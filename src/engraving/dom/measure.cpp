@@ -1292,11 +1292,6 @@ void Measure::cmdAddStaves(staff_idx_t sStaff, staff_idx_t eStaff, bool createRe
                 barline->setParent(bs);
                 barline->setGenerated(false);
                 score()->undoAddElement(barline);
-
-                if (PlayCountText* pct = barline->playCountText()) {
-                    barline->remove(pct);
-                    pct->unlink();
-                }
             }
         }
     }
@@ -1771,8 +1766,12 @@ EngravingItem* Measure::drop(EditData& data)
             score()->insertBox(ElementType::TBOX, this);
             break;
         case ActionIconType::FFRAME:
-            score()->insertBox(ElementType::FBOX, this);
+        {
+            Score::InsertMeasureOptions options;
+            options.cloneBoxToAllParts = false;
+            score()->insertBox(ElementType::FBOX, this, options);
             break;
+        }
         case ActionIconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, this);
             break;
@@ -2006,6 +2005,10 @@ bool Measure::visible(staff_idx_t staffIdx) const
 bool Measure::stemless(staff_idx_t staffIdx) const
 {
     const Staff* staff = score()->staff(staffIdx);
+    if (!staff) {
+        return false;
+    }
+
     return staff->stemless(tick()) || m_mstaves[staffIdx]->stemless() || staff->staffType(tick())->stemless();
 }
 
@@ -2797,6 +2800,9 @@ Segment* Measure::searchSegment(double x, SegmentType st, track_idx_t strack, tr
         if (!segment->hasElements(strack, lastTrack)) {
             continue;
         }
+        if (segment->isTimeTickType() && segment->rtick() == ticks()) {
+            continue;
+        }
         Segment* ns = segment->next(st);
         for (; ns; ns = ns->next(st)) {
             if (ns->hasElements(strack, lastTrack)) {
@@ -3459,6 +3465,11 @@ bool Measure::endBarLineVisible() const
 
 const BarLine* Measure::startBarLine() const
 {
+    return startBarLine(0, true);
+}
+
+const BarLine* Measure::startBarLine(staff_idx_t staffIdx, bool firstStaff) const
+{
     // search barline segment:
     Segment* s = first();
     while (s && !(s->isStartRepeatBarLineType() || s->isBeginBarLineType())) {
@@ -3467,7 +3478,7 @@ const BarLine* Measure::startBarLine() const
     // search first element
     if (s) {
         for (const EngravingItem* e : s->elist()) {
-            if (e) {
+            if (e && (e->staffIdx() == staffIdx || firstStaff)) {
                 return toBarLine(e);
             }
         }

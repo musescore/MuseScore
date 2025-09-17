@@ -89,14 +89,14 @@ enum class ElementType : unsigned char {
     STEM,   // list STEM before NOTE: notes in TAB might 'break' stems
     HOOK,   // and this requires stems to be drawn before notes
     NOTE,   // elements from CLEF to TIMESIG need to be in the order
-    SYMBOL, // in which they appear in a measure
-    CLEF,
+    CLEF,   // in which they appear in a measure
     KEYSIG,
     AMBITUS,
     TIMESIG,
     REST,
     MMREST,
     DEAD_SLAPPED,
+    SYMBOL,
     BREATH,
     MEASURE_REPEAT,
     TIE,
@@ -128,8 +128,8 @@ enum class ElementType : unsigned char {
     REHEARSAL_MARK,
     INSTRUMENT_CHANGE,
     STAFFTYPE_CHANGE,
-    HARMONY,
     FRET_DIAGRAM,
+    HARMONY,
     HARP_DIAGRAM,
     BEND,
     TREMOLOBAR,

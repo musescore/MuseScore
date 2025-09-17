@@ -190,6 +190,8 @@ public:
     ParsedChord* parsedChord() const { return m_parsedChord; }
     ParsedChord* getParsedChord();
 
+    bool hasModifiers() const;
+
 private:
     int m_id = -1;                          // >0 = id of matched chord from chord list, if applicable
                                             // -1 = invalid chord
@@ -267,6 +269,8 @@ public:
     const std::vector<HarmonyInfo*> chords() const { return m_chords; }
     void addChord(HarmonyInfo* info) { m_chords.push_back(info); }
 
+    bool hasModifiers() const;
+
     String harmonyName() const;
 
     double baseLine() const override;
@@ -292,6 +296,7 @@ public:
     void setBassScale(double v) { m_bassScale = v; }
 
     Color curColor() const override;
+    void setColor(const Color& color) override;
 
     bool doNotStackModifiers() const { return m_doNotStackModifiers; }
 

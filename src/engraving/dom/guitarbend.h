@@ -193,8 +193,8 @@ public:
     DECLARE_LAYOUTDATA_METHODS(GuitarBendSegment)
 
 private:
-    void startEditDrag(EditData& ed) override;
-    void editDrag(EditData& ed) override;
+    void startDragGrip(EditData& ed) override;
+    void dragGrip(EditData& ed) override;
 
     PointF m_vertexPointOff = PointF();
     GuitarBendText* m_text = nullptr;
@@ -245,7 +245,7 @@ public:
     double lineWidth() const { return guitarBendHold()->lineWidth(); }
 
 private:
-    void editDrag(EditData& ed) override;
+    void dragGrip(EditData& ed) override;
 
     double m_dashLength = 3.0;
 

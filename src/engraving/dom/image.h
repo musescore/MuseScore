@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_IMAGE_H
-#define MU_ENGRAVING_IMAGE_H
+#pragma once
 
 #include "bsymbol.h"
 
@@ -116,8 +115,8 @@ public:
 private:
 
     bool isEditable() const override { return true; }
-    void startEditDrag(EditData&) override;
-    void editDrag(EditData& ed) override;
+    void startDragGrip(EditData&) override;
+    void dragGrip(EditData& ed) override;
     std::vector<LineF> gripAnchorLines(Grip) const override { return std::vector<LineF>(); }
 
     ImageStoreItem* m_storeItem = nullptr;
@@ -136,5 +135,4 @@ private:
 
     ImageType m_imageType = ImageType::NONE;
 };
-} // namespace mu::engraving
-#endif
+}

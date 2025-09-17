@@ -27,6 +27,7 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
 import MuseScore.AppShell 1.0
+import MuseScore.Playback 1.0
 
 AppWindow {
     id: root
@@ -59,8 +60,8 @@ AppWindow {
         StyledTabBar {
             id: bar
             anchors.left: parent.left
-            anchors.right: parent.right
             anchors.margins: 16
+            width: 300
 
             StyledTabButton {
                 text: "Notation"
@@ -68,6 +69,12 @@ AppWindow {
             StyledTabButton {
                 text: "Dev"
             }
+        }
+
+        PlaybackToolBar {
+            anchors.left: bar.right
+            anchors.right: parent.right
+            anchors.leftMargin: 16
         }
 
         StackLayout {

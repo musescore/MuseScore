@@ -57,24 +57,6 @@ Bracket::~Bracket()
 }
 
 //---------------------------------------------------------
-//   playTick
-//---------------------------------------------------------
-
-Fraction Bracket::playTick() const
-{
-    // Brackets always have a tick value of zero, so play from the start of the first measure in the system that the bracket belongs to.
-    const auto sys = system();
-    if (sys) {
-        const auto firstMeasure = sys->firstMeasure();
-        if (firstMeasure) {
-            return firstMeasure->tick();
-        }
-    }
-
-    return tick();
-}
-
-//---------------------------------------------------------
 //   setStaffSpan
 //---------------------------------------------------------
 
@@ -152,7 +134,7 @@ void Bracket::endEdit(EditData& ed)
     ed.clear(); // score layout invalidates element
 }
 
-void Bracket::editDrag(EditData& ed)
+void Bracket::dragGrip(EditData& ed)
 {
     double bracketHeight = ldata()->bracketHeight();
     bracketHeight += ed.delta.y();
@@ -160,11 +142,11 @@ void Bracket::editDrag(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   endEditDrag
+//   endDragGrip
 //    snap to nearest staff
 //---------------------------------------------------------
 
-void Bracket::endEditDrag(EditData&)
+void Bracket::endDragGrip(EditData&)
 {
     double ay2 = m_ay1 + ldata()->bracketHeight();
 

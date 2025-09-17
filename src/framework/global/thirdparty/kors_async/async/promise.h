@@ -136,7 +136,7 @@ public:
 
         switch (type) {
         case PromiseType::AsyncByPromise:
-            Async::call(nullptr, [res](BodyResolveReject body) mutable {
+            Async::call(nullptr, [res](BodyResolve body) mutable {
                 body(res);
             }, body);
             break;

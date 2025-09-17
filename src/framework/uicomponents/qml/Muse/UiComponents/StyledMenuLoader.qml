@@ -37,6 +37,7 @@ Loader {
     property StyledMenu menu: loader.item as StyledMenu
     property Item menuAnchorItem: null
     property bool hasSiblingMenus: false
+    property var parentWindow: null
 
     property alias isMenuOpened: loader.active
 
@@ -65,6 +66,8 @@ Loader {
 
         accessibleName: loader.accessibleName
 
+        parentWindow: loader.parentWindow
+
         onHandleMenuItem: function(itemId) {
             itemMenu.close()
             Qt.callLater(loader.handleMenuItem, itemId)
@@ -72,7 +75,7 @@ Loader {
 
         onOpenPrevMenu: {
            Qt.callLater(loader.openPrevMenu)
-        }  
+        }
 
         onOpenNextMenu: {
             Qt.callLater(loader.openNextMenu)
@@ -144,7 +147,7 @@ Loader {
 
         menu.model = model
 
-        menu.calculateSize()
+        Qt.callLater(menu.calculateSize)
     }
 
     Timer {

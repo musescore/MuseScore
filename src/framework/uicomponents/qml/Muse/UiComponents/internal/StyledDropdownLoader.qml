@@ -25,6 +25,8 @@ import QtQuick.Window 2.15
 Loader {
     id: loader
 
+    property var parentWindow: null
+
     property string textRole: ""
     property string valueRole: ""
 
@@ -73,6 +75,7 @@ Loader {
         itemColor: loader.itemColor
         background.color: loader.backgroundColor
 
+        parentWindow: loader.parentWindow
         accessibleWindow: loader.Window.window
 
         onHandleItem: function(index, value) {

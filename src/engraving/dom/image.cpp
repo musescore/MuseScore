@@ -309,19 +309,19 @@ bool Image::loadFromData(const path_t& name, const muse::ByteArray& ba)
 //   startDrag
 //---------------------------------------------------------
 
-void Image::startEditDrag(EditData& data)
+void Image::startDragGrip(EditData& data)
 {
-    BSymbol::startEditDrag(data);
+    BSymbol::startDragGrip(data);
     ElementEditDataPtr eed = data.getData(this);
 
     eed->pushProperty(Pid::SIZE);
 }
 
 //---------------------------------------------------------
-//   editDrag
+//   dragGrip
 //---------------------------------------------------------
 
-void Image::editDrag(EditData& ed)
+void Image::dragGrip(EditData& ed)
 {
     if (ed.curGrip == Grip::MIDDLE) {
         setOffset(offset() + ed.evtDelta);

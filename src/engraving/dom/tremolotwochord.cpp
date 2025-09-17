@@ -355,10 +355,10 @@ std::vector<PointF> TremoloTwoChord::gripsPositions(const EditData&) const
 }
 
 //---------------------------------------------------------
-//   editDrag
+//   dragGrip
 //---------------------------------------------------------
 
-void TremoloTwoChord::editDrag(EditData& ed)
+void TremoloTwoChord::dragGrip(EditData& ed)
 {
     int idx = directionIdx();
     double dy = ed.delta.y();
@@ -372,6 +372,9 @@ void TremoloTwoChord::editDrag(EditData& ed)
         y1 += dy;
     } else if (ed.curGrip == Grip::END) {
         y2 += dy;
+    } else {
+        UNREACHABLE;
+        return;
     }
 
     double _spatium = spatium();

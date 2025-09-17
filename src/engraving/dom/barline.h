@@ -62,8 +62,8 @@ class BarLineEditData : public ElementEditData
 {
     OBJECT_ALLOCATOR(engraving, BarLineEditData)
 public:
-    double yoff1;
-    double yoff2;
+    double yoff1 = 0.0;
+    double yoff2 = 0.0;
     virtual EditDataType type() override { return EditDataType::BarLineEditData; }
 };
 
@@ -79,8 +79,7 @@ class BarLine final : public EngravingItem
     DECLARE_CLASSOF(ElementType::BAR_LINE)
 
 public:
-
-    virtual ~BarLine();
+    ~BarLine() override;
 
     BarLine& operator=(const BarLine&) = delete;
 
@@ -91,7 +90,6 @@ public:
     EngravingObjectList scanChildren() const override;
 
     BarLine* clone() const override { return new BarLine(*this); }
-    Fraction playTick() const override;
     PointF canvasPos() const override;      ///< position in canvas coordinates
     PointF pagePos() const override;        ///< position in page coordinates
 
@@ -118,10 +116,8 @@ public:
     void startEdit(EditData& ed) override;
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData& ed) override;
-    void editDrag(EditData&) override;
-    void endEditDrag(EditData&) override;
-
-    void undoUnlink() override;
+    void dragGrip(EditData&) override;
+    void endDragGrip(EditData&) override;
 
     const ElementList* el() const { return &m_el; }
 
@@ -133,9 +129,6 @@ public:
     bool isTop() const;
     bool isBottom() const;
 
-    void setPlayCountTextSetting(const AutoCustomHide& v) { m_playCountTextSetting = v; }
-    AutoCustomHide playCountTextSetting() const { return m_playCountTextSetting; }
-
     int subtype() const override { return int(m_barLineType); }
     TranslatableString subtypeUserName() const override;
 
@@ -146,13 +139,10 @@ public:
     using EngravingObject::undoChangeProperty;
     EngravingItem* propertyDelegate(Pid) override;
 
-    PlayCountText* playCountText() const { return m_playCountText; }
-    void setPlayCountText(PlayCountText* text);
-    String playCountCustomText() const { return m_playCountCustomText; }
-    void setPlayCountCustomText(const String& v) { m_playCountCustomText = v; }
-
     void setPlayCount(int playCount) { m_playCount = playCount; }
     int playCount() const { return m_playCount; }
+
+    PlayCountText* playCountText() const;
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
@@ -193,9 +183,6 @@ private:
 
     ElementList m_el;          ///< fermata or other articulations
 
-    PlayCountText* m_playCountText = nullptr;     // Play count text for barlines on system object staves
-    AutoCustomHide m_playCountTextSetting = AutoCustomHide::AUTO;
-    String m_playCountCustomText = u"";
     int m_playCount = -1;                 // For use during copy & paste
 };
 } // namespace mu::engraving

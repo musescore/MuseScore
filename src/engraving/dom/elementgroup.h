@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_ELEMENTGROUP_H
-#define MU_ENGRAVING_ELEMENTGROUP_H
+#pragma once
 
 #include "global/allocator.h"
 #include "draw/types/geometry.h"
@@ -84,6 +83,4 @@ public:
 private:
     EngravingItem* m_e = nullptr;
 };
-} // namespace mu::engraving
-
-#endif
+}

@@ -39,6 +39,7 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/playcounttext.h"
+#include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stem.h"
@@ -113,7 +114,6 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::PARTIAL_TIE:
     case mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE:
     case mu::engraving::ElementType::PALM_MUTE: return findLines(elementType);
-    // case mu::engraving::ElementType::PLAY_COUNT_TEXT: return findPlayCountText();
     default:
         QList<mu::engraving::EngravingItem*> resultList;
 
@@ -394,15 +394,15 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findSectionBreaks
 
 EngravingItem* ElementRepositoryService::findTextDelegate(EngravingItem* element) const
 {
-    if (!element->isBarLine()) {
+    switch (element->type()) {
+    case ElementType::BAR_LINE: {
+        Segment* seg = toBarLine(element)->segment();
+        PlayCountText* playCountText = toPlayCountText(seg->findAnnotation(ElementType::PLAY_COUNT_TEXT, 0, 0));
+        return playCountText;
+    }
+    default:
         return element;
     }
-
-    if (PlayCountText* playCount = toBarLine(element)->playCountText()) {
-        return playCount;
-    }
-
-    return element;
 }
 
 QList<mu::engraving::EngravingItem*> ElementRepositoryService::findTexts() const

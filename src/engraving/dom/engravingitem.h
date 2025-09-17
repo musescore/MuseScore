@@ -20,14 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_ELEMENT_H
-#define MU_ENGRAVING_ELEMENT_H
-
-#include <optional>
+#pragma once
 
 #include "draw/types/color.h"
 #include "draw/types/geometry.h"
-#include "draw/painter.h"
 
 #include "modularity/ioc.h"
 #include "../iengravingconfiguration.h"
@@ -44,6 +40,10 @@
 #include "engravingobject.h"
 #include "elementgroup.h"
 #include "editdata.h"
+
+namespace muse::draw {
+class Painter;
+}
 
 #define DECLARE_LAYOUTDATA_METHODS(Class) \
     const LayoutData* ldata() const { return static_cast<const Class::LayoutData*>(EngravingItem::ldata()); } \
@@ -256,7 +256,6 @@ public:
 
     virtual Fraction tick() const;
     virtual Fraction rtick() const;
-    virtual Fraction playTick() const;   ///< muse::Returns the tick at which playback should begin when this element is selected. Defaults to the element's own tick position.
 
     Fraction beat() const;
 
@@ -301,9 +300,9 @@ public:
     virtual void startEdit(EditData&);
     virtual bool isEditAllowed(EditData&) const;
     virtual bool edit(EditData&);
-    virtual void startEditDrag(EditData&);
-    virtual void editDrag(EditData&);
-    virtual void endEditDrag(EditData&);
+    virtual void startDragGrip(EditData&);
+    virtual void dragGrip(EditData&);
+    virtual void endDragGrip(EditData&);
     virtual void endEdit(EditData&);
 
     virtual void editCut(EditData&) {}
@@ -389,12 +388,6 @@ public:
  Reimplemented by elements that accept drops.
 */
     virtual EngravingItem* drop(EditData&) { return 0; }
-
-/**
- delivers mouseEvent to element in edit mode
- returns true if mouse event is accepted by element
- */
-    virtual bool mousePress(EditData&) { return false; }
 
     mutable bool itemDiscovered = false;       // helper flag for bsp
 
@@ -507,9 +500,9 @@ public:
 
     struct BarBeat
     {
-        int bar;
-        int displayedBar;
-        double beat;
+        int bar = 0;
+        int displayedBar = 0;
+        double beat = 0.0;
     };
     BarBeat barbeat() const;
 
@@ -768,9 +761,9 @@ using ElementPtr = std::shared_ptr<EngravingItem>;
 //   ElementEditData
 //    holds element specific data during element editing:
 //
-//    startEditDrag(EditData&)    creates data and attaches it to EditData
-//       editDrag(EditData&)
-//    endEditDrag(EditData&)      use data to create undo records
+//    startDragGrip(EditData&)    creates data and attaches it to EditData
+//         dragGrip(EditData&)
+//      endDragGrip(EditData&)    use data to create undo records
 //-----------------------------------------------------------------------------
 
 enum class EditDataType : signed char {
@@ -792,12 +785,12 @@ class ElementEditData
     OBJECT_ALLOCATOR(engraving, ElementEditData)
 public:
     EngravingItem* e = nullptr;
-    std::list<PropertyData> propertyData;
+    std::vector<PropertyData> propertyData;
 
     virtual ~ElementEditData() = default;
     void pushProperty(Pid pid)
     {
-        propertyData.push_back(PropertyData({ pid, e->getProperty(pid), e->propertyFlags(pid) }));
+        propertyData.emplace_back(PropertyData { pid, e->getProperty(pid), e->propertyFlags(pid) });
     }
 
     virtual EditDataType type() { return EditDataType::ElementEditData; }
@@ -816,30 +809,6 @@ public:
     void replace(EngravingItem* old, EngravingItem* n);
 };
 
-//---------------------------------------------------------
-//   @@ Compound
-//---------------------------------------------------------
-
-class Compound : public EngravingItem
-{
-    OBJECT_ALLOCATOR(engraving, Compound)
-
-public:
-    Compound(const ElementType& type, Score*);
-    Compound(const Compound&);
-
-    virtual void addElement(EngravingItem*, double x, double y);
-    void clear();
-    virtual void setSelected(bool f);
-    virtual void setVisible(bool);
-
-protected:
-    const std::list<EngravingItem*>& getElements() const { return m_elements; }
-
-private:
-    std::list<EngravingItem*> m_elements;
-};
-
 extern bool elementLessThan(const EngravingItem* const, const EngravingItem* const);
 extern void collectElements(void* data, EngravingItem* e);
 } // mu::engraving
@@ -847,6 +816,4 @@ extern void collectElements(void* data, EngravingItem* e);
 #ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::ElementPtr)
 Q_DECLARE_METATYPE(mu::engraving::ElementType)
-#endif
-
 #endif

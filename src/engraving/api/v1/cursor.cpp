@@ -337,6 +337,7 @@ void Cursor::add(EngravingItem* wrapped)
     case ElementType::TREMOLO_TWOCHORD:
     case ElementType::CHORDLINE:
     case ElementType::ORNAMENT:
+    case ElementType::TAPPING:
     case ElementType::ARTICULATION: {
         mu::engraving::EngravingItem* curElement = currentElement();
         if (curElement->isChord()) {
@@ -363,7 +364,8 @@ void Cursor::add(EngravingItem* wrapped)
             s->setParent(curElement);
             m_score->undoAddElement(s);
         }
-    } // FALLTHROUGH
+        [[fallthrough]];
+    }
     case ElementType::FINGERING:
     case ElementType::BEND:
     case ElementType::NOTEHEAD: {

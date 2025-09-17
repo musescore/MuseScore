@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_BOX_H
-#define MU_ENGRAVING_BOX_H
+#pragma once
 
 #include "measurebase.h"
 #include "property.h"
@@ -43,8 +42,8 @@ public:
 
     virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
-    virtual void startEditDrag(EditData&) override;
-    virtual void editDrag(EditData&) override;
+    virtual void startDragGrip(EditData&) override;
+    virtual void dragGrip(EditData&) override;
 
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
@@ -160,7 +159,7 @@ public:
     PropertyValue propertyDefault(Pid) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
 
-    void startEditDrag(EditData&) override;
+    void startDragGrip(EditData&) override;
 
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
@@ -207,20 +206,17 @@ public:
     Grip defaultGrip() const override;
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
+    bool needStartEditingAfterSelecting() const override { return false; }
+
     void undoReorderElements(const StringList& newOrder);
-    const StringList& diagramsOrder() const { return m_diagramsOrder; }
-
-    void undoSetInvisibleDiagrams(const StringList& invisibleDiagrams);
-    const StringList& invisibleDiagrams() const { return m_invisibleDiagrams; }
-
-    ElementList orderedElements(bool includeInvisible = false) const;
+    void reorderElements(const StringList& newOrder);
+    StringList diagramsOrder() const;
 
     bool needsRebuild() const { return m_needsRebuild; }
     void setNeedsRebuild(bool v) { m_needsRebuild = v; }
 
 private:
 
-    void updateDiagramsOrder(const StringList& currentDiagrams);
     void updateInvisibleDiagrams(const StringList& currentDiagrams);
     size_t computeInsertionIdx(const String& nameOfDiagramBeforeThis);
 
@@ -234,8 +230,7 @@ private:
 
     AlignH m_contentAlignmentH = AlignH::HCENTER;
 
-    StringList /*harmonyNames*/ m_diagramsOrder;
-    StringList /*harmonyNames*/ m_invisibleDiagrams;
+    StringList m_diagramsOrderInScore;
 };
 
 //---------------------------------------------------------
@@ -281,5 +276,4 @@ public:
 private:
     Text* m_text = nullptr;
 };
-} // namespace mu::engraving
-#endif
+}

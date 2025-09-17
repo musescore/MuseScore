@@ -49,7 +49,7 @@ env:
 
 jobs:
   macos_universal:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1
@@ -168,9 +168,10 @@ jobs:
         target: 'desktop'
         arch: 'clang_64'
         modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
-    - name: Setup environment
+
+    - name: Download dependencies
       run: |
-        bash ./buildscripts/ci/macos/setup.sh
+        bash ./buildscripts/ci/macos/download_dependencies.sh
 
     - name: Generate _en.ts files
       env:

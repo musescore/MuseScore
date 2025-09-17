@@ -53,8 +53,13 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid id) const override;
 
+    TranslatableString subtypeUserName() const override;
+
     bool snapToItemAfter() const { return m_snapToItemAfter; }
     void setSnapToItemAfter(bool v) { m_snapToItemAfter = v; }
+
+    bool adjustForRehearsalMark(bool start) const;
+    PointF linePos(Grip grip, System** system) const override;
 
 protected:
     void added() override;
@@ -68,6 +73,8 @@ private:
     std::optional<float> m_tempoChangeFactor;
 
     bool m_snapToItemAfter = true;
+
+    bool m_alignRightOfRehearsalMark = true;
 
     friend class GradualTempoChangeSegment;
 };

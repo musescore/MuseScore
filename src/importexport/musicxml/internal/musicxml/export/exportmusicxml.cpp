@@ -5909,7 +5909,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
             Char ch = dynText.at(i);
             const auto it = map.find(ch.unicode());
             if (it != map.end()) {
-                // found a SMUFL single letter dynamics glyph
+                // found a SMuFL single letter dynamics glyph
                 if (!inDynamicsSym) {
                     if (!text.empty()) {
                         m_xml.tag("other-dynamics", text);
@@ -5925,6 +5925,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
                         if (muse::contains(validMusicXmlDynamics, text)) {
                             m_xml.tagRaw(text);
                         } else {
+                            // TODO: this is wrong, should be <words>
                             m_xml.tag("other-dynamics", text);
                         }
                         text.clear();
@@ -7005,15 +7006,11 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         //LOGD(" singleKey %d", singleKey);
         if (singleKey) {
             // keysig applies to all staves
-            if (!keysigs.at(0)->forInstrumentChange()) {
-                keysig(keysigs.at(0), p->staff(0)->clef(m->tick()), 0, keysigs.at(0)->visible());
-            }
+            keysig(keysigs.at(0), p->staff(0)->clef(m->tick()), 0, keysigs.at(0)->visible());
         } else {
             // staff-specific keysigs
             for (staff_idx_t st : muse::keys(keysigs)) {
-                if (!keysigs.at(st)->forInstrumentChange()) {
-                    keysig(keysigs.at(st), p->staff(st)->clef(m->tick()), st + 1, keysigs.at(st)->visible());
-                }
+                keysig(keysigs.at(st), p->staff(st)->clef(m->tick()), st + 1, keysigs.at(st)->visible());
             }
         }
     } else {
@@ -7515,7 +7512,7 @@ void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves,
             sstaff /= VOICES;
 
             Clef* cle = static_cast<Clef*>(seg->element(st));
-            if (cle && !cle->forInstrumentChange()) {
+            if (cle) {
                 clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick, int(cle->clefType()), cle->generated());
                 // output only clef changes, not generated clefs at line beginning
                 // exception: at tick=0, export clef anyway
@@ -7951,10 +7948,6 @@ void ExportMusicXml::writeInstrumentChange(const InstrumentChange* instrChange)
     }
     m_xml.endElement();
 
-    for (KeySig* keySig : instrChange->keySigs()) {
-        staff_idx_t st = m_score->staffIdx(part);
-        keysig(keySig, part->staff(st)->clef(instrChange->tick()), m_score->staffIdx(part), keySig->visible());
-    }
     writeInstrumentDetails(instr, m_score->style().styleB(Sid::concertPitch));
 
     m_xml.startElement("sound");
@@ -8839,12 +8832,13 @@ static void writeMusicXml(const FretDiagram* item, XmlWriter& xml)
 
 void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd, const Fraction& offset)
 {
-    // No supprt for polychords at the moment. Export the first chord from the list.
-    HarmonyInfo* info = h->chords().empty() ? nullptr : h->chords().front();
-    int rootTpc = info ? info->rootTpc() : Tpc::TPC_INVALID;
-    int bassTpc = info ? info->bassTpc() : Tpc::TPC_INVALID;
-
+    if (h->chords().empty()) {
+        return;
+    }
     XmlWriter::Attributes harmonyAttrs;
+    if (h->isPolychord()) {
+        harmonyAttrs.emplace_back(std::make_pair("arrangement", "vertical"));
+    }
     if (!h->isStyled(Pid::PLACEMENT)) {
         harmonyAttrs.emplace_back(std::make_pair("placement", TConv::toXml(h->placement())));
     }
@@ -8854,100 +8848,112 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
     }
     addColorAttr(h, harmonyAttrs);
     m_xml.startElement("harmony", harmonyAttrs);
-    if (h->harmonyType() == HarmonyType::STANDARD && tpcIsValid(rootTpc)) {
-        m_xml.startElement("root");
-        m_xml.tag("root-step", tpc2stepName(rootTpc));
-        int alter = int(tpc2alter(rootTpc));
-        if (alter) {
-            m_xml.tag("root-alter", alter);
-        }
-        m_xml.endElement();
-
-        const String xmlKind = harmonyXmlKind(info);
-
-        if (!xmlKind.isEmpty()) {
-            String s = u"kind";
-            String kindText = harmonyXmlText(info);
-            if (!harmonyXmlText(info).empty()) {
-                s += u" text=\"" + kindText + u"\"";
+    if (h->harmonyType() == HarmonyType::STANDARD && tpcIsValid(h->rootTpc())) {
+        for (const HarmonyInfo* info : h->chords()) {
+            if (!info) {
+                continue; // skip invalid HarmonyInfo
             }
-            if (harmonyXmlSymbols(info) == u"yes") {
-                s += u" use-symbols=\"yes\"";
+            int rootTpc = info->rootTpc();
+            int bassTpc = info->bassTpc();
+            m_xml.startElement("root");
+            m_xml.tag("root-step", tpc2stepName(rootTpc));
+            int alter = int(tpc2alter(rootTpc));
+            if (alter) {
+                m_xml.tag("root-alter", alter);
             }
-            if (harmonyXmlParens(info) == u"yes") {
-                s += u" parentheses-degrees=\"yes\"";
-            }
-            m_xml.tagRaw(s, xmlKind);
+            m_xml.endElement();
 
-            if (bassTpc != Tpc::TPC_INVALID) {
-                m_xml.startElement("bass");
-                m_xml.tag("bass-step", tpc2stepName(bassTpc));
-                alter = int(tpc2alter(bassTpc));
-                if (alter) {
-                    m_xml.tag("bass-alter", alter);
+            const String xmlKind = harmonyXmlKind(info);
+
+            if (!xmlKind.isEmpty()) {
+                String s = u"kind";
+                String kindText = harmonyXmlText(info);
+                if (!harmonyXmlText(info).empty()) {
+                    s += u" text=\"" + kindText + u"\"";
                 }
-                m_xml.endElement();
-            }
+                if (harmonyXmlSymbols(info) == u"yes") {
+                    s += u" use-symbols=\"yes\"";
+                }
+                if (harmonyXmlParens(info) == u"yes") {
+                    s += u" parentheses-degrees=\"yes\"";
+                }
+                if (m_score->style().styleB(Sid::verticallyStackModifiers)) {
+                    s += h->getProperty(Pid::HARMONY_DO_NOT_STACK_MODIFIERS).toBool()
+                         ? u" stack-degrees=\"no\"" : u" stack-degrees=\"yes\"";
+                }
+                m_xml.tagRaw(s, xmlKind);
 
-            StringList l = harmonyXmlDegrees(info);
-            if (!l.empty()) {
-                for (const String& tag : l) {
-                    String degreeText;
-                    if (xmlKind.startsWith(u"suspended")
-                        && tag.startsWith(u"add") && tag.at(3).isDigit()
-                        && !kindText.isEmpty() && kindText.at(0).isDigit()) {
-                        // hack to correct text for suspended chords whose kind text has degree information baked in
-                        // (required by some other applications)
-                        int tagDegree = tag.mid(3).toInt();
-                        String kindTextExtension;
-                        for (size_t i = 0; i < kindText.size() && kindText.at(i).isDigit(); ++i) {
-                            kindTextExtension[i] = kindText[i];
-                        }
-                        int kindExtension = kindTextExtension.toInt();
-                        if (tagDegree <= kindExtension && (tagDegree & 1) && (kindExtension & 1)) {
-                            degreeText = u" text=\"\"";
-                        }
+                if (tpcIsValid(bassTpc)) {
+                    XmlWriter::Attributes bassAttrs
+                        = { { "arrangement", m_score->style().styleB(Sid::chordBassNoteStagger) ? "diagonal" : "horizontal" } };
+                    m_xml.startElement("bass", bassAttrs);
+                    m_xml.tag("bass-step", tpc2stepName(bassTpc));
+                    alter = int(tpc2alter(bassTpc));
+                    if (alter) {
+                        m_xml.tag("bass-alter", alter);
                     }
-                    m_xml.startElement("degree");
-                    alter = 0;
-                    int idx = 3;
-                    if (tag[idx] == '#') {
-                        alter = 1;
-                        ++idx;
-                    } else if (tag[idx] == 'b') {
-                        alter = -1;
-                        ++idx;
+                    m_xml.endElement();
+                }
+
+                StringList l = harmonyXmlDegrees(info);
+                if (!l.empty()) {
+                    for (const String& tag : l) {
+                        String degreeText;
+                        if (xmlKind.startsWith(u"suspended")
+                            && tag.startsWith(u"add") && tag.at(3).isDigit()
+                            && !kindText.isEmpty() && kindText.at(0).isDigit()) {
+                            // hack to correct text for suspended chords whose kind text has degree information baked in
+                            // (required by some other applications)
+                            int tagDegree = tag.mid(3).toInt();
+                            String kindTextExtension;
+                            for (size_t i = 0; i < kindText.size() && kindText.at(i).isDigit(); ++i) {
+                                kindTextExtension[i] = kindText[i];
+                            }
+                            int kindExtension = kindTextExtension.toInt();
+                            if (tagDegree <= kindExtension && (tagDegree & 1) && (kindExtension & 1)) {
+                                degreeText = u" text=\"\"";
+                            }
+                        }
+                        m_xml.startElement("degree");
+                        alter = 0;
+                        int idx = 3;
+                        if (tag[idx] == '#') {
+                            alter = 1;
+                            ++idx;
+                        } else if (tag[idx] == 'b') {
+                            alter = -1;
+                            ++idx;
+                        }
+                        m_xml.tagRaw(String(u"degree-value%1").arg(degreeText), tag.mid(idx));
+                        m_xml.tag("degree-alter", alter);               // finale insists on this even if 0
+                        if (tag.startsWith(u"add")) {
+                            m_xml.tagRaw(String(u"degree-type%1").arg(degreeText), "add");
+                        } else if (tag.startsWith(u"sub")) {
+                            m_xml.tag("degree-type", "subtract");
+                        } else if (tag.startsWith(u"alt")) {
+                            m_xml.tag("degree-type", "alter");
+                        }
+                        m_xml.endElement();
                     }
-                    m_xml.tagRaw(String(u"degree-value%1").arg(degreeText), tag.mid(idx));
-                    m_xml.tag("degree-alter", alter);               // finale insists on this even if 0
-                    if (tag.startsWith(u"add")) {
-                        m_xml.tagRaw(String(u"degree-type%1").arg(degreeText), "add");
-                    } else if (tag.startsWith(u"sub")) {
-                        m_xml.tag("degree-type", "subtract");
-                    } else if (tag.startsWith(u"alt")) {
-                        m_xml.tag("degree-type", "alter");
+                }
+            } else {
+                if (info->textName().empty()) {
+                    m_xml.tag("kind", "none");
+                } else {
+                    m_xml.tag("kind", { { "text", info->textName() } }, "");
+                }
+
+                if (tpcIsValid(bassTpc)) {
+                    m_xml.startElement("bass");
+                    m_xml.tag("bass-step", tpc2stepName(bassTpc));
+                    alter = int(tpc2alter(bassTpc));
+                    if (alter) {
+                        m_xml.tag("bass-alter", alter);
                     }
                     m_xml.endElement();
                 }
             }
-        } else {
-            if (info->textName().empty()) {
-                m_xml.tag("kind", "none");
-            } else {
-                m_xml.tag("kind", { { "text", info->textName() } }, "");
-            }
-
-            if (bassTpc != Tpc::TPC_INVALID) {
-                m_xml.startElement("bass");
-                m_xml.tag("bass-step", tpc2stepName(bassTpc));
-                alter = int(tpc2alter(bassTpc));
-                if (alter) {
-                    m_xml.tag("bass-alter", alter);
-                }
-                m_xml.endElement();
-            }
         }
-
         if (offset.isValid() && offset > Fraction(0, 1)) {
             m_xml.tag("offset", calculateDurationInDivisions(offset, m_div));
         } else {
@@ -8961,6 +8967,8 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         // export an unrecognized Chord
         // which may contain arbitrary text
         //
+        // No supprt for polychords at the moment. Export the first chord from the list.
+        const HarmonyInfo* info = h->chords().front();
         const String xmlKind = harmonyXmlKind(info);
         const String textName = info->textName();
         switch (h->harmonyType()) {

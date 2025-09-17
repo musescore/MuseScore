@@ -44,9 +44,19 @@ public:
 };
 }
 
+#ifdef Q_OS_WASM
+
+#define ONLY_AUDIO_WORKER_THREAD
+#define ONLY_AUDIO_MAIN_THREAD
+#define ONLY_AUDIO_MAIN_OR_WORKER_THREAD
+
+#else
+
 #define ONLY_AUDIO_WORKER_THREAD assert(muse::audio::AudioSanitizer::isWorkerThread())
 #define ONLY_AUDIO_MAIN_THREAD assert(muse::audio::AudioSanitizer::isMainThread())
 #define ONLY_AUDIO_MAIN_OR_WORKER_THREAD assert((muse::audio::AudioSanitizer::isWorkerThread() \
                                                  || muse::audio::AudioSanitizer::isMainThread()))
+
+#endif
 
 #endif // MUSE_AUDIO_AUDIOSANITIZER_H

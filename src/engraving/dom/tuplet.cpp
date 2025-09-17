@@ -381,12 +381,12 @@ bool Tuplet::isEditable() const
 }
 
 //---------------------------------------------------------
-//   startEditDrag
+//   startDragGrip
 //---------------------------------------------------------
 
-void Tuplet::startEditDrag(EditData& ed)
+void Tuplet::startDragGrip(EditData& ed)
 {
-    DurationElement::startEditDrag(ed);
+    DurationElement::startDragGrip(ed);
     ElementEditDataPtr eed = ed.getData(this);
 
     eed->pushProperty(Pid::P1);
@@ -394,21 +394,21 @@ void Tuplet::startEditDrag(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   editDrag
+//   dragGrip
 //---------------------------------------------------------
 
-void Tuplet::editDrag(EditData& ed)
+void Tuplet::dragGrip(EditData& ed)
 {
     if (ed.curGrip == Grip::START || ed.curGrip == Grip::MIDDLE) {
         m_userP1 += ed.delta;
-    }
-    if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE) {
+    } else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE) {
         m_userP2 += ed.delta;
+    } else {
+        UNREACHABLE;
+        return;
     }
 
     setGenerated(false);
-    //layout();
-    //score()->setUpdateAll();
     triggerLayout();
 }
 

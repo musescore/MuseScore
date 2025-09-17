@@ -573,16 +573,6 @@ Fraction EngravingItem::rtick() const
 }
 
 //---------------------------------------------------------
-//   playTick
-//---------------------------------------------------------
-
-Fraction EngravingItem::playTick() const
-{
-    // Play from the element's tick position by default.
-    return tick();
-}
-
-//---------------------------------------------------------
 //   beat
 //---------------------------------------------------------
 
@@ -890,78 +880,6 @@ void ElementList::replace(EngravingItem* o, EngravingItem* n)
         return;
     }
     *i = n;
-}
-
-//---------------------------------------------------------
-//   Compound
-//---------------------------------------------------------
-
-Compound::Compound(const ElementType& type, Score* s)
-    : EngravingItem(type, s)
-{
-}
-
-Compound::Compound(const Compound& c)
-    : EngravingItem(c)
-{
-    m_elements.clear();
-    for (EngravingItem* e : c.m_elements) {
-        m_elements.push_back(e->clone());
-    }
-}
-
-//---------------------------------------------------------
-//   addElement
-//---------------------------------------------------------
-
-/**
- offset \a x and \a y are in Point units
-*/
-
-void Compound::addElement(EngravingItem* e, double x, double y)
-{
-    e->setPos(x, y);
-    e->setParent(this);
-    m_elements.push_back(e);
-}
-
-//---------------------------------------------------------
-//   setSelected
-//---------------------------------------------------------
-
-void Compound::setSelected(bool f)
-{
-    EngravingItem::setSelected(f);
-    for (auto i = m_elements.begin(); i != m_elements.end(); ++i) {
-        (*i)->setSelected(f);
-    }
-}
-
-//---------------------------------------------------------
-//   setVisible
-//---------------------------------------------------------
-
-void Compound::setVisible(bool f)
-{
-    EngravingItem::setVisible(f);
-    for (auto i = m_elements.begin(); i != m_elements.end(); ++i) {
-        (*i)->setVisible(f);
-    }
-}
-
-//---------------------------------------------------------
-//   clear
-//---------------------------------------------------------
-
-void Compound::clear()
-{
-    for (EngravingItem* e : m_elements) {
-        if (e->selected()) {
-            score()->deselect(e);
-        }
-        delete e;
-    }
-    m_elements.clear();
 }
 
 //---------------------------------------------------------
@@ -2359,10 +2277,10 @@ bool EngravingItem::edit(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   startEditDrag
+//   startDragGrip
 //---------------------------------------------------------
 
-void EngravingItem::startEditDrag(EditData& ed)
+void EngravingItem::startDragGrip(EditData& ed)
 {
     ElementEditDataPtr eed = ed.getData(this);
     if (!eed) {
@@ -2378,11 +2296,15 @@ void EngravingItem::startEditDrag(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   editDrag
+//   dragGrip
 //---------------------------------------------------------
 
-void EngravingItem::editDrag(EditData& ed)
+void EngravingItem::dragGrip(EditData& ed)
 {
+    IF_ASSERT_FAILED(ed.curGrip != Grip::NO_GRIP) {
+        return;
+    }
+
     score()->addRefresh(canvasBoundingRect());
     setOffset(offset() + ed.delta);
     setOffsetChanged(true);
@@ -2390,10 +2312,10 @@ void EngravingItem::editDrag(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   endEditDrag
+//   endDragGrip
 //---------------------------------------------------------
 
-void EngravingItem::endEditDrag(EditData& ed)
+void EngravingItem::endDragGrip(EditData& ed)
 {
     ElementEditDataPtr eed = ed.getData(this);
     bool changed = false;

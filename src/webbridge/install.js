@@ -28,6 +28,9 @@ fs.mkdirSync(OUTPUT_DIR+"/distr", { recursive: true });
 copyFile(HERE+"/distr/muapi.js", OUTPUT_DIR+"/distr/muapi.js");
 copyFile(HERE+"/distr/muimpl.js", OUTPUT_DIR+"/distr/muimpl.js");
 copyFile(HERE+"/distr/qtloader.js", OUTPUT_DIR+"/distr/qtloader.js");
+copyFile(HERE+"/distr/audioworker.js", OUTPUT_DIR+"/distr/audioworker.js");
+copyFile(HERE+"/distr/audiodriver.js", OUTPUT_DIR+"/distr/audiodriver.js"); 
+copyFile(HERE+"/distr/audio_worklet_processor.js", OUTPUT_DIR+"/distr/audio_worklet_processor.js");
 
 // Copy viewer
 copyFile(HERE+"/viewer/viewer.html", OUTPUT_DIR+"/viewer.html");

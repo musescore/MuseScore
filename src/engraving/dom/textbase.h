@@ -99,7 +99,7 @@ public:
     double fontSize() const { return m_fontSize; }
     String fontFamily() const { return m_fontFamily; }
     void setValign(VerticalAlignment val) { m_valign = val; }
-    void setFontSize(double val) { m_fontSize = muse::RealIsEqualOrLess(val, 0.0) ? 1.0 : val; } // Font Size 0 will cause a crash
+    void setFontSize(double val) { m_fontSize = val; }
     void setFontFamily(const String& val) { m_fontFamily = val; }
 
     FormatValue formatValue(FormatId) const;
@@ -303,8 +303,6 @@ public:
 
     ~TextBase();
 
-    virtual bool mousePress(EditData&) override;
-
     Text& operator=(const Text&) = delete;
 
     Align align() const { return m_align; }
@@ -355,6 +353,9 @@ public:
     virtual void endDrag(EditData&) override;
     void movePosition(EditData&, TextCursor::MoveOperation);
 
+    bool mousePress(EditData& ed);
+    void dragTo(EditData& ed);
+
     bool deleteSelectedText(EditData&);
 
     void selectAll(TextCursor*);
@@ -367,8 +368,6 @@ public:
     RectF pageRectangle() const;
 
     const Shape& highResShape() const { return ldata()->highResShape.value(); }
-
-    void dragTo(EditData&);
 
     std::vector<LineF> dragAnchorLines() const override;
 

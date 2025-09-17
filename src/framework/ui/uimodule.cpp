@@ -49,6 +49,7 @@
 #include "view/mainwindowbridge.h"
 #else
 #include "internal/platform/stub/stubplatformtheme.h"
+#include "internal/windowscontroller.h"
 #include "view/mainwindowbridge.h"
 #endif
 
@@ -108,6 +109,7 @@ void UiModule::registerExports()
     m_platformTheme = std::make_shared<LinuxPlatformTheme>();
     m_windowsController = std::make_shared<WindowsController>();
     #else
+    m_windowsController = std::make_shared<WindowsController>();
     m_platformTheme = std::make_shared<StubPlatformTheme>();
     #endif
 

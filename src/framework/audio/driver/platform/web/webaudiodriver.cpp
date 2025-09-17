@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,104 +20,62 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "webaudiodriver.h"
+
+#include <emscripten/val.h>
+
 #include "log.h"
 
-#include <emscripten.h>
-#include <emscripten/val.h>
-#include <emscripten/bind.h>
-#include <emscripten/html5.h>
-
+using namespace muse;
 using namespace muse::audio;
-using namespace emscripten;
 
-namespace muse::audio::web {
-using let = emscripten::val;
-static val context = val::global();
-static IAudioDriver::Spec* format = nullptr;
-static std::vector<float> buffer;
-
-void audioCallback(emscripten::val event)
-{
-    let sampleBuffer = event["outputBuffer"];
-    int length = sampleBuffer["length"].as<int>();
-    int channels = sampleBuffer["numberOfChannels"].as<int>();
-    int sampleCount = length * channels;
-    int bytes = sampleCount * sizeof(float);
-
-    if (!format) {
-        return;
-    }
-    if (buffer.size() != sampleCount) {
-        buffer.resize(sampleCount);
-    }
-    format->callback(nullptr, reinterpret_cast<uint8_t*>(buffer.data()), bytes);
-
-    for (int j = 0; j < channels; ++j) {
-        let channelData = sampleBuffer.call<val>("getChannelData", j);
-        for (int i = 0; i < length; ++i) {
-            channelData.set(i, buffer[i * channels + j]);
-        }
-    }
-}
-
-EM_BOOL mouseCallback(int eventType, const EmscriptenMouseEvent* e, void* userData)
-{
-    if (context["state"].as<std::string>() == std::string("suspended")) {
-        context.call<val>("resume");
-    }
-    return true;
-}
-}
-EMSCRIPTEN_BINDINGS(events)
-{
-    function("audioCallback", web::audioCallback);
-}
-
-WebAudioDriver::WebAudioDriver()
+void WebAudioDriver::init()
 {
 }
 
 std::string WebAudioDriver::name() const
 {
-    return "MUAUDIO(WEB)";
+    return "web";
 }
 
 bool WebAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
-    if (isOpened()) {
-        return true;
+    LOGI() << "try open driver";
+
+    emscripten::val::module_property("driver")["open"]();
+
+    emscripten::val specVal = emscripten::val::module_property("driver")["outputSpec"]();
+    m_activeSpec = spec;
+    m_activeSpec.output.sampleRate = specVal["sampleRate"].as<double>();
+    m_activeSpec.output.samplesPerChannel = specVal["samplesPerChannel"].as<int>();
+
+    LOGI() << "activeSpec: "
+           << "sampleRate: " << m_activeSpec.output.sampleRate
+           << ", samplesPerChannel: " << m_activeSpec.output.samplesPerChannel
+           << ", audioChannelCount: " << m_activeSpec.output.audioChannelCount
+           << " (real: " << specVal["audioChannelCount"].as<int>() << ")";
+
+    if (activeSpec) {
+        *activeSpec = m_activeSpec;
     }
 
-    auto AudioContext = val::global("AudioContext");
-    if (!AudioContext.as<bool>()) {
-        AudioContext = val::global("webkitAudioContext");
-    }
-
-    web::context = AudioContext.new_();
-    unsigned int sampleRate = web::context["sampleRate"].as<int>();
-    *activeSpec = spec;
-    activeSpec->format = Format::AudioF32;
-    activeSpec->sampleRate = sampleRate;
-    web::format = activeSpec;
-
-    auto audioNode = web::context.call<val>("createScriptProcessor", spec.samples, 0, spec.channels);
-    if (!audioNode.as<bool>()) {
-        LOGE() << "can't create audio script processor";
-        return false;
-    }
-    web::buffer.resize(spec.samples * spec.channels, 0.f);
-
-    audioNode.set("onaudioprocess", val::module_property("audioCallback"));
-    audioNode.call<val>("connect", web::context["destination"]);
-
-    emscripten_set_mousedown_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, nullptr, true, web::mouseCallback);
     m_opened = true;
-    return m_opened;
+    return true;
+}
+
+void WebAudioDriver::resume()
+{
+    emscripten::val::module_property("driver")["resume"]();
+}
+
+void WebAudioDriver::suspend()
+{
+    emscripten::val::module_property("driver")["suspend"]();
 }
 
 void WebAudioDriver::close()
 {
-    web::context.call<val>("close");
+    m_opened = false;
+    emscripten::val::module_property("driver")["close"]();
 }
 
 bool WebAudioDriver::isOpened() const
@@ -125,36 +83,84 @@ bool WebAudioDriver::isOpened() const
     return m_opened;
 }
 
-std::string WebAudioDriver::outputDevice() const
+const WebAudioDriver::Spec& WebAudioDriver::activeSpec() const
 {
-    NOT_SUPPORTED;
-    return "default";
+    return m_activeSpec;
 }
 
-bool WebAudioDriver::selectOutputDevice(const std::string& name)
+bool WebAudioDriver::setOutputDeviceBufferSize(unsigned int)
 {
     NOT_SUPPORTED;
     return false;
 }
 
-std::vector<std::string> WebAudioDriver::availableOutputDevices() const
+async::Notification WebAudioDriver::outputDeviceBufferSizeChanged() const
+{
+    static async::Notification n;
+    return n;
+}
+
+bool WebAudioDriver::setOutputDeviceSampleRate(unsigned int)
 {
     NOT_SUPPORTED;
-    return { "default" };
+    return false;
+}
+
+async::Notification WebAudioDriver::outputDeviceSampleRateChanged() const
+{
+    static async::Notification n;
+    return n;
+}
+
+std::vector<unsigned int> WebAudioDriver::availableOutputDeviceBufferSizes() const
+{
+    std::vector<unsigned int> sizes;
+    sizes.push_back(m_activeSpec.output.samplesPerChannel);
+    return sizes;
+}
+
+std::vector<unsigned int> WebAudioDriver::availableOutputDeviceSampleRates() const
+{
+    std::vector<unsigned int> sizes;
+    sizes.push_back(m_activeSpec.output.sampleRate);
+    return sizes;
+}
+
+AudioDeviceID WebAudioDriver::outputDevice() const
+{
+    static AudioDeviceID id("default");
+    return id;
+}
+
+bool WebAudioDriver::selectOutputDevice(const AudioDeviceID&)
+{
+    NOT_SUPPORTED;
+    return false;
+}
+
+bool WebAudioDriver::resetToDefaultOutputDevice()
+{
+    return true;
+}
+
+async::Notification WebAudioDriver::outputDeviceChanged() const
+{
+    static async::Notification n;
+    return n;
+}
+
+AudioDeviceList WebAudioDriver::availableOutputDevices() const
+{
+    AudioDeviceList list;
+    AudioDevice d;
+    d.id = outputDevice();
+    d.name = d.id;
+    list.push_back(d);
+    return list;
 }
 
 async::Notification WebAudioDriver::availableOutputDevicesChanged() const
 {
-    NOT_SUPPORTED;
-    return async::Notification();
-}
-
-void WebAudioDriver::resume()
-{
-    web::context.call<val>("resume");
-}
-
-void WebAudioDriver::suspend()
-{
-    web::context.call<val>("suspend");
+    static async::Notification n;
+    return n;
 }

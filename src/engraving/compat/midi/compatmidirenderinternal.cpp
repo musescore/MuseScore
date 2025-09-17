@@ -457,7 +457,7 @@ static void collectGuitarBend(const Note* note,
     const float scale = (float)wheelSpec.mLimit / wheelSpec.mAmplitude;
 
     while (note->bendFor() || note->tieFor()) {
-        const GuitarBend* bendFor = note->bendFor();
+        GuitarBend* bendFor = note->bendFor();
         int duration = note->chord()->actualTicks().ticks();
         if (bendFor) {
             const Note* endNote = bendFor->endNote();
@@ -482,6 +482,7 @@ static void collectGuitarBend(const Note* note,
                 addConstPitchWheel(curPitchBendSegmentStart, initialPitchBendValue, pitchWheelRenderer, channel, note->staffIdx(), effect);
             }
 
+            bendFor->computeBendAmount();
             currentQuarterTones = bendFor->bendAmountInQuarterTones();
 
             double tickDelta = duration * (bendPlaybackInfo.endTimeFactor - bendPlaybackInfo.startTimeFactor);
@@ -702,6 +703,9 @@ static int calculateTieLength(const Note* note)
             n = tieFor->endNote();
         } else if (bendFor && bendFor->endNote() != n) {
             n = bendFor->endNote();
+            if (n->chord()->isGrace()) {
+                return tieLen;
+            }
         } else {
             break;
         }

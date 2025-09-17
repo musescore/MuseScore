@@ -102,7 +102,7 @@ async::Promise<Color> InteractiveProvider::selectColor(const Color& color, const
 
         dlg->setCurrentColor(color.toQColor());
 
-        QObject::connect(dlg, &QFileDialog::finished, [this, dlg, resolve, reject](int result) {
+        QObject::connect(dlg, &QColorDialog::finished, [this, dlg, resolve, reject](int result) {
             dlg->deleteLater();
 
             m_isSelectColorOpened = false;

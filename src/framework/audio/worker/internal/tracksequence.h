@@ -26,7 +26,7 @@
 #include "modularity/ioc.h"
 #include "../iaudioengine.h"
 
-#include "common/audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 #include "../itracksequence.h"
 #include "../iclock.h"

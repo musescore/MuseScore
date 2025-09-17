@@ -680,7 +680,7 @@ static int process_info(SFData *sf, int size)
 
             if(sf->version.major == 3)
             {
-#if !LIBSNDFILE_SUPPORT
+#if !(LIBSNDFILE_SUPPORT || STBVORBIS_SUPPORT)
                 FLUID_LOG(FLUID_WARN,
                           "Sound font version is %d.%d but fluidsynth was compiled without"
                           " support for (v3.x)",
@@ -2519,6 +2519,27 @@ error_exit:
     sf_close(sndfile);
     return -1;
 }
+
+#elif STBVORBIS_SUPPORT
+
+extern int vorbis_decode_memory(const unsigned char *mem, unsigned int len, short **output, unsigned int *channels, unsigned int *sample_rate);
+
+static int fluid_sffile_read_vorbis(SFData *sf, unsigned int start_byte, unsigned int end_byte, short **data)
+{
+    FILE* f = sf->sffd;
+
+    fseek(f, sf->samplepos + start_byte, SEEK_SET);
+    size_t size = end_byte - start_byte;
+    uint8_t* mem = (uint8_t*)malloc(size);
+    fread(mem, 1, size, f);
+    fseek(f, sf->samplepos + start_byte, SEEK_SET);
+
+    int sampleSize = vorbis_decode_memory(mem, size, data, NULL, NULL);
+    free(mem);
+
+    return sampleSize;
+}
+
 #else
 static int fluid_sffile_read_vorbis(SFData *sf, unsigned int start_byte, unsigned int end_byte, short **data)
 {

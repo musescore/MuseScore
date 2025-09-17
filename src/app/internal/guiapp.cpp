@@ -108,7 +108,7 @@ void GuiApp::perform()
     struct SplashScreen {
         void close() {}
     };
-    SplashScreen* splashScreen = nullptr;
+    static SplashScreen* splashScreen = nullptr;
 #endif
 
     // ====================================================

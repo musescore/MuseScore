@@ -49,7 +49,8 @@ public:
     void consolidateAdjustmentOffsetIntoUserOffset();
 
     bool isEdited() const;
-    void editDrag(EditData&) override;
+    RectF drag(EditData&) override;
+    void dragGrip(EditData&) override;
 
     Tie* tie() const { return (Tie*)spanner(); }
 

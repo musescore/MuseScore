@@ -497,7 +497,11 @@ InterruptionPoints RestLayout::computeInterruptionPoints(const Measure* measure,
     for (const Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
         for (track_idx_t track = sTrack; track < eTrack; ++track) {
             EngravingItem* item = segment->element(track);
-            if (item && item->isRest() && toRest(item)->isGap()) {
+            if (!item) {
+                continue;
+            }
+            const bool gapRest = item->isRest() && toRest(item)->isGap();
+            if (gapRest || !item->visible()) {
                 for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                     interruptionPointSets[voice].insert(segment->rtick());
                     interruptionPointSets[voice].insert(segment->rtick() + segment->ticks());
@@ -597,12 +601,15 @@ void RestLayout::checkFullMeasureRestCollisions(const System* system, LayoutCont
 
             Shape measureShape;
             for (const Segment& segment : measure->segments()) {
+                if (!segment.isActive()) {
+                    continue;
+                }
                 double xSegment = segment.pagePos().x() - system->pagePos().x();
                 measureShape.add(segment.staffShape(staffIdx).translated(PointF(xSegment, 0.0)));
             }
             measureShape.remove_if([fullMeasureRest] (const ShapeElement& shapeEl) {
                 const EngravingItem* shapeItem = shapeEl.item();
-                return shapeItem && (shapeItem == fullMeasureRest || shapeItem->isBarLine());
+                return shapeItem && (shapeItem == fullMeasureRest || shapeItem->isBarLine() || shapeItem->isAccidental());
             });
 
             const double spatium = fullMeasureRest->spatium();

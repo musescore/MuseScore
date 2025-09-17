@@ -18,16 +18,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+include(GetPlatformInfo)
+
 set(AUDIO_MAIN_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audiomodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audiomodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/istartaudiocontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/iplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontcontroller.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/startaudiocontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/startaudiocontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/playback.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/playback.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/player.cpp

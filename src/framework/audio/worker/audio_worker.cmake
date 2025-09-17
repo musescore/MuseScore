@@ -20,14 +20,22 @@
 
 include(GetPlatformInfo)
 
+if (WEBWORKER_FACADE_MODE)
+# Web Facade
 set(AUDIO_WORKER_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/audioworker.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/audioworker.h
+    ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudioworker.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudioworker.h
+)
+
+else()
+# Real worker
+set(AUDIO_WORKER_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/iaudioworker.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioworkerconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/istartworkercontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iworkerplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudiostream.h
     ${CMAKE_CURRENT_LIST_DIR}/iclock.h
     ${CMAKE_CURRENT_LIST_DIR}/isequenceio.h
     ${CMAKE_CURRENT_LIST_DIR}/itracksequence.h
@@ -41,6 +49,8 @@ set(AUDIO_WORKER_SRC
     # internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioworkerconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioworkerconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/startworkercontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/startworkercontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerplayback.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerchannelcontroller.cpp
@@ -62,8 +72,6 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/igettracks.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequenceplayer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequenceplayer.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiostream.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiostream.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/samplerateconvertor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/samplerateconvertor.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/track.h
@@ -127,21 +135,39 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsoundfontparser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsoundfontparser.cpp
+
+    # codecs
+    ${CMAKE_CURRENT_LIST_DIR}/internal/codecs/vorbisdecoder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/codecs/vorbisdecoder.h
 )
 
+if (OS_IS_WASM)
+    set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/platform/web/networksfloader.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/platform/web/networksfloader.h
+    )
+else()
+    set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.h
+    )
+endif()
+
 if (ARCH_IS_X86_64)
-    set(MODULE_SRC ${MODULE_SRC}
+    set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_sse2.h
         )
 elseif (ARCH_IS_AARCH64)
-    set(MODULE_SRC ${MODULE_SRC}
+    set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_neon.h
         )
 else ()
-    set(MODULE_SRC ${MODULE_SRC}
+    set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_scalar.h
         )
 endif()
+
+endif() # End of Real worker
 
 set(AUDIO_WORKER_LINK )
 if (MUSE_MODULE_AUDIO_EXPORT)

@@ -1707,7 +1707,6 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
             // Jazz superscript
             if (superScriptModifier) {
                 // Set scale
-                LOGI() << "SCALE: " << cl->stackedModifierMag();
                 m_renderList.emplace_back(new RenderActionScale(cl->stackedModifierMag()));
                 // Move to x-height
                 m_renderList.emplace_back(new RenderActionPush());
@@ -2289,7 +2288,7 @@ void ChordList::checkChordList(const MStyle& style)
         double eadjust = style.styleD(Sid::chordExtensionAdjust);
         double mmag = style.styleD(Sid::chordModifierMag);
         double madjust = style.styleD(Sid::chordModifierAdjust);
-        double stackedmmag = style.styleD(Sid::chordStackedModiferMag);
+        double stackedmmag = style.styleD(Sid::chordStackedModifierMag);
         bool stackModifiers = style.styleB(Sid::verticallyStackModifiers);
         bool excludeModsHAlign = style.styleB(Sid::chordAlignmentExcludeModifiers);
         String symbolFont = style.styleSt(Sid::musicalTextFont);

@@ -34,8 +34,8 @@ AbstractSynthesizer::AbstractSynthesizer(const AudioInputParams& params, const m
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    audioEngine()->modeChanged().onNotify(this, [this]() {
-        updateRenderingMode(audioEngine()->mode());
+    audioEngine()->modeChanged().onReceive(this, [this](RenderMode mode) {
+        updateRenderingMode(mode);
     });
 }
 
@@ -61,11 +61,6 @@ void AbstractSynthesizer::setup(const mpe::PlaybackData& playbackData)
 
     setupSound(playbackData.setupData);
     setupEvents(playbackData);
-}
-
-void AbstractSynthesizer::revokePlayingNotes()
-{
-    ONLY_AUDIO_WORKER_THREAD;
 }
 
 void AbstractSynthesizer::prepareToPlay()

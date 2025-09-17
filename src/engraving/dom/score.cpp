@@ -1132,7 +1132,7 @@ Measure* Score::searchMeasure(const PointF& p, const System* preferredSystem, do
     for (System* system : systems) {
         double x = p.x() - system->canvasPos().x();
         for (MeasureBase* mb : system->measures()) {
-            if (mb->isMeasure() && (x < (mb->x() + mb->ldata()->bbox().width()))) {
+            if (mb->isMeasure() && !toMeasure(mb)->isMMRest() && (x < (mb->x() + mb->ldata()->bbox().width()))) {
                 return toMeasure(mb);
             }
         }
@@ -1612,7 +1612,8 @@ void Score::addElement(EngravingItem* element)
         break;
     }
 
-    if (element->isTextBase() && toTextBase(element)->hasParentSegment()) {
+    if (element->isTextBase() && toTextBase(element)->hasParentSegment()
+        && toSegment(element->parent())->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
         MoveElementAnchors::checkMeasureBoundariesAndMoveIfNeed(element);
     }
 
@@ -3593,16 +3594,23 @@ static Segment* findElementEndSegment(Score* score, EngravingItem* e, Segment* d
         return score->tick2segmentMM(sp->tick2(), true, Segment::CHORD_REST_OR_TIME_TICK_TYPE);
     }
 
-    if (Segment* ancestor = toSegment(e->findAncestor(ElementType::SEGMENT))) {
-        if (ancestor->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+    if (Segment* seg = toSegment(e->findAncestor(ElementType::SEGMENT))) {
+        if (seg->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
             // https://github.com/musescore/MuseScore/pull/25821#issuecomment-2617369881
-            if (Segment* next = ancestor->nextCR(e->track(), true)) {
-                return next;
-            }
+            return seg->nextCR(e->track(), true);
+        }
+        // Strictly speaking redundant, but more efficient than `tick2segmentMM`
+        else if (Segment* crSegAtSameTick = seg->measure()->findSegmentR(Segment::CHORD_REST_OR_TIME_TICK_TYPE, seg->rtick())) {
+            return crSegAtSameTick;
         }
     }
 
-    if (Segment* seg = score->tick2segmentMM(e->tick(), true, Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+    const Fraction& tick = e->tick();
+    if (tick == score->endTick()) {
+        return nullptr;
+    }
+
+    if (Segment* seg = score->tick2segmentMM(tick, true, Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
         return seg;
     }
 
@@ -3791,7 +3799,7 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
         }
 
         Segment* newEndSegment = findElementEndSegment(this, newElement, newStartSegment);
-        if (endSegment && newEndSegment->tick() > endSegment->tick()) {
+        if (endSegment && (!newEndSegment || newEndSegment->tick() > endSegment->tick())) {
             endSegment = newEndSegment;
         }
 
@@ -5796,6 +5804,18 @@ void Score::addSystemObjectStaff(Staff* staff)
 void Score::removeSystemObjectStaff(Staff* staff)
 {
     muse::remove(m_systemObjectStaves, staff);
+}
+
+const std::vector<Staff*> Score::systemObjectStavesWithTopStaff() const
+{
+    std::vector<Staff*> result;
+    if (Staff* topStaff = staff(0)) {
+        result.push_back(topStaff);
+    }
+
+    muse::join(result, systemObjectStaves());
+
+    return result;
 }
 
 const std::vector<Part*>& Score::parts() const

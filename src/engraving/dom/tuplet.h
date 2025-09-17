@@ -76,8 +76,8 @@ public:
     static void resetNumberProperty(Text* number);
 
     bool isEditable() const override;
-    void startEditDrag(EditData&) override;
-    void editDrag(EditData&) override;
+    void startDragGrip(EditData&) override;
+    void dragGrip(EditData&) override;
 
     void setSelected(bool f) override;
 

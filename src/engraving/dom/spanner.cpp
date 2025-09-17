@@ -1621,10 +1621,16 @@ String SpannerSegment::formatBarsAndBeats() const
         endSegment = score()->lastSegment()->prev1MM(SegmentType::ChordRest);
     }
 
-    if (endSegment->tick() != score()->lastSegment()->prev1MM(SegmentType::ChordRest)->tick()
+    if (endSegment->tick() > Fraction(0, 1)
+        && endSegment->tick() != score()->lastSegment()->prev1MM(SegmentType::ChordRest)->tick()
         && spanner->type() != ElementType::SLUR
+        && spanner->type() != ElementType::HAMMER_ON_PULL_OFF
         && spanner->type() != ElementType::TIE) {
         endSegment = endSegment->prev1MM(SegmentType::ChordRest);
+    }
+
+    IF_ASSERT_FAILED(endSegment) {
+        return EngravingItem::formatBarsAndBeats();
     }
 
     return formatStartBarsAndBeats(spanner->startSegment()) + u' ' + formatEndBarsAndBeats(endSegment);

@@ -23,6 +23,20 @@ set(MODULE_ALIAS muse::audio)
 
 include(GetPlatformInfo)
 
+set(MODULE_LINK )
+if (OS_IS_WASM)
+    set(WEBWORKER_FACADE_MODE ON)
+
+    # worker exec
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/worker/platform/web audio_worker)
+
+else()
+
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth fluidsynth)
+list(APPEND MODULE_LINK fluidsynth)
+
+endif()
+
 include(common/audio_common.cmake)
 include(main/audio_main.cmake)
 include(worker/audio_worker.cmake)
@@ -40,15 +54,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/devtools/inputlag.h
     )
 
-# fluidsynth dependency
-include(SetupSndFile)
-
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth fluidsynth)
-
-set(MODULE_LINK
-    ${AUDIO_WORKER_LINK}
-    fluidsynth
-    )
+set(MODULE_LINK ${MODULE_LINK} ${AUDIO_WORKER_LINK})
 
 if (QT_ADD_CONCURRENT)
     list(APPEND MODULE_LINK Qt::Concurrent)

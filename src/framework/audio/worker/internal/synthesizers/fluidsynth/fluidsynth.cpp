@@ -64,6 +64,7 @@ FluidSynth::FluidSynth(const AudioSourceParams& params, const modularity::Contex
     : AbstractSynthesizer(params, iocCtx)
 {
     m_fluid = std::make_shared<Fluid>();
+    m_midiOutPort = midiOutPort();
 }
 
 bool FluidSynth::isValid() const
@@ -133,7 +134,7 @@ Ret FluidSynth::init(const OutputSpec& spec)
     createFluidInstance();
 
     m_sequencer.setOnOffStreamFlushed([this]() {
-        m_allNotesOffRequested = true;
+        m_flushSoundRequested = true;
     });
 
     LOGD() << "synth inited\n";
@@ -150,7 +151,7 @@ void FluidSynth::createFluidInstance()
     fluid_synth_add_sfloader(m_fluid->synth, sfloader);
 }
 
-void FluidSynth::allNotesOff()
+void FluidSynth::doFlushSound()
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return;
@@ -165,8 +166,7 @@ void FluidSynth::allNotesOff()
         setPitchBend(i, 8192);
     }
 
-    auto port = midiOutPort();
-    if (port->isConnected()) {
+    if (m_midiOutPort && m_midiOutPort->isConnected()) {
         // Send all notes off to connected midi ports.
         // Room for improvement:
         // - We could record which groups/channels we sent something or which channels were scheduled in the sequencer.
@@ -188,24 +188,22 @@ void FluidSynth::allNotesOff()
             muse::midi::Event e(muse::midi::Event::Opcode::ControlChange, muse::midi::Event::MessageType::ChannelVoice20);
             e.setChannel(i);
             e.setIndex(123); // CC#123 = All notes off
-            port->sendEvent(e);
+            m_midiOutPort->sendEvent(e);
         }
         for (int i = lowerBound; i < upperBound; i++) {
             muse::midi::Event e(muse::midi::Event::Opcode::ControlChange, muse::midi::Event::MessageType::ChannelVoice20);
             e.setChannel(i);
             e.setIndex(midi::SUSTAIN_PEDAL_CONTROLLER);
             e.setData(0);
-            port->sendEvent(e);
+            m_midiOutPort->sendEvent(e);
         }
         for (int i = lowerBound; i < upperBound; i++) {
             muse::midi::Event e(muse::midi::Event::Opcode::PitchBend, muse::midi::Event::MessageType::ChannelVoice20);
             e.setChannel(i);
             e.setData(0x80000000);
-            port->sendEvent(e);
+            m_midiOutPort->sendEvent(e);
         }
     }
-
-    m_allNotesOffRequested = false;
 }
 
 bool FluidSynth::handleEvent(const midi::Event& event)
@@ -240,16 +238,18 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     }
     }
 
-    if (STAFF_TO_MIDIOUT_CHANNEL && event.isChannelVoice()) {
-        int staff = m_sequencer.lastStaff();
-        if (staff >= 0) {
-            int channel = staff % 16;
-            midi::Event me(event);
-            me.setChannel(channel);
-            midiOutPort()->sendEvent(me);
+    if (m_midiOutPort) {
+        if (STAFF_TO_MIDIOUT_CHANNEL && event.isChannelVoice()) {
+            int staff = m_sequencer.lastStaff();
+            if (staff >= 0) {
+                int channel = staff % 16;
+                midi::Event me(event);
+                me.setChannel(channel);
+                m_midiOutPort->sendEvent(me);
+            }
+        } else {
+            m_midiOutPort->sendEvent(event);
         }
-    } else {
-        midiOutPort()->sendEvent(event);
     }
 
     return ret == FLUID_OK;
@@ -357,23 +357,10 @@ const mpe::PlaybackData& FluidSynth::playbackData() const
     return m_sequencer.playbackData();
 }
 
-void FluidSynth::revokePlayingNotes()
-{
-    m_allNotesOffRequested = true;
-}
-
 void FluidSynth::flushSound()
 {
-    IF_ASSERT_FAILED(m_fluid->synth) {
-        return;
-    }
-
     m_sequencer.flushOffstream();
-
-    allNotesOff();
-
-    fluid_synth_all_sounds_off(m_fluid->synth, -1);
-    fluid_synth_cc(m_fluid->synth, -1, 121, 127);
+    m_flushSoundRequested = true;
 }
 
 bool FluidSynth::isActive() const
@@ -412,8 +399,9 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
         return 0;
     }
 
-    if (m_allNotesOffRequested) {
-        allNotesOff();
+    if (m_flushSoundRequested) {
+        doFlushSound();
+        m_flushSoundRequested = false;
     }
 
     const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_outputSpec.sampleRate);

@@ -1844,7 +1844,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="181"/>
         <source>Hammer-ons, pull-offs &amp; tapping</source>
-        <translation type="unfinished"/>
+        <translation>Hammer-on, pull-off și bătăi</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="186"/>
@@ -2292,8 +2292,8 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="547"/>
-        <source>Hide empty staves within systems</source>
-        <translation>Ascunde portativele goale din sisteme</translation>
+        <source>Automatically hide all empty staves</source>
+        <translation>Ascunde automat toate portativele goale</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="559"/>
@@ -2736,7 +2736,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2636"/>
         <source>Note to note:</source>
-        <translation type="unfinished"/>
+        <translation>Notă la notă:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2662"/>
@@ -2751,7 +2751,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2730"/>
         <source>System density:</source>
-        <translation type="unfinished"/>
+        <translation>Densitate sistem:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2737"/>
@@ -2791,7 +2791,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2864"/>
         <source>Start of the system to first note:</source>
-        <translation type="unfinished"/>
+        <translation>Începutul sistemului la prima notă:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2917"/>
@@ -3227,7 +3227,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5039"/>
         <source>Left (start) repeat signs</source>
-        <translation type="unfinished"/>
+        <translation>Semnele de început repetiție</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5068"/>
@@ -3629,7 +3629,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6641"/>
         <source>Extend bracket to end of duration</source>
-        <translation type="unfinished"/>
+        <translation>Extinde paranteza până la finalul duratei</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6651"/>
@@ -3777,17 +3777,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7268"/>
         <source>Partial slurs across repeats and breaks:</source>
-        <translation type="unfinished"/>
+        <translation>Legato parțial peste repetiții și întreruperi:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7278"/>
         <source>Follow contour of notes</source>
-        <translation type="unfinished"/>
+        <translation>Urmează conturul notelor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7285"/>
         <source>Angle away from staff</source>
-        <translation type="unfinished"/>
+        <translation>Înclină în afara portativului</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7297"/>
@@ -4328,7 +4328,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11417"/>
         <source>Min. space between lyrics:</source>
-        <translation type="unfinished"/>
+        <translation>Spațiu minim între versuri:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11443"/>
@@ -4353,7 +4353,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11552"/>
         <source>Align verse numbers</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază numerele versurilor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11625"/>
@@ -4378,12 +4378,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11763"/>
         <source>Min. space between dash and text:</source>
-        <translation type="unfinished"/>
+        <translation>Spațiu minim între liniuță și text:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11773"/>
         <source>Limit number of dashes to:</source>
-        <translation type="unfinished"/>
+        <translation>Limitează numărul de liniuțe la:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11783"/>
@@ -4440,7 +4440,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12024"/>
         <source>Max. space between dashes:</source>
-        <translation type="unfinished"/>
+        <translation>Spațiu maxim între liniuțe:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12041"/>
@@ -4478,12 +4478,13 @@ prima notă a sistemului</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12102"/>
         <source>Never left-align syllables
 followed by dashes</source>
-        <translation type="unfinished"/>
+        <translation>Nu alinia la stânga silabele
+urmate de cratime</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12122"/>
         <source>Extension lines</source>
-        <translation type="unfinished"/>
+        <translation>Linii de extensie</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12162"/>
@@ -4523,7 +4524,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12347"/>
         <source>Reset &apos;Snap to dynamics&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Resetează valoarea pentru „Fixează la nuanțe”</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12569"/>
@@ -6214,9 +6215,9 @@ followed by dashes</source>
 <context>
     <name>accessibility</name>
     <message>
-        <location filename="../../src/framework/accessibility/internal/accessibleiteminterface.cpp" line="285"/>
-        <source>Panel</source>
-        <translation>Panou</translation>
+        <location filename="../../src/framework/accessibility/internal/accessibleiteminterface.cpp" line="308"/>
+        <source>%1 panel</source>
+        <translation>Panou %1</translation>
     </message>
 </context>
 <context>
@@ -6355,7 +6356,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="145"/>
         <source>S&amp;election filter</source>
-        <translation type="unfinished"/>
+        <translation>Filtru s&amp;elecție</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="146"/>
@@ -6476,12 +6477,12 @@ followed by dashes</source>
         <translation>Preferințe...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="206"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="215"/>
         <source>Parts…</source>
         <translation>Știme…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="272"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="281"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="159"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="582"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="583"/>
@@ -6490,14 +6491,14 @@ followed by dashes</source>
         <translation>Revenire</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="273"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="282"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="160"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="77"/>
         <source>Undo ‘%1’</source>
         <translation>Anulează „%1”</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="278"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="287"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="165"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="589"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="590"/>
@@ -6506,7 +6507,7 @@ followed by dashes</source>
         <translation>Refacere</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="279"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="288"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="166"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="85"/>
         <source>Redo ‘%1’</source>
@@ -6640,12 +6641,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="42"/>
         <source>Edit workspaces</source>
-        <translation type="unfinished"/>
+        <translation>Editează spațiile de lucru</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="43"/>
         <source>Edit workspaces…</source>
-        <translation type="unfinished"/>
+        <translation>Editează spațiile de lucru...</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="49"/>
@@ -7299,12 +7300,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="443"/>
         <source>Add &amp;fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă &amp;diagramă acord</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="444"/>
         <source>Add fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă diagramă acord</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="450"/>
@@ -7344,13 +7345,13 @@ followed by dashes</source>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="475"/>
-        <source>Respell &amp;pitches</source>
-        <translation>Rescrie în&amp;ălțimile</translation>
+        <source>&amp;Optimize enharmonic spelling</source>
+        <translation>&amp;Optimizează notația enarmonică</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="476"/>
-        <source>Respell pitches</source>
-        <translation>Rescrie Înălțimile</translation>
+        <source>Optimize enharmonic spelling</source>
+        <translation>Optimizează notația enarmonică</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="481"/>
@@ -7671,32 +7672,32 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="746"/>
         <source>Insert &amp;fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Inserează &amp;legendă diagramă acord</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="747"/>
         <source>Insert fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Inserează legendă diagramă acord</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="753"/>
         <source>&amp;Horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>Cadru &amp;Orizontal</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="754"/>
         <source>Insert horizontal frame at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Inserează un cadru orizontal la finalul partiturii</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="760"/>
         <source>&amp;Vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>Cadru &amp;vertical</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="761"/>
         <source>Insert vertical frame at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Inserează un cadru vertical la finalul partiturii</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="767"/>
@@ -7706,17 +7707,17 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="768"/>
         <source>Insert text frame at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Inserează un cadru de text la finalul partiturii</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="774"/>
         <source>&amp;Fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Legendă diagramă acord</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="775"/>
         <source>Insert fretboard diagram legend at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Inserează legenda diagramei de acord la finalul partiturii</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="781"/>
@@ -8107,7 +8108,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1263"/>
         <source>Add hairpin: diminuendo</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă ac de păr: diminuendo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1268"/>
@@ -8672,23 +8673,23 @@ followed by dashes</source>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1653"/>
-        <source>Change enharmonic spelling (both modes)</source>
-        <translation>Schimbă notația enarmonică (ambele moduri)</translation>
+        <source>Change enharmonic spelling (concert and transposed &amp;pitch)</source>
+        <translation>Schimbă notația enarmonică (etalon camerton și trans&amp;pus)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1654"/>
-        <source>Change enharmonic spelling (concert and written pitch)</source>
-        <translation>Schimbă notația enarmonică (etalon camerton și scris)</translation>
+        <source>Change enharmonic spelling (concert and transposed pitch)</source>
+        <translation>Schimbă notația enarmonică (etalon camerton și transpus)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1660"/>
-        <source>Change enharmonic spelling (current mode)</source>
-        <translation>Schimbă notația enarmonică (modul curent)</translation>
+        <source>Change enharmonic spelling (&amp;current pitch mode only)</source>
+        <translation>Schimbă notația enarmonică (doar pentru modul de afișare &amp;curent)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1661"/>
-        <source>Change enharmonic spelling (current mode only)</source>
-        <translation>Schimbă notația enarmonică (doar în modul curent)</translation>
+        <source>Change enharmonic spelling (current pitch mode only)</source>
+        <translation>Schimbă notația enarmonică (doar pentru modul de afișare curent)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1667"/>
@@ -8758,55 +8759,55 @@ followed by dashes</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1717"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1718"/>
         <source>Advance cursor: longa (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avansează cursorul: notă cvadruplu întreagă (simbol acord/bas cifrat)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1723"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1724"/>
         <source>Advance cursor: breve (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avansează cursorul: notă dublu întreagă (simbol acord/bas cifrat)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1729"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1730"/>
         <source>Advance cursor: whole note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avansează cursorul: notă întreagă (simbol acord/bas cifrat)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1735"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1736"/>
         <source>Advance cursor: half note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avansează cursorul: doime (simbol acord/bas cifrat)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1741"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1742"/>
         <source>Advance cursor: quarter note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avansează cursorul: pătrime (simbol acord/bas cifrat)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1747"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1748"/>
         <source>Advance cursor: eighth note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avansează cursorul: optime (simbol acord/bas cifrat)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1753"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1754"/>
         <source>Advance cursor: 16th note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avansează cursorul: șaisprezecime (simbol acord/bas cifrat)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1759"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1760"/>
         <source>Advance cursor: 32nd note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avansează cursorul: treizecidoime (simbol acord/bas cifrat)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1765"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1766"/>
         <source>Advance cursor: 64th note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avansează cursorul: șaizecipătrime (simbol acord/bas cifrat)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1771"/>
@@ -8985,22 +8986,22 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1891"/>
         <source>Toggle vertical turn</source>
-        <translation type="unfinished"/>
+        <translation>Comută gruppetto vertical</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1892"/>
         <source>Add ornament: vertical turn</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă ornament: gruppetto vertical</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1897"/>
         <source>Toggle vertical inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>Comută gruppetto vertical inversat</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1898"/>
         <source>Add ornament: vertical inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă ornament: gruppetto vertical inversat</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1903"/>
@@ -9035,12 +9036,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1921"/>
         <source>Toggle Haydn ornament</source>
-        <translation type="unfinished"/>
+        <translation>Comută ornament Haydn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1922"/>
         <source>Add ornament: Haydn ornament</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă ornament: ornament Haydn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1927"/>
@@ -9850,12 +9851,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2559"/>
         <source>Hammer-on/pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Hammer-on/pull-off</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2560"/>
         <source>Add hammer-on/pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă hammer-on/pull-off</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2568"/>
@@ -9980,18 +9981,18 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2660"/>
         <source>Show line-attach points</source>
-        <translation type="unfinished"/>
+        <translation>Afișează punctele de atașament la linie</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2661"/>
         <source>Show/hide line-attach points</source>
-        <translation type="unfinished"/>
+        <translation>Afișează/ascunde punctele de atașament la linie</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2667"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2668"/>
         <source>Mark empty staff visibility overrides</source>
-        <translation type="unfinished"/>
+        <translation>Marchează vizibilitate portativ gol</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2674"/>
@@ -10071,12 +10072,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="52"/>
         <source>Pause and select</source>
-        <translation type="unfinished"/>
+        <translation>Pauză și alege</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="53"/>
         <source>Pause and select playback position</source>
-        <translation type="unfinished"/>
+        <translation>Pune pe pauză și alege poziția de redare</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="59"/>
@@ -10200,6 +10201,11 @@ followed by dashes</source>
         <translation>Reîncarcă cache-ul de redare</translation>
     </message>
     <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="192"/>
+        <source>Clear online sounds cache for this score</source>
+        <translation>Golește cache-ul de sunete online pentru această partitură</translation>
+    </message>
+    <message>
         <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="130"/>
         <source>Playback settings</source>
         <translation>Setări redare</translation>
@@ -10267,7 +10273,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="75"/>
         <source>Save &amp;selection…</source>
-        <translation type="unfinished"/>
+        <translation>Salvează &amp;selecția...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="76"/>
@@ -10287,7 +10293,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="88"/>
         <source>Publish to &amp;MuseScore.com…</source>
-        <translation type="unfinished"/>
+        <translation>Publică pe &amp;MuseScore.com…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="89"/>
@@ -10297,7 +10303,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="95"/>
         <source>Share on &amp;Audio.com…</source>
-        <translation type="unfinished"/>
+        <translation>Partajează pe &amp;Audio.com…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="96"/>
@@ -10347,12 +10353,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="129"/>
         <source>&amp;Clear list of recent files</source>
-        <translation type="unfinished"/>
+        <translation>Golește lista de fișiere re&amp;cente</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="130"/>
         <source>Clear list of recent files</source>
-        <translation type="unfinished"/>
+        <translation>Golește lista de fișiere recente</translation>
     </message>
 </context>
 <context>
@@ -10555,12 +10561,12 @@ Această acțiune nu va șterge niciuna din partiturile tale.</translation>
         <translation>Repornește</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="370"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="371"/>
         <source>The previous session quit unexpectedly.</source>
         <translation>Ultima sesiune s-a închis neașteptat.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="371"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="372"/>
         <source>Do you want to restore the session?</source>
         <translation>Dorești să restaurezi sesiunea?</translation>
     </message>
@@ -10779,7 +10785,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
 (Tutorialele video necesită o conexiune la internet)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="80"/>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="76"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
         <translation>Pentru a-ți proteja confidențialitatea, MuseScore Studio nu colectează niciun fel de date personale. Vezi &lt;a href=&quot;%1&quot;&gt;Politica de confidențialitate&lt;/a&gt; pentru mai multe informații.</translation>
     </message>
@@ -10791,12 +10797,12 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="104"/>
         <source>If you choose to cancel, then be sure to check out our free MuseSounds playback libraries on &lt;a href=&quot;%1&quot;&gt;MuseHub.com&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Dacă alegi să anulezi, asigură-te că verifici bibliotecile noastre gratuite de redare MuseSounds pe &lt;a href=&quot;%1&quot;&gt;MuseHub.com&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="114"/>
         <source>Visit MuseHub</source>
-        <translation type="unfinished"/>
+        <translation>Vizitează MuseHub</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="126"/>
@@ -10807,54 +10813,54 @@ unde vei găsi tutoriale pentru a te pune pe picioare
 <context>
     <name>appshell/menu/add</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="324"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="333"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="205"/>
         <source>&amp;Notes</source>
         <translation>&amp;Note</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="325"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="334"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="206"/>
         <source>&amp;Intervals</source>
         <translation>&amp;Intervale</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="326"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="335"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="207"/>
         <source>T&amp;uplets</source>
         <translation>Divizi&amp;uni excepționale</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="328"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="337"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="209"/>
         <source>&amp;Measures</source>
         <translation>&amp;Măsuri</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="329"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="338"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="210"/>
         <source>&amp;Frames</source>
         <translation>&amp;Cadre</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="330"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="339"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="211"/>
         <source>&amp;Text</source>
         <translation>&amp;Text</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="331"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="340"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="212"/>
         <source>&amp;Lines</source>
         <translation>&amp;Linii</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="332"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="341"/>
         <source>&amp;Chords and fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>A&amp;corduri și diagrame acord</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="336"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="345"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="215"/>
         <source>&amp;Add</source>
         <translation>&amp;Adaugă</translation>
@@ -10863,55 +10869,55 @@ unde vei găsi tutoriale pentru a te pune pe picioare
 <context>
     <name>appshell/menu/add/chordandfret</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="168"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="177"/>
         <source>Fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Legendă diagramă de acord</translation>
     </message>
 </context>
 <context>
     <name>appshell/menu/diagnostics</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="471"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="489"/>
         <source>&amp;System</source>
         <translation>&amp;Sistem</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="485"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="501"/>
         <source>&amp;MuseSampler</source>
         <translation>&amp;MuseSampler</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="532"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="547"/>
         <source>A&amp;ctions</source>
         <translation>A&amp;cțiuni</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="533"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="548"/>
         <source>&amp;Accessibility</source>
         <translation>&amp;Accesibilitate</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="534"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="549"/>
         <source>&amp;Engraving</source>
         <translation>&amp;Gravare</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="535"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="550"/>
         <source>E&amp;xtensions</source>
         <translation>E&amp;xtensii</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="536"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="551"/>
         <source>Auto&amp;bot</source>
         <translation>&amp;Bot automat</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="537"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="552"/>
         <source>&amp;VST</source>
         <translation>&amp;VST</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="541"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="556"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="291"/>
         <source>&amp;Diagnostics</source>
         <translation>&amp;Diagnostice</translation>
@@ -10920,7 +10926,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
 <context>
     <name>appshell/menu/edit</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="256"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="265"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="143"/>
         <source>&amp;Edit</source>
         <translation>&amp;Editează</translation>
@@ -10929,22 +10935,22 @@ unde vei găsi tutoriale pentru a te pune pe picioare
 <context>
     <name>appshell/menu/file</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="193"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="202"/>
         <source>Open &amp;recent</source>
         <translation>Deschide &amp;recente</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="199"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="208"/>
         <source>Save o&amp;ther</source>
-        <translation type="unfinished"/>
+        <translation>Salvează al&amp;tele</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="200"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="209"/>
         <source>Pu&amp;blish online</source>
-        <translation type="unfinished"/>
+        <translation>Pu&amp;blică online</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="213"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="222"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="120"/>
         <source>&amp;File</source>
         <translation>&amp;Fișier</translation>
@@ -10953,13 +10959,13 @@ unde vei găsi tutoriale pentru a te pune pe picioare
 <context>
     <name>appshell/menu/format</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="352"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="361"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="231"/>
         <source>Str&amp;etch</source>
         <translation>Întind&amp;e</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="363"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="372"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="239"/>
         <source>F&amp;ormat</source>
         <translation>F&amp;ormatează</translation>
@@ -10968,7 +10974,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
 <context>
     <name>appshell/menu/help</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="457"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="475"/>
         <source>&amp;Help</source>
         <translation>A&amp;jutor</translation>
     </message>
@@ -10976,7 +10982,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
 <context>
     <name>appshell/menu/plugins</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="412"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="423"/>
         <source>&amp;Plugins</source>
         <translation>&amp;Plugin-uri</translation>
     </message>
@@ -10984,19 +10990,19 @@ unde vei găsi tutoriale pentru a te pune pe picioare
 <context>
     <name>appshell/menu/tools</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="388"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="397"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="264"/>
         <source>&amp;Voices</source>
         <translation>&amp;Voce</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="389"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="398"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="265"/>
         <source>&amp;Measures</source>
         <translation>&amp;Măsuri</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="407"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="418"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="282"/>
         <source>&amp;Tools</source>
         <translation>Unel&amp;te</translation>
@@ -11005,25 +11011,25 @@ unde vei găsi tutoriale pentru a te pune pe picioare
 <context>
     <name>appshell/menu/view</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="306"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="315"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="187"/>
         <source>&amp;Toolbars</source>
         <translation>&amp;Bare de instrumente</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="310"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="319"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="191"/>
         <source>W&amp;orkspaces</source>
         <translation>Spații de lucru</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="314"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="323"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="195"/>
         <source>&amp;Show</source>
         <translation>&amp;Afișează</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="318"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="327"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="199"/>
         <source>&amp;View</source>
         <translation>&amp;Vizualizează</translation>
@@ -11315,7 +11321,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/FretboardDiagramsSection.qml" line="41"/>
         <source>Never autofill fretboard diagrams when changing chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Nu completa automat diagrama de acord la schimbarea simbolurilor de acord</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="33"/>
@@ -11360,7 +11366,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="58"/>
         <source>Color guitar bends and hammer-ons/pull-offs outside of playable range</source>
-        <translation type="unfinished"/>
+        <translation>Colorează bend-urile de chitară și hammer-on/pull-off-urile în afara diapazonului</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="33"/>
@@ -11436,7 +11442,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="163"/>
         <source>Play preview notes with score dynamics</source>
-        <translation type="unfinished"/>
+        <translation>Redă previzualizarea notelor cu nuanțele marcate pe partitură</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="180"/>
@@ -11446,7 +11452,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="195"/>
         <source>Play MIDI notes with velocity and duration during note input</source>
-        <translation type="unfinished"/>
+        <translation>Redă notele MIDI cu intensitate și durată în timpul intrării notelor</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="35"/>
@@ -11471,35 +11477,40 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="30"/>
         <source>Online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Sunete online</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="51"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="53"/>
+        <source>Show error dialog when online sounds cannot be processed</source>
+        <translation>Afișează un mesaj de eroare când sunetele online nu pot fi procesate</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="69"/>
         <source>Automatically process online sounds in the background</source>
-        <translation type="unfinished"/>
+        <translation>Procesează automat sunetele online în fundal</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="85"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="103"/>
         <source>To process online sounds, press ‘Process online sounds’ in the status bar at the bottom of the app window</source>
-        <translation type="unfinished"/>
+        <translation>Pentru a procesa sunetele online, apasă pe „Procesează sunetele online” în bara de stare din subsolul ferestrei aplicației</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="97"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="115"/>
         <source>Show processing visualization:</source>
-        <translation type="unfinished"/>
+        <translation>Arată vizualizare procesare:</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="107"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="125"/>
         <source>Always</source>
         <translation>mereu</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="110"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="128"/>
         <source>Only if processing is unfinished during playback</source>
-        <translation type="unfinished"/>
+        <translation>Doar dacă procesarea este nefinalizată în timpul redării</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="113"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="131"/>
         <source>Never</source>
         <translation>niciodată</translation>
     </message>
@@ -11632,12 +11643,12 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/WelcomeDialogSection.qml" line="32"/>
         <source>Welcome screen</source>
-        <translation type="unfinished"/>
+        <translation>Ecran de bun venit</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/WelcomeDialogSection.qml" line="43"/>
         <source>Show welcome screen when MuseScore Studio launches</source>
-        <translation type="unfinished"/>
+        <translation>Afișează ecranul de bun venit la lansarea MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ZoomSection.qml" line="30"/>
@@ -11721,7 +11732,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="112"/>
         <source>Musical symbol fonts</source>
-        <translation type="unfinished"/>
+        <translation>Fonturi simboluri muzicale</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="118"/>
@@ -11925,67 +11936,67 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/qml/WelcomeDialog.qml" line="34"/>
         <source>Welcome</source>
-        <translation type="unfinished"/>
+        <translation>Bun venit</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/WelcomeDialog.qml" line="122"/>
         <source>Previous item</source>
-        <translation type="unfinished"/>
+        <translation>Elementul anterior</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/WelcomeDialog.qml" line="176"/>
+        <location filename="../../src/appshell/qml/WelcomeDialog.qml" line="172"/>
         <source>Next item</source>
-        <translation type="unfinished"/>
+        <translation>Elementul următor</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/WelcomeDialog.qml" line="267"/>
+        <location filename="../../src/appshell/qml/WelcomeDialog.qml" line="263"/>
         <source>Don’t show welcome dialog on startup</source>
-        <translation type="unfinished"/>
+        <translation>Nu afișa ecranul de bun venit la pornire</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="233"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="234"/>
         <source>What’s new in MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Ce este nou în MuseScore Studio</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="235"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="236"/>
         <source>Includes a new system for hiding empty staves, a new text editing widget, guitar notation improvements, engraving improvements and more.</source>
-        <translation type="unfinished"/>
+        <translation>Include un nou sistem pentru ascunderea portativelor goale, un nou widget de editare a textului, îmbunătățiri în notația chitarei, îmbunătățiri de gravare și mai multe.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="237"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="238"/>
         <source>Watch video</source>
         <translation>Urmărește video</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="241"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="242"/>
         <source>Install our free MuseSounds libraries</source>
-        <translation type="unfinished"/>
+        <translation>Instalează bibliotecile noastre gratuite MuseSounds</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="243"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="244"/>
         <source>Explore our collection of realistic sample libraries, including solo instruments, marching percussion, and full orchestra - available for free on MuseHub.</source>
-        <translation type="unfinished"/>
+        <translation>Explorează colecția noastră de biblioteci de eșantioane realiste care includ instrumente solo, percuție și o întreagă orchestră - disponibile gratuit pe MuseHub.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="245"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="246"/>
         <source>Get it on MuseHub</source>
-        <translation type="unfinished"/>
+        <translation>Obține-l pe MuseHub</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="250"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="251"/>
         <source>Explore our tutorials</source>
-        <translation type="unfinished"/>
+        <translation>Explorează tutorialele noastre</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="252"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="253"/>
         <source>We’ve put together a playlist of tutorials to help both beginners and experienced users get the most out of MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>Am alcătuit o listă de tutoriale pentru a ajuta atât începătorii cât și utilizatorii experimentați să obțină maximul din MuseScore Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="254"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="255"/>
         <source>View tutorials</source>
-        <translation type="unfinished"/>
+        <translation>Vezi tutoriale</translation>
     </message>
 </context>
 <context>
@@ -12030,6 +12041,45 @@ unde vei găsi tutoriale pentru a te pune pe picioare
         <location filename="../../src/framework/audioplugins/tests/registeraudiopluginsscenariotest.cpp" line="165"/>
         <source>Scanning audio plugins</source>
         <translation>Se scanează plugin-uri audio</translation>
+    </message>
+</context>
+<context>
+    <name>braille/notation</name>
+    <message>
+        <location filename="../../src/braille/internal/notationbraille.cpp" line="641"/>
+        <source>Tuplet %1</source>
+        <translation>Diviziune excepțională %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/braille/internal/notationbraille.cpp" line="880"/>
+        <source>Six-key input mode</source>
+        <extracomment>Braille input with 6 keyboard keys (F,D,S &amp; J,K,L) to represent the 6 dots in a braille cell.</extracomment>
+        <translation>Mod de intrare cu șase taste</translation>
+    </message>
+    <message>
+        <location filename="../../src/braille/internal/notationbraille.cpp" line="882"/>
+        <source>Navigation mode</source>
+        <translation>Mod navigare</translation>
+    </message>
+</context>
+<context>
+    <name>braille/view</name>
+    <message>
+        <location filename="../../src/braille/qml/MuseScore/Braille/BrailleView.qml" line="40"/>
+        <source>Braille</source>
+        <translation>Braille</translation>
+    </message>
+    <message>
+        <location filename="../../src/braille/qml/MuseScore/Braille/BrailleView.qml" line="171"/>
+        <source>Six-key input mode</source>
+        <extracomment>Braille input with 6 keyboard keys (F,D,S &amp; J,K,L) to represent the 6 dots in a braille cell.</extracomment>
+        <translation>Mod de intrare cu șase taste</translation>
+    </message>
+    <message>
+        <location filename="../../src/braille/qml/MuseScore/Braille/BrailleView.qml" line="173"/>
+        <source>Navigation mode</source>
+        <extracomment>Braille navigation.</extracomment>
+        <translation>Mod navigare</translation>
     </message>
 </context>
 <context>
@@ -12110,38 +12160,38 @@ unde vei găsi tutoriale pentru a te pune pe picioare
 <context>
     <name>engraving</name>
     <message>
-        <location filename="../../src/engraving/accessibility/accessibleitem.cpp" line="206"/>
+        <location filename="../../src/engraving/accessibility/accessibleitem.cpp" line="204"/>
         <source>invisible</source>
         <translation>invizibil</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/accessibility/accessibleitem.cpp" line="208"/>
+        <location filename="../../src/engraving/accessibility/accessibleitem.cpp" line="206"/>
         <source>selected</source>
         <translation>selectat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="105"/>
+        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="109"/>
         <source>Score</source>
         <translation>Partitură</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="141"/>
+        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="145"/>
         <source>Staff %1</source>
         <translation>Portativ %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="211"/>
-        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="214"/>
+        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="201"/>
+        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="204"/>
         <source>Staff %1 (%2)</source>
         <translation>Portativul %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="220"/>
+        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="210"/>
         <source>Range selection starts %1%2 ends %3%4</source>
         <translation>Selecția începe la %1%2 și se termină la %3%4</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/ambitus.cpp" line="558"/>
+        <location filename="../../src/engraving/dom/ambitus.cpp" line="561"/>
         <source>Top pitch: %1; Bottom pitch: %2</source>
         <translation>Înălțime maximă: %1; Înălțime minimă: %2</translation>
     </message>
@@ -12157,22 +12207,22 @@ unde vei găsi tutoriale pentru a te pune pe picioare
         <translation>Articulație</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1078"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1092"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1103"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3331"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3343"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2590"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3355"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2599"/>
         <source>Start of %1</source>
         <translation>Începutul lui %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1081"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1100"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1095"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1105"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3335"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3351"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2605"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3347"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3363"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2614"/>
         <source>End of %1</source>
         <translation>Sfârșitul lui %1</translation>
     </message>
@@ -12298,12 +12348,12 @@ Tasta %1 pe coardele %2</translation>
         <translation>Începutul și sfârșitul lui %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3589"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3585"/>
         <source>Current contents of measures will be replaced</source>
         <translation>Conținul actual al măsuri va fi înlocuit</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3590"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3586"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>Continui cu inserarea repetițiilor de măsură?</translation>
     </message>
@@ -12313,33 +12363,33 @@ Tasta %1 pe coardele %2</translation>
         <translation>Nu se poate crea diviziune excepțională cu rația %1 pentru durata %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8068"/>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8216"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8100"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8248"/>
         <source>Remove stale partial tie</source>
         <translation>Elimină legato parțial perimat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8126"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8158"/>
         <source>Reset incoming partial slur</source>
         <translation>Resetează legato parțial de intrare</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8136"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8168"/>
         <source>Reset outgoing partial slur</source>
         <translation>Resetează legato parțial de ieșire</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2654"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2663"/>
         <source>Measure: %1</source>
         <translation>Măsură: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2657"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2666"/>
         <source>Displayed measure: %1</source>
         <translation>Măsura afișată: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2661"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2670"/>
         <source>Beat: %1</source>
         <translation>Timp: %1</translation>
     </message>
@@ -12350,91 +12400,91 @@ Tasta %1 pe coardele %2</translation>
         <translation>Număr coardă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1197"/>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1298"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1204"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1305"/>
         <source>with chord symbol %1</source>
         <translation>cu simbolul de acord %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1199"/>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1299"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1206"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1306"/>
         <source>without chord symbol</source>
         <translation>fără simbolul de acord</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1212"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1219"/>
         <source>string %1</source>
         <translation>coarda %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1218"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1225"/>
         <source>circle marker</source>
         <translation>marcator cerc</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1221"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1228"/>
         <source>cross marker</source>
         <translation>marcator cruce</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1253"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1260"/>
         <source>%1 and %2</source>
         <translation>%1 și %2</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/engraving/dom/fret.cpp" line="1261"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1268"/>
         <source>%n dot(s) on fret(s) %1</source>
         <extracomment>Omit the &quot;%n &quot; for the singular translation (and the &quot;(s)&quot; too)</extracomment>
         <translation><numerusform>un punct pe tasta %1</numerusform><numerusform>%n puncte pe tasta %1</numerusform><numerusform>%n de puncte pe tasta %1</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1273"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1280"/>
         <source>fret %1</source>
         <translation>tasta %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1277"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1284"/>
         <source>barré %1</source>
         <translation>barré %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1279"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1286"/>
         <source>beginning string %1</source>
         <translation>coarda %1 la început</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1282"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1289"/>
         <source>and ending string %1</source>
         <translation>și coarda %1 la final</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1285"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1292"/>
         <source>partial barré %1 %2 %3</source>
         <translation>barré parțial %1 %2 %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1294"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1301"/>
         <source>no content</source>
         <translation>fără conținut</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/engraving/dom/fret.cpp" line="1303"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1310"/>
         <source>%n string(s) total</source>
         <translation><numerusform>%n coardă în total</numerusform><numerusform>%n coarde în total</numerusform><numerusform>%n de coarde în total</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/harmony.cpp" line="1260"/>
+        <location filename="../../src/engraving/dom/harmony.cpp" line="1244"/>
         <source>Roman numeral</source>
         <translation>Numerale romane</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/harmony.cpp" line="1262"/>
+        <location filename="../../src/engraving/dom/harmony.cpp" line="1246"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1717"/>
         <source>Nashville number</source>
         <translation>Numere Nashville</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/harmony.cpp" line="1312"/>
+        <location filename="../../src/engraving/dom/harmony.cpp" line="1296"/>
         <source>lower case</source>
         <translation>litere mici</translation>
     </message>
@@ -12490,77 +12540,77 @@ Tasta %1 pe coardele %2</translation>
         <translation>Notă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3238"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3276"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3250"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3288"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="543"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="555"/>
         <source>Voice: %1</source>
         <translation>Voce: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3246"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3258"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>(activ %1‰ inactiv %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3252"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3281"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3264"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3293"/>
         <source>Beat slash</source>
         <translation>Slash timp</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3252"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3281"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3264"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3293"/>
         <source>Rhythm slash</source>
         <translation>Slash ritm</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3256"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3285"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3268"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3297"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Coarda: %2; Tasta: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3262"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3274"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Înălțime: %2; Durată: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3291"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3303"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%2 cu cap %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3293"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3305"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="558"/>
         <source>Cross-staff above</source>
         <translation>Multi-portativ deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3295"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3307"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="560"/>
         <source>Cross-staff below</source>
         <translation>Multi-portativ dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3299"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3311"/>
         <source>too low</source>
         <translation>prea jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3301"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3313"/>
         <source>too high</source>
         <translation>prea sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3303"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3315"/>
         <source>too low for amateurs</source>
         <translation>prea jos pentru amatori</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3305"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3317"/>
         <source>too high for amateurs</source>
         <translation>prea sus pentru amatori</translation>
     </message>
@@ -12590,43 +12640,43 @@ Tasta %1 pe coardele %2</translation>
         <translation>%1; Durată: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2564"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2573"/>
         <source>Annotations:</source>
         <translation>Anotații:</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1631"/>
-        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="170"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1636"/>
+        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="159"/>
         <source>Start measure: %1</source>
         <translation>Măsura de început: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1634"/>
-        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="172"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1639"/>
+        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="161"/>
         <source>Start displayed measure: %1</source>
         <translation>Măsura de început afișată: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1637"/>
-        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="174"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1642"/>
+        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="163"/>
         <source>Start beat: %1</source>
         <translation>Timpul de început: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1644"/>
-        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="177"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1649"/>
+        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="166"/>
         <source>End measure: %1</source>
         <translation>Măsura de final: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1647"/>
-        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="179"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1652"/>
+        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="168"/>
         <source>End displayed measure: %1</source>
         <translation>Măsura de final afișată: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1650"/>
-        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="181"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1655"/>
+        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="170"/>
         <source>End beat: %1</source>
         <translation>Timpul de final: %1</translation>
     </message>
@@ -12783,12 +12833,12 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/dom/tapping.cpp" line="96"/>
         <source>Left-hand</source>
-        <translation type="unfinished"/>
+        <translation>Mâna-stângă</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tapping.cpp" line="96"/>
         <source>Right-hand</source>
-        <translation type="unfinished"/>
+        <translation>Mâna-dreaptă</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="457"/>
@@ -12896,7 +12946,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="88"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Acest fișier a fost salvat într-o versiune mai nouă de MuseScore Studio. Te rog vizitează &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; pentru a obține ultima versiune.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="93"/>
@@ -12958,90 +13008,90 @@ Tasta %1 pe coardele %2</translation>
         <location filename="../../src/engraving/rw/read410/measureread.cpp" line="91"/>
         <location filename="../../src/engraving/rw/read460/measureread.cpp" line="92"/>
         <source>MSCX error at byte offset %1: invalid measure length: %2</source>
-        <translation type="unfinished"/>
+        <translation>Eroare MSCX la octetul cu offset %1: Lungime invalidă măsură: %2</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="185"/>
         <source>invalid</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>invalid</numerusform><numerusform>invalid</numerusform><numerusform>invalid</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="186"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2049"/>
         <source>Invalid</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Invalid</numerusform><numerusform>Invalid</numerusform><numerusform>Invalid</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="188"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="545"/>
         <source>bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>paranteză</numerusform><numerusform>paranteze</numerusform><numerusform>paranteze</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="189"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="546"/>
         <source>Bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Paranteză</numerusform><numerusform>Paranteze</numerusform><numerusform>Paranteze</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="191"/>
         <source>part(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>partidă</numerusform><numerusform>partide</numerusform><numerusform>partide</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="192"/>
         <source>Part(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Partidă</numerusform><numerusform>Partide</numerusform><numerusform>Partide</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
         <source>staff/staves</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>portativ</numerusform><numerusform>portative</numerusform><numerusform>portative</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="195"/>
         <source>Staff/Staves</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Portativ</numerusform><numerusform>Portative</numerusform><numerusform>Portative</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="197"/>
         <source>score(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>partitură</numerusform><numerusform>partituri</numerusform><numerusform>partituri</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="198"/>
         <source>Score(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Partitură</numerusform><numerusform>Partituri</numerusform><numerusform>Partituri</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
         <source>symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>simbol</numerusform><numerusform>simboluri</numerusform><numerusform>de simboluri</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="201"/>
         <source>Symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Simbol</numerusform><numerusform>Simboluri</numerusform><numerusform>Simboluri</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="203"/>
         <source>text</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>text</numerusform><numerusform>text</numerusform><numerusform>text</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="204"/>
         <source>Text</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Text</numerusform><numerusform>Text</numerusform><numerusform>Text</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="206"/>
         <source>measure number(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>număr de măsură</numerusform><numerusform>numere de măsură</numerusform><numerusform>numere de măsură</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="207"/>
         <source>Measure number(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Număr de măsură</numerusform><numerusform>Numere de măsură</numerusform><numerusform>Numere de măsură</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="209"/>
@@ -13056,32 +13106,32 @@ Tasta %1 pe coardele %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="212"/>
         <source>instrument name(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>nume instrument</numerusform><numerusform>nume instrument</numerusform><numerusform>nume instrument</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="213"/>
         <source>Instrument name(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Nume instrument</numerusform><numerusform>Nume instrument</numerusform><numerusform>Nume instrument</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="215"/>
         <source>slur segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segment legato de expresie</numerusform><numerusform>segmente legato de expresie</numerusform><numerusform>segmente legato de expresie</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="216"/>
         <source>Slur segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segment legato de expresie</numerusform><numerusform>Segmente legato de expresie</numerusform><numerusform>Segmente legato de expresie</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="218"/>
         <source>tie segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segment legato de prelungire</numerusform><numerusform>segmente legato de prelungire</numerusform><numerusform>segmente legato de prelungire</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="219"/>
         <source>Tie segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segment legato de prelungire</numerusform><numerusform>Segmente legato de prelungire</numerusform><numerusform>Segmente legato de prelungire</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
@@ -13106,22 +13156,22 @@ Tasta %1 pe coardele %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="227"/>
         <source>barline(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>bară de măsură</numerusform><numerusform>bare de măsură</numerusform><numerusform>bare de măsură</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="228"/>
         <source>Barline(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Bară de măsură</numerusform><numerusform>Bare de măsură</numerusform><numerusform>Bare de măsură</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="230"/>
         <source>staff lines</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>linie de portativ</numerusform><numerusform>linii de portativ</numerusform><numerusform>linii de portativ</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="231"/>
         <source>Staff lines</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Linie de portativ</numerusform><numerusform>Linii de portativ</numerusform><numerusform>Linii de portativ</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="233"/>
@@ -13156,12 +13206,12 @@ Tasta %1 pe coardele %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="242"/>
         <source>accidental(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>alterație</numerusform><numerusform>alterații</numerusform><numerusform>alterații</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="243"/>
         <source>Accidental(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Alterație</numerusform><numerusform>Alterații</numerusform><numerusform>Alterații</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="245"/>
@@ -13176,52 +13226,52 @@ Tasta %1 pe coardele %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="248"/>
         <source>stem(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>codiță</numerusform><numerusform>codițe</numerusform><numerusform>codițe</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="249"/>
         <source>Stem(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Codiță</numerusform><numerusform>Codițe</numerusform><numerusform>Codițe</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="251"/>
         <source>flag(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>steguleț</numerusform><numerusform>stegulețe</numerusform><numerusform>stegulețe</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="252"/>
         <source>Flag(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Steguleț</numerusform><numerusform>Stegulețe</numerusform><numerusform>Stegulețe</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="254"/>
         <source>note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>notă</numerusform><numerusform>note</numerusform><numerusform>note</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="255"/>
         <source>Note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Notă</numerusform><numerusform>Note</numerusform><numerusform>Note</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="257"/>
         <source>clef(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>cheie</numerusform><numerusform>chei</numerusform><numerusform>chei</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="258"/>
         <source>Clef(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Cheie</numerusform><numerusform>Chei</numerusform><numerusform>Chei</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="260"/>
         <source>key signature(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>armură</numerusform><numerusform>armuri</numerusform><numerusform>armuri</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="261"/>
         <source>Key signature(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Armură</numerusform><numerusform>Armuri</numerusform><numerusform>Armuri</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="263"/>
@@ -13236,22 +13286,22 @@ Tasta %1 pe coardele %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="266"/>
         <source>time signature(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>metrică</numerusform><numerusform>metrici</numerusform><numerusform>metrici</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="267"/>
         <source>Time signature(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Metrică</numerusform><numerusform>Metrici</numerusform><numerusform>Metrici</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="269"/>
         <source>rest(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>pauză</numerusform><numerusform>pauze</numerusform><numerusform>pauze</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="270"/>
         <source>Rest(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pauză</numerusform><numerusform>Pauze</numerusform><numerusform>Pauze</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="272"/>
@@ -14007,12 +14057,12 @@ Tasta %1 pe coardele %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="497"/>
         <source>pedal(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>pedală</numerusform><numerusform>pedale</numerusform><numerusform>pedale</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="498"/>
         <source>Pedal(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pedală</numerusform><numerusform>Pedale</numerusform><numerusform>Pedale</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="500"/>
@@ -14410,22 +14460,22 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="946"/>
         <source>x%1</source>
-        <translation type="unfinished"/>
+        <translation>x%1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="947"/>
         <source>%1x</source>
-        <translation type="unfinished"/>
+        <translation>%1x</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="948"/>
         <source>Play %1 times</source>
-        <translation type="unfinished"/>
+        <translation>Redă de %1 ori</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="949"/>
         <source>%1 repeats</source>
-        <translation type="unfinished"/>
+        <translation>%1 repetări</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1053"/>
@@ -14440,15 +14490,15 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1073"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1097"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2230"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2266"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2232"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2268"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1214"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3040"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3064"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3042"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3066"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3319"/>
         <source>Custom</source>
         <translation>Personalizat</translation>
@@ -14536,7 +14586,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1696"/>
         <source>Measure number (alternate)</source>
-        <translation type="unfinished"/>
+        <translation>Număr de măsură (alternativ)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1697"/>
@@ -14561,7 +14611,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1702"/>
         <source>Repeat play count</source>
-        <translation type="unfinished"/>
+        <translation>Număr redări repetate</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1703"/>
@@ -14646,7 +14696,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1722"/>
         <source>Tablature fret number</source>
-        <translation type="unfinished"/>
+        <translation>Număr fret tabulatură</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1723"/>
@@ -14661,7 +14711,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1726"/>
         <source>Hammer-ons, pull-offs, and tapping</source>
-        <translation type="unfinished"/>
+        <translation>Hammer-on-uri, pull-off-uri și bătăi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1730"/>
@@ -14943,314 +14993,314 @@ Tasta %1 pe coardele %2</translation>
         <translation>Zero</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2231"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2233"/>
         <source>Up</source>
         <translation>Sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2232"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2234"/>
         <source>Down</source>
         <translation>Jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2267"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2269"/>
         <source>Right</source>
         <translation>Dreapta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2268"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2270"/>
         <source>Left</source>
         <translation>Stânga</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2515"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2517"/>
         <source>Arpeggio</source>
         <translation>Arpeggio</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2516"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2518"/>
         <source>Up arpeggio</source>
         <translation>Arpeggio ascendent</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2517"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2519"/>
         <source>Down arpeggio</source>
         <translation>Arpeggio descendent</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2518"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2520"/>
         <source>Bracket arpeggio</source>
         <translation>Arpeggio tip acoladă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2519"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2521"/>
         <source>Up arpeggio straight</source>
         <translation>Arpeggio ascendent linie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2520"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2522"/>
         <source>Down arpeggio straight</source>
         <translation>Arpeggio descendent linie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2876"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2878"/>
         <source>Fall</source>
         <translation>Fall</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2877"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2879"/>
         <source>Doit</source>
         <translation>Doit</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2878"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2880"/>
         <source>Plop</source>
         <translation>Plop</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2879"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2881"/>
         <source>Scoop</source>
         <translation>Scoop</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2881"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2883"/>
         <source>Slide out down</source>
         <translation>Alunecare finală în jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2882"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2884"/>
         <source>Slide out up</source>
         <translation>Alunecare finală în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2883"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2885"/>
         <source>Slide in above</source>
         <translation>Alunecare inițială de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2884"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2886"/>
         <source>Slide in below</source>
         <translation>Alunecare inițială de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2886"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2888"/>
         <source>Slide out down (rough)</source>
         <translation>Alunecare finală în jos (dură)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2887"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2889"/>
         <source>Slide out up (rough)</source>
         <translation>Alunecare finală în sus (dură)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2888"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2890"/>
         <source>Slide in above (rough)</source>
         <translation>Alunecare inițială de sus (dură)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2889"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2891"/>
         <source>Slide in below (rough)</source>
         <translation>Alunecare inițială de jos (dură)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3006"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3008"/>
         <source>Straight glissando</source>
         <translation>Glissando linie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3007"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3009"/>
         <source>Wavy glissando</source>
         <translation>Glissando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3026"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3028"/>
         <source>Da Capo</source>
         <translation>Da Capo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3027"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3029"/>
         <source>Da Capo al Fine</source>
         <translation>Da Capo al Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3028"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3030"/>
         <source>Da Capo al Coda</source>
         <translation>Da Capo al Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3029"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3031"/>
         <source>D.S. al Coda</source>
         <translation>D.S. al Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3030"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3032"/>
         <source>D.S. al Fine</source>
         <translation>D.S. al Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3031"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3033"/>
         <source>D.S.</source>
         <translation>D.S</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3033"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3035"/>
         <source>Da Capo al Doppia Coda</source>
         <translation>Da Capo al Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3034"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3036"/>
         <source>Dal Segno al Doppia Coda</source>
         <translation>Dal Segno al Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3035"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3037"/>
         <source>Dal Doppio Segno</source>
         <translation>Dal Doppio Segno</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3036"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3038"/>
         <source>Dal Doppio Segno al Coda</source>
         <translation>Dal Doppio Segno al Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3037"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3039"/>
         <source>Dal Doppio Segno al Doppia Coda</source>
         <translation>Dal Doppio Segno al Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3038"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3040"/>
         <source>Dal Doppio Segno al Fine</source>
         <translation>Dal Doppio Segno al Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3054"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3056"/>
         <source>Segno</source>
         <translation>Segno</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3055"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3057"/>
         <source>Segno variation</source>
         <translation>Segno variație</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3056"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3058"/>
         <source>Coda</source>
         <translation>Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3057"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3059"/>
         <source>Varied coda</source>
         <translation>Coda variată</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3058"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3060"/>
         <source>Doppia Coda</source>
         <translation>Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3059"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3061"/>
         <source>Fine</source>
         <translation>Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3060"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3062"/>
         <source>To coda</source>
         <translation>To Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3061"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3063"/>
         <source>To coda (symbol)</source>
         <translation>Spre coda (symbol)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3062"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3064"/>
         <source>Da Coda</source>
         <translation>Da Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3063"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3065"/>
         <source>Da Doppia Coda</source>
         <translation>Da Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3303"/>
-        <source>C♭ major, A♭ minor</source>
-        <translation>Do♭ major, la♭ minor</translation>
+        <source>C♭ major / A♭ minor</source>
+        <translation>Do♭ major / la♭ minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3304"/>
-        <source>G♭ major, E♭ minor</source>
-        <translation>Sol♭ major, mi♭ minor</translation>
+        <source>G♭ major / E♭ minor</source>
+        <translation>Sol♭ major / mi♭ minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3305"/>
-        <source>D♭ major, B♭ minor</source>
-        <translation>Re♭ major, si♭ minor</translation>
+        <source>D♭ major / B♭ minor</source>
+        <translation>Re♭ major / si♭ minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3306"/>
-        <source>A♭ major, F minor</source>
-        <translation>La♭ major, fa minor</translation>
+        <source>A♭ major / F minor</source>
+        <translation>La♭ major / fa minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3307"/>
-        <source>E♭ major, C minor</source>
-        <translation>Mi♭ major, do minor</translation>
+        <source>E♭ major / C minor</source>
+        <translation>Mi♭ major / do minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3308"/>
-        <source>B♭ major, G minor</source>
-        <translation>Si♭ major, sol minor</translation>
+        <source>B♭ major / G minor</source>
+        <translation>Si♭ major / sol minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3309"/>
-        <source>F major, D minor</source>
-        <translation>Fa major, re minor</translation>
+        <source>F major / D minor</source>
+        <translation>Fa major / re minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3310"/>
-        <source>C major, A minor</source>
-        <translation>Do major, la minor</translation>
+        <source>C major / A minor</source>
+        <translation>Do major / la minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3311"/>
-        <source>G major, E minor</source>
-        <translation>Sol major, mi minor</translation>
+        <source>G major / E minor</source>
+        <translation>Sol major / mi minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3312"/>
-        <source>D major, B minor</source>
-        <translation>Re major, si minor</translation>
+        <source>D major / B minor</source>
+        <translation>Re major / si minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3313"/>
-        <source>A major, F♯ minor</source>
-        <translation>La major, fa♯ minor</translation>
+        <source>A major / F♯ minor</source>
+        <translation>La major / fa♯ minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3314"/>
-        <source>E major, C♯ minor</source>
-        <translation>Mi major, do♯ minor</translation>
+        <source>E major / C♯ minor</source>
+        <translation>Mi major / do♯ minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3315"/>
-        <source>B major, G♯ minor</source>
-        <translation>Si major, sol♯ minor</translation>
+        <source>B major / G♯ minor</source>
+        <translation>Si major / sol♯ minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3316"/>
-        <source>F♯ major, D♯ minor</source>
-        <translation>Fa♯ major, re♯ minor</translation>
+        <source>F♯ major / D♯ minor</source>
+        <translation>Fa♯ major / re♯ minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3317"/>
-        <source>C♯ major, A♯ minor</source>
-        <translation>Do♯ major, la♯ minor</translation>
+        <source>C♯ major / A♯ minor</source>
+        <translation>Do♯ major / la♯ minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3318"/>
-        <source>Open/Atonal</source>
-        <translation>Deschis/Atonal</translation>
+        <source>Open / Atonal</source>
+        <translation>Deschis / Atonal</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/partialtiepopupmodel.cpp" line="192"/>
@@ -15266,53 +15316,51 @@ Tasta %1 pe coardele %2</translation>
 <context>
     <name>engraving/bagpipeembellishment</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2547"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2549"/>
         <source>Single grace low G</source>
         <translation>Apogiatură simplă sol de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2548"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2550"/>
         <source>Single grace low A</source>
         <translation>Apogiatură simplă la de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2549"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2551"/>
         <source>Single grace B</source>
         <translation>Apogiatură simplă si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2550"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2552"/>
         <source>Single grace C</source>
         <translation>Apogiatură simplă do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2551"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2553"/>
         <source>Single grace D</source>
         <translation>Apogiatură simplă re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2552"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2554"/>
         <source>Single grace E</source>
         <translation>Apogiatură simplă mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2553"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2555"/>
         <source>Single grace F</source>
         <translation>Apogiatură simplă fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2554"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2556"/>
         <source>Single grace high G</source>
         <translation>Apogiatură simplă sol de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2555"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2557"/>
         <source>Single grace high A</source>
         <translation>Apogiatură simplă la de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2558"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2559"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2560"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2561"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2562"/>
@@ -15320,802 +15368,804 @@ Tasta %1 pe coardele %2</translation>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2564"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2565"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2566"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2567"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2568"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2569"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2570"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2571"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2572"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2573"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2574"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2575"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2576"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2577"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2578"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2579"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2580"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2581"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2582"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2583"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2584"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2585"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2586"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2587"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2588"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2589"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2590"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2591"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2592"/>
         <source>Double grace</source>
         <translation>Apogiatură dublă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2593"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2595"/>
         <source>Half doubling on low G</source>
         <translation>Half doubling pe Sol de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2594"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2596"/>
         <source>Half doubling on low A</source>
         <translation>Half doubling pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2595"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2597"/>
         <source>Half doubling on B</source>
         <translation>Half doubling pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2596"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2598"/>
         <source>Half doubling on C</source>
         <translation>Half doubling pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2597"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2599"/>
         <source>Half doubling on D</source>
         <translation>Half doubling pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2598"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2600"/>
         <source>Half doubling on E</source>
         <translation>Half doubling pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2599"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2601"/>
         <source>Half doubling on F</source>
         <translation>Half doubling pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2604"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2606"/>
         <source>Doubling on high G</source>
         <translation>Half doubling pe Sol de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2605"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2607"/>
         <source>Doubling on high A</source>
         <translation>Half doubling pe La de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2608"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2610"/>
         <source>Half strike on low A</source>
         <translation>Half strike pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2609"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2611"/>
         <source>Half strike on B</source>
         <translation>Half strike pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2610"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2612"/>
         <source>Half strike on C</source>
         <translation>Half strike pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2611"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2612"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2613"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2614"/>
         <source>Half strike on D</source>
         <translation>Half strike pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2613"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2615"/>
         <source>Half strike on E</source>
         <translation>Half strike pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2614"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2616"/>
         <source>Half strike on F</source>
         <translation>Half strike pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2615"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2617"/>
         <source>Half strike on high G</source>
         <translation>Half strike pe Sol</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2618"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2673"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2674"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2620"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2675"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2676"/>
         <source>Grip</source>
         <translation>Grip</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2621"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2623"/>
         <source>Half D throw</source>
         <translation>Half Re throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2624"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2626"/>
         <source>Doubling on low G</source>
         <translation>Doubling pe Sol de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2625"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2627"/>
         <source>Doubling on low A</source>
         <translation>Doubling pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2626"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2628"/>
         <source>Doubling on B</source>
         <translation>Doubling pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2627"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2629"/>
         <source>Doubling on C</source>
         <translation>Doubling pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2628"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2630"/>
         <source>Doubling on D</source>
         <translation>Doubling pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2629"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2631"/>
         <source>Doubling on E</source>
         <translation>Doubling pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2630"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2632"/>
         <source>Doubling on F</source>
         <translation>Doubling pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2633"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2635"/>
         <source>Thumb doubling on low G</source>
         <translation>Dublare cu policele pe Sol de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2634"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2636"/>
         <source>Thumb doubling on low A</source>
         <translation>Dublare cu policele pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2635"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2637"/>
         <source>Thumb doubling on B</source>
         <translation>Dublare cu policele pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2636"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2638"/>
         <source>Thumb doubling on C</source>
         <translation>Dublare cu policele pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2637"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2639"/>
         <source>Thumb doubling on D</source>
         <translation>Dublare cu policele pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2638"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2640"/>
         <source>Thumb doubling on E</source>
         <translation>Dublare cu policele pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2639"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2641"/>
         <source>Thumb doubling on F</source>
         <translation>Dublare cu policele pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2643"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2645"/>
         <source>G grace note on low A</source>
         <translation>Apogiatură Sol pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2644"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2646"/>
         <source>G grace note on B</source>
         <translation>Apogiatură Sol pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2645"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2647"/>
         <source>G grace note on C</source>
         <translation>Apogiatură Sol pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2646"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2647"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2648"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2649"/>
         <source>G grace note on D</source>
         <translation>Apogiaturp Sol pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2648"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2650"/>
         <source>G grace note on E</source>
         <translation>Apogiaturp Sol pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2649"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2651"/>
         <source>G grace note on F</source>
         <translation>Apogiatură Sol pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2652"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2654"/>
         <source>Double strike on low A</source>
         <translation>Double strike pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2653"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2655"/>
         <source>Double strike on B</source>
         <translation>Double strike pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2654"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2656"/>
         <source>Double strike on C</source>
         <translation>Double strike pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2655"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2656"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2657"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2658"/>
         <source>Double strike on D</source>
         <translation>Double strike pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2657"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2659"/>
         <source>Double strike on E</source>
         <translation>Double strike pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2658"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2660"/>
         <source>Double strike on F</source>
         <translation>Double strike pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2659"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2661"/>
         <source>Double strike on high G</source>
         <translation>Double strike pe Sol de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2660"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2662"/>
         <source>Double strike on high A</source>
         <translation>Double strike pe La</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2663"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2665"/>
         <source>Thumb strike on low A</source>
         <translation>Strike cu policele pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2664"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2666"/>
         <source>Thumb strike on B</source>
         <translation>Strike cu policele pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2665"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2667"/>
         <source>Thumb strike on C</source>
         <translation>Strike cu policele pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2666"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2667"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2668"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2669"/>
         <source>Thumb strike on D</source>
         <translation>Strike cu policele pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2668"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2670"/>
         <source>Thumb strike on E</source>
         <translation>Strike cu policele pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2669"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2671"/>
         <source>Thumb strike on F</source>
         <translation>Strike cu policele pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2670"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2672"/>
         <source>Thumb strike on high G</source>
         <translation>Strike cu policele pe Sol</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2677"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2683"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2744"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2745"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2679"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2685"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2746"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2747"/>
         <source>Birl</source>
         <translation>Birl</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2678"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2680"/>
         <source>D throw</source>
         <translation>Re throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2679"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2681"/>
         <source>Half heavy D throw</source>
         <translation>Half heavy Re throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2680"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2686"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2687"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2682"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2688"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2689"/>
         <source>Taorluath</source>
         <translation>Taorluath</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2684"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2741"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2686"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2743"/>
         <source>Bubbly</source>
         <translation>Cu bule</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2685"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2687"/>
         <source>Heavy D throw</source>
         <translation>Heavy Re throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2690"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2692"/>
         <source>Half double strike on low A</source>
         <translation>Half double strike pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2691"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2693"/>
         <source>Half double strike on B</source>
         <translation>Half double strike pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2692"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2694"/>
         <source>Half double strike on C</source>
         <translation>Half double strike pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2693"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2694"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2695"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2696"/>
         <source>Half double strike on D</source>
         <translation>Half double strike pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2695"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2697"/>
         <source>Half double strike on E</source>
         <translation>Half double strike pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2696"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2698"/>
         <source>Half double strike on F</source>
         <translation>Half double strike pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2697"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2699"/>
         <source>Half double strike on high G</source>
         <translation>Half double strike pe Sol de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2698"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2700"/>
         <source>Half double strike on high A</source>
         <translation>Half double strike pe La de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2701"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2703"/>
         <source>Half grip on low A</source>
         <translation>Half grip pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2702"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2704"/>
         <source>Half grip on B</source>
         <translation>Half grip pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2703"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2705"/>
         <source>Half grip on C</source>
         <translation>Half grip pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2704"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2705"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2706"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2707"/>
         <source>Half grip on D</source>
         <translation>Half grip pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2706"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2708"/>
         <source>Half grip on E</source>
         <translation>Half grip pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2707"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2709"/>
         <source>Half grip on F</source>
         <translation>Half grip pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2708"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2710"/>
         <source>Half grip on high G</source>
         <translation>Half grip pe Sol de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2709"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2711"/>
         <source>Half grip on high A</source>
         <translation>Half grip pe La de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2712"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2714"/>
         <source>Half pele on low A</source>
         <translation>Half pele pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2713"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2715"/>
         <source>Half pele on B</source>
         <translation>Half pele pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2714"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2716"/>
         <source>Half pele on C</source>
         <translation>Half pele pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2715"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2716"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2717"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2718"/>
         <source>Half pele on D</source>
         <translation>Half pele pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2717"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2719"/>
         <source>Half pele on E</source>
         <translation>Half pele pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2718"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2720"/>
         <source>Half pele on F</source>
         <translation>Half pele pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2719"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2721"/>
         <source>Half pele on high G</source>
         <translation>Half pele pe Sol de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2722"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2724"/>
         <source>G grace note grip on low A</source>
         <translation>Apogiatură Sol grip pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2723"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2725"/>
         <source>G grace note grip on B</source>
         <translation>Apogiatură Sol grip pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2724"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2726"/>
         <source>G grace note grip on C</source>
         <translation>Apogiatură Sol grip pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2725"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2726"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2727"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2728"/>
         <source>G grace note grip on D</source>
         <translation>Apogiatură Sol grip pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2727"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2729"/>
         <source>G grace note grip on E</source>
         <translation>Apogiatură Sol grip pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2728"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2730"/>
         <source>G grace note grip on F</source>
         <translation>Apogiatură Sol grip pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2731"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2733"/>
         <source>Thumb grip on low A</source>
         <translation>Grip cu policele pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2732"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2734"/>
         <source>Thumb grip on B</source>
         <translation>Grip cu policele pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2733"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2735"/>
         <source>Thumb grip on C</source>
         <translation>Grip cu policele pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2734"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2735"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2736"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2737"/>
         <source>Thumb grip on D</source>
         <translation>Grip cu policele pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2736"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2738"/>
         <source>Thumb grip on E</source>
         <translation>Grip cu policele pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2737"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2739"/>
         <source>Thumb grip on F</source>
         <translation>Grip cu policele pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2738"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2740"/>
         <source>Thumb grip on high G</source>
         <translation>Grip cu policele pe Sol de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2748"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2750"/>
         <source>Pele on low A</source>
         <translation>Pele pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2749"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2751"/>
         <source>Pele on B</source>
         <translation>Pele pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2750"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2752"/>
         <source>Pele on C</source>
         <translation>Pele pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2751"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2752"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2753"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2754"/>
         <source>Pele on D</source>
         <translation>Pele pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2753"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2755"/>
         <source>Pele on E</source>
         <translation>Pele pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2754"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2756"/>
         <source>Pele on F</source>
         <translation>Pele pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2757"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2759"/>
         <source>Thumb grace note pele on low A</source>
         <translation>Apogiatură Sol grip pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2758"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2760"/>
         <source>Thumb grace note pele on B</source>
         <translation>Apogiatură pele cu policele pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2759"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2761"/>
         <source>Thumb grace note pele on C</source>
         <translation>Apogiatură pele cu policele pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2760"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2761"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2762"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2763"/>
         <source>Thumb grace note pele on D</source>
         <translation>Apogiatură pele cu policele pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2762"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2764"/>
         <source>Thumb grace note pele on E</source>
         <translation>Apogiatură pele cu policele pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2763"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2765"/>
         <source>Thumb grace note pele on F</source>
         <translation>Apogiatură pele cu policele pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2764"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2766"/>
         <source>Thumb grace note pele on high G</source>
         <translation>Apogiatură pele cu policele pe Sol</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2767"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2769"/>
         <source>G grace note double strike on low A</source>
         <translation>Apogiatură dublu strike Sol pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2768"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2770"/>
         <source>G grace note double strike on B</source>
         <translation>Apogiatură dublu strike Sol pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2769"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2771"/>
         <source>G grace note double strike on C</source>
         <translation>Apogiatură dublu strike Sol pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2770"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2771"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2772"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2773"/>
         <source>G grace note double strike on D</source>
         <translation>Apogiatură dublu strike Sol pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2772"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2774"/>
         <source>G grace note double strike on E</source>
         <translation>Apogiatură dublu strike Sol pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2773"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2775"/>
         <source>G grace note double strike on F</source>
         <translation>Apogiatură dublu strike Sol pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2776"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2778"/>
         <source>Thumb double strike on low A</source>
         <translation>Dublu strike cu policele pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2777"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2779"/>
         <source>Thumb double strike on B</source>
         <translation>Dublu strike cu policele pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2778"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2780"/>
         <source>Thumb double strike on C</source>
         <translation>Dublu strike cu policele pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2779"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2780"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2781"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2782"/>
         <source>Thumb double strike on D</source>
         <translation>Dublu strike cu policele pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2781"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2783"/>
         <source>Thumb double strike on E</source>
         <translation>Dublu strike cu policele pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2782"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2784"/>
         <source>Thumb double strike on F</source>
         <translation>Dublu strike cu policele pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2783"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2785"/>
         <source>Thumb double strike on high G</source>
         <translation>Dublu strike cu policele pe Sol de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2786"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2788"/>
         <source>Triple strike on low A</source>
         <translation>Lovitură triplă pe la de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2787"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2789"/>
         <source>Triple strike on B</source>
         <translation>Lovitură triplă pe si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2788"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2790"/>
         <source>Triple strike on C</source>
         <translation>Lovitură triplă pe do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2789"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2790"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2791"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2792"/>
         <source>Triple strike on D</source>
         <translation>Lovitură triplă pe e</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2791"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2793"/>
         <source>Triple strike on E</source>
         <translation>Lovitură triplă pe mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2792"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2794"/>
         <source>Triple strike on F</source>
         <translation>Lovitură triplă pe fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2793"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2795"/>
         <source>Triple strike on high G</source>
         <translation>Lovitură triplă pe sol de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2794"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2796"/>
         <source>Triple strike on high A</source>
         <translation>Lovitură triplă pe la de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2797"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2799"/>
         <source>Half triple strike on low A</source>
         <translation>Jumătate de lovitură triplă pe la de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2798"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2800"/>
         <source>Half triple strike on B</source>
         <translation>Jumătate de lovitură triplă pe si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2799"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2801"/>
         <source>Half triple strike on C</source>
         <translation>Jumătate de lovitură triplă pe do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2800"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2801"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2802"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2803"/>
         <source>Half triple strike on D</source>
         <translation>Jumătate de lovitură triplă pe e</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2802"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2804"/>
         <source>Half triple strike on E</source>
         <translation>Jumătate de lovitură triplă pe mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2803"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2805"/>
         <source>Half triple strike on F</source>
         <translation>Jumătate de lovitură triplă pe fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2804"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2806"/>
         <source>Half triple strike on high G</source>
         <translation>Jumătate de lovitură triplă pe sol de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2805"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2807"/>
         <source>Half triple strike on high A</source>
         <translation>Jumătate de lovitură triplă pe la de sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2808"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2810"/>
         <source>G grace note triple strike on low A</source>
         <translation>Apogiatură dublu strike Sol pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2809"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2811"/>
         <source>G grace note triple strike on B</source>
         <translation>Apogiatură dublu strike Sol pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2810"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2812"/>
         <source>G grace note triple strike on C</source>
         <translation>Apogiatură dublu strike Sol pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2811"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2812"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2813"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2814"/>
         <source>G grace note triple strike on D</source>
         <translation>Apogiatură dublu strike Sol pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2813"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2815"/>
         <source>G grace note triple strike on E</source>
         <translation>Apogiatură dublu strike Sol pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2814"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2816"/>
         <source>G grace note triple strike on F</source>
         <translation>Apogiatură dublu strike Sol pe Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2817"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2819"/>
         <source>Thumb triple strike on low A</source>
         <translation>Triplu strike cu policele pe La de jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2818"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2820"/>
         <source>Thumb triple strike on B</source>
         <translation>Triplu strike cu policele pe Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2819"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2821"/>
         <source>Thumb triple strike on C</source>
         <translation>Triplu strike cu policele pe Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2820"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2821"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2822"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2823"/>
         <source>Thumb triple strike on D</source>
         <translation>Triplu strike cu policele pe Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2822"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2824"/>
         <source>Thumb triple strike on E</source>
         <translation>Triplu strike cu policele pe Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2823"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2825"/>
         <source>Thumb triple strike on F</source>
         <translation>Triplu strike cu policele pe Sol</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2824"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2826"/>
         <source>Thumb triple strike on high G</source>
         <translation>Triplu strike cu policele pe Sol de sus</translation>
     </message>
@@ -16123,27 +16173,27 @@ Tasta %1 pe coardele %2</translation>
 <context>
     <name>engraving/brackettype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2473"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2475"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2474"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2476"/>
         <source>Brace</source>
         <translation>Acoladă rotundă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2475"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2477"/>
         <source>Square</source>
         <translation>Paranteză pătrată</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2476"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2478"/>
         <source>Line</source>
         <translation>Linie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2477"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2479"/>
         <source>No bracket</source>
         <translation>Fără acoladă</translation>
     </message>
@@ -16333,333 +16383,333 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1293"/>
         <source>G clef ottava bassa with C clef</source>
-        <translation type="unfinished"/>
+        <translation>Cheia sol ottava bassa cu cheia do</translation>
     </message>
 </context>
 <context>
     <name>engraving/drumset</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2914"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2916"/>
         <source>High Q</source>
         <translation>High Q</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2915"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2917"/>
         <source>Slap</source>
         <translation>Slap</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2916"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2918"/>
         <source>Scratch Push</source>
         <translation>Scratch Push</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2918"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2920"/>
         <source>Scratch Pull</source>
         <translation>Scratch Pull</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2919"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2921"/>
         <source>Sticks</source>
         <translation>Sticks</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2920"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2922"/>
         <source>Square Click</source>
         <translation>Square Click</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2921"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2923"/>
         <source>Metronome Click</source>
         <translation>Metronom Click</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2922"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2924"/>
         <source>Metronome Bell</source>
         <translation>Metronom Clopot</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2923"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2925"/>
         <source>Acoustic Bass Drum</source>
         <translation>Tobă Mare Acustică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2924"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2926"/>
         <source>Bass Drum 1</source>
         <translation>Tobă Mare 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2925"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2927"/>
         <source>Side Stick</source>
         <translation>Lovit pe Margine (Side Stick)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2926"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2928"/>
         <source>Acoustic Snare</source>
         <translation>Premier Acustic</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2927"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2929"/>
         <source>Hand Clap</source>
         <translation>Bătaie din palme</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2929"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2931"/>
         <source>Electric Snare</source>
         <translation>Premier Electric</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2930"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2932"/>
         <source>Low Floor Tom</source>
         <translation>Cazan Mare</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2931"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2933"/>
         <source>Closed Hi-Hat</source>
         <translation>Fus Închis</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2932"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2934"/>
         <source>High Floor Tom</source>
         <translation>Cazan Mic</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2933"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2935"/>
         <source>Pedal Hi-Hat</source>
         <translation>Pedală Fus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2934"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2936"/>
         <source>Low Tom</source>
         <translation>Tom Mare</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2935"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2937"/>
         <source>Open Hi-Hat</source>
         <translation>Fus Deschis</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2936"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2938"/>
         <source>Low-Mid Tom</source>
         <translation>Tom Mare-Mediu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2937"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2939"/>
         <source>Hi-Mid Tom</source>
         <translation>Tom Mic-Mediu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2938"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2940"/>
         <source>Crash Cymbal 1</source>
         <translation>Cinel Crash 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2940"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2942"/>
         <source>High Tom</source>
         <translation>Tom Mic</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2941"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2943"/>
         <source>Ride Cymbal 1</source>
         <translation>Cinel Ride 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2942"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2944"/>
         <source>Chinese Cymbal</source>
         <translation>Cinel China</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2943"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2945"/>
         <source>Ride Bell</source>
         <translation>Ride Bell</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2944"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2946"/>
         <source>Tambourine</source>
         <translation>Tamburină</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2945"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2947"/>
         <source>Splash Cymbal</source>
         <translation>Cinel Splash</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2946"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2948"/>
         <source>Cowbell</source>
         <translation>Cowbell</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2947"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2949"/>
         <source>Crash Cymbal 2</source>
         <translation>Cine Crash 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2948"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2950"/>
         <source>Vibraslap</source>
         <translation>Vibraslap</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2949"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2951"/>
         <source>Ride Cymbal 2</source>
         <translation>Cinel Ride 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2951"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2953"/>
         <source>Hi Bongo</source>
         <translation>Bongo Sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2952"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2954"/>
         <source>Low Bongo</source>
         <translation>Bongos Grav - Low Conga</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2953"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2955"/>
         <source>Mute Hi Conga</source>
         <translation>Conga Înalt Mut</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2954"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2956"/>
         <source>Open Hi Conga</source>
         <translation>Conga Înalt Deschis</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2955"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2957"/>
         <source>Low Conga</source>
         <translation>Conga Jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2956"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2958"/>
         <source>High Timbale</source>
         <translation>Timbale Înalt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2957"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2959"/>
         <source>Low Timbale</source>
         <translation>Timbale Jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2958"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2960"/>
         <source>High Agogo</source>
         <translation>Acogo Înalt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2959"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2961"/>
         <source>Low Agogo</source>
         <translation>Agogo Jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2960"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2962"/>
         <source>Cabasa</source>
         <translation>Cabasa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2962"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2964"/>
         <source>Maracas</source>
         <translation>Maracas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2963"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2965"/>
         <source>Short Whistle</source>
         <translation>Fluier Scurt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2964"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2966"/>
         <source>Long Whistle</source>
         <translation>Fluier Lung</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2965"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2967"/>
         <source>Short Güiro</source>
         <translation>Güiro scurt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2966"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2968"/>
         <source>Long Güiro</source>
         <translation>Güiro lung</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2967"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2969"/>
         <source>Claves</source>
         <translation>Claves</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2968"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2970"/>
         <source>Hi Wood Block</source>
         <translation>Lemn (Wood Blocks) Înalt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2969"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2971"/>
         <source>Low Wood Block</source>
         <translation>Lemn (Wood Blocks) Jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2970"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2972"/>
         <source>Mute Cuica</source>
         <translation>Cuica Mută</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2971"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2973"/>
         <source>Open Cuica</source>
         <translation>Cuica Deschisp</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2973"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2975"/>
         <source>Mute Triangle</source>
         <translation>Trianglu Mut</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2974"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2976"/>
         <source>Open Triangle</source>
         <translation>Trianglu Deschis</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2975"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2977"/>
         <source>Shaker</source>
         <translation>Shaker</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2976"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2978"/>
         <source>Sleigh Bell</source>
         <translation>Zurgălăi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2977"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2979"/>
         <source>Mark Tree</source>
         <translation>Chimes cu bare</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2978"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2980"/>
         <source>Castanets</source>
         <translation>Castaniete</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2979"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2981"/>
         <source>Mute Surdo</source>
         <translation>Surdo Mut</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2980"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2982"/>
         <source>Open Surdo</source>
         <translation>Surdo Deschis</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2982"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2984"/>
         <source>Snare (Rim shot)</source>
         <translation>Toba mică (lovitură pe margine)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2984"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2986"/>
         <source>Ride (Edge)</source>
         <translation>Cinele (pe margine)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2986"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2988"/>
         <source>Cowbell Low</source>
         <translation>Cowbell Jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2988"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2990"/>
         <source>Cowbell High</source>
         <translation>Cowbell Înalt</translation>
     </message>
@@ -16835,57 +16885,57 @@ Tasta %1 pe coardele %2</translation>
 <context>
     <name>engraving/gradualtempochangetype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2115"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2117"/>
         <source>accel.</source>
         <translation>accel.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2116"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2118"/>
         <source>allarg.</source>
         <translation>allarg.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2117"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2119"/>
         <source>calando</source>
         <translation>calando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2118"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2120"/>
         <source>lentando</source>
         <translation>lentando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2119"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2121"/>
         <source>morendo</source>
         <translation>morendo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2120"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2122"/>
         <source>precipitando</source>
         <translation>precipitando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2121"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2123"/>
         <source>rall.</source>
         <translation>rall.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2122"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2124"/>
         <source>rit.</source>
         <translation>rit.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2123"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2125"/>
         <source>smorz.</source>
         <translation>smorz.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2124"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2126"/>
         <source>sost.</source>
         <translation>sost.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2125"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2127"/>
         <source>string.</source>
         <translation>coardă.</translation>
     </message>
@@ -16941,22 +16991,22 @@ Tasta %1 pe coardele %2</translation>
 <context>
     <name>engraving/layoutbreaktype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2302"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2304"/>
         <source>System break</source>
         <translation>Întrerupere de sistem</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2303"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2305"/>
         <source>Page break</source>
         <translation>Întrerupere de pagină</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2304"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2306"/>
         <source>Section break</source>
         <translation>Întrerupere de secțiune</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2305"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2307"/>
         <source>Keep measures on the same system</source>
         <translation>Păstrează măsurile în același sistem</translation>
     </message>
@@ -17530,23 +17580,33 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2090"/>
         <source>Swing up</source>
-        <translation type="unfinished"/>
+        <translation>Glisează în sus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2092"/>
         <source>Swing down</source>
-        <translation type="unfinished"/>
+        <translation>Glisează în jos</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2093"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2094"/>
         <source>Echo</source>
-        <translation type="unfinished"/>
+        <translation>Ecou</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2095"/>
         <source>Damp</source>
-        <translation type="unfinished"/>
+        <translation>Atenuat</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2096"/>
+        <source>Let vibrate</source>
+        <translation>Lasă să vibreze</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2097"/>
+        <source>Ring</source>
+        <translation>Sună</translation>
     </message>
 </context>
 <context>
@@ -17557,7 +17617,7 @@ Tasta %1 pe coardele %2</translation>
         <translation>%1 (Personalizat)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="568"/>
+        <location filename="../../src/notation/notationtypes.h" line="561"/>
         <source>Custom</source>
         <translation>Personalizat</translation>
     </message>
@@ -17611,17 +17671,17 @@ Tasta %1 pe coardele %2</translation>
 <context>
     <name>engraving/staffgroup</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3102"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3104"/>
         <source>Standard</source>
         <translation>Standard</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3103"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3105"/>
         <source>Percussion</source>
         <translation>Percuţie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3104"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3106"/>
         <source>Tablature</source>
         <translation>Tabulatură</translation>
     </message>
@@ -17629,1949 +17689,1939 @@ Tasta %1 pe coardele %2</translation>
 <context>
     <name>engraving/sym</name>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3164"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3172"/>
         <source>No symbol</source>
         <translation>Fără simboluri</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3174"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3182"/>
         <source>11 large diesis down, 3° down [46 EDO]</source>
         <translation>11 large diesis down, 3° down [46 EDO]</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3175"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3183"/>
         <source>11 large diesis up, (11L), (sharp less 11M), 3° up [46 EDO]</source>
         <translation>11 large diesis up, (11L), (sharp less 11M), 3° up [46 EDO]</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3176"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3184"/>
         <source>11 medium diesis down, 1°[17 31] 2°46 down, 1/4-tone down</source>
         <translation>11 medium diesis down, 1°[17 31] 2°46 down, 1/4-tone down</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3177"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3185"/>
         <source>11 medium diesis up, (11M), 1°[17 31] 2°46 up, 1/4-tone up</source>
         <translation>11 medium diesis up, (11M), 1°[17 31] 2°46 up, 1/4-tone up</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3202"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3210"/>
         <source>25 small diesis down, 2° down [53 EDO]</source>
         <translation>25 small diesis down, 2° down [53 EDO]</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3203"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3211"/>
         <source>25 small diesis up, (25S, ~5:13S, ~37S, 5C plus 5C), 2° up [53 EDO]</source>
         <translation>25 small diesis up, (25S, ~5:13S, ~37S, 5C plus 5C), 2° up [53 EDO]</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3208"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3216"/>
         <source>35 large diesis down, 2° down [50 EDO], 5/18-tone down</source>
         <translation>35 diesis mari în jos, 2° în jos [50 EDO], 5/18-ton în jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3209"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3217"/>
         <source>35 large diesis up, (35L, ~13L, ~125L, sharp less 35M), 2°50 up</source>
         <translation>35 diesis mari în sus, (35L, ~13L, ~125L, diez mai puțin 35M), 2°50 în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3210"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3218"/>
         <source>35 medium diesis down, 1°[50] 2°[27] down, 2/9-tone down</source>
         <translation>35 diesis medii în jos, 1°[50] 2°[27] în jos, 2/9-ton în jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3211"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3219"/>
         <source>35 medium diesis up, (35M, ~13M, ~125M, 5C plus 7C), 2/9-tone up</source>
         <translation>35 diesis medii în sus, (35M, ~13M, ~125M, 5C plus 7C), 2/9-ton în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3224"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3232"/>
         <source>5 comma down, 1° down [22 27 29 34 41 46 53 96 EDOs], 1/12-tone down</source>
         <translation>5 come în jos, 1° jos [22 27 29 34 41 46 53 96 EDOs], 1/12-tonuri în jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3225"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3233"/>
         <source>5 comma up, (5C), 1° up [22 27 29 34 41 46 53 96 EDOs], 1/12-tone up</source>
         <translation>5 come în sus, (5C), 1° sus [22 27 29 34 41 46 53 96 EDOs], 1/12-tonuri în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3240"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3248"/>
         <source>5:7 kleisma down</source>
         <translation>5:7 kleisma în jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3241"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3249"/>
         <source>5:7 kleisma up, (5:7k, ~11:13k, 7C less 5C)</source>
         <translation>5:7 kleisma în sus, (5:7k, ~11:13k, 7C mai puțin 5C)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3244"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3252"/>
         <source>7 comma down, 1° down [43 EDO], 2° down [72 EDO], 1/6-tone down</source>
         <translation>7 come în jos, 1° în jos [43 EDO], 2° în jos [72 EDO], 1/6-ton în jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3245"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3253"/>
         <source>7 comma up, (7C), 1° up [43 EDO], 2° up [72 EDO], 1/6-tone up</source>
         <translation>7 come în sus, (7C), 1° în sus [43 EDO], 2° în sus [72 EDO], 1/6-ton în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3301"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3309"/>
         <source>Flat, (apotome down)[almost all EDOs], 1/2-tone down</source>
         <translation>Bemol, (apotom în jos)[aproape toate EDO-urile], 1/2-ton în jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3323"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3331"/>
         <source>Flat 25S-up, 3° down [53 EDO]</source>
         <translation>Bemol 25S-sus, 3° în jos [53 EDO]</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3333"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3341"/>
         <source>Flat 5C-up, 2°[22 29] 3°[27 34 41] 4°[39 46 53] 5°72 7°[96] down, 5/12-tone down</source>
         <translation>Bemol 5C-sus, 2°[22 29] 3°[27 34 41] 4°[39 46 53] 5°72 7°[96] în jos, 5/12-ton în jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3344"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3352"/>
         <source>Flat 5:7k-up</source>
         <translation>Bemol 5:7k-sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3346"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3354"/>
         <source>Flat 7C-up, 2° down [43 EDO], 4° down [72 EDO], 1/3-tone down</source>
         <translation>Bemol 7C-sus, 2° jos [43 EDO], 4° jos [72 EDO], 1/3-ton în jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3358"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3366"/>
         <source>Sharp, (apotome up)[almost all EDOs], 1/2-tone up</source>
         <translation>Diez, (apotom în sus)[aproape toate EDOurile], 1/2-ton în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3379"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3387"/>
         <source>Sharp 25S-down, 3° up [53 EDO]</source>
         <translation>Diez 25S-jos, 3° sus [53 EDO]</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3389"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3397"/>
         <source>Sharp 5C-down, 2°[22 29] 3°[27 34 41] 4°[39 46 53] 5°[72] 7°[96] up, 5/12-tone up</source>
         <translation>Diez 5C-jos, 2°[22 29] 3°[27 34 41] 4°[39 46 53] 5°[72] 7°[96] sus, 5/12-ton în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3400"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3408"/>
         <source>Sharp 5:7k-down</source>
         <translation>Diez 5:7k-jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3402"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3410"/>
         <source>Sharp 7C-down, 2° up [43 EDO], 4° up [72 EDO], 1/3-tone up</source>
         <translation>Diez 7C-jos, 2° sus [43 EDO], 4° sus [72 EDO], 1/3-ton în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3414"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3422"/>
         <source>Combining accordion coupler dot</source>
         <translation>Punct de cuplare combinațional acordeon</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3415"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3423"/>
         <source>Combining left hand, 2 ranks, empty</source>
         <translation>Mâna stângă, 2 ranguri, goală combinațională</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3416"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3424"/>
         <source>Combining left hand, 3 ranks, empty (square)</source>
         <translation>Mâna stângă, 3 ranguri, goală (pătrat) combinațională</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3417"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3425"/>
         <source>Combining right hand, 3 ranks, empty</source>
         <translation>Mâna dreaptă, 3 ranguri, goală combinațională</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3418"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3426"/>
         <source>Combining right hand, 4 ranks, empty</source>
         <translation>Mâna dreaptă, 4 ranguri, goală combinațională</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3419"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3427"/>
         <source>Diatonic accordion clef</source>
         <translation>Cheie de acordeon diatonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3420"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3428"/>
         <source>Left hand, 2 ranks, 16&apos; stop (round)</source>
         <translation>Mâna stângă, 2 ranguri, stop 16&apos; (rotund)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3421"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3429"/>
         <source>Left hand, 2 ranks, 8&apos; stop + 16&apos; stop (round)</source>
         <translation>Mâna stângă, 2 ranguri, stop 8&apos; + stop 16&apos; (rotund)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3422"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3430"/>
         <source>Left hand, 2 ranks, 8&apos; stop (round)</source>
         <translation>Mâna stângă, 2 ranguri, stop 8&apos; (rotund)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3423"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3431"/>
         <source>Left hand, 2 ranks, full master (round)</source>
         <translation>Mâna stângă, 2 ranguri, master plin (rotund)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3424"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3432"/>
         <source>Left hand, 2 ranks, master + 16&apos; stop (round)</source>
         <translation>Mâna stângă, 2 ranguri, master + stop 16&apos; (rotund)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3425"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3433"/>
         <source>Left hand, 2 ranks, master (round)</source>
         <translation>Mâna stângă, 2 ranguri, master (rotund)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3426"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3434"/>
         <source>Left hand, 3 ranks, 2&apos; stop + 8&apos; stop (square)</source>
         <translation>Mâna stângă, 3 ranguri, stop 2&apos; + stop 8&apos; (pătrat)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3427"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3435"/>
         <source>Left hand, 3 ranks, 2&apos; stop (square)</source>
         <translation>Mâna stângă, 3 ranguri, stop 2&apos; (pătrat)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3428"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3436"/>
         <source>Left hand, 3 ranks, 8&apos; stop (square)</source>
         <translation>Mâna stângă, 3 ranguri, stop 8&apos; (pătrat)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3429"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3437"/>
         <source>Left hand, 3 ranks, double 8&apos; stop (square)</source>
         <translation>Mâna stângă, 3 ranguri, stop 8&apos; dublu (pătrat)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3430"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3438"/>
         <source>Left hand, 3 ranks, 2&apos; stop + double 8&apos; stop (tutti) (square)</source>
         <translation>Mâna stângă, 3 ranguri, stop 2&apos; + stop 8&apos; dublu (tutti) (pătrat)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3431"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3439"/>
         <source>Pull</source>
         <translation>Trage</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3432"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3440"/>
         <source>Push</source>
         <translation>Împinge</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3433"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3441"/>
         <source>Right hand, 3 ranks, 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop (accordion)</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 8&apos; stop + stop 8&apos; tremolo superior + stop 16&apos; (acordeon)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3434"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3442"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop (authentic musette)</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 8&apos; tremolo inferior + stop 8&apos; + stop 8&apos; tremolo superior (musette autentică)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3436"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3444"/>
         <source>Right hand, 3 ranks, 8&apos; stop + 16&apos; stop (bandoneón)</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 8&apos; + stop 16&apos; (bandoneón)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3437"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3445"/>
         <source>Right hand, 3 ranks, 16&apos; stop (bassoon)</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 16&apos; (fagot)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3438"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3446"/>
         <source>Right hand, 3 ranks, 8&apos; stop (clarinet)</source>
         <translation>Mâna dreaptă, stop 8&apos; (clarinet)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3439"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3447"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</source>
         <translation>Mâna dreaptă, stop 8&apos; tremolo inferior + stop 8&apos; + stop 8&apos; tremolo superior + stop 16&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3440"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3448"/>
         <source>Right hand, 3 ranks, 4&apos; stop + lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 4&apos; stop + stop 8&apos; tremolo inferior + stop 8&apos; + stop 8&apos; tremolo superior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3441"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3449"/>
         <source>Right hand, 3 ranks, 4&apos; stop + lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 4&apos; + stop 8&apos; tremolo inferior + stop 8&apos; + stop 8&apos; tremolo superior + stop 16&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3443"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3451"/>
         <source>Right hand, 3 ranks, 4&apos; stop + 8&apos; stop + 16&apos; stop (harmonium)</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 4&apos; + stop 8&apos; + stop 16&apos; (armoniu)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3444"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3452"/>
         <source>Right hand, 3 ranks, 4&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop (imitation musette)</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 4&apos; + stop 8&apos; + stop 8&apos; tremolo superior (musette imitație)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3445"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3453"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 8&apos; tremolo inferior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3446"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3454"/>
         <source>Right hand, 3 ranks, 4&apos; stop + lower tremolo 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop (master)</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 4&apos; + stop 8&apos; tremolo inferior + stop 8&apos; tremolo superior + stop 16&apos; (master)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3448"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3456"/>
         <source>Right hand, 3 ranks, 4&apos; stop + 8&apos; stop (oboe)</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 4&apos; + stop 8&apos; (oboi)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3449"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3457"/>
         <source>Right hand, 3 ranks, 4&apos; stop + 16&apos; stop (organ)</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 4&apos; + stop 16&apos; (orgă)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3450"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3458"/>
         <source>Right hand, 3 ranks, 4&apos; stop (piccolo)</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 4&apos; (piculină)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3451"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3459"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 8&apos; tremolo inferior + stop 8&apos; tremolo superior + stop 16&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3452"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3460"/>
         <source>Right hand, 3 ranks, 4&apos; stop + lower tremolo 8&apos; stop + upper tremolo 8&apos; stop</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 4&apos; + stop 8&apos; tremolo inferior + stop 8&apos; tremolo superior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3453"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3461"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop + upper tremolo 8&apos; stop</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 8&apos; tremolo inferior + stop 8&apos; tremolo superior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3454"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3462"/>
         <source>Right hand, 3 ranks, upper tremolo 8&apos; stop</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 8&apos; tremolo superior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3455"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3463"/>
         <source>Right hand, 3 ranks, 8&apos; stop + upper tremolo 8&apos; stop (violin)</source>
         <translation>Mâna dreaptă, 3 ranguri, stop 8&apos; + stop 8&apos; tremolo superior (vioară)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3456"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3464"/>
         <source>Right hand, 4 ranks, alto</source>
         <translation>Mâna dreaptă, 4 ranguri, alto</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3457"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3465"/>
         <source>Right hand, 4 ranks, bass/alto</source>
         <translation>Mâna dreaptă, 4 ranguri, bass/alto</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3458"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3466"/>
         <source>Right hand, 4 ranks, master</source>
         <translation>Mâna dreaptă, 4 ranguri, master</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3459"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3467"/>
         <source>Right hand, 4 ranks, soft bass</source>
         <translation>Mâna dreaptă, 4 ranguri, soft bass</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3460"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3468"/>
         <source>Right hand, 4 ranks, soft tenor</source>
         <translation>Mâna dreaptă, 4 ranguri, soft tenor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3461"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3469"/>
         <source>Right hand, 4 ranks, soprano</source>
         <translation>Mâna dreaptă, 4 ranguri, soprană</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3462"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3470"/>
         <source>Right hand, 4 ranks, tenor</source>
         <translation>Mâna dreaptă, 4 ranguri, tenor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3463"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3471"/>
         <source>Ricochet (2 tones)</source>
         <translation>Înclinare ricoșată (2 tonuri)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3464"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3472"/>
         <source>Ricochet (3 tones)</source>
         <translation>Înclinare ricoșată (3 tonuri)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3465"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3473"/>
         <source>Ricochet (4 tones)</source>
         <translation>Înclinare ricoșată (4 tonuri)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3466"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3474"/>
         <source>Ricochet (5 tones)</source>
         <translation>Înclinare ricoșată (5 tonuri)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3467"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3475"/>
         <source>Ricochet (6 tones)</source>
         <translation>Înclinare ricoșată (6 tonuri)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3468"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3476"/>
         <source>Combining ricochet for stem (2 tones)</source>
         <translation>Înclinare ricoșată (2 tonuri) pentru codiță, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3469"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3477"/>
         <source>Combining ricochet for stem (3 tones)</source>
         <translation>Înclinare ricoșată (3 tonuri) pentru codiță, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3470"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3478"/>
         <source>Combining ricochet for stem (4 tones)</source>
         <translation>Înclinare ricoșată (4 tonuri) pentru codiță, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3471"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3479"/>
         <source>Combining ricochet for stem (5 tones)</source>
         <translation>Înclinare ricoșată (5 tonuri) pentru codiță, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3472"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3480"/>
         <source>Combining ricochet for stem (6 tones)</source>
         <translation>Înclinare ricoșată (6 tonuri) pentru codiță, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3473"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3481"/>
         <source>1-comma flat</source>
         <translation>Bemol de 1 comă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3474"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3482"/>
         <source>1-comma sharp</source>
         <translation>Diez de 1 comă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3475"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3483"/>
         <source>2-comma flat</source>
         <translation>Bemol de 2 come</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3476"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3484"/>
         <source>2-comma sharp</source>
         <translation>Diez de 2 come</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3477"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3485"/>
         <source>3-comma flat</source>
         <translation>Bemol de 3 come</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3478"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3486"/>
         <source>3-comma sharp</source>
         <translation>Diez de 3 come</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3479"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3487"/>
         <source>4-comma flat</source>
         <translation>Bemol de 4 come</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3480"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3488"/>
         <source>5-comma sharp</source>
         <translation>Diez de 5 come</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3481"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3489"/>
         <source>Arrow down (lower by one quarter-tone)</source>
         <translation>Săgeată în jos (coboară cu un sfert de ton)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3482"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3490"/>
         <source>Arrow up (raise by one quarter-tone)</source>
         <translation>Săgeată în sus (urcă cu un sfert de ton)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3483"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3491"/>
         <source>Bakiye (flat)</source>
         <translation>Bakiye (bemol)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3487"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3495"/>
         <source>Büyük mücenneb (flat)</source>
         <translation>Büyük mücenneb (bemol)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3488"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3496"/>
         <source>Büyük mücenneb (sharp)</source>
         <translation>Büyük mücenneb (diez)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3490"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3498"/>
         <source>Combining lower by one 17-limit schisma</source>
         <translation>Scade cu o schismă de 17 limite, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3491"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3499"/>
         <source>Combining lower by one 19-limit schisma</source>
         <translation>Scade cu o schismă de 19 limite, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3492"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3500"/>
         <source>Combining lower by one 23-limit comma</source>
         <translation>Scade cu o comă de 23 de limite, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3494"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3502"/>
         <source>Combining lower by one 31-limit schisma</source>
         <translation>Scade cu o schismă de 31 de limite, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3499"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3507"/>
         <source>Combining lower by one 53-limit comma</source>
         <translation>Scade cu o comă de 53 de limite, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3501"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3509"/>
         <source>Combining raise by one 17-limit schisma</source>
         <translation>Crește cu o schismă de 17 limite, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3502"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3510"/>
         <source>Combining raise by one 19-limit schisma</source>
         <translation>Crește cu o schismă de 19 limite, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3503"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3511"/>
         <source>Combining raise by one 23-limit comma</source>
         <translation>Crește cu o comă de 23 de limite, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3505"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3513"/>
         <source>Combining raise by one 31-limit schisma</source>
         <translation>Crește cu o schismă de 31 de limite, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3510"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3518"/>
         <source>Combining raise by one 53-limit comma</source>
         <translation>Crește cu o comă de 53 de limite, combinațional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3513"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3521"/>
         <source>Double flat</source>
         <translation>Dublu-bemol</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3515"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3523"/>
         <source>Double flat equal tempered semitone</source>
         <translation>Dublu-bemol semiton bine temperat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3516"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3524"/>
         <source>Double flat lowered by one syntonic comma</source>
         <translation>Dublu bemol coborât cu o comă diatonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3517"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3525"/>
         <source>Double flat raised by one syntonic comma</source>
         <translation>Dublu bemol urcat cu o comă diatonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3519"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3527"/>
         <source>Double flat lowered by three syntonic commas</source>
         <translation>Dublu bemol coborât cu trei come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3520"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3528"/>
         <source>Double flat raised by three syntonic commas</source>
         <translation>Dublu bemol urcat cu trei come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3522"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3530"/>
         <source>Double flat lowered by two syntonic commas</source>
         <translation>Dublu bemol coborât cu două come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3523"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3531"/>
         <source>Double flat raised by two syntonic commas</source>
         <translation>Dublu bemol urcat cu două come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3524"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3532"/>
         <source>Double sharp</source>
         <translation>Dublu-diez</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3526"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3534"/>
         <source>Double sharp equal tempered semitone</source>
         <translation>Dublu-diez semiton bine temperat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3527"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3535"/>
         <source>Double sharp lowered by one syntonic comma</source>
         <translation>Dublu diez coborât cu o comă diatonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3528"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3536"/>
         <source>Double sharp raised by one syntonic comma</source>
         <translation>Dublu diez urcat cu o comă diatonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3529"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3537"/>
         <source>Double sharp lowered by three syntonic commas</source>
         <translation>Dublu diez coborât cu trei come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3530"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3538"/>
         <source>Double sharp raised by three syntonic commas</source>
         <translation>Dublu diez urcat cu trei come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3531"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3539"/>
         <source>Double sharp lowered by two syntonic commas</source>
         <translation>Dublu diez coborât cu două come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3532"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3540"/>
         <source>Double sharp raised by two syntonic commas</source>
         <translation>Dublu diez urcat cu două come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3533"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3541"/>
         <source>Enharmonically reinterpret accidental almost equal to</source>
         <translation>Alterație aproximativ egal de reinterpretare enarmonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3534"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3542"/>
         <source>Enharmonically reinterpret accidental equals</source>
         <translation>Alterație egal de reinterpretare enarmonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3535"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3543"/>
         <source>Enharmonically reinterpret accidental tilde</source>
         <translation>Alterație tildă de reinterpretare enarmonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3541"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3549"/>
         <source>Five-quarter-tones flat</source>
         <translation>Bemol de cinci sferturi de ton</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3542"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3550"/>
         <source>Five-quarter-tones sharp</source>
         <translation>Diez de cinci sferturi de ton</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3543"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3551"/>
         <source>Flat</source>
         <translation>Bemol</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3545"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3553"/>
         <source>Flat equal tempered semitone</source>
         <translation>Bemol (semiton bine temperat)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3547"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3555"/>
         <source>Flat lowered by one syntonic comma</source>
         <translation>Bemol coborât cu o comă diatonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3548"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3556"/>
         <source>Flat raised by one syntonic comma</source>
         <translation>Bemol urcat cu o comă diatonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3552"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3560"/>
         <source>Flat lowered by three syntonic commas</source>
         <translation>Bemol coborât cu trei come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3553"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3561"/>
         <source>Flat raised by three syntonic commas</source>
         <translation>Bemol urcat cu trei come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3555"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3563"/>
         <source>Flat lowered by two syntonic commas</source>
         <translation>Bemol coborât cu două come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3556"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3564"/>
         <source>Flat raised by two syntonic commas</source>
         <translation>Bemol urcat cu două come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3575"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3583"/>
         <source>Koron (quarter tone flat)</source>
         <translation>Koron (bemol de un sfert de ton)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3577"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3585"/>
         <source>Küçük mücenneb (sharp)</source>
         <translation>Küçük mücenneb (diez)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3579"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3587"/>
         <source>Lower by one septimal comma</source>
         <translation>Coboară cu o comă septimală</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3580"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3588"/>
         <source>Lower by one tridecimal quartertone</source>
         <translation>Coboară cu un sfert de ton tridecimal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3581"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3589"/>
         <source>Lower by one undecimal quartertone</source>
         <translation>Coboară cu un sfert de ton undecimal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3582"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3590"/>
         <source>Lower by two septimal commas</source>
         <translation>Coboară cu două come septimale</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3586"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3594"/>
         <source>Natural</source>
         <translation>Becar</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3588"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3596"/>
         <source>Natural equal tempered semitone</source>
         <translation>Becar (semiton bine temperat)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3589"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3597"/>
         <source>Natural flat</source>
         <translation>Becar și bemol</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3591"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3599"/>
         <source>Natural lowered by one syntonic comma</source>
         <translation>Becar coborât cu o comă diatonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3592"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3600"/>
         <source>Natural raised by one syntonic comma</source>
         <translation>Becar urcat cu o comă diatonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3595"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3603"/>
         <source>Natural sharp</source>
         <translation>Becar și diez</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3596"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3604"/>
         <source>Natural lowered by three syntonic commas</source>
         <translation>Becar coborât cu trei come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3597"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3605"/>
         <source>Natural raised by three syntonic commas</source>
         <translation>Becar urcat cu trei come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3598"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3606"/>
         <source>Natural lowered by two syntonic commas</source>
         <translation>Becar coborât cu două come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3599"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3607"/>
         <source>Natural raised by two syntonic commas</source>
         <translation>Becar urcat cu două come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3610"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3618"/>
         <source>Lower by one equal tempered quarter-tone</source>
         <translation>Coboară cu un sfert de ton bine temperat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3611"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3619"/>
         <source>Raise by one equal tempered quarter tone</source>
         <translation>Urcă cu sfert de ton bine temperat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3614"/>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3616"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3622"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3624"/>
         <source>Quarter-tone flat</source>
         <translation>Bemol de un sfert de ton</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3618"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3626"/>
         <source>Reversed flat (quarter-tone flat) (Stein)</source>
         <translation>Bemol invers (bemol de un sfert de ton) (Stein)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3622"/>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3624"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3630"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3632"/>
         <source>Quarter-tone sharp</source>
         <translation>Diez de un sfert de ton</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3625"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3633"/>
         <source>Half sharp (quarter-tone sharp) (Stein)</source>
         <translation>Jumăcate de diez (diez de un sfert de ton) (Stein)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3627"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3635"/>
         <source>Raise by one septimal comma</source>
         <translation>Urcă cu o comă septimală</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3628"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3636"/>
         <source>Raise by one tridecimal quartertone</source>
         <translation>Urcă cu un sfert de ton tridecimal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3629"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3637"/>
         <source>Raise by one undecimal quartertone</source>
         <translation>Urcă cu un sfert de ton undecimal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3630"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3638"/>
         <source>Raise by two septimal commas</source>
         <translation>Urcă cu două come septimale</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3636"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3644"/>
         <source>Sharp</source>
         <translation>Diez</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3638"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3646"/>
         <source>Sharp equal tempered semitone</source>
         <translation>Diez (semiton bine temperat)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3640"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3648"/>
         <source>Sharp lowered by one syntonic comma</source>
         <translation>Diez coborât cu o comă diatonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3641"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3649"/>
         <source>Sharp raised by one syntonic comma</source>
         <translation>Diez urcat cu o comă diatonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3647"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3655"/>
         <source>Sharp sharp</source>
         <translation>Diez și diez</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3648"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3656"/>
         <source>Sharp lowered by three syntonic commas</source>
         <translation>Diez coborât cu trei come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3649"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3657"/>
         <source>Sharp raised by three syntonic commas</source>
         <translation>Diez urcat cu trei come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3650"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3658"/>
         <source>Sharp lowered by two syntonic commas</source>
         <translation>Diez coborât cu două come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3651"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3659"/>
         <source>Sharp raised by two syntonic commas</source>
         <translation>Diez urcat cu două come diatonice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3658"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3666"/>
         <source>Sori (quarter tone sharp)</source>
         <translation>Sori (diez de un sfert de ton)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3662"/>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3663"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3670"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3671"/>
         <source>Three-quarter-tones flat</source>
         <translation>Bemol de trei sferturi de ton</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3667"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3675"/>
         <source>Reversed flat and flat (three-quarter-tones flat) (Zimmermann)</source>
         <translation>Bemol invers și bemol (bemol de trei sferturi de ton) (Zimmermann)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3669"/>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3670"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3677"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3678"/>
         <source>Three-quarter-tones sharp</source>
         <translation>Diez de trei sferturi de ton</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3672"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3680"/>
         <source>One and a half sharps (three-quarter-tones sharp) (Stein)</source>
         <translation>Un diez și jumătate (diez de trei sferturi de ton) (Stein)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3674"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3682"/>
         <source>Triple flat</source>
         <translation>Triplu bemol</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3675"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3683"/>
         <source>Triple sharp</source>
         <translation>Triplu-diez</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3684"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3692"/>
         <source>5/6 tone flat (Wyschnegradsky)</source>
         <translation>Bemol de 5/6 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3685"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3693"/>
         <source>5/6 tone sharp (Wyschnegradsky)</source>
         <translation>Diez de 5/6 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3686"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3694"/>
         <source>11/12 tone flat (Wyschnegradsky)</source>
         <translation>Bemol de 11/12 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3687"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3695"/>
         <source>11/12 tone sharp (Wyschnegradsky)</source>
         <translation>Diez de 11/12 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3688"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3696"/>
         <source>1/12 tone flat (Wyschnegradsky)</source>
         <translation>Bemol de 1/12 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3689"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3697"/>
         <source>1/12 tone sharp (Wyschnegradsky)</source>
         <translation>Diez de 1/12 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3690"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3698"/>
         <source>1/6 tone flat (Wyschnegradsky)</source>
         <translation>Bemol de 1/6 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3691"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3699"/>
         <source>1/6 tone sharp (Wyschnegradsky)</source>
         <translation>Diez de 1/6 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3692"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3700"/>
         <source>1/4 tone flat (Wyschnegradsky)</source>
         <translation>Bemol de 1/4 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3693"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3701"/>
         <source>1/4 tone sharp (Wyschnegradsky)</source>
         <translation>Diez de 1/4 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3694"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3702"/>
         <source>1/3 tone flat (Wyschnegradsky)</source>
         <translation>Bemol de 1/3 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3695"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3703"/>
         <source>1/3 tone sharp (Wyschnegradsky)</source>
         <translation>Diez de 1/3 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3696"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3704"/>
         <source>5/12 tone flat (Wyschnegradsky)</source>
         <translation>Bemol de 5/12 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3697"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3705"/>
         <source>5/12 tone sharp (Wyschnegradsky)</source>
         <translation>Diez de 5/12 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3698"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3706"/>
         <source>1/2 tone flat (Wyschnegradsky)</source>
         <translation>Bemol de 1/2 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3699"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3707"/>
         <source>1/2 tone sharp (Wyschnegradsky)</source>
         <translation>Diez de 1/2 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3700"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3708"/>
         <source>7/12 tone flat (Wyschnegradsky)</source>
         <translation>Bemol de 7/12 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3701"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3709"/>
         <source>7/12 tone sharp (Wyschnegradsky)</source>
         <translation>Diez de 7/12 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3702"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3710"/>
         <source>2/3 tone flat (Wyschnegradsky)</source>
         <translation>Bemol de 2/3 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3703"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3711"/>
         <source>2/3 tone sharp (Wyschnegradsky)</source>
         <translation>Diez de 2/3 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3704"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3712"/>
         <source>3/4 tone flat (Wyschnegradsky)</source>
         <translation>Bemol de 3/4 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3705"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3713"/>
         <source>3/4 tone sharp (Wyschnegradsky)</source>
         <translation>Diez de 3/4 ton (Wyschnegradsky)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3771"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3779"/>
         <source>Accent above</source>
         <translation>Accent deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3772"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3780"/>
         <source>Accent below</source>
         <translation>Accent dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3773"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3781"/>
         <source>Accent-staccato above</source>
         <translation>Staccato accentuat deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3774"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3782"/>
         <source>Accent-staccato below</source>
         <translation>Staccato accentuat dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3775"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3783"/>
         <source>Laissez vibrer (l.v.) above</source>
         <translation>Laissez vibrer (l.v.) deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3776"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3784"/>
         <source>Laissez vibrer (l.v.) below</source>
         <translation>Laissez vibrer (l.v.) dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3777"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3785"/>
         <source>Marcato above</source>
         <translation>Marcato deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3778"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3786"/>
         <source>Marcato below</source>
         <translation>Marcato dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3779"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3787"/>
         <source>Marcato-staccato above</source>
         <translation>Marcato-staccato deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3780"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3788"/>
         <source>Marcato-staccato below</source>
         <translation>Marcato-staccato dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3781"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3789"/>
         <source>Marcato-tenuto above</source>
         <translation>Marcato-tenuto deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3782"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3790"/>
         <source>Marcato-tenuto below</source>
         <translation>Marcato-tenuto dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3783"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3791"/>
         <source>Soft accent above</source>
         <translation>Accent moale deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3784"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3792"/>
         <source>Soft accent below</source>
         <translation>Accent moale dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3785"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3793"/>
         <source>Soft accent-staccato above</source>
         <translation>Accent moale-staccato deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3786"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3794"/>
         <source>Soft accent-staccato below</source>
         <translation>Accent moale-staccato dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3787"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3795"/>
         <source>Soft accent-tenuto above</source>
         <translation>Accent moale-tenuto deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3788"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3796"/>
         <source>Soft accent-tenuto below</source>
         <translation>Accent moale-tenuto dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3789"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3797"/>
         <source>Soft accent-tenuto-staccato above</source>
         <translation>Accent moale-tenuto-staccato deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3790"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3798"/>
         <source>Soft accent-tenuto-staccato below</source>
         <translation>Accent moale-tenuto-staccato dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3791"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3799"/>
         <source>Staccatissimo above</source>
         <translation>Staccatissimo deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3792"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3800"/>
         <source>Staccatissimo below</source>
         <translation>Staccatissimo dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3793"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3801"/>
         <source>Staccatissimo stroke above</source>
         <translation>Staccatissimo liniuță deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3794"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3802"/>
         <source>Staccatissimo stroke below</source>
         <translation>staccatissimo liniuță dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3795"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3803"/>
         <source>Staccatissimo wedge above</source>
         <translation>Staccatissimo pană deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3796"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3804"/>
         <source>Staccatissimo wedge below</source>
         <translation>Staccatissimo pană dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3797"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3805"/>
         <source>Staccato above</source>
         <translation>Staccato deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3798"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3806"/>
         <source>Staccato below</source>
         <translation>Staccato dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3799"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3807"/>
         <source>Stress above</source>
         <translation>Accentuare deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3800"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3808"/>
         <source>Stress below</source>
         <translation>Accentuare dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3801"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3809"/>
         <source>Tenuto above</source>
         <translation>Tenuto deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3802"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3810"/>
         <source>Tenuto-accent above</source>
         <translation>Tenuto-accent deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3803"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3811"/>
         <source>Tenuto-accent below</source>
         <translation>Tenuto-accent dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3804"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3812"/>
         <source>Tenuto below</source>
         <translation>Tenuto dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3805"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3813"/>
         <source>Louré (tenuto-staccato) above</source>
         <translation>Louré (tenuto-staccato) deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3806"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3814"/>
         <source>Louré (tenuto-staccato) below</source>
         <translation>Louré (tenuto-staccato) dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3807"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3815"/>
         <source>Unstress above</source>
         <translation>Semnul moale deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3808"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3816"/>
         <source>Unstress below</source>
         <translation>Semnul moale dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3810"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3818"/>
         <source>Dashed barline</source>
         <translation>Bară întreruptă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3811"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3819"/>
         <source>Dotted barline</source>
         <translation>Bară punctată</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3812"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3820"/>
         <source>Double barline</source>
         <translation>Bară dublă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3813"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3821"/>
         <source>Final barline</source>
         <translation>Bară finală</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3814"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3822"/>
         <source>Heavy barline</source>
         <translation>Bară groasă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3815"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3823"/>
         <source>Heavy double barline</source>
         <translation>Bară groasă dublă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3816"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3824"/>
         <source>Reverse final barline</source>
         <translation>Bară finală inversă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3817"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3825"/>
         <source>Short barline</source>
         <translation>Bară scurtă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3818"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3826"/>
         <source>Single barline</source>
         <translation>Bară simplă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3819"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3827"/>
         <source>Tick barline</source>
         <translation>Bară de tact</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3865"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3873"/>
         <source>Muted (closed)</source>
         <translation>Amuțit (închis)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3867"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3875"/>
         <source>Open</source>
         <translation>Deschis</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3872"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3880"/>
         <source>Breath mark (comma)</source>
         <translation>Semn de respiro (virgulă)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3873"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3881"/>
         <source>Breath mark (Salzedo)</source>
         <translation>Semn respirație (Salzedo)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3874"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3882"/>
         <source>Breath mark (tick-like)</source>
         <translation>Semn respirație (stil bifă)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3875"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3883"/>
         <source>Breath mark (upbow-like)</source>
         <translation>Semn respirație (ca un ac)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3878"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3886"/>
         <source>C clef</source>
         <translation>Cheia do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3879"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3887"/>
         <source>C clef ottava bassa</source>
         <translation>Cheia do la octavă bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3886"/>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3896"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3894"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3904"/>
         <source>Caesura</source>
         <translation>Cezură</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3887"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3895"/>
         <source>Curved caesura</source>
         <translation>Cezură curbată</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3888"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3896"/>
         <source>Short caesura</source>
         <translation>Cezură scurtă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3889"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3897"/>
         <source>Single stroke caesura</source>
         <translation>Cesură cu lovire simplă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3890"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3898"/>
         <source>Thick caesura</source>
         <translation>Cezură groasă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3961"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3969"/>
         <source>Coda</source>
         <translation>Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="3962"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3970"/>
         <source>Square coda</source>
         <translation>Coda pătrată</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4037"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4045"/>
         <source>Forte</source>
         <translation>Forte</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4047"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4055"/>
         <source>Mezzo</source>
         <translation>Mezzo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4048"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4056"/>
         <source>Niente</source>
         <translation>Niente</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4056"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4064"/>
         <source>Piano</source>
         <translation>Pian</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4057"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4065"/>
         <source>Rinforzando</source>
         <translation>Rinforzando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4060"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4068"/>
         <source>Sforzando</source>
         <translation>Sforzando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4067"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4075"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4133"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4141"/>
         <source>F clef</source>
         <translation>Cheia fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4143"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4151"/>
         <source>Fermata above</source>
         <translation>Coroană desupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4144"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4152"/>
         <source>Fermata below</source>
         <translation>Coroană dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4145"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4153"/>
         <source>Long fermata above</source>
         <translation>Coroană lungă deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4146"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4154"/>
         <source>Long fermata below</source>
         <translation>Coroană lungă dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4147"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4155"/>
         <source>Long fermata (Henze) above</source>
         <translation>Coroană lungă (Henze) deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4148"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4156"/>
         <source>Long fermata (Henze) below</source>
         <translation>Coroană lungă (Henze) dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4149"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4157"/>
         <source>Short fermata above</source>
         <translation>Coroană scurtă deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4150"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4158"/>
         <source>Short fermata below</source>
         <translation>Coroană scurtă dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4151"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4159"/>
         <source>Short fermata (Henze) above</source>
         <translation>Coroană scurtă (Henze) deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4152"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4160"/>
         <source>Short fermata (Henze) below</source>
         <translation>Coroană scurtă (Henze) dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4153"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4161"/>
         <source>Very long fermata above</source>
         <translation>Coroană foarte lungă deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4154"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4162"/>
         <source>Very long fermata below</source>
         <translation>Coroană foarte lungă dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4155"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4163"/>
         <source>Very short fermata above</source>
         <translation>Coroană foarte scurtă deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4156"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4164"/>
         <source>Very short fermata below</source>
         <translation>Coroană foarte scurtă dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4320"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4328"/>
         <source>G clef</source>
         <translation>Cheia sol</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4346"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4354"/>
         <source>Fade in</source>
         <translation>Fade in</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4347"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4355"/>
         <source>Fade out</source>
         <translation>Fade out</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4373"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4381"/>
         <source>Volume swell</source>
         <translation>Urcare Volum</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4582"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4590"/>
         <source>Right-hand fingering, first finger</source>
         <translation>Digitație mâna dreaptă, degetul unu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4583"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4591"/>
         <source>Right-hand fingering, second finger</source>
         <translation>Digitație mâna dreaptă, degetul doi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4584"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4592"/>
         <source>Right-hand fingering, third finger</source>
         <translation>Digitație mâna dreaptă, degetul trei</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4585"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4593"/>
         <source>Right-hand fingering, thumb</source>
         <translation>Digitație mâna dreaptă, degetul mare</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4670"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4678"/>
         <source>Elision</source>
         <translation>Eliziune</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4671"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4679"/>
         <source>Narrow elision</source>
         <translation>Eliziune îngustă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4672"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4680"/>
         <source>Wide elision</source>
         <translation>Eliziune lată</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4838"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4846"/>
         <source>Augmentation dot</source>
         <translation>Punct de prelungire</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4840"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4848"/>
         <source>1024th note (semihemidemisemihemidemisemiquaver) stem up</source>
         <translation>omiedouăzecipătime cu codița în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4842"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4850"/>
         <source>128th note (semihemidemisemiquaver) stem up</source>
         <translation>Osutădouăzecioptime cu codița în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4844"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4852"/>
         <source>16th note (semiquaver) stem up</source>
         <translation>șaisprezecime cu codița în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4846"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4854"/>
         <source>256th note (demisemihemidemisemiquaver) stem up</source>
         <translation>douăsutecincizecișesime cu codița în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4848"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4856"/>
         <source>32nd note (demisemiquaver) stem up</source>
         <translation>treizecidoime cu codița în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4850"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4858"/>
         <source>512th note (hemidemisemihemidemisemiquaver) stem up</source>
         <translation>cincisutedouăsprezecime cu codița în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4852"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4860"/>
         <source>64th note (hemidemisemiquaver) stem up</source>
         <translation>șaizecipătrime cu codița în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4854"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4862"/>
         <source>Eighth note (quaver) stem up</source>
         <translation>Optime cu codița în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4858"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4866"/>
         <source>Half note (minim) stem up</source>
         <translation>Doime cu codița în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4860"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4868"/>
         <source>Quarter note (crotchet) stem up</source>
         <translation>Pătrime cu codița în sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="4861"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4869"/>
         <source>Whole note (semibreve)</source>
         <translation>Notă întreagă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5321"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5329"/>
         <source>Haydn ornament</source>
-        <translation type="unfinished"/>
+        <translation>Ornament Haydn</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5339"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5347"/>
         <source>Mordent</source>
         <translation>Mordent inferior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5345"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5353"/>
         <source>Pincé (Couperin)</source>
         <translation>Pincé (Couperin)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5359"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5367"/>
         <source>Mordent with upper prefix</source>
         <translation>Tril scurt superior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5361"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5369"/>
         <source>Slide</source>
         <translation>Mordent cu terminație</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5377"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5385"/>
         <source>Shake</source>
         <translation>Shake</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5378"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5386"/>
         <source>Shake (Muffat)</source>
         <translation>Shake (Muffat)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5381"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5389"/>
         <source>Short trill</source>
         <translation>Mordent superior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5386"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5394"/>
         <source>Tremblement</source>
         <translation>Mordent dublu superior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5387"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5395"/>
         <source>Tremblement appuyé (Couperin)</source>
         <translation>Mordent dublu superior appuyé (Couperin)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5388"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5396"/>
         <source>Trill</source>
         <translation>Tril</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5389"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5397"/>
         <source>Turn</source>
         <translation>Grupet superior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5390"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5398"/>
         <source>Inverted turn</source>
         <translation>Grupet inferior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5391"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5399"/>
         <source>Turn with slash</source>
         <translation>Grupet inferior (tăiat)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5392"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5400"/>
         <source>Turn up</source>
-        <translation type="unfinished"/>
+        <translation>Gruppetto ascendent</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5393"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5401"/>
         <source>Inverted turn up</source>
-        <translation type="unfinished"/>
+        <translation>Gruppetto ascendent inversat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5582"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5590"/>
         <source>Half-open 2 (Weinberg)</source>
         <translation>Semideschis 2 (Weinberg)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5689"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5697"/>
         <source>Snap pizzicato above</source>
         <translation>Pizzicato Bartók deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5690"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5698"/>
         <source>Snap pizzicato below</source>
         <translation>Pizzicato Bartók dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5696"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5704"/>
         <source>Repeat last bar</source>
         <translation>Repetă ultima măsură</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5697"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5705"/>
         <source>Repeat last two bars</source>
         <translation>Repetă ultimele 2 măsuri</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5698"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5706"/>
         <source>Repeat last four bars</source>
         <translation>Repetă ultimele 4 măsuri</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5704"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5712"/>
         <source>Left (start) repeat sign</source>
         <translation>Semn de repetiție la stânga (început)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5705"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5713"/>
         <source>Right (end) repeat sign</source>
         <translation>Semn de repetiție la dreapta (sfârșit)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5706"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5714"/>
         <source>Right and left repeat sign</source>
         <translation>Semn de repetiție bidirecțional</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5707"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5715"/>
         <source>1024th rest</source>
         <translation>Pauză de omiedouăzecipătime</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5708"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5716"/>
         <source>128th (semihemidemisemiquaver) rest</source>
         <translation>Pauză de osutădouăzecioptime</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5709"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5717"/>
         <source>16th (semiquaver) rest</source>
         <translation>Pauză de șaisprezecime</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5710"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5718"/>
         <source>256th rest</source>
         <translation>Pauză de douăsutecincizecișesime</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5711"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5719"/>
         <source>32nd (demisemiquaver) rest</source>
         <translation>Pauză de treizecidoime</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5712"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5720"/>
         <source>512th rest</source>
         <translation>Pauză de cincisutedouăsprezecime</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5713"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5721"/>
         <source>64th (hemidemisemiquaver) rest</source>
         <translation>Pauză de șaizecipătrime</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5714"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5722"/>
         <source>Eighth (quaver) rest</source>
         <translation>Pauză de optime</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5715"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5723"/>
         <source>Double whole (breve) rest</source>
         <translation>Pauză de notă dublu întreagă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5716"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5724"/>
         <source>Double whole rest on leger lines</source>
         <translation>Pauză dublu întreagă pe linii ajutătoare</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5721"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5729"/>
         <source>Half (minim) rest</source>
         <translation>Pauză de doime</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5722"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5730"/>
         <source>Half rest on leger line</source>
         <translation>Pauză de doime pe linie ajutătoare</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5723"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5731"/>
         <source>Longa rest</source>
         <translation>Pauză de notă cvadruplu întreagă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5724"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5732"/>
         <source>Maxima rest</source>
         <translation>Pauză dublu-cvadruplu întreagă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5725"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5733"/>
         <source>Quarter (crotchet) rest</source>
         <translation>Pauză de pătrime</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5728"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5736"/>
         <source>Whole (semibreve) rest</source>
         <translation>Pauză de notă întreagă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5729"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5737"/>
         <source>Whole rest on leger line</source>
         <translation>Pauză de notă întreagă pe linie ajutătoare</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5747"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5755"/>
         <source>Segno</source>
         <translation>Segno</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5748"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5756"/>
         <source>Segno (serpent)</source>
         <translation>Segno (șerpuit)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5826"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5834"/>
         <source>Down bow</source>
         <translation>Arcuș jos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5833"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5841"/>
         <source>Harmonic</source>
         <translation>Armonică</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5847"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5855"/>
         <source>Thumb position</source>
         <translation>Poziția degetului mare</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5851"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5859"/>
         <source>Up bow</source>
         <translation>Arcuș sus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5861"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5869"/>
         <source>System divider</source>
         <translation>Separator de sistem</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5862"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5870"/>
         <source>Extra long system divider</source>
         <translation>Separator de sistem extra-lung</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5863"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5871"/>
         <source>Long system divider</source>
         <translation>Separator de sistem lung</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5928"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5936"/>
         <source>Common time</source>
         <translation>Alla breve (4/4)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5931"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5939"/>
         <source>Cut time (Bach)</source>
         <translation>Alla breve (Bach)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5932"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5940"/>
         <source>Cut triple time (9/8)</source>
         <translation>Alla breve triplu (9/8)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5933"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5941"/>
         <source>Cut time</source>
         <translation>Alla breve (2/2)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5959"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5967"/>
         <source>Divide measured tremolo by 2</source>
         <translation>Divide tremoloul măsurat la 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5960"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5968"/>
         <source>Divide measured tremolo by 3</source>
         <translation>Divide tremoloul măsurat la 3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5961"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5969"/>
         <source>Divide measured tremolo by 4</source>
         <translation>Divide tremoloul măsurat la 4</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="5962"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="5970"/>
         <source>Divide measured tremolo by 6</source>
         <translation>Divide tremoloul măsurat la 6</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="6027"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="6035"/>
         <source>Sawtooth line segment</source>
         <translation>Segment linie dinte de fierăstrău</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="6029"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="6037"/>
         <source>Wide sawtooth line segment</source>
         <translation>Segment linie dinte de fierăstrău lat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="6046"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="6054"/>
         <source>Vibrato large, faster</source>
         <translation>Vibrato lung, mai rapid</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="6051"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="6059"/>
         <source>Vibrato large, slowest</source>
         <translation>Vibrato lung, cel mai rar</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="6142"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="6150"/>
         <source>Prall mordent</source>
         <translation>Mordent dublu inferior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="6143"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="6151"/>
         <source>Up prall</source>
         <translation>Tril scurt inferior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="6144"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="6152"/>
         <source>Up mordent</source>
         <translation>Tril scurt inferior (tăiat)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="6145"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="6153"/>
         <source>Prall down</source>
         <translation>Tril scurt cu încheiere inferioară</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="6147"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="6155"/>
         <source>Down mordent</source>
         <translation>Tril scurt superior (tăiat)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="6148"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="6156"/>
         <source>Prall up</source>
         <translation>Tril scurt cu încheiere superioară</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="6149"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="6157"/>
         <source>Line prall</source>
         <translation>Tril scurt superior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/symnames.cpp" line="6163"/>
+        <location filename="../../src/engraving/types/symnames.cpp" line="6171"/>
         <source>Space</source>
         <translation>Spațiu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3203"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3205"/>
         <source>Slap</source>
         <translation>Slap</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3204"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3206"/>
         <source>Pop</source>
         <translation>Pop</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3206"/>
-        <source>Let vibrate</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3207"/>
-        <source>Ring</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3208"/>
         <source>Thumb damp</source>
-        <translation type="unfinished"/>
+        <translation>Atenuare cu degetul</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3209"/>
         <source>Brush damp</source>
-        <translation type="unfinished"/>
+        <translation>Atenuare cu peria</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3210"/>
         <source>Ring touch</source>
-        <translation type="unfinished"/>
+        <translation>Sunet prin atingere</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3211"/>
         <source>Pluck</source>
-        <translation type="unfinished"/>
+        <translation>Ciupit</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3212"/>
         <source>Singing bell</source>
-        <translation type="unfinished"/>
+        <translation>Clopot cântător</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3213"/>
         <source>Vibrate</source>
-        <translation type="unfinished"/>
+        <translation>Vibrează</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="372"/>
@@ -19623,47 +19673,47 @@ Tasta %1 pe coardele %2</translation>
 <context>
     <name>engraving/tremolotype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2446"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2448"/>
         <source>Eighth through stem</source>
         <translation>Optime pe notă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2447"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2449"/>
         <source>16th through stem</source>
         <translation>Șaisprezecime pe notă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2448"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2450"/>
         <source>32nd through stem</source>
         <translation>Treizecidoime pe notă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2449"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2451"/>
         <source>64th through stem</source>
         <translation>Șaizecipătrime pe notă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2450"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2452"/>
         <source>Buzz roll</source>
         <translation>Buzz roll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2451"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2453"/>
         <source>Eighth between notes</source>
         <translation>Optime între note</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2452"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2454"/>
         <source>16th between notes</source>
         <translation>Șaisprezecime între note</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2453"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2455"/>
         <source>32nd between notes</source>
         <translation>Treizecidoime între note</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2454"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2456"/>
         <source>64th between notes</source>
         <translation>Șaizecipătrime între note</translation>
     </message>
@@ -19671,22 +19721,22 @@ Tasta %1 pe coardele %2</translation>
 <context>
     <name>engraving/trilltype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3123"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3125"/>
         <source>Trill line</source>
         <translation>Linie tril</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3124"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3126"/>
         <source>Upprall line</source>
         <translation>Linie tril scurt inferior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3125"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3127"/>
         <source>Downprall line</source>
         <translation>Linie tril scurt superior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3126"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3128"/>
         <source>Prallprall line</source>
         <translation>Linie tril (fără tr.)</translation>
     </message>
@@ -19732,22 +19782,22 @@ Tasta %1 pe coardele %2</translation>
 <context>
     <name>engraving/vibratotype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3166"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3168"/>
         <source>Guitar vibrato</source>
         <translation>Vibrato chitară</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3167"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3169"/>
         <source>Guitar vibrato wide</source>
         <translation>Vibrato larg chitară</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3168"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3170"/>
         <source>Vibrato sawtooth</source>
         <translation>Vibrato dinte de fierăstrău</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3170"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3172"/>
         <source>Tremolo sawtooth wide</source>
         <translation>Tremolo dinte de fierăstrău lat</translation>
     </message>
@@ -19782,18 +19832,18 @@ Tasta %1 pe coardele %2</translation>
         <translation>Scurtătură:</translation>
     </message>
     <message>
-        <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="82"/>
+        <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="80"/>
         <source>Edit shortcut</source>
         <extracomment>Edit the keyboard shortcut assigned to a plug-in</extracomment>
         <translation>Editează scurtăturile</translation>
     </message>
     <message>
-        <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="129"/>
+        <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="125"/>
         <source>Enable</source>
         <translation>Activează</translation>
     </message>
     <message>
-        <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="129"/>
+        <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="125"/>
         <source>Disable</source>
         <translation>Dezactivează</translation>
     </message>
@@ -19821,43 +19871,43 @@ Tasta %1 pe coardele %2</translation>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="34"/>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="96"/>
         <source>Failed to install extension</source>
-        <translation type="unfinished"/>
+        <translation>A eșuat instalarea extensiei</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="35"/>
         <source>The extension does not contain a valid manifest file.</source>
-        <translation type="unfinished"/>
+        <translation>Extensia nu conține un fișier manifest valid.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="55"/>
         <source>The extension is already installed.</source>
-        <translation type="unfinished"/>
+        <translation>Extensia este deja instalată.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="62"/>
         <source>This extension cannot be updated.</source>
-        <translation type="unfinished"/>
+        <translation>Extensia nu poate fi actualizată.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="63"/>
         <source>The currently installed version cannot be uninstalled.</source>
-        <translation type="unfinished"/>
+        <translation>Versiunea curentă instalată nu poate fi dezinstalată.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="69"/>
         <source>Another version of the extension “%1” is already installed (version %2). Do you want to replace it with version %3?</source>
-        <translation type="unfinished"/>
+        <translation>O altă versiune a extensiei „%1” este deja instalată (versiunea %2). Dorești să o înlocuiești cu versiunea %3?</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="73"/>
         <source>Update extension</source>
-        <translation type="unfinished"/>
+        <translation>Actualizează extensia</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="98"/>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="100"/>
         <source>Error code: %1</source>
-        <translation type="unfinished"/>
+        <translation>Cod de eroare: %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="76"/>
@@ -19911,7 +19961,7 @@ Tasta %1 pe coardele %2</translation>
     <name>global</name>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="157"/>
-        <location filename="../../src/appshell/qml/WelcomeDialog.qml" line="290"/>
+        <location filename="../../src/appshell/qml/WelcomeDialog.qml" line="286"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml" line="112"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="107"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="255"/>
@@ -19963,7 +20013,7 @@ Tasta %1 pe coardele %2</translation>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="220"/>
         <location filename="../../src/framework/learn/qml/Muse/Learn/internal/Playlist.qml" line="142"/>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="172"/>
-        <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="95"/>
+        <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="105"/>
         <source>Please check your internet connection or try again later.</source>
         <translation>Te rog verifică conexiunea la internet sau reîncearcă mai târziu.</translation>
     </message>
@@ -20002,7 +20052,7 @@ Tasta %1 pe coardele %2</translation>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialogContent.qml" line="143"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="69"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="79"/>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="275"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="282"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="178"/>
         <source>Clear</source>
         <translation>Şterge</translation>
@@ -20064,7 +20114,7 @@ Tasta %1 pe coardele %2</translation>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/PopupPanel.qml" line="166"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/PopupPanel.qml" line="160"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchButton.qml" line="82"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="52"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PartsDialog.qml" line="101"/>
@@ -20429,7 +20479,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="126"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TitleListView.qml" line="123"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="297"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="293"/>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresGridView.qml" line="202"/>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="268"/>
         <source>No results found</source>
@@ -20439,18 +20489,18 @@ Tasta %1 pe coardele %2</translation>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml" line="107"/>
         <source>Processing %1%…</source>
         <extracomment>%1 will be replaced with percentage (i.e. if it is replaced with 50, the string will read &quot;Processing 50%…&quot;)</extracomment>
-        <translation type="unfinished"/>
+        <translation>Se procesează %1%…</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml" line="108"/>
         <source>Processing…</source>
-        <translation type="unfinished"/>
+        <translation>Se procesează...</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml" line="110"/>
         <source>%1%</source>
         <extracomment>%1 will be replaced with percentage (i.e. if it is replaced with 50, the string will read &quot;50%&quot;)</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1%</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
@@ -20481,7 +20531,7 @@ Tasta %1 pe coardele %2</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="108"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1409"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1407"/>
         <source>Success!</source>
         <translation>Succes!</translation>
     </message>
@@ -20654,7 +20704,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/importexport/audioexport/internal/abstractaudiowriter.cpp" line="114"/>
         <source>Processing online sounds…</source>
-        <translation type="unfinished"/>
+        <translation>Se procesează sunetele online...</translation>
     </message>
 </context>
 <context>
@@ -20960,7 +21010,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/shared/musicxmlsupport.cpp" line="50"/>
         <source>byte offset %1:</source>
-        <translation type="unfinished"/>
+        <translation>offset octet %1:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/shared/musicxmlsupport.cpp" line="63"/>
@@ -21047,7 +21097,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="49"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/FretFrameSettings.qml" line="66"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="473"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="474"/>
         <source>Frame</source>
         <translation>Cadru</translation>
     </message>
@@ -21141,14 +21191,14 @@ anacruzele</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/OffsetSection.qml" line="56"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="157"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="158"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="98"/>
         <source>Horizontal</source>
         <translation>Orizontal</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/OffsetSection.qml" line="78"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="156"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="157"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="125"/>
         <source>Vertical</source>
         <translation>Vertical</translation>
@@ -21226,19 +21276,19 @@ anacruzele</translation>
         <translation>Oprit</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml" line="48"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml" line="40"/>
+        <source>Reset to default</source>
+        <translation>Aplică valorile implicite</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml" line="64"/>
         <source>Hide empty staves</source>
         <translation>Ascunde portativele goale</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml" line="64"/>
-        <source>Show all empty staves</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml" line="80"/>
-        <source>Reset empty staves visibility</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml" line="83"/>
+        <source>Show empty staves</source>
+        <translation>Arată portativele goale</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml" line="65"/>
@@ -21676,19 +21726,19 @@ anacruzele</translation>
         <translation>Bară groasă dublă</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="66"/>
-        <source>Left (start) barline</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="67"/>
         <source>Right (end) repeat barline</source>
-        <translation type="unfinished"/>
+        <translation>Bară de repetiție dreaptă (de final)</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="66"/>
+        <source>Left (start) repeat barline</source>
+        <translation>Bară de repetiție stângă (de început)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="68"/>
-        <source>Right and left repeat barline</source>
-        <translation type="unfinished"/>
+        <source>Right and left (end/start) repeat barline</source>
+        <translation>Bare de repetiție stânga și dreapta (sfârșit și început)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="74"/>
@@ -21698,7 +21748,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="104"/>
         <source>Play count</source>
-        <translation type="unfinished"/>
+        <translation>Număr redări</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="142"/>
@@ -21891,29 +21941,29 @@ anacruzele</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="98"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="175"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="176"/>
         <source>Exclude from vertical alignment</source>
-        <translation type="unfinished"/>
+        <translation>Exclude din alinierea verticală</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="109"/>
         <source>Do not stack modifiers</source>
-        <translation type="unfinished"/>
+        <translation>Nu stivui modificatorii</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="128"/>
         <source>Bass note scale</source>
-        <translation type="unfinished"/>
+        <translation>Scalare notă bas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="151"/>
         <source>Alignment to notehead</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere la capul de notă</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="176"/>
         <source>Add fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă diagramă acord</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="55"/>
@@ -22011,7 +22061,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="59"/>
         <source>Align left edge of legend to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază marginea stângă a legendei la punctul de referință</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="64"/>
@@ -22023,7 +22073,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="65"/>
         <source>Align horizontal center of legend to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază centrul orizontal al legendei la punctul de referință</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="70"/>
@@ -22035,7 +22085,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="71"/>
         <source>Align right edge of legend to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază marginea dreaptă a legendei la punctul de referință</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="62"/>
@@ -22050,32 +22100,32 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="93"/>
         <source>Reset chord list</source>
-        <translation type="unfinished"/>
+        <translation>Resetează lista de acorduri</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml" line="53"/>
         <source>Column gap</source>
-        <translation type="unfinished"/>
+        <translation>Spațiu coloană</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml" line="69"/>
         <source>Row gap</source>
-        <translation type="unfinished"/>
+        <translation>Spațiu linie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameScalesSection.qml" line="53"/>
         <source>Text scale</source>
-        <translation type="unfinished"/>
+        <translation>Scalare text</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameScalesSection.qml" line="72"/>
         <source>Diagram scale</source>
-        <translation type="unfinished"/>
+        <translation>Scalare diagramă</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameSettingsTab.qml" line="85"/>
         <source>Chords per row</source>
-        <translation type="unfinished"/>
+        <translation>Acorduri per rând</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalGapsSection.qml" line="49"/>
@@ -22100,12 +22150,12 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="52"/>
         <source>Gap to staff/frames</source>
-        <translation type="unfinished"/>
+        <translation>Spațiu la portativ/cadre</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="96"/>
         <source>Clearance for notation</source>
-        <translation type="unfinished"/>
+        <translation>Cadru liber pentru notație</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="49"/>
@@ -22135,27 +22185,27 @@ anacruzele</translation>
         <translation>Deget pentru coarda %1</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="79"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="80"/>
         <source>Strings</source>
         <translation>Coarde</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="103"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="104"/>
         <source>Visible frets</source>
         <translation>Taste vizibile</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="122"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="123"/>
         <source>Fret number</source>
         <translation>Număr tastă</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="142"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="143"/>
         <source>Show nut</source>
         <translation>Arată călușul</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="152"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="153"/>
         <source>Orientation</source>
         <translation>Orientare</translation>
     </message>
@@ -22248,7 +22298,7 @@ anacruzele</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="53"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="116"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="117"/>
         <source>Style settings</source>
         <translation>Setări stil</translation>
     </message>
@@ -22530,66 +22580,24 @@ anacruzele</translation>
         <translation>Tip marcator:</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="60"/>
-        <source>Segno</source>
-        <translation>Segno</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="61"/>
-        <source>Segno variation</source>
-        <translation>Segno (variantă)</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="62"/>
-        <source>Coda</source>
-        <translation>Coda</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="63"/>
-        <source>Varied coda</source>
-        <translation>Coda (variantă)</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="64"/>
-        <source>Codetta</source>
-        <translation>Codetta</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="65"/>
-        <source>Fine</source>
-        <translation>Fine</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="66"/>
-        <source>To Coda</source>
-        <translation>Spre Coda</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="67"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/playcounttext/PlayCountSettings.qml" line="68"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="71"/>
-        <source>Custom</source>
-        <translation>Personalizat</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="74"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="55"/>
         <source>Label</source>
         <translation>Etichetă</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="90"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="71"/>
         <source>Symbol size</source>
-        <translation type="unfinished"/>
+        <translation>Mărime simbol</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="102"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="83"/>
         <source>Align symbol with barline</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază simbolul cu bara de măsură</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="111"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="92"/>
         <source>Alignment to barline</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere la bara de măsură</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml" line="48"/>
@@ -22933,12 +22941,18 @@ anacruzele</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/playcounttext/PlayCountSettings.qml" line="55"/>
         <location filename="../../src/inspector/models/notation/playcounttext/playcounttextsettingsmodel.cpp" line="36"/>
         <source>Play count text</source>
-        <translation type="unfinished"/>
+        <translation>Text număr redări</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/playcounttext/PlayCountSettings.qml" line="68"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="71"/>
+        <source>Custom</source>
+        <translation>Personalizat</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/rests/RestSettings.qml" line="71"/>
         <source>Align with other rests in the same voice</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază cu alte pauze din aceeași voce</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="48"/>
@@ -23217,16 +23231,16 @@ anacruzele</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="50"/>
-        <source>Empty staves</source>
-        <translation>Portative goale</translation>
+        <source>Automatically hide all empty staves</source>
+        <translation>Ascunde automat toate portativele goale</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="76"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="77"/>
         <source>Show options for hiding empty staves</source>
         <translation>Arată opțiunile pentru ascunderea portativelor goale</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="100"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="101"/>
         <source>Page settings</source>
         <translation>Proprietăți pagină</translation>
     </message>
@@ -23381,7 +23395,7 @@ anacruzele</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="148"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="449"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="450"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStyleSubPopup.qml" line="56"/>
         <source>Text style</source>
         <translation>Stil text</translation>
@@ -23394,37 +23408,37 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/FrameSubPopup.qml" line="49"/>
         <source>Frame settings</source>
-        <translation type="unfinished"/>
+        <translation>Setări cadru</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="82"/>
         <source>Text style settings buttons</source>
-        <translation type="unfinished"/>
+        <translation>Butoane setări stil text</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="135"/>
         <source>Font size</source>
-        <translation type="unfinished"/>
+        <translation>Mărime font</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="194"/>
         <source>Vertical alignment buttons</source>
-        <translation type="unfinished"/>
+        <translation>Butoane aliniere verticală</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="252"/>
         <source>Text style buttons</source>
-        <translation type="unfinished"/>
+        <translation>Butoane stil text</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="307"/>
         <source>Horizontal alignment buttons</source>
-        <translation type="unfinished"/>
+        <translation>Butoane aliniere orizontală</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="352"/>
         <source>Subscript buttons</source>
-        <translation type="unfinished"/>
+        <translation>Butoane subscript</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="383"/>
@@ -23434,17 +23448,17 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="427"/>
         <source>Add symbols</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă simboluri</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStyleSubPopup.qml" line="51"/>
         <source>Additional text style controls</source>
-        <translation type="unfinished"/>
+        <translation>Controale adiționale stil text</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="37"/>
+        <location filename="../../src/inspector/models/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="39"/>
         <source>Empty staves visibility</source>
-        <translation type="unfinished"/>
+        <translation>Vizibilitatea portativelor goale</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/arpeggioplaybackmodel.cpp" line="33"/>
@@ -23547,7 +23561,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/models/notation/frames/fretframesettingsproxymodel.cpp" line="34"/>
         <source>Fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Legendă diagramă de acord</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/horizontalframesettingsmodel.cpp" line="34"/>
@@ -23721,7 +23735,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="64"/>
         <source>Hammer-on/pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Hammer-on/pull-off</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="115"/>
@@ -23765,7 +23779,7 @@ anacruzele</translation>
         <translation>Versuri</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/markers/markersettingsmodel.cpp" line="32"/>
+        <location filename="../../src/inspector/models/notation/markers/markersettingsmodel.cpp" line="33"/>
         <source>Marker</source>
         <translation>Marcator</translation>
     </message>
@@ -24141,23 +24155,23 @@ anacruzele</translation>
         <translation>Marcaje de sistem (tempo, repere etc.)</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="260"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="258"/>
         <source>Settings</source>
         <translation>Setări</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/SystemObjectsLayerSettingsPopup.qml" line="57"/>
         <source>Display at this position on the score</source>
-        <translation>Afișează la această poziție</translation>
+        <translation>Afișează la această poziție pe partitură</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="135"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="136"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;, or use the keyboard shortcut %1.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Layout panel (LayoutControlPanel.qml)</extracomment>
         <translation>Nu există nici un instrument în partitura ta. Pentru a alege niște instrumente apasă &lt;b&gt;Adaugă&lt;/b&gt;, sau folosește scurtătura %1.</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="138"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="140"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Layout panel (LayoutControlPanel.qml)</extracomment>
         <translation>Nu există nici un instrument în partitura ta. Pentru a alege niște instrumente apasă &lt;b&gt;Adaugă&lt;/b&gt;.</translation>
@@ -24180,12 +24194,12 @@ anacruzele</translation>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="1043"/>
         <source>Are you sure you want to delete the selected instrument(s)?</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ești sigur că dorești să ștergi instrumentul selectat?</numerusform><numerusform>Ești sigur că dorești să ștergi instrumentele selectate?</numerusform><numerusform>Ești sigur că dorești să ștergi instrumentele selectate?</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="1044"/>
         <source>This will remove the instrument(s) from the full score and all part scores.</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Aceasta va elimina instrumentul din partitura completă și din toate partidele.</numerusform><numerusform>Aceasta va elimina instrumentele din partitura completă și din toate partidele.</numerusform><numerusform>Aceasta va elimina instrumentele din partitura completă și din toate partidele.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="252"/>
@@ -24222,13 +24236,13 @@ anacruzele</translation>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="69"/>
         <source>%1, %2</source>
         <extracomment>%1 is the system markings list, %2 is the next system marking name to add to list</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1, %2</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="71"/>
         <source>%1 &amp; %2</source>
         <extracomment>%1 is the system markings list, %2 is the last system marking name to add to list</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1 și %2</translation>
     </message>
 </context>
 <context>
@@ -24271,7 +24285,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="173"/>
         <source>Only hide staves on a system if the entire instrument is empty</source>
-        <translation type="unfinished"/>
+        <translation>Ascunde portativele dintr-un sistem doar dacă întreg instrumentul este gol</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="194"/>
@@ -24315,7 +24329,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="206"/>
         <source>Follow instrument</source>
-        <translation type="unfinished"/>
+        <translation>Urmează instrumentul</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="207"/>
@@ -24330,7 +24344,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="235"/>
         <source>If the entire system is empty, show this staff</source>
-        <translation type="unfinished"/>
+        <translation>Dacă întreg sistemul este gol, arată acest portativ</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="256"/>
@@ -24340,13 +24354,13 @@ anacruzele</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="267"/>
         <source>Linked staves contain identical notation (e.g. for guitar tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Portativele legate conțin notație identică (ex. pentru tabulatură de chitară)</translation>
     </message>
 </context>
 <context>
     <name>learn</name>
     <message>
-        <location filename="../../src/framework/learn/qml/Muse/Learn/internal/ClassesPage.qml" line="204"/>
+        <location filename="../../src/framework/learn/qml/Muse/Learn/internal/ClassesPage.qml" line="199"/>
         <source>Open %1</source>
         <translation>Deschide %1</translation>
     </message>
@@ -24437,17 +24451,17 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
 <context>
     <name>musesampler</name>
     <message>
-        <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="55"/>
+        <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="54"/>
         <source>MuseSampler library is detected, version %1</source>
         <translation>Biblioteca MuseSampler a fost găsită, versiune %1</translation>
     </message>
     <message>
-        <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="58"/>
+        <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="57"/>
         <source>Installed MuseSampler library is not supported, version %1</source>
-        <translation type="unfinished"/>
+        <translation>Biblioteca instalată MuseSampler nu este suportată, versiunea %1</translation>
     </message>
     <message>
-        <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="61"/>
+        <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="60"/>
         <source>MuseSampler library is not found</source>
         <translation>Biblioteca MuseSampler nu a fost găsită</translation>
     </message>
@@ -24465,57 +24479,57 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <translation>Ne pare rău, nu putem încărca aceste sunete acum</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="70"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="98"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="68"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="96"/>
         <source>Not now</source>
-        <translation type="unfinished"/>
+        <translation>Nu acum</translation>
+    </message>
+    <message>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="72"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="100"/>
+        <source>Quit &amp; launch MuseSounds Manager</source>
+        <translation>Închide și lansează MuseSounds Manager</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="74"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="102"/>
-        <source>Quit &amp; launch MuseSounds Manager</source>
-        <translation type="unfinished"/>
+        <source>To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. Your MuseSounds libraries won’t work until the update is complete.</source>
+        <translation>Pentru a aplica această actualizare, MuseScore Studio va trebui să se închidă un moment și va deschide MuseSounds Manager. Bibliotecile MuseSounds nu vor funcționa până când actualizarea este finalizată.</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="76"/>
-        <source>To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. Your MuseSounds libraries won’t work until the update is complete.</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="78"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="107"/>
+        <source>Quit &amp; launch MuseHub</source>
+        <translation>Închide și lansează MuseHub</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="80"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="109"/>
-        <source>Quit &amp; launch MuseHub</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="82"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseHub will open. Your MuseSounds libraries won’t work until the update is complete.</source>
-        <translation type="unfinished"/>
+        <translation>Pentru a aplica această actualizare, MuseScore Studio va trebui să se închidă un moment și va deschide MuseHub. Bibliotecile MuseSounds nu vor funcționa până când actualizarea este finalizată.</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="86"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="84"/>
         <source>MuseSounds needs an update</source>
-        <translation type="unfinished"/>
+        <translation>MuseSounds are nevoie de o actualizare</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="104"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="102"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseSounds Manager can apply the update. You’ll need to restart MuseScore Studio when the update is complete.</source>
-        <translation type="unfinished"/>
+        <translation>Pentru a menține MuseSounds în funcționare optimă, MuseScore Studio va trebui sp se închidă un moment pentru ca MuseSounds Manager să poată aplica actualizarea. Va trebui să repornești MuseScore Studio după finalizarea actualizării.</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="111"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="109"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseHub can apply the update. You’ll be prompted to relaunch MuseScore Studio when it’s ready.</source>
-        <translation type="unfinished"/>
+        <translation>Pentru a menține MuseSounds în funcționare optimă, MuseScore Studio va trebui sp se închidă un moment pentru ca MuseHub să poată aplica actualizarea. Va trebui să repornești MuseScore Studio după finalizarea actualizării.</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="116"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="114"/>
         <source>An update for MuseSounds is available</source>
-        <translation type="unfinished"/>
+        <translation>O actualizare pentru MuseSounds este disponibilă</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesoundsconfiguration.cpp" line="61"/>
+        <location filename="../../src/musesounds/internal/musesoundsconfiguration.cpp" line="60"/>
         <source>Show occasional MuseHub promotions</source>
-        <translation type="unfinished"/>
+        <translation>Arată promoții ocazionale MuseHub</translation>
     </message>
 </context>
 <context>
@@ -24552,16 +24566,6 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="349"/>
         <source>History</source>
         <translation>Istoric</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="594"/>
-        <source>Note input modes</source>
-        <translation>Moduri introducere note</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="595"/>
-        <source>Discover different ways to input notes in MuseScore Studio.</source>
-        <translation>Descoperă moduri diferite de introducere a notelor în MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsToolBar.qml" line="33"/>
@@ -24674,7 +24678,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/DynamicPopup.qml" line="58"/>
         <source>Dynamics popup</source>
-        <translation type="unfinished"/>
+        <translation>Popup nuanțe</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="45"/>
@@ -24744,7 +24748,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="160"/>
         <source>Edit chord symbol text style</source>
-        <translation type="unfinished"/>
+        <translation>Editează stil text simbol acord</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="263"/>
@@ -24767,37 +24771,37 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="485"/>
         <source>Bass note scale:</source>
-        <translation type="unfinished"/>
+        <translation>Scalare notă bas:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="523"/>
         <source>Divider thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Grosime separator:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="562"/>
         <source>Divider spacing:</source>
-        <translation type="unfinished"/>
+        <translation>Spațiere separator:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="621"/>
         <source>Alignment to notehead:</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere la capul notei:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="635"/>
         <source>Alignment to fretboard diagram:</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere la diagrama de acord:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="672"/>
         <source>Minimum space from fretboard diagram:</source>
-        <translation type="unfinished"/>
+        <translation>Spațiu minim de la diagrama de acord:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="711"/>
         <source>Minimum space between chord symbols:</source>
-        <translation type="unfinished"/>
+        <translation>Spațiu minim între simbolurile de acord:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="750"/>
@@ -25039,7 +25043,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="96"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="327"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="334"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="199"/>
         <source>Edit text style</source>
         <translation>Editare stil text</translation>
@@ -25097,12 +25101,12 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="147"/>
         <source>Repeat play count text</source>
-        <translation type="unfinished"/>
+        <translation>Text număr de redări repetiție</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="180"/>
         <source>Preset</source>
-        <translation type="unfinished"/>
+        <translation>Presetare</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml" line="44"/>
@@ -25453,12 +25457,12 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="188"/>
         <source>Include single notes</source>
-        <translation type="unfinished"/>
+        <translation>Include notele singulare</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="200"/>
         <source>Notation elements</source>
-        <translation type="unfinished"/>
+        <translation>Elemente de notație</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="272"/>
@@ -25496,52 +25500,40 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <translation>Meniu mărire</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="659"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="674"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="365"/>
         <source>Insert &amp;after selection…</source>
         <translation>Inserează &amp;după selecție...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="660"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="675"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="366"/>
         <source>Insert &amp;before selection…</source>
         <translation>Inserează îna&amp;inte de selecție...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="662"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="677"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="368"/>
         <source>Insert at &amp;start of score…</source>
         <translation>Inserează la înce&amp;putul selecției...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="663"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="678"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="369"/>
         <source>Insert at &amp;end of score…</source>
         <translation>Inserează la &amp;finalul partiturii...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="677"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="692"/>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="650"/>
         <source>Insert at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Inserează la sfârșitul partiturii</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="163"/>
         <location filename="../../src/appshell_web/view/notationstatusbarmodel.cpp" line="163"/>
         <source>Continuous view</source>
         <translation>Vizualizare continuă</translation>
-    </message>
-    <message>
-        <location filename="../../src/braille/internal/notationbraille.cpp" line="886"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="746"/>
-        <source>Note input mode</source>
-        <translation>Modul introducere note</translation>
-    </message>
-    <message>
-        <location filename="../../src/braille/internal/notationbraille.cpp" line="888"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="746"/>
-        <source>Normal mode</source>
-        <translation>Mod normal</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="57"/>
@@ -25758,62 +25750,62 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <translation>Te rog elimină schimbarea de tip de portativ și reîncearcă.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="138"/>
+        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="127"/>
         <source>List selection</source>
         <translation>Listă selecție</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="183"/>
+        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="172"/>
         <source>Range selection; %1; %2</source>
         <translation>Interval selecție; %1; %2</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="203"/>
+        <location filename="../../src/notation/internal/notationaccessibility.cpp" line="192"/>
         <source>Staff %1</source>
         <translation>Portativ %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="989"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="978"/>
         <source>Cannot create tuplet</source>
         <translation>Nu se poate crea diviziune excepțională</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="989"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="978"/>
         <source>Note value is too short</source>
         <translation>Valoarea notei este prea scurtă</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1511"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1500"/>
         <source>All Supported Files</source>
         <translation>Toate fișierele suportate</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1512"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1501"/>
         <source>Scalable Vector Graphics</source>
         <translation>SVG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1513"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1502"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1514"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1503"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1515"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1504"/>
         <source>Bitmap</source>
         <translation>Bitmap</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1516"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1505"/>
         <source>TIFF</source>
         <translation>TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1517"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1506"/>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="51"/>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="147"/>
         <location filename="../../src/notation/view/selectionfilter/voicesselectionfiltermodel.cpp" line="49"/>
@@ -25821,53 +25813,53 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <translation>Toate</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1519"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1508"/>
         <source>Insert Image</source>
         <translation>Inserează imagine</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1882"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1869"/>
         <source>MuseScore style files</source>
         <translation>Fișiere stiluri MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1883"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1870"/>
         <source>MuseScore style file</source>
         <translation>Fișier stiluri MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1886"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1873"/>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="120"/>
         <source>Load style</source>
         <translation>Încarcă stil</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1887"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1874"/>
         <source>Save style</source>
         <translation>Salvează stil</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1897"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1884"/>
         <source>The style file could not be loaded.</source>
         <translation>Fișierul de stiluri nu a putut fi încărcat.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1903"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1890"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
         <translation>Întrucât acest fișier de stiluri provine dintr-o versiune diferită de MuseScore Studio, partitura ta nu este garantat a fi afișată corect.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1905"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1892"/>
         <source>Click OK to load anyway.</source>
         <translation>Apasă OK pentru a încărca oricum.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1923"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1910"/>
         <source>The style file could not be saved.</source>
         <translation>Fișierul de stiluri nu a putut fi salvat.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1924"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1911"/>
         <source>An error occurred.</source>
         <translation>A apărut o eroare.</translation>
     </message>
@@ -25882,9 +25874,9 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <translation>Panoramare netedă</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2170"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2220"/>
         <source>Sorry, instrument change on the web is not supported at this time.</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, schimbarea de instrument pe web nu este încă suportată.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="50"/>
@@ -25934,13 +25926,13 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="69"/>
-        <source>No note or rest or harmony selected</source>
-        <translation type="unfinished"/>
+        <source>No note or rest or chord symbol selected</source>
+        <translation>Nicio notă, pauză sau simbol de acord selectate</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="70"/>
-        <source>Please select a note or rest or harmony and retry</source>
-        <translation type="unfinished"/>
+        <source>Please select a note or rest or chord symbol and retry</source>
+        <translation>Te rog selectează o notă, o pauză sau un simbol de acord și încearcă din nou</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="73"/>
@@ -25953,69 +25945,69 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <translation>Selecția este goală</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="265"/>
+        <location filename="../../src/notation/notationtypes.h" line="266"/>
         <source>Percentage</source>
         <translation>Procent</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="266"/>
+        <location filename="../../src/notation/notationtypes.h" line="267"/>
         <source>Page width</source>
         <translation>Lățime pagină</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="267"/>
+        <location filename="../../src/notation/notationtypes.h" line="268"/>
         <source>Whole page</source>
         <translation>Toată pagina</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="268"/>
+        <location filename="../../src/notation/notationtypes.h" line="269"/>
         <source>Two pages</source>
         <translation>Două pagini</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="306"/>
+        <location filename="../../src/notation/notationtypes.h" line="307"/>
         <source>%1 %2</source>
         <comment>Tuned instrument displayed in the UI</comment>
         <extracomment>%1=tuning (&quot;D&quot;), %2=name (&quot;Tin Whistle&quot;). Example: &quot;D Tin Whistle&quot;</extracomment>
         <translation>%2 %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="310"/>
+        <location filename="../../src/notation/notationtypes.h" line="311"/>
         <source>%1 in %2</source>
         <comment>Transposing instrument displayed in the UI</comment>
         <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;). Example: &quot;Horn in C alto&quot;</extracomment>
         <translation>%1 în %2</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="314"/>
+        <location filename="../../src/notation/notationtypes.h" line="315"/>
         <source>%1 (%2)</source>
         <comment>String instrument displayed in the UI</comment>
         <extracomment>%1=name (&quot;Tenor Lute&quot;), %2=course/strings (&quot;7-course&quot;). Example: &quot;Tenor Lute (7-course)&quot;</extracomment>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="335"/>
+        <location filename="../../src/notation/notationtypes.h" line="336"/>
         <source>%1 %2 %3</source>
         <comment>One of several tuned instruments displayed in the UI</comment>
         <extracomment>%1=tuning (&quot;D&quot;), %2=name (&quot;Tin Whistle&quot;), %3=number (&quot;2&quot;). Example: &quot;D Tin Whistle 2&quot;</extracomment>
         <translation>%2 %1 %3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="339"/>
+        <location filename="../../src/notation/notationtypes.h" line="340"/>
         <source>%1 in %2 %3</source>
         <comment>One of several transposing instruments displayed in the UI</comment>
         <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;), %3=number (&quot;2&quot;). Example: &quot;Horn in C alto 2&quot;</extracomment>
         <translation>%1 în %2 %3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="343"/>
+        <location filename="../../src/notation/notationtypes.h" line="344"/>
         <source>%1 (%2) %3</source>
         <comment>One of several string instruments displayed in the UI</comment>
         <extracomment>%1=name (&quot;Tenor Lute&quot;), %2=course/strings (&quot;7-course&quot;), %3=number (&quot;2&quot;). Example: &quot;Tenor Lute (7-course) 2&quot;</extracomment>
         <translation>%1 (%2) %3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="347"/>
+        <location filename="../../src/notation/notationtypes.h" line="348"/>
         <source>%1 %2</source>
         <comment>One of several instruments displayed in the UI</comment>
         <extracomment>%1=name (&quot;Flute&quot;), %2=number (&quot;2&quot;). Example: &quot;Flute 2&quot;</extracomment>
@@ -26042,80 +26034,80 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <translation><numerusform>%n coardă</numerusform><numerusform>% coarde</numerusform><numerusform>%n de coarde</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="119"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="121"/>
         <source>Clear measures</source>
         <translation>Golește măsurile</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="121"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="123"/>
         <source>Delete measures</source>
         <translation>Șterge măsurile</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="133"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="135"/>
         <source>Insert measures</source>
         <translation>Adaugă măsuri</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="135"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="137"/>
         <source>Move measures</source>
         <translation>Mută măsurile</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="137"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="139"/>
         <source>Create system from selection</source>
         <translation>Creează sistem din selecție</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="215"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="217"/>
         <source>Add c&amp;hord symbol</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă simbol aco&amp;rd</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="231"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="233"/>
         <source>Hide</source>
         <translation>Ascunde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="240"/>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="274"/>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="416"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="242"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="276"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="418"/>
         <source>Select</source>
         <translation>Selectează</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="293"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="295"/>
         <source>After selection…</source>
         <translation>După selecție...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="294"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="296"/>
         <source>Before selection…</source>
         <translation>Înaintea selecției...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="296"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="298"/>
         <source>At start of score…</source>
         <translation>La începutul partiturii...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="297"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="299"/>
         <source>At end of score…</source>
         <translation>La finalul partiturii...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="306"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="308"/>
         <source>To previous system</source>
         <translation>La sistemul precedent</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="307"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="309"/>
         <source>To next system</source>
         <translation>La sistemul următor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="335"/>
-        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="348"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="337"/>
+        <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="350"/>
         <source>Add</source>
         <translation>Adaugă</translation>
     </message>
@@ -26167,12 +26159,12 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="574"/>
         <source>Chords and fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Acorduri și diagrame acord</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="717"/>
         <source>Fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Legendă diagramă acord</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="129"/>
@@ -26342,32 +26334,32 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="151"/>
         <source>Seventh note</source>
-        <translation type="unfinished"/>
+        <translation>Nota a șaptea</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="153"/>
         <source>Sixth note</source>
-        <translation type="unfinished"/>
+        <translation>Nota a șasea</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="155"/>
         <source>Fifth note</source>
-        <translation type="unfinished"/>
+        <translation>Nota a cincea</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="157"/>
         <source>Fourth note</source>
-        <translation type="unfinished"/>
+        <translation>Nota a patra</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="159"/>
         <source>Third note</source>
-        <translation type="unfinished"/>
+        <translation>Nota a treia</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="161"/>
         <source>Second note</source>
-        <translation type="unfinished"/>
+        <translation>Nota a doua</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="163"/>
@@ -26677,17 +26669,17 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml" line="58"/>
         <source>Show barline before key and time signature changes</source>
-        <translation type="unfinished"/>
+        <translation>Arată bara de măsură înainte de schimbările de armură sau metrică</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml" line="66"/>
         <source>Use double barline before key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Folosește bară de măsură dublă înainte de armuri</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml" line="74"/>
         <source>Use double barline before time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Folosește bară de măsură dublă înainte de metrică</translation>
     </message>
 </context>
 <context>
@@ -26695,7 +26687,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="111"/>
         <source>Preset</source>
-        <translation type="unfinished"/>
+        <translation>Presetare</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="153"/>
@@ -26710,17 +26702,17 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="204"/>
         <source>Automatically capitalize note names</source>
-        <translation type="unfinished"/>
+        <translation>Capitalizează automat numele notelor</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="221"/>
         <source>Lowercase minor chords</source>
-        <translation type="unfinished"/>
+        <translation>Folosește litere mici pentru acordurile minore</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="227"/>
         <source>Lowercase bass notes</source>
-        <translation type="unfinished"/>
+        <translation>Folosește litere mici pentru notele de bas</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="233"/>
@@ -26730,27 +26722,27 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="249"/>
         <source>Extensions (e.g. 7, 11)</source>
-        <translation type="unfinished"/>
+        <translation>Extensii (ex: 7, 11)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="326"/>
         <source>Modifiers (e.g. sus4, no 3)</source>
-        <translation type="unfinished"/>
+        <translation>Modificatori (ex: sus4, no 3)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="400"/>
         <source>Vertically stack modifiers</source>
-        <translation type="unfinished"/>
+        <translation>Stivuiește vertical modificatorii</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="409"/>
         <source>Altered bass notes (e.g. A7/G)</source>
-        <translation type="unfinished"/>
+        <translation>Note bas alterate (ex: A7/G)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="509"/>
         <source>Polychords (e.g. C|F♯)</source>
-        <translation type="unfinished"/>
+        <translation>Poliacorduri (ex: C|F♯)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="589"/>
@@ -26760,12 +26752,12 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="604"/>
         <source>Vertically align chord symbols and fretboard diagrams on the same system</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază vertical simbolurile și diagramele de acord pe același sistem</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="648"/>
         <source>Exclude modifiers from horizontal alignment</source>
-        <translation type="unfinished"/>
+        <translation>Exclude modificatorii din alinierea orizontală</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="658"/>
@@ -26792,12 +26784,12 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="74"/>
         <source>Legacy MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore învechit</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="77"/>
         <source>Load custom XML…</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă XML personalizat...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="154"/>
@@ -26885,32 +26877,34 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="56"/>
         <source>Show ‘H’ and ‘P’ symbols on</source>
-        <translation type="unfinished"/>
+        <translation>Afișează simbolurile „H” și „P” pe</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="72"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="148"/>
         <source>Standard staves</source>
-        <translation type="unfinished"/>
+        <translation>portative standard</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="89"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="154"/>
         <source>Tablature staves</source>
-        <translation type="unfinished"/>
+        <translation>portative tabulatură</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="98"/>
         <source>Case</source>
-        <translation type="unfinished"/>
+        <translation>Capitalizare</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="108"/>
         <source>Upper case</source>
-        <translation type="unfinished"/>
+        <translation>litere mari</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="109"/>
         <source>Lower case</source>
-        <translation type="unfinished"/>
+        <translation>litere mici</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="125"/>
@@ -26919,73 +26913,83 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="137"/>
+        <source>Alignment</source>
+        <translation>Aliniere</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="144"/>
+        <source>Align ‘H’, ‘P’ and ‘T’ symbols in the same slur on</source>
+        <translation>Aliniază simbolurile „H”, „P” și „T” în același legato pe</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="164"/>
         <source>Consecutive hammer-ons/pull-offs</source>
-        <translation type="unfinished"/>
+        <translation>Hammer-on/Pull-off consecutive</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="148"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="175"/>
         <source>Show ‘H’ or ‘P’ between each pair of notes</source>
-        <translation type="unfinished"/>
+        <translation>Afișează „H” sau „P” între fiecare pereche de note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="149"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="176"/>
         <source>Show ‘H’ or ‘P’ once per group of ascending/descending notes</source>
-        <translation type="unfinished"/>
+        <translation>Afișează „H” sau „P” o dată per grup de note ascendente/descendente</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="169"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="196"/>
         <source>Left-hand tapping</source>
-        <translation type="unfinished"/>
+        <translation>Bătaie cu mâna stângă</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="182"/>
-        <source>Show on standard staves</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="189"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="245"/>
-        <source>Half slur</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="190"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="209"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="246"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="265"/>
+        <source>Show on standard staves</source>
+        <translation>Afișează pe portative standard</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="216"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="272"/>
+        <source>Half slur</source>
+        <translation>Legato pe jumătate</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="217"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="236"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="273"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="292"/>
         <source>Symbol</source>
         <translation>Simbol</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="191"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="247"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="218"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="274"/>
         <source>Both</source>
-        <translation type="unfinished"/>
+        <translation>Ambele</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="238"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="265"/>
         <source>Show on tablature staves</source>
-        <translation type="unfinished"/>
+        <translation>Afișează pe portative tabulatură</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="289"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="316"/>
         <source>Slur top and bottom notes in chords</source>
-        <translation type="unfinished"/>
+        <translation>Notele de sus și de jos din legato în acorduri</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="299"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="326"/>
         <source>Right-hand tapping</source>
-        <translation type="unfinished"/>
+        <translation>Bătaie cu mâna dreaptă</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="309"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="336"/>
         <source>Symbol (standard staff)</source>
-        <translation type="unfinished"/>
+        <translation>Simbol (portativ standard)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="334"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="361"/>
         <source>Symbol (tablature staff)</source>
-        <translation type="unfinished"/>
+        <translation>Simbol (portativ tabulatură)</translation>
     </message>
 </context>
 <context>
@@ -26993,32 +26997,32 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="164"/>
         <source>Automatically show text at repeat barlines</source>
-        <translation type="unfinished"/>
+        <translation>Arată automat textul la barele de repetiție</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="169"/>
         <source>Show for single repeats (e.g. “x2”)</source>
-        <translation type="unfinished"/>
+        <translation>Arată pentru repetiții singulare (ex: „x2”)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/repeatplaycounttextmodel.cpp" line="45"/>
         <source>x3</source>
-        <translation type="unfinished"/>
+        <translation>x3</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/repeatplaycounttextmodel.cpp" line="48"/>
         <source>3x</source>
-        <translation type="unfinished"/>
+        <translation>3x</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/repeatplaycounttextmodel.cpp" line="51"/>
         <source>Play 3 times</source>
-        <translation type="unfinished"/>
+        <translation>Redă de 3 ori</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/repeatplaycounttextmodel.cpp" line="54"/>
         <source>3 repeats</source>
-        <translation type="unfinished"/>
+        <translation>3 repetări</translation>
     </message>
 </context>
 <context>
@@ -27127,7 +27131,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="349"/>
         <source>Gap between numbers (scaled):</source>
-        <translation type="unfinished"/>
+        <translation>Spațiu între numere (scalat):</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="374"/>
@@ -27192,7 +27196,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="557"/>
         <source>Changes that apply to both the repeat/jump and the subsequent measure</source>
-        <translation type="unfinished"/>
+        <translation>Schimbări care se aplică atât la repetiție/salt cât și la măsura următoare</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="564"/>
@@ -27255,17 +27259,17 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TupletCenteringSelector.qml" line="44"/>
         <source>Number alignment</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere număr</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TupletCenteringSelector.qml" line="52"/>
         <source>Graphical center</source>
-        <translation type="unfinished"/>
+        <translation>Centru grafic</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TupletCenteringSelector.qml" line="53"/>
         <source>Rhythmic center</source>
-        <translation type="unfinished"/>
+        <translation>Centru ritmic</translation>
     </message>
 </context>
 <context>
@@ -27278,28 +27282,28 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="61"/>
         <source>Show measure numbers</source>
-        <translation type="unfinished"/>
+        <translation>Arată numerele de măsură</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="68"/>
         <source>Show initial measure number</source>
-        <translation type="unfinished"/>
+        <translation>Arată numărul măsurii inițiale</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="78"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="311"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="318"/>
         <source>Text style</source>
         <translation>Stil text</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="115"/>
         <source>Frequency</source>
-        <translation type="unfinished"/>
+        <translation>Frecvență</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="124"/>
         <source>Start of each system</source>
-        <translation type="unfinished"/>
+        <translation>Începerea fiecărui sistem</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="133"/>
@@ -27313,29 +27317,29 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="162"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="240"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="402"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="247"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="409"/>
         <source>Position</source>
         <translation>Poziție</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="173"/>
         <source>Align</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="180"/>
         <source>To the barline</source>
-        <translation type="unfinished"/>
+        <translation>la bara de măsură</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="186"/>
         <source>To the measure</source>
-        <translation type="unfinished"/>
+        <translation>la măsură</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="190"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="373"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="380"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="137"/>
         <source>Alignment</source>
         <translation>Aliniere</translation>
@@ -27346,69 +27350,79 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <translation>Afișează</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="225"/>
-        <source>At system marking positions</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="227"/>
+        <source>Above system</source>
+        <translation>Deasupra sistemului</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="231"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="228"/>
+        <source>Below system</source>
+        <translation>Dedesubtul sistem</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="229"/>
+        <source>At system marking positions</source>
+        <translation>La pozițiile marcatorilor de sistem</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="230"/>
         <source>On all staves</source>
         <translation>Pe toate portativele</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="246"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="408"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="253"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="415"/>
         <source>Above</source>
         <translation>deasupra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="247"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="409"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="254"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="416"/>
         <source>Below</source>
         <translation>dedesubt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="267"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="274"/>
         <source>Offset when above staff:</source>
-        <translation type="unfinished"/>
+        <translation>Decalaj deasupra portativului:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="279"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="286"/>
         <source>Offset when below staff:</source>
-        <translation type="unfinished"/>
+        <translation>Decalaj dedesubtul portativului:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="294"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="301"/>
         <source>Measure number range at multimeasure rests</source>
-        <translation type="unfinished"/>
+        <translation>Interval număr de măsură la pauzele multi-măsură</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="302"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="309"/>
         <source>Show measure number ranges</source>
-        <translation type="unfinished"/>
+        <translation>Arată intervalele numerelor de măsură</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="346"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="353"/>
         <source>Bracket type</source>
         <translation>Tip acoladă</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="352"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="359"/>
         <source>Brackets</source>
         <translation>Acolade sistem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="353"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="360"/>
         <source>Parenthesis</source>
         <translation>Paranteze</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="354"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="361"/>
         <source>None</source>
         <translation>fără</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="428"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="435"/>
         <source>Offset</source>
         <translation>Decalaj</translation>
     </message>
@@ -27435,42 +27449,42 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="117"/>
         <source>Dash:</source>
-        <translation type="unfinished"/>
+        <translation>Liniuță:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="126"/>
         <source>Gap:</source>
-        <translation type="unfinished"/>
+        <translation>Spațiu:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="158"/>
         <source>At start of system, start volta:</source>
-        <translation type="unfinished"/>
+        <translation>La început de sistem, începe volta:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="163"/>
         <source>After key signature</source>
-        <translation type="unfinished"/>
+        <translation>După armură</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="169"/>
         <source>On key signature</source>
-        <translation type="unfinished"/>
+        <translation>Pe armură</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="192"/>
         <source>Align start hook:</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază cârligul de pornire:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="197"/>
         <source>To right side of barlines</source>
-        <translation type="unfinished"/>
+        <translation>la dreapta barei de măsură</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="203"/>
         <source>To left side of barlines</source>
-        <translation type="unfinished"/>
+        <translation>la stânga barei de măsură</translation>
     </message>
 </context>
 <context>
@@ -27634,7 +27648,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="177"/>
         <source>%1 columns</source>
-        <translation type="unfinished"/>
+        <translation>%1 coloane</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="184"/>
@@ -27678,7 +27692,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StaffVisibilityPopup.qml" line="54"/>
         <source>Staff visibility popup</source>
-        <translation type="unfinished"/>
+        <translation>Popup vizibilitate portativ</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StaffVisibilityPopup.qml" line="87"/>
@@ -27688,27 +27702,27 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StaffVisibilityPopup.qml" line="95"/>
         <source>System %1</source>
-        <translation type="unfinished"/>
+        <translation>Sistemul %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StaffVisibilityPopup.qml" line="106"/>
         <source>Reset all</source>
-        <translation type="unfinished"/>
+        <translation>Resetează tot</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="282"/>
         <source>Reset all staff visibility</source>
-        <translation type="unfinished"/>
+        <translation>Resetează toată vizibilitatea portativului</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="323"/>
         <source>Change part visibility: %1</source>
-        <translation type="unfinished"/>
+        <translation>Schimbă vizibilitatea partidei: %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="340"/>
         <source>Change staff visibility: %1</source>
-        <translation type="unfinished"/>
+        <translation>Schimbă vizibilitatea portativului: %1</translation>
     </message>
 </context>
 <context>
@@ -27846,6 +27860,54 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     </message>
 </context>
 <context>
+    <name>noteInputMethod</name>
+    <message>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="50"/>
+        <source>Input by note name mode</source>
+        <translation>Mod intrare după nume de notă</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="51"/>
+        <source>Input by duration mode</source>
+        <translation>Mod intrare după durată</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="52"/>
+        <source>Re-pitch existing notes mode</source>
+        <translation>Mod repoziționare note existente</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="53"/>
+        <source>Rhythm-only input mode</source>
+        <translation>Mod intrare doar ritm</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="54"/>
+        <source>Metronome real-time input mode</source>
+        <translation>Mod intrare în timp real cu metronom</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="55"/>
+        <source>Pedal real-time input mode</source>
+        <translation>Mod intrare în timp real cu pedală</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="56"/>
+        <source>Insert mode (grow measures)</source>
+        <translation>Mod inserare (crește măsurile)</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="61"/>
+        <source>Unknown note input mode</source>
+        <translation>Mod intrare necunoscut</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="401"/>
+        <source>Normal mode</source>
+        <translation>Mod normal</translation>
+    </message>
+</context>
+<context>
     <name>palette</name>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/DrumsetPanel.qml" line="66"/>
@@ -27925,13 +27987,13 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="491"/>
-        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1120"/>
+        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1121"/>
         <source>Delete</source>
         <translation>Șterge</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="492"/>
-        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1121"/>
+        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1122"/>
         <source>Properties…</source>
         <translation>Proprietăţi…</translation>
     </message>
@@ -28095,24 +28157,42 @@ failed.</source>
 a eșuat.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="186"/>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="188"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="231"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="233"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1805"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1806"/>
         <source>Capo</source>
         <translation>Capodastru</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="196"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="241"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1811"/>
         <source>String tunings</source>
         <translation>Acordaj coarde</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="250"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="257"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1843"/>
+        <source>Left-hand tapping</source>
+        <translation>Bătaie cu mâna stângă</translation>
+    </message>
+    <message>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="261"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1847"/>
+        <source>Right-hand tapping</source>
+        <translation>Bătaie cu mâna dreaptă</translation>
+    </message>
+    <message>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="267"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1850"/>
+        <source>Hammer-on / pull-off</source>
+        <translation>Hammer-on / pull-off</translation>
+    </message>
+    <message>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="315"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1711"/>
         <source>Blank</source>
-        <translation type="unfinished"/>
+        <translation>Gol</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteconfiguration.cpp" line="44"/>
@@ -28804,21 +28884,6 @@ a eșuat.</translation>
         <translation>Linie barré</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1843"/>
-        <source>Left-hand tapping</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1847"/>
-        <source>Right-hand tapping</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1850"/>
-        <source>Hammer-on / pull-off</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1892"/>
         <source>Keyboard</source>
         <translation>Pedalier</translation>
@@ -28847,7 +28912,7 @@ a eșuat.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="2013"/>
         <source>Handbells</source>
-        <translation type="unfinished"/>
+        <translation>Clopoței</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="73"/>
@@ -29018,12 +29083,12 @@ a eșuat: %2</translation>
         <translation>Selector ligaturi</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1138"/>
+        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1139"/>
         <source>Delete palette cell</source>
         <translation>Șterge celula paletei</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1139"/>
+        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1140"/>
         <source>Are you sure you want to delete palette cell “%1”?</source>
         <translation>Ești sigur că dorești ștergerea celulei „%1” din paletă?</translation>
     </message>
@@ -30565,25 +30630,26 @@ a eșuat: %2</translation>
 <context>
     <name>playback</name>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="608"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="594"/>
         <source>This sound processes online</source>
-        <translation type="unfinished"/>
+        <translation>Sunetul se procesează online</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="595"/>
+        <source>An animated bar will let you know when sounds are processing online. You’ll also see a notification in the status bar. You can change when these notifications appear in Preferences &gt; Audio &amp; MIDI…</source>
+        <translation>O bară animată te va anunța când sunetele se procesează online. Vei vedea de asemenea o notificare în bara de stare. Poți schimba când apar aceste notificări în Preferințe &gt; Audio și MIDI...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="609"/>
-        <source>An animated bar will let you know when sounds are processing online. You’ll also see a notification in the status bar. You can change when these notifications appear in Preferences &gt; Audio &amp; MIDI…</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="623"/>
-        <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="114"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="116"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="126"/>
         <source>Online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Sunete online</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="624"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="610"/>
         <source>Click to manually process online sounds.</source>
-        <translation type="unfinished"/>
+        <translation>Clic pentru a procesa manual sunetele online.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioResourceControl.qml" line="99"/>
@@ -30684,9 +30750,19 @@ a eșuat: %2</translation>
         <translation>Opțiuni pentru fanionul de sunet nu sunt disponibile pentru acest sunet.</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="111"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="114"/>
+        <source>Processing online sounds</source>
+        <translation>Se procesează sunetele online</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="119"/>
         <source>Process online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Procesează sunetele online</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="122"/>
+        <source>Online sounds processed</source>
+        <translation>S-au procesat sunetele online</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/PlaybackToolBar.qml" line="44"/>
@@ -30739,39 +30815,39 @@ a eșuat: %2</translation>
         <translation>Activează acest profil</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="84"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="83"/>
         <source>Reverb</source>
         <translation>Reverber</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="90"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="89"/>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="617"/>
         <source>Aux %1</source>
         <translation>Aux %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1053"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1014"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1063"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1024"/>
         <source>Chords</source>
         <translation>Acorduri</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1429"/>
-        <source>This may be due to a poor internet connection or server issue. Your score will still play, but some sounds may be missing. Please check your internet connection or try again later.</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1366"/>
+        <source>This may be due to a poor internet connection or server issue. Your score will still play, but some sounds may be missing. Please check your connection or &lt;a href=&quot;%1&quot;&gt;learn more here&lt;/a&gt;.</source>
+        <translation>Acest lucru se poate datora unei conexiuni slabe la internet sau unei probleme cu server-ul. Partitura ta se va putea reda și așa, dar unele sunete pot lipsi. Te rog verifică conexiunea sau &lt;a href=&quot;%1&quot;&gt;află mai multe aici&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1432"/>
-        <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="86"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1371"/>
+        <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="96"/>
         <source>Some online sounds aren’t ready yet</source>
-        <translation type="unfinished"/>
+        <translation>Unele sunete online nu sunt încă gata</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1542"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1503"/>
         <source>Loading audio samples</source>
         <translation>Se încarcă sunetele</translation>
     </message>
@@ -30912,7 +30988,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="131"/>
         <source>Scores will appear here when you save a file to the cloud, or publish a score on &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Partiturile vor apărea aici când le vei salva în cloud sau când le vei publica pe &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="155"/>
@@ -30922,7 +30998,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="156"/>
         <source>Log in or create a new account on &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt; to view online scores.</source>
-        <translation type="unfinished"/>
+        <translation>Autentifică-te sau creează un cont nou pe &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt; pentru a vedea partiturile online.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="219"/>
@@ -30996,12 +31072,12 @@ a eșuat: %2</translation>
         <translation>Copyright</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml" line="43"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml" line="44"/>
         <source>Stop download</source>
         <translation>Oprește descărcarea</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml" line="43"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml" line="44"/>
         <source>Download score</source>
         <translation>Descarcă partitura</translation>
     </message>
@@ -31150,23 +31226,23 @@ a eșuat: %2</translation>
         <translation>Se salvează online...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2356"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2347"/>
         <source>File “%1” seems not corrupted</source>
         <translation>Fișierul „%1” pare integru</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2357"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2348"/>
         <source>This file does not seem to contain errors.</source>
         <translation>Fișierul nu pare să conțină erori.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2360"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2351"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1795"/>
         <source>File “%1” is corrupted</source>
         <translation>Fișierul „%1” este corupt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2362"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2353"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</source>
         <translation>Fișierul conține erori care ar putea face ca MuseScore Studio să funcționeze nedeterminist. Te rog repară erorile înainte pentru a preveni crăpări și coruperi ulterioare.</translation>
     </message>
@@ -31191,212 +31267,217 @@ a eșuat: %2</translation>
         <translation>Partitura este invalidă.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="746"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="744"/>
         <source>Do you want to save changes to the score “%1” before closing?</source>
         <translation>Dorești să salvezi modificările partiturii „%1” înainte de a o închide?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="749"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="747"/>
         <source>Your changes will be lost if you don’t save them.</source>
         <translation>Modificările tale vor fi pierdute dacă nu le salvezi.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1533"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1625"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1531"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1623"/>
         <source>Your score cannot be uploaded to the cloud</source>
         <translation>Partitura ta nu poate fi încărcată în cloud</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1536"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1534"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on MuseScore.org.</source>
         <translation>Această partitură a devenit coruptă și conține erori. Poți repara erorile manual sau să salvezi partitura pe calculator și să obții ajutor pentru această problemă pe MuseScore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1544"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1542"/>
         <source>Save as…</source>
         <translation>Salvează ca...</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1549"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1591"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1547"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1589"/>
         <source>Revert to last saved</source>
         <translation>Revino la ultima salvare</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1572"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1570"/>
         <source>This score has become corrupted and contains errors</source>
         <translation>Această partitură a devenit coruptă și conține erori.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1576"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1574"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on MuseScore.org.</source>
         <translation>Poți continua să o salvezi local, dar fișierul ar putea deveni inutilizabil. Poți încerca să repari erorile manual sau să obții ajutor pentru această problemă pe MuseScore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1578"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1576"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on MuseScore.org.</source>
         <translation>Poți continua să o salvezi local, dar fișierul ar putea deveni inutilizabil. Pentru a-ți păstra partitura, revino la ultima versiune salvată sau repară erorile manual. Poți de asemenea să obții ajutor pentru această problemă pe MuseScore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1586"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1584"/>
         <source>Save anyway</source>
         <translation>Salvează oricum</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1624"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1622"/>
         <source>Your score cannot be saved</source>
         <translation>Partitura ta nu poate fi salvată</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1628"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1626"/>
         <source>This score is corrupted. You can get help for this issue on MuseScore.org.</source>
         <translation>Partitura este coruptă. Poți obține ajutor pentru această problemă pe MuseScore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1631"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1819"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1629"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1817"/>
         <source>Get help</source>
         <translation>Obține ajutor</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1681"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1679"/>
         <source>Try again</source>
         <translation>Încearcă din nou</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1696"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1694"/>
         <source>Revert to last saved?</source>
         <translation>Revii la ultima versiune salvată?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1697"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1695"/>
         <source>Your changes will be lost. This action cannot be undone.</source>
         <translation>Modificările tale vor fi pierdute. Această acțiune nu se poate anula.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1777"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1802"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1775"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1800"/>
         <source>Open anyway</source>
         <translation>Deschide oricum</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1789"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1833"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1787"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1831"/>
         <source>Cannot read file %1</source>
         <translation>Nu se poate citi din fișierul %1</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1790"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1788"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Acest fișier a fost salvat într-o versiune mai nouă de MuseScore Studio. Te rog vizitează &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; pentru a obține ultima versiune.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1799"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
         <translation>Acest fișier conține erori care pot face ca MuseScore Studio să nu funcționeze corect.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1814"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1812"/>
         <source>File “%1” is corrupted and cannot be opened</source>
         <translation>Fișierul „%1” este corupt și nu poate fi deschis</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1816"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1814"/>
         <source>Get help for this issue on MuseScore.org.</source>
         <translation>Obține ajutor cu privire la această problemă pe MuseScore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1838"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1836"/>
         <source>This file does not exist or cannot be accessed at the moment.</source>
         <translation>Acest fișier nu există sau nu poate fi accesat în acest moment.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1841"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1839"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
         <translation>Acest fișier nu a putut fi deschis. Te rog asigură-te că MuseScore Studio are permisiunea să citească din acest fișier.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1848"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1846"/>
         <source>An error occurred while reading this file.</source>
         <translation>A apărut o eroare la citirea din acest fișier.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1904"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1902"/>
         <source>All supported files</source>
         <translation>Toate tipurile de fișiere suportate</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1905"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1903"/>
         <source>MuseScore files</source>
         <translation>Fișiere MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1906"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1904"/>
         <source>MusicXML files</source>
         <translation>Fișiere MusicXML</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1907"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1905"/>
         <source>MIDI files</source>
         <translation>Fișiere MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1908"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1906"/>
         <source>MuseData files</source>
         <translation>Fișiere MuseData</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1909"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1907"/>
         <source>Capella files</source>
         <translation>Fișiere Capella</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1910"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1908"/>
         <source>BB files (experimental)</source>
         <translation>Fișiere BB (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1911"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1909"/>
         <source>Overture / Score Writer files (experimental)</source>
         <translation>Fișiere Overture / Score Writer (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1912"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1910"/>
         <source>Bagpipe Music Writer files (experimental)</source>
         <translation>Fișiere Bagpipe Music Writer (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1913"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1911"/>
         <source>Guitar Pro files</source>
         <translation>Fișiere Guitar Pro</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1914"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1912"/>
         <source>Power Tab Editor files (experimental)</source>
         <translation>Fișiere Editor Power Tab (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1915"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1913"/>
         <source>MEI files</source>
         <translation>Fișiere MEI</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1916"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1914"/>
+        <source>TablEdit files (experimental)</source>
+        <translation>Fișiere TablEdit (experimental)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1915"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
         <translation>Dosare necomprimate MuseScore (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1917"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1916"/>
         <source>MuseScore developer files</source>
         <translation>Fișiere dezvoltator MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1918"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1917"/>
         <source>MuseScore backup files</source>
         <translation>Fișiere backup MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1930"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1929"/>
         <source>Open</source>
         <translation>Deschis</translation>
     </message>
@@ -31553,7 +31634,7 @@ a eșuat: %2</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="516"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="603"/>
         <source>Could not connect to &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;. Please check your internet connection or try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Nu s-a putut realiza conexiunea la &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;. Te rog verifică conexiunea la internet sau încearcă din nou mai târziu.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="521"/>
@@ -32550,7 +32631,7 @@ a eșuat: %2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="234"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1027"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1025"/>
         <source>Log in to MuseScore.com to save this score to the cloud.</source>
         <translation>Autentifică-te pe MuseScore.com pentru a salva această partitură în Cloud.</translation>
     </message>
@@ -32599,7 +32680,7 @@ a eșuat: %2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="410"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1481"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1479"/>
         <source>Unable to connect to the cloud</source>
         <translation>Nu se poate conecta la cloud</translation>
     </message>
@@ -32661,53 +32742,53 @@ a eșuat: %2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="586"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1677"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1675"/>
         <source>Save as…</source>
         <translation>Salvează ca...</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="461"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="558"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="459"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="556"/>
         <source>Log in or create a free account on MuseScore.com to open this score.</source>
         <translation>Autentifică-te sau creează un cont gratuit pe MuseScore.com pentru a deschide această partitură.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1403"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1401"/>
         <source>View online</source>
         <translation>Vizualizează online</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1406"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1404"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on MuseScore.com.</source>
         <translation>Toate modificările salvate vor fi încărcate acum în cloud. Poți administra acest fișier pe MuseScore.com în managerul de partituri.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1482"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1480"/>
         <source>Your changes will be saved to a local file until the connection resumes.</source>
         <translation>Modificările tale se vor salva într-un fișier local până când revine conexiunea.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1497"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1495"/>
         <source>Please add at least one instrument to enable saving.</source>
         <translation>Te rog adaugă cel puțin un instrument pentru a putea să salvezi.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1647"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1645"/>
         <source>An unknown error occurred while saving this file.</source>
         <translation>O eroare necunoscută a apărut în timpul salvării acestui fișier.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1655"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1653"/>
         <source>Your score could not be saved</source>
         <translation>Partitura ta nu a putut fi salvată</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1665"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1663"/>
         <source>An error occurred while saving your score</source>
         <translation>A apărut o eroare la salvarea partiturii</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1667"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1665"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
         <translation>Pentru a păstra partitura încearcă să o salvezi din nou. Dacă acest mesaj apare din nou, te rog salvează partitura ca o copie. Poți de asemenea să obții ajutor despre această problemă la %1.&lt;br/&gt;&lt;br/&gt;Detalii eroare (te rog citează când întrebi pentru ajutor): %2</translation>
     </message>
@@ -33010,17 +33091,17 @@ a eșuat: %2</translation>
 <context>
     <name>tours</name>
     <message>
-        <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="146"/>
+        <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="142"/>
         <source>Watch video</source>
         <translation>Urmărește video</translation>
     </message>
     <message>
-        <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="166"/>
+        <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="162"/>
         <source>Got it</source>
         <translation>Am înțeles</translation>
     </message>
     <message>
-        <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="166"/>
+        <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="162"/>
         <source>Next</source>
         <translation>Următorul</translation>
     </message>
@@ -33350,20 +33431,20 @@ a eșuat: %2</translation>
 <context>
     <name>undoableAction</name>
     <message>
-        <location filename="../../src/braille/internal/notationbraille.cpp" line="717"/>
+        <location filename="../../src/braille/internal/notationbraille.cpp" line="712"/>
         <location filename="../../src/engraving/dom/edit.cpp" line="1995"/>
         <location filename="../../src/engraving/dom/edit.cpp" line="2130"/>
         <source>Add tie</source>
         <translation>Adaugă legato de prelungire</translation>
     </message>
     <message>
-        <location filename="../../src/braille/internal/notationbraille.cpp" line="743"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2851"/>
+        <location filename="../../src/braille/internal/notationbraille.cpp" line="738"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2901"/>
         <source>Add slur</source>
         <translation>adaugă legato</translation>
     </message>
     <message>
-        <location filename="../../src/braille/internal/notationbraille.cpp" line="788"/>
+        <location filename="../../src/braille/internal/notationbraille.cpp" line="783"/>
         <source>Add long slur</source>
         <translation>Adaugă legato lung</translation>
     </message>
@@ -33384,7 +33465,7 @@ a eșuat: %2</translation>
         <translation>Partitură coruptă</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="2862"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="2858"/>
         <source>Reset all positions</source>
         <translation>Resetează toate pozițiile</translation>
     </message>
@@ -33399,7 +33480,7 @@ a eșuat: %2</translation>
         <translation>Comută laissez vibrer</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="4434"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="4491"/>
         <source>Enter rest</source>
         <translation>Adaugă pauză</translation>
     </message>
@@ -33415,14 +33496,9 @@ a eșuat: %2</translation>
         <translation>Lipește versurile</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/playcounttext.cpp" line="44"/>
-        <source>Set play count text setting to custom</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/playcounttext.cpp" line="52"/>
+        <location filename="../../src/engraving/dom/playcounttext.cpp" line="51"/>
         <source>Update play count text</source>
-        <translation type="unfinished"/>
+        <translation>Actualizează textul numărului de redări</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/textedit.cpp" line="925"/>
@@ -33440,7 +33516,7 @@ a eșuat: %2</translation>
         <translation>Crează partide</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="404"/>
+        <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="409"/>
         <location filename="../../src/inspector/models/notation/frames/verticalframesettingsmodel.cpp" line="65"/>
         <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="207"/>
         <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="219"/>
@@ -33448,47 +33524,47 @@ a eșuat: %2</translation>
         <translation>Editează %1</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="437"/>
+        <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="442"/>
         <location filename="../../src/inspector/models/notation/frames/verticalframesettingsmodel.cpp" line="97"/>
         <source>Reset %1</source>
-        <translation type="unfinished"/>
+        <translation>Resetează %1</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="520"/>
+        <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="525"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1272"/>
         <source>Edit style</source>
         <translation>Editează stil</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="61"/>
-        <source>Hide empty staves in selection</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/inspector/models/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="84"/>
+        <source>Hide empty staves</source>
+        <translation>Ascunde portativele goale</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="83"/>
-        <source>Show all empty staves</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/inspector/models/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="107"/>
+        <source>Show empty staves</source>
+        <translation>Arată portativele goale</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="105"/>
+        <location filename="../../src/inspector/models/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="130"/>
         <source>Reset empty staves visibility</source>
-        <translation type="unfinished"/>
+        <translation>Resetează vizibilitatea portativelor goale</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="161"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="499"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="500"/>
         <source>Make element(s) visible</source>
         <translation>Fă elementele vizibile</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="162"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="501"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="502"/>
         <source>Make element(s) invisible</source>
         <translation>Fă elementele invizibile</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/inspectormodelwithvoiceandpositionoptions.cpp" line="163"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5888"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5945"/>
         <source>Change voice</source>
         <translation>Schimbă vocea</translation>
     </message>
@@ -33503,24 +33579,24 @@ a eșuat: %2</translation>
         <translation>Editează curba bend-ului</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="118"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="121"/>
         <source>Make chord(s) visible</source>
-        <translation type="unfinished"/>
+        <translation>Fă acordurile vizibile</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="119"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="122"/>
         <source>Make chord(s) invisible</source>
-        <translation type="unfinished"/>
+        <translation>Fă acordurile invizibile</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="145"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="158"/>
         <source>Move chord(s) up</source>
-        <translation type="unfinished"/>
+        <translation>Mută acordurile în sus</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="167"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="180"/>
         <source>Move chord(s) down</source>
-        <translation type="unfinished"/>
+        <translation>Mută acordurile în jos</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/stems/stemsettingsmodel.cpp" line="114"/>
@@ -33551,13 +33627,13 @@ a eșuat: %2</translation>
         <location filename="../../src/instrumentsscene/view/instrumentsettingsmodel.cpp" line="129"/>
         <location filename="../../src/instrumentsscene/view/instrumentsettingsmodel.cpp" line="151"/>
         <source>Change instrument settings</source>
-        <translation type="unfinished"/>
+        <translation>Schimbă setările instrumentului</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/staffsettingsmodel.cpp" line="240"/>
         <location filename="../../src/instrumentsscene/view/staffsettingsmodel.cpp" line="275"/>
         <source>Change staff settings</source>
-        <translation type="unfinished"/>
+        <translation>Schimbă setările portativului</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayersettingsmodel.cpp" line="99"/>
@@ -33576,12 +33652,12 @@ a eșuat: %2</translation>
         <translation>Redenumește partida</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="550"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="554"/>
         <source>Add/remove parts</source>
         <translation>Adaugă/elimină partide</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="593"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="597"/>
         <source>Reset part</source>
         <translation>Resetează partida</translation>
     </message>
@@ -33593,13 +33669,13 @@ a eșuat: %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="105"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="960"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="966"/>
         <source>Remove instruments</source>
         <translation>Elimină instrumente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="120"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="1084"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="1090"/>
         <source>Remove staves</source>
         <translation>Elimină portative</translation>
     </message>
@@ -33647,43 +33723,43 @@ a eșuat: %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="303"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="897"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="903"/>
         <source>Add system object layer below the bottom staff</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă un strat de obiecte de sistem sub portativul de jos</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="316"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="906"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="912"/>
         <source>Remove system object layer below the bottom staff</source>
-        <translation type="unfinished"/>
+        <translation>Șterge stratul de obiecte de sistem de sub portativul de jos</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="477"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="478"/>
         <source>Toggle multimeasure rests</source>
         <translation>Comută pauzele multi-măsură</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="479"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="480"/>
         <source>Toggle empty staves</source>
         <translation>Arată/ascunde portativele goale</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="482"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="483"/>
         <source>Mirror notehead</source>
         <translation>Oglidește cap notă</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="497"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="498"/>
         <source>Enter full-measure rest</source>
         <translation>Introdu pauză de măsură</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2205"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2192"/>
         <source>Display concert pitch</source>
         <translation>Afișează etalon camerton</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2206"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2193"/>
         <source>Display transposed</source>
         <translation>Afișează transpus</translation>
     </message>
@@ -33698,567 +33774,567 @@ a eșuat: %2</translation>
         <translation><numerusform>Trage elementul</numerusform><numerusform>Trage elementele</numerusform><numerusform>Trage elementele</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1860"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1918"/>
         <source>Drop element: %1</source>
         <translation>Eliberează element: %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2123"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2183"/>
         <source>Move range</source>
         <translation>Mută intervalul</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2124"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2184"/>
         <source>Copy range</source>
         <translation>Copiază intervalul</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2243"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2293"/>
         <source>Apply palette element: %1</source>
         <translation>Aplică element paletă: %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3882"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3932"/>
         <source>Move chord/rest to staff</source>
         <translation>Mută acord/pauză pe portativ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3912"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3962"/>
         <source>Move chord/rest</source>
         <translation>Mută acord/pauză</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3962"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4012"/>
         <source>Toggle snap to previous</source>
         <translation>Comută fixează la anteriorul</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4003"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4053"/>
         <source>Toggle snap to next</source>
         <translation>Comută fixează la următorul</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4134"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4193"/>
         <source>Change vertical position</source>
         <translation>Schimbă poziția verticală</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4137"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4196"/>
         <source>Change pitch</source>
         <translation>Schimbă înălțimea</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4150"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4209"/>
         <source>Move lyrics</source>
         <translation>Mută versurile</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4162"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4221"/>
         <source>Nudge element</source>
         <translation>Mișcă fin elementul</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4198"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4257"/>
         <source>Nudge</source>
         <translation>Mișcă fin</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4307"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4366"/>
         <source>Edit text</source>
         <translation>Editează textul</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4707"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4768"/>
         <source>Keystroke edit</source>
         <extracomment>Means: an editing operation triggered by a keystroke</extracomment>
         <translation>Editează apăsarea de tastă</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4791"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4852"/>
         <source>Move element anchors</source>
-        <translation type="unfinished"/>
+        <translation>Mută ancorele elementului</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4837"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4898"/>
         <source>Split measure</source>
         <translation>Sparge mărura</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4852"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4913"/>
         <source>Join measures</source>
         <translation>Unește măsurile</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5005"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5066"/>
         <source>Add horizontal frame</source>
         <translation>Adaugă cadru orizontal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5006"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5067"/>
         <source>Add vertical frame</source>
         <translation>Adaugă cadru vertical</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5007"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5068"/>
         <source>Add text frame</source>
         <translation>Adaugă cadru text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5008"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5069"/>
         <source>Add fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă legendă diagramă acord</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5009"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5070"/>
         <source>Add %n measure(s)</source>
         <translation><numerusform>Adaugă %n măsură</numerusform><numerusform>Adaugă %n măsuri</numerusform><numerusform>Adaugă %n de măsuri</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5074"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5109"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5135"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5170"/>
         <source>Repeat selection</source>
         <translation>Repetare Selecţie</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5131"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5192"/>
         <source>Paste</source>
         <translation>Lipește</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5242"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5299"/>
         <source>Delete</source>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5268"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5325"/>
         <source>Flip direction</source>
         <translation>Schimbă orientarea</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5281"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5338"/>
         <source>Flip horizontally</source>
         <translation>Oglindește orizontal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5341"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5398"/>
         <source>Add ottava</source>
         <translation>Adaugă ottava</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5348"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5388"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5405"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5445"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="201"/>
         <source>Add hairpin</source>
         <translation>Adaugă ac cresc./decresc.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5449"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5506"/>
         <source>Add brackets</source>
         <translation>Adaugă paranteze pătrate</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5454"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5511"/>
         <source>Add braces</source>
         <translation>Adaugă acolade</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5459"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5516"/>
         <source>Add parentheses</source>
         <translation>Adaugă paranteze</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5486"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5543"/>
         <source>Toggle accidental</source>
         <translation>Comută alterație</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5529"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8041"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5586"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8061"/>
         <source>Toggle articulation</source>
         <translation>Comută articulație</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5546"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5603"/>
         <source>Toggle augmentation dots</source>
         <translation>Comută puncte de prelungire</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5580"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5637"/>
         <source>Add grace note</source>
         <translation>Adaugă apogiatură</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5607"/>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="692"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5664"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="716"/>
         <source>Add tuplet</source>
         <translation>Adaugă diviziune excepționială</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5628"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5685"/>
         <source>Set beam type</source>
         <translation>Setează tip ligatură</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5640"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5697"/>
         <source>Decrease duration</source>
         <translation>Micșorează durata</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5641"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5698"/>
         <source>Increase duration</source>
         <translation>Mărește durata</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5658"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5715"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="193"/>
         <source>Change hairpin type</source>
         <translation>Schimbă tipul acului de păr</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5701"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5758"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="159"/>
         <source>Add dynamic</source>
         <translation>Adaugă nuanță</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5752"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5809"/>
         <source>Toggle layout break</source>
         <translation>Comută întrerupere de aspect</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5759"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5816"/>
         <source>Move measure to previous system</source>
         <translation>Mută măsura la sistemul anterior</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5766"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5823"/>
         <source>Move measure to next system</source>
         <translation>Mută măsura la sistemul următor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5773"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5830"/>
         <source>Lock/unlock selected system(s)</source>
         <translation>Blochează/deblochează sistemele selectate</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5780"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5837"/>
         <source>Lock/unlock all systems</source>
         <translation>Blochează/deblochează toate sistemele</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5787"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5844"/>
         <source>Create system from selection</source>
         <translation>Creează sistem din selecție</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5794"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5851"/>
         <source>Apply system lock to selection</source>
         <translation>Aplică blocare sistem pe selecție</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5804"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5861"/>
         <source>Measures per system</source>
         <translation>Măsuri per sistem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5811"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5868"/>
         <source>Transposition</source>
         <translation>Transpoziție</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5835"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5892"/>
         <source>Swap voices</source>
         <translation>Interschimbă vocile</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5866"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5923"/>
         <source>Add interval</source>
         <translation>Adaugă interval</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5873"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5930"/>
         <source>Enter note at fret %1</source>
         <translation>Introdu nota pe fret-ul %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5899"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5956"/>
         <source>Change voice assignment</source>
         <translation>Schimbă asocierea vocii</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5910"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5967"/>
         <source>Add note-anchored line</source>
         <translation>Adaugă linie ancorată la notă</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5993"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6050"/>
         <source>Add text</source>
         <translation>Adaugă Text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6061"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6118"/>
         <source>Add image</source>
         <translation>Adaugă imagine</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6080"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6137"/>
         <source>Add figured bass</source>
         <translation>Adaugă bass cifrat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6095"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6152"/>
         <source>Increase layout stretch</source>
         <translation>Mărește întinderea aspectului</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6096"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6153"/>
         <source>Decrease layout stretch</source>
         <translation>Micșorează întinderea aspectului</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6119"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6176"/>
         <source>Add time signature</source>
         <translation>Adaugă metrică</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6130"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6187"/>
         <source>Explode</source>
         <translation>Explodeaza</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6141"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6198"/>
         <source>Implode</source>
         <translation>Implodeaza</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6152"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6209"/>
         <source>Realize chord symbols</source>
         <translation>Desfășoară simboluri acord</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6198"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6255"/>
         <source>Delete %n measure(s)</source>
         <translation><numerusform>Șterge %n măsură</numerusform><numerusform>Șterge %n măsuri</numerusform><numerusform>Șterge %n de măsuri</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6209"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6266"/>
         <source>Delete range</source>
         <translation>Șterge interval</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6216"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6273"/>
         <source>Remove empty trailing measures</source>
         <translation>Elimină măsurile goale de la sfârșit</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6227"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6284"/>
         <source>Fill with slashes</source>
         <translation>Umple cu slash-uri</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6238"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6295"/>
         <source>Toggle rhythmic slash notation</source>
         <translation>Comută notație ritmică slash</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6245"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6302"/>
         <source>Change enharmonic spelling</source>
         <translation>Schimbă numele enarmonic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6252"/>
-        <source>Respell pitches</source>
-        <translation>Rescrie Înălțimile</translation>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6309"/>
+        <source>Optimize enharmonic spelling</source>
+        <translation>Optimizează notația enarmonică</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6259"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6316"/>
         <source>Regroup rhythms</source>
         <translation>Regrupează ritmurile</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6266"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6323"/>
         <source>Resequence rehearsal marks</source>
         <translation>Resecvențiază reperele</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6273"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6330"/>
         <source>Reset layout stretch</source>
         <translation>Resetează întinderea aspectului</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6280"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6337"/>
         <source>Reset text style overrides</source>
         <translation>Resetează suprascrieri stil de text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6287"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6344"/>
         <source>Reset beams</source>
         <translation>Resetează ligaturile</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6304"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6361"/>
         <source>Reset shapes and positions</source>
         <translation>Resetează formele și pozițiile</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6324"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6381"/>
         <source>Reset to default layout</source>
         <translation>Resetează la aspectul implicit</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6350"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6407"/>
         <source>Set score view settings</source>
         <translation>Aplică setările de vizualizare ale partiturii</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6557"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6577"/>
         <source>Navigate to lyrics</source>
         <translation>Navighează la versuri</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6686"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6745"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6706"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6765"/>
         <source>Navigate to next syllable</source>
         <translation>Navighează la următoarea silabă</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6924"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6944"/>
         <source>Navigate to verse</source>
         <translation>Navighează la vers</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7019"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7077"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7039"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7097"/>
         <source>Navigate to next chord symbol</source>
         <translation>Navighează la următorul simbol de acord</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7118"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7138"/>
         <source>Navigate to chord symbol</source>
         <translation>Navighează la simbol de acord</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7173"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7217"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7193"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7237"/>
         <source>Navigate to next figured bass</source>
         <translation>Navighează la următorul bas cifrat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7265"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7285"/>
         <source>Navigate to figured bass</source>
         <translation>Navighează la bas cifrat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7562"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7569"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7629"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7582"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7589"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7649"/>
         <source>Enter lyrics extension line</source>
         <translation>Introdu linie de extensie versuri</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7711"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7731"/>
         <source>Add lyrics verse</source>
         <translation>Adaugă vers text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7759"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7779"/>
         <source>Enter guitar bend</source>
         <translation>Introdu bend chitară</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7832"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7852"/>
         <source>Add fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă diagramă acord</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7965"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7985"/>
         <source>Format text</source>
         <translation>Formatează text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7985"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8005"/>
         <source>Toggle subscript</source>
         <translation>Comută subscript</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7987"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8007"/>
         <source>Toggle superscript</source>
         <translation>Comută superscript</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7989"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8009"/>
         <source>Toggle subscript/superscript</source>
         <translation>Comută subscript/superscript</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8046"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8066"/>
         <source>Toggle ornament</source>
         <translation>Comută ornament</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8051"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8071"/>
         <source>Toggle automatic placement</source>
         <translation>Comută amplasare automată</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8062"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8082"/>
         <source>Add clef</source>
         <translation>Adaugă cheie</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8067"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8087"/>
         <source>Add accidental</source>
         <translation>Adaugă alterație</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8072"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8092"/>
         <source>Transpose semitone</source>
         <translation>Transpune semiton</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8078"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8098"/>
         <source>Transpose diatonically</source>
         <translation>Transpune diatonic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationmidiinput.cpp" line="318"/>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="432"/>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="474"/>
+        <location filename="../../src/notation/internal/notationmidiinput.cpp" line="313"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="454"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="498"/>
         <source>Enter note</source>
         <translation>Introdu notă</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationmidiinput.cpp" line="498"/>
+        <location filename="../../src/notation/internal/notationmidiinput.cpp" line="493"/>
         <source>Realtime advance</source>
         <translation>Avansează în timp real</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="428"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="450"/>
         <source>Add note to chord</source>
         <translation>Adaugă notă la acord</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="430"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="452"/>
         <source>Insert note</source>
         <translation>Inserează notă</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="454"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="478"/>
         <source>Pad note</source>
         <translation>Notă pad</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="499"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="523"/>
         <source>Delete note</source>
         <translation>Șterge nota</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="902"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="926"/>
         <source>Double note input duration</source>
         <translation>Dublează durata notei introduse</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="915"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="939"/>
         <source>Halve note input duration</source>
         <translation>Înjumătățește durata notei introduse</translation>
     </message>
@@ -34355,12 +34431,12 @@ a eșuat: %2</translation>
         <translation>Resetează formatarea instrumentului</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="1135"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="1141"/>
         <source>Move instruments</source>
         <translation>Mută instrumentele</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="1164"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="1170"/>
         <source>Move staves</source>
         <translation>Mută portativele</translation>
     </message>
@@ -34527,25 +34603,25 @@ a eșuat: %2</translation>
 <context>
     <name>workspace</name>
     <message>
-        <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="107"/>
-        <location filename="../../src/framework/workspace/qml/Muse/Workspace/internal/WorkspacesTopPanel.qml" line="104"/>
+        <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="105"/>
+        <location filename="../../src/framework/workspace/qml/Muse/Workspace/internal/WorkspacesTopPanel.qml" line="103"/>
         <source>Remove</source>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../../src/framework/workspace/qml/Muse/Workspace/internal/WorkspacesTopPanel.qml" line="70"/>
+        <location filename="../../src/framework/workspace/qml/Muse/Workspace/internal/WorkspacesTopPanel.qml" line="69"/>
         <source>Workspaces</source>
         <translation>Spații de lucru</translation>
     </message>
     <message>
-        <location filename="../../src/framework/workspace/qml/Muse/Workspace/internal/WorkspacesTopPanel.qml" line="81"/>
+        <location filename="../../src/framework/workspace/qml/Muse/Workspace/internal/WorkspacesTopPanel.qml" line="80"/>
         <source>Save layout as new workspace</source>
-        <translation type="unfinished"/>
+        <translation>Salvează aspectul ca spațiu de lucru nou</translation>
     </message>
     <message>
-        <location filename="../../src/framework/workspace/qml/Muse/Workspace/internal/WorkspacesTopPanel.qml" line="118"/>
+        <location filename="../../src/framework/workspace/qml/Muse/Workspace/internal/WorkspacesTopPanel.qml" line="117"/>
         <source>Workspaces allow you to choose different configurations of the %1 interface. You can also save your own unique configurations as new workspaces.</source>
-        <translation type="unfinished"/>
+        <translation>Spațiile de lucru îți permit să alegi configurații diferite ale interfeței %1. Poți de asemenea să salvezi configurațiile tale unice ca noi spații de lucru.</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/qml/Muse/Workspace/internal/WorkspacesView.qml" line="170"/>
@@ -34581,22 +34657,22 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="225"/>
         <source>This action will reset your workspace to its factory default layout and cannot be undone. Do you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Această acțiune va reseta spațiul tău de lucru la aspectul implicit și nu poate fi anulată. Dorești să continui?</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="228"/>
         <source>Resetting workspaces</source>
-        <translation type="unfinished"/>
+        <translation>Se resetează spațiile de lucru</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="229"/>
         <source>Reset workspace</source>
-        <translation type="unfinished"/>
+        <translation>Resetează spațiu de lucru</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="262"/>
         <source>Name cannot be empty</source>
-        <translation type="unfinished"/>
+        <translation>Numele nu poate fi gol</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="273"/>

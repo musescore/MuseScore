@@ -430,8 +430,6 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             TRead::read(expr, e, ctx);
             segment->add(expr);
         } else if (tag == "Harmony") {
-            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
-            // for symbols attached to anything but a measure
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
             Harmony* el = Factory::createHarmony(segment);
 
@@ -442,8 +440,6 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             }
             segment->add(el);
         } else if (tag == "FretDiagram") {
-            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
-            // for symbols attached to anything but a measure
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
             FretDiagram* el = Factory::createFretDiagram(segment);
 
@@ -454,8 +450,6 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             }
             segment->add(el);
         } else if (tag == "TremoloBar") {
-            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
-            // for symbols attached to anything but a measure
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
             TremoloBar* el = Factory::createTremoloBar(segment);
             el->setTrack(ctx.track());
@@ -465,8 +459,6 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             }
             segment->add(el);
         } else if (tag == "Symbol") {
-            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
-            // for symbols attached to anything but a measure
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
             Symbol* el = Factory::createSymbol(segment);
 
@@ -477,9 +469,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             }
             segment->add(el);
         } else if (tag == "Tempo") {
-            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
-            // for symbols attached to anything but a measure
-            segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
+            segment = measure->getChordRestOrTimeTickSegment(ctx.tick());
             TempoText* el = Factory::createTempoText(segment);
 
             el->setTrack(ctx.track());
@@ -489,9 +479,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             }
             segment->add(el);
         } else if (tag == "StaffText") {
-            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
-            // for symbols attached to anything but a measure
-            segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
+            segment = measure->getChordRestOrTimeTickSegment(ctx.tick());
             StaffText* el = Factory::createStaffText(segment);
             el->setTrack(ctx.track());
             TRead::read(el, e, ctx);
@@ -510,10 +498,12 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                    || tag == "FiguredBass"
                    || tag == "HarpPedalDiagram"
                    ) {
-            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
-            // for symbols attached to anything but a measure
-            segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
-            EngravingItem* el = Factory::createItemByName(tag, segment);
+            EngravingItem* el = Factory::createItemByName(tag, ctx.dummy());
+            if (el->allowTimeAnchor()) {
+                segment = measure->getChordRestOrTimeTickSegment(ctx.tick());
+            } else {
+                segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
+            }
 
             el->setTrack(ctx.track());
             TRead::readItem(el, e, ctx);
@@ -536,6 +526,16 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 TRead::read(el, e, ctx);
                 segment->add(el);
             }
+        } else if (tag == "PlayCountText") {
+            segment = measure->getSegment(SegmentType::EndBarLine, ctx.tick());
+            EngravingItem* el = Factory::createItemByName(tag, segment);
+
+            el->setTrack(ctx.track());
+            TRead::readItem(el, e, ctx);
+            if (el->systemFlag() && el->isTopSystemObject()) {
+                el->setTrack(0); // original system object always goes on top
+            }
+            segment->add(el);
         }
         //----------------------------------------------------
         else if (tag == "Tuplet") {

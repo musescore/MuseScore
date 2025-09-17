@@ -151,7 +151,7 @@ void ChordRest::undoSetSmall(bool val)
 
 EngravingItem* ChordRest::drop(EditData& data)
 {
-    EngravingItem* e       = data.dropElement;
+    EngravingItem* e = data.dropElement;
     Measure* m       = measure();
     bool fromPalette = (e->track() == muse::nidx);
     switch (e->type()) {

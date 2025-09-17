@@ -55,20 +55,7 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
     }
 
     bool itemAddToSkyline = parent->autoplace() && !parent->ldata()->isSkipDraw();
-    Shape dummyItemShape = parent->shape();
-    dummyItemShape.remove_if([](ShapeElement& shapeEl) {
-        return shapeEl.item() && shapeEl.item()->isParenthesis();
-    });
-
-    if (parent->isNote()) {
-        const Note* note = toNote(parent);
-        const Chord* chord = note->chord();
-        LedgerLine* ledger = (note->line() < -1 || note->line() > note->staff()->lines(note->tick())) && !chord->ledgerLines().empty()
-                             ? chord->ledgerLines().front() : nullptr;
-        if (ledger) {
-            dummyItemShape.add(ledger->shape().translate(ledger->pos() - note->pos() - ledger->staffOffset()));
-        }
-    }
+    Shape dummyItemShape = getParentShape(parent);
 
     if (!leftParen || !rightParen) {
         // 1 parenthesis
@@ -391,7 +378,7 @@ void ParenthesisLayout::setNoteValues(Parenthesis* item, Parenthesis::LayoutData
     ldata->setMag(note->mag());
     Shape noteShape = note->shape();
     noteShape.remove_if([item](ShapeElement& s) {
-        return s.item() == item || s.item()->isBend() || s.item()->isParenthesis() || s.item()->isAccidental() || s.item()->isNoteDot();
+        return s.item() == item || s.item()->isBend() || s.item()->isParenthesis() || s.item()->isAccidental() || s.item()->isNoteDot() || s.item()->isLaissezVibSegment();
     });
 
     if (st->isTabStaff()) {
@@ -417,18 +404,26 @@ void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutD
     double extension = 0.1 * spatium * (parent->size() / 10.0);
     double bottom = parent->baseLine() + extension;
 
+    double defaultCapHeight = muse::draw::FontMetrics::capHeight(parent->font());
+
     double topCapHeight = DBL_MAX;
     const TextSegment* rootTextSeg = nullptr;
-    for (const HarmonyRenderItem* renderItem : parent->ldata()->renderItemList.value()) {
-        if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
-            topCapHeight = std::min(topCapHeight, ts->pos().y() - ts->capHeight());
+    if (!parent->ldata()->renderItemList.value().empty()) {
+        for (const HarmonyRenderItem* renderItem : parent->ldata()->renderItemList.value()) {
+            if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
+                topCapHeight = std::min(topCapHeight, ts->pos().y() - ts->capHeight());
 
-            rootTextSeg = !rootTextSeg ? ts : rootTextSeg;
+                rootTextSeg = !rootTextSeg ? ts : rootTextSeg;
+            }
         }
+    } else {
+        topCapHeight = defaultCapHeight;
     }
+
     double top = topCapHeight - extension;
     double height = bottom - top;
-    double rootCapHeight = rootTextSeg->capHeight();
+
+    double rootCapHeight = rootTextSeg ? rootTextSeg->capHeight() : defaultCapHeight;
     double scale = (height - 2 * extension) / rootCapHeight;
 
     ldata->setMag(parent->mag());
@@ -457,4 +452,30 @@ void ParenthesisLayout::setDefaultValues(Parenthesis* item, Parenthesis::LayoutD
     ldata->midPointThickness.set_value(ldata->height / 60 * ldata->mag());  // 0.1sp for a height of 6sp
     const double PADDING = spatium * 0.2;
     ldata->setPosX(item->direction() == DirectionH::RIGHT ? bbox.right() + PADDING : bbox.left() - PADDING);
+}
+
+Shape ParenthesisLayout::getParentShape(const EngravingItem* parent)
+{
+    Shape parentShape = parent->shape();
+
+    bool isNote = parent->isNote();
+
+    parentShape.remove_if([isNote](ShapeElement& s) {
+        return !s.item() || s.item()->isParenthesis()
+               || (s.item()->isLaissezVibSegment() && isNote);
+    });
+
+    if (!isNote) {
+        return parentShape;
+    }
+
+    const Note* note = toNote(parent);
+    const Chord* chord = note->chord();
+    LedgerLine* ledger = (note->line() < -1 || note->line() > note->staff()->lines(note->tick())) && !chord->ledgerLines().empty()
+                         ? chord->ledgerLines().front() : nullptr;
+    if (ledger) {
+        parentShape.add(ledger->shape().translate(ledger->pos() - note->pos() - ledger->staffOffset()));
+    }
+
+    return parentShape;
 }

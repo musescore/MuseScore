@@ -159,7 +159,6 @@ enum class CommandType : signed char {
     FretMarker,
     FretBarre,
     FretClear,
-    FretLinkHarmony,
     RemoveFretDiagramFromFretBox,
 
     // Harmony
@@ -855,8 +854,9 @@ public:
 
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override;
 
+    std::vector<EngravingObject*> objectItems() const override;
+
     UNDO_TYPE(CommandType::RemoveElement)
-    UNDO_CHANGED_OBJECTS({ element })
 };
 
 class AddSystemLock : public UndoCommand
@@ -1803,25 +1803,6 @@ public:
     UNDO_TYPE(CommandType::FretClear)
     UNDO_NAME("FretClear")
     UNDO_CHANGED_OBJECTS({ diagram })
-};
-
-class FretLinkHarmony : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, FretLinkHarmony)
-
-    FretDiagram* m_fretDiagram = nullptr;
-    Harmony* m_harmony = nullptr;
-    bool m_unlink = false;
-
-    void undo(EditData*) override;
-    void redo(EditData*) override;
-
-public:
-    FretLinkHarmony(FretDiagram*, Harmony*, bool unlink = false);
-
-    UNDO_TYPE(CommandType::FretLinkHarmony)
-    UNDO_NAME("FretLinkHarmony")
-    UNDO_CHANGED_OBJECTS({ m_fretDiagram })
 };
 
 class RemoveFretDiagramFromFretBox : public UndoCommand

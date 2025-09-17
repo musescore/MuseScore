@@ -63,6 +63,7 @@
 #include "engraving/dom/slur.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
+#include "engraving/dom/systemtext.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/textline.h"
@@ -461,6 +462,8 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
                 chordRest->segment(), PlayingTechniqueType::Natural, TextStyleType::STAFF);
             break;
         case (ElementType::STAFF_TEXT): item = Factory::createStaffText(chordRest->segment());
+            break;
+        case (ElementType::SYSTEM_TEXT): item = Factory::createSystemText(chordRest->segment());
             break;
         default:
             item = Factory::createExpression(chordRest->segment());

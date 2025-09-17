@@ -55,7 +55,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/translation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/translation.h
     ${CMAKE_CURRENT_LIST_DIR}/timer.h
-    ${CMAKE_CURRENT_LIST_DIR}/threadutils.h
     ${CMAKE_CURRENT_LIST_DIR}/progress.h
     ${CMAKE_CURRENT_LIST_DIR}/utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utils.h
@@ -118,6 +117,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/iodevice.h
     ${CMAKE_CURRENT_LIST_DIR}/io/file.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/file.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/filewatcher.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/filewatcher.h
     ${CMAKE_CURRENT_LIST_DIR}/io/buffer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/buffer.h
     ${CMAKE_CURRENT_LIST_DIR}/io/ifilesystem.h
@@ -150,13 +151,18 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack_forward.h
-    
+
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.hpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/concurrency/taskscheduler.h
-    ${CMAKE_CURRENT_LIST_DIR}/concurrency/concurrent.h
 )
+
+if (MUSE_THREADS_SUPPORT)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/concurrency/taskscheduler.h
+        ${CMAKE_CURRENT_LIST_DIR}/concurrency/concurrent.h
+        ${CMAKE_CURRENT_LIST_DIR}/concurrency/threadutils.h
+    )
+endif()
 
 if (GLOBAL_NO_INTERNAL)
     set(MODULE_DEF ${MODULE_DEF} -DGLOBAL_NO_INTERNAL)
@@ -199,9 +205,6 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/systeminfo.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/systeminfo.h
 
-        ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.h
-
         ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlreader.cpp
         ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlreader.h
         ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlwriter.cpp
@@ -219,6 +222,18 @@ else()
     endif()
 
     include(GetPlatformInfo)
+
+    if (OS_IS_WASM)
+        set(MODULE_SRC ${MODULE_SRC}
+            ${CMAKE_CURRENT_LIST_DIR}/io/internal/memfilesystem.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/io/internal/memfilesystem.h
+        )
+    else()
+        set(MODULE_SRC ${MODULE_SRC}
+            ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.h
+        )
+    endif()
 
     if (OS_IS_MAC)
         set(MODULE_SRC ${MODULE_SRC}

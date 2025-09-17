@@ -981,7 +981,19 @@ void NavigationController::onEscape()
     activeCtrl->setActive(false);
 
     if (m_defaultNavigationControl) {
-        doActivateControl(m_defaultNavigationControl);
+        INavigationPanel* defaultPanel = m_defaultNavigationControl->panel();
+        if (!defaultPanel) {
+            return;
+        }
+
+        INavigationSection* defaultSection = defaultPanel->section();
+        if (!defaultSection) {
+            return;
+        }
+
+        onActiveRequested(defaultSection, defaultPanel, m_defaultNavigationControl, true);
+    } else {
+        m_navigationChanged.notify();
     }
 }
 

@@ -452,8 +452,8 @@ private:
     void startDrag(EditData&) override;
     RectF drag(EditData& ed) override;
     void endDrag(EditData&) override;
-    void editDrag(EditData& editData) override;
 
+    void dragInEditMode(EditData& ed);
     void verticalDrag(EditData& ed);
     void horizontalDrag(EditData& ed);
 
@@ -484,7 +484,6 @@ private:
                                       // except if only one note is dotted
     bool m_fretConflict = false;      // used by TAB staves to mark a fretting conflict:
                                       // two or more notes on the same string
-    bool m_dragMode = false;
     bool m_isSmall = false;
     bool m_play = true;           // note is not played if false
     mutable bool m_mark = false;  // for use in sequencer

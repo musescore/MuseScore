@@ -75,7 +75,8 @@ void DynamicsLayout::doLayoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, 
     }
 
     bool centerOnNote = item->centerOnNotehead() || (!item->centerOnNotehead() && item->align().horizontal == AlignH::HCENTER);
-    double noteHeadWidth = item->score()->noteHeadWidth();
+    double mag = item->staff()->staffMag(item);
+    double noteHeadWidth = item->score()->noteHeadWidth() * mag;
 
     ldata->moveX(noteHeadWidth * (centerOnNote ? 0.5 : 1));
 
@@ -83,7 +84,7 @@ void DynamicsLayout::doLayoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, 
         return;
     }
 
-    // Use Smufl optical center for dynamic if available
+    // Use SMuFL optical center for dynamic if available
     SymId symId = TConv::symId(item->dynamicType());
     double opticalCenter = item->symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x();
     if (symId != SymId::noSym && opticalCenter) {

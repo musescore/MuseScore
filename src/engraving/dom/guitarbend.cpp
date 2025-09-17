@@ -165,7 +165,7 @@ void GuitarBend::setEndNotePitch(int pitch, QuarterOffset quarterOff)
 
 bool GuitarBend::isReleaseBend() const
 {
-    return endNote()->pitch() < startNote()->pitch();
+    return bendAmountInQuarterTones() < 0;
 }
 
 bool GuitarBend::isFullRelease() const
@@ -519,17 +519,17 @@ std::vector<PointF> GuitarBendSegment::gripsPositions(const EditData&) const
     return grips;
 }
 
-void GuitarBendSegment::startEditDrag(EditData& ed)
+void GuitarBendSegment::startDragGrip(EditData& ed)
 {
     ElementEditDataPtr eed = ed.getData(this);
     if (!eed) {
         return;
     }
     eed->pushProperty(Pid::BEND_VERTEX_OFF);
-    LineSegment::startEditDrag(ed);
+    LineSegment::startDragGrip(ed);
 }
 
-void GuitarBendSegment::editDrag(EditData& ed)
+void GuitarBendSegment::dragGrip(EditData& ed)
 {
     PointF delta = ed.evtDelta;
 
@@ -550,6 +550,7 @@ void GuitarBendSegment::editDrag(EditData& ed)
         setOffsetChanged(true);
         break;
     default:
+        UNREACHABLE;
         break;
     }
 
@@ -731,7 +732,7 @@ GuitarBendHoldSegment::GuitarBendHoldSegment(GuitarBendHold* sp, System* parent)
     setFlag(ElementFlag::ON_STAFF, true);
 }
 
-void GuitarBendHoldSegment::editDrag(EditData& ed)
+void GuitarBendHoldSegment::dragGrip(EditData& ed)
 {
     PointF delta = ed.evtDelta;
 

@@ -33,7 +33,9 @@ class GeneralRpcChannel : public IRpcChannel
 public:
     GeneralRpcChannel() = default;
 
-    void initOnWorker();
+    void setupOnMain() override;
+    void setupOnWorker() override;
+
     void process() override;
 
     // IRpcChannel
@@ -71,7 +73,7 @@ private:
     bool isWorkerThread() const;
     void receive(RpcData& from, RpcData& to) const;
 
-    std::thread::id m_workerThreadID;
+    std::thread::id m_mainThreadID;
     RpcData m_workerRpcData;
     RpcData m_mainRpcData;
 };

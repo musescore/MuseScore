@@ -1,4 +1,5 @@
 import qtLoad from "./qtloader.js";
+import AudioDriver from "./audiodriver.js";
 
 function setupInternalCallbacks(Module) {
 
@@ -23,21 +24,73 @@ function setupInternalCallbacks(Module) {
     }
 }
 
+function setupRpc(Module)
+{
+    // Main <=> Worker 
+    // port1 - main
+    // port2 - worker
+    Module.main_worker_rpcChannel = new MessageChannel();
+
+    Module.main_worker_rpcSend = function(data) {
+        Module.main_worker_rpcChannel.port1.postMessage(data)
+    }
+
+    Module.main_worker_rpcListen = function(data) {} // will be overridden
+
+    Module.main_worker_rpcChannel.port1.onmessage = function(event) {
+        Module.main_worker_rpcListen(event.data)
+    };
+
+    // Worker <=> Driver (processor)
+    // port1 - driver
+    // port2 - worker
+    Module.driver_worker_rpcChannel = new MessageChannel();
+}
+
+async function setupDriver(Module) 
+{
+    Module.driver = AudioDriver;
+    await AudioDriver.setup(Module.driver_worker_rpcChannel.port1);
+}
+
+async function setupWorker(Module)
+{
+    // Initialize the worker.
+    Module.worker = new Worker("distr/audioworker.js")
+
+    var museAudioUrl = new URL("MuseAudio.js", window.location) + "";
+
+    Module.worker.postMessage({
+    type: 'INITIALIZE_WORKER',
+    mainPort: Module.main_worker_rpcChannel.port2,
+    driverPort: Module.driver_worker_rpcChannel.port2,
+    options: {
+        museAudioUrl: museAudioUrl
+    }
+    }, [Module.main_worker_rpcChannel.port2, Module.driver_worker_rpcChannel.port2]);
+}
+
 const MuImpl = {
 
+    Module: {},
+
     loadModule: async function(config) {
-        const instance = await qtLoad({
+
+        this.Module = {
             qt: {
                 onLoaded: config.onLoaded,
                 onExit: config.onExit,
                 entryFunction: window.MuseScoreStudio_entry, // from MuseScoreStudio.js
                 containerElements: [config.screen],
             }
-        });
+        }
 
-        setupInternalCallbacks(instance)
+        setupRpc(this.Module);
+        setupInternalCallbacks(this.Module);
 
-        return instance;
+        this.Module = await qtLoad(this.Module);
+
+        return this.Module;
     },
 
     loadScoreFile: async function(file) {
@@ -55,6 +108,12 @@ const MuImpl = {
         this.Module._load(ptr, data.length);
         this.Module._free(ptr);
     },
+
+    startAudioProcessing: async function() {
+        await setupDriver(this.Module);
+        await setupWorker(this.Module);
+        this.Module._startAudioProcessing()
+    }
 }
 
 export default MuImpl;

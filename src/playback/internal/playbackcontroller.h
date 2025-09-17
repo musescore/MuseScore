@@ -97,8 +97,8 @@ public:
 
     void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) override;
 
-    void seekElement(const notation::EngravingItem* element) override;
-    void seekBeat(int measureIndex, int beatIndex) override;
+    void seekElement(const notation::EngravingItem* element, bool flushSound = true) override;
+    void seekBeat(int measureIndex, int beatIndex, bool flushSound = true) override;
 
     bool actionChecked(const muse::actions::ActionCode& actionCode) const override;
     muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const override;
@@ -141,8 +141,8 @@ private:
 
     void updateCurrentTempo();
 
-    void seekRawTick(const muse::midi::tick_t tick);
-    void seek(const muse::audio::secs_t secs);
+    void seekRawTick(const muse::midi::tick_t tick, const bool flushSound = true);
+    void seek(const muse::audio::secs_t secs, const bool flushSound = true);
 
     bool isPaused() const;
     bool isLoaded() const;
@@ -154,7 +154,6 @@ private:
     void onPartChanged(const engraving::Part* part);
 
     void onSelectionChanged();
-    void seekListSelection();
     void seekRangeSelection();
 
     void onAudioResourceChanged(const muse::audio::TrackId trackId, const mu::engraving::InstrumentTrackId& instrumentTrackId,

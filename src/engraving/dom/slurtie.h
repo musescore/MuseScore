@@ -32,9 +32,9 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 struct SlurTiePos {
-    PointF p1;               // start point of slur
+    PointF p1;               // start point of slur in system coordinates
     System* system1 = nullptr;          // start system of slur
-    PointF p2;               // end point of slur
+    PointF p2;               // end point of slur in system coordinates
     System* system2 = nullptr;           // end system of slur
 };
 
@@ -99,8 +99,8 @@ public:
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 
-    void startEditDrag(EditData& ed) override;
-    void endEditDrag(EditData& ed) override;
+    void startDragGrip(EditData& ed) override;
+    void endDragGrip(EditData& ed) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

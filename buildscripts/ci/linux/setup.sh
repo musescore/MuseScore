@@ -168,46 +168,15 @@ else
   echo "Unknown compiler: $COMPILER"
 fi
 
-# CMAKE
-# Get newer CMake (only used cached version if it is the same)
-case "$PACKARCH" in
-  x86_64 | wasm)
-    cmake_version="3.24.0"
-    cmake_dir="$BUILD_TOOLS/cmake/${cmake_version}"
-    if [[ ! -d "$cmake_dir" ]]; then
-      mkdir -p "$cmake_dir"
-      cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-linux-x86_64.tar.gz"
-      wget -q --show-progress --no-check-certificate -O - "${cmake_url}" | tar --strip-components=1 -xz -C "${cmake_dir}"
-    fi
-    export PATH="$cmake_dir/bin:$PATH"
-    echo export PATH="$cmake_dir/bin:\${PATH}" >> ${ENV_FILE}
-    ;;
-  armv7l | aarch64)
-    $SUDO apt-get install -y --no-install-recommends cmake
-    ;;
-esac
+# CMake
+echo "cmake version"
 cmake --version
 
 # Ninja
-case "$PACKARCH" in
-  x86_64 | wasm)
-    echo "Get Ninja"
-    ninja_dir=$BUILD_TOOLS/Ninja
-    if [[ ! -d "$ninja_dir" ]]; then
-      mkdir -p $ninja_dir
-      wget -q --show-progress -O $ninja_dir/ninja "https://s3.amazonaws.com/utils.musescore.org/build_tools/linux/Ninja/ninja"
-      chmod +x $ninja_dir/ninja
-    fi
-    export PATH="${ninja_dir}:${PATH}"
-    echo export PATH="${ninja_dir}:\${PATH}" >> ${ENV_FILE}
-    ;;
-  armv7l | aarch64)
-    $SUDO apt-get install -y --no-install-recommends ninja-build
-    ;;
-esac
 echo "ninja version"
 ninja --version
 
+# Emscripten
 if [[ "$PACKARCH" == "wasm" ]]; then
   git clone https://github.com/emscripten-core/emsdk.git $BUILD_TOOLS/emsdk
   origin_dir=$(pwd)
@@ -222,7 +191,7 @@ fi
 # MESON
 # Get recent version of Meson (to build pipewire)
 meson_version="1.1.1"
-sudo python3 -m pip install meson==${meson_version}
+$SUDO python3 -m pip install meson==${meson_version}
 
 ##########################################################################
 # BUILD PIPWIRE

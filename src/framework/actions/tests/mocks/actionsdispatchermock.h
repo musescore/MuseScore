@@ -33,6 +33,9 @@ public:
     MOCK_METHOD(void, dispatch, (const ActionCode&, const ActionData&), (override));
     MOCK_METHOD(void, dispatch, (const ActionQuery& actionQuery), (override));
 
+    MOCK_METHOD(async::Channel<ActionCode>, preDispatch, (), (const, override));
+    MOCK_METHOD(async::Channel<ActionCode>, postDispatch, (), (const, override));
+
     MOCK_METHOD(void, unReg, (Actionable*), (override));
     MOCK_METHOD(void, reg, (Actionable*, const ActionCode&, const ActionCallBackWithNameAndData&), (override));
     MOCK_METHOD(void, reg, (Actionable * client, const ActionQuery& actionQuery, const ActionCallBackWithQuery& call), (override));

@@ -158,18 +158,17 @@ void MoveElementAnchors::moveElementAnchors(EngravingItem* element, KeyboardKey 
         return;
     }
 
-    bool leftRightKey = key == Key_Left || key == Key_Right;
     bool altMod = mod & AltModifier;
-    bool shiftMod = mod & ShiftModifier;
 
-    bool changeAnchorType = shiftMod && altMod && leftRightKey && canAnchorToEndOfPrevious(element);
     bool anchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
-    if (changeAnchorType) {
+    bool changeAnchorType = altMod && canAnchorToEndOfPrevious(element);
+    bool resetAnchorType = !altMod && anchorToEndOfPrevious;
+    if (changeAnchorType || resetAnchorType) {
         element->undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious,
                                     element->propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
 
-        bool doesntNeedMoveSeg = ((key == Key_Left && anchorToEndOfPrevious) || (key == Key_Right && !anchorToEndOfPrevious));
-        if (doesntNeedMoveSeg) {
+        bool needMoveSeg = (key == Key_Left && anchorToEndOfPrevious) || (key == Key_Right && !anchorToEndOfPrevious);
+        if (!needMoveSeg) {
             checkMeasureBoundariesAndMoveIfNeed(element);
             return;
         }
@@ -199,7 +198,7 @@ void MoveElementAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* elem
     Measure* curMeasure = curSeg->measure();
     Measure* prevMeasure = curMeasure->prevMeasure();
     bool anchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
-    bool needMoveToNext = curTick == curMeasure->endTick() && anchorToEndOfPrevious;
+    bool needMoveToNext = curTick == curMeasure->endTick() && !anchorToEndOfPrevious;
     bool needMoveToPrevious = curSeg->rtick().isZero() && anchorToEndOfPrevious && prevMeasure;
 
     if (!needMoveToPrevious && !needMoveToNext) {
@@ -251,14 +250,6 @@ void MoveElementAnchors::moveElementAnchorsOnDrag(EngravingItem* element, EditDa
 
 void MoveElementAnchors::moveSegment(EngravingItem* element, bool forward)
 {
-    if (canAnchorToEndOfPrevious(element)) {
-        bool cachedAnchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
-        element->undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
-        if (cachedAnchorToEndOfPrevious && forward) {
-            return;
-        }
-    }
-
     Segment* curSeg = toSegment(element->parentItem());
     Segment* newSeg = getNewSegment(element, curSeg, forward);
 
@@ -288,10 +279,8 @@ void MoveElementAnchors::moveSegment(EngravingItem* element, Segment* newSeg, Fr
         doMoveSegment(toFiguredBass(element), newSeg, tickDiff);
         break;
     case ElementType::HARMONY:
-        doMoveSegment(toHarmony(element), newSeg, tickDiff);
-        break;
     case ElementType::FRET_DIAGRAM:
-        doMoveSegment(toFretDiagram(element), newSeg, tickDiff);
+        doMoveHarmonyOrFretDiagramSegment(element, newSeg, tickDiff);
         break;
     default:
         doMoveSegment(toEngravingItem(element), newSeg, tickDiff);
@@ -374,37 +363,30 @@ void MoveElementAnchors::doMoveSegment(FiguredBass* element, Segment* newSeg, Fr
     }
 }
 
-void MoveElementAnchors::doMoveSegment(Harmony* element, Segment* newSeg, Fraction tickDiff)
+void MoveElementAnchors::doMoveHarmonyOrFretDiagramSegment(EngravingItem* element, Segment* newSeg, Fraction tickDiff)
 {
-    if (newSeg->isTimeTickType()) {
-        Measure* measure = newSeg->measure();
-        Segment* chordRestSegAtSameTick = measure->undoGetSegment(SegmentType::ChordRest, newSeg->tick());
-        newSeg = chordRestSegAtSameTick;
+    for (EngravingObject* item : element->linkList()) {
+        Score* score = item->score();
+        Measure* measure = score->tick2measure(newSeg->tick());
+        Segment* chordRestSeg = measure->undoGetSegment(SegmentType::ChordRest, newSeg->tick());
+        if (item == element) {
+            newSeg = chordRestSeg;
+        }
     }
 
-    Segment* oldSegment = toSegment(element->parent());
+    Fraction oldTick = element->tick();
+
     doMoveSegment(toEngravingItem(element), newSeg, tickDiff);
 
-    oldSegment->checkEmpty();
-    if (oldSegment->empty()) {
-        element->score()->undoRemoveElement(oldSegment);
-    }
-}
-
-void MoveElementAnchors::doMoveSegment(FretDiagram* element, Segment* newSeg, Fraction tickDiff)
-{
-    if (newSeg->isTimeTickType()) {
-        Measure* measure = newSeg->measure();
-        Segment* chordRestSegAtSameTick = measure->undoGetSegment(SegmentType::ChordRest, newSeg->tick());
-        newSeg = chordRestSegAtSameTick;
-    }
-
-    Segment* oldSegment = toSegment(element->parent());
-    doMoveSegment(toEngravingItem(element), newSeg, tickDiff);
-
-    oldSegment->checkEmpty();
-    if (oldSegment->empty()) {
-        element->score()->undoRemoveElement(oldSegment);
+    for (EngravingObject* item : element->linkList()) {
+        Score* score = item->score();
+        Segment* oldSegment = score->tick2segment(oldTick, true, SegmentType::ChordRest, false);
+        if (oldSegment) {
+            oldSegment->checkEmpty();
+            if (oldSegment->empty()) {
+                score->undoRemoveElement(oldSegment);
+            }
+        }
     }
 }
 

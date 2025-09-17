@@ -188,126 +188,49 @@ static void clearMeasures(mu::engraving::MasterScore* masterScore)
     masterScore->updateRepeatList();
 }
 
-static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions& scoreOptions)
+static void createMeasures(MasterScore* masterScore, const ScoreCreateOptions& scoreOptions)
 {
     TRACEFUNC;
 
-    mu::engraving::Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
-    score->sigmap()->add(0, timesig);
-    bool pickupMeasure = scoreOptions.withPickupMeasure;
-    int measures = scoreOptions.measures;
-    if (pickupMeasure) {
-        measures += 1;
-    }
-    mu::engraving::Fraction firstMeasureTicks = pickupMeasure ? mu::engraving::Fraction(scoreOptions.measureTimesigNumerator,
-                                                                                        scoreOptions.measureTimesigDenominator) : timesig;
+    masterScore->sigmap()->add(0, scoreOptions.globalTimesig);
 
-    KeySigEvent ks;
+    KeySigEvent keySigEvent;
     if (scoreOptions.key == Key::INVALID) {
         // Make atonal key signature
-        ks.setCustom(true);
-        ks.setMode(KeyMode::NONE);
+        keySigEvent.setCustom(true);
+        keySigEvent.setMode(KeyMode::NONE);
     } else {
-        ks.setConcertKey(scoreOptions.key);
+        keySigEvent.setConcertKey(scoreOptions.key);
     }
 
-    for (int i = 0; i < measures; ++i) {
-        mu::engraving::Fraction tick = firstMeasureTicks + timesig * (i - 1);
-        if (i == 0) {
-            tick = mu::engraving::Fraction(0, 1);
+    const int totalMeasures = scoreOptions.withPickupMeasure ? scoreOptions.totalMeasures + 1 : scoreOptions.totalMeasures;
+    for (int i = 0; i < totalMeasures; ++i) {
+        MeasureBase* measureBase = masterScore->insertMeasure();
+        Measure* measure = measureBase && measureBase->isMeasure() ? toMeasure(measureBase) : nullptr;
+        IF_ASSERT_FAILED(measure) {
+            break;
         }
-        QList<mu::engraving::Rest*> puRests;
-        for (mu::engraving::Score* _score : score->scoreList()) {
-            mu::engraving::Rest* rest = 0;
-            mu::engraving::Measure* measure = mu::engraving::Factory::createMeasure(_score->dummy()->system());
-            measure->setTimesig(timesig);
-            measure->setTicks(timesig);
-            measure->setTick(tick);
 
-            if (pickupMeasure && tick.isZero()) {
-                measure->setIrregular(true);                // don’t count pickup measure
-                measure->setTicks(mu::engraving::Fraction(scoreOptions.measureTimesigNumerator,
-                                                          scoreOptions.measureTimesigDenominator));
-            }
-            _score->measures()->append(measure);
+        measure->setTimesig(scoreOptions.globalTimesig);
 
-            for (mu::engraving::Staff* staff : _score->staves()) {
-                mu::engraving::staff_idx_t staffIdx = staff->idx();
-                if (tick.isZero()) {
-                    mu::engraving::Measure* m = _score->firstMeasure();
-                    mu::engraving::Segment* s = m->getSegment(mu::engraving::SegmentType::TimeSig, mu::engraving::Fraction(0, 1));
-                    mu::engraving::TimeSig* ts = mu::engraving::Factory::createTimeSig(s);
-                    ts->setTrack(staffIdx * mu::engraving::VOICES);
-                    ts->setSig(timesig, scoreOptions.timesigType);
-                    s->add(ts);
-                    Part* part = staff->part();
-                    mu::engraving::KeySigEvent nKey;
-                    // use atonal keysig for drums
-                    if (part->instrument()->useDrumset()) {
-                        nKey.setConcertKey(Key::C);
-                        nKey.setCustom(true);
-                        nKey.setMode(KeyMode::NONE);
-                    } else {
-                        //
-                        // transpose key
-                        //
-                        nKey = ks;
-                        mu::engraving::Interval v = part->instrument()->transpose();
-                        if (!nKey.isAtonal() && !v.isZero() && !score->style().styleB(mu::engraving::Sid::concertPitch)) {
-                            v.flip();
-                            nKey.setKey(mu::engraving::transposeKey(nKey.concertKey(), v, part->preferSharpFlat()));
-                        }
-                    }
-                    staff->setKey(mu::engraving::Fraction(0, 1), nKey);
-                    mu::engraving::Segment* ss
-                        = measure->getSegment(mu::engraving::SegmentType::KeySig, mu::engraving::Fraction(0, 1));
-                    mu::engraving::KeySig* keysig = mu::engraving::Factory::createKeySig(ss);
-                    keysig->setTrack(staffIdx * mu::engraving::VOICES);
-                    keysig->setKeySigEvent(nKey);
-                    ss->add(keysig);
-                }
+        if (i > 0) {
+            measure->setTicks(scoreOptions.globalTimesig);
+            continue;
+        }
 
-                // determined if this staff is linked to previous so we can reuse rests
-                bool linkedToPrevious = staffIdx && staff->isLinked(_score->staff(staffIdx - 1));
-                if (measure->timesig() != measure->ticks()) {
-                    if (!linkedToPrevious) {
-                        puRests.clear();
-                    }
-                    std::vector<mu::engraving::TDuration> dList = mu::engraving::toRhythmicDurationList(
-                        measure->ticks(), true, mu::engraving::Fraction(0, 1),
-                        measure->score()->sigmap()->timesig(measure->tick().ticks()).nominal(), measure, 0);
-                    if (!dList.empty()) {
-                        mu::engraving::Fraction ltick = tick;
-                        int k = 0;
-                        for (mu::engraving::TDuration d : dList) {
-                            mu::engraving::Segment* seg = measure->getSegment(mu::engraving::SegmentType::ChordRest, ltick);
-                            if (k < puRests.count()) {
-                                rest = static_cast<mu::engraving::Rest*>(puRests[k]->linkedClone());
-                            } else {
-                                rest = mu::engraving::Factory::createRest(seg, d);
-                                puRests.append(rest);
-                            }
-                            rest->setScore(_score);
-                            rest->setTicks(d.isMeasure() ? measure->ticks() : d.fraction());
-                            rest->setTrack(staffIdx * mu::engraving::VOICES);
-                            seg->add(rest);
-                            ltick += rest->actualTicks();
-                            k++;
-                        }
-                    }
-                } else {
-                    mu::engraving::Segment* seg = measure->getSegment(mu::engraving::SegmentType::ChordRest, tick);
-                    if (linkedToPrevious && rest) {
-                        rest = static_cast<mu::engraving::Rest*>(rest->linkedClone());
-                    } else {
-                        rest = mu::engraving::Factory::createRest(seg, mu::engraving::TDuration(mu::engraving::DurationType::V_MEASURE));
-                    }
-                    rest->setScore(_score);
-                    rest->setTicks(measure->ticks());
-                    rest->setTrack(staffIdx * mu::engraving::VOICES);
-                    seg->add(rest);
-                }
-            }
+        // Special handling for first measure (apply pickups, timesigs, and keysigs)...
+
+        measure->setIrregular(scoreOptions.withPickupMeasure);
+        measure->adjustToLen(scoreOptions.withPickupMeasure ? scoreOptions.pickupTimesig : scoreOptions.globalTimesig);
+
+        // Add timesigs...
+        TimeSig* timesig = Factory::createTimeSig(masterScore->dummy()->segment());
+        timesig->setSig(scoreOptions.globalTimesig, scoreOptions.timesigType);
+        masterScore->cmdAddTimeSig(measure, /*staffIdx*/ 0, timesig, /*local*/ false);
+
+        for (Staff* staff : masterScore->staves()) {
+            // Add keysig for each staff...
+            masterScore->undoChangeKeySig(staff, measure->tick(), keySigEvent);
         }
     }
 }

@@ -1127,6 +1127,12 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
                 chord->setTicks(d.fraction());
                 chord->setStemDirection(stemDirection);
                 chord->add(note);
+                if (cr && cr->isChord()) {
+                    std::vector<Chord*> graceNotes = toChord(cr)->graceNotes();
+                    for (Chord* grace : graceNotes) {
+                        undoChangeParent(grace, chord, chord->staffIdx());
+                    }
+                }
                 note->setNval(nval, tick);
                 if (forceAccidental) {
                     int tpc = style().styleB(Sid::concertPitch) ? nval.tpc1 : nval.tpc2;
@@ -5072,7 +5078,11 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
                 NoteVal nval2 = noteValForPosition(pos, AccidentalType::NONE, error);
                 forceAccidental = (nval.pitch == nval2.pitch);
             }
-            addNote(chord, nval, forceAccidental, m_is.articulationIds());
+            if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
+                addPitchToChord(nval, chord, /* externalInputState */ nullptr, forceAccidental);
+            } else {
+                addNote(chord, nval, forceAccidental, m_is.articulationIds());
+            }
             m_is.setAccidentalType(AccidentalType::NONE);
             return;
         }

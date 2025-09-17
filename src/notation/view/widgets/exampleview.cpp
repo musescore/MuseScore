@@ -22,8 +22,9 @@
 
 #include "exampleview.h"
 
-#include <cmath>
 #include <QMimeData>
+
+#include "draw/painter.h"
 
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/page.h"

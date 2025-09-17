@@ -24,6 +24,8 @@
 
 #include "global/interpolation.h"
 
+#include "log.h"
+
 using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::synth;
@@ -41,6 +43,8 @@ static constexpr uint32_t CTRL_OFF = 0;
 void FluidSequencer::init(const PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride,
                           bool useDynamicEvents)
 {
+    TRACEFUNC;
+
     m_channels.init(setupData, programOverride);
     m_useDynamicEvents = useDynamicEvents;
 }

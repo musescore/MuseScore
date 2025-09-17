@@ -20,11 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_LAYOUTBREAK_H
-#define MU_ENGRAVING_LAYOUTBREAK_H
+#pragma once
 
 #include "engravingitem.h"
-#include "draw/types/painterpath.h"
+#include "draw/types/font.h"
 
 namespace mu::engraving {
 class Factory;
@@ -95,6 +94,4 @@ private:
     bool m_showCourtesy = false;
     LayoutBreakType m_layoutBreakType = LayoutBreakType::NOBREAK;
 };
-} // namespace mu::engraving
-
-#endif
+}

@@ -68,7 +68,7 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
 
     ldata->setPos(positionPoint);
 
-    if (!item->cursor()->editing()) {
+    if (!item->cursor()->editing() && !ldata->renderItemList.value().empty()) {
         ParenthesisLayout::layoutParentheses(item, ctx);
     }
 }
@@ -500,7 +500,7 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
 
     // render bass
     if (tpcIsValid(info->bassTpc())) {
-        std::list<RenderActionPtr >& bassNoteChordList
+        std::list<RenderActionPtr > bassNoteChordList
             = style.styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
 
         static const std::wregex PATTERN_69 = std::wregex(L"6[,/]?9");
@@ -764,10 +764,49 @@ void HarmonyLayout::renderActionScale(const RenderActionScalePtr& a, HarmonyRend
 void HarmonyLayout::renderActionParen(Harmony* item, const RenderActionParenPtr& a, HarmonyRenderCtx& harmonyCtx)
 {
     Parenthesis* p = Factory::createParenthesis(item);
+    p->setParent(item);
     p->setDirection(a->direction());
+    p->setColor(item->color());
+    p->setFollowParentColor(true);
+    p->setGenerated(true);
 
     ChordSymbolParen* parenItem = new ChordSymbolParen(p, harmonyCtx.hAlign, harmonyCtx.x(), harmonyCtx.y());
     harmonyCtx.renderItemList.push_back(parenItem);
+}
+
+void HarmonyLayout::kernCharacters(const Harmony* item, const String& text, HarmonyRenderCtx& harmonyCtx)
+{
+    if (harmonyCtx.renderItemList.empty()) {
+        return;
+    }
+    // Character pair and distance to move the second
+    static const std::map<std::pair<String, String>, double> KERNED_CHARACTERS {
+        { { u"A", u"\uE870" }, -0.4 },  // dim
+        { { u"A", u"\uE871" }, -0.3 },  // half-dim
+        { { u"\uE873", u"\uE870" }, -0.4 }, // triangle - dim
+        { { u"\uE873", u"\uE871" }, -0.3 }, // triangle - half-dim
+
+        { { u"A", u"\uE18E" }, -0.15 },  // dim JAZZ
+        { { u"A", u"\uE18F" }, -0.15 },  // hal-dim JAZZ
+        { { u"\uE18A", u"\uE18E" }, -0.15 },  // triangle - dim JAZZ
+        { { u"\uE18A", u"\uE18F" }, -0.15 },  // triangle - half-dim JAZZ
+    };
+
+    HarmonyRenderItem* prevSeg = harmonyCtx.renderItemList.back();
+    TextSegment* ts = dynamic_cast<TextSegment*>(prevSeg);
+    if (!ts) {
+        return;
+    }
+
+    for (auto& kernInfo : KERNED_CHARACTERS) {
+        const std::pair<String, String> kernPair = kernInfo.first;
+        if (ts->text().endsWith(kernPair.first) && text.startsWith(kernPair.second)) {
+            const FontMetrics fm = FontMetrics(item->font());
+            const double scale = harmonyCtx.scale * item->mag();
+            harmonyCtx.pos = harmonyCtx.pos + PointF(kernInfo.second, 0.0) * FontMetrics::capHeight(item->font()) * scale;
+            break;
+        }
+    }
 }
 
 void HarmonyLayout::renderActionSet(Harmony* item, Harmony::LayoutData* ldata, const RenderActionSetPtr& a, HarmonyRenderCtx& harmonyCtx)
@@ -781,6 +820,8 @@ void HarmonyLayout::renderActionSet(Harmony* item, Harmony::LayoutData* ldata, c
         double nmag = chordList->nominalMag();
         font.setPointSizeF(font.pointSizeF() * nmag);
     }
+
+    kernCharacters(item, text, harmonyCtx);
 
     TextSegment* ts = new TextSegment(text, font, harmonyCtx.x(), harmonyCtx.y(), harmonyCtx.hAlign);
     harmonyCtx.movex(ts->width());

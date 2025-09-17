@@ -1179,7 +1179,7 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
     m_scoreCallbacks.setSelectionProximity(proximity);
 
     if (isGripEditStarted()) {
-        m_editData.element->startEditDrag(m_editData);
+        m_editData.element->startDragGrip(m_editData);
         return;
     }
 
@@ -1256,6 +1256,8 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     m_dragData.ed.pos = toPos;
     m_dragData.ed.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
 
+    m_dragData.ed.isEditMode = isElementEditStarted();
+
     if (isTextEditingStarted()) {
         m_editData.pos = toPos;
         toTextBase(m_editData.element)->dragTo(m_editData);
@@ -1269,7 +1271,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.ed.delta = evtDelta;
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
         m_dragData.ed.addData(m_editData.getData(m_editData.element));
-        m_editData.element->editDrag(m_dragData.ed);
+        m_editData.element->dragGrip(m_dragData.ed);
 
         if (m_editData.element->isDynamic()) {
             // When the dynamic has no left grip, the right grip will have index zero, a.k.a. Grip::LEFT.
@@ -1279,9 +1281,6 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
             addHairpinOnGripDrag(m_editData, isLeftGrip);
         }
     } else {
-        if (m_editData.element) {
-            m_editData.element->editDrag(m_dragData.ed);
-        }
         for (auto& group : m_dragData.dragGroups) {
             score()->addRefresh(group->drag(m_dragData.ed));
         }
@@ -1309,7 +1308,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
 void NotationInteraction::doEndDrag()
 {
     if (isGripEditStarted()) {
-        m_editData.element->endEditDrag(m_editData);
+        m_editData.element->endDragGrip(m_editData);
         m_editData.element->endEdit(m_editData);
     } else {
         for (auto& group : m_dragData.dragGroups) {
@@ -3004,7 +3003,10 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
         Segment* seg1 = toSegment(firstItem->findAncestor(ElementType::SEGMENT));
         Segment* seg2 = toSegment(secondItem->findAncestor(ElementType::SEGMENT));
 
-        if (!cr || (!header && segmentsAreInDifferentRepeatSegments(seg1, seg2))) {
+        bool differentRepeatSegments = segmentsAreInDifferentRepeatSegments(seg1, seg2);
+        bool validBarline = isValidBarLineForRepeatSection(seg1, seg2);
+
+        if (!cr || (!header && (differentRepeatSegments && !validBarline))) {
             return;
         }
 
@@ -3019,6 +3021,11 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
             partialSlur->undoSetIncoming(true);
             secondChordRest = toChordRest(cr);
             const Measure* startMeas = otherElement->findMeasure();
+            if (otherElement->isBarLine()) {
+                if (toBarLine(otherElement)->barLineType() == BarLineType::END_REPEAT) {
+                    startMeas = startMeas->nextMeasure();
+                }
+            }
             ChordRest* startCr = startMeas->firstChordRest(0);
             firstChordRest = startCr;
         }
@@ -3359,7 +3366,6 @@ void NotationInteraction::setDropRect(const RectF& rect)
     if (edd.dropTarget) {
         edd.dropTarget->setDropTarget(false);
         score()->addRefresh(edd.dropTarget->canvasBoundingRect());
-        edd.dropTarget = nullptr;
     } else if (!m_anchorLines.empty()) {
         RectF rf;
         rf.setTopLeft(m_anchorLines.front().p1());
@@ -4282,11 +4288,15 @@ void NotationInteraction::nudgeAnchors(MoveDirection d)
 
     if (m_editData.curGrip != mu::engraving::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
         m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
-    }
 
-    m_editData.element->startEditDrag(m_editData);
-    m_editData.element->editDrag(m_editData);
-    m_editData.element->endEditDrag(m_editData);
+        m_editData.element->startDragGrip(m_editData);
+        m_editData.element->dragGrip(m_editData);
+        m_editData.element->endDragGrip(m_editData);
+    } else {
+        m_editData.element->startDrag(m_editData);
+        m_editData.element->drag(m_editData);
+        m_editData.element->endDrag(m_editData);
+    }
 
     apply();
 }
@@ -4455,11 +4465,15 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
 
     if (m_editData.curGrip != mu::engraving::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
         m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
-    }
 
-    m_editData.element->startEditDrag(m_editData);
-    m_editData.element->editDrag(m_editData);
-    m_editData.element->endEditDrag(m_editData);
+        m_editData.element->startDragGrip(m_editData);
+        m_editData.element->dragGrip(m_editData);
+        m_editData.element->endDragGrip(m_editData);
+    } else {
+        m_editData.element->startDrag(m_editData);
+        m_editData.element->drag(m_editData);
+        m_editData.element->endDrag(m_editData);
+    }
 
     return true;
 }
@@ -5082,6 +5096,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
     options.createEmptyMeasures = false;
     options.moveSignaturesClef = moveSignaturesClef;
     options.needDeselectAll = false;
+    options.cloneBoxToAllParts = boxType != BoxType::Fret;
 
     for (int i = 0; i < count; ++i) {
         score()->insertMeasure(elementType, beforeBox, options);
@@ -5191,8 +5206,6 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
 {
     startEdit(TranslatableString("undoableAction", "Paste"));
 
-    EngravingItem* pastedElement = nullptr;
-
     if (isTextEditingStarted()) {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         if (mimeData->hasFormat(TextEditData::mimeRichTextFormat)) {
@@ -5223,20 +5236,12 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         QMimeDataAdapter ma(mimeData);
-
-        std::vector<EngravingItem*> pastedElements = score()->cmdPaste(&ma, nullptr, scale);
-        if (!pastedElements.empty()) {
-            pastedElement = pastedElements.back();
-        }
+        score()->cmdPaste(&ma, nullptr, scale);
     }
 
     apply();
 
-    if (pastedElement == nullptr) {
-        pastedElement = selection()->element();
-    }
-
-    if (pastedElement) {
+    if (EngravingItem* pastedElement = selection()->element()) {
         selectAndStartEditIfNeeded(pastedElement);
     }
 
@@ -7858,11 +7863,11 @@ void NotationInteraction::addFretboardDiagram()
         diagram->setTrack(element->track());
 
         Harmony* harmony = toHarmony(element);
-
         diagram->updateDiagram(harmony->harmonyName());
-        score->undo(new FretLinkHarmony(diagram, harmony));
 
+        diagram->setParent(harmony->parent());
         score->undoAddElement(diagram);
+        score->undoChangeParent(harmony, diagram, track2staff(element->track()));
 
         lastAddedDiagram = diagram;
     }

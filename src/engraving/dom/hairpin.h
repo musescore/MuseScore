@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_HAIRPIN_H
-#define MU_ENGRAVING_HAIRPIN_H
+#pragma once
 
 #include "../types/types.h"
 
@@ -73,14 +72,14 @@ public:
     EngravingItem* findElementToSnapBefore(bool ignoreInvisible = true) const;
     EngravingItem* findElementToSnapAfter(bool ignoreInvisible = true) const;
 
-    void endEditDrag(EditData& ed) override;
+    void endDragGrip(EditData& ed) override;
 
 private:
     TextBase* findStartDynamicOrExpression(bool ignoreInvisible = true) const;
     TextBase* findEndDynamicOrExpression(bool ignoreInvisible = true) const;
 
-    void startEditDrag(EditData&) override;
-    void editDrag(EditData&) override;
+    void startDragGrip(EditData&) override;
+    void dragGrip(EditData&) override;
 
     Sid getPropertyStyle(Pid) const override;
 
@@ -204,6 +203,4 @@ private:
 
 #ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::HairpinType)
-#endif
-
 #endif

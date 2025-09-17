@@ -86,7 +86,7 @@ void VstSynthesiser::init(const OutputSpec& spec)
     });
 
     m_sequencer.setOnOffStreamFlushed([this]() {
-        m_vstAudioClient->allNotesOff();
+        m_vstAudioClient->flushSound();
     });
 }
 
@@ -124,15 +124,10 @@ std::string VstSynthesiser::name() const
     return m_pluginPtr->name();
 }
 
-void VstSynthesiser::revokePlayingNotes()
-{
-    m_vstAudioClient->allNotesOff();
-}
-
 void VstSynthesiser::flushSound()
 {
     m_sequencer.flushOffstream();
-    m_vstAudioClient->flush();
+    m_vstAudioClient->flushSound();
 }
 
 void VstSynthesiser::setupSound(const mpe::PlaybackSetupData& setupData)
@@ -159,6 +154,7 @@ void VstSynthesiser::setIsActive(const bool isActive)
 {
     m_sequencer.setActive(isActive);
     toggleVolumeGain(isActive);
+    m_vstAudioClient->setIsActive(isActive);
 }
 
 muse::audio::msecs_t VstSynthesiser::playbackPosition() const

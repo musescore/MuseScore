@@ -106,9 +106,9 @@ InspectorSectionView {
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart
 
-            text: root.model && root.model.showPartLinkingOption
-                  ? qsTrc("inspector", "Exclude from score")
-                  : qsTrc("inspector", "Exclude from parts")
+            text: root.model && root.model.isMasterScore
+                  ? qsTrc("inspector", "Exclude from parts")
+                  : qsTrc("inspector", "Exclude from score")
         }
     }
 }
