@@ -26,8 +26,9 @@
 #include <vector>
 #include <map>
 
-#include "val.h"
 #include "global/logstream.h"
+#include "global/io/path.h"
+#include "val.h"
 
 namespace muse {
 class Uri
@@ -36,11 +37,9 @@ public:
     Uri() = default;
     explicit Uri(const std::string& str);
     explicit Uri(const muse::String& str);
+    explicit Uri(const std::string& scheme, const std::string& path);
 
     using Scheme = std::string;
-    static const Scheme MuseScore;
-    static const Scheme Http;
-    static const Scheme Https;
 
     bool isValid() const;
 
@@ -48,6 +47,7 @@ public:
     void setScheme(const Scheme& scheme);
 
     std::string path() const;
+    void setPath(const std::string& path);
 
     inline bool operator==(const Uri& uri) const { return m_path == uri.m_path && m_scheme == uri.m_scheme; }
     inline bool operator!=(const Uri& uri) const { return !(*this == uri); }
@@ -60,6 +60,9 @@ public:
     }
 
     std::string toString() const;
+
+    io::path_t toLocalFile() const;
+    static Uri fromLocalFile(const io::path_t& path);
 
 private:
 

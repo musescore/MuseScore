@@ -27,14 +27,20 @@
 
 using namespace muse;
 
-const Uri::Scheme Uri::MuseScore("musescore");
-const Uri::Scheme Uri::Http("http");
-const Uri::Scheme Uri::Https("https");
-
 static const std::string URI_VAL_TRUE("true");
 static const std::string URI_VAL_FALSE("false");
 
 // muse://module/target/name
+
+static std::string extractPath(const std::string& str)
+{
+    auto schemePos = str.find(':');
+    auto paramsPos = str.find('?');
+    auto pathPos= (schemePos != std::string::npos) ? (schemePos + 3) : 0;
+    size_t pathN = (paramsPos != std::string::npos) ? (paramsPos - pathPos) : std::string::npos;
+
+    return str.substr(pathPos, pathN);
+}
 
 Uri::Uri(const std::string& str)
 {
@@ -43,16 +49,18 @@ Uri::Uri(const std::string& str)
         m_scheme = str.substr(0, schemePos);
     }
 
-    auto paramsPos = str.find('?');
-    auto pathPos= (schemePos != std::string::npos) ? (schemePos + 3) : 0;
-    size_t pathN = (paramsPos != std::string::npos) ? (paramsPos - pathPos) : std::string::npos;
-
-    m_path = str.substr(pathPos, pathN);
+    m_path = extractPath(str);
 }
 
 Uri::Uri(const String& str)
     : Uri(str.toStdString())
 {
+}
+
+Uri::Uri(const std::string& scheme, const std::string& path)
+    : m_scheme(scheme)
+{
+    m_path = extractPath(path);
 }
 
 bool Uri::isValid() const
@@ -83,9 +91,64 @@ std::string Uri::path() const
     return m_path;
 }
 
+void Uri::setPath(const std::string& path)
+{
+    m_path = path;
+}
+
 std::string Uri::toString() const
 {
     return m_scheme + "://" + m_path;
+}
+
+static bool shouldEncode(char c)
+{
+    static const std::string safe_chars
+        ="abcdefghijklmnopqrstuvwxyz"
+         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+         "0123456789"
+         "-_.~/";
+
+    return safe_chars.find(c) == std::string::npos;
+}
+
+Uri Uri::fromLocalFile(const io::path_t& path)
+{
+    std::string absolutePath = io::absoluteFilePath(path).toStdString();
+
+    std::replace(absolutePath.begin(), absolutePath.end(), '\\', '/');
+
+    std::ostringstream encoded;
+    encoded.fill('0');
+    encoded << std::hex << std::uppercase;
+
+    for (char c : absolutePath) {
+        if (shouldEncode(c)) {
+            encoded << '%' << std::setw(2)
+                    << static_cast<int>(static_cast<unsigned char>(c));
+        } else {
+            encoded << c;
+        }
+    }
+
+    return Uri("file", encoded.str());
+}
+
+io::path_t Uri::toLocalFile() const
+{
+    std::string decoded;
+    for (size_t i = 0; i < m_path.size(); ++i) {
+        if (m_path[i] == '%' && i + 2 < m_path.size()) {
+            std::string hex = m_path.substr(i + 1, 2);
+            char c = static_cast<char>(std::stoi(hex, nullptr, 16));
+            decoded += c;
+            i += 2;
+        } else {
+            decoded += m_path[i];
+        }
+    }
+
+    return io::path_t(decoded);
 }
 
 // muse://module/target/name?param1=value1&paramn=valuen

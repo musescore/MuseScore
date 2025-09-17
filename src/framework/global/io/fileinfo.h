@@ -40,6 +40,7 @@ public:
     String filePath() const;
     String canonicalFilePath() const;
     String absolutePath() const;
+    String absoluteFilePath() const;
 
     String fileName() const;
     String baseName() const;

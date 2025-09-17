@@ -45,15 +45,15 @@ public:
 
     void init();
 
-    void addSoundFont(const synth::SoundFontPath& path) override;
+    void addSoundFont(const synth::SoundFontUri& uri) override;
 
 private:
 
-    Ret doAddSoundFont(const synth::SoundFontPath& src, const synth::SoundFontPath& dst);
+    Ret doAddSoundFont(const io::path_t& src, const io::path_t& dst);
 
-    RetVal<synth::SoundFontPath> resolveInstallationPath(const synth::SoundFontPath& path) const;
+    RetVal<io::path_t> resolveInstallationPath(const io::path_t& path) const;
 
     void loadSoundFonts();
-    void loadSoundFonts(const synth::SoundFontPaths& paths);
+    void loadSoundFonts(const std::vector<io::path_t>& paths);
 };
 }

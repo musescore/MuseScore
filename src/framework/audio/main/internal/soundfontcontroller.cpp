@@ -23,6 +23,7 @@
 #include "soundfontcontroller.h"
 
 #include "global/translation.h"
+#include "global/io/path.h"
 
 #include "audio/common/rpc/rpcpacker.h"
 
@@ -40,8 +41,9 @@ void SoundFontController::init()
     loadSoundFonts();
 }
 
-void SoundFontController::addSoundFont(const synth::SoundFontPath& path)
+void SoundFontController::addSoundFont(const SoundFontUri& uri)
 {
+    io::path_t path = uri.toLocalFile();
     std::string title = muse::qtrc("audio", "Do you want to add the SoundFont: %1?")
                         .arg(io::filename(path).toQString()).toStdString();
 
@@ -55,7 +57,7 @@ void SoundFontController::addSoundFont(const synth::SoundFontPath& path)
             return;
         }
 
-        RetVal<SoundFontPath> newPath = resolveInstallationPath(path);
+        RetVal<io::path_t> newPath = resolveInstallationPath(path);
         if (!newPath.ret) {
             LOGE() << "failed resolve path, err: " << newPath.ret.toString();
             return;
@@ -90,29 +92,30 @@ void SoundFontController::addSoundFont(const synth::SoundFontPath& path)
     });
 }
 
-Ret SoundFontController::doAddSoundFont(const synth::SoundFontPath& src, const SoundFontPath& dst)
+Ret SoundFontController::doAddSoundFont(const io::path_t& src, const io::path_t& dst)
 {
     Ret ret = fileSystem()->copy(src, dst, true /* replace */);
 
     if (ret) {
-        channel()->send(rpc::make_request(Method::AddSoundFont, RpcPacker::pack(dst)));
+        synth::SoundFontUri uri = synth::SoundFontUri::fromLocalFile(dst);
+        channel()->send(rpc::make_request(Method::AddSoundFont, RpcPacker::pack(uri)));
     }
 
     return ret;
 }
 
-RetVal<SoundFontPath> SoundFontController::resolveInstallationPath(const SoundFontPath& path) const
+RetVal<io::path_t> SoundFontController::resolveInstallationPath(const io::path_t& path) const
 {
     io::paths_t dirs = configuration()->userSoundFontDirectories();
 
     for (const io::path_t& dir : dirs) {
         if (fileSystem()->isWritable(dir)) {
-            SoundFontPath newPath = dir + "/" + io::filename(path);
-            return RetVal<SoundFontPath>::make_ok(newPath);
+            io::path_t newPath = dir + "/" + io::filename(path);
+            return RetVal<io::path_t>::make_ok(newPath);
         }
     }
 
-    return RetVal<SoundFontPath>(make_ret(Ret::Code::UnknownError));
+    return RetVal<io::path_t>(make_ret(Ret::Code::UnknownError));
 }
 
 void SoundFontController::loadSoundFonts()
@@ -122,7 +125,7 @@ void SoundFontController::loadSoundFonts()
     static const std::vector<std::string> filters = { "*.sf2",  "*.sf3" };
     io::paths_t dirs = configuration()->soundFontDirectories();
 
-    synth::SoundFontPaths paths;
+    std::vector<io::path_t> paths;
     for (const io::path_t& dir : dirs) {
         RetVal<io::paths_t> soundFonts = fileSystem()->scanFiles(dir, filters);
         if (!soundFonts.ret) {
@@ -136,7 +139,12 @@ void SoundFontController::loadSoundFonts()
     loadSoundFonts(paths);
 }
 
-void SoundFontController::loadSoundFonts(const synth::SoundFontPaths& paths)
+void SoundFontController::loadSoundFonts(const std::vector<io::path_t>& paths)
 {
-    channel()->send(rpc::make_request(Method::LoadSoundFonts, RpcPacker::pack(paths)));
+    std::vector<synth::SoundFontUri> uris;
+    uris.reserve(paths.size());
+    for (const io::path_t& p : paths) {
+        uris.push_back(synth::SoundFontUri::fromLocalFile(p));
+    }
+    channel()->send(rpc::make_request(Method::LoadSoundFonts, RpcPacker::pack(uris)));
 }

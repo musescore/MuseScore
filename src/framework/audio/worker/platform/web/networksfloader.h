@@ -22,15 +22,15 @@
 #pragma once
 
 #include "global/types/retval.h"
+#include "global/types/uri.h"
 #include "global/io/path.h"
 #include "global/async/promise.h"
 
-namespace muse::audio::worker {
-//! NOTE Temporary class for testing
+namespace muse::audio::synth {
 class NetworkSFLoader
 {
 public:
 
-    static async::Promise<RetVal<io::path_t> > load();
+    static async::Promise<RetVal<io::path_t> > load(const Uri& uri);
 };
 }

@@ -21,21 +21,16 @@
  */
 #include "networksfloader.h"
 
-#include <fstream>
-
 #include <emscripten/fetch.h>
 
-#include "global/io/file.h"
-
 using namespace muse;
-using namespace muse::audio::worker;
+using namespace muse::audio::synth;
 
-static const char* SF_URL = "https://s3.us-east-1.amazonaws.com/new.musescore.org/MS_Basic.sf3";
 static const io::path_t SF_PATH = "MS Basic.sf3";
 
-async::Promise<RetVal<io::path_t> > NetworkSFLoader::load()
+async::Promise<RetVal<io::path_t> > NetworkSFLoader::load(const Uri& uri)
 {
-    return async::make_promise<RetVal<io::path_t> >([](auto resolve) {
+    return async::make_promise<RetVal<io::path_t> >([uri](auto resolve) {
         emscripten_fetch_attr_t attr;
         emscripten_fetch_attr_init(&attr);
         strcpy(attr.requestMethod, "GET");
@@ -43,6 +38,7 @@ async::Promise<RetVal<io::path_t> > NetworkSFLoader::load()
 
         struct Holder
         {
+            Uri uri;
             async::Promise<RetVal<io::path_t> >::Resolve resolve;
 
             void onSuccess(const char* data, uint64_t numBytes) {
@@ -74,27 +70,29 @@ async::Promise<RetVal<io::path_t> > NetworkSFLoader::load()
         };
 
         Holder* h = new Holder();
+        h->uri = uri;
         h->resolve = resolve;
 
         attr.userData = h;
         attr.onsuccess = [](emscripten_fetch_t* fetch) {
-            LOGDA() << "success download sf: " << SF_URL;
             Holder* h = static_cast<Holder*>(fetch->userData);
+            LOGI() << "success download sf: " << h->uri;
             h->onSuccess(fetch->data, fetch->numBytes);
             emscripten_fetch_close(fetch);  // Free data associated with the fetch.
             delete h;
         };
 
         attr.onerror = [](emscripten_fetch_t* fetch) {
-            LOGDA() << "failed download sf: " << SF_URL;
             Holder* h = static_cast<Holder*>(fetch->userData);
+            LOGE() << "failed download sf: " << h->uri;
             h->onFailed(fetch->status);
             emscripten_fetch_close(fetch);  // Also free data on failure.
             delete h;
         };
 
-        emscripten_fetch(&attr, SF_URL);
-        LOGDA() << "start download sf: " << SF_URL;
+        std::string str = h->uri.toString();
+        emscripten_fetch(&attr, str.c_str());
+        LOGDA() << "start download sf: " << h->uri;
 
         return async::Promise<RetVal<io::path_t> >::dummy_result();
     }, async::PromiseType::AsyncByBody);

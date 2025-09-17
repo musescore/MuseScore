@@ -29,6 +29,7 @@
 #include "../types/number.h"
 #include "../types/flags.h"
 #include "../types/retval.h"
+#include "../types/uri.h"
 #include "../io/path.h"
 
 void pack_custom(std::vector<uint8_t>& data, const size_t& value);
@@ -63,6 +64,10 @@ template<typename T1, typename T2>
 void pack_custom(std::vector<uint8_t>& data, const muse::RetVal2<T1, T2>& value);
 template<typename T1, typename T2>
 bool unpack_custom(muse::msgpack::Cursor& cursor, muse::RetVal2<T1, T2>& value);
+
+// Uri
+void pack_custom(std::vector<uint8_t>& data, const muse::Uri& value);
+bool unpack_custom(muse::msgpack::Cursor& cursor, muse::Uri& value);
 
 // path_t
 void pack_custom(std::vector<uint8_t>& data, const muse::io::path_t& value);
@@ -200,6 +205,20 @@ template<typename T1, typename T2>
 inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::RetVal2<T1, T2>& value)
 {
     return muse::msgpack::UnPacker::unpack(cursor, value.ret, value.val1, value.val2);
+}
+
+// Uri
+inline void pack_custom(std::vector<uint8_t>& data, const muse::Uri& value)
+{
+    muse::msgpack::Packer::pack(data, value.toString());
+}
+
+inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::Uri& value)
+{
+    std::string str;
+    bool ok = muse::msgpack::UnPacker::unpack(cursor, str);
+    value = muse::Uri(str);
+    return ok;
 }
 
 // path_t

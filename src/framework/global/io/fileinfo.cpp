@@ -66,6 +66,11 @@ String FileInfo::absolutePath() const
     return fileSystem()->absolutePath(m_filePath).toString();
 }
 
+String FileInfo::absoluteFilePath() const
+{
+    return fileSystem()->absoluteFilePath(m_filePath).toString();
+}
+
 String FileInfo::fileName() const
 {
     size_t lastSep = m_filePath.lastIndexOf(u'/');

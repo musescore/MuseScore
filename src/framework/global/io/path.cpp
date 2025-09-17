@@ -156,6 +156,11 @@ io::path_t muse::io::absolutePath(const path_t& path)
     return FileInfo(path).absolutePath();
 }
 
+io::path_t muse::io::absoluteFilePath(const path_t& path)
+{
+    return FileInfo(path).absoluteFilePath();
+}
+
 io::path_t muse::io::dirpath(const io::path_t& path)
 {
     return FileInfo(path).dir().path();

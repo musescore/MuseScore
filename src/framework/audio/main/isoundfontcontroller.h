@@ -34,6 +34,6 @@ class ISoundFontController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISoundFontController() = default;
 
-    virtual void addSoundFont(const synth::SoundFontPath& path) = 0;
+    virtual void addSoundFont(const synth::SoundFontUri& uri) = 0;
 };
 }

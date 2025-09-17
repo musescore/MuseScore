@@ -26,13 +26,14 @@
 #include <string>
 #include <vector>
 
+#include "global/types/uri.h"
 #include "global/io/path.h"
 
 #include "midi/miditypes.h"
 
 namespace muse::audio::synth {
+using SoundFontUri = Uri;
 using SoundFontPath = io::path_t;
-using SoundFontPaths = std::vector<SoundFontPath>;
 
 inline bool isSoundFont(const io::path_t& filePath)
 {
@@ -52,7 +53,7 @@ struct SoundFontMeta
     std::vector<SoundFontPreset> presets;
 };
 
-using SoundFontsMap = std::map<SoundFontPath, SoundFontMeta>;
+using SoundFontsMap = std::map<SoundFontUri, SoundFontMeta>;
 
 inline const String SOUNDFONT_NAME_ATTRIBUTE(u"soundFontName");
 inline const String PRESET_NAME_ATTRIBUTE(u"presetName");
