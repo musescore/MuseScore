@@ -405,18 +405,16 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         return type2 != ElementType::KEYSIG;
     }
 
-    if (type1 == ElementType::FRET_DIAGRAM && type2 == ElementType::HARMONY) {
-        const Harmony* h = toHarmony(itemInSkyline);
-        return itemToAutoplace->parent() != h->getParentSeg();
+    if (type1 == ElementType::FRET_DIAGRAM && (type2 == ElementType::FRET_DIAGRAM || type2 == ElementType::HARMONY)) {
+        bool isFretDiagAgainstItsOwnHarmony = itemInSkyline->parentItem() == itemToAutoplace;
+        bool areOnDifferentSegments = itemToAutoplace->findAncestor(ElementType::SEGMENT)
+                                      != itemInSkyline->findAncestor(ElementType::SEGMENT);
+        return isFretDiagAgainstItsOwnHarmony || areOnDifferentSegments;
     }
 
     if ((type1 == ElementType::DYNAMIC || type1 == ElementType::HAIRPIN_SEGMENT)
         && (type2 == ElementType::DYNAMIC || type2 == ElementType::HAIRPIN_SEGMENT)) {
         return true;
-    }
-
-    if (type1 == type2 && type1 == ElementType::FRET_DIAGRAM) {
-        return itemToAutoplace->parent() != itemInSkyline->parent();
     }
 
     if (type1 == type2) {
