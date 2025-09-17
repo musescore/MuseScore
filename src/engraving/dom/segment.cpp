@@ -324,28 +324,6 @@ Segment* Segment::next1(SegmentType types) const
     return 0;
 }
 
-Segment* Segment::next1ChordRestOrTimeTick() const
-{
-    Segment* nextSeg = next1(CHORD_REST_OR_TIME_TICK_TYPE);
-    while (nextSeg && nextSeg->tick() == tick()) {
-        nextSeg = nextSeg->next1(CHORD_REST_OR_TIME_TICK_TYPE);
-    }
-    if (!nextSeg) {
-        return nullptr;
-    }
-
-    Segment* nextNextSeg = nextSeg->next1(CHORD_REST_OR_TIME_TICK_TYPE);
-    if (!nextNextSeg) {
-        return nextSeg;
-    }
-
-    if (nextSeg->tick() == nextNextSeg->tick()) {
-        return nextSeg->isChordRestType() ? nextSeg : nextNextSeg;
-    }
-
-    return nextSeg;
-}
-
 Segment* Segment::next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType) const
 {
     Segment* next = next1(segType);
@@ -459,28 +437,6 @@ Segment* Segment::prev1() const
     }
     Measure* m = measure()->prevMeasure();
     return m ? m->last() : 0;
-}
-
-Segment* Segment::prev1ChordRestOrTimeTick() const
-{
-    Segment* prevSeg = prev1(CHORD_REST_OR_TIME_TICK_TYPE);
-    while (prevSeg && prevSeg->tick() == tick()) {
-        prevSeg = prevSeg->prev1(CHORD_REST_OR_TIME_TICK_TYPE);
-    }
-    if (!prevSeg) {
-        return nullptr;
-    }
-
-    Segment* prevPrevSeg = prevSeg->prev1(CHORD_REST_OR_TIME_TICK_TYPE);
-    if (!prevPrevSeg) {
-        return prevSeg;
-    }
-
-    if (prevSeg->tick() == prevPrevSeg->tick()) {
-        return prevSeg->isChordRestType() ? prevSeg : prevPrevSeg;
-    }
-
-    return prevSeg;
 }
 
 Segment* Segment::prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType) const
