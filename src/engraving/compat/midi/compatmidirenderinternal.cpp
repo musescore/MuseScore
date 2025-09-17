@@ -745,10 +745,6 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
             return MidiInstrumentEffect::SLIDE;
         }
 
-        if (event.hammerPull()) {
-            return MidiInstrumentEffect::HAMMER_PULL;
-        }
-
         return MidiInstrumentEffect::NONE;
     };
 
@@ -1094,6 +1090,30 @@ void CompatMidiRendererInternal::collectGraceBeforeChordEvents(Chord* chord, Cho
     }
 }
 
+bool shouldPlayHammerOn(const Chord* chord)
+{
+    int currentTick = chord->tick().ticks();
+    Chord* firstTiedChord = chord->nextTiedChord(true, false);
+    const Score* score = chord->score();
+    while (firstTiedChord) {
+        currentTick = firstTiedChord->tick().ticks();
+        firstTiedChord = firstTiedChord->nextTiedChord(true, false);
+    }
+
+    for (auto it : score->spannerMap().findOverlapping(currentTick, currentTick + chord->ticks().ticks())) {
+        Spanner* spanner = it.value;
+        if (spanner->track() != chord->track()) {
+            continue;
+        }
+
+        if (spanner->isHammerOnPullOff() && (spanner->startChord() != chord)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 CompatMidiRendererInternal::ChordParams CompatMidiRendererInternal::collectChordParams(const Chord* chord, int tickOffset) const
 {
     ChordParams chordParams;
@@ -1115,6 +1135,7 @@ CompatMidiRendererInternal::ChordParams CompatMidiRendererInternal::collectChord
         }
     }
 
+    chordParams.hammerOnPullOff = shouldPlayHammerOn(chord);
     return chordParams;
 }
 
@@ -1182,6 +1203,8 @@ void CompatMidiRendererInternal::doCollectMeasureEvents(EventsHolder& events, Me
             MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
             if (chordParams.palmMute) {
                 effect = MidiInstrumentEffect::PALM_MUTE;
+            } else if (chordParams.hammerOnPullOff) {
+                effect = MidiInstrumentEffect::HAMMER_PULL;
             }
 
             collectGraceBeforeChordEvents(chord, prevChords[voice], events, veloMultiplier, st1, tickOffset, pitchWheelRenderer, effect);
@@ -1503,10 +1526,6 @@ void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context
         fillArticulationsInfo();
     }
 
-    if (m_context.instrumentsHaveEffects) {
-        fillHammerOnPullOffsInfo();
-    }
-
     CompatMidiRender::createPlayEvents(score, score->firstMeasure(), nullptr, m_context);
 
     score->updateChannel();
@@ -1546,26 +1565,6 @@ void CompatMidiRendererInternal::fillArticulationsInfo()
                     m_context.articulationsWithoutValuesByInstrument[instrId].insert(articulationName);
                 }
             }
-        }
-    }
-}
-
-void CompatMidiRendererInternal::fillHammerOnPullOffsInfo()
-{
-    for (const auto& i : score->spanner()) {
-        const Spanner* s = i.second;
-        if (s->isHammerOnPullOff()) {
-            const EngravingItem* start = s->startElement();
-            const EngravingItem* end = s->endElement();
-            if (!start || !end || !start->isChord() || !end->isChord()) {
-                continue;
-            }
-
-            for (const Chord* ch = toChord(start)->next(); ch && ch != toChord(end); ch = ch->next()) {
-                m_context.chordsWithHammerOnPullOff.insert(ch);
-            }
-
-            m_context.chordsWithHammerOnPullOff.insert(toChord(end));
         }
     }
 }

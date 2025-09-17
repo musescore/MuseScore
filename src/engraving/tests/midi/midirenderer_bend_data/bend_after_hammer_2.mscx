@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <programVersion>4.7.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>EQvzKmTRpCC_U4Z0kCTdkpG</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2025-09-18</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="originalFormat">gp</metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff>
+        <eid>Ayh+V/OICFM_WCLRbAYvVHM</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Clean Guitar</trackName>
+      <Instrument id="electric-guitar">
+        <longName>Clean Guitar</longName>
+        <shortName>el.guit.</shortName>
+        <trackName></trackName>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>pluck.guitar.electric</instrumentId>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <StringData>
+          <frets>24</frets>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
+          <string>71</string>
+          <string>76</string>
+          </StringData>
+        <Channel>
+          <program value="27"/>
+          <controller ctrl="7" value="101"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>dpWxCnyKu0M_/BvIGEr0LGE</eid>
+        <voice>
+          <KeySig>
+            <eid>a2dHhUsd50E_VHfETNveYNC</eid>
+            <concertKey>0</concertKey>
+            <mode>major</mode>
+            </KeySig>
+          <TimeSig>
+            <eid>05WlGeu5pnB_FdB+u1OsBBI</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            <eid>kNENNlQLfvM_YeimOq9bPAD</eid>
+            </Dynamic>
+          <Tempo>
+            <tempo>0.833333</tempo>
+            <eid>l7tSe9ay7NL_041F0Zz8xv</eid>
+            <text><sym>metNoteQuarterUp</sym><font face="Edwin"/> = 50</text>
+            </Tempo>
+          <Chord>
+            <eid>5wVu7LJgdeN_AxBkK3zpaLN</eid>
+            <durationType>quarter</durationType>
+            <Spanner type="HammerOnPullOff">
+              <HammerOnPullOff>
+                <eid>OoTJzGQZgBB_9H5O9J4Rt/K</eid>
+                </HammerOnPullOff>
+              <next>
+                <location>
+                  <fractions>1/4</fractions>
+                  <grace>0</grace>
+                  </location>
+                </next>
+              </Spanner>
+            <Note>
+              <eid>Qm9gFL9FtXF_VV6X+lxP1XN</eid>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              <fret>7</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>W/fPpjWUobB_AQmEeF/6j/</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <Spanner type="HammerOnPullOff">
+              <prev>
+                <location>
+                  <fractions>-1/4</fractions>
+                  </location>
+                </prev>
+              </Spanner>
+            <grace8after/>
+            <noStem>1</noStem>
+            <Note>
+              <eid>3IZCvPRJiQJ_RtP7POU/CAN</eid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              <fret>8</fret>
+              <string>5</string>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5bIJd5ZdaKK_2g1ZOGuujnP</eid>
+            <durationType>16th</durationType>
+            <Note>
+              <eid>nVVSvXPjbpB_HcV0nCa0MX</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>usisruPMqyL_lfWc9UTcsPG</eid>
+                </Accidental>
+              <pitch>44</pitch>
+              <tpc>22</tpc>
+              <fret>4</fret>
+              <string>5</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>0</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>0.216667</bendEndTimeFactor>
+                  <eid>E+xM5ZxvZJE_jtvkwfOlicJ</eid>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <grace>0</grace>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>LcTNYXnOx7J_lFMnIBHwv4G</eid>
+            <dots>1</dots>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <eid>Jur7r3BCIcC_EffLnfkwYfM</eid>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
