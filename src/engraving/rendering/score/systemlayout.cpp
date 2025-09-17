@@ -1346,7 +1346,7 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
         }
 
         for (EngravingItem* item : measure->el()) {
-            if (item->staffIdx() == staffIdx && (item->isMarker() || item->isJump())) {
+            if (item->effectiveStaffIdx() == staffIdx && (item->isMarker() || item->isJump())) {
                 elements.markersAndJumps.push_back(item);
             }
         }
