@@ -24,6 +24,10 @@
 using namespace muse;
 using namespace muse::audio;
 
-void SoundFontControllerStub::addSoundFont(const synth::SoundFontPath&)
+void SoundFontControllerStub::init()
+{
+}
+
+void SoundFontControllerStub::addSoundFont(const synth::SoundFontUri&)
 {
 }

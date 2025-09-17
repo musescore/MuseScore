@@ -7,6 +7,7 @@ console.log("args:", args)
 console.log("__dirname:", __dirname);
 
 const HERE=__dirname
+const ROOT=HERE+"/../.."
 const OUTPUT_DIR = args.length > 0 ? args[0] : "./out"
 
 function copyFile(src, dst) {
@@ -39,4 +40,12 @@ copyFile(HERE+"/viewer/index.html", OUTPUT_DIR+"/MuseScoreStudio.html");
 
 // Copy tools
 copyFile(HERE+"/viewer/run_server.sh", OUTPUT_DIR+"/run_server.sh");
+
+// Copy SF if need
+const SF_SRC=ROOT+"/share/sound/MS Basic.sf3"
+const SF_DST=OUTPUT_DIR+"/sound/MS Basic.sf3";
+if (!fs.existsSync(SF_DST)) {
+  fs.mkdirSync(OUTPUT_DIR+"/sound", { recursive: true });
+  copyFile(SF_SRC, SF_DST);
+}
 

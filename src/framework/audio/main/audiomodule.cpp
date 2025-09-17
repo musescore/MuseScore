@@ -29,15 +29,16 @@
 #ifdef Q_OS_WASM
 #include "audio/common/rpc/platform/web/webrpcchannel.h"
 #include "audio/worker/platform/web/webaudioworker.h"
+#include "platform/web/websoundfontcontroller.h"
 #else
 #include "audio/common/rpc/platform/general/generalrpcchannel.h"
 #include "audio/worker/platform/general/generalaudioworker.h"
+#include "platform/general/generalsoundfontcontroller.h"
 #endif
 
 #include "internal/audioconfiguration.h"
 #include "internal/startaudiocontroller.h"
 #include "internal/playback.h"
-#include "internal/soundfontcontroller.h"
 #include "internal/audiooutputdevicecontroller.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
@@ -114,15 +115,15 @@ void AudioModule::registerExports()
     m_audioOutputController = std::make_shared<AudioOutputDeviceController>(iocContext());
     m_mainPlayback = std::make_shared<Playback>(iocContext());
 
-    m_soundFontController = std::make_shared<SoundFontController>();
-
 #ifdef Q_OS_WASM
     m_rpcChannel = std::make_shared<rpc::WebRpcChannel>();
     m_audioWorker = std::make_shared<worker::WebAudioWorker>(m_rpcChannel);
+    m_soundFontController = std::make_shared<WebSoundFontController>();
 #else
     m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
     m_audioWorker = std::make_shared<worker::GeneralAudioWorker>(m_rpcChannel);
     m_audioWorker->registerExports();
+    m_soundFontController = std::make_shared<GeneralSoundFontController>();
 #endif
 
 #if defined(MUSE_MODULE_AUDIO_JACK)

@@ -41,7 +41,7 @@ class AudioConfiguration;
 class StartAudioController;
 class AudioOutputDeviceController;
 class Playback;
-class SoundFontController;
+class ISoundFontController;
 class IAudioDriver;
 class AudioModule : public modularity::IModuleSetup, public async::Asyncable
 {
@@ -62,7 +62,7 @@ private:
     std::shared_ptr<StartAudioController> m_startAudioController;
     std::shared_ptr<AudioOutputDeviceController> m_audioOutputController;
     std::shared_ptr<Playback> m_mainPlayback;
-    std::shared_ptr<SoundFontController> m_soundFontController;
+    std::shared_ptr<ISoundFontController> m_soundFontController;
 
     std::shared_ptr<worker::IAudioWorker> m_audioWorker;
 

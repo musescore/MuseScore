@@ -76,8 +76,9 @@ Notification SoundFontRepository::soundFontsChanged() const
 void SoundFontRepository::addSoundFont(const SoundFontUri& uri)
 {
     ONLY_AUDIO_WORKER_THREAD;
-    doAddSoundFont(uri);
-    m_soundFontsChanged.notify();
+    doAddSoundFont(uri, nullptr, [this]() {
+        m_soundFontsChanged.notify();
+    });
 }
 
 void SoundFontRepository::doAddSoundFont(const SoundFontUri& uri, const SoundFontsMap* cache, std::function<void()> onFinished)

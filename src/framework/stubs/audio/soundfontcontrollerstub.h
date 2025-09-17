@@ -28,6 +28,8 @@ class SoundFontControllerStub : public ISoundFontController
 {
 public:
 
-    void addSoundFont(const synth::SoundFontPath& path) override;
+    void init() override;
+
+    void addSoundFont(const synth::SoundFontUri& uri) override;
 };
 }
