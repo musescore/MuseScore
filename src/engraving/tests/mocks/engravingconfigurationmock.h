@@ -42,6 +42,7 @@ public:
 
     MOCK_METHOD(SizeF, defaultPageSize, (), (const, override));
 
+    MOCK_METHOD(bool, canLayoutIcons, (), (const, override));
     MOCK_METHOD(String, iconsFontFamily, (), (const, override));
 
     MOCK_METHOD(Color, defaultColor, (), (const, override));
