@@ -57,12 +57,15 @@ class TextSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(QVariantList textStyles READ textStyles NOTIFY textStylesChanged)
 
+    Q_PROPERTY(bool areTextPropertiesAvailable READ areTextPropertiesAvailable NOTIFY areTextPropertiesAvailableChanged)
     Q_PROPERTY(bool areStaffTextPropertiesAvailable READ areStaffTextPropertiesAvailable NOTIFY areStaffTextPropertiesAvailableChanged)
     Q_PROPERTY(
         bool isSpecialCharactersInsertionAvailable READ isSpecialCharactersInsertionAvailable NOTIFY isSpecialCharactersInsertionAvailableChanged)
     Q_PROPERTY(bool isDynamicSpecificSettings READ isDynamicSpecificSettings NOTIFY isDynamicSpecificSettingsChanged)
     Q_PROPERTY(bool isHorizontalAlignmentAvailable READ isHorizontalAlignmentAvailable NOTIFY isHorizontalAlignmentAvailableChanged)
     Q_PROPERTY(bool isSymbolSizeAvailable READ isSymbolSizeAvailable NOTIFY isSymbolSizeAvailableChanged)
+    Q_PROPERTY(bool isScriptSizeAvailable READ isScriptSizeAvailable NOTIFY isScriptSizeAvailableChanged)
+    Q_PROPERTY(bool isLineSpacingAvailable READ isLineSpacingAvailable NOTIFY isLineSpacingAvailableChanged)
 
 public:
     explicit TextSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -100,37 +103,49 @@ public:
 
     QVariantList textStyles();
 
+    bool areTextPropertiesAvailable() const;
     bool areStaffTextPropertiesAvailable() const;
     bool isSpecialCharactersInsertionAvailable() const;
     bool isDynamicSpecificSettings() const;
     bool isHorizontalAlignmentAvailable() const;
     bool isSymbolSizeAvailable() const;
+    bool isScriptSizeAvailable() const;
+    bool isLineSpacingAvailable() const;
 
 public slots:
+    void setAreTextPropertiesAvailable(bool areTextPropertiesAvailable);
     void setAreStaffTextPropertiesAvailable(bool areStaffTextPropertiesAvailable);
     void setIsSpecialCharactersInsertionAvailable(bool isSpecialCharactersInsertionAvailable);
     void setIsDynamicSpecificSettings(bool isOnlyDynamics);
     void setIsHorizontalAlignmentAvailable(bool isHorizontalAlignmentAvailable);
     void setIsSymbolSizeAvailable(bool isSymbolSizeAvailable);
+    void setIsScriptSizeAvailable(bool isScriptSizeAvailable);
+    void setIsLineSpacingAvailable(bool isScriptSizeAvailable);
 
 signals:
     void textStylesChanged();
 
+    void areTextPropertiesAvailableChanged(bool areTextPropertiesAvailable);
     void areStaffTextPropertiesAvailableChanged(bool areStaffTextPropertiesAvailable);
     void isSpecialCharactersInsertionAvailableChanged(bool isSpecialCharactersInsertionAvailable);
     void isDynamicSpecificSettingsChanged(bool isDynamicSpecificSettings);
     void isHorizontalAlignmentAvailableChanged(bool isHorizontalAlignmentAvailable);
     void isSymbolSizeAvailableChanged(bool isSymbolSizeAvailable);
+    void isScriptSizeAvailableChanged(bool isSymbolSizeAvailable);
+    void isLineSpacingAvailableChanged(bool isSymbolSizeAvailable);
 
 private:
     bool isTextEditingStarted() const;
     muse::async::Notification isTextEditingChanged() const;
 
+    void updateTextPropertiesAvailability();
     void updateFramePropertiesAvailability();
     void updateStaffPropertiesAvailability();
     void updateIsDynamicSpecificSettings();
     void updateIsHorizontalAlignmentAvailable();
     void updateIsSymbolSizeAvailable();
+    void updateIsScriptSizeAvailable();
+    void updateIsLineSpacingAvailable();
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
@@ -156,11 +171,14 @@ private:
 
     QVariantList m_textStyles;
 
+    bool m_areTextPropertiesAvailable = true;
     bool m_areStaffTextPropertiesAvailable = false;
     bool m_isSpecialCharactersInsertionAvailable = false;
     bool m_isDynamicSpecificSettings = false;
     bool m_isHorizontalAlignmentAvailable = true;
     bool m_isSymbolSizeAvailable = false;
+    bool m_isScriptSizeAvailable = false;
+    bool m_isLineSpacingAvailable = false;
 };
 }
 
