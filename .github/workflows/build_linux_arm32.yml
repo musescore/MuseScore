@@ -13,7 +13,7 @@ on:
         default: 'off'
         required: false
       sentry_project:
-        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
+        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
         required: false
       use_qt69:
@@ -33,7 +33,7 @@ on:
         type: string
         required: false
       sentry_project:
-        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
+        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
         type: string
         required: false
@@ -56,8 +56,8 @@ jobs:
     - name: Configure workflow
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
-        SENTRY_SERVER_MU4_KEY: ${{ secrets.SENTRY_SERVER_MU4_KEY }}
-        SENTRY_SERVER_SANDBOX_KEY: ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }}
+        SENTRY_MUSE_MU4_KEY: ${{ secrets.SENTRY_MUSE_MU4_KEY }}
+        SENTRY_MUSE_MU4_SANDBOX_KEY: ${{ secrets.SENTRY_MUSE_MU4_SANDBOX_KEY }}
         SENTRY_PROJECT: ${{ inputs.sentry_project }}
       run: |
         bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
@@ -83,24 +83,24 @@ jobs:
         DO_UPLOAD_SYMBOLS='false'
         SENTRY_URL=""
 
-        if [ "$SENTRY_SERVER_MU4_KEY" != "" ]; then
+        if [ "$SENTRY_MUSE_MU4_KEY" != "" ]; then
           if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then
             SENTRY_PROJECT="mu4"
           fi
 
           if [ "$SENTRY_PROJECT" == "mu4" ]; then
             DO_UPLOAD_SYMBOLS='true'
-            SENTRY_URL=https://sentry.musescore.org/api/4/minidump/?sentry_key=$SENTRY_SERVER_MU4_KEY
+            SENTRY_URL=https://sentry.musescore.com/api/4/minidump/?sentry_key=$SENTRY_MUSE_MU4_KEY
           fi
         fi
 
         if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "nightly" ]; then
-          SENTRY_PROJECT="sandbox"
+          SENTRY_PROJECT="mu4-sandbox"
         fi
 
-        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ "$SENTRY_SERVER_SANDBOX_KEY" != "" ]; then
+        if [ "$SENTRY_PROJECT" == "mu4-sandbox" ] && [ "$SENTRY_MUSE_MU4_SANDBOX_KEY" != "" ]; then
           DO_UPLOAD_SYMBOLS='true'
-          SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=$SENTRY_SERVER_SANDBOX_KEY
+          SENTRY_URL=https://sentry.musescore.com/api/3/minidump/?sentry_key=$SENTRY_MUSE_MU4_SANDBOX_KEY
         fi
 
         DO_PUBLISH='false'
@@ -160,13 +160,13 @@ jobs:
       run: |
         APP_BIN=$(find "$(pwd)/build.release/src/app/" -type f -name "mscore4portable*" -print -quit)
         ARCH=armv7l
-        cmake -DAPP_BIN=${APP_BIN} \
-              -DARCH=${ARCH} \
-              -DSENTRY_URL=https://sentry.musescore.org \
-              -DSENTRY_ORG=musescore \
-              -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
-              -DSENTRY_PROJECT=${SENTRY_PROJECT} \
-              -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
+        sudo cmake -DAPP_BIN=${APP_BIN} \
+                   -DARCH=${ARCH} \
+                   -DSENTRY_URL=https://sentry.musescore.com \
+                   -DSENTRY_ORG=sentry \
+                   -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_MUSE_AUTH_TOKEN }} \
+                   -DSENTRY_PROJECT=${SENTRY_PROJECT} \
+                   -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       run: |
