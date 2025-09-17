@@ -8840,6 +8840,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             }
             gliss->setText(glissandoText);
             gliss->setGlissandoType(glissandoTag || (lineType == u"wavy") ? GlissandoType::WAVY : GlissandoType::STRAIGHT);
+            gliss->setGlissandoStyle(note->part()->instrument(tick)->glissandoStyle());
             spanners[gliss] = std::pair<int, int>(tick.ticks(), -1);
             // LOGD("glissando/slide=%p inserted at first tick %d", gliss, tick);
         }

@@ -40,6 +40,7 @@
         <instrumentId>pluck.guitar.acoustic</instrumentId>
         <clef>G8vb</clef>
         <singleNoteDynamics>0</singleNoteDynamics>
+        <glissandoStyle>portamento</glissandoStyle>
         <StringData>
           <frets>20</frets>
           <string>40</string>

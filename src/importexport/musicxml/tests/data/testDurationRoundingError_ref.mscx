@@ -45,6 +45,7 @@
         <concertClef>G8vb</concertClef>
         <transposingClef>G</transposingClef>
         <singleNoteDynamics>0</singleNoteDynamics>
+        <glissandoStyle>portamento</glissandoStyle>
         <StringData>
           <frets>19</frets>
           <string>52</string>
