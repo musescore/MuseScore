@@ -81,7 +81,7 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
     // [THEN] The map matches the expected one
     ScoreElementScanner::ElementMap expectedMap;
     // 1st measure
-    expectedMap[ElementType::KEYSIG] = { makeInfo(u"C major, A minor") };
+    expectedMap[ElementType::KEYSIG] = { makeInfo(u"C major / A minor") };
     expectedMap[ElementType::TIMESIG] = { makeInfo(u"4/4 time") };
     expectedMap[ElementType::ARPEGGIO] = { makeInfo(u"Up arpeggio", u"C5 E5 G5 B5") };
     expectedMap[ElementType::CHORD] = { makeInfo(u"", u"C5 E5 G5 B5") };

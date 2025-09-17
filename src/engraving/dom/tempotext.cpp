@@ -69,7 +69,7 @@ TempoText::TempoText(Segment* parent)
     m_relative       = 1.0;
     m_isRelative     = false;
 
-    resetProperty(Pid::MUSIC_SYMBOL_SIZE);
+    setSymbolSize(styleValue(Pid::FONT_SIZE, Sid::tempoFontSize).toDouble() * TempoText::DEFAULT_SYM_SIZE_RATIO);
 }
 
 void TempoText::setTempoTextType(TempoTextType ttt)
