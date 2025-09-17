@@ -60,6 +60,12 @@ async function setupWorker(Module)
 
     var museAudioUrl = new URL("MuseAudio.js", window.location) + "";
 
+    Module.worker.onmessage = function(event) {
+        if (event.data.type == "WORKER_INITED") {
+            Module.ccall('addSoundFont', '', ['string'], [Module.soundFont]);
+        }
+    }
+
     Module.worker.postMessage({
     type: 'INITIALIZE_WORKER',
     mainPort: Module.main_worker_rpcChannel.port2,
@@ -82,7 +88,9 @@ const MuImpl = {
                 onExit: config.onExit,
                 entryFunction: window.MuseScoreStudio_entry, // from MuseScoreStudio.js
                 containerElements: [config.screen],
-            }
+            },
+
+            soundFont: config.soundFont
         }
 
         setupRpc(this.Module);

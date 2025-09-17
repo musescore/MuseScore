@@ -27,6 +27,7 @@ let MuseAudio = {
     console.info("[worker] onRuntimeInitialized")
     try {
       MuseAudio.ccall('Init', '', ['number'], [42]);
+      postMessage({type: "WORKER_INITED" });
     } catch (error) {
       MuseAudio.onLogMessage("ERROR", error)
     }

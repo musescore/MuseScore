@@ -55,6 +55,7 @@ static void callJsWithBytes(const char*, const uint8_t*, size_t)
 WebApi* WebApi::instance()
 {
     static WebApi a;
+
     return &a;
 }
 
@@ -99,6 +100,11 @@ void WebApi::load(const void* source, unsigned int len)
     io::File::writeFile(tempFilePath, data);
 
     dispatcher()->dispatch("file-open", actions::ActionData::make_arg1(QUrl::fromLocalFile(tempFilePath.toQString())));
+}
+
+void WebApi::addSoundFont(const std::string& uri)
+{
+    soundFontController()->addSoundFont(Uri(uri));
 }
 
 void WebApi::startAudioProcessing()

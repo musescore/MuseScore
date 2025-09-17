@@ -19,23 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "global/modularity/imoduleinterface.h"
+#include "../../isoundfontcontroller.h"
 
-#include "audio/common/soundfonttypes.h"
+#include "global/modularity/ioc.h"
+#include "audio/common/rpc/irpcchannel.h"
 
 namespace muse::audio {
-class ISoundFontController : MODULE_EXPORT_INTERFACE
+class WebSoundFontController : public ISoundFontController
 {
-    INTERFACE_ID(ISoundFontController)
+    Inject<rpc::IRpcChannel> channel;
 
 public:
-    virtual ~ISoundFontController() = default;
+    WebSoundFontController() = default;
 
-    virtual void init() = 0;
+    void init() override;
 
-    virtual void addSoundFont(const synth::SoundFontUri& uri) = 0;
+    void addSoundFont(const synth::SoundFontUri& uri) override;
 };
 }

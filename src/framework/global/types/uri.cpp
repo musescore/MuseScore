@@ -21,6 +21,8 @@
  */
 #include "uri.h"
 
+#include <iomanip>
+
 #include "global/stringutils.h"
 
 #include "log.h"

@@ -22,9 +22,20 @@
 
 #include "webbridge/webapi.h"
 
+#include <emscripten.h>
+
 using namespace mu::webbridge;
 
 extern "C" {
+EMSCRIPTEN_KEEPALIVE
 void load(const void* source, unsigned int len) { WebApi::instance()->load(source, len); }
+
+EMSCRIPTEN_KEEPALIVE
+void addSoundFont(const char* uri)
+{
+    WebApi::instance()->addSoundFont(std::string(uri));
+}
+
+EMSCRIPTEN_KEEPALIVE
 void startAudioProcessing() { WebApi::instance()->startAudioProcessing(); }
 }

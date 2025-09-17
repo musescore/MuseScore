@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "soundfontcontroller.h"
+#include "generalsoundfontcontroller.h"
 
 #include "global/translation.h"
 #include "global/io/path.h"
@@ -32,7 +32,7 @@ using namespace muse::audio;
 using namespace muse::audio::rpc;
 using namespace muse::audio::synth;
 
-void SoundFontController::init()
+void GeneralSoundFontController::init()
 {
     configuration()->soundFontDirectoriesChanged().onReceive(this, [this](const io::paths_t&) {
         loadSoundFonts();
@@ -41,7 +41,7 @@ void SoundFontController::init()
     loadSoundFonts();
 }
 
-void SoundFontController::addSoundFont(const SoundFontUri& uri)
+void GeneralSoundFontController::addSoundFont(const SoundFontUri& uri)
 {
     io::path_t path = uri.toLocalFile();
     std::string title = muse::qtrc("audio", "Do you want to add the SoundFont: %1?")
@@ -92,7 +92,7 @@ void SoundFontController::addSoundFont(const SoundFontUri& uri)
     });
 }
 
-Ret SoundFontController::doAddSoundFont(const io::path_t& src, const io::path_t& dst)
+Ret GeneralSoundFontController::doAddSoundFont(const io::path_t& src, const io::path_t& dst)
 {
     Ret ret = fileSystem()->copy(src, dst, true /* replace */);
 
@@ -104,7 +104,7 @@ Ret SoundFontController::doAddSoundFont(const io::path_t& src, const io::path_t&
     return ret;
 }
 
-RetVal<io::path_t> SoundFontController::resolveInstallationPath(const io::path_t& path) const
+RetVal<io::path_t> GeneralSoundFontController::resolveInstallationPath(const io::path_t& path) const
 {
     io::paths_t dirs = configuration()->userSoundFontDirectories();
 
@@ -118,7 +118,7 @@ RetVal<io::path_t> SoundFontController::resolveInstallationPath(const io::path_t
     return RetVal<io::path_t>(make_ret(Ret::Code::UnknownError));
 }
 
-void SoundFontController::loadSoundFonts()
+void GeneralSoundFontController::loadSoundFonts()
 {
     TRACEFUNC;
 
@@ -139,7 +139,7 @@ void SoundFontController::loadSoundFonts()
     loadSoundFonts(paths);
 }
 
-void SoundFontController::loadSoundFonts(const std::vector<io::path_t>& paths)
+void GeneralSoundFontController::loadSoundFonts(const std::vector<io::path_t>& paths)
 {
     std::vector<synth::SoundFontUri> uris;
     uris.reserve(paths.size());

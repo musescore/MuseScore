@@ -19,23 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "websoundfontcontroller.h"
 
-#pragma once
+#include "audio/common/rpc/rpcpacker.h"
 
-#include "global/modularity/imoduleinterface.h"
+using namespace muse::audio;
+using namespace muse::audio::rpc;
 
-#include "audio/common/soundfonttypes.h"
-
-namespace muse::audio {
-class ISoundFontController : MODULE_EXPORT_INTERFACE
+void WebSoundFontController::init()
 {
-    INTERFACE_ID(ISoundFontController)
+    // noop
+}
 
-public:
-    virtual ~ISoundFontController() = default;
-
-    virtual void init() = 0;
-
-    virtual void addSoundFont(const synth::SoundFontUri& uri) = 0;
-};
+void WebSoundFontController::addSoundFont(const synth::SoundFontUri& uri)
+{
+    channel()->send(rpc::make_request(Method::AddSoundFont, RpcPacker::pack(uri)));
 }
