@@ -5983,7 +5983,7 @@ const std::array<muse::TranslatableString, size_t(SymId::lastSym) + 1> SymNames:
     muse::TranslatableString::untranslatable("Tuplet 0"),
     muse::TranslatableString::untranslatable("Tuplet 1"),
     muse::TranslatableString::untranslatable("Tuplet 2"),
-    muse::TranslatableString::untranslatable("Tuplet 3"),
+    muse::TranslatableString("engraving/sym", "Tuplet 3"),
     muse::TranslatableString::untranslatable("Tuplet 4"),
     muse::TranslatableString::untranslatable("Tuplet 5"),
     muse::TranslatableString::untranslatable("Tuplet 6"),
