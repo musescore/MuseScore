@@ -127,6 +127,8 @@ public:
 
     String groupId;
 
+    GlissandoStyle glissandoStyle = GlissandoStyle::CHROMATIC;
+
     bool isValid() const;
 
     void write(XmlWriter& xml) const;
