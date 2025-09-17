@@ -33,6 +33,20 @@ https://musescore.com/contact
 Change log
 ----------
 
+17 September 2025 (Martin Keary & Simon Smith) Leland Version 0.80
+- Leland
+  - Added:
+    - Left and right parentheses for pedal marking (E676, E677)
+    - Stylistic alternate for pedal mark (no dot) (keyboardPedalPedNoDot)
+- Leland Text:
+  - Added:
+    - Left and right parenthesis for pedal marking (E676, E677)
+    - Stylistic alternate for pedal mark (no dot) (keyboardPedalPedNoDot)
+    - Tuplet 3 numeral (E883)
+    - Ligatures and contextual alternates for creating simple metric modulations and swing markings from metronome mark glyphs
+  - Modified:
+    - Scaling and kerning for keyboard pedal marking glyphs
+
 23 August 2025 (Martin Keary & Simon Smith) Leland Version 0.79
 - Metadata
   - Upward stem attachment point corrected for Whole (semibreve) notehead (E0A2)
