@@ -74,6 +74,7 @@ void TextSettingsModel::createProperties()
         emit requestReloadPropertyItems();
     });
 
+    m_symbolSize = buildPropertyItem(mu::engraving::Pid::MUSIC_SYMBOL_SIZE);
     m_isSizeSpatiumDependent = buildPropertyItem(mu::engraving::Pid::SIZE_SPATIUM_DEPENDENT);
 
     m_frameType = buildPropertyItem(mu::engraving::Pid::FRAME_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
@@ -109,6 +110,7 @@ void TextSettingsModel::loadProperties()
         Pid::FONT_SIZE,
         Pid::TEXT_LINE_SPACING,
         Pid::ALIGN,
+        Pid::MUSIC_SYMBOL_SIZE,
         Pid::TEXT_SIZE_SPATIUM_DEPENDENT,
         Pid::FRAME_TYPE,
         Pid::FRAME_BG_COLOR,
@@ -169,6 +171,10 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         });
     }
 
+    if (muse::contains(propertyIdSet, Pid::MUSIC_SYMBOL_SIZE)) {
+        loadPropertyItem(m_symbolSize);
+    }
+
     if (muse::contains(propertyIdSet, Pid::TEXT_SIZE_SPATIUM_DEPENDENT)) {
         loadPropertyItem(m_isSizeSpatiumDependent);
     }
@@ -211,6 +217,7 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     updateIsDynamicSpecificSettings();
     updateIsHorizontalAlignmentAvailable();
     updateIsSystemObjectBelowBottomStaff();
+    updateIsSymbolSizeAvailable();
 }
 
 void TextSettingsModel::resetProperties()
@@ -220,6 +227,7 @@ void TextSettingsModel::resetProperties()
     m_fontSize->resetToDefault();
     m_textLineSpacing->resetToDefault();
     m_isSizeSpatiumDependent->resetToDefault();
+    m_symbolSize->resetToDefault();
 
     m_frameType->resetToDefault();
     m_frameBorderColor->resetToDefault();
@@ -297,6 +305,11 @@ PropertyItem* TextSettingsModel::horizontalAlignment() const
 PropertyItem* TextSettingsModel::verticalAlignment() const
 {
     return m_verticalAlignment;
+}
+
+PropertyItem* TextSettingsModel::symbolSize() const
+{
+    return m_symbolSize;
 }
 
 PropertyItem* TextSettingsModel::isSizeSpatiumDependent() const
@@ -391,6 +404,11 @@ bool TextSettingsModel::isHorizontalAlignmentAvailable() const
     return m_isHorizontalAlignmentAvailable;
 }
 
+bool TextSettingsModel::isSymbolSizeAvailable() const
+{
+    return m_isSymbolSizeAvailable;
+}
+
 void TextSettingsModel::setAreStaffTextPropertiesAvailable(bool areStaffTextPropertiesAvailable)
 {
     if (m_areStaffTextPropertiesAvailable == areStaffTextPropertiesAvailable) {
@@ -429,6 +447,16 @@ void TextSettingsModel::setIsHorizontalAlignmentAvailable(bool isHorizontalAlign
 
     m_isHorizontalAlignmentAvailable = isHorizontalAlignmentAvailable;
     emit isHorizontalAlignmentAvailableChanged(m_isHorizontalAlignmentAvailable);
+}
+
+void TextSettingsModel::setIsSymbolSizeAvailable(bool isSymbolSizeAvailable)
+{
+    if (isSymbolSizeAvailable == m_isSymbolSizeAvailable) {
+        return;
+    }
+
+    m_isSymbolSizeAvailable = isSymbolSizeAvailable;
+    emit isSymbolSizeAvailableChanged(m_isSymbolSizeAvailable);
 }
 
 void TextSettingsModel::updateFramePropertiesAvailability()
@@ -475,6 +503,22 @@ void TextSettingsModel::updateIsHorizontalAlignmentAvailable()
         }
     }
     setIsHorizontalAlignmentAvailable(available);
+}
+
+void TextSettingsModel::updateIsSymbolSizeAvailable()
+{
+    bool available = false;
+    for (EngravingItem* item : m_elementList) {
+        if (!item->isTextBase()) {
+            continue;
+        }
+
+        if (toTextBase(item)->hasSymbolSize()) {
+            available = true;
+            break;
+        }
+    }
+    setIsSymbolSizeAvailable(available);
 }
 
 bool TextSettingsModel::isTextEditingStarted() const

@@ -498,6 +498,10 @@ public:
     AutoOnOff centerBetweenStaves() const { return m_centerBetweenStaves; }
     void genText();
 
+    double symbolSize() const { return m_symbolSize; }
+    void setSymbolSize(double v) { m_symbolSize = v; }
+    inline bool hasSymbolSize() const { return isMarker() || isTempoText() || isSystemText() || isStaffText(); }
+
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
              ElementFlags = ElementFlag::NOTHING);
@@ -557,6 +561,8 @@ private:
 
     int m_hexState = -1;
     bool m_primed = 0;
+
+    double m_symbolSize = 18.0;
 
     TextCursor* m_cursor = nullptr;
 

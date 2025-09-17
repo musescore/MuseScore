@@ -468,10 +468,9 @@ class EngravingItem : public apiv1::ScoreElement
     /// For markers: The marker type,
     /// one of PluginAPI::PluginAPI::MarkerType values.
     API_PROPERTY_T(int, markerType,       MARKER_TYPE)
-    /// For markers: The size of musical symbols used.
-    /// Value is relative to the default size of 20pt.
+    /// The size of musical symbols used.
     /// \since MuseScore 4.6
-    API_PROPERTY_T(qreal, markerSymbolSize, MARKER_SYMBOL_SIZE)
+    API_PROPERTY_T(qreal, musicSymbolSize, MUSIC_SYMBOL_SIZE)
     /// For markers: Whether the symbol is aligned with the barline.
     /// \since MuseScore 4.6
     API_PROPERTY_T(bool, markerCenterOnSymbol, MARKER_CENTER_ON_SYMBOL)

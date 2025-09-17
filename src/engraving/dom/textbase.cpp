@@ -918,15 +918,10 @@ Font TextFragment::font(const TextBase* t) const
             // We use a default font size of 10pt for historical reasons,
             // but SMuFL standard is 20pt so multiply x2 here.
             m *= 2;
-        } else if (t->isTempoText()) {
+        } else if (t->hasSymbolSize()) {
             family = t->style().styleSt(Sid::musicalTextFont);
             fontType = Font::Type::MusicSymbolText;
-            // to keep desired size ratio (based on 20pt symbol size to 12pt text size)
-            m *= 5.0 / 3.0;
-        } else if (t->isMarker()) {
-            family = t->style().styleSt(Sid::musicalTextFont);
-            fontType = Font::Type::MusicSymbolText;
-            m = t->getProperty(Pid::MARKER_SYMBOL_SIZE).toDouble();
+            m = t->getProperty(Pid::MUSIC_SYMBOL_SIZE).toDouble();
             if (t->sizeIsSpatiumDependent()) {
                 m *= spatiumScaling;
             }
@@ -1765,6 +1760,7 @@ TextBase::TextBase(const TextBase& st)
     m_paddingWidth                = st.m_paddingWidth;
     m_frameRound                  = st.m_frameRound;
     m_position                    = st.m_position;
+    m_symbolSize                  = st.m_symbolSize;
 
     m_voiceAssignment = st.m_voiceAssignment;
     m_direction = st.m_direction;
@@ -2821,6 +2817,8 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
         return centerBetweenStaves();
     case Pid::VOICE_ASSIGNMENT:
         return voiceAssignment();
+    case Pid::MUSIC_SYMBOL_SIZE:
+        return symbolSize();
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -2907,6 +2905,9 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
     case Pid::VOICE_ASSIGNMENT:
         setVoiceAssignment(v.value<VoiceAssignment>());
         break;
+    case Pid::MUSIC_SYMBOL_SIZE:
+        setSymbolSize(v.toDouble());
+        break;
     default:
         rv = EngravingItem::setProperty(pid, v);
         break;
@@ -2954,6 +2955,8 @@ PropertyValue TextBase::propertyDefault(Pid id) const
         return AutoOnOff::AUTO;
     case Pid::VOICE_ASSIGNMENT:
         return VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
+    case Pid::MUSIC_SYMBOL_SIZE:
+        return 18.0;
     default:
         for (const auto& p : *textStyle(TextStyleType::DEFAULT)) {
             if (p.pid == id) {
