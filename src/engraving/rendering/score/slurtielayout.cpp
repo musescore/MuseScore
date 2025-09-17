@@ -2181,10 +2181,14 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
 
     Shape shape = isGrace ? chord->shape().translate(systemPos) : chordSeg->staffShape(chord->vStaffIdx()).translated(systemPos);
     bool ignoreDot = start && (isOuterTieOfChord || dotsPlacement == TieDotsPlacement::BEFORE_DOTS);
-    const bool ignoreAccidental = !start && isOuterTieOfChord;
     bool ignoreLvSeg = tieSegment->isLaissezVibSegment();
     bool ignoreArpeggio = note == chord->downNote() && !tie->up();
     bool ignoreParen = tieSegment->isLaissezVibSegment() && start;
+    auto ignoreAccidental = [&](const Accidental* acc) {
+        bool accIsInwardOfTie = tie->up() ? acc->line() >= note->line() : acc->line() <= note->line();
+        return !start && isOuterTieOfChord && accIsInwardOfTie;
+    };
+
     static const std::set<ElementType> IGNORED_TYPES = {
         ElementType::HOOK,
         ElementType::STEM_SLASH,
@@ -2196,7 +2200,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
     shape.remove_if([&](ShapeElement& s) {
         bool remove =  !s.item() || s.item() == note || muse::contains(IGNORED_TYPES, s.item()->type())
                       || (s.item()->isNoteDot() && ignoreDot)
-                      || (s.item()->isAccidental() && ignoreAccidental)
+                      || (s.item()->isAccidental() && ignoreAccidental(toAccidental(s.item())))
                       || (s.item()->isLaissezVibSegment() && ignoreLvSeg)
                       || (s.item()->isArpeggio() && ignoreArpeggio)
                       || (s.item()->isParenthesis() && ignoreParen)
