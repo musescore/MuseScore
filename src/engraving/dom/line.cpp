@@ -257,9 +257,9 @@ bool LineSegment::edit(EditData& ed)
             return true;
         }
         if (moveStart) {
-            s1 = findNewAnchorSegment(ed, s1);
+            s1 = MoveElementAnchors::findNewAnchorSegmentForLine(this, ed, s1);
         } else {
-            s2 = findNewAnchorSegment(ed, s2);
+            s2 = MoveElementAnchors::findNewAnchorSegmentForLine(this, ed, s2);
         }
         if (s1 == 0 || s2 == 0 || s1->tick() >= s2->tick()) {
             return true;
@@ -398,49 +398,6 @@ bool LineSegment::edit(EditData& ed)
 
     triggerLayout();
     return true;
-}
-
-Segment* LineSegment::findNewAnchorSegment(const EditData& ed, const Segment* curSeg)
-{
-    if (!line()->allowTimeAnchor()) {
-        if (ed.key == Key_Left) {
-            return curSeg->prev1WithElemsOnStaff(staffIdx());
-        }
-        if (ed.key == Key_Right) {
-            Segment* lastCRSegInScore = score()->lastSegment();
-            while (lastCRSegInScore && !lastCRSegInScore->isChordRestType()) {
-                lastCRSegInScore = lastCRSegInScore->prev1(SegmentType::ChordRest);
-            }
-            if (curSeg == lastCRSegInScore && curSeg == line()->endSegment()) {
-                // If we reach this point, it means that the line in question does not accept time anchors
-                // and that the line's end segment is the last CR segment in the score. Trying to use
-                // next1WithElemsOnStaff won't do anything from here, but the last segment in the score is
-                // still a valid new anchor segment for this line (see also LineSegment::edit)...
-                return score()->lastSegment();
-            }
-            return curSeg->next1WithElemsOnStaff(staffIdx());
-        }
-    }
-
-    if (ed.modifiers & ControlModifier) {
-        if (ed.key == Key_Left) {
-            Measure* measure = curSeg->rtick().isZero() ? curSeg->measure()->prevMeasure() : curSeg->measure();
-            return measure ? measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1)) : nullptr;
-        }
-        if (ed.key == Key_Right) {
-            Measure* measure = curSeg->measure()->nextMeasure();
-            return measure ? measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1)) : nullptr;
-        }
-    }
-
-    if (ed.key == Key_Left) {
-        return curSeg->prev1ChordRestOrTimeTick();
-    }
-    if (ed.key == Key_Right) {
-        return curSeg->next1ChordRestOrTimeTick();
-    }
-
-    return nullptr;
 }
 
 //---------------------------------------------------------

@@ -92,7 +92,15 @@ EngravingObject* LinkedObjects::mainElement()
 
                     // MM rests may be generated but not written (e.g. if
                     // saving a file right after disabling MM rests)
-                    const bool mmRestsWritten = e1->style().styleB(Sid::createMultiMeasureRests);
+                    bool mmRestsWritten = e1->style().styleB(Sid::createMultiMeasureRests);
+                    if (m1->tick() == m2->tick()) {
+                        // MM rests may be still enabled but the mmRest may have been removed by editing
+                        // NOTE: the fact that we have linked clones between the original measure and the MMRest
+                        // and we have to decide which one is the "main" one is really bad tech debt. We should not
+                        // use linked clones for that. Needs fix in future. [M.S.]
+                        bool oneIsMMRestCoveringOther = m1->mmRest() == m2 || m2->mmRest() == m1;
+                        mmRestsWritten &= oneIsMMRestCoveringOther;
+                    }
 
                     if (m1->isMMRest()) {
                         // m1 is earlier if m2 is *not* the first MM rest measure

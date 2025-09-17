@@ -1110,7 +1110,7 @@ double AccidentalsLayout::xPosRelativeToSegment(const Accidental* accidental)
     if (note) {
         x += note->pos().x();
     }
-    if (chord) {
+    if (chord && !keepAccidentalsCloseToChord(chord)) {
         x += chord->pos().x();
     }
     return x;

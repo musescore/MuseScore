@@ -632,7 +632,10 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
     sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, !m_dragInProgress);
     endMoveRows();
 
-    updateSystemObjectLayers();
+    if (!m_dragInProgress) {
+        updateSystemObjectLayers();
+    }
+
     updateRearrangementAvailability();
 
     return true;

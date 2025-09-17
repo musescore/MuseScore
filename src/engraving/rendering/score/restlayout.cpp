@@ -601,6 +601,9 @@ void RestLayout::checkFullMeasureRestCollisions(const System* system, LayoutCont
 
             Shape measureShape;
             for (const Segment& segment : measure->segments()) {
+                if (!segment.isActive()) {
+                    continue;
+                }
                 double xSegment = segment.pagePos().x() - system->pagePos().x();
                 measureShape.add(segment.staffShape(staffIdx).translated(PointF(xSegment, 0.0)));
             }

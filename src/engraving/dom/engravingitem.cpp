@@ -1408,7 +1408,7 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
                 if (segment && segment->isTimeTickType() && segment->measure() != measure) {
                     // Edge case: this is a TimeTick segment at the end of previous measure. Happens only
                     // when dynamic is anchorToEndOfPrevious. In this case look for preceding segment.
-                    segment = segment->prev1ChordRestOrTimeTick();
+                    segment = segment->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
                     assert(segment);
                     measure = segment->measure();
                 }
