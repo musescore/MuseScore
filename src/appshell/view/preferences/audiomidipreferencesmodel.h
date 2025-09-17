@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "audio/iaudioconfiguration.h"
+#include "audio/iaudiodrivercontroller.h"
 #include "midi/imidiconfiguration.h"
 #include "midi/imidioutport.h"
 #include "midi/imidiinport.h"
@@ -58,6 +59,7 @@ class AudioMidiPreferencesModel : public QObject, public muse::Injectable, publi
         int onlineSoundsShowProgressBarMode READ onlineSoundsShowProgressBarMode WRITE setOnlineSoundsShowProgressBarMode NOTIFY onlineSoundsShowProgressBarModeChanged)
 
     muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    muse::Inject<muse::audio::IAudioDriverController> audioDriverController = { this };
     muse::Inject<muse::midi::IMidiConfiguration> midiConfiguration = { this };
     muse::Inject<muse::midi::IMidiOutPort> midiOutPort = { this };
     muse::Inject<muse::midi::IMidiInPort> midiInPort = { this };

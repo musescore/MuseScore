@@ -22,17 +22,24 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
-#include "async/asyncable.h"
+#include "iaudiodriver.h"
+
+#include "modularity/imoduleinterface.h"
 
 namespace muse::audio {
-class AudioModule : public modularity::IModuleSetup, public async::Asyncable
+class IAudioDriverController : MODULE_EXPORT_INTERFACE
 {
-public:
-    std::string moduleName() const override;
+    INTERFACE_ID(IAudioDriverController)
 
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
+public:
+    virtual ~IAudioDriverController() = default;
+
+    virtual std::string currentAudioApi() const = 0;
+    virtual void setCurrentAudioApi(const std::string& name) = 0;
+    virtual async::Notification currentAudioApiChanged() const = 0;
+
+    virtual std::vector<std::string> availableAudioApiList() const = 0;
+
+    virtual IAudioDriverPtr audioDriver() const = 0;
 };
 }

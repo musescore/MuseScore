@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,11 +24,6 @@
 using namespace muse::audio;
 using namespace muse;
 
-std::vector<std::string> AudioConfigurationStub::availableAudioApiList() const
-{
-    return {};
-}
-
 std::string AudioConfigurationStub::currentAudioApi() const
 {
     return std::string();
@@ -36,6 +31,11 @@ std::string AudioConfigurationStub::currentAudioApi() const
 
 void AudioConfigurationStub::setCurrentAudioApi(const std::string&)
 {
+}
+
+async::Notification AudioConfigurationStub::currentAudioApiChanged() const
+{
+    return {};
 }
 
 std::string AudioConfigurationStub::audioOutputDeviceId() const

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,21 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_AUDIOOUTPUTDEVICECONTROLLER_H
-#define MU_NOTATION_AUDIOOUTPUTDEVICECONTROLLER_H
+
+#pragma once
 
 #include "global/async/asyncable.h"
 
 #include "global/modularity/ioc.h"
 #include "iaudioconfiguration.h"
-#include "iaudiodriver.h"
+#include "iaudiodrivercontroller.h"
 #include "audio/common/rpc/irpcchannel.h"
 
 namespace muse::audio {
 class AudioOutputDeviceController : public Injectable, public async::Asyncable
 {
     Inject<IAudioConfiguration> configuration = { this };
-    Inject<IAudioDriver> audioDriver = { this };
+    Inject<IAudioDriverController> audioDriverController = { this };
     Inject<rpc::IRpcChannel> rpcChannel = { this };
 
 public:
@@ -46,7 +46,7 @@ public:
 private:
     void checkConnection();
     void onOutputDeviceChanged();
+
+    IAudioDriverPtr audioDriver() const;
 };
 }
-
-#endif // MU_NOTATION_AUDIOOUTPUTDEVICECONTROLLER_H
