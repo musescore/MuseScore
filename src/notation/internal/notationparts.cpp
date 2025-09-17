@@ -374,8 +374,8 @@ void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreC
     std::vector<Staff*> removedStaves;
     std::vector<Staff*> addedStaves;
 
-    for (auto& pair : changes.changedItems) {
-        if (!pair.first || !pair.first->isStaff()) {
+    for (auto& pair : changes.changedObjects) {
+        if (!pair.first->isStaff()) {
             continue;
         }
 
