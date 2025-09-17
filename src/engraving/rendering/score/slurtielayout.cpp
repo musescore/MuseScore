@@ -2196,7 +2196,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
     shape.remove_if([&](ShapeElement& s) {
         bool remove =  !s.item() || s.item() == note || muse::contains(IGNORED_TYPES, s.item()->type())
                       || (s.item()->isNoteDot() && ignoreDot)
-                      || (s.item()->isAccidental() && ignoreAccidental && s.item()->track() == chord->track())
+                      || (s.item()->isAccidental() && ignoreAccidental)
                       || (s.item()->isLaissezVibSegment() && ignoreLvSeg)
                       || (s.item()->isArpeggio() && ignoreArpeggio)
                       || (s.item()->isParenthesis() && ignoreParen)
