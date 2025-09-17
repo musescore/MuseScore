@@ -91,6 +91,27 @@ LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
     });
 }
 
+void LayoutPanelTreeModel::updateScoreSelection() const
+{
+    const std::vector<EngravingItem*>& selectedElements = m_notation->interaction()->selection()->elements();
+
+    // This only gets executed for one part, see break down below
+    // Rewriting it to early return wouldn't bring much clarity in my opinion
+    for (EngravingItem* e: selectedElements) {
+        Part* selectedPart = e->part();
+        if (!selectedPart) {
+            continue;
+        }
+        ID selectedPartId = selectedPart->id();
+        AbstractLayoutPanelTreeItem* item = m_rootItem->childAtId(selectedPartId, LayoutPanelItemType::PART);
+
+        if (!item->isSelected()) {
+            m_notation->interaction()->clearSelection();
+            break;
+        }
+    }
+}
+
 void LayoutPanelTreeModel::onMasterNotationChanged()
 {
     m_masterNotation = context()->currentMasterNotation();
@@ -307,7 +328,9 @@ void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& partId)
 void LayoutPanelTreeModel::setupNotationConnections()
 {
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
-        updateSelectedRows();
+        if (!m_blockSelectionChangedEvents) {
+            updateSelectedRows();
+        }
     });
 
     m_notation->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChanges& changes) {
@@ -490,11 +513,17 @@ void LayoutPanelTreeModel::setLayoutPanelVisible(bool visible)
 void LayoutPanelTreeModel::selectRow(const QModelIndex& rowIndex)
 {
     m_selectionModel->select(rowIndex);
+    m_blockSelectionChangedEvents = true;
+    updateScoreSelection();
+    m_blockSelectionChangedEvents = false;
 }
 
 void LayoutPanelTreeModel::clearSelection()
 {
     m_selectionModel->clear();
+    m_blockSelectionChangedEvents = true;
+    updateScoreSelection();
+    m_blockSelectionChangedEvents = false;
 }
 
 void LayoutPanelTreeModel::addInstruments()

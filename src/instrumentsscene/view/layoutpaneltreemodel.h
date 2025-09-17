@@ -147,6 +147,7 @@ private:
 
     void updateSelectedRows();
     void onScoreChanged(const mu::engraving::ScoreChanges& changes = {});
+    void updateScoreSelection() const;
 
     void clear();
     void deleteItems();
@@ -199,5 +200,7 @@ private:
     MoveParams m_activeDragMoveParams;
 
     muse::ID m_systemStaffToSelect;
+
+    bool m_blockSelectionChangedEvents = false;
 };
 }
