@@ -499,11 +499,6 @@ IFontFace* FontsEngine::createFontFace(const io::path_t& path) const
     }
 
     IFontFace* origin = new FontFaceFT();
-    if (io::FileInfo::suffix(path) == u"ftx") {
-        //origin = new FontFaceXT();
-    } else {
-        origin = new FontFaceFT();
-    }
 
     return new FontFaceDU(origin);
 }

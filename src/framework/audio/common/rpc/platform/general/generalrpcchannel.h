@@ -32,6 +32,7 @@ class GeneralRpcChannel : public IRpcChannel
 {
 public:
     GeneralRpcChannel() = default;
+    ~GeneralRpcChannel() override;
 
     void setupOnMain() override;
     void setupOnWorker() override;

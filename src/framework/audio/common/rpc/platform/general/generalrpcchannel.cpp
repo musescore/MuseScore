@@ -37,6 +37,12 @@
 
 using namespace muse::audio::rpc;
 
+GeneralRpcChannel::~GeneralRpcChannel()
+{
+    m_workerRpcData.streams.clear();
+    m_mainRpcData.streams.clear();
+}
+
 void GeneralRpcChannel::setupOnMain()
 {
     ONLY_AUDIO_MAIN_THREAD;
