@@ -26,19 +26,22 @@
 #include "global/modularity/ioc.h"
 #include "../iaudioconfiguration.h"
 #include "audio/worker/iaudioworker.h"
-#include "../../iaudiodriver.h"
+#include "../../iaudiodrivercontroller.h"
 
 namespace muse::audio {
 class StartAudioController : public IStartAudioController
 {
     Inject<IAudioConfiguration> configuration;
     Inject<worker::IAudioWorker> audioWorker;
-    Inject<IAudioDriver> audioDriver;
+    Inject<IAudioDriverController> audioDriverController;
 
 public:
     StartAudioController() = default;
 
     void startAudioProcessing(const IApplication::RunMode& mode) override;
     void stopAudioProcessing() override;
+
+private:
+    IAudioDriverPtr audioDriver() const;
 };
 }

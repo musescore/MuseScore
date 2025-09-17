@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,7 +25,7 @@
 #include "ui/iuiengine.h"
 
 #include "audioconfigurationstub.h"
-#include "audiodriverstub.h"
+#include "audiodrivercontrollerstub.h"
 #include "synthresolverstub.h"
 #include "fxresolverstub.h"
 #include "soundfontcontrollerstub.h"
@@ -47,7 +47,7 @@ std::string AudioModule::moduleName() const
 void AudioModule::registerExports()
 {
     ioc()->registerExport<IAudioConfiguration>(moduleName(), new AudioConfigurationStub());
-    ioc()->registerExport<IAudioDriver>(moduleName(), new AudioDriverStub());
+    ioc()->registerExport<IAudioDriverController>(moduleName(), new AudioDriverControllerStub());
 
     ioc()->registerExport<synth::ISynthResolver>(moduleName(), new synth::SynthResolverStub());
     ioc()->registerExport<fx::IFxResolver>(moduleName(), new fx::FxResolverStub());

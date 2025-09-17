@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,7 +22,6 @@
 
 #include "commonaudioapiconfigurationmodel.h"
 
-#include "global/translation.h"
 #include "audio/common/audiotypes.h"
 
 #include "log.h"
@@ -125,4 +124,9 @@ QList<unsigned int> CommonAudioApiConfigurationModel::sampleRateList() const
 void CommonAudioApiConfigurationModel::sampleRateSelected(const QString& sampleRateStr)
 {
     audioConfiguration()->setSampleRate(sampleRateStr.toInt());
+}
+
+muse::audio::IAudioDriverPtr CommonAudioApiConfigurationModel::audioDriver() const
+{
+    return audioDriverController()->audioDriver();
 }

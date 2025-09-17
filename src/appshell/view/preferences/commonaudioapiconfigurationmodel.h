@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,16 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_COMMONAUDIOAPICONFIGURATIONMODEL_H
-#define MU_APPSHELL_COMMONAUDIOAPICONFIGURATIONMODEL_H
+
+#pragma once
 
 #include <QObject>
 
 #include "async/asyncable.h"
-
 #include "modularity/ioc.h"
+
 #include "audio/main/iaudioconfiguration.h"
-#include "audio/iaudiodriver.h"
+#include "audio/iaudiodrivercontroller.h"
 
 namespace mu::appshell {
 class CommonAudioApiConfigurationModel : public QObject, public muse::Injectable, public muse::async::Asyncable
@@ -45,7 +45,7 @@ class CommonAudioApiConfigurationModel : public QObject, public muse::Injectable
     Q_PROPERTY(QList<unsigned int> sampleRateList READ sampleRateList NOTIFY sampleRateListChanged)
 
     muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
-    muse::Inject<muse::audio::IAudioDriver> audioDriver = { this };
+    muse::Inject<muse::audio::IAudioDriverController> audioDriverController = { this };
 
 public:
     explicit CommonAudioApiConfigurationModel(QObject* parent = nullptr);
@@ -73,7 +73,8 @@ signals:
 
     void bufferSizeChanged();
     void bufferSizeListChanged();
+
+private:
+    muse::audio::IAudioDriverPtr audioDriver() const;
 };
 }
-
-#endif // MU_APPSHELL_COMMONAUDIOAPICONFIGURATIONMODEL_H

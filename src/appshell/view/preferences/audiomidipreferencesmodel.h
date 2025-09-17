@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_AUDIOMIDIPREFERENCESMODEL_H
-#define MU_APPSHELL_AUDIOMIDIPREFERENCESMODEL_H
+#pragma once
 
 #include <QObject>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "audio/main/iaudioconfiguration.h"
+#include "audio/iaudiodrivercontroller.h"
 #include "midi/imidiconfiguration.h"
 #include "midi/imidioutport.h"
 #include "midi/imidiinport.h"
@@ -58,6 +58,7 @@ class AudioMidiPreferencesModel : public QObject, public muse::Injectable, publi
         int onlineSoundsShowProgressBarMode READ onlineSoundsShowProgressBarMode WRITE setOnlineSoundsShowProgressBarMode NOTIFY onlineSoundsShowProgressBarModeChanged)
 
     muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    muse::Inject<muse::audio::IAudioDriverController> audioDriverController = { this };
     muse::Inject<muse::midi::IMidiConfiguration> midiConfiguration = { this };
     muse::Inject<muse::midi::IMidiOutPort> midiOutPort = { this };
     muse::Inject<muse::midi::IMidiInPort> midiInPort = { this };
@@ -128,5 +129,3 @@ private:
     void showMidiError(const muse::midi::MidiDeviceID& deviceId, const std::string& text) const;
 };
 }
-
-#endif // MU_APPSHELL_AUDIOMIDIPREFERENCESMODEL_H

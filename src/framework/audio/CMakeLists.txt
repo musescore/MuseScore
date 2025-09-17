@@ -51,6 +51,7 @@ set(MODULE_SRC
 
     # Common public
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiodrivercontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/inputlag.h
     )
 

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_AUDIODRIVERSTUB_H
-#define MU_AUDIO_AUDIODRIVERSTUB_H
+#pragma once
 
 #include "audio/iaudiodriver.h"
 
@@ -59,5 +58,3 @@ public:
     void suspend() override;
 };
 }
-
-#endif // MU_AUDIO_AUDIODRIVERSTUB_H

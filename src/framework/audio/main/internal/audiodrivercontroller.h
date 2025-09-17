@@ -22,31 +22,31 @@
 
 #pragma once
 
-#include "global/async/asyncable.h"
-
-#include "global/modularity/ioc.h"
-#include "audio/main/iaudioconfiguration.h"
 #include "audio/iaudiodrivercontroller.h"
-#include "audio/common/rpc/irpcchannel.h"
+#include "modularity/ioc.h"
+
+#include "audio/main/iaudioconfiguration.h"
 
 namespace muse::audio {
-class AudioOutputDeviceController : public Injectable, public async::Asyncable
+class AudioDriverController : public IAudioDriverController, public Injectable
 {
     Inject<IAudioConfiguration> configuration = { this };
-    Inject<IAudioDriverController> audioDriverController = { this };
-    Inject<rpc::IRpcChannel> rpcChannel = { this };
 
 public:
-
-    AudioOutputDeviceController(const modularity::ContextPtr& iocCtx)
+    AudioDriverController(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
     void init();
 
-private:
-    void checkConnection();
-    void onOutputDeviceChanged();
+    std::string currentAudioApi() const override;
+    void setCurrentAudioApi(const std::string& name) override;
+    async::Notification currentAudioApiChanged() const override;
 
-    IAudioDriverPtr audioDriver() const;
+    std::vector<std::string> availableAudioApiList() const override;
+
+    IAudioDriverPtr audioDriver() const override;
+
+private:
+    IAudioDriverPtr m_audioDriver;
 };
 }

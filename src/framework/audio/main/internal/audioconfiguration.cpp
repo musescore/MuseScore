@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -63,7 +63,12 @@ void AudioConfiguration::init()
         updateSamplesToPreallocate();
     });
 
-    settings()->setDefaultValue(AUDIO_API_KEY, Val("Core Audio"));
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    settings()->setDefaultValue(AUDIO_API_KEY, Val("PipeWire"));
+#endif
+    settings()->valueChanged(AUDIO_API_KEY).onReceive(nullptr, [this](const Val&) {
+        m_currentAudioApiChanged.notify();
+    });
 
     settings()->setDefaultValue(AUDIO_OUTPUT_DEVICE_ID_KEY, Val(DEFAULT_DEVICE_ID));
     settings()->valueChanged(AUDIO_OUTPUT_DEVICE_ID_KEY).onReceive(nullptr, [this](const Val&) {
@@ -107,18 +112,6 @@ void AudioConfiguration::onWorkerConfigChanged()
     rpcChannel()->send(rpc::make_notification(rpc::Method::WorkerConfigChanged, rpc::RpcPacker::pack(workerConfig())));
 }
 
-std::vector<std::string> AudioConfiguration::availableAudioApiList() const
-{
-    std::vector<std::string> names {
-        "Core Audio",
-        "ALSA Audio",
-        "PulseAudio",
-        "JACK Audio Server"
-    };
-
-    return names;
-}
-
 std::string AudioConfiguration::currentAudioApi() const
 {
     return settings()->value(AUDIO_API_KEY).toString();
@@ -127,6 +120,11 @@ std::string AudioConfiguration::currentAudioApi() const
 void AudioConfiguration::setCurrentAudioApi(const std::string& name)
 {
     settings()->setSharedValue(AUDIO_API_KEY, Val(name));
+}
+
+async::Notification AudioConfiguration::currentAudioApiChanged() const
+{
+    return m_currentAudioApiChanged;
 }
 
 std::string AudioConfiguration::audioOutputDeviceId() const

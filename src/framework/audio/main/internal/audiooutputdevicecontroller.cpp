@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -107,4 +107,9 @@ void AudioOutputDeviceController::onOutputDeviceChanged()
 
     IAudioDriver::Spec activeSpec = audioDriver()->activeSpec();
     rpcChannel()->send(rpc::make_request(Method::SetOutputSpec, RpcPacker::pack(activeSpec.output)));
+}
+
+IAudioDriverPtr AudioOutputDeviceController::audioDriver() const
+{
+    return audioDriverController()->audioDriver();
 }
