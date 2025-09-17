@@ -127,6 +127,16 @@ void ToolBarItem::setTitle(const TranslatableString& title)
     emit actionChanged();
 }
 
+void ToolBarItem::setDescription(const TranslatableString& description)
+{
+    if (m_action.description == description) {
+        return;
+    }
+
+    m_action.description = description;
+    emit actionChanged();
+}
+
 void ToolBarItem::setState(const UiActionState& state)
 {
     if (m_state == state) {
