@@ -1481,6 +1481,8 @@ static void readTempoText(TempoText* t, XmlReader& e, ReadContext& ctx)
     } else {
         t->setXmlText(t->xmlText().replace(u"<sym>unicode", u"<sym>met"));
     }
+
+    t->resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
 //---------------------------------------------------------

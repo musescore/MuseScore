@@ -1054,6 +1054,8 @@ void readTempoText(TempoText* t, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+
+    t->resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
 //---------------------------------------------------------

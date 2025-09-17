@@ -652,6 +652,8 @@ void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
         t->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(int(lrint(t->tempo().toBPM().val))));
         t->setVisible(false);
     }
+
+    t->resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
 void TRead::read(StaffText* t, XmlReader& xml, ReadContext& ctx)

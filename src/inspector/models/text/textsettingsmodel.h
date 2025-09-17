@@ -42,6 +42,7 @@ class TextSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * horizontalAlignment READ horizontalAlignment CONSTANT)
     Q_PROPERTY(PropertyItem * verticalAlignment READ verticalAlignment CONSTANT)
 
+    Q_PROPERTY(PropertyItem * symbolSize READ symbolSize CONSTANT)
     Q_PROPERTY(PropertyItem * isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
     Q_PROPERTY(PropertyItem * frameType READ frameType CONSTANT)
     Q_PROPERTY(PropertyItem * frameBorderColor READ frameBorderColor CONSTANT)
@@ -61,6 +62,7 @@ class TextSettingsModel : public AbstractInspectorModel
         bool isSpecialCharactersInsertionAvailable READ isSpecialCharactersInsertionAvailable NOTIFY isSpecialCharactersInsertionAvailableChanged)
     Q_PROPERTY(bool isDynamicSpecificSettings READ isDynamicSpecificSettings NOTIFY isDynamicSpecificSettingsChanged)
     Q_PROPERTY(bool isHorizontalAlignmentAvailable READ isHorizontalAlignmentAvailable NOTIFY isHorizontalAlignmentAvailableChanged)
+    Q_PROPERTY(bool isSymbolSizeAvailable READ isSymbolSizeAvailable NOTIFY isSymbolSizeAvailableChanged)
 
 public:
     explicit TextSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -83,6 +85,7 @@ public:
     PropertyItem* horizontalAlignment() const;
     PropertyItem* verticalAlignment() const;
 
+    PropertyItem* symbolSize() const;
     PropertyItem* isSizeSpatiumDependent() const;
     PropertyItem* frameType() const;
     PropertyItem* frameBorderColor() const;
@@ -101,12 +104,14 @@ public:
     bool isSpecialCharactersInsertionAvailable() const;
     bool isDynamicSpecificSettings() const;
     bool isHorizontalAlignmentAvailable() const;
+    bool isSymbolSizeAvailable() const;
 
 public slots:
     void setAreStaffTextPropertiesAvailable(bool areStaffTextPropertiesAvailable);
     void setIsSpecialCharactersInsertionAvailable(bool isSpecialCharactersInsertionAvailable);
     void setIsDynamicSpecificSettings(bool isOnlyDynamics);
     void setIsHorizontalAlignmentAvailable(bool isHorizontalAlignmentAvailable);
+    void setIsSymbolSizeAvailable(bool isSymbolSizeAvailable);
 
 signals:
     void textStylesChanged();
@@ -115,6 +120,7 @@ signals:
     void isSpecialCharactersInsertionAvailableChanged(bool isSpecialCharactersInsertionAvailable);
     void isDynamicSpecificSettingsChanged(bool isDynamicSpecificSettings);
     void isHorizontalAlignmentAvailableChanged(bool isHorizontalAlignmentAvailable);
+    void isSymbolSizeAvailableChanged(bool isSymbolSizeAvailable);
 
 private:
     bool isTextEditingStarted() const;
@@ -124,6 +130,7 @@ private:
     void updateStaffPropertiesAvailability();
     void updateIsDynamicSpecificSettings();
     void updateIsHorizontalAlignmentAvailable();
+    void updateIsSymbolSizeAvailable();
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
@@ -134,6 +141,7 @@ private:
     PropertyItem* m_horizontalAlignment = nullptr;
     PropertyItem* m_verticalAlignment = nullptr;
 
+    PropertyItem* m_symbolSize = nullptr;
     PropertyItem* m_isSizeSpatiumDependent = nullptr;
     PropertyItem* m_frameType = nullptr;
     PropertyItem* m_frameBorderColor = nullptr;
@@ -152,6 +160,7 @@ private:
     bool m_isSpecialCharactersInsertionAvailable = false;
     bool m_isDynamicSpecificSettings = false;
     bool m_isHorizontalAlignmentAvailable = true;
+    bool m_isSymbolSizeAvailable = false;
 };
 }
 
