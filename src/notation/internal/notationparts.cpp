@@ -374,7 +374,14 @@ void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreC
     std::vector<Staff*> removedStaves;
     std::vector<Staff*> addedStaves;
 
+    bool stavesSorted = false;
+
     for (auto& pair : changes.changedObjects) {
+        if (muse::contains(pair.second, CommandType::SortStaves)) {
+            stavesSorted = true;
+            break;
+        }
+
         if (!pair.first->isStaff()) {
             continue;
         }
@@ -386,6 +393,11 @@ void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreC
         } else if (muse::contains(pair.second, CommandType::InsertStaff)) {
             addedStaves.push_back(staff);
         }
+    }
+
+    if (stavesSorted && !partsChanged) {
+        m_partChangedNotifier.changed();
+        return;
     }
 
     for (Staff* staff : removedStaves) {
