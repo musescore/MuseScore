@@ -249,7 +249,6 @@ Item {
                             item: model ? model.itemRole : null
 
                             sideMargin: contentColumn.sideMargin
-                            popupAnchorItem: root
 
                             navigation.name: model ? model.itemRole.title : "LayoutPanelItemDelegate"
                             navigation.panel: layoutPanelTreeView.navigationTreePanel
@@ -281,24 +280,6 @@ Item {
 
                             onRemoveSelectionRequested: {
                                 treeModel.removeSelectedRows()
-                            }
-
-                            property real contentYBackup: 0
-
-                            onPopupOpened: function(popupX, popupY, popupHeight) {
-                                contentYBackup = layoutPanelTreeView.flickableItem.contentY
-                                var mappedPopupY = mapToItem(layoutPanelTreeView.flickableItem, popupX, popupY).y
-
-                                if (mappedPopupY + popupHeight < layoutPanelTreeView.flickableItem.height - contentColumn.sideMargin) {
-                                    return
-                                }
-
-                                var hiddenPopupPartHeight = Math.abs(layoutPanelTreeView.flickableItem.height - (mappedPopupY + popupHeight))
-                                layoutPanelTreeView.flickableItem.contentY += hiddenPopupPartHeight + contentColumn.sideMargin
-                            }
-
-                            onPopupClosed: {
-                                layoutPanelTreeView.flickableItem.contentY = contentYBackup
                             }
 
                             onChangeVisibilityOfSelectedRowsRequested: function(visible) {
