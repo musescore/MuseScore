@@ -892,11 +892,13 @@
     </SC>
   <SC>
     <key>zoomin</key>
+    <seq>Ctrl++</seq>
     <seq>Ctrl+=</seq>
     </SC>
   <SC>
     <key>zoomout</key>
     <seq>Ctrl+-</seq>
+    <seq>Ctrl+Shift+-</seq>
     </SC>
   <SC>
     <key>zoom100</key>
