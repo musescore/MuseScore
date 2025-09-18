@@ -1274,12 +1274,16 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         TLayout::layoutItem(ic, ctx);
     }
 
-    for (EngravingItem* item : elementsToLayout.playTechCapoStringTunSystemTextTripletFeel) {
+    for (EngravingItem* item : elementsToLayout.playTechCapoStringTunTripletFeel) {
         TLayout::layoutItem(item, ctx);
     }
 
     if (hasFretDiagram) {
         layoutFretDiagrams(elementsToLayout, system, ctx);
+    }
+
+    for (SystemText* systemText : elementsToLayout.systemText) {
+        TLayout::layoutSystemText(systemText, systemText->mutldata());
     }
 
     layoutVoltas(elementsToLayout, ctx);
@@ -1434,9 +1438,11 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
             case ElementType::PLAYTECH_ANNOTATION:
             case ElementType::CAPO:
             case ElementType::STRING_TUNINGS:
-            case ElementType::SYSTEM_TEXT:
             case ElementType::TRIPLET_FEEL:
-                elements.playTechCapoStringTunSystemTextTripletFeel.push_back(item);
+                elements.playTechCapoStringTunTripletFeel.push_back(item);
+                break;
+            case ElementType::SYSTEM_TEXT:
+                elements.systemText.push_back(toSystemText(item));
                 break;
             case ElementType::REHEARSAL_MARK:
                 elements.rehMarks.push_back(toRehearsalMark(item));
