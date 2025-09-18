@@ -75,16 +75,17 @@ StyledDialogView {
             }
 
             SaveLocationOption {
-                title: qsTrc("project/save", "To the Cloud (free)")
-                description: qsTrc("project/save", "Files are saved privately on your own personal account. \
-You can share drafts with others and publish your finished scores publicly too.")
-                buttonText: qsTrc("project/save", "Save to the cloud")
+                title: qsTrc("project/save", "Save to cloud")
+                isFreeLabelVisible: true
+                description: qsTrc("project/save", "Save files privately on your personal MuseScore.com account, share drafts with others, and publish your finished scores when you’re ready.")
+                buttonText: qsTrc("project/save", "Save to cloud on MuseScore.com")
 
-                imageSource: "qrc:/SaveToCloud/images/Cloud.png"
+                imageSource: ui.theme.isDark ? "qrc:/SaveToCloud/images/Cloud_Dark.png"
+                                             : "qrc:/SaveToCloud/images/Cloud_Light.png"
 
                 navigation.panel: optionsNavPanel
                 navigation.column: 1
-                navigation.accessible.name: qsTrc("project/save", "Save to the cloud (free)")
+                navigation.accessible.name: qsTrc("project/save", "Save to cloud on MuseScore.com (free)")
                 navigation.accessible.description: description
 
                 onButtonClicked: {
