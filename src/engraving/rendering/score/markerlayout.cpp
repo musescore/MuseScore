@@ -98,12 +98,7 @@ void MarkerLayout::doLayoutMarker(const Marker* item, TextBase::LayoutData* ldat
             break;
         }
     } else {
-        staff_idx_t blIdx = avoidBarline ? item->staffIdx() - 1 : item->staffIdx();
-        // right and start repoeat: next measure
-        // left and start repeat: measure
-        // right and anything else: measure
-        // left and anything else: prev measure
-        // start repeat - use beginbarline
+        staff_idx_t blIdx = item->staffIdx() - 1;
 
         const BarLine* bl = nullptr;
         if (startRepeat) {
@@ -121,8 +116,8 @@ void MarkerLayout::doLayoutMarker(const Marker* item, TextBase::LayoutData* ldat
         }
 
         if (hPos == AlignH::LEFT) {
-            double startRepeatAdjust = startRepeat ? bl->width() : 0.0;
-            xAdj += blPadding + startRepeatAdjust;
+            blWidth = startRepeat ? bl->width() : 0.0;
+            xAdj += blPadding + blWidth;
         } else if (hPos == AlignH::RIGHT) {
             blWidth = startRepeat ? 0.0 : bl->width();
             xAdj -= ldata->bbox().width() + blWidth + blPadding;
