@@ -2778,7 +2778,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     if (item->explicitParent()->isSegment()) {
         // We need to get the width of the notehead/rest in order to position the fret diagram correctly
         Segment* pSeg = item->segment();
-        double noteheadWidth = 0;
+        double noteheadWidth = 0.0;
         if (pSeg->isChordRestType()) {
             staff_idx_t idx = item->staff()->idx();
             for (EngravingItem* e = pSeg->firstElementOfSegment(idx); e; e = pSeg->nextElementOfSegment(e, idx)) {
@@ -2793,6 +2793,10 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
                     break;
                 }
             }
+        }
+        if (RealIsNull(noteheadWidth)) {
+            // If note or rest not found, use standard notehead width
+            noteheadWidth = item->symWidth(SymId::noteheadBlack);
         }
 
         ldata->setPos((noteheadWidth - item->mainWidth()) / 2, -(ldata->shape().bottom() + item->styleP(Sid::fretY)));
