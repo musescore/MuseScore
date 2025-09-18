@@ -56,9 +56,10 @@
           </StaffType>
         </Staff>
       <trackName>Guitar Standard</trackName>
-      <Instrument>
+      <Instrument id="cavaquinho">
         <longName>Guitar Standard</longName>
         <trackName></trackName>
+        <instrumentId>pluck.guitar</instrumentId>
         <StringData>
           <frets>25</frets>
           <string>38</string>
