@@ -7001,7 +7001,9 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
                                                    )
                                                * ticksPerBeat);
 
-    bool needAddSegment = false;
+    endEditText();
+
+    startEdit(TranslatableString("undoableAction", "Navigate to next chord symbol"));
 
     // look for next/prev beat, note, rest or chord
     for (;;) {
@@ -7015,16 +7017,12 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
                 measure = measure->nextMeasure();
                 if (!measure) {
                     LOGD("no next measure");
+                    rollback();
                     return;
                 }
             }
 
-            segment = Factory::createSegment(measure, mu::engraving::SegmentType::ChordRest, newTick - measure->tick());
-            if (!segment) {
-                LOGD("no prev segment");
-                return;
-            }
-            needAddSegment = true;
+            segment = measure->undoGetSegment(SegmentType::ChordRest, newTick);
             break;
         }
 
@@ -7039,12 +7037,6 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
                 break;
             }
         }
-    }
-
-    startEdit(TranslatableString("undoableAction", "Navigate to next chord symbol"));
-
-    if (needAddSegment) {
-        score()->undoAddElement(segment);
     }
 
     mu::engraving::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->textStyleType());
