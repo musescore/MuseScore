@@ -751,6 +751,29 @@ TEST_F(MidiRendererBend_Tests, bendAfterHammer)
     EXPECT_EQ(events[1].size(), 1);
 }
 
+TEST_F(MidiRendererBend_Tests, bendAfterHammer2)
+{
+    constexpr int defVol = 80; // mf
+    constexpr int pwReset = 8192;
+
+    EventsHolder events = renderMidiEvents(u"bend_after_hammer_2.mscx", true, true);
+
+    EXPECT_EQ(events.size(), 2);
+    EXPECT_EQ(events[0].size(), 2);
+    EXPECT_EQ(events[1].size(), 7);
+
+    checkEventInterval(events, 0, 479, 47, defVol);
+
+    checkEventInterval(events, 480, 599, 44, defVol, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 480, pwReset, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 490, 8595, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 500, 9807, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 510, 10922, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+
+    EXPECT_EQ(events[0].size(), 0);
+    EXPECT_EQ(events[1].size(), 1);
+}
+
 TEST_F(MidiRendererBend_Tests, bendOnHiddenStaff)
 {
     constexpr int defVol = 80; // mf

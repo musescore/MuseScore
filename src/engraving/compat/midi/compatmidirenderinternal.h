@@ -169,7 +169,6 @@ public:
         std::unordered_map<track_idx_t, VelocityMap> velocitiesByTrack;
         std::unordered_map<track_idx_t, VelocityMap> velocityMultiplicationsByTrack;
         std::unordered_map<String, std::unordered_set<String> > articulationsWithoutValuesByInstrument;
-        std::unordered_set<const Chord*> chordsWithHammerOnPullOff;
 
         std::shared_ptr<ChannelLookup> channels = std::make_shared<ChannelLookup>();
         std::shared_ptr<PauseMap> pauseMap = std::make_shared<PauseMap>();
@@ -198,6 +197,7 @@ private:
     struct ChordParams {
         bool letRing = false;
         bool palmMute = false;
+        bool hammerOnPullOff = false;
         int endLetRingTick = 0;
     };
 
@@ -205,7 +205,6 @@ private:
     void collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord, EventsHolder& events, double veloMultiplier, Staff* st,
                                        int tickOffset, PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect);
     void fillArticulationsInfo();
-    void fillHammerOnPullOffsInfo();
 
     Score* score = nullptr;
     Context m_context;
