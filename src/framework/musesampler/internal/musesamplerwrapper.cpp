@@ -315,10 +315,13 @@ bool MuseSamplerWrapper::initSampler(const sample_rate_t sampleRate, const sampl
 
 void MuseSamplerWrapper::setupOnlineSound()
 {
+    constexpr double AUTO_PROCESS_INTERVAL = 3.0;
+    constexpr double NO_AUTO_PROCESS = -1.0; // interval < 0 -> no auto process
+
     const bool autoProcess = config()->autoProcessOnlineSoundsInBackground();
 
     m_sequencer.setUpdateMainStreamWhenInactive(autoProcess);
-    m_samplerLib->setAutoRenderInterval(m_sampler, autoProcess ? 1.0 : -1.0); // interval < 0 -> no auto process
+    m_samplerLib->setAutoRenderInterval(m_sampler, autoProcess ? AUTO_PROCESS_INTERVAL : NO_AUTO_PROCESS);
 
     //! NOTE: update progress on the worker thread
     m_renderingStateChanged.onReceive(this, [this](ms_RenderingRangeList list, int size) {
@@ -334,7 +337,7 @@ void MuseSamplerWrapper::setupOnlineSound()
     config()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool on) {
         m_sequencer.setUpdateMainStreamWhenInactive(on);
         m_sequencer.updateMainStream();
-        m_samplerLib->setAutoRenderInterval(m_sampler, on ? 1.0 : -1.0);
+        m_samplerLib->setAutoRenderInterval(m_sampler, on ? AUTO_PROCESS_INTERVAL : NO_AUTO_PROCESS);
     });
 }
 
