@@ -33,26 +33,50 @@ BaseSection {
 
     signal currentAudioApiIndexChangeRequested(int newIndex)
 
-    /*
-     * TODO: https://github.com/musescore/MuseScore/issues/9807
-    ComboBoxWithTitle {
-        id: apiComboBox
+    Row {
+        spacing: 8
 
-        title: qsTrc("appshell/preferences", "Audio API:")
-        columnWidth: root.columnWidth
+        ComboBoxWithTitle {
+            id: apiComboBox
 
-        currentIndex: root.currentAudioApiIndex
-        model: root.audioApiList
+            property int initialIndex: -1
 
-        navigation.name: "AudioApiBox"
-        navigation.panel: root.navigation
-        navigation.row: 1
+            title: qsTrc("appshell/preferences", "Audio API:")
+            columnWidth: root.columnWidth
 
-        onValueEdited: function(newIndex, newValue) {
-            root.currentAudioApiIndexChangeRequested(newIndex)
+            visible: root.audioApiList.length > 1
+
+            currentIndex: root.currentAudioApiIndex
+            model: root.audioApiList
+
+            navigation.name: "AudioApiBox"
+            navigation.panel: root.navigation
+            navigation.row: 1
+
+            onValueEdited: function(newIndex, newValue) {
+                root.currentAudioApiIndexChangeRequested(newIndex)
+            }
+
+            onCurrentIndexChanged: {
+                if (apiComboBox.initialIndex !== -1) {
+                    restartRequiredLabel.visible = apiComboBox.currentIndex !== apiComboBox.initialIndex
+                }
+            }
+
+            Component.onCompleted: {
+                apiComboBox.initialIndex = apiComboBox.currentIndex
+            }
+        }
+
+        StyledTextLabel {
+            id: restartRequiredLabel
+
+            anchors.verticalCenter: parent.verticalCenter
+
+            text: qsTrc("appshell/preferences", "Restart required")
+            visible: false
         }
     }
-    */
 
     CommonAudioApiConfiguration {
         columnWidth: root.columnWidth

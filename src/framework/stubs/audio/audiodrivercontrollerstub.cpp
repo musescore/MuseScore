@@ -20,19 +20,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "audiodrivercontrollerstub.h"
 
-#include "modularity/imodulesetup.h"
-#include "async/asyncable.h"
+#include "audiodriverstub.h"
 
-namespace muse::audio {
-class AudioModule : public modularity::IModuleSetup, public async::Asyncable
+using namespace muse::audio;
+
+std::string AudioDriverControllerStub::currentAudioApi() const
 {
-public:
-    std::string moduleName() const override;
+    return {};
+}
 
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-};
+void AudioDriverControllerStub::setCurrentAudioApi(const std::string&)
+{
+}
+
+muse::async::Notification AudioDriverControllerStub::currentAudioApiChanged() const
+{
+    return {};
+}
+
+std::vector<std::string> AudioDriverControllerStub::availableAudioApiList() const
+{
+    return {};
+}
+
+IAudioDriverPtr AudioDriverControllerStub::audioDriver() const
+{
+    if (!m_audioDriver) {
+        m_audioDriver = std::make_shared<AudioDriverStub>();
+    }
+
+    return m_audioDriver;
 }

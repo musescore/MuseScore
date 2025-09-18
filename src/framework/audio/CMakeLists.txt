@@ -43,6 +43,7 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/iaudioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiodrivercontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/audioutils.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/inputlag.h
 

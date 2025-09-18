@@ -28,7 +28,7 @@
 #include "modularity/imodulesetup.h"
 #include "global/async/asyncable.h"
 
-#include "../iaudiodriver.h"
+#include "audio/iaudiodrivercontroller.h"
 
 namespace muse::audio::worker  {
 class AudioWorkerModule;
@@ -76,7 +76,7 @@ private:
     QTimer m_rpcTimer;
     std::shared_ptr<rpc::GeneralRpcChannel> m_rpcChannel;
 
-    std::shared_ptr<IAudioDriver> m_audioDriver;
+    std::shared_ptr<IAudioDriverController> m_audioDriverController;
 };
 }
 
