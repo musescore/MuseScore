@@ -27,11 +27,13 @@
 #include "audio/common/rpc/irpcchannel.h"
 
 #include "../iworkerplayback.h"
+#include "../isoundfontrepository.h"
 
 namespace muse::audio::worker {
 class WorkerChannelController : public async::Asyncable
 {
     Inject<rpc::IRpcChannel> channel;
+    Inject<synth::ISoundFontRepository> soundFontRepository;
 
 public:
     WorkerChannelController() = default;

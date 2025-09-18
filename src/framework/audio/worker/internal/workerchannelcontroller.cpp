@@ -118,8 +118,35 @@ void WorkerChannelController::init(std::shared_ptr<IWorkerPlayback> playback)
         channel()->addReceiveStream(StreamName::PlaybackDataMainStream, mainStreamId, playbackData.mainStream);
         channel()->addReceiveStream(StreamName::PlaybackDataOffStream, offStreamId, playbackData.offStream);
 
-        RetVal2<TrackId, AudioParams> ret = m_playback->addTrack(seqId, trackName, playbackData, params);
-        channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
+        auto addTrackAndSendResponce = [this](const Msg& msg, const TrackSequenceId& seqId, const TrackName& trackName,
+                                              const mpe::PlaybackData& playbackData, const AudioParams& params) {
+            RetVal2<TrackId, AudioParams> ret = m_playback->addTrack(seqId, trackName, playbackData, params);
+            channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
+        };
+
+        AudioResourceType resourceType = params.in.resourceMeta.type;
+        // Not Fluid
+        if (resourceType != AudioResourceType::FluidSoundfont) {
+            addTrackAndSendResponce(msg, seqId, trackName, playbackData, params);
+        }
+        // Fluid
+        else {
+            AudioResourceId sfname = params.in.resourceMeta.id;
+            if (soundFontRepository()->isSoundFontLoaded(sfname)) {
+                addTrackAndSendResponce(msg, seqId, trackName, playbackData, params);
+            }
+            // Waiting for SF to load
+            else {
+                soundFontRepository()->soundFontsChanged().onNotify(this,
+                                                                    [this, sfname, addTrackAndSendResponce,
+                                                                     msg, seqId, trackName, playbackData, params]() {
+                    if (soundFontRepository()->isSoundFontLoaded(sfname)) {
+                        addTrackAndSendResponce(msg, seqId, trackName, playbackData, params);
+                        soundFontRepository()->soundFontsChanged().resetOnNotify(this);
+                    }
+                });
+            }
+        }
     });
 
     channel()->onMethod(Method::AddTrackWithIODevice, [this](const Msg& msg) {
