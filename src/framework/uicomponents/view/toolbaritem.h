@@ -107,6 +107,7 @@ public:
 public slots:
     void setId(const QString& id);
     void setTitle(const TranslatableString& title);
+    void setDescription(const TranslatableString& description);
     void setState(const ui::UiActionState& state);
     void setSelected(bool selected);
     void setType(muse::uicomponents::ToolBarItemType::Type type);
