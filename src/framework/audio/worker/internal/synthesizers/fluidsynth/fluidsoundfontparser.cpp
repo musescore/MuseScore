@@ -67,6 +67,7 @@ RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPath& 
     }
 
     SoundFontMeta meta;
+    meta.name = io::completeBasename(path).toStdString();
     meta.path = path;
 
     fluid_defsfont_sfont_iteration_start(sfont);

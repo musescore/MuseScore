@@ -61,6 +61,17 @@ void SoundFontRepository::init()
     });
 }
 
+bool SoundFontRepository::isSoundFontLoaded(const std::string& name) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    for (const auto& p : m_soundFonts) {
+        if (p.second.name == name) {
+            return true;
+        }
+    }
+    return false;
+}
+
 const SoundFontsMap& SoundFontRepository::soundFonts() const
 {
     ONLY_AUDIO_WORKER_THREAD;

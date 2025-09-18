@@ -40,6 +40,7 @@ public:
 
     void init();
 
+    bool isSoundFontLoaded(const std::string& name) const override;
     const SoundFontsMap& soundFonts() const override;
     async::Notification soundFontsChanged() const override;
 

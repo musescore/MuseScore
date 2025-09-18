@@ -49,6 +49,7 @@ struct SoundFontPreset
 
 struct SoundFontMeta
 {
+    std::string name;
     SoundFontPath path;
     std::vector<SoundFontPreset> presets;
 };
