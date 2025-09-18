@@ -71,6 +71,11 @@ const UiActionList DiagnosticsActions::m_actions = {
              muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Show engraving &elements")
              ),
+    UiAction("diagnostic-show-engraving-undostack",
+             muse::ui::UiCtxAny,
+             muse::shortcuts::CTX_ANY,
+             TranslatableString("action", "Show engraving &undo stack")
+             ),
     UiAction("diagnostic-show-actions",
              muse::ui::UiCtxAny,
              muse::shortcuts::CTX_ANY,
