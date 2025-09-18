@@ -102,7 +102,18 @@ ComboBox {
         }
 
         Component.onCompleted: function() {
+            if (!styleItem) {
+                return;
+            }
+
             currentIndex = indexOfValue(styleItem.value)
+
+            styleItem.valueChanged.connect(function() {
+                const idx = indexOfValue(styleItem.value);
+                if (idx >= 0) {
+                    currentIndex = idx;
+                }
+            })
         }
 
         onActivated: function(index) {
