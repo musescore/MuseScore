@@ -21,19 +21,8 @@
  */
 #include "appshellconfiguration.h"
 
-#include <QJsonArray>
-#include <QJsonDocument>
-
-#include "settings.h"
-
-#include "multiinstances/resourcelockguard.h"
-
-#include "log.h"
-
 using namespace muse;
-using namespace mu;
 using namespace mu::appshell;
-using namespace mu::notation;
 
 static const std::string module_name("appshell");
 
