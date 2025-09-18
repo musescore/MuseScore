@@ -332,7 +332,6 @@ void HarmonyLayout::render(Harmony* item, Harmony::LayoutData* ldata, const Layo
     ldata->fontList.mut_value().clear();
     for (const ChordFont& cf : chordList->fonts) {
         Font ff(item->font());
-        ff.setPointSizeF(item->size());
         ff.setFamily(item->family(), Font::Type::Harmony);
 
         double mag = item->mag() * cf.mag;
@@ -346,7 +345,6 @@ void HarmonyLayout::render(Harmony* item, Harmony::LayoutData* ldata, const Layo
     }
     if (ldata->fontList.mut_value().empty()) {
         Font ff(item->font());
-        ff.setPointSizeF(item->size());
         ff.setFamily(item->family(), Font::Type::Harmony);
 
         ldata->fontList.mut_value().push_back(ff);
