@@ -201,7 +201,7 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
             }
         }
         for (EngravingItem* item : toMeasure(mb)->el()) {
-            if (item->isMarker() && item->visible() && system->staff(item->staffIdx())->show()) {
+            if ((item->isMarker() || item->isJump()) && item->visible() && system->staff(item->staffIdx())->show()) {
                 allText.push_back(toTextBase(item));
             }
         }
