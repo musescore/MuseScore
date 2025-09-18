@@ -662,8 +662,6 @@ void LayoutPanelTreeModel::endActiveDrag()
 
     updateSystemObjectLayers();
     initPartOrders();
-
-    emit layoutChanged();
 }
 
 void LayoutPanelTreeModel::changeVisibilityOfSelectedRows(bool visible)
@@ -750,7 +748,7 @@ int LayoutPanelTreeModel::columnCount(const QModelIndex&) const
 
 QVariant LayoutPanelTreeModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid() && role != ItemRole) {
+    if (!index.isValid() || role != ItemRole) {
         return QVariant();
     }
 

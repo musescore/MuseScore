@@ -76,6 +76,8 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    Q_INVOKABLE AbstractLayoutPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
+
     bool isMovingUpAvailable() const;
     bool isMovingDownAvailable() const;
     bool isRemovingAvailable() const;
@@ -165,7 +167,6 @@ private:
     AbstractLayoutPanelTreeItem* buildSystemObjectsLayerItem(const mu::notation::Staff* masterStaff,
                                                              const SystemObjectGroups& systemObjects);
     AbstractLayoutPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
-    AbstractLayoutPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
 
     void updateSystemObjectLayers();
 

@@ -44,8 +44,7 @@
 
 QT_BEGIN_NAMESPACE
 
-//#define QQUICKTREEMODELADAPTOR_DEBUG
-#if defined(QQUICKTREEMODELADAPTOR_DEBUG) && !defined(QT_TESTLIB_LIB)
+#ifndef NDEBUG
 #   define ASSERT_CONSISTENCY() Q_ASSERT_X(testConsistency(true /* dumpOnFail */), Q_FUNC_INFO, "Consistency test failed")
 #else
 #   define ASSERT_CONSISTENCY qt_noop
@@ -171,7 +170,7 @@ QVariant QQuickTreeModelAdaptor1::data(const QModelIndex &index, int role) const
     if (!m_model)
         return QVariant();
 
-    const QModelIndex &modelIndex = mapToModel(index);
+    const QPersistentModelIndex &modelIndex = mapToModel(index);
 
     switch (role) {
     case DepthRole:
@@ -261,7 +260,7 @@ bool QQuickTreeModelAdaptor1::childrenVisible(const QModelIndex &index)
            || (m_expandedItems.contains(index) && isVisible(index));
 }
 
-QModelIndex QQuickTreeModelAdaptor1::mapToModel(const QModelIndex &index) const
+QPersistentModelIndex QQuickTreeModelAdaptor1::mapToModel(const QModelIndex &index) const
 {
     return m_items.at(index.row()).index;
 }
@@ -959,7 +958,7 @@ void QQuickTreeModelAdaptor1::emitQueuedSignals()
      * We don't merge adjacent updates, because they are typically filed with a
      * different role (a parent row is next to its children).
      */
-    for (const DataChangedParams &dataChange : m_queuedDataChanged) {
+    for (const DataChangedParams &dataChange : std::as_const(m_queuedDataChanged)) {
         int startRow = dataChange.topLeft.row();
         int endRow = dataChange.bottomRight.row();
         bool merged = false;
