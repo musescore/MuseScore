@@ -209,11 +209,6 @@ Item {
                 role: "itemRole"
             }
 
-            function isControl(itemType) {
-                return itemType === LayoutPanelItemType.CONTROL_ADD_STAFF ||
-                        itemType === LayoutPanelItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
-            }
-
             style: LegacyTreeViewStyle {
                 indentation: 0
                 branchDelegate: null
@@ -222,6 +217,37 @@ Item {
                 rowDelegate: Item {
                     height: layoutPanelTreeView.delegateHeight
                     width: parent.width
+                }
+            }
+
+            property StyledPopupView openedPopup: null
+
+            // In `contentItem` coordinates
+            readonly property real openedPopupBottom: {
+                if (!openedPopup) {
+                    return 0
+                }
+                let parentControl = openedPopup.parent
+                let desiredPopupPosition = contentItem.mapFromItem(openedPopup.parent, openedPopup.parent.width / 2, openedPopup.parent.height)
+                return desiredPopupPosition.y + openedPopup.height + 1
+            }
+
+            onOpenedPopupBottomChanged: {
+                Qt.callLater(function() {
+                    if (openedPopup) {
+                        let viewportBottom = flickableItem.contentY + flickableItem.height
+                        if (openedPopupBottom > viewportBottom) {
+                            flickableItem.contentY += openedPopupBottom - viewportBottom
+                        }
+                    }
+                })
+            }
+
+            flickableItem.footer: Item {
+                implicitHeight: Math.max(0, layoutPanelTreeView.openedPopupBottom - this.y)
+
+                onImplicitHeightChanged: {
+                    Qt.callLater(layoutPanelTreeView.flickableItem.returnToBounds);
                 }
             }
 
@@ -236,8 +262,12 @@ Item {
                     height: parent.height
                     width: parent.width
 
-                    sourceComponent: layoutPanelTreeView.isControl(delegateType) ?
-                                         controlItemDelegateComponent : treeItemDelegateComponent
+                    function isControl(itemType) {
+                        return itemType === LayoutPanelItemType.CONTROL_ADD_STAFF 
+                               || itemType === LayoutPanelItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
+                    }
+
+                    sourceComponent: isControl(delegateType) ? controlItemDelegateComponent : treeItemDelegateComponent
 
                     Component {
                         id: treeItemDelegateComponent
@@ -283,22 +313,12 @@ Item {
                                 treeModel.removeSelectedRows()
                             }
 
-                            property real contentYBackup: 0
-
-                            onPopupOpened: function(popupX, popupY, popupHeight) {
-                                contentYBackup = layoutPanelTreeView.flickableItem.contentY
-                                var mappedPopupY = mapToItem(layoutPanelTreeView.flickableItem, popupX, popupY).y
-
-                                if (mappedPopupY + popupHeight < layoutPanelTreeView.flickableItem.height - contentColumn.sideMargin) {
-                                    return
-                                }
-
-                                var hiddenPopupPartHeight = Math.abs(layoutPanelTreeView.flickableItem.height - (mappedPopupY + popupHeight))
-                                layoutPanelTreeView.flickableItem.contentY += hiddenPopupPartHeight + contentColumn.sideMargin
+                            onPopupOpened: function(popup) {
+                                layoutPanelTreeView.openedPopup = popup
                             }
 
                             onPopupClosed: {
-                                layoutPanelTreeView.flickableItem.contentY = contentYBackup
+                                layoutPanelTreeView.openedPopup = null
                             }
 
                             onChangeVisibilityOfSelectedRowsRequested: function(visible) {
