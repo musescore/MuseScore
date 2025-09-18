@@ -81,7 +81,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
                             : nullptr;
     const bool alignToFretDiagram = fd && fd->visible();
 
-    const double cw = item->symWidth(SymId::noteheadBlack);
+    const double standardNoteWidth = item->symWidth(SymId::noteheadBlack);
 
     double newPosX = 0.0;
     double newPosY = 0.0;
@@ -177,10 +177,10 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
             newPosX = 0.0;
             break;
         case AlignH::HCENTER:
-            newPosX = cw * 0.5;
+            newPosX = standardNoteWidth * 0.5;
             break;
         case AlignH::RIGHT:
-            newPosX = cw;
+            newPosX = standardNoteWidth;
             break;
         }
     }

@@ -144,7 +144,7 @@ private:
         std::vector<StaffText*> staffText;
         std::vector<InstrumentChange*> instrChanges;
         std::vector<SystemText*> systemText;
-        std::vector<EngravingItem*> playTechCapoStringTunSystemTextTripletFeel;
+        std::vector<EngravingItem*> playTechCapoStringTunTripletFeel;
         std::vector<RehearsalMark*> rehMarks;
         std::vector<TempoText*> tempoText;
         std::vector<Image*> images;

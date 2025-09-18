@@ -311,10 +311,10 @@ void GuitarBendLayout::adjustX(GuitarBendSegment* item, PointF& startPos, PointF
     Chord* startChord = startNote->chord();
     Chord* endChord = endNote->chord();
 
-    bool adjustStart = item->isSingleBeginType() && ((startChord->stem() && startChord->up() == up)
+    bool adjustStart = item->isSingleBeginType() && ((startChord->stem() && startChord->up() && up)
                                                      || (up && startNote != startChord->upNote())
                                                      || (!up && startNote != startChord->downNote()));
-    bool adjustEnd = item->isSingleEndType() && ((endChord->stem() && endChord->up() == up)
+    bool adjustEnd = item->isSingleEndType() && ((endChord->stem() && !endChord->up() && !up)
                                                  || (up && endNote != endChord->upNote())
                                                  || (!up && endNote != endChord->downNote()));
 
