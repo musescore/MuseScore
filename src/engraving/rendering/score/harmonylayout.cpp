@@ -258,7 +258,7 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
             // Set top paren height
             lastTextSegHeight = textSeg->height();
             lastTextSegTop = textSeg->tightBoundingRect().translated(textSeg->pos()).y();
-            if (!openingParenStack.empty()) {
+            if (!openingParenStack.empty() && textSeg->font().type() != Font::Type::MusicSymbolText) {
                 ChordSymbolParen* topParen = openingParenStack.back();
                 topParen->top = std::min(topParen->top, textSeg->tightBoundingRect().translated(textSeg->pos()).y());
                 topParen->bottom = std::max(topParen->bottom, textSeg->bboxBaseLine() + textSeg->pos().y());
