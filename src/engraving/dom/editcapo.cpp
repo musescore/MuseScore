@@ -70,6 +70,19 @@ void EditCapo::applyCapoTranspose(int startTick, int endTick, UpdateCtx& ctx)
                     }
                     if (const GuitarBend* bend = note->bendFor(); bend) {
                         if (GuitarBendType::BEND == bend->type()) {
+                            Note* startNote = bend->startNote();
+                            Note* endNote = bend->endNote();
+                            const StringData* stringData = ctx.stringData;
+                            const int startString = startNote->string();
+                            const int startFret = stringData->fret(startNote->pitch(), startString, startNote->staff(), startNote->tick());
+                            if (startFret != startNote->fret()) {
+                                startNote->setFret(startFret);
+                            }
+
+                            if (endNote->fret() != startFret) {
+                                endNote->setString(startString);
+                                endNote->setFret(startFret);
+                            }
                             GuitarBend::fixNotesFrettingForStandardBend(bend->startNote(), bend->endNote());
                         }
                     }
@@ -220,7 +233,6 @@ void EditCapo::handleActiveChanged(const CapoParams& newParams, int startTick, i
         switch (newParams.transposeMode) {
         case CapoParams::TransposeMode::STANDARD_ONLY:
             ctx.noteOffset = -newParams.fretPosition;
-            applyCapoTranspose(startTick, endTick, ctx);
             break;
         case CapoParams::TransposeMode::TAB_ONLY:
         case CapoParams::TransposeMode::PLAYBACK_ONLY:
@@ -231,12 +243,12 @@ void EditCapo::handleActiveChanged(const CapoParams& newParams, int startTick, i
         switch (newParams.transposeMode) {
         case CapoParams::TransposeMode::STANDARD_ONLY:
             ctx.noteOffset = newParams.fretPosition;
-            applyCapoTranspose(startTick, endTick, ctx);
             break;
         case CapoParams::TransposeMode::TAB_ONLY:
         case CapoParams::TransposeMode::PLAYBACK_ONLY:
             break;
         }
     }
+    applyCapoTranspose(startTick, endTick, ctx);
 }
 } // namespace mu::engraving
