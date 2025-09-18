@@ -785,6 +785,7 @@ void HarmonyLayout::kernCharacters(const Harmony* item, const String& text, Harm
         { { u"A", u"\uE871" }, -0.3 },  // half-dim
         { { u"\uE873", u"\uE870" }, -0.4 }, // triangle - dim
         { { u"\uE873", u"\uE871" }, -0.3 }, // triangle - half-dim
+        { { u"A", u"/" }, 0.1 },
 
         { { u"A", u"\uE18E" }, -0.15 },  // dim JAZZ
         { { u"A", u"\uE18F" }, -0.15 },  // hal-dim JAZZ
