@@ -889,7 +889,8 @@ void MeasureLayout::removeMMRestElements(Measure* mmRestMeasure)
     }
 
     for (Segment* seg = mmRestMeasure->first(); seg && seg->rtick().isZero(); seg = seg->next()) {
-        for (EngravingItem* item : seg->annotations()) {
+        const std::vector<EngravingItem*> annotations = seg->annotations(); // copy because we're removing elements
+        for (EngravingItem* item : annotations) {
             item->undoUnlink();
             mmRestMeasure->score()->doUndoRemoveElement(item);
         }
