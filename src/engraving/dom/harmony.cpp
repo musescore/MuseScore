@@ -1438,6 +1438,15 @@ EngravingItem* Harmony::drop(EditData& data)
     return e;
 }
 
+void Harmony::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
+{
+    if (id == Pid::FONT_STYLE || id == Pid::FONT_FACE || id == Pid::FONT_SIZE) {
+        EngravingItem::undoChangeProperty(id, v, ps);
+    }
+
+    TextBase::undoChangeProperty(id, v, ps);
+}
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
@@ -1459,6 +1468,12 @@ PropertyValue Harmony::getProperty(Pid pid) const
         return int(m_realizedHarmony.duration());
     case Pid::HARMONY_DO_NOT_STACK_MODIFIERS:
         return m_doNotStackModifiers;
+    case Pid::FONT_SIZE:
+        return m_fontSize;
+    case Pid::FONT_STYLE:
+        return static_cast<int>(m_fontStyle);
+    case Pid::FONT_FACE:
+        return m_fontFamily;
     default:
         return TextBase::getProperty(pid);
     }
