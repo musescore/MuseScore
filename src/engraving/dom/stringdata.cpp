@@ -443,7 +443,6 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
                 *string = strings - i - 1;
                 int fretCorrection = (capo.active && muse::contains(capo.ignoredStrings, (string_idx_t)*string)) ? capo.fretPosition : 0;
                 *fret = pitch - strg.pitch + fretCorrection;
-                *fret = pitch - strg.pitch;
                 return true;
             }
         }
