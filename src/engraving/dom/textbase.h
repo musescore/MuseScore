@@ -332,13 +332,13 @@ public:
     bool empty() const { return xmlText().isEmpty(); }
     void clear() { setXmlText(String()); }
 
-    FontStyle fontStyle() const;
-    String family() const;
-    double size() const;
+    virtual FontStyle fontStyle() const;
+    virtual String family() const;
+    virtual double size() const;
 
-    void setFontStyle(const FontStyle& val);
-    void setFamily(const String& val);
-    void setSize(const double& val);
+    virtual void setFontStyle(const FontStyle& val);
+    virtual void setFamily(const String& val);
+    virtual void setSize(const double& val);
 
     bool anchorToEndOfPrevious() const { return m_anchorToEndOfPrevious; }
     void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }

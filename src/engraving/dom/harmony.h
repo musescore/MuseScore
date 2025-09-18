@@ -286,6 +286,8 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
+    using EngravingObject::undoChangeProperty;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;
@@ -302,6 +304,14 @@ public:
 
     NoteCaseType rootRenderCase(HarmonyInfo* info) const;
     NoteCaseType bassRenderCase() const;
+
+    FontStyle fontStyle() const override { return m_fontStyle; }
+    String family() const override { return m_fontFamily; }
+    double size() const override { return m_fontSize; }
+
+    void setFontStyle(const FontStyle& val) override { m_fontStyle = val; }
+    void setFamily(const String& val) override { m_fontFamily = val; }
+    void setSize(const double& val) override { m_fontSize = val; }
 
     struct LayoutData : public TextBase::LayoutData {
         ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };    // used for calculating the height is frame while editing.
@@ -337,5 +347,10 @@ private:
     NoteCaseType m_bassCase = NoteCaseType::AUTO;        // case as typed
 
     double m_bassScale = 1.0;
+
+    // Overridden textbase properties to apply to whole item
+    double m_fontSize = 10.0;
+    String m_fontFamily = u"";
+    FontStyle m_fontStyle;
 };
 } // namespace mu::engraving

@@ -91,6 +91,8 @@ Column {
             anchors.right: parent.right
             height: 30
 
+            visible: root.model ? root.model.isScriptSizeAvailable : false
+
             model: [
                 { iconRole: IconCode.TEXT_SUBSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_BOTTOM, titleRole: qsTrc("inspector", "Subscript") },
                 { iconRole: IconCode.TEXT_SUPERSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_TOP, titleRole: qsTrc("inspector", "Superscript") }
@@ -135,13 +137,18 @@ Column {
         frameCornerRadius: root.model ? root.model.frameCornerRadius : null
     }
 
-    SeparatorLine { anchors.margins: -12 }
+    SeparatorLine {
+        visible: root.model ? root.model.isLineSpacingAvailable : false
+        anchors.margins: -12
+    }
 
     SpinBoxPropertyView {
         id: textLineSpacingSection
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
+
+        visible: root.model ? root.model.isLineSpacingAvailable : false
 
         navigationName: "Line Spacing"
         navigationPanel: root.navigationPanel

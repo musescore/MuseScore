@@ -47,9 +47,11 @@ TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService*
     isTextEditingChanged().onNotify(this, [this]() {
         loadProperties();
         setIsSpecialCharactersInsertionAvailable(isTextEditingStarted());
+        updateTextPropertiesAvailability();
     });
 
     setIsSpecialCharactersInsertionAvailable(isTextEditingStarted());
+    updateTextPropertiesAvailability();
 }
 
 void TextSettingsModel::createProperties()
@@ -212,12 +214,15 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         });
     }
 
+    updateTextPropertiesAvailability();
     updateFramePropertiesAvailability();
     updateStaffPropertiesAvailability();
     updateIsDynamicSpecificSettings();
     updateIsHorizontalAlignmentAvailable();
     updateIsSystemObjectBelowBottomStaff();
     updateIsSymbolSizeAvailable();
+    updateIsScriptSizeAvailable();
+    updateIsLineSpacingAvailable();
 }
 
 void TextSettingsModel::resetProperties()
@@ -384,6 +389,11 @@ QVariantList TextSettingsModel::textStyles()
     return m_textStyles;
 }
 
+bool TextSettingsModel::areTextPropertiesAvailable() const
+{
+    return m_areTextPropertiesAvailable;
+}
+
 bool TextSettingsModel::areStaffTextPropertiesAvailable() const
 {
     return m_areStaffTextPropertiesAvailable;
@@ -407,6 +417,26 @@ bool TextSettingsModel::isHorizontalAlignmentAvailable() const
 bool TextSettingsModel::isSymbolSizeAvailable() const
 {
     return m_isSymbolSizeAvailable;
+}
+
+bool TextSettingsModel::isScriptSizeAvailable() const
+{
+    return m_isScriptSizeAvailable;
+}
+
+bool TextSettingsModel::isLineSpacingAvailable() const
+{
+    return m_isLineSpacingAvailable;
+}
+
+void TextSettingsModel::setAreTextPropertiesAvailable(bool areTextPropertiesAvailable)
+{
+    if (m_areTextPropertiesAvailable == areTextPropertiesAvailable) {
+        return;
+    }
+
+    m_areTextPropertiesAvailable = areTextPropertiesAvailable;
+    emit areTextPropertiesAvailableChanged(m_areTextPropertiesAvailable);
 }
 
 void TextSettingsModel::setAreStaffTextPropertiesAvailable(bool areStaffTextPropertiesAvailable)
@@ -457,6 +487,26 @@ void TextSettingsModel::setIsSymbolSizeAvailable(bool isSymbolSizeAvailable)
 
     m_isSymbolSizeAvailable = isSymbolSizeAvailable;
     emit isSymbolSizeAvailableChanged(m_isSymbolSizeAvailable);
+}
+
+void TextSettingsModel::setIsScriptSizeAvailable(bool isScriptSizeAvailable)
+{
+    if (isScriptSizeAvailable == m_isScriptSizeAvailable) {
+        return;
+    }
+
+    m_isScriptSizeAvailable = isScriptSizeAvailable;
+    emit isScriptSizeAvailableChanged(m_isScriptSizeAvailable);
+}
+
+void TextSettingsModel::setIsLineSpacingAvailable(bool isLineSpacingAvailable)
+{
+    if (isLineSpacingAvailable == m_isLineSpacingAvailable) {
+        return;
+    }
+
+    m_isLineSpacingAvailable = isLineSpacingAvailable;
+    emit isLineSpacingAvailableChanged(m_isLineSpacingAvailable);
 }
 
 void TextSettingsModel::updateFramePropertiesAvailability()
@@ -521,6 +571,32 @@ void TextSettingsModel::updateIsSymbolSizeAvailable()
     setIsSymbolSizeAvailable(available);
 }
 
+void TextSettingsModel::updateIsScriptSizeAvailable()
+{
+    bool available = true;
+    for (EngravingItem* item : m_elementList) {
+        if (item->isHarmony()) {
+            available = false;
+            break;
+        }
+    }
+
+    setIsScriptSizeAvailable(available);
+}
+
+void TextSettingsModel::updateIsLineSpacingAvailable()
+{
+    bool available = true;
+    for (EngravingItem* item : m_elementList) {
+        if (item->isHarmony()) {
+            available = false;
+            break;
+        }
+    }
+
+    setIsLineSpacingAvailable(available);
+}
+
 bool TextSettingsModel::isTextEditingStarted() const
 {
     IF_ASSERT_FAILED(context() && context()->currentNotation()) {
@@ -537,4 +613,16 @@ muse::async::Notification TextSettingsModel::isTextEditingChanged() const
     }
 
     return context()->currentNotation()->interaction()->textEditingChanged();
+}
+
+void TextSettingsModel::updateTextPropertiesAvailability()
+{
+    bool available = true;
+    for (EngravingItem* item : m_elementList) {
+        if (item->isHarmony() && isTextEditingStarted()) {
+            available = false;
+        }
+    }
+
+    setAreTextPropertiesAvailable(available);
 }
