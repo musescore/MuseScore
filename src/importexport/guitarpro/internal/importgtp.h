@@ -413,6 +413,7 @@ class GuitarPro5 : public GuitarPro
     std::unordered_map<Note*, Note*> m_harmonicNotes; // for adding ties for harmonic notes
     bool m_currentBeatHasRasgueado = false;
     std::unordered_set<ChordRest*> m_letRingForChords; // fixing gp5 bug with no storing let ring for tied notes
+    std::vector<std::pair<Note*, Note*> > m_glissandoNotePairs;
 
     void readInfo();
     void readPageSetup();
@@ -425,6 +426,7 @@ class GuitarPro5 : public GuitarPro
     Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, mu::engraving::Tuplet** tuplets, bool mixChange);
     ReadNoteResult readNoteEffects(Note*);
     float naturalHarmonicFromFret(int fret);
+    void addGlissandos();
 
 public:
     GuitarPro5(mu::engraving::MasterScore* s, int v, const muse::modularity::ContextPtr& iocCtx)
