@@ -41,7 +41,7 @@
 #include <cstring>
 #include <vector>
 
-#define DEBUG_AUDIO
+// #define DEBUG_AUDIO
 // #define ALSA_POLL
 
 #ifdef DEBUG_AUDIO
