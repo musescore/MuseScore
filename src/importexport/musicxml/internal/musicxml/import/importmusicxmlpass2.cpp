@@ -211,7 +211,7 @@ void MusicXmlLyricsExtend::setExtend(const int no, const track_idx_t track, cons
     std::vector<Lyrics*> list;
     for (Lyrics* l : m_lyrics) {
         const EngravingItem* el = l->parentItem();
-        if (el->type() == ElementType::CHORD || el->type() == ElementType::REST) {
+        if (el->isChordRest()) {
             const ChordRest* par = static_cast<const ChordRest*>(el);
             // no = -1: stop all extends on this track
             // otherwise, stop all extends in the stave with the same no and placement
@@ -1068,7 +1068,7 @@ static Fraction calculateTupletDuration(const Tuplet* const t)
     Fraction res;
 
     for (DurationElement* de : t->elements()) {
-        if (de->type() == ElementType::CHORD || de->type() == ElementType::REST) {
+        if (de->isChordRest()) {
             const ChordRest* cr = static_cast<ChordRest*>(de);
             const Fraction fraction = cr->ticks(); // TODO : take care of nested tuplets
             if (fraction.isValid()) {
@@ -1154,7 +1154,7 @@ static void handleTupletStop(Tuplet*& tuplet, const int normalNotes)
     int ticksPerNote = f.ticks() / tuplet->ratio().numerator();
     bool ticksCorrect = true;
     for (DurationElement* de : tuplet->elements()) {
-        if (de->type() == ElementType::CHORD || de->type() == ElementType::REST) {
+        if (de->isChordRest()) {
             int globalTicks = de->globalTicks().ticks();
             if (globalTicks != ticksPerNote) {
                 ticksCorrect = false;
@@ -1696,7 +1696,7 @@ void MusicXmlParserPass2::addError(const String& error)
 
 static void setChordRestDuration(ChordRest* cr, TDuration duration, const Fraction dura)
 {
-    if (duration.type() == DurationType::V_MEASURE) {
+    if (duration.isMeasure()) {
         cr->setDurationType(duration);
         cr->setTicks(dura);
     } else {
@@ -2532,7 +2532,7 @@ static void markUserAccidentals(const staff_idx_t firstStaff,
     for (mu::engraving::Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
         for (track_idx_t track = 0; track < staves * VOICES; ++track) {
             EngravingItem* e = segment->element(firstStaff * VOICES + track);
-            if (!e || e->type() != mu::engraving::ElementType::CHORD) {
+            if (!e || !e->isChord()) {
                 continue;
             }
             Chord* chord = static_cast<Chord*>(e);
@@ -6365,7 +6365,7 @@ static TDuration determineDuration(const bool isRest, const bool measureRest, co
         ByteArray ba = type.toAscii();
         res.setType(TConv::fromXml(ba.constChar(), DurationType::V_INVALID));
         res.setDots(dots);
-        if (res.type() == DurationType::V_INVALID) {
+        if (!res.isValid()) {
             res.setType(DurationType::V_QUARTER);        // default, TODO: use measureDuration ?
         }
     }
@@ -8908,7 +8908,7 @@ static void addArpeggio(ChordRest* cr, String& arpeggioType, int arpeggioNo, Col
             curArp->setSpan(static_cast<int>(span + 1));
         }
     } else {
-        if (!arpeggioType.empty() && cr->type() == ElementType::CHORD) {
+        if (!arpeggioType.empty() && cr->isChord()) {
             Arpeggio* arpeggio = Factory::createArpeggio(mu::engraving::toChord(cr));
             arpeggio->setArpeggioType(ArpeggioType::NORMAL);
             if (arpeggioType == "up") {
