@@ -44,9 +44,8 @@
         <file>qml/MuseScore/NotationScene/internal/DynamicPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/StaffVisibilityPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleToggleWithImage.qml</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/AccidentalsPage.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/followOffset-OFF.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/followOffset-ON.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/secondsAdjacent-OFF.png</file>
@@ -118,5 +117,9 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleToggle.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/TupletCenteringSelector.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/SlursAndTiesPage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/SlursSection.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/TiesSection.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/LaissezVibrSection.qml</file>
     </qresource>
 </RCC>

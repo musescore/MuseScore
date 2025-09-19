@@ -12,10 +12,8 @@ set(STYLEDIALOG_SRC
     ${CMAKE_CURRENT_LIST_DIR}/beamspagemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/bendstyleselector.cpp
     ${CMAKE_CURRENT_LIST_DIR}/bendstyleselector.h
-    ${CMAKE_CURRENT_LIST_DIR}/tieplacementselector.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tieplacementselector.h
-    ${CMAKE_CURRENT_LIST_DIR}/accidentalgrouppagemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/accidentalgrouppagemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/accidentalspagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/accidentalspagemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/fretboardspagemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fretboardspagemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/glissandosectionmodel.cpp
@@ -40,4 +38,6 @@ set(STYLEDIALOG_SRC
     ${CMAKE_CURRENT_LIST_DIR}/repeatplaycounttextmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/measurerepeatmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/measurerepeatmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/slursandtiespagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/slursandtiespagemodel.h
     )
