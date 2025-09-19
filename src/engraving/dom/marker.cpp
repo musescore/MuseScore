@@ -297,14 +297,14 @@ std::vector<LineF> Marker::dragAnchorLines() const
 String Marker::symbolString() const
 {
     // Returns the coda/segno symbol if present
-    constexpr static std::array REPEAT_SYMBOL_NAMES {
-        u"<sym>coda</sym>",
-        u"<sym>codaSquare</sym>",
-        u"<sym>codaJapanes</sym>",
-        u"<sym>segno</sym>",
-        u"<sym>segnoSerpent1</sym>",
-        u"<sym>segnoSerpent2</sym>",
-        u"<sym>segnoJapanese</sym>",
+    const static std::array REPEAT_SYMBOL_NAMES {
+        String(u"<sym>coda</sym>"),
+        String(u"<sym>codaSquare</sym>"),
+        String(u"<sym>codaJapanes</sym>"),
+        String(u"<sym>segno</sym>"),
+        String(u"<sym>segnoSerpent1</sym>"),
+        String(u"<sym>segnoSerpent2</sym>"),
+        String(u"<sym>segnoJapanese</sym>"),
     };
 
     for (const String& sym : REPEAT_SYMBOL_NAMES) {
