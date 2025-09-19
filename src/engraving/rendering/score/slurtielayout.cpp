@@ -1854,6 +1854,8 @@ void SlurTieLayout::calculateLaissezVibX(LaissezVibSegment* segment, SlurTiePos&
     computeStartAndEndSystem(lv, sPos);
     sPos.p1 = computeDefaultStartOrEndPoint(lv, Grip::START);
 
+    correctForCrossStaff(lv, sPos, SpannerSegmentType::SINGLE);
+
     if (segment->autoplace() && !segment->isEdited()) {
         adjustX(segment, sPos, Grip::START);
     }
@@ -1874,7 +1876,6 @@ void SlurTieLayout::calculateLaissezVibX(LaissezVibSegment* segment, SlurTiePos&
 void SlurTieLayout::calculateLaissezVibY(LaissezVibSegment* segment, SlurTiePos& sPos)
 {
     LaissezVib* lv = segment->laissezVib();
-    correctForCrossStaff(lv, sPos, SpannerSegmentType::SINGLE);
 
     adjustYforLedgerLines(segment, sPos);
 
