@@ -472,7 +472,7 @@ void alsaPollLoop(AlsaData* data)
     }
 }
 
-#endif
+#else  // ALSA_POLL
 
 void alsaWriteLoop(AlsaData* data)
 {
@@ -509,6 +509,7 @@ void alsaWriteLoop(AlsaData* data)
         }
     }
 }
+#endif  // ALSA_POLL
 
 static void* alsaThread(void* aParam)
 {
