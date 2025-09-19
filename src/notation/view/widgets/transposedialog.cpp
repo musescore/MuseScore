@@ -63,6 +63,7 @@ TransposeDialog::TransposeDialog(QWidget* parent)
     setEnableTransposeChordNames(hasChordNames);
 
     setKey(firstPitchedStaffKey());
+    restorePreviousSettings();
 
     connect(this, &TransposeDialog::accepted, this, &TransposeDialog::apply);
 
@@ -127,6 +128,35 @@ TransposeMode TransposeDialog::mode() const
     return chromaticBox->isChecked()
            ? (transposeByKey->isChecked() ? TransposeMode::TO_KEY : TransposeMode::BY_INTERVAL)
            : TransposeMode::DIATONICALLY;
+}
+
+void TransposeDialog::setMode(TransposeMode& mode)
+{
+    // revert the logic of getter
+    switch (mode) {
+    case TransposeMode::TO_KEY: {
+        chromaticBox->setChecked(true);
+        diatonicBox->setChecked(false);
+        transposeByKey->setChecked(true);
+        transposeByInterval->setChecked(false);
+        break;
+    }
+    case TransposeMode::BY_INTERVAL: {
+        chromaticBox->setChecked(true);
+        diatonicBox->setChecked(false);
+        transposeByKey->setChecked(false);
+        transposeByInterval->setChecked(true);
+        break;
+    }
+    case TransposeMode::DIATONICALLY: {
+        chromaticBox->setChecked(false);
+        diatonicBox->setChecked(true);
+        break;
+    }
+    default:
+    {
+    }
+    }
 }
 
 //---------------------------------------------------------
@@ -209,7 +239,7 @@ INotationSelectionPtr TransposeDialog::selection() const
 
 void TransposeDialog::apply()
 {
-    TransposeOptions options;
+    TransposeOptions& options = lastUsedOptions();
 
     options.mode = mode();
     options.direction = direction();
@@ -298,4 +328,52 @@ void TransposeDialog::setKey(Key k)
 bool TransposeDialog::useDoubleSharpsFlats() const
 {
     return accidentalOptions->currentIndex() == 1;
+}
+
+void TransposeDialog::setDirection(TransposeDirection direction)
+{
+    switch (mode()) {
+    case TransposeMode::TO_KEY: {
+        if (direction == TransposeDirection::CLOSEST) {
+            closestKey->setChecked(true);
+        } else {
+            upKey->setChecked(direction == TransposeDirection::UP);
+        }
+        break;
+    }
+    case TransposeMode::BY_INTERVAL: {
+        upInterval->setChecked(direction == TransposeDirection::UP);
+        break;
+    }
+    case TransposeMode::DIATONICALLY: {
+        upDiatonic->setChecked(direction == TransposeDirection::UP);
+        break;
+    }
+    default: {
+    }
+    }
+}
+
+void TransposeDialog::setInterval(int interval)
+{
+    if (chromaticBox->isChecked()) {
+        intervalList->setCurrentIndex(interval);
+    } else {
+        degreeList->setCurrentIndex(interval - 1);
+    }
+}
+
+void TransposeDialog::restorePreviousSettings()
+{
+    TransposeOptions& options = lastUsedOptions();
+
+    setMode(options.mode);
+    setDirection(options.direction);
+    setInterval(options.interval);
+}
+
+TransposeOptions& TransposeDialog::lastUsedOptions()
+{
+    static TransposeOptions options;
+    return options;
 }
