@@ -100,6 +100,10 @@ void AudioMidiPreferencesModel::init()
         emit muteHiddenInstrumentsChanged(mute);
     });
 
+    playbackConfiguration()->focusSelectedInstrumentChanged().onReceive(this, [this](bool mute) {
+        emit focusSelectedInstrumentChanged(mute);
+    });
+
     playbackConfiguration()->shouldShowOnlineSoundsProcessingErrorChanged().onNotify(this, [this]() {
         emit shouldShowOnlineSoundsProcessingErrorChanged();
     });
@@ -207,6 +211,20 @@ void AudioMidiPreferencesModel::setMuteHiddenInstruments(bool mute)
     }
 
     playbackConfiguration()->setMuteHiddenInstruments(mute);
+}
+
+bool AudioMidiPreferencesModel::focusSelectedInstrument() const
+{
+    return playbackConfiguration()->focusSelectedInstrument();
+}
+
+void AudioMidiPreferencesModel::setFocusSelectedInstrument(bool checked)
+{
+    if (checked == focusSelectedInstrument()) {
+        return;
+    }
+
+    playbackConfiguration()->setFocusSelectedInstrument(checked);
 }
 
 bool AudioMidiPreferencesModel::shouldShowOnlineSoundsProcessingError() const

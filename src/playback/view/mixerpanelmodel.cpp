@@ -25,6 +25,7 @@
 #include "defer.h"
 
 #include "log.h"
+#include "settings.h"
 #include "translation.h"
 
 using namespace muse;
@@ -42,6 +43,7 @@ MixerPanelModel::MixerPanelModel(QObject* parent)
     controller()->currentTrackSequenceIdChanged().onNotify(this, [this]() {
         load();
     });
+    m_scoreSelectionNotifyReceiver = std::make_shared<muse::async::Asyncable>();
 }
 
 void MixerPanelModel::load()
@@ -319,6 +321,11 @@ void MixerPanelModel::setupConnections()
         } else {
             removeItem(trackId);
         }
+    });
+
+    onNotationChanged();
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        onNotationChanged();
     });
 }
 
@@ -609,6 +616,60 @@ void MixerPanelModel::updateOutputResourceItemCount()
     }
 }
 
+void MixerPanelModel::onNotationChanged()
+{
+    m_scoreSelectionNotifyReceiver->disconnectAll();
+    m_notationInteraction = context()->currentNotation()->interaction();
+
+    if (!m_notationInteraction) {
+        return;
+    }
+    m_notationInteraction->selectionChanged().onNotify(m_scoreSelectionNotifyReceiver.get(), [this]() {
+        onScoreSelectionChanged();
+    });
+}
+
+void MixerPanelModel::onScoreSelectionChanged()
+{
+    if (!m_notationInteraction) {
+        return;
+    }
+
+    if (!configuration()->focusSelectedInstrument()) {
+        return;
+    }
+    const std::vector<EngravingItem*>& selectedElements = m_notationInteraction->selection()->elements();
+    if (selectedElements.empty()) {
+        return;
+    }
+
+    std::vector<Part*> selectedParts;
+    for (const EngravingItem* element : selectedElements) {
+        if (!element->part()) {
+            continue;
+        }
+
+        selectedParts.push_back(element->part());
+    }
+
+    int idxToFocus = -1;
+    for (Part* part: selectedParts) {
+        std::string primaryInstrId = part->instrument()->id().toStdString();
+
+        for (const InstrumentTrackId& instrumentTrackId : part->instrumentTrackIdList()) {
+            auto it = std::find_if(m_mixerChannelList.begin(), m_mixerChannelList.end(), [instrumentTrackId](const MixerChannelItem* item) {
+                return item->instrumentTrackId() == instrumentTrackId;
+            });
+            if (it == m_mixerChannelList.end()) {
+                continue;
+            }
+            idxToFocus = std::distance(m_mixerChannelList.begin(), it);
+            break;
+        }
+    }
+    setFocusedIndex(idxToFocus);
+}
+
 INotationProjectPtr MixerPanelModel::currentProject() const
 {
     return context()->currentProject();
@@ -659,4 +720,19 @@ void MixerPanelModel::setNavigationOrderStart(int navigationOrderStart)
     emit navigationOrderStartChanged();
 
     updateItemsPanelsOrder();
+}
+
+int MixerPanelModel::focusedIndex() const
+{
+    return m_focusedIndex;
+}
+
+void MixerPanelModel::setFocusedIndex(int focusedIndex)
+{
+    if (m_focusedIndex == focusedIndex) {
+        return;
+    }
+
+    m_focusedIndex = focusedIndex;
+    emit focusedIndexChanged();
 }

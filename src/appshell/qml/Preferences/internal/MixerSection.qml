@@ -30,8 +30,10 @@ BaseSection {
     title: qsTrc("appshell/preferences", "Mixer")
 
     property alias muteHiddenInstruments: muteHiddenInstrumentsCheckBox.checked
+    property alias focusSelectedInstrument: focusSelectedInstrumentCheckBox.checked
 
     signal muteHiddenInstrumentsChangeRequested(bool mute)
+    signal focusSelectedInstrumentInMixerChangeRequested(bool checked)
 
     CheckBox {
         id: muteHiddenInstrumentsCheckBox
@@ -45,6 +47,21 @@ BaseSection {
 
         onClicked: {
             root.muteHiddenInstrumentsChangeRequested(!checked)
+        }
+    }
+
+    CheckBox {
+        id: focusSelectedInstrumentCheckBox
+
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Automatically scroll Mixer panel to show the instrument selected in the Score")
+
+        navigation.name: "FocusSelectedInstrumentInMixerCheckbox"
+        navigation.panel: root.navigation
+
+        onClicked: {
+            root.focusSelectedInstrumentInMixerChangeRequested(!checked)
         }
     }
 }

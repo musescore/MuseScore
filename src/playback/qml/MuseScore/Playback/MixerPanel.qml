@@ -76,14 +76,34 @@ ColumnLayout {
         }
     }
 
-    function scrollToFocusedItem(focusedIndex) {
-        let targetScrollPosition = (focusedIndex) * (prv.channelItemWidth + 1) // + 1 for separators
+    function scrollToFocusedItem(focusedIndex, smooth = false) {
+        let targetScrollPosition = (focusedIndex) * (prv.channelItemWidth + 1) + prv.headerWidth // + 1 for separators
         let maxContentX = flickable.contentWidth - flickable.width
 
+        console.log("Target scroll position:\t" + targetScrollPosition)
+        console.log("Current scroll position:\t" + flickable.contentX)
+        console.log("Max content X\t\t" + maxContentX)
+
+        let contentX = -1
         if (targetScrollPosition + prv.channelItemWidth > flickable.contentX + flickable.width) {
-            flickable.contentX = Math.min(targetScrollPosition + prv.channelItemWidth - flickable.width, maxContentX)
+            console.log("Scrolling right")
+            contentX = Math.min(targetScrollPosition + prv.channelItemWidth - flickable.width, maxContentX)
         } else if (targetScrollPosition < flickable.contentX) {
-            flickable.contentX = Math.max(targetScrollPosition - prv.channelItemWidth, 0)
+            console.log("Scrolling left: choosing between 0 and " + (targetScrollPosition))
+            contentX = Math.max(targetScrollPosition, 0)
+        }
+
+        if (contentX !== -1) {
+            if (!smooth) {
+                flickable.contentX = contentX
+            } else {
+                scrollAnimation.running = false
+                console.log("From " + flickable.contentX + " to " + contentX)
+                scrollAnimation.from = flickable.contentX
+                scrollAnimation.to = contentX
+                console.log("From " + scrollAnimation.from + " to " + scrollAnimation.to)
+                scrollAnimation.running = true
+            }
         }
     }
 
@@ -116,6 +136,14 @@ ColumnLayout {
                     }
                 })
             }
+        }
+
+        onFocusedIndexChanged: {
+            let idx = mixerPanelModel.focusedIndex
+            if (idx === -1) {
+                return
+            }
+            scrollToFocusedItem(idx, true)
         }
     }
 
@@ -344,6 +372,15 @@ ColumnLayout {
                 }
             }
         }
+    }
+
+    NumberAnimation {
+        id: scrollAnimation
+        target: flickable
+        property: "contentX"
+        to: 0
+        duration: 200
+        easing.type: Easing.OutQuad
     }
 
     Column {

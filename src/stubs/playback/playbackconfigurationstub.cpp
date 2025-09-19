@@ -150,6 +150,21 @@ muse::async::Channel<bool> PlaybackConfigurationStub::muteHiddenInstrumentsChang
     return ch;
 }
 
+bool PlaybackConfigurationStub::focusSelectedInstrument() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setFocusSelectedInstrument(bool)
+{
+}
+
+muse::async::Channel<bool> PlaybackConfigurationStub::focusSelectedInstrumentChanged() const
+{
+    static muse::async::Channel<bool> ch;
+    return ch;
+}
+
 const SoundProfileName& PlaybackConfigurationStub::basicSoundProfileName() const
 {
     static const SoundProfileName basic;
