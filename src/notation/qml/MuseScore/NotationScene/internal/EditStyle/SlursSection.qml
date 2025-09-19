@@ -120,7 +120,7 @@ StyledGroupBox {
 
                 minValue: 0.0
                 maxValue: 99.99
-                step: 0.05
+                step: 0.5
                 decimals: 2
                 measureUnitsSymbol: qsTrc("global", "sp")
 
