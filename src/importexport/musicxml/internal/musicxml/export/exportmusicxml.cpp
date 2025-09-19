@@ -1301,7 +1301,7 @@ void ExportMusicXml::calcDivisions()
         track_idx_t etrack = strack + staves * VOICES;
 
         for (MeasureBase* mb = m_score->measures()->first(); mb; mb = mb->next()) {
-            if (mb->type() != ElementType::MEASURE) {
+            if (!mb->isMeasure()) {
                 continue;
             }
             Measure* m = (Measure*)mb;
@@ -1309,7 +1309,7 @@ void ExportMusicXml::calcDivisions()
             for (track_idx_t st = strack; st < etrack; ++st) {
                 for (Segment* seg = m->first(); seg; seg = seg->next()) {
                     for (const EngravingItem* e : seg->annotations()) {
-                        if (e->track() == st && e->type() == ElementType::FIGURED_BASS) {
+                        if (e->track() == st && e->isFiguredBass()) {
                             const FiguredBass* fb = toFiguredBass(e);
 #ifdef DEBUG_TICK
                             LOGD("figuredbass tick %d duration %d", fb->tick().ticks(), fb->ticks().ticks());
@@ -1324,7 +1324,7 @@ void ExportMusicXml::calcDivisions()
                     }
 
                     // must ignore start repeat to prevent spurious backup/forward
-                    if (el->type() == ElementType::BAR_LINE && toBarLine(el)->barLineType() == BarLineType::START_REPEAT) {
+                    if (el->isBarLine() && toBarLine(el)->barLineType() == BarLineType::START_REPEAT) {
                         continue;
                     }
 
@@ -1537,7 +1537,7 @@ static double parentHeight(const EngravingItem* element)
         return 0;
     }
 
-    if (parent->type() == ElementType::VBOX) {
+    if (parent->isVBox()) {
         return parent->height();
     }
 
@@ -1811,7 +1811,7 @@ static Volta* findVolta(const Measure* const m, bool left, const track_idx_t tra
     auto spanners = m->score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
     for (auto i : spanners) {
         Spanner* el = i.value;
-        if (el->type() != ElementType::VOLTA || track2staff(el->track()) != track2staff(track)) {
+        if (!el->isVolta() || track2staff(el->track()) != track2staff(track)) {
             continue;
         }
         if (left && el->tick() == stick) {
@@ -3393,7 +3393,7 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
 {
     for (EngravingItem* e : chord->el()) {
         LOGD("writeChordLines: el %p type %d (%s)", e, int(e->type()), e->typeName());
-        if (e->type() == ElementType::CHORDLINE) {
+        if (e->isChordLine()) {
             ChordLine const* const cl = static_cast<ChordLine*>(e);
             String subtype;
             switch (cl->chordLineType()) {
@@ -3935,7 +3935,7 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
     noteheadTagname += color2xml(note);
     bool leftParenthesis = false, rightParenthesis = false;
     for (EngravingItem* elem : note->el()) {
-        if (elem->type() == ElementType::SYMBOL) {
+        if (elem->isSymbol()) {
             Symbol* s = static_cast<Symbol*>(elem);
             if (s->sym() == SymId::noteheadParenthesisLeft) {
                 leftParenthesis = true;
@@ -4064,7 +4064,7 @@ static void writeGuitarBend(XmlWriter& xml, Notations& notations, Technical& tec
 static void writeFingering(XmlWriter& xml, Notations& notations, Technical& technical, const Note* const note)
 {
     for (const EngravingItem* e : note->el()) {
-        if (e->type() == ElementType::FINGERING) {
+        if (e->isFingering()) {
             const TextBase* f = toTextBase(e);
             notations.tag(xml, e);
             technical.tag(xml);
@@ -4535,12 +4535,12 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
             arpeggiate(chord->spanArpeggio(), note == nl.front(), note == nl.back(), m_xml, notations, m_measArpeggios, /*spanArp=*/ true);
         }
         for (Spanner* spanner : note->spannerFor()) {
-            if (spanner->type() == ElementType::GLISSANDO) {
+            if (spanner->isGlissando()) {
                 m_gh.doGlissandoStart(static_cast<Glissando*>(spanner), notations, m_xml);
             }
         }
         for (Spanner* spanner : note->spannerBack()) {
-            if (spanner->type() == ElementType::GLISSANDO) {
+            if (spanner->isGlissando()) {
                 m_gh.doGlissandoStop(static_cast<Glissando*>(spanner), notations, m_xml);
             }
         }
@@ -4626,7 +4626,7 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyric
 
     String restTag = u"rest";
     const TDuration d = rest->durationType();
-    if (d.type() == DurationType::V_MEASURE) {
+    if (d.isMeasure()) {
         restTag += u" measure=\"yes\"";
     }
     // Either <rest/>
@@ -4641,7 +4641,7 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyric
     }
 
     Fraction tickLen = rest->actualTicks();
-    if (d.type() == DurationType::V_MEASURE) {
+    if (d.isMeasure()) {
         // to avoid forward since rest->ticklen=0 in this case.
         tickLen = rest->measure()->ticks();
     }
@@ -4662,7 +4662,7 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyric
     m_xml.tag("voice", static_cast<int>(voice));
 
     // do not output a "type" element for whole measure rest
-    if (d.type() != DurationType::V_MEASURE) {
+    if (!d.isMeasure()) {
         AsciiStringView s = TConv::toXml(d.type());
         if (rest->isSmall()) {
             m_xml.tag("type", { { "size", "cue" } }, s);
@@ -6716,7 +6716,7 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
             }
 
             if (track == wtrack) {
-                if (e->type() == ElementType::FIGURED_BASS) {
+                if (e->isFiguredBass()) {
                     const FiguredBass* fb = dynamic_cast<const FiguredBass*>(e);
                     if (fb->items().empty()) {
                         continue;
@@ -6739,7 +6739,7 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
                     // Check for changing figures under a single note (each figure stored in a separate segment)
                     for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL; segNext = segNext->next()) {
                         for (EngravingItem* annot : segNext->annotations()) {
-                            if (annot->type() == ElementType::FIGURED_BASS && annot->track() == track) {
+                            if (annot->isFiguredBass() && annot->track() == track) {
                                 fb = dynamic_cast<const FiguredBass*>(annot);
                                 writeMusicXml(fb, xml, true, 0, 0, true, divisions);
                             }
@@ -6947,11 +6947,11 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
             if (!el) {
                 continue;
             }
-            if (el->type() == ElementType::KEYSIG) {
+            if (el->isKeySig()) {
                 //LOGD(" found keysig %p track %d", el, el->track());
                 staff_idx_t st = (t - strack) / VOICES;
                 if (!el->generated()) {
-                    keysigs[st] = static_cast<KeySig*>(el);
+                    keysigs[st] = toKeySig(el);
                 }
             }
         }
@@ -7009,8 +7009,8 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
             break;
         }
         EngravingItem* el = seg->element(strack);
-        if (el && el->type() == ElementType::TIMESIG) {
-            tsig = (TimeSig*)el;
+        if (el && el->isTimeSig()) {
+            tsig = toTimeSig(el);
         }
     }
     if (tsig) {
@@ -7535,7 +7535,7 @@ static void findPitchesUsed(const Part* part, pitchSet& set)
 
     // loop over all chords in the part
     for (const MeasureBase* mb = part->score()->measures()->first(); mb; mb = mb->next()) {
-        if (mb->type() != ElementType::MEASURE) {
+        if (!mb->isMeasure()) {
             continue;
         }
         const Measure* m = static_cast<const Measure*>(mb);
@@ -7545,7 +7545,7 @@ static void findPitchesUsed(const Part* part, pitchSet& set)
                 if (!el) {
                     continue;
                 }
-                if (el->type() == ElementType::CHORD) {
+                if (el->isChord()) {
                     // add grace and non-grace note pitches to the result set
                     const Chord* c = static_cast<const Chord*>(el);
                     if (c) {
