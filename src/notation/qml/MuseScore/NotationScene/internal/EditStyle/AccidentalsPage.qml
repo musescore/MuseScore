@@ -72,7 +72,7 @@ StyledFlickable {
                 model: [
                     { text: qsTrc("notation/editstyle/accidentals", "Only for a change to C major / A minor"), value: /* KeySigNatural::NONE */ 0 },
                     { text: qsTrc("notation/editstyle/accidentals", "Before key signature if changing to fewer ♯ or ♭"), value: /* KeySigNatural::BEFORE */ 1 },
-                    { text: qsTrc("notation/editstyle/accidentals", "After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭"), value: /* KeySigNatural::AFTER */ 2 }
+                    { text: qsTrc("notation/editstyle/accidentals", "After key signature if changing to fewer ♯ or ♭; before if changing between ♯ and ♭"), value: /* KeySigNatural::AFTER */ 2 }
                 ]
 
                 delegate: RoundedRadioButton {
