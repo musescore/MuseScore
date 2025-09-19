@@ -609,11 +609,24 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
     const auto preferredAccess = SND_PCM_ACCESS_RW_INTERLEAVED;
 #endif
 
+    auto deviceId = spec.deviceId;
     snd_pcm_t* deviceHandle;
-    int rc = snd_pcm_open(&deviceHandle, spec.deviceId.c_str(), SND_PCM_STREAM_PLAYBACK, flags);
+    int rc = snd_pcm_open(&deviceHandle, deviceId.c_str(), SND_PCM_STREAM_PLAYBACK, flags);
     if (rc < 0) {
         LOGE() << "Could not open ALSA device (" << spec.deviceId << "): " << snd_strerror(rc);
-        return false;
+        auto devices = availableOutputDevices();
+        if (devices.size() == 0) {
+            return false;
+        }
+
+        LOGI() << "Attempt to open ALSA device " << devices[0].id;
+        rc = snd_pcm_open(&deviceHandle, devices[0].id.c_str(), SND_PCM_STREAM_PLAYBACK, flags);
+        if (rc < 0) {
+            LOGE() << "Could not open ALSA device (" << devices[0].id << "): " << snd_strerror(rc);
+            return false;
+        }
+        deviceId = devices[0].id;
+        availableOutputDevicesChanged().notify();
     }
 
     AlsaParams params {
