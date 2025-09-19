@@ -4800,16 +4800,6 @@ void NotationInteraction::editElement(QKeyEvent* event)
         }
 
         apply();
-
-        if (isGripEditStarted()) {
-            if (m_editData.element->isDynamic() && !m_editData.isStartEndGrip()) {
-                updateDragAnchorLines();
-            } else {
-                updateGripAnchorLines();
-            }
-        } else if (isElementEditStarted() && !m_editData.element->isTextBase()) {
-            updateDragAnchorLines();
-        }
     } else {
         rollback();
     }
