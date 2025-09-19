@@ -46,6 +46,7 @@ class QItemSelectionModel;
 
 namespace mu::instrumentsscene {
 class PartTreeItem;
+class SystemObjectsLayerTreeItem;
 class LayoutPanelTreeModel : public QAbstractItemModel, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
@@ -169,7 +170,11 @@ private:
     AbstractLayoutPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
 
     void updateSystemObjectLayers();
+    void updateSystemObjectLayersSelection();
 
+    bool shouldRemoveSystemObjectsLayerItem(const SystemObjectsLayerTreeItem* layer) const;
+
+    SystemObjectsLayerTreeItem* findSystemObjectsLayerItemByStaff(const notation::Staff* staff) const;
     const PartTreeItem* findPartItemByStaff(const notation::Staff* staff) const;
     const notation::Staff* resolveNewSystemObjectStaff() const;
 

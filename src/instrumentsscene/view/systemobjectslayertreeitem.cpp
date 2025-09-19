@@ -101,10 +101,6 @@ void SystemObjectsLayerTreeItem::init(const Staff* staff, const SystemObjectGrou
 {
     setStaff(staff);
     setSystemObjects(systemObjects);
-
-    bool isTopLayer = staff->score()->staff(0) == staff;
-    setIsRemovable(!isTopLayer);
-    setIsSelectable(!isTopLayer);
 }
 
 const Staff* SystemObjectsLayerTreeItem::staff() const
@@ -123,6 +119,10 @@ void SystemObjectsLayerTreeItem::setStaff(const Staff* staff)
         setId(ID());
         m_staffIdx = muse::nidx;
     }
+
+    bool selectable = staff && staff->score()->staff(0) != staff;
+    setIsRemovable(selectable);
+    setIsSelectable(selectable);
 }
 
 void SystemObjectsLayerTreeItem::setSystemObjects(const SystemObjectGroups& systemObjects)
