@@ -1387,7 +1387,7 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
 
             bool dotExists = false;
             for (auto const& d : allDots) {
-                if (d.exists()) {
+                if (d.exists() && !d.isPartOfSlurBarre) { // Don't write dot if part of slur barré (will be generate during layout)
                     dotExists = true;
                     break;
                 }
