@@ -56,9 +56,10 @@
           </StaffType>
         </Staff>
       <trackName>Bass</trackName>
-      <Instrument>
+      <Instrument id="bass">
         <longName>Bass</longName>
         <trackName></trackName>
+        <instrumentId>voice.bass</instrumentId>
         <StringData>
           <frets>25</frets>
           <string>28</string>

@@ -55,9 +55,10 @@
           </StaffType>
         </Staff>
       <trackName>Guitar Standard</trackName>
-      <Instrument>
+      <Instrument id="cavaquinho">
         <longName>Guitar Standard</longName>
         <trackName></trackName>
+        <instrumentId>pluck.guitar</instrumentId>
         <StringData>
           <frets>25</frets>
           <string>40</string>
@@ -108,9 +109,10 @@
           </StaffType>
         </Staff>
       <trackName>Acoustic Bass</trackName>
-      <Instrument>
+      <Instrument id="acoustic-bass">
         <longName>Acoustic Bass</longName>
         <trackName></trackName>
+        <instrumentId>pluck.bass.acoustic</instrumentId>
         <StringData>
           <frets>25</frets>
           <string>28</string>
