@@ -432,7 +432,7 @@ void FretDiagram::setDot(int string, int fret, bool add /*= false*/, FretDotType
 void FretDiagram::addDotForDotStyleBarre(int string, int fret)
 {
     if (m_dots[string].empty()) {
-        m_dots[string].push_back(FretItem::Dot(fret, FretDotType::NORMAL));
+        m_dots[string].push_back(FretItem::Dot(fret, FretDotType::NORMAL, /*isPartOfSlurBarre*/ true));
     }
 }
 
@@ -779,10 +779,24 @@ String FretDiagram::patternFromDiagram(const FretDiagram* diagram)
         }
 
         const auto it = dotsMap.find(i);
-        if (it != dotsMap.end() && !it->second.empty()) {
+        std::vector<FretItem::Dot> dotList;
+        if (it != dotsMap.end()) {
+            const std::vector<FretItem::Dot>& dots = it->second;
+            for (const FretItem::Dot& dot : dots) {
+                if (!dot.isPartOfSlurBarre) { // Don't write dot if part of slur barré
+                    dotList.push_back(dot);
+                }
+            }
+        }
+
+        if (!dotList.empty()) {
             const auto& dotList = it->second;
             StringList dotDescriptions;
             for (const auto& dot : dotList) {
+                if (dot.isPartOfSlurBarre) {
+                    continue;
+                }
+
                 int actualFret = dot.fret + offset;
                 Char typeChar = u'O';
 
