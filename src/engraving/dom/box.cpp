@@ -90,6 +90,9 @@ bool Box::edit(EditData&)
 
 void Box::startEditDrag(EditData& ed)
 {
+    if (ed.curGrip == Grip::NO_GRIP) {
+        return;
+    }
     ElementEditDataPtr eed = ed.getData(this);
     if (isHBox()) {
         eed->pushProperty(Pid::BOX_WIDTH);
@@ -100,6 +103,9 @@ void Box::startEditDrag(EditData& ed)
 
 void Box::editDrag(EditData& ed)
 {
+    if (ed.curGrip == Grip::NO_GRIP) {
+        return;
+    }
     const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
     if (isVBox()) {
         m_boxHeight += Spatium(ed.delta.y() / sp);
@@ -524,6 +530,9 @@ void Box::manageExclusionFromParts(bool exclude)
 
 RectF HBox::drag(EditData& data)
 {
+    if (!isMovable()) {
+        return RectF();
+    }
     RectF r(canvasBoundingRect());
     double diff = data.evtDelta.x();
     double x1   = offset().x() + diff;
@@ -677,6 +686,9 @@ bool VBox::setProperty(Pid propertyId, const PropertyValue& v)
 
 void VBox::startEditDrag(EditData& ed)
 {
+    if (ed.curGrip == Grip::NO_GRIP) {
+        return;
+    }
     const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
     if (isAutoSizeEnabled()) {
         setAutoSizeEnabled(false);
