@@ -930,19 +930,20 @@ bool PlaybackModel::shouldSkipChanges(const ScoreChanges& changes) const
         return true;
     }
 
-    if (changes.changedItems.size() != 1) {
+    if (changes.changedObjects.size() != 1) {
         return false;
     }
 
-    const EngravingItem* item = changes.changedItems.begin()->first;
-    if (!item->isTextBase()) {
+    const EngravingObject* obj = changes.changedObjects.begin()->first;
+    if (!obj->isTextBase()) {
         return false;
     }
 
-    const bool empty = toTextBase(item)->empty();
+    const TextBase* text = toTextBase(obj);
+    const bool empty = toTextBase(obj)->empty();
 
-    if (empty && item->isHarmony() && m_playChordSymbols) {
-        const InstrumentTrackId trackId = chordSymbolsTrackId(item->part()->id());
+    if (empty && text->isHarmony() && m_playChordSymbols) {
+        const InstrumentTrackId trackId = chordSymbolsTrackId(text->part()->id());
         if (!muse::contains(m_playbackDataMap, trackId)) {
             return false;
         }
@@ -983,8 +984,12 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChanges& 
         return result;
     }
 
-    for (const auto& pair : changes.changedItems) {
-        const EngravingItem* item = pair.first;
+    for (const auto& pair : changes.changedObjects) {
+        if (!pair.first->isEngravingItem()) {
+            continue;
+        }
+
+        const EngravingItem* item = toEngravingItem(pair.first);
 
         if (item->isNote()) {
             const Note* note = toNote(item);

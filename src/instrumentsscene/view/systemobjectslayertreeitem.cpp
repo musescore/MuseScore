@@ -156,11 +156,12 @@ void SystemObjectsLayerTreeItem::onScoreChanged(const mu::engraving::ScoreChange
 
     bool shouldUpdateState = false;
 
-    for (const auto& pair : changes.changedItems) {
-        EngravingItem* item = pair.first;
-        if (!item) {
+    for (const auto& pair : changes.changedObjects) {
+        if (!pair.first->isEngravingItem()) {
             continue;
         }
+
+        EngravingItem* item = toEngravingItem(pair.first);
 
         bool isSystemObj = item->systemFlag() || (item->isStaff() && toStaff(item)->isSystemObjectStaff());
         if (!isSystemObj && item->isTimeSig()) {

@@ -268,7 +268,7 @@ struct ScoreChanges {
 
     bool isTextEditing = false;
 
-    std::map<EngravingItem*, std::unordered_set<CommandType> > changedItems;
+    std::map<EngravingObject*, std::unordered_set<CommandType> > changedObjects;
     ElementTypeSet changedTypes;
     PropertyIdSet changedPropertyIdSet;
     StyleIdSet changedStyleIdSet;

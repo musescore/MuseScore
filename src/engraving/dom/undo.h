@@ -291,7 +291,7 @@ public:
 
     struct ChangesInfo {
         ElementTypeSet changedObjectTypes;
-        std::map<EngravingItem*, std::unordered_set<CommandType> > changedItems;
+        std::map<EngravingObject*, std::unordered_set<CommandType> > changedObjects;
         StyleIdSet changedStyleIdSet;
         PropertyIdSet changedPropertyIdSet;
         bool isTextEditing = false;

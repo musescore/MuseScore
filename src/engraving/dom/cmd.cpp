@@ -116,8 +116,12 @@ static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoMacro:
     int startTick = cmdState.startTick().ticks();
     int endTick = cmdState.endTick().ticks();
 
-    for (const auto& pair : changes.changedItems) {
-        int tick = pair.first->tick().ticks();
+    for (const auto& pair : changes.changedObjects) {
+        if (!pair.first->isEngravingItem()) {
+            continue;
+        }
+
+        int tick = toEngravingItem(pair.first)->tick().ticks();
 
         if (startTick > tick) {
             startTick = tick;
@@ -131,7 +135,7 @@ static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoMacro:
     return { startTick, endTick,
              cmdState.startStaff(), cmdState.endStaff(),
              changes.isTextEditing,
-             std::move(changes.changedItems),
+             std::move(changes.changedObjects),
              std::move(changes.changedObjectTypes),
              std::move(changes.changedPropertyIdSet),
              std::move(changes.changedStyleIdSet) };

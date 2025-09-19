@@ -724,13 +724,7 @@ UndoMacro::ChangesInfo UndoMacro::changesInfo(bool undo) const
             }
 
             result.changedObjectTypes.insert(object->type());
-
-            auto item = dynamic_cast<EngravingItem*>(object);
-            if (!item) {
-                continue;
-            }
-
-            result.changedItems[item].insert(type);
+            result.changedObjects[object].insert(type);
         }
     }
 
