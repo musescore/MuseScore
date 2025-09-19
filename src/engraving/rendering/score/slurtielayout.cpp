@@ -2012,7 +2012,6 @@ void SlurTieLayout::layoutLaissezVibChord(Chord* chord, LayoutContext& ctx)
     double chordLvEndPoint = -DBL_MAX;
     std::map<LaissezVibSegment*, SlurTiePos> lvSegmentsWithPositions;
     const bool smuflLayout = ctx.conf().styleB(Sid::laissezVibUseSmuflSym);
-    const PointF chordPos = chord->pos() + chord->segment()->pos() + chord->measure()->pos();
 
     for (const Note* note : chord->notes()) {
         LaissezVib* lv = note->laissezVib();
@@ -2048,6 +2047,9 @@ void SlurTieLayout::layoutLaissezVibChord(Chord* chord, LayoutContext& ctx)
             ldata->setPos(sPos.p1);
         }
 
+        const System* system = sPos.system1;
+        const SysStaff* staff = system->staff(chord->vStaffIdx());
+        const PointF chordPos = chord->pos() + chord->segment()->pos() + chord->measure()->pos() + PointF(0.0, staff->y());
         const PointF notePos = chordPos + note->pos();
         ldata->posRelativeToNote = sPos.p1 - notePos;
     }
