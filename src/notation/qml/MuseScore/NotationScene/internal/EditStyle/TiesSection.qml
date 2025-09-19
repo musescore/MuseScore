@@ -239,7 +239,7 @@ StyledGroupBox {
 
             StyledTextLabel {
                 Layout.fillWidth: true
-                text: qsTrc("notation", "Placement on multiple voices:")
+                text: qsTrc("notation", "Placement of inner ties with respect to augmentation dots:")
                 horizontalAlignment: Text.AlignLeft
             }
 
