@@ -267,6 +267,14 @@ PlaybackSetupData StringsSetupDataResolver::doResolve(const Instrument* instrume
                                                                                 SoundSubCategory::Plucked } } },
         { "bowed-synth", { SoundId::Synthesizer, SoundCategory::Strings, { SoundSubCategory::Electric,
                                                                            SoundSubCategory::Bowed } } },
+        { "timple-canario", { SoundId::TimpleCanario, SoundCategory::Strings, { SoundSubCategory::Acoustic,
+                                                                                SoundSubCategory::Nylon,
+                                                                                SoundSubCategory::Spanish,
+                                                                                SoundSubCategory::Plucked } } },
+        { "timple-canario-tablature", { SoundId::TimpleCanario, SoundCategory::Strings, { SoundSubCategory::Acoustic,
+                                                                                          SoundSubCategory::Nylon,
+                                                                                          SoundSubCategory::Spanish,
+                                                                                          SoundSubCategory::Plucked } } },
     };
 
     auto search = SETUP_DATA_MAP.find(instrument->id().toStdString());
