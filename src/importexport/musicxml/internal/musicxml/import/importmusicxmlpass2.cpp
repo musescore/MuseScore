@@ -7251,11 +7251,11 @@ Note* MusicXmlParserPass2::note(const String& partId,
                     // create a new tuplet
                     handleTupletStart(cr, tuplet, actualNotes, normalNotes, notations.tupletDesc());
                 }
-                if (tupletAction & MusicXmlTupletFlag::ADD_CHORD) {
+                if (tuplet && tupletAction & MusicXmlTupletFlag::ADD_CHORD) {
                     cr->setTuplet(tuplet);
                     tuplet->add(cr);
                 }
-                if (tupletAction & MusicXmlTupletFlag::STOP_CURRENT) {
+                if (tuplet && tupletAction & MusicXmlTupletFlag::STOP_CURRENT) {
                     if (missingCurr.isValid() && missingCurr > Fraction(0, 1)) {
                         LOGD("add missing %s to current tuplet", muPrintable(missingCurr.toString()));
                         const int track = msTrack + msVoice;

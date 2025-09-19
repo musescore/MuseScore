@@ -184,8 +184,6 @@ PropertyValue Marker::getProperty(Pid propertyId) const
         return label();
     case Pid::MARKER_TYPE:
         return int(markerType());
-    case Pid::MARKER_SYMBOL_SIZE:
-        return symbolSize();
     case Pid::MARKER_CENTER_ON_SYMBOL:
         return centerOnSymbol();
     default:
@@ -206,9 +204,6 @@ bool Marker::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::MARKER_TYPE:
         setMarkerType(MarkerType(v.toInt()));
-        break;
-    case Pid::MARKER_SYMBOL_SIZE:
-        setSymbolSize(v.toDouble());
         break;
     case Pid::MARKER_CENTER_ON_SYMBOL:
         setCenterOnSymbol(v.toBool());
@@ -236,8 +231,6 @@ PropertyValue Marker::propertyDefault(Pid propertyId) const
         return int(MarkerType::FINE);
     case Pid::PLACEMENT:
         return PlacementV::ABOVE;
-    case Pid::MARKER_SYMBOL_SIZE:
-        return 18.0;
     case Pid::MARKER_CENTER_ON_SYMBOL:
         return true;
     default:

@@ -83,9 +83,6 @@ public:
 
     bool positionSeparateFromAlignment() const override { return true; }
 
-    double symbolSize() const { return m_symbolSize; }
-    void setSymbolSize(double v) { m_symbolSize = v; }
-
     bool centerOnSymbol() const { return m_centerOnSymbol; }
     void setCenterOnSymbol(bool val) { m_centerOnSymbol = val; }
 
@@ -105,7 +102,6 @@ private:
     MarkerType m_markerType = MarkerType::SEGNO;
     String m_label;                 ///< referenced from Jump() element
 
-    double m_symbolSize = 18.0;
     bool m_centerOnSymbol = true;
 };
 } // namespace mu::engraving

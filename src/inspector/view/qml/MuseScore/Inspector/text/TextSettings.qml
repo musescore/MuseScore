@@ -43,6 +43,26 @@ Column {
         matchStaffSize.navigation.requestActive()
     }
 
+    SpinBoxPropertyView {
+        id: symbolSize
+
+        anchors.left: parent.left
+
+        navigationName: "Symbol size"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
+
+        titleText: qsTrc("inspector", "Symbol size")
+        measureUnitsSymbol: "pt"
+        propertyItem: root.model ? root.model.symbolSize : null
+        visible: root.model ? root.model.isSymbolSizeAvailable : false
+
+        decimals: 0
+        step: 1
+        minValue: 0
+        maxValue: 1000
+    }
+
     Item {
         height: childrenRect.height
         width: parent.width
@@ -56,7 +76,7 @@ Column {
 
             navigation.name: "Scale with staff size"
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart + 1
+            navigation.row: symbolSize.navigationRowEnd + 1
 
             text: qsTrc("inspector", "Scale with staff size")
             propertyItem: root.model ? root.model.isSizeSpatiumDependent : null
@@ -70,6 +90,8 @@ Column {
 
             anchors.right: parent.right
             height: 30
+
+            visible: root.model ? root.model.isScriptSizeAvailable : false
 
             model: [
                 { iconRole: IconCode.TEXT_SUBSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_BOTTOM, titleRole: qsTrc("inspector", "Subscript") },
@@ -115,13 +137,18 @@ Column {
         frameCornerRadius: root.model ? root.model.frameCornerRadius : null
     }
 
-    SeparatorLine { anchors.margins: -12 }
+    SeparatorLine {
+        visible: root.model ? root.model.isLineSpacingAvailable : false
+        anchors.margins: -12
+    }
 
     SpinBoxPropertyView {
         id: textLineSpacingSection
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
+
+        visible: root.model ? root.model.isLineSpacingAvailable : false
 
         navigationName: "Line Spacing"
         navigationPanel: root.navigationPanel

@@ -332,13 +332,13 @@ public:
     bool empty() const { return xmlText().isEmpty(); }
     void clear() { setXmlText(String()); }
 
-    FontStyle fontStyle() const;
-    String family() const;
-    double size() const;
+    virtual FontStyle fontStyle() const;
+    virtual String family() const;
+    virtual double size() const;
 
-    void setFontStyle(const FontStyle& val);
-    void setFamily(const String& val);
-    void setSize(const double& val);
+    virtual void setFontStyle(const FontStyle& val);
+    virtual void setFamily(const String& val);
+    virtual void setSize(const double& val);
 
     bool anchorToEndOfPrevious() const { return m_anchorToEndOfPrevious; }
     void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }
@@ -498,6 +498,10 @@ public:
     AutoOnOff centerBetweenStaves() const { return m_centerBetweenStaves; }
     void genText();
 
+    double symbolSize() const { return m_symbolSize; }
+    void setSymbolSize(double v) { m_symbolSize = v; }
+    inline bool hasSymbolSize() const { return isMarker() || isTempoText() || isSystemText() || isStaffText(); }
+
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
              ElementFlags = ElementFlag::NOTHING);
@@ -557,6 +561,8 @@ private:
 
     int m_hexState = -1;
     bool m_primed = 0;
+
+    double m_symbolSize = 18.0;
 
     TextCursor* m_cursor = nullptr;
 

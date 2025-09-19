@@ -40,6 +40,8 @@ InspectorSectionView {
 
         spacing: 12
 
+        enabled: root.model ? root.model.areTextPropertiesAvailable : false
+
         DropdownPropertyView {
             id: fontSection
             navigationName: "Font"

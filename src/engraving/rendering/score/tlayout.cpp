@@ -3609,11 +3609,38 @@ void TLayout::layoutJump(const Jump* item, Jump::LayoutData* ldata)
 
     layoutBaseTextBase(item, ldata);
 
+    AlignH align = item->align().horizontal;
+
+    const Measure* measure = toMeasure(item->parentItem());
+
+    bool avoidBarline = item->staffIdx() != 0 && align != AlignH::HCENTER;
+
+    if (avoidBarline) {
+        bool startRepeat = measure->repeatStart();
+        bool endRepeat = measure->repeatEnd();
+        staff_idx_t blIdx = item->staffIdx() - 1;
+
+        const double fontSizeScaleFactor = item->size() / 10.0;
+        double padding = (startRepeat || endRepeat) ? 0.0 : 0.5 * item->spatium() * fontSizeScaleFactor;
+        double xAdj = 0.0;
+
+        if (align == AlignH::LEFT) {
+            const BarLine* bl = startRepeat || !measure->prevMeasure()
+                                ? measure->startBarLine(blIdx) : measure->prevMeasure()->endBarLine(blIdx);
+            double blWidth = startRepeat ? bl->width() : 0.0;
+            xAdj += padding + blWidth;
+        } else if (align == AlignH::RIGHT) {
+            const BarLine* bl = measure->endBarLine(blIdx);
+            xAdj -= bl->width() + padding;
+        }
+
+        ldata->moveX(xAdj);
+    }
+
     if (item->autoplace()) {
-        const Measure* m = toMeasure(item->explicitParent());
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(ldata->isSetBbox());
-        LD_CONDITION(m->ldata()->isSetPos());
+        LD_CONDITION(measure->ldata()->isSetPos());
     }
 
     Autoplace::autoplaceMeasureElement(item, ldata);

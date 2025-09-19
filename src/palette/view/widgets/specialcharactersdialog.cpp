@@ -58,6 +58,7 @@ static constexpr SymId commonScoreSymbols[] = {
     SymId::metNote64thUp,
     SymId::metNote128thUp,
     SymId::metAugmentationDot,
+    SymId::tuplet3,
     SymId::restWholeLegerLine,
     SymId::restHalfLegerLine,
     SymId::restQuarter,
