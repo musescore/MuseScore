@@ -48,7 +48,7 @@ RowLayout {
 
     Loader {
         id: labelLoader
-        Layout.preferredWidth: root.labelAreaWidth
+        Layout.preferredWidth: root.labelAreaWidth > 0 ? root.labelAreaWidth : implicitWidth
 
         sourceComponent: StyledTextLabel {
             horizontalAlignment: Text.AlignLeft
@@ -59,7 +59,8 @@ RowLayout {
 
     Item {
         id: control
-        Layout.preferredWidth: root.controlAreaWidth
+        Layout.preferredWidth: root.controlAreaWidth > 0 ? root.controlAreaWidth : implicitWidth
+        implicitWidth: children.length === 1 ? children[0].implicitWidth : 0
         implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
     }
 

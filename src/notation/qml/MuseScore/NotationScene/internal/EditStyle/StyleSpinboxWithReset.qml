@@ -34,7 +34,9 @@ StyleControlRowWithReset {
     property bool inPercentage: false
     property double step: 0.01
     property double spinBoxWidth: 80
-    property double min: 0
+    property alias min: spinBox.minValue
+    property alias max: spinBox.maxValue
+    property alias decimals: spinBox.decimals
 
     IncrementalPropertyControl {
         id: spinBox
@@ -42,7 +44,7 @@ StyleControlRowWithReset {
         width: root.spinBoxWidth
 
         currentValue: inPercentage ? Math.round(styleItem.value * 100) : styleItem.value
-        minValue: root.min
+        minValue: 0
         maxValue: inPercentage ? 999 : 99
         step: inPercentage ? 1 : root.step
         decimals: inPercentage ? 0 : 2
