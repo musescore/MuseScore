@@ -23,6 +23,7 @@
 #include <climits>
 
 #include "anchors.h"
+#include "dom/utils.h"
 #include "factory.h"
 #include "figuredbass.h"
 #include "fret.h"
@@ -237,15 +238,41 @@ void MoveElementAnchors::moveElementAnchorsOnDrag(EngravingItem* element, EditDa
 
     EditTimeTickAnchors::updateAnchors(element);
 
-    staff_idx_t si = element->staffIdx();
-    Segment* newSeg = nullptr;     // don't prefer any segment while dragging, just snap to the closest
-    static constexpr double spacingFactor = 0.5;
-    element->score()->dragPosition(element->canvasPos(), &si, &newSeg, spacingFactor, element->allowTimeAnchor());
-    if (newSeg && ((newSeg != segment && !newSeg->measure()->isMMRest()) || element->staffIdx() != si)) {
+    Segment* newSeg = findNewAnchorableSegmentFromDrag(element, segment);
+
+    if (newSeg && (newSeg != segment && !newSeg->measure()->isMMRest())) {
         PointF curOffset = element->offset();
         moveSegment(element, newSeg, newSeg->tick() - segment->tick());
         rebaseOffsetOnMoveSegment(element, curOffset, newSeg, segment);
     }
+}
+
+Segment* MoveElementAnchors::findNewAnchorableSegmentFromDrag(EngravingItem* element, Segment* curSeg)
+{
+    const System* system = curSeg->system();
+    if (!system) {
+        return nullptr;
+    }
+
+    const Measure* newMeasure = nullptr;
+    double xRef = element->canvasX() - system->canvasX();
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        if (mb->x() + mb->width() > xRef) {
+            newMeasure = toMeasure(mb);
+            break;
+        }
+    }
+    if (!newMeasure) {
+        return nullptr;
+    }
+
+    Segment* newSeg = nullptr;
+    dragPositionToSegment(element->canvasPos(), newMeasure, element->staffIdx(), &newSeg, 0.5, true);
+
+    return newSeg;
 }
 
 Segment* MoveElementAnchors::findNewAnchorSegmentForLine(LineSegment* lineSegment, const EditData& ed, const Segment* curSeg)
