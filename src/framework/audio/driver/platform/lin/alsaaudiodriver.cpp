@@ -613,9 +613,9 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
     AlsaParams params {
         .access = preferredAccess,
         .format = SND_PCM_FORMAT_FLOAT_LE,
-        .channels = spec.channels,
-        .sampleRate = spec.sampleRate,
-        .periodSize = spec.samples,
+        .channels = spec.output.audioChannelCount,
+        .sampleRate = static_cast<unsigned int>(spec.output.sampleRate),
+        .periodSize = spec.output.samplesPerChannel,
         .periods = 2u,
         .ringBufferSize = 0u,
     };
@@ -653,8 +653,9 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
     if (activeSpec) {
         *activeSpec = spec;
         activeSpec->format = Format::AudioF32;
-        activeSpec->samples = params.periodSize;
-        activeSpec->sampleRate = params.sampleRate;
+        activeSpec->output.samplesPerChannel = params.periodSize;
+        activeSpec->output.sampleRate = params.sampleRate;
+        activeSpec->output.audioChannelCount = params.channels;
         s_format = *activeSpec;
     }
 
