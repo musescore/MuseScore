@@ -53,6 +53,7 @@ private:
     static void moveSegment(EngravingItem* element, bool forward);
     static Segment* getNewSegment(EngravingItem* element, Segment* curSeg, bool forward);
     static Segment* findNewAnchorableSegment(const Segment* curSeg, bool forward);
+    static Segment* findNewAnchorableSegmentFromDrag(EngravingItem* element, Segment* curSeg);
 
     static void doMoveSegment(EngravingItem* element, Segment* newSeg, Fraction tickDiff);
     static void doMoveSegment(FiguredBass* element, Segment* newSeg, Fraction tickDiff);
