@@ -691,8 +691,47 @@ async::Channel<IAudioDriver::Spec> AlsaAudioDriver::activeSpecChanged() const
 
 AudioDeviceList AlsaAudioDriver::availableOutputDevices() const
 {
+    void** hints = nullptr;
+
+    if (snd_device_name_hint(-1, "pcm", &hints) < 0) {
+        return {
+            { DEFAULT_DEVICE_ID, muse::trc("audio", "System default") }
+        };
+    }
+
     AudioDeviceList devices;
-    devices.push_back({ DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
+
+    for (void** n=hints; *n != nullptr; n++) {
+        char* cio = snd_device_name_get_hint(*n, "IOID");
+        char* cname = snd_device_name_get_hint(*n, "NAME");
+        char* cdesc = snd_device_name_get_hint(*n, "DESC");
+
+        const auto isCaptureOnly = cio && strcmp(cio, "Input") == 0;
+
+        if (!isCaptureOnly && cname && strcmp(cname, "null") != 0) {
+            std::string name = cname;
+            std::string desc = cdesc ? cdesc : cname;
+            devices.push_back({ name, desc });
+        }
+        if (isCaptureOnly) {
+            LOGD() << "Skipping non-playback device: " << cname;
+        }
+        if (cio) {
+            free(cio);
+        }
+        if (cname) {
+            free(cname);
+        }
+        if (cdesc) {
+            free(cdesc);
+        }
+    }
+
+    free(hints);
+
+    if (devices.empty()) {
+        devices.push_back({ DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
+    }
 
     return devices;
 }
