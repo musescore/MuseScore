@@ -5418,39 +5418,64 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                 // rests or gap in destination
                 //   insert new chord if the rests / gap are long enough
                 //   then move note in
-                ChordRest* pcr = nullptr;
-                ChordRest* ncr = nullptr;
+                bool hasIncompatibleTuplet = false;
+                Chord* cBefore = nullptr;
+                Chord* cAfterStart = nullptr;
                 for (Segment* s2 = m->first(SegmentType::ChordRest); s2; s2 = s2->next()) {
                     if (s2->segmentType() != SegmentType::ChordRest) {
                         continue;
                     }
                     ChordRest* cr2 = toChordRest(s2->element(dstTrack));
-                    if (!cr2 || cr2->type() == ElementType::REST) {
+                    if (!cr2) {
+                        continue;
+                    }
+                    if (Tuplet* topTuplet = cr2->topTuplet()) {
+                        if (topTuplet->tick() < s->tick()
+                            && topTuplet->tick() + topTuplet->actualTicks() > s->tick()) {
+                            hasIncompatibleTuplet = true;
+                            break;
+                        }
+                        if (topTuplet->tick() < s->tick() + chord->actualTicks()
+                            && topTuplet->tick() + topTuplet->actualTicks() > s->tick() + chord->actualTicks()) {
+                            hasIncompatibleTuplet = true;
+                            break;
+                        }
+                    }
+                    if (!cr2->isChord()) {
                         continue;
                     }
                     if (s2->tick() < s->tick()) {
-                        pcr = cr2;
-                        continue;
-                    } else if (s2->tick() >= s->tick()) {
-                        ncr = cr2;
+                        cBefore = toChord(cr2);
+                    }
+                    if (s2->tick() >= s->tick()) {
+                        cAfterStart = toChord(cr2);
+                    }
+                    if (s2->tick() >= s->tick() + chord->actualTicks()) {
                         break;
                     }
                 }
-                Fraction gapStart = pcr ? pcr->tick() + pcr->actualTicks() : m->tick();
-                Fraction gapEnd   = ncr ? ncr->tick() : m->tick() + m->ticks();
-                if (gapStart <= s->tick() && gapEnd >= s->tick() + chord->actualTicks()) {
-                    // big enough gap found
-                    dstChord = Factory::createChord(s);
-                    dstChord->setTrack(dstTrack);
-                    dstChord->setDurationType(chord->durationType());
-                    dstChord->setTicks(chord->ticks());
-                    dstChord->setParent(s);
-                    // makeGapVoice will not back-fill an empty voice
-                    if (voice && !dstCR) {
-                        score->expandVoice(s, /*m->first(SegmentType::ChordRest,*/ dstTrack);
-                    }
-                    score->makeGapVoice(s, dstTrack, chord->actualTicks(), s->tick());
+                if (hasIncompatibleTuplet) {
+                    continue;
                 }
+                if (cBefore && cBefore->tick() + cBefore->actualTicks() > s->tick()) {
+                    // previous chord overlaps
+                    continue;
+                }
+                if (cAfterStart && cAfterStart->tick() < s->tick() + chord->actualTicks()) {
+                    // next chord overlaps
+                    continue;
+                }
+                // big enough gap found
+                dstChord = Factory::createChord(s);
+                dstChord->setTrack(dstTrack);
+                dstChord->setDurationType(chord->durationType());
+                dstChord->setTicks(chord->ticks());
+                dstChord->setParent(s);
+                // makeGapVoice will not back-fill an empty voice
+                if (voice && !dstCR) {
+                    score->expandVoice(s, /*m->first(SegmentType::ChordRest,*/ dstTrack);
+                }
+                score->makeGapVoice(s, dstTrack, chord->actualTicks(), s->tick());
             }
 
             if (!dstChord) {
