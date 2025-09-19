@@ -19,34 +19,50 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "accidentalgrouppagemodel.h"
+#include "accidentalspagemodel.h"
 
 using namespace mu::notation;
 
-AccidentalGroupPageModel::AccidentalGroupPageModel(QObject* parent)
-    : AbstractStyleDialogModel(parent, { StyleId::accidentalOrderFollowsNoteDisplacement,
-                                         StyleId::alignAccidentalOctavesAcrossSubChords,
-                                         StyleId::keepAccidentalSecondsTogether,
-                                         StyleId::alignOffsetOctaveAccidentals })
+AccidentalsPageModel::AccidentalsPageModel(QObject* parent)
+    : AbstractStyleDialogModel(parent, {
+    StyleId::bracketedAccidentalPadding,
+
+    StyleId::keySigNaturals,
+
+    StyleId::accidentalOrderFollowsNoteDisplacement,
+    StyleId::alignAccidentalOctavesAcrossSubChords,
+    StyleId::keepAccidentalSecondsTogether,
+    StyleId::alignOffsetOctaveAccidentals
+})
 {
 }
 
-StyleItem* AccidentalGroupPageModel::accidFollowNoteOffset() const
+StyleItem* AccidentalsPageModel::bracketedAccidentalPadding() const
+{
+    return styleItem(StyleId::bracketedAccidentalPadding);
+}
+
+StyleItem* AccidentalsPageModel::keySigNaturals() const
+{
+    return styleItem(StyleId::keySigNaturals);
+}
+
+StyleItem* AccidentalsPageModel::accidFollowNoteOffset() const
 {
     return styleItem(StyleId::accidentalOrderFollowsNoteDisplacement);
 }
 
-StyleItem* AccidentalGroupPageModel::alignAccidentalOctavesAcrossSubChords() const
+StyleItem* AccidentalsPageModel::alignAccidentalOctavesAcrossSubChords() const
 {
     return styleItem(StyleId::alignAccidentalOctavesAcrossSubChords);
 }
 
-StyleItem* AccidentalGroupPageModel::keepAccidentalSecondsTogether() const
+StyleItem* AccidentalsPageModel::keepAccidentalSecondsTogether() const
 {
     return styleItem(StyleId::keepAccidentalSecondsTogether);
 }
 
-StyleItem* AccidentalGroupPageModel::alignOffsetOctaveAccidentals() const
+StyleItem* AccidentalsPageModel::alignOffsetOctaveAccidentals() const
 {
     return styleItem(StyleId::alignOffsetOctaveAccidentals);
 }

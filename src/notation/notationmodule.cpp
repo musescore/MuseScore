@@ -94,8 +94,7 @@
 #include "view/styledialog/restspagemodel.h"
 #include "view/styledialog/beamspagemodel.h"
 #include "view/styledialog/bendstyleselector.h"
-#include "view/styledialog/tieplacementselector.h"
-#include "view/styledialog/accidentalgrouppagemodel.h"
+#include "view/styledialog/accidentalspagemodel.h"
 #include "view/styledialog/fretboardspagemodel.h"
 #include "view/styledialog/glissandosectionmodel.h"
 #include "view/styledialog/notelinesectionmodel.h"
@@ -108,6 +107,7 @@
 #include "view/styledialog/tupletcenteringselectormodel.h"
 #include "view/styledialog/repeatplaycounttextmodel.h"
 #include "view/styledialog/measurerepeatmodel.h"
+#include "view/styledialog/slursandtiespagemodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -237,8 +237,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<RestsPageModel>("MuseScore.NotationScene", 1, 0, "RestsPageModel");
     qmlRegisterType<BeamsPageModel>("MuseScore.NotationScene", 1, 0, "BeamsPageModel");
     qmlRegisterType<BendStyleSelector>("MuseScore.NotationScene", 1, 0, "BendStyleSelector");
-    qmlRegisterType<TiePlacementSelectorModel>("MuseScore.NotationScene", 1, 0, "TiePlacementSelectorModel");
-    qmlRegisterType<AccidentalGroupPageModel>("MuseScore.NotationScene", 1, 0, "AccidentalGroupPageModel");
+    qmlRegisterType<AccidentalsPageModel>("MuseScore.NotationScene", 1, 0, "AccidentalsPageModel");
     qmlRegisterType<FretboardsPageModel>("MuseScore.NotationScene", 1, 0, "FretboardsPageModel");
     qmlRegisterType<GlissandoSectionModel>("MuseScore.NotationScene", 1, 0, "GlissandoSectionModel");
     qmlRegisterType<NoteLineSectionModel>("MuseScore.NotationScene", 1, 0, "NoteLineSectionModel");
@@ -251,6 +250,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<TupletCenteringSelectorModel>("MuseScore.NotationScene", 1, 0, "TupletCenteringSelectorModel");
     qmlRegisterType<RepeatPlayCountTextModel>("MuseScore.NotationScene", 1, 0, "RepeatPlayCountTextModel");
     qmlRegisterType<MeasureRepeatModel>("MuseScore.NotationScene", 1, 0, "MeasureRepeatModel");
+    qmlRegisterType<SlursAndTiesPageModel>("MuseScore.NotationScene", 1, 0, "SlursAndTiesPageModel");
 
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 
