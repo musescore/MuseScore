@@ -69,10 +69,11 @@ public:
         int fingering = 0;     // NOTE:JT - possible future feature?
 
         Dot() = default;
-        Dot(int f, FretDotType t = FretDotType::NORMAL)
-            : fret(f), dtype(t) {}
+        Dot(int f, FretDotType t = FretDotType::NORMAL, bool isPartOfSlurBarre = false)
+            : fret(f), dtype(t), isPartOfSlurBarre(isPartOfSlurBarre) {}
 
         bool exists() const { return fret > 0; }
+        bool isPartOfSlurBarre = false;
     };
 
     struct Marker {
