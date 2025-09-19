@@ -62,7 +62,7 @@ TransposeDialog::TransposeDialog(QWidget* parent)
     });
     setEnableTransposeChordNames(hasChordNames);
 
-    setKey(firstPitchedStaffKey());
+    restorePreviousState();
 
     connect(this, &TransposeDialog::accepted, this, &TransposeDialog::apply);
 
@@ -147,7 +147,6 @@ void TransposeDialog::setEnableTransposeToKey(bool val)
 void TransposeDialog::setEnableTransposeChordNames(bool val)
 {
     transposeChordNames->setEnabled(val);
-    transposeChordNames->setChecked(val);
 }
 
 //---------------------------------------------------------
@@ -219,6 +218,8 @@ void TransposeDialog::apply()
     options.needTransposeChordNames = getTransposeChordNames();
     options.needTransposeDoubleSharpsFlats = useDoubleSharpsFlats();
 
+    saveState();
+
     interaction()->transpose(options);
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
@@ -226,39 +227,6 @@ void TransposeDialog::apply()
     if (m_allSelected) {
         interaction()->clearSelection();
     }
-}
-
-Key TransposeDialog::firstPitchedStaffKey() const
-{
-    mu::engraving::staff_idx_t startStaffIdx = 0;
-    mu::engraving::staff_idx_t endStaffIdx   = 0;
-    Fraction startTick = Fraction(0, 1);
-    INotationSelectionRangePtr range = selection()->range();
-
-    if (selection()->isRange()) {
-        startStaffIdx = range->startStaffIndex();
-        endStaffIdx = range->endStaffIndex();
-        startTick = range->startTick();
-    }
-
-    Key key = Key::C;
-
-    muse::async::NotifyList<const Part*> partList = notation()->parts()->partList();
-    for (const Part* part : partList) {
-        for (const Staff* staff : part->staves()) {
-            if (staff->idx() < startStaffIdx || staff->idx() > endStaffIdx) {
-                continue;
-            }
-
-            if (staff->isPitchedStaff(startTick)) {
-                key = staff->concertKey(startTick);
-
-                break;
-            }
-        }
-    }
-
-    return key;
 }
 
 void TransposeDialog::setEnableTransposeKeys(bool val)
@@ -290,12 +258,62 @@ int TransposeDialog::transposeInterval() const
            : degreeList->currentIndex() + 1;
 }
 
-void TransposeDialog::setKey(Key k)
-{
-    keyList->setCurrentIndex(int(k) + 7);
-}
-
 bool TransposeDialog::useDoubleSharpsFlats() const
 {
     return accidentalOptions->currentIndex() == 1;
+}
+
+TransposeDialogState& TransposeDialog::previousState()
+{
+    static TransposeDialogState options;
+    return options;
+}
+
+void TransposeDialog::restorePreviousState()
+{
+    const TransposeDialogState& state = previousState();
+
+    chromaticBox->setChecked(state.chromaticChecked);
+    diatonicBox->setChecked(!state.chromaticChecked);
+
+    transposeByKey->setChecked(state.transposeByKeyChecked);
+    transposeByInterval->setChecked(!state.transposeByKeyChecked);
+
+    keyList->setCurrentIndex(state.keyListIdx);
+    closestKey->setChecked(state.closestKeyChecked);
+    upKey->setChecked(state.upKeyChecked);
+    downKey->setChecked(!state.closestKeyChecked && !state.upKeyChecked);
+
+    intervalList->setCurrentIndex(state.chromaticIntervalIdx);
+    upInterval->setChecked(state.upIntervalChecked);
+    downInterval->setChecked(!state.upIntervalChecked);
+
+    transposeKeys->setChecked(state.needTransposeKeysChecked);
+
+    degreeList->setCurrentIndex(state.diatonicIntervalIdx);
+    upDiatonic->setChecked(state.upDiatonicChecked);
+    downDiatonic->setChecked(!state.upDiatonicChecked);
+    keepDegreeAlterations->setChecked(state.keepDegreeAlterationsChecked);
+
+    transposeChordNames->setChecked(state.needTransposeChordNamesChecked);
+    accidentalOptions->setCurrentIndex(state.needTransposeDoubleSharpsFlatsIdx);
+}
+
+void TransposeDialog::saveState()
+{
+    TransposeDialogState& state = previousState();
+
+    state.chromaticChecked = chromaticBox->isChecked();
+    state.transposeByKeyChecked = transposeByKey->isChecked();
+    state.closestKeyChecked = closestKey->isChecked();
+    state.upKeyChecked = upKey->isChecked();
+    state.keyListIdx = keyList->currentIndex();
+    state.upIntervalChecked = upInterval->isChecked();
+    state.chromaticIntervalIdx = intervalList->currentIndex();
+    state.upDiatonicChecked = upDiatonic->isChecked();
+    state.diatonicIntervalIdx = degreeList->currentIndex();
+    state.keepDegreeAlterationsChecked = keepDegreeAlterations->isChecked();
+    state.needTransposeKeysChecked = transposeKeys->isChecked();
+    state.needTransposeChordNamesChecked = transposeChordNames->isChecked();
+    state.needTransposeDoubleSharpsFlatsIdx = accidentalOptions->currentIndex();
 }
