@@ -213,7 +213,7 @@ FocusScope {
                 iconCode: root.icon
                 font: root.iconFont
                 color: root.iconColor
-                visible: !isEmpty
+                visible: !isEmpty && buttonType != FlatButton.TextOnly
             }
 
             StyledTextLabel {
@@ -224,7 +224,7 @@ FocusScope {
                 textFormat: root.textFormat
                 wrapMode: Text.Wrap
                 maximumLineCount: root.maximumLineCount
-                visible: !isEmpty
+                visible: !isEmpty && buttonType != FlatButton.IconOnly
             }
         }
     }
