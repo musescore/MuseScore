@@ -69,6 +69,9 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations print-object="no">
+          <fermata type="upright"/>
+          </notations>
         </note>
       <note>
         <pitch>
@@ -94,6 +97,11 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations print-object="no">
+          <articulations>
+            <staccato/>
+            </articulations>
+          </notations>
         </note>
       </measure>
     <measure number="2">
@@ -427,6 +435,9 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations print-object="no">
+          <slur type="start" number="1"/>
+          </notations>
         </note>
       <note>
         <pitch>
@@ -457,6 +468,9 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations print-object="no">
+          <slur type="stop" number="1"/>
+          </notations>
         </note>
       </measure>
     <measure number="9">
@@ -590,6 +604,9 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations print-object="no">
+          <glissando line-type="wavy" number="1" type="start">gliss.</glissando>
+          </notations>
         </note>
       <note>
         <pitch>
@@ -600,6 +617,9 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations print-object="no">
+          <glissando line-type="wavy" number="1" type="stop"/>
+          </notations>
         </note>
       </measure>
     <measure number="12">
@@ -653,6 +673,9 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations print-object="no">
+          <arpeggiate number="1"/>
+          </notations>
         </note>
       <note>
         <chord/>
@@ -664,6 +687,9 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations print-object="no">
+          <arpeggiate number="1"/>
+          </notations>
         </note>
       <note>
         <chord/>
@@ -675,6 +701,9 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations print-object="no">
+          <arpeggiate number="1"/>
+          </notations>
         </note>
       <note>
         <rest/>
@@ -737,6 +766,12 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations print-object="no">
+          <tied type="start"/>
+          <technical>
+            <fingering>4</fingering>
+            </technical>
+          </notations>
         </note>
       </measure>
     <measure number="14">
@@ -750,6 +785,9 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations print-object="no">
+          <tied type="stop"/>
+          </notations>
         </note>
       <note>
         <rest/>
@@ -773,6 +811,9 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations print-object="no">
+          <tied type="start"/>
+          </notations>
         <notations>
           <technical>
             <fingering>4</fingering>
@@ -791,6 +832,9 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations print-object="no">
+          <tied type="stop"/>
+          </notations>
         </note>
       <note>
         <rest/>

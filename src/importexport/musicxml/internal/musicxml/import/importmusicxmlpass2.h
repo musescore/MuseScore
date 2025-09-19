@@ -279,6 +279,8 @@ public:
     muse::String print() const;
     void setText(const muse::String& text) { m_text = text; }
     muse::String text() const { return m_text; }
+    void setVisible(const bool visible) { m_visible = visible; }
+    bool visible() const { return m_visible; }
     static Notation notationWithAttributes(const muse::String& name, const std::vector<muse::XmlStreamReader::Attribute>& attributes,
                                            const muse::String& parent = {}, const engraving::SymId& symId = engraving::SymId::noSym);
 private:
@@ -288,6 +290,7 @@ private:
     muse::String m_subType;
     muse::String m_text;
     std::map<muse::String, muse::String> m_attributes;
+    bool m_visible = true;
 };
 
 //---------------------------------------------------------
@@ -396,6 +399,7 @@ private:
     bool m_slurStop = false;
     bool m_slurStart = false;
     bool m_wavyLineStop = false;
+    bool m_visible = true;
 };
 
 //---------------------------------------------------------
