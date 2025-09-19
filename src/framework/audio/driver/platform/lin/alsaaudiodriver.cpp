@@ -619,7 +619,7 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
         .access = preferredAccess,
         .format = SND_PCM_FORMAT_FLOAT_LE,
         .channels = spec.output.audioChannelCount,
-        .sampleRate = spec.output.sampleRate,
+        .sampleRate = static_cast<unsigned int>(spec.output.sampleRate),
         .periodSize = spec.output.samplesPerChannel,
         .periods = 2u,
         .ringBufferSize = 0u,
