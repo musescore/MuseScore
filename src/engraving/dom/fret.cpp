@@ -790,9 +790,9 @@ String FretDiagram::patternFromDiagram(const FretDiagram* diagram)
         }
 
         if (!dotList.empty()) {
-            const auto& dotList = it->second;
+            const auto& dotList2 = it->second;
             StringList dotDescriptions;
-            for (const auto& dot : dotList) {
+            for (const auto& dot : dotList2) {
                 if (dot.isPartOfSlurBarre) {
                     continue;
                 }
