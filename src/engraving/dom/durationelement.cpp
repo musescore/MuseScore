@@ -84,9 +84,10 @@ Fraction DurationElement::totalTupletRatio() const
     return tuplet() ? tuplet()->totalTupletRatio() : Fraction(1, 1);
 }
 
-Fraction DurationElement::totalTupletRatio(DurationElement *e) {
+Fraction DurationElement::totalTupletRatio(DurationElement* e)
+{
     if (!e) {
-        return Fraction(1,1);
+        return Fraction(1, 1);
     }
 
     return e->totalTupletRatio();

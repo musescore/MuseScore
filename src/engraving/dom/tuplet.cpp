@@ -266,7 +266,8 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
 //   scanElements
 //---------------------------------------------------------
 
-Fraction Tuplet::totalTupletRatio() const {
+Fraction Tuplet::totalTupletRatio() const
+{
     Fraction totalRatio = ratio();
     return tuplet() ? totalRatio * tuplet()->totalTupletRatio() : totalRatio;
 }
