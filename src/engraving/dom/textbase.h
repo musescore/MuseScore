@@ -215,7 +215,6 @@ class TextFragment
 {
 public:
     muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
-    static const QRegularExpression urlPattern;
 
 public:
     mutable CharFormat format;
