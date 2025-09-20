@@ -220,7 +220,7 @@ bool LayoutSaver::restoreLayout(const QByteArray &data)
     layout.scaleSizes(d->m_restoreOptions);
 
     d->floatWidgetsWhichSkipRestore(layout.mainWindowNames());
-    d->floatUnknownWidgets(layout);
+    // d->floatUnknownWidgets(layout); // commented out because we want unknown widgets to start docked, not floating
 
     Private::RAIIIsRestoring isRestoring;
 
