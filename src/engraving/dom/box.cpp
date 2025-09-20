@@ -524,6 +524,9 @@ void Box::manageExclusionFromParts(bool exclude)
 
 RectF HBox::drag(EditData& data)
 {
+    if (!isMovable()) {
+        return RectF();
+    }
     RectF r(canvasBoundingRect());
     double diff = data.evtDelta.x();
     double x1   = offset().x() + diff;
