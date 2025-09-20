@@ -88,6 +88,8 @@ public:
     void setMask(const RectF& background, const std::vector<RectF>& maskRects) override;
     void setClipping(bool enable) override;
 
+    QPainter* getQPainter() override;
+
     // ---
 
     DrawDataPtr drawData() const;
