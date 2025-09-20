@@ -79,6 +79,11 @@ Tuplet* DurationElement::topTuplet() const
     return t;
 }
 
+Fraction DurationElement::totalTupletRatio() const
+{
+    return tuplet() ? tuplet()->totalRatio() : Fraction(1, 1);
+}
+
 //---------------------------------------------------------
 //   globalTicks
 //---------------------------------------------------------
