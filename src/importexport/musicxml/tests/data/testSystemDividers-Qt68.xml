@@ -137,7 +137,7 @@
     </part-list>
   <part id="P1">
     <measure number="1" width="162.25">
-      <print>
+      <print page-number="1">
         <system-layout>
           <system-margins>
             <left-margin>126.16</left-margin>
@@ -302,6 +302,15 @@
         </note>
       </measure>
     <measure number="20" width="504.04">
+      <print page-number="2">
+        <system-layout>
+          <system-margins>
+            <left-margin>68.5</left-margin>
+            <right-margin>0</right-margin>
+            </system-margins>
+          <top-system-distance>70</top-system-distance>
+          </system-layout>
+        </print>
       <note default-x="262.55" default-y="-10">
         <rest measure="yes"/>
         <duration>4</duration>
@@ -407,7 +416,7 @@
     </part>
   <part id="P2">
     <measure number="1" width="162.25">
-      <print>
+      <print page-number="1">
         <staff-layout number="1">
           <staff-distance>57.53</staff-distance>
           </staff-layout>
@@ -564,6 +573,11 @@
         </note>
       </measure>
     <measure number="20" width="504.04">
+      <print page-number="2">
+        <staff-layout number="1">
+          <staff-distance>64.68</staff-distance>
+          </staff-layout>
+        </print>
       <note default-x="262.55" default-y="-114.68">
         <rest measure="yes"/>
         <duration>4</duration>
@@ -665,7 +679,7 @@
     </part>
   <part id="P3">
     <measure number="1" width="162.25">
-      <print>
+      <print page-number="1">
         <staff-layout number="1">
           <staff-distance>57.53</staff-distance>
           </staff-layout>
@@ -822,6 +836,11 @@
         </note>
       </measure>
     <measure number="20" width="504.04">
+      <print page-number="2">
+        <staff-layout number="1">
+          <staff-distance>64.68</staff-distance>
+          </staff-layout>
+        </print>
       <note default-x="262.55" default-y="-219.36">
         <rest measure="yes"/>
         <duration>4</duration>
@@ -923,7 +942,7 @@
     </part>
   <part id="P4">
     <measure number="1" width="162.25">
-      <print>
+      <print page-number="1">
         <staff-layout number="1">
           <staff-distance>57.53</staff-distance>
           </staff-layout>
@@ -1080,6 +1099,11 @@
         </note>
       </measure>
     <measure number="20" width="504.04">
+      <print page-number="2">
+        <staff-layout number="1">
+          <staff-distance>64.68</staff-distance>
+          </staff-layout>
+        </print>
       <note default-x="262.55" default-y="-324.03">
         <rest measure="yes"/>
         <duration>4</duration>
