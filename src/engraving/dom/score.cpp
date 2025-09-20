@@ -5419,10 +5419,8 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
             // set up destination chord
 
             Fraction tupletRatio = Fraction(1, 1);
-            Tuplet* tuplet = nullptr;
             if (dstCR) {
-                tupletRatio = dstCR->ticks() / dstCR->globalTicks();
-                tuplet =  dstCR->tuplet();
+                tupletRatio = DurationElement::totalTupletRatio(dstCR);
             }
             Fraction newTicks = chord->globalTicks() * tupletRatio;
 
@@ -5511,7 +5509,7 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
 
                     ChordRest* crToMeasure = dstCR ? dstCR : nearestLeftRest;
                     Tuplet* dstTuplet = crToMeasure ? crToMeasure->tuplet() : nullptr;
-                    Fraction dstTupletRatio = crToMeasure ? crToMeasure->ticks() / crToMeasure->globalTicks() : Fraction(1, 1);
+                    Fraction dstTupletRatio = DurationElement::totalTupletRatio(crToMeasure);
                     newTicks = chord->globalTicks() * dstTupletRatio;
 
                     // sanity check - can we even display such note in new tuplet?
@@ -5521,7 +5519,7 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
 
                     // Another sanity check - can the position of note be represented?
                     Fraction startPos = dstTuplet ? dstTuplet->tick() : s->measure()->tick();
-                    Fraction pos = s->tick() - startPos;
+                    Fraction pos = (s->tick() - startPos) * dstTupletRatio;
                     if (!canBeRepresentedAsDurationList(pos, true, 4)) {
                         continue;
                     }

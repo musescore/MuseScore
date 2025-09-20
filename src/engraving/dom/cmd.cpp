@@ -1081,7 +1081,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             segment = addRest(segment, track, cr->ticks(), cr->tuplet())->segment();
         }
         // the returned gap ends at the measure boundary or at tuplet end
-        Fraction totalTupletRatio = cr ? cr->totalTupletRatio() : Fraction(1, 1);
+        Fraction totalTupletRatio = DurationElement::totalTupletRatio(cr);
         Fraction dd = makeGap(segment, track, sd / totalTupletRatio, tuplet);
         Fraction naturalDD = dd * totalTupletRatio;
 
@@ -1263,7 +1263,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _de
     Measure* measure = segment->measure();
     Fraction accRemovedTicks;
     Fraction desiredDurationCopy = _desiredDuration;
-    Fraction totalTupletRatio = tuplet ? tuplet->totalRatio() : Fraction(1, 1);
+    Fraction totalTupletRatio = DurationElement::totalTupletRatio(tuplet);
 
     //
     // remember first segment which should
@@ -1561,7 +1561,7 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
              srcF.numerator(), srcF.denominator(),
              dstF.numerator(), dstF.denominator()
              );
-        Fraction totalTupletRatio = cr1->totalTupletRatio();
+        Fraction totalTupletRatio = DurationElement::totalTupletRatio(cr1);
         std::vector<TDuration> dList = toDurationList(dstF * totalTupletRatio, true);
         size_t n = dList.size();
         LOGI("Changing rest len (normal) to %d/%d", dList[0].ticks().numerator(), dList[0].ticks().denominator());
@@ -1731,7 +1731,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
         // operation mean for measure repeats.
         return;
     }
-    Fraction totalTupletRatio = cr->totalTupletRatio();
+    Fraction totalTupletRatio = DurationElement::totalTupletRatio(cr);
     Fraction srcF(cr->ticks());
     if (srcF == dstF) {
         if (cr->isFullMeasureRest()) {
@@ -4187,7 +4187,7 @@ Segment* Score::setChord(Segment* segment, track_idx_t track, const Chord* chord
     Chord* nr     = nullptr;   //current added chord used so we can select the last added chord and so we can apply ties
     std::vector<Tie*> tie(chordTemplate->notes().size());   //keep pointer to a tie for each note in the chord in case we need to tie notes
     ChordRest* cr = toChordRest(segment->element(track));   //chord rest under the segment for the specified track
-    Fraction totalTupletRatio = cr->totalTupletRatio();
+    Fraction totalTupletRatio = DurationElement::totalTupletRatio(cr);
 
     bool addTie = false;
 
@@ -4319,7 +4319,7 @@ Segment* Score::setChord(Segment* segment, track_idx_t track, const Chord* chord
             }
         }
 
-        totalTupletRatio = cr->totalTupletRatio();
+        totalTupletRatio = DurationElement::totalTupletRatio(cr);
         //
         //  Note does not fit on current measure, create Tie to
         //  next part of note

@@ -472,7 +472,7 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
     Measure* measure = tick2measure(tick);
     std::vector<Rest*> rests;
     Staff* staff     = Score::staff(track / VOICES);
-    Fraction totalTupletRatio = tuplet ? tuplet->totalRatio() : Fraction(1, 1);
+    Fraction totalTupletRatio = DurationElement::totalTupletRatio(tuplet);
 
     while (!needToDelete.isZero()) {
         //
@@ -480,7 +480,6 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
         //
         Fraction maxAllowedToDelete;
         if (tuplet) {
-            // f = tuplet->baseLen().fraction() * tuplet->ratio().numerator() / tuplet->totalTupletRatio();
             // We start with full tuplet length
             maxAllowedToDelete = tuplet->globalTicks();
             // Then we remove lengths of elements that preceed our tick
@@ -1869,7 +1868,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             expandVoice(segment, tr);
                         }
                         // the returned gap ends at the measure boundary or at tuplet end
-                        Fraction totalTupletRatio = cr->totalTupletRatio();
+                        Fraction totalTupletRatio = DurationElement::totalTupletRatio(cr);
                         Fraction dd = makeGap(segment, tr, sd / totalTupletRatio, cr->tuplet());
                         if (dd.isZero()) {
                             break;

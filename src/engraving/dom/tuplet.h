@@ -95,16 +95,7 @@ public:
     const Fraction& ratio() const { return m_ratio; }
     void setRatio(const Fraction& r) { m_ratio = r; }
 
-    const Fraction totalRatio() const
-    {
-        Fraction totalRatio = ratio();
-        const Tuplet* t = this;
-        while ((t = t->tuplet()))
-        {
-            totalRatio *= t->ratio();
-        }
-        return totalRatio;
-    }
+    Fraction totalTupletRatio() const override;
 
     void setUserPoint1(PointF p) { m_userP1 = p; }
     void setUserPoint2(PointF p) { m_userP2 = p; }
