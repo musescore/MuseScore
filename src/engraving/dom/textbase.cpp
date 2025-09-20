@@ -40,6 +40,8 @@
 #include "accessibility/accessibleitem.h"
 #endif
 
+#include <QTextDocument>
+
 #include "anchors.h"
 #include "barline.h"
 #include "box.h"
@@ -65,6 +67,9 @@ static constexpr double superScriptOffset = -0.9; // of x-height
 
 static const char* FALLBACK_SYMBOL_FONT = "Bravura";
 static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
+
+const QRegularExpression TextFragment::urlPattern = QRegularExpression(
+    R"((https?://[a-zA-Z0-9.-]+(?:/[a-zA-Z0-9._~:/?#[\]@!$&'()*+,;=-]*)?))");
 
 //---------------------------------------------------------
 //   isSorted
@@ -848,6 +853,12 @@ bool TextFragment::operator ==(const TextFragment& f) const
 
 void TextFragment::draw(Painter* p, const TextBase* t) const
 {
+    auto qp = p->getQPainter();
+    if (qp && text.toQString().contains(urlPattern)) {
+        drawWithUrl(qp, t);
+        return;
+    }
+
     Font f(font(t));
     f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
@@ -856,6 +867,41 @@ void TextFragment::draw(Painter* p, const TextBase* t) const
     p->setFont(f);
     p->drawText(pos, text);
 #endif
+}
+
+// WARNING: this function directly operates with QPainter instead of working with Painter class
+void TextFragment::drawWithUrl(QPainter* qp, const TextBase* t) const
+{
+    QTextDocument doc;
+
+    // Set font
+    QFont f = font(t).toQFont();
+    float fontScalingFactor = qp->device()->logicalDpiX() / 72.;
+    f.setPixelSize(f.pointSizeF() * MScore::pixelRatio * fontScalingFactor);
+    doc.setDefaultFont(f);
+    doc.setUseDesignMetrics(true);
+
+    // Convert URLs to HTML links
+    QString htmlText = convertUrlsToLinks(text);
+    doc.setHtml(htmlText);
+
+    // Set document properties
+    doc.setTextWidth(-1); // No wrapping
+    doc.setDocumentMargin(0);
+
+    // Draw the document
+    qp->save();
+    qp->translate(pos.toQPointF());
+    doc.drawContents(qp);
+    qp->restore();
+}
+
+QString TextFragment::convertUrlsToLinks(const QString& text)
+{
+    QString result = text.toHtmlEscaped();
+    result.replace(urlPattern, R"(<a href="\1" style="color: blue; text-decoration: underline;">\1</a>)");
+
+    return result;
 }
 
 //---------------------------------------------------------

@@ -216,6 +216,9 @@ class TextFragment
 public:
     muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
 
+private:
+    static const QRegularExpression urlPattern;
+
 public:
     mutable CharFormat format;
     PointF pos;                    // y is relative to TextBlock->y()
@@ -232,9 +235,13 @@ public:
 
     TextFragment split(int column);
     void draw(muse::draw::Painter*, const TextBase*) const;
+    void drawWithUrl(QPainter* qp, const TextBase*) const;
+
     muse::draw::Font font(const TextBase*) const;
     int columns() const;
     void changeFormat(FormatId id, const FormatValue& data);
+private:
+    static QString convertUrlsToLinks(const QString& text);
 };
 
 //---------------------------------------------------------
