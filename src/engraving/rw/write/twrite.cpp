@@ -379,6 +379,14 @@ void TWrite::writeItems(const ElementList& items, XmlWriter& xml, WriteContext& 
     }
 }
 
+//-----------------------------------------------------------------------------
+//   writeProperty
+//
+//    - styled properties are never written
+//    - unstyled properties are always written regardless of value or if forced,
+//    - properties without style are written if different from default value
+//-----------------------------------------------------------------------------
+
 void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, bool force)
 {
     if (item->isStyled(pid)) {
@@ -390,7 +398,7 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, b
         return;
     }
     PropertyFlags f = item->propertyFlags(pid);
-    PropertyValue d = !force && (f != PropertyFlags::STYLED) ? item->propertyDefault(pid) : PropertyValue();
+    PropertyValue d = !force && (f == PropertyFlags::NOSTYLE) ? item->propertyDefault(pid) : PropertyValue();
 
     if (pid == Pid::FONT_STYLE) {
         FontStyle ds = FontStyle(d.isValid() ? d.toInt() : 0);
