@@ -29,6 +29,7 @@
 #endif
 
 #include "log.h"
+#include "musesampler/internal/apitypes.h"
 
 using namespace muse;
 using namespace muse::draw;
@@ -428,6 +429,11 @@ void Painter::drawText(const PointF& point, const String& text)
     }
 }
 
+void Painter::drawTextWithUrl(const PointF& point, const String& htmlText)
+{
+    m_provider->drawHtml(point, htmlText);
+}
+
 void Painter::drawText(const RectF& rect, int flags, const String& text)
 {
     m_provider->drawText(rect, flags, text);
@@ -553,7 +559,7 @@ void Painter::setClipping(bool enable)
     m_provider->setClipping(enable);
 }
 
-QPainter* Painter::getQPainter() const
+bool Painter::canDrawHtml() const
 {
-    return m_provider->getQPainter();
+    return m_provider->canDrawHtml();
 }

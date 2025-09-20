@@ -303,6 +303,35 @@ void QPainterProvider::drawTextWorkaround(const Font& f, const PointF& pos, cons
     m_painter->restore();
 }
 
+bool QPainterProvider::canDrawHtml()
+{
+    return true;
+}
+
+void QPainterProvider::drawHtml(const PointF& point, const String& htmlText)
+{
+    QTextDocument doc;
+
+    // Set font
+    QFont f = font().toQFont();
+    float fontScalingFactor = m_painter->device()->logicalDpiX() / 72.;
+    f.setPixelSize(f.pointSizeF() * fontScalingFactor);
+    doc.setDefaultFont(f);
+    doc.setUseDesignMetrics(true);
+
+    doc.setHtml(htmlText);
+
+    // Set document properties
+    doc.setTextWidth(-1); // No wrapping
+    doc.setDocumentMargin(0);
+
+    // Draw the document
+    m_painter->save();
+    m_painter->translate(point.toQPointF());
+    doc.drawContents(m_painter);
+    m_painter->restore();
+}
+
 void QPainterProvider::drawSymbol(const PointF& point, char32_t ucs4Code)
 {
     static QHash<char32_t, QString> cache;

@@ -191,6 +191,13 @@ void PaintDebugger::drawTextWorkaround(const Font& f, const PointF& pos, const S
     m_real->drawTextWorkaround(f, pos, text);
 }
 
+bool PaintDebugger::canDrawHtml() { return false; }
+
+void PaintDebugger::drawHtml(const muse::PointF& point, const muse::String& htmlText)
+{
+    //
+}
+
 void PaintDebugger::drawSymbol(const PointF& point, char32_t ucs4Code)
 {
     m_real->drawSymbol(point, ucs4Code);
