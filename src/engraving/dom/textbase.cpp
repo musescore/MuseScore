@@ -68,15 +68,54 @@ static constexpr double superScriptOffset = -0.9; // of x-height
 static const char* FALLBACK_SYMBOL_FONT = "Bravura";
 static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
 
-static const QRegularExpression URL_PATTERN = QRegularExpression(
+static const std::regex URL_PATTERN(
     R"((https?://[a-zA-Z0-9.-]+(?:/[a-zA-Z0-9._~:/?#[\]@!$&'()*+,;=-]*)?))");
 
-QString convertUrlsToLinks(const QString& text)
+std::string htmlEscape(const String& text)
 {
-    QString result = text.toHtmlEscaped();
-    result.replace(URL_PATTERN, R"(<a href="\1" style="color: blue; text-decoration: underline;">\1</a>)");
+    std::string result = text.toStdString();
+
+    // Replace in order: & first, then < and >
+    size_t pos = 0;
+    while ((pos = result.find('&', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&amp;");
+        pos += 5;
+    }
+
+    pos = 0;
+    while ((pos = result.find('<', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&lt;");
+        pos += 4;
+    }
+
+    pos = 0;
+    while ((pos = result.find('>', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&gt;");
+        pos += 4;
+    }
+
+    pos = 0;
+    while ((pos = result.find('"', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&quot;");
+        pos += 6;
+    }
+
+    pos = 0;
+    while ((pos = result.find('\'', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&#39;");
+        pos += 5;
+    }
 
     return result;
+}
+
+String convertUrlsToLinks(const String& text)
+{
+    std::string result = htmlEscape(text);
+    result = std::regex_replace(result, URL_PATTERN,
+                                R"(<a href="$1" style="color: blue; text-decoration: underline;">$1</a>)");
+
+    return String::fromStdString(result);
 }
 
 //---------------------------------------------------------
@@ -861,47 +900,18 @@ bool TextFragment::operator ==(const TextFragment& f) const
 
 void TextFragment::draw(Painter* p, const TextBase* t) const
 {
-    auto qp = p->getQPainter();
-    if (qp && text.toQString().contains(URL_PATTERN)) {
-        drawWithUrl(qp, t);
-        return;
-    }
-
     Font f(font(t));
     f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
     TextBase::drawTextWorkaround(p, f, pos, text);
 #else
     p->setFont(f);
-    p->drawText(pos, text);
+    if (p->canDrawHtml() && std::regex_search(text.toStdString(), URL_PATTERN)) {
+        p->drawTextWithUrl(pos, convertUrlsToLinks(text));
+    } else {
+        p->drawText(pos, text);
+    }
 #endif
-}
-
-// WARNING: this function directly operates with QPainter instead of working with Painter class
-void TextFragment::drawWithUrl(QPainter* qp, const TextBase* t) const
-{
-    QTextDocument doc;
-
-    // Set font
-    QFont f = font(t).toQFont();
-    float fontScalingFactor = qp->device()->logicalDpiX() / 72.;
-    f.setPixelSize(f.pointSizeF() * MScore::pixelRatio * fontScalingFactor);
-    doc.setDefaultFont(f);
-    doc.setUseDesignMetrics(true);
-
-    // Convert URLs to HTML links
-    QString htmlText = convertUrlsToLinks(text);
-    doc.setHtml(htmlText);
-
-    // Set document properties
-    doc.setTextWidth(-1); // No wrapping
-    doc.setDocumentMargin(0);
-
-    // Draw the document
-    qp->save();
-    qp->translate(pos.toQPointF());
-    doc.drawContents(qp);
-    qp->restore();
 }
 
 //---------------------------------------------------------

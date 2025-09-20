@@ -234,7 +234,6 @@ public:
 
     TextFragment split(int column);
     void draw(muse::draw::Painter*, const TextBase*) const;
-    void drawWithUrl(QPainter* qp, const TextBase*) const;
 
     muse::draw::Font font(const TextBase*) const;
     int columns() const;
