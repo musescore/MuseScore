@@ -17,8 +17,8 @@
     </identification>
   <part-list>
     <score-part id="P1">
-      <part-name>Oboe</part-name>
-      <part-abbreviation>Ob.</part-abbreviation>
+      <part-name print-object="no">Oboe</part-name>
+      <part-abbreviation print-object="no">Ob.</part-abbreviation>
       <score-instrument id="P1-I1">
         <instrument-name>Oboe</instrument-name>
         </score-instrument>
