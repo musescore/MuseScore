@@ -160,6 +160,8 @@ public:
     void setMask(const RectF& background, const std::vector<RectF>& maskRects);
     void setClipping(bool enable);
 
+    QPainter* getQPainter() const;
+
     //! NOTE Provider for tests.
     //! We're not ready to use DI (ModuleIoC) here yet
     static IPaintProviderPtr extended;

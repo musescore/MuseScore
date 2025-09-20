@@ -86,6 +86,8 @@ public:
     void setMask(const muse::RectF& background, const std::vector<muse::RectF>& maskRects) override;
     void setClipping(bool enable) override;
 
+    QPainter* getQPainter() override;
+
 private:
     muse::draw::IPaintProviderPtr m_real = nullptr;
 

@@ -238,3 +238,8 @@ void PaintDebugger::setClipping(bool enable)
 {
     m_real->setClipping(enable);
 }
+
+QPainter* PaintDebugger::getQPainter()
+{
+    return nullptr;
+}

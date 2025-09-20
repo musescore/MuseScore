@@ -552,3 +552,8 @@ void Painter::setClipping(bool enable)
 {
     m_provider->setClipping(enable);
 }
+
+QPainter* Painter::getQPainter() const
+{
+    return m_provider->getQPainter();
+}

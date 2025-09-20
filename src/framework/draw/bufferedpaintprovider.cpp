@@ -355,6 +355,11 @@ void BufferedPaintProvider::setClipping(bool enable)
     UNUSED(enable);
 }
 
+QPainter* BufferedPaintProvider::getQPainter()
+{
+    return nullptr;
+}
+
 DrawDataPtr BufferedPaintProvider::drawData() const
 {
     return m_buf;
