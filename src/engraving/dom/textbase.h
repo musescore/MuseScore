@@ -33,6 +33,8 @@
 #include "property.h"
 #include "../types/types.h"
 
+class QPainter;
+
 namespace mu::engraving {
 class TextBase;
 class TextBlock;
