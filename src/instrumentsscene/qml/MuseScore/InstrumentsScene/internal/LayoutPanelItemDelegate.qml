@@ -49,7 +49,7 @@ FocusableControl {
     signal doubleClicked(var mouse)
     signal removeSelectionRequested()
 
-    signal popupOpened(var popupX, var popupY, var popupHeight)
+    signal popupOpened(var popup)
     signal popupClosed()
 
     signal changeVisibilityOfSelectedRowsRequested(bool visible)
@@ -148,7 +148,7 @@ FocusableControl {
             openedPopup.load(item)
 
             openedPopup.opened.connect(function() {
-                root.popupOpened(openedPopup.x, openedPopup.y, openedPopup.height)
+                root.popupOpened(openedPopup)
             })
 
             openedPopup.closed.connect(function() {
