@@ -40,8 +40,6 @@
 #include "accessibility/accessibleitem.h"
 #endif
 
-#include <QTextDocument>
-
 #include "anchors.h"
 #include "barline.h"
 #include "box.h"
