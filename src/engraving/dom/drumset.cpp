@@ -121,7 +121,7 @@ void Drumset::save(XmlWriter& xml) const
         if (!shortcut(i).empty()) {
             xml.tag("shortcut", shortcut(i));
         }
-        std::list<DrumInstrumentVariant> vs = variants(i);
+        const std::vector<DrumInstrumentVariant>& vs = variants(i);
         if (!vs.empty()) {
             xml.startElement("variants");
             for (const auto& v : vs) {
@@ -282,12 +282,12 @@ int Drumset::prevPitch(int ii) const
 DrumInstrumentVariant Drumset::findVariant(int p, const std::vector<Articulation*>& articulations, TremoloType tremType) const
 {
     DrumInstrumentVariant div;
-    auto vs = variants(p);
-    for (const auto& v : vs) {
+    const std::vector<DrumInstrumentVariant>& vs = variants(p);
+    for (const DrumInstrumentVariant& v : vs) {
         bool matchTremolo = ((tremType == TremoloType::INVALID_TREMOLO) && (v.tremolo == TremoloType::INVALID_TREMOLO))
                             || (v.tremolo == tremType);
         bool matchArticulation = v.articulationName.empty() && articulations.empty();
-        for (auto a : articulations) {
+        for (const Articulation* a : articulations) {
             matchArticulation = a->articulationName() == v.articulationName;
             if (!matchArticulation) {
                 break;

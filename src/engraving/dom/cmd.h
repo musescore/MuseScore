@@ -38,7 +38,7 @@ struct UpdateState
     bool playNote = false;       ///< play selected note after command
     bool playChord = false;      ///< play whole chord for the selected note
     bool selectionChanged = false;
-    std::list<EngravingObject*> deleteList;
+    std::vector<EngravingObject*> deleteList;
 };
 
 //---------------------------------------------------------

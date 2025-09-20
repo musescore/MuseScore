@@ -959,7 +959,7 @@ EditStyle::EditStyle(QWidget* parent)
     // Figured Bass
     // ====================================================
 
-    std::list<String> fbFontNames = FiguredBass::fontNames();
+    const std::vector<String> fbFontNames = FiguredBass::fontNames();
     for (const String& family : fbFontNames) {
         comboFBFont->addItem(family);
     }

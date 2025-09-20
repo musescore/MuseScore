@@ -2670,9 +2670,9 @@ void Score::deleteItem(EngravingItem* el)
         Part* part = el->part();
         InstrumentName* in = toInstrumentName(el);
         if (in->instrumentNameType() == InstrumentNameType::LONG) {
-            undo(new ChangeInstrumentLong(Fraction(0, 1), part, std::list<StaffName>()));
+            undo(new ChangeInstrumentLong(Fraction(0, 1), part, StaffNameList()));
         } else if (in->instrumentNameType() == InstrumentNameType::SHORT) {
-            undo(new ChangeInstrumentShort(Fraction(0, 1), part, std::list<StaffName>()));
+            undo(new ChangeInstrumentShort(Fraction(0, 1), part, StaffNameList()));
         }
     }
     break;
@@ -4694,8 +4694,8 @@ void Score::restoreInitialKeySigAndTimeSig()
 
 void Score::checkSpanner(const Fraction& startTick, const Fraction& endTick, bool removeOrphans)
 {
-    std::list<Spanner*> sl;       // spanners to remove
-    std::list<Spanner*> sl2;      // spanners to shorten
+    std::vector<Spanner*> spannersToRemove;
+    std::vector<Spanner*> spannersToShorten;
     auto spanners = m_spanner.findOverlapping(startTick.ticks(), endTick.ticks());
 
     // DEBUG: check all spanner
@@ -4703,28 +4703,28 @@ void Score::checkSpanner(const Fraction& startTick, const Fraction& endTick, boo
 
     Fraction lastTick = lastMeasure()->endTick();
 
-    for (auto i : m_spanner.map()) {
+    for (const auto& i : m_spanner.map()) {
         Spanner* s = i.second;
 
         if (s->isSlur()) {
             Segment* seg = tick2segmentMM(s->tick(), false, SegmentType::ChordRest);
             if (!seg || !seg->element(s->track())) {
-                sl.push_back(s);
+                spannersToRemove.push_back(s);
             } else {
                 seg = tick2segmentMM(s->tick2(), false, SegmentType::ChordRest);
                 if (!seg || !seg->element(s->track2())) {
-                    sl.push_back(s);
+                    spannersToRemove.push_back(s);
                 }
             }
         } else {
             // remove spanner if there is no start element
             s->computeStartElement();
             if (!s->startElement()) {
-                sl.push_back(s);
+                spannersToRemove.push_back(s);
                 LOGD("checkSpanner::remove (3)");
             } else {
                 if (s->tick2() > lastTick) {
-                    sl2.push_back(s);              //s->undoChangeProperty(Pid::SPANNER_TICKS, lastTick - s->tick());
+                    spannersToShorten.push_back(s);              //s->undoChangeProperty(Pid::SPANNER_TICKS, lastTick - s->tick());
                 } else {
                     s->computeEndElement();
                 }
@@ -4732,11 +4732,11 @@ void Score::checkSpanner(const Fraction& startTick, const Fraction& endTick, boo
         }
     }
     if (removeOrphans) {
-        for (auto s : sl) {       // actually remove scheduled spanners
+        for (auto s : spannersToRemove) {       // actually remove scheduled spanners
             doUndoRemoveElement(s);
         }
     }
-    for (auto s : sl2) {      // shorten spanners that extended past end of score
+    for (Spanner* s : spannersToShorten) {      // shorten spanners that extended past end of score
         undo(new ChangeProperty(s, Pid::SPANNER_TICKS, lastTick - s->tick()));
         s->computeEndElement();
     }
@@ -6578,7 +6578,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || (et == ElementType::PLAY_COUNT_TEXT)
         || isSystemLine
         ) {
-        std::list<Staff* > staffList;
+        std::vector<Staff* > staffList;
 
         if (!addToLinkedStaves) {
             staffList.push_back(element->staff());
@@ -6599,7 +6599,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         }
 
         if (elementToRelink) {
-            staffList.remove(ostaff);
+            muse::remove(staffList, ostaff);
         }
 
         bool originalAdded = false;
@@ -6816,7 +6816,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         return;
     }
 
-    std::list<Staff*> staves;
+    std::vector<Staff*> staves;
     if (addToLinkedStaves) {
         staves = ostaff->staffList();
     } else {
@@ -6824,7 +6824,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
     }
 
     if (elementToRelink) {
-        staves.remove(ostaff);
+        muse::remove(staves, ostaff);
     }
 
     for (Staff* staff : staves) {
@@ -7528,7 +7528,7 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
     if (!element) {
         return;
     }
-    std::list<Segment*> segments;
+    std::vector<Segment*> segments;
     for (EngravingObject* ee : element->linkList()) {
         EngravingItem* e = static_cast<EngravingItem*>(ee);
         if (e == element || removeLinked) {
@@ -7767,8 +7767,8 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
         return;
     }
 
-    std::list<Spanner*> sl;
-    for (auto i : m_spanner.map()) {
+    std::vector<Spanner*> spannersToAdjust;
+    for (const auto& i : m_spanner.map()) {
         Spanner* s = i.second;
         if (s->tick2() < tick) {
             continue;
@@ -7797,17 +7797,17 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
                 append = true;
             }
         }
-        for (Spanner* ss : sl) {
+        for (const Spanner* ss : spannersToAdjust) {
             if (muse::contains(ss->linkList(), static_cast<EngravingObject*>(s))) {
                 append = false;
                 break;
             }
         }
         if (append) {
-            sl.push_back(s);
+            spannersToAdjust.push_back(s);
         }
     }
-    for (Spanner* s : sl) {
+    for (Spanner* s : spannersToAdjust) {
         if (len > Fraction(0, 1)) {
             if (tick == s->tick() && s->isVolta()) {
                 s->undoChangeProperty(Pid::SPANNER_TICKS, s->ticks() + len);

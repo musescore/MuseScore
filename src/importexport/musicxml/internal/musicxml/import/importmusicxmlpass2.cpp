@@ -23,6 +23,7 @@
 #include <cmath>
 #include <memory>
 #include <utility>
+#include <vector>
 
 #include "containers.h"
 
@@ -7713,7 +7714,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
     const bool printObject = m_e.asciiAttribute("print-object") != "no";
 
     String kind, kindText, functionText, inversionText, symbols, parens;
-    std::list<HDegree> degreeList;
+    std::vector<HDegree> degreeList;
 
     FretDiagram* fd = nullptr;
     Harmony* ha = Factory::createHarmony(m_score->dummy()->segment());
@@ -7847,11 +7848,11 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
                                    .arg(degreeValue).arg(degreeAlter).arg(degreeType), &m_e);
             } else {
                 if (degreeType == "add") {
-                    degreeList.push_back(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
+                    degreeList.emplace_back(degreeValue, degreeAlter, HDegreeType::ADD);
                 } else if (degreeType == "alter") {
-                    degreeList.push_back(HDegree(degreeValue, degreeAlter, HDegreeType::ALTER));
+                    degreeList.emplace_back(degreeValue, degreeAlter, HDegreeType::ALTER);
                 } else if (degreeType == "subtract") {
-                    degreeList.push_back(HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT));
+                    degreeList.emplace_back(degreeValue, degreeAlter, HDegreeType::SUBTRACT);
                 }
             }
         } else if (m_e.name() == "frame") {

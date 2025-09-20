@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <algorithm>
 #include <cfloat>
 
 #include "accidentalslayout.h"
@@ -569,26 +570,105 @@ void AccidentalsLayout::computeOrderingWithLeastColumns(std::vector<Accidental*>
     accidentals = totalColumns(compactOrdered) < totalColumns(standardOrdered) ? compactOrdered : standardOrdered;
 }
 
+struct AccidentalsLayout::AccidentalsVectorView {
+    AccidentalsVectorView(std::vector<Accidental*>& vec)
+        : m_begin(vec.begin()), m_end(vec.end()) {}
+
+    bool empty() const { return m_begin == m_end; }
+
+    std::vector<Accidental*>::iterator& begin() { return m_begin; }
+    std::vector<Accidental*>::iterator& end() { return m_end; }
+
+    Accidental* front() const
+    {
+        if (empty()) {
+            return nullptr;
+        }
+        return *m_begin;
+    }
+
+    Accidental* pop_front()
+    {
+        if (empty()) {
+            return nullptr;
+        }
+        Accidental* acc = *m_begin;
+        ++m_begin;
+        return acc;
+    }
+
+    Accidental* back() const
+    {
+        if (empty()) {
+            return nullptr;
+        }
+        return *(m_end - 1);
+    }
+
+    Accidental* pop_back()
+    {
+        if (empty()) {
+            return nullptr;
+        }
+        --m_end;
+        return *m_end;
+    }
+
+    std::vector<Accidental*>::reverse_iterator rbegin() { return std::vector<Accidental*>::reverse_iterator(m_end); }
+    std::vector<Accidental*>::reverse_iterator rend() { return std::vector<Accidental*>::reverse_iterator(m_begin); }
+
+    bool remove(Accidental* acc)
+    {
+        auto originalEnd = m_end;
+        m_end = std::remove(m_begin, m_end, acc);
+        return m_end != originalEnd;
+    }
+
+    template<typename Predicate>
+    bool remove_if(Predicate pred)
+    {
+        auto originalEnd = m_end;
+        m_end = std::remove_if(m_begin, m_end, pred);
+        return m_end != originalEnd;
+    }
+
+    bool reverse_remove(Accidental* acc)
+    {
+        auto originalBegin = m_begin;
+        m_begin = std::remove(rbegin(), rend(), acc).base();
+        return m_begin != originalBegin;
+    }
+
+    template<typename Predicate>
+    bool reverse_remove_if(Predicate pred)
+    {
+        auto originalBegin = m_begin;
+        m_begin = std::remove_if(rbegin(), rend(), pred).base();
+        return m_begin != originalBegin;
+    }
+
+private:
+    std::vector<Accidental*>::iterator m_begin;
+    std::vector<Accidental*>::iterator m_end;
+};
+
 void AccidentalsLayout::computeStandardOrdering(std::vector<Accidental*>& accidentals, AccidentalsLayoutContext& ctx)
 {
-    std::list<Accidental*> accidentalsToPlace { accidentals.begin(), accidentals.end() };
-
     std::vector<Accidental*> accidentalsPlaced;
-    accidentalsPlaced.reserve(accidentalsToPlace.size());
+    accidentalsPlaced.reserve(accidentals.size());
+
+    AccidentalsVectorView accidentalsToPlace { accidentals };
 
     bool pickFromTop = true;
-    while (accidentalsToPlace.size() > 0) {
-        Accidental* acc = pickFromTop ? accidentalsToPlace.front() : accidentalsToPlace.back();
-        pickFromTop ? accidentalsToPlace.pop_front() : accidentalsToPlace.pop_back();
-
+    while (!accidentalsToPlace.empty()) {
+        Accidental* acc = pickFromTop ? accidentalsToPlace.pop_front() : accidentalsToPlace.pop_back();
         accidentalsPlaced.push_back(acc);
 
         if (ctx.keepSecondsTogether()) {
             findAndInsertSecond(acc, accidentalsPlaced, accidentalsToPlace, ctx);
         }
 
-        bool foundOctave = findAndInsertOctave(acc, accidentalsPlaced, accidentalsToPlace, ctx);
-
+        const bool foundOctave = findAndInsertOctave(acc, accidentalsPlaced, accidentalsToPlace, ctx);
         if (foundOctave) {
             pickFromTop = true;
         } else {
@@ -601,19 +681,17 @@ void AccidentalsLayout::computeStandardOrdering(std::vector<Accidental*>& accide
 
 void AccidentalsLayout::computeCompactOrdering(std::vector<Accidental*>& accidentals, AccidentalsLayoutContext& ctx)
 {
-    std::list<Accidental*> accidentalsToPlace { accidentals.begin(), accidentals.end() };
-    size_t totAccidNumber = accidentalsToPlace.size();
+    const size_t totAccidNumber = accidentals.size();
+    Accidental* const bottomAcc = accidentals.back();
 
     std::vector<Accidental*> accidentalsPlaced;
     accidentalsPlaced.reserve(totAccidNumber);
 
-    Accidental* bottomAcc = accidentalsToPlace.back();
+    AccidentalsVectorView accidentalsToPlace { accidentals };
 
     bool pickFromTop = true;
-    while (accidentalsToPlace.size() > 0) {
-        Accidental* acc = pickFromTop ? accidentalsToPlace.front() : accidentalsToPlace.back();
-        pickFromTop ? accidentalsToPlace.pop_front() : accidentalsToPlace.pop_back();
-
+    while (!accidentalsToPlace.empty()) {
+        Accidental* acc = pickFromTop ? accidentalsToPlace.pop_front() : accidentalsToPlace.pop_back();
         accidentalsPlaced.push_back(acc);
 
         bool foundOneThatFits = false;
@@ -627,43 +705,30 @@ void AccidentalsLayout::computeCompactOrdering(std::vector<Accidental*>& acciden
             }
         }
 
-        const auto fitOthersIntoColumn = [&](const auto startIter, auto endIter) {
-            auto iter = startIter;
-            while (iter != endIter) {
-                Accidental* const acc2 = *iter;
-                if ((pickFromTop && acc2->line() < acc->line()) || (!pickFromTop && acc2->line() > acc->line())) {
-                    ++iter;
-                    continue;
-                }
-                if (canFitInSameColumn(acc, acc2, ctx)) {
-                    if (acc2->ldata()->octaves.value().size() > 0) {
-                        ++iter;
-                        continue;
-                    }
-                    foundOneThatFits = true;
-                    accidentalsPlaced.push_back(acc2);
-                    acc = acc2;
-                    if (acc2 == bottomAcc) {
-                        hitBottom = true;
-                    }
-                    if constexpr (std::is_same_v<decltype(iter), decltype(accidentalsToPlace.begin())>) {
-                        iter = accidentalsToPlace.erase(iter);
-                        endIter = accidentalsToPlace.end();
-                    } else {
-                        static_assert(std::is_same_v<decltype(iter), decltype(accidentalsToPlace.rbegin())>);
-                        iter = std::reverse_iterator(accidentalsToPlace.erase(std::next(iter).base()));
-                        endIter = accidentalsToPlace.rend();
-                    }
-                    continue;
-                }
-                ++iter;
+        // fit others into same column
+        const auto pred = [&](Accidental* acc2) {
+            if ((pickFromTop && acc2->line() < acc->line()) || (!pickFromTop && acc2->line() > acc->line())) {
+                return false;
             }
+            if (canFitInSameColumn(acc, acc2, ctx)) {
+                if (acc2->ldata()->octaves.value().size() > 0) {
+                    return false;
+                }
+                foundOneThatFits = true;
+                accidentalsPlaced.push_back(acc2);
+                acc = acc2;
+                if (acc2 == bottomAcc) {
+                    hitBottom = true;
+                }
+                return true;
+            }
+            return false;
         };
 
         if (pickFromTop) {
-            fitOthersIntoColumn(accidentalsToPlace.begin(), accidentalsToPlace.end());
+            accidentalsToPlace.remove_if(pred);
         } else {
-            fitOthersIntoColumn(accidentalsToPlace.rbegin(), accidentalsToPlace.rend());
+            accidentalsToPlace.reverse_remove_if(pred);
         }
 
         if (ctx.keepSecondsTogether()) {
@@ -683,13 +748,14 @@ void AccidentalsLayout::computeCompactOrdering(std::vector<Accidental*>& acciden
 }
 
 void AccidentalsLayout::findAndInsertSecond(Accidental* acc, std::vector<Accidental*>& accidentalsPlaced,
-                                            std::list<Accidental*>& accidentalsToPlace, AccidentalsLayoutContext& ctx)
+                                            AccidentalsVectorView& accidentalsToPlace, AccidentalsLayoutContext& ctx)
 {
-    const std::vector<Accidental*> seconds = acc->ldata()->seconds.value();
+    const std::vector<Accidental*>& seconds = acc->ldata()->seconds.value();
     for (Accidental* secondAcc : seconds) {
-        if (muse::remove(accidentalsToPlace, secondAcc)) {
-            auto position = std::find(accidentalsPlaced.begin(), accidentalsPlaced.end(), acc);
+        const bool removed = accidentalsToPlace.remove(secondAcc);
+        if (removed) {
             if (ctx.orderFollowNoteDisplacement() && secondAcc->note()->x() > acc->note()->x()) {
+                auto position = std::find(accidentalsPlaced.begin(), accidentalsPlaced.end(), acc);
                 accidentalsPlaced.insert(position, secondAcc);
             } else {
                 accidentalsPlaced.push_back(secondAcc);
@@ -699,23 +765,30 @@ void AccidentalsLayout::findAndInsertSecond(Accidental* acc, std::vector<Acciden
 }
 
 bool AccidentalsLayout::findAndInsertOctave(Accidental* acc, std::vector<Accidental*>& accidentalsPlaced,
-                                            std::list<Accidental*>& accidentalsToPlace, AccidentalsLayoutContext& ctx, bool acceptAbove,
+                                            AccidentalsVectorView& accidentalsToPlace, AccidentalsLayoutContext& ctx, bool acceptAbove,
                                             bool acceptBelow)
 {
     bool foundOctave = false;
     int thisLine = acc->line();
     const std::vector<Accidental*>& octaves = acc->ldata()->octaves.value();
     for (Accidental* octaveAcc : octaves) {
-        if (muse::contains(accidentalsToPlace, octaveAcc)) {
-            int octaveLine = octaveAcc->line();
-            bool acceptOctave = (octaveLine < thisLine && acceptAbove) || (octaveLine > thisLine && acceptBelow);
-            if (acceptOctave) {
-                foundOctave = true;
-                accidentalsPlaced.push_back(octaveAcc);
-                accidentalsToPlace.remove(octaveAcc);
-                if (ctx.keepSecondsTogether()) {
-                    findAndInsertSecond(octaveAcc, accidentalsPlaced, accidentalsToPlace, ctx);
+        const bool removed = accidentalsToPlace.remove_if([&](Accidental* a) {
+            if (a == octaveAcc) {
+                int octaveLine = octaveAcc->line();
+                bool acceptOctave = (octaveLine < thisLine && acceptAbove) || (octaveLine > thisLine && acceptBelow);
+                if (acceptOctave) {
+                    foundOctave = true;
+                    return true;
                 }
+            }
+            return false;
+        });
+
+        if (removed) {
+            accidentalsPlaced.push_back(octaveAcc);
+
+            if (ctx.keepSecondsTogether()) {
+                findAndInsertSecond(octaveAcc, accidentalsPlaced, accidentalsToPlace, ctx);
             }
         }
     }
