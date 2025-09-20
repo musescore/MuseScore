@@ -77,6 +77,9 @@ public:
     void drawText(const PointF& point, const String& text) override;
     void drawText(const RectF& rect, int flags, const String& text) override;
 
+    bool canDrawHtml() const override;
+    void drawHtml(const PointF& point, const String& htmlText) override;
+
     void drawSymbol(const PointF& point, char32_t ucs4Code) override;
 
     void drawPixmap(const PointF& point, const Pixmap& pm) override;

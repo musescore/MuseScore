@@ -29,6 +29,7 @@
 #include <QPixmapCache>
 #include <QStaticText>
 #include <QPainterPath>
+#include <QTextBlock>
 
 #include "draw/utils/drawlogger.h"
 #include "types/transform.h"
@@ -245,6 +246,34 @@ void QPainterProvider::drawText(const PointF& point, const String& text)
 void QPainterProvider::drawText(const RectF& rect, int flags, const String& text)
 {
     m_painter->drawText(rect.toQRectF(), flags, text);
+}
+
+bool QPainterProvider::canDrawHtml() const
+{
+    return true;
+}
+
+void QPainterProvider::drawHtml(const PointF& point, const String& htmlText)
+{
+    QTextDocument doc;
+
+    QFont f = font().toQFont();
+    double fontScalingFactor = m_painter->device()->logicalDpiX() / 72.0;
+    f.setPixelSize(static_cast<int>(f.pointSizeF() * fontScalingFactor));
+    doc.setDefaultFont(f);
+    doc.setUseDesignMetrics(true);
+    doc.setHtml(htmlText);
+    doc.setTextWidth(-1); // No wrapping
+    doc.setDocumentMargin(0);
+
+    QFontMetricsF fm(f);
+    qreal baselineOffset = fm.ascent();
+
+    QPointF p = point.toQPointF();
+    m_painter->save();
+    m_painter->translate(p.x(), p.y() - baselineOffset);
+    doc.drawContents(m_painter);
+    m_painter->restore();
 }
 
 void QPainterProvider::drawSymbol(const PointF& point, char32_t ucs4Code)

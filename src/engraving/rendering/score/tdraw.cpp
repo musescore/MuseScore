@@ -1741,7 +1741,11 @@ void TDraw::draw(const TextBlock& textBlock, const TextBase* item, Painter* pain
 void TDraw::draw(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter)
 {
     painter->setFont(textFragment.font(item));
-    painter->drawText(textFragment.pos, textFragment.text);
+    if (textFragment.htmlText && painter->canDrawHtml()) {
+        painter->drawHtml(textFragment.pos, *textFragment.htmlText);
+    } else {
+        painter->drawText(textFragment.pos, textFragment.text);
+    }
 }
 
 void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* painter, const PaintOptions& opt)

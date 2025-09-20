@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <optional>
 #include <variant>
 
 #include "draw/fontmetrics.h"
@@ -229,6 +230,7 @@ public:
     mutable CharFormat format;
     PointF pos;                    // y is relative to TextBlock->y()
     mutable String text;
+    std::optional<String> htmlText;
 
     TextFragment() = default;
     TextFragment(const String& s);
@@ -244,6 +246,8 @@ public:
     double calculatedFontSize(const TextBase*) const;
     int columns() const;
     void changeFormat(FormatId id, const FormatValue& data);
+
+    void updateHtml();
 
 private:
     void resolveFallback(muse::draw::Font::Type fontType, const muse::draw::FontMetrics& fm, String& family) const;
