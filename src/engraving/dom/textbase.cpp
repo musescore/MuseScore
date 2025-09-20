@@ -68,13 +68,13 @@ static constexpr double superScriptOffset = -0.9; // of x-height
 static const char* FALLBACK_SYMBOL_FONT = "Bravura";
 static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
 
-const QRegularExpression TextFragment::urlPattern = QRegularExpression(
+static const QRegularExpression URL_PATTERN = QRegularExpression(
     R"((https?://[a-zA-Z0-9.-]+(?:/[a-zA-Z0-9._~:/?#[\]@!$&'()*+,;=-]*)?))");
 
 QString convertUrlsToLinks(const QString& text)
 {
     QString result = text.toHtmlEscaped();
-    result.replace(TextFragment::urlPattern, R"(<a href="\1" style="color: blue; text-decoration: underline;">\1</a>)");
+    result.replace(URL_PATTERN, R"(<a href="\1" style="color: blue; text-decoration: underline;">\1</a>)");
 
     return result;
 }
@@ -862,7 +862,7 @@ bool TextFragment::operator ==(const TextFragment& f) const
 void TextFragment::draw(Painter* p, const TextBase* t) const
 {
     auto qp = p->getQPainter();
-    if (qp && text.toQString().contains(urlPattern)) {
+    if (qp && text.toQString().contains(URL_PATTERN)) {
         drawWithUrl(qp, t);
         return;
     }
