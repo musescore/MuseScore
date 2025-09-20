@@ -65,6 +65,10 @@ public:
     void setMuteHiddenInstruments(bool mute) override;
     muse::async::Channel<bool> muteHiddenInstrumentsChanged() const override;
 
+    bool focusSelectedInstrument() const override;
+    void setFocusSelectedInstrument(bool mute) override;
+    muse::async::Channel<bool> focusSelectedInstrumentChanged() const override;
+
     const SoundProfileName& basicSoundProfileName() const override;
     const SoundProfileName& museSoundsProfileName() const override;
     const SoundProfileName& compatMuseSoundsProfileName() const override;

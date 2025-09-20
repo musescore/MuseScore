@@ -61,6 +61,7 @@ static const Settings::Key ONLINE_SOUNDS_SHOW_ERROR(moduleName, "playback/online
 static const Settings::Key ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE(moduleName, "playback/onlineSounds/showProgressBarMode");
 
 static const Settings::Key MUTE_HIDDEN_INSTRUMENTS(moduleName, "playback/mixer/muteHiddenInstruments");
+static const Settings::Key FOCUS_SELECTED_INSTRUMENT(moduleName, "playback/mixer/focusSelectedInstrument");
 
 static const Settings::Key DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS(moduleName, "playback/profiles/defaultProfileName");
 static const SoundProfileName BASIC_PROFILE_NAME(u"MuseScore Basic");
@@ -128,6 +129,11 @@ void PlaybackConfiguration::init()
     settings()->setDefaultValue(MUTE_HIDDEN_INSTRUMENTS, Val(true));
     settings()->valueChanged(MUTE_HIDDEN_INSTRUMENTS).onReceive(nullptr, [this](const Val& mute) {
         m_muteHiddenInstrumentsChanged.send(mute.toBool());
+    });
+
+    settings()->setDefaultValue(FOCUS_SELECTED_INSTRUMENT, Val(true));
+    settings()->valueChanged(FOCUS_SELECTED_INSTRUMENT).onReceive(nullptr, [this](const Val& checked) {
+        m_focusSelectedInstrumentChanged.send(checked.toBool());
     });
 
     settings()->setDefaultValue(DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS, Val(fallbackSoundProfileStr().toStdString()));
@@ -301,6 +307,21 @@ void PlaybackConfiguration::setMuteHiddenInstruments(bool mute)
 muse::async::Channel<bool> PlaybackConfiguration::muteHiddenInstrumentsChanged() const
 {
     return m_muteHiddenInstrumentsChanged;
+}
+
+bool PlaybackConfiguration::focusSelectedInstrument() const
+{
+    return settings()->value(FOCUS_SELECTED_INSTRUMENT).toBool();
+}
+
+void PlaybackConfiguration::setFocusSelectedInstrument(bool mute)
+{
+    settings()->setSharedValue(FOCUS_SELECTED_INSTRUMENT, Val(mute));
+}
+
+muse::async::Channel<bool> PlaybackConfiguration::focusSelectedInstrumentChanged() const
+{
+    return m_focusSelectedInstrumentChanged;
 }
 
 const SoundProfileName& PlaybackConfiguration::basicSoundProfileName() const

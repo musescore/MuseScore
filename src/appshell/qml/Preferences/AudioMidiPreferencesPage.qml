@@ -84,12 +84,16 @@ PreferencesPage {
 
         MixerSection {
             muteHiddenInstruments: audioMidiModel.muteHiddenInstruments
+            focusSelectedInstrument: audioMidiModel.focusSelectedInstrument
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 3
 
             onMuteHiddenInstrumentsChangeRequested: function(mute) {
                 audioMidiModel.muteHiddenInstruments = mute
+            }
+            onFocusSelectedInstrumentInMixerChangeRequested: function (checked) {
+                audioMidiModel.focusSelectedInstrument = checked
             }
         }
 

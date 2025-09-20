@@ -49,6 +49,8 @@ class AudioMidiPreferencesModel : public QObject, public muse::Injectable, publi
     Q_PROPERTY(bool useMIDI20Output READ useMIDI20Output WRITE setUseMIDI20Output NOTIFY useMIDI20OutputChanged)
 
     Q_PROPERTY(bool muteHiddenInstruments READ muteHiddenInstruments WRITE setMuteHiddenInstruments NOTIFY muteHiddenInstrumentsChanged)
+    Q_PROPERTY(
+        bool focusSelectedInstrument READ focusSelectedInstrument WRITE setFocusSelectedInstrument NOTIFY focusSelectedInstrumentChanged)
 
     Q_PROPERTY(
         bool shouldShowOnlineSoundsProcessingError READ shouldShowOnlineSoundsProcessingError WRITE setShouldShowOnlineSoundsProcessingError NOTIFY shouldShowOnlineSoundsProcessingErrorChanged)
@@ -89,6 +91,7 @@ public:
     bool useMIDI20Output() const;
 
     bool muteHiddenInstruments() const;
+    bool focusSelectedInstrument() const;
 
     bool shouldShowOnlineSoundsProcessingError() const;
     bool autoProcessOnlineSoundsInBackground() const;
@@ -100,6 +103,7 @@ public slots:
     void setUseMIDI20Output(bool use);
 
     void setMuteHiddenInstruments(bool mute);
+    void setFocusSelectedInstrument(bool checked);
 
     void setShouldShowOnlineSoundsProcessingError(bool value);
     void setAutoProcessOnlineSoundsInBackground(bool value);
@@ -116,6 +120,7 @@ signals:
     void useMIDI20OutputChanged();
 
     void muteHiddenInstrumentsChanged(bool mute);
+    void focusSelectedInstrumentChanged(bool mute);
 
     void shouldShowOnlineSoundsProcessingErrorChanged();
     void autoProcessOnlineSoundsInBackgroundChanged();

@@ -72,6 +72,10 @@ public:
     virtual void setMuteHiddenInstruments(bool mute) = 0;
     virtual muse::async::Channel<bool> muteHiddenInstrumentsChanged() const = 0;
 
+    virtual bool focusSelectedInstrument() const = 0;
+    virtual void setFocusSelectedInstrument(bool mute) = 0;
+    virtual muse::async::Channel<bool> focusSelectedInstrumentChanged() const = 0;
+
     virtual const SoundProfileName& basicSoundProfileName() const = 0;
     virtual const SoundProfileName& museSoundsProfileName() const = 0;
     virtual const SoundProfileName& compatMuseSoundsProfileName() const = 0;
