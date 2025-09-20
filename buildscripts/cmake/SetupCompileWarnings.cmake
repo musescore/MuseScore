@@ -8,7 +8,10 @@ if (MSVC)
     # either the above or the below, or even both
     #add_compile_options(/wd4996) # disabled warning: C4996, needed for VS 17.8.1 to suppress tons (some 1000) of them in VS' own code
 else()
-    add_compile_options(-Wall -Wextra) #-Wconversion
+    add_compile_options(
+        $<$<COMPILE_LANGUAGE:C,CXX,OBJC,OBJCXX>:-Wall>
+        $<$<COMPILE_LANGUAGE:C,CXX,OBJC,OBJCXX>:-Wextra>
+    )
 endif()
 
 # Target
