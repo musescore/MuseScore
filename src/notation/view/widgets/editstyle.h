@@ -81,7 +81,7 @@ private:
     void keyPressEvent(QKeyEvent* event);
 
     void retranslate();
-    void setHeaderFooterToolTip();
+    void setHeaderFooterMacroInfoText();
     void adjustPagesStackSize(int currentPageIndex);
 
     bool isBoolStyleRepresentedByButtonGroup(StyleId id);
