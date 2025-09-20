@@ -46,7 +46,7 @@ mu::engraving::Score* NotationElements::msScore() const
     return m_getScore->score();
 }
 
-EngravingItem* NotationElements::search(const std::string& searchText) const
+std::vector<EngravingItem*> NotationElements::search(const QString& searchText) const
 {
     SearchCommandsParser commandsParser;
 
@@ -54,24 +54,32 @@ EngravingItem* NotationElements::search(const std::string& searchText) const
     if (searchData.isValid()) {
         switch (searchData.elementType) {
         case ElementType::REHEARSAL_MARK: {
-            return rehearsalMark(searchData.value.toString().toStdString());
+            return { rehearsalMark(searchData.value.toString().toStdString()) };
         }
         case ElementType::MEASURE: {
             //!NOTE: the measure numbering in the service starts from zero
-            int measureIndex = searchData.value.toInt() - 1;
-            return measure(measureIndex);
+            if (searchData.value.canConvert<int>()) {
+                // single measure
+                int measureIndex = searchData.value.toInt() - 1;
+                return { measure(measureIndex) };
+            } else {
+                // measure range
+                int startMeasureIndex = searchData.value.value<QPair<int, int> >().first - 1;
+                int endMeasureIndex = searchData.value.value<QPair<int, int> >().second - 1;
+                return { measure(startMeasureIndex), measure(endMeasureIndex) };
+            }
         }
         case ElementType::PAGE: {
             //!NOTE: the page numbering in the service starts from zero
             int pageIndex = searchData.value.toInt() - 1;
-            return page(pageIndex);
+            return { page(pageIndex) };
         }
         default:
-            return nullptr;
+            return {};
         }
     }
 
-    return nullptr;
+    return {};
 }
 
 std::vector<EngravingItem*> NotationElements::elements(const FilterElementsOptions& elementsOptions) const
