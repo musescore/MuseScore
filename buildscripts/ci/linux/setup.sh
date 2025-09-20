@@ -169,10 +169,16 @@ else
 fi
 
 # CMake
+if [[ "$PACKARCH" == "armv7l" ]]; then
+  $SUDO apt-get install -y --no-install-recommends cmake
+fi
 echo "cmake version"
 cmake --version
 
 # Ninja
+if [[ "$PACKARCH" == "armv7l" ]]; then
+  $SUDO apt-get install -y --no-install-recommends ninja-build
+fi
 echo "ninja version"
 ninja --version
 
@@ -186,6 +192,11 @@ if [[ "$PACKARCH" == "wasm" ]]; then
   ./emsdk activate $EMSDK_VERSION
   echo "source $BUILD_TOOLS/emsdk/emsdk_env.sh" >> ${ENV_FILE}
   cd $origin_dir
+fi
+
+# Python3-pip
+if [[ "$PACKARCH" == "armv7l" ]]; then
+  $SUDO apt-get install -y --no-install-recommends python3-pip
 fi
 
 # MESON
