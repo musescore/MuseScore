@@ -25,6 +25,8 @@
         <file>qml/MuseScore/Engraving/EngravingElementsPanel.qml</file>
         <file>qml/MuseScore/Engraving/EngravingUndoStackDialog.qml</file>
         <file>qml/MuseScore/Engraving/EngravingUndoStackPanel.qml</file>
+        <file>qml/MuseScore/Engraving/EngravingStyleDialog.qml</file>
+        <file>qml/MuseScore/Engraving/EngravingStylePanel.qml</file>
         <file>qml/MuseScore/Engraving/qmldir</file>
     </qresource>
 </RCC>

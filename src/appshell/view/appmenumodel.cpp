@@ -518,6 +518,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
         MenuItemList engravingItems {
             makeMenuItem("diagnostic-show-engraving-elements"),
             makeMenuItem("diagnostic-show-engraving-undostack"),
+            makeMenuItem("diagnostic-show-engraving-style"),
             makeSeparator(),
             makeMenuItem("show-element-bounding-rects"),
             makeMenuItem("color-element-shapes"),
