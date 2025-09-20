@@ -43,14 +43,9 @@ FocusableControl {
 
     property int sideMargin: 0
 
-    property var popupAnchorItem: null
-
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
     signal removeSelectionRequested()
-
-    signal popupOpened(var popupX, var popupY, var popupHeight)
-    signal popupClosed()
 
     signal changeVisibilityOfSelectedRowsRequested(bool visible)
     signal changeVisibilityRequested(var index, bool visible)
@@ -147,12 +142,7 @@ FocusableControl {
 
             openedPopup.load(item)
 
-            openedPopup.opened.connect(function() {
-                root.popupOpened(openedPopup.x, openedPopup.y, openedPopup.height)
-            })
-
             openedPopup.closed.connect(function() {
-                root.popupClosed()
                 sourceComponent = null
             })
 
@@ -170,8 +160,6 @@ FocusableControl {
         id: instrumentSettingsComp
 
         InstrumentSettingsPopup {
-            anchorItem: popupAnchorItem
-
             onReplaceInstrumentRequested: {
                 // The popup would close when the dialog to select the new
                 // instrument is shown; when it closes, it is unloaded, i.e.
@@ -193,17 +181,13 @@ FocusableControl {
     Component {
         id: staffSettingsComp
 
-        StaffSettingsPopup {
-            anchorItem: popupAnchorItem
-        }
+        StaffSettingsPopup {}
     }
 
     Component {
         id: systemObjectsLayerSettingsComp
 
-        SystemObjectsLayerSettingsPopup {
-            anchorItem: popupAnchorItem
-        }
+        SystemObjectsLayerSettingsPopup {}
     }
 
     VisibilityControls {
