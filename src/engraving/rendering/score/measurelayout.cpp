@@ -111,6 +111,23 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
     //    layout cross-staff ties
     //---------------------------------------------------
 
+    auto layoutCrossStaffTies = [](Chord* chord, Measure* item, const Fraction& stick, LayoutContext& ctx) ->void {
+        for (Note* note : chord->notes()) {
+            Tie* tieFor = note->tieFor();
+            Tie* tieBack = note->tieBack();
+            LaissezVib* lv = note->laissezVib();
+            if (lv && lv->isCrossStaff()) {
+                SlurTieLayout::layoutLaissezVibChord(chord, ctx);
+            }
+            if (tieFor && !lv && tieFor->isCrossStaff()) {
+                SlurTieLayout::layoutTieFor(tieFor, item->system());
+            }
+            if (tieBack && tieBack->tick() < stick && tieBack->isCrossStaff()) {
+                SlurTieLayout::layoutTieBack(tieBack, item->system(), ctx);
+            }
+        }
+    };
+
     const Fraction stick = item->system()->measures().front()->tick();
     const size_t tracks = ctx.dom().ntracks();
     static const SegmentType st { SegmentType::ChordRest };
@@ -125,19 +142,10 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
                 continue;
             }
             Chord* chord = toChord(element);
-            for (Note* note : chord->notes()) {
-                Tie* tieFor = note->tieFor();
-                Tie* tieBack = note->tieBack();
-                LaissezVib* lv = note->laissezVib();
-                if (lv && lv->isCrossStaff()) {
-                    SlurTieLayout::layoutLaissezVibChord(chord, ctx);
-                }
-                if (tieFor && !lv && tieFor->isCrossStaff()) {
-                    SlurTieLayout::layoutTieFor(tieFor, item->system());
-                }
-                if (tieBack && tieBack->tick() < stick && tieBack->isCrossStaff()) {
-                    SlurTieLayout::layoutTieBack(tieBack, item->system(), ctx);
-                }
+            layoutCrossStaffTies(chord, item, stick, ctx);
+
+            for (Chord* graceChord : chord->graceNotes()) {
+                layoutCrossStaffTies(graceChord, item, stick, ctx);
             }
         }
     }
