@@ -218,12 +218,10 @@ void System::removeLastMeasure()
 
 Box* System::vbox() const
 {
-    if (!m_ml.empty()) {
-        if (m_ml[0]->isVBox() || m_ml[0]->isTBox() || m_ml[0]->isFBox()) {
-            return toBox(m_ml[0]);
-        }
+    if (!m_ml.empty() && m_ml.front()->isVBoxBase()) {
+        return toBox(m_ml.front());
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
