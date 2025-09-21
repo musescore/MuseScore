@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
-  <programVersion>4.6.0</programVersion>
+  <programVersion>4.7.0</programVersion>
   <programRevision></programRevision>
   <Score>
     <eid>Ex2IW2bYPwB_e/EWDtY+O9I</eid>
@@ -261,14 +261,6 @@
             <noStem>1</noStem>
             <Note>
               <eid>248S5+q+0xL_iZrHzbr8xBM</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
-                <eid>59tuzMXo7bH_9YQmBNFnqCI</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
-                <eid>2b5Cb9zDuSL_+bY8HBWoBlK</eid>
-                </Symbol>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>

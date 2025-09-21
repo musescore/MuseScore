@@ -100,6 +100,15 @@ static void checkPitchBend(EventsHolder& events, int tick, int pitchValue, MidiI
     events[channel].erase(it);
 }
 
+static void checkPitchBendInterval(EventsHolder& events, int startTick, int endTick, int step, int pitchValue,
+                                   MidiInstrumentEffect effect = MidiInstrumentEffect::NONE,
+                                   int channel = DEFAULT_CHANNEL)
+{
+    for (int tick = startTick; tick <= endTick; tick += step) {
+        checkPitchBend(events, tick, pitchValue, effect, channel);
+    }
+}
+
 static EventsHolder renderMidiEvents(const String& fileName, bool eachStringHasChannel = false, bool instrumentsHaveEffects = false)
 {
     MasterScore* score = ScoreRW::readScore(MIDIRENDERER_BEND_TESTS_DIR + fileName);
@@ -123,7 +132,7 @@ TEST_F(MidiRendererBend_Tests, simple)
     EventsHolder events = renderMidiEvents(u"simple.mscx", true, true);
 
     EXPECT_EQ(events.size(), 1);
-    EXPECT_EQ(events[0].size(), 45);
+    EXPECT_EQ(events[0].size(), 79);
 
     /// bend with startFactor 0, endFactor 1
     checkEventInterval(events, 0, 239, 52, defVol);
@@ -139,20 +148,20 @@ TEST_F(MidiRendererBend_Tests, simple)
     checkPitchBend(events, 90, 8960);
     checkPitchBend(events, 100, 9140);
     checkPitchBend(events, 110, 9339);
-    checkPitchBend(events, 120, 9557);
+
+    checkPitchBendInterval(events, 120, 230, 10, 9557);
 
     /// bend with startFactor 0.25, endFactor 0.75
     checkPitchBend(events, 470, pwReset);
     checkEventInterval(events, 480, 719, 52, defVol);
-    checkPitchBend(events, 480, 8192);
     checkPitchBend(events, 510, 8192);
     checkPitchBend(events, 520, 8229);
     checkPitchBend(events, 530, 8343);
     checkPitchBend(events, 540, 8533);
     checkPitchBend(events, 550, 8798);
     checkPitchBend(events, 560, 9140);
-    checkPitchBend(events, 570, 9557);
-    checkPitchBend(events, 600, 9557);
+
+    checkPitchBendInterval(events, 570, 710, 10, 9557);
 
     /// bend with 2+1/4 tones
     checkPitchBend(events, 950, pwReset);
@@ -169,7 +178,7 @@ TEST_F(MidiRendererBend_Tests, simple)
     checkPitchBend(events, 1050, 9920);
     checkPitchBend(events, 1060, 10325);
     checkPitchBend(events, 1070, 10773);
-    checkPitchBend(events, 1080, 11264);
+    checkPitchBendInterval(events, 1080, 1190, 10, 11264);
 
     EXPECT_EQ(events[0].size(), 2);
 }
@@ -182,7 +191,7 @@ TEST_F(MidiRendererBend_Tests, combined)
     EventsHolder events = renderMidiEvents(u"combined.mscx", true, true);
 
     EXPECT_EQ(events.size(), 1);
-    EXPECT_EQ(events[0].size(), 73);
+    EXPECT_EQ(events[0].size(), 131);
 
     /// bend+bend
     checkEventInterval(events, 0, 479, 52, defVol);
@@ -210,20 +219,18 @@ TEST_F(MidiRendererBend_Tests, combined)
     checkPitchBend(events, 210, 10325);
     checkPitchBend(events, 220, 10505);
     checkPitchBend(events, 230, 10704);
-    checkPitchBend(events, 240, 10922); /// 2 tones up
+    checkPitchBendInterval(events, 240, 470, 10, 10922); /// 2 tones up
 
     /// bend+release
     checkPitchBend(events, 710, pwReset);
     checkEventInterval(events, 720, 1199, 52, defVol);
-    checkPitchBend(events, 720, 8192);
     checkPitchBend(events, 750, 8192);
     checkPitchBend(events, 760, 8258);
     checkPitchBend(events, 770, 8457);
     checkPitchBend(events, 780, 8789);
     checkPitchBend(events, 790, 9253);
     checkPitchBend(events, 800, 9851);
-    checkPitchBend(events, 810, 10581);
-    checkPitchBend(events, 840, 10581);
+    checkPitchBendInterval(events, 810, 840, 10, 10581);
     checkPitchBend(events, 850, 10576);
     checkPitchBend(events, 860, 10562);
     checkPitchBend(events, 870, 10538);
@@ -235,7 +242,7 @@ TEST_F(MidiRendererBend_Tests, combined)
     checkPitchBend(events, 930, 10197);
     checkPitchBend(events, 940, 10107);
     checkPitchBend(events, 950, 10007);
-    checkPitchBend(events, 960, 9898);
+    checkPitchBendInterval(events, 960, 1190, 10, 9898);
 
     /// bend+note
     checkPitchBend(events, 1430, pwReset);
@@ -252,9 +259,9 @@ TEST_F(MidiRendererBend_Tests, combined)
     checkPitchBend(events, 1530, 8960);
     checkPitchBend(events, 1540, 9140);
     checkPitchBend(events, 1550, 9339);
-    checkPitchBend(events, 1560, 9557);
+    checkPitchBendInterval(events, 1560, 1670, 10, 9557);
 
-    checkPitchBend(events, 1670, pwReset);
+    checkPitchBend(events, 1675, pwReset);
     checkEventInterval(events, 1680, 1919, 52, defVol);
 
     EXPECT_EQ(events[0].size(), 3);
@@ -266,7 +273,7 @@ TEST_F(MidiRendererBend_Tests, tied)
     EventsHolder events = renderMidiEvents(u"tied.mscx", true, true);
 
     EXPECT_EQ(events.size(), 1);
-    EXPECT_EQ(events[0].size(), 52);
+    EXPECT_EQ(events[0].size(), 75);
 
     checkEventInterval(events, 0, 1919, 52, defVol);
     checkPitchBend(events, 0, 8192);
@@ -295,7 +302,7 @@ TEST_F(MidiRendererBend_Tests, tied)
     checkPitchBend(events, 210, 10282);
     checkPitchBend(events, 220, 10486);
     checkPitchBend(events, 230, 10699);
-    checkPitchBend(events, 240, 10922);
+    checkPitchBendInterval(events, 240, 470, 10, 10922);
 
     checkPitchBend(events, 480, 10922);
     checkPitchBend(events, 490, 10917);
@@ -336,7 +343,7 @@ TEST_F(MidiRendererBend_Tests, prebend)
     EventsHolder events = renderMidiEvents(u"prebend.mscx", true, true);
 
     EXPECT_EQ(events.size(), 1);
-    EXPECT_EQ(events[0].size(), 35);
+    EXPECT_EQ(events[0].size(), 57);
 
     /// prebend only
     checkEventInterval(events, 0, 239, 52, defVol);
@@ -355,7 +362,7 @@ TEST_F(MidiRendererBend_Tests, prebend)
     checkPitchBend(events, 570, 8960);
     checkPitchBend(events, 580, 9140);
     checkPitchBend(events, 590, 9339);
-    checkPitchBend(events, 600, 9557);
+    checkPitchBendInterval(events, 600, 710, 10, 9557);
 
     /// prebend+tie+bend
     checkPitchBend(events, 950, pwReset);
@@ -372,7 +379,7 @@ TEST_F(MidiRendererBend_Tests, prebend)
     checkPitchBend(events, 1170, 8960);
     checkPitchBend(events, 1180, 9140);
     checkPitchBend(events, 1190, 9339);
-    checkPitchBend(events, 1200, 9557);
+    checkPitchBendInterval(events, 1200, 1319, 10, 9557);
 
     EXPECT_EQ(events[0].size(), 2);
 }
@@ -385,7 +392,7 @@ TEST_F(MidiRendererBend_Tests, slightbend)
     EventsHolder events = renderMidiEvents(u"slightbend.mscx", true, true);
 
     EXPECT_EQ(events.size(), 1);
-    EXPECT_EQ(events[0].size(), 46);
+    EXPECT_EQ(events[0].size(), 47);
 
     /// slight bend 0 -> 1
     checkEventInterval(events, 0, 119, 52, defVol);
@@ -405,14 +412,13 @@ TEST_F(MidiRendererBend_Tests, slightbend)
     /// slight bend 0.25 -> 0.75
     checkPitchBend(events, 230, pwReset);
     checkEventInterval(events, 240, 359, 52, defVol);
-    checkPitchBend(events, 240, 8192);
     checkPitchBend(events, 270, 8192);
     checkPitchBend(events, 280, 8201);
     checkPitchBend(events, 290, 8229);
     checkPitchBend(events, 300, 8277);
     checkPitchBend(events, 310, 8343);
     checkPitchBend(events, 320, 8429);
-    checkPitchBend(events, 330, 8533);
+    checkPitchBendInterval(events, 330, 350, 10, 8533);
 
     /// slight bend + note
     checkPitchBend(events, 470, pwReset);
@@ -442,7 +448,7 @@ TEST_F(MidiRendererBend_Tests, slides)
     EventsHolder events = renderMidiEvents(u"slides.mscx", true, true);
 
     EXPECT_EQ(events.size(), 4);
-    EXPECT_EQ(events[0].size(), 28);
+    EXPECT_EQ(events[0].size(), 51);
     EXPECT_EQ(events[1].size(), 18);
     EXPECT_EQ(events[2].size(), 3);
     EXPECT_EQ(events[3].size(), 9);
@@ -460,7 +466,7 @@ TEST_F(MidiRendererBend_Tests, slides)
     checkPitchBend(events, 90, 8960);
     checkPitchBend(events, 100, 9140);
     checkPitchBend(events, 110, 9339);
-    checkPitchBend(events, 120, 9557);
+    checkPitchBendInterval(events, 120, 230, 10, 9557);
     checkEventInterval(events, 180, 198, 53, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 1);
     checkEventInterval(events, 199, 217, 52, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 1);
     checkEventInterval(events, 219, 237, 51, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 1);
@@ -470,15 +476,13 @@ TEST_F(MidiRendererBend_Tests, slides)
     checkEventInterval(events, 460, 478, 53, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 1);
     checkPitchBend(events, 470, pwReset);
     checkEventInterval(events, 480, 719, 52, defVol);
-    checkPitchBend(events, 480, 8192);
     checkPitchBend(events, 510, 8192);
     checkPitchBend(events, 520, 8229);
     checkPitchBend(events, 530, 8343);
     checkPitchBend(events, 540, 8533);
     checkPitchBend(events, 550, 8798);
     checkPitchBend(events, 560, 9140);
-    checkPitchBend(events, 570, 9557);
-    checkPitchBend(events, 600, 9557);
+    checkPitchBendInterval(events, 570, 710, 10, 9557);
 
     checkEventInterval(events, 960, 1019, 52, defVol, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 2);
     checkEventInterval(events, 1020, 1038, 53, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 3);
@@ -499,7 +503,7 @@ TEST_F(MidiRendererBend_Tests, gracebend)
     EventsHolder events = renderMidiEvents(u"gracebend.mscx", true, true);
 
     EXPECT_EQ(events.size(), 1);
-    EXPECT_EQ(events[0].size(), 51);
+    EXPECT_EQ(events[0].size(), 192);
 
     /// time factor: 0->1
     checkEventInterval(events, 360, 959, 52, defVol);
@@ -515,7 +519,7 @@ TEST_F(MidiRendererBend_Tests, gracebend)
     checkPitchBend(events, 450, 8960);
     checkPitchBend(events, 460, 9140);
     checkPitchBend(events, 470, 9339);
-    checkPitchBend(events, 480, 9557);
+    checkPitchBendInterval(events, 480, 950, 10, 9557);
 
     /// time factor: 0.25->0.75 (ignoring factor)
     checkPitchBend(events, 1310, pwReset);
@@ -532,10 +536,10 @@ TEST_F(MidiRendererBend_Tests, gracebend)
     checkPitchBend(events, 1410, 8960);
     checkPitchBend(events, 1420, 9140);
     checkPitchBend(events, 1430, 9339);
-    checkPitchBend(events, 1440, 9557);
+    checkPitchBendInterval(events, 1440, 1910, 10, 9557);
 
     /// note + gracebend
-    checkPitchBend(events, 1910, pwReset);
+    checkPitchBend(events, 1915, pwReset);
     checkEventInterval(events, 1920, 2279, 54, defVol);
     checkPitchBend(events, 2270, pwReset);
     checkEventInterval(events, 2280, 2879, 52, defVol);
@@ -551,7 +555,7 @@ TEST_F(MidiRendererBend_Tests, gracebend)
     checkPitchBend(events, 2370, 8960);
     checkPitchBend(events, 2380, 9140);
     checkPitchBend(events, 2390, 9339);
-    checkPitchBend(events, 2400, 9557);
+    checkPitchBendInterval(events, 2400, 2870, 10, 9557);
 
     EXPECT_EQ(events[0].size(), 1);
 }
@@ -564,10 +568,10 @@ TEST_F(MidiRendererBend_Tests, bendGraceAfter)
     EventsHolder events = renderMidiEvents(u"bend-grace-after.mscx");
 
     EXPECT_EQ(events.size(), 1);
-    EXPECT_EQ(events[0].size(), 54);
+    EXPECT_EQ(events[0].size(), 122);
 
     checkEventInterval(events, 0, 479, 60, defVol);
-    checkPitchBend(events, 0, pwReset);
+
     checkPitchBend(events, 111, 8192);
     checkPitchBend(events, 121, 8202);
     checkPitchBend(events, 131, 8235);
@@ -580,35 +584,33 @@ TEST_F(MidiRendererBend_Tests, bendGraceAfter)
     checkPitchBend(events, 201, 9073);
     checkPitchBend(events, 211, 9280);
     checkPitchBend(events, 221, 9508);
-    checkPitchBend(events, 231, 9557);
+    checkPitchBendInterval(events, 231, 471, 10, 9557);
 
     checkPitchBend(events, 1910, pwReset);
     checkEventInterval(events, 1920, 2399, 60, defVol);
-    checkPitchBend(events, 1920, 8192);
+
     checkPitchBend(events, 1988, 8192);
     checkPitchBend(events, 1998, 8229);
     checkPitchBend(events, 2008, 8343);
     checkPitchBend(events, 2018, 8533);
     checkPitchBend(events, 2028, 8798);
     checkPitchBend(events, 2038, 9140);
-    checkPitchBend(events, 2048, 9557);
-    checkPitchBend(events, 2160, 9557);
-
-    checkPitchBend(events, 2170, 9546);
-    checkPitchBend(events, 2180, 9514);
-    checkPitchBend(events, 2190, 9460);
-    checkPitchBend(events, 2200, 9384);
-    checkPitchBend(events, 2210, 9287);
-    checkPitchBend(events, 2220, 9168);
-    checkPitchBend(events, 2230, 9028);
-    checkPitchBend(events, 2240, 8866);
-    checkPitchBend(events, 2250, 8683);
-    checkPitchBend(events, 2260, 8478);
-    checkPitchBend(events, 2270, 8252);
-    checkPitchBend(events, 2280, 8192);
+    checkPitchBendInterval(events, 2048, 2158, 10, 9557);
+    checkPitchBend(events, 2168, 9550);
+    checkPitchBend(events, 2178, 9522);
+    checkPitchBend(events, 2188, 9472);
+    checkPitchBend(events, 2198, 9401);
+    checkPitchBend(events, 2208, 9308);
+    checkPitchBend(events, 2218, 9194);
+    checkPitchBend(events, 2228, 9058);
+    checkPitchBend(events, 2238, 8901);
+    checkPitchBend(events, 2248, 8721);
+    checkPitchBend(events, 2258, 8521);
+    checkPitchBend(events, 2268, 8299);
 
     checkPitchBend(events, 3830, pwReset);
     checkEventInterval(events, 3840, 4319, 64, defVol);
+
     checkPitchBend(events, 3840, 8192);
     checkPitchBend(events, 3850, 8199);
     checkPitchBend(events, 3860, 8221);
@@ -619,7 +621,7 @@ TEST_F(MidiRendererBend_Tests, bendGraceAfter)
     checkPitchBend(events, 3910, 8554);
     checkPitchBend(events, 3920, 8666);
     checkPitchBend(events, 3930, 8792);
-    checkPitchBend(events, 3940, 8874);
+    checkPitchBendInterval(events, 3940, 4310, 10, 8874);
 
     EXPECT_TRUE(events[0].empty());
 }
@@ -633,7 +635,7 @@ TEST_F(MidiRendererBend_Tests, bendGraceAfter2)
     EventsHolder events = renderMidiEvents(u"bend-grace-after-2.mscx");
 
     EXPECT_EQ(events.size(), 1);
-    EXPECT_EQ(events[0].size(), 96);
+    EXPECT_EQ(events[0].size(), 104);
 
     checkEventInterval(events, 0, 239, pitch, defVol);
     checkPitchBend(events, 0, pwReset);
@@ -729,7 +731,7 @@ TEST_F(MidiRendererBend_Tests, bendGraceAfter2)
     checkPitchBend(events, 840, 9557);
     checkPitchBend(events, 850, 9709);
     checkPitchBend(events, 860, 10164);
-    checkPitchBend(events, 870, 10922);
+    checkPitchBendInterval(events, 870, 950, 10, 10922);
 
     EXPECT_TRUE(events[0].empty());
 }
@@ -743,7 +745,7 @@ TEST_F(MidiRendererBend_Tests, bendAfterHammer)
 
     EXPECT_EQ(events.size(), 2);
     EXPECT_EQ(events[0].size(), 2);
-    EXPECT_EQ(events[1].size(), 16);
+    EXPECT_EQ(events[1].size(), 51);
 
     checkEventInterval(events, 0, 479, 62, defVol);
     checkEventInterval(events, 480, 1439, 66, defVol, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
@@ -759,7 +761,7 @@ TEST_F(MidiRendererBend_Tests, bendAfterHammer)
     checkPitchBend(events, 1050, 8960, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
     checkPitchBend(events, 1060, 9140, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
     checkPitchBend(events, 1070, 9339, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
-    checkPitchBend(events, 1080, 9557, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBendInterval(events, 1080, 1430, 10, 9557, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
 
     EXPECT_EQ(events[0].size(), 0);
     EXPECT_EQ(events[1].size(), 1);
@@ -774,7 +776,7 @@ TEST_F(MidiRendererBend_Tests, bendAfterHammer2)
 
     EXPECT_EQ(events.size(), 2);
     EXPECT_EQ(events[0].size(), 2);
-    EXPECT_EQ(events[1].size(), 7);
+    EXPECT_EQ(events[1].size(), 15);
 
     checkEventInterval(events, 0, 479, 47, defVol);
 
@@ -782,7 +784,7 @@ TEST_F(MidiRendererBend_Tests, bendAfterHammer2)
     checkPitchBend(events, 480, pwReset, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
     checkPitchBend(events, 490, 8595, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
     checkPitchBend(events, 500, 9807, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
-    checkPitchBend(events, 510, 10922, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBendInterval(events, 510, 590, 10, 10922, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
 
     EXPECT_EQ(events[0].size(), 0);
     EXPECT_EQ(events[1].size(), 1);
@@ -829,4 +831,115 @@ TEST_F(MidiRendererBend_Tests, bendOnHiddenStaff)
 
     EXPECT_EQ(events[0].size(), 1);
     EXPECT_EQ(events[1].size(), 1);
+}
+
+TEST_F(MidiRendererBend_Tests, bendAndVibrato)
+{
+    constexpr int defVol = 80; // mf
+    constexpr int pwReset = 8192;
+
+    EventsHolder events = renderMidiEvents(u"bend_and_vibrato.mscx");
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].size(), 98);
+
+    checkEventInterval(events, 0, 959, 52, defVol);
+    checkPitchBend(events,   0, 8029);
+    checkPitchBend(events,  10, 8084);
+    checkPitchBend(events,  20, 8142);
+    checkPitchBend(events,  30, 8202);
+    checkPitchBend(events,  40, 8264);
+    checkPitchBend(events,  50, 8330);
+    checkPitchBend(events,  60, 8397);
+    checkPitchBend(events,  70, 8359);
+    checkPitchBend(events,  80, 8321);
+    checkPitchBend(events,  90, 8288);
+    checkPitchBend(events, 100, 8256);
+    checkPitchBend(events, 110, 8226);
+    checkPitchBend(events, 120, 8199);
+    checkPitchBend(events, 130, 8174);
+    checkPitchBend(events, 140, 8151);
+    checkPitchBend(events, 150, 8131);
+    checkPitchBend(events, 160, 8113);
+    checkPitchBend(events, 170, 8098);
+    checkPitchBend(events, 180, 8085);
+    checkPitchBend(events, 190, 8183);
+    checkPitchBend(events, 200, 8284);
+    checkPitchBend(events, 210, 8387);
+    checkPitchBend(events, 220, 8492);
+    checkPitchBend(events, 230, 8600);
+    checkPitchBend(events, 240, 8711);
+    checkPitchBend(events, 250, 8768);
+    checkPitchBend(events, 260, 8830);
+    checkPitchBend(events, 270, 8896);
+    checkPitchBend(events, 280, 8966);
+    checkPitchBend(events, 290, 9042);
+    checkPitchBend(events, 300, 9123);
+    checkPitchBend(events, 310, 9099);
+    checkPitchBend(events, 320, 9080);
+    checkPitchBend(events, 330, 9066);
+    checkPitchBend(events, 340, 9057);
+    checkPitchBend(events, 350, 9052);
+    checkPitchBend(events, 360, 9053);
+    checkPitchBend(events, 370, 9057);
+    checkPitchBend(events, 380, 9066);
+    checkPitchBend(events, 390, 9081);
+    checkPitchBend(events, 400, 9099);
+    checkPitchBend(events, 410, 9123);
+    checkPitchBend(events, 420, 9151);
+    checkPitchBend(events, 430, 9294);
+    checkPitchBend(events, 440, 9440);
+    checkPitchBend(events, 450, 9593);
+    checkPitchBend(events, 460, 9748);
+    checkPitchBend(events, 470, 9910);
+    checkPitchBend(events, 480, 10077);
+    checkPitchBend(events, 490, 10131);
+    checkPitchBend(events, 500, 10186);
+    checkPitchBend(events, 510, 10240);
+    checkPitchBend(events, 520, 10294);
+    checkPitchBend(events, 530, 10349);
+    checkPitchBend(events, 540, 10403);
+    checkPitchBend(events, 550, 10349);
+    checkPitchBend(events, 560, 10294);
+    checkPitchBend(events, 570, 10240);
+    checkPitchBend(events, 580, 10186);
+    checkPitchBend(events, 590, 10131);
+    checkPitchBend(events, 600, 10077);
+    checkPitchBend(events, 610, 10022);
+    checkPitchBend(events, 620, 9967);
+    checkPitchBend(events, 630, 9913);
+    checkPitchBend(events, 640, 9858);
+    checkPitchBend(events, 650, 9804);
+    checkPitchBend(events, 660, 9749);
+    checkPitchBend(events, 670, 9804);
+    checkPitchBend(events, 680, 9858);
+    checkPitchBend(events, 690, 9913);
+    checkPitchBend(events, 700, 9967);
+    checkPitchBend(events, 710, 10022);
+    checkPitchBend(events, 720, 10077);
+    checkPitchBend(events, 730, 10131);
+    checkPitchBend(events, 740, 10186);
+    checkPitchBend(events, 750, 10240);
+    checkPitchBend(events, 760, 10294);
+    checkPitchBend(events, 770, 10349);
+    checkPitchBend(events, 780, 10403);
+    checkPitchBend(events, 790, 10349);
+    checkPitchBend(events, 800, 10294);
+    checkPitchBend(events, 810, 10240);
+    checkPitchBend(events, 820, 10186);
+    checkPitchBend(events, 830, 10131);
+    checkPitchBend(events, 840, 10077);
+    checkPitchBend(events, 850, 10022);
+    checkPitchBend(events, 860, 9967);
+    checkPitchBend(events, 870, 9913);
+    checkPitchBend(events, 880, 9858);
+    checkPitchBend(events, 890, 9804);
+    checkPitchBend(events, 900, 9749);
+    checkPitchBend(events, 910, 9804);
+    checkPitchBend(events, 920, 9858);
+    checkPitchBend(events, 930, 9913);
+    checkPitchBend(events, 940, 9967);
+    checkPitchBend(events, 950, 10022);
+
+    EXPECT_TRUE(events[0].empty());
 }

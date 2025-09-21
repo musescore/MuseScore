@@ -311,7 +311,8 @@ static void collectVibrato(int channel,
     pitchWheelRenderer.addPitchWheelFunction(func, channel, staffIdx, effect);
 }
 
-static void addConstPitchWheel(int tick, float value, PitchWheelRenderer& pitchWheelRenderer, int channel, staff_idx_t staffIdx,
+static void addConstPitchWheel(int startTick, int endTick, float value, PitchWheelRenderer& pitchWheelRenderer, int channel,
+                               staff_idx_t staffIdx,
                                MidiInstrumentEffect effect)
 {
     const float scale = (float)wheelSpec.mLimit / wheelSpec.mAmplitude;
@@ -323,8 +324,8 @@ static void addConstPitchWheel(int tick, float value, PitchWheelRenderer& pitchW
     };
 
     pitchWheelConstFunc.func = constFunc;
-    pitchWheelConstFunc.mStartTick = tick;
-    pitchWheelConstFunc.mEndTick = tick + wheelSpec.mStep;
+    pitchWheelConstFunc.mStartTick = startTick;
+    pitchWheelConstFunc.mEndTick = endTick;
     pitchWheelRenderer.addPitchWheelFunction(pitchWheelConstFunc, channel, staffIdx, effect);
 }
 
@@ -478,8 +479,9 @@ static void collectGuitarBend(const Note* note,
             BendPlaybackInfo bendPlaybackInfo = getBendPlaybackInfo(bendFor, curPitchBendSegmentStart, duration, graceBeforeBend);
             double initialPitchBendValue = quarterOffsetFromStartNote / 2.0;
 
-            if (bendPlaybackInfo.startTick > curPitchBendSegmentStart) {
-                addConstPitchWheel(curPitchBendSegmentStart, initialPitchBendValue, pitchWheelRenderer, channel, note->staffIdx(), effect);
+            if (bendPlaybackInfo.startTick > curPitchBendSegmentStart && initialPitchBendValue != 0) {
+                addConstPitchWheel(curPitchBendSegmentStart, bendPlaybackInfo.startTick, initialPitchBendValue, pitchWheelRenderer, channel,
+                                   note->staffIdx(), effect);
             }
 
             bendFor->computeBendAmount();
@@ -505,7 +507,9 @@ static void collectGuitarBend(const Note* note,
             quarterOffsetFromStartNote += currentQuarterTones;
 
             if (bendPlaybackInfo.endTick < curPitchBendSegmentStart + duration) {
-                addConstPitchWheel(bendPlaybackInfo.endTick, quarterOffsetFromStartNote / 2.0, pitchWheelRenderer, channel,
+                int constPitchWheelduration = (quarterOffsetFromStartNote == 0 ? wheelSpec.mStep : duration);
+                addConstPitchWheel(bendPlaybackInfo.endTick, curPitchBendSegmentStart + constPitchWheelduration,
+                                   quarterOffsetFromStartNote / 2.0, pitchWheelRenderer, channel,
                                    note->staffIdx(),
                                    effect);
             }
@@ -517,7 +521,27 @@ static void collectGuitarBend(const Note* note,
             note = endNote;
         } else {
             if (!note->isGrace() && note->bendBack()) {
-                addConstPitchWheel(note->tick().ticks(), quarterOffsetFromStartNote / 2.0, pitchWheelRenderer, channel,
+                int constPitchWheelduration = 0;
+                int noteTick = note->tick().ticks();
+                if (quarterOffsetFromStartNote == 0) {
+                    // reset pitchwheel once, no need to keep in for each tick
+                    constPitchWheelduration = wheelSpec.mStep;
+                } else {
+                    Note* lastTied = note->lastTiedNote(false);
+                    IF_ASSERT_FAILED(lastTied) {
+                        LOGE() << "couldn't find tied note for note on track " << note->track() << ", tick " << note->tick().ticks() <<
+                            ", guitar bend midi may be incorrect";
+                        constPitchWheelduration = note->chord()->actualTicks().ticks();
+                    } else {
+                        Chord* lastChord = lastTied->chord();
+                        // keep the last pitchwheel value for the total duration of tied notes
+                        constPitchWheelduration = lastChord->tick().ticks() - noteTick
+                                                  + (lastTied->bendFor() ? 0 : lastChord->actualTicks().ticks());
+                    }
+                }
+
+                addConstPitchWheel(noteTick, noteTick + constPitchWheelduration, quarterOffsetFromStartNote / 2.0, pitchWheelRenderer,
+                                   channel,
                                    note->staffIdx(), effect);
             }
 
@@ -531,8 +555,12 @@ static void collectGuitarBend(const Note* note,
         curPitchBendSegmentStart += duration;
     }
 
+    // adding pitch wheel to last note of bend/tie chain, if it's end of bend
     if (!note->isGrace() && note->bendBack()) {
-        addConstPitchWheel(note->tick().ticks(), quarterOffsetFromStartNote / 2.0, pitchWheelRenderer, channel, note->staffIdx(), effect);
+        int constPitchWheelduration = (quarterOffsetFromStartNote == 0) ? wheelSpec.mStep : note->chord()->actualTicks().ticks();
+        addConstPitchWheel(note->tick().ticks(),
+                           note->tick().ticks() + constPitchWheelduration, quarterOffsetFromStartNote / 2.0, pitchWheelRenderer, channel,
+                           note->staffIdx(), effect);
     }
 }
 
