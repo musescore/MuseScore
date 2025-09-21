@@ -43,16 +43,6 @@ using namespace muse::uicomponents;
 
 static const muse::actions::ActionCode ADD_INSTRUMENTS_ACTIONCODE("instruments");
 
-namespace mu::instrumentsscene {
-static QString notationToKey(const INotationPtr notation)
-{
-    std::stringstream stream;
-    stream << notation.get();
-
-    return QString::fromStdString(stream.str());
-}
-}
-
 LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
