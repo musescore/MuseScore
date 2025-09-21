@@ -189,12 +189,7 @@ void MuseData::readChord(Part*, QStringView s)
         }
     }
     int pitch = table[step] + alter + (octave + 1) * 12;
-    if (pitch < 0) {
-        pitch = 0;
-    }
-    if (pitch > 127) {
-        pitch = 127;
-    }
+    pitch = std::clamp(pitch, 0, 127);
 
     Chord* chord = (Chord*)chordRest;
     Note* note = Factory::createNote(chord);

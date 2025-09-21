@@ -449,10 +449,7 @@ static signed char pitchStr2Char(QString& strPitch)
     int octave = strPitch.right(1).toInt();
     int pitch  = istep + 12 * octave;
 
-    if (pitch < 0) {
-        pitch = -1;
-    }
-    if (pitch > 127) {
+    if (!pitchIsValid(pitch)) {
         pitch = -1;
     }
 

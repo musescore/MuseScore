@@ -2414,7 +2414,7 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
 static void readDrumset(Drumset* ds, XmlReader& e)
 {
     int pitch = e.intAttribute("pitch", -1);
-    if (pitch < 0 || pitch > 127) {
+    if (!pitchIsValid(pitch)) {
         LOGD("load drumset: invalid pitch %d", pitch);
         return;
     }

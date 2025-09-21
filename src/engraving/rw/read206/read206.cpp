@@ -655,7 +655,7 @@ SymId Read206::articulationNames2SymId206(const AsciiStringView& s)
 static void readDrumset206(Drumset* ds, XmlReader& e)
 {
     int pitch = e.intAttribute("pitch", -1);
-    if (pitch < 0 || pitch > 127) {
+    if (!pitchIsValid(pitch)) {
         LOGD("load drumset: invalid pitch %d", pitch);
         return;
     }
