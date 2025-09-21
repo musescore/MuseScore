@@ -774,7 +774,6 @@ enum class Sid {
     snapToDynamics,
     centerOnNotehead,
     dynamicsMinDistance,
-    autoplaceVerticalAlignRange,
 
     textLinePlacement,
     textLinePosAbove,
@@ -2020,14 +2019,6 @@ enum class Sid {
 END_QT_REGISTERED_ENUM(Sid)
 
 using StyleIdSet = std::unordered_set<Sid>;
-
-//---------------------------------------------------------
-//   VerticalAlignRange
-//---------------------------------------------------------
-
-enum class VerticalAlignRange : unsigned char {
-    SEGMENT, MEASURE, SYSTEM
-};
 
 //---------------------------------------------------------
 //   StyledProperty

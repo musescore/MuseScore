@@ -358,7 +358,6 @@
     <dynamicsPosAbove x="0" y="-2"/>
     <dynamicsPosBelow x="0" y="4"/>
     <dynamicsMinDistance>0.5</dynamicsMinDistance>
-    <autoplaceVerticalAlignRange>2</autoplaceVerticalAlignRange>
     <textLinePlacement>0</textLinePlacement>
     <textLinePosAbove x="0" y="-3.5"/>
     <textLinePosBelow x="0" y="3.5"/>

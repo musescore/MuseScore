@@ -820,7 +820,7 @@
                   <string>Autoplace</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_11">
-                  <item row="0" column="4">
+                  <item row="0" column="0">
                    <widget class="QLabel" name="minVerticalDistance_label">
                     <property name="text">
                      <string>Min. vertical distance:</string>
@@ -830,7 +830,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="5">
+                  <item row="0" column="1">
                    <widget class="QDoubleSpinBox" name="minVerticalDistance">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -855,10 +855,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="1">
-                   <widget class="QComboBox" name="autoplaceVerticalAlignRange"/>
-                  </item>
-                  <item row="0" column="7">
+                  <item row="0" column="3">
                    <spacer name="horizontalSpacer_23">
                     <property name="orientation">
                      <enum>Qt::Orientation::Horizontal</enum>
@@ -871,7 +868,7 @@
                     </property>
                    </spacer>
                   </item>
-                  <item row="0" column="6">
+                  <item row="0" column="2">
                    <widget class="QToolButton" name="resetMinVerticalDistance">
                     <property name="toolTip">
                      <string>Reset to default</string>
@@ -883,42 +880,6 @@
                      <string notr="true"/>
                     </property>
                    </widget>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_36">
-                    <property name="text">
-                     <string>Vertical align range:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>autoplaceVerticalAlignRange</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="2">
-                   <widget class="QToolButton" name="resetAutoplaceVerticalAlignRange">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Vertical align range' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="3">
-                   <spacer name="horizontalSpacer_51">
-                    <property name="orientation">
-                     <enum>Qt::Orientation::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>0</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                   </spacer>
                   </item>
                  </layout>
                 </widget>
