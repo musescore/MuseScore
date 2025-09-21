@@ -135,13 +135,14 @@ private:
     void onMasterNotationChanged();
     void onNotationChanged();
 
+    bool isMasterScore() const;
+
     bool shouldShowSystemObjectLayers() const;
 
-    void initPartOrders();
     void onBeforeChangeNotation();
     void setLoadingBlocked(bool blocked);
 
-    void sortParts(notation::PartList& parts);
+    static void sortParts(notation::PartList& parts, notation::PartList& referenceParts);
 
     void setupPartsConnections();
     void setupStavesConnections(const muse::ID& partId);
@@ -189,7 +190,6 @@ private:
     std::shared_ptr<muse::async::Asyncable> m_partsNotifyReceiver = nullptr;
 
     using NotationKey = QString;
-    QHash<NotationKey, QList<muse::ID> > m_sortedPartIdList;
 
     bool m_layoutPanelVisible = true;
     bool m_scoreChanged = false;
