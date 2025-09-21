@@ -37,10 +37,12 @@ BaseSection {
 
     property bool addAccidentalDotsArticulationsToNextNoteEntered: true
     property bool useNoteInputCursorInInputByDuration: false
+    property bool enterNoteInputModeOnKeyboardEntry: false
 
     signal defaultNoteInputMethodChangeRequested(int method)
     signal addAccidentalDotsArticulationsToNextNoteEnteredChangeRequested(bool add)
     signal useNoteInputCursorInInputByDurationChangeRequested(bool use)
+    signal enterNoteInputModeOnKeyboardEntryChangeRequested(bool use)
 
     ComboBoxWithTitle {
         id: defaultNoteInputMethodDropdown
@@ -93,6 +95,25 @@ BaseSection {
 
         onValueEdited: function(newIndex, newValue) {
             root.useNoteInputCursorInInputByDurationChangeRequested(newIndex === 1)
+        }
+    }
+
+    ComboBoxWithTitle {
+        title: qsTrc("appshell/preferences", "Enter Note Input Mode on keyboard note entry")
+
+        navigation.name: "EnterNoteInputOnKeyboardEntryDropdown"
+        navigation.panel: root.navigation
+        navigation.row: 2
+
+        model: [
+            { text: qsTrc("appshell/preferences", "Yes"), value: 0 },
+            { text: qsTrc("appshell/preferences", "No"), value: 1 },
+        ]
+
+        currentIndex: root.enterNoteInputModeOnKeyboardEntry ? 1 : 0
+
+        onValueEdited: function(newIndex, newValue) {
+            root.enterNoteInputModeOnKeyboardEntryChangeRequested(newIndex === 1)
         }
     }
 }

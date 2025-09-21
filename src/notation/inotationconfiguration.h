@@ -92,6 +92,10 @@ public:
     virtual void setUseNoteInputCursorInInputByDuration(bool use) = 0;
     virtual muse::async::Notification useNoteInputCursorInInputByDurationChanged() const = 0;
 
+    virtual bool enterNoteInputModeOnKeyboardEntry() const = 0;
+    virtual void setEnterNoteInputModeOnKeyboardEntry(bool use) = 0;
+    virtual muse::async::Notification enterNoteInputModeOnKeyboardEntryChanged() const = 0;
+
     virtual int selectionProximity() const = 0;
     virtual void setSelectionProximity(int proximity) = 0;
     virtual muse::async::Channel<int> selectionProximityChanged() const = 0;

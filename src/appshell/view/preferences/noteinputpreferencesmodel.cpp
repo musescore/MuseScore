@@ -45,6 +45,10 @@ void NoteInputPreferencesModel::load()
         emit useNoteInputCursorInInputByDurationChanged(useNoteInputCursorInInputByDuration());
     });
 
+    notationConfiguration()->enterNoteInputModeOnKeyboardEntryChanged().onNotify(this, [this]() {
+        emit enterNoteInputModeOnKeyboardEntryChanged(enterNoteInputModeOnKeyboardEntry());
+    });
+
     notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
         emit midiInputEnabledChanged(midiInputEnabled());
     });
@@ -149,6 +153,11 @@ bool NoteInputPreferencesModel::useNoteInputCursorInInputByDuration() const
     return notationConfiguration()->useNoteInputCursorInInputByDuration();
 }
 
+bool NoteInputPreferencesModel::enterNoteInputModeOnKeyboardEntry() const
+{
+    return notationConfiguration()->enterNoteInputModeOnKeyboardEntry();
+}
+
 bool NoteInputPreferencesModel::midiInputEnabled() const
 {
     return notationConfiguration()->isMidiInputEnabled();
@@ -249,6 +258,15 @@ void NoteInputPreferencesModel::setUseNoteInputCursorInInputByDuration(bool valu
     }
 
     notationConfiguration()->setUseNoteInputCursorInInputByDuration(value);
+}
+
+void NoteInputPreferencesModel::setEnterNoteInputModeOnKeyboardEntry(bool value)
+{
+    if (value == enterNoteInputModeOnKeyboardEntry()) {
+        return;
+    }
+
+    notationConfiguration()->setEnterNoteInputModeOnKeyboardEntry(value);
 }
 
 void NoteInputPreferencesModel::setMidiInputEnabled(bool value)

@@ -82,6 +82,10 @@ public:
     MOCK_METHOD(void, setUseNoteInputCursorInInputByDuration, (bool), (override));
     MOCK_METHOD(muse::async::Notification, useNoteInputCursorInInputByDurationChanged, (), (const, override));
 
+    MOCK_METHOD(bool, enterNoteInputModeOnKeyboardEntry, (), (const, override));
+    MOCK_METHOD(void, setEnterNoteInputModeOnKeyboardEntry, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, enterNoteInputModeOnKeyboardEntryChanged, (), (const, override));
+
     MOCK_METHOD(int, selectionProximity, (), (const, override));
     MOCK_METHOD(void, setSelectionProximity, (int), (override));
     MOCK_METHOD(muse::async::Channel<int>, selectionProximityChanged, (), (const, override));
