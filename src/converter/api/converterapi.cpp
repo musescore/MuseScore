@@ -86,7 +86,7 @@ bool ConverterApi::batch(const QString& outDir, const QString& job, const QStrin
 
     QCoreApplication::processEvents();
 
-    ret = converter()->batchConvert(jobFile, io::path_t(), false, String(), UriQuery(uriQuery.toStdString()), progress);
+    ret = converter()->batchConvert(jobFile, {}, String(), UriQuery(uriQuery.toStdString()), progress);
     if (!ret) {
         LOGE() << ret.toString();
         return false;

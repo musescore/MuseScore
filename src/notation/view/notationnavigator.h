@@ -99,7 +99,7 @@ private:
 
     bool isVerticalOrientation() const;
 
-    PageList pages() const;
+    const PageList& pages() const;
 
     muse::RectF m_cursorRect;
     NotationNavigatorCursorView* m_cursorRectView = nullptr;

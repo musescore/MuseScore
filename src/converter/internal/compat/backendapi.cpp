@@ -290,16 +290,6 @@ RetVal<project::INotationProjectPtr> BackendApi::openProject(const muse::io::pat
     return RetVal<INotationProjectPtr>::make_ok(notationProject);
 }
 
-PageList BackendApi::pages(const INotationPtr notation)
-{
-    auto elements = notation->elements();
-    if (!elements) {
-        return {};
-    }
-
-    return elements->pages();
-}
-
 QVariantMap BackendApi::readBeatsColors(const muse::io::path_t& filePath)
 {
     TRACEFUNC
@@ -345,7 +335,7 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
     jsonWriter.addKey("pngs");
     jsonWriter.openArray();
 
-    PageList notationPages = pages(notation);
+    const PageList& notationPages = notation->elements()->pages();
 
     bool result = true;
     for (size_t i = 0; i < notationPages.size(); ++i) {
@@ -387,7 +377,7 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const muse::io::pat
     jsonWriter.addKey("svgs");
     jsonWriter.openArray();
 
-    PageList notationPages = pages(notation);
+    const PageList& notationPages = notation->elements()->pages();
     QVariantMap beatsColors = readBeatsColors(highlightConfigPath);
 
     bool result = true;
