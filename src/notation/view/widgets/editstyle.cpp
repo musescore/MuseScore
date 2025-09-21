@@ -620,7 +620,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::rehearsalMarkPosBelow,    false, rehearsalMarkPosBelow,      resetRehearsalMarkPosBelow },
         { StyleId::rehearsalMarkMinDistance, false, rehearsalMarkMinDistance,   resetRehearsalMarkMinDistance },
 
-        { StyleId::autoplaceVerticalAlignRange, false, autoplaceVerticalAlignRange, resetAutoplaceVerticalAlignRange },
         { StyleId::minVerticalDistance,         false, minVerticalDistance,         resetMinVerticalDistance },
 
         { StyleId::textLinePlacement,           false, textLinePlacement,           resetTextLinePlacement },
@@ -753,11 +752,6 @@ EditStyle::EditStyle(QWidget* parent)
         cb->addItem(muse::qtrc("notation/editstyle", "Above"), int(PlacementV::ABOVE));
         cb->addItem(muse::qtrc("notation/editstyle", "Below"), int(PlacementV::BELOW));
     }
-
-    autoplaceVerticalAlignRange->clear();
-    autoplaceVerticalAlignRange->addItem(muse::qtrc("notation/editstyle", "Segment"), int(VerticalAlignRange::SEGMENT));
-    autoplaceVerticalAlignRange->addItem(muse::qtrc("notation/editstyle", "Measure"), int(VerticalAlignRange::MEASURE));
-    autoplaceVerticalAlignRange->addItem(muse::qtrc("notation/editstyle", "System"),  int(VerticalAlignRange::SYSTEM));
 
     tupletNumberType->clear();
     tupletNumberType->addItem(muse::qtrc("notation/editstyle", "Number"), int(TupletNumberType::SHOW_NUMBER));
@@ -1321,10 +1315,6 @@ void EditStyle::retranslate()
         cb->setItemText(0, muse::qtrc("notation/editstyle", "Above"));
         cb->setItemText(1, muse::qtrc("notation/editstyle", "Below"));
     }
-
-    autoplaceVerticalAlignRange->setItemText(0, muse::qtrc("notation/editstyle", "Segment"));
-    autoplaceVerticalAlignRange->setItemText(1, muse::qtrc("notation/editstyle", "Measure"));
-    autoplaceVerticalAlignRange->setItemText(2, muse::qtrc("notation/editstyle", "System"));
 
     tupletNumberType->setItemText(0, muse::qtrc("notation/editstyle", "Number"));
     tupletNumberType->setItemText(1, muse::qtrc("notation/editstyle", "Ratio"));
