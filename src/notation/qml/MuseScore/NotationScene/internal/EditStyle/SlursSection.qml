@@ -147,7 +147,7 @@ StyledGroupBox {
 
             Repeater {
                 model: [
-                    { text: qsTrc("notation/editstyle/slursandties", "Follow countour of notes"), value: false },
+                    { text: qsTrc("notation/editstyle/slursandties", "Follow contour of notes"), value: false },
                     { text: qsTrc("notation/editstyle/slursandties", "Angle away from staff"), value: true }
                 ]
                 delegate: RoundedRadioButton {
