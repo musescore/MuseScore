@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -35,7 +35,7 @@ AudioMidiPreferencesModel::AudioMidiPreferencesModel(QObject* parent)
 
 int AudioMidiPreferencesModel::currentAudioApiIndex() const
 {
-    QString currentApi = QString::fromStdString(audioConfiguration()->currentAudioApi());
+    QString currentApi = QString::fromStdString(audioDriverController()->currentAudioApi());
     return audioApiList().indexOf(currentApi);
 }
 
@@ -45,12 +45,12 @@ void AudioMidiPreferencesModel::setCurrentAudioApiIndex(int index)
         return;
     }
 
-    std::vector<std::string> apiList = audioConfiguration()->availableAudioApiList();
+    std::vector<std::string> apiList = audioDriverController()->availableAudioApiList();
     if (index < 0 || index >= static_cast<int>(apiList.size())) {
         return;
     }
 
-    audioConfiguration()->setCurrentAudioApi(apiList[index]);
+    audioDriverController()->setCurrentAudioApi(apiList.at(index));
     emit currentAudioApiIndexChanged(index);
 }
 
@@ -108,6 +108,10 @@ void AudioMidiPreferencesModel::init()
         emit onlineSoundsShowProgressBarModeChanged();
     });
 
+    audioDriverController()->currentAudioApiChanged().onNotify(this, [this]() {
+        emit currentAudioApiIndexChanged(currentAudioApiIndex());
+    });
+
     audioConfiguration()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool) {
         emit autoProcessOnlineSoundsInBackgroundChanged();
     });
@@ -115,10 +119,13 @@ void AudioMidiPreferencesModel::init()
 
 QStringList AudioMidiPreferencesModel::audioApiList() const
 {
-    QStringList result;
+    const std::vector<std::string> apiList = audioDriverController()->availableAudioApiList();
 
-    for (const std::string& api: audioConfiguration()->availableAudioApiList()) {
-        result.push_back(QString::fromStdString(api));
+    QStringList result;
+    result.reserve(apiList.size());
+
+    for (const std::string& api: apiList) {
+        result.emplace_back(QString::fromStdString(api));
     }
 
     return result;

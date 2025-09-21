@@ -92,3 +92,8 @@ void StartAudioController::stopAudioProcessing()
         audioWorker()->stop();
     }
 }
+
+IAudioDriverPtr StartAudioController::audioDriver() const
+{
+    return audioDriverController()->audioDriver();
+}

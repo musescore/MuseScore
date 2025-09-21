@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_AUDIOCONFIGURATION_H
-#define MUSE_AUDIO_AUDIOCONFIGURATION_H
+
+#pragma once
 
 #include "../iaudioconfiguration.h"
 
@@ -45,10 +45,9 @@ public:
     AudioWorkerConfig workerConfig() const override;
     void onWorkerConfigChanged();
 
-    std::vector<std::string> availableAudioApiList() const override;
-
     std::string currentAudioApi() const override;
     void setCurrentAudioApi(const std::string& name) override;
+    async::Notification currentAudioApiChanged() const override;
 
     std::string audioOutputDeviceId() const override;
     void setAudioOutputDeviceId(const std::string& deviceId) override;
@@ -87,6 +86,7 @@ private:
     async::Channel<samples_t> m_samplesToPreallocateChanged;
     async::Channel<bool> m_autoProcessOnlineSoundsInBackgroundChanged;
 
+    async::Notification m_currentAudioApiChanged;
     async::Notification m_audioOutputDeviceIdChanged;
     async::Notification m_driverBufferSizeChanged;
     async::Notification m_driverSampleRateChanged;
@@ -94,5 +94,3 @@ private:
     samples_t m_samplesToPreallocate = 0;
 };
 }
-
-#endif // MUSE_AUDIO_AUDIOCONFIGURATION_H

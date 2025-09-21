@@ -20,33 +20,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "audiodrivercontrollerstub.h"
 
-#include "global/async/asyncable.h"
+#include "audiodriverstub.h"
 
-#include "global/modularity/ioc.h"
-#include "audio/main/iaudioconfiguration.h"
-#include "audio/iaudiodrivercontroller.h"
-#include "audio/common/rpc/irpcchannel.h"
+using namespace muse::audio;
 
-namespace muse::audio {
-class AudioOutputDeviceController : public Injectable, public async::Asyncable
+std::string AudioDriverControllerStub::currentAudioApi() const
 {
-    Inject<IAudioConfiguration> configuration = { this };
-    Inject<IAudioDriverController> audioDriverController = { this };
-    Inject<rpc::IRpcChannel> rpcChannel = { this };
+    return {};
+}
 
-public:
+void AudioDriverControllerStub::setCurrentAudioApi(const std::string&)
+{
+}
 
-    AudioOutputDeviceController(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+muse::async::Notification AudioDriverControllerStub::currentAudioApiChanged() const
+{
+    return {};
+}
 
-    void init();
+std::vector<std::string> AudioDriverControllerStub::availableAudioApiList() const
+{
+    return {};
+}
 
-private:
-    void checkConnection();
-    void onOutputDeviceChanged();
+IAudioDriverPtr AudioDriverControllerStub::audioDriver() const
+{
+    if (!m_audioDriver) {
+        m_audioDriver = std::make_shared<AudioDriverStub>();
+    }
 
-    IAudioDriverPtr audioDriver() const;
-};
+    return m_audioDriver;
 }

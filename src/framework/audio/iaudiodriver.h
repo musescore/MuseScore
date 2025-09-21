@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_IAUDIODRIVER_H
-#define MUSE_AUDIO_IAUDIODRIVER_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -29,15 +28,12 @@
 #include <memory>
 
 #include "global/async/notification.h"
-#include "modularity/imoduleinterface.h"
 
 #include "audio/common/audiotypes.h"
 
 namespace muse::audio {
-class IAudioDriver : MODULE_EXPORT_INTERFACE
+class IAudioDriver
 {
-    INTERFACE_ID(IAudioDriver)
-
 public:
     virtual ~IAudioDriver() = default;
 
@@ -84,5 +80,3 @@ public:
 };
 using IAudioDriverPtr = std::shared_ptr<IAudioDriver>;
 }
-
-#endif // MUSE_AUDIO_IAUDIODRIVER_H
