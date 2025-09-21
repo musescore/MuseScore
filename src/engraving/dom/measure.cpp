@@ -2336,7 +2336,7 @@ bool Measure::hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len, bool
         for (track_idx_t track = strack; track < etrack; ++track) {
             ChordRest* cr = toChordRest(s->element(track));
             if (cr) {
-                if (cr->tick() + cr->actualTicks() <= stick) {
+                if (cr->endTick() <= stick) {
                     continue;
                 }
                 if (considerInvisible) {

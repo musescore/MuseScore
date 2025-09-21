@@ -1382,7 +1382,7 @@ std::vector<Note*> Selection::noteList(track_idx_t selTrack) const
 
 static bool checkStart(EngravingItem* e)
 {
-    if (e == 0 || !e->isChordRest()) {
+    if (!e || !e->isChordRest()) {
         return false;
     }
     ChordRest* cr = toChordRest(e);
@@ -1397,7 +1397,7 @@ static bool checkStart(EngravingItem* e)
             e = tuplet;
             tuplet = tuplet->tuplet();
         }
-    } else if (cr->type() == ElementType::CHORD) {
+    } else if (cr->isChord()) {
         rv = false;
         Chord* chord = toChord(cr);
         if (chord->tremoloTwoChord()) {
@@ -1415,7 +1415,7 @@ static bool checkStart(EngravingItem* e)
 
 static bool checkEnd(EngravingItem* e, const Fraction& endTick)
 {
-    if (e == 0 || !e->isChordRest()) {
+    if (!e || !e->isChordRest()) {
         return false;
     }
     ChordRest* cr = toChordRest(e);
@@ -1432,10 +1432,10 @@ static bool checkEnd(EngravingItem* e, const Fraction& endTick)
         }
         // also check that the selection extends to the end of the top-level tuplet
         tuplet = toTuplet(e);
-        if (tuplet->elements().front()->tick() + tuplet->actualTicks() > endTick) {
+        if (tuplet->endTick() > endTick) {
             return true;
         }
-    } else if (cr->type() == ElementType::CHORD) {
+    } else if (cr->isChord()) {
         rv = false;
         Chord* chord = toChord(cr);
         if (chord->tremoloTwoChord()) {

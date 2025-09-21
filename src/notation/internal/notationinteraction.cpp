@@ -7091,7 +7091,7 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
     Fraction newTick   = segment->tick() + ticks;
 
     // find the measure containing the target tick
-    while (newTick >= measure->tick() + measure->ticks()) {
+    while (newTick >= measure->endTick()) {
         measure = measure->nextMeasure();
         if (!measure) {
             LOGD("no next measure");
@@ -7227,7 +7227,7 @@ void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
     Fraction nextSegTick   = segm->tick() + ticks;
 
     // find the measure containing the target tick
-    while (nextSegTick >= measure->tick() + measure->ticks()) {
+    while (nextSegTick >= measure->endTick()) {
         measure = measure->nextMeasure();
         if (!measure) {
             LOGD("figuredBassTicksTab: no next measure");

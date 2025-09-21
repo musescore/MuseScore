@@ -96,7 +96,7 @@ TEST_F(Engraving_BarlineTests, barline01)
         // (2 measure for each system)
         for (int msrNo=0; msrNo < 2; ++msrNo) {
             Measure* msr = toMeasure(sys->measure(msrNo));
-            Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick() + msr->ticks());
+            Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->endTick());
             EXPECT_TRUE(seg);
 
             BarLine* bar = toBarLine(seg->element(0));
@@ -128,7 +128,7 @@ TEST_F(Engraving_BarlineTests, barline02)
 
     msr = score->firstMeasure();
     while ((msr = msr->nextMeasure())) {
-        Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick() + msr->ticks());
+        Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->endTick());
         EXPECT_TRUE(seg);
 
         BarLine* bar = static_cast<BarLine*>(seg->element(0));

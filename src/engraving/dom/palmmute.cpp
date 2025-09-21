@@ -215,7 +215,7 @@ void PalmMute::setChannel()
     int idx = instrument->channelIdx(String::fromUtf8(InstrChannel::PALM_MUTE_NAME));
     if (idx > 0) {
         staff()->insertIntoChannelList(voice(), startCR->tick(), idx);
-        staff()->insertIntoChannelList(voice(), endCR->tick() + endCR->ticks(), 0);
+        staff()->insertIntoChannelList(voice(), endCR->endTick(), 0);
     }
 }
 }

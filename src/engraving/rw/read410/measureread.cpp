@@ -191,7 +191,7 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
     ctx.checkConnectors();
     if (measure->isMMRest()) {
         Measure* lm = ctx.lastMeasure();
-        ctx.setTick(lm->tick() + lm->ticks());
+        ctx.setTick(lm->endTick());
     }
     ctx.setCurrentMeasure(nullptr);
 

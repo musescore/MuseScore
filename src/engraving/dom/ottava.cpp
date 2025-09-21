@@ -430,7 +430,7 @@ PointF Ottava::linePos(Grip grip, System** system) const
     Shape staffShape = seg->staffShape(endCr->vStaffIdx());
     staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
     double x = staffShape.right() + seg->x() + seg->measure()->x() + spatium();
-    Segment* followingCRseg = score()->tick2segment(endCr->tick() + endCr->actualTicks(), true, SegmentType::ChordRest);
+    Segment* followingCRseg = score()->tick2segment(endCr->endTick(), true, SegmentType::ChordRest);
     if (followingCRseg && followingCRseg->system() == seg->system()) {
         x = std::min(x, followingCRseg->x() + followingCRseg->measure()->x());
     }

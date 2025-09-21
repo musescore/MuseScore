@@ -96,7 +96,7 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
         }
         irregular = true;
         ctx.compatTimeSigMap()->add(measure->tick().ticks(), SigEvent(measure->m_len, measure->m_timesig));
-        ctx.compatTimeSigMap()->add((measure->tick() + measure->ticks()).ticks(), SigEvent(measure->m_timesig));
+        ctx.compatTimeSigMap()->add(measure->endTick().ticks(), SigEvent(measure->m_timesig));
     }
 
     while (e.readNextStartElement()) {
@@ -200,7 +200,7 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
     ctx.checkConnectors();
     if (measure->isMMRest()) {
         Measure* lm = ctx.lastMeasure();
-        ctx.setTick(lm->tick() + lm->ticks());
+        ctx.setTick(lm->endTick());
     }
     ctx.setCurrentMeasure(nullptr);
 

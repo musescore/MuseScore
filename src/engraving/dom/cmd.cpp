@@ -571,8 +571,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
 
     if (spanner->anchor() == Spanner::Anchor::SEGMENT) {
         spanner->setTick(segment->tick());
-        Fraction lastTick = lastMeasure()->tick() + lastMeasure()->ticks();
-        Fraction tick2 = std::min(segment->measure()->tick() + segment->measure()->ticks(), lastTick);
+        Fraction tick2 = std::min(segment->measure()->endTick(), lastMeasure()->endTick());
         spanner->setTick2(tick2);
     } else {      // Anchor::MEASURE, Anchor::CHORD, Anchor::NOTE
         Measure* m = toMeasure(mb);
@@ -647,7 +646,7 @@ void Score::expandVoice(Segment* s, track_idx_t track)
     }
     if (ps) {
         ChordRest* cr = toChordRest(ps->element(track));
-        Fraction tick = cr->tick() + cr->actualTicks();
+        Fraction tick = cr->endTick();
         if (tick > s->tick()) {
             // previous cr extends past current segment
             LOGD("expandVoice: cannot insert element here");
@@ -1282,7 +1281,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
                 continue;
             }
             Segment* seg1 = seg->next(SegmentType::ChordRest);
-            Fraction tick2 = seg1 ? seg1->tick() : seg->measure()->tick() + seg->measure()->ticks();
+            Fraction tick2 = seg1 ? seg1->tick() : seg->measure()->endTick();
             Fraction td(tick2 - seg->tick());
             if (td > sd) {
                 td = sd;
@@ -1404,7 +1403,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             break;
         }
     }
-//      Fraction ticks = measure->tick() + measure->ticks() - segment->tick();
+//      Fraction ticks = measure->endTick() - segment->tick();
 //      Fraction td = Fraction::fromTicks(ticks);
 // NEEDS REVIEW !!
 // once the statement below is removed, these two lines do nothing
@@ -1512,9 +1511,9 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
         size_t n = dList.size();
         undoChangeChordRestLen(cr1, TDuration(dList[0]));
         if (n > 1) {
-            Fraction crtick = cr1->tick() + cr1->actualTicks();
+            Fraction crtick = cr1->endTick();
             Measure* measure = tick2measure(crtick);
-            if (cr1->type() == ElementType::CHORD) {
+            if (cr1->isChord()) {
                 // split Chord
                 Chord* c = toChord(cr1);
                 for (size_t i = 1; i < n; ++i) {
@@ -1711,7 +1710,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
             setRest(tick2, track, d.fraction(), (d.dots() > 0), tuplet);
         }
         if (fillWithRest) {
-            setRest(cr->tick() + cr->actualTicks(), track, srcF - dstF, false, tuplet);
+            setRest(cr->endTick(), track, srcF - dstF, false, tuplet);
         }
 
         if (selElement) {

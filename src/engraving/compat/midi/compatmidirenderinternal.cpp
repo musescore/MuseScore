@@ -211,7 +211,7 @@ static Fraction getPlayTicksForBend(const Note* note)
         tie = nextNote->tieFor();
     }
 
-    return nextNote->chord()->tick() + nextNote->chord()->actualTicks() - stick;
+    return nextNote->chord()->endTick() - stick;
 }
 
 //---------------------------------------------------------
@@ -1157,7 +1157,7 @@ CompatMidiRendererInternal::ChordParams CompatMidiRendererInternal::collectChord
             LetRing* letRing = toLetRing(spanner);
             chordParams.letRing = true;
             ChordRest* endCR = letRing->endCR();
-            chordParams.endLetRingTick = (endCR ? endCR->tick().ticks() + endCR->ticks().ticks() : letRing->tick2().ticks()) + tickOffset;
+            chordParams.endLetRingTick = (endCR ? endCR->endTick().ticks() : letRing->tick2().ticks()) + tickOffset;
         } else if (spanner->isPalmMute()) {
             chordParams.palmMute = true;
         }
@@ -1522,8 +1522,7 @@ void CompatMidiRendererInternal::doRenderSpanners(EventsHolder& events, Spanner*
 
 static Trill* findFirstTrill(Chord* chord)
 {
-    auto spanners = chord->score()->spannerMap().findOverlapping(1 + chord->tick().ticks(),
-                                                                 chord->tick().ticks() + chord->actualTicks().ticks() - 1);
+    auto spanners = chord->score()->spannerMap().findOverlapping(1 + chord->tick().ticks(), chord->endTick().ticks() - 1);
     for (auto i : spanners) {
         if (i.value->type() != ElementType::TRILL) {
             continue;
@@ -1918,8 +1917,8 @@ void fillVoltaVelocities(const Volta* volta, VelocityMap& veloMap)
             return;
         }
 
-        Fraction startTick = Fraction::fromTicks(startMeasure->tick().ticks() - 1);
-        Fraction endTick = Fraction::fromTicks((endMeasure->tick() + endMeasure->ticks()).ticks() - 1);
+        Fraction startTick = startMeasure->tick() - Fraction::eps();
+        Fraction endTick = endMeasure->endTick() - Fraction::eps();
         int prevVelo = veloMap.val(startTick);
         veloMap.addDynamic(endTick, prevVelo);
     }

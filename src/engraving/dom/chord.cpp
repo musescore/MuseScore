@@ -914,7 +914,7 @@ Fraction Chord::endTickIncludingTied() const
             break;
         }
     }
-    return lastTied->tick() + lastTied->actualTicks();
+    return lastTied->endTick();
 }
 
 Chord* Chord::prev() const

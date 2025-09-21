@@ -987,7 +987,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, track_idx_t trac
         }
         if (endTick == Fraction::max()) {               // no next segment: set up to score end
             Measure* meas = seg->score()->lastMeasure();
-            endTick = meas->tick() + meas->ticks();
+            endTick = meas->endTick();
         }
         fb->setTicks(endTick - seg->tick());
 

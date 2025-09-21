@@ -234,7 +234,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         break;
                     case 181:                         // caesura
                     {
-                        Segment* seg = s->measure()->getSegment(SegmentType::Breath, s->tick() + (cr ? cr->actualTicks() : Fraction(0, 1)));
+                        Segment* seg = s->measure()->getSegment(SegmentType::Breath, cr ? cr->endTick() : s->tick());
                         Breath* b = Factory::createBreath(seg);
                         b->setTrack(track);
                         b->setSymId(SymId::caesura);
@@ -544,11 +544,11 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
     //
     Fraction startTick = tick;
 
-    Tuplet* tuplet                = nullptr;
+    Tuplet* tuplet            = nullptr;
     int tupletNotesSpanned    = 0;     // Total number of notes/rests in the tuplet
     int tupletCurrentSequence = 0;     // Current sequence number after adding to the tuplet (1 => first note/rest)
-    bool tuplettrp             = false;
-    bool tupletprol            = false;
+    bool tuplettrp            = false;
+    bool tupletprol           = false;
     Fraction tupletTick = Fraction(0, 1);
     ClefType pclef = score->staff(staffIdx)->defaultClefType().concertClef;
 
@@ -567,7 +567,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             TDuration d;
             d.setVal(ticks.ticks());
             if (o->tupletDenominator) {
-                if (tuplet == nullptr) {
+                if (!tuplet) {
                     tupletCurrentSequence     = 0; // reset tuplet counter
                     tupletNotesSpanned = (o->tupletCount) ? o->tupletCount + 1 : o->tupletDenominator;
                     tuplettrp   = o->tripartite;
@@ -628,7 +628,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
 
             if (tuplet) {
                 if (o->tupletEnd) {
-                    tick = tupletTick + tuplet->actualTicks();
+                    tick = tuplet->endTick();
                     //! NOTE If the tuplet is not added anywhere, then delete it
                     if (tuplet->elements().empty()) {
                         delete tuplet;
@@ -831,7 +831,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
 
             if (tuplet) {
                 if (o->tupletEnd) {
-                    tick = tupletTick + tuplet->actualTicks();
+                    tick = tuplet->endTick();
                     //! NOTE If the tuplet is not added anywhere, then delete it
                     if (tuplet->elements().empty()) {
                         delete tuplet;
@@ -1069,7 +1069,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         volta->setVoltaType(Volta::Type::OPEN);
                     }
                     volta->setTick(cr1->measure()->tick());
-                    volta->setTick2(cr2->measure()->tick() + cr2->measure()->ticks());
+                    volta->setTick2(cr2->measure()->endTick());
                     score->addElement(volta);
                 }
             }

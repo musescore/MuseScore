@@ -488,7 +488,7 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
             }
         } else {
             if (measure->tick() < tick) {
-                f = measure->tick() + measure->ticks() - tick;
+                f = measure->endTick() - tick;
             } else {
                 f = measure->ticks();
             }
@@ -1760,7 +1760,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
             if (!curr) {
                 continue;         // this voice is empty here (CR overlaps with CR in other track)
             }
-            if (seg->tick() + curr->actualTicks() > maxTick) {
+            if (curr->endTick() > maxTick) {
                 break;         // outside range
             }
             if (curr->isRest() && !(curr->tuplet()) && !(toRest(curr)->isGap())) {
@@ -1771,7 +1771,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                     if (!cr) {
                         continue;             // this voice is empty here
                     }
-                    if (!cr->isRest() || s->tick() + cr->actualTicks() > maxTick || toRest(cr)->isGap()) {
+                    if (!cr->isRest() || cr->endTick() > maxTick || toRest(cr)->isGap()) {
                         break;             // next element in the same voice is not a rest, or it exceeds the selection, or it is a gap
                     }
                     lastRest = cr;
@@ -2258,7 +2258,7 @@ void Score::cmdAddOttava(OttavaType type)
             if (!cr1) {
                 continue;
             }
-            if (cr2 == 0) {
+            if (!cr2) {
                 cr2 = cr1;
             }
             Ottava* ottava = Factory::createOttava(this->dummy());
@@ -2270,7 +2270,7 @@ void Score::cmdAddOttava(OttavaType type)
             ottava->setTrack(cr1->track());
             ottava->setTrack2(cr1->track());
             ottava->setTick(cr1->tick());
-            ottava->setTick2(cr2->tick() + cr2->actualTicks());
+            ottava->setTick2(cr2->endTick());
             undoAddElement(ottava);
         }
     } else {
@@ -2280,7 +2280,7 @@ void Score::cmdAddOttava(OttavaType type)
         if (!cr1) {
             return;
         }
-        if (cr2 == 0) {
+        if (!cr2) {
             cr2 = cr1;
         }
 
@@ -2293,7 +2293,7 @@ void Score::cmdAddOttava(OttavaType type)
         ottava->setTrack(cr1->track());
         ottava->setTrack2(cr1->track());
         ottava->setTick(cr1->tick());
-        ottava->setTick2(cr2->tick() + cr2->actualTicks());
+        ottava->setTick2(cr2->endTick());
         undoAddElement(ottava);
         if (!noteEntryMode()) {
             select(ottava, SelectType::SINGLE, 0);
@@ -2890,7 +2890,7 @@ void Score::deleteItem(EngravingItem* el)
                 } else if (ns) {
                     ticks = ns->tick() - stick;
                 } else {
-                    ticks = m->ticks() + m->tick() - stick;
+                    ticks = m->endTick() - stick;
                 }
 
                 if (ticks != m->ticks() && ticks != s->ticks()) {
@@ -3678,7 +3678,7 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
     const auto foundDeselected = [&](const DurationElement* deselectedElement) {
         const std::vector<Rest*> rests = setRests(restStartTick, track, restDuration, /*useDots*/ !currentTuplet, currentTuplet);
         crsToSelect.insert(crsToSelect.end(), rests.begin(), rests.end());
-        restStartTick = deselectedElement->tick() + deselectedElement->actualTicks();
+        restStartTick = deselectedElement->endTick();
         restDuration = Fraction();
     };
 
@@ -3737,7 +3737,7 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
                 restDuration += nextTuplet->ticks();
                 cmdDeleteTuplet(nextTuplet, /*replaceWithRest*/ false);
             } else {
-                const Fraction recursionEnd = std::min(nextTuplet->tick() + nextTuplet->actualTicks(), endTick);
+                const Fraction recursionEnd = std::min(nextTuplet->endTick(), endTick);
                 deleteRangeAtTrack(crsToSelect, track, cr1->segment(), recursionEnd, nextTuplet, filter, selectionContainsMultiNoteChords);
                 foundDeselected(nextTuplet);
             }
@@ -4538,10 +4538,9 @@ void Score::cmdDeleteTuplet(Tuplet* tuplet, bool replaceWithRest)
 void Score::nextInputPos(ChordRest* cr, bool doSelect)
 {
     ChordRest* ncr = nextChordRest(cr);
-    if ((ncr == 0) && (m_is.track() % VOICES)) {
-        Segment* s = tick2segment(cr->tick() + cr->actualTicks(), false, SegmentType::ChordRest);
-        track_idx_t track = (cr->track() / VOICES) * VOICES;
-        ncr = s ? toChordRest(s->element(track)) : 0;
+    if ((!ncr) && (m_is.track() % VOICES)) {
+        Segment* s = tick2segment(cr->endTick(), false, SegmentType::ChordRest);
+        ncr = s ? toChordRest(s->element(cr->staffIdx() * VOICES)) : nullptr;
     }
     if (ncr) {
         m_is.setSegment(ncr->segment());
@@ -4849,7 +4848,7 @@ void Score::cmdTimeDelete()
         }
 
         startSegment     = cr->segment();
-        Fraction endTick = startSegment->tick() + cr->actualTicks();
+        Fraction endTick = cr->endTick();
         endSegment       = tick2measure(endTick)->findSegment(CR_TYPE, endTick);
     } else {
         startSegment = selection().startSegment();
@@ -6289,7 +6288,7 @@ void Score::undoExchangeVoice(Measure* measure, voice_idx_t srcVoice, voice_idx_
             track_idx_t track = staffIdx * VOICES;
             for (Segment* s = measure->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                 ChordRest* cr = toChordRest(s->element(track));
-                if (cr == 0) {
+                if (!cr) {
                     continue;
                 }
                 if (cr->isRest()) {
@@ -6301,7 +6300,7 @@ void Score::undoExchangeVoice(Measure* measure, voice_idx_t srcVoice, voice_idx_
                 if (ctick < s->tick()) {
                     setRest(ctick, track, s->tick() - ctick, false, 0);             // fill gap
                 }
-                ctick = s->tick() + cr->actualTicks();
+                ctick = cr->endTick();
             }
             Fraction etick = measure->endTick();
             if (ctick < etick) {

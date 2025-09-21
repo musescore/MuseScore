@@ -2309,7 +2309,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
                 if (!measure->isMMRest()) {
                     score->measures()->append(measure);
                     ctx.setLastMeasure(measure);
-                    ctx.setTick(measure->tick() + measure->ticks());
+                    ctx.setTick(measure->endTick());
                 } else {
                     // this is a multi measure rest
                     // always preceded by the first measure it replaces
