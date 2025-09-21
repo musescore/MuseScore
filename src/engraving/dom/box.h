@@ -207,6 +207,8 @@ public:
     Grip defaultGrip() const override;
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
+    bool needStartEditingAfterSelecting() const override { return false; }
+
     void undoReorderElements(const StringList& newOrder);
     void reorderElements(const StringList& newOrder);
     StringList diagramsOrder() const;

@@ -43,16 +43,6 @@ using namespace muse::uicomponents;
 
 static const muse::actions::ActionCode ADD_INSTRUMENTS_ACTIONCODE("instruments");
 
-namespace mu::instrumentsscene {
-static QString notationToKey(const INotationPtr notation)
-{
-    std::stringstream stream;
-    stream << notation.get();
-
-    return QString::fromStdString(stream.str());
-}
-}
-
 LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
@@ -94,7 +84,6 @@ LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
 void LayoutPanelTreeModel::onMasterNotationChanged()
 {
     m_masterNotation = context()->currentMasterNotation();
-    initPartOrders();
 }
 
 void LayoutPanelTreeModel::onNotationChanged()
@@ -116,6 +105,11 @@ void LayoutPanelTreeModel::onNotationChanged()
     }
 
     m_notationChangedWhileLoadingWasBlocked = false;
+}
+
+bool LayoutPanelTreeModel::isMasterScore() const
+{
+    return m_notation && m_notation->isMaster();
 }
 
 LayoutPanelTreeModel::~LayoutPanelTreeModel()
@@ -161,24 +155,7 @@ bool LayoutPanelTreeModel::shouldShowSystemObjectLayers() const
 {
     // Only show system object staves in master score
     // TODO: extend system object staves logic to parts
-    return m_notation && m_notation->isMaster();
-}
-
-void LayoutPanelTreeModel::initPartOrders()
-{
-    m_sortedPartIdList.clear();
-
-    if (!m_masterNotation) {
-        return;
-    }
-
-    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
-        NotationKey key = notationToKey(excerpt->notation());
-
-        for (const Part* part : excerpt->notation()->parts()->partList()) {
-            m_sortedPartIdList[key] << part->id();
-        }
-    }
+    return isMasterScore();
 }
 
 void LayoutPanelTreeModel::onBeforeChangeNotation()
@@ -194,8 +171,6 @@ void LayoutPanelTreeModel::onBeforeChangeNotation()
             partIdList << item->id();
         }
     }
-
-    m_sortedPartIdList[notationToKey(m_notation)] = partIdList;
 }
 
 void LayoutPanelTreeModel::setLoadingBlocked(bool blocked)
@@ -401,7 +376,11 @@ void LayoutPanelTreeModel::load()
     m_rootItem = new RootTreeItem(m_masterNotation, m_notation, this);
 
     async::NotifyList<const Part*> masterParts = m_masterNotation->parts()->partList();
-    sortParts(masterParts);
+    async::NotifyList<const Part*> excerptParts = m_notation->parts()->partList();
+    // For master score we should use score's order, for others - custom
+    if (!isMasterScore()) {
+        sortParts(masterParts, excerptParts);
+    }
 
     const bool showSystemObjectLayers = shouldShowSystemObjectLayers();
     const std::vector<Staff*>& systemObjectStaves = m_masterNotation->notation()->parts()->systemObjectStaves();
@@ -442,30 +421,32 @@ void LayoutPanelTreeModel::load()
     emit isAddingAvailableChanged(true);
 }
 
-void LayoutPanelTreeModel::sortParts(notation::PartList& parts)
+void LayoutPanelTreeModel::sortParts(notation::PartList& parts, notation::PartList& referenceParts)
 {
-    NotationKey key = notationToKey(m_notation);
+    // First collect ids of referenceParts to use in sorting further
 
-    if (!m_sortedPartIdList.contains(key)) {
-        return;
+    std::vector<ID> referenceIdOrder;
+    referenceParts.reserve(referenceParts.size());
+
+    for (const Part* part : referenceParts) {
+        referenceIdOrder.push_back(part->id());
     }
 
-    const QList<muse::ID>& sortedPartIdList = m_sortedPartIdList[key];
+    // Now we can define ordering function based on reference order
+    auto comparator = [&referenceIdOrder] (const Part* partA, const Part* partB) {
+        const ID& idA = partA->id();
+        const ID& idB = partB->id();
 
-    std::sort(parts.begin(), parts.end(), [&sortedPartIdList](const Part* part1, const Part* part2) {
-        int index1 = sortedPartIdList.indexOf(part1->id());
-        int index2 = sortedPartIdList.indexOf(part2->id());
+        auto itA = std::find(referenceIdOrder.begin(), referenceIdOrder.end(), idA);
+        auto itB = std::find(referenceIdOrder.begin(), referenceIdOrder.end(), idB);
 
-        if (index1 < 0) {
-            index1 = std::numeric_limits<int>::max();
-        }
+        auto idxA = std::distance(referenceIdOrder.begin(), itA);
+        auto idxB = std::distance(referenceIdOrder.begin(), itB);
 
-        if (index2 < 0) {
-            index2 = std::numeric_limits<int>::max();
-        }
+        return idxA < idxB;
+    };
 
-        return index1 < index2;
-    });
+    std::stable_sort(parts.begin(), parts.end(), comparator);
 }
 
 void LayoutPanelTreeModel::setLayoutPanelVisible(bool visible)
@@ -661,9 +642,6 @@ void LayoutPanelTreeModel::endActiveDrag()
     setLoadingBlocked(false);
 
     updateSystemObjectLayers();
-    initPartOrders();
-
-    emit layoutChanged();
 }
 
 void LayoutPanelTreeModel::changeVisibilityOfSelectedRows(bool visible)
@@ -750,7 +728,7 @@ int LayoutPanelTreeModel::columnCount(const QModelIndex&) const
 
 QVariant LayoutPanelTreeModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid() && role != ItemRole) {
+    if (!index.isValid() || role != ItemRole) {
         return QVariant();
     }
 
@@ -993,7 +971,7 @@ void LayoutPanelTreeModel::updateIsAddingSystemMarkingsAvailable()
 {
     bool addingSysMarkAvailable = false;
 
-    if (!isAddingAvailable() || !m_notation->isMaster()) {
+    if (!isAddingAvailable() || !isMasterScore()) {
         addingSysMarkAvailable = false;
     } else {
         int systemLayerCount = 0;

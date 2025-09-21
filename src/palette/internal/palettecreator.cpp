@@ -1029,7 +1029,7 @@ PalettePtr PaletteCreator::newArpeggioPalette()
         if (a->glissandoType() != a->style().styleV(Sid::glissandoType).value<GlissandoType>()) {
             a->setPropertyFlags(Pid::GLISS_TYPE, PropertyFlags::UNSTYLED);
         }
-        sp->appendElement(a, a->glissandoTypeName());
+        sp->appendElement(a, a->subtypeUserName());
     }
 
     //fall and doits

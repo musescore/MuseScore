@@ -560,6 +560,15 @@ void TablEdit::createRepeats()
     }
 }
 
+static void setInstrumentIDs(const std::vector<Part*>& parts)
+{
+    for (Part* part : parts) {
+        for (const auto& pair : part->instruments()) {
+            pair.second->updateInstrumentId();
+        }
+    }
+}
+
 void TablEdit::createScore()
 {
     createProperties();
@@ -571,6 +580,7 @@ void TablEdit::createScore()
     createRepeats();
     createTexts();
     createLinkedTabs();
+    setInstrumentIDs(score->parts());
 }
 
 void TablEdit::createTempo()

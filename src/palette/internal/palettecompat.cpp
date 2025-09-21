@@ -52,11 +52,20 @@
 using namespace mu::palette;
 using namespace mu::engraving;
 
+static const qreal COMPAT_FRAME_MAG = 1.25;
+
 static const std::unordered_set<ActionIconType> BENDS_ACTION_TYPES = {
     ActionIconType::STANDARD_BEND,
     ActionIconType::PRE_BEND,
     ActionIconType::GRACE_NOTE_BEND,
     ActionIconType::SLIGHT_BEND
+};
+
+static const std::unordered_set<ActionIconType> BOXES_ACTION_TYPES = {
+    ActionIconType::VFRAME,
+    ActionIconType::HFRAME,
+    ActionIconType::TFRAME,
+    ActionIconType::FFRAME
 };
 
 static const std::unordered_map<String, String> FRET_DIAGRAMS_MIGRATION_MAP = {
@@ -89,9 +98,9 @@ static const std::unordered_map<String, String> FRET_DIAGRAMS_MIGRATION_MAP = {
     { u"X[2-O][1-O][2-O]O[2-O]", u"B7" }
 };
 
-void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* paletteScore)
+void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* paletteScore)
 {
-    EngravingItem* item = element.get();
+    EngravingItem* item = cell->element.get();
 
     if (item->isArticulation()) {
         const std::set<SymId>& ornamentIds = compat::CompatUtils::ORNAMENT_IDS;
@@ -104,7 +113,7 @@ void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* pa
         Articulation* oldOrnament = toArticulation(item);
         Ornament* newOrnament = Factory::createOrnament((ChordRest*)(paletteScore->dummy()->chord()));
         newOrnament->setSymId(oldOrnament->symId());
-        element.reset(newOrnament);
+        cell->element.reset(newOrnament);
         return;
     }
 
@@ -116,7 +125,7 @@ void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* pa
         } else {
             newExpression->setXmlText(oldExpression->xmlText());
         }
-        element.reset(newExpression);
+        cell->element.reset(newExpression);
         return;
     }
 
@@ -133,7 +142,7 @@ void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* pa
         newPedal->setContinueText(newPedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
         newPedal->setEndText(newPedal->propertyDefault(Pid::END_TEXT).value<String>());
 
-        element.reset(newPedal);
+        cell->element.reset(newPedal);
         return;
     }
 
@@ -156,8 +165,12 @@ void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* pa
             newFretDiagram->updateDiagram(harmonyName);
         }
 
-        element.reset(newFretDiagram);
+        cell->element.reset(newFretDiagram);
         return;
+    }
+
+    if (item->isActionIcon() && muse::contains(BOXES_ACTION_TYPES, toActionIcon(item)->actionType())) {
+        cell->mag = COMPAT_FRAME_MAG;
     }
 }
 
@@ -180,6 +193,11 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
 
     if (palette.type() == Palette::Type::Repeat) {
         addNewRepeatItems(palette, paletteScore);
+        return;
+    }
+
+    if (palette.type() == Palette::Type::Layout) {
+        addNewLayoutItems(palette);
         return;
     }
 }
@@ -268,8 +286,7 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     }
 
     if (!containsFFrame) {
-        static const qreal FRAME_MAG = 1.25;
-        guitarPalette.appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", FRAME_MAG);
+        guitarPalette.appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", COMPAT_FRAME_MAG);
     }
 }
 
@@ -335,6 +352,26 @@ void PaletteCompat::addNewRepeatItems(Palette& repeatPalette, engraving::Score* 
         marker->setMarkerType(MarkerType::TOCODASYM);
         marker->styleChanged();
         repeatPalette.insertElement(5, marker, TConv::userName(MarkerType::TOCODASYM));
+    }
+}
+
+void PaletteCompat::addNewLayoutItems(Palette& layoutPalette)
+{
+    bool containsFFrame = false;
+    for (const PaletteCellPtr& cell : layoutPalette.cells()) {
+        const ElementPtr element = cell->element;
+        if (!element) {
+            continue;
+        }
+
+        if (element->isActionIcon() && toActionIcon(element.get())->actionType() == ActionIconType::FFRAME) {
+            containsFFrame = true;
+        }
+    }
+
+    if (!containsFFrame) {
+        int defaultPosition = std::min(10, layoutPalette.cellsCount());
+        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::FFRAME, "insert-fretframe", COMPAT_FRAME_MAG);
     }
 }
 

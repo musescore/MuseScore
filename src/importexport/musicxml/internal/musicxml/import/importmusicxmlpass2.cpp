@@ -4026,10 +4026,23 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
         } else if (m_e.name() == "wedge") {
             wedge(type, n, starts, stops);
         } else if (m_e.name() == "coda") {
-            m_wordsText += u"<sym>coda</sym>";
+            const String smufl = m_e.attribute("smufl");
+            if (!smufl.empty()) {
+                m_wordsText += u"<sym>" + smufl + u"</sym>";
+            } else {
+                m_wordsText += u"<sym>coda</sym>";
+            }
             m_e.skipCurrentElement();
         } else if (m_e.name() == "segno") {
-            m_wordsText += u"<sym>segno</sym>";
+            const String smufl = m_e.attribute("smufl");
+            if (!smufl.empty()) {
+                m_wordsText += u"<sym>" + smufl + u"</sym>";
+            } else {
+                m_wordsText += u"<sym>segno</sym>";
+            }
+            m_e.skipCurrentElement();
+        } else if (m_e.name() == "eyeglasses") {
+            m_wordsText += u"<sym>miscEyeglasses</sym>";
             m_e.skipCurrentElement();
         } else if (m_e.name() == "symbol") {
             const String smufl = m_e.readText();
@@ -8827,6 +8840,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             }
             gliss->setText(glissandoText);
             gliss->setGlissandoType(glissandoTag || (lineType == u"wavy") ? GlissandoType::WAVY : GlissandoType::STRAIGHT);
+            gliss->setGlissandoStyle(note->part()->instrument(tick)->glissandoStyle());
             spanners[gliss] = std::pair<int, int>(tick.ticks(), -1);
             // LOGD("glissando/slide=%p inserted at first tick %d", gliss, tick);
         }

@@ -76,6 +76,8 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    Q_INVOKABLE AbstractLayoutPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
+
     bool isMovingUpAvailable() const;
     bool isMovingDownAvailable() const;
     bool isRemovingAvailable() const;
@@ -133,13 +135,14 @@ private:
     void onMasterNotationChanged();
     void onNotationChanged();
 
+    bool isMasterScore() const;
+
     bool shouldShowSystemObjectLayers() const;
 
-    void initPartOrders();
     void onBeforeChangeNotation();
     void setLoadingBlocked(bool blocked);
 
-    void sortParts(notation::PartList& parts);
+    static void sortParts(notation::PartList& parts, notation::PartList& referenceParts);
 
     void setupPartsConnections();
     void setupStavesConnections(const muse::ID& partId);
@@ -165,7 +168,6 @@ private:
     AbstractLayoutPanelTreeItem* buildSystemObjectsLayerItem(const mu::notation::Staff* masterStaff,
                                                              const SystemObjectGroups& systemObjects);
     AbstractLayoutPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
-    AbstractLayoutPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
 
     void updateSystemObjectLayers();
 
@@ -188,7 +190,6 @@ private:
     std::shared_ptr<muse::async::Asyncable> m_partsNotifyReceiver = nullptr;
 
     using NotationKey = QString;
-    QHash<NotationKey, QList<muse::ID> > m_sortedPartIdList;
 
     bool m_layoutPanelVisible = true;
     bool m_scoreChanged = false;

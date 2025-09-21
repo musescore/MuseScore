@@ -6147,12 +6147,15 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
 {
     const MarkerType mtp = getEffectiveMarkerType(m, jumps);
     String words;
+    String smufl;
     String type;
     String sound;
 
     switch (mtp) {
-    case MarkerType::CODA:
     case MarkerType::VARCODA:
+        smufl = u"codaSquare";
+        [[fallthrough]];
+    case MarkerType::CODA:
     case MarkerType::CODETTA:
         type = u"coda";
         if (m->label() == "") {
@@ -6161,8 +6164,10 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
             sound = u"coda=\"" + m->label() + u"\"";
         }
         break;
-    case MarkerType::SEGNO:
     case MarkerType::VARSEGNO:
+        smufl = u"segnoSerpent1";
+        [[fallthrough]];
+    case MarkerType::SEGNO:
         type = u"segno";
         if (m->label() == "") {
             sound = u"segno=\"1\"";
@@ -6201,6 +6206,9 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
         xml.startElement("direction-type");
         String attrs = color2xml(m);
         attrs += ExportMusicXml::positioningAttributes(m);
+        if (!smufl.empty()) {
+            attrs += String(u" smufl=\"%1\"").arg(smufl);
+        }
         if (!type.empty()) {
             xml.tagRaw(type + attrs);
         }

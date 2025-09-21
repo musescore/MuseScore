@@ -196,25 +196,14 @@ void TextBase::endEdit(EditData& ed)
         assert(newlyAdded || textWasEdited);
 
         undo->reopen();
-        score()->undoRemoveElement(this);
+        if (newlyAdded) {
+            score()->endCmd(true); // rollback the "add element" command
+        } else {
+            score()->undoRemoveElement(this);
+            commitText();
+        }
         ed.element = 0;
 
-        static const std::vector<Filter> filters {
-            Filter::AddElementLinked,
-            Filter::RemoveElementLinked,
-            Filter::ChangePropertyLinked,
-            Filter::Link,
-        };
-
-        if (newlyAdded && !undo->activeCommand()->hasUnfilteredChildren(filters, this)) {
-            for (Filter f : filters) {
-                undo->activeCommand()->filterChildren(f, this);
-            }
-
-            ted->setDeleteText(true); // mark this text element for deletion
-        }
-
-        commitText();
         if (isLyrics()) {
             Lyrics* prev = prevLyrics(toLyrics(this));
             if (prev) {

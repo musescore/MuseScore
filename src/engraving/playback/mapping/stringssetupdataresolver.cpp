@@ -211,14 +211,16 @@ PlaybackSetupData StringsSetupDataResolver::doResolve(const Instrument* instrume
         { "balalaika-secunda", { SoundId::Balalaika, SoundCategory::Strings, { SoundSubCategory::Secunda,
                                                                                SoundSubCategory::Plucked } } },
 
+        { "guzheng", { SoundId::Guzheng, SoundCategory::Strings, { SoundSubCategory::Chinese,
+                                                                   SoundSubCategory::Plucked } } },
         { "koto", { SoundId::Koto, SoundCategory::Strings, { SoundSubCategory::Japanese,
                                                              SoundSubCategory::Plucked } } },
+        { "oud", { SoundId::Oud, SoundCategory::Strings, { SoundSubCategory::African,
+                                                           SoundSubCategory::Plucked } } },
         { "shamisen", { SoundId::Shamisen, SoundCategory::Strings, { SoundSubCategory::Japanese,
                                                                      SoundSubCategory::Plucked } } },
         { "sitar", { SoundId::Sitar, SoundCategory::Strings, { SoundSubCategory::Indian,
                                                                SoundSubCategory::Plucked } } },
-        { "oud", { SoundId::Oud, SoundCategory::Strings, { SoundSubCategory::African,
-                                                           SoundSubCategory::Plucked } } },
         { "prim", { SoundId::Prim, SoundCategory::Strings, { SoundSubCategory::Plucked, } } },
         { "brac", { SoundId::Brac, SoundCategory::Strings, { SoundSubCategory::Plucked } } },
         { "bugarija", { SoundId::Bugarija, SoundCategory::Strings, { mpe::SoundSubCategory::Plucked } } },
@@ -267,6 +269,14 @@ PlaybackSetupData StringsSetupDataResolver::doResolve(const Instrument* instrume
                                                                                 SoundSubCategory::Plucked } } },
         { "bowed-synth", { SoundId::Synthesizer, SoundCategory::Strings, { SoundSubCategory::Electric,
                                                                            SoundSubCategory::Bowed } } },
+        { "timple-canario", { SoundId::TimpleCanario, SoundCategory::Strings, { SoundSubCategory::Acoustic,
+                                                                                SoundSubCategory::Nylon,
+                                                                                SoundSubCategory::Spanish,
+                                                                                SoundSubCategory::Plucked } } },
+        { "timple-canario-tablature", { SoundId::TimpleCanario, SoundCategory::Strings, { SoundSubCategory::Acoustic,
+                                                                                          SoundSubCategory::Nylon,
+                                                                                          SoundSubCategory::Spanish,
+                                                                                          SoundSubCategory::Plucked } } },
     };
 
     auto search = SETUP_DATA_MAP.find(instrument->id().toStdString());

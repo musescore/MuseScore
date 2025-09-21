@@ -26,29 +26,20 @@
 #include "engraving/engravingmodule.h"
 #include "engraving/tests/utils/scorerw.h"
 
-#include "importexport/tabledit/tableditmodule.h"
-
 #include "engraving/dom/instrtemplate.h"
+#include "engraving/dom/mscore.h"
 
-#include "log.h"
+static muse::testing::SuiteEnvironment converter_se
+    = muse::testing::SuiteEnvironment()
+      .setDependencyModules({ new muse::draw::DrawModule(), new mu::engraving::EngravingModule() })
+      .setPostInit([]() {
+    LOGI() << "converter tests suite post init";
 
-using namespace mu::iex::tabledit;
-
-static muse::testing::SuiteEnvironment importexport_se(
-{
-    new muse::draw::DrawModule(),         // needs for engraving
-    new mu::engraving::EngravingModule(),
-    new mu::iex::tabledit::TablEditModule()
-},
-    nullptr,
-    []() {
-    LOGI() << "tabledit tests suite post init";
-
-    mu::engraving::ScoreRW::setRootPath(muse::String::fromUtf8(iex_tabledit_tests_DATA_ROOT));
+    mu::engraving::ScoreRW::setRootPath(muse::String::fromUtf8(converter_tests_DATA_ROOT));
 
     mu::engraving::MScore::testMode = true;
+    mu::engraving::MScore::testWriteStyleToScore = false;
     mu::engraving::MScore::noGui = true;
 
     mu::engraving::loadInstrumentTemplates(":/engraving/instruments/instruments.xml");
-}
-    );
+});

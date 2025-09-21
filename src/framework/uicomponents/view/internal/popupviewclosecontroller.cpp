@@ -125,6 +125,11 @@ void PopupViewCloseController::onApplicationStateChanged(Qt::ApplicationState st
         return;
     }
 
+    // Hack for https://github.com/musescore/MuseScore/issues/29656 on Linux
+    if (interactiveProvider()->isSelectColorOpened()) {
+        return;
+    }
+
     if (state != Qt::ApplicationActive) {
         notifyAboutClose();
     }
@@ -183,6 +188,11 @@ bool PopupViewCloseController::isMouseWithinBoundaries(const QPointF& mousePos) 
         if (childRect.contains(mousePos)) {
             return true;
         }
+    }
+
+    // Hack for https://github.com/musescore/MuseScore/issues/29656
+    if (interactiveProvider()->isSelectColorOpened()) {
+        return true;
     }
 
     return false;

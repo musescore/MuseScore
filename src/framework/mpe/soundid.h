@@ -63,6 +63,7 @@ enum class SoundId
     Theorbo,
     Archlute,
     Balalaika,
+    Guzheng,
     Koto,
     Oud,
     Shamisen,
@@ -87,6 +88,7 @@ enum class SoundId
     Erhu,
     Contrabass,
     Octobass,
+    TimpleCanario,
 
     WindsGroup,
     Piccolo,
@@ -472,6 +474,7 @@ inline const std::unordered_map<SoundId, String> ID_STRINGS
     { SoundId::Theorbo, String(u"theorbo") },
     { SoundId::Archlute, String(u"archlute") },
     { SoundId::Balalaika, String(u"balalaika") },
+    { SoundId::Guzheng, String(u"ghuzheng") },
     { SoundId::Koto, String(u"koto") },
     { SoundId::Oud, String(u"oud") },
     { SoundId::Shamisen, String(u"shamisen") },
@@ -496,6 +499,7 @@ inline const std::unordered_map<SoundId, String> ID_STRINGS
     { SoundId::Erhu, String(u"erhu") },
     { SoundId::Contrabass, String(u"contrabass") },
     { SoundId::Octobass, String(u"octobass") },
+    { SoundId::TimpleCanario, String(u"timple_canario") },
 
     { SoundId::WindsGroup, String(u"winds_group") },
     { SoundId::Piccolo, String(u"piccolo") },

@@ -36,12 +36,12 @@ static const mpe::ArticulationTypeSet SUSTAIN_PEDAL_CC_SUPPORTED_TYPES {
     mpe::ArticulationType::Pedal,
 };
 
-static const mpe::ArticulationTypeSet SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES = {
+static const mpe::ArticulationTypeSet SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES {
     mpe::ArticulationType::LaissezVibrer,
 };
 
 static const mpe::ArticulationTypeSet BEND_SUPPORTED_TYPES {
-    mpe::ArticulationType::Multibend,
+    mpe::ArticulationType::Multibend, mpe::ArticulationType::ContinuousGlissando,
 };
 
 static constexpr mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 0);
