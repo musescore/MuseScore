@@ -606,7 +606,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                     tempoEndTick = segment.tick() + segment.ticks();
                 }
 
-                Fraction etick = tempoEndTick - Fraction(1, 480 * 4);
+                Fraction etick = tempoEndTick - Fraction::eps();
                 auto e = tempomap()->find(etick.ticks());
                 if (e == tempomap()->end()) {
                     tempomap()->setTempo(etick.ticks(), otempo);
@@ -2222,7 +2222,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
         }
         // check if a key signature is present but is spurious (i.e. no actual change)
         else if (staff->currentKeyTick(ctick) == ctick
-                 && staff->key(ctick - Fraction::fromTicks(1)) == ostaff->key(otick)) {
+                 && staff->key(ctick - Fraction::eps()) == ostaff->key(otick)) {
             Segment* ns = firstAppendedMeasure->first(SegmentType::KeySig);
             if (ns) {
                 ns->remove(ns->element(trackIdx));
@@ -2231,7 +2231,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
 
         // check if time signature needs to be changed
         TimeSig* ots = ostaff->timeSig(otick), * cts = staff->timeSig(ctick);
-        TimeSig* pts = staff->timeSig(ctick - Fraction::fromTicks(1));
+        TimeSig* pts = staff->timeSig(ctick - Fraction::eps());
         if (ots && cts && *ots != *cts) {
             Segment* ns = firstAppendedMeasure->undoGetSegment(SegmentType::TimeSig, ctick);
             TimeSig* nsig = new TimeSig(*ots);
@@ -2255,7 +2255,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
         }
         // check if a clef change is present but is spurious (i.e. no actual change)
         else if (staff->currentClefTick(ctick) == ctick
-                 && staff->clef(ctick - Fraction::fromTicks(1)) == ostaff->clef(otick)) {
+                 && staff->clef(ctick - Fraction::eps()) == ostaff->clef(otick)) {
             Segment* ns = firstAppendedMeasure->first(SegmentType::Clef);
             if (!ns) {
                 ns = firstAppendedMeasure->first(SegmentType::HeaderClef);
@@ -4669,7 +4669,7 @@ ChordRest* Score::findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& t
 ChordRest* Score::findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& tick, staff_idx_t staffIdx, bool forceVoice,
                                                                voice_idx_t voice) const
 {
-    Fraction ptick = tick - Fraction::fromTicks(1);
+    Fraction ptick = tick - Fraction::eps();
     Measure* m = tick2measureMM(ptick);
     if (!m) {
         LOGD("findCRinStaff: no measure for tick %d", ptick.ticks());

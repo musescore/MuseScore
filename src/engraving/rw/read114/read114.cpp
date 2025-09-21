@@ -2137,7 +2137,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
     for (auto& p : ctx.tuplets()) {
         Tuplet* tuplet = p.second;
         Fraction tupletTick = tuplet->tick();
-        Fraction tupletDuration = tuplet->actualTicks() - Fraction::fromTicks(1);
+        Fraction tupletDuration = tuplet->actualTicks() - Fraction::eps();
         std::vector<DurationElement*> tElements = tuplet->elements();
         for (auto& p2 : ctx.tuplets()) {
             Tuplet* tuplet2 = p2.second;

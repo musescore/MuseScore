@@ -686,7 +686,7 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                 // Handle cross-measure beams
                 BeamMode mode = cr->beamMode();
                 if (mode == BeamMode::MID || mode == BeamMode::END || mode == BeamMode::BEGIN16 || mode == BeamMode::BEGIN32) {
-                    ChordRest* prevCR = ctx.mutDom().findCR(measure->tick() - Fraction::fromTicks(1), track);
+                    ChordRest* prevCR = ctx.mutDom().findCR(measure->tick() - Fraction::eps(), track);
                     if (prevCR) {
                         Beam* prevBeam = prevCR->beam();
                         const Measure* pm = prevCR->measure();

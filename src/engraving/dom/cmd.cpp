@@ -3943,7 +3943,7 @@ void Score::cmdSlashFill()
         endSegment = endSegment->measure()->mmRestLast()->last();
     }
 
-    Fraction endTick = endSegment ? endSegment->tick() : lastSegment()->tick() + Fraction::fromTicks(1);
+    Fraction endTick = endSegment ? endSegment->tick() : lastSegment()->tick() + Fraction::eps();
     Chord* firstSlash = 0;
     Chord* lastSlash = 0;
 
@@ -5008,7 +5008,7 @@ bool Score::resolveNoteInputParams(int note, bool addFlag, NoteInputParams& out)
                     if (p && p->isClef()) {
                         Clef* clef = toClef(p);
                         // check if it's an actual change or just a courtesy
-                        ClefType ctb = staff->clef(clef->tick() - Fraction::fromTicks(1));
+                        ClefType ctb = staff->clef(clef->tick() - Fraction::eps());
                         if (ctb != clef->clefType() || clef->tick().isZero()) {
                             curPitch = line2pitch(4, clef->clefType(), Key::C);                     // C 72 for treble clef
                             break;

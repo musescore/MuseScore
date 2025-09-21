@@ -1469,7 +1469,7 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
         // the measure duration does not change,
         // so its ok to just update the time signatures
         //
-        TimeSig* nts = staff(staffIdx)->nextTimeSig(tick + Fraction::fromTicks(1));
+        TimeSig* nts = staff(staffIdx)->nextTimeSig(tick + Fraction::eps());
         const Fraction lmTick = nts ? nts->segment()->tick() : Fraction(-1, 1);
         for (Score* score : scoreList()) {
             Measure* mf = score->tick2measure(tick);

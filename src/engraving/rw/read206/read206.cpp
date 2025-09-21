@@ -1770,7 +1770,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
         } else {
             if (atype == "start") {
                 if (spanner->ticks() > Fraction(0, 1) && spanner->tick() == Fraction(-1, 1)) {       // stop has been read first
-                    spanner->setTicks(spanner->ticks() - ctx.tick() - Fraction::fromTicks(1));
+                    spanner->setTicks(spanner->ticks() - ctx.tick() - Fraction::eps());
                 }
                 spanner->setTick(ctx.tick());
                 spanner->setTrack(ch->track());

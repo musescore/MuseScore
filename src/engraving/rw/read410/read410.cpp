@@ -574,7 +574,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             // check previous CR on same track, if it has tremolo, delete the tremolo
                             // we don't want a tremolo and two different chord durations
                             if (cr->isChord()) {
-                                Segment* s = score->tick2leftSegment(tick - Fraction::fromTicks(1));
+                                Segment* s = score->tick2leftSegment(tick - Fraction::eps());
                                 if (s) {
                                     ChordRest* crt = toChordRest(s->element(cr->track()));
                                     if (!crt) {
