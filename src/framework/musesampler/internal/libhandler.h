@@ -86,6 +86,7 @@ public:
 
         // Check versions here; define optional functions below
         bool at_least_v_0_102 = (m_version.major() == 0 && m_version.minor() >= 102) || m_version.major() > 0;
+        bool at_least_v_0_103 = (m_version.major() == 0 && m_version.minor() >= 103) || m_version.major() > 0;
 
         initLib = (ms_init)muse::getLibFunc(m_lib, "ms_init");
 
@@ -217,7 +218,6 @@ public:
             setLoggingCallback = (ms_set_logging_callback)muse::getLibFunc(m_lib, "ms_set_logging_callback");
             isOnlineInstrument = (ms_Instrument_is_online)muse::getLibFunc(m_lib, "ms_Instrument_is_online");
             setScoreId = (ms_MuseSampler_set_score_id)muse::getLibFunc(m_lib, "ms_MuseSampler_set_score_id");
-            getRenderInfo = (ms_MuseSampler_get_render_info)muse::getLibFunc(m_lib, "ms_MuseSampler_get_render_info");
             getNextRenderProgressInfo = (ms_RenderProgressInfo_get_next)muse::getLibFunc(m_lib, "ms_RenderProgressInfo_get_next");
             setAutoRenderInterval = (ms_MuseSampler_set_auto_render_interval)muse::getLibFunc(m_lib,
                                                                                               "ms_MuseSampler_set_auto_render_interval");
@@ -228,12 +228,18 @@ public:
             setLoggingCallback = [](ms_logging_callback) {};
             isOnlineInstrument = [](ms_InstrumentInfo) { return false; };
             setScoreId = [](ms_MuseSampler, const char*) {};
-            getRenderInfo = [](ms_MuseSampler, int*) { return ms_RenderingRangeList(); };
             getNextRenderProgressInfo = [](ms_RenderingRangeList) { return ms_RenderRangeInfo { 0, 0, ms_RenderingState_ErrorRendering }; };
             setAutoRenderInterval = [](ms_MuseSampler, double) {};
             triggerRender = [](ms_MuseSampler) {};
             clearOnlineCache = [](ms_MuseSampler) {};
             addAuditionCCEvent = [](ms_MuseSampler, ms_Track, int, float) { return ms_Result_Error; };
+        }
+
+        if (at_least_v_0_103) {
+            setRenderingStateChangedCallback = (ms_MuseSampler_set_rendering_state_changed_callback)muse::getLibFunc(m_lib,
+                                                                                                                     "ms_MuseSampler_set_rendering_state_changed_callback");
+        } else {
+            setRenderingStateChangedCallback = [](ms_MuseSampler, ms_rendering_state_changed_callback, void*) {};
         }
 
         return isValid();
@@ -310,9 +316,9 @@ public:
                && allNotesOff
                && readyToPlay
                && setLoggingCallback
+               && setRenderingStateChangedCallback
                && isOnlineInstrument
                && setScoreId
-               && getRenderInfo
                && getNextRenderProgressInfo
                && setAutoRenderInterval
                && triggerRender
@@ -384,7 +390,6 @@ public:
                << "\n ms_MuseSampler_all_notes_off - " << reinterpret_cast<uint64_t>(allNotesOff)
                << "\n ms_MuseSampler_ready_to_play - " << reinterpret_cast<uint64_t>(readyToPlay)
                << "\n ms_Instrument_is_online - " << reinterpret_cast<uint64_t>(isOnlineInstrument)
-               << "\n ms_MuseSampler_get_render_info - " << reinterpret_cast<uint64_t>(getRenderInfo)
                << "\n ms_RenderProgressInfo_get_next - " << reinterpret_cast<uint64_t>(getNextRenderProgressInfo)
                << "\n ms_MuseSampler_trigger_render - " << reinterpret_cast<uint64_t>(triggerRender)
                << "\n ms_MuseSampler_set_auto_render_interval - " << reinterpret_cast<uint64_t>(setAutoRenderInterval)
@@ -392,6 +397,8 @@ public:
                << "\n ms_MuseSampler_add_track_syllable_event_2 - " << reinterpret_cast<uint64_t>(addSyllableEventInternal2)
                << "\n ms_reload_all_instruments - " << reinterpret_cast<uint64_t>(reloadAllInstruments)
                << "\n ms_set_logging_callback - " << reinterpret_cast<uint64_t>(setLoggingCallback)
+               << "\n ms_MuseSampler_set_rendering_state_changed_callback - "
+               << reinterpret_cast<uint64_t>(setRenderingStateChangedCallback)
                << "\n ms_MuseSampler_set_score_id - " << reinterpret_cast<uint64_t>(setScoreId)
                << "\n ms_MuseSampler_clear_online_cache - " << reinterpret_cast<uint64_t>(clearOnlineCache);
     }
@@ -457,9 +464,10 @@ public:
     ms_reload_all_instruments reloadAllInstruments = nullptr;
 
     ms_set_logging_callback setLoggingCallback = nullptr;
+    ms_MuseSampler_set_rendering_state_changed_callback setRenderingStateChangedCallback = nullptr;
+
     ms_MuseSampler_set_score_id setScoreId = nullptr;
     ms_Instrument_is_online isOnlineInstrument = nullptr;
-    ms_MuseSampler_get_render_info getRenderInfo = nullptr;
     ms_RenderProgressInfo_get_next getNextRenderProgressInfo = nullptr;
     ms_MuseSampler_set_auto_render_interval setAutoRenderInterval = nullptr;
     ms_MuseSampler_trigger_render triggerRender = nullptr;

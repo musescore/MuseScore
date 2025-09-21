@@ -24,6 +24,10 @@
 
 #include <cstring>
 
+#include "audio/common/audioerrors.h"
+
+#include "realfn.h"
+
 using namespace muse;
 using namespace muse::audio;
 using namespace muse::musesampler;
@@ -53,7 +57,10 @@ MuseSamplerWrapper::~MuseSamplerWrapper()
         return;
     }
 
-    m_sequencer.deinit();
+    if (m_inputProcessingProgress.isStarted) {
+        m_inputProcessingProgress.finish((int)Ret::Code::Cancel);
+    }
+
     m_samplerLib->destroy(m_sampler);
 }
 
@@ -308,17 +315,120 @@ bool MuseSamplerWrapper::initSampler(const sample_rate_t sampleRate, const sampl
 
 void MuseSamplerWrapper::setupOnlineSound()
 {
+    constexpr double AUTO_PROCESS_INTERVAL = 3.0;
+    constexpr double NO_AUTO_PROCESS = -1.0; // interval < 0 -> no auto process
+
     const bool autoProcess = config()->autoProcessOnlineSoundsInBackground();
 
     m_sequencer.setUpdateMainStreamWhenInactive(autoProcess);
-    m_sequencer.setRenderingProgress(&m_inputProcessingProgress);
-    m_sequencer.setAutoRenderInterval(autoProcess ? 1.0 : -1.0); // interval < 0 -> no auto process
+    m_samplerLib->setAutoRenderInterval(m_sampler, autoProcess ? AUTO_PROCESS_INTERVAL : NO_AUTO_PROCESS);
+
+    //! NOTE: update progress on the worker thread
+    m_renderingStateChanged.onReceive(this, [this](ms_RenderingRangeList list, int size) {
+        updateRenderingProgress(list, size);
+    });
+
+    m_samplerLib->setRenderingStateChangedCallback(m_sampler, [](void* data, ms_RenderingRangeList list, int size) {
+        //! NOTE: move call to the worker thread
+        RenderingStateChangedChannel* channel = reinterpret_cast<RenderingStateChangedChannel*>(data);
+        channel->send(list, size);
+    }, &m_renderingStateChanged);
 
     config()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool on) {
         m_sequencer.setUpdateMainStreamWhenInactive(on);
         m_sequencer.updateMainStream();
-        m_sequencer.setAutoRenderInterval(on ? 1.0 : -1.0);
+        m_samplerLib->setAutoRenderInterval(m_sampler, on ? AUTO_PROCESS_INTERVAL : NO_AUTO_PROCESS);
     });
+}
+
+void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int size)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return;
+    }
+
+    const bool progressStarted = m_renderingInfo.maxChunksDurationUs > 0;
+
+    audio::InputProcessingProgress::ChunkInfoList chunks;
+    chunks.reserve(size);
+
+    long long chunksDurationUs = 0;
+    bool isRendering = false;
+
+    for (int i = 0; i < size; ++i) {
+        const ms_RenderRangeInfo info = m_samplerLib->getNextRenderProgressInfo(list);
+
+        switch (info._state) {
+        case ms_RenderingState_Rendering:
+            isRendering = true;
+            break;
+        case ms_RenderingState_ErrorNetwork:
+            m_renderingInfo.error = "Network error";
+            break;
+        case ms_RenderingState_ErrorRendering:
+            m_renderingInfo.error = "Rendering error";
+            break;
+        case ms_RenderingState_ErrorFileIO:
+            m_renderingInfo.error = "File IO error";
+            break;
+        case ms_RenderingState_ErrorTimeOut:
+            m_renderingInfo.error = "Timeout";
+            break;
+        }
+
+        // Failed regions remain in the list, but should be excluded when
+        // calculating the total remaining rendering duration
+        if (progressStarted && !m_renderingInfo.error.empty()) {
+            continue;
+        }
+
+        chunksDurationUs += info._end_us - info._start_us;
+        chunks.push_back({ audio::microsecsToSecs(info._start_us), audio::microsecsToSecs(info._end_us) });
+    }
+
+    // Start progress
+    if (!progressStarted) {
+        // Rendering has started on the sampler side, but it is not yet ready to report progress
+        if (chunksDurationUs <= 0 && isRendering) {
+            return;
+        }
+
+        if (!m_inputProcessingProgress.isStarted) {
+            m_inputProcessingProgress.start();
+        }
+    }
+
+    m_renderingInfo.maxChunksDurationUs = std::max(m_renderingInfo.maxChunksDurationUs, chunksDurationUs);
+
+    bool isChanged = false;
+    if (m_renderingInfo.lastReceivedChunks != chunks) {
+        m_renderingInfo.lastReceivedChunks = chunks;
+        isChanged = true;
+    }
+
+    // Update percentage
+    int64_t percentage = 0;
+    if (m_renderingInfo.maxChunksDurationUs != 0) {
+        percentage = std::lround(100.f - (float)chunksDurationUs / (float)m_renderingInfo.maxChunksDurationUs * 100.f);
+    }
+
+    if (percentage != m_renderingInfo.percentage) {
+        m_renderingInfo.percentage = percentage;
+        isChanged = true;
+    }
+
+    if (isChanged) {
+        m_inputProcessingProgress.process(chunks, std::lround(percentage), 100);
+    }
+
+    // Finish progress
+    if (chunksDurationUs <= 0) {
+        const int errcode = !m_renderingInfo.error.empty() ? (int)muse::audio::Err::OnlineSoundsProcessingError : 0;
+        m_inputProcessingProgress.finish(errcode, m_renderingInfo.error);
+        m_renderingInfo.clear();
+    }
 }
 
 InstrumentInfo MuseSamplerWrapper::resolveInstrument(const mpe::PlaybackSetupData& setupData) const
@@ -507,7 +617,12 @@ bool MuseSamplerWrapper::readyToPlay() const
 
 void MuseSamplerWrapper::processInput()
 {
-    m_sequencer.triggerRender();
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return;
+    }
+
+    m_sequencer.updateMainStream();
+    m_samplerLib->triggerRender(m_sampler);
 }
 
 void MuseSamplerWrapper::clearCache()
@@ -517,5 +632,6 @@ void MuseSamplerWrapper::clearCache()
     }
 
     m_samplerLib->clearOnlineCache(m_sampler);
-    m_sequencer.triggerRender();
+    m_sequencer.updateMainStream();
+    m_samplerLib->triggerRender(m_sampler);
 }

@@ -78,6 +78,7 @@ private:
     bool initSampler(const muse::audio::sample_rate_t sampleRate, const muse::audio::samples_t blockSize);
 
     void setupOnlineSound();
+    void updateRenderingProgress(ms_RenderingRangeList list, int size);
 
     InstrumentInfo resolveInstrument(const mpe::PlaybackSetupData& setupData) const;
     std::string resolveDefaultPresetCode(const InstrumentInfo& instrument) const;
@@ -88,6 +89,18 @@ private:
     void doCurrentSetPosition();
     void extractOutputSamples(muse::audio::samples_t samples, float* output);
 
+    struct RenderingInfo {
+        long long maxChunksDurationUs = 0;
+        std::string error;
+        int64_t percentage = 0;
+        audio::InputProcessingProgress::ChunkInfoList lastReceivedChunks;
+
+        void clear()
+        {
+            *this = RenderingInfo();
+        }
+    };
+
     async::Channel<unsigned int> m_audioChannelsCountChanged;
 
     MuseSamplerLibHandlerPtr m_samplerLib = nullptr;
@@ -95,6 +108,11 @@ private:
     InstrumentInfo m_instrument;
     TrackList m_tracks;
     ms_OutputBuffer m_bus;
+
+    RenderingInfo m_renderingInfo;
+
+    using RenderingStateChangedChannel = async::Channel<ms_RenderingRangeList, int>;
+    RenderingStateChangedChannel m_renderingStateChanged;
 
     muse::audio::samples_t m_currentPosition = 0;
     muse::audio::sample_rate_t m_samplerSampleRate = 0;

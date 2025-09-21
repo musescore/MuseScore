@@ -174,12 +174,14 @@ static AccidentalType accidentalType(const InputState& is, const NoteVal& nval, 
         return AccidentalType::NONE;
     }
 
+    AccidentalVal accVal = AccidentalVal::NATURAL;
     if (is.accidentalType() != AccidentalType::NONE) {
-        return is.accidentalType();
+        accVal = Accidental::subtype2value(is.accidentalType());
+    } else {
+        accVal = mu::engraving::noteValToAccidentalVal(nval, is.staff(), is.tick());
     }
 
     bool error = false;
-    const AccidentalVal accVal = mu::engraving::noteValToAccidentalVal(nval, is.staff(), is.tick());
     const AccidentalVal existingAccVal = is.segment()->measure()->findAccidental(is.segment(), is.staffIdx(), line, error);
 
     if (!error && accVal != existingAccVal) {
@@ -3461,6 +3463,8 @@ std::vector<NotationInteraction::ShadowNoteParams> NotationInteraction::previewN
     params.duration = is.rest() ? is.duration() : TDuration();
     params.position.segment = segment;
     params.position.staffIdx = staffIdx;
+
+    result.reserve(nvals.size());
 
     for (const NoteVal& nval : nvals) {
         const int line = mu::engraving::noteValToLine(nval, staff, tick);

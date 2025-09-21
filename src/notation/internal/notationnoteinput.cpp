@@ -479,13 +479,6 @@ void NotationNoteInput::padNote(const Pad& pad)
     score()->padToggle(pad);
     apply();
 
-    if (pad >= Pad::NOTE00 && pad <= Pad::NOTE1024) {
-        const NoteInputState& is = score()->inputState();
-        if (!is.rest() && isNoteInputMode() && is.usingNoteEntryMethod(NoteInputMethod::BY_DURATION)) {
-            score()->toggleAccidental(AccidentalType::NONE);
-        }
-    }
-
     notifyAboutStateChanged();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
@@ -590,6 +583,8 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
         return;
     }
 
+    is.setAccidentalType(AccidentalType::NONE);
+
     const Staff* staff = is.staff();
     const Fraction tick = is.tick();
 
@@ -615,7 +610,7 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
             newVal.pitch = val.pitch + (up ? 1 : -1);
             break;
         case PitchMode::DIATONIC: {
-            const int oldLine = mu::engraving::noteValToLine(val, is.staff(), is.tick());
+            const int oldLine = mu::engraving::noteValToLine(val, staff, tick);
             const int newLine = oldLine + (up ? -1 : 1);
             newVal = noteValForLine(newLine);
         } break;

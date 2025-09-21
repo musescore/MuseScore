@@ -102,7 +102,7 @@ QString OnlineSoundsStatusModel::errorDescription() const
         return QString();
     }
 
-    return muse::qtrc("global", "Please check your internet connection or try again later.");
+    return muse::qtrc("playback", "Please check your connection, and make sure MuseHub is running and you are logged in.");
 }
 
 void OnlineSoundsStatusModel::onOnlineSoundsChanged()
