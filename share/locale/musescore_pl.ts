@@ -3724,13 +3724,13 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7083"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7360"/>
         <source>Line thickness at end:</source>
-        <translation>Grubość linii końcowej:</translation>
+        <translation>Grubość linii na końcu:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7115"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7312"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
-        <translation>Resetuj wartość &quot;Grubość linii końcowej&quot;</translation>
+        <translation>Resetuj wartość &quot;Grubość linii na końcu&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7141"/>
@@ -32445,7 +32445,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
         <source>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</source>
-        <translation>Pliki są zapisywane prywatnie na Twoim osobistym koncie. Możesz dzielić się wersjami roboczymi z innymi i publikować swoje gotowe partytury.</translation>
+        <translation>Pliki są zapisywane prywatnie na Twoim osobistym koncie. Możesz udostępniać wersje robocze innym i publikować swoje gotowe partytury.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>

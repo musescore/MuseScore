@@ -5294,7 +5294,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="246"/>
         <source>Unit</source>
-        <translation>Unitate</translation>
+        <translation>Unitate de măsură</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="252"/>

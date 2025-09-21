@@ -1840,7 +1840,7 @@ Cresc./Dim.-Gabeln/Linien</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="176"/>
         <source>Articulations &amp; ornaments</source>
-        <translation>Artikulationen &amp; Verzierung</translation>
+        <translation>Artikulationen &amp; Verzierungen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="181"/>
@@ -4198,7 +4198,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10404"/>
         <source>Articulations &amp;&amp; ornaments</source>
-        <translation>Artikulationen &amp;&amp; Verzierung</translation>
+        <translation>Artikulationen &amp;&amp; Verzierungen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10410"/>
@@ -26267,7 +26267,7 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="67"/>
         <source>Ornaments</source>
-        <translation>Verzierung</translation>
+        <translation>Verzierungen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="69"/>
@@ -28317,7 +28317,7 @@ fehlgeschlagen.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="791"/>
         <source>Ornaments</source>
-        <translation>Verzierung</translation>
+        <translation>Verzierungen</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="858"/>

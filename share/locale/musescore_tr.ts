@@ -14378,12 +14378,12 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="605"/>
         <source>time tick anchor(s)</source>
-        <translation><numerusform>zaman işareti sabitleyici</numerusform><numerusform>zaman işareti sabitleyici</numerusform></translation>
+        <translation><numerusform>zaman işareti bağlantısı</numerusform><numerusform>zaman işareti bağlantısı</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="606"/>
         <source>Time tick anchor(s)</source>
-        <translation><numerusform>Zaman işareti sabitleyici</numerusform><numerusform>Zaman işareti sabitleyici</numerusform></translation>
+        <translation><numerusform>Zaman işareti bağlantısı</numerusform><numerusform>Zaman işareti bağlantısı</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="608"/>

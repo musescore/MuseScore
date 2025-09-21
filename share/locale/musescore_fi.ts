@@ -2263,7 +2263,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14009"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14050"/>
         <source>Reset to default</source>
-        <translation>Palauta oletusarvoiksi</translation>
+        <translation>Palauta oletukseksi</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="452"/>
@@ -3386,7 +3386,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5678"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5681"/>
         <source>Number layout</source>
-        <translation>Numeroasettelu</translation>
+        <translation>Numeroiden ulkoasu</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5700"/>
@@ -5105,12 +5105,12 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="348"/>
         <source>Layout stretch factor</source>
-        <translation>Asettelun joustotekijä</translation>
+        <translation>Ulkoasun joustotekijä</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="351"/>
         <source>Layout stretch:</source>
-        <translation>Asettelun jousto:</translation>
+        <translation>Ulkoasun jousto:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="386"/>
@@ -6283,12 +6283,12 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="100"/>
         <source>Restore the &amp;default layout</source>
-        <translation>Palauta &amp;oletusasettelu</translation>
+        <translation>Palauta &amp;oletus ulkoasu</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="101"/>
         <source>Restore the default layout</source>
-        <translation>Palauta oletusasettelu</translation>
+        <translation>Palauta oletus ulkoasu</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="108"/>
@@ -6336,7 +6336,7 @@ jos niiden perässä on viivoja</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="132"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="72"/>
         <source>Show/hide layout panel</source>
-        <translation>Näytä/piilota asettelupaneeli</translation>
+        <translation>Näytä/piilota ulkoasupaneeli</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="138"/>
@@ -9118,7 +9118,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1970"/>
         <source>Reset all style values to default</source>
-        <translation>Palauta kaikki tyyliarvot oletusarvoiksi</translation>
+        <translation>Palauta kaikki tyyliarvot oletuksiksi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1975"/>
@@ -9366,7 +9366,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2131"/>
         <source>Toggle note input mode: re-pitch existing notes</source>
-        <translation>Vaihda nuotin syöttötila: muuta nuottien korkeutta</translation>
+        <translation>Vaihda nuotin syöttötila: muuta nykyisten nuottien korkeutta</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2137"/>
@@ -11074,7 +11074,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/qml/Preferences/internal/AdvancedTopSection.qml" line="44"/>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemeAdditionalOptionsSection.qml" line="50"/>
         <source>Reset to default</source>
-        <translation>Palauta oletusasetukset</translation>
+        <translation>Palauta oletukseksi</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AdvancedTopSection.qml" line="67"/>
@@ -21275,7 +21275,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml" line="40"/>
         <source>Reset to default</source>
-        <translation>Palauta oletusasetukset</translation>
+        <translation>Palauta oletukseksi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml" line="64"/>
@@ -21305,7 +21305,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="72"/>
         <source>Reset stacking order to default</source>
-        <translation>Palauta pinoamisjärjestys oletusarvoon</translation>
+        <translation>Palauta pinoamisjärjestys oletukseksi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="98"/>
@@ -21765,7 +21765,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="193"/>
         <source>Set as staff default</source>
-        <translation>Aseta viivaston oletusarvoksi</translation>
+        <translation>Aseta viivaston oletukseksi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="216"/>
@@ -24315,7 +24315,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="176"/>
         <source>Hide all measures that do not contain notation (cutaway)</source>
-        <translation>Piilota kaikki tahdit, jotka eivät sisällä nuotteja (leikkaus)</translation>
+        <translation>Piilota kaikki tahdit, jotka eivät sisällä nuotteja (katkoviivasto)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="194"/>
@@ -25338,7 +25338,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="166"/>
         <source>Duplicate</source>
-        <translation>Kaksoiskappale</translation>
+        <translation>Kopioi</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="167"/>
@@ -25375,7 +25375,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsView.qml" line="81"/>
         <source>Parts view</source>
-        <translation>Stemmojen katselu</translation>
+        <translation>Stemmanäkymä</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="91"/>
@@ -31973,7 +31973,7 @@ Haluatko korvata sen?</translation>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="590"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation>Koko asettelu</translation>
+        <translation>Koko ulkoasu</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="592"/>
@@ -32524,7 +32524,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="213"/>
         <source>Replace existing</source>
-        <translation>Korvaa olemassa oleva</translation>
+        <translation>Korvaa nykyinen</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="215"/>
@@ -32560,7 +32560,7 @@ Haluatko korvata sen?</translation>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="189"/>
         <source>Replace the existing &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online score in question</extracomment>
-        <translation>Korvaa olemassa oleva &lt;a href=&quot;%1&quot;&gt;online-partituuri&lt;/a&gt;</translation>
+        <translation>Korvaa nykyinen &lt;a href=&quot;%1&quot;&gt;online-partituuri&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="192"/>
@@ -32583,7 +32583,7 @@ Haluatko korvata sen?</translation>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="203"/>
         <source>Replace the &lt;a href=&quot;%1&quot;&gt;existing audio&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online audio in question</extracomment>
-        <translation>Korvaa &lt;a href=&quot;%1&quot;&gt;olemassa oleva audio&lt;/a&gt;</translation>
+        <translation>Korvaa &lt;a href=&quot;%1&quot;&gt;nykyinen audio&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="206"/>
@@ -32908,7 +32908,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsBottomPanel.qml" line="89"/>
         <source>Reset to default</source>
-        <translation>Palauta oletusasetukset</translation>
+        <translation>Palauta oletukseksi</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsList.qml" line="31"/>
@@ -34178,7 +34178,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6381"/>
         <source>Reset to default layout</source>
-        <translation>Palauta oletusasettelu</translation>
+        <translation>Palauta oletus ulkoasu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6407"/>
@@ -34615,7 +34615,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/framework/workspace/qml/Muse/Workspace/internal/WorkspacesTopPanel.qml" line="80"/>
         <source>Save layout as new workspace</source>
-        <translation>Tallenna asettelu uutena työtilana</translation>
+        <translation>Tallenna ulkoasu uutena työtilana</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/qml/Muse/Workspace/internal/WorkspacesTopPanel.qml" line="117"/>

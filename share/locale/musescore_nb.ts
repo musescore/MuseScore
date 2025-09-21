@@ -23454,7 +23454,7 @@ opptakt</translation>
     <message>
         <location filename="../../src/inspector/models/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="39"/>
         <source>Empty staves visibility</source>
-        <translation type="unfinished"/>
+        <translation>Synlighet av tomme notesystemer</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/arpeggioplaybackmodel.cpp" line="33"/>
