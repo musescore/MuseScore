@@ -8836,11 +8836,12 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
     m_xml.startElement("harmony", harmonyAttrs);
     if (h->harmonyType() == HarmonyType::STANDARD && tpcIsValid(h->rootTpc())) {
         for (const HarmonyInfo* info : h->chords()) {
-            if (!info) {
+            if (!info || !tpcIsValid(info->rootTpc())) {
+                LOGD("invalid HarmonyInfo");
                 continue; // skip invalid HarmonyInfo
             }
-            int rootTpc = info->rootTpc();
-            int bassTpc = info->bassTpc();
+            const int rootTpc = info->rootTpc();
+            const int bassTpc = info->bassTpc();
             m_xml.startElement("root");
             m_xml.tag("root-step", tpc2stepName(rootTpc));
             int alter = int(tpc2alter(rootTpc));
