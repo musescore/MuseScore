@@ -3391,7 +3391,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5700"/>
         <source>Reset &apos;Vertical position of number&apos; value</source>
-        <translation>重置“数字垂直位置”值</translation>
+        <translation>重置“数字的垂直位置”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5710"/>
@@ -9873,7 +9873,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2576"/>
         <source>Show/hide formatting</source>
-        <translation>显示/隐藏排版标记</translation>
+        <translation>显示/隐藏格式标记</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2582"/>
@@ -23254,7 +23254,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="67"/>
         <source>Formatting</source>
-        <translation>排版标记</translation>
+        <translation>格式标记</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="80"/>
@@ -24817,7 +24817,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="834"/>
         <source>Capo fret position:</source>
-        <translation>变调夹品位置：</translation>
+        <translation>变调夹品格位：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="701"/>

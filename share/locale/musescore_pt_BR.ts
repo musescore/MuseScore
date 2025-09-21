@@ -9351,12 +9351,12 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2123"/>
         <source>Rhythm only (not pitch)</source>
-        <translation>Ritmo apenas (ignorar altura)</translation>
+        <translation>Apenas ritmo (ignorar altura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2124"/>
         <source>Toggle note input mode: rhythm only (not pitch)</source>
-        <translation>Alternar modo de inserção de notas: somente ritmo (ignorar altura)</translation>
+        <translation>Alternar modo de inserção de notas: apenas ritmo (ignorar altura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2130"/>
@@ -27875,7 +27875,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="53"/>
         <source>Rhythm-only input mode</source>
-        <translation>Modo de entrada somente de ritmo</translation>
+        <translation>Modo de inserção apenas por ritmo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="54"/>

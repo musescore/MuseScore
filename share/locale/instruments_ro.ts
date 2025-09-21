@@ -4388,14 +4388,14 @@
         <source>Mezzo-Soprano Saxophone</source>
         <comment>mezzo-soprano-saxophone trackName</comment>
         <extracomment>trackName for Mezzo-Soprano Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxofon mezzo-sopran</translation>
+        <translation>Saxofon mezzosopran</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1604"/>
         <source>Mezzo-Soprano Saxophone</source>
         <comment>mezzo-soprano-saxophone longName</comment>
         <extracomment>longName for Mezzo-Soprano Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxofon mezzo-sopran</translation>
+        <translation>Saxofon mezzosopran</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1606"/>
@@ -14307,7 +14307,7 @@
         <source>Soprano voice.</source>
         <comment>soprano description</comment>
         <extracomment>description for Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voce de soprană.</translation>
+        <translation>Voce de sopran.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4768"/>
@@ -14335,14 +14335,14 @@
         <source>Soprano voice (notated in C clef).</source>
         <comment>soprano-c-clef description</comment>
         <extracomment>description for Soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voce de soprană (notație în cheia do).</translation>
+        <translation>Voce de sopran (notație în cheia do).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4777"/>
         <source>Soprano (C clef)</source>
         <comment>soprano-c-clef trackName</comment>
         <extracomment>trackName for Soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Soprană (Cheia Do)</translation>
+        <translation>Sopran (Cheia Do)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4779"/>
@@ -14363,21 +14363,21 @@
         <source>Mezzo-soprano voice.</source>
         <comment>mezzo-soprano description</comment>
         <extracomment>description for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voce de mezzo-soprană.</translation>
+        <translation>Voce de mezzosopran.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4786"/>
         <source>Mezzo-soprano</source>
         <comment>mezzo-soprano trackName</comment>
         <extracomment>trackName for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mezzo-soprano</translation>
+        <translation>Mezzosopran</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4788"/>
         <source>Mezzo-soprano</source>
         <comment>mezzo-soprano longName</comment>
         <extracomment>longName for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mezzo-soprano</translation>
+        <translation>Mezzosopran</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4790"/>
@@ -14391,21 +14391,21 @@
         <source>Mezzo-soprano voice (notated in C clef).</source>
         <comment>mezzo-soprano-c-clef description</comment>
         <extracomment>description for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voce de mezzo-soprană (notație în cheia do).</translation>
+        <translation>Voce de mezzosopran (notație în cheia do).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4795"/>
         <source>Mezzo-soprano (C clef)</source>
         <comment>mezzo-soprano-c-clef trackName</comment>
         <extracomment>trackName for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mezzo-soprano (cheia do)</translation>
+        <translation>Mezzosopran (cheia do)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4797"/>
         <source>Mezzo-soprano</source>
         <comment>mezzo-soprano-c-clef longName</comment>
         <extracomment>longName for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mezzo-soprano</translation>
+        <translation>Mezzosopran</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4799"/>

@@ -3058,7 +3058,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4555"/>
         <source>♮ in key signatures</source>
-        <translation>♮ dans les armures</translation>
+        <translation>♮ dans les Armures</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4561"/>
