@@ -330,6 +330,10 @@ Harmony::Harmony(const Harmony& h)
         HarmonyInfo* newInfo = new HarmonyInfo(*hi);
         m_chords.push_back(newInfo);
     }
+
+    m_fontFamily = h.m_fontFamily;
+    m_fontStyle  = h.m_fontStyle;
+    m_fontSize   = h.m_fontSize;
 }
 
 //---------------------------------------------------------
