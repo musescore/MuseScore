@@ -24,8 +24,6 @@
 
 #include "utils/scorerw.h"
 #include "engraving/compat/midi/compatmidirender.h"
-#include "engraving/compat/midi/pausemap.h"
-#include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/rw/mscloader.h"
 #include "engraving/dom/noteevent.h"
 
@@ -69,6 +67,25 @@ static void checkEventInterval(EventsHolder& events, int tickStart, int tickEnd,
 
     EXPECT_EQ(it->second.pitch(), pitch);
     EXPECT_EQ(it->second.velo(), NOTE_OFF_VOLUME);
+    EXPECT_EQ(it->second.channel(), channel);
+    EXPECT_EQ(it->second.effect(), effect);
+
+    events[channel].erase(it);
+}
+
+static void checkPitchBend(EventsHolder& events, int tick, int pitchValue, MidiInstrumentEffect effect = MidiInstrumentEffect::NONE,
+                           int channel = DEFAULT_CHANNEL)
+{
+    auto it = events[channel].find(tick);
+    EXPECT_NE(it, events[channel].end());
+    if (it == events[channel].end()) {
+        return;
+    }
+
+    int dataA = pitchValue % 128;
+    int dataB = pitchValue / 128;
+    EXPECT_EQ(it->second.dataA(), dataA);
+    EXPECT_EQ(it->second.dataB(), dataB);
     EXPECT_EQ(it->second.channel(), channel);
     EXPECT_EQ(it->second.effect(), effect);
 
@@ -991,4 +1008,87 @@ TEST_F(MidiRenderer_Tests, hammerOnPullOff)
     checkEventInterval(events, 1200, 1439, 53, 80, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
     checkEventInterval(events, 1440, 1679, 55, 80, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
     checkEventInterval(events, 1680, 1919, 53, 80, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+}
+
+TEST_F(MidiRenderer_Tests, vibrato)
+{
+    constexpr int defVol = 80; // mf
+    constexpr int pwReset = 8192;
+    EventsHolder events = renderMidiEvents(u"vibrato.mscx");
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 68);
+
+    // smallest vibrato
+    checkEventInterval(events, 0, 239, 52, defVol);
+    checkPitchBend(events,    0, 8192);
+    checkPitchBend(events,   10, 8226);
+    checkPitchBend(events,   20, 8260);
+    checkPitchBend(events,   30, 8294);
+    checkPitchBend(events,   40, 8328);
+    checkPitchBend(events,   50, 8294);
+    checkPitchBend(events,   60, 8260);
+    checkPitchBend(events,   70, 8226);
+    checkPitchBend(events,   80, 8192);
+    checkPitchBend(events,   90, 8158);
+    checkPitchBend(events,  100, 8124);
+    checkPitchBend(events,  110, 8090);
+    checkPitchBend(events,  120, 8056);
+    checkPitchBend(events,  130, 8090);
+    checkPitchBend(events,  140, 8124);
+    checkPitchBend(events,  150, 8158);
+
+    // average vibrato
+    checkPitchBend(events, 470, pwReset);
+    checkEventInterval(events, 480, 719, 52, defVol);
+    checkPitchBend(events,  480, 8192);
+    checkPitchBend(events,  490, 8248);
+    checkPitchBend(events,  500, 8305);
+    checkPitchBend(events,  510, 8362);
+    checkPitchBend(events,  520, 8419);
+    checkPitchBend(events,  530, 8453);
+    checkPitchBend(events,  540, 8396);
+    checkPitchBend(events,  550, 8339);
+    checkPitchBend(events,  560, 8283);
+    checkPitchBend(events,  570, 8226);
+    checkPitchBend(events,  580, 8170);
+    checkPitchBend(events,  590, 8113);
+    checkPitchBend(events,  600, 8056);
+    checkPitchBend(events,  610, 7999);
+    checkPitchBend(events,  620, 7942);
+    checkPitchBend(events,  630, 7954);
+    checkPitchBend(events,  640, 8010);
+    checkPitchBend(events,  650, 8067);
+    checkPitchBend(events,  660, 8124);
+    checkPitchBend(events,  670, 8181);
+
+    // wide vibrato
+    checkPitchBend(events, 950, pwReset);
+    checkEventInterval(events, 960, 1439, 52, defVol);
+    checkPitchBend(events,  960, 8029);
+    checkPitchBend(events,  970, 8083);
+    checkPitchBend(events,  980, 8138);
+    checkPitchBend(events,  990, 8192);
+    checkPitchBend(events, 1000, 8246);
+    checkPitchBend(events, 1010, 8301);
+    checkPitchBend(events, 1020, 8355);
+    checkPitchBend(events, 1030, 8301);
+    checkPitchBend(events, 1040, 8246);
+    checkPitchBend(events, 1050, 8192);
+    checkPitchBend(events, 1060, 8138);
+    checkPitchBend(events, 1070, 8083);
+    checkPitchBend(events, 1080, 8029);
+    checkPitchBend(events, 1090, 7974);
+    checkPitchBend(events, 1100, 7919);
+    checkPitchBend(events, 1110, 7865);
+    checkPitchBend(events, 1120, 7810);
+    checkPitchBend(events, 1130, 7756);
+    checkPitchBend(events, 1140, 7701);
+    checkPitchBend(events, 1150, 7756);
+    checkPitchBend(events, 1160, 7810);
+    checkPitchBend(events, 1170, 7865);
+    checkPitchBend(events, 1180, 7919);
+    checkPitchBend(events, 1190, 7974);
+
+    EXPECT_TRUE(events[DEFAULT_CHANNEL].empty());
 }
