@@ -26,6 +26,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/tempotext.h"
 
 using namespace mu::converter;
 
@@ -101,7 +102,7 @@ static void addElementInfoIfNeed(void* data, mu::engraving::EngravingItem* item)
     }
 
     mu::engraving::ElementType type = item->type();
-    mu::engraving::EngravingItem::BarBeat barbeat;
+    std::optional<mu::engraving::EngravingItem::BarBeat> barbeat;
     ScoreElementScanner::ElementInfo info;
 
     if (item->isNote()) {
@@ -118,7 +119,6 @@ static void addElementInfoIfNeed(void* data, mu::engraving::EngravingItem* item)
         } else {
             info.name = note->tpcUserName();
         }
-        barbeat = item->barbeat();
     } else if (item->isSpannerSegment()) {
         mu::engraving::Spanner* spanner = mu::engraving::toSpannerSegment(item)->spanner();
         item = spanner;
@@ -131,20 +131,26 @@ static void addElementInfoIfNeed(void* data, mu::engraving::EngravingItem* item)
         }
     } else if (item->isHarmony()) {
         info.name = mu::engraving::toHarmony(item)->harmonyName();
-        barbeat = item->barbeat();
     } else if (isChordArticulation(item)) {
         const mu::engraving::Chord* chord = mu::engraving::toChord(item->parentItem());
         scannerData->chords.insert(chord);
-
         info.name = item->translatedSubtypeUserName();
         info.notes = chordToNotes(chord);
-        barbeat = item->barbeat();
+    } else if (item->isTempoText()) {
+        info.text = mu::engraving::toTempoText(item)->tempoInfo();
+    } else if (item->isPlayTechAnnotation() || item->isDynamic()) {
+        info.name = item->translatedSubtypeUserName();
+    } else if (item->isTextBase()) {
+        info.text = mu::engraving::toTextBase(item)->plainText();
     } else {
         info.name = item->translatedSubtypeUserName();
+    }
+
+    if (!barbeat.has_value()) {
         barbeat = item->barbeat();
     }
 
-    if (info.name.empty() && info.notes.empty()) {
+    if (info.name.empty() && info.notes.empty() && info.text.empty()) {
         info.name = item->typeUserName().translated();
     }
 
@@ -168,8 +174,8 @@ static void addElementInfoIfNeed(void* data, mu::engraving::EngravingItem* item)
 
     info.staffIdx = item->staffIdx();
     info.voiceIdx = item->voice();
-    info.measureIdx = barbeat.bar - 1;
-    info.beat = barbeat.beat - 1.;
+    info.measureIdx = barbeat.value().bar - 1;
+    info.beat = barbeat.value().beat - 1.;
     scannerData->elements[trackId][type].push_back(info);
 }
 
