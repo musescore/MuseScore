@@ -1700,6 +1700,9 @@ void SystemLayout::layoutTuplets(const std::vector<ChordRest*>& chordRests, Layo
 void SystemLayout::layoutTiesAndBends(const ElementsToLayout& elementsToLayout, LayoutContext& ctx)
 {
     System* system = elementsToLayout.system;
+    if (elementsToLayout.measures.empty()) {
+        return;
+    }
     Fraction stick = elementsToLayout.measures.front()->tick();
 
     for (Chord* chord : elementsToLayout.chords) {
