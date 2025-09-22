@@ -166,7 +166,7 @@ Column {
 
             visible: root.model ? !root.model.insideFretBox : true
 
-            titleText: qsTrc("inspector", "Alignment to notehead")
+            titleText: qsTrc("inspector", "Alignment")
             propertyItem: root.model ? root.model.position : null
 
             navigationPanel: root.navigationPanel
@@ -176,9 +176,21 @@ Column {
             requestWidth: 98
 
             model: [
-                { iconCode: IconCode.NOTE_ALIGN_LEFT, value: 0},
-                { iconCode: IconCode.NOTE_ALIGN_CENTER, value: 2},
-                { iconCode: IconCode.NOTE_ALIGN_RIGHT, value: 1 }
+                { iconCode: IconCode.NOTE_ALIGN_LEFT,
+                    value: 0,
+                    title: qsTrc("inspector", "Align left"),
+                    description: qsTrc("inspector", "Align left edge of text to notehead")
+                },
+                { iconCode: IconCode.NOTE_ALIGN_CENTER,
+                    value: 2,
+                    title: qsTrc("inspector", "Align center"),
+                    description: qsTrc("inspector", "Align horizontal center of text to notehead")
+                },
+                { iconCode: IconCode.NOTE_ALIGN_RIGHT,
+                    value: 1 ,
+                    title: qsTrc("inspector", "Align right"),
+                    description: qsTrc("inspector", "Align right edge of text to notehead")
+                }
             ]
         }
     }
