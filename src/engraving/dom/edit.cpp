@@ -857,11 +857,11 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
     case TextStyleType::HARMONY_ROMAN:
     case TextStyleType::HARMONY_NASHVILLE: {
         track_idx_t track = muse::nidx;
-        Segment* newParent = nullptr;
+        EngravingItem* newParent = nullptr;
         if (destinationElement && destinationElement->isFretDiagram()) {
             FretDiagram* fretDiagram = toFretDiagram(destinationElement);
             track = fretDiagram->track();
-            newParent = fretDiagram->segment();
+            newParent = fretDiagram->harmony() ? toEngravingItem(fretDiagram->segment()) : toEngravingItem(fretDiagram);
         } else {
             ChordRest* chordRest = chordOrRest(destinationElement);
             if (chordRest) {
@@ -6904,6 +6904,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 FretDiagram* fd = toFretDiagram(ne);
                 Harmony* fdHarmony = fd->harmony();
                 if (fdHarmony) {
+                    // TODO: this stuff should be done by overriding setScore setSelected and setTrack for FretDiagram [M.S.]
                     fdHarmony->setScore(score);
                     fdHarmony->setSelected(false);
                     fdHarmony->setTrack(linkedTrack);
@@ -6978,6 +6979,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 newChordLine->setNote(newNote);
             }
             doUndoAddElement(ne);
+        } else if (element->isHarmony() && element->explicitParent()->isFretDiagram()) {
+            doUndoAddElement(ne);
         }
         //
         // elements with Segment as parent
@@ -6994,14 +6997,12 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                  || element->isSticking()
                  || element->isFretDiagram()
                  || element->isFermata()
-                 || element->isHarmony()
+                 || element->isHarmony() // Case with parent FretDiagram handled above, so we know it has parent Segment
                  || element->isHarpPedalDiagram()
                  || element->isFiguredBass()
                  || element->isClef()
                  || element->isAmbitus()) {
-            Segment* segment
-                = element->explicitParent()->isFretDiagram() ? toSegment(element->explicitParent()->explicitParent()) : toSegment(
-                      element->explicitParent());
+            Segment* segment = toSegment(element->explicitParent());
             Fraction tick    = segment->tick();
             Measure* m       = score->tick2measure(tick);
             bool addClefToPrevMeasure = segment->isType(SegmentType::Clef) && element->isClef() && !toClef(element)->isHeader();
