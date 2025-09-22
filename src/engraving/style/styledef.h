@@ -2040,6 +2040,7 @@ struct StyleDef
 private:
 
     friend class MStyle;
+    friend class EngravingStyleModel;
 
     struct StyleValue {
         Sid _idx;

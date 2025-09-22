@@ -39,6 +39,7 @@ static const muse::UriQuery NAVIGATION_TREE_URI("muse://diagnostics/navigation/t
 static const muse::UriQuery ACCESSIBLE_TREE_URI("muse://diagnostics/accessible/tree?modal=false&floating=true");
 static const muse::UriQuery ENGRAVING_ELEMENTS_URI("musescore://diagnostics/engraving/elements?modal=false&floating=true");
 static const muse::UriQuery ENGRAVING_UNDOSTACK_URI("musescore://diagnostics/engraving/undostack?modal=false&floating=true");
+static const muse::UriQuery ENGRAVING_STYLE_URI("musescore://diagnostics/engraving/style?modal=false&floating=true");
 static const muse::UriQuery ACTIONS_LIST_URI("muse://diagnostics/actions/list?modal=false&floating=true");
 
 void DiagnosticsActionsController::init()
@@ -51,6 +52,7 @@ void DiagnosticsActionsController::init()
     dispatcher()->reg(this, "diagnostic-accessible-tree-dump", []() { DiagnosticAccessibleModel().dumpTree(); });
     dispatcher()->reg(this, "diagnostic-show-engraving-elements", [this]() { openUri(ENGRAVING_ELEMENTS_URI, false); });
     dispatcher()->reg(this, "diagnostic-show-engraving-undostack", [this]() { openUri(ENGRAVING_UNDOSTACK_URI, false); });
+    dispatcher()->reg(this, "diagnostic-show-engraving-style", [this]() { openUri(ENGRAVING_STYLE_URI, false); });
     dispatcher()->reg(this, "diagnostic-save-diagnostic-files", this, &DiagnosticsActionsController::saveDiagnosticFiles);
     dispatcher()->reg(this, "diagnostic-show-actions", [this]() { openUri(ACTIONS_LIST_URI); });
 
