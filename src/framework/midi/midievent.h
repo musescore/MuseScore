@@ -23,6 +23,7 @@
 #define MUSE_MIDI_MIDIEVENT_H
 
 #include <cstdint>
+#include <cstring>
 #include <array>
 #include <set>
 #include <cassert>
@@ -174,7 +175,7 @@ struct Event {
     {
         Event e;
         size_t numBytes = std::min(count, e.m_data.size()) * sizeof(uint32_t);
-        memcpy(e.m_data.data(), data, numBytes);
+        std::memcpy(e.m_data.data(), data, numBytes);
         return e;
     }
 

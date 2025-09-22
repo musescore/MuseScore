@@ -23,6 +23,8 @@
 #ifndef MUSE_AUDIO_CIRCULARSAMPLEBUFFER_H
 #define MUSE_AUDIO_CIRCULARSAMPLEBUFFER_H
 
+#include <cstring>
+#include <algorithm>
 #include <cassert>
 
 #include "vectorops.h"
@@ -80,7 +82,7 @@ public:
     void reset()
     {
         if (m_buffer && m_allocatedSize > 0) {
-            memset(m_buffer, 0, sizeof(SampleT) * m_allocatedSize);
+            std::memset(m_buffer, 0, sizeof(SampleT) * m_allocatedSize);
         }
         m_positionIndex = 0;
     }

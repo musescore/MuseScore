@@ -26,10 +26,6 @@ include(GetPlatformInfo)
 set(MODULE_LINK )
 if (OS_IS_WASM)
     set(WEBWORKER_FACADE_MODE ON)
-
-    # worker exec
-    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/worker/platform/web audio_worker)
-
 else()
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth fluidsynth)

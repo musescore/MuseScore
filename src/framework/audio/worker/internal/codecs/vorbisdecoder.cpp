@@ -22,6 +22,8 @@
 
 #include "vorbisdecoder.h"
 
+#include <algorithm>
+
 #if (defined (_MSCVER) || defined (_MSC_VER))
 #pragma warning(push)
 #pragma warning(disable: 4456) // declaration hides previous local declaration

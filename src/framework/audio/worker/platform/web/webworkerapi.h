@@ -47,7 +47,6 @@ public:
 private:
     WebWorkerApi() = default;
 
-    std::shared_ptr<GlobalModule> m_globalModule;
     std::shared_ptr<audio::rpc::IRpcChannel> m_rpcChannel;
     std::shared_ptr<audio::worker::StartWorkerController> m_startWorkerController;
 };

@@ -73,12 +73,16 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
         let totalWriten = 0;
         for (let ci = 0; ci < output.length; ++ci) {
             let channel = output[ci];
-            const samplesToWrite = Math.min(this.buffer.length, channel.length);
-            for (let i = 0; i < samplesToWrite; i++) {
-                channel[i] = this.buffer[i * 2 + ci];
+            for (let i = 0; i < channel.length; i++) {
+                let index = i * 2 + ci;
+                if (index < this.buffer.length) {
+                    channel[i] = this.buffer[i * 2 + ci];
+                } else {
+                    channel[i] = 0;
+                }
             }
 
-            totalWriten += samplesToWrite;
+            totalWriten += Math.min(this.buffer.length, channel.length);
         }
 
         this.buffer = this.buffer.slice(totalWriten);
