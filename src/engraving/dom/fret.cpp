@@ -990,6 +990,9 @@ void FretDiagram::add(EngravingItem* e)
 
         m_harmony->setTrack(track());
 
+        //! on the same lavel as diagram
+        m_harmony->setZ(z());
+
         if (m_harmony->harmonyName().empty()) {
             if (s_diagramPatternToHarmoniesMap.empty()) {
                 readHarmonyToDiagramFile(HARMONY_TO_DIAGRAM_FILE_PATH);
