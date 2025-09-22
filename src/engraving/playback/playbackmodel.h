@@ -133,14 +133,15 @@ private:
 
     void clearExpiredTracks();
     void clearExpiredContexts(const track_idx_t trackFrom, const track_idx_t trackTo);
-    void clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo);
+    void clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
+                            ChangedTrackIdSet* trackChanges = nullptr);
     void collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result);
     void notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, const InstrumentTrackIdSet& changedTracks);
 
     void removeEventsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo, const muse::mpe::timestamp_t timestampFrom = -1,
-                               const muse::mpe::timestamp_t timestampTo = -1);
+                               const muse::mpe::timestamp_t timestampTo = -1, ChangedTrackIdSet* trackChanges = nullptr);
     void removeTrackEvents(const InstrumentTrackId& trackId, const muse::mpe::timestamp_t timestampFrom = -1,
-                           const muse::mpe::timestamp_t timestampTo = -1);
+                           const muse::mpe::timestamp_t timestampTo = -1, ChangedTrackIdSet* trackChanges = nullptr);
 
     bool shouldSkipChanges(const ScoreChanges& changes) const;
 
