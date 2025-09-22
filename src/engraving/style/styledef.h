@@ -716,6 +716,7 @@ enum class Sid {
     linearStretch,
     crossMeasureValues,
     keySigNaturals,
+    keySigShowNaturalsChangingSharpsFlats,
 
     tupletMaxSlope,
     tupletOutOfStaff,

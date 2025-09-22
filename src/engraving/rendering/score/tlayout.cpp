@@ -3846,9 +3846,12 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
             }
         }
 
+        const bool sameAccidentals = t1 * int(t2) > 0;
+        // Don't show naturals when going from sharps to flats, if style says so
+        naturalsOn = sameAccidentals || conf.styleB(Sid::keySigShowNaturalsChangingSharpsFlats);
         // Naturals should go BEFORE accidentals if style says so
         // or going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
-        const bool natBefore = conf.styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE) || t1 * int(t2) < 0;
+        const bool natBefore = conf.styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE) || !sameAccidentals;
 
         const signed char* lines = ClefInfo::lines(clef);
 
