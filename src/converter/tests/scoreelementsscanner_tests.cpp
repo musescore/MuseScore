@@ -134,6 +134,7 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
 
             EXPECT_EQ(actualInfo.name, expectedInfo.name);
             EXPECT_EQ(actualInfo.notes, expectedInfo.notes);
+            EXPECT_EQ(actualInfo.text, expectedInfo.text);
         }
     }
 

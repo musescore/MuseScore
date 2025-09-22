@@ -435,6 +435,16 @@ String TempoText::duration2userName(const TDuration t)
 
 String TempoText::accessibleInfo() const
 {
+    String info = tempoInfo();
+    if (info.empty()) {
+        return TextBase::accessibleInfo();
+    }
+
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), info);
+}
+
+String TempoText::tempoInfo() const
+{
     TDuration t1;
     TDuration t2;
     int len1;
@@ -448,8 +458,9 @@ String TempoText::accessibleInfo() const
         x2 = findTempoDuration(secondPart, len2, t2);
     }
 
+    String info;
+
     if (x1 != -1) {
-        String info;
         String dots1 = duration2userName(t1);
         if (x2 != -1) {
             String dots2 = duration2userName(t2);
@@ -466,11 +477,9 @@ String TempoText::accessibleInfo() const
             //: translate "%1 note" with "%1", so that just the duration will be shown.
             info = muse::mtrc("engraving", "%1 note = %2").arg(dots1, secondPart);
         }
-
-        return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), info);
-    } else {
-        return TextBase::accessibleInfo();
     }
+
+    return info;
 }
 
 void TempoText::added()
