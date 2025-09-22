@@ -51,6 +51,7 @@ class MixerPanelModel : public QAbstractListModel, public muse::async::Asyncable
     Q_PROPERTY(int navigationOrderStart READ navigationOrderStart WRITE setNavigationOrderStart NOTIFY navigationOrderStartChanged)
 
     Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
+    Q_PROPERTY(int focusedIndex READ focusedIndex WRITE setFocusedIndex NOTIFY focusedIndexChanged)
 
 public:
     explicit MixerPanelModel(QObject* parent = nullptr);
@@ -68,9 +69,13 @@ public:
     int navigationOrderStart() const;
     void setNavigationOrderStart(int navigationOrderStart);
 
+    int focusedIndex() const;
+    void setFocusedIndex(int focusedIndex);
+
 signals:
     void navigationSectionChanged();
     void navigationOrderStartChanged();
+    void focusedIndexChanged();
     void rowCountChanged();
 
 private:
@@ -101,6 +106,9 @@ private:
     void loadOutputParams(MixerChannelItem* item, muse::audio::AudioOutputParams&& params);
     void updateOutputResourceItemCount();
 
+    void onNotationChanged();
+    void onScoreSelectionChanged();
+
     project::INotationProjectPtr currentProject() const;
     project::IProjectAudioSettingsPtr audioSettings() const;
     notation::INotationPlaybackPtr notationPlayback() const;
@@ -112,6 +120,11 @@ private:
 
     muse::ui::NavigationSection* m_navigationSection = nullptr;
     int m_navigationOrderStart = 1;
+
+    int m_focusedIndex = -1;
+    notation::INotationInteractionPtr m_notationInteraction = nullptr;
+
+    std::shared_ptr<muse::async::Asyncable> m_scoreSelectionNotifyReceiver = nullptr;
 };
 }
 
