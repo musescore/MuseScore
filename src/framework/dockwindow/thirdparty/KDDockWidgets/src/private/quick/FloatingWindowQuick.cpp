@@ -82,6 +82,9 @@ public:
 
     void updateRootItemSize()
     {
+        if (m_floatingWindow->beingDeleted())
+            return;
+
         m_floatingWindow->setSize(size());
     }
 
