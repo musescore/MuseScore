@@ -5248,44 +5248,16 @@ void NotationInteraction::swapSelection()
         return;
     }
 
+    // Store the old selection...
     mu::engraving::Selection& selection = score()->selection();
-    QString mimeType = selection.mimeType();
+    QByteArray oldSelection = selection.mimeData().toQByteArray();
 
-    if (mimeType == mu::engraving::mimeStaffListFormat) { // determine size of clipboard selection
-        const QMimeData* mimeData = this->selection()->qMimeData();
-        QByteArray data = mimeData ? mimeData->data(mu::engraving::mimeStaffListFormat) : QByteArray();
-        mu::engraving::XmlReader reader(data);
-        reader.readNextStartElement();
-
-        Fraction tickLen = Fraction(0, 1);
-        int stavesCount = 0;
-
-        if (reader.name() == "StaffList") {
-            tickLen = mu::engraving::Fraction::fromString(reader.attribute("len"));
-            stavesCount = reader.intAttribute("staves", 0);
-        }
-
-        if (tickLen > mu::engraving::Fraction(0, 1)) { // attempt to extend selection to match clipboard size
-            mu::engraving::Segment* segment = selection.startSegment();
-            mu::engraving::Fraction startTick = selection.tickStart() + tickLen;
-            mu::engraving::Segment* segmentAfter = score()->tick2leftSegment(startTick);
-
-            size_t staffIndex = selection.staffStart() + stavesCount - 1;
-            if (staffIndex >= score()->nstaves()) {
-                staffIndex = score()->nstaves() - 1;
-            }
-
-            startTick = selection.tickStart();
-            mu::engraving::Fraction endTick = startTick + tickLen;
-            selection.extendRangeSelection(segment, segmentAfter, staffIndex, startTick, endTick);
-            selection.update();
-        }
-    }
-
-    QByteArray currentSelectionBackup = selection.mimeData().toQByteArray();
+    // Paste using contents of clipboard...
     pasteSelection();
+
+    // Save old selection to clipboard...
     QMimeData* mimeData = new QMimeData();
-    mimeData->setData(mimeType, currentSelectionBackup);
+    mimeData->setData(selection.mimeType(), oldSelection);
     QApplication::clipboard()->setMimeData(mimeData);
 }
 
