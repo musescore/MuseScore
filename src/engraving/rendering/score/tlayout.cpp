@@ -3688,16 +3688,17 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
 //        return;
 //    }
 
-    const Segment* s = item->segment();
-    double spatium = item->spatium();
-    double step = spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
-
     ldata->setBbox(RectF());
-
     ldata->keySymbols.clear();
-    if (item->staff() && !item->staff()->staffType(item->tick())->genKeysig()) {
+
+    const StaffType* st = item->staffType();
+    if (st && !st->genKeysig()) {
         return;
     }
+    const Segment* s = item->segment();
+    track_idx_t track = item->track();
+    double spatium = item->spatium();
+    double step = spatium * (st ? st->lineDistance().val() * 0.5 : 0.5);
 
     // determine current clef for this staff
     ClefType clef = ClefType::G;
@@ -3709,19 +3710,16 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
                 const bool isClefSeg = seg->isClefType() || seg->isHeaderClefType()
                                        || (seg->isClefRepeatAnnounceType() && s->isKeySigRepeatAnnounceType());
                 if (seg->enabled() && isClefSeg) {
-                    c = toClef(seg->element(item->track()));
+                    c = toClef(seg->element(track));
                 }
             }
         }
-        if (c) {
-            clef = c->clefType();
-        } else {
-            // no clef found, so get the clef type from the clefs list, using the previous tick
-            clef = item->staff()->clef(item->tick() - Fraction::eps());
-        }
+        // If no clef found, get the clef type from the clefs list (using the previous tick)
+        clef = c ? c->clefType() : item->staff()->clef(item->tick() - Fraction::eps());
     }
 
     int t1 = int(item->key());
+    const signed char* lines = ClefInfo::lines(clef);
 
     if (item->isCustom() && !item->isAtonal()) {
         double accidentalGap = conf.styleS(Sid::keysigAccidentalDistance).val();
@@ -3740,7 +3738,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
                 KeySym ks;
                 int lineIndexOffset = t1 > 0 ? -1 : 6;
                 ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
-                ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
+                ks.line = lines[lineIndexOffset + i];
                 if (!ldata->keySymbols.empty()) {
                     const KeySym& previous = ldata->keySymbols.back();
                     double previousWidth = item->symWidth(previous.sym) / spatium;
@@ -3758,7 +3756,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
             bool flat = std::string(SymNames::nameForSymId(sym).ascii()).find("Flat") != std::string::npos;
             int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
             accIdx = flat ? 13 - accIdx : accIdx;
-            int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
+            int line = lines[accIdx] + cd.octAlt * 7;
             double xpos = cd.xAlt;
             if (!ldata->keySymbols.empty()) {
                 const KeySym& previous = ldata->keySymbols.back();
@@ -3791,101 +3789,87 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
             }
         }
     } else {
-        auto key2accidentals = [](int key) -> int {
-            switch (std::abs(key)) {
-            case 7: return 0x7f;
-            case 6: return 0x3f;
-            case 5: return 0x1f;
-            case 4: return 0xf;
-            case 3: return 0x7;
-            case 2: return 0x3;
-            case 1: return 0x1;
-            case 0: return 0;
-            default:
-                LOGD("illegal key %d", key);
-                return 0;
+        auto layoutSharpsFlats = [&]() {
+            if (std::abs(t1) > 7) {
+                LOGD("illegal t1 key %d", t1);
+                return;
             }
-        };
-        int accidentals = key2accidentals(t1);
-        int naturals = 0;
-
-        // Naturals are shown if:
-        // Key signature is courtesy, mid-measure or prev. measure has no section break and no courtesy keysig.
-        // AND we're not force hiding naturals (continuous mode)
-        // AND key sig is CMaj/Amin OR style says they are on
-        const Measure* prevMeasure = item->measure() ? item->measure()->prevMeasureMM() : nullptr;
-        bool naturalsOn = !item->hideNaturals() && item->track() != muse::nidx
-                          && (conf.styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0))
-                          && ((s && (s->isType(SegmentType::CourtesyKeySigType) || !s->rtick().isZero()))
-                              || (prevMeasure && !prevMeasure->sectionBreak() && !prevMeasure->hasCourtesyKeySig()));
-
-        int coffset = 0;
-        Key t2 = Key::C;
-        if (naturalsOn) {
-            if (item->staff()) {
-                t2 = item->staff()->key(item->tick() - Fraction::eps());
-            }
-            if (s && s->isType(SegmentType::KeySigStartRepeatAnnounce)) {
-                // Handle naturals in continuation courtesy
-                Segment* prevCourtesySeg
-                    = prevMeasure ? prevMeasure->findSegmentR(SegmentType::KeySigRepeatAnnounce, prevMeasure->ticks()) : nullptr;
-                EngravingItem* prevCourtesy = prevCourtesySeg ? prevCourtesySeg->element(item->track()) : nullptr;
-                t2 = prevCourtesy && prevCourtesy->isKeySig() ? toKeySig(prevCourtesy)->key() : t2;
-            }
-            if (t2 == Key::C) {
-                naturalsOn = false;
-            } else {
-                naturals = key2accidentals(int(t2));
-                // remove redundant naturals
-                if (!((t1 > 0) ^ (t2 > 0))) {
-                    naturals &= ~accidentals;
-                }
-                if (t2 < 0) {
-                    coffset = 7;
-                }
-            }
-        }
-
-        const bool sameAccidentals = t1 * int(t2) > 0;
-        // Don't show naturals when going from sharps to flats, if style says so
-        naturalsOn = sameAccidentals || conf.styleB(Sid::keySigShowNaturalsChangingSharpsFlats);
-        // Naturals should go BEFORE accidentals if style says so
-        // or going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
-        const bool natBefore = conf.styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE) || !sameAccidentals;
-
-        const signed char* lines = ClefInfo::lines(clef);
-
-        if (naturalsOn && natBefore) {
-            for (int i = 0; i < 7; ++i) {
-                if (naturals & (1 << i)) {
-                    keySigAddLayout(item, conf, SymId::accidentalNatural, lines[i + coffset], ldata);
-                }
-            }
-        }
-        if (std::abs(t1) <= 7) {
             SymId symbol = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
             int lineIndexOffset = t1 > 0 ? 0 : 7;
             for (int i = 0; i < std::abs(t1); ++i) {
                 keySigAddLayout(item, conf, symbol, lines[lineIndexOffset + i], ldata);
             }
-        } else {
-            LOGD("illegal t1 key %d", t1);
-        }
-        if (naturalsOn && !natBefore) {
-            for (int i = 0; i < 7; ++i) {
-                if (naturals & (1 << i)) {
-                    keySigAddLayout(item, conf, SymId::accidentalNatural, lines[i + coffset], ldata);
+        };
+
+        // Naturals are shown if:
+        // Key signature is courtesy, mid-measure or prev. measure has no section break and no courtesy keysig.
+        // AND we're not force hiding naturals (continuous mode)
+        // AND key sig is CMaj/Amin OR style says they are on
+        const Measure* pm = item->measure() ? item->measure()->prevMeasureMM() : nullptr;
+        if (!item->hideNaturals() && track != muse::nidx
+            && (conf.styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0))
+            && ((s && (s->isType(SegmentType::CourtesyKeySigType) || !s->rtick().isZero()))
+                || (pm && !pm->sectionBreak() && !pm->hasCourtesyKeySig()))) {
+            int t2 = item->staff() ? int(item->staff()->key(item->tick() - Fraction::eps())) : 0;
+
+            // Handle naturals in continuation courtesy
+            if (pm && s && s->isType(SegmentType::KeySigStartRepeatAnnounce)) {
+                Segment* prevCourtesySeg = pm->findSegmentR(SegmentType::KeySigRepeatAnnounce, pm->ticks());
+                if (prevCourtesySeg && prevCourtesySeg->element(track)) {
+                    t2 = int(toKeySig(prevCourtesySeg->element(track))->key());
+                }
+            }
+            // Don't show naturals when going from sharps to flats, if style says so
+            const bool sameAccidentals = t1 * t2 >= 0;
+            if (t2 != 0 && (sameAccidentals || conf.styleB(Sid::keySigShowNaturalsChangingSharpsFlats))) {
+                auto key2accidentals = [](int key) -> int {
+                    switch (std::abs(key)) {
+                    case 7: return 0x7f;
+                    case 6: return 0x3f;
+                    case 5: return 0x1f;
+                    case 4: return 0xf;
+                    case 3: return 0x7;
+                    case 2: return 0x3;
+                    case 1: return 0x1;
+                    case 0: return 0;
+                    default:
+                        LOGD("illegal key %d", key);
+                        return 0;
+                    }
+                };
+
+                int naturals = key2accidentals(t2);
+                // remove redundant naturals
+                if (!((t1 > 0) ^ (t2 > 0))) {
+                    naturals &= ~key2accidentals(t1);
+                }
+                auto layoutNaturals = [&]() {
+                    int lineIndexOffset = t2 > 0 ? 0 : 7;
+                    for (int i = 0; i < 7; ++i) {
+                        if (naturals & (1 << i)) {
+                            keySigAddLayout(item, conf, SymId::accidentalNatural, lines[i + lineIndexOffset], ldata);
+                        }
+                    }
+                };
+                // Naturals should go BEFORE accidentals if style says so
+                // or going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
+                if (conf.styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE) || !sameAccidentals) {
+                    layoutNaturals();
+                    layoutSharpsFlats();
+                } else {
+                    layoutSharpsFlats();
+                    layoutNaturals();
                 }
             }
         }
 
-        // Follow stepOffset
-        if (item->staffType()) {
-            ldata->setPosY(item->staffType()->stepOffset() * 0.5 * spatium);
+        // No naturals were added, so just create a regular keysig
+        if (ldata->keySymbols.empty()) {
+            layoutSharpsFlats();
         }
     }
 
-    ldata->moveY(item->staffOffsetY());
+    ldata->setPosY((st ? step * st->stepOffset() : 0.0) + item->staffOffsetY());
 
     Shape keySigShape;
     for (const KeySym& ks : ldata->keySymbols) {
