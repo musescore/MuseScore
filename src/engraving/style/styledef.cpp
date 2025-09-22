@@ -701,6 +701,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(linearStretch,                              PropertyValue(double(1.5))),
     styleDef(crossMeasureValues,                         false),
     styleDef(keySigNaturals,                             PropertyValue(int(KeySigNatural::NONE))),
+    styleDef(keySigShowNaturalsChangingSharpsFlats,      true),
 
     styleDef(tupletMaxSlope,                             PropertyValue(double(0.5))),
     styleDef(tupletOutOfStaff,                           true),
