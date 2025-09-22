@@ -36,6 +36,7 @@ public:
     {
         muse::String name;
         muse::String notes;
+        muse::String text;
         mu::engraving::staff_idx_t staffIdx = 0;
         mu::engraving::voice_idx_t voiceIdx = 0;
         size_t measureIdx = 0;

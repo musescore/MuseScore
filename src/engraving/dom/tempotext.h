@@ -93,6 +93,8 @@ public:
     PropertyValue propertyDefault(Pid id) const override;
     String accessibleInfo() const override;
 
+    String tempoInfo() const;
+
     static constexpr double DEFAULT_SYM_SIZE_RATIO = 5.0 / 3.0;
 
 protected:
