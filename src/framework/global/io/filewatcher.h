@@ -23,6 +23,7 @@
 
 #include "global/async/channel.h"
 
+#include <string>
 #include <memory>
 
 class QFileSystemWatcher;

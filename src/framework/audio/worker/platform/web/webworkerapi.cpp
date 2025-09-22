@@ -22,7 +22,9 @@
 #include "webworkerapi.h"
 
 #include "global/modularity/ioc.h"
-#include "global/globalmodule.h"
+
+#include "global/runtime.h"
+#include "global/io/internal/memfilesystem.h"
 
 #include "audio/common/rpc/platform/web/webrpcchannel.h"
 
@@ -31,6 +33,7 @@
 #include "log.h"
 
 using namespace muse;
+using namespace muse::io;
 using namespace muse::web::worker;
 using namespace muse::audio;
 using namespace muse::audio::worker;
@@ -54,18 +57,16 @@ static modularity::ModulesIoC* ioc()
 
 void WebWorkerApi::init()
 {
-    m_globalModule = std::make_shared<GlobalModule>();
+    muse::runtime::mainThreadId(); //! NOTE Needs only call
+    muse::runtime::setThreadName("worker");
+
     m_rpcChannel = std::make_shared<WebRpcChannel>();
     m_startWorkerController = std::make_shared<StartWorkerController>(m_rpcChannel);
 
-    m_globalModule->registerExports();
     ioc()->registerExport<IRpcChannel>(moduleName(), m_rpcChannel);
     m_startWorkerController->registerExports();
 
     m_rpcChannel->setupOnWorker();
-
-    m_globalModule->onPreInit(IApplication::RunMode::ConsoleApp);
-    m_globalModule->onInit(IApplication::RunMode::ConsoleApp);
 
     m_rpcChannel->send(rpc::make_notification(Method::WorkerStarted));
 

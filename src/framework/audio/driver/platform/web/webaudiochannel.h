@@ -22,6 +22,7 @@
 #pragma once
 
 #include <vector>
+#include <functional>
 
 namespace muse::audio::worker {
 //! NOTE This is an RPC channel for

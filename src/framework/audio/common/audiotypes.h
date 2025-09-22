@@ -133,8 +133,8 @@ using AudioResourceVendor = std::string;
 using AudioResourceAttributes = std::map<String, String>;
 using AudioUnitConfig = std::map<std::string, std::string>;
 
-static const String PLAYBACK_SETUP_DATA_ATTRIBUTE("playbackSetupData");
-static const String CATEGORIES_ATTRIBUTE("categories");
+static const String PLAYBACK_SETUP_DATA_ATTRIBUTE(u"playbackSetupData");
+static const String CATEGORIES_ATTRIBUTE(u"categories");
 
 enum class AudioResourceType {
     Undefined = -1,
