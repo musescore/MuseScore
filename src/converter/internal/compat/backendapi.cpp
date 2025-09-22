@@ -706,6 +706,10 @@ muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notatio
                     obj["notes"] = element.notes.toQString();
                 }
 
+                if (!element.text.empty()) {
+                    obj["text"] = element.text.toQString();
+                }
+
                 if (element.staffIdx != muse::nidx) {
                     obj["staffIdx"] = static_cast<int>(element.staffIdx);
                 }
