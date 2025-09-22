@@ -20,22 +20,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_ACCIDENTALGROUPPAGEMODEL_H
-#define MU_NOTATION_ACCIDENTALGROUPPAGEMODEL_H
+#pragma once
 
 #include "abstractstyledialogmodel.h"
 
 namespace mu::notation {
-class AccidentalGroupPageModel : public AbstractStyleDialogModel
+class AccidentalsPageModel : public AbstractStyleDialogModel
 {
     Q_OBJECT
+
+    Q_PROPERTY(StyleItem * bracketedAccidentalPadding READ bracketedAccidentalPadding CONSTANT)
+
+    Q_PROPERTY(StyleItem * keySigNaturals READ keySigNaturals CONSTANT)
 
     Q_PROPERTY(StyleItem * accidFollowNoteOffset READ accidFollowNoteOffset CONSTANT)
     Q_PROPERTY(StyleItem * alignAccidentalOctavesAcrossSubChords READ alignAccidentalOctavesAcrossSubChords CONSTANT)
     Q_PROPERTY(StyleItem * keepAccidentalSecondsTogether READ keepAccidentalSecondsTogether CONSTANT)
     Q_PROPERTY(StyleItem * alignOffsetOctaveAccidentals READ alignOffsetOctaveAccidentals CONSTANT)
+
 public:
-    explicit AccidentalGroupPageModel(QObject* parent = nullptr);
+    explicit AccidentalsPageModel(QObject* parent = nullptr);
+
+    StyleItem* bracketedAccidentalPadding() const;
+
+    StyleItem* keySigNaturals() const;
 
     StyleItem* accidFollowNoteOffset() const;
     StyleItem* alignAccidentalOctavesAcrossSubChords() const;
@@ -43,4 +51,3 @@ public:
     StyleItem* alignOffsetOctaveAccidentals() const;
 };
 }
-#endif // MU_NOTATION_ACCIDENTALGROUPPAGEMODEL_H

@@ -247,11 +247,6 @@ EditStyle::EditStyle(QWidget* parent)
     // use this group widgets in list styleWidgets
     // This works for groups which represent an int enumeration.
 
-    QButtonGroup* ksng = new QButtonGroup(this);
-    ksng->addButton(radioKeySigNatNone, int(KeySigNatural::NONE));
-    ksng->addButton(radioKeySigNatBefore, int(KeySigNatural::BEFORE));
-    ksng->addButton(radioKeySigNatAfter, int(KeySigNatural::AFTER));
-
     QButtonGroup* ksbl = new QButtonGroup(this);
     ksbl->addButton(radioKeySigCourtesyBarlineAlwaysSingle, int(CourtesyBarlineMode::ALWAYS_SINGLE));
     ksbl->addButton(radioKeySigCourtesyBarlineAlwaysDouble, int(CourtesyBarlineMode::ALWAYS_DOUBLE));
@@ -316,10 +311,6 @@ EditStyle::EditStyle(QWidget* parent)
     mmRestConstantWidth->addButton(mmRestWidthProportional, 0);
     mmRestConstantWidth->addButton(mmRestWidthConstant, 1);
 
-    QButtonGroup* partialSlurAngle = new QButtonGroup(this);
-    partialSlurAngle->addButton(partialSlursAngleNormal, 0);
-    partialSlurAngle->addButton(partialSlursAngleWeird, 1);
-
     // ====================================================
     // Style widgets
     // ====================================================
@@ -331,7 +322,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::figuredBassFontSize,     false, doubleSpinFBSize,        0 },
         { StyleId::figuredBassYOffset,      false, doubleSpinFBVertPos,     0 },
         { StyleId::figuredBassLineHeight,   true,  spinFBLineHeight,        0 },
-        { StyleId::keySigNaturals,          false, ksng,                    0 },
         { StyleId::ottavaLineStyle,         false, ottavaLineStyle,         resetOttavaLineStyle },
         { StyleId::ottavaDashLineLen,       false, ottavaLineStyleDashSize, resetOttavaLineStyleDashSize },
         { StyleId::ottavaDashGapLen,        false, ottavaLineStyleGapSize,  resetOttavaLineStyleGapSize },
@@ -432,7 +422,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::subsSystemInstNameVisibility, false, subsSysLabels, resetSubsSystemLabel },
         { StyleId::accidentalNoteDistance,  false, accidentalNoteDistance,  0 },
         { StyleId::accidentalDistance,      false, accidentalDistance,      0 },
-        { StyleId::bracketedAccidentalPadding, false, accidentalsBracketsBadding, resetAccidentalsBracketPadding },
         { StyleId::minNoteDistance,         false, minNoteDistance,         resetMinNoteDistance },
         { StyleId::barNoteDistance,         false, barNoteDistance,         resetBarNoteDistance },
         { StyleId::barAccidentalDistance,   false, barAccidentalDistance,   resetBarAccidentalDistance },
@@ -471,20 +460,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::arpeggioLineWidth,       false, arpeggioLineWidth,       0 },
         { StyleId::arpeggioHookLen,         false, arpeggioHookLen,         0 },
         { StyleId::arpeggioHiddenInStdIfTab, false, arpeggioHiddenInStdIfTab, 0 },
-        { StyleId::slurEndWidth,            false, slurEndLineWidth,        resetSlurEndLineWidth },
-        { StyleId::slurMidWidth,            false, slurMidLineWidth,        resetSlurMidLineWidth },
-        { StyleId::slurDottedWidth,         false, slurDottedLineWidth,     resetSlurDottedLineWidth },
-        { StyleId::slurMinDistance,         false, slurMinDistance,         resetSlurMinDistance },
-        { StyleId::angleHangingSlursAwayFromStaff, false, partialSlurAngle, 0 },
-        { StyleId::tieEndWidth,             false, tieEndLineWidth,         resetTieEndLineWidth },
-        { StyleId::tieMidWidth,             false, tieMidLineWidth,         resetTieMidLineWidth },
-        { StyleId::tieDottedWidth,          false, tieDottedLineWidth,      resetTieDottedLineWidth },
-        { StyleId::tieMinDistance,          false, tieMinDistance,          resetTieMinDistance },
-        { StyleId::minTieLength,            false, minTieLength,            resetMinTieLength },
-        { StyleId::minHangingTieLength,     false, minHangingTieLength,     resetMinHangingTieLength },
-
-        { StyleId::minLaissezVibLength,            false, minLaissezVibLength,            resetMinLaissezVibLength },
-        { StyleId::laissezVibUseSmuflSym,          false, laissezVibUseSmufl,            0 },
 
         { StyleId::bracketWidth,            false, bracketWidth,            resetBracketThickness },
         { StyleId::bracketDistance,         false, bracketDistance,         resetBracketDistance },
@@ -847,35 +822,32 @@ EditStyle::EditStyle(QWidget* parent)
     fullBendStyleBoxSelector->layout()->addWidget(fullBendStyleSelector.widget);
 
     // ====================================================
-    // TIE PLACEMENT (QML)
+    //  SLURS AND TIES (QML)
     // ====================================================
 
-    auto tiePlacementSelector = createQmlWidget(
-        groupBox_ties,
-        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml")));
-    tiePlacementSelector.widget->setMinimumSize(224, 240);
-    groupBox_ties->layout()->addWidget(tiePlacementSelector.widget);
+    auto slursAndTiesPage = createQmlWidget(
+        PageSlursTies,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/SlursAndTiesPage.qml")));
+    PageSlursTies->layout()->addWidget(slursAndTiesPage.widget);
 
     // ====================================================
-    // ACCIDENTAL GROUP PLACEMENT (QML)
+    // ACCIDENTALS (QML)
     // ====================================================
 
-    auto accidPlacementSelector = createQmlWidget(
-        groupBoxAccidentalStacking,
-        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml")));
-    accidPlacementSelector.widget->setMinimumSize(224, 440);
-    groupBoxAccidentalStacking->layout()->addWidget(accidPlacementSelector.widget);
+    auto accidentalsPage = createQmlWidget(
+        PageAccidentals,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalsPage.qml")));
+    PageAccidentals->layout()->addWidget(accidentalsPage.widget);
 
     // ====================================================
     // FRETBOARDS STYLE PAGE (QML)
     // ====================================================
 
     auto fretboardsPage = createQmlWidget(
-        fretboardsWidget,
+        PageFretboardDiagrams,
         QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml")));
-    fretboardsPage.widget->setMinimumSize(224, 1006);
     connect(fretboardsPage.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
-    fretboardsWidget->layout()->addWidget(fretboardsPage.widget);
+    PageFretboardDiagrams->layout()->addWidget(fretboardsPage.widget);
 
     // ====================================================
     // Hammer-on/pull-off and tapping STYLE PAGE (QML)
@@ -1015,8 +987,6 @@ EditStyle::EditStyle(QWidget* parent)
     connect(lyricsDashMaxLength, &QDoubleSpinBox::valueChanged, this, &EditStyle::lyricsDashMaxLengthValueChanged);
     connect(minSystemDistance,   &QDoubleSpinBox::valueChanged, this, &EditStyle::systemMinDistanceValueChanged);
     connect(maxSystemDistance,   &QDoubleSpinBox::valueChanged, this, &EditStyle::systemMaxDistanceValueChanged);
-
-    accidentalsGroup->setVisible(false);   // disable, not yet implemented
 
     // ====================================================
     // Signal Mappers
@@ -1490,7 +1460,7 @@ EditStyle::WidgetAndView EditStyle::createQmlWidget(QWidget* parent, const QUrl&
     view->setSource(source);
 
     QWidget* container = QWidget::createWindowContainer(view, parent);
-    container->setMinimumSize(view->size());
+    container->setMinimumSize(view->rootObject()->implicitWidth(), view->rootObject()->implicitHeight());
     container->setFocusPolicy(Qt::TabFocus);
 
     return { container, view };

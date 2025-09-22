@@ -27,24 +27,25 @@ import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
-Rectangle {
+StyledFlickable {
     id: root
-    anchors.fill: parent
-    color: ui.theme.backgroundPrimaryColor
+
+    contentWidth: groupBox.implicitWidth
+    contentHeight: groupBox.implicitHeight
 
     readonly property real controlAreaWidth: 204
 
     signal goToTextStylePage(string s)
 
+    FretboardsPageModel {
+        id: fretboardsPage
+    }
+
     StyledGroupBox {
-        width: parent.width
-        height: parent.height
+        id: groupBox
+        anchors.fill: parent
 
         title: qsTrc("notation", "Fretboard diagrams")
-
-        FretboardsPageModel {
-            id: fretboardsPage
-        }
 
         ColumnLayout {
             spacing: 12
