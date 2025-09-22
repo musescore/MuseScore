@@ -120,7 +120,7 @@ StyledGroupBox {
 
                 minValue: 0.0
                 maxValue: 99.99
-                step: 0.05
+                step: 0.5
                 decimals: 2
                 measureUnitsSymbol: qsTrc("global", "sp")
 
@@ -151,6 +151,28 @@ StyledGroupBox {
 
             StyleResetButton {
                 styleItem: root.pageModel.minTieLength
+            }
+
+            StyledTextLabel {
+                text: qsTrc("notation/editstyle/slursandties", "Minimum hanging tie length:")
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            IncrementalPropertyControl {
+                Layout.preferredWidth: 80
+                currentValue: root.pageModel.minHangingTieLength.value
+
+                minValue: 0.0
+                maxValue: 99.99
+                step: 0.1
+                decimals: 2
+                measureUnitsSymbol: qsTrc("global", "sp")
+
+                onValueEdited: newValue => root.pageModel.minHangingTieLength.value = newValue
+            }
+
+            StyleResetButton {
+                styleItem: root.pageModel.minHangingTieLength
             }
         }
 
@@ -217,7 +239,7 @@ StyledGroupBox {
 
             StyledTextLabel {
                 Layout.fillWidth: true
-                text: qsTrc("notation", "Placement on multiple voices:")
+                text: qsTrc("notation", "Placement of inner ties with respect to augmentation dots:")
                 horizontalAlignment: Text.AlignLeft
             }
 
