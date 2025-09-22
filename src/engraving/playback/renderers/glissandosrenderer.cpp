@@ -93,7 +93,7 @@ void GlissandosRenderer::renderDiscreteGlissando(const Note* note, NominalNoteCt
                                      noteCtx.duration,
                                      noteCtx.articulations);
 
-        result.emplace_back(buildNoteEvent(std::move(noteCtx)));
+        result.emplace_back(buildNoteEvent(noteCtx));
     }
 }
 

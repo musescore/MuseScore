@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -126,33 +126,7 @@ struct NominalNoteCtx {
     }
 };
 
-inline muse::mpe::NoteEvent buildNoteEvent(const NominalNoteCtx& ctx)
-{
-    return muse::mpe::NoteEvent(ctx.timestamp,
-                                ctx.duration,
-                                static_cast<muse::mpe::voice_layer_idx_t>(ctx.voiceIdx),
-                                static_cast<muse::mpe::staff_layer_idx_t>(ctx.staffIdx),
-                                ctx.pitchLevel,
-                                ctx.dynamicLevel,
-                                ctx.articulations,
-                                ctx.tempo.val,
-                                ctx.userVelocityFraction);
-}
-
-inline muse::mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
-{
-    return muse::mpe::NoteEvent(ctx.timestamp,
-                                ctx.duration,
-                                static_cast<muse::mpe::voice_layer_idx_t>(ctx.voiceIdx),
-                                static_cast<muse::mpe::staff_layer_idx_t>(ctx.staffIdx),
-                                ctx.pitchLevel,
-                                ctx.dynamicLevel,
-                                ctx.articulations,
-                                ctx.tempo.val,
-                                ctx.userVelocityFraction);
-}
-
-inline muse::mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const muse::mpe::PitchCurve& pitchCurve)
+inline muse::mpe::NoteEvent buildNoteEvent(const NominalNoteCtx& ctx, const muse::mpe::PitchCurve& pitchCurve = {})
 {
     return muse::mpe::NoteEvent(ctx.timestamp,
                                 ctx.duration,

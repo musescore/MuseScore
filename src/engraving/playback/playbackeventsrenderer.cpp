@@ -374,5 +374,5 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
     }
 
     NominalNoteCtx noteCtx(note, ctx);
-    result.emplace_back(buildNoteEvent(std::move(noteCtx)));
+    result.emplace_back(buildNoteEvent(noteCtx));
 }
