@@ -21,15 +21,17 @@
  */
 
 #include <gtest/gtest.h>
-
+#include "dom/score.h"
 #include "compat/scoreaccess.h"
 #include "dom/chordrest.h"
 #include "dom/durationtype.h"
 #include "dom/excerpt.h"
+#include "dom/fret.h"
 #include "dom/harmony.h"
 #include "dom/masterscore.h"
 #include "dom/measure.h"
 #include "dom/part.h"
+
 #include "dom/segment.h"
 
 #include "utils/scorerw.h"
@@ -433,5 +435,23 @@ TEST_F(Engraving_ChordSymbolTests, testParserSuffix)
     }
 
     delete pc;
+    delete score;
+}
+
+TEST_F(Engraving_ChordSymbolTests, testAddHarmonyToFretDiagram)
+{
+    MasterScore* score = ScoreRW::readScore(CHORDSYMBOL_DATA_DIR + u"add-to-fret" + ".mscz");
+    EXPECT_TRUE(score);
+    score->doLayout();
+
+    Measure* firstMeasure = score->firstMeasure();
+    Segment* firstSeg = firstMeasure->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+    FretDiagram* fretDiag = toFretDiagram(firstSeg->findAnnotation(ElementType::FRET_DIAGRAM, 0, 0));
+    EXPECT_TRUE(fretDiag);
+
+    score->addText(TextStyleType::HARMONY_A, fretDiag);
+
+    EXPECT_TRUE(fretDiag->harmony());
+
     delete score;
 }
