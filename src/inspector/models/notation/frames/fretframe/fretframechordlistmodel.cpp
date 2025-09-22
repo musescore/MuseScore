@@ -48,7 +48,9 @@ void FretFrameChordListModel::load()
         QString name;
         for (const HarmonyRenderItem* segment : harmony->ldata()->renderItemList()) {
             if (const TextSegment* textSeg = dynamic_cast<const TextSegment*>(segment)) {
-                name += textSeg->text().toQString();
+                QString t = textSeg->text().toQString();
+                t.replace("\uE87C", "/");
+                name += t;
             } else if (const ChordSymbolParen* parenSeg = dynamic_cast<const ChordSymbolParen*>(segment)) {
                 name += parenSeg->parenItem->direction() == DirectionH::LEFT ? u"(" : u")";
             }
