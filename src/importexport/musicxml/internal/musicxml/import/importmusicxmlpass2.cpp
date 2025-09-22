@@ -1883,6 +1883,11 @@ static void cleanupUnterminatedTie(Tie* tie, const Score* score, bool fixForCros
     // Delete unterminated ties pending fully featured l.v. ties & ties over repeats
     unterminatedTieNote->remove(tie);
     delete tie;
+
+    // Add Laissez Vibrer instead
+    LaissezVib* lvTie = Factory::createLaissezVib(unterminatedTieNote);
+    lvTie->setParent(unterminatedTieNote);
+    unterminatedTieNote->score()->undoAddElement(lvTie);
 }
 
 //---------------------------------------------------------
