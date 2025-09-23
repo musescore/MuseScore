@@ -23,7 +23,6 @@
 #define MU_ENGRAVING_PAINTDEBUGGER_DEV_H
 
 #include "draw/ipaintprovider.h"
-#include "gtest/internal/gtest-string.h"
 
 namespace mu::engraving::rendering::score {
 class PaintDebugger : public muse::draw::IPaintProvider
@@ -71,7 +70,7 @@ public:
     void drawText(const muse::RectF& rect, int flags, const muse::String& text) override;
     void drawTextWorkaround(const muse::draw::Font& f, const muse::PointF& pos, const muse::String& text) override;
 
-    bool canDrawHtml() override;
+    bool canDrawHtml() const override;
 
     void drawHtml(const muse::PointF& point, const muse::String& htmlText) override;
 
@@ -90,8 +89,6 @@ public:
     void setClipRect(const muse::RectF& rect) override;
     void setMask(const muse::RectF& background, const std::vector<muse::RectF>& maskRects) override;
     void setClipping(bool enable) override;
-
-    QPainter* getQPainter() override;
 
 private:
     muse::draw::IPaintProviderPtr m_real = nullptr;

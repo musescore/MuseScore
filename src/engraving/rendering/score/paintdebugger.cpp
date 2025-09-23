@@ -191,11 +191,10 @@ void PaintDebugger::drawTextWorkaround(const Font& f, const PointF& pos, const S
     m_real->drawTextWorkaround(f, pos, text);
 }
 
-bool PaintDebugger::canDrawHtml() { return false; }
+bool PaintDebugger::canDrawHtml() const { return false; }
 
-void PaintDebugger::drawHtml(const muse::PointF& point, const muse::String& htmlText)
+void PaintDebugger::drawHtml(const PointF&, const String&)
 {
-    //
 }
 
 void PaintDebugger::drawSymbol(const PointF& point, char32_t ucs4Code)
@@ -244,9 +243,4 @@ void PaintDebugger::setMask(const RectF& background, const std::vector<RectF>& m
 void PaintDebugger::setClipping(bool enable)
 {
     m_real->setClipping(enable);
-}
-
-QPainter* PaintDebugger::getQPainter()
-{
-    return nullptr;
 }

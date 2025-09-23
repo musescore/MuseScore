@@ -306,7 +306,7 @@ void BufferedPaintProvider::drawTextWorkaround(const Font& f, const PointF& pos,
     drawText(pos, text);
 }
 
-bool BufferedPaintProvider::canDrawHtml()
+bool BufferedPaintProvider::canDrawHtml() const
 {
     return false;
 }
@@ -363,11 +363,6 @@ void BufferedPaintProvider::setMask(const RectF& background, const std::vector<R
 void BufferedPaintProvider::setClipping(bool enable)
 {
     UNUSED(enable);
-}
-
-QPainter* BufferedPaintProvider::getQPainter()
-{
-    return nullptr;
 }
 
 DrawDataPtr BufferedPaintProvider::drawData() const

@@ -72,7 +72,7 @@ public:
     void drawText(const RectF& rect, int flags, const String& text) override;
     void drawTextWorkaround(const Font& f, const PointF& pos, const String& text) override;
 
-    bool canDrawHtml() override;
+    bool canDrawHtml() const override;
     void drawHtml(const PointF& point, const String& htmlText) override;
 
     void drawSymbol(const PointF& point, char32_t ucs4Code) override;
@@ -90,8 +90,6 @@ public:
     void setClipRect(const RectF& rect) override;
     void setMask(const RectF& background, const std::vector<RectF>& maskRects) override;
     void setClipping(bool enable) override;
-
-    QPainter* getQPainter() override;
 
     // ---
 
