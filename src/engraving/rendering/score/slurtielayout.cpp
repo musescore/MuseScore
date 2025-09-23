@@ -150,11 +150,12 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         // beginning of system
         Measure* measure = item->startCR()->measure();
         ChordRest* firstCr = incomingPartialSlur ? measure->firstChordRest(item->track()) : system->firstChordRest(item->track2());
+        const bool sameStaff = firstCr && firstCr->vStaffIdx() == slurSegment->vStaffIdx();
         double y = p1.y();
         if (firstCr && firstCr == item->endCR()) {
             constrainLeftAnchor = true;
         }
-        if (firstCr && firstCr->isChord()) {
+        if (firstCr && firstCr->isChord() && sameStaff) {
             Chord* chord = toChord(firstCr);
             Shape chordShape = chord->shape();
             chordShape.removeTypes({ ElementType::ACCIDENTAL });
@@ -170,7 +171,8 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
 
         // adjust for ties at the start of the system
         ChordRest* cr = incomingPartialSlur ? measure->firstChordRest(item->track()) : system->firstChordRest(item->track());
-        if (cr && cr->isChord() && cr->tick() >= stick && cr->tick() <= etick) {
+        const bool tieSameStaff = cr && cr->vStaffIdx() == item->staffIdx();
+        if (cr && cr->isChord() && cr->tick() >= stick && cr->tick() <= etick && tieSameStaff) {
             Chord* c = toChord(cr);
             Tie* tie = nullptr;
             PointF endPoint;
@@ -238,9 +240,10 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         Measure* measure = item->endCR()->measure();
         ChordRest* lastCr = outgoingPartialSlur ? measure->lastChordRest(item->track()) : system->lastChordRest(item->track());
         double y = p1.y();
+        const bool sameStaff = lastCr && lastCr->vStaffIdx() == slurSegment->vStaffIdx();
         if (lastCr && lastCr == item->startCR()) {
             y += 0.25 * item->spatium() * (item->up() ? -1 : 1);
-        } else if (lastCr && lastCr->isChord()) {
+        } else if (lastCr && lastCr->isChord() && sameStaff) {
             Chord* chord = toChord(lastCr);
             Shape chordShape = chord->shape();
             chordShape.removeTypes({ ElementType::ACCIDENTAL });
@@ -260,8 +263,9 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
 
         // adjust for ties at the end of the system
         ChordRest* cr = outgoingPartialSlur ? measure->lastChordRest(item->track()) : system->lastChordRest(item->track());
+        const bool tieSameStaff = cr && cr->vStaffIdx() == item->staffIdx();
 
-        if (cr && cr->isChord() && cr->tick() >= stick && cr->tick() <= etick) {
+        if (cr && cr->isChord() && cr->tick() >= stick && cr->tick() <= etick && tieSameStaff) {
             Chord* c = toChord(cr);
             Tie* tie = nullptr;
             PointF endPoint;
@@ -1161,8 +1165,10 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
     staff_idx_t endStaffIdx = endCR->staffIdx();
     Shape segShape = seg->staffShape(startStaffIdx).translated(seg->pos() + seg->measure()->pos());
 
+    bool crossStaffSlur = slur->isCrossStaff() && seg != startCR->segment();
+
     // If cross-staff, also add the shape of second staff
-    if (slur->isCrossStaff() && seg != startCR->segment()) {
+    if (crossStaffSlur) {
         endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
         SysStaff* startStaff = slurSeg->system()->staves().at(startStaffIdx);
         SysStaff* endStaff = slurSeg->system()->staves().at(endStaffIdx);
@@ -1175,6 +1181,9 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
     for (track_idx_t track = staff2track(startStaffIdx); track < staff2track(endStaffIdx, VOICES); ++track) {
         EngravingItem* e = seg->elementAt(track);
         if (!e || !e->isChordRest()) {
+            continue;
+        }
+        if (e->vStaffIdx() != slurSeg->vStaffIdx() && !crossStaffSlur) {
             continue;
         }
         // Gets tie and 2 note tremolo shapes
