@@ -131,7 +131,7 @@ bool FretFrameChordsSettingsModel::hasInvisibleChords() const
 
 void FretFrameChordsSettingsModel::resetList()
 {
-    beginCommand(TranslatableString("undoableAction", "Reset Fret Diagram Legend chords list"));
+    beginCommand(TranslatableString("undoableAction", "Reset fretboard diagram legend chords list"));
 
     FBox* fbox = fretBox();
     if (fbox) {
