@@ -34840,8 +34840,8 @@ failed: %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3411"/>
-        <source>Add harmony to fret diagram</source>
-        <translation type="unfinished">Add harmony to fret diagram</translation>
+        <source>Add chord symbol to fretboard diagram</source>
+        <translation type="unfinished">Add chord symbol to fretboard diagram</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3949"/>
@@ -35583,8 +35583,8 @@ failed: %2</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordssettingsmodel.cpp" line="134"/>
-        <source>Reset Fret Diagram Legend chords list</source>
-        <translation type="unfinished">Reset Fret Diagram Legend chords list</translation>
+        <source>Reset fretboard diagram legend chords list</source>
+        <translation type="unfinished">Reset fretboard diagram legend chords list</translation>
     </message>
 </context>
 <context>
