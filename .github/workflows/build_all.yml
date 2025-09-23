@@ -133,7 +133,7 @@ jobs:
         os:
         - ubuntu-22.04 # linux_x64, backend, linux_arm32, linux_arm64
         - macos-latest
-        - windows-2022 # windows_x64, windows_portable
+        - windows-2025 # windows_x64, windows_portable
     runs-on: ${{ matrix.os }}
     steps:
     - name: Clone repository
