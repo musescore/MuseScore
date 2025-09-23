@@ -38,7 +38,7 @@ InspectorSectionView {
         navigation.row: root.navigationRowStart + 3
 
         toolTipTitle: qsTrc("inspector", "Reset to default")
-        enabled: root.model?.canResetEmptyStavesVisibility
+        enabled: root.model && root.model.canResetEmptyStavesVisibility
 
         onClicked: {
             if (root.model) {
