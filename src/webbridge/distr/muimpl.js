@@ -50,11 +50,18 @@ function setupRpc(Module)
 async function setupDriver(Module) 
 {
     Module.driver = AudioDriver;
-    await AudioDriver.setup(Module.driver_worker_rpcChannel.port1);
+
+    AudioDriver.onInited = function() {
+        console.log("driver on inited add sound font")
+        Module.ccall('addSoundFont', '', ['string'], [Module.soundFont]);
+    }
+   // await AudioDriver.setup(Module.driver_worker_rpcChannel.port1);
+   await AudioDriver.setup(Module.main_worker_rpcChannel.port2);
 }
 
 async function setupWorker(Module)
 {
+    return;
     // Initialize the worker.
     Module.worker = new Worker("distr/audioworker.js")
 

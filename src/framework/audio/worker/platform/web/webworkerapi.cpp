@@ -57,18 +57,28 @@ static modularity::ModulesIoC* ioc()
 
 void WebWorkerApi::init()
 {
+    LOGI() << "before setup runtime";
     muse::runtime::mainThreadId(); //! NOTE Needs only call
     muse::runtime::setThreadName("worker");
 
+    LOGI() << "before create m_rpcChannel, m_startWorkerController";
     m_rpcChannel = std::make_shared<WebRpcChannel>();
     m_startWorkerController = std::make_shared<StartWorkerController>(m_rpcChannel);
 
+    LOGI() << "before registerExport";
     ioc()->registerExport<IRpcChannel>(moduleName(), m_rpcChannel);
     m_startWorkerController->registerExports();
 
+    LOGI() << "before  m_rpcChannel->setupOnWorker";
     m_rpcChannel->setupOnWorker();
 
+    LOGI() << "before  m_rpcChannel->send(rpc::make_notification(Method::WorkerStarted))";
     m_rpcChannel->send(rpc::make_notification(Method::WorkerStarted));
 
     LOGI() << "Inited";
+}
+
+void WebWorkerApi::process(float* stream, unsigned samplesPerChannel)
+{
+    m_startWorkerController->process(stream, samplesPerChannel);
 }

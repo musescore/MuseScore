@@ -6,6 +6,8 @@ let AudioDriver = (function () {
     let processor = null;
 
     var api = {
+
+        onInited: null,
         
         setup: async function(workerPort, audio_context) {
 
@@ -32,6 +34,12 @@ let AudioDriver = (function () {
             // driver (processor) -> main
             processor.port.onmessage = function(event) {
                 console.log("[processor]", event.data)
+
+                if (event.data.type == "DRIVER_INITED") {
+                    if (api.onInited) {
+                        api.onInited();
+                    }
+                }
             }
 
             processor.port.postMessage({

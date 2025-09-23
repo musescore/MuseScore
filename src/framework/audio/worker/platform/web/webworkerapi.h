@@ -43,6 +43,7 @@ public:
     static WebWorkerApi* instance();
 
     void init();
+    void process(float* stream, unsigned samplesPerChannel);
 
 private:
     WebWorkerApi() = default;

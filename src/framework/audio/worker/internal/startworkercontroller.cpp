@@ -132,13 +132,13 @@ void StartWorkerController::init(const OutputSpec& outputSpec, const AudioWorker
     m_workerChannelController->init(m_workerPlayback);
 
 #ifdef Q_OS_WASM
-    m_webAudioChannel = std::make_shared<WebAudioChannel>();
-    m_webAudioChannel->open([this](float* stream, size_t samples) {
-        //LOGDA() << "processAudioData";
-        m_audioEngine->processAudioData();
-        auto samplesPerChannel = samples / 2; // 2 channels
-        m_audioEngine->popAudioData(stream, samplesPerChannel);
-    });
+    // m_webAudioChannel = std::make_shared<WebAudioChannel>();
+    // m_webAudioChannel->open([this](float* stream, size_t samples) {
+    //     //LOGDA() << "processAudioData";
+    //     m_audioEngine->processAudioData();
+    //     auto samplesPerChannel = samples / 2; // 2 channels
+    //     m_audioEngine->popAudioData(stream, samplesPerChannel);
+    // });
 #endif
 }
 
@@ -150,4 +150,11 @@ void StartWorkerController::deinit()
     m_workerPlayback->deinit();
     m_workerChannelController->deinit();
     m_audioEngine->deinit();
+}
+
+void StartWorkerController::process(float* stream, unsigned samplesPerChannel)
+{
+    //LOGI() << "processAudioData";
+    m_audioEngine->processAudioData();
+    m_audioEngine->popAudioData(stream, samplesPerChannel);
 }

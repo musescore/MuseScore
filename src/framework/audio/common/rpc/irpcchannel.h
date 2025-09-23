@@ -114,6 +114,7 @@ enum class Method {
     // SoundFont
     LoadSoundFonts,
     AddSoundFont,
+    AddSoundFontData,
 };
 
 inline std::string to_string(Method m)
@@ -195,6 +196,7 @@ inline std::string to_string(Method m)
     // SoundFont
     case Method::LoadSoundFonts: return "LoadSoundFonts";
     case Method::AddSoundFont: return "AddSoundFont";
+    case Method::AddSoundFontData: return "AddSoundFontData";
     }
 
     assert(false && "unknown enum value");

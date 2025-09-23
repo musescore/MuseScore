@@ -54,6 +54,8 @@ public:
     void init(const OutputSpec& outputSpec, const AudioWorkerConfig& conf) override;
     void deinit() override;
 
+    void process(float* stream, unsigned samplesPerChannel);
+
 private:
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
     std::shared_ptr<AudioWorkerConfiguration> m_configuration;

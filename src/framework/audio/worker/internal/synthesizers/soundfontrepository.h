@@ -48,6 +48,7 @@ private:
 
     void loadSoundFonts(const std::vector<SoundFontUri>& uris);
     void addSoundFont(const SoundFontUri& uri);
+    void addSoundFontData(const SoundFontUri& uri, const ByteArray& data);
 
     void doAddSoundFont(const SoundFontUri& uri, const SoundFontsMap* cache = nullptr, std::function<void()> onFinished = nullptr);
 

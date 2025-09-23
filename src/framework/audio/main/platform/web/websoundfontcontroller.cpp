@@ -22,6 +22,9 @@
 #include "websoundfontcontroller.h"
 
 #include "audio/common/rpc/rpcpacker.h"
+#include "audio/worker/platform/web/networksfloader.h"
+
+#include "log.h"
 
 using namespace muse::audio;
 using namespace muse::audio::rpc;
@@ -33,5 +36,13 @@ void WebSoundFontController::init()
 
 void WebSoundFontController::addSoundFont(const synth::SoundFontUri& uri)
 {
-    channel()->send(rpc::make_request(Method::AddSoundFont, RpcPacker::pack(uri)));
+    async::Promise<RetVal<ByteArray> > promise = synth::NetworkSFLoader::loadData(uri);
+    promise.onResolve(this, [this, uri](const RetVal<ByteArray>& rv) {
+        if (!rv.ret) {
+            LOGE() << rv.ret.toString();
+            return;
+        }
+
+        channel()->send(rpc::make_request(Method::AddSoundFontData, RpcPacker::pack(uri, rv.val)));
+    });
 }

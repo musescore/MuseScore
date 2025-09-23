@@ -59,6 +59,16 @@ void SoundFontRepository::init()
 
         this->addSoundFont(uri);
     });
+
+    channel()->onMethod(Method::AddSoundFontData, [this](const Msg& msg) {
+        SoundFontUri uri;
+        ByteArray data;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, uri, data)) {
+            return;
+        }
+
+        this->addSoundFontData(uri, data);
+    });
 }
 
 bool SoundFontRepository::isSoundFontLoaded(const std::string& name) const
@@ -90,6 +100,31 @@ void SoundFontRepository::addSoundFont(const SoundFontUri& uri)
     doAddSoundFont(uri, nullptr, [this]() {
         m_soundFontsChanged.notify();
     });
+}
+
+void SoundFontRepository::addSoundFontData(const SoundFontUri& uri, const ByteArray& data)
+{
+    static const io::path_t SF_PATH = "MS Basic.sf3";
+
+    {
+        FILE* file = fopen(SF_PATH.c_str(), "wb");
+        size_t wsize = fwrite(data.constChar(), sizeof(char), data.size(), file);
+        IF_ASSERT_FAILED(wsize == data.size()) {
+            return;
+        }
+        fclose(file);
+    }
+
+    RetVal<SoundFontMeta> meta = FluidSoundFontParser::parseSoundFont(SF_PATH);
+
+    if (meta.ret) {
+        m_soundFonts.insert_or_assign(uri, std::move(meta.val));
+        LOGI() << "added sound font, uri: " << uri;
+    } else {
+        LOGE() << "Failed parse SoundFont presets for " << SF_PATH << ": " << meta.ret.toString();
+    }
+
+    m_soundFontsChanged.notify();
 }
 
 void SoundFontRepository::doAddSoundFont(const SoundFontUri& uri, const SoundFontsMap* cache, std::function<void()> onFinished)
