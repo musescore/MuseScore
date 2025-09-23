@@ -146,6 +146,8 @@ void InputState::setVoice(voice_idx_t v)
     }
 
     const track_idx_t newTrack = (m_track / VOICES) * VOICES + v;
+    // setTrack(newTrack);
+    // setDuration(ticks() * Fraction(3, 2));
     Segment* currSeg = segment();
     if (!currSeg || currSeg->cr(newTrack)) {
         setTrack(newTrack);

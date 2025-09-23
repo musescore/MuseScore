@@ -5368,6 +5368,17 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
             Note* note   = toNote(e);
             Chord* chord = note->chord();
 
+            if (chord) {
+                Fraction tick = chord->tick();
+                Fraction duration = chord->ticks();
+                Fraction globalDuration = chord->globalTicks();
+                LOGI("Looking where to put chord from tick %d/%d with duration %d/%d (global %d/%d)",
+                     tick.numerator(), tick.denominator(),
+                     duration.numerator(),  duration.denominator(),
+                     globalDuration.numerator(), globalDuration.denominator()
+                     );
+            }
+
             // move grace notes with main chord only
             if (chord->isGrace() || chord->isTrillCueNote()) {
                 continue;
@@ -5396,60 +5407,144 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                 continue;
             }
 
+            if (dstCR) {
+                Fraction duration = dstCR->ticks();
+                Fraction globalDuration = dstCR->globalTicks();
+                Fraction tick = dstCR->tick();
+                LOGI("Found dstCR at %d/%d with duration %d/%d (global %d/%d)",
+                     tick.numerator(), tick.denominator(),
+                     duration.numerator(), duration.denominator(),
+                     globalDuration.numerator(), globalDuration.denominator()
+                     );
+            } else {
+                LOGI("Didn't find dstCR in segment");
+            }
+
             // set up destination chord
 
+            Fraction tupletRatio = Fraction(1, 1);
+            if (dstCR) {
+                tupletRatio = DurationElement::totalTupletRatio(dstCR);
+            }
+            Fraction newTicks = chord->globalTicks() * tupletRatio;
+
             if (dstCR && dstCR->type() == ElementType::CHORD && dstCR->globalTicks() == chord->globalTicks()) {
+                LOGI("Chose option 1");
                 // existing chord in destination with correct duration;
                 //   can simply move note in
                 dstChord = toChord(dstCR);
             } else if (dstCR && dstCR->type() == ElementType::REST
                        && dstCR->globalTicks() == chord->globalTicks()) {
+                LOGI("Chose option 2");
                 // existing rest in destination with correct duration;
                 //   replace with chord, then move note in
                 //   this case allows for tuplets, unlike the more general case below
                 dstChord = Factory::createChord(s);
                 dstChord->setTrack(dstTrack);
-                dstChord->setDurationType(chord->durationType());
-                dstChord->setTicks(chord->ticks());
-                dstChord->setTuplet(dstCR->tuplet());
+                dstChord->setDurationType(newTicks);
+                dstChord->setTicks(newTicks);
+                if (dstCR->tuplet()) {
+                    Tuplet* dstTuplet = dstCR->tuplet();
+                    dstChord->setTuplet(dstTuplet);
+                }
                 dstChord->setParent(s);
                 score->undoRemoveElement(dstCR);
-            } else if (!chord->tuplet()) {
+            } else {
                 // rests or gap in destination
                 //   insert new chord if the rests / gap are long enough
                 //   then move note in
+                LOGI("Chose option 3");
                 ChordRest* pcr = nullptr;
                 ChordRest* ncr = nullptr;
+                ChordRest* nearestLeftRest = nullptr;
                 for (Segment* s2 = m->first(SegmentType::ChordRest); s2; s2 = s2->next()) {
                     if (s2->segmentType() != SegmentType::ChordRest) {
                         continue;
                     }
                     ChordRest* cr2 = toChordRest(s2->element(dstTrack));
+
+                    if (cr2 && nearestLeftRest && s2->tick() > s->tick()) {
+                        // We are already on the right, we know of the chordrest on the left (or at the desired segment)
+                        // And current segment has chordrest on this track
+                        // Check for passing tuplet boundary
+                        if (cr2->tuplet() != nearestLeftRest->tuplet()) {
+                            LOGI("Breaking on tuplet boundary at %d/%d", cr2->tick().numerator(), cr2->tick().denominator());
+                            ncr = cr2;
+                            break;
+                        }
+                    }
+
                     if (!cr2 || cr2->type() == ElementType::REST) {
+                        // Find the rest that's left or equal to our segment
+                        // It will be used for tuplet boundary check
+                        if (s2->tick() <= s->tick() && cr2) {
+                            nearestLeftRest = cr2;
+                        }
                         continue;
                     }
+                    // This one has `<` because here we check for chords, not rests.
+                    // Later we'll use it as pcr.tick + pcr.actualTicks to understand where it ends (and gap starts)
                     if (s2->tick() < s->tick()) {
                         pcr = cr2;
                         continue;
-                    } else if (s2->tick() >= s->tick()) {
+                    }
+                    if (nearestLeftRest && (nearestLeftRest->tuplet() != cr2->tuplet())) {
+                        // stop at tuplet boundary
+                        LOGI("Breaking at tuplet boundary: %d/%d", cr2->ticks().numerator(), cr2->tick().denominator());
+                        ncr = cr2;
+                        break;
+                    }
+                    if (s2->tick() >= s->tick()) {
                         ncr = cr2;
                         break;
                     }
                 }
+                // Is it correct? Can gapStart turn out to be later than our segment's tick?
                 Fraction gapStart = pcr ? pcr->tick() + pcr->actualTicks() : m->tick();
                 Fraction gapEnd   = ncr ? ncr->tick() : m->tick() + m->ticks();
                 if (gapStart <= s->tick() && gapEnd >= s->tick() + chord->actualTicks()) {
+                    LOGI("Found gap from %d/%d to %d/%d, will try to use it to put %d/%d starting at %d/%d",
+                         gapStart.numerator(), gapStart.denominator(),
+                         gapEnd.numerator(), gapEnd.denominator(),
+                         chord->actualTicks().numerator(), chord->actualTicks().denominator(),
+                         s->tick().numerator(), s->tick().denominator()
+                         );
                     // big enough gap found
-                    dstChord = Factory::createChord(s);
-                    dstChord->setTrack(dstTrack);
-                    dstChord->setDurationType(chord->durationType());
-                    dstChord->setTicks(chord->ticks());
-                    dstChord->setParent(s);
+
+                    ChordRest* crToMeasure = dstCR ? dstCR : nearestLeftRest;
+                    Tuplet* dstTuplet = crToMeasure ? crToMeasure->tuplet() : nullptr;
+                    Fraction dstTupletRatio = DurationElement::totalTupletRatio(crToMeasure);
+                    newTicks = chord->globalTicks() * dstTupletRatio;
+
+                    // sanity check - can we even display such note in new tuplet?
+                    if (!canBeRepresentedAsDurationList(newTicks, true, 4)) {
+                        continue;
+                    }
+
+                    // Another sanity check - can the position of note be represented?
+                    Fraction startPos = dstTuplet ? dstTuplet->tick() : s->measure()->tick();
+                    Fraction pos = (s->tick() - startPos) * dstTupletRatio;
+                    if (!canBeRepresentedAsDurationList(pos, true, 4)) {
+                        continue;
+                    }
+
                     // makeGapVoice will not back-fill an empty voice
                     if (voice && !dstCR) {
                         score->expandVoice(s, /*m->first(SegmentType::ChordRest,*/ dstTrack);
                     }
-                    score->makeGapVoice(s, dstTrack, chord->actualTicks(), s->tick());
+                    bool madeGap = score->makeGapVoice(s, dstTrack, chord->actualTicks(), s->tick(), dstTuplet);
+                    if (!madeGap) {
+                        continue;
+                    }
+
+                    dstChord = Factory::createChord(s);
+                    dstChord->setTrack(dstTrack);
+
+                    dstChord->setDurationType(newTicks);
+                    dstChord->setTicks(newTicks);
+
+                    dstChord->setTuplet(dstTuplet);
+                    dstChord->setParent(s);
                 }
             }
 
@@ -5469,6 +5564,23 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
             if (dstChord != dstCR) {
                 score->undoAddCR(dstChord, m, s->tick());
             }
+            // LOGI("-------");
+            // LOGI("After adding note");
+            // for (Segment& s: m->segments())
+            // {
+            //     EngravingItem* el = s.elementAt(dstTrack);
+            //     if (el->isChordRest())
+            //     {
+            //         Fraction duration = toChordRest(el)->ticks();
+            //         Fraction globalDuration = toChordRest(el)->globalTicks();
+            //         LOGI("Segment at %d/%d :%s\t duration %d/%d (global %d/%d)",
+            //             s.tick().numerator(), s.tick().denominator(),
+            //             toChordRest(el)->typeName(),
+            //             duration.numerator(), duration.denominator(),
+            //             globalDuration.numerator(), globalDuration.denominator()
+            //             );
+            //     }
+            // }
             for (EngravingObject* linked : note->linkList()) {
                 Note* linkedNote = toNote(linked);
                 Note* linkedNewNote = linked == note ? newNote : toNote(newNote->findLinkedInStaff(linkedNote->staff()));
