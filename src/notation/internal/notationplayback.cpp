@@ -212,8 +212,8 @@ muse::async::Channel<InstrumentTrackId> NotationPlayback::trackRemoved() const
 void NotationPlayback::updateLoopBoundaries()
 {
     LoopBoundaries newBoundaries;
-    newBoundaries.loopInTick = score()->loopInTick().ticks();
-    newBoundaries.loopOutTick = score()->loopOutTick().ticks();
+    newBoundaries.loopInTick = score()->loopInTick();
+    newBoundaries.loopOutTick = score()->loopOutTick();
     newBoundaries.enabled = m_loopBoundaries.enabled;
 
     if (m_loopBoundaries != newBoundaries) {

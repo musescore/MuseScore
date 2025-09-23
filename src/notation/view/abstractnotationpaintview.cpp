@@ -242,6 +242,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     }
 
     m_notation->notationChanged().onNotify(this, [this]() {
+        updateLoopMarkers();
         updateShadowNoteVisibility();
         scheduleRedraw();
     });
@@ -295,7 +296,6 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     });
 
     m_notation->viewModeChanged().onNotify(this, [this]() {
-        updateLoopMarkers();
         ensureViewportInsideScrollableArea();
     });
 
@@ -419,11 +419,13 @@ void AbstractNotationPaintView::updateLoopMarkers()
 
     const LoopBoundaries& loop = notationPlayback()->loopBoundaries();
 
-    m_loopInMarker->move(loop.loopInTick);
-    m_loopOutMarker->move(loop.loopOutTick);
-
     m_loopInMarker->setVisible(loop.enabled);
     m_loopOutMarker->setVisible(loop.enabled);
+
+    if (loop.enabled) {
+        m_loopInMarker->updatePosition(loop.loopInTick);
+        m_loopOutMarker->updatePosition(loop.loopOutTick);
+    }
 
     scheduleRedraw();
 }

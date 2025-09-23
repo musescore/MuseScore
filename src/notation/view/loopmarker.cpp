@@ -43,20 +43,18 @@ void LoopMarker::setVisible(bool visible)
     m_visible = visible;
 }
 
-void LoopMarker::move(muse::midi::tick_t tick)
+void LoopMarker::updatePosition(engraving::Fraction tick)
 {
     m_rect = resolveMarkerRectByTick(tick);
 }
 
-RectF LoopMarker::resolveMarkerRectByTick(muse::midi::tick_t _tick) const
+RectF LoopMarker::resolveMarkerRectByTick(engraving::Fraction tick) const
 {
     if (!m_notation) {
         return RectF();
     }
 
     const mu::engraving::Score* score = m_notation->elements()->msScore();
-
-    Fraction tick = Fraction::fromTicks(_tick);
 
     // set mark height for whole system
     if (m_type == LoopBoundaryType::LoopOut && tick > Fraction(0, 1)) {
@@ -69,7 +67,6 @@ RectF LoopMarker::resolveMarkerRectByTick(muse::midi::tick_t _tick) const
     }
 
     qreal x = 0.0;
-    const Fraction offset = { 0, 1 };
 
     mu::engraving::Segment* s = nullptr;
     for (s = measure->first(mu::engraving::SegmentType::ChordRest); s;) {
@@ -86,9 +83,6 @@ RectF LoopMarker::resolveMarkerRectByTick(muse::midi::tick_t _tick) const
             t2 = measure->endTick();
             x2 = measure->canvasPos().x() + measure->width();
         }
-
-        t1 += offset;
-        t2 += offset;
 
         if (tick >= t1 && tick < t2) {
             Fraction dt = t2 - t1;

@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_LOOPMARKER_H
-#define MU_NOTATION_LOOPMARKER_H
+ #pragma once
 
 #include "notation/inotationconfiguration.h"
 #include "modularity/ioc.h"
@@ -41,12 +40,12 @@ public:
     void setNotation(INotationPtr notation);
     void setVisible(bool visible);
 
-    void move(muse::midi::tick_t tick);
+    void updatePosition(engraving::Fraction tick);
 
     void paint(muse::draw::Painter* painter);
 
 private:
-    muse::RectF resolveMarkerRectByTick(muse::midi::tick_t tick) const;
+    muse::RectF resolveMarkerRectByTick(engraving::Fraction tick) const;
 
     LoopBoundaryType m_type = LoopBoundaryType::Unknown;
     muse::RectF m_rect;
@@ -54,5 +53,3 @@ private:
     INotationPtr m_notation;
 };
 }
-
-#endif // MU_NOTATION_LOOPMARKER_H
