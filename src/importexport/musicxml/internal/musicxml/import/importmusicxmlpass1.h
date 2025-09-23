@@ -204,7 +204,8 @@ public:
     void createDefaultHeader(engraving::Score* const score);
     void createMeasuresAndVboxes(engraving::Score* const score, const std::vector<engraving::Fraction>& ml,
                                  const std::vector<engraving::Fraction>& ms, const std::set<int>& systemStartMeasureNrs,
-                                 const std::set<int>& pageStartMeasureNrs, const CreditWordsList& crWords, const muse::Size& pageSize);
+                                 const std::set<int>& sectionStartMeasureNrs, const std::set<int>& pageStartMeasureNrs,
+                                 const CreditWordsList& crWords, const muse::Size& pageSize);
     void setHasInferredHeaderText(bool b) { m_hasInferredHeaderText = b; }
     bool hasInferredHeaderText() const { return m_hasInferredHeaderText; }
     int maxDiff() const { return m_maxDiff; }
@@ -225,8 +226,10 @@ private:
     MusicXmlExporterSoftware m_exporterSoftware = MusicXmlExporterSoftware::OTHER;   // Software which exported the file
     int m_divs = 0;                              // Current MusicXML divisions value
     std::map<muse::String, MusicXmlPart> m_parts;      // Parts data, mapped on part id
-    std::set<int> m_systemStartMeasureNrs;       // Measure numbers of measures starting a page
+    std::set<int> m_systemStartMeasureNrs;       // Measure numbers of measures starting a system
+    std::set<int> m_sectionStartMeasureNrs;      // Measure numbers of measures starting a section
     std::set<int> m_pageStartMeasureNrs;         // Measure numbers of measures starting a page
+    double m_leftMargin = 0;                     // The left margin of the current system
     std::vector<engraving::Fraction> m_measureLength;       // Length of each measure
     std::vector<engraving::Fraction> m_measureStart;        // Start time of each measure
     CreditWordsList m_credits;                   // All credits collected
