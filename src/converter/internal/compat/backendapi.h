@@ -95,8 +95,7 @@ private:
     static muse::Ret doExportScoreTranspose(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter,
                                             bool addSeparator = false);
 
-    static muse::Ret doExportScoreElements(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter,
-                                           const std::string& optionsJson, bool addSeparator = false);
+    static muse::Ret doExportScoreElements(const notation::INotationPtr notation, const std::string& optionsJson, QIODevice& out);
 
     static muse::RetVal<QByteArray> scorePartJson(mu::engraving::Score* score, const std::string& fileName);
 
