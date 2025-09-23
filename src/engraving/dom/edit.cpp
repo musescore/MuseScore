@@ -3703,6 +3703,8 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
         }
 
         if (e->isMeasureRepeat()) {
+            // MeasureRepeat has its own special handling, so it is skipped here
+            foundDeselected(toDurationElement(e));
             deleteItem(e);
             continue;
         }
