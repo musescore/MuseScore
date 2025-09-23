@@ -1204,7 +1204,7 @@ void MusicXmlParserPass1::createMeasuresAndVboxes(Score* score,
 
         // add a footer vbox if the next measure is on a new page or end of score has been reached
         if ((pageStartMeasureNrs.count(int(i + 1)) || i == (ml.size() - 1)) && pageNr == 1) {
-            addCreditWords(score, crWords, pageSize, measure->tick() + measure->ticks(), sibOrDolet());
+            addCreditWords(score, crWords, pageSize, measure->endTick(), sibOrDolet());
         }
     }
 }

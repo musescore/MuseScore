@@ -825,7 +825,7 @@ Ret Score::insertChordByInsertingTime(const Position& pos)
         // II. Make chord or rest in other track longer if it crosses the insert area
         if (!measureIsFull) {
             ChordRest* cr = ms->findCR(tick, track);
-            if (cr && cr->tick() < tick && (cr->tick() + cr->actualTicks()) > tick) {
+            if (cr && cr->tick() < tick && cr->endTick() > tick) {
                 if (cr->isRest()) {
                     const Fraction fillLen = cr->ticks() + fraction;
                     ms->undoRemoveElement(cr);

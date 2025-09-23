@@ -46,7 +46,7 @@ public:
     // it should be cleared to 0 at some point, so that it will not be carried over
     // if the melisma is not extended beyond a single chord, but no suitable place to do this
     // has been identified yet.
-    static constexpr Fraction TEMP_MELISMA_TICKS = Fraction::fromTicks(1); // THIS WAS A HORRIBLE HACK. At some point we must remove it and replace it with a proper solution. (M.S.)
+    static constexpr Fraction TEMP_MELISMA_TICKS = Fraction::eps(); // THIS WAS A HORRIBLE HACK. At some point we must remove it and replace it with a proper solution. (M.S.)
 
     ~Lyrics();
 

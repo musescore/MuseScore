@@ -686,7 +686,7 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                 // Handle cross-measure beams
                 BeamMode mode = cr->beamMode();
                 if (mode == BeamMode::MID || mode == BeamMode::END || mode == BeamMode::BEGIN16 || mode == BeamMode::BEGIN32) {
-                    ChordRest* prevCR = ctx.mutDom().findCR(measure->tick() - Fraction::fromTicks(1), track);
+                    ChordRest* prevCR = ctx.mutDom().findCR(measure->tick() - Fraction::eps(), track);
                     if (prevCR) {
                         Beam* prevBeam = prevCR->beam();
                         const Measure* pm = prevCR->measure();
@@ -804,7 +804,7 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                     &&
                     (bm == BeamMode::BEGIN
                      || (a1->segment()->segmentType() != cr->segment()->segmentType())
-                     || (a1->tick() + a1->actualTicks() < cr->tick())
+                     || (a1->endTick() < cr->tick())
                     )
                     ) {
                     a1->removeDeleteBeam(false);
@@ -825,7 +825,7 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
         if (beam) {
             layout1(beam, ctx);
         } else if (a1) {
-            Fraction nextTick = a1->tick() + a1->actualTicks();
+            Fraction nextTick = a1->endTick();
             Measure* m = (nextTick >= measure->endTick() ? measure->nextMeasure() : measure);
             ChordRest* nextCR = (m ? m->findChordRest(nextTick, track) : nullptr);
             Beam* b = a1->beam();

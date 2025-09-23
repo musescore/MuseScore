@@ -453,7 +453,7 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
 
     if (meiElement.m_name == "breath" || meiElement.m_name == "caesura") {
         // For Breath we need to add a specific segment and add the breath to it (and not to the ChordRest one)
-        segment = measure->getSegment(SegmentType::Breath, segment->tick() + chordRest->actualTicks());
+        segment = measure->getSegment(SegmentType::Breath, chordRest->endTick());
         item = Factory::createBreath(segment);
     } else if (meiElement.m_name == "dir") {
         ElementType elementType = Convert::elementTypeForDir(meiElement);
@@ -1394,7 +1394,7 @@ bool MeiImporter::readEnding(pugi::xml_node endingNode)
         volta->setTrack(0);
         volta->setTrack2(0);
         volta->setTick(m_endingStart->tick());
-        volta->setTick2(m_endingEnd->tick() + m_endingEnd->ticks());
+        volta->setTick2(m_endingEnd->endTick());
         m_score->addElement(volta);
     }
 
@@ -2554,7 +2554,7 @@ bool MeiImporter::readFermata(pugi::xml_node fermataNode, Measure* measure)
     if (meiFermata.HasTstamp()) {
         Fraction fermataPos = Convert::tstampToFraction(meiFermata.GetTstamp(), measure->timesig());
         if (fermataPos == measure->ticks()) {
-            Segment* segment = measure->getSegment(SegmentType::EndBarLine, measure->tick() + measure->ticks());
+            Segment* segment = measure->getSegment(SegmentType::EndBarLine, measure->endTick());
             fermata = Factory::createFermata(segment);
             this->readXmlId(fermata, meiFermata.m_xmlId);
             const int staffIdx
@@ -3487,7 +3487,7 @@ void MeiImporter::addSpannerEnds()
             spannerMapEntry.first->setTrack2(chordRest->track());
             if (spannerMapEntry.first->isOttava() || spannerMapEntry.first->isTrill()) {
                 // Set the tick2 to include the duration of the ChordRest
-                spannerMapEntry.first->setTick2(chordRest->tick() + chordRest->ticks());
+                spannerMapEntry.first->setTick2(chordRest->endTick());
                 // Special handling of ottavas
                 if (spannerMapEntry.first->isOttava()) {
                     Ottava* ottava = toOttava(spannerMapEntry.first);

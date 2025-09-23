@@ -781,14 +781,10 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
     Note* note2  = nullptr;
     Chord* chord = note->chord();
     Segment* seg = chord->segment();
-    Part* part   = chord->part();
-    track_idx_t strack = part->staves().front()->idx() * VOICES;
-    track_idx_t etrack = strack + part->staves().size() * VOICES;
 
     if (!nextSegment) {
-        const Fraction nextTick = chord->tick() + chord->actualTicks();
         nextSegment = seg->next1(SegmentType::ChordRest);
-        while (nextSegment && nextSegment->tick() < nextTick) {
+        while (nextSegment && nextSegment->tick() < chord->endTick()) {
             nextSegment = nextSegment->next1(SegmentType::ChordRest);
         }
     }
@@ -831,7 +827,7 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
         // try to tie to grace note after if present
         std::vector<Chord*> gna = chord->graceNotesAfter();
         if (!gna.empty()) {
-            Chord* gc = gna[0];
+            Chord* gc = gna.front();
             note2 = gc->findNote(note->pitch());
             if (note2) {
                 return note2;
@@ -842,21 +838,21 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
     // and we are looking for a note in the *next* chord (grace or regular)
 
     int idx1 = note->unisonIndex();
-    for (track_idx_t track = strack; track < etrack; ++track) {
+    Part* part = chord->part();
+    for (track_idx_t track = part->startTrack(); track < part->endTrack(); ++track) {
         EngravingItem* e = nextSegment->element(track);
         if (!e || !e->isChord()) {
             continue;
         }
         Chord* c = toChord(e);
-        const staff_idx_t staffIdx = c->staffIdx() + c->staffMove();
-        if (staffIdx != chord->staffIdx() + chord->staffMove()) {
+        if (c->vStaffIdx() != chord->vStaffIdx()) {
             // this check is needed as we are iterating over all staves to capture cross-staff chords
             continue;
         }
         // if there are grace notes before, try to tie to first one
         std::vector<Chord*> gnb = c->graceNotesBefore();
         if (!gnb.empty()) {
-            Chord* gc = gnb[0];
+            Chord* gc = gnb.front();
             Note* gn2 = gc->findNote(note->pitch());
             if (gn2) {
                 return gn2;

@@ -319,7 +319,7 @@ void Lyrics::adjustPrevious()
                 if (s->tick() > prev->tick()) {
                     prev->undoChangeProperty(Pid::LYRIC_TICKS, s->tick() - prev->tick());
                 } else {
-                    prev->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(1));
+                    prev->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::eps());
                 }
                 prev->setNeedRemoveInvalidSegments();
                 prev->triggerLayout();

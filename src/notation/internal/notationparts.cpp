@@ -1065,10 +1065,8 @@ void NotationParts::doInsertPart(Part* part, size_t index)
         part->setInstrument(new Instrument(*it->second), it->first);
     }
 
-    const MeasureBase* firstMeasure = score()->firstMeasure();
-    mu::engraving::Fraction startTick = firstMeasure->tick();
-    const MeasureBase* lastMeasure = score()->lastMeasure();
-    mu::engraving::Fraction endTick = lastMeasure->tick() + lastMeasure->ticks();
+    mu::engraving::Fraction startTick = score()->firstMeasure()->tick();
+    mu::engraving::Fraction endTick = score()->lastMeasure()->endTick();
 
     for (size_t staffIndex = 0; staffIndex < stavesCopy.size(); ++staffIndex) {
         Staff* staff = stavesCopy[staffIndex];

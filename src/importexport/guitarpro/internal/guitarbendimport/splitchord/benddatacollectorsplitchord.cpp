@@ -179,7 +179,7 @@ void BendDataCollectorSplitChord::fillBendsDurations(BendDataContextSplitChord& 
         for (const auto& [mainTick, chords] : trackInfo) {
             const auto& importedInfoForTick = importedInfoForTrack.at(mainTick);
             const Chord* lastChord = chords.back();
-            Fraction totalDuration = lastChord->tick() - mainTick + lastChord->actualTicks();
+            Fraction totalDuration = lastChord->endTick() - mainTick;
             if (Tuplet* tuplet = lastChord->tuplet()) {
                 totalDuration *= tuplet->ratio();
             }

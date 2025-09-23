@@ -1204,10 +1204,7 @@ Fraction Note::playTicksFraction() const
     if (!m_tieBack && !m_tieFor && chord()) {
         return chord()->actualTicks();
     }
-
-    Fraction stick = firstTiedNote()->chord()->tick();
-    const Note* note = lastTiedNote();
-    return note->chord()->tick() + note->chord()->actualTicks() - stick;
+    return lastTiedNote()->chord()->endTick() - firstTiedNote()->chord()->tick();
 }
 
 //---------------------------------------------------------
@@ -1476,7 +1473,7 @@ bool Note::shouldForceShowFret() const
     };
 
     auto hasVibratoLine = [&] () {
-        auto spanners = score()->spannerMap().findOverlapping(tick().ticks(), (tick() + ch->actualTicks()).ticks());
+        auto spanners = score()->spannerMap().findOverlapping(tick().ticks(), ch->endTick().ticks());
         for (auto interval : spanners) {
             Spanner* sp = interval.value;
             if (sp->isVibrato() && sp->startElement() == ch) {

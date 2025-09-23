@@ -606,7 +606,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                     tempoEndTick = segment.tick() + segment.ticks();
                 }
 
-                Fraction etick = tempoEndTick - Fraction(1, 480 * 4);
+                Fraction etick = tempoEndTick - Fraction::eps();
                 auto e = tempomap()->find(etick.ticks());
                 if (e == tempomap()->end()) {
                     tempomap()->setTempo(etick.ticks(), otempo);
@@ -1147,36 +1147,24 @@ Measure* Score::searchMeasure(const PointF& p, const System* preferredSystem, do
 
 static Segment* getNextValidInputSegment(Segment* segment, track_idx_t track, voice_idx_t voice)
 {
-    if (segment == nullptr) {
+    if (!segment) {
         return nullptr;
     }
 
     assert(segment->segmentType() == SegmentType::ChordRest);
 
-    ChordRest* chordRest = nullptr;
+    Fraction nextTick = segment->measure()->tick();
     for (Segment* s1 = segment; s1; s1 = s1->prev(SegmentType::ChordRest)) {
-        EngravingItem* element = s1->element(track + voice);
-        chordRest = toChordRest(element);
-
-        if (chordRest) {
+        if (EngravingItem* element = s1->element(track + voice)) {
+            nextTick = toChordRest(element)->endTick();
             break;
         }
     }
 
-    Fraction nextTick = (chordRest == nullptr) ? segment->measure()->tick()
-                        : chordRest->tick() + chordRest->actualTicks();
-
-    static const SegmentType st { SegmentType::ChordRest };
-    while (segment) {
-        if (segment->element(track + voice)) {
+    for (segment; segment; segment = segment->next(SegmentType::ChordRest)) {
+        if (segment->element(track + voice) || (voice && segment->tick() == nextTick)) {
             break;
         }
-
-        if (voice && segment->tick() == nextTick) {
-            return segment;
-        }
-
-        segment = segment->next(st);
     }
 
     return segment;
@@ -1448,8 +1436,8 @@ void Score::styleChanged()
 Measure* Score::getCreateMeasure(const Fraction& tick)
 {
     Measure* last = lastMeasure();
-    if (last == 0 || ((last->tick() + last->ticks()) <= tick)) {
-        Fraction lastTick  = last ? (last->tick() + last->ticks()) : Fraction(0, 1);
+    if (!last || last->endTick() <= tick) {
+        Fraction lastTick  = last ? last->endTick() : Fraction(0, 1);
         while (tick >= lastTick) {
             Measure* m = Factory::createMeasure(this->dummy()->system());
             Fraction ts = sigmap()->timesig(lastTick).timesig();
@@ -1457,7 +1445,7 @@ Measure* Score::getCreateMeasure(const Fraction& tick)
             m->setTimesig(ts);
             m->setTicks(ts);
             measures()->append(toMeasureBase(m));
-            lastTick += Fraction::fromTicks(ts.ticks());
+            lastTick += m->ticks();
         }
     }
     return tick2measure(tick);
@@ -1660,7 +1648,7 @@ void Score::removeElement(EngravingItem* element)
         if (!system) {
             // vertical boxes are not shown in continuous view so no system
 #ifndef NDEBUG
-            bool noSystemMode = lineMode() && (element->isVBox() || element->isTBox());
+            bool noSystemMode = lineMode() && element->isVBoxBase();
 #endif
             assert(noSystemMode || !isOpen());
             return;
@@ -2234,7 +2222,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
         }
         // check if a key signature is present but is spurious (i.e. no actual change)
         else if (staff->currentKeyTick(ctick) == ctick
-                 && staff->key(ctick - Fraction::fromTicks(1)) == ostaff->key(otick)) {
+                 && staff->key(ctick - Fraction::eps()) == ostaff->key(otick)) {
             Segment* ns = firstAppendedMeasure->first(SegmentType::KeySig);
             if (ns) {
                 ns->remove(ns->element(trackIdx));
@@ -2243,7 +2231,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
 
         // check if time signature needs to be changed
         TimeSig* ots = ostaff->timeSig(otick), * cts = staff->timeSig(ctick);
-        TimeSig* pts = staff->timeSig(ctick - Fraction::fromTicks(1));
+        TimeSig* pts = staff->timeSig(ctick - Fraction::eps());
         if (ots && cts && *ots != *cts) {
             Segment* ns = firstAppendedMeasure->undoGetSegment(SegmentType::TimeSig, ctick);
             TimeSig* nsig = new TimeSig(*ots);
@@ -2267,7 +2255,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
         }
         // check if a clef change is present but is spurious (i.e. no actual change)
         else if (staff->currentClefTick(ctick) == ctick
-                 && staff->clef(ctick - Fraction::fromTicks(1)) == ostaff->clef(otick)) {
+                 && staff->clef(ctick - Fraction::eps()) == ostaff->clef(otick)) {
             Segment* ns = firstAppendedMeasure->first(SegmentType::Clef);
             if (!ns) {
                 ns = firstAppendedMeasure->first(SegmentType::HeaderClef);
@@ -4681,11 +4669,11 @@ ChordRest* Score::findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& t
 ChordRest* Score::findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& tick, staff_idx_t staffIdx, bool forceVoice,
                                                                voice_idx_t voice) const
 {
-    Fraction ptick = tick - Fraction::fromTicks(1);
+    Fraction ptick = tick - Fraction::eps();
     Measure* m = tick2measureMM(ptick);
     if (!m) {
         LOGD("findCRinStaff: no measure for tick %d", ptick.ticks());
-        return 0;
+        return nullptr;
     }
     // attach to first rest all spanner when mmRest
     if (m->isMMRest()) {
@@ -4699,14 +4687,14 @@ ChordRest* Score::findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& t
 
     Fraction lastTick = Fraction(-1, 1);
     for (Segment* ns = s;; ns = ns->next(SegmentType::ChordRest)) {
-        if (ns == 0 || ns->tick() > ptick) {
+        if (!ns || ns->tick() > ptick) {
             break;
         }
         // found a segment; now find longest cr on this staff that does not overlap tick
         for (track_idx_t t = strack; t < etrack; ++t) {
             ChordRest* cr = toChordRest(ns->element(t));
             if ((cr) && ((!forceVoice) || voice == cr->voice())) {
-                Fraction endTick = cr->tick() + cr->actualTicks();
+                Fraction endTick = cr->endTick();
                 if (endTick >= lastTick && endTick <= tick) {
                     s = ns;
                     actualTrack = t;
@@ -4718,25 +4706,22 @@ ChordRest* Score::findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& t
     if (s) {
         return toChordRest(s->element(actualTrack));
     }
-    return 0;
+    return nullptr;
 }
 
 ChordRest* Score::findChordRestEndingBeforeTickInTrack(const Fraction& tick, track_idx_t trackIdx) const
 {
-    Measure* measure = tick2measureMM(tick - Fraction::eps());
-    if (!measure) {
+    Measure* m = tick2measureMM(tick - Fraction::eps());
+    if (!m) {
         LOGD("findCRinStaff: no measure for tick %d", tick.ticks());
         return nullptr;
     }
 
-    for (const Segment* segment = measure->last(); segment; segment = segment->prev()) {
-        EngravingItem* item = segment->elementAt(trackIdx);
-        if (!segment->isChordRestType() || !item) {
-            continue;
-        }
-        ChordRest* chordRest = toChordRest(item);
-        if (segment->tick() + chordRest->actualTicks() <= tick) {
-            return chordRest;
+    for (const Segment* s = m->last(SegmentType::ChordRest); s; s = s->prev(SegmentType::ChordRest)) {
+        if (ChordRest* cr = toChordRest(s->elementAt(trackIdx))) {
+            if (cr->endTick() <= tick) {
+                return cr;
+            }
         }
     }
 
@@ -5398,34 +5383,31 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
 
             // set up destination chord
 
-            if (dstCR && dstCR->type() == ElementType::CHORD && dstCR->globalTicks() == chord->globalTicks()) {
-                // existing chord in destination with correct duration;
-                //   can simply move note in
-                dstChord = toChord(dstCR);
-            } else if (dstCR && dstCR->type() == ElementType::REST
-                       && dstCR->globalTicks() == chord->globalTicks()) {
-                // existing rest in destination with correct duration;
-                //   replace with chord, then move note in
+            if (dstCR && dstCR->globalTicks() == chord->globalTicks()) {
+                // existing chord/rest in destination with correct duration
                 //   this case allows for tuplets, unlike the more general case below
-                dstChord = Factory::createChord(s);
-                dstChord->setTrack(dstTrack);
-                dstChord->setDurationType(chord->durationType());
-                dstChord->setTicks(chord->ticks());
-                dstChord->setTuplet(dstCR->tuplet());
-                dstChord->setParent(s);
-                score->undoRemoveElement(dstCR);
+                if (dstCR->isChord()) {
+                    // can simply move note in
+                    dstChord = toChord(dstCR);
+                } else {
+                    // replace rest with chord, then move note in
+                    dstChord = Factory::createChord(s);
+                    dstChord->setTrack(dstTrack);
+                    dstChord->setDurationType(chord->durationType());
+                    dstChord->setTicks(chord->ticks());
+                    dstChord->setTuplet(dstCR->tuplet());
+                    dstChord->setParent(s);
+                    score->undoRemoveElement(dstCR);
+                }
             } else if (!chord->tuplet()) {
                 // rests or gap in destination
                 //   insert new chord if the rests / gap are long enough
                 //   then move note in
                 ChordRest* pcr = nullptr;
                 ChordRest* ncr = nullptr;
-                for (Segment* s2 = m->first(SegmentType::ChordRest); s2; s2 = s2->next()) {
-                    if (s2->segmentType() != SegmentType::ChordRest) {
-                        continue;
-                    }
+                for (Segment* s2 = m->first(SegmentType::ChordRest); s2; s2 = s2->next(SegmentType::ChordRest)) {
                     ChordRest* cr2 = toChordRest(s2->element(dstTrack));
-                    if (!cr2 || cr2->type() == ElementType::REST) {
+                    if (!cr2 || cr2->isRest()) {
                         continue;
                     }
                     if (s2->tick() < s->tick()) {
@@ -5436,9 +5418,9 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                         break;
                     }
                 }
-                Fraction gapStart = pcr ? pcr->tick() + pcr->actualTicks() : m->tick();
-                Fraction gapEnd   = ncr ? ncr->tick() : m->tick() + m->ticks();
-                if (gapStart <= s->tick() && gapEnd >= s->tick() + chord->actualTicks()) {
+                Fraction gapStart = pcr ? pcr->endTick() : m->tick();
+                Fraction gapEnd   = ncr ? ncr->tick() : m->endTick();
+                if (gapStart <= s->tick() && gapEnd >= chord->endTick()) {
                     // big enough gap found
                     dstChord = Factory::createChord(s);
                     dstChord->setTrack(dstTrack);

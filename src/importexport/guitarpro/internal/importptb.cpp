@@ -585,7 +585,7 @@ void PowerTab::addPalmMute(Chord* chord)
         if (pm->tick2() < tick) {
             _palmMutes[track] = 0;
         } else {
-            pm->setTick2(chord->tick() + chord->actualTicks());
+            pm->setTick2(chord->endTick());
             pm->setEndElement(chord);
         }
     }

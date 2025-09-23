@@ -1123,7 +1123,7 @@ Note* SLine::guessFinalNote(Note* startNote)
         return 0;
     }
 
-    Segment* segm = chord->score()->tick2rightSegment(chord->tick() + chord->actualTicks());
+    Segment* segm = chord->score()->tick2rightSegment(chord->endTick());
     while (segm && !segm->isChordRestType()) {
         segm = segm->next1();
     }

@@ -655,7 +655,7 @@ SymId Read206::articulationNames2SymId206(const AsciiStringView& s)
 static void readDrumset206(Drumset* ds, XmlReader& e)
 {
     int pitch = e.intAttribute("pitch", -1);
-    if (pitch < 0 || pitch > 127) {
+    if (!pitchIsValid(pitch)) {
         LOGD("load drumset: invalid pitch %d", pitch);
         return;
     }
@@ -1770,7 +1770,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
         } else {
             if (atype == "start") {
                 if (spanner->ticks() > Fraction(0, 1) && spanner->tick() == Fraction(-1, 1)) {       // stop has been read first
-                    spanner->setTicks(spanner->ticks() - ctx.tick() - Fraction::fromTicks(1));
+                    spanner->setTicks(spanner->ticks() - ctx.tick() - Fraction::eps());
                 }
                 spanner->setTick(ctx.tick());
                 spanner->setTrack(ch->track());

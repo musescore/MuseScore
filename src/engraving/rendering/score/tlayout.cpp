@@ -2406,7 +2406,7 @@ static void layoutLines(const FiguredBass* item, FiguredBass::LayoutData* ldata,
     // or the previous measure, if nextTick is the first tick of a measure
     //    (and line should stop before any measure terminal segment (bar, clef, ...) )
 
-    const Measure* m = ctx.dom().tick2measure(nextTick - Fraction::fromTicks(1));
+    const Measure* m = ctx.dom().tick2measure(nextTick - Fraction::eps());
     if (m) {
         // locate the first segment (of ANY type) right after this' last tick
         for (nextSegm = m->first(SegmentType::All); nextSegm; nextSegm = nextSegm->next()) {
@@ -3717,7 +3717,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
             clef = c->clefType();
         } else {
             // no clef found, so get the clef type from the clefs list, using the previous tick
-            clef = item->staff()->clef(item->tick() - Fraction::fromTicks(1));
+            clef = item->staff()->clef(item->tick() - Fraction::eps());
         }
     }
 
@@ -3844,7 +3844,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         Key t2      = Key::C;
         if (naturalsOn) {
             if (item->staff()) {
-                t2 = item->staff()->key(item->tick() - Fraction(1, 480 * 4));
+                t2 = item->staff()->key(item->tick() - Fraction::eps());
             }
             if (item->segment() && item->segment()->isType(SegmentType::KeySigStartRepeatAnnounce)) {
                 // Handle naturals in continuation courtesy

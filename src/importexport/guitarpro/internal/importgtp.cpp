@@ -601,7 +601,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
         }
         volta->setText(XmlWriter::xmlString(voltaTextString));
         volta->setTick(m->tick());
-        volta->setTick2(m->tick() + m->ticks());
+        volta->setTick2(m->endTick());
         score->addElement(volta);
     }
 }
@@ -975,8 +975,8 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect, bool& hasVibratoL
             a->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
             chord->add(a);
         }
-        //TODO-ws		else for (auto n : chord->notes())
-        //			n->setHarmonic(true);
+        //TODO-ws       else for (auto n : chord->notes())
+        //          n->setHarmonic(true);
     } else if (beatEffect == 5) {
         Articulation* a = Factory::createArticulation(chord);
         a->setSymId(SymId::stringsUpBow);
@@ -1310,7 +1310,7 @@ void GuitarPro::restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr
      * make them invisible so users get the same visual if they are
      * at a valid tick of the score. */
     if (seg->empty()) {
-        if (tick < measure->first()->tick() + measure->ticks()) {
+        if (tick < measure->endTick()) {
             cr = Factory::createRest(seg);
             cr->setTrack(track);
             TDuration d(l);
@@ -1940,8 +1940,8 @@ GuitarPro::ReadNoteResult GuitarPro1::readNote(int string, Note* note)
             if (modMask2 & EFFECT_ARTIFICIAL_HARMONIC) {
                 /*int type =*/
                 readUInt8();
-                //TODO-ws			if (type == 1 || type == 4 || type == 5)
-                //				      note->setHarmonic(true);
+                //TODO-ws           if (type == 1 || type == 4 || type == 5)
+                //                    note->setHarmonic(true);
             }
             if (modMask2 & EFFECT_TRILL) {
                 //TODO-ws                        note->setTrillFret(readUInt8());      // trill fret

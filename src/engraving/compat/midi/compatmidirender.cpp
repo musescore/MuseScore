@@ -1014,10 +1014,9 @@ Chord* CompatMidiRender::getChordFromSegment(Segment* segment, track_idx_t track
 
 Trill* CompatMidiRender::findFirstTrill(Chord* chord)
 {
-    auto spanners = chord->score()->spannerMap().findOverlapping(1 + chord->tick().ticks(),
-                                                                 chord->tick().ticks() + chord->actualTicks().ticks() - 1);
+    auto spanners = chord->score()->spannerMap().findOverlapping(1 + chord->tick().ticks(), chord->endTick().ticks() - 1);
     for (auto i : spanners) {
-        if (i.value->type() != ElementType::TRILL) {
+        if (!i.value->isTrill()) {
             continue;
         }
         if (i.value->track() != chord->track()) {

@@ -122,8 +122,6 @@ public:
         return m_crossMeasure == CrossMeasure::FIRST ? m_crossMeasureTDur.ticks() : m_durationType.ticks();
     }
 
-    Fraction endTick() const { return tick() + actualTicks(); }
-
     String durationUserName() const;
 
     void setTrack(track_idx_t val) override;

@@ -168,7 +168,7 @@ void ContiniousElementsBuilder::buildContiniousElement(ChordRest* cr, ElementTyp
     };
 
     auto setEndCR = [](Spanner* elem, ChordRest* cr) {
-        elem->setTick2(cr->tick() + cr->actualTicks());
+        elem->setTick2(cr->endTick());
         elem->setEndElement(cr);
     };
 

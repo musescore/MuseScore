@@ -290,7 +290,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
         // ElementType nt = lc.curMeasure ? lc.curMeasure->type() : ElementType::INVALID;
         mb = ctx.state().curMeasure();
-        if (lineBreak || !mb || mb->isVBox() || mb->isTBox() || mb->isFBox()) {
+        if (lineBreak || !mb || mb->isVBoxBase()) {
             break;
         }
     }

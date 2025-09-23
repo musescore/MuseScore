@@ -1598,7 +1598,7 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
         Fraction tick = m->endTick();
         for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             const Staff* staff     = ctx.dom().staff(staffIdx);
-            const KeySigEvent key1 = staff->keySigEvent(tick - Fraction::fromTicks(1));
+            const KeySigEvent key1 = staff->keySigEvent(tick - Fraction::eps());
             const KeySigEvent key2 = staff->keySigEvent(tick);
             if (key1 == key2) {
                 continue;
@@ -2508,7 +2508,7 @@ Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff*
     const bool hideClef = staffType->isTabStaff() ? ctx.conf().styleB(Sid::hideTabClefAfterFirst) : !ctx.conf().styleB(Sid::genClef);
 
     // find the clef type at the previous tick
-    ClefTypeList cl = staff->clefType(m->tick() - Fraction::fromTicks(1));
+    ClefTypeList cl = staff->clefType(m->tick() - Fraction::eps());
     bool showCourtesy = true;
     Segment* s = nullptr;
     if (m->prevMeasure()) {

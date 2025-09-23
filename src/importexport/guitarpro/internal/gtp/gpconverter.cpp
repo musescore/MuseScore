@@ -835,7 +835,7 @@ void GPConverter::doAddVolta(const GPMasterBar* mB, Measure* measure)
     }
 
     volta->endings().clear();
-    volta->setTick2(measure->tick() + measure->ticks());
+    volta->setTick2(measure->endTick());
 
     String str;
     for (const auto& end : mB->alternateEnding()) {
@@ -1717,12 +1717,7 @@ void GPConverter::addClef(const GPBar* bar, int curTrack)
 
 Measure* GPConverter::addMeasure(const GPMasterBar* mB)
 {
-    Fraction tick{ 0, 1 };
-    auto lastMeasure = _score->measures()->last();
-    if (lastMeasure) {
-        tick = lastMeasure->tick() + lastMeasure->ticks();
-    }
-
+    Fraction tick = _score->measures()->last() ? _score->measures()->last()->endTick() : Fraction(0, 1);
     Measure* measure = Factory::createMeasure(_score->dummy()->system());
     measure->setTick(tick);
     GPMasterBar::TimeSig sig = mB->timeSig();

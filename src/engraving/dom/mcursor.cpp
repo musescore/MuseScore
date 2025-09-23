@@ -65,7 +65,7 @@ void MCursor::createMeasures()
         Fraction tick = Fraction(0, 1);
         measure = m_score->lastMeasure();
         if (measure) {
-            tick = measure->tick() + measure->ticks();
+            tick = measure->endTick();
             if (tick > m_tick) {
                 break;
             }

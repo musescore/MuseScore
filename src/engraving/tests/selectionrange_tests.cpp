@@ -97,7 +97,7 @@ TEST_F(Engraving_SelectionRangeTests, selRangeAndSpanners)
 
         // Setup: Find all the spanners in this measure...
         std::unordered_set<const Spanner*> spannersInMeasure;
-        auto spanners = spannerMap.findContained(measure->tick().ticks(), Fraction(measure->tick() + measure->ticks()).ticks());
+        auto spanners = spannerMap.findContained(measure->tick().ticks(), measure->endTick().ticks());
         for (auto i : spanners) {
             const Spanner* sp = i.value;
             spannersInMeasure.emplace(sp);

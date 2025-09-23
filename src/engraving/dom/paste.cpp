@@ -188,7 +188,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                 if (!firstpart) {
                     c2->removeMarkings(true);
                 }
-                Fraction mlen = measure->tick() + measure->ticks() - tick;
+                Fraction mlen = measure->endTick() - tick;
                 Fraction len = mlen > rest ? rest : mlen;
                 std::vector<TDuration> dl = toRhythmicDurationList(len, false, tick - measure->tick(), sigmap()->timesig(
                                                                        tick).nominal(), measure, MAX_DOTS);
@@ -232,7 +232,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
             while (!rest.isZero()) {
                 Rest* r2      = firstpart ? r : toRest(r->clone());
                 measure       = tick2measure(tick);
-                Fraction mlen = measure->tick() + measure->ticks() - tick;
+                Fraction mlen = measure->endTick() - tick;
                 Fraction len  = rest > mlen ? mlen : rest;
                 std::vector<TDuration> dl = toRhythmicDurationList(len, true, tick - measure->tick(), sigmap()->timesig(
                                                                        tick).nominal(), measure, MAX_DOTS);
@@ -254,7 +254,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                 while (!rest.isZero()) {
                     Rest* r2      = toRest(r->clone());
                     measure       = tick2measure(tick);
-                    Fraction mlen = measure->tick() + measure->ticks() - tick;
+                    Fraction mlen = measure->endTick() - tick;
                     Fraction len  = rest > mlen ? mlen : rest;
                     std::vector<TDuration> dl = toDurationList(len, false);
                     TDuration d = dl[0];

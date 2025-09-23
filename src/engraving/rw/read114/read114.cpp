@@ -2137,7 +2137,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
     for (auto& p : ctx.tuplets()) {
         Tuplet* tuplet = p.second;
         Fraction tupletTick = tuplet->tick();
-        Fraction tupletDuration = tuplet->actualTicks() - Fraction::fromTicks(1);
+        Fraction tupletDuration = tuplet->actualTicks() - Fraction::eps();
         std::vector<DurationElement*> tElements = tuplet->elements();
         for (auto& p2 : ctx.tuplets()) {
             Tuplet* tuplet2 = p2.second;
@@ -2309,7 +2309,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
                 if (!measure->isMMRest()) {
                     score->measures()->append(measure);
                     ctx.setLastMeasure(measure);
-                    ctx.setTick(measure->tick() + measure->ticks());
+                    ctx.setTick(measure->endTick());
                 } else {
                     // this is a multi measure rest
                     // always preceded by the first measure it replaces
@@ -2414,7 +2414,7 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
 static void readDrumset(Drumset* ds, XmlReader& e)
 {
     int pitch = e.intAttribute("pitch", -1);
-    if (pitch < 0 || pitch > 127) {
+    if (!pitchIsValid(pitch)) {
         LOGD("load drumset: invalid pitch %d", pitch);
         return;
     }

@@ -1210,13 +1210,13 @@ static void findTrills(const Measure* const measure, track_idx_t strack, track_i
 {
     // loop over all spanners in this measure
     Fraction stick = measure->tick();
-    Fraction etick = measure->tick() + measure->ticks();
+    Fraction etick = measure->endTick();
     for (auto it = measure->score()->spanner().lower_bound(stick.ticks());
          it != measure->score()->spanner().upper_bound(etick.ticks()); ++it) {
         EngravingItem* e = it->second;
         //LOGD("1 trill %p type %d track %d tick %s", e, e->type(), e->track(), muPrintable(e->tick().print()));
         if (e->isTrill() && strack <= e->track() && e->track() < etrack
-            && e->tick() >= measure->tick() && e->tick() < (measure->tick() + measure->ticks())) {
+            && e->tick() >= measure->tick() && e->tick() < measure->endTick()) {
             //LOGD("2 trill %p", e);
             // a trill is found starting in this segment, trill end time is known
             // determine notes to write trill start and stop
@@ -1807,7 +1807,7 @@ static String tick2xml(const Fraction& ticks, int* dots)
 static Volta* findVolta(const Measure* const m, bool left, const track_idx_t track)
 {
     Fraction stick = m->tick();
-    Fraction etick = m->tick() + m->ticks();
+    Fraction etick = m->endTick();
     auto spanners = m->score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
     for (auto i : spanners) {
         Spanner* el = i.value;
@@ -1821,7 +1821,7 @@ static Volta* findVolta(const Measure* const m, bool left, const track_idx_t tra
             return (Volta*)el;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -6739,7 +6739,7 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
                     } else {
                         muse::remove(fbMap, strack);
                     }
-                    const Fraction crEndTick = cr->tick() + cr->actualTicks();
+                    const Fraction crEndTick = cr->endTick();
                     const Fraction fbEndTick = fb->segment()->tick() + fb->ticks();
                     const bool writeDuration = fb->ticks() < cr->actualTicks();
                     writeMusicXml(fb, xml, true, crEndTick.ticks(), fbEndTick.ticks(),
@@ -6761,7 +6761,7 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
         // check for extend pending
         if (muse::contains(fbMap, strack)) {
             const FiguredBass* fb = fbMap.at(strack);
-            Fraction crEndTick = cr->tick() + cr->actualTicks();
+            Fraction crEndTick = cr->endTick();
             Fraction fbEndTick = fb->segment()->tick() + fb->ticks();
             bool writeDuration = fb->ticks() < cr->actualTicks();
             if (cr->tick() < fbEndTick) {
@@ -6769,7 +6769,7 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
                 writeMusicXml(fb, xml, false, crEndTick.ticks(), fbEndTick.ticks(), writeDuration, divisions);
             }
             if (fbEndTick <= crEndTick) {
-                //LOGD("figuredbass() at tick %d extend done", cr->tick() + cr->actualTicks());
+                //LOGD("figuredbass() at tick %d extend done", cr->endTick());
                 muse::remove(fbMap, strack);
             }
         }

@@ -67,7 +67,7 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                     }
                     score->checkSpanner(ctx.tick(), ctx.tick() + measure->ticks(), /*removeOrphans*/ false);
                     ctx.setLastMeasure(measure);
-                    ctx.setTick(measure->tick() + measure->ticks());
+                    ctx.setTick(measure->endTick());
                     if (timeSigForThisMeasure != Fraction(0, 1) && ctx.timeSigForNextMeasure() == timeSigForThisMeasure) {
                         ctx.setTimeSigForNextMeasure(Fraction(0, 1));
                     }

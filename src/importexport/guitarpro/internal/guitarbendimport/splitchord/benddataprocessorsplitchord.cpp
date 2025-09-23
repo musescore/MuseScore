@@ -76,7 +76,7 @@ static void createSplitDurationBends(const BendDataContextSplitChord& bendDataCt
             mainChord->setTicks(newMainChordDuration);
             mainChord->setDurationType(TDuration(newMainChordDuration));
             Fraction currentTick = mainChord->tick() + mainChord->ticks();
-            Fraction currentActualTick = mainChord->tick() + mainChord->actualTicks();
+            Fraction currentActualTick = mainChord->endTick();
             createSplitDurationBendsForChord(bendDataCtx, mainChord);
 
             Tuplet* tuplet = mainChord->tuplet();

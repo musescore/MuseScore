@@ -278,8 +278,8 @@ void Volta::setChannel() const
             return;
         }
 
-        Fraction startTick = startMeasure->tick() - Fraction::fromTicks(1);
-        Fraction endTick  = endMeasure->endTick() - Fraction::fromTicks(1);
+        Fraction startTick = startMeasure->tick() - Fraction::eps();
+        Fraction endTick  = endMeasure->endTick() - Fraction::eps();
         Staff* st = staff();
         for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
             int channel = st->channel(startTick, voice);
@@ -301,8 +301,8 @@ void Volta::setTempo() const
         if (!endMeasure->repeatEnd()) {
             return;
         }
-        Fraction startTick = startMeasure->tick() - Fraction::fromTicks(1);
-        Fraction endTick  = endMeasure->endTick() - Fraction::fromTicks(1);
+        Fraction startTick = startMeasure->tick() - Fraction::eps();
+        Fraction endTick  = endMeasure->endTick() - Fraction::eps();
         BeatsPerSecond tempoBeforeVolta = score()->tempomap()->tempo(startTick.ticks());
         score()->setTempo(endTick, tempoBeforeVolta);
     }
