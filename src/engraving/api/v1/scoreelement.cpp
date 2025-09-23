@@ -221,6 +221,33 @@ void ScoreElement::reset(mu::engraving::Pid pid)
     }
 }
 
+void ScoreElement::scanElements(QJSValue func, bool all)
+{
+    if (!func.isCallable()) {
+        return;
+    }
+
+    struct CallbackContext {
+        QJSValue callback;
+        QJSEngine* engine;
+        Ownership ownership;
+    };
+
+    CallbackContext ctx{ func, qmlEngine(this), ownership() };
+
+    auto wrapper = [](void* data, mu::engraving::EngravingItem* item) {
+        auto* ctx = static_cast<CallbackContext*>(data);
+        if (!ctx->callback.isCallable()) {
+            return;
+        }
+
+        QJSValueList args;
+        args << ctx->engine->toScriptValue(wrap(item, ctx->ownership));
+        ctx->callback.call(args);
+    };
+    e->scanElements(&ctx, wrapper, all);
+}
+
 //---------------------------------------------------------
 //   wrap
 ///   \cond PLUGIN_API \private \endcond
