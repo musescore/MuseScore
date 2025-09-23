@@ -144,13 +144,13 @@ void CoreMidiOutPort::initCore()
     };
 
     result = MIDIClientCreate(CFSTR("MuseScore"), onCoreMidiNotificationReceived, this, &m_core->client);
-    IF_ASSERT_FAILED(result == noErr) {
+    if (result != noErr) {
         LOGE() << "failed create midi output client";
         return;
     }
 
     result = MIDIOutputPortCreate(m_core->client, CFSTR("MuseScore output port"), &m_core->outputPort);
-    IF_ASSERT_FAILED(result == noErr) {
+    if (result != noErr) {
         LOGE() << "failed create midi output port";
     }
 }
