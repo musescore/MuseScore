@@ -94,6 +94,7 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
+    virtual EngravingItem* propertyDelegate(Pid) override;
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
