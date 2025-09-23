@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #ifndef MU_NOTATION_NOTATIONACTIONCONTROLLER_H
 #define MU_NOTATION_NOTATIONACTIONCONTROLLER_H
 
@@ -274,6 +275,8 @@ private:
 
     using IsActionEnabledFunc = std::function<bool ()>;
     std::map<muse::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;
+
+    void addSimpleArpeggioToSelection();
 };
 }
 

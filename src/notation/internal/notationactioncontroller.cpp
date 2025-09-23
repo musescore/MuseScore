@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationactioncontroller.h"
 
 #include "io/file.h"
@@ -2577,4 +2578,29 @@ void NotationActionController::registerAction(const ActionCode& code, void (INot
             }
         }
     }, enabler);
+}
+
+NotationActionController::NotationActionController() {
+    registerAction("add-simple-arpeggio", &Controller::addSimpleArpeggioToSelection);
+}
+
+void NotationActionController::addSimpleArpeggioToSelection()
+{
+    auto notation = currentNotation();
+    if (!notation)
+        return;
+
+    auto selection = notation->selection();
+    if (!selection)
+        return;
+
+    for (auto& el : selection->elements()) {
+        if (el->type() == mu::engraving::ElementType::CHORD) {
+            auto chord = static_cast<mu::engraving::Chord*>(el);
+            if (!chord->arpeggio()) {
+                auto arpeggio = std::make_unique<mu::engraving::Arpeggio>();
+                chord->addChild(std::move(arpeggio));
+            }
+        }
+    }
 }
