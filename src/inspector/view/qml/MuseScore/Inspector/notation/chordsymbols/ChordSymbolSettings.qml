@@ -87,7 +87,7 @@ Column {
         propertyItem: root.model ? root.model.durationType : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: voicingSection.navigationRowEnd + 1
+        navigationRowStart: (voicingSection.visible ? voicingSection.navigationRowEnd : root.navigationRowStart) + 1
 
         model: [
             { text: qsTrc("inspector", "Until the next chord symbol"), value: ChordSymbolTypes.DURATION_UNTIL_NEXT_CHORD_SYMBOL },
@@ -119,7 +119,7 @@ Column {
 
         navigation.name: "Do not stack modifiers"
         navigation.panel: root.navigationPanel
-        navigation.row: verticalAlignCheckBox.navigationRowEnd + 1
+        navigation.row: (verticalAlignCheckBox.visible ? verticalAlignCheckBox.navigation.row : durationSection.navigationRowEnd) + 1
     }
 
     Item {
@@ -144,7 +144,15 @@ Column {
 
             navigationName: "Bass note scale"
             navigationPanel: root.navigationPanel
-            navigationRowStart: doNotStackModifiersCheckBox.navigationRowEnd + 1
+            navigationRowStart: {
+                if (doNotStackModifiersCheckBox.visible) {
+                    return doNotStackModifiersCheckBox.navigation.row + 1
+                } else if (verticalAlignCheckBox.visible) {
+                    return verticalAlignCheckBox.navigation.row + 1
+                } else {
+                    return durationSection.navigationRowEnd
+                }
+            }
         }
 
         FlatRadioButtonGroupPropertyView {
@@ -158,7 +166,7 @@ Column {
 
             visible: root.model ? !root.model.insideFretBox : true
 
-            titleText: qsTrc("inspector", "Alignment to notehead")
+            titleText: qsTrc("inspector", "Alignment")
             propertyItem: root.model ? root.model.position : null
 
             navigationPanel: root.navigationPanel
@@ -168,9 +176,21 @@ Column {
             requestWidth: 98
 
             model: [
-                { iconCode: IconCode.NOTE_ALIGN_LEFT, value: 0},
-                { iconCode: IconCode.NOTE_ALIGN_CENTER, value: 2},
-                { iconCode: IconCode.NOTE_ALIGN_RIGHT, value: 1 }
+                { iconCode: IconCode.NOTE_ALIGN_LEFT,
+                    value: 0,
+                    title: qsTrc("inspector", "Align left"),
+                    description: qsTrc("inspector", "Align left edge of text to notehead")
+                },
+                { iconCode: IconCode.NOTE_ALIGN_CENTER,
+                    value: 2,
+                    title: qsTrc("inspector", "Align center"),
+                    description: qsTrc("inspector", "Align horizontal center of text to notehead")
+                },
+                { iconCode: IconCode.NOTE_ALIGN_RIGHT,
+                    value: 1 ,
+                    title: qsTrc("inspector", "Align right"),
+                    description: qsTrc("inspector", "Align right edge of text to notehead")
+                }
             ]
         }
     }
@@ -181,7 +201,7 @@ Column {
 
         navigation.name: "AddFretboardDiagram"
         navigation.panel: root.navigationPanel
-        navigation.row: alignmentButtonList.navigationRowEnd + 1
+        navigation.row: (alignmentButtonList.visible ? alignmentButtonList.navigationRowEnd : bassNoteScale.navigationRowEnd) + 1
 
         text: qsTrc("inspector", "Add fretboard diagram")
         icon: IconCode.FRETBOARD_DIAGRAM

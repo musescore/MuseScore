@@ -58,10 +58,14 @@ RadioButtonGroup {
 
         transparent: root.transparent
 
+        toolTipTitle: modelData.title ?? ""
+        toolTipDescription: modelData.description ?? ""
+
         navigation.name: "FlatRadioButtonList_" + (Boolean(text) ? text : modelData.title)
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1 + model.index
         navigation.accessible.name: root.accessibleName + " " + (Boolean(text) ? text : modelData.title)
+        navigation.accessible.description:  modelData.description ?? ""
 
         onToggled: {
             root.toggled(modelData.value)
