@@ -528,6 +528,11 @@ bool Slur::isCrossStaff()
                || startCR()->vStaffIdx() != endCR()->vStaffIdx());
 }
 
+bool Slur::hasCrossBeams()
+{
+    return (startCR() && startCR()->beam() && startCR()->beam()->cross()) || (endCR() && endCR()->beam() && endCR()->beam()->cross());
+}
+
 PropertyValue Slur::getProperty(Pid propertyId) const
 {
     switch (propertyId) {

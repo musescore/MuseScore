@@ -114,6 +114,7 @@ public:
     const SlurSegment* segmentAt(int n) const { return toSlurSegment(Spanner::segmentAt(n)); }
 
     bool isCrossStaff();
+    bool hasCrossBeams();
     const StemFloated& stemFloated() const { return m_stemFloated; }
     StemFloated& stemFloated() { return m_stemFloated; }
 
