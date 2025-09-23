@@ -107,9 +107,9 @@ async::Promise<io::path_t> AutobotInteractive::selectOpeningFile(const std::stri
 }
 
 io::path_t AutobotInteractive::selectOpeningFileSync(const std::string& title, const io::path_t& dir,
-                                                     const std::vector<std::string>& filter)
+                                                     const std::vector<std::string>& filter, const int options)
 {
-    return m_real->selectOpeningFileSync(title, dir, filter);
+    return m_real->selectOpeningFileSync(title, dir, filter, options);
 }
 
 io::path_t AutobotInteractive::selectSavingFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,

@@ -250,7 +250,7 @@ enum class FileDialogMode {
 };
 
 static UriQuery makeSelectFileQuery(FileDialogMode mode, const std::string& title, const io::path_t& current,
-                                    const std::vector<std::string>& filter, bool confirmOverwrite)
+                                    const std::vector<std::string>& filter, const int options = 0)
 {
     UriQuery q("muse://interactive/selectfile");
     q.set("title", title);
@@ -262,15 +262,12 @@ static UriQuery makeSelectFileQuery(FileDialogMode mode, const std::string& titl
 
     q.set("nameFilters", filterList);
     q.set("fileMode", static_cast<int>(mode));
+    q.set("options", options);
     if (mode == FileDialogMode::OpenFile) {
         q.set("selectExisting", true);
         q.set("folder", QUrl::fromLocalFile(current.toQString()).toString().toStdString());
     } else if (mode == FileDialogMode::SaveFile) {
         q.set("currentFile", QUrl::fromLocalFile(current.toQString()).toString().toStdString());
-
-        if (!confirmOverwrite) {
-            q.set("options", QFileDialog::DontConfirmOverwrite);
-        }
     }
 
     return q;
@@ -322,7 +319,7 @@ async::Promise<io::path_t> Interactive::selectOpeningFile(const std::string& tit
 
 #else
 
-    UriQuery q = makeSelectFileQuery(FileDialogMode::OpenFile, title, dir, filter, false);
+    UriQuery q = makeSelectFileQuery(FileDialogMode::OpenFile, title, dir, filter);
 
     async::Promise<Val> promise = provider()->openAsync(q);
 
@@ -338,14 +335,16 @@ async::Promise<io::path_t> Interactive::selectOpeningFile(const std::string& tit
 #endif
 }
 
-io::path_t Interactive::selectOpeningFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter)
+io::path_t Interactive::selectOpeningFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
+                                              const int options)
 {
 #ifndef Q_OS_LINUX
-    QString result = QFileDialog::getOpenFileName(nullptr, QString::fromStdString(title), dir.toQString(), filterToString(filter));
+    const QFileDialog::Options qoptions = QFileDialog::Options::fromInt(options);
+    QString result = QFileDialog::getOpenFileName(nullptr, QString::fromStdString(title), dir.toQString(), filterToString(
+                                                      filter), nullptr, qoptions);
     return result;
 #else
-
-    UriQuery q = makeSelectFileQuery(FileDialogMode::OpenFile, title, dir, filter, false);
+    UriQuery q = makeSelectFileQuery(FileDialogMode::OpenFile, title, dir, filter, options);
 
     RetVal<Val> rv = provider()->openSync(q);
     if (!rv.ret) {
@@ -367,7 +366,8 @@ io::path_t Interactive::selectSavingFileSync(const std::string& title, const io:
     return result;
 #else
 
-    UriQuery q = makeSelectFileQuery(FileDialogMode::SaveFile, title, dir, filter, confirmOverwrite);
+    UriQuery q
+        = makeSelectFileQuery(FileDialogMode::SaveFile, title, dir, filter, !confirmOverwrite ? QFileDialog::DontConfirmOverwrite : 0);
 
     RetVal<Val> rv = provider()->openSync(q);
     if (!rv.ret) {
