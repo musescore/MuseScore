@@ -108,7 +108,7 @@ target_link_libraries(MuseAudio PRIVATE
     fluidsynth
 )
 
-set_target_properties(MuseAudio PROPERTIES OUTPUT_NAME "MuseAudio.js")
+#set_target_properties(MuseAudio PROPERTIES OUTPUT_NAME "MuseAudio.js")
 target_link_options(MuseAudio PRIVATE ${EMCC_LINKER_FLAGS})
 target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORT_NAME=MuseAudio_entry")
 target_link_options(MuseAudio PRIVATE "SHELL:-s MODULARIZE=1")
@@ -116,5 +116,19 @@ target_link_options(MuseAudio PRIVATE "SHELL:-s FETCH=1")
 target_link_options(MuseAudio PRIVATE "SHELL:-s INITIAL_MEMORY=50MB")
 target_link_options(MuseAudio PRIVATE "SHELL:-s ALLOW_MEMORY_GROWTH=1")
 target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORTED_RUNTIME_METHODS=ccall,cwrap")
-target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORTED_FUNCTIONS=[_main,_malloc,_free,_Init]")
-target_link_options(MuseAudio PRIVATE "SHELL:-s ENVIRONMENT=worker")
+target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORTED_FUNCTIONS=[_main,_malloc,_free,_Init,_process]")
+#target_link_options(MuseAudio PRIVATE "SHELL:-s ENVIRONMENT=worker")
+
+target_link_options(MuseAudio PRIVATE "SHELL:-s ENVIRONMENT=shell")
+target_link_options(MuseAudio PRIVATE "SHELL:-s BINARYEN_ASYNC_COMPILATION=0")
+target_link_options(MuseAudio PRIVATE "SHELL:-s SINGLE_FILE=1")
+target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORT_ES6=1")
+
+add_custom_command(
+    TARGET MuseAudio POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E rename
+            "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MuseAudio"
+            "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MuseAudio.js"
+    COMMENT "Fix output js file name"
+)
+

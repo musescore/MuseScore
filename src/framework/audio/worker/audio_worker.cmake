@@ -27,6 +27,13 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudioworker.h
 )
 
+if (OS_IS_WASM)
+    set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/platform/web/networksfloader.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/platform/web/networksfloader.h
+    )
+endif()
+
 else()
 # Real worker
 set(AUDIO_WORKER_SRC

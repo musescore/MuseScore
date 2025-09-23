@@ -22,17 +22,27 @@
 
 #include "webworkerapi.h"
 
+#include "log.h"
+
 using namespace muse::web::worker;
 
-extern "C" {
 int main()
 {
     // noop
     return 0;
 }
 
-void Init(unsigned int)
+extern "C" {
+void Init(unsigned int val)
 {
+    LOGI() << val;
     WebWorkerApi::instance()->init();
+}
+
+void process(uintptr_t ptr, unsigned samplesPerChannel)
+{
+    float* stream = reinterpret_cast<float*>(ptr);
+    std::memset(stream, 0.0f, samplesPerChannel * 2);
+    WebWorkerApi::instance()->process(stream, samplesPerChannel);
 }
 }

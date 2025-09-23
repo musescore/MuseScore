@@ -23,11 +23,13 @@
 
 #include "../../isoundfontcontroller.h"
 
+#include "global/async/asyncable.h"
+
 #include "global/modularity/ioc.h"
 #include "audio/common/rpc/irpcchannel.h"
 
 namespace muse::audio {
-class WebSoundFontController : public ISoundFontController
+class WebSoundFontController : public ISoundFontController, public async::Asyncable
 {
     Inject<rpc::IRpcChannel> channel;
 
