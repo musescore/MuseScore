@@ -626,6 +626,7 @@ void QWidgetAdapter::move(int x, int y)
 
 void QWidgetAdapter::setSize(QSize size)
 {
+#ifdef Q_OS_MACOS
     FloatingWindow *floatingWindow = this->floatingWindow();
     if (!floatingWindow) {
         return;
@@ -639,7 +640,7 @@ void QWidgetAdapter::setSize(QSize size)
         windowGeo.setSize(newSize);
         window->setGeometry(windowGeo);
     }
-
+#endif
     QQuickItem::setSize(QSizeF(size));
 }
 
