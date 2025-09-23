@@ -27,7 +27,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_profiler/profiler/profiler.cma
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_modularity/modularity/modularity.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/utfcpp/utfcpp.cmake)
 
-find_package(TinyXml REQUIRED)
 set(MODULE_SRC
     ${MODULARITY_SRC}
     ${ASYNC_SRC}
@@ -131,26 +130,26 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/devtools/allzerosfilecorruptor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/devtools/allzerosfilecorruptor.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.h
-    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.h
-    ${TINYXML_MODULE_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipreader.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipwriter.h
-
     ${CMAKE_CURRENT_LIST_DIR}/serialization/internal/zipcontainer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/internal/zipcontainer.h
+
     ${CMAKE_CURRENT_LIST_DIR}/serialization/textstream.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/textstream.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/json.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/json.h
-    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack_forward.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.h
 
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.hpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.cpp
@@ -279,9 +278,6 @@ list(APPEND MODULE_INCLUDE_PRIVATE
 
 list(APPEND MODULE_INCLUDE_PRIVATE ${Z_INCLUDE})
 list(APPEND MODULE_LINK ${Z_LIB})
-
-list(APPEND MODULE_LINK ${TINYXML_MODULE_LINK})
-set(MODULE_DEF ${TINYXML_MODULE_DEF})
 
 if (QT_SUPPORT)
     # These are needed by so many modules, that we make them public here,
