@@ -80,7 +80,7 @@ TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
 
     for (const auto& pair : p_to_f_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first);
-        ASSERT_FALSE(muse::contains(expectedDynamics, time));
+        ASSERT_FALSE(expectedDynamics.contains(time));
         expectedDynamics.emplace(time, p + static_cast<dynamic_level_t>(pair.second));
     }
 
@@ -99,7 +99,7 @@ TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
             mpe::timestamp_t time = timestampFromTicks(score, tick);
 
             if (tick != f_to_fff_startTick) { // f already added by the previous hairpin
-                ASSERT_FALSE(muse::contains(expectedDynamics, time));
+                ASSERT_FALSE(expectedDynamics.contains(time));
             }
 
             expectedDynamics.emplace(time, f + static_cast<dynamic_level_t>(pair.second));
@@ -115,7 +115,7 @@ TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
 
     for (const auto& pair : ppp_to_p_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, ppp_to_p_startTick + pair.first);
-        ASSERT_FALSE(muse::contains(expectedDynamics, time));
+        ASSERT_FALSE(expectedDynamics.contains(time));
         expectedDynamics.emplace(time, ppp + static_cast<dynamic_level_t>(pair.second));
     }
 

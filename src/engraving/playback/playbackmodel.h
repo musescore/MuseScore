@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_PLAYBACKMODEL_H
-#define MU_ENGRAVING_PLAYBACKMODEL_H
+#pragma once
 
 #include <unordered_map>
 #include <map>
@@ -176,5 +175,3 @@ private:
     muse::async::Channel<InstrumentTrackId> m_trackRemoved;
 };
 }
-
-#endif // PLAYBACKMODEL_H

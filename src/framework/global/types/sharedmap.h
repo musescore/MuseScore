@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_GLOBAL_SHAREDMAP_H
-#define MUSE_GLOBAL_SHAREDMAP_H
+#pragma once
 
 #include <memory>
 #include <map>
@@ -35,7 +34,7 @@ public:
     // like std
     using key_type = KeyType;
     using mapped_type = ValType;
-    using value_type = std::pair<KeyType, ValType>;
+    using value_type = std::pair<const KeyType, ValType>;
 
     using PairType = value_type;
     using Data = std::map<KeyType, ValType>;
@@ -136,9 +135,21 @@ public:
         return m_dataPtr->find(key);
     }
 
+    iterator lower_bound(const KeyType& key)
+    {
+        ensureDetach();
+        return m_dataPtr->lower_bound(key);
+    }
+
     const_iterator lower_bound(const KeyType& key) const
     {
         return m_dataPtr->lower_bound(key);
+    }
+
+    iterator upper_bound(const KeyType& key)
+    {
+        ensureDetach();
+        return m_dataPtr->upper_bound(key);
     }
 
     const_iterator upper_bound(const KeyType& key) const
@@ -204,7 +215,7 @@ public:
         m_dataPtr->erase(key);
     }
 
-    void erase(const_iterator first, const_iterator last)
+    void erase(iterator first, iterator last)
     {
         ensureDetach();
         m_dataPtr->erase(first, last);
@@ -230,7 +241,7 @@ public:
         return m_dataPtr->operator >(another.m_dataPtr);
     }
 
-protected:
+private:
     void ensureDetach()
     {
         if (!m_dataPtr) {
@@ -247,5 +258,3 @@ protected:
     DataPtr m_dataPtr = nullptr;
 };
 }
-
-#endif // MUSE_GLOBAL_SHAREDMAP_H
