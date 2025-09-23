@@ -210,7 +210,7 @@ mpe::NoteEvent BendsRenderer::buildSlightNoteEvent(const Note* note, const Rende
     slightNoteCtx.duration -= timeOffset;
     slightNoteCtx.pitchLevel += mpe::PITCH_LEVEL_STEP / 2;
 
-    return buildNoteEvent(std::move(slightNoteCtx));
+    return buildNoteEvent(slightNoteCtx);
 }
 
 mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const RenderingContext& startNoteCtx,
@@ -251,7 +251,7 @@ mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const Render
     }
 
     mpe::PitchCurve curve = buildPitchCurve(noteCtx.timestamp, noteCtx.duration, pitchOffsets, timeFactorMap);
-    mpe::NoteEvent result = buildNoteEvent(std::move(noteCtx), curve);
+    mpe::NoteEvent result = buildNoteEvent(noteCtx, curve);
 
     return result;
 }

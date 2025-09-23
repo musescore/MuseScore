@@ -359,7 +359,7 @@ void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePat
                                 mpe::PlaybackEventList& result)
 {
     if (noteCtx.chordCtx.nominalDurationTicks <= pattern.boundaries.lowTempoDurationTicks) {
-        result.emplace_back(buildNoteEvent(std::move(noteCtx)));
+        result.emplace_back(buildNoteEvent(noteCtx));
         return;
     }
 
@@ -380,7 +380,7 @@ void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePat
         }
 
         if (alterationsCount == 0) {
-            result.emplace_back(buildNoteEvent(std::move(noteCtx)));
+            result.emplace_back(buildNoteEvent(noteCtx));
         } else {
             createEvents(type, noteCtx, alterationsCount,
                          noteCtx.chordCtx.nominalDurationTicks - pattern.prefixDurationTicks - pattern.suffixDurationTicks,
@@ -429,7 +429,7 @@ void OrnamentsRenderer::createEvents(const ArticulationType type, NominalNoteCtx
             updateArticulationBoundaries(type, subNoteCtx.timestamp,
                                          subNoteCtx.duration, subNoteCtx.articulations);
 
-            result.emplace_back(buildNoteEvent(std::move(subNoteCtx)));
+            result.emplace_back(buildNoteEvent(subNoteCtx));
 
             noteCtx.timestamp += durationStep;
         }

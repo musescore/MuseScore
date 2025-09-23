@@ -101,8 +101,6 @@ void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ExpressionContext& val
 
 void pack_custom(muse::msgpack::Packer& p, const muse::mpe::NoteEvent& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::NoteEvent& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::RestEvent& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::RestEvent& value);
 void pack_custom(muse::msgpack::Packer& p, const muse::mpe::TextArticulationEvent& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::TextArticulationEvent& value);
 void pack_custom(muse::msgpack::Packer& p, const muse::mpe::SoundPresetChangeEvent& value);
@@ -436,18 +434,6 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::NoteEvent& valu
     value = muse::mpe::NoteEvent(std::move(arrCtx), std::move(pitchCtx), std::move(exprCtx));
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::RestEvent& value)
-{
-    p.process(value.arrangementCtx());
-}
-
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::RestEvent& value)
-{
-    muse::mpe::ArrangementContext arrCtx;
-    p.process(arrCtx);
-    value = muse::mpe::RestEvent(std::move(arrCtx));
-}
-
 inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::TextArticulationEvent& value)
 {
     p.process(value.text, value.layerIdx, value.flags);
@@ -504,22 +490,18 @@ inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackEvent
         p.process(event);
     } break;
     case 2: {
-        const muse::mpe::RestEvent& event = std::get<muse::mpe::RestEvent>(value);
-        p.process(event);
-    } break;
-    case 3: {
         const muse::mpe::TextArticulationEvent& event = std::get<muse::mpe::TextArticulationEvent>(value);
         p.process(event);
     } break;
-    case 4: {
+    case 3: {
         const muse::mpe::SoundPresetChangeEvent& event = std::get<muse::mpe::SoundPresetChangeEvent>(value);
         p.process(event);
     } break;
-    case 5: {
+    case 4: {
         const muse::mpe::SyllableEvent& event = std::get<muse::mpe::SyllableEvent>(value);
         p.process(event);
     } break;
-    case 6: {
+    case 5: {
         const muse::mpe::ControllerChangeEvent& event = std::get<muse::mpe::ControllerChangeEvent>(value);
         p.process(event);
     } break;
@@ -544,26 +526,21 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackEvent& 
         value = event;
     } break;
     case 2: {
-        muse::mpe::RestEvent event;
-        p.process(event);
-        value = event;
-    } break;
-    case 3: {
         muse::mpe::TextArticulationEvent event;
         p.process(event);
         value = event;
     } break;
-    case 4: {
+    case 3: {
         muse::mpe::SoundPresetChangeEvent event;
         p.process(event);
         value = event;
     } break;
-    case 5: {
+    case 4: {
         muse::mpe::SyllableEvent event;
         p.process(event);
         value = event;
     } break;
-    case 6: {
+    case 5: {
         muse::mpe::ControllerChangeEvent event;
         p.process(event);
         value = event;

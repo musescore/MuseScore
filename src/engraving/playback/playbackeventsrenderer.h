@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_PLAYBACKEVENTSRENDERER_H
-#define MU_ENGRAVING_PLAYBACKEVENTSRENDERER_H
+#pragma once
 
 #include "mpe/events.h"
 
@@ -29,7 +28,6 @@
 
 namespace mu::engraving {
 class Chord;
-class Rest;
 class Score;
 class Note;
 
@@ -68,9 +66,5 @@ private:
     void renderFixedNoteEvent(const Note* note, const muse::mpe::timestamp_t actualTimestamp, const muse::mpe::duration_t actualDuration,
                               const muse::mpe::dynamic_level_t actualDynamicLevel, const PlaybackContextPtr playbackCtx,
                               const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventList& result) const;
-
-    void renderRestEvents(const Rest* rest, const int tickPositionOffset, muse::mpe::PlaybackEventsMap& result) const;
 };
 }
-
-#endif // MU_ENGRAVING_PLAYBACKEVENTSRENDERER_H

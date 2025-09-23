@@ -654,25 +654,6 @@ TEST_F(Audio_RpcPackerTests, MPE_PlaybackEvent)
         EXPECT_TRUE(origin == unpacked);
     }
 
-    // RestEvent
-    {
-        muse::mpe::ArrangementContext arrCtx = makeArrangementContext();
-        mpe::RestEvent event = muse::mpe::RestEvent(std::move(arrCtx));
-
-        KNOWN_FIELDS(event,
-                     event.arrangementCtx());
-
-        mpe::PlaybackEvent origin = event;
-
-        ByteArray data = rpc::RpcPacker::pack(origin);
-
-        mpe::PlaybackEvent unpacked;
-        bool ok = rpc::RpcPacker::unpack(data, unpacked);
-
-        EXPECT_TRUE(ok);
-        EXPECT_TRUE(origin == unpacked);
-    }
-
     // TextArticulationEvent
     {
         mpe::TextArticulationEvent event;
@@ -766,7 +747,6 @@ TEST_F(Audio_RpcPackerTests, MPE_PlaybackEvent)
     {
         using KnownPlaybackEvent = std::variant<std::monostate,
                                                 mpe::NoteEvent,
-                                                mpe::RestEvent,
                                                 mpe::TextArticulationEvent,
                                                 mpe::SoundPresetChangeEvent,
                                                 mpe::SyllableEvent,
