@@ -82,6 +82,10 @@ public:
 
     void updateRootItemSize()
     {
+#ifdef Q_OS_MACOS
+        if (m_floatingWindow->beingDeleted())
+            return;
+#endif
         m_floatingWindow->setSize(size());
     }
 
