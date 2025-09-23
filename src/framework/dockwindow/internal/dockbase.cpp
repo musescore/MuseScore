@@ -695,9 +695,10 @@ void DockBase::applySizeConstraints()
         window->setMaximumSize(maximumSize);
 
         const QSize winSize = adjustSizeByConstraints(window->frameGeometry().size(), minimumSize, maximumSize);
+#ifdef Q_OS_MACOS
         window->setWidth(winSize.width());
         window->setHeight(winSize.height());
-
+#endif
         const QRect winRect(window->dragRect().topLeft(), winSize);
         window->setGeometry(winRect);
     }
