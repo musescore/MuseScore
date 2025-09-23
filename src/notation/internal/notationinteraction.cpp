@@ -3407,7 +3407,7 @@ void NotationInteraction::doFinishAddFretboardDiagram()
     // NOTE: needs to be done on a separate transaction because when text editing ends, if text is empty
     // the last action is rolled back to remove the text, this ensures that only the text insertion is
     // rolled back (and not the diagram insertion).
-    startEdit(TranslatableString("undoableAction", "Add harmony to fret diagram"));
+    startEdit(TranslatableString("undoableAction", "Add chord symbol to fretboard diagram"));
     mu::engraving::TextBase* text = score()->addText(TextStyleType::HARMONY_A, fretDiagram);
     apply();
 
