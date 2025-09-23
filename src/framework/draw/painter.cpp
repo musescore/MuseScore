@@ -29,7 +29,6 @@
 #endif
 
 #include "log.h"
-#include "musesampler/internal/apitypes.h"
 
 using namespace muse;
 using namespace muse::draw;
@@ -429,7 +428,7 @@ void Painter::drawText(const PointF& point, const String& text)
     }
 }
 
-void Painter::drawTextWithUrl(const PointF& point, const String& htmlText)
+void Painter::drawHtml(const PointF& point, const String& htmlText)
 {
     m_provider->drawHtml(point, htmlText);
 }

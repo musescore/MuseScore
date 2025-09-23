@@ -128,7 +128,7 @@ public:
 
     void drawText(const PointF& point, const String& text);
 
-    void drawTextWithUrl(const PointF& point, const String& htmlText);
+    void drawHtml(const PointF& point, const String& htmlText);
 
     inline void drawText(double x, double y, const String& text);
 

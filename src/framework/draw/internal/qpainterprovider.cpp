@@ -303,7 +303,7 @@ void QPainterProvider::drawTextWorkaround(const Font& f, const PointF& pos, cons
     m_painter->restore();
 }
 
-bool QPainterProvider::canDrawHtml()
+bool QPainterProvider::canDrawHtml() const
 {
     return true;
 }
@@ -319,6 +319,7 @@ void QPainterProvider::drawHtml(const PointF& point, const String& htmlText)
     doc.setDefaultFont(f);
     doc.setUseDesignMetrics(true);
 
+    // Set contents
     doc.setHtml(htmlText);
 
     // Set document properties
@@ -410,9 +411,4 @@ void QPainterProvider::setMask(const RectF& background, const std::vector<RectF>
 void QPainterProvider::setClipping(bool enable)
 {
     m_painter->setClipping(enable);
-}
-
-QPainter* QPainterProvider::getQPainter()
-{
-    return m_painter;
 }

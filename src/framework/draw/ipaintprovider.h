@@ -33,8 +33,6 @@
 #include "types/transform.h"
 #include "types/painterpath.h"
 
-class QPainter;
-
 namespace muse::draw {
 class Painter;
 class IPaintProvider
@@ -78,7 +76,7 @@ public:
     virtual void drawText(const RectF& rect, int flags, const String& text) = 0;
     virtual void drawTextWorkaround(const Font& f, const PointF& pos, const String& text) = 0; // see Painter::drawTextWorkaround .h file
 
-    virtual bool canDrawHtml() = 0;
+    virtual bool canDrawHtml() const = 0;
     virtual void drawHtml(const PointF& point, const String& htmlText) = 0;
 
     virtual void drawSymbol(const PointF& point, char32_t ucs4Code) = 0;
@@ -96,11 +94,6 @@ public:
     virtual void setClipRect(const RectF& rect) = 0;
     virtual void setMask(const RectF& background, const std::vector<RectF>& maskRects) = 0;
     virtual void setClipping(bool enable) = 0;
-
-    // We cannot implement writing clickable url into pdf without
-    // directly passing QPainter to QTextDocument::drawContents,
-    // so we need to expose QPainter
-    virtual QPainter* getQPainter() = 0;
 };
 
 using IPaintProviderPtr = std::shared_ptr<IPaintProvider>;

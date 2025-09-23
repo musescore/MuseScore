@@ -69,7 +69,7 @@ static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
 static const std::regex URL_PATTERN(
     R"((https?://[a-zA-Z0-9.-]+(?:/[a-zA-Z0-9._~:/?#[\]@!$&'()*+,;=-]*)?))");
 
-std::string htmlEscape(const String& text)
+static std::string htmlEscape(const String& text)
 {
     std::string result = text.toStdString();
 
@@ -107,7 +107,7 @@ std::string htmlEscape(const String& text)
     return result;
 }
 
-String convertUrlsToLinks(const String& text)
+static String convertUrlsToLinks(const String& text)
 {
     std::string result = htmlEscape(text);
     result = std::regex_replace(result, URL_PATTERN,
@@ -905,7 +905,7 @@ void TextFragment::draw(Painter* p, const TextBase* t) const
 #else
     p->setFont(f);
     if (p->canDrawHtml() && std::regex_search(text.toStdString(), URL_PATTERN)) {
-        p->drawTextWithUrl(pos, convertUrlsToLinks(text));
+        p->drawHtml(pos, convertUrlsToLinks(text));
     } else {
         p->drawText(pos, text);
     }
