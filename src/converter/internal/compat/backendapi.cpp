@@ -71,6 +71,10 @@ static constexpr auto NO_STYLE = "";
 
 static ScoreElementScanner::Options parseScoreElementScannerOptions(const std::string& json)
 {
+    if (json.empty()) {
+        return {};
+    }
+
     QJsonParseError parseError;
     const QJsonDocument doc = QJsonDocument::fromJson(QByteArray::fromStdString(json), &parseError);
     if (parseError.error != QJsonParseError::NoError) {
@@ -242,9 +246,7 @@ Ret BackendApi::exportScoreElements(const muse::io::path_t& in, const muse::io::
     QFile outputFile;
     openOutputFile(outputFile, out);
 
-    BackendJsonWriter jsonWriter(&outputFile);
-
-    return doExportScoreElements(notation, jsonWriter, optionsJson);
+    return doExportScoreElements(notation, optionsJson, outputFile);
 }
 
 Ret BackendApi::openOutputFile(QFile& file, const muse::io::path_t& out)
@@ -684,8 +686,7 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
     return ret;
 }
 
-muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter,
-                                            const std::string& optionsJson, bool addSeparator)
+muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notation, const std::string& optionsJson, QIODevice& out)
 {
     mu::engraving::Score* score = notation->elements()->msScore();
     ScoreElementScanner::Options options = parseScoreElementScannerOptions(optionsJson);
@@ -748,8 +749,7 @@ muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notatio
         rootArray << instrumentObj;
     }
 
-    jsonWriter.addKey("scoreElements");
-    jsonWriter.addValue(QJsonDocument(rootArray).toJson(QJsonDocument::Compact), addSeparator);
+    out.write(QJsonDocument(rootArray).toJson(QJsonDocument::Compact));
 
     return make_ok();
 }
