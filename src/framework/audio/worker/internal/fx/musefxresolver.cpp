@@ -35,6 +35,7 @@ IFxProcessorPtr createFxProcessor(const AudioFxParams& fxParams, const OutputSpe
     if (fxParams.resourceMeta.id == MUSE_REVERB_ID) {
         std::shared_ptr<ReverbProcessor> p = std::make_shared<ReverbProcessor>(fxParams);
         p->init(outputSpec);
+        return p;
     }
 
     return nullptr;
