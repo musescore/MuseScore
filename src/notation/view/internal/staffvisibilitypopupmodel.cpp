@@ -26,6 +26,7 @@
 #include <iterator>
 #include <memory>
 
+#include "async/async.h"
 #include "containers.h"
 
 #include "engraving/dom/measure.h"
@@ -104,6 +105,8 @@ void EmptyStavesVisibilityModel::load(INotationPtr notation, engraving::System* 
 void EmptyStavesVisibilityModel::reload()
 {
     engraving::Fraction tick = m_system->tick();
+
+    assert(m_system && m_system->staves().size() == m_system->score()->nstaves());
 
     beginResetModel();
     m_parts.clear();
@@ -290,7 +293,7 @@ void EmptyStavesVisibilityModel::resetAllVisibility()
 
     m_notation->undoStack()->commitChanges();
 
-    reload();
+    scheduleUpdateData();
 }
 
 bool EmptyStavesVisibilityModel::canResetAll() const
@@ -331,7 +334,7 @@ void EmptyStavesVisibilityModel::setPartVisibility(PartItem* partItem, engraving
 
     m_notation->undoStack()->commitChanges();
 
-    updateData(partItem);
+    scheduleUpdateData();
 }
 
 void EmptyStavesVisibilityModel::setStaffVisibility(StaffItem* staffItem, engraving::AutoOnOff value)
@@ -346,53 +349,79 @@ void EmptyStavesVisibilityModel::setStaffVisibility(StaffItem* staffItem, engrav
 
     m_notation->undoStack()->commitChanges();
 
-    updateData(staffItem->part);
+    scheduleUpdateData();
 }
 
-void EmptyStavesVisibilityModel::updateData(PartItem* partItem)
+void EmptyStavesVisibilityModel::scheduleUpdateData()
 {
-    partItem->isVisible = false;
-    partItem->canChangeVisibility = false;
-    partItem->canReset = false;
+    //! NOTE: Changing empty staves visibility might cause `m_system` to be
+    //! deleted. If that happens, its StaffVisibilityIndicator will also be
+    //! deleted, and thus removed from the selection; as a result, the popup will
+    //! be closed on the next event loop tick, and this model will be deleted.
+    //!
+    //! Therefore, we delay the call to `doUpdateData()` by two event loop ticks.
+    //! If the model is still alive at that point, the popup will not have been
+    //! closed, so `m_system` will still be valid, so we can safely call
+    //! `doUpdateData()`. Otherwise, if `m_system` was deleted, the model will
+    //! also have been deleted, so the async call will be cancelled
+    //! automatically.
+    muse::async::Async::call(this, [this]() {
+        muse::async::Async::call(this, [this]() {
+            doUpdateData();
+        });
+    });
+}
 
-    for (const auto& staffItem : partItem->staves) {
-        staffItem->isVisible = m_system->staff(staffItem->staffIndex)->show();
-        if (staffItem->isVisible) {
-            // Part is visible if any of its staves is visible
-            partItem->isVisible = true;
-        }
+void EmptyStavesVisibilityModel::doUpdateData()
+{
+    assert(m_system && m_system->staves().size() == m_system->score()->nstaves());
 
-        staffItem->canChangeVisibility = SystemLayout::canChangeSysStaffVisibility(m_system, staffItem->staffIndex);
-        if (staffItem->canChangeVisibility) {
-            // Part visibility can be changed if any of its staves can change visibility
-            partItem->canChangeVisibility = true;
-        }
+    int row = 0;
+    for (const auto& partItem : m_parts) {
+        partItem->isVisible = false;
+        partItem->canChangeVisibility = false;
+        partItem->canReset = false;
 
-        // Staff can reset visibility if any measure in the range contains an override
-        staffItem->canReset = false;
-        for (const engraving::MeasureBase* mb : m_system->measures()) {
-            if (!mb->isMeasure()) {
-                continue;
+        for (const auto& staffItem : partItem->staves) {
+            staffItem->isVisible = m_system->staff(staffItem->staffIndex)->show();
+            if (staffItem->isVisible) {
+                // Part is visible if any of its staves is visible
+                partItem->isVisible = true;
             }
-            if (engraving::toMeasure(mb)->hideStaffIfEmpty(staffItem->staffIndex) != engraving::AutoOnOff::AUTO) {
-                staffItem->canReset = true;
-                break;
+
+            staffItem->canChangeVisibility = SystemLayout::canChangeSysStaffVisibility(m_system, staffItem->staffIndex);
+            if (staffItem->canChangeVisibility) {
+                // Part visibility can be changed if any of its staves can change visibility
+                partItem->canChangeVisibility = true;
+            }
+
+            // Staff can reset visibility if any measure in the range contains an override
+            staffItem->canReset = false;
+            for (const engraving::MeasureBase* mb : m_system->measures()) {
+                if (!mb->isMeasure()) {
+                    continue;
+                }
+                if (engraving::toMeasure(mb)->hideStaffIfEmpty(staffItem->staffIndex) != engraving::AutoOnOff::AUTO) {
+                    staffItem->canReset = true;
+                    break;
+                }
+            }
+            if (staffItem->canReset) {
+                // Part can reset visibility if any of its staves can reset
+                partItem->canReset = true;
             }
         }
-        if (staffItem->canReset) {
-            // Part can reset visibility if any of its staves can reset
-            partItem->canReset = true;
+
+        QModelIndex partModelIndex = index(row, 0, QModelIndex());
+        emit dataChanged(partModelIndex, partModelIndex, { IsVisible, CanReset });
+
+        if (partItem->staves.size() > 1) {
+            emit dataChanged(index(0, 0, partModelIndex),
+                             index(static_cast<int>(partItem->staves.size()) - 1, 0, partModelIndex),
+                             { IsVisible, CanReset });
         }
-    }
 
-    int row = partIndex(partItem);
-    QModelIndex partModelIndex = index(row, 0, QModelIndex());
-    emit dataChanged(partModelIndex, partModelIndex, { IsVisible, CanReset });
-
-    if (partItem->staves.size() > 1) {
-        emit dataChanged(index(0, 0, partModelIndex),
-                         index(static_cast<int>(partItem->staves.size()) - 1, 0, partModelIndex),
-                         { IsVisible, CanReset });
+        ++row;
     }
 
     emit canResetAllChanged();
