@@ -29,6 +29,7 @@
 #include <QPixmapCache>
 #include <QStaticText>
 #include <QPainterPath>
+#include <QTextBlock>
 
 #include "draw/utils/drawlogger.h"
 #include "types/transform.h"
@@ -326,9 +327,13 @@ void QPainterProvider::drawHtml(const PointF& point, const String& htmlText)
     doc.setTextWidth(-1); // No wrapping
     doc.setDocumentMargin(0);
 
+    // Calculate baseline offset
+    QFontMetricsF fm(f);
+    qreal baselineOffset = fm.ascent();
+
     // Draw the document
     m_painter->save();
-    m_painter->translate(point.toQPointF());
+    m_painter->translate(point.toQPointF().x(), point.toQPointF().y() - baselineOffset);
     doc.drawContents(m_painter);
     m_painter->restore();
 }
