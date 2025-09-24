@@ -708,7 +708,7 @@ StyledFlickable {
                         Layout.preferredWidth: 120
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.WordWrap
-                        text: qsTrc("notation", "Minimum space between chord symbols:")
+                        text: qsTrc("notation", "Autoplace min. distance:")
                     }
 
                     IncrementalPropertyControl {
@@ -724,6 +724,34 @@ StyledFlickable {
 
                         onValueEdited: function(newValue) {
                             chordSymbolsModel.minHarmonyDist.value = newValue
+                        }
+                    }
+                }
+
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+
+                    StyledTextLabel {
+                        Layout.preferredWidth: 120
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        text: qsTrc("notation", "Minimum space between chord symbols:")
+                    }
+
+                    IncrementalPropertyControl {
+                        Layout.preferredWidth: 80
+
+                        currentValue: chordSymbolsModel.harmonyHarmonyDist.value
+                        minValue: 0
+                        maxValue: 99
+                        step: 0.1
+                        decimals: 2
+
+                        measureUnitsSymbol: qsTrc("global", "sp")
+
+                        onValueEdited: function(newValue) {
+                            chordSymbolsModel.harmonyHarmonyDist.value = newValue
                         }
                     }
                 }
