@@ -1,3 +1,4 @@
+import config from "./config.js";
 import qtLoad from "./qtloader.js";
 import AudioDriver from "./audiodriver.js";
 
@@ -55,13 +56,17 @@ async function setupDriver(Module)
         console.log("driver on inited add sound font")
         Module.ccall('addSoundFont', '', ['string'], [Module.soundFont]);
     }
-   // await AudioDriver.setup(Module.driver_worker_rpcChannel.port1);
-   await AudioDriver.setup(Module.main_worker_rpcChannel.port2);
+
+    if (config.MUSE_MODULE_AUDIO_WORKER == "ON") {
+        await AudioDriver.setup(Module.config, Module.driver_worker_rpcChannel.port1);
+    } else {
+        await AudioDriver.setup(Module.config, Module.main_worker_rpcChannel.port2);
+    }
+
 }
 
 async function setupWorker(Module)
 {
-    return;
     // Initialize the worker.
     Module.worker = new Worker("distr/audioworker.js")
 
@@ -87,17 +92,19 @@ const MuImpl = {
 
     Module: {},
 
-    loadModule: async function(config) {
+    loadModule: async function(opt) {
 
         this.Module = {
+            config: config, // static configuration
+
             qt: {
-                onLoaded: config.onLoaded,
-                onExit: config.onExit,
+                onLoaded: opt.onLoaded,
+                onExit: opt.onExit,
                 entryFunction: window.MuseScoreStudio_entry, // from MuseScoreStudio.js
-                containerElements: [config.screen],
+                containerElements: [opt.screen],
             },
 
-            soundFont: config.soundFont
+            soundFont: opt.soundFont
         }
 
         setupRpc(this.Module);
@@ -126,7 +133,11 @@ const MuImpl = {
 
     startAudioProcessing: async function() {
         await setupDriver(this.Module);
-        await setupWorker(this.Module);
+
+        if (config.MUSE_MODULE_AUDIO_WORKER == "ON") {
+            await setupWorker(this.Module);
+        }
+
         this.Module._startAudioProcessing()
     }
 }

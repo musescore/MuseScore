@@ -1,0 +1,6 @@
+
+const config = {
+    MUSE_MODULE_AUDIO_WORKER: '{{MUSE_MODULE_AUDIO_WORKER}}'
+};
+
+export default config;

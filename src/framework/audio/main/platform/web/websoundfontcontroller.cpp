@@ -22,6 +22,7 @@
 #include "websoundfontcontroller.h"
 
 #include "audio/common/rpc/rpcpacker.h"
+
 #include "audio/worker/platform/web/networksfloader.h"
 
 #include "log.h"
@@ -36,7 +37,7 @@ void WebSoundFontController::init()
 
 void WebSoundFontController::addSoundFont(const synth::SoundFontUri& uri)
 {
-    async::Promise<RetVal<ByteArray> > promise = synth::NetworkSFLoader::loadData(uri);
+    async::Promise<RetVal<ByteArray> > promise = synth::NetworkSFLoader::load(uri);
     promise.onResolve(this, [this, uri](const RetVal<ByteArray>& rv) {
         if (!rv.ret) {
             LOGE() << rv.ret.toString();

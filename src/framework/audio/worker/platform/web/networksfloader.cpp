@@ -26,79 +26,7 @@
 using namespace muse;
 using namespace muse::audio::synth;
 
-static const io::path_t SF_PATH = "MS Basic.sf3";
-
-async::Promise<RetVal<io::path_t> > NetworkSFLoader::load(const Uri& uri)
-{
-    return async::make_promise<RetVal<io::path_t> >([uri](auto resolve) {
-        emscripten_fetch_attr_t attr;
-        emscripten_fetch_attr_init(&attr);
-        strcpy(attr.requestMethod, "GET");
-        attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY | EMSCRIPTEN_FETCH_PERSIST_FILE;
-
-        struct Holder
-        {
-            Uri uri;
-            async::Promise<RetVal<io::path_t> >::Resolve resolve;
-
-            void onSuccess(const char* data, uint64_t numBytes) {
-                // ByteArray ba(data, numBytes);
-                // io::File::writeFile(SF_PATH, ba);
-
-                LOGDA() << "data size: " << numBytes;
-
-                {
-                    FILE* file = fopen(SF_PATH.c_str(), "wb");
-                    IF_ASSERT_FAILED(file) {
-                        (void)resolve(RetVal<io::path_t>::make_ret(10, "failed load sound font"));
-                        return;
-                    }
-                    size_t wsize = fwrite(data, sizeof(char), numBytes, file);
-                    IF_ASSERT_FAILED(wsize == numBytes) {
-                        (void)resolve(RetVal<io::path_t>::make_ret(10, "failed load sound font"));
-                        return;
-                    }
-                    fclose(file);
-                }
-                (void)resolve(RetVal<io::path_t>::make_ok(SF_PATH));
-            }
-
-            void onFailed(unsigned short status) {
-                LOGE() << "failed load sound font, status: " << status;
-                (void)resolve(RetVal<io::path_t>::make_ret(status, "failed load sound font"));
-            }
-        };
-
-        Holder* h = new Holder();
-        h->uri = uri;
-        h->resolve = resolve;
-
-        attr.userData = h;
-        attr.onsuccess = [](emscripten_fetch_t* fetch) {
-            Holder* h = static_cast<Holder*>(fetch->userData);
-            LOGI() << "success download sf: " << h->uri;
-            h->onSuccess(fetch->data, fetch->numBytes);
-            emscripten_fetch_close(fetch);  // Free data associated with the fetch.
-            delete h;
-        };
-
-        attr.onerror = [](emscripten_fetch_t* fetch) {
-            Holder* h = static_cast<Holder*>(fetch->userData);
-            LOGE() << "failed download sf: " << h->uri;
-            h->onFailed(fetch->status);
-            emscripten_fetch_close(fetch);  // Also free data on failure.
-            delete h;
-        };
-
-        std::string str = h->uri.toString();
-        emscripten_fetch(&attr, str.c_str());
-        LOGDA() << "start download sf: " << h->uri;
-
-        return async::Promise<RetVal<io::path_t> >::dummy_result();
-    }, async::PromiseType::AsyncByBody);
-}
-
-async::Promise<RetVal<ByteArray> > NetworkSFLoader::loadData(const Uri& uri)
+async::Promise<RetVal<ByteArray> > NetworkSFLoader::load(const Uri& uri)
 {
     return async::make_promise<RetVal<ByteArray> >([uri](auto resolve) {
         emscripten_fetch_attr_t attr;
@@ -112,9 +40,6 @@ async::Promise<RetVal<ByteArray> > NetworkSFLoader::loadData(const Uri& uri)
             async::Promise<RetVal<ByteArray> >::Resolve resolve;
 
             void onSuccess(const char* data, uint64_t numBytes) {
-                // ByteArray ba(data, numBytes);
-                // io::File::writeFile(SF_PATH, ba);
-
                 LOGDA() << "data size: " << numBytes;
 
                 ByteArray ba(data, numBytes);

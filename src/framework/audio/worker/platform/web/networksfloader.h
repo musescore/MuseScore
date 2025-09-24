@@ -24,7 +24,6 @@
 #include "global/types/retval.h"
 #include "global/types/uri.h"
 #include "global/types/bytearray.h"
-#include "global/io/path.h"
 #include "global/async/promise.h"
 
 namespace muse::audio::synth {
@@ -32,7 +31,6 @@ class NetworkSFLoader
 {
 public:
 
-    static async::Promise<RetVal<io::path_t> > load(const Uri& uri);
-    static async::Promise<RetVal<ByteArray>> loadData(const Uri& uri);
+    static async::Promise<RetVal<ByteArray> > load(const Uri& uri);
 };
 }

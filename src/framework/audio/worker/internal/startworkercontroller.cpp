@@ -42,8 +42,12 @@
 #include "synthesizers/synthresolver.h"
 #include "synthesizers/soundfontrepository.h"
 
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_AUDIO_WORKER
 #ifdef Q_OS_WASM
 #include "audio/driver/platform/web/webaudiochannel.h"
+#endif
 #endif
 
 #include "log.h"
@@ -131,22 +135,25 @@ void StartWorkerController::init(const OutputSpec& outputSpec, const AudioWorker
     m_workerPlayback->init();
     m_workerChannelController->init(m_workerPlayback);
 
+#ifdef MUSE_MODULE_AUDIO_WORKER
 #ifdef Q_OS_WASM
-    // m_webAudioChannel = std::make_shared<WebAudioChannel>();
-    // m_webAudioChannel->open([this](float* stream, size_t samples) {
-    //     //LOGDA() << "processAudioData";
-    //     m_audioEngine->processAudioData();
-    //     auto samplesPerChannel = samples / 2; // 2 channels
-    //     m_audioEngine->popAudioData(stream, samplesPerChannel);
-    // });
+    m_webAudioChannel = std::make_shared<WebAudioChannel>();
+    m_webAudioChannel->open([this](float* stream, size_t samples) {
+        unsigned samplesPerChannel = samples / 2;
+        process(stream, samplesPerChannel);
+    });
+#endif
 #endif
 }
 
 void StartWorkerController::deinit()
 {
+#ifdef MUSE_MODULE_AUDIO_WORKER
 #ifdef Q_OS_WASM
     m_webAudioChannel->close();
 #endif
+#endif
+
     m_workerPlayback->deinit();
     m_workerChannelController->deinit();
     m_audioEngine->deinit();
@@ -154,7 +161,6 @@ void StartWorkerController::deinit()
 
 void StartWorkerController::process(float* stream, unsigned samplesPerChannel)
 {
-    //LOGI() << "processAudioData";
     m_audioEngine->processAudioData();
     m_audioEngine->popAudioData(stream, samplesPerChannel);
 }

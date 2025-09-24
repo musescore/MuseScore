@@ -43,10 +43,6 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
 
         this.port.onmessage = this.onMessageFromMain.bind(this);
 
-        this.buffer = [];
-        this.channel_inited = false;
-        this.audio_requested = false;
-
         this.debugLog("end of constructor MuseDriverProcessor")
 
         globalThis.port = this.port;
@@ -56,27 +52,46 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
     }
 
     init(data) {
-        // this.workerPort = data.workerPort
-        // this.workerPort.onmessage = this.onMessageFromWorker.bind(this);
+        this.config = data.config;
+        this.IS_USED_WORKER = this.config.MUSE_MODULE_AUDIO_WORKER == "ON";
 
-        // Rpc
-        // main <=> worker
-        MuseAudio.mainPort = data.workerPort;
-        MuseAudio.main_worker_rpcSend = function(data) {
-            MuseAudio.mainPort.postMessage(data)
-        }
 
-        MuseAudio.main_worker_rpcListen = function(data) {} // will be overridden
-        MuseAudio.mainPort.onmessage = function(event) {
-            MuseAudio.main_worker_rpcListen(event.data)
-        }
+        if (this.IS_USED_WORKER) {
 
-        // Init wasm
-        try {
-            this.debugLog("[worker] call entry: MuseAudio_entry")
-            MuseAudio_entry(MuseAudio);
-        } catch (error) {
-            this.debugLog("MuseAudio_entry ERROR:" + error)
+            this.workerPort = data.rpcPort
+            this.workerPort.onmessage = this.onMessageFromWorker.bind(this);
+
+            this.workerBuffer = [];
+            this.channel_inited = false;
+            this.audio_requested = false;
+
+        } else {
+
+            // Rpc
+            // main <=> worker
+            MuseAudio.mainPort = data.rpcPort;
+            MuseAudio.main_worker_rpcSend = function(data) {
+                MuseAudio.mainPort.postMessage(data)
+            }
+
+            MuseAudio.main_worker_rpcListen = function(data) {} // will be overridden
+            MuseAudio.mainPort.onmessage = function(event) {
+                MuseAudio.main_worker_rpcListen(event.data)
+            }
+
+            // Init wasm
+            try {
+                MuseAudio_entry(MuseAudio);
+            } catch (error) {
+                this.debugLog("MuseAudio_entry ERROR:" + error)
+            }
+
+            // Buffer
+            this.wasmBuffer = {
+                size: 0,
+                ptr: null
+            }
+
         }
     }
 
@@ -85,8 +100,6 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
     }
 
     onMessageFromMain(event) {
-        this.debugLog("pong from processor: " + JSON.stringify(event.data))
-
         if (event.data.type == "INITIALIZE_DRIVER") {
             this.init(event.data)
         }
@@ -101,8 +114,6 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
     }
 
     onMessageFromWorker(event) {
-        //this.debugLog("[processor] from worker " + event.data.type)
-
         if (event.data.type == "response_audio") {
             this.onResponseAudio(event.data)
         } else if (event.data.type == "channel_inited") {
@@ -124,70 +135,72 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
     }
 
     onResponseAudio(msg) {
-        this.buffer.push(...msg.data);
+        this.workerBuffer.push(...msg.data);
         this.audio_requested = false;
-    }
-
-    wasmBuffer = {
-        size: 0,
-        ptr: null
     }
 
     process(inputs, outputs, parameters) {
 
-        if (!MuseAudio.inited) {
-            // Wait for the WASM module to be loaded.
-            return true;
-        }
+        // Direct wasm, not worker
+        if (!this.IS_USED_WORKER) {
+            if (!MuseAudio.inited) {
+                // Wait for the WASM module to be loaded.
+                return true;
+            }
 
-        const output = outputs[0];
-        const chCount = output.length;
-        const samplesPerCh = output[0].length;
-        const totalSamples = chCount * samplesPerCh;
+            const output = outputs[0];
+            const chCount = output.length;
+            const samplesPerCh = output[0].length;
+            const totalSamples = chCount * samplesPerCh;
 
-        const bufferSize = totalSamples * 4 /*float*/
-        if (this.wasmBuffer.size < bufferSize) {
-            MuseAudio._free(this.wasmBuffer.ptr);
-            this.wasmBuffer.ptr = MuseAudio._malloc(bufferSize);
-            this.wasmBuffer.size = bufferSize;
-        }
+            const bufferSize = totalSamples * 4 /*float*/
+            if (this.wasmBuffer.size < bufferSize) {
+                MuseAudio._free(this.wasmBuffer.ptr);
+                this.wasmBuffer.ptr = MuseAudio._malloc(bufferSize);
+                this.wasmBuffer.size = bufferSize;
+            }
 
-        MuseAudio._process(this.wasmBuffer.ptr, samplesPerCh);
+            MuseAudio._process(this.wasmBuffer.ptr, samplesPerCh);
 
-        const view = new Float32Array(MuseAudio.HEAPU8.buffer, this.wasmBuffer.ptr, totalSamples);
+            const view = new Float32Array(MuseAudio.HEAPU8.buffer, this.wasmBuffer.ptr, totalSamples);
 
-        for (let ci = 0; ci < output.length; ++ci) {
-            let channel = output[ci];
-            for (let i = 0; i < channel.length; i++) {
-                let index = i * 2 + ci;
-                if (index < view.length) {
-                    channel[i] = view[i * 2 + ci];
-                } else {
-                    channel[i] = 0;
+            for (let ci = 0; ci < output.length; ++ci) {
+                let channel = output[ci];
+                for (let i = 0; i < channel.length; i++) {
+                    let index = i * 2 + ci;
+                    if (index < view.length) {
+                        channel[i] = view[i * 2 + ci];
+                    } else {
+                        channel[i] = 0;
+                    }
                 }
             }
+        } 
+        // use worker
+        else {
+            const output = outputs[0];
+
+            let totalWriten = 0;
+            for (let ci = 0; ci < output.length; ++ci) {
+                let channel = output[ci];
+                for (let i = 0; i < channel.length; i++) {
+                    let index = i * 2 + ci;
+                    if (index < this.workerBuffer.length) {
+                        channel[i] = this.workerBuffer[i * 2 + ci];
+                    } else {
+                        channel[i] = 0;
+                    }
+                }
+
+                totalWriten += Math.min(this.workerBuffer.length, channel.length);
+            }
+
+            this.workerBuffer = this.workerBuffer.slice(totalWriten);
+
+            if (this.workerBuffer.length <= (totalWriten * 10)) {
+                this.requestAudio()
+            }
         }
-
-        // let totalWriten = 0;
-        // for (let ci = 0; ci < output.length; ++ci) {
-        //     let channel = output[ci];
-        //     for (let i = 0; i < channel.length; i++) {
-        //         let index = i * 2 + ci;
-        //         if (index < this.buffer.length) {
-        //             channel[i] = this.buffer[i * 2 + ci];
-        //         } else {
-        //             channel[i] = 0;
-        //         }
-        //     }
-
-        //     totalWriten += Math.min(this.buffer.length, channel.length);
-        // }
-
-        // this.buffer = this.buffer.slice(totalWriten);
-
-        // if (this.buffer.length <= (totalWriten * 10)) {
-        //     this.requestAudio()
-        // }
 
         return true; 
     }
