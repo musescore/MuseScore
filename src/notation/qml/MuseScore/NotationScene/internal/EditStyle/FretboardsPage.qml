@@ -59,6 +59,13 @@ StyledFlickable {
             }
 
             StyleSpinboxWithReset {
+                styleItem: fretboardsPage.fretMinDistance
+                label: qsTrc("notation", "Autoplace min. distance:")
+                suffix: qsTrc("global", "sp")
+                controlAreaWidth: root.controlAreaWidth
+            }
+
+            StyleSpinboxWithReset {
                 styleItem: fretboardsPage.fretMag
                 label: qsTrc("notation", "Scale:")
                 inPercentage: true
