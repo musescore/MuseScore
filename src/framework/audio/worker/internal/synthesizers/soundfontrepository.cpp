@@ -102,12 +102,20 @@ void SoundFontRepository::addSoundFont(const SoundFontUri& uri)
     });
 }
 
+static io::path_t fileNameFromUri(const SoundFontUri& uri)
+{
+    io::path_t path = uri.toLocalFile();
+    return io::filename(path);
+}
+
 void SoundFontRepository::addSoundFontData(const SoundFontUri& uri, const ByteArray& data)
 {
-    static const io::path_t SF_PATH = "MS Basic.sf3";
+    ONLY_AUDIO_WORKER_THREAD;
+
+    const io::path_t fileName = fileNameFromUri(uri);
 
     {
-        FILE* file = fopen(SF_PATH.c_str(), "wb");
+        FILE* file = fopen(fileName.c_str(), "wb");
         size_t wsize = fwrite(data.constChar(), sizeof(char), data.size(), file);
         IF_ASSERT_FAILED(wsize == data.size()) {
             return;
@@ -115,13 +123,13 @@ void SoundFontRepository::addSoundFontData(const SoundFontUri& uri, const ByteAr
         fclose(file);
     }
 
-    RetVal<SoundFontMeta> meta = FluidSoundFontParser::parseSoundFont(SF_PATH);
+    RetVal<SoundFontMeta> meta = FluidSoundFontParser::parseSoundFont(fileName);
 
     if (meta.ret) {
         m_soundFonts.insert_or_assign(uri, std::move(meta.val));
         LOGI() << "added sound font, uri: " << uri;
     } else {
-        LOGE() << "Failed parse SoundFont presets for " << SF_PATH << ": " << meta.ret.toString();
+        LOGE() << "Failed parse SoundFont presets for " << fileName << ": " << meta.ret.toString();
     }
 
     m_soundFontsChanged.notify();
@@ -162,9 +170,20 @@ void SoundFontRepository::doAddSoundFont(const SoundFontUri& uri, const SoundFon
     } else {
 #ifdef Q_OS_WASM
         auto promise = NetworkSFLoader::load(uri);
-        promise.onResolve(this, [uri, parseAndAdd](const RetVal<io::path_t>& path) {
-            if (path.ret) {
-                parseAndAdd(uri, path.val);
+        promise.onResolve(this, [uri, parseAndAdd](const RetVal<ByteArray>& data) {
+            if (data.ret) {
+                const io::path_t fileName = fileNameFromUri(uri);
+
+                {
+                    FILE* file = fopen(fileName.c_str(), "wb");
+                    size_t wsize = fwrite(data.val.constChar(), sizeof(char), data.val.size(), file);
+                    IF_ASSERT_FAILED(wsize == data.val.size()) {
+                        return;
+                    }
+                    fclose(file);
+                }
+
+                parseAndAdd(uri, fileName);
             }
         });
 #else

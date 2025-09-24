@@ -428,7 +428,7 @@ elseif(OS_IS_WASM)
     add_custom_command(
         TARGET MuseScoreStudio
         POST_BUILD
-        COMMAND node ${PROJECT_SOURCE_DIR}/src/webbridge/install.js ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        COMMAND node ${PROJECT_SOURCE_DIR}/src/webbridge/install.js ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${MUSE_MODULE_AUDIO_WORKER}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Install js api..."
     )

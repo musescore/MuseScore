@@ -9,7 +9,7 @@ let AudioDriver = (function () {
 
         onInited: null,
         
-        setup: async function(workerPort, audio_context) {
+        setup: async function(config, rpcPort, audio_context) {
 
             if (audio_context) {
                 audioContext = audio_context
@@ -44,9 +44,10 @@ let AudioDriver = (function () {
 
             processor.port.postMessage({
                 type: 'INITIALIZE_DRIVER',
-                workerPort: workerPort,
+                config: config,
+                rpcPort: rpcPort,
                 options: {}
-            }, [workerPort]); 
+            }, [rpcPort]); 
         },
 
         outputSpec: function() {

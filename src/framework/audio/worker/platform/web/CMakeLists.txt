@@ -25,6 +25,8 @@ project(MuseAudio LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(MUSE_MODULE_AUDIO_WORKER "Enable audio worker" OFF)
+
 # src/framework/audio/worker/platform/web
 set(MU_ROOT ${CMAKE_CURRENT_LIST_DIR}/../../../../../..)
 set(MUSE_FRAMEWORK_PATH ${MU_ROOT})
@@ -117,12 +119,15 @@ target_link_options(MuseAudio PRIVATE "SHELL:-s INITIAL_MEMORY=50MB")
 target_link_options(MuseAudio PRIVATE "SHELL:-s ALLOW_MEMORY_GROWTH=1")
 target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORTED_RUNTIME_METHODS=ccall,cwrap")
 target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORTED_FUNCTIONS=[_main,_malloc,_free,_Init,_process]")
-#target_link_options(MuseAudio PRIVATE "SHELL:-s ENVIRONMENT=worker")
 
-target_link_options(MuseAudio PRIVATE "SHELL:-s ENVIRONMENT=shell")
-target_link_options(MuseAudio PRIVATE "SHELL:-s BINARYEN_ASYNC_COMPILATION=0")
-target_link_options(MuseAudio PRIVATE "SHELL:-s SINGLE_FILE=1")
-target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORT_ES6=1")
+if (MUSE_MODULE_AUDIO_WORKER)
+    target_link_options(MuseAudio PRIVATE "SHELL:-s ENVIRONMENT=worker")
+else()
+    target_link_options(MuseAudio PRIVATE "SHELL:-s ENVIRONMENT=shell")
+    target_link_options(MuseAudio PRIVATE "SHELL:-s BINARYEN_ASYNC_COMPILATION=0")
+    target_link_options(MuseAudio PRIVATE "SHELL:-s SINGLE_FILE=1")
+    target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORT_ES6=1")
+endif()
 
 add_custom_command(
     TARGET MuseAudio POST_BUILD
