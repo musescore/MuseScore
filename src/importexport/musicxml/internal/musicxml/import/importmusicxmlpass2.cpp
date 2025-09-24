@@ -68,6 +68,7 @@
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pedal.h"
+#include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
@@ -255,10 +256,7 @@ static int MusicXmlStepAltOct2Pitch(int step, int alter, int octave)
     }
     int pitch = table[step] + alter + (octave + 1) * 12;
 
-    if (pitch < 0) {
-        pitch = -1;
-    }
-    if (pitch > 127) {
+    if (!pitchIsValid(pitch)) {
         pitch = -1;
     }
 
