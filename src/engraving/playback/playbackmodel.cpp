@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -313,7 +313,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
         m_renderer.render(item, timestamp, duration, dynamicLevel, ctx, profile, result);
     }
 
-    trackPlaybackData.offStream.send(std::move(result), std::move(dynamics), flushSound);
+    trackPlaybackData.offStream.send(result, dynamics, flushSound);
 }
 
 void PlaybackModel::triggerMetronome(int tick)
@@ -327,7 +327,7 @@ void PlaybackModel::triggerMetronome(int tick)
 
     PlaybackEventsMap result;
     m_renderer.renderMetronome(m_score, tick, 0, profile, result);
-    trackPlaybackData->second.offStream.send(std::move(result), {}, true /*flushOffstream*/);
+    trackPlaybackData->second.offStream.send(result, {}, true /*flushOffstream*/);
 }
 
 void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& countInDuration)
@@ -341,12 +341,13 @@ void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& countInDurat
 
     PlaybackEventsMap result;
     m_renderer.renderCountIn(m_score, tick, 0, profile, result, countInDuration);
-    trackPlaybackData->second.offStream.send(std::move(result), {}, true /*flushOffstream*/);
+    trackPlaybackData->second.offStream.send(result, {}, true /*flushOffstream*/);
 }
 
 InstrumentTrackIdSet PlaybackModel::existingTrackIdSet() const
 {
     InstrumentTrackIdSet result;
+    result.reserve(m_playbackDataMap.size());
 
     for (const auto& pair : m_playbackDataMap) {
         result.insert(pair.first);
@@ -533,7 +534,7 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
         }
 
         const PlaybackContextPtr ctx = playbackCtx(trackId);
-        m_renderer.render(item, tickPositionOffset, std::move(profile), ctx, m_playbackDataMap[trackId].originEvents);
+        m_renderer.render(item, tickPositionOffset, profile, ctx, m_playbackDataMap[trackId].originEvents);
 
         collectChangesTracks(trackId, trackChanges);
     }
@@ -919,7 +920,7 @@ void PlaybackModel::removeTrackEvents(const InstrumentTrackId& trackId, const mu
         return;
     }
 
-    PlaybackEventsMap::const_iterator lowerBound;
+    PlaybackEventsMap::iterator lowerBound;
 
     if (timestampFrom == 0) {
         //!Note Some events might be started RIGHT before the "official" start of the track
