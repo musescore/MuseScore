@@ -681,7 +681,7 @@ StyledFlickable {
                             currentValue: chordSymbolsModel.harmonyFretDist.value
                             minValue: 0
                             maxValue: 99
-                            step: 0.1
+                            step: 0.05
                             decimals: 2
 
                             measureUnitsSymbol: qsTrc("global", "sp")
@@ -717,7 +717,7 @@ StyledFlickable {
                         currentValue: chordSymbolsModel.minHarmonyDist.value
                         minValue: 0
                         maxValue: 99
-                        step: 0.1
+                        step: 0.05
                         decimals: 2
 
                         measureUnitsSymbol: qsTrc("global", "sp")
@@ -745,7 +745,7 @@ StyledFlickable {
                         currentValue: chordSymbolsModel.harmonyHarmonyDist.value
                         minValue: 0
                         maxValue: 99
-                        step: 0.1
+                        step: 0.05
                         decimals: 2
 
                         measureUnitsSymbol: qsTrc("global", "sp")

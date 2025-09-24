@@ -56,6 +56,7 @@ StyledFlickable {
                 label: qsTrc("notation", "Position above:")
                 suffix: qsTrc("global", "sp")
                 controlAreaWidth: root.controlAreaWidth
+                step: 0.05
             }
 
             StyleSpinboxWithReset {
@@ -63,6 +64,7 @@ StyledFlickable {
                 label: qsTrc("notation", "Autoplace min. distance:")
                 suffix: qsTrc("global", "sp")
                 controlAreaWidth: root.controlAreaWidth
+                step: 0.05
             }
 
             StyleSpinboxWithReset {
