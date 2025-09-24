@@ -50,9 +50,9 @@ enum class SegmentType {
     ClefStartRepeatAnnounce    = 0x40,
     KeySigStartRepeatAnnounce  = 0x80,
     TimeSigStartRepeatAnnounce = 0x100,
-    Clef                  = 0x200,
-    BarLine               = 0x400,
-    Breath                = 0x800,
+    Breath                = 0x200,
+    Clef                  = 0x400,
+    BarLine               = 0x800,
     //--
     TimeTick              = 0x1000,
     ChordRest             = 0x2000,
