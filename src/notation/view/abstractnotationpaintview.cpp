@@ -501,6 +501,7 @@ void AbstractNotationPaintView::onNoteInputStateChanged()
     TRACEFUNC;
 
     setAcceptHoverEvents(isNoteEnterMode());
+    updateLoopMarkers();
     updateShadowNoteVisibility();
     scheduleRedraw();
 }
