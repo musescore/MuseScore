@@ -78,6 +78,7 @@ private:
     static void adjustEndPoints(SlurSegment* slurSeg);
     static void adjustSlurFloatingEndPointAngles(SlurSegment* slurSeg, PointF& p1, PointF& p2, bool incomingPartial, bool outgoingPartial);
 
+    static void layoutSegment(SlurSegment* item, const PointF& p1, const PointF& p2);
     static void avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p2, PointF& p3, PointF& p4,
                                 muse::draw::Transform& toSystemCoordinates, double& slurAngle);
     static Shape getSegmentShapes(SlurSegment* slurSeg, ChordRest* startCR, ChordRest* endCR);
@@ -109,8 +110,6 @@ private:
     static double defaultStemLengthEnd(TremoloTwoChord* tremolo);
 
     static bool isDirectionMixture(const Chord* c1, const Chord* c2, LayoutContext& ctx);
-
-    static void layoutSegment(SlurSegment* item, const PointF& p1, const PointF& p2);
 
     static void computeMidThickness(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
     static void fillShape(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);

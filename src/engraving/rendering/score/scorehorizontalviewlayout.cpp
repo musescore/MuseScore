@@ -233,7 +233,7 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
     auto spanners = ctx.dom().spannerMap().findOverlapping(system->tick().ticks(), system->endTick().ticks());
     for (auto interval : spanners) {
         Spanner* sp = interval.value;
-        if (sp->isSlur() && toSlur(sp)->isCrossStaff()) {
+        if (sp->isSlur() && (toSlur(sp)->isCrossStaff() || toSlur(sp)->hasCrossBeams())) {
             SlurTieLayout::layoutSystem(toSlur(sp), system, ctx);
         }
     }
