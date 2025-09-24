@@ -875,8 +875,6 @@ void BeamLayout::layoutNonCrossBeams(ChordRest* cr, LayoutContext& ctx)
         if (beamCR->isRest() && beamCR->vStaffIdx() == beam->staffIdx()) {
             verticalAdjustBeamedRests(toRest(beamCR), beam, ctx);
         }
-
-        beamCR->segment()->createShape(beamCR->staffIdx());
     }
 }
 
@@ -935,6 +933,8 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
     }
 
     TLayout::layoutBeam(beam, ctx);
+
+    rest->segment()->createShape(rest->vStaffIdx());
 }
 
 void BeamLayout::checkCrossPosAndStemConsistency(Beam* beam, LayoutContext& ctx)

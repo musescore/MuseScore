@@ -311,6 +311,14 @@ void BeamTremoloLayout::extendStem(const BeamBase::LayoutData* ldata, Chord* cho
     if (chord->stemSlash()) {
         TLayout::layoutStemSlash(chord->stemSlash(), chord->stemSlash()->mutldata(), ctx.conf());
     }
+
+    // Update stem shape
+    Stem* stem = chord->stem();
+    for (ShapeElement& shapeEl : chord->segment()->staffShape(chord->vStaffIdx()).elements()) {
+        if (shapeEl.item() == stem) {
+            shapeEl = ShapeElement(stem->ldata()->bbox().translated(stem->pos() + chord->pos()), stem);
+        }
+    }
 }
 
 bool BeamTremoloLayout::isBeamInsideStaff(int yPos, int staffLines, bool allowFloater)
