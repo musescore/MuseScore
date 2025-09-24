@@ -70,11 +70,11 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
     }
 
     // Check range
-    bool isLayoutAll = stick <= Fraction(0, 1) && (etick < Fraction(0, 1) || etick >= score->masterScore()->last()->endTick());
+    bool isLayoutAll = stick <= Fraction(0, 1) && (etick < Fraction(0, 1) || etick == Fraction::max());
     if (stick < Fraction(0, 1)) {
         stick = Fraction(0, 1);
     }
-    if (etick < Fraction(0, 1)) {
+    if (etick < Fraction(0, 1) || etick == Fraction::max()) {
         etick = score->last()->endTick();
     }
 

@@ -325,7 +325,7 @@ void MasterScore::setUpdateAll()
 void MasterScore::setLayoutAll(staff_idx_t staff, const EngravingItem* e)
 {
     m_cmdState.setTick(Fraction(0, 1));
-    m_cmdState.setTick(measures()->last() ? measures()->last()->endTick() : Fraction(0, 1));
+    m_cmdState.setTick(Fraction::max());
 
     if (e && e->score() == this) {
         // TODO: map staff number properly
