@@ -63,7 +63,9 @@ public:
     ~NotationProject() override;
 
     muse::Ret load(const muse::io::path_t& path,
-                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false, const std::string& format = "") override;
+                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false, bool unrollRepeats = false,
+                   const std::string& format = "") override;
+
     muse::Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
     muse::io::path_t path() const override;
@@ -111,8 +113,9 @@ private:
 
     muse::Ret loadTemplate(const ProjectCreateOptions& projectOptions);
 
-    muse::Ret doLoad(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, const std::string& format);
-    muse::Ret doImport(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode);
+    muse::Ret doLoad(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, bool unrollRepeats,
+                     const std::string& format);
+    muse::Ret doImport(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, bool unrollRepeats);
 
     muse::Ret saveScore(const muse::io::path_t& path, const std::string& fileSuffix, bool generateBackup = true,
                         bool createThumbnail = true, bool isAutosave = false);

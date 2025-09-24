@@ -33,6 +33,7 @@
 #include "engraving/dom/undo.h"
 
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/repeatlist.h"
 #include "engraving/engravingproject.h"
 #include "engraving/compat/engravingcompat.h"
 #include "engraving/infrastructure/mscio.h"
@@ -99,7 +100,8 @@ void NotationProject::setupProject()
     m_projectAudioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
 }
 
-Ret NotationProject::load(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, const std::string& format_)
+Ret NotationProject::load(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, bool unrollRepeats,
+                          const std::string& format_)
 {
     TRACEFUNC;
 
@@ -111,7 +113,7 @@ Ret NotationProject::load(const muse::io::path_t& path, const muse::io::path_t& 
     setPath(path);
 
     if (!isMuseScoreFile(format)) {
-        Ret ret = doImport(path, stylePath.empty() ? notationConfiguration()->styleFileImportPath() : stylePath, forceMode);
+        Ret ret = doImport(path, stylePath.empty() ? notationConfiguration()->styleFileImportPath() : stylePath, forceMode, unrollRepeats);
         if (ret) {
             listenIfNeedSaveChanges();
         }
@@ -119,7 +121,7 @@ Ret NotationProject::load(const muse::io::path_t& path, const muse::io::path_t& 
         return ret;
     }
 
-    Ret ret = doLoad(path, stylePath, forceMode, format);
+    Ret ret = doLoad(path, stylePath, forceMode, unrollRepeats, format);
     if (!ret) {
         LOGE() << "failed load, err: " << ret.toString();
         return ret;
@@ -136,7 +138,8 @@ Ret NotationProject::load(const muse::io::path_t& path, const muse::io::path_t& 
     return ret;
 }
 
-Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, const std::string& format)
+Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, bool unrollRepeats,
+                            const std::string& format)
 {
     TRACEFUNC;
 
@@ -196,9 +199,16 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t
 
     mu::engraving::compat::EngravingCompat::doPreLayoutCompatIfNeeded(m_engravingProject->masterScore());
 
-    masterScore->lockUpdates(false);
-    masterScore->setLayoutAll();
-    masterScore->update();
+    if (unrollRepeats && masterScore->repeatList().size() > 1) {
+        MasterScore* original = masterScore;
+        masterScore = original->unrollRepeats();
+        delete original;
+        m_engravingProject->setMasterScore(masterScore);
+    } else {
+        masterScore->lockUpdates(false);
+        masterScore->setLayoutAll();
+        masterScore->update();
+    }
 
     mu::engraving::compat::EngravingCompat::doPostLayoutCompatIfNeeded(m_engravingProject->masterScore());
 
@@ -252,7 +262,7 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t
     return make_ret(Ret::Code::Ok);
 }
 
-Ret NotationProject::doImport(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode)
+Ret NotationProject::doImport(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, bool unrollRepeats)
 {
     TRACEFUNC;
 
@@ -296,6 +306,13 @@ Ret NotationProject::doImport(const muse::io::path_t& path, const muse::io::path
     ret = m_engravingProject->setupMasterScore(forceMode);
     if (!ret) {
         return ret;
+    }
+
+    if (unrollRepeats && score->repeatList().size() > 1) {
+        MasterScore* original = score;
+        score = original->unrollRepeats();
+        delete original;
+        m_engravingProject->setMasterScore(score);
     }
 
     // Setup audio settings

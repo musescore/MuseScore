@@ -83,6 +83,8 @@ void CommandLineParser::init()
 
     m_parser.addOption(QCommandLineOption("session-type", "Startup with given session type", "type")); // see StartupScenario::sessionTypeTromString
 
+    m_parser.addOption(QCommandLineOption("unroll-repeats", "Unroll repeats"));
+
     // Converter mode
     m_parser.addOption(QCommandLineOption({ "r", "image-resolution" }, "Set output resolution for image export", "DPI"));
     m_parser.addOption(QCommandLineOption({ "o", "export-to" }, "Export to 'file'. Format depends on file's extension", "file"));
@@ -441,6 +443,10 @@ void CommandLineParser::parse(int argc, char** argv)
 
     if (m_parser.isSet("f")) {
         m_options.converterTask.params[CmdOptions::ParamKey::ForceMode] = true;
+    }
+
+    if (m_parser.isSet("unroll-repeats")) {
+        m_options.converterTask.params[CmdOptions::ParamKey::UnrollRepeats] = true;
     }
 
     if (m_parser.isSet("S")) {

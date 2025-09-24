@@ -71,6 +71,7 @@ public:
     bool readOnly() const;
 
     MasterScore* masterScore() const;
+    void setMasterScore(MasterScore* score);
     muse::Ret setupMasterScore(bool forceMode);
 
     muse::Ret loadMscz(const MscReader& msc, SettingsCompat& settingsCompat, bool ignoreVersionError);
@@ -85,8 +86,6 @@ private:
     EngravingProject(const muse::modularity::ContextPtr& iocCtx);
 
     void init(const MStyle& style);
-
-    muse::Ret doSetupMasterScore(bool forceMode);
 
     MasterScore* m_masterScore = nullptr;
 

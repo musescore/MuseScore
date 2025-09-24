@@ -323,7 +323,8 @@ Ret ProjectActionsController::loadWithFallback(const std::shared_ptr<INotationPr
 {
     bool forceLoad = false;
     const std::string stylePath = "";
-    Ret result = project->load(loadPath, stylePath, forceLoad, format);
+    const bool unrollRepeats = false;
+    Ret result = project->load(loadPath, stylePath, forceLoad, unrollRepeats, format);
 
     if (result || result.code() == static_cast<int>(Ret::Code::Cancel)) {
         return result;
@@ -331,7 +332,7 @@ Ret ProjectActionsController::loadWithFallback(const std::shared_ptr<INotationPr
 
     forceLoad = shouldRetryLoadAfterError(result, loadPath);
     if (forceLoad) {
-        result = project->load(loadPath, stylePath, forceLoad, format);
+        result = project->load(loadPath, stylePath, forceLoad, unrollRepeats, format);
     }
 
     return result;
