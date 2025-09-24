@@ -19910,6 +19910,51 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Volume swell</translation>
     </message>
     <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4392"/>
+        <source>Gyro</source>
+        <translation type="unfinished">Gyro</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4393"/>
+        <source>Hand martellato</source>
+        <translation type="unfinished">Hand martellato</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4394"/>
+        <source>Mallet, bell on table</source>
+        <translation type="unfinished">Mallet, bell on table</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4395"/>
+        <source>Mallet, bell suspended</source>
+        <translation type="unfinished">Mallet, bell suspended</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4396"/>
+        <source>Mallet lift</source>
+        <translation type="unfinished">Mallet lift</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4397"/>
+        <source>Martellato</source>
+        <translation type="unfinished">Martellato</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4398"/>
+        <source>Martellato lift</source>
+        <translation type="unfinished">Martellato lift</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4399"/>
+        <source>Muted martellato</source>
+        <translation type="unfinished">Muted martellato</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4400"/>
+        <source>Pluck lift</source>
+        <translation type="unfinished">Pluck lift</translation>
+    </message>
+    <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4595"/>
         <source>Right-hand fingering, first finger</source>
         <translation type="unfinished">Right-hand fingering, first finger</translation>
@@ -20481,8 +20526,8 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3213"/>
-        <source>Vibrate</source>
-        <translation type="unfinished">Vibrate</translation>
+        <source>Vibrato</source>
+        <translation type="unfinished">Vibrato</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="372"/>
