@@ -444,7 +444,7 @@ void ExportProjectScenario::showExportProgress(bool isAudioExport) const
 {
     std::string title = isAudioExport ? muse::trc("project/export", "Exporting audio…") : muse::trc("project/export", "Exporting…");
 
-    interactive()->showProgress(title, &m_exportProgress);
+    interactive()->showProgress(title, m_exportProgress);
 }
 
 void ExportProjectScenario::openFolder(const muse::io::path_t& path) const

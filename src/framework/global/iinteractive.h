@@ -210,7 +210,7 @@ public:
     }
 
     // progress
-    virtual void showProgress(const std::string& title, Progress* progress) = 0;
+    virtual void showProgress(const std::string& title, Progress progress) = 0;
 
     // files
     virtual async::Promise<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir,

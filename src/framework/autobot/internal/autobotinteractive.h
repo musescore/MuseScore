@@ -69,7 +69,7 @@ public:
                                  const std::string& dialogTitle = "") override;
 
     // progress
-    void showProgress(const std::string& title, Progress* progress) override;
+    void showProgress(const std::string& title, Progress progress) override;
 
     // files
     virtual async::Promise<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir,

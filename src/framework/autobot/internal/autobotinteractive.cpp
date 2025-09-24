@@ -95,7 +95,7 @@ async::Promise<IInteractive::Result> AutobotInteractive::error(const std::string
     return m_real->error(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-void AutobotInteractive::showProgress(const std::string& title, Progress* progress)
+void AutobotInteractive::showProgress(const std::string& title, Progress progress)
 {
     m_real->showProgress(title, progress);
 }
