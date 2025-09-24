@@ -434,6 +434,7 @@ void GuitarBendLayout::layoutTabStaff(GuitarBendSegment* item, LayoutContext& ct
     GuitarBendSegment* prevBendSeg = prevBend && !prevBend->segmentsEmpty() && !prevBend->isFullRelease()
                                      ? toGuitarBendSegment(prevBend->backSegment()) : nullptr;
     GuitarBendHoldSegment* prevHoldLine = prevBend && prevBend->holdLine() && !prevBend->holdLine()->segmentsEmpty()
+                                          && prevBend->endNote() != bend->startNote()
                                           ? toGuitarBendHoldSegment(prevBend->holdLine()->backSegment()) : nullptr;
 
     PointF prevEndPoint = PointF(0.0, 0.0);
