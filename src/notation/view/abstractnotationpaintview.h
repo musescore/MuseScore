@@ -124,7 +124,8 @@ public:
     void hideContextMenu() override;
 
     void showElementPopup(const ElementType& elementType) override;
-    void hideElementPopup(const ElementType& elementType = ElementType::INVALID) override;
+    void hideElementPopup(const ElementType& elementType) override;
+    void hideElementPopup(PopupModelType modelType = PopupModelType::TYPE_UNDEFINED) override;
     void toggleElementPopup(const ElementType& elementType) override;
 
     bool elementPopupIsOpen(const ElementType& elementType) const override;
