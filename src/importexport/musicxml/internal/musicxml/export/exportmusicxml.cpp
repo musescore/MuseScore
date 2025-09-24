@@ -24,10 +24,6 @@
  MusicXML export.
  */
 
-// TODO: trill lines need to be handled the same way as slurs
-// in MuseScore they are measure level elements, while in MusicXML
-// they are attached to notes (as ornaments)
-
 //=========================================================
 //  LVI FIXME
 //
