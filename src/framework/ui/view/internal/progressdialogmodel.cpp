@@ -55,21 +55,19 @@ QString ProgressDialogModel::statusMessage() const
 
 void ProgressDialogModel::load(const QVariant& progressObj)
 {
-    if (progressObj.canConvert<Progress*>()) {
-        m_progress = progressObj.value<Progress*>();
-    }
-
-    IF_ASSERT_FAILED(m_progress) {
+    IF_ASSERT_FAILED(progressObj.canConvert<Progress>()) {
         return;
     }
 
-    m_progress->progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
+    m_progress = progressObj.value<Progress>();
+
+    m_progress.progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
         setValue(current);
         setTo(total);
         setStatusMessage(QString::fromStdString(status));
     });
 
-    m_progress->finished().onReceive(this, [this](const ProgressResult& res) {
+    m_progress.finished().onReceive(this, [this](const ProgressResult& res) {
         if (!res.ret) {
             LOGE() << res.ret.toString();
         }
@@ -80,11 +78,7 @@ void ProgressDialogModel::load(const QVariant& progressObj)
 
 void ProgressDialogModel::cancel()
 {
-    IF_ASSERT_FAILED(m_progress) {
-        return;
-    }
-
-    m_progress->cancel();
+    m_progress.cancel();
 }
 
 void ProgressDialogModel::setFrom(int value)

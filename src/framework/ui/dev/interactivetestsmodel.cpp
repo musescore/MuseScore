@@ -92,7 +92,7 @@ void InteractiveTestsModel::showProgress()
         }
     });
 
-    interactive()->showProgress("Progress sample", &pd->progress);
+    interactive()->showProgress("Progress sample", pd->progress);
 
     pd->timer.start();
     pd->progress.start();

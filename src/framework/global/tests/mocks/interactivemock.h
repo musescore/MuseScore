@@ -54,7 +54,7 @@ public:
     MOCK_METHOD(async::Promise<Result>, error, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
                                                 const std::string&), (override));
 
-    MOCK_METHOD(void, showProgress, (const std::string&, Progress*), (override));
+    MOCK_METHOD(void, showProgress, (const std::string&, Progress), (override));
 
     MOCK_METHOD(async::Promise<io::path_t>, selectOpeningFile, (const std::string& title, const io::path_t& dir,
                                                                 const std::vector<std::string>& filter), (override));

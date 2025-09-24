@@ -232,7 +232,7 @@ async::Promise<IInteractive::Result> Interactive::error(const std::string& conte
     return openStandardAsync("ERROR", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-void Interactive::showProgress(const std::string& title, Progress* progress)
+void Interactive::showProgress(const std::string& title, Progress progress)
 {
     Uri uri("muse://interactive/progress");
     QVariantMap params;

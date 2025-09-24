@@ -88,7 +88,7 @@ Ret RegisterAudioPluginsScenario::registerNewPlugins(io::paths_t newPluginPaths)
 
 void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t& pluginPaths)
 {
-    interactive()->showProgress(muse::trc("audio", "Scanning audio plugins"), &m_progress);
+    interactive()->showProgress(muse::trc("audio", "Scanning audio plugins"), m_progress);
 
     m_aborted = false;
     m_progress.start();
