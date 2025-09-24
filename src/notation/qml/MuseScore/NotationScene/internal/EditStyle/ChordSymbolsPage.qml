@@ -669,7 +669,7 @@ StyledFlickable {
                         Layout.preferredWidth: 120
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.WordWrap
-                        text: qsTrc("notation", "Minimum space from fretboard diagram:")
+                        text: qsTrc("notation", "Min. space to fretboard diagram:")
                     }
 
                     Item {
@@ -708,7 +708,7 @@ StyledFlickable {
                         Layout.preferredWidth: 120
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.WordWrap
-                        text: qsTrc("notation", "Autoplace min. distance:")
+                        text: qsTrc("notation", "Min. space to other notation:")
                     }
 
                     IncrementalPropertyControl {
@@ -736,7 +736,7 @@ StyledFlickable {
                         Layout.preferredWidth: 120
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.WordWrap
-                        text: qsTrc("notation", "Minimum space between chord symbols:")
+                        text: qsTrc("notation", "Min. space between chord symbols:")
                     }
 
                     IncrementalPropertyControl {
