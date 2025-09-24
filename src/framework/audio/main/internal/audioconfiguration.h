@@ -42,7 +42,7 @@ public:
 
     void init();
 
-    AudioWorkerConfig workerConfig() const override;
+    AudioEngineConfig engineConfig() const override;
     void onWorkerConfigChanged();
 
     std::string currentAudioApi() const override;

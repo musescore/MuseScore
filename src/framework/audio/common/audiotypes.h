@@ -122,7 +122,7 @@ struct SoundTrackFormat {
     }
 };
 
-struct AudioWorkerConfig {
+struct AudioEngineConfig {
     bool autoProcessOnlineSoundsInBackground = false;
 };
 

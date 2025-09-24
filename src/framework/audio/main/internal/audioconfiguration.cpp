@@ -100,16 +100,16 @@ void AudioConfiguration::init()
     updateSamplesToPreallocate();
 }
 
-AudioWorkerConfig AudioConfiguration::workerConfig() const
+AudioEngineConfig AudioConfiguration::engineConfig() const
 {
-    AudioWorkerConfig conf;
+    AudioEngineConfig conf;
     conf.autoProcessOnlineSoundsInBackground = this->autoProcessOnlineSoundsInBackground();
     return conf;
 }
 
 void AudioConfiguration::onWorkerConfigChanged()
 {
-    rpcChannel()->send(rpc::make_notification(rpc::Method::WorkerConfigChanged, rpc::RpcPacker::pack(workerConfig())));
+    rpcChannel()->send(rpc::make_notification(rpc::Method::EngineConfigChanged, rpc::RpcPacker::pack(engineConfig())));
 }
 
 std::string AudioConfiguration::currentAudioApi() const

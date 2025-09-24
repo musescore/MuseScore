@@ -199,16 +199,18 @@ async::Promise<io::path_t> WebInteractive::selectOpeningFile(const std::string& 
 #endif
 }
 
-io::path_t WebInteractive::selectOpeningFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter)
+io::path_t WebInteractive::selectOpeningFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
+                                                 const int options)
 {
 #ifdef Q_OS_WASM
     UNUSED(title);
     UNUSED(dir);
     UNUSED(filter);
+    UNUSED(options);
     NOT_SUPPORTED;
     return io::path_t();
 #else
-    return m_origin->selectOpeningFileSync(title, dir, filter);
+    return m_origin->selectOpeningFileSync(title, dir, filter, options);
 #endif
 }
 

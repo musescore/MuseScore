@@ -25,7 +25,7 @@
 
 #include <memory>
 
-#include "audio/worker/internal/synthesizers/abstractsynthesizer.h"
+#include "audio/engine/internal/synthesizers/abstractsynthesizer.h"
 #include "async/channel.h"
 
 #include "libhandler.h"

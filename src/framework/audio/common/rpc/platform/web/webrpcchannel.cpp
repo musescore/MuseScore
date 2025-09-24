@@ -88,7 +88,7 @@ void WebRpcChannel::setupOnMain()
     };
 }
 
-void WebRpcChannel::setupOnWorker()
+void WebRpcChannel::setupOnEngine()
 {
     g_rpcListen = [this](const ByteArray& d) {
         receive(d);

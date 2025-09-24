@@ -23,7 +23,7 @@
 
 #include "audio/common/rpc/rpcpacker.h"
 
-#include "audio/worker/platform/web/networksfloader.h"
+#include "audio/engine/platform/web/networksfloader.h"
 
 #include "log.h"
 

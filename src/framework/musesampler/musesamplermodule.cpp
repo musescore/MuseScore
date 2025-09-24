@@ -23,7 +23,7 @@
 #include "musesamplermodule.h"
 
 #include "modularity/ioc.h"
-#include "audio/worker/isynthresolver.h"
+#include "audio/engine/isynthresolver.h"
 
 #include "ui/iuiactionsregister.h"
 

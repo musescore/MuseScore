@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "audio/worker/isynthresolver.h"
+#include "audio/engine/isynthresolver.h"
 #include "imusesamplerinfo.h"
 
 #include "modularity/ioc.h"

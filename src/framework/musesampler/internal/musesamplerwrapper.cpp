@@ -198,21 +198,21 @@ void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
 
 void MuseSamplerWrapper::setupEvents(const mpe::PlaybackData& playbackData)
 {
-    ONLY_AUDIO_WORKER_THREAD;
+    ONLY_AUDIO_ENGINE_THREAD;
 
     m_sequencer.load(playbackData);
 }
 
 const mpe::PlaybackData& MuseSamplerWrapper::playbackData() const
 {
-    ONLY_AUDIO_WORKER_THREAD;
+    ONLY_AUDIO_ENGINE_THREAD;
 
     return m_sequencer.playbackData();
 }
 
 void MuseSamplerWrapper::updateRenderingMode(const RenderMode mode)
 {
-    ONLY_AUDIO_WORKER_THREAD;
+    ONLY_AUDIO_ENGINE_THREAD;
 
     if (!m_samplerLib || !m_sampler) {
         return;
@@ -343,7 +343,7 @@ void MuseSamplerWrapper::setupOnlineSound()
 
 void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int size)
 {
-    ONLY_AUDIO_WORKER_THREAD;
+    ONLY_AUDIO_ENGINE_THREAD;
 
     IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;

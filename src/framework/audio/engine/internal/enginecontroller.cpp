@@ -1,0 +1,166 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2025 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#include "enginecontroller.h"
+
+#include "global/modularity/ioc.h"
+
+#ifdef Q_OS_WIN
+#include "global/platform/win/waitabletimer.h"
+#endif
+
+#include "audio/common/audioutils.h"
+#include "audio/common/rpc/rpcpacker.h"
+
+#include "audioengineconfiguration.h"
+#include "audioengine.h"
+#include "engineplayback.h"
+#include "enginerpcchannelcontroller.h"
+
+#include "fx/fxresolver.h"
+#include "fx/musefxresolver.h"
+
+#include "synthesizers/fluidsynth/fluidresolver.h"
+#include "synthesizers/synthresolver.h"
+#include "synthesizers/soundfontrepository.h"
+
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_AUDIO_WORKER
+#ifdef Q_OS_WASM
+#include "audio/driver/platform/web/webaudiochannel.h"
+#endif
+#endif
+
+#include "log.h"
+
+using namespace muse;
+using namespace muse::modularity;
+using namespace muse::audio;
+using namespace muse::audio::engine;
+using namespace muse::audio::fx;
+using namespace muse::audio::synth;
+
+static std::string moduleName()
+{
+    return "audio_engine";
+}
+
+static muse::modularity::ModulesIoC* ioc()
+{
+    return muse::modularity::globalIoc();
+}
+
+EngineController::EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
+    : m_rpcChannel(rpcChannel)
+{
+    rpc::set_last_stream_id(100000);
+
+    m_rpcChannel->onMethod(rpc::Method::EngineInit, [this](const rpc::Msg& msg) {
+        OutputSpec spec;
+        AudioEngineConfig conf;
+
+        IF_ASSERT_FAILED(rpc::RpcPacker::unpack(msg.data, spec, conf)) {
+            return;
+        }
+
+        init(spec, conf);
+    });
+}
+
+void EngineController::registerExports()
+{
+    //! NOTE Services registration
+    //! At the moment, it is better to create services
+    //! and register them in the IOC in the main thread,
+    //! because the IOC thread is not safe.
+    //! Therefore, we will need to make own IOC instance for the engine.
+
+    m_configuration = std::make_shared<AudioEngineConfiguration>();
+    m_audioEngine = std::make_shared<AudioEngine>();
+    m_playback = std::make_shared<EnginePlayback>();
+    m_rpcChannelController  = std::make_shared<EngineRpcChannelController>();
+    m_fxResolver = std::make_shared<FxResolver>();
+    m_synthResolver = std::make_shared<SynthResolver>();
+    m_soundFontRepository = std::make_shared<SoundFontRepository>();
+
+    ioc()->registerExport<IAudioEngineConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IAudioEngine>(moduleName(), m_audioEngine);
+    ioc()->registerExport<IEnginePlayback>(moduleName(), m_playback);
+    ioc()->registerExport<IFxResolver>(moduleName(), m_fxResolver);
+    ioc()->registerExport<ISynthResolver>(moduleName(), m_synthResolver);
+    ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
+}
+
+void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfig& conf)
+{
+    //! NOTE It should be as early as possible
+    m_rpcChannel->setupOnEngine();
+
+    m_configuration->init(conf);
+
+    m_fxResolver->registerResolver(AudioFxType::MuseFx, std::make_shared<MuseFxResolver>());
+    m_synthResolver->registerResolver(AudioSourceType::Fluid, std::make_shared<FluidResolver>());
+
+    engine::AudioEngine::RenderConstraints consts;
+    consts.minSamplesToReserveWhenIdle = minSamplesToReserve(RenderMode::IdleMode);
+    consts.minSamplesToReserveInRealtime = minSamplesToReserve(RenderMode::RealTimeMode);
+    consts.desiredAudioThreadNumber = m_configuration->desiredAudioThreadNumber();
+    consts.minTrackCountForMultithreading = m_configuration->minTrackCountForMultithreading();
+
+    // Setup audio engine
+    m_audioEngine->init(outputSpec, consts);
+
+    m_synthResolver->init(m_configuration->defaultAudioInputParams(), outputSpec);
+
+    m_soundFontRepository->init();
+    m_playback->init();
+    m_rpcChannelController->init(m_playback);
+
+#ifdef MUSE_MODULE_AUDIO_WORKER
+#ifdef Q_OS_WASM
+    m_webAudioChannel = std::make_shared<WebAudioChannel>();
+    m_webAudioChannel->open([this](float* stream, size_t samples) {
+        unsigned samplesPerChannel = samples / 2;
+        process(stream, samplesPerChannel);
+    });
+#endif
+#endif
+}
+
+void EngineController::deinit()
+{
+#ifdef MUSE_MODULE_AUDIO_WORKER
+#ifdef Q_OS_WASM
+    m_webAudioChannel->close();
+#endif
+#endif
+
+    m_playback->deinit();
+    m_rpcChannelController->deinit();
+    m_audioEngine->deinit();
+}
+
+void EngineController::process(float* stream, unsigned samplesPerChannel)
+{
+    m_audioEngine->processAudioData();
+    m_audioEngine->popAudioData(stream, samplesPerChannel);
+}

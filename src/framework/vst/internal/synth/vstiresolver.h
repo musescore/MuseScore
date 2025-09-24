@@ -24,7 +24,7 @@
 #define MUSE_VST_VSTIRESOLVER_H
 
 #include "modularity/ioc.h"
-#include "audio/worker/isynthresolver.h"
+#include "audio/engine/isynthresolver.h"
 
 #include "../../ivstinstancesregister.h"
 #include "../../ivstmodulesrepository.h"

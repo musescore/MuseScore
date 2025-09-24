@@ -38,11 +38,11 @@ enum class Method {
     Undefined = 0,
 
     // Init
-    WorkerStarted, // notification
-    WorkerInit,
+    EngineInit,
+    EngineStarted, // notification
 
     // Config
-    WorkerConfigChanged,
+    EngineConfigChanged,
 
     // AudioEngine
     SetOutputSpec,
@@ -123,11 +123,11 @@ inline std::string to_string(Method m)
     case Method::Undefined: return "Undefined";
 
     // Init
-    case Method::WorkerStarted: return "WorkerStarted";
-    case Method::WorkerInit: return "WorkerInit";
+    case Method::EngineStarted: return "EngineStarted";
+    case Method::EngineInit: return "EngineInit";
 
     // Config
-    case Method::WorkerConfigChanged: return "WorkerConfigChanged";
+    case Method::EngineConfigChanged: return "EngineConfigChanged";
 
     // AudioEngine
     case Method::SetOutputSpec: return "SetOutputSpec";
@@ -345,7 +345,7 @@ public:
     virtual ~IRpcChannel() = default;
 
     virtual void setupOnMain() = 0;
-    virtual void setupOnWorker() = 0;
+    virtual void setupOnEngine() = 0;
 
     virtual void process() = 0;
 
