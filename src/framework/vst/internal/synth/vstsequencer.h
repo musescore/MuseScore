@@ -23,7 +23,7 @@
 #ifndef MUSE_VST_VSTSEQUENCER_H
 #define MUSE_VST_VSTSEQUENCER_H
 
-#include "audio/worker/internal/abstracteventsequencer.h"
+#include "audio/engine/internal/abstracteventsequencer.h"
 
 #include "vsttypes.h"
 
@@ -54,7 +54,7 @@ struct std::less<VstSequencerEvent>
 };
 
 namespace muse::vst {
-class VstSequencer : public muse::audio::worker::AbstractEventSequencer<VstEvent, ParamChangeEvent, muse::audio::gain_t>
+class VstSequencer : public audio::engine::AbstractEventSequencer<VstEvent, ParamChangeEvent, muse::audio::gain_t>
 {
 public:
     void init(ParamsMapping&& mapping, bool useDynamicEvents);

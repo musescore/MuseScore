@@ -27,8 +27,8 @@
 #include "ui/iuiengine.h"
 
 #include "modularity/ioc.h"
-#include "audio/worker/isynthresolver.h"
-#include "audio/worker/ifxresolver.h"
+#include "audio/engine/isynthresolver.h"
+#include "audio/engine/ifxresolver.h"
 
 #include "audioplugins/iaudiopluginsscannerregister.h"
 #include "audioplugins/iaudiopluginmetareaderregister.h"

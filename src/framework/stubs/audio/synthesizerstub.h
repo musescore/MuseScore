@@ -22,7 +22,7 @@
 #ifndef MU_AUDIO_SYNTHESIZERSTUB_H
 #define MU_AUDIO_SYNTHESIZERSTUB_H
 
-#include "audio/worker/isynthesizer.h"
+#include "audio/engine/isynthesizer.h"
 
 namespace muse::audio::synth {
 class SynthesizerStub : public ISynthesizer

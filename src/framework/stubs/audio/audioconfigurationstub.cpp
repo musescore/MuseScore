@@ -24,7 +24,7 @@
 using namespace muse::audio;
 using namespace muse;
 
-AudioWorkerConfig AudioConfigurationStub::workerConfig() const
+AudioEngineConfig AudioConfigurationStub::engineConfig() const
 {
     return {};
 }

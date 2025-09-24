@@ -28,7 +28,7 @@
 using namespace muse::audio;
 
 static std::thread::id s_as_mainThreadID;
-static std::thread::id s_as_workerThreadID;
+static std::thread::id s_as_engineThreadID;
 static std::set<std::thread::id> s_mixerThreadIdSet;
 
 void AudioSanitizer::setupMainThread()
@@ -46,9 +46,9 @@ bool AudioSanitizer::isMainThread()
     return std::this_thread::get_id() == s_as_mainThreadID;
 }
 
-void AudioSanitizer::setupWorkerThread()
+void AudioSanitizer::setupEngineThread()
 {
-    s_as_workerThreadID = std::this_thread::get_id();
+    s_as_engineThreadID = std::this_thread::get_id();
 }
 
 void AudioSanitizer::setMixerThreads(const std::set<std::thread::id>& threadIdSet)
@@ -56,14 +56,14 @@ void AudioSanitizer::setMixerThreads(const std::set<std::thread::id>& threadIdSe
     s_mixerThreadIdSet = threadIdSet;
 }
 
-std::thread::id AudioSanitizer::workerThread()
+std::thread::id AudioSanitizer::engineThread()
 {
-    return s_as_workerThreadID;
+    return s_as_engineThreadID;
 }
 
-bool AudioSanitizer::isWorkerThread()
+bool AudioSanitizer::isEngineThread()
 {
     std::thread::id id = std::this_thread::get_id();
 
-    return id == s_as_workerThreadID || muse::contains(s_mixerThreadIdSet, id);
+    return id == s_as_engineThreadID || muse::contains(s_mixerThreadIdSet, id);
 }

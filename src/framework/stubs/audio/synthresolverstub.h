@@ -22,7 +22,7 @@
 #ifndef MU_AUDIO_SYNTHRESOLVERSTUB_H
 #define MU_AUDIO_SYNTHRESOLVERSTUB_H
 
-#include "audio/worker/isynthresolver.h"
+#include "audio/engine/isynthresolver.h"
 
 namespace muse::audio::synth {
 class SynthResolverStub : public ISynthResolver

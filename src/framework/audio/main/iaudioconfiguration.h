@@ -37,7 +37,7 @@ class IAudioConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAudioConfiguration() = default;
 
-    virtual AudioWorkerConfig workerConfig() const = 0;
+    virtual AudioEngineConfig engineConfig() const = 0;
 
     virtual std::string currentAudioApi() const = 0;
     virtual void setCurrentAudioApi(const std::string& name) = 0;

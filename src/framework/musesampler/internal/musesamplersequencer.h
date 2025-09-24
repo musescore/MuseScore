@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "audio/worker/internal/abstracteventsequencer.h"
+#include "audio/engine/internal/abstracteventsequencer.h"
 #include "imusesamplertracks.h"
 
 #include "internal/apitypes.h"
@@ -70,7 +70,7 @@ struct std::less<MuseSamplerEvent>
 };
 
 namespace muse::musesampler {
-class MuseSamplerSequencer : public audio::worker::AbstractEventSequencer<mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent,
+class MuseSamplerSequencer : public audio::engine::AbstractEventSequencer<mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent,
                                                                           AuditionCCEvent>
 {
 public:

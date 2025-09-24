@@ -28,11 +28,11 @@
 #include "audio/common/audiothreadsecurer.h"
 #ifdef Q_OS_WASM
 #include "audio/common/rpc/platform/web/webrpcchannel.h"
-#include "audio/worker/platform/web/webaudioworker.h"
+#include "audio/engine/platform/web/webaudioworker.h"
 #include "platform/web/websoundfontcontroller.h"
 #else
 #include "audio/common/rpc/platform/general/generalrpcchannel.h"
-#include "audio/worker/platform/general/generalaudioworker.h"
+#include "audio/engine/platform/general/generalaudioworker.h"
 #include "platform/general/generalsoundfontcontroller.h"
 #endif
 
@@ -75,11 +75,11 @@ void AudioModule::registerExports()
 
 #ifdef Q_OS_WASM
     m_rpcChannel = std::make_shared<rpc::WebRpcChannel>();
-    m_audioWorker = std::make_shared<worker::WebAudioWorker>(m_rpcChannel);
+    m_audioWorker = std::make_shared<engine::WebAudioWorker>(m_rpcChannel);
     m_soundFontController = std::make_shared<WebSoundFontController>();
 #else
     m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
-    m_audioWorker = std::make_shared<worker::GeneralAudioWorker>(m_rpcChannel);
+    m_audioWorker = std::make_shared<engine::GeneralAudioWorker>(m_rpcChannel);
     m_audioWorker->registerExports();
     m_soundFontController = std::make_shared<GeneralSoundFontController>();
 #endif
@@ -88,7 +88,7 @@ void AudioModule::registerExports()
     ioc()->registerExport<IStartAudioController>(moduleName(), m_startAudioController);
     ioc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
     ioc()->registerExport<rpc::IRpcChannel>(moduleName(), m_rpcChannel);
-    ioc()->registerExport<worker::IAudioWorker>(moduleName(), m_audioWorker);
+    ioc()->registerExport<engine::IAudioWorker>(moduleName(), m_audioWorker);
     ioc()->registerExport<IAudioDriverController>(moduleName(), m_audioDriverController);
     ioc()->registerExport<ISoundFontController>(moduleName(), m_soundFontController);
     ioc()->registerExport<IPlayback>(moduleName(), m_mainPlayback);

@@ -30,7 +30,7 @@ public:
     WebRpcChannel() = default;
 
     void setupOnMain() override;
-    void setupOnWorker() override;
+    void setupOnEngine() override;
 
     void process() override;
 

@@ -49,7 +49,7 @@ void GeneralRpcChannel::setupOnMain()
     m_mainThreadID = std::this_thread::get_id();
 }
 
-void GeneralRpcChannel::setupOnWorker()
+void GeneralRpcChannel::setupOnEngine()
 {
 }
 

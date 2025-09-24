@@ -28,8 +28,8 @@
 
 #include "log.h"
 
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioWorkerConfig& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioWorkerConfig& value);
+void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioEngineConfig& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioEngineConfig& value);
 
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::OutputSpec& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::OutputSpec& value);
@@ -121,12 +121,12 @@ void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackData& value);
 
 #include "global/serialization/msgpack.h"
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioWorkerConfig& value)
+inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioEngineConfig& value)
 {
     p.process(value.autoProcessOnlineSoundsInBackground);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioWorkerConfig& value)
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioEngineConfig& value)
 {
     p.process(value.autoProcessOnlineSoundsInBackground);
 }

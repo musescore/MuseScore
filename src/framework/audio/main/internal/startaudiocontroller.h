@@ -25,14 +25,14 @@
 
 #include "global/modularity/ioc.h"
 #include "../iaudioconfiguration.h"
-#include "audio/worker/iaudioworker.h"
+#include "audio/engine/iaudioworker.h"
 #include "../../iaudiodrivercontroller.h"
 
 namespace muse::audio {
 class StartAudioController : public IStartAudioController
 {
     Inject<IAudioConfiguration> configuration;
-    Inject<worker::IAudioWorker> audioWorker;
+    Inject<engine::IAudioWorker> audioWorker;
     Inject<IAudioDriverController> audioDriverController;
 
 public:
