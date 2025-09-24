@@ -1259,6 +1259,10 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
         if (item->isFermata()) {
             return true;
         }
+        // Ignore fret diagrams
+        if (item->isFretDiagram()) {
+            return true;
+        }
         return false;
     });
 
