@@ -48,6 +48,7 @@ public:
 
     MOCK_METHOD(void, moveChordNoteSelection, (MoveDirection), (override));
     MOCK_METHOD(void, select, (const std::vector<EngravingItem*>&, SelectType, engraving::staff_idx_t), (override));
+    MOCK_METHOD(void, selectAndStartEditIfNeeded, (EngravingItem*), (override));
     MOCK_METHOD(void, selectAll, (), (override));
     MOCK_METHOD(void, selectSection, (), (override));
     MOCK_METHOD(void, selectFirstElement, (bool), (override));
