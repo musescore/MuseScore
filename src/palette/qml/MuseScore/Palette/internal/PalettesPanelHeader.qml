@@ -129,7 +129,7 @@ Item {
             id: addPalettesPopup
             paletteProvider: root.paletteProvider
 
-            popupAvailableWidth: root ? root.width : 0
+            popupAvailableWidth: root.width
             anchorItem: root.popupAnchorItem
 
             onAddCustomPaletteRequested: {
@@ -140,7 +140,7 @@ Item {
         CreateCustomPalettePopup {
             id: createCustomPalettePopup
 
-            popupAvailableWidth: root ? root.width : 0
+            popupAvailableWidth: root.width
             anchorItem: root.popupAnchorItem
 
             onAddCustomPaletteRequested: function(paletteName) {

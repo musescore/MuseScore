@@ -20,13 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Layouts
 
-import MuseScore.Palette 1.0
-import Muse.UiComponents 1.0
-import Muse.Ui 1.0
+import Muse.Ui
+import Muse.UiComponents
+import MuseScore.Palette
 
 StyledPopupView {
     id: root
@@ -37,8 +36,9 @@ StyledPopupView {
 
     property int popupAvailableWidth: 0
 
-    contentWidth: contentColumn.width
-    contentHeight: contentColumn.height
+    contentWidth: popupAvailableWidth - 2 * margins
+    contentHeight: Math.min(maxHeight - 2 * margins - 2 * padding - 1, 
+                            contentColumn.implicitHeight)
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "AddPalettesPopup"
@@ -53,23 +53,23 @@ StyledPopupView {
 
     signal addCustomPaletteRequested()
 
-    Column {
+    ColumnLayout {
         id: contentColumn
 
-        width: root.popupAvailableWidth - 2 * root.margins
-        height: childrenRect.height
-
+        anchors.fill: parent
         spacing: 12
 
         StyledTextLabel {
             id: header
+            Layout.fillWidth: true
             text: qsTrc("palette", "More palettes")
             font: ui.theme.bodyBoldFont
+            horizontalAlignment: Text.AlignLeft
         }
 
         FlatButton {
             id: createCustomPaletteButton
-            width: parent.width
+            Layout.fillWidth: true
             text: qsTrc("palette", "Create custom palette")
 
             objectName: "CreateCustomPalette"
@@ -83,7 +83,8 @@ StyledPopupView {
         }
 
         StyledTextLabel {
-            width: parent.width
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             visible: palettesList.count <= 0
             text: qsTrc("palette", "All palettes were added")
             wrapMode: Text.WordWrap
@@ -91,11 +92,13 @@ StyledPopupView {
 
         StyledListView {
             id: palettesList
-            height: Math.min(availableHeight, contentHeight)
-            width: parent.width + root.margins
 
-            readonly property int availableHeight:
-                root.maxHeight - header.height - createCustomPaletteButton.height - 2 * contentColumn.spacing
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.leftMargin: -root.margins
+            Layout.rightMargin: -root.margins
+
+            implicitHeight: contentHeight
 
             scrollBarThickness: 6
 
@@ -105,33 +108,30 @@ StyledPopupView {
             delegate: Item {
                 id: morePalettesDelegate
 
-                width: parent.width - root.margins
-                height: addButton.height
+                width: ListView.view.width
+                implicitWidth: rowLayout.implicitWidth
+                implicitHeight: rowLayout.implicitHeight
 
                 property bool added: false
                 property bool removed: false
 
                 RowLayout {
+                    id: rowLayout
                     anchors.fill: parent
+                    anchors.leftMargin: root.margins
+                    anchors.rightMargin: root.margins
                     spacing: 8
                     visible: !(morePalettesDelegate.added || morePalettesDelegate.removed)
 
                     StyledTextLabel {
-                        Layout.alignment: Qt.AlignLeft
                         Layout.fillWidth: true
 
-                        height: parent.height
                         text: model.display
                         horizontalAlignment: Text.AlignHLeft
-
-                        wrapMode: Text.WordWrap
-                        maximumLineCount: 1
                     }
 
                     FlatButton {
                         id: addButton
-                        Layout.alignment: Qt.AlignRight
-                        Layout.preferredWidth: width
 
                         icon: IconCode.PLUS
                         toolTipTitle: qsTrc("palette", "Add %1 palette").arg(model.display)

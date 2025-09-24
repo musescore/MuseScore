@@ -19,18 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
 
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import Muse.Ui
+import Muse.UiComponents
 
 StyledPopupView {
     id: root
 
     property int popupAvailableWidth: 0
 
-    contentWidth: contentColumn.width
-    contentHeight: contentColumn.height
+    contentWidth: root.popupAvailableWidth - 2 * root.margins
+    contentHeight: contentColumn.implicitHeight
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "CreateCustomPalettePopup"
@@ -49,9 +49,7 @@ StyledPopupView {
     Column {
         id: contentColumn
 
-        width: root.popupAvailableWidth - 2 * root.margins
-        height: childrenRect.height
-
+        anchors.fill: parent
         spacing: 12
 
         StyledTextLabel {
