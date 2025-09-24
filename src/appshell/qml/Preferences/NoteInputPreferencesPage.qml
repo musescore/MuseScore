@@ -193,5 +193,20 @@ PreferencesPage {
                 noteInputModel.warnGuitarBends = warn
             }
         }
+        
+        SeparatorLine {}
+
+        LyricsSection {
+            width: parent.width
+
+            lyricsFormMelismaAtSlurTies: noteInputModel.lyricsFormMelismaAtSlurTies
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 7
+
+            onLyricsFormMelismaAtSlurTiesChangeRequested: function(update) {
+                noteInputModel.lyricsFormMelismaAtSlurTies = update
+            }
+        }
     }
 }
