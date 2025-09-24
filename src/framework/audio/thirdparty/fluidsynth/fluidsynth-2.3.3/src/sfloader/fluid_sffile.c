@@ -680,7 +680,7 @@ static int process_info(SFData *sf, int size)
 
             if(sf->version.major == 3)
             {
-#if !(LIBSNDFILE_SUPPORT || STBVORBIS_SUPPORT)
+#if !(LIBSNDFILE_SUPPORT || EXTERN_VORBIS_SUPPORT)
                 FLUID_LOG(FLUID_WARN,
                           "Sound font version is %d.%d but fluidsynth was compiled without"
                           " support for (v3.x)",
@@ -2520,7 +2520,7 @@ error_exit:
     return -1;
 }
 
-#elif STBVORBIS_SUPPORT
+#elif EXTERN_VORBIS_SUPPORT
 
 extern int vorbis_decode_memory(const unsigned char *mem, unsigned int len, short **output, unsigned int *channels, unsigned int *sample_rate);
 
