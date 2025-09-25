@@ -89,8 +89,6 @@ void DialogView::beforeOpen()
 void DialogView::onHidden()
 {
     WindowView::onHidden();
-
-    activateNavigationParentControl();
 }
 
 QScreen* DialogView::resolveScreen() const

@@ -129,6 +129,10 @@ signals:
 
 protected:
     bool isDialog() const override;
+    void beforeOpen() override;
+    void onHidden() override;
+
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
     void initCloseController() override;
 

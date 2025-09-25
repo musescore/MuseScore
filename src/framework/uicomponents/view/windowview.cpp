@@ -164,16 +164,6 @@ void WindowView::componentComplete()
     init();
 }
 
-bool WindowView::eventFilter(QObject* watched, QEvent* event)
-{
-    if (QEvent::UpdateRequest == event->type()
-        || (event->type() == QEvent::Move && watched == mainWindow()->qWindow())) {
-        repositionWindowIfNeed();
-    }
-
-    return QObject::eventFilter(watched, event);
-}
-
 QWindow* WindowView::qWindow() const
 {
     return m_window ? m_window->qWindow() : nullptr;
@@ -224,8 +214,6 @@ void WindowView::doOpen()
         m_closeController->setActive(true);
     }
 
-    qApp->installEventFilter(this);
-
     emit isOpenedChanged();
     emit opened();
 }
@@ -234,6 +222,8 @@ void WindowView::onHidden()
 {
     emit isOpenedChanged();
     emit closed(m_forceClosed);
+
+    activateNavigationParentControl();
 }
 
 void WindowView::close(bool force)
@@ -251,12 +241,8 @@ void WindowView::close(bool force)
         m_closeController->setActive(false);
     }
 
-    qApp->removeEventFilter(this);
-
     m_forceClosed = force;
     m_window->close();
-
-    activateNavigationParentControl();
 }
 
 void WindowView::toggleOpened()

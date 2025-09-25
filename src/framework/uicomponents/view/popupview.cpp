@@ -70,6 +70,30 @@ void PopupView::initCloseController()
     });
 }
 
+void PopupView::beforeOpen()
+{
+    WindowView::beforeOpen();
+
+    qApp->installEventFilter(this);
+}
+
+void PopupView::onHidden()
+{
+    WindowView::onHidden();
+
+    qApp->removeEventFilter(this);
+}
+
+bool PopupView::eventFilter(QObject* watched, QEvent* event)
+{
+    if (QEvent::UpdateRequest == event->type()
+        || (event->type() == QEvent::Move && watched == mainWindow()->qWindow())) {
+        repositionWindowIfNeed();
+    }
+
+    return WindowView::eventFilter(watched, event);
+}
+
 PopupView::ClosePolicies PopupView::closePolicies() const
 {
     return m_closePolicies;

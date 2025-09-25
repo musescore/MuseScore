@@ -162,12 +162,8 @@ protected:
     virtual bool isDialog() const = 0;
     void classBegin() override;
     void componentComplete() override;
-    bool eventFilter(QObject* watched, QEvent* event) override;
 
     virtual void initCloseController() {}
-
-    void doFocusOut();
-    void windowMoveEvent();
 
     virtual void beforeOpen();
     void doOpen();
