@@ -126,16 +126,14 @@ void Ambitus::initFrom(Ambitus* a)
 
 void Ambitus::setTrack(track_idx_t t)
 {
-    Segment* segm  = segment();
-    Staff* stf   = score()->staff(track2staff(t));
-
     EngravingItem::setTrack(t);
+
     // if not initialized and there is a segment and a staff,
     // initialize pitches and tpc's to first and last staff line
     // (for use in palettes)
-    if (m_topPitch == INVALID_PITCH || m_topTpc == Tpc::TPC_INVALID
-        || m_bottomPitch == INVALID_PITCH || m_bottomTpc == Tpc::TPC_INVALID) {
-        if (segm && stf) {
+    if (!pitchIsValid(m_topPitch) || !tpcIsValid(m_topTpc)
+        || !pitchIsValid(m_bottomPitch) || !tpcIsValid(m_bottomTpc)) {
+        if (segment() && staff()) {
             Ambitus::Ranges ranges = estimateRanges();
             m_topTpc = ranges.topTpc;
             m_bottomTpc = ranges.bottomTpc;
@@ -145,9 +143,6 @@ void Ambitus::setTrack(track_idx_t t)
             m_topAccidental->setTrack(t);
             m_bottomAccidental->setTrack(t);
         }
-//            else {
-//                  _topPitch = _bottomPitch = INVALID_PITCH;
-//                  _topTpc   = _bottomTpc   = Tpc::TPC_INVALID;
     }
 }
 
@@ -296,9 +291,6 @@ SymId Ambitus::noteHead() const
 
 double Ambitus::headWidth() const
 {
-//      int head  = noteHead();
-//      double val = symbols[score()->symIdx()][head].width(magS());
-//      return val;
     return symWidth(noteHead());
 }
 
@@ -308,12 +300,12 @@ double Ambitus::headWidth() const
 
 PointF Ambitus::pagePos() const
 {
-    if (explicitParent() == 0) {
+    if (!explicitParent()) {
         return pos();
     }
-    System* system = segment()->measure()->system();
+
     double yp = y();
-    if (system) {
+    if (System* system = segment()->measure()->system()) {
         yp += system->staff(staffIdx())->y() + system->y();
     }
     return PointF(pageX(), yp);
@@ -343,62 +335,29 @@ Ambitus::Ranges Ambitus::estimateRanges() const
 {
     Ambitus::Ranges result;
 
-    if (!segment()) {
-        return result;
-    }
-    Chord* chord;
-    track_idx_t firstTrack  = track();
-    track_idx_t lastTrack   = firstTrack + VOICES - 1;
-    int pitchTop    = -1000;
-    int pitchBottom = 1000;
-    int tpcTop      = 0;    // Initialized to prevent warning
-    int tpcBottom   = 0;    // Initialized to prevent warning
-    track_idx_t trk;
-    Measure* meas     = segment()->measure();
-    Segment* segm     = meas->findSegment(SegmentType::ChordRest, segment()->tick());
-    bool stop     = meas->sectionBreak();
-    while (segm) {
-        // moved to another measure?
-        if (segm->measure() != meas) {
-            // if section break has been found, stop here
-            if (stop) {
-                break;
-            }
-            // update meas and stop condition
-            meas = segm->measure();
-            stop = meas->sectionBreak();
-        }
-        // scan all relevant tracks of this segment for chords
-        for (trk = firstTrack; trk <= lastTrack; trk++) {
-            EngravingItem* e = segm->element(trk);
+    Segment* s = segment() ? segment()->measure()->findSegment(SegmentType::ChordRest, segment()->tick()) : nullptr;
+    for (; s && !s->measure()->sectionBreak(); s = s->nextCR()) {
+        for (track_idx_t t = track(); t < track() + VOICES; t++) {
+            EngravingItem* e = s->element(t);
             if (!e || !e->isChord()) {
                 continue;
             }
-            chord = toChord(e);
-            // update pitch range (with associated tpc's)
+            Chord* chord = toChord(e);
             for (Note* n : chord->notes()) {
-                if (!n->play()) {         // skip notes which are not to be played
+                if (!n->play()) {
                     continue;
                 }
-                int pitch = n->epitch();
-                if (pitch > pitchTop) {
-                    pitchTop = pitch;
-                    tpcTop   = n->tpc();
+                int pitch = n->epitch() + n->ottaveCapoFret(); // written pitch, accounting for octave offset
+                if (pitch > result.topPitch || !pitchIsValid(result.topPitch)) {
+                    result.topPitch = pitch;
+                    result.topTpc   = n->tpc();
                 }
-                if (pitch < pitchBottom) {
-                    pitchBottom = pitch;
-                    tpcBottom   = n->tpc();
+                if (pitch < result.bottomPitch || !pitchIsValid(result.bottomPitch)) {
+                    result.bottomPitch = pitch;
+                    result.bottomTpc   = n->tpc();
                 }
             }
         }
-        segm = segm->nextCR();
-    }
-
-    if (pitchTop > -1000) {               // if something has been found, update this
-        result.topPitch    = pitchTop;
-        result.bottomPitch = pitchBottom;
-        result.topTpc      = tpcTop;
-        result.bottomTpc   = tpcBottom;
     }
 
     return result;
@@ -406,7 +365,7 @@ Ambitus::Ranges Ambitus::estimateRanges() const
 
 void Ambitus::remove(EngravingItem* e)
 {
-    if (e->type() == ElementType::ACCIDENTAL) {
+    if (e->isAccidental()) {
         //! NOTE Do nothing (removing _topAccid or _bottomAccid)
         return;
     }
@@ -554,7 +513,7 @@ EngravingItem* Ambitus::prevSegmentElement()
 
 String Ambitus::accessibleInfo() const
 {
-    if (m_topTpc == Tpc::TPC_INVALID || m_bottomTpc == Tpc::TPC_INVALID) {
+    if (!tpcIsValid(m_topTpc) || !tpcIsValid(m_bottomTpc)) {
         return EngravingItem::accessibleInfo();
     }
     return EngravingItem::accessibleInfo() + u"; "
