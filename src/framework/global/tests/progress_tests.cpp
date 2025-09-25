@@ -145,3 +145,19 @@ TEST_F(Global_Types_ProgressTests, IncrementsAreForwardedIfTotalChanged) {
     EXPECT_TRUE(progress.progress(0, 11));
     EXPECT_EQ(notificationCount, 2);
 }
+
+TEST_F(Global_Types_ProgressTests, maxNumIncrementsIsRespected) {
+    Progress progress;
+
+    auto notificationCount = 0;
+    progress.progressChanged().onReceive(this, [&notificationCount](auto, auto, auto) {
+        ++notificationCount;
+    });
+    progress.start();
+    progress.setMaxNumIncrements(10);
+    for (auto i = 0; i < 100; ++i) {
+        progress.progress(i, 100);
+    }
+
+    EXPECT_EQ(notificationCount, 10);
+}
