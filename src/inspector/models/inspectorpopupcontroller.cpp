@@ -25,7 +25,7 @@
 #include <QGuiApplication>
 #include <QWindow>
 
-#include "uicomponents/view/windowview.h"
+#include "uicomponents/view/popupview.h"
 
 #include "log.h"
 
@@ -63,7 +63,7 @@ QQuickItem* InspectorPopupController::visualControl() const
     return m_visualControl;
 }
 
-WindowView* InspectorPopupController::popup() const
+PopupView* InspectorPopupController::popup() const
 {
     return m_popup;
 }
@@ -106,7 +106,7 @@ void InspectorPopupController::setVisualControl(QQuickItem* control)
     emit visualControlChanged();
 }
 
-void InspectorPopupController::setPopup(WindowView* popup)
+void InspectorPopupController::setPopup(PopupView* popup)
 {
     if (m_popup == popup) {
         return;
@@ -121,13 +121,13 @@ void InspectorPopupController::setPopup(WindowView* popup)
     if (m_popup) {
         qApp->installEventFilter(this);
 
-        connect(m_popup, &WindowView::isOpenedChanged, this, [this]() {
+        connect(m_popup, &PopupView::isOpenedChanged, this, [this]() {
             if (m_popup && !m_popup->isOpened()) {
                 setPopup(nullptr);
             }
         });
 
-        connect(m_popup, &WindowView::destroyed, this, [this]() {
+        connect(m_popup, &PopupView::destroyed, this, [this]() {
             setPopup(nullptr);
         });
     } else {

@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_INSPECTOR_INSPECTORPOPUPCONTROLLER_H
-#define MU_INSPECTOR_INSPECTORPOPUPCONTROLLER_H
+#pragma once
 
 #include <QObject>
 
@@ -30,12 +29,12 @@
 #include "global/iinteractive.h"
 
 Q_MOC_INCLUDE(< QQuickItem >)
-Q_MOC_INCLUDE("uicomponents/view/windowview.h")
+Q_MOC_INCLUDE("uicomponents/view/popupview.h")
 
 class QQuickItem;
 
 namespace muse::uicomponents {
-class WindowView;
+class PopupView;
 }
 
 namespace mu::inspector {
@@ -44,7 +43,7 @@ class InspectorPopupController : public QObject, public muse::Injectable
     Q_OBJECT
 
     Q_PROPERTY(QQuickItem * visualControl READ visualControl WRITE setVisualControl NOTIFY visualControlChanged)
-    Q_PROPERTY(muse::uicomponents::WindowView * popup READ popup WRITE setPopup NOTIFY popupChanged)
+    Q_PROPERTY(muse::uicomponents::PopupView * popup READ popup WRITE setPopup NOTIFY popupChanged)
 
     Q_PROPERTY(QQuickItem * notationView READ notationView WRITE setNotationView NOTIFY notationViewChanged)
 
@@ -58,13 +57,13 @@ public:
     Q_INVOKABLE void load();
 
     QQuickItem* visualControl() const;
-    muse::uicomponents::WindowView* popup() const;
+    muse::uicomponents::PopupView* popup() const;
 
     QQuickItem* notationView() const;
 
 public slots:
     void setVisualControl(QQuickItem* control);
-    void setPopup(muse::uicomponents::WindowView* popup);
+    void setPopup(muse::uicomponents::PopupView* popup);
     void setNotationView(QQuickItem* notationView);
 
 signals:
@@ -82,9 +81,7 @@ private:
     void closePopupIfNeed(const QPointF& mouseGlobalPos);
 
     QQuickItem* m_visualControl = nullptr;
-    muse::uicomponents::WindowView* m_popup = nullptr;
+    muse::uicomponents::PopupView* m_popup = nullptr;
     QQuickItem* m_notationView = nullptr;
 };
 }
-
-#endif // MU_INSPECTOR_INSPECTORPOPUPCONTROLLER_H

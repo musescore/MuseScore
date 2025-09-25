@@ -27,7 +27,7 @@
 using namespace muse::uicomponents;
 
 DropdownView::DropdownView(QQuickItem* parent)
-    : WindowView(parent)
+    : PopupView(parent)
 {
 }
 

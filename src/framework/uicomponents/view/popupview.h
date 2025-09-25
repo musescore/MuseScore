@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,30 +21,18 @@
  */
 #pragma once
 
-#include "popupview.h"
-
-class QQuickCloseEvent;
+#include "windowview.h"
 
 namespace muse::uicomponents {
-class DropdownView : public PopupView
+class PopupView : public WindowView
 {
     Q_OBJECT
 
-    Q_PROPERTY(int focusItemY READ focusItemY WRITE setFocusItemY NOTIFY focusItemYChanged)
-
 public:
-    explicit DropdownView(QQuickItem* parent = nullptr);
-    ~DropdownView() override = default;
-
-    int focusItemY() const;
-    void setFocusItemY(int newFocusItemY);
-
-signals:
-    void focusItemYChanged();
+    explicit PopupView(QQuickItem* parent = nullptr);
+    ~PopupView() override;
 
 private:
-    void updateGeometry() override;
-
-    int m_focusItemY = -1;
+    bool isDialog() const override;
 };
 }

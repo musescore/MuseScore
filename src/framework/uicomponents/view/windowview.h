@@ -277,7 +277,7 @@ signals:
     void parentWindowChanged();
 
 protected:
-    virtual bool isDialog() const;
+    virtual bool isDialog() const = 0;
     void classBegin() override;
     void componentComplete() override;
     bool eventFilter(QObject* watched, QEvent* event) override;
