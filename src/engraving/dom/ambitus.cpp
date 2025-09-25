@@ -308,12 +308,12 @@ double Ambitus::headWidth() const
 
 PointF Ambitus::pagePos() const
 {
-    if (explicitParent() == 0) {
+    if (!explicitParent()) {
         return pos();
     }
-    System* system = segment()->measure()->system();
+
     double yp = y();
-    if (system) {
+    if (System* system = segment()->measure()->system()) {
         yp += system->staff(staffIdx())->y() + system->y();
     }
     return PointF(pageX(), yp);
@@ -343,62 +343,29 @@ Ambitus::Ranges Ambitus::estimateRanges() const
 {
     Ambitus::Ranges result;
 
-    if (!segment()) {
-        return result;
-    }
-    Chord* chord;
-    track_idx_t firstTrack  = track();
-    track_idx_t lastTrack   = firstTrack + VOICES - 1;
-    int pitchTop    = -1000;
-    int pitchBottom = 1000;
-    int tpcTop      = 0;    // Initialized to prevent warning
-    int tpcBottom   = 0;    // Initialized to prevent warning
-    track_idx_t trk;
-    Measure* meas     = segment()->measure();
-    Segment* segm     = meas->findSegment(SegmentType::ChordRest, segment()->tick());
-    bool stop     = meas->sectionBreak();
-    while (segm) {
-        // moved to another measure?
-        if (segm->measure() != meas) {
-            // if section break has been found, stop here
-            if (stop) {
-                break;
-            }
-            // update meas and stop condition
-            meas = segm->measure();
-            stop = meas->sectionBreak();
-        }
-        // scan all relevant tracks of this segment for chords
-        for (trk = firstTrack; trk <= lastTrack; trk++) {
-            EngravingItem* e = segm->element(trk);
+    Segment* s = segment() ? segment()->measure()->findSegment(SegmentType::ChordRest, segment()->tick()) : nullptr;
+    for (; s && !s->measure()->sectionBreak(); s = s->nextCR()) {
+        for (track_idx_t t = track(); t < track() + VOICES; t++) {
+            EngravingItem* e = s->element(t);
             if (!e || !e->isChord()) {
                 continue;
             }
-            chord = toChord(e);
-            // update pitch range (with associated tpc's)
+            Chord* chord = toChord(e);
             for (Note* n : chord->notes()) {
-                if (!n->play()) {         // skip notes which are not to be played
+                if (!n->play()) {
                     continue;
                 }
-                int pitch = n->epitch();
-                if (pitch > pitchTop) {
-                    pitchTop = pitch;
-                    tpcTop   = n->tpc();
+                int pitch = n->epitch() + n->ottaveCapoFret(); // written pitch, accounting for octave offset
+                if (pitch > result.topPitch || !pitchIsValid(result.topPitch)) {
+                    result.topPitch = pitch;
+                    result.topTpc   = n->tpc();
                 }
-                if (pitch < pitchBottom) {
-                    pitchBottom = pitch;
-                    tpcBottom   = n->tpc();
+                if (pitch < result.bottomPitch || !pitchIsValid(result.bottomPitch)) {
+                    result.bottomPitch = pitch;
+                    result.bottomTpc   = n->tpc();
                 }
             }
         }
-        segm = segm->nextCR();
-    }
-
-    if (pitchTop > -1000) {               // if something has been found, update this
-        result.topPitch    = pitchTop;
-        result.bottomPitch = pitchBottom;
-        result.topTpc      = tpcTop;
-        result.bottomTpc   = tpcBottom;
     }
 
     return result;
@@ -406,7 +373,7 @@ Ambitus::Ranges Ambitus::estimateRanges() const
 
 void Ambitus::remove(EngravingItem* e)
 {
-    if (e->type() == ElementType::ACCIDENTAL) {
+    if (e->isAccidental()) {
         //! NOTE Do nothing (removing _topAccid or _bottomAccid)
         return;
     }
@@ -554,7 +521,7 @@ EngravingItem* Ambitus::prevSegmentElement()
 
 String Ambitus::accessibleInfo() const
 {
-    if (m_topTpc == Tpc::TPC_INVALID || m_bottomTpc == Tpc::TPC_INVALID) {
+    if (!tpcIsValid(m_topTpc) || !tpcIsValid(m_bottomTpc)) {
         return EngravingItem::accessibleInfo();
     }
     return EngravingItem::accessibleInfo() + u"; "
