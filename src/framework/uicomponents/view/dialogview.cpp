@@ -59,10 +59,6 @@ void DialogView::onHidden()
 {
     PopupView::onHidden();
 
-    if (m_loop.isRunning()) {
-        m_loop.exit();
-    }
-
     activateNavigationParentControl();
 }
 
@@ -138,14 +134,6 @@ void DialogView::updateGeometry()
 QRect DialogView::viewGeometry() const
 {
     return QRect(m_globalPos.toPoint(), QSize(contentWidth(), contentHeight()));
-}
-
-void DialogView::exec()
-{
-    open();
-    m_loop.exec();
-
-    activateNavigationParentControl();
 }
 
 void DialogView::show()

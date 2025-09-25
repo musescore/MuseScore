@@ -20,10 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UICOMPONENTS_DIALOGVIEW_H
-#define MUSE_UICOMPONENTS_DIALOGVIEW_H
-
-#include <QEventLoop>
+#pragma once
 
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
@@ -43,7 +40,6 @@ public:
     explicit DialogView(QQuickItem* parent = nullptr);
     ~DialogView() override = default;
 
-    Q_INVOKABLE void exec();
     Q_INVOKABLE void show();
     Q_INVOKABLE void hide();
     Q_INVOKABLE void raise();
@@ -60,9 +56,5 @@ private:
     void updateGeometry() override;
 
     QRect viewGeometry() const override;
-
-    QEventLoop m_loop;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_DIALOGVIEW_H
