@@ -625,7 +625,7 @@ DockPage {
                         "description": qsTrc("playback", "An animated bar will let you know when sounds are processing online. You’ll also see a notification in the status bar. You can change when these notifications appear in Preferences > Audio & MIDI…"),
                         "controlUri": "control://NotationStatusBar/NotationStatusBar/OnlineSoundsStatusView",
                         "previewImageOrGifUrl": "qrc:/resources/OnlineSoundsPreview.gif",
-                        "videoExplanationUrl": "https://youtu.be/xm1-XkS9VzA?utm_source=mss-yt&utm_medium=enter-by-duration&utm_campaign=mss-yt-enter-by-duration"
+                        "videoExplanationUrl": "https://youtu.be/hQ4YqmHM3BE?utm_source=mss-app-yt-4.6-cantai&utm_medium=mss-app-yt-4.6-cantai&utm_campaign=mss-app-yt-4.6-cantai"
                     }
                 ]
             }
