@@ -822,7 +822,6 @@ TEST_F(MidiRendererBend_Tests, bendOnHiddenStaff)
 TEST_F(MidiRendererBend_Tests, bendAndVibrato)
 {
     constexpr int defVol = 80; // mf
-    constexpr int pwReset = 8192;
 
     EventsHolder events = renderMidiEvents(u"bend_and_vibrato.mscx");
 

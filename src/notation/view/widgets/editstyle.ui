@@ -13038,8 +13038,6 @@ followed by dashes</string>
   <tabstop>swingEighth</tabstop>
   <tabstop>swingSixteenth</tabstop>
   <tabstop>swingBox</tabstop>
-  <tabstop>autoplaceVerticalAlignRange</tabstop>
-  <tabstop>resetAutoplaceVerticalAlignRange</tabstop>
   <tabstop>minVerticalDistance</tabstop>
   <tabstop>resetMinVerticalDistance</tabstop>
   <tabstop>spacingScrollArea</tabstop>
