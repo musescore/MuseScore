@@ -42,6 +42,8 @@ class Progress
         async::Notification canceled;
         std::atomic<bool> isStarted = false;
         std::atomic<bool> isCanceled = false;
+        std::atomic<int64_t> prevCurrent = -1;
+        std::atomic<int64_t> prevTotal = -1;
 
         async::Channel<int64_t /*current*/, int64_t /*total*/, std::string /*title*/> progressChanged;
     };
@@ -67,6 +69,8 @@ public:
     {
         m_data->isCanceled = false;
         m_data->isStarted = true;
+        m_data->prevCurrent = -1;
+        m_data->prevTotal = -1;
         m_data->started.notify();
     }
 
@@ -74,9 +78,17 @@ public:
     bool isStarted() const { return m_data->isStarted; }
 
     // progress
-    void progress(int64_t current, int64_t total, const std::string& msg = {})
+    bool progress(int64_t current, int64_t total, const std::string& msg = {})
     {
+        if (current == m_data->prevCurrent && total == m_data->prevTotal) {
+            return false;
+        }
+
+        m_data->prevCurrent = current;
+        m_data->prevTotal = total;
         m_data->progressChanged.send(current, total, msg);
+
+        return true;
     }
 
     async::Channel<int64_t /*current*/, int64_t /*total*/, std::string /*title*/>& progressChanged()
@@ -86,6 +98,8 @@ public:
 
     void finish(const ProgressResult& res)
     {
+        m_data->prevCurrent = -1;
+        m_data->prevTotal = -1;
         m_data->isStarted = false;
         m_data->finished.send(res);
     }
