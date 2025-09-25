@@ -1,11 +1,11 @@
-# ![MuseScore](share/icons/musescore_logo_full.png)
+# ![MuseScore Studio](share/icons/musescore_logo_full.png)
 
 Music notation and composition software
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![Coverage](https://s3.us-east-1.amazonaws.com/extensions.musescore.org/test/code_coverage/coverage_badge.svg?)](https://github.com/musescore/MuseScore/actions/workflows/check_unit_tests.yml)
 
-MuseScore is an open source and free music notation software. For support, contribution, and bug reports visit MuseScore.org. Fork and make pull requests!
+MuseScore Studio is an open source and free music notation software. For support, contribution, and bug reports visit MuseScore.org. Fork and make pull requests!
 
 ## Features
 
@@ -29,7 +29,7 @@ MuseScore is an open source and free music notation software. For support, contr
 
 ## License
 
-MuseScore is licensed under GPL version 3.0. See [license file](https://github.com/musescore/MuseScore/blob/master/LICENSE.txt) in the same directory.
+MuseScore Studio is licensed under GPL version 3.0. See [license file](https://github.com/musescore/MuseScore/blob/master/LICENSE.txt) in the same directory.
 
 ## Packages
 
@@ -53,7 +53,7 @@ Otherwise, you can just download the latest source release tarball from the [Rel
 
 ### Release Build
 
-To compile MuseScore for release, type:
+To compile MuseScore Studio for release, type:
 
     cmake -P build.cmake -DCMAKE_BUILD_TYPE=Release
 
@@ -65,7 +65,7 @@ Then try running the first command again.
 
 ### Running
 
-To start MuseScore, type:
+To start MuseScore Studio, type:
 
     cmake -P build.cmake -DCMAKE_BUILD_TYPE=Release run
 
