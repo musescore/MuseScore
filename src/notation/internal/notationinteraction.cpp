@@ -7059,6 +7059,8 @@ void NotationInteraction::navigateToHarmonyInNearMeasure(MoveDirection direction
 
     track_idx_t track = harmony->track();
 
+    doEndEditElement();
+
     mu::engraving::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->textStyleType());
     if (!nextHarmony) {
         nextHarmony = createHarmony(segment, track, harmony->harmonyType());
@@ -7103,6 +7105,8 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
     while (segment && segment->tick() < newTick) {
         segment = segment->next1(mu::engraving::SegmentType::ChordRest);
     }
+
+    doEndEditElement();
 
     startEdit(TranslatableString("undoableAction", "Navigate to chord symbol"));
 
@@ -7155,6 +7159,8 @@ void NotationInteraction::navigateToNearFiguredBass(MoveDirection direction)
         return;
     }
 
+    doEndEditElement();
+
     bool bNew = false;
     // add a (new) FB element, using chord duration as default duration
     mu::engraving::FiguredBass* fbNew = mu::engraving::FiguredBass::addFiguredBassToSegment(nextSegm, track, Fraction(0, 1), &bNew);
@@ -7199,6 +7205,8 @@ void NotationInteraction::navigateToFiguredBassInNearMeasure(MoveDirection direc
         return;
     }
 
+    doEndEditElement();
+
     bool bNew = false;
     // add a (new) FB element, using chord duration as default duration
     mu::engraving::FiguredBass* fbNew = mu::engraving::FiguredBass::addFiguredBassToSegment(nextSegm, fb->track(), Fraction(0, 1), &bNew);
@@ -7235,8 +7243,6 @@ void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
         }
     }
 
-    doEndEditElement();
-
     // look for a segment at this tick; if none, create one
     mu::engraving::Segment* nextSegm = segm;
     while (nextSegm && nextSegm->tick() < nextSegTick) {
@@ -7250,6 +7256,8 @@ void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
             return;
         }
     }
+
+    doEndEditElement();
 
     startEdit(TranslatableString("undoableAction", "Navigate to figured bass"));
 
@@ -7451,6 +7459,8 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
             }
         }
     }
+
+    doEndEditElement();
 
     if (textEl) {
         // edit existing text
