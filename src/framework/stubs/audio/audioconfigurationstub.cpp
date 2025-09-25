@@ -81,16 +81,6 @@ async::Notification AudioConfigurationStub::driverBufferSizeChanged() const
     return async::Notification();
 }
 
-samples_t AudioConfigurationStub::samplesToPreallocate() const
-{
-    return 0;
-}
-
-async::Channel<samples_t> AudioConfigurationStub::samplesToPreallocateChanged() const
-{
-    return async::Channel<samples_t>();
-}
-
 unsigned int AudioConfigurationStub::sampleRate() const
 {
     return 0;
