@@ -131,12 +131,15 @@ void VSTModule::registerUiTypes()
     ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(muse_vst_QML_IMPORT);
 }
 
-void VSTModule::onInit(const IApplication::RunMode&)
+void VSTModule::onInit(const IApplication::RunMode& mode)
 {
     m_configuration->init();
-    m_actionsController->init();
     m_pluginModulesRepo->init();
-    m_actionsController->setupUsedView();
+
+    if (mode == IApplication::RunMode::GuiApp) {
+        m_actionsController->init();
+        m_actionsController->setupUsedView();
+    }
 }
 
 void VSTModule::onDeinit()

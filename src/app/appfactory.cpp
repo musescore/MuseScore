@@ -384,17 +384,8 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     return app;
 }
 
-std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& options) const
+static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
 {
-#ifdef MUE_ENABLE_CONSOLEAPP
-
-    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
-    ++m_lastID;
-    // ctx->id = m_lastID;
-    ctx->id = -1; //! NOTE At the moment global ioc
-
-    std::shared_ptr<ConsoleApp> app = std::make_shared<ConsoleApp>(options, ctx);
-
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
     //! For other modules, the order is (an should be) unimportant.
     app->addModule(new muse::diagnostics::DiagnosticsModule());
@@ -516,6 +507,37 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     app->addModule(new mu::project::ProjectModule());
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
+}
+
+static void addAudioPluginRegistrationModules(std::shared_ptr<ConsoleApp> app)
+{
+    app->addModule(new muse::audio::AudioModule());
+
+#ifdef MUSE_MODULE_AUDIOPLUGINS
+    app->addModule(new muse::audioplugins::AudioPluginsModule());
+#endif
+
+#ifdef MUSE_MODULE_VST
+    app->addModule(new muse::vst::VSTModule());
+#endif
+}
+
+std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& options) const
+{
+#ifdef MUE_ENABLE_CONSOLEAPP
+
+    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
+    ++m_lastID;
+    // ctx->id = m_lastID;
+    ctx->id = -1; //! NOTE At the moment global ioc
+
+    std::shared_ptr<ConsoleApp> app = std::make_shared<ConsoleApp>(options, ctx);
+
+    if (options.runMode == muse::IApplication::RunMode::ConsoleApp) {
+        addConsoleModules(app);
+    } else if (options.runMode == muse::IApplication::RunMode::AudioPluginRegistration) {
+        addAudioPluginRegistrationModules(app);
+    }
 
     return app;
 
