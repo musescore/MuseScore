@@ -393,7 +393,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <offset x="0.430279" y="0"/>
             <fretDiagram>
                 <string no="1">
                     <dot fret="4">normal</dot>
@@ -1283,7 +1282,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <offset x="1.47697" y="-0.105498"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -1349,7 +1347,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -1379,7 +1376,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>3</fretOffset>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <dot fret="2">normal</dot>
@@ -1755,7 +1751,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -1870,7 +1865,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>4</fretOffset>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -1892,7 +1886,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>4</fretOffset>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="1">
                     <dot fret="2">normal</dot>
@@ -1965,7 +1958,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -2431,7 +2423,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>4</fretOffset>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -2484,7 +2475,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -2543,7 +2533,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>4</fretOffset>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -2568,7 +2557,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>4</fretOffset>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -2621,7 +2609,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -2645,7 +2632,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -3110,7 +3096,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -3381,7 +3366,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>1</fretOffset>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -3515,7 +3499,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -4741,7 +4724,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>3</fretOffset>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <dot fret="1">normal</dot>
@@ -4783,7 +4765,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>2</fretOffset>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -5057,7 +5038,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>3</fretOffset>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <dot fret="1">normal</dot>
@@ -5079,7 +5059,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>3</fretOffset>
-            <color r="240" g="182" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <dot fret="1">normal</dot>
@@ -26471,7 +26450,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="255" g="0" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -26523,7 +26501,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="255" g="0" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -26773,7 +26750,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="255" g="0" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -27151,7 +27127,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="255" g="0" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -29257,7 +29232,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>2</fretOffset>
-            <color r="255" g="0" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -29335,7 +29309,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>2</fretOffset>
-            <color r="255" g="0" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -29417,7 +29390,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="255" g="0" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -29533,7 +29505,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>2</fretOffset>
-            <color r="255" g="0" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -29817,7 +29788,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="255" g="0" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -29924,7 +29894,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>2</fretOffset>
-            <color r="255" g="0" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -30852,7 +30821,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="255" g="0" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -31106,7 +31074,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretOffset>3</fretOffset>
-            <color r="255" g="0" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -32529,7 +32496,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <color r="255" g="0" b="0" a="255"/>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -64454,7 +64420,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <offset x="0.430279" y="0"/>
             <fretDiagram>
                 <string no="1">
                     <dot fret="4">normal</dot>
