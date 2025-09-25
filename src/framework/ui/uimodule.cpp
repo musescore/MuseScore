@@ -200,7 +200,7 @@ void UiModule::registerUiTypes()
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(muse_ui_QML_IMPORT);
 }
 
-void UiModule::onPreInit(const IApplication::RunMode& mode)
+void UiModule::onPreInit(const IApplication::RunMode&)
 {
     m_configuration->init();
 }
