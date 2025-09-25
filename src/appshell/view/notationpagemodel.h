@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_NOTATIONPAGEMODEL_H
-#define MU_APPSHELL_NOTATIONPAGEMODEL_H
+#pragma once
 
 #include <QQuickItem>
 
@@ -89,10 +88,17 @@ private:
 
     void toggleDock(const QString& name);
 
-    void updateDrumsetPanelVisibility();
-    void updatePercussionPanelVisibility();
-    void updateExtensionsToolBarVisibility();
+    void scheduleUpdateDrumsetPanelVisibility();
+    void doUpdateDrumsetPanelVisibility();
+
+    void scheduleUpdatePercussionPanelVisibility();
+    void doUpdatePercussionPanelVisibility();
+
+    void scheduleUpdateExtensionsToolBarVisibility();
+    void doUpdateExtensionsToolBarVisibility();
+
+    bool m_updateDrumsetPanelVisibilityScheduled = false;
+    bool m_updatePercussionPanelVisibilityScheduled = false;
+    bool m_updateExtensionsToolBarVisibilityScheduled = false;
 };
 }
-
-#endif // MU_APPSHELL_NOTATIONPAGEMODEL_H
