@@ -25,10 +25,12 @@ ORIGIN_DIR=${PWD}
 ARTIFACTS_DIR=build.artifacts
 DOCKER_WORK_DIR=$ARTIFACTS_DIR/docker
 MU_VERSION=""
+INSTALL_MUSE_SOUNDS="off"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -v|--version) MU_VERSION="$2"; shift ;;
+        --install_muse_sounds) INSTALL_MUSE_SOUNDS="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -47,6 +49,12 @@ cp $HERE/docker/setup.sh $DOCKER_WORK_DIR/setup.sh
 cp $HERE/docker/install_mu_template.sh $DOCKER_WORK_DIR/install_mu.sh
 
 sed -i 's|x.x.x.xxxxxx|'${MU_VERSION}'|' $DOCKER_WORK_DIR/install_mu.sh
+
+if [ "$INSTALL_MUSE_SOUNDS" = "on" ]; then
+    echo "Copying Muse Sounds installation template"
+    cp $HERE/docker/install_muse_sounds_template.sh $DOCKER_WORK_DIR/install_muse_sounds.sh
+    sed -i 's|x.x.x.xxxxxx|'${MU_VERSION}'|' $DOCKER_WORK_DIR/install_muse_sounds.sh
+fi
 
 
 cd $DOCKER_WORK_DIR
