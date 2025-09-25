@@ -60,11 +60,7 @@ void MeiModule::resolveImports()
     }
 }
 
-void MeiModule::onInit(const IApplication::RunMode& mode)
+void MeiModule::onInit(const IApplication::RunMode&)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     m_configuration->init();
 }

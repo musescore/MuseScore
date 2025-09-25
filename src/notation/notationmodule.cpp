@@ -260,10 +260,6 @@ void NotationModule::registerUiTypes()
 
 void NotationModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     m_configuration->init();
     m_instrumentsRepository->init();
     m_actionController->init();
