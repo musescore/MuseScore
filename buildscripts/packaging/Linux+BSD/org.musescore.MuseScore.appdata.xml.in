@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2018-2022 MuseScore BVBA and others -->
+<!-- Copyright 2018-2022 MuseScore Limited and others -->
 <component type="desktop-application">
     <!--
         Please write XML tags in the order they are specified in
@@ -70,7 +70,7 @@
         <internet>always</internet>
     </supports>
     <project_license>GPL-3.0-only</project_license>
-    <developer_name>MuseScore BVBA</developer_name>
+    <developer_name>MuseScore Limited</developer_name>
     <screenshots>
         <screenshot type="default">
             <caption>Start Center</caption>

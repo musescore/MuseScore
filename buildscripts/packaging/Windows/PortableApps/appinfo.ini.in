@@ -5,7 +5,7 @@ Version=3.7 # Version of the PortableApps format, not of MuseScore
 [Details]
 Name=MuseScore Portable
 AppId=MuseScorePortable
-Publisher=Musescore BVBA and Others
+Publisher=MuseScore Limited and Others
 Homepage=PortableApps.com/MuseScorePortable
 Donate=musescore.org/donate
 Category=Music & Video
