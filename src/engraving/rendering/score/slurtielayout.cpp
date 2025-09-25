@@ -112,7 +112,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         if (sc) {
             Tie* tie = (item->up() ? sc->upNote() : sc->downNote())->tieFor();
             PointF endPoint = PointF();
-            if (tie && (tie->isInside() || tie->up() != item->up())) {
+            if (tie && (tie->isInside() || tie->up() != item->up() || tieSegmentShouldBeSkipped(tie))) {
                 // there is a tie that starts on this chordrest
                 tie = nullptr;
             }
@@ -133,9 +133,9 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
                     }
                 }
             }
-            Tie* tieBack = sc->notes()[0]->tieBack();
+            Tie* tieBack = sc->upNote()->tieBack();
             if (!adjustedVertically && tieBack && (!tieBack->isInside() || tieBack->isPartialTie())
-                && tieBack->up() == item->up()) {
+                && tieBack->up() == item->up() && !tieSegmentShouldBeSkipped(tieBack)) {
                 // there is a tie that ends on this chordrest
                 tie = tieBack;
                 if (!tie->segmentsEmpty()) {
@@ -174,8 +174,9 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             Chord* c = toChord(cr);
             Tie* tie = nullptr;
             PointF endPoint;
-            Tie* tieBack = c->notes()[0]->tieBack();
-            if (tieBack && (tieBack->isPartialTie() || !tieBack->isInside()) && tieBack->up() == item->up()) {
+            Tie* tieBack = c->upNote()->tieBack();
+            if (tieBack && (tieBack->isPartialTie() || !tieBack->isInside()) && tieBack->up() == item->up()
+                && !tieSegmentShouldBeSkipped(tieBack)) {
                 // there is a tie that ends on this chordrest
                 if (!tieBack->segmentsEmpty()) { //Checks for spanner segment esxists
                     tie = tieBack;
@@ -207,7 +208,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         if (ec) {
             Tie* tie = (item->up() ? ec->upNote() : ec->downNote())->tieBack();
             PointF endPoint;
-            if (tie && (tie->isInside() || tie->up() != item->up())) {
+            if (tie && (tie->isInside() || tie->up() != item->up() || tieSegmentShouldBeSkipped(tie))) {
                 tie = nullptr;
             }
             bool adjustedVertically = false;
@@ -225,8 +226,9 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
                     }
                 }
             }
-            Tie* tieFor = ec->notes()[0]->tieFor();
-            if (!adjustedVertically && tieFor && (tieFor->isPartialTie() || !tieFor->isInside()) && tieFor->up() == item->up()) {
+            Tie* tieFor = ec->upNote()->tieFor();
+            if (!adjustedVertically && tieFor && (tieFor->isPartialTie() || !tieFor->isInside()) && tieFor->up() == item->up()
+                && !tieSegmentShouldBeSkipped(tieFor)) {
                 // there is a tie that starts on this chordrest
                 if (!tieFor->segmentsEmpty() && std::abs(tieFor->frontSegment()->ups(Grip::START).pos().y() - p2.y()) < tieClearance) {
                     p2.rx() -= horizontalTieClearance;
@@ -265,8 +267,9 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             Chord* c = toChord(cr);
             Tie* tie = nullptr;
             PointF endPoint;
-            Tie* tieFor = c->notes()[0]->tieFor();
-            if (tieFor && (tieFor->isPartialTie() || !tieFor->isInside()) && tieFor->up() == item->up()) {
+            Tie* tieFor = c->upNote()->tieFor();
+            if (tieFor && (tieFor->isPartialTie() || !tieFor->isInside()) && tieFor->up() == item->up()
+                && !tieSegmentShouldBeSkipped(tieFor)) {
                 // there is a tie that starts on this chordrest
                 if (!tieFor->segmentsEmpty()) { //Checks is spanner segment exists
                     tie = tieFor;
@@ -305,7 +308,8 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         p1 = p2 - PointF(2.5 * item->spatium(), 0.0);
     }
 
-    bool isHangingSlur = sst == SpannerSegmentType::BEGIN || sst == SpannerSegmentType::END || incomingPartialSlur || outgoingPartialSlur;
+    bool isHangingSlur = sst == SpannerSegmentType::BEGIN || sst == SpannerSegmentType::END || incomingPartialSlur
+                         || outgoingPartialSlur;
     if (isHangingSlur && ctx.conf().styleB(Sid::angleHangingSlursAwayFromStaff)) {
         adjustSlurFloatingEndPointAngles(slurSegment, p1, p2, incomingPartialSlur, outgoingPartialSlur);
     }
@@ -1250,6 +1254,15 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
         if (item->isFermata()) {
             return true;
         }
+        // Ignore fret diagrams
+        if (item->isFretDiagram()) {
+            return true;
+        }
+
+        if (item->isNote() && toNote(item)->shouldHideFret()) {
+            return true;
+        }
+
         return false;
     });
 
@@ -1475,7 +1488,7 @@ void SlurTieLayout::avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTie
     }
 }
 
-static bool tieSegmentShouldBeSkipped(Tie* item)
+bool SlurTieLayout::tieSegmentShouldBeSkipped(const Tie* item)
 {
     Note* startNote = item->startNote();
     StaffType* st = item->staff()->staffType(startNote ? startNote->tick() : Fraction(0, 1));
