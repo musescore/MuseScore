@@ -136,6 +136,8 @@ const char* PaletteCell::translationContext() const
     case ElementType::ORNAMENT:
     case ElementType::SYMBOL:
         return "engraving/sym";
+    case ElementType::PLAYTECH_ANNOTATION:
+        return "engraving/playtechtype";
     case ElementType::TIMESIG:
         return "engraving/timesig";
     case ElementType::TREMOLO_SINGLECHORD:
