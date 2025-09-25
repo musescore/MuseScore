@@ -1166,16 +1166,6 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
         sp->appendElement(hairpin, hairpin->subtypeUserName());
     }
 
-    auto gabel = Factory::makeHairpin(gpaletteScore->dummy());
-    gabel->setHairpinType(HairpinType::CRESC_HAIRPIN);
-    gabel->setBeginText(u"<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
-    gabel->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
-    gabel->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
-    gabel->setPropertyFlags(Pid::BEGIN_TEXT_ALIGN, PropertyFlags::UNSTYLED);
-    gabel->setLen(w);
-    // Keep name in sync with PaletteCell::translationContext()
-    sp->appendElement(gabel, QT_TRANSLATE_NOOP("palette", "Dynamic + hairpin"));
-
     auto volta = makeElement<Volta>(gpaletteScore);
     volta->setVoltaType(Volta::Type::CLOSED);
     volta->setLen(w);
