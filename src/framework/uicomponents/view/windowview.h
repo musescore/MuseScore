@@ -61,7 +61,7 @@ public:
     Q_ENUM(Type)
 };
 
-class PopupView : public QObject, public QQmlParserStatus, public Injectable, public async::Asyncable
+class WindowView : public QObject, public QQmlParserStatus, public Injectable, public async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -117,8 +117,8 @@ public:
 
 public:
 
-    explicit PopupView(QQuickItem* parent = nullptr);
-    ~PopupView() override;
+    explicit WindowView(QQuickItem* parent = nullptr);
+    ~WindowView() override;
 
     enum class OpenPolicy {
         Default = 0x00000000,
@@ -215,9 +215,9 @@ public slots:
     void setContentHeight(int contentHeight);
     void setLocalX(qreal x);
     void setLocalY(qreal y);
-    void setOpenPolicies(muse::uicomponents::PopupView::OpenPolicies openPolicies);
-    void setClosePolicies(muse::uicomponents::PopupView::ClosePolicies closePolicies);
-    void setPlacementPolicies(muse::uicomponents::PopupView::PlacementPolicies placementPolicies);
+    void setOpenPolicies(muse::uicomponents::WindowView::OpenPolicies openPolicies);
+    void setClosePolicies(muse::uicomponents::WindowView::ClosePolicies closePolicies);
+    void setPlacementPolicies(muse::uicomponents::WindowView::PlacementPolicies placementPolicies);
     void setNavigationParentControl(muse::ui::INavigationControl* parentNavigationControl);
     void setObjectId(QString objectId);
     void setTitle(QString title);
@@ -235,7 +235,7 @@ public slots:
     void setAnchorItem(QQuickItem* anchorItem);
 
     void setActivateParentOnClose(bool activateParentOnClose);
-    void setFocusPolicies(const muse::uicomponents::PopupView::FocusPolicies& policies);
+    void setFocusPolicies(const muse::uicomponents::WindowView::FocusPolicies& policies);
 
 signals:
     void parentItemChanged();
@@ -245,9 +245,9 @@ signals:
     void windowChanged();
     void xChanged(qreal x);
     void yChanged(qreal y);
-    void openPoliciesChanged(muse::uicomponents::PopupView::OpenPolicies openPolicies);
-    void closePoliciesChanged(muse::uicomponents::PopupView::ClosePolicies closePolicies);
-    void placementPoliciesChanged(muse::uicomponents::PopupView::PlacementPolicies placementPolicies);
+    void openPoliciesChanged(muse::uicomponents::WindowView::OpenPolicies openPolicies);
+    void closePoliciesChanged(muse::uicomponents::WindowView::ClosePolicies closePolicies);
+    void placementPoliciesChanged(muse::uicomponents::WindowView::PlacementPolicies placementPolicies);
     void navigationParentControlChanged(muse::ui::INavigationControl* navigationParentControl);
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);

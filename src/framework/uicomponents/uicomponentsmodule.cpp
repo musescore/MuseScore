@@ -27,7 +27,7 @@
 #include "view/validators/intinputvalidator.h"
 #include "view/iconview.h"
 #include "view/sortfilterproxymodel.h"
-#include "view/popupview.h"
+#include "view/windowview.h"
 #include "view/dialogview.h"
 #include "view/dropdownview.h"
 #include "view/menuview.h"
@@ -99,7 +99,7 @@ void UiComponentsModule::registerUiTypes()
     qmlRegisterType<SorterValue>("Muse.UiComponents", 1, 0, "SorterValue");
     qmlRegisterUncreatableType<CompareType>("Muse.UiComponents", 1, 0, "CompareType", "Cannot create a CompareType");
 
-    qmlRegisterType<PopupView>("Muse.UiComponents", 1, 0, "PopupView");
+    qmlRegisterType<WindowView>("Muse.UiComponents", 1, 0, "PopupView");
     qmlRegisterType<DialogView>("Muse.UiComponents", 1, 0, "DialogView");
     qmlRegisterType<DropdownView>("Muse.UiComponents", 1, 0, "DropdownView");
     qmlRegisterType<MenuView>("Muse.UiComponents", 1, 0, "MenuView");

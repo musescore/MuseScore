@@ -21,12 +21,12 @@
  */
 #pragma once
 
-#include "popupview.h"
+#include "windowview.h"
 
 class QQuickCloseEvent;
 
 namespace muse::uicomponents {
-class DropdownView : public PopupView
+class DropdownView : public WindowView
 {
     Q_OBJECT
 

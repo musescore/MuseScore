@@ -29,7 +29,7 @@ using namespace muse::uicomponents;
 static const QString MENU_VIEW_CONTENT_OBJECT_NAME("_MenuViewContent");
 
 MenuView::MenuView(QQuickItem* parent)
-    : PopupView(parent)
+    : WindowView(parent)
 {
     setObjectName("MenuView");
     setErrCode(Ret::Code::Ok);
@@ -62,7 +62,7 @@ void MenuView::componentComplete()
 {
     m_contentItem->setObjectName(m_contentItem->objectName() + MENU_VIEW_CONTENT_OBJECT_NAME);
 
-    PopupView::componentComplete();
+    WindowView::componentComplete();
 }
 
 void MenuView::updateGeometry()

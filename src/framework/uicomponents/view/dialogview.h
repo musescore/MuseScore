@@ -26,10 +26,10 @@
 #include "global/iapplication.h"
 #include "ui/iwindowscontroller.h"
 
-#include "popupview.h"
+#include "windowview.h"
 
 namespace muse::uicomponents {
-class DialogView : public PopupView
+class DialogView : public WindowView
 {
     Q_OBJECT
 

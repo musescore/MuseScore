@@ -21,10 +21,10 @@
  */
 #pragma once
 
-#include "popupview.h"
+#include "windowview.h"
 
 namespace muse::uicomponents {
-class MenuView : public PopupView
+class MenuView : public WindowView
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)

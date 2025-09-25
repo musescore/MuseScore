@@ -34,7 +34,7 @@ using namespace muse::uicomponents;
 static const int DIALOG_WINDOW_FRAME_HEIGHT(20);
 
 DialogView::DialogView(QQuickItem* parent)
-    : PopupView(parent)
+    : WindowView(parent)
 {
     setObjectName("DialogView");
     setClosePolicies(ClosePolicy::NoAutoClose);
@@ -57,7 +57,7 @@ void DialogView::beforeOpen()
 
 void DialogView::onHidden()
 {
-    PopupView::onHidden();
+    WindowView::onHidden();
 
     activateNavigationParentControl();
 }
