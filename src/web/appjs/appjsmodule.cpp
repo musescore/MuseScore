@@ -19,18 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
+#include "appjsmodule.h"
 
-#include "modularity/imodulesetup.h"
+#include "webapi.h"
 
-namespace mu::webbridge {
-class WebBridgeModule : public muse::modularity::IModuleSetup
+using namespace muse;
+using namespace mu::appjs;
+
+std::string AppJsModule::moduleName() const
 {
-public:
+    return "appjs";
+}
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void onInit(const muse::IApplication::RunMode& mode) override;
-    void onDeinit() override;
-};
+void AppJsModule::onInit(const muse::IApplication::RunMode&)
+{
+    WebApi::instance()->init();
+}
+
+void AppJsModule::onDeinit()
+{
+    WebApi::instance()->deinit();
 }

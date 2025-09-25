@@ -199,7 +199,7 @@ if (OS_IS_WIN)
 endif()
 
 if (MUE_CONFIGURATION_IS_APPWEB)
-    list(APPEND LINK_LIB webbridge)
+    list(APPEND LINK_LIB appjs)
 endif()
 
 ###########################################
@@ -428,11 +428,10 @@ elseif(OS_IS_WASM)
     add_custom_command(
         TARGET MuseScoreStudio
         POST_BUILD
-        COMMAND node ${PROJECT_SOURCE_DIR}/src/webbridge/install.js ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${MUSE_MODULE_AUDIO_WORKER}
+        COMMAND node ${PROJECT_SOURCE_DIR}/src/web/appjs/install.js ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${MUSE_MODULE_AUDIO_WORKER}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Install js api..."
     )
-
 
 else()
     message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")

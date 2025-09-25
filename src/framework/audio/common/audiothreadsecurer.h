@@ -31,8 +31,8 @@ class AudioThreadSecurer : public IAudioThreadSecurer
 public:
     bool isMainThread() const override;
     std::thread::id mainThreadId() const override;
-    bool isAudioWorkerThread() const override;
-    std::thread::id workerThreadId() const override;
+    bool isAudioEngineThread() const override;
+    std::thread::id audioEngineThreadId() const override;
 };
 }
 

@@ -18,16 +18,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(webbridge)
+declare_module(appjs)
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/webbridgemodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/webbridgemodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/appjsmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/appjsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/webapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/webapi.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/internal/webinteractive.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/webinteractive.h
     )
 
 setup_module()

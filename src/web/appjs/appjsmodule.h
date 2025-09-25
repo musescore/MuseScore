@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,29 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#pragma once
 
-#include "audiothreadsecurer.h"
+#include "modularity/imodulesetup.h"
 
-#include "audio/common/audiosanitizer.h"
-
-using namespace muse::audio;
-
-bool AudioThreadSecurer::isMainThread() const
+namespace mu::appjs {
+class AppJsModule : public muse::modularity::IModuleSetup
 {
-    return AudioSanitizer::isMainThread();
-}
+public:
 
-std::thread::id AudioThreadSecurer::mainThreadId() const
-{
-    return AudioSanitizer::mainThread();
-}
+    std::string moduleName() const override;
 
-bool AudioThreadSecurer::isAudioEngineThread() const
-{
-    return AudioSanitizer::isEngineThread();
-}
+    void onInit(const muse::IApplication::RunMode& mode) override;
+    void onDeinit() override;
 
-std::thread::id AudioThreadSecurer::audioEngineThreadId() const
-{
-    return AudioSanitizer::engineThread();
+private:
+};
 }
