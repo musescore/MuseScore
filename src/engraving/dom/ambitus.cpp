@@ -163,15 +163,7 @@ void Ambitus::setTopPitch(int val, bool applyLogic)
     // if deltaPitch is not an integer number of octaves, adjust tpc
     // (to avoid 'wild' tpc changes with octave changes)
     if (deltaPitch % PITCH_DELTA_OCTAVE != 0) {
-        int newTpc = topTpc() + deltaPitch * TPC_DELTA_SEMITONE;
-        // reduce newTpc into acceptable range via enharmonic
-        while (newTpc < Tpc::TPC_MIN) {
-            newTpc += TPC_DELTA_ENHARMONIC;
-        }
-        while (newTpc > Tpc::TPC_MAX) {
-            newTpc -= TPC_DELTA_ENHARMONIC;
-        }
-        m_topTpc = newTpc;
+        m_topTpc = clampEnharmonic(topTpc() + deltaPitch * TPC_DELTA_SEMITONE);
     }
     m_topPitch = val;
     normalize();
@@ -188,15 +180,7 @@ void Ambitus::setBottomPitch(int val, bool applyLogic)
     // if deltaPitch is not an integer number of octaves, adjust tpc
     // (to avoid 'wild' tpc changes with octave changes)
     if (deltaPitch % PITCH_DELTA_OCTAVE != 0) {
-        int newTpc = bottomTpc() + deltaPitch * TPC_DELTA_SEMITONE;
-        // reduce newTpc into acceptable range via enharmonic
-        while (newTpc < Tpc::TPC_MIN) {
-            newTpc += TPC_DELTA_ENHARMONIC;
-        }
-        while (newTpc > Tpc::TPC_MAX) {
-            newTpc -= TPC_DELTA_ENHARMONIC;
-        }
-        m_bottomTpc = newTpc;
+        m_bottomTpc = clampEnharmonic(bottomTpc() + deltaPitch * TPC_DELTA_SEMITONE);
     }
     m_bottomPitch = val;
     normalize();
