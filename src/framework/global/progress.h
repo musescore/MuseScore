@@ -44,6 +44,7 @@ class Progress
         std::atomic<bool> isCanceled = false;
         std::atomic<int64_t> prevCurrent = -1;
         std::atomic<int64_t> prevTotal = -1;
+        std::atomic<int64_t> maxNumIncrements = 0;
 
         async::Channel<int64_t /*current*/, int64_t /*total*/, std::string /*title*/> progressChanged;
     };
@@ -77,9 +78,17 @@ public:
     async::Notification& started() { return m_data->started; }
     bool isStarted() const { return m_data->isStarted; }
 
+    void setMaxNumIncrements(int64_t maxNumIncrements) { m_data->maxNumIncrements = maxNumIncrements; }
+
     // progress
     bool progress(int64_t current, int64_t total, const std::string& msg = {})
     {
+        const int64_t maxNumIncrements = m_data->maxNumIncrements;
+        if (maxNumIncrements > 0 && total > maxNumIncrements) {
+            current *= static_cast<double>(maxNumIncrements) / total;
+            total = maxNumIncrements;
+        }
+
         if (current == m_data->prevCurrent && total == m_data->prevTotal) {
             return false;
         }
