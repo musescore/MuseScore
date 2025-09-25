@@ -23,12 +23,15 @@ add_subdirectory(framework)
 
 # App (main)
 add_subdirectory(app)
+if (MUE_CONFIGURATION_IS_APPWEB)
+    add_subdirectory(web/appjs)
+endif()
 
 # Modules
 if (MUE_BUILD_APPSHELL_MODULE)
 
     if (MUE_CONFIGURATION_IS_APPWEB)
-        add_subdirectory(appshell_web)
+        add_subdirectory(web/appshell)
     else()
         add_subdirectory(appshell)
     endif()
@@ -80,10 +83,6 @@ endif()
 
 if (MUE_BUILD_PROJECT_MODULE)
     add_subdirectory(project)
-endif()
-
-if (MUE_CONFIGURATION_IS_APPWEB)
-    add_subdirectory(webbridge)
 endif()
 
 # Stubs

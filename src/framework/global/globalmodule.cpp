@@ -36,10 +36,6 @@
 #include "internal/process.h"
 #include "internal/systeminfo.h"
 
-#ifdef MUSE_MODULE_UI
-#include "internal/interactive.h"
-#endif
-
 #include "runtime.h"
 #include "async/processevents.h"
 
@@ -52,11 +48,18 @@
 #include "api/filesystemapi.h"
 #include "api/processapi.h"
 
+#include "muse_framework_config.h"
+
 #ifdef MUSE_MODULE_DIAGNOSTICS
 #include "diagnostics/idiagnosticspathsregister.h"
 #endif
 
-#include "muse_framework_config.h"
+#ifdef MUSE_MODULE_UI
+#include "internal/interactive.h"
+#ifdef Q_OS_WASM
+#include "internal/platform/web/webinteractive.h"
+#endif
+#endif
 
 #ifdef Q_OS_WASM
 #include "io/internal/memfilesystem.h"
@@ -120,7 +123,12 @@ void GlobalModule::registerExports()
 #endif
 
 #ifdef MUSE_MODULE_UI
+#ifdef Q_OS_WASM
+    std::shared_ptr<IInteractive> originInteractive = std::make_shared<Interactive>(iocContext());
+    ioc()->registerExport<muse::IInteractive>(moduleName(), new WebInteractive(originInteractive));
+#else
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive(iocContext()));
+#endif
 #endif
 }
 

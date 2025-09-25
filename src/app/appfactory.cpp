@@ -225,7 +225,7 @@
 #endif
 
 #ifdef MUE_CONFIGURATION_IS_APPWEB
-#include "webbridge/webbridgemodule.h"
+#include "web/appjs/appjsmodule.h"
 #endif
 
 using namespace muse;
@@ -371,8 +371,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::workspace::WorkspaceModule());
 
 #ifdef MUE_CONFIGURATION_IS_APPWEB
-    //! NOTE It should be the last one because it replaces some services.
-    app->addModule(new mu::webbridge::WebBridgeModule());
+    app->addModule(new mu::appjs::AppJsModule());
 #endif
 
     return app;

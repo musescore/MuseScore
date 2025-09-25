@@ -20,11 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "webbridge/webapi.h"
+#include "web/appjs/webapi.h"
 
 #include <emscripten.h>
 
-using namespace mu::webbridge;
+using namespace mu::appjs;
 
 extern "C" {
 EMSCRIPTEN_KEEPALIVE

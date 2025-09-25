@@ -30,7 +30,6 @@
 #include "log.h"
 
 using namespace muse;
-using namespace mu::webbridge;
 
 struct FileOpenData {
     std::string lastOpenedFileName;

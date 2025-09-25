@@ -27,8 +27,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(MUSE_MODULE_AUDIO_WORKER "Enable audio worker" OFF)
 
-# src/framework/audio/engine/platform/web
-set(MU_ROOT ${CMAKE_CURRENT_LIST_DIR}/../../../../../..)
+# src/web/audioengine
+set(MU_ROOT ${CMAKE_CURRENT_LIST_DIR}/../../..)
 set(MUSE_FRAMEWORK_PATH ${MU_ROOT})
 set(MUSE_FRAMEWORK_SRC_PATH ${MU_ROOT}/src/framework)
 
@@ -60,7 +60,7 @@ else()
 endif()
 
 
-set(AUDIO_ROOT ${CMAKE_CURRENT_LIST_DIR}/../../..)
+set(AUDIO_ROOT ${MU_ROOT}/src/framework/audio)
 include(${AUDIO_ROOT}/common/audio_common.cmake)
 set(WEBWORKER_FACADE_MODE OFF)
 include(${AUDIO_ROOT}/engine/audio_engine.cmake)
@@ -68,7 +68,7 @@ include(${AUDIO_ROOT}/engine/audio_engine.cmake)
 add_executable(MuseAudio
     ${AUDIO_COMMON_SRC}
     ${AUDIO_ENGINE_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/workerapi_export.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/engine_export.cpp
     ${CMAKE_CURRENT_LIST_DIR}/webaudioengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/webaudioengine.h
 
@@ -102,7 +102,7 @@ set(GLOBAL_NO_INTERNAL ON)
 configure_file(${MU_ROOT}/src/framework/cmake/muse_framework_config.h.in muse_framework_config.h )
 
 add_subdirectory(${MU_ROOT}/src/framework/global global)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../../thirdparty/fluidsynth fluidsynth)
+add_subdirectory(${AUDIO_ROOT}/thirdparty/fluidsynth fluidsynth)
 
 target_link_libraries(MuseAudio PRIVATE
     embind

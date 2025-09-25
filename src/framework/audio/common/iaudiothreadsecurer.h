@@ -26,7 +26,7 @@
 #include <cassert>
 #include <thread>
 
-#include "global/modularity/ioc.h"
+#include "global/modularity/imoduleinterface.h"
 
 namespace muse::audio {
 class IAudioThreadSecurer : MODULE_EXPORT_INTERFACE
@@ -36,13 +36,13 @@ public:
     virtual ~IAudioThreadSecurer() = default;
     virtual bool isMainThread() const = 0;
     virtual std::thread::id mainThreadId() const = 0;
-    virtual bool isAudioWorkerThread() const = 0;
-    virtual std::thread::id workerThreadId() const = 0;
+    virtual bool isAudioEngineThread() const = 0;
+    virtual std::thread::id audioEngineThreadId() const = 0;
 };
 }
 
-#define ONLY_AUDIO_THREAD(securer) assert(securer()->isAudioWorkerThread())
+#define ONLY_AUDIO_THREAD(securer) assert(securer()->isAudioEngineThread())
 #define ONLY_MAIN_THREAD(securer) assert(securer()->isMainThread())
-#define ONLY_AUDIO_OR_MAIN_THREAD(securer) assert(securer()->isMainThread() || securer()->isAudioWorkerThread())
+#define ONLY_AUDIO_OR_MAIN_THREAD(securer) assert(securer()->isMainThread() || securer()->isAudioEngineThread())
 
 #endif // MUSE_AUDIO_IAUDIOTHREADSECURER_H

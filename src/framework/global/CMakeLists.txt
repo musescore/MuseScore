@@ -226,6 +226,8 @@ else()
         set(MODULE_SRC ${MODULE_SRC}
             ${CMAKE_CURRENT_LIST_DIR}/io/internal/memfilesystem.cpp
             ${CMAKE_CURRENT_LIST_DIR}/io/internal/memfilesystem.h
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/web/webinteractive.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/web/webinteractive.h
         )
     else()
         set(MODULE_SRC ${MODULE_SRC}

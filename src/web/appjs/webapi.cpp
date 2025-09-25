@@ -31,7 +31,7 @@
 #include "log.h"
 
 using namespace muse;
-using namespace mu::webbridge;
+using namespace mu::appjs;
 
 #ifdef Q_OS_WASM
 static void callJsWithBytes(const char* fnname, const uint8_t* data, size_t size)

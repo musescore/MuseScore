@@ -23,7 +23,7 @@
 
 #include "global/iinteractive.h"
 
-namespace mu::webbridge {
+namespace muse {
 class WebInteractive : public muse::IInteractive
 {
 public:

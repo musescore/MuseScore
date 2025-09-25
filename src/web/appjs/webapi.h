@@ -30,7 +30,7 @@
 #include "audio/main/istartaudiocontroller.h"
 #include "audio/main/isoundfontcontroller.h"
 
-namespace mu::webbridge {
+namespace mu::appjs {
 class WebApi : public muse::async::Asyncable
 {
     inline static muse::GlobalInject<muse::IInteractive> interactive;
