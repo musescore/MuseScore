@@ -18,7 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 3.22) # Min. required by Qt 6.9
+if (APPLE)
+    cmake_minimum_required(VERSION 3.26) # Min. required for Swift-C++ interop
+else()
+    cmake_minimum_required(VERSION 3.22) # Min. required by Qt 6.9
+endif()
 
 project(MuseScore LANGUAGES C CXX)
 
@@ -97,6 +101,8 @@ option(MUE_BUILD_PRINT_MODULE "Build print module" ON)
 option(MUE_BUILD_PROJECT_MODULE "Build project module" ON)
 option(MUE_BUILD_PROJECT_TESTS "Build project tests" ON)
 option(MUE_BUILD_CONVERTER_TESTS "Build converter tests" ON)
+
+option(MUE_BUILD_MACOS_INTEGRATION "Build macOS integration module" ON)
 
 # === Setup ===
 option(MUE_DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
