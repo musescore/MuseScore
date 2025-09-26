@@ -72,8 +72,6 @@ static muse::modularity::ModulesIoC* ioc()
 EngineController::EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
     : m_rpcChannel(rpcChannel)
 {
-    rpc::set_last_stream_id(100000);
-
     m_rpcChannel->onMethod(rpc::Method::EngineInit, [this](const rpc::Msg& msg) {
         OutputSpec spec;
         AudioEngineConfig conf;
@@ -110,15 +108,17 @@ void EngineController::registerExports()
     ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
 }
 
-void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfig& conf)
+void EngineController::preInit()
 {
-    //! NOTE It should be as early as possible
-    m_rpcChannel->setupOnEngine();
-
-    m_configuration->init(conf);
-
     m_fxResolver->registerResolver(AudioFxType::MuseFx, std::make_shared<MuseFxResolver>());
     m_synthResolver->registerResolver(AudioSourceType::Fluid, std::make_shared<FluidResolver>());
+
+    m_soundFontRepository->init();
+}
+
+void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfig& conf)
+{
+    m_configuration->init(conf);
 
     engine::AudioEngine::RenderConstraints consts;
     consts.minSamplesToReserveWhenIdle = minSamplesToReserve(RenderMode::IdleMode);
@@ -131,7 +131,6 @@ void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfi
 
     m_synthResolver->init(m_configuration->defaultAudioInputParams(), outputSpec);
 
-    m_soundFontRepository->init();
     m_playback->init();
     m_rpcChannelController->init(m_playback);
 

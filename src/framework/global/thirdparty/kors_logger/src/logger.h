@@ -123,6 +123,14 @@ public:
 };
 
 //! Layout ---------------------------------
+class IThreadNameProvider
+{
+public:
+    virtual ~IThreadNameProvider() = default;
+
+    virtual const std::string& threadName(const std::thread::id& thID) const = 0;
+};
+
 class LogLayout
 {
 public:
@@ -151,10 +159,14 @@ public:
     static PatternData parsePattern(const std::string& format, const std::string_view& pattern);
     static std::vector<PatternData> patterns(const std::string& format);
 
+    void setThreadNameProvider(std::shared_ptr<IThreadNameProvider> provider);
+    std::shared_ptr<IThreadNameProvider> threadNameProvider() const;
+
 private:
     std::string m_format;
     std::vector<PatternData> m_patterns;
     std::thread::id m_mainThread;
+    std::shared_ptr<IThreadNameProvider> m_threadNameProvider;
 };
 
 //! Destination ----------------------------

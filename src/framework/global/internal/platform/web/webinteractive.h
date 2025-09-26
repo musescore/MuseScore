@@ -64,7 +64,7 @@ public:
                                        const std::string& dialogTitle = "") override;
 
     // progress
-    void showProgress(const std::string& title, muse::Progress* progress) override;
+    void showProgress(const std::string& title, muse::Progress progress) override;
 
     // files
     muse::async::Promise<muse::io::path_t> selectOpeningFile(const std::string& title, const muse::io::path_t& dir,

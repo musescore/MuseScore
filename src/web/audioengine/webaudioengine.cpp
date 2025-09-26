@@ -56,15 +56,35 @@ static modularity::ModulesIoC* ioc()
 void WebAudioEngine::init()
 {
     muse::runtime::mainThreadId(); //! NOTE Needs only call
-    muse::runtime::setThreadName("worker");
+    muse::runtime::setThreadName("audio_engine");
 
+    //! --- Setup logger ---
+    using namespace muse::logger;
+    Logger* logger = Logger::instance();
+    logger->clearDests();
+
+    //! Console
+    if (muse::runtime::isDebug()) {
+        class ThreadNameProvider : public IThreadNameProvider
+        {
+        public:
+            const std::string& threadName(const std::thread::id&) const { return muse::runtime::threadName(); }
+        };
+
+        LogLayout ll("${time} | ${type|5} | ${thread|15} | ${tag|15} | ${message}");
+        ll.setThreadNameProvider(std::make_shared<ThreadNameProvider>());
+        logger->addDest(new ConsoleLogDest(ll));
+    }
+
+    rpc::set_last_stream_id(100000);
     m_rpcChannel = std::make_shared<WebRpcChannel>();
-    m_controller = std::make_shared<EngineController>(m_rpcChannel);
-
-    ioc()->registerExport<IRpcChannel>(moduleName(), m_rpcChannel);
-    m_controller->registerExports();
-
     m_rpcChannel->setupOnEngine();
+    ioc()->registerExport<IRpcChannel>(moduleName(), m_rpcChannel);
+
+    m_controller = std::make_shared<EngineController>(m_rpcChannel);
+    m_controller->registerExports();
+    m_controller->preInit();
+
     m_rpcChannel->send(rpc::make_notification(Method::EngineStarted));
 
     LOGI() << "Web audio engine inited";

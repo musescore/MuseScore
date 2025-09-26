@@ -110,7 +110,8 @@ target_link_libraries(MuseAudio PRIVATE
     fluidsynth
 )
 
-#set_target_properties(MuseAudio PROPERTIES OUTPUT_NAME "MuseAudio.js")
+#set_target_properties(MuseAudio PROPERTIES OUTPUT_NAME "MuseAudio.wasm")
+#target_link_options(MuseAudio PRIVATE "SHELL:-o MuseAudio.wasm")
 target_link_options(MuseAudio PRIVATE ${EMCC_LINKER_FLAGS})
 target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORT_NAME=MuseAudio_entry")
 target_link_options(MuseAudio PRIVATE "SHELL:-s MODULARIZE=1")
@@ -126,7 +127,7 @@ else()
     target_link_options(MuseAudio PRIVATE "SHELL:-s ENVIRONMENT=shell")
     target_link_options(MuseAudio PRIVATE "SHELL:-s BINARYEN_ASYNC_COMPILATION=0")
     target_link_options(MuseAudio PRIVATE "SHELL:-s SINGLE_FILE=1")
-    target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORT_ES6=1")
+   # target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORT_ES6=1")
 endif()
 
 add_custom_command(

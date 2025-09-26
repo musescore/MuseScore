@@ -112,6 +112,8 @@ void SoundFontRepository::addSoundFontData(const SoundFontUri& uri, const ByteAr
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
+    LOGI() << "try add sound font uri: " << uri << ", size: " << data.size();
+
     const io::path_t fileName = fileNameFromUri(uri);
 
     {

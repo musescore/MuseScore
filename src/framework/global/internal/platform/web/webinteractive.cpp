@@ -151,7 +151,7 @@ async::Promise<IInteractive::Result> WebInteractive::error(const std::string& co
     return m_origin->error(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-void WebInteractive::showProgress(const std::string& title, Progress* progress)
+void WebInteractive::showProgress(const std::string& title, Progress progress)
 {
     m_origin->showProgress(title, progress);
 }

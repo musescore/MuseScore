@@ -1,5 +1,16 @@
 
 
+async function URLFromFiles(files) {
+    const promises = files.map(file =>
+        fetch(file).then(response => response.text())
+    );
+
+    const texts = await Promise.all(promises);
+    const text = texts.join("");
+    const blob = new Blob([text], { type: "application/javascript" });
+    return URL.createObjectURL(blob);
+}
+
 let AudioDriver = (function () {
 
     let audioContext = null;
@@ -7,6 +18,7 @@ let AudioDriver = (function () {
 
     var api = {
 
+        inited: false, 
         onInited: null,
         
         setup: async function(config, rpcPort, audio_context) {
@@ -19,7 +31,12 @@ let AudioDriver = (function () {
 
             try {
 
-                await audioContext.audioWorklet.addModule('./distr/audio_worklet_processor.js')
+                const code = await URLFromFiles([
+                    '../MuseAudio.js',
+                    './distr/audio_worklet_processor.js'
+                ]);
+
+                await audioContext.audioWorklet.addModule(code)
                 processor = new AudioWorkletNode(audioContext, 'musedriver-processor', {
                                 numberOfInputs: 0,
                                 numberOfOutputs: 1,
@@ -36,6 +53,7 @@ let AudioDriver = (function () {
                 console.log("[processor]", event.data)
 
                 if (event.data.type == "DRIVER_INITED") {
+                    api.inited = true;
                     if (api.onInited) {
                         api.onInited();
                     }
@@ -53,7 +71,7 @@ let AudioDriver = (function () {
         outputSpec: function() {
             return {
                 sampleRate: audioContext.sampleRate,
-                samplesPerChannel: Math.round(audioContext.baseLatency * audioContext.sampleRate),
+                samplesPerChannel: Math.max(Math.round(audioContext.baseLatency * audioContext.sampleRate), 128),
                 audioChannelCount: audioContext.destination.channelCount
             }
         },

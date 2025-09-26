@@ -48,7 +48,7 @@ static uint64_t toWinTime(const msecs_t msecs)
 GeneralAudioWorker::GeneralAudioWorker(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
     : m_rpcChannel(rpcChannel)
 {
-    m_startWorkerController = std::make_shared<EngineController>(rpcChannel);
+    m_engineController = std::make_shared<EngineController>(rpcChannel);
 }
 
 GeneralAudioWorker::~GeneralAudioWorker()
@@ -60,7 +60,7 @@ GeneralAudioWorker::~GeneralAudioWorker()
 
 void GeneralAudioWorker::registerExports()
 {
-    m_startWorkerController->registerExports();
+    m_engineController->registerExports();
     // optimization
     m_engine = audioEngine();
 }
@@ -116,11 +116,14 @@ static msecs_t audioWorkerInterval(const samples_t samples, const sample_rate_t 
 
 void GeneralAudioWorker::th_main(const OutputSpec& outputSpec, const AudioEngineConfig& conf)
 {
-    runtime::setThreadName("audio_worker");
+    runtime::setThreadName("audio_engine");
     AudioSanitizer::setupEngineThread();
     ONLY_AUDIO_ENGINE_THREAD;
 
-    m_startWorkerController->init(outputSpec, conf);
+    m_rpcChannel->setupOnEngine();
+
+    m_engineController->preInit();
+    m_engineController->init(outputSpec, conf);
 
     m_engine->outputSpecChanged().onReceive(this, [this](const OutputSpec& spec) {
         msecs_t interval = audioWorkerInterval(spec.samplesPerChannel, spec.sampleRate);
@@ -152,5 +155,5 @@ void GeneralAudioWorker::th_main(const OutputSpec& outputSpec, const AudioEngine
 #endif
     }
 
-    m_startWorkerController->deinit();
+    m_engineController->deinit();
 }

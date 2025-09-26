@@ -1,4 +1,4 @@
-import MuseAudio_entry from '../MuseAudio.js';
+//import MuseAudio_entry from '../MuseAudio.js';
 
 let MuseAudio = {
     preRun: [],
@@ -23,7 +23,7 @@ let MuseAudio = {
         //MuseAudio.ccall('Init', '', ['number'], [42]);
         MuseAudio._Init(42)
         MuseAudio.inited = true;
-        globalThis.port.postMessage({type: "DRIVER_INITED" });
+        globalThis.mainPort.postMessage({type: "DRIVER_INITED" });
         } catch (error) {
         debugLog("init ERROR: " + error)
         }
@@ -45,9 +45,9 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
 
         this.debugLog("end of constructor MuseDriverProcessor")
 
-        globalThis.port = this.port;
+        globalThis.mainPort = this.port;
         globalThis.debugLog = function(data) {
-            globalThis.port.postMessage(data)
+            globalThis.mainPort.postMessage(data)
         }
     }
 

@@ -21,6 +21,8 @@
  */
 #include "appjsmodule.h"
 
+#include <emscripten/val.h>
+
 #include "webapi.h"
 
 using namespace muse;
@@ -39,4 +41,9 @@ void AppJsModule::onInit(const muse::IApplication::RunMode&)
 void AppJsModule::onDeinit()
 {
     WebApi::instance()->deinit();
+}
+
+void AppJsModule::onStartApp()
+{
+    emscripten::val::module_property("onStartApp")();
 }

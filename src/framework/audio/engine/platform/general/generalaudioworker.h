@@ -60,7 +60,7 @@ private:
 
     // service
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
-    std::shared_ptr<EngineController> m_startWorkerController;
+    std::shared_ptr<EngineController> m_engineController;
     std::shared_ptr<IAudioEngine> m_engine;
 
     // thread
