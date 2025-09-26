@@ -43,6 +43,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/allocator_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mnemonicstring_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/containers_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/vectorview_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/version_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/number_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/progress_tests.cpp
