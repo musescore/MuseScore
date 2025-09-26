@@ -29,6 +29,8 @@
 
 #include "log.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 using namespace muse::uicomponents;
 
 static const int DIALOG_WINDOW_FRAME_HEIGHT(20);
@@ -37,6 +39,7 @@ DialogView::DialogView(QQuickItem* parent)
     : WindowView(parent)
 {
     setObjectName("DialogView");
+    setRetCode(Ret::Code::Ok);
 }
 
 bool DialogView::isDialog() const
@@ -46,12 +49,41 @@ bool DialogView::isDialog() const
 
 void DialogView::beforeOpen()
 {
+    QWindow* qWindow = m_window->qWindow();
+    IF_ASSERT_FAILED(qWindow) {
+        return;
+    }
+
     //! NOTE Set default title
     if (m_title.isEmpty()) {
         setTitle(application()->title());
     }
 
-    windowsController()->regWindow(qWindow()->winId());
+    qWindow->setTitle(m_title);
+
+    if (m_alwaysOnTop) {
+#ifdef Q_OS_MAC
+        auto updateStayOnTopHint = [this]() {
+            bool stay = qApp->applicationState() == Qt::ApplicationActive;
+            m_window->qWindow()->setFlag(Qt::WindowStaysOnTopHint, stay);
+        };
+        updateStayOnTopHint();
+        connect(qApp, &QApplication::applicationStateChanged, this, updateStayOnTopHint);
+#endif
+    } else {
+        qWindow->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
+    }
+
+    qWindow->setFlag(Qt::FramelessWindowHint, m_frameless);
+#ifdef MUSE_MODULE_UI_DISABLE_MODALITY
+    qWindow->setModality(Qt::NonModal);
+#endif
+    m_window->setResizable(m_resizable);
+
+    //! NOTE ok will be if they call accept
+    setRetCode(Ret::Code::Cancel);
+
+    windowsController()->regWindow(qWindow->winId());
 }
 
 void DialogView::onHidden()
@@ -125,14 +157,130 @@ void DialogView::updateGeometry()
 
     setContentWidth(dlgRect.width());
     setContentHeight(dlgRect.height());
-
-    //! NOTE ok will be if they call accept
-    setErrCode(Ret::Code::Cancel);
 }
 
 QRect DialogView::viewGeometry() const
 {
     return QRect(m_globalPos.toPoint(), QSize(contentWidth(), contentHeight()));
+}
+
+QString DialogView::title() const
+{
+    return m_title;
+}
+
+void DialogView::setTitle(QString title)
+{
+    if (m_title == title) {
+        return;
+    }
+
+    m_title = title;
+    if (qWindow()) {
+        qWindow()->setTitle(title);
+    }
+
+    emit titleChanged(m_title);
+}
+
+QString DialogView::objectId() const
+{
+    return m_objectId;
+}
+
+void DialogView::setObjectId(QString objectId)
+{
+    if (m_objectId == objectId) {
+        return;
+    }
+
+    m_objectId = objectId;
+    emit objectIdChanged(m_objectId);
+}
+
+bool DialogView::modal() const
+{
+    return m_modal;
+}
+
+void DialogView::setModal(bool modal)
+{
+    if (m_modal == modal) {
+        return;
+    }
+
+    m_modal = modal;
+    emit modalChanged(m_modal);
+}
+
+bool DialogView::frameless() const
+{
+    return m_frameless;
+}
+
+void DialogView::setFrameless(bool frameless)
+{
+    if (m_frameless == frameless) {
+        return;
+    }
+
+    m_frameless = frameless;
+    emit framelessChanged(m_frameless);
+}
+
+bool DialogView::resizable() const
+{
+    return m_window ? m_window->resizable() : m_resizable;
+}
+
+void DialogView::setResizable(bool resizable)
+{
+    if (this->resizable() == resizable) {
+        return;
+    }
+
+    m_resizable = resizable;
+    if (m_window) {
+        m_window->setResizable(m_resizable);
+    }
+    emit resizableChanged(m_resizable);
+}
+
+bool DialogView::alwaysOnTop() const
+{
+    return m_alwaysOnTop;
+}
+
+void DialogView::setAlwaysOnTop(bool alwaysOnTop)
+{
+    if (m_alwaysOnTop == alwaysOnTop) {
+        return;
+    }
+
+    m_alwaysOnTop = alwaysOnTop;
+    emit alwaysOnTopChanged();
+}
+
+QVariantMap DialogView::ret() const
+{
+    return m_ret;
+}
+
+void DialogView::setRet(QVariantMap ret)
+{
+    if (m_ret == ret) {
+        return;
+    }
+
+    m_ret = ret;
+    emit retChanged(m_ret);
+}
+
+void DialogView::setRetCode(Ret::Code code)
+{
+    QVariantMap ret;
+    ret[u"errcode"_s] = static_cast<int>(code);
+    setRet(ret);
 }
 
 void DialogView::show()
@@ -154,16 +302,16 @@ void DialogView::raise()
 
 void DialogView::accept()
 {
-    setErrCode(Ret::Code::Ok);
+    setRetCode(Ret::Code::Ok);
     close();
 }
 
 void DialogView::reject(int code)
 {
     if (code > 0) {
-        setErrCode(static_cast<Ret::Code>(code));
+        setRetCode(static_cast<Ret::Code>(code));
     } else {
-        setErrCode(Ret::Code::Cancel);
+        setRetCode(Ret::Code::Cancel);
     }
 
     close();

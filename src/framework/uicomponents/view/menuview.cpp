@@ -32,10 +32,9 @@ MenuView::MenuView(QQuickItem* parent)
     : PopupView(parent)
 {
     setObjectName("MenuView");
-    setErrCode(Ret::Code::Ok);
 
-    setPadding(8);
     setShowArrow(false);
+    setPadding(8);
 }
 
 int MenuView::viewVerticalMargin() const

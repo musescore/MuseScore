@@ -24,7 +24,6 @@
 #include <QQuickItem>
 #include <QQmlParserStatus>
 
-#include "types/ret.h"
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
@@ -67,15 +66,6 @@ class WindowView : public QObject, public QQmlParserStatus, public Injectable, p
         bool activateParentOnClose READ activateParentOnClose WRITE setActivateParentOnClose NOTIFY activateParentOnCloseChanged)
 
     Q_PROPERTY(FocusPolicies focusPolicies READ focusPolicies WRITE setFocusPolicies NOTIFY focusPoliciesChanged)
-
-    //! NOTE Used for dialogs, but be here so that dialogs and just popups have one api
-    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
-    Q_PROPERTY(QString objectId READ objectId WRITE setObjectId NOTIFY objectIdChanged)
-    Q_PROPERTY(bool modal READ modal WRITE setModal NOTIFY modalChanged)
-    Q_PROPERTY(bool frameless READ frameless WRITE setFrameless NOTIFY framelessChanged)
-    Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
-    Q_PROPERTY(bool alwaysOnTop READ alwaysOnTop WRITE setAlwaysOnTop NOTIFY alwaysOnTopChanged)
-    Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
 
 public:
     Inject<ui::IMainWindow> mainWindow = { this };
@@ -131,14 +121,6 @@ public:
 
     bool isOpened() const;
 
-    QString objectId() const;
-    QString title() const;
-    bool modal() const;
-    bool frameless() const;
-    bool resizable() const;
-    bool alwaysOnTop() const;
-    QVariantMap ret() const;
-
     bool isContentReady() const;
     void setIsContentReady(bool ready);
 
@@ -151,13 +133,6 @@ public slots:
     void setContentHeight(int contentHeight);
     void setOpenPolicies(muse::uicomponents::WindowView::OpenPolicies openPolicies);
     void setNavigationParentControl(muse::ui::INavigationControl* parentNavigationControl);
-    void setObjectId(QString objectId);
-    void setTitle(QString title);
-    void setModal(bool modal);
-    void setFrameless(bool frameless);
-    void setResizable(bool resizable);
-    void setAlwaysOnTop(bool alwaysOnTop);
-    void setRet(QVariantMap ret);
 
     void setActivateParentOnClose(bool activateParentOnClose);
     void setFocusPolicies(const muse::uicomponents::WindowView::FocusPolicies& policies);
@@ -170,13 +145,6 @@ signals:
     void windowChanged();
     void openPoliciesChanged(muse::uicomponents::WindowView::OpenPolicies openPolicies);
     void navigationParentControlChanged(muse::ui::INavigationControl* navigationParentControl);
-    void objectIdChanged(QString objectId);
-    void titleChanged(QString title);
-    void modalChanged(bool modal);
-    void framelessChanged(bool frameless);
-    void resizableChanged(bool resizable);
-    void alwaysOnTopChanged();
-    void retChanged(QVariantMap ret);
 
     void isOpenedChanged();
     void opened();
@@ -209,7 +177,7 @@ protected:
 
     virtual void repositionWindowIfNeed() {}
 
-    void setErrCode(Ret::Code code);
+    bool frameless() const { return false; }
 
     QWindow* parentWindow() const;
     void setParentWindow(QWindow* window);
@@ -246,13 +214,6 @@ protected:
 
     bool m_activateParentOnClose = true;
     ui::INavigationControl* m_navigationParentControl = nullptr;
-    QString m_objectId;
-    QString m_title;
-    bool m_modal = true;
-    bool m_frameless = false;
-    bool m_resizable = false;
-    bool m_alwaysOnTop = false;
-    QVariantMap m_ret;
 
     PopupViewCloseController* m_closeController = nullptr;
     bool m_forceClosed = false;

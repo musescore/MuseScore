@@ -42,7 +42,6 @@ using namespace muse::uicomponents;
 WindowView::WindowView(QQuickItem* parent)
     : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
-    setErrCode(Ret::Code::Ok);
 }
 
 WindowView::~WindowView()
@@ -205,39 +204,10 @@ void WindowView::doOpen()
         return;
     }
 
-    beforeOpen();
-
     resolveParentWindow();
-
     updateGeometry();
 
-    if (isDialog()) {
-        QWindow* qWindow = m_window->qWindow();
-        IF_ASSERT_FAILED(qWindow) {
-            return;
-        }
-
-        qWindow->setTitle(m_title);
-
-        if (m_alwaysOnTop) {
-#ifdef Q_OS_MAC
-            auto updateStayOnTopHint = [this]() {
-                bool stay = qApp->applicationState() == Qt::ApplicationActive;
-                m_window->qWindow()->setFlag(Qt::WindowStaysOnTopHint, stay);
-            };
-            updateStayOnTopHint();
-            connect(qApp, &QApplication::applicationStateChanged, this, updateStayOnTopHint);
-#endif
-        } else {
-            qWindow->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
-        }
-
-        qWindow->setFlag(Qt::FramelessWindowHint, m_frameless);
-#ifdef MUSE_MODULE_UI_DISABLE_MODALITY
-        qWindow->setModality(Qt::NonModal);
-#endif
-        m_window->setResizable(m_resizable);
-    }
+    beforeOpen();
 
     resolveNavigationParentControl();
 
@@ -398,113 +368,6 @@ void WindowView::setOpenPolicies(WindowView::OpenPolicies openPolicies)
     emit openPoliciesChanged(m_openPolicies);
 }
 
-void WindowView::setObjectId(QString objectId)
-{
-    if (m_objectId == objectId) {
-        return;
-    }
-
-    m_objectId = objectId;
-    emit objectIdChanged(m_objectId);
-}
-
-QString WindowView::objectId() const
-{
-    return m_objectId;
-}
-
-QString WindowView::title() const
-{
-    return m_title;
-}
-
-void WindowView::setTitle(QString title)
-{
-    if (m_title == title) {
-        return;
-    }
-
-    m_title = title;
-    if (qWindow()) {
-        qWindow()->setTitle(title);
-    }
-
-    emit titleChanged(m_title);
-}
-
-bool WindowView::modal() const
-{
-    return m_modal;
-}
-
-void WindowView::setModal(bool modal)
-{
-    if (m_modal == modal) {
-        return;
-    }
-
-    m_modal = modal;
-    emit modalChanged(m_modal);
-}
-
-bool WindowView::frameless() const
-{
-    return m_frameless;
-}
-
-void WindowView::setFrameless(bool frameless)
-{
-    if (m_frameless == frameless) {
-        return;
-    }
-
-    m_frameless = frameless;
-    emit framelessChanged(m_frameless);
-}
-
-bool WindowView::resizable() const
-{
-    return m_window ? m_window->resizable() : m_resizable;
-}
-
-void WindowView::setResizable(bool resizable)
-{
-    if (this->resizable() == resizable) {
-        return;
-    }
-
-    m_resizable = resizable;
-    if (m_window) {
-        m_window->setResizable(m_resizable);
-    }
-    emit resizableChanged(m_resizable);
-}
-
-bool WindowView::alwaysOnTop() const
-{
-    return m_alwaysOnTop;
-}
-
-void WindowView::setAlwaysOnTop(bool alwaysOnTop)
-{
-    if (m_alwaysOnTop == alwaysOnTop) {
-        return;
-    }
-
-    m_alwaysOnTop = alwaysOnTop;
-    emit alwaysOnTopChanged();
-}
-
-void WindowView::setRet(QVariantMap ret)
-{
-    if (m_ret == ret) {
-        return;
-    }
-
-    m_ret = ret;
-    emit retChanged(m_ret);
-}
-
 void WindowView::setActivateParentOnClose(bool activateParentOnClose)
 {
     if (m_activateParentOnClose == activateParentOnClose) {
@@ -523,18 +386,6 @@ void WindowView::setFocusPolicies(const FocusPolicies& policies)
 
     m_focusPolicies = policies;
     emit focusPoliciesChanged();
-}
-
-QVariantMap WindowView::ret() const
-{
-    return m_ret;
-}
-
-void WindowView::setErrCode(Ret::Code code)
-{
-    QVariantMap ret;
-    ret["errcode"] = static_cast<int>(code);
-    setRet(ret);
 }
 
 QWindow* WindowView::parentWindow() const
