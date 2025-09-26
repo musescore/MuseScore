@@ -24,6 +24,8 @@
 
 #include <QProcess>
 #include <QTextStream>
+#include <QFile>
+#include <QDebug>
 
 #include "scorerw.h"
 
@@ -74,7 +76,6 @@ bool ScoreComp::compareFiles(const String& fullPath1, const String& fullPath2)
 
         return false;
     }
-
     // QProcess::exitCode() is only valid when QProcess::exitStatus() == NormalExit
     if (p.exitStatus() != QProcess::NormalExit) {
         QTextStream err(stderr);
@@ -93,6 +94,21 @@ bool ScoreComp::compareFiles(const String& fullPath1, const String& fullPath2)
         err << String("%1 %2 failed with code: %3 \n")
             .arg(p.program(), p.arguments().join(' '))
             .arg(code);
+
+        QFile file(QStringLiteral(BINARY_DIR) + "/Testing/Temporary/failed_test_reference_files.txt");
+        if (!file.open(QIODevice::Append)) {
+            return false;
+        }
+        QString pathToPrint = fullPath1.contains(QStringLiteral("_ref")) ? fullPath1 : fullPath2;
+        // Extract only the portion after "/src"
+        int srcIndex = pathToPrint.indexOf("/src");
+        if (srcIndex != -1) {
+            pathToPrint = pathToPrint.mid(srcIndex);
+        }
+
+        out << pathToPrint << "\n";
+
+        err << BINARY_DIR;
         return false;
     }
 
