@@ -717,7 +717,7 @@ secs_t PlaybackController::playbackStartSecs() const
     const LoopBoundaries& loop = notationPlayback()->loopBoundaries();
     if (loop.enabled) {
         // Convert from raw ticks (visual tick != playback tick due to repeats etc)
-        RetVal<tick_t> startTick = notationPlayback()->playPositionTickByRawTick(loop.loopInTick);
+        RetVal<tick_t> startTick = notationPlayback()->playPositionTickByRawTick(loop.loopInTick.ticks());
         if (!startTick.ret) {
             return 0;
         }
@@ -903,8 +903,8 @@ void PlaybackController::updateLoop()
     }
 
     // Convert from raw ticks (visual tick != playback tick due to repeats etc)
-    RetVal<tick_t> playbackTickFrom = notationPlayback()->playPositionTickByRawTick(boundaries.loopInTick);
-    RetVal<tick_t> playbackTickTo = notationPlayback()->playPositionTickByRawTick(boundaries.loopOutTick);
+    RetVal<tick_t> playbackTickFrom = notationPlayback()->playPositionTickByRawTick(boundaries.loopInTick.ticks());
+    RetVal<tick_t> playbackTickTo = notationPlayback()->playPositionTickByRawTick(boundaries.loopOutTick.ticks());
     if (!playbackTickFrom.ret || !playbackTickTo.ret) {
         return;
     }

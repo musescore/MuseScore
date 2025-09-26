@@ -463,13 +463,13 @@ struct TupletOptions
 
 struct LoopBoundaries
 {
-    int loopInTick = 0;
-    int loopOutTick = 0;
+    Fraction loopInTick;
+    Fraction loopOutTick;
     bool enabled = false;
 
     bool isNull() const
     {
-        return loopInTick == 0 && loopOutTick == 0;
+        return loopInTick.isZero() && loopOutTick.isZero();
     }
 
     bool operator==(const LoopBoundaries& boundaries) const
