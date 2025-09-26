@@ -710,7 +710,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
         }
     }
     // ensure sane values:
-    note->setPitch(std::clamp(note->pitch(), 0, 127));
+    note->setPitch(clampPitch(note->pitch()));
 
     if (note->concertPitch()) {
         note->setTpc2(Tpc::TPC_INVALID);
@@ -736,13 +736,13 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             if (v.isZero()) {
                 note->setTpc2(note->tpc1());
             } else {
-                note->setTpc2(mu::engraving::transposeTpc(note->tpc1(), v, true));
+                note->setTpc2(transposeTpc(note->tpc1(), v, true));
             }
         } else {
             if (v.isZero()) {
                 note->setTpc1(note->tpc2());
             } else {
-                note->setTpc1(mu::engraving::transposeTpc(note->tpc2(), v, true));
+                note->setTpc1(transposeTpc(note->tpc2(), v, true));
             }
         }
     }

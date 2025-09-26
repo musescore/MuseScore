@@ -191,10 +191,10 @@ void InstrumentGroup::clear()
 InstrumentTemplate::InstrumentTemplate()
 {
     staffCount        = 1;
-    minPitchA          = 0;
-    maxPitchA          = 127;
-    minPitchP          = 0;
-    maxPitchP          = 127;
+    minPitchA          = static_cast<char>(MIN_PITCH);
+    maxPitchA          = static_cast<char>(MAX_PITCH);
+    minPitchP          = static_cast<char>(MIN_PITCH);
+    maxPitchP          = static_cast<char>(MAX_PITCH);
     staffGroup         = StaffGroup::STANDARD;
     staffTypePreset    = 0;
     useDrumset         = false;
@@ -363,10 +363,10 @@ void InstrumentTemplate::write(XmlWriter& xml) const
             }
         }
     }
-    if (minPitchA != 0 || maxPitchA != 127) {
+    if (int(minPitchA) != MIN_PITCH || int(maxPitchA) != MAX_PITCH) {
         xml.tag("aPitchRange", String(u"%1-%2").arg(int(minPitchA)).arg(int(maxPitchA)));
     }
-    if (minPitchP != 0 || maxPitchP != 127) {
+    if (minPitchP != static_cast<char>(MIN_PITCH) || maxPitchP != static_cast<char>(MAX_PITCH)) {
         xml.tag("pPitchRange", String(u"%1-%2").arg(int(minPitchP)).arg(int(maxPitchP)));
     }
     if (transpose.diatonic) {
@@ -631,8 +631,8 @@ void InstrumentTemplate::setPitchRange(const String& s, char* a, char* b) const
 {
     StringList sl = s.split(u'-');
     if (sl.size() != 2) {
-        *a = 0;
-        *b = 127;
+        *a = static_cast<char>(MIN_PITCH);
+        *b = static_cast<char>(MAX_PITCH);
         return;
     }
     *a = sl.at(0).toInt();

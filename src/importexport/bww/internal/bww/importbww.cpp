@@ -99,15 +99,7 @@ static void xmlSetPitch(mu::engraving::Note* n, char step, int alter, int octave
         LOGD("xmlSetPitch: illegal pitch %d, <%c>", istep, step);
         return;
     }
-    int pitch = table[istep] + alter + (octave + 1) * 12;
-
-    if (pitch < 0) {
-        pitch = 0;
-    }
-    if (pitch > 127) {
-        pitch = 127;
-    }
-
+    int pitch = clampPitch(table[istep] + alter + (octave + 1) * PITCH_DELTA_OCTAVE);
     n->setPitch(pitch);
 
     //                        a  b  c  d  e  f  g

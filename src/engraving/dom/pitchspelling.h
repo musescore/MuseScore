@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_PITCHSPELLING_H
-#define MU_ENGRAVING_PITCHSPELLING_H
+#pragma once
 
 #include <vector>
 
@@ -33,7 +32,9 @@ class MidiNote;
 class Note;
 enum class Key : signed char;
 
-const int INVALID_PITCH      = -1;
+static constexpr int INVALID_PITCH  = -1;
+static constexpr int MIN_PITCH      = 0;
+static constexpr int MAX_PITCH      = 127;
 
 // a list of tpc's, with legal ranges, not really an enum, so no way to convert into a class
 enum Tpc : signed char {
@@ -99,6 +100,7 @@ extern int function2Tpc(const String& s, Key key);
 extern int function2Tpc(const String& s, Key key, size_t& idx);
 extern int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseType& noteCase, size_t& idx);
 extern int clampEnharmonic(int tpc, bool useDoubleSharpsFlats = true);
+extern int clampPitch(int pitch, bool octaved = false);
 
 //---------------------------------------------------------
 //   tpc2alter
@@ -116,6 +118,5 @@ inline static int playingOctave(int pitch, int tpc)
 
 extern Char tpc2stepName(int tpc);
 extern bool tpcIsValid(int val);
-inline bool pitchIsValid(int pitch) { return pitch >= 0 && pitch <= 127; }
+inline bool pitchIsValid(int pitch) { return pitch >= MIN_PITCH && pitch <= MAX_PITCH; }
 } // namespace mu::engraving
-#endif

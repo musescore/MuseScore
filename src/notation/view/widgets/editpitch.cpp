@@ -103,5 +103,5 @@ void EditPitch::on_tableWidget_cellDoubleClicked(int row, int col)
 {
     // topmost row contains notes for 10-th MIDI octave (numbered as '9')
     int pitch = (tableWidget->rowCount() - 1 - row) * 12 + col;
-    done(std::min(pitch, 127));
+    done(std::min(pitch, MAX_PITCH));
 }

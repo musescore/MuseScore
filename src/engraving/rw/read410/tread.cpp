@@ -3302,7 +3302,7 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
     const AsciiStringView tag(e.name());
 
     if (tag == "pitch") {
-        n->setPitch(std::clamp(e.readInt(), 0, 127), false);
+        n->setPitch(clampPitch(e.readInt()), false);
     } else if (tag == "tpc") {
         int tcp = e.readInt();
         n->setTpc1(tcp);

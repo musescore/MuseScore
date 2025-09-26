@@ -793,10 +793,9 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 }
                 pitch += n.alteration;
                 pitch += score->staff(staffIdx)->part()->instrument()->transpose().chromatic;               // assume not in concert pitch
-                pitch = std::clamp(pitch, 0, 127);
 
                 chord->add(note);
-                note->setPitch(pitch);
+                note->setPitch(clampPitch(pitch));
                 note->setHeadGroup(NoteHeadGroup(n.headGroup));
                 // TODO: compute tpc from pitch & line
                 note->setTpcFromPitch();

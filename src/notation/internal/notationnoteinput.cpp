@@ -620,7 +620,7 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
             break;
         }
 
-        newVal.pitch = std::clamp(newVal.pitch, 0, 127);
+        newVal.pitch = mu::engraving::clampPitch(newVal.pitch);
         notes.push_back(newVal);
     }
 

@@ -424,23 +424,12 @@ int y2pitch(double y, ClefType clef, double _spatium)
 
 int line2pitch(int line, ClefType clef, Key key)
 {
-    int l      = ClefInfo::pitchOffset(clef) - line;
-    int octave = 0;
-    if (l < 0) {
-        l = 0;
-    }
+    int l = std::max(ClefInfo::pitchOffset(clef) - line, 0);
+    int octave = l / STEP_DELTA_OCTAVE;
+    l %= STEP_DELTA_OCTAVE;
 
-    octave += l / 7;
-    l       = l % 7;
-
-    int pitch = pitchKeyAdjust(l, key) + octave * 12;
-
-    if (pitch > 127) {
-        pitch = 127;
-    } else if (pitch < 0) {
-        pitch = 0;
-    }
-    return pitch;
+    int pitch = pitchKeyAdjust(l, key) + octave * PITCH_DELTA_OCTAVE;
+    return clampPitch(pitch);
 }
 
 //---------------------------------------------------------
@@ -498,7 +487,7 @@ static const char16_t* valFlat[] = {
  */
 String pitch2string(int v, bool useFlats)
 {
-    if (v < 0 || v > 127) {
+    if (!pitchIsValid(v)) {
         return String(u"----");
     }
     int octave = (v / PITCH_DELTA_OCTAVE) - 1;
@@ -526,7 +515,7 @@ String pitch2string(int v, bool useFlats)
 int string2pitch(const String& s)
 {
     if (s == String(u"----")) {
-        return -1;
+        return INVALID_PITCH;
     }
 
     String value = s;
@@ -707,8 +696,8 @@ int diatonicUpDown(Key k, int pitch, int steps)
     };
 
     int key    = int(k) + 7;
-    int step   = pitch % 12;
-    int octave = pitch / 12;
+    int step   = pitch % PITCH_DELTA_OCTAVE;
+    int octave = pitch / PITCH_DELTA_OCTAVE;
 
     // loop through the diatonic steps of the key looking for the given note
     // or the gap where it would fit
@@ -757,13 +746,8 @@ int diatonicUpDown(Key k, int pitch, int steps)
 
     // convert step to pitch
     step = ptab[key][i];
-    pitch = octave * 12 + step;
-    if (pitch < 0) {
-        pitch = 0;
-    }
-    if (pitch > 127) {
-        pitch = 128;
-    }
+    pitch = std::clamp(octave * PITCH_DELTA_OCTAVE + step, MIN_PITCH, MAX_PITCH + 1);
+
     return pitch;
 }
 
@@ -883,13 +867,13 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
 
 int absStep(int tpc, int pitch)
 {
-    int line     = tpc2step(tpc) + (pitch / 12) * 7;
+    int line = tpc2step(tpc) + (pitch / PITCH_DELTA_OCTAVE) * STEP_DELTA_OCTAVE;
     int tpcPitch = tpc2pitch(tpc);
 
-    if (tpcPitch < 0) {
-        line += 7;
+    if (tpcPitch < MIN_PITCH) {
+        line += STEP_DELTA_OCTAVE;
     } else {
-        line -= (tpcPitch / 12) * 7;
+        line -= (tpcPitch / PITCH_DELTA_OCTAVE) * STEP_DELTA_OCTAVE;
     }
     return line;
 }
@@ -956,10 +940,10 @@ int convertLine(int lineL2, ClefType clefL, ClefType clefR)
     int lineR2 = lineL2;
     int goalpitch = line2pitch(lineL2, clefL, Key::C);
     int p;
-    while ((p = line2pitch(lineR2, clefR, Key::C)) > goalpitch && p < 127) {
+    while ((p = line2pitch(lineR2, clefR, Key::C)) > goalpitch && p < MAX_PITCH) {
         lineR2++;
     }
-    while ((p = line2pitch(lineR2, clefR, Key::C)) < goalpitch && p > 0) {
+    while ((p = line2pitch(lineR2, clefR, Key::C)) < goalpitch && p > MIN_PITCH) {
         lineR2--;
     }
     return lineR2;
