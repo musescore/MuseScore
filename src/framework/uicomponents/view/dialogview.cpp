@@ -22,10 +22,10 @@
 
 #include "dialogview.h"
 
-#include <QStyle>
-#include <QWindow>
-#include <QScreen>
 #include <QApplication>
+#include <QQuickView>
+#include <QScreen>
+#include <QStyle>
 
 #include "log.h"
 
@@ -42,15 +42,36 @@ DialogView::DialogView(QQuickItem* parent)
     setRetCode(Ret::Code::Ok);
 }
 
-void DialogView::initWindow()
+void DialogView::initView()
 {
-    m_window->init(engine(), true, frameless());
+    QQuickWindow::setDefaultAlphaBuffer(m_frameless);
+
+    WindowView::initView();
+
+    m_view->setFlags(Qt::Dialog);
+    m_view->setIcon(QIcon(uiConfiguration()->appIconPath().toString()));
+
+    if (m_frameless) {
+        m_view->setColor(QColor(Qt::transparent));
+    } else {
+        auto updateBackgroundColor = [this]() {
+            if (!m_view) {
+                return;
+            }
+
+            QString bgColorStr = uiConfiguration()->currentTheme().values.value(ui::BACKGROUND_PRIMARY_COLOR).toString();
+            m_view->setColor(QColor(bgColorStr));
+        };
+
+        uiConfiguration()->currentThemeChanged().onNotify(this, updateBackgroundColor);
+
+        updateBackgroundColor();
+    }
 }
 
 void DialogView::beforeOpen()
 {
-    QWindow* qWindow = m_window->qWindow();
-    IF_ASSERT_FAILED(qWindow) {
+    IF_ASSERT_FAILED(m_view) {
         return;
     }
 
@@ -59,31 +80,30 @@ void DialogView::beforeOpen()
         setTitle(application()->title());
     }
 
-    qWindow->setTitle(m_title);
+    m_view->setTitle(m_title);
+    m_view->setFlag(Qt::FramelessWindowHint, m_frameless);
 
-    if (m_alwaysOnTop) {
 #ifdef Q_OS_MAC
+    if (m_alwaysOnTop) {
         auto updateStayOnTopHint = [this]() {
             bool stay = qApp->applicationState() == Qt::ApplicationActive;
-            m_window->qWindow()->setFlag(Qt::WindowStaysOnTopHint, stay);
+            m_view->setFlag(Qt::WindowStaysOnTopHint, stay);
         };
         updateStayOnTopHint();
         connect(qApp, &QApplication::applicationStateChanged, this, updateStayOnTopHint);
-#endif
-    } else {
-        qWindow->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
     }
-
-    qWindow->setFlag(Qt::FramelessWindowHint, m_frameless);
-#ifdef MUSE_MODULE_UI_DISABLE_MODALITY
-    qWindow->setModality(Qt::NonModal);
 #endif
-    m_window->setResizable(m_resizable);
+
+#ifdef MUSE_MODULE_UI_DISABLE_MODALITY
+    m_view->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
+#else
+    m_view->setModality(Qt::NonModal);
+#endif
 
     //! NOTE ok will be if they call accept
     setRetCode(Ret::Code::Cancel);
 
-    windowsController()->regWindow(qWindow->winId());
+    windowsController()->regWindow(m_view->winId());
 }
 
 void DialogView::onHidden()
@@ -91,21 +111,9 @@ void DialogView::onHidden()
     WindowView::onHidden();
 }
 
-QScreen* DialogView::resolveScreen() const
-{
-    QWindow* qMainWindow = mainWindow()->qWindow();
-    QScreen* mainWindowScreen = qMainWindow->screen();
-    if (!mainWindowScreen) {
-        mainWindowScreen = QGuiApplication::primaryScreen();
-    }
-
-    return mainWindowScreen;
-}
-
 void DialogView::updateGeometry()
 {
-    const QScreen* screen = resolveScreen();
-    QRect anchorRect = screen->availableGeometry();
+    QRect anchorRect = currentScreenGeometry();
 
     const QWindow* qMainWindow = mainWindow()->qWindow();
     bool mainWindowVisible = qMainWindow->isVisible();
@@ -174,11 +182,11 @@ void DialogView::setTitle(QString title)
     }
 
     m_title = title;
-    if (qWindow()) {
-        qWindow()->setTitle(title);
-    }
-
     emit titleChanged(m_title);
+
+    if (isOpened()) {
+        m_view->setTitle(title);
+    }
 }
 
 QString DialogView::objectId() const
@@ -228,20 +236,21 @@ void DialogView::setFrameless(bool frameless)
 
 bool DialogView::resizable() const
 {
-    return m_window ? m_window->resizable() : m_resizable;
+    return m_resizable;
 }
 
 void DialogView::setResizable(bool resizable)
 {
-    if (this->resizable() == resizable) {
+    if (m_resizable == resizable) {
         return;
     }
 
     m_resizable = resizable;
-    if (m_window) {
-        m_window->setResizable(m_resizable);
-    }
     emit resizableChanged(m_resizable);
+
+    if (isOpened()) {
+        updateSize(m_view->size());
+    }
 }
 
 bool DialogView::alwaysOnTop() const
@@ -294,7 +303,7 @@ void DialogView::hide()
 void DialogView::raise()
 {
     if (isOpened()) {
-        m_window->raise();
+        m_view->raise();
     }
 }
 

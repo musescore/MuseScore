@@ -21,21 +21,24 @@
  */
 #pragma once
 
-#include <QQuickItem>
 #include <QQmlParserStatus>
+#include <QQuickItem>
+#include <QQuickView>
 
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
+#include "ui/iinteractiveprovider.h"
 #include "ui/imainwindow.h"
-#include "ui/iuiconfiguration.h"
 #include "ui/inavigationcontroller.h"
-
-#include "popupwindow/ipopupwindow.h"
+#include "ui/iuiconfiguration.h"
 
 Q_MOC_INCLUDE(< QWindow >)
 
+class QQmlComponent;
+class QQmlEngine;
 class QQuickCloseEvent;
+class QQuickView;
 
 namespace muse::ui {
 class INavigationControl;
@@ -66,15 +69,14 @@ class WindowView : public QObject, public QQmlParserStatus, public Injectable, p
 
     Q_PROPERTY(FocusPolicies focusPolicies READ focusPolicies WRITE setFocusPolicies NOTIFY focusPoliciesChanged)
 
-public:
+protected:
     Inject<ui::IMainWindow> mainWindow = { this };
     Inject<ui::IUiConfiguration> uiConfiguration = { this };
     Inject<ui::INavigationController> navigationController = { this };
+    Inject<ui::IInteractiveProvider> interactiveProvider = { this };
 
 public:
-
     explicit WindowView(QQuickItem* parent = nullptr);
-    ~WindowView() override;
 
     enum class OpenPolicy {
         Default = 0x00000000,
@@ -103,6 +105,7 @@ public:
 
     QRect geometry() const;
 
+    bool hasActiveFocus();
     Q_INVOKABLE void forceActiveFocus();
 
     void init();
@@ -161,12 +164,13 @@ protected:
     void classBegin() override;
     void componentComplete() override;
 
-    virtual void initWindow() = 0;
+    virtual void initView();
+    void setContent(QQmlComponent* component, QQuickItem* item);
 
     virtual void beforeOpen();
     void doOpen();
+    void showView();
 
-    QWindow* qWindow() const;
     virtual void onHidden();
 
     virtual void repositionWindowIfNeed() {}
@@ -175,26 +179,28 @@ protected:
     void setParentWindow(QWindow* window);
     void resolveParentWindow();
 
-    virtual QScreen* resolveScreen() const;
+    QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
     virtual void updateGeometry() = 0;
-
     virtual QRect viewGeometry() const;
+    void updateSize(const QSize& newSize);
 
     void resolveNavigationParentControl();
     void activateNavigationParentControl();
 
     QQmlEngine* engine() const;
 
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
+    QQmlEngine* m_engine = nullptr;
     QWindow* m_parentWindow = nullptr;
-    IPopupWindow* m_window = nullptr;
+    QQuickView* m_view = nullptr;
 
     QQmlComponent* m_component = nullptr;
-    QQmlEngine* m_engine = nullptr;
-
     QQuickItem* m_contentItem = nullptr;
     int m_contentWidth = 0;
     int m_contentHeight = 0;
+    bool m_resizable = false;
 
     QPointF m_globalPos;
 

@@ -46,9 +46,25 @@ PopupView::~PopupView()
     }
 }
 
-void PopupView::initWindow()
+void PopupView::initView()
 {
-    m_window->init(engine(), false, true);
+    QQuickWindow::setDefaultAlphaBuffer(true);
+
+    WindowView::initView();
+
+    Qt::WindowFlags flags;
+    if (qGuiApp->platformName().contains("wayland")) {
+        flags = Qt::Popup;
+    } else {
+        flags = Qt::Tool;
+    }
+
+    flags |= Qt::FramelessWindowHint        // Without border
+             | Qt::NoDropShadowWindowHint   // Without system shadow
+             | Qt::BypassWindowManagerHint; // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
+
+    m_view->setFlags(flags);
+    m_view->setColor(Qt::transparent);
 }
 
 void PopupView::initCloseController()
@@ -110,7 +126,7 @@ void PopupView::onHidden()
 bool PopupView::eventFilter(QObject* watched, QEvent* event)
 {
     if (QEvent::UpdateRequest == event->type()
-        || (event->type() == QEvent::Move && watched == mainWindow()->qWindow())) {
+        || (event->type() == QEvent::Move && watched == m_parentWindow)) {
         repositionWindowIfNeed();
     }
 
@@ -295,7 +311,7 @@ void PopupView::repositionWindowIfNeed()
 
     m_globalPos = QPointF();
     updateGeometry();
-    m_window->setPosition(m_globalPos.toPoint());
+    m_view->setPosition(m_globalPos.toPoint());
     m_globalPos = QPoint();
 }
 

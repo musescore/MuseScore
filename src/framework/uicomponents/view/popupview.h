@@ -132,7 +132,8 @@ signals:
     void paddingChanged(int padding);
 
 protected:
-    void initWindow() override;
+    void initView() override;
+
     void beforeOpen() override;
     void onHidden() override;
 

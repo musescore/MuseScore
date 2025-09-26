@@ -88,21 +88,18 @@ signals:
     void retChanged(QVariantMap ret);
 
 private:
-    void initWindow() override;
+    void initView() override;
+
     void beforeOpen() override;
     void onHidden() override;
 
-    QScreen* resolveScreen() const override;
-
     void updateGeometry() override;
-
     QRect viewGeometry() const override;
 
     QString m_objectId;
     QString m_title;
     bool m_modal = true;
     bool m_frameless = false;
-    bool m_resizable = false;
     bool m_alwaysOnTop = false;
     QVariantMap m_ret;
 };

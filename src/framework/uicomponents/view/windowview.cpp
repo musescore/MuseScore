@@ -22,18 +22,13 @@
 
 #include "windowview.h"
 
-#include <functional>
-#include <QQuickView>
 #include <QQmlEngine>
-#include <QUrl>
-#include <QQmlContext>
-#include <QApplication>
-#include <QTimer>
+#include <QQuickView>
 #include <QScreen>
+#include <QTimer>
+#include <QUrl>
 
 #include "ui/inavigation.h"
-
-#include "popupwindow/popupwindow_qquickview.h"
 
 #include "log.h"
 
@@ -42,13 +37,6 @@ using namespace muse::uicomponents;
 WindowView::WindowView(QQuickItem* parent)
     : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
-}
-
-WindowView::~WindowView()
-{
-    if (m_window) {
-        m_window->setOnHidden(std::function<void()>());
-    }
 }
 
 QQuickItem* WindowView::parentItem() const
@@ -88,12 +76,28 @@ void WindowView::setComponent(QQmlComponent* component)
     m_component = component;
 }
 
+bool WindowView::hasActiveFocus()
+{
+    return m_view && m_view->activeFocusItem() != nullptr;
+}
+
 void WindowView::forceActiveFocus()
 {
-    IF_ASSERT_FAILED(m_window) {
+    if (!m_view) {
         return;
     }
-    m_window->forceActiveFocus();
+
+    m_view->setFlag(Qt::WindowDoesNotAcceptFocus, false);
+    m_view->requestActivate();
+
+    QQuickItem* rootObject = m_view->rootObject();
+    if (!rootObject) {
+        return;
+    }
+
+    if (!rootObject->hasActiveFocus()) {
+        rootObject->forceActiveFocus();
+    }
 }
 
 void WindowView::classBegin()
@@ -102,24 +106,12 @@ void WindowView::classBegin()
 
 void WindowView::init()
 {
-    QQmlEngine* engine = this->engine();
-    IF_ASSERT_FAILED(engine) {
+    IF_ASSERT_FAILED(engine()) {
         return;
     }
 
-    m_window = new PopupWindow_QQuickView(muse::iocCtxForQmlEngine(engine), this);
-    initWindow();
-    m_window->setOnHidden([this]() { onHidden(); });
-    m_window->setParentWindow(m_parentWindow);
-    m_window->setContent(m_component, m_contentItem);
-    m_window->setTakeFocusOnClick(m_focusPolicies & FocusPolicy::ClickFocus);
-
-    // TODO: Can't use new `connect` syntax because the IPopupWindow::aboutToClose
-    // has a parameter of type QQuickCloseEvent, which is not public, so we
-    // can't include any header for it and it will always be an incomplete
-    // type, which is not allowed for the new `connect` syntax.
-    //connect(m_window, &IPopupWindow::aboutToClose, this, &PopupView::aboutToClose);
-    connect(m_window, SIGNAL(aboutToClose(QQuickCloseEvent*)), this, SIGNAL(aboutToClose(QQuickCloseEvent*)));
+    initView();
+    setContent(m_component, m_contentItem);
 
     connect(this, &WindowView::isContentReadyChanged, this, [this]() {
         if (isContentReady() && m_shouldOpenOnReady) {
@@ -137,22 +129,69 @@ void WindowView::init()
             return;
         }
 
-        if (navigationPanel->window() == m_window->qWindow() && !m_window->hasActiveFocus()) {
-            m_window->forceActiveFocus();
+        if (navigationPanel->window() == m_view && !hasActiveFocus()) {
+            forceActiveFocus();
         }
     });
 
     emit windowChanged();
 }
 
+void WindowView::initView()
+{
+    //! NOTE: do not set the window when constructing the view
+    //! This causes different bugs on different OS (e.g., no transparency for popups on windows)
+    m_view = new QQuickView(engine(), nullptr);
+
+    //! NOTE: We must set the parent
+    //! Otherwise, the garbage collector may take ownership of the view and destroy it when we don't expect it
+    m_view->QObject::setParent(this);
+
+    m_view->setObjectName(objectName() + "_WindowView_QQuickView");
+    m_view->setResizeMode(QQuickView::SizeRootObjectToView);
+
+    //! NOTE It is important that there is a connection to this signal with an error,
+    //! otherwise the default action will be performed - displaying a message and terminating.
+    //! We will not be able to switch to another backend.
+    QObject::connect(m_view, &QQuickWindow::sceneGraphError, this, [this](QQuickWindow::SceneGraphError, const QString& msg) {
+        LOGE() << "[" << objectName() << "] scene graph error: " << msg;
+    });
+
+    QObject::connect(m_view, &QQuickView::closing, this, &WindowView::aboutToClose);
+
+    m_view->installEventFilter(this);
+}
+
+void WindowView::setContent(QQmlComponent* component, QQuickItem* item)
+{
+    if (!m_view || !item) {
+        return;
+    }
+
+    m_view->setContent(QUrl(), component, item);
+
+    connect(item, &QQuickItem::implicitWidthChanged, this, [this, item]() {
+        if (!m_view->isVisible()) {
+            return;
+        }
+        if (item->implicitWidth() != m_view->width()) {
+            updateSize(QSize(item->implicitWidth(), item->implicitHeight()));
+        }
+    });
+
+    connect(item, &QQuickItem::implicitHeightChanged, this, [this, item]() {
+        if (!m_view->isVisible()) {
+            return;
+        }
+        if (item->implicitHeight() != m_view->height()) {
+            updateSize(QSize(item->implicitWidth(), item->implicitHeight()));
+        }
+    });
+}
+
 void WindowView::componentComplete()
 {
     init();
-}
-
-QWindow* WindowView::qWindow() const
-{
-    return m_window ? m_window->qWindow() : nullptr;
 }
 
 void WindowView::open()
@@ -176,7 +215,7 @@ void WindowView::doOpen()
         return;
     }
 
-    IF_ASSERT_FAILED(m_window) {
+    IF_ASSERT_FAILED(m_view) {
         return;
     }
 
@@ -187,13 +226,51 @@ void WindowView::doOpen()
 
     resolveNavigationParentControl();
 
-    QScreen* screen = resolveScreen();
-    m_window->show(screen, viewGeometry(), !(m_openPolicies & OpenPolicy::NoActivateFocus));
+    showView();
 
     m_globalPos = QPointF(); // invalidate
 
     emit isOpenedChanged();
     emit opened();
+}
+
+void WindowView::showView()
+{
+    if (!m_view) {
+        return;
+    }
+
+    const QRect geometry = viewGeometry();
+    m_view->setGeometry(geometry);
+
+    QScreen* screen = resolveScreen();
+    m_view->setScreen(screen);
+
+    if (m_openPolicies & OpenPolicy::NoActivateFocus) {
+        m_view->setFlag(Qt::WindowDoesNotAcceptFocus);
+    }
+
+    assert(m_parentWindow);
+    m_view->setTransientParent(m_parentWindow);
+
+    connect(m_parentWindow, &QWindow::visibleChanged, this, [this](){
+        if (!m_view->transientParent() || !m_view->transientParent()->isVisible()) {
+            close();
+        }
+    });
+
+    m_view->show();
+
+    const QQuickItem* item = m_view->rootObject();
+    if (item) {
+        updateSize(QSize(item->implicitWidth(), item->implicitHeight()));
+    }
+
+    if (!(m_openPolicies & OpenPolicy::NoActivateFocus)) {
+        QTimer::singleShot(0, this, [this]() {
+            forceActiveFocus();
+        });
+    }
 }
 
 void WindowView::onHidden()
@@ -210,12 +287,12 @@ void WindowView::close(bool force)
         return;
     }
 
-    IF_ASSERT_FAILED(m_window) {
+    IF_ASSERT_FAILED(m_view) {
         return;
     }
 
     m_forceClosed = force;
-    m_window->close();
+    m_view->close();
 }
 
 void WindowView::toggleOpened()
@@ -229,7 +306,38 @@ void WindowView::toggleOpened()
 
 bool WindowView::isOpened() const
 {
-    return m_window ? m_window->isVisible() : false;
+    return m_view ? m_view->isVisible() : false;
+}
+
+bool WindowView::eventFilter(QObject* watched, QEvent* event)
+{
+    if (watched == m_view) {
+        switch (event->type()) {
+        case QEvent::Hide:
+            onHidden();
+            break;
+        case QEvent::FocusIn:
+            if (m_view->rootObject()) {
+                m_view->rootObject()->forceActiveFocus();
+            }
+            break;
+        case QEvent::FocusOut:
+            if (!(m_focusPolicies & FocusPolicy::ClickFocus)) {
+                // Undo what's done in TextInput{Field,Area}.qml ensureActiveFocus
+                m_view->setFlag(Qt::WindowDoesNotAcceptFocus);
+            }
+            break;
+        case QEvent::MouseButtonPress:
+            if (m_focusPolicies & FocusPolicy::ClickFocus) {
+                forceActiveFocus();
+            }
+            break;
+        default:
+            break;
+        }
+    }
+
+    return QObject::eventFilter(watched, event);
 }
 
 WindowView::OpenPolicies WindowView::openPolicies() const
@@ -309,12 +417,12 @@ void WindowView::setContentHeight(int contentHeight)
 
 QWindow* WindowView::window() const
 {
-    return qWindow();
+    return m_view;
 }
 
 QRect WindowView::geometry() const
 {
-    return m_window->geometry();
+    return m_view ? m_view->geometry() : QRect();
 }
 
 void WindowView::setOpenPolicies(WindowView::OpenPolicies openPolicies)
@@ -358,11 +466,7 @@ void WindowView::setParentWindow(QWindow* window)
         return;
     }
 
-    if (m_window) {
-        m_window->setParentWindow(window);
-    }
     m_parentWindow = window;
-
     emit parentWindowChanged();
 }
 
@@ -378,13 +482,12 @@ void WindowView::resolveParentWindow()
             return;
         }
     }
-    setParentWindow(mainWindow()->qWindow());
+    setParentWindow(interactiveProvider()->topWindow());
 }
 
 QScreen* WindowView::resolveScreen() const
 {
-    const QWindow* parentWindow = this->parentWindow();
-    QScreen* screen = parentWindow ? parentWindow->screen() : nullptr;
+    QScreen* screen = m_parentWindow ? m_parentWindow->screen() : nullptr;
 
     if (!screen) {
         screen = QGuiApplication::primaryScreen();
@@ -402,6 +505,23 @@ QRect WindowView::currentScreenGeometry() const
 QRect WindowView::viewGeometry() const
 {
     return QRect(m_globalPos.toPoint(), contentItem()->size().toSize());
+}
+
+void WindowView::updateSize(const QSize& newSize)
+{
+    if (!m_view) {
+        return;
+    }
+
+    if (m_resizable) {
+        m_view->setMinimumSize(newSize);
+        m_view->setMaximumSize(QSize(16777215, 16777215));
+        m_view->resize(m_view->size().expandedTo(newSize));
+    } else {
+        m_view->setMinimumSize(newSize);
+        m_view->setMaximumSize(newSize);
+        m_view->resize(newSize);
+    }
 }
 
 void WindowView::resolveNavigationParentControl()
