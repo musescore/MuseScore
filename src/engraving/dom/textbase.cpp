@@ -379,12 +379,14 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
     const TextFragment* tf = ldata->textBlock(static_cast<int>(startRow)).fragment(static_cast<int>(selectionStartCol));
     CharFormat resultFormat = tf ? tf->format : CharFormat();
 
+    bool allBlocksEmpty = true;
     for (size_t row = startRow; row <= endRow; ++row) {
         const TextBlock& block = ldata->blocks.at(row);
 
         if (block.fragments().empty()) {
             continue;
         }
+        allBlocksEmpty = false;
 
         const size_t startColumn = (row == startRow) ? selectionStartCol : 0;
         const size_t endColumn = (row == endRow && hasSelection()) ? selectionEndCol : block.columns();
@@ -429,7 +431,17 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
         }
     }
 
-    return resultFormat;
+    if (!allBlocksEmpty) {
+        return resultFormat;
+    }
+
+    CharFormat defaultFormat;
+    defaultFormat.setStyle(m_text->propertyDefault(Pid::FONT_STYLE).value<FontStyle>());
+    defaultFormat.setFontFamily(m_text->propertyDefault(Pid::FONT_FACE).value<String>());
+    defaultFormat.setFontSize(m_text->propertyDefault(Pid::FONT_SIZE).toDouble());
+    defaultFormat.setValign(VerticalAlignment(m_text->propertyDefault(Pid::TEXT_SCRIPT_ALIGN).toInt()));
+
+    return defaultFormat;
 }
 
 //---------------------------------------------------------
