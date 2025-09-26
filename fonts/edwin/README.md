@@ -14,11 +14,11 @@ In **2016**, URW++ released a **major Version 2.0** upgrade to the Core 35 fonts
 
 In **2017**, URW++ additionally released the same Version 2.0 fonts under the LaTeX Project Public License (LPPL) Version 1.3c, and under the SIL Open Font License (OFL), Version 1.1, without a "Reserved Font Name" clause.
 
-In **2020**, MuseScore BVBA released the **Edwin** font family, a renamed version of the **C059** font family (Roman, Italic, Bold & Bold Italic) from the **Core 35** font set. This was done in order to make modifications that suit the requirements of the open source notation software, **MuseScore**. It is released under the under the SIL Open Font License (OFL) only.
+In **2020**, MuseScore Limited released the **Edwin** font family, a renamed version of the **C059** font family (Roman, Italic, Bold & Bold Italic) from the **Core 35** font set. This was done in order to make modifications that suit the requirements of the open source notation software, **MuseScore**. It is released under the under the SIL Open Font License (OFL) only.
 
-## About MuseScore BVBA
+## About MuseScore Limited
 
-MuseScore BVBA is a music software company that creates music notation software, including the open source desktop application, **MuseScore**, and runs the score sharing platform, **MuseScore.com**.
+MuseScore Limited is a music software company that creates music notation software, including the open source desktop application, **MuseScore**, and runs the score sharing platform, **MuseScore.com**.
 
 ## Links
 
