@@ -109,6 +109,8 @@ void DialogView::beforeOpen()
 void DialogView::onHidden()
 {
     WindowView::onHidden();
+
+    windowsController()->unregWindow(m_view->winId());
 }
 
 void DialogView::updateGeometry()
