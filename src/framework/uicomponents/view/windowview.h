@@ -44,23 +44,6 @@ class INavigationControl;
 }
 
 namespace muse::uicomponents {
-class PopupPosition
-{
-    Q_GADGET
-
-public:
-    enum Type: int {
-        Left = 0x01,
-        Right = 0x02,
-        Horizontal = 0x03,
-        Bottom = 0x04,
-        Top = 0x08,
-        Vertical = 0x0C,
-    };
-
-    Q_ENUM(Type)
-};
-
 class WindowView : public QObject, public QQmlParserStatus, public Injectable, public async::Asyncable
 {
     Q_OBJECT
@@ -75,26 +58,10 @@ class WindowView : public QObject, public QQmlParserStatus, public Injectable, p
     Q_PROPERTY(QWindow * window READ window NOTIFY windowChanged)
     Q_PROPERTY(QWindow * parentWindow READ parentWindow WRITE setParentWindow NOTIFY parentWindowChanged FINAL)
 
-    //! NOTE Local, related parent
-    Q_PROPERTY(qreal x READ localX WRITE setLocalX NOTIFY xChanged)
-    Q_PROPERTY(qreal y READ localY WRITE setLocalY NOTIFY yChanged)
-
-    Q_PROPERTY(bool showArrow READ showArrow WRITE setShowArrow NOTIFY showArrowChanged)
-    Q_PROPERTY(int padding READ padding WRITE setPadding NOTIFY paddingChanged)
-    Q_PROPERTY(PlacementPolicies placementPolicies READ placementPolicies WRITE setPlacementPolicies NOTIFY placementPoliciesChanged)
-
-    Q_PROPERTY(QQuickItem * anchorItem READ anchorItem WRITE setAnchorItem NOTIFY anchorItemChanged)
-    Q_PROPERTY(PopupPosition::Type popupPosition READ popupPosition WRITE setPopupPosition NOTIFY popupPositionChanged)
-
-    Q_PROPERTY(int arrowX READ arrowX WRITE setArrowX NOTIFY arrowXChanged)
-    Q_PROPERTY(int arrowY READ arrowY WRITE setArrowY NOTIFY arrowYChanged)
-
     Q_PROPERTY(bool isOpened READ isOpened NOTIFY isOpenedChanged)
     Q_PROPERTY(OpenPolicies openPolicies READ openPolicies WRITE setOpenPolicies NOTIFY openPoliciesChanged)
 
     Q_PROPERTY(bool isContentReady READ isContentReady WRITE setIsContentReady NOTIFY isContentReadyChanged)
-
-    Q_PROPERTY(ClosePolicies closePolicies READ closePolicies WRITE setClosePolicies NOTIFY closePoliciesChanged)
 
     Q_PROPERTY(
         bool activateParentOnClose READ activateParentOnClose WRITE setActivateParentOnClose NOTIFY activateParentOnCloseChanged)
@@ -128,13 +95,6 @@ public:
     Q_DECLARE_FLAGS(OpenPolicies, OpenPolicy)
     Q_FLAG(OpenPolicies)
 
-    enum class ClosePolicy {
-        NoAutoClose = 0x00000000,
-        CloseOnPressOutsideParent = 0x00000001,
-    };
-    Q_DECLARE_FLAGS(ClosePolicies, ClosePolicy)
-    Q_FLAG(ClosePolicies)
-
     enum class FocusPolicy {
         TabFocus = 0x00000001,
         ClickFocus = 0x00000002,
@@ -144,17 +104,6 @@ public:
     Q_DECLARE_FLAGS(FocusPolicies, FocusPolicy)
     Q_FLAG(FocusPolicies)
 
-    enum class PlacementPolicy {
-        Default = 0x00000000,
-        PreferBelow = 0x00000001,
-        PreferAbove = 0x00000002,
-        PreferLeft = 0x00000004,
-        PreferRight = 0x00000008,
-        IgnoreFit = 0x0000000F,
-    };
-    Q_DECLARE_FLAGS(PlacementPolicies, PlacementPolicy)
-    Q_FLAG(PlacementPolicies)
-
     QQuickItem* parentItem() const;
 
     QQuickItem* contentItem() const;
@@ -163,8 +112,6 @@ public:
 
     QWindow* window() const;
 
-    qreal localX() const;
-    qreal localY() const;
     QRect geometry() const;
 
     Q_INVOKABLE void forceActiveFocus();
@@ -175,11 +122,7 @@ public:
     Q_INVOKABLE void close(bool force = false);
     Q_INVOKABLE void toggleOpened();
 
-    Q_INVOKABLE QRectF anchorGeometry() const;
-
     OpenPolicies openPolicies() const;
-    ClosePolicies closePolicies() const;
-    PlacementPolicies placementPolicies() const;
 
     bool activateParentOnClose() const;
     FocusPolicies focusPolicies() const;
@@ -196,13 +139,6 @@ public:
     bool alwaysOnTop() const;
     QVariantMap ret() const;
 
-    PopupPosition::Type popupPosition() const;
-    int arrowX() const;
-    int arrowY() const;
-    int padding() const;
-    bool showArrow() const;
-    QQuickItem* anchorItem() const;
-
     bool isContentReady() const;
     void setIsContentReady(bool ready);
 
@@ -213,11 +149,7 @@ public slots:
     void setContentItem(QQuickItem* content);
     void setContentWidth(int contentWidth);
     void setContentHeight(int contentHeight);
-    void setLocalX(qreal x);
-    void setLocalY(qreal y);
     void setOpenPolicies(muse::uicomponents::WindowView::OpenPolicies openPolicies);
-    void setClosePolicies(muse::uicomponents::WindowView::ClosePolicies closePolicies);
-    void setPlacementPolicies(muse::uicomponents::WindowView::PlacementPolicies placementPolicies);
     void setNavigationParentControl(muse::ui::INavigationControl* parentNavigationControl);
     void setObjectId(QString objectId);
     void setTitle(QString title);
@@ -226,13 +158,6 @@ public slots:
     void setResizable(bool resizable);
     void setAlwaysOnTop(bool alwaysOnTop);
     void setRet(QVariantMap ret);
-
-    void setPopupPosition(PopupPosition::Type position);
-    void setArrowX(int arrowX);
-    void setArrowY(int arrowY);
-    void setPadding(int padding);
-    void setShowArrow(bool showArrow);
-    void setAnchorItem(QQuickItem* anchorItem);
 
     void setActivateParentOnClose(bool activateParentOnClose);
     void setFocusPolicies(const muse::uicomponents::WindowView::FocusPolicies& policies);
@@ -243,11 +168,7 @@ signals:
     void contentWidthChanged();
     void contentHeightChanged();
     void windowChanged();
-    void xChanged(qreal x);
-    void yChanged(qreal y);
     void openPoliciesChanged(muse::uicomponents::WindowView::OpenPolicies openPolicies);
-    void closePoliciesChanged(muse::uicomponents::WindowView::ClosePolicies closePolicies);
-    void placementPoliciesChanged(muse::uicomponents::WindowView::PlacementPolicies placementPolicies);
     void navigationParentControlChanged(muse::ui::INavigationControl* navigationParentControl);
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);
@@ -262,13 +183,6 @@ signals:
     void aboutToClose(QQuickCloseEvent* closeEvent);
     void closed(bool force);
 
-    void popupPositionChanged(PopupPosition::Type position);
-    void arrowXChanged(int arrowX);
-    void arrowYChanged(int arrowY);
-    void paddingChanged(int padding);
-    void showArrowChanged(bool showArrow);
-    void anchorItemChanged(QQuickItem* anchorItem);
-
     void activateParentOnCloseChanged(bool activateParentOnClose);
     void focusPoliciesChanged();
 
@@ -282,12 +196,10 @@ protected:
     void componentComplete() override;
     bool eventFilter(QObject* watched, QEvent* event) override;
 
-    void initCloseController();
+    virtual void initCloseController() {}
 
     void doFocusOut();
     void windowMoveEvent();
-
-    bool isMouseWithinBoundaries(const QPointF& mousePos) const;
 
     virtual void beforeOpen();
     void doOpen();
@@ -295,7 +207,7 @@ protected:
     QWindow* qWindow() const;
     virtual void onHidden();
 
-    void repositionWindowIfNeed();
+    virtual void repositionWindowIfNeed() {}
 
     void setErrCode(Ret::Code code);
 
@@ -305,8 +217,7 @@ protected:
 
     virtual QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
-    virtual void updateGeometry();
-    virtual void updateContentPosition();
+    virtual void updateGeometry() = 0;
 
     virtual QRect viewGeometry() const;
 
@@ -325,19 +236,13 @@ protected:
     int m_contentWidth = 0;
     int m_contentHeight = 0;
 
-    QQuickItem* m_anchorItem = nullptr;
-
-    QPointF m_localPos;
     QPointF m_globalPos;
 
     OpenPolicies m_openPolicies = { OpenPolicy::Default };
     bool m_shouldOpenOnReady = false;
     bool m_isContentReady = false;
 
-    ClosePolicies m_closePolicies = { ClosePolicy::CloseOnPressOutsideParent };
     FocusPolicies m_focusPolicies = { FocusPolicy::DefaultFocus };
-
-    PlacementPolicies m_placementPolicies = { PlacementPolicy::Default };
 
     bool m_activateParentOnClose = true;
     ui::INavigationControl* m_navigationParentControl = nullptr;
@@ -348,11 +253,6 @@ protected:
     bool m_resizable = false;
     bool m_alwaysOnTop = false;
     QVariantMap m_ret;
-    PopupPosition::Type m_popupPosition = PopupPosition::Bottom;
-    int m_arrowX = 0;
-    int m_arrowY = 0;
-    int m_padding = 0;
-    bool m_showArrow = false;
 
     PopupViewCloseController* m_closeController = nullptr;
     bool m_forceClosed = false;

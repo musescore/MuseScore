@@ -134,6 +134,8 @@ void MenuView::updateGeometry()
 
     // remove padding for arrow
     movePos(m_globalPos.x() - padding(), m_globalPos.y());
+
+    updateContentPosition();
 }
 
 void MenuView::updateContentPosition()

@@ -37,7 +37,6 @@ DialogView::DialogView(QQuickItem* parent)
     : WindowView(parent)
 {
     setObjectName("DialogView");
-    setClosePolicies(ClosePolicy::NoAutoClose);
 }
 
 bool DialogView::isDialog() const
@@ -92,8 +91,8 @@ void DialogView::updateGeometry()
     dlgRect.moveLeft(referenceRect.x() + (referenceRect.width() - dlgRect.width()) / 2);
     dlgRect.moveTop(referenceRect.y() + (referenceRect.height() - dlgRect.height()) / 2 + DIALOG_WINDOW_FRAME_HEIGHT);
 
-    dlgRect.moveLeft(dlgRect.x() + m_localPos.x());
-    dlgRect.moveTop(dlgRect.y() + m_localPos.y());
+    dlgRect.moveLeft(dlgRect.x());
+    dlgRect.moveTop(dlgRect.y());
 
     // try to move the dialog if it doesn't fit on the screen
 

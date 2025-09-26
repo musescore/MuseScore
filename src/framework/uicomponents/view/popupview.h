@@ -24,15 +24,130 @@
 #include "windowview.h"
 
 namespace muse::uicomponents {
+class PopupPosition
+{
+    Q_GADGET
+
+public:
+    enum Type: int {
+        Left = 0x01,
+        Right = 0x02,
+        Horizontal = 0x03,
+        Bottom = 0x04,
+        Top = 0x08,
+        Vertical = 0x0C,
+    };
+
+    Q_ENUM(Type)
+};
+
 class PopupView : public WindowView
 {
     Q_OBJECT
+
+    Q_PROPERTY(ClosePolicies closePolicies READ closePolicies WRITE setClosePolicies NOTIFY closePoliciesChanged)
+
+    Q_PROPERTY(QQuickItem * anchorItem READ anchorItem WRITE setAnchorItem NOTIFY anchorItemChanged)
+    Q_PROPERTY(PlacementPolicies placementPolicies READ placementPolicies WRITE setPlacementPolicies NOTIFY placementPoliciesChanged)
+    Q_PROPERTY(PopupPosition::Type popupPosition READ popupPosition WRITE setPopupPosition NOTIFY popupPositionChanged)
+
+    // Relative to parentItem
+    Q_PROPERTY(qreal x READ localX WRITE setLocalX NOTIFY xChanged)
+    Q_PROPERTY(qreal y READ localY WRITE setLocalY NOTIFY yChanged)
+
+    Q_PROPERTY(bool showArrow READ showArrow WRITE setShowArrow NOTIFY showArrowChanged)
+    Q_PROPERTY(int arrowX READ arrowX WRITE setArrowX NOTIFY arrowXChanged)
+    Q_PROPERTY(int arrowY READ arrowY WRITE setArrowY NOTIFY arrowYChanged)
+    Q_PROPERTY(int padding READ padding WRITE setPadding NOTIFY paddingChanged)
 
 public:
     explicit PopupView(QQuickItem* parent = nullptr);
     ~PopupView() override;
 
-private:
+    enum class ClosePolicy {
+        NoAutoClose = 0x00000000,
+        CloseOnPressOutsideParent = 0x00000001,
+    };
+    Q_DECLARE_FLAGS(ClosePolicies, ClosePolicy)
+    Q_FLAG(ClosePolicies)
+
+    enum class PlacementPolicy {
+        Default = 0x00000000,
+        PreferBelow = 0x00000001,
+        PreferAbove = 0x00000002,
+        PreferLeft = 0x00000004,
+        PreferRight = 0x00000008,
+        IgnoreFit = 0x0000000F,
+    };
+    Q_DECLARE_FLAGS(PlacementPolicies, PlacementPolicy)
+    Q_FLAG(PlacementPolicies)
+
+    ClosePolicies closePolicies() const;
+    void setClosePolicies(ClosePolicies closePolicies);
+
+    QQuickItem* anchorItem() const;
+    void setAnchorItem(QQuickItem* anchorItem);
+    Q_INVOKABLE QRectF anchorGeometry() const;
+
+    PlacementPolicies placementPolicies() const;
+    void setPlacementPolicies(PlacementPolicies placementPolicies);
+
+    PopupPosition::Type popupPosition() const;
+    void setPopupPosition(PopupPosition::Type position);
+
+    qreal localX() const;
+    qreal localY() const;
+    void setLocalX(qreal x);
+    void setLocalY(qreal y);
+
+    bool showArrow() const;
+    void setShowArrow(bool showArrow);
+
+    int arrowX() const;
+    void setArrowX(int arrowX);
+
+    int arrowY() const;
+    void setArrowY(int arrowY);
+
+    int padding() const;
+    void setPadding(int padding);
+
+signals:
+    void closePoliciesChanged(ClosePolicies closePolicies);
+
+    void anchorItemChanged(QQuickItem* anchorItem);
+    void placementPoliciesChanged(PlacementPolicies placementPolicies);
+    void popupPositionChanged(PopupPosition::Type position);
+
+    void xChanged(qreal x);
+    void yChanged(qreal y);
+
+    void showArrowChanged(bool showArrow);
+    void arrowXChanged(int arrowX);
+    void arrowYChanged(int arrowY);
+    void paddingChanged(int padding);
+
+protected:
     bool isDialog() const override;
+
+    void initCloseController() override;
+
+    void repositionWindowIfNeed() override;
+    void updateGeometry() override;
+    virtual void updateContentPosition();
+
+    QPointF m_localPos;
+
+private:
+    ClosePolicies m_closePolicies = { ClosePolicy::CloseOnPressOutsideParent };
+
+    QQuickItem* m_anchorItem = nullptr;
+    PlacementPolicies m_placementPolicies = { PlacementPolicy::Default };
+    PopupPosition::Type m_popupPosition = { PopupPosition::Bottom };
+
+    bool m_showArrow = false;
+    int m_arrowX = 0;
+    int m_arrowY = 0;
+    int m_padding = 0;
 };
 }
