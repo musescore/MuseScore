@@ -2035,8 +2035,15 @@ void NotationActionController::navigateToTextElement(MoveDirection direction, bo
         currentNotationInteraction()->navigateToLyrics(direction, moveOnly);
     } else if (element->isHarmony()) {
         const Harmony* chordSymbol = editedChordSymbol();
+
+        // otherwise, chord symbol will be deleted when navigating away from it
+        const bool canPlay = chordSymbol && !chordSymbol->plainText().empty();
+
         currentNotationInteraction()->navigateToNearHarmony(direction, nearNoteOrRest);
-        playbackController()->playElements({ chordSymbol });
+
+        if (canPlay) {
+            playbackController()->playElements({ chordSymbol });
+        }
     } else if (element->isFiguredBass()) {
         currentNotationInteraction()->navigateToNearFiguredBass(direction);
     } else {
@@ -2053,8 +2060,15 @@ void NotationActionController::navigateToTextElementByFraction(const Fraction& f
 
     if (element->isHarmony()) {
         const Harmony* chordSymbol = editedChordSymbol();
+
+        // otherwise, chord symbol will be deleted when navigating away from it
+        const bool canPlay = chordSymbol && !chordSymbol->plainText().empty();
+
         currentNotationInteraction()->navigateToHarmony(fraction);
-        playbackController()->playElements({ chordSymbol });
+
+        if (canPlay) {
+            playbackController()->playElements({ chordSymbol });
+        }
     } else if (element->isFiguredBass()) {
         currentNotationInteraction()->navigateToFiguredBass(fraction);
     }
@@ -2069,8 +2083,15 @@ void NotationActionController::navigateToTextElementInNearMeasure(MoveDirection 
 
     if (element->isHarmony()) {
         const Harmony* chordSymbol = editedChordSymbol();
+
+        // otherwise, chord symbol will be deleted when navigating away from it
+        const bool canPlay = chordSymbol && !chordSymbol->plainText().empty();
+
         currentNotationInteraction()->navigateToHarmonyInNearMeasure(direction);
-        playbackController()->playElements({ chordSymbol });
+
+        if (canPlay) {
+            playbackController()->playElements({ chordSymbol });
+        }
     } else if (element->isFiguredBass()) {
         currentNotationInteraction()->navigateToFiguredBassInNearMeasure(direction);
     }
