@@ -597,22 +597,6 @@ LayoutState& LayoutContext::mutState()
     return m_state;
 }
 
-void LayoutContext::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e)
-{
-    IF_ASSERT_FAILED(m_score) {
-        return;
-    }
-    m_score->setLayout(tick1, tick2, staff1, staff2, e);
-}
-
-void LayoutContext::addRefresh(const RectF& r)
-{
-    IF_ASSERT_FAILED(m_score) {
-        return;
-    }
-    m_score->addRefresh(r);
-}
-
 const Selection& LayoutContext::selection() const
 {
     IF_ASSERT_FAILED(m_score) {

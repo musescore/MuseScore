@@ -22,15 +22,19 @@
 
 #pragma once
 
-#include <QAbstractItemModel>
-#include <QQmlParserStatus>
 #include <memory>
 #include <vector>
 
+#include <QAbstractItemModel>
+#include <QQmlParserStatus>
+
+#include "async/asyncable.h"
 #include "context/iglobalcontext.h"
-#include "inotation.h"
 #include "modularity/ioc.h"
-#include "types/types.h"
+
+#include "engraving/types/types.h"
+
+#include "inotation.h"
 #include "view/abstractelementpopupmodel.h"
 
 namespace mu::engraving {
@@ -67,7 +71,7 @@ private:
     size_t m_systemIndex = 0;
 };
 
-class EmptyStavesVisibilityModel : public QAbstractItemModel, public muse::Injectable
+class EmptyStavesVisibilityModel : public QAbstractItemModel, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -115,7 +119,8 @@ private:
     void setPartVisibility(PartItem* partItem, engraving::AutoOnOff value);
     void setStaffVisibility(StaffItem* staffItem, engraving::AutoOnOff value);
 
-    void updateData(PartItem* partItem);
+    void scheduleUpdateData();
+    void doUpdateData();
 
     int partIndex(const PartItem* partItem) const;
 
