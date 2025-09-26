@@ -22,6 +22,7 @@
 
 #include "pickscrape.h"
 
+#include "dom/text.h"
 #include "score.h"
 #include "system.h"
 
@@ -56,6 +57,8 @@ static const ElementStyle pickScrapeStyle {
 PickScrapeSegment::PickScrapeSegment(PickScrape* sp, System* parent)
     : TextLineBaseSegment(ElementType::PICK_SCRAPE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
+    m_text->setTextStyleType(TextStyleType::PALM_MUTE);
+    m_endText->setTextStyleType(TextStyleType::PALM_MUTE);
 }
 
 //---------------------------------------------------------
