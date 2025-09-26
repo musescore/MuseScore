@@ -49,10 +49,6 @@ WindowView::~WindowView()
     if (m_window) {
         m_window->setOnHidden(std::function<void()>());
     }
-
-    if (m_closeController) {
-        delete m_closeController;
-    }
 }
 
 QQuickItem* WindowView::parentItem() const
@@ -71,11 +67,6 @@ void WindowView::setParentItem(QQuickItem* parent)
     }
 
     QObject::setParent(parent);
-
-    if (m_closeController) {
-        m_closeController->setParentItem(parent);
-    }
-
     emit parentItemChanged();
 }
 
@@ -206,14 +197,6 @@ void WindowView::doOpen()
 
     m_globalPos = QPointF(); // invalidate
 
-    if (!isDialog()) {
-        if (!m_closeController) {
-            initCloseController();
-        }
-
-        m_closeController->setActive(true);
-    }
-
     emit isOpenedChanged();
     emit opened();
 }
@@ -234,11 +217,6 @@ void WindowView::close(bool force)
 
     IF_ASSERT_FAILED(m_window) {
         return;
-    }
-
-    if (m_closeController) {
-        m_closeController->setCanClosed(true);
-        m_closeController->setActive(false);
     }
 
     m_forceClosed = force;

@@ -23,6 +23,8 @@
 
 #include "windowview.h"
 
+#include "internal/popupviewclosecontroller.h"
+
 namespace muse::uicomponents {
 class PopupPosition
 {
@@ -82,6 +84,8 @@ public:
     Q_DECLARE_FLAGS(PlacementPolicies, PlacementPolicy)
     Q_FLAG(PlacementPolicies)
 
+    void setParentItem(QQuickItem* parent) override;
+
     ClosePolicies closePolicies() const;
     void setClosePolicies(ClosePolicies closePolicies);
 
@@ -134,7 +138,7 @@ protected:
 
     bool eventFilter(QObject* watched, QEvent* event) override;
 
-    void initCloseController() override;
+    void initCloseController();
 
     void repositionWindowIfNeed() override;
     void updateGeometry() override;
@@ -153,5 +157,7 @@ private:
     int m_arrowX = 0;
     int m_arrowY = 0;
     int m_padding = 0;
+
+    PopupViewCloseController* m_closeController = nullptr;
 };
 }

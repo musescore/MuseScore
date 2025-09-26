@@ -32,7 +32,6 @@
 #include "ui/inavigationcontroller.h"
 
 #include "popupwindow/ipopupwindow.h"
-#include "internal/popupviewclosecontroller.h"
 
 Q_MOC_INCLUDE(< QWindow >)
 
@@ -125,7 +124,7 @@ public:
     void setIsContentReady(bool ready);
 
 public slots:
-    void setParentItem(QQuickItem* parent);
+    virtual void setParentItem(QQuickItem* parent);
     void setEngine(QQmlEngine* engine);
     void setComponent(QQmlComponent* component);
     void setContentItem(QQuickItem* content);
@@ -162,8 +161,6 @@ protected:
     virtual bool isDialog() const = 0;
     void classBegin() override;
     void componentComplete() override;
-
-    virtual void initCloseController() {}
 
     virtual void beforeOpen();
     void doOpen();
@@ -211,7 +208,6 @@ protected:
     bool m_activateParentOnClose = true;
     ui::INavigationControl* m_navigationParentControl = nullptr;
 
-    PopupViewCloseController* m_closeController = nullptr;
     bool m_forceClosed = false;
 };
 }

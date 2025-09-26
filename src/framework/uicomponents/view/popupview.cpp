@@ -41,6 +41,9 @@ PopupView::PopupView(QQuickItem* parent)
 
 PopupView::~PopupView()
 {
+    if (m_closeController) {
+        delete m_closeController;
+    }
 }
 
 bool PopupView::isDialog() const
@@ -70,9 +73,24 @@ void PopupView::initCloseController()
     });
 }
 
+void PopupView::setParentItem(QQuickItem* parent)
+{
+    WindowView::setParentItem(parent);
+
+    if (m_closeController) {
+        m_closeController->setParentItem(parent);
+    }
+}
+
 void PopupView::beforeOpen()
 {
     WindowView::beforeOpen();
+
+    if (!m_closeController) {
+        initCloseController();
+    }
+
+    m_closeController->setActive(true);
 
     qApp->installEventFilter(this);
 }
@@ -80,6 +98,11 @@ void PopupView::beforeOpen()
 void PopupView::onHidden()
 {
     WindowView::onHidden();
+
+    if (m_closeController) {
+        m_closeController->setCanClosed(true);
+        m_closeController->setActive(false);
+    }
 
     qApp->removeEventFilter(this);
 }
