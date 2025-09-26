@@ -37,6 +37,7 @@ class TransposeDialog : public QDialog, Ui::TransposeDialogBase, public muse::In
     muse::Inject<context::IGlobalContext> context = { this };
 
 public:
+
     TransposeDialog(QWidget* parent = 0);
 
 private slots:
@@ -64,8 +65,19 @@ private:
     int transposeInterval() const;
     TransposeDirection direction() const;
     TransposeMode mode() const;
+
+    void setMode(TransposeMode& mode);
+
     void setKey(Key k);
     bool useDoubleSharpsFlats() const;
+
+    void setDirection(TransposeDirection direction);
+
+    void setInterval(int interval);
+
+    void restorePreviousSettings();
+
+    static TransposeOptions& lastUsedOptions();
 
     bool m_allSelected = false;
 };
