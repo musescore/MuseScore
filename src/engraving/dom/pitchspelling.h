@@ -32,9 +32,9 @@ class MidiNote;
 class Note;
 enum class Key : signed char;
 
-static constexpr int INVALID_PITCH  = -1;
-static constexpr int MIN_PITCH      = 0;
-static constexpr int MAX_PITCH      = 127;
+static constexpr int INVALID_PITCH = -1;
+static constexpr int MIN_PITCH     = 0;
+static constexpr int MAX_PITCH     = 127;
 
 // a list of tpc's, with legal ranges, not really an enum, so no way to convert into a class
 enum Tpc : signed char {
@@ -50,13 +50,15 @@ enum Tpc : signed char {
     TPC_MAX = TPC_B_SSS
 };
 
-const int TPC_DELTA_SEMITONE      = 7;    // the delta in tpc value to go 1 semitone up or down
-const int TPC_DELTA_ENHARMONIC    = 12;   // the delta in tpc value to reach the next (or prev) enharmonic spelling
-//const int TPC_FIRST_STEP          = 3;  // the step of the first valid tpc (= F = step 3)
-const int PITCH_DELTA_OCTAVE      = 12;   // the delta in pitch value to go 1 octave up or down
-const int STEP_DELTA_OCTAVE       = 7;    // the number of steps in an octave
-//const int STEP_DELTA_TPC          = 4;  // the number of steps in a tpc step (= a fifth = 4 steps)
-const int TPCS_PER_STEP           = (Tpc::TPC_MAX - Tpc::TPC_MIN + 1) / STEP_DELTA_OCTAVE;
+static constexpr int TPC_DELTA_SEMITONE   = 7;    // the delta in tpc value to go 1 semitone up or down
+static constexpr int TPC_DELTA_ENHARMONIC = 12;   // the delta in tpc value to reach the next (or prev) enharmonic spelling
+//static constexpr int TPC_FIRST_STEP       = 3;  // the step of the first valid tpc (= F = step 3)
+static constexpr int PITCH_DELTA_OCTAVE   = 12;   // the delta in pitch value to go 1 octave up or down
+static constexpr int STEP_DELTA_OCTAVE    = 7;    // the number of steps in an octave
+//static constexpr int STEP_DELTA_TPC       = 4;  // the number of steps in a tpc step (= a fifth = 4 steps)
+static constexpr int TPCS_PER_STEP        = (Tpc::TPC_MAX - Tpc::TPC_MIN + 1) / STEP_DELTA_OCTAVE;
+static constexpr int MIN_STEP             = MIN_PITCH * STEP_DELTA_OCTAVE / PITCH_DELTA_OCTAVE;
+static constexpr int MAX_STEP             = MAX_PITCH * STEP_DELTA_OCTAVE / PITCH_DELTA_OCTAVE;
 
 //---------------------------------------------------------
 //   pitch2tpc

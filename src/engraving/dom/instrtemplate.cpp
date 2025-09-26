@@ -190,11 +190,11 @@ void InstrumentGroup::clear()
 
 InstrumentTemplate::InstrumentTemplate()
 {
-    staffCount        = 1;
-    minPitchA          = static_cast<char>(MIN_PITCH);
-    maxPitchA          = static_cast<char>(MAX_PITCH);
-    minPitchP          = static_cast<char>(MIN_PITCH);
-    maxPitchP          = static_cast<char>(MAX_PITCH);
+    staffCount         = 1;
+    minPitchA          = MIN_PITCH;
+    maxPitchA          = MAX_PITCH;
+    minPitchP          = MIN_PITCH;
+    maxPitchP          = MAX_PITCH;
     staffGroup         = StaffGroup::STANDARD;
     staffTypePreset    = 0;
     useDrumset         = false;
@@ -362,11 +362,11 @@ void InstrumentTemplate::write(XmlWriter& xml) const
             }
         }
     }
-    if (int(minPitchA) != MIN_PITCH || int(maxPitchA) != MAX_PITCH) {
-        xml.tag("aPitchRange", String(u"%1-%2").arg(int(minPitchA)).arg(int(maxPitchA)));
+    if (minPitchA != MIN_PITCH || maxPitchA != MAX_PITCH) {
+        xml.tag("aPitchRange", String(u"%1-%2").arg(minPitchA).arg(maxPitchA));
     }
-    if (minPitchP != static_cast<char>(MIN_PITCH) || maxPitchP != static_cast<char>(MAX_PITCH)) {
-        xml.tag("pPitchRange", String(u"%1-%2").arg(int(minPitchP)).arg(int(maxPitchP)));
+    if (minPitchP != MIN_PITCH || maxPitchP != MAX_PITCH) {
+        xml.tag("pPitchRange", String(u"%1-%2").arg(minPitchP).arg(maxPitchP));
     }
     if (transpose.diatonic) {
         xml.tag("transposeDiatonic", transpose.diatonic);
@@ -490,9 +490,9 @@ void InstrumentTemplate::read(XmlReader& e)
                 barlineSpan[idx + i] = true;
             }
         } else if (tag == "aPitchRange") {
-            setPitchRange(e.readText(), &minPitchA, &maxPitchA);
+            setPitchRange(e.readText(), minPitchA, maxPitchA);
         } else if (tag == "pPitchRange") {
-            setPitchRange(e.readText(), &minPitchP, &maxPitchP);
+            setPitchRange(e.readText(), minPitchP, maxPitchP);
         } else if (tag == "transposition") {      // obsolete
             int i = e.readInt();
             transpose.chromatic = i;
@@ -626,16 +626,16 @@ void InstrumentTemplate::read(XmlReader& e)
 //   setPitchRange
 //---------------------------------------------------------
 
-void InstrumentTemplate::setPitchRange(const String& s, char* a, char* b) const
+void InstrumentTemplate::setPitchRange(const String& s, int& a, int& b) const
 {
     StringList sl = s.split(u'-');
     if (sl.size() != 2) {
-        *a = static_cast<char>(MIN_PITCH);
-        *b = static_cast<char>(MAX_PITCH);
+        a = MIN_PITCH;
+        b = MAX_PITCH;
         return;
     }
-    *a = sl.at(0).toInt();
-    *b = sl.at(1).toInt();
+    a = sl.at(0).toInt();
+    b = sl.at(1).toInt();
 }
 
 //---------------------------------------------------------
