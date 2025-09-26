@@ -44,7 +44,7 @@ public:
 
     void initStyle();
 
-    virtual EngravingItem* propertyDelegate(Pid) override;
+    virtual EngravingObject* propertyDelegate(Pid) const override;
 
     TextLine* textLine() const { return toTextLine(spanner()); }
 
