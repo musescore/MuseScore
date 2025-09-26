@@ -35,7 +35,6 @@
 
 Q_MOC_INCLUDE(< QWindow >)
 
-class QQmlComponent;
 class QQmlEngine;
 class QQuickCloseEvent;
 class QQuickView;
@@ -127,9 +126,8 @@ public:
     void setIsContentReady(bool ready);
 
 public slots:
-    virtual void setParentItem(QQuickItem* parent);
     void setEngine(QQmlEngine* engine);
-    void setComponent(QQmlComponent* component);
+    virtual void setParentItem(QQuickItem* parent);
     void setContentItem(QQuickItem* content);
     void setContentWidth(int contentWidth);
     void setContentHeight(int contentHeight);
@@ -165,7 +163,7 @@ protected:
     void componentComplete() override;
 
     virtual void initView();
-    void setContent(QQmlComponent* component, QQuickItem* item);
+    void setViewContent(QQuickItem* item);
 
     virtual void beforeOpen();
     void doOpen();
@@ -173,7 +171,9 @@ protected:
 
     virtual void onHidden();
 
-    virtual void repositionWindowIfNeed() {}
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
+    QQmlEngine* engine() const;
 
     QWindow* parentWindow() const;
     void setParentWindow(QWindow* window);
@@ -184,19 +184,15 @@ protected:
     virtual void updateGeometry() = 0;
     virtual QRect viewGeometry() const;
     void updateSize(const QSize& newSize);
+    virtual void repositionWindowIfNeed() {}
 
     void resolveNavigationParentControl();
     void activateNavigationParentControl();
-
-    QQmlEngine* engine() const;
-
-    bool eventFilter(QObject* watched, QEvent* event) override;
 
     QQmlEngine* m_engine = nullptr;
     QWindow* m_parentWindow = nullptr;
     QQuickView* m_view = nullptr;
 
-    QQmlComponent* m_component = nullptr;
     QQuickItem* m_contentItem = nullptr;
     int m_contentWidth = 0;
     int m_contentHeight = 0;

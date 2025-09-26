@@ -39,69 +39,13 @@ WindowView::WindowView(QQuickItem* parent)
 {
 }
 
-QQuickItem* WindowView::parentItem() const
-{
-    if (!parent()) {
-        return nullptr;
-    }
-
-    return qobject_cast<QQuickItem*>(parent());
-}
-
-void WindowView::setParentItem(QQuickItem* parent)
-{
-    if (parentItem() == parent) {
-        return;
-    }
-
-    QObject::setParent(parent);
-    emit parentItemChanged();
-}
-
-void WindowView::setEngine(QQmlEngine* engine)
-{
-    if (m_engine == engine) {
-        return;
-    }
-
-    m_engine = engine;
-}
-
-void WindowView::setComponent(QQmlComponent* component)
-{
-    if (m_component == component) {
-        return;
-    }
-
-    m_component = component;
-}
-
-bool WindowView::hasActiveFocus()
-{
-    return m_view && m_view->activeFocusItem() != nullptr;
-}
-
-void WindowView::forceActiveFocus()
-{
-    if (!m_view) {
-        return;
-    }
-
-    m_view->setFlag(Qt::WindowDoesNotAcceptFocus, false);
-    m_view->requestActivate();
-
-    QQuickItem* rootObject = m_view->rootObject();
-    if (!rootObject) {
-        return;
-    }
-
-    if (!rootObject->hasActiveFocus()) {
-        rootObject->forceActiveFocus();
-    }
-}
-
 void WindowView::classBegin()
 {
+}
+
+void WindowView::componentComplete()
+{
+    init();
 }
 
 void WindowView::init()
@@ -111,7 +55,7 @@ void WindowView::init()
     }
 
     initView();
-    setContent(m_component, m_contentItem);
+    setViewContent(m_contentItem);
 
     connect(this, &WindowView::isContentReadyChanged, this, [this]() {
         if (isContentReady() && m_shouldOpenOnReady) {
@@ -162,13 +106,13 @@ void WindowView::initView()
     m_view->installEventFilter(this);
 }
 
-void WindowView::setContent(QQmlComponent* component, QQuickItem* item)
+void WindowView::setViewContent(QQuickItem* item)
 {
     if (!m_view || !item) {
         return;
     }
 
-    m_view->setContent(QUrl(), component, item);
+    m_view->setContent(QUrl(), nullptr, item);
 
     connect(item, &QQuickItem::implicitWidthChanged, this, [this, item]() {
         if (!m_view->isVisible()) {
@@ -187,11 +131,6 @@ void WindowView::setContent(QQmlComponent* component, QQuickItem* item)
             updateSize(QSize(item->implicitWidth(), item->implicitHeight()));
         }
     });
-}
-
-void WindowView::componentComplete()
-{
-    init();
 }
 
 void WindowView::open()
@@ -340,34 +279,46 @@ bool WindowView::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
-WindowView::OpenPolicies WindowView::openPolicies() const
+QQmlEngine* WindowView::engine() const
 {
-    return m_openPolicies;
+    if (m_engine) {
+        return m_engine;
+    }
+
+    return qmlEngine(this);
 }
 
-bool WindowView::activateParentOnClose() const
+void WindowView::setEngine(QQmlEngine* engine)
 {
-    return m_activateParentOnClose;
-}
-
-WindowView::FocusPolicies WindowView::focusPolicies() const
-{
-    return m_focusPolicies;
-}
-
-muse::ui::INavigationControl* WindowView::navigationParentControl() const
-{
-    return m_navigationParentControl;
-}
-
-void WindowView::setNavigationParentControl(ui::INavigationControl* navigationParentControl)
-{
-    if (m_navigationParentControl == navigationParentControl) {
+    if (m_engine == engine) {
         return;
     }
 
-    m_navigationParentControl = navigationParentControl;
-    emit navigationParentControlChanged(m_navigationParentControl);
+    m_engine = engine;
+}
+
+QQuickItem* WindowView::parentItem() const
+{
+    if (!parent()) {
+        return nullptr;
+    }
+
+    return qobject_cast<QQuickItem*>(parent());
+}
+
+void WindowView::setParentItem(QQuickItem* parent)
+{
+    if (parentItem() == parent) {
+        return;
+    }
+
+    QObject::setParent(parent);
+    emit parentItemChanged();
+}
+
+QQuickItem* WindowView::contentItem() const
+{
+    return m_contentItem;
 }
 
 void WindowView::setContentItem(QQuickItem* content)
@@ -378,11 +329,6 @@ void WindowView::setContentItem(QQuickItem* content)
 
     m_contentItem = content;
     emit contentItemChanged();
-}
-
-QQuickItem* WindowView::contentItem() const
-{
-    return m_contentItem;
 }
 
 int WindowView::contentWidth() const
@@ -425,34 +371,28 @@ QRect WindowView::geometry() const
     return m_view ? m_view->geometry() : QRect();
 }
 
-void WindowView::setOpenPolicies(WindowView::OpenPolicies openPolicies)
+bool WindowView::hasActiveFocus()
 {
-    if (m_openPolicies == openPolicies) {
-        return;
-    }
-
-    m_openPolicies = openPolicies;
-    emit openPoliciesChanged(m_openPolicies);
+    return m_view && m_view->activeFocusItem() != nullptr;
 }
 
-void WindowView::setActivateParentOnClose(bool activateParentOnClose)
+void WindowView::forceActiveFocus()
 {
-    if (m_activateParentOnClose == activateParentOnClose) {
+    if (!m_view) {
         return;
     }
 
-    m_activateParentOnClose = activateParentOnClose;
-    emit activateParentOnCloseChanged(m_activateParentOnClose);
-}
+    m_view->setFlag(Qt::WindowDoesNotAcceptFocus, false);
+    m_view->requestActivate();
 
-void WindowView::setFocusPolicies(const FocusPolicies& policies)
-{
-    if (m_focusPolicies == policies) {
+    QQuickItem* rootObject = m_view->rootObject();
+    if (!rootObject) {
         return;
     }
 
-    m_focusPolicies = policies;
-    emit focusPoliciesChanged();
+    if (!rootObject->hasActiveFocus()) {
+        rootObject->forceActiveFocus();
+    }
 }
 
 QWindow* WindowView::parentWindow() const
@@ -524,6 +464,66 @@ void WindowView::updateSize(const QSize& newSize)
     }
 }
 
+WindowView::OpenPolicies WindowView::openPolicies() const
+{
+    return m_openPolicies;
+}
+
+void WindowView::setOpenPolicies(WindowView::OpenPolicies openPolicies)
+{
+    if (m_openPolicies == openPolicies) {
+        return;
+    }
+
+    m_openPolicies = openPolicies;
+    emit openPoliciesChanged(m_openPolicies);
+}
+
+WindowView::FocusPolicies WindowView::focusPolicies() const
+{
+    return m_focusPolicies;
+}
+
+void WindowView::setFocusPolicies(const FocusPolicies& policies)
+{
+    if (m_focusPolicies == policies) {
+        return;
+    }
+
+    m_focusPolicies = policies;
+    emit focusPoliciesChanged();
+}
+
+bool WindowView::activateParentOnClose() const
+{
+    return m_activateParentOnClose;
+}
+
+void WindowView::setActivateParentOnClose(bool activateParentOnClose)
+{
+    if (m_activateParentOnClose == activateParentOnClose) {
+        return;
+    }
+
+    m_activateParentOnClose = activateParentOnClose;
+    emit activateParentOnCloseChanged(m_activateParentOnClose);
+}
+
+muse::ui::INavigationControl* WindowView::navigationParentControl() const
+{
+    return m_navigationParentControl;
+}
+
+void WindowView::setNavigationParentControl(ui::INavigationControl* navigationParentControl)
+{
+    if (m_navigationParentControl == navigationParentControl) {
+        return;
+    }
+
+    m_navigationParentControl = navigationParentControl;
+    emit navigationParentControlChanged(m_navigationParentControl);
+}
+
 void WindowView::resolveNavigationParentControl()
 {
     ui::INavigationControl* ctrl = navigationController()->activeControl();
@@ -544,15 +544,6 @@ void WindowView::activateNavigationParentControl()
     if (m_activateParentOnClose && m_navigationParentControl) {
         m_navigationParentControl->requestActive();
     }
-}
-
-QQmlEngine* WindowView::engine() const
-{
-    if (m_engine) {
-        return m_engine;
-    }
-
-    return qmlEngine(this);
 }
 
 bool WindowView::isContentReady() const
