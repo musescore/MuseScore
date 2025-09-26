@@ -358,6 +358,8 @@ GradualTempoChangeSegment::GradualTempoChangeSegment(GradualTempoChange* annotat
                           ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     initElementStyle(&tempoSegmentStyle);
+    m_text->setTextStyleType(TextStyleType::TEMPO_CHANGE);
+    m_endText->setTextStyleType(TextStyleType::TEMPO_CHANGE);
 }
 
 GradualTempoChangeSegment* GradualTempoChangeSegment::clone() const

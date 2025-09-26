@@ -24,6 +24,7 @@
 
 #include <cmath>
 
+#include "dom/text.h"
 #include "draw/types/transform.h"
 
 #include "types/typesconv.h"
@@ -77,6 +78,8 @@ static const ElementStyle hairpinStyle {
 HairpinSegment::HairpinSegment(Hairpin* sp, System* parent)
     : TextLineBaseSegment(ElementType::HAIRPIN_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
+    m_text->setTextStyleType(TextStyleType::HAIRPIN);
+    m_endText->setTextStyleType(TextStyleType::HAIRPIN);
 }
 
 bool HairpinSegment::acceptDrop(EditData& data) const
