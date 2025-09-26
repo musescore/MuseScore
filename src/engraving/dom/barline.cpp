@@ -769,7 +769,7 @@ void BarLine::remove(EngravingItem* e)
 
 PropertyValue BarLine::getProperty(Pid id) const
 {
-    if (EngravingItem* e = const_cast<BarLine*>(this)->propertyDelegate(id)) {
+    if (EngravingObject* e = const_cast<BarLine*>(this)->propertyDelegate(id)) {
         return e->getProperty(id);
     }
 
@@ -796,7 +796,7 @@ PropertyValue BarLine::getProperty(Pid id) const
 
 bool BarLine::setProperty(Pid id, const PropertyValue& v)
 {
-    if (EngravingItem* e = propertyDelegate(id)) {
+    if (EngravingObject* e = propertyDelegate(id)) {
         return e->setProperty(id, v);
     }
 
@@ -830,7 +830,7 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
 
 void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
-    if (EngravingItem* e = propertyDelegate(id)) {
+    if (EngravingObject* e = propertyDelegate(id)) {
         e->undoChangeProperty(id, v, ps);
         return;
     }
@@ -842,7 +842,7 @@ void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
     }
 }
 
-EngravingItem* BarLine::propertyDelegate(Pid pid)
+EngravingObject* BarLine::propertyDelegate(Pid pid) const
 {
     if (pid == Pid::REPEAT_COUNT) {
         return measure();
@@ -870,7 +870,7 @@ PlayCountText* BarLine::playCountText() const
 
 PropertyValue BarLine::propertyDefault(Pid propertyId) const
 {
-    if (EngravingItem* e = const_cast<BarLine*>(this)->propertyDelegate(propertyId)) {
+    if (EngravingObject* e = const_cast<BarLine*>(this)->propertyDelegate(propertyId)) {
         return e->propertyDefault(propertyId);
     }
 

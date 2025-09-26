@@ -61,7 +61,7 @@ NoteLineSegment::NoteLineSegment(Spanner* sp, System* parent)
 {
 }
 
-EngravingItem* NoteLineSegment::propertyDelegate(Pid pid)
+EngravingObject* NoteLineSegment::propertyDelegate(Pid pid) const
 {
     if (pid == Pid::NOTELINE_PLACEMENT) {
         return noteLine();

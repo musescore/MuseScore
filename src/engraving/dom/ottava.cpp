@@ -77,7 +77,7 @@ OttavaSegment::OttavaSegment(Ottava* sp, System* parent)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingItem* OttavaSegment::propertyDelegate(Pid pid)
+EngravingObject* OttavaSegment::propertyDelegate(Pid pid) const
 {
     if (pid == Pid::OTTAVA_TYPE || pid == Pid::NUMBERS_ONLY) {
         return spanner();

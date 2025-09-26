@@ -80,7 +80,7 @@ VoltaSegment::VoltaSegment(Volta* sp, System* parent)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingItem* VoltaSegment::propertyDelegate(Pid pid)
+EngravingObject* VoltaSegment::propertyDelegate(Pid pid) const
 {
     if (pid == Pid::BEGIN_HOOK_TYPE || pid == Pid::END_HOOK_TYPE || pid == Pid::VOLTA_ENDING) {
         return spanner();

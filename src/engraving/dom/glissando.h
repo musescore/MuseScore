@@ -48,7 +48,7 @@ public:
 
     GlissandoSegment* clone() const override { return new GlissandoSegment(*this); }
 
-    EngravingItem* propertyDelegate(Pid) override;
+    EngravingObject* propertyDelegate(Pid) const override;
 };
 
 //---------------------------------------------------------

@@ -433,6 +433,14 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v)
 
 void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
+    if (id == Pid::BEGIN_FONT_FACE) {
+        LOGI() << "==> undoChangeProperty: " << propertyName(id) << ": " << getProperty(id).value<String>() << " v: " <<
+            v.value<String>() << " " << this;
+        LOGI() << "flags: " << (int)propertyFlags(id) << " ps: " << (int)ps;
+        if ((getProperty(id) == v) && (propertyFlags(id) == ps)) {
+            LOGI() << "DON'T SET";
+        }
+    }
     if ((getProperty(id) == v) && (propertyFlags(id) == ps)) {
         return;
     }
@@ -475,7 +483,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
         }
     } else if (id == Pid::EXCLUDE_FROM_OTHER_PARTS) {
         if (isEngravingItem() && getProperty(Pid::EXCLUDE_FROM_OTHER_PARTS) != v) {
-            EngravingItem* delegate = toEngravingItem(this)->propertyDelegate(id);
+            EngravingItem* delegate = toEngravingItem(toEngravingItem(this)->propertyDelegate(id));
             if (delegate) {
                 delegate->manageExclusionFromParts(v.toBool());
             } else {
