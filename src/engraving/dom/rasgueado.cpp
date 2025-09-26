@@ -22,6 +22,7 @@
 
 #include "rasgueado.h"
 
+#include "dom/text.h"
 #include "score.h"
 #include "stafftype.h"
 #include "system.h"
@@ -57,6 +58,8 @@ static const ElementStyle rasgueadoStyle {
 RasgueadoSegment::RasgueadoSegment(Rasgueado* sp, System* parent)
     : TextLineBaseSegment(ElementType::RASGUEADO_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
+    m_text->setTextStyleType(TextStyleType::LET_RING);
+    m_endText->setTextStyleType(TextStyleType::LET_RING);
 }
 
 //---------------------------------------------------------

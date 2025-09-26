@@ -23,6 +23,7 @@
 #include "palmmute.h"
 
 #include "chordrest.h"
+#include "dom/text.h"
 #include "part.h"
 #include "score.h"
 #include "staff.h"
@@ -64,6 +65,8 @@ static const ElementStyle palmMuteStyle {
 PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
     : TextLineBaseSegment(ElementType::PALM_MUTE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
+    m_text->setTextStyleType(TextStyleType::PALM_MUTE);
+    m_endText->setTextStyleType(TextStyleType::PALM_MUTE);
 }
 
 //---------------------------------------------------------
