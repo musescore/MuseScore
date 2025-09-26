@@ -68,8 +68,6 @@ extern Interval intervalList[intervalListSize];
 extern int searchInterval(int steps, int semitones);
 extern int chromatic2diatonic(int val);
 
-int diatonicUpDown(Key, int pitch, int steps);
-
 extern Note* nextChordNote(Note* note);
 extern Note* prevChordNote(Note* note);
 extern Segment* nextSeg1(Segment* s);
