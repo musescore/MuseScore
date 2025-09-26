@@ -95,10 +95,10 @@ public:
 
     Trait trait;
 
-    char minPitchA = 0;           // pitch range playable by an amateur
-    char maxPitchA = 0;
-    char minPitchP = 0;           // pitch range playable by professional
-    char maxPitchP = 0;
+    int minPitchA = 0;           // pitch range playable by an amateur
+    int maxPitchA = 0;
+    int minPitchP = 0;           // pitch range playable by professional
+    int maxPitchP = 0;
 
     Interval transpose;       // for transposing instruments
 
@@ -139,7 +139,7 @@ public:
 
 private:
     void init(const InstrumentTemplate&);
-    void setPitchRange(const String& s, char* a, char* b) const;
+    void setPitchRange(const String& s, int& a, int& b) const;
     void linkGenre(const String&);
 };
 

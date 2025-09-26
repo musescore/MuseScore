@@ -193,7 +193,7 @@ static const int pitchByStepAndKey[int(Key::NUM_OF)][STEP_DELTA_OCTAVE] = {
 
 int step2deltaPitchByKey(int step, Key key)
 {
-    while (step < 0) {
+    while (step < MIN_STEP) {
         step+= STEP_DELTA_OCTAVE;
     }
     while (key < Key::MIN) {
@@ -832,10 +832,10 @@ int pitch2absStepByKey(int pitch, int tpc, Key key, int& alter)
 int absStep2pitchByKey(int step, Key key)
 {
     // sanitize input data
-    if (step < 0) {
+    if (step < MIN_STEP) {
         step += STEP_DELTA_OCTAVE;
     }
-    if (step > 74) {
+    if (step > MAX_STEP) {
         step -= STEP_DELTA_OCTAVE;
     }
     if (key < Key::MIN) {
