@@ -1647,6 +1647,11 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
     if (clefSeg && item->staff()) {
         const Fraction tick = clefSeg->measure()->tick();
         const Fraction tickPrev = tick - Fraction::eps();
+
+        if (item->staff()->isJianpuStaff(tick)) {
+            return; // Jianpu do not need to show clef
+        }
+
         const StaffType* st = item->staff()->staffType(tick);
         const StaffType* stPrev = !tickPrev.negative() ? item->staff()->staffType(tickPrev) : nullptr;
         bool show = st->genClef();            // check staff type allows clef display

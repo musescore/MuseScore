@@ -1665,16 +1665,28 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
     bool staffVisible = !st->isLinesInvisible(tick);
     bool isJianpu = st->isJianpuStaff(tick);
 
+    auto getLinesByDots = [item](int base){
+        int lines = base - 1;
+        int dots = item->dots();
+        while (dots > 0)
+        {
+            base /= 2;
+            lines += base;
+            dots--;
+        }
+        return -lines; // negative indicates lines to lengthen the duration
+    };
+
     int lines = 0;
     TDuration durationType = item->durationType();
     if (durationType == DurationType::V_LONG) {
-        lines = -15;
+        lines = getLinesByDots(16);
     } else if (durationType == DurationType::V_BREVE) {
-        lines = -7;
+        lines = getLinesByDots(8);
     } else if (durationType == DurationType::V_WHOLE) {
-        lines = -3;
+        lines = getLinesByDots(4);
     } else if (durationType == DurationType::V_HALF) {
-        lines = -1;
+        lines = getLinesByDots(2);
     } else if (durationType == DurationType::V_QUARTER) {
         lines = 0;
     } else if (durationType == DurationType::V_EIGHTH) {
@@ -1800,8 +1812,10 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
         } else if (octave < baseOctave) {
             dots = baseOctave - octave;
             offsetY = distance;
-            if (item->durationLines().size() > 0) {
-                offsetY += item->durationLines().back()->pos().y() + item->durationLines().back()->height() * .5;
+            auto lines = item->durationLines();
+            // The octave dot should be under the halving lines
+            if (lines.size() > 0 && lines.back()->halving()) {
+                offsetY += lines.back()->pos().y() + lines.back()->height() * .5;
             }
         } else {
             cleanupOctaveDots();

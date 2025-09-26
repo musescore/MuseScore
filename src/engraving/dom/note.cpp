@@ -2081,6 +2081,22 @@ void Note::setDotRelativeLine(int dotMove)
     int cdots = static_cast<int>(chord()->dots());
     int ndots = static_cast<int>(m_dots.size());
 
+    // remove dots for jianpu which already convert to lengthen duration lines
+    int ddots = 0;
+    if (staff()->isJianpuStaff(chord()->tick())) {
+        TDuration durationType = chord()->durationType();
+        if (durationType == DurationType::V_LONG) {
+            ddots = 4;
+        } else if (durationType == DurationType::V_BREVE) {
+            ddots = 3;
+        } else if (durationType == DurationType::V_WHOLE) {
+            ddots = 2;
+        } else if (durationType == DurationType::V_HALF) {
+            ddots = 1;
+        }
+    }
+    cdots = std::max(0, cdots - ddots);
+
     int n = cdots - ndots;
     for (int i = 0; i < n; ++i) {
         NoteDot* dot = Factory::createNoteDot(this);

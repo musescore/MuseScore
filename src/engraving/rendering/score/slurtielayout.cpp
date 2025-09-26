@@ -1580,6 +1580,7 @@ TieSegment* SlurTieLayout::layoutTieFor(Tie* item, System* system)
 
     correctForCrossStaff(item, sPos, sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
     forceHorizontal(item, sPos);
+    correctForJianpu(item, sPos);
 
     item->fixupSegments(segmentCount);
     TieSegment* segment = item->segmentAt(0);
@@ -1612,6 +1613,39 @@ TieSegment* SlurTieLayout::layoutTieFor(Tie* item, System* system)
 
     addLineAttachPoints(segment); // add attach points to start and end note
     return segment;
+}
+
+void SlurTieLayout::correctForJianpu(Tie* item, SlurTiePos& sPos)
+{
+    if (!item->startNote() || !item->endNote()) {
+        return;
+    }
+
+    if (!item->staff()->isJianpuStaff(item->startNote()->tick())) {
+        return;
+    }
+
+    double y1 = 0.0;
+    Chord* chord1 = item->startNote()->chord();
+    if (chord1) {
+        y1 = chord1->ldata()->bbox().top();
+        if (!chord1->octaveDots().empty()) {
+            y1 += chord1->octaveDots().front()->ldata()->pos().y();
+        }
+    }
+
+    double y2 = 0.0;
+    Chord* chord2 = item->endNote()->chord();
+    if (chord2) {
+        y2 = chord2->ldata()->bbox().top();
+        if (!chord2->octaveDots().empty()) {
+            y2 += chord2->octaveDots().front()->ldata()->pos().y();
+        }
+    }
+
+    double minY = std::min(y1, y2);
+    sPos.p1 += PointF(0, minY);
+    sPos.p2 += PointF(0, minY);
 }
 
 TieSegment* SlurTieLayout::layoutTieBack(Tie* item, System* system, LayoutContext& ctx)
@@ -3044,7 +3078,9 @@ void SlurTieLayout::calculateDirection(Tie* item)
         StaffType* st = item->staff()->staffType(primaryNote ? primaryNote->tick() : Fraction(0, 1));
         bool simpleException = st && st->isSimpleTabStaff();
         // if there are multiple voices, the tie direction goes on stem side
-        if (primaryMeasure->hasVoices(primaryChord->staffIdx(), primaryChord->tick(), primaryChord->actualTicks())) {
+        if (item->staff()->isJianpuStaff(primaryNote ? primaryNote->tick() : Fraction(0, 1))) {
+            item->setUp(true);
+        } else if (primaryMeasure->hasVoices(primaryChord->staffIdx(), primaryChord->tick(), primaryChord->actualTicks())) {
             item->setUp(simpleException ? isUpVoice(primaryChord->voice()) : primaryChord->up());
         } else if (tieHasBothNotes && secondaryMeasure->hasVoices(secondaryChord->staffIdx(), secondaryChord->tick(),
                                                                   secondaryChord->actualTicks())) {
