@@ -638,6 +638,10 @@ int EngravingObject::getPropertyFlagsIdx(Pid id) const
 
 PropertyFlags EngravingObject::propertyFlags(Pid id) const
 {
+    if (EngravingObject* e = propertyDelegate(id)) {
+        return e->propertyFlags(id);
+    }
+
     static PropertyFlags f = PropertyFlags::NOSTYLE;
 
     int i = getPropertyFlagsIdx(id);
@@ -653,6 +657,11 @@ PropertyFlags EngravingObject::propertyFlags(Pid id) const
 
 void EngravingObject::setPropertyFlags(Pid id, PropertyFlags f)
 {
+    if (EngravingObject* e = propertyDelegate(id)) {
+        e->setPropertyFlags(id, f);
+        return;
+    }
+
     int i = getPropertyFlagsIdx(id);
     if (i == -1) {
         return;
