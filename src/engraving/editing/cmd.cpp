@@ -4948,8 +4948,8 @@ void Score::cmdToggleAutoplace(bool all)
         std::set<EngravingItem*> spanners;
         for (EngravingItem* e : selection().elements()) {
             if (e->isSpannerSegment()) {
-                if (EngravingItem* ee = e->propertyDelegate(Pid::AUTOPLACE)) {
-                    e = ee;
+                if (EngravingObject* ee = e->propertyDelegate(Pid::AUTOPLACE)) {
+                    e = toEngravingItem(ee);
                 }
                 // spanner segments may each have their own autoplace setting
                 // but if they delegate to spanner, only toggle once

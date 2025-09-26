@@ -789,7 +789,7 @@ void LineSegment::localSpatiumChanged(double ov, double nv)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingItem* LineSegment::propertyDelegate(Pid pid)
+EngravingObject* LineSegment::propertyDelegate(Pid pid) const
 {
     if (pid == Pid::DIAGONAL
         || pid == Pid::COLOR

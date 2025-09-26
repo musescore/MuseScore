@@ -44,7 +44,7 @@ public:
 
     Vibrato* vibrato() const { return toVibrato(spanner()); }
 
-    EngravingItem* propertyDelegate(Pid) override;
+    EngravingObject* propertyDelegate(Pid) const override;
 
     const SymIdList& symbols() const { return m_symbols; }
     void setSymbols(const SymIdList& s) { m_symbols = s; }

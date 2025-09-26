@@ -478,7 +478,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
         }
     } else if (id == Pid::EXCLUDE_FROM_OTHER_PARTS) {
         if (isEngravingItem() && getProperty(Pid::EXCLUDE_FROM_OTHER_PARTS) != v) {
-            EngravingItem* delegate = toEngravingItem(this)->propertyDelegate(id);
+            EngravingItem* delegate = toEngravingItem(toEngravingItem(this)->propertyDelegate(id));
             if (delegate) {
                 delegate->manageExclusionFromParts(v.toBool());
             } else {

@@ -253,6 +253,6 @@ public:
     Color color() const override { return lyricsLine()->color(); }
     double baseLineShift() const override;
 
-    EngravingItem* propertyDelegate(Pid) override;
+    EngravingObject* propertyDelegate(Pid) const override;
 };
 } // namespace mu::engraving

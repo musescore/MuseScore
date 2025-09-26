@@ -227,7 +227,7 @@ void HairpinSegment::dragGrip(EditData& ed)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingItem* HairpinSegment::propertyDelegate(Pid pid)
+EngravingObject* HairpinSegment::propertyDelegate(Pid pid) const
 {
     if (pid == Pid::HAIRPIN_TYPE
         || pid == Pid::VELO_CHANGE
