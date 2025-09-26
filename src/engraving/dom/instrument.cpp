@@ -62,10 +62,10 @@ Instrument::Instrument(String id)
     a->setName(String::fromUtf8(InstrChannel::DEFAULT_NAME));
     m_channel.push_back(a);
 
-    m_minPitchA   = 0;
-    m_maxPitchA   = 127;
-    m_minPitchP   = 0;
-    m_maxPitchP   = 127;
+    m_minPitchA   = MIN_PITCH;
+    m_maxPitchA   = MAX_PITCH;
+    m_minPitchP   = MIN_PITCH;
+    m_maxPitchP   = MAX_PITCH;
     m_useDrumset  = false;
     m_drumset     = 0;
     m_singleNoteDynamics = true;

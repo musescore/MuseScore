@@ -926,7 +926,7 @@ static void readNote206(Note* note, XmlReader& e, ReadContext& ctx)
         }
     }
     // ensure sane values:
-    note->setPitch(std::clamp(note->pitch(), 0, 127));
+    note->setPitch(clampPitch(note->pitch()));
 
     if (!tpcIsValid(note->tpc1()) && !tpcIsValid(note->tpc2())) {
         Key key = (note->staff() && note->chord()) ? note->staff()->key(note->chord()->tick()) : Key::C;

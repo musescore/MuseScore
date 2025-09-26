@@ -1326,10 +1326,10 @@ bool Score::getPosition(Position* pos, const PointF& p, voice_idx_t voice) const
             pos->line = s->lines(tick) - 1;
         }
     } else {
-        int minLine   = absStep(0);
+        int minLine   = absStep(MIN_PITCH);
         ClefType clef = s->clef(pos->segment->tick());
         minLine       = relStep(minLine, clef);
-        int maxLine   = absStep(127);
+        int maxLine   = absStep(MAX_PITCH);
         maxLine       = relStep(maxLine, clef);
 
         if (pos->line > minLine || pos->line < maxLine) {
