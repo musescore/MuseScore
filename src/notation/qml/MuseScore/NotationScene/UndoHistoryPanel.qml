@@ -30,25 +30,24 @@ import MuseScore.NotationScene
 Item {
     id: root
 
-    property alias navigationSection: navPanel.section
-    property alias navigationOrderStart: navPanel.order
-
-    NavigationPanel {
-        id: navPanel
-        name: "Undo/redo history"
-        direction: NavigationPanel.Vertical
-        enabled: root.enabled && root.visible
-    }
+    property var navigationSection: null
+    property int navigationOrderStart: 0
 
     StyledListView {
         id: listView
+
+        objectName: "Undo/redo history"
+
         anchors.fill: parent
+
+        currentIndex: undoHistoryModel.currentIndex
+
+        navigation.section: root.navigationSection
+        navigation.order: root.navigationOrderStart
 
         model: UndoHistoryModel {
             id: undoHistoryModel
         }
-
-        currentIndex: undoHistoryModel.currentIndex
 
         delegate: ListItemBlank {
             id: listItem
@@ -56,7 +55,7 @@ Item {
 
             readonly property bool isRedoable: model.index > undoHistoryModel.currentIndex
 
-            navigation.panel: navPanel
+            navigation.panel: listView.navigation
             navigation.order: model.index
             navigation.accessible.name: model.text
             navigation.accessible.row: model.index
