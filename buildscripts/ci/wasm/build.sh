@@ -81,7 +81,7 @@ echo "=== BUILD MuseAudio ==="
 mkdir -p build.audio.release
 cd build.audio.release
 
-cmake ../src/framework/audio/worker/platform/web -GNinja -DCMAKE_BUILD_TYPE="Release" 
+cmake ../src/web/audioengine -GNinja -DCMAKE_BUILD_TYPE="Release" 
 
 if [ $(which nproc) ]; then
     JOBS=$(nproc --all)

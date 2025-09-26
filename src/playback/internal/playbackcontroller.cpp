@@ -168,7 +168,7 @@ void PlaybackController::updateCurrentTempo()
 
 bool PlaybackController::isPlayAllowed() const
 {
-    bool allowed = m_notation != nullptr && m_notation->hasVisibleParts() && isLoaded();
+    bool allowed = m_currentSequenceId != -1 && m_notation != nullptr && m_notation->hasVisibleParts() && isLoaded();
     return allowed;
 }
 

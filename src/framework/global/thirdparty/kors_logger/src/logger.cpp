@@ -279,12 +279,27 @@ std::string LogLayout::formatTime(const Time& t) const
     return str;
 }
 
+void LogLayout::setThreadNameProvider(std::shared_ptr<IThreadNameProvider> provider)
+{
+    m_threadNameProvider = provider;
+}
+
+std::shared_ptr<IThreadNameProvider> LogLayout::threadNameProvider() const
+{
+    return m_threadNameProvider;
+}
+
 std::string LogLayout::formatThread(const std::thread::id& thID) const
 {
+    if (m_threadNameProvider) {
+        return m_threadNameProvider->threadName(thID);
+    }
+
     if (m_mainThread == thID) {
         static const std::string MAIN_THREAD_STR(MAIN_THREAD);
         return MAIN_THREAD_STR;
     }
+
     std::ostringstream ss;
     ss << thID;
     return ss.str();

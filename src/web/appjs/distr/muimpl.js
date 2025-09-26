@@ -54,6 +54,11 @@ async function setupDriver(Module)
 
     AudioDriver.onInited = function() {
         console.log("driver on inited add sound font")
+
+        if (Module.isNeedStartAudio) {
+            Module._startAudioProcessing()
+        }
+
         Module.ccall('addSoundFont', '', ['string'], [Module.soundFont]);
     }
 
@@ -94,6 +99,8 @@ const MuImpl = {
 
     loadModule: async function(opt) {
 
+        console.info("STEP 0: Begin load main module")
+
         this.Module = {
             config: config, // static configuration
 
@@ -104,15 +111,32 @@ const MuImpl = {
                 containerElements: [opt.screen],
             },
 
-            soundFont: opt.soundFont
+            soundFont: opt.soundFont,
+
+            // called from cpp
+            onStartApp: this._onStartApp.bind(this)
         }
 
         setupRpc(this.Module);
+        console.info("STEP 0.1: End setupRpc")
         setupInternalCallbacks(this.Module);
+        console.info("STEP 0.2: End setupInternalCallbacks")
 
         this.Module = await qtLoad(this.Module);
+        console.info("STEP 0.3: End load main module")
 
         return this.Module;
+    },
+
+    _onStartApp: async function() {
+        console.info("STEP 1: Begin on onStartApp")
+        await setupDriver(this.Module);
+        console.info("STEP 1.1: End setupDriver")
+
+        if (config.MUSE_MODULE_AUDIO_WORKER == "ON") {
+            await setupWorker(this.Module);
+            console.info("STEP 1.2: End setupWorker")
+        }
     },
 
     loadScoreFile: async function(file) {
@@ -132,13 +156,12 @@ const MuImpl = {
     },
 
     startAudioProcessing: async function() {
-        await setupDriver(this.Module);
-
-        if (config.MUSE_MODULE_AUDIO_WORKER == "ON") {
-            await setupWorker(this.Module);
+        if (this.Module.driver.inited) {
+            this.Module._startAudioProcessing()
+        } else {
+            console.log("driver not inited, start audio will be later")
+            this.Module.isNeedStartAudio = true;
         }
-
-        this.Module._startAudioProcessing()
     }
 }
 

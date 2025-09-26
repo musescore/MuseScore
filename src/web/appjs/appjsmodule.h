@@ -32,6 +32,7 @@ public:
 
     void onInit(const muse::IApplication::RunMode& mode) override;
     void onDeinit() override;
+    void onStartApp() override;
 
 private:
 };
