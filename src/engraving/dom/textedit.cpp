@@ -222,6 +222,9 @@ void TextBase::endEdit(EditData& ed)
 
     if (textWasEdited) {
         setXmlText(ted->oldXmlText); // reset text to value before editing
+        for (auto& fragment: fragmentList()) {
+            fragment.updateHtml();
+        }
         undo->reopen();
         resetFormatting();
 

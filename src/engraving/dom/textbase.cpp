@@ -66,6 +66,56 @@ static constexpr double superScriptOffset = -0.9; // of x-height
 static const char* FALLBACK_SYMBOL_FONT = "Bravura";
 static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
 
+static const std::regex URL_PATTERN(
+    R"((https?://[a-zA-Z0-9.-]+(?:/[a-zA-Z0-9._~:/?#[\]@!$&'()*+,;=-]*)?))");
+
+static std::string htmlEscape(const String& text)
+{
+    std::string result = text.toStdString();
+
+    // Replace in order: & first, then < and >
+    size_t pos = 0;
+    while ((pos = result.find('&', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&amp;");
+        pos += 5;
+    }
+
+    pos = 0;
+    while ((pos = result.find('<', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&lt;");
+        pos += 4;
+    }
+
+    pos = 0;
+    while ((pos = result.find('>', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&gt;");
+        pos += 4;
+    }
+
+    pos = 0;
+    while ((pos = result.find('"', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&quot;");
+        pos += 6;
+    }
+
+    pos = 0;
+    while ((pos = result.find('\'', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&#39;");
+        pos += 5;
+    }
+
+    return result;
+}
+
+static String convertUrlsToLinks(const String& text)
+{
+    std::string result = htmlEscape(text);
+    result = std::regex_replace(result, URL_PATTERN,
+                                R"(<a href="$1" style="color: blue; text-decoration: underline;">$1</a>)");
+
+    return String::fromStdString(result);
+}
+
 //---------------------------------------------------------
 //   isSorted
 /// return true if (r1,c1) is at or before (r2,c2)
@@ -763,6 +813,7 @@ int TextCursor::position(int row, int column) const
 TextFragment::TextFragment(const String& s)
 {
     text = s;
+    updateHtml();
 }
 
 TextFragment::TextFragment(TextCursor* cursor, const String& s)
@@ -776,6 +827,9 @@ TextFragment::TextFragment(const TextFragment& f)
     text = f.text;
     format = f.format;
     pos = f.pos;
+    if (f.htmlText) {
+        htmlText = std::make_unique<String>(*f.htmlText);
+    }
 }
 
 TextFragment& TextFragment::operator =(const TextFragment& f)
@@ -783,6 +837,9 @@ TextFragment& TextFragment::operator =(const TextFragment& f)
     text = f.text;
     format = f.format;
     pos = f.pos;
+    if (f.htmlText) {
+        htmlText = std::make_unique<String>(*f.htmlText);
+    }
     return *this;
 }
 
@@ -806,6 +863,7 @@ TextFragment TextFragment::split(int column)
                     text   = text.left(idx);
                 }
             }
+            f.updateHtml();
             return f;
         }
         ++idx;
@@ -814,6 +872,7 @@ TextFragment TextFragment::split(int column)
         }
         ++col;
     }
+    f.updateHtml();
     return f;
 }
 
@@ -854,7 +913,11 @@ void TextFragment::draw(Painter* p, const TextBase* t) const
     TextBase::drawTextWorkaround(p, f, pos, text);
 #else
     p->setFont(f);
-    p->drawText(pos, text);
+    if (htmlText && p->canDrawHtml()) {
+        p->drawHtml(pos, *htmlText);
+    } else {
+        p->drawText(pos, text);
+    }
 #endif
 }
 
@@ -1321,10 +1384,13 @@ void TextBlock::insert(TextCursor* cursor, const String& s)
             }
         } else {
             i->text.insert(ridx, s);
+            i->updateHtml();
         }
     } else {
         if (!m_fragments.empty() && m_fragments.back().format == *cursor->format()) {
-            m_fragments.back().text.append(s);
+            TextFragment& fragmentIt = m_fragments.back();
+            fragmentIt.text.append(s);
+            fragmentIt.updateHtml();
         } else {
             m_fragments.push_back(TextFragment(cursor, s));
         }
@@ -1404,9 +1470,11 @@ String TextBlock::remove(int column, TextCursor* cursor)
                 if (it->text.at(i).isSurrogate()) {
                     s = it->text.mid(idx, 2);
                     it->text.remove(idx, 2);
+                    it->updateHtml();
                 } else {
                     s = it->text.mid(idx, 1);
                     it->text.remove(idx, 1);
+                    it->updateHtml();
                 }
                 if (it->text.isEmpty()) {
                     m_fragments.erase(it);
@@ -1442,6 +1510,7 @@ void TextBlock::simplify()
     for (; i != m_fragments.end(); ++i) {
         while (i != m_fragments.end() && (i->format == f->format)) {
             f->text.append(i->text);
+            f->updateHtml();
             i = m_fragments.erase(i);
         }
         if (i == m_fragments.end()) {
@@ -1504,6 +1573,7 @@ String TextBlock::remove(int start, int n, TextCursor* cursor)
                 }
                 --n;
                 if (n == 0) {
+                    i->updateHtml();
                     insertEmptyFragmentIfNeeded(cursor);           // without this, cursorRect can't calculate the y position of the cursor correctly
                     return s;
                 }
@@ -1518,6 +1588,7 @@ String TextBlock::remove(int start, int n, TextCursor* cursor)
         if (inc) {
             ++i;
         }
+        i->updateHtml();
     }
     insertEmptyFragmentIfNeeded(cursor);   // without this, cursorRect can't calculate the y position of the cursor correctly
     return s;
@@ -1633,6 +1704,15 @@ void TextFragment::changeFormat(FormatId id, const FormatValue& data)
     format.setFormatValue(id, data);
 }
 
+void TextFragment::updateHtml()
+{
+    if (std::regex_search(text.toStdString(), URL_PATTERN)) {
+        htmlText = std::make_unique<String>(convertUrlsToLinks(text));
+    } else {
+        htmlText.reset();
+    }
+}
+
 //---------------------------------------------------------
 //   split
 //---------------------------------------------------------
@@ -1652,6 +1732,7 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
                         tf.format = it->format;
                         tl.m_fragments.push_back(tf);
                         it->text = it->text.left(idx);
+                        it->updateHtml();
                         ++it;
                     }
                 }

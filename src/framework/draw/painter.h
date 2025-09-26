@@ -127,6 +127,9 @@ public:
     void drawArc(const RectF& rect, int a, int alen);
 
     void drawText(const PointF& point, const String& text);
+
+    void drawHtml(const PointF& point, const String& htmlText);
+
     inline void drawText(double x, double y, const String& text);
 
     void drawText(const RectF& rect, int flags, const String& text);
@@ -159,6 +162,8 @@ public:
     void setClipRect(const RectF& rect);
     void setMask(const RectF& background, const std::vector<RectF>& maskRects);
     void setClipping(bool enable);
+
+    bool canDrawHtml() const;
 
     //! NOTE Provider for tests.
     //! We're not ready to use DI (ModuleIoC) here yet

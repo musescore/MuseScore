@@ -146,6 +146,7 @@ public:
     TextBase* text() const { return m_text; }
     bool hasSelection() const { return (m_selectLine != m_row) || (m_selectColumn != m_column); }
     void clearSelection();
+
     void endEdit();
     void startEdit();
     bool editing() const { return m_editing; }
@@ -220,6 +221,7 @@ public:
     mutable CharFormat format;
     PointF pos;                    // y is relative to TextBlock->y()
     mutable String text;
+    std::unique_ptr<String> htmlText;
 
     TextFragment() = default;
     TextFragment(const String& s);
@@ -232,9 +234,12 @@ public:
 
     TextFragment split(int column);
     void draw(muse::draw::Painter*, const TextBase*) const;
+
     muse::draw::Font font(const TextBase*) const;
     int columns() const;
     void changeFormat(FormatId id, const FormatValue& data);
+
+    void updateHtml();
 };
 
 //---------------------------------------------------------
