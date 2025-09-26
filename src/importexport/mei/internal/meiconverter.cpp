@@ -3035,7 +3035,7 @@ Convert::BracketStruct Convert::staffGrpFromMEI(const libmei::StaffGrp& meiStaff
     return bracketSt;
 }
 
-libmei::StaffGrp Convert::staffGrpToMEI(const engraving::BracketType bracket, int barLineSpan)
+libmei::StaffGrp Convert::staffGrpToMEI(const engraving::BracketType bracket, const bool barLineSpan)
 {
     libmei::StaffGrp meiStaffGrp;
 
@@ -3043,7 +3043,7 @@ libmei::StaffGrp Convert::staffGrpToMEI(const engraving::BracketType bracket, in
     meiStaffGrp.SetSymbol(symbolToMEI(bracket));
 
     // @bar.thru
-    if (barLineSpan > 0) {
+    if (barLineSpan) {
         meiStaffGrp.SetBarThru(libmei::BOOLEAN_true);
     }
 

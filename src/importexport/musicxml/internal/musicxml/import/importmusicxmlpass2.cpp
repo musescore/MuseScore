@@ -2023,7 +2023,7 @@ Err MusicXmlParserPass2::parse()
  */
 
 static std::unique_ptr<BarLine> createBarline(const Score* score, const track_idx_t track, const BarLineType type, const bool visible,
-                                              const String& barStyle, int spanStaff)
+                                              const String& barStyle, const bool spanStaff)
 {
     std::unique_ptr<BarLine> barline(Factory::createBarLine(score->dummy()->segment()));
     barline->setTrack(track);
@@ -5742,7 +5742,7 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
                 staff_idx_t nstaves = part->nstaves();
                 for (staff_idx_t i = 0; i < nstaves; ++i) {
                     const Staff* staff = part->staff(i);
-                    bool spanStaff = nstaves > 1 ? i < nstaves - 1 : staff->barLineSpan();
+                    const bool spanStaff = nstaves > 1 ? i < nstaves - 1 : staff->barLineSpan();
                     track_idx_t currentTrack = track + (i * VOICES);
                     auto b = createBarline(measure->score(), currentTrack, type, visible, barStyle, spanStaff);
                     colorItem(b.get(), barlineColor);

@@ -104,11 +104,11 @@ public:
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const { return explicitParent() ? toMeasure(explicitParent()->explicitParent()) : nullptr; }
 
-    void setSpanStaff(int val) { m_spanStaff = val; }
+    void setSpanStaff(const bool val) { m_spanStaff = val; }
     void setSpanFrom(int val) { m_spanFrom = val; }
     void setSpanTo(int val) { m_spanTo = val; }
     void setShowTips(bool val);
-    int spanStaff() const { return m_spanStaff; }
+    bool spanStaff() const { return m_spanStaff; }
     int spanFrom() const { return m_spanFrom; }
     int spanTo() const { return m_spanTo; }
     bool showTips() const;
@@ -176,7 +176,7 @@ private:
     BarLine(Segment* parent);
     BarLine(const BarLine&);
 
-    int m_spanStaff = 0;         // span barline to next staff if true, values > 1 are used for importing from 2.x
+    bool m_spanStaff = false;         // span barline to next staff if true
     int m_spanFrom = 0;          // line number on start and end staves
     int m_spanTo = 0;
     BarLineType m_barLineType = BarLineType::NORMAL;

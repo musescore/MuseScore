@@ -195,7 +195,7 @@ void MeasureNumberLayout::checkBarlineCollisions(const MeasureNumber* item, cons
     }
 
     const double minBarLineDistance = 0.25 * item->spatium();
-    if (!barlineSeg || (barlineSeg->segmentType() != SegmentType::BeginBarLine && item->score()->staff(barlineStaff)->barLineSpan() < 1)) {
+    if (!barlineSeg || (barlineSeg->segmentType() != SegmentType::BeginBarLine && !item->score()->staff(barlineStaff)->barLineSpan())) {
         return;
     }
 

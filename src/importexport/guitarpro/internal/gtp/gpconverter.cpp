@@ -1111,7 +1111,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 
     if (tR->staffCount() > 1) {
         part->staff(0)->addBracket(mu::engraving::Factory::createBracketItem(_score->dummy(), BracketType::BRACE, 2));
-        part->staff(0)->setBarLineSpan(2);
+        part->staff(0)->setBarLineSpan(true);
     }
 
     part->setMidiProgram(programm);

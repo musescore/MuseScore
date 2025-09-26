@@ -84,7 +84,7 @@ void MaskLayout::computeBarlineMasks(const Segment* barlineSement, const System*
             continue;
         }
         BarLine* barline = toBarLine(barlineSement->element(staff2track(staffIdx)));
-        if (!barline || barline->spanStaff() == 0) {
+        if (!barline || !barline->spanStaff()) {
             continue;
         }
         maskBarlineForText(barline, allSystemText);

@@ -19,10 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#pragma once
 
-#ifndef MU_ENGRAVING_INSTRTEMPLATE_H
-#define MU_ENGRAVING_INSTRTEMPLATE_H
-
+#include <array>
 #include <list>
 
 #include "io/path.h"
@@ -119,7 +118,7 @@ public:
     int staffLines[MAX_STAVES];
     BracketType bracket[MAX_STAVES];              // bracket type (NO_BRACKET)
     int bracketSpan[MAX_STAVES];
-    int barlineSpan[MAX_STAVES];
+    std::array<bool, MAX_STAVES> barlineSpan{};
     bool smallStaff[MAX_STAVES];
 
     bool extended = false;            // belongs to extended instrument set if true
@@ -193,4 +192,3 @@ extern void addTemplateToGroup(const InstrumentTemplate* templ, const String& gr
 
 extern ClefType defaultClef(int patch);
 } // namespace mu::engraving
-#endif

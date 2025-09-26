@@ -1523,7 +1523,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         } else if (tag == "BarLine") {
             BarLine* barLine = Factory::createBarLine(ctx.dummy()->segment());
             barLine->setTrack(ctx.track());
-            barLine->resetProperty(Pid::BARLINE_SPAN);
+            // initialize span properties with values from staff
             barLine->resetProperty(Pid::BARLINE_SPAN_FROM);
             barLine->resetProperty(Pid::BARLINE_SPAN_TO);
 
@@ -2400,7 +2400,15 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
             staff->setBracketSpan(col, e.intAttribute("span", 0));
             e.readNext();
         } else if (tag == "barLineSpan") {
-            staff->setBarLineSpan(e.readInt());
+            const int barLineSpan = e.readInt();
+            if (barLineSpan > 0) {
+                ctx.setStaffBarLineSpan(staff->idx(), static_cast<size_t>(barLineSpan - 1));
+            } else {
+                if (barLineSpan < 0) {
+                    LOGW() << "barLineSpan is negative: " << barLineSpan;
+                }
+                ctx.setStaffBarLineSpan(staff->idx(), 0);
+            }
         } else {
             e.unknown();
         }
@@ -2926,16 +2934,12 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         return make_ret(Err::FileBadFormat, e.errorString());
     }
 
+    setBarLineSpanToStaves(masterScore, ctx);
+
     for (Staff* s : masterScore->staves()) {
         size_t idx = s->idx();
         track_idx_t track = idx * VOICES;
 
-        // check barLineSpan
-        if (s->barLineSpan() > static_cast<int>(masterScore->nstaves() - idx)) {
-            LOGD("read114: invalid barline span %d (max %zu)",
-                 s->barLineSpan(), masterScore->nstaves() - idx);
-            s->setBarLineSpan(static_cast<int>(masterScore->nstaves() - idx));
-        }
         for (auto i : s->clefList()) {
             Fraction tick   = Fraction::fromTicks(i.first);
             ClefType clefId = i.second.concertClef;
@@ -3078,17 +3082,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
 
     masterScore->m_fileDivision = Constants::DIVISION;
 
-    //
-    //    sanity check for barLineSpan and update ottavas
-    //
     for (Staff* staff : masterScore->staves()) {
-        int barLineSpan = staff->barLineSpan();
-        staff_idx_t idx = staff->idx();
-        size_t n = masterScore->nstaves();
-        if (idx + barLineSpan > n) {
-            LOGD("bad span: idx %zu  span %d staves %zu", idx, barLineSpan, n);
-            staff->setBarLineSpan(static_cast<int>(n - idx));
-        }
         staff->updateOttava();
     }
 
@@ -3196,6 +3190,32 @@ void Read114::pasteSymbols(XmlReader&, ChordRest*)
 void Read114::readTremoloCompat(TremoloCompat*, XmlReader&)
 {
     UNREACHABLE;
+}
+
+// also propagates to non-generated bar lines
+void Read114::setBarLineSpanToStaves(Score* score, const read400::ReadContext& ctx)
+{
+    const size_t numStaves = score->nstaves();
+    size_t barLineSpan = 0;
+    for (Staff* s : score->staves()) {
+        const staff_idx_t staffIdx = s->idx();
+        const size_t maxSpan = numStaves - staffIdx - 1;
+
+        size_t staffBarLineSpan = ctx.getStaffBarLineSpan(staffIdx);
+        if (staffBarLineSpan > maxSpan) {
+            LOGW() << "invalid barline span " << staffBarLineSpan << " (max " << maxSpan << ")";
+            staffBarLineSpan = maxSpan;
+        }
+
+        barLineSpan = std::max(barLineSpan, staffBarLineSpan);
+        if (barLineSpan == 0) {
+            s->setProperty(Pid::STAFF_BARLINE_SPAN, false);
+            continue;
+        }
+        --barLineSpan;
+
+        s->setProperty(Pid::STAFF_BARLINE_SPAN, true);
+    }
 }
 
 void Read114::doReadItem(EngravingItem*, XmlReader&)
