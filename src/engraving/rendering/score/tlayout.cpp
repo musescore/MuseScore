@@ -1648,6 +1648,11 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
         const Fraction tick = endOfMeasureClef && !item->isTrailer() ? item->tick() : clefSeg->measure()->tick();
 
         const Fraction tickPrev = tick - Fraction::eps();
+
+        if (item->staff()->isJianpuStaff(tick)) {
+            return; // Jianpu do not need to show clef
+        }
+
         const StaffType* st = item->staff()->staffType(tick);
         const StaffType* stPrev = !tickPrev.negative() ? item->staff()->staffType(tickPrev) : nullptr;
         StaffGroup staffGroup = st->group();
