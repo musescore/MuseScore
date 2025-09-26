@@ -198,6 +198,7 @@ void TextBase::endEdit(EditData& ed)
         undo->reopen();
         if (newlyAdded) {
             score()->endCmd(true); // rollback the "add element" command
+            ted->deleteText = true;
         } else {
             score()->undoRemoveElement(this);
             commitText();
