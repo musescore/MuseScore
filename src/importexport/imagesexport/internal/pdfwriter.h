@@ -28,6 +28,7 @@
 #include "../iimagesexportconfiguration.h"
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
+#include "context/iglobalcontext.h"
 
 class QPdfWriter;
 
@@ -36,6 +37,7 @@ class PdfWriter : public AbstractImageWriter
 {
     Inject<IImagesExportConfiguration> configuration = { this };
     Inject<muse::IApplication> application = { this };
+    Inject<context::IGlobalContext> globalContext = { this };
 
 public:
     PdfWriter(const muse::modularity::ContextPtr& iocCtx)
@@ -47,7 +49,9 @@ public:
                         const Options& options = Options()) override;
 
 private:
-    void preparePdfWriter(QPdfWriter& pdfWriter, const QString& title, const QSizeF& size) const;
+    void preparePdfWriter(QPdfWriter& pdfWriter, notation::INotationPtr notation, const QSizeF& size) const;
+    project::ProjectMeta getProjectMetadata(notation::INotationPtr notation) const;
+    QByteArray generateXmpMetadata(const project::ProjectMeta& meta) const;
 };
 }
 
