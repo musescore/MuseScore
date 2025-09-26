@@ -46,9 +46,9 @@ PopupView::~PopupView()
     }
 }
 
-bool PopupView::isDialog() const
+void PopupView::initWindow()
 {
-    return false;
+    m_window->init(engine(), false, true);
 }
 
 void PopupView::initCloseController()

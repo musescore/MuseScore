@@ -158,9 +158,10 @@ signals:
     void parentWindowChanged();
 
 protected:
-    virtual bool isDialog() const = 0;
     void classBegin() override;
     void componentComplete() override;
+
+    virtual void initWindow() = 0;
 
     virtual void beforeOpen();
     void doOpen();
@@ -169,8 +170,6 @@ protected:
     virtual void onHidden();
 
     virtual void repositionWindowIfNeed() {}
-
-    bool frameless() const { return false; }
 
     QWindow* parentWindow() const;
     void setParentWindow(QWindow* window);

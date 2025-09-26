@@ -96,11 +96,6 @@ void WindowView::forceActiveFocus()
     m_window->forceActiveFocus();
 }
 
-bool WindowView::isDialog() const
-{
-    return false;
-}
-
 void WindowView::classBegin()
 {
 }
@@ -113,7 +108,7 @@ void WindowView::init()
     }
 
     m_window = new PopupWindow_QQuickView(muse::iocCtxForQmlEngine(engine), this);
-    m_window->init(engine, isDialog(), frameless());
+    initWindow();
     m_window->setOnHidden([this]() { onHidden(); });
     m_window->setParentWindow(m_parentWindow);
     m_window->setContent(m_component, m_contentItem);

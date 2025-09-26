@@ -42,9 +42,9 @@ DialogView::DialogView(QQuickItem* parent)
     setRetCode(Ret::Code::Ok);
 }
 
-bool DialogView::isDialog() const
+void DialogView::initWindow()
 {
-    return true;
+    m_window->init(engine(), true, frameless());
 }
 
 void DialogView::beforeOpen()

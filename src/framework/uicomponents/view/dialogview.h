@@ -88,7 +88,7 @@ signals:
     void retChanged(QVariantMap ret);
 
 private:
-    bool isDialog() const override;
+    void initWindow() override;
     void beforeOpen() override;
     void onHidden() override;
 
