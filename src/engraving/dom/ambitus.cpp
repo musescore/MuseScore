@@ -332,11 +332,11 @@ Ambitus::Ranges Ambitus::estimateRanges() const
                     continue;
                 }
                 int pitch = n->epitch() + n->ottaveCapoFret(); // written pitch, accounting for octave offset
-                if (pitch > result.topPitch || !pitchIsValid(result.topPitch)) {
+                if (pitch > result.topPitch) {
                     result.topPitch = pitch;
                     result.topTpc   = n->tpc();
                 }
-                if (pitch < result.bottomPitch || !pitchIsValid(result.bottomPitch)) {
+                if (pitch < result.bottomPitch) {
                     result.bottomPitch = pitch;
                     result.bottomTpc   = n->tpc();
                 }
@@ -426,10 +426,10 @@ bool Ambitus::setProperty(Pid propertyId, const PropertyValue& v)
         setBottomPitch(v.toInt());
         break;
     case Pid::FBPARENTHESIS3:                // recycled property = octave of _topPitch
-        setTopPitch(topPitch() % 12 + (v.toInt() + 1) * 12);
+        setTopPitch(topPitch() % PITCH_DELTA_OCTAVE + (v.toInt() + 1) * PITCH_DELTA_OCTAVE);
         break;
     case Pid::FBPARENTHESIS4:                // recycled property = octave of _bottomPitch
-        setBottomPitch(bottomPitch() % 12 + (v.toInt() + 1) * 12);
+        setBottomPitch(bottomPitch() % PITCH_DELTA_OCTAVE + (v.toInt() + 1) * PITCH_DELTA_OCTAVE);
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
@@ -464,9 +464,9 @@ PropertyValue Ambitus::propertyDefault(Pid id) const
     case Pid::FBPARENTHESIS2:
         return estimateRanges().bottomPitch;
     case Pid::FBPARENTHESIS3:
-        return int(estimateRanges().topPitch / 12) - 1;
+        return int(estimateRanges().topPitch / PITCH_DELTA_OCTAVE) - 1;
     case Pid::FBPARENTHESIS4:
-        return int(estimateRanges().bottomPitch / 12) - 1;
+        return int(estimateRanges().bottomPitch / PITCH_DELTA_OCTAVE) - 1;
     default:
         return EngravingItem::propertyDefault(id);
     }

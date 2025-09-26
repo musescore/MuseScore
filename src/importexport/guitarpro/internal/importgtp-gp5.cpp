@@ -1229,7 +1229,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             auto staff = note->staff();
             int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), harmonicOvertone, staff);
 
-            note->setPitch(std::clamp(pitch, 0, 127));
+            note->setPitch(clampPitch(pitch));
             note->setTpcFromPitch(Prefer::SHARPS);
         } else if (type >= HARMONIC_MARK_ARTIFICIAL && type <= HARMONIC_MARK_SEMI) {
             int fret = (type == HARMONIC_MARK_TAP ? (readChar() - note->fret()) : note->fret());
@@ -1289,7 +1289,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
 
             int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), overtoneFret + note->part()->capoFret(), staff);
 
-            harmonicNote->setPitch(std::clamp(pitch, 0, 127));
+            harmonicNote->setPitch(clampPitch(pitch));
             harmonicNote->setTpcFromPitch(Prefer::SHARPS);
             note->setHarmonicPitchOffset(harmonicNote->pitch() - note->pitch());
             note->chord()->add(harmonicNote);

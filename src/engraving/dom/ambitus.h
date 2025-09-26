@@ -67,8 +67,8 @@ public:
     DirectionH direction() const { return m_direction; }
     bool hasLine() const { return m_hasLine; }
     Spatium lineWidth() const { return m_lineWidth; }
-    int topOctave() const { return (m_topPitch / 12) - 1; }
-    int bottomOctave() const { return (m_bottomPitch / 12) - 1; }
+    int topOctave() const { return (m_topPitch / PITCH_DELTA_OCTAVE) - 1; }
+    int bottomOctave() const { return (m_bottomPitch / PITCH_DELTA_OCTAVE) - 1; }
     int topPitch() const { return m_topPitch; }
     int bottomPitch() const { return m_bottomPitch; }
     int topTpc() const { return m_topTpc; }
@@ -131,7 +131,7 @@ private:
         int topTpc = Tpc::TPC_INVALID;
         int bottomTpc = Tpc::TPC_INVALID;
         int topPitch = INVALID_PITCH;
-        int bottomPitch = INVALID_PITCH;
+        int bottomPitch = MAX_PITCH + 1;
     };
 
     Ranges estimateRanges() const;                // scan staff up to next section break and update range pitches

@@ -192,7 +192,7 @@ bool Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
     } else {
         ntpc2 = ntpc1;
     }
-    if (npitch > 127) {
+    if (!pitchIsValid(npitch)) {
         return false;
     }
     undoChangePitch(n, npitch, ntpc1, ntpc2);
@@ -633,13 +633,8 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
         newTpc2 = clampEnharmonic(newTpc, useDoubleAccidentals);
     }
 
-    // check results are in ranges
-    while (newPitch > 127) {
-        newPitch -= PITCH_DELTA_OCTAVE;
-    }
-    while (newPitch < 0) {
-        newPitch += PITCH_DELTA_OCTAVE;
-    }
+    // check pitch is in range
+    newPitch = clampPitch(newPitch, true);
 
     // store new data
     score()->undoChangePitch(this, newPitch, newTpc1, newTpc2);
