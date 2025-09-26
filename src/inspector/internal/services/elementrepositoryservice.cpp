@@ -392,16 +392,32 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findSectionBreaks
     return resultList;
 }
 
-EngravingItem* ElementRepositoryService::findTextDelegate(EngravingItem* element) const
+std::vector<EngravingItem*> ElementRepositoryService::findTextDelegates(EngravingItem* element) const
 {
+    if (element->isTextLineBaseSegment()) {
+        std::vector<EngravingItem*> textItems;
+        TextLineBase* tl = toTextLineBaseSegment(element)->textLineBase();
+        for (SpannerSegment* seg : tl->spannerSegments()) {
+            if (Text* text = toTextLineBaseSegment(seg)->text()) {
+                textItems.push_back(text);
+            }
+
+            if (Text* endText = toTextLineBaseSegment(seg)->endText()) {
+                textItems.push_back(endText);
+            }
+        }
+
+        return textItems;
+    }
+
     switch (element->type()) {
     case ElementType::BAR_LINE: {
         Segment* seg = toBarLine(element)->segment();
         PlayCountText* playCountText = toPlayCountText(seg->findAnnotation(ElementType::PLAY_COUNT_TEXT, 0, 0));
-        return playCountText;
+        return { playCountText };
     }
     default:
-        return element;
+        return { element };
     }
 }
 
@@ -410,9 +426,11 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findTexts() const
     QList<mu::engraving::EngravingItem*> resultList;
 
     for (mu::engraving::EngravingItem* element : m_exposedElementList) {
-        EngravingItem* el = findTextDelegate(element);
-        if (TEXT_ELEMENT_TYPES.contains(el->type())) {
-            resultList << el;
+        std::vector<EngravingItem*> delegateItems = findTextDelegates(element);
+        for (mu::engraving::EngravingItem* el : delegateItems) {
+            if (TEXT_ELEMENT_TYPES.contains(el->type())) {
+                resultList << el;
+            }
         }
     }
 

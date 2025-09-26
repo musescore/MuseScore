@@ -68,7 +68,7 @@ class TextSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool isLineSpacingAvailable READ isLineSpacingAvailable NOTIFY isLineSpacingAvailableChanged)
 
 public:
-    explicit TextSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit TextSettingsModel(QObject* parent, IElementRepositoryService* repository, bool isTextLineText);
 
     Q_INVOKABLE void insertSpecialCharacters();
     Q_INVOKABLE void showStaffTextProperties();
@@ -148,6 +148,8 @@ private:
     void updateIsLineSpacingAvailable();
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
+
+    bool isTextLineText() const;
 
     PropertyItem* m_fontFamily = nullptr;
     PropertyItem* m_fontStyle = nullptr;
