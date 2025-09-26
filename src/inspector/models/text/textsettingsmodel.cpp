@@ -37,10 +37,10 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService* repository)
+TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService* repository, bool isTextLineText)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_TEXT);
+    setSectionType(isTextLineText ? InspectorSectionType::SECTION_TEXT_LINES : InspectorSectionType::SECTION_TEXT);
     setTitle(muse::qtrc("inspector", "Text"));
     createProperties();
 
@@ -56,19 +56,25 @@ TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService*
 
 void TextSettingsModel::createProperties()
 {
-    m_fontFamily = buildPropertyItem(mu::engraving::Pid::FONT_FACE);
-    m_fontStyle = buildPropertyItem(mu::engraving::Pid::FONT_STYLE);
-    m_fontSize = buildPropertyItem(mu::engraving::Pid::FONT_SIZE);
+    const bool textLine = isTextLineText();
+    const Pid fontFaceId = textLine ? mu::engraving::Pid::BEGIN_FONT_FACE : mu::engraving::Pid::FONT_FACE;
+    const Pid fontStyleId = textLine ? mu::engraving::Pid::BEGIN_FONT_STYLE : mu::engraving::Pid::FONT_STYLE;
+    const Pid fontSizeId = textLine ? mu::engraving::Pid::BEGIN_FONT_SIZE : mu::engraving::Pid::FONT_SIZE;
+    const Pid fontAlignId = textLine ? mu::engraving::Pid::BEGIN_TEXT_ALIGN : mu::engraving::Pid::ALIGN;
+
+    m_fontFamily = buildPropertyItem(fontFaceId);
+    m_fontStyle = buildPropertyItem(fontStyleId);
+    m_fontSize = buildPropertyItem(fontSizeId);
     m_textLineSpacing = buildPropertyItem(mu::engraving::Pid::TEXT_LINE_SPACING);
 
-    m_horizontalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_horizontalAlignment = buildPropertyItem(fontAlignId, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
     }, [this](const mu::engraving::Sid sid, const QVariant& newValue) {
         updateStyleValue(sid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
 
         emit requestReloadPropertyItems();
     });
-    m_verticalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_verticalAlignment = buildPropertyItem(fontAlignId, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
     }, [this](const mu::engraving::Sid sid, const QVariant& newValue) {
         updateStyleValue(sid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
@@ -106,7 +112,7 @@ void TextSettingsModel::requestElements()
 
 void TextSettingsModel::loadProperties()
 {
-    static const PropertyIdSet propertyIdSet {
+    static const PropertyIdSet textPropertyIdSet {
         Pid::FONT_FACE,
         Pid::FONT_STYLE,
         Pid::FONT_SIZE,
@@ -125,12 +131,31 @@ void TextSettingsModel::loadProperties()
         Pid::TEXT_SCRIPT_ALIGN
     };
 
-    loadProperties(propertyIdSet);
+    static const PropertyIdSet textLinePropertyIdSet {
+        Pid::BEGIN_FONT_FACE,
+        Pid::FONT_STYLE,
+        Pid::BEGIN_FONT_SIZE,
+        Pid::TEXT_LINE_SPACING,
+        Pid::BEGIN_TEXT_ALIGN,
+        Pid::MUSIC_SYMBOL_SIZE,
+        Pid::TEXT_SIZE_SPATIUM_DEPENDENT,
+        Pid::FRAME_TYPE,
+        Pid::FRAME_BG_COLOR,
+        Pid::FRAME_FG_COLOR,
+        Pid::FRAME_WIDTH,
+        Pid::FRAME_PADDING,
+        Pid::FRAME_ROUND,
+        Pid::TEXT_STYLE,
+        Pid::PLACEMENT,
+        Pid::TEXT_SCRIPT_ALIGN
+    };
+
+    loadProperties(isTextLineText() ? textLinePropertyIdSet : textPropertyIdSet);
 }
 
 void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
-    if (muse::contains(propertyIdSet, Pid::FONT_FACE)) {
+    if (muse::contains(propertyIdSet, Pid::FONT_FACE) || muse::contains(propertyIdSet, Pid::BEGIN_FONT_FACE)) {
         loadPropertyItem(m_fontFamily, [](const QVariant& elementPropertyValue) -> QVariant {
             return elementPropertyValue.toString() == mu::engraving::TextBase::UNDEFINED_FONT_FAMILY
                    ? QVariant() : elementPropertyValue.toString();
@@ -139,7 +164,7 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         m_fontFamily->setIsEnabled(true);
     }
 
-    if (muse::contains(propertyIdSet, Pid::FONT_STYLE)) {
+    if (muse::contains(propertyIdSet, Pid::FONT_STYLE) || muse::contains(propertyIdSet, Pid::BEGIN_FONT_STYLE)) {
         loadPropertyItem(m_fontStyle, [](const QVariant& elementPropertyValue) -> QVariant {
             return elementPropertyValue.toInt() == static_cast<int>(mu::engraving::FontStyle::Undefined)
                    ? QVariant() : elementPropertyValue.toInt();
@@ -148,7 +173,7 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         m_fontStyle->setIsEnabled(true);
     }
 
-    if (muse::contains(propertyIdSet, Pid::FONT_SIZE)) {
+    if (muse::contains(propertyIdSet, Pid::FONT_SIZE) || muse::contains(propertyIdSet, Pid::BEGIN_FONT_SIZE)) {
         loadPropertyItem(m_fontSize, [](const QVariant& elementPropertyValue) -> QVariant {
             return muse::RealIsEqual(elementPropertyValue.toDouble(), mu::engraving::TextBase::UNDEFINED_FONT_SIZE)
                    ? QVariant() : elementPropertyValue.toDouble();
@@ -161,7 +186,7 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         loadPropertyItem(m_textLineSpacing, formatDoubleFunc);
     }
 
-    if (muse::contains(propertyIdSet, Pid::ALIGN)) {
+    if (muse::contains(propertyIdSet, Pid::ALIGN) || muse::contains(propertyIdSet, Pid::BEGIN_TEXT_ALIGN)) {
         loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
             QVariantList list = elementPropertyValue.toList();
             return list.size() >= 2 ? list[0] : QVariant();
@@ -223,6 +248,11 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     updateIsSymbolSizeAvailable();
     updateIsScriptSizeAvailable();
     updateIsLineSpacingAvailable();
+}
+
+bool TextSettingsModel::isTextLineText() const
+{
+    return sectionType() == InspectorSectionType::SECTION_TEXT_LINES;
 }
 
 void TextSettingsModel::resetProperties()
