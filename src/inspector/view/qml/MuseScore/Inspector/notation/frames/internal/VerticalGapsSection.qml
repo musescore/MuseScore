@@ -37,7 +37,7 @@ Item {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
-    property int navigationRowEnd: gapBelow.navigationRowEnd
+    property int navigationRowEnd: gapNotationBelow.navigationRowEnd
 
     height: childrenRect.height
     width: parent.width
@@ -112,7 +112,7 @@ Item {
         measureUnitsSymbol: qsTrc("global", "sp")
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: root.navigationRowStart + 1
+        navigationRowStart: gapBelow.navigationRowEnd + 1
     }
 
     SpinBoxPropertyView {
@@ -129,6 +129,6 @@ Item {
         measureUnitsSymbol: qsTrc("global", "sp")
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: gapAbove.navigationRowEnd + 1
+        navigationRowStart: gapNotationAbove.navigationRowEnd + 1
     }
 }
