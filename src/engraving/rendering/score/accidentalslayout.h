@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include "vectorview.h"
+
 #include "shape.h"
 
 namespace mu::engraving {
@@ -98,7 +100,7 @@ private:
         static constexpr size_t m_largeGroupLimit = 6;
     };
 
-    struct AccidentalsVectorView;
+    using AccidentalsVectorView = muse::VectorView<Accidental*>;
 
     static void collectAccidentals(const std::vector<Chord*> chords, std::vector<Accidental*>& allAccidentals,
                                    std::vector<Accidental*>& redundantAccidentals, std::vector<Accidental*>& invisibleAccidentals);
