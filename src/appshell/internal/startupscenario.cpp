@@ -237,7 +237,7 @@ QList<QVariantMap> StartupScenario::welcomeDialogData() const
                                            "Includes a new system for hiding empty staves, a new text editing widget, guitar notation improvements, engraving improvements and more."));
     item1.insert("buttonText", muse::qtrc("appshell/welcome", "Watch video"));
     item1.insert("destinationUrl",
-                 "https://www.youtube.com/watch?v=83ZMq8JP-x8&utm_source=mss-yt-4.6-release&utm_medium=mss-yt-4.6-release&utm_campaign=mss-yt-4.6-release&utm_id=mss-yt-4.6-release");
+                 "https://www.youtube.com/watch?v=J2gY9CbMuoI&utm_source=mss-app-yt-4.6-release&utm_medium=mss-app-yt-4.6-release&utm_campaign=mss-app-yt-4.6-release");
 
     QVariantMap item2;
     item2.insert("title", muse::qtrc("appshell/welcome", "Install our free MuseSounds libraries"));
