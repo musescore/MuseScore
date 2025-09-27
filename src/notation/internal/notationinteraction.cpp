@@ -6472,6 +6472,8 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
     mu::engraving::PropertyFlags fFlags = lyrics->propertyFlags(mu::engraving::Pid::FONT_STYLE);
     mu::engraving::TextStyleType styleType = lyrics->textStyleType();
 
+    mu::engraving::ChordRest* lastSlurredOrTiedCR = lyrics->chordRest();
+
     mu::engraving::Segment* nextSegment = segment;
     if (back) {
         // search prev chord
@@ -6491,6 +6493,43 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         }
     } else {
         // search next chord
+
+        if (configuration()->lyricsFormMelismaAtSlurTies()) {
+            // check if at start of slur
+            if (lastSlurredOrTiedCR->isChord()) {
+                auto slurredChord = toChord(lastSlurredOrTiedCR);
+
+                // if at start of slur, find the shortest slur and proceed to the end of it
+                if (slurredChord->startEndSlurs().startDown || slurredChord->startEndSlurs().startUp) {
+                    auto spanners = score()->spannerMap().findOverlapping(slurredChord->tick().ticks(), slurredChord->endTick().ticks());
+                    Spanner* spannerToFollow = nullptr;
+                    for (auto& spanner : spanners) {
+                        if (spanner.value->startCR() == slurredChord && spanner.value->isSlur()) {
+                            if (!spannerToFollow
+                                || (spannerToFollow->ticks() > spanner.value->ticks())
+                                ) {
+                                spannerToFollow = spanner.value;
+                            }
+                        }
+                    }
+                    if (spannerToFollow) {
+                        lastSlurredOrTiedCR = spannerToFollow->endCR();
+                    }
+                }
+            }
+
+            // check if have tie - if so, proceed until no more ties
+            if (lastSlurredOrTiedCR->isChord()) {
+                auto tiedChord = toChord(lastSlurredOrTiedCR);
+                while (tiedChord->nextTiedChord()) {
+                    tiedChord = tiedChord->nextTiedChord();
+                }
+                lastSlurredOrTiedCR = toChordRest(tiedChord);
+            }
+
+            nextSegment = lastSlurredOrTiedCR->segment();
+        }
+
         while ((nextSegment = nextSegment->next1(mu::engraving::SegmentType::ChordRest))) {
             EngravingItem* el = nextSegment->element(track);
             if (!el) {
@@ -6505,9 +6544,6 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
                 }
             }
         }
-    }
-    if (nextSegment == 0) {
-        return;
     }
 
     endEditText();
@@ -6526,6 +6562,17 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
             }
             segment = segment->prev1(mu::engraving::SegmentType::ChordRest);
         }
+    }
+
+    // if nowhere to navigate to, return
+    if (nextSegment == 0) {
+        // add melisma line if have jumped ahead for slur/tie and have written lyrics (i.e., not just pressing space repeatedly)
+        if (fromLyrics == lyrics && lastSlurredOrTiedCR != lyrics->chordRest()) {
+            score()->startCmd(TranslatableString("undoableAction", "Navigate to lyrics"));
+            lyrics->undoChangeProperty(mu::engraving::Pid::LYRIC_TICKS, lastSlurredOrTiedCR->endTick() - lyrics->chordRest()->endTick());
+            score()->endCmd();
+        }
+        return;
     }
 
     ChordRest* cr = toChordRest(nextSegment->element(track));
@@ -6585,6 +6632,11 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         }
     }
 
+    // add melisma line if have jumped ahead for slur/tie and have written lyrics (i.e., not just pressing space repeatedly)
+    if (fromLyrics == lyrics && lastSlurredOrTiedCR != lyrics->chordRest()) {
+        lyrics->undoChangeProperty(mu::engraving::Pid::LYRIC_TICKS, lastSlurredOrTiedCR->endTick() - lyrics->chordRest()->endTick());
+    }
+
     if (newLyrics) {
         score()->undoAddElement(nextLyrics);
     }
@@ -6617,6 +6669,7 @@ void NotationInteraction::navigateToNextSyllable()
         LOGW("nextSyllable called with invalid current element");
         return;
     }
+
     Lyrics* lyrics = toLyrics(m_editData.element);
     ChordRest* initialCR = lyrics->chordRest();
     const bool hasPrecedingRepeat = initialCR->hasPrecedingJumpItem();
@@ -6632,7 +6685,43 @@ void NotationInteraction::navigateToNextSyllable()
     mu::engraving::TextStyleType styleType = lyrics->textStyleType();
 
     // search next chord
-    Segment* nextSegment = segment;
+
+    // check if at start of slur
+    ChordRest* lastSlurredOrTiedCR = initialCR;
+    if (configuration()->lyricsFormMelismaAtSlurTies()) {
+        if (lastSlurredOrTiedCR->isChord()) {
+            auto slurredChord = toChord(lastSlurredOrTiedCR);
+
+            // if at start of slur, find the shortest slur and proceed to the end of it
+            if (slurredChord->startEndSlurs().startDown || slurredChord->startEndSlurs().startUp) {
+                auto spanners = score()->spannerMap().findOverlapping(slurredChord->tick().ticks(), slurredChord->endTick().ticks());
+                Spanner* spannerToFollow = nullptr;
+                for (auto& spanner : spanners) {
+                    if (spanner.value->startCR() == slurredChord && spanner.value->isSlur()) {
+                        if (!spannerToFollow
+                            || (spannerToFollow->ticks() > spanner.value->ticks())
+                            ) {
+                            spannerToFollow = spanner.value;
+                        }
+                    }
+                }
+                if (spannerToFollow) {
+                    lastSlurredOrTiedCR = spannerToFollow->endCR();
+                }
+            }
+        }
+
+        // check if have tie - if so, proceed until no more ties
+        if (lastSlurredOrTiedCR->isChord()) {
+            auto tiedChord = toChord(lastSlurredOrTiedCR);
+            while (tiedChord->nextTiedChord()) {
+                tiedChord = tiedChord->nextTiedChord();
+            }
+            lastSlurredOrTiedCR = toChordRest(tiedChord);
+        }
+    }
+
+    Segment* nextSegment = lastSlurredOrTiedCR->segment();
     while ((nextSegment = nextSegment->next1(SegmentType::ChordRest))) {
         EngravingItem* el = nextSegment->element(track);
         if (!el || !el->isChord()) {
