@@ -52,7 +52,7 @@ InspectorPropertyView {
         navigation.name: root.navigationName + " Spinbox"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
-        navigation.accessible.name: root.titleText
+        navigation.accessible.name: root.accessibleName
 
         isIndeterminate: root.propertyItem ? root.propertyItem.isUndefined : true
         currentValue: Boolean(root.propertyItem) && !Boolean(root.propertyItem.isUndefined) ? root.propertyItem.value : 0.0

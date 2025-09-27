@@ -31,6 +31,7 @@ StyledListView {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
+    property int navigationRowEnd: navigationRowStart + (count * 2) - 1
 
     spacing: 0
 
@@ -72,8 +73,7 @@ StyledListView {
 
         navigation.name: item.title
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowStart + model.index
-        navigation.column: 0
+        navigation.row: root.navigationRowStart + (model.index * 2)
         navigation.accessible.name: item.title
         navigation.onActiveChanged: {
             if (navigation.active) {
@@ -94,8 +94,7 @@ StyledListView {
                 Layout.alignment: Qt.AlignLeft
 
                 navigation.panel: root.navigationPanel
-                navigation.row: itemDelegate.navigation.row
-                navigation.column: 1
+                navigation.row: root.navigationRowStart + (model.index * 2) + 1
                 accessibleText: titleLabel.text
 
                 isVisible: itemDelegate.item.isVisible

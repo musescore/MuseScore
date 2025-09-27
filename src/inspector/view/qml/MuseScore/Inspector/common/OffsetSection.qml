@@ -53,7 +53,7 @@ InspectorPropertyView {
             navigation.name: "HorizontalOffsetControl"
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 1
-            navigation.accessible.name: root.titleText + " " + qsTrc("inspector", "Horizontal") + " " + currentValue
+            navigation.accessible.name: root.accessibleName + " " + qsTrc("inspector", "Horizontal") + " " + currentValue
 
             icon: IconCode.HORIZONTAL
 
@@ -75,7 +75,7 @@ InspectorPropertyView {
             navigation.name: "VerticalOffsetControl"
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 2
-            navigation.accessible.name: root.titleText + " " + qsTrc("inspector", "Vertical") + " " + currentValue
+            navigation.accessible.name: root.accessibleName + " " + qsTrc("inspector", "Vertical") + " " + currentValue
 
             icon: IconCode.VERTICAL
 

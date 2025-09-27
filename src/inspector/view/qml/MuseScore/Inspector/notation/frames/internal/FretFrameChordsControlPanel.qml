@@ -51,17 +51,17 @@ RowLayout {
     signal resetListRequested();
 
     FlatButton {
-        id: upBotton
+        id: upButton
 
         Layout.fillWidth: true
 
         icon: IconCode.ARROW_UP
         enabled: root.isMovingUpAvailable
+        toolTipTitle: qsTrc("inspector", "Move up")
 
         navigation.name: "MoveUpButton"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart
-        navigation.accessible.name: qsTrc("inspector", "Move up")
 
         onClicked: {
             root.moveSelectionUpRequested()
@@ -75,11 +75,11 @@ RowLayout {
 
         icon: IconCode.ARROW_DOWN
         enabled: root.isMovingDownAvailable
+        toolTipTitle: qsTrc("inspector", "Move down")
 
         navigation.name: "MoveDownButton"
         navigation.panel: root.navigationPanel
-        navigation.row: upBotton.navigation.row + 1
-        navigation.accessible.name: qsTrc("inspector", "Move down")
+        navigation.row: upButton.navigation.row + 1
 
         onClicked: {
             root.moveSelectionDownRequested()
@@ -89,12 +89,12 @@ RowLayout {
     PropertyResetButton {
         id: resetButton
 
+        enabled: root.listOrderItem.isModified || root.hasInvisibleChords
+        toolTipTitle: qsTrc("inspector", "Reset chord list")
+
         navigation.name: "ResetButton"
         navigation.panel: root.navigationPanel
         navigation.row: downButton.navigation.row + 1
-        navigation.accessible.name: qsTrc("inspector", "Reset chord list")
-
-        enabled: root.listOrderItem.isModified || root.hasInvisibleChords
 
         onClicked: {
             root.resetListRequested()
