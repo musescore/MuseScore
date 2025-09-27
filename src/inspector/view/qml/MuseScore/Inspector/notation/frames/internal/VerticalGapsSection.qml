@@ -48,7 +48,7 @@ Item {
 
     StyledTextLabel {
         id: gapToStaff
-        horizontalAlignment: Qt.AlignLeft
+        horizontalAlignment: Text.AlignLeft
         text: qsTrc("inspector", "Gap to staff/frames")
         font: ui.theme.bodyBoldFont
     }
@@ -69,6 +69,7 @@ Item {
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
+        accessibleName: qsTrc("inspector", "Gap to staff/frames above")
     }
 
     SpinBoxPropertyView {
@@ -86,13 +87,14 @@ Item {
 
         navigationPanel: root.navigationPanel
         navigationRowStart: gapAbove.navigationRowEnd + 1
+        accessibleName: qsTrc("inspector", "Gap to staff/frames below")
     }
 
     StyledTextLabel {
         id: notationPadding
         anchors.top: gapAbove.bottom
         anchors.topMargin: 12
-        horizontalAlignment: Qt.AlignLeft
+        horizontalAlignment: Text.AlignLeft
         text: qsTrc("inspector", "Clearance for notation")
         font: ui.theme.bodyBoldFont
     }
@@ -113,6 +115,7 @@ Item {
 
         navigationPanel: root.navigationPanel
         navigationRowStart: gapBelow.navigationRowEnd + 1
+        accessibleName: qsTrc("inspector", "Clearance for notation above")
     }
 
     SpinBoxPropertyView {
@@ -130,5 +133,6 @@ Item {
 
         navigationPanel: root.navigationPanel
         navigationRowStart: gapNotationAbove.navigationRowEnd + 1
+        accessibleName: qsTrc("inspector", "Clearance for notation below")
     }
 }

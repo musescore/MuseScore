@@ -42,7 +42,7 @@ InspectorPropertyView {
         navigation.name: root.navigationName + " ColorPicker"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
-        navigation.accessible.name: root.titleText + " " + Utils.accessibleColorDescription(colorPicker.color)
+        navigation.accessible.name: root.accessibleName + " " + Utils.accessibleColorDescription(colorPicker.color)
 
         enabled: root.propertyItem ? root.propertyItem.isEnabled : false
         isIndeterminate: root.propertyItem && enabled ? root.propertyItem.isUndefined : false
