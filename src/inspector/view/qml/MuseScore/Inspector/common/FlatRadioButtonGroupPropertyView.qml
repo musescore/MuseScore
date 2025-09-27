@@ -54,7 +54,7 @@ InspectorPropertyView {
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
-        accessibleName: root.titleText
+        accessibleName: root.accessibleName
 
         iconFontSize: root.requestIconFontSize
 
