@@ -844,7 +844,7 @@ void PowerTab::addToScore(ptSection& sec)
         lastPart = sec.partMarker;
         auto seg = measure->getSegment(SegmentType::ChordRest, measure->tick());
         RehearsalMark* t = new RehearsalMark(seg);
-        t->setFrameType(FrameType::SQUARE);
+        t->setFrameType(FrameType::RECTANGLE);
         t->setPlainText(String(Char::fromAscii(sec.partMarker)));
         t->setTrack(0);
         seg->add(t);
