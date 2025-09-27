@@ -27,6 +27,7 @@ using namespace mu::notation;
 FretboardsPageModel::FretboardsPageModel(QObject* parent)
     : AbstractStyleDialogModel(parent, {
     StyleId::fretY,
+    StyleId::fretMinDistance,
     StyleId::fretMag,
     StyleId::fretOrientation,
     StyleId::fretNutThickness,
@@ -45,6 +46,7 @@ FretboardsPageModel::FretboardsPageModel(QObject* parent)
 }
 
 StyleItem* FretboardsPageModel::fretY() const { return styleItem(StyleId::fretY); }
+StyleItem* FretboardsPageModel::fretMinDistance() const { return styleItem(StyleId::fretMinDistance); }
 StyleItem* FretboardsPageModel::fretMag() const { return styleItem(StyleId::fretMag); }
 StyleItem* FretboardsPageModel::fretOrientation() const { return styleItem(StyleId::fretOrientation); }
 StyleItem* FretboardsPageModel::fretNutThickness() const { return styleItem(StyleId::fretNutThickness); }
