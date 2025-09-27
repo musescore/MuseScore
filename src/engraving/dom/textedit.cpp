@@ -723,12 +723,7 @@ bool TextBase::edit(EditData& ed)
                 return true;
             }
         }
-        if (ctrlPressed && altPressed) {
-            if (ed.key == Key_Minus || ed.key == Key_Underscore) {
-                insertSym(ed, SymId::lyricsElision);
-                return true;
-            }
-        }
+
     }
     if (!s.isEmpty()) {
         deleteSelectedText(ed);
