@@ -168,15 +168,7 @@ void Ambitus::setTopPitch(int val, bool applyLogic)
     // if deltaPitch is not an integer number of octaves, adjust tpc
     // (to avoid 'wild' tpc changes with octave changes)
     if (deltaPitch % PITCH_DELTA_OCTAVE != 0) {
-        int newTpc = topTpc() + deltaPitch * TPC_DELTA_SEMITONE;
-        // reduce newTpc into acceptable range via enharmonic
-        while (newTpc < Tpc::TPC_MIN) {
-            newTpc += TPC_DELTA_ENHARMONIC;
-        }
-        while (newTpc > Tpc::TPC_MAX) {
-            newTpc -= TPC_DELTA_ENHARMONIC;
-        }
-        m_topTpc = newTpc;
+        m_topTpc = clampEnharmonic(topTpc() + deltaPitch * TPC_DELTA_SEMITONE);
     }
     m_topPitch = val;
     normalize();
@@ -193,15 +185,7 @@ void Ambitus::setBottomPitch(int val, bool applyLogic)
     // if deltaPitch is not an integer number of octaves, adjust tpc
     // (to avoid 'wild' tpc changes with octave changes)
     if (deltaPitch % PITCH_DELTA_OCTAVE != 0) {
-        int newTpc = bottomTpc() + deltaPitch * TPC_DELTA_SEMITONE;
-        // reduce newTpc into acceptable range via enharmonic
-        while (newTpc < Tpc::TPC_MIN) {
-            newTpc += TPC_DELTA_ENHARMONIC;
-        }
-        while (newTpc > Tpc::TPC_MAX) {
-            newTpc -= TPC_DELTA_ENHARMONIC;
-        }
-        m_bottomTpc = newTpc;
+        m_bottomTpc = clampEnharmonic(bottomTpc() + deltaPitch * TPC_DELTA_SEMITONE);
     }
     m_bottomPitch = val;
     normalize();
@@ -308,12 +292,12 @@ double Ambitus::headWidth() const
 
 PointF Ambitus::pagePos() const
 {
-    if (explicitParent() == 0) {
+    if (!explicitParent()) {
         return pos();
     }
-    System* system = segment()->measure()->system();
+
     double yp = y();
-    if (system) {
+    if (System* system = segment()->measure()->system()) {
         yp += system->staff(staffIdx())->y() + system->y();
     }
     return PointF(pageX(), yp);
@@ -343,62 +327,29 @@ Ambitus::Ranges Ambitus::estimateRanges() const
 {
     Ambitus::Ranges result;
 
-    if (!segment()) {
-        return result;
-    }
-    Chord* chord;
-    track_idx_t firstTrack  = track();
-    track_idx_t lastTrack   = firstTrack + VOICES - 1;
-    int pitchTop    = -1000;
-    int pitchBottom = 1000;
-    int tpcTop      = 0;    // Initialized to prevent warning
-    int tpcBottom   = 0;    // Initialized to prevent warning
-    track_idx_t trk;
-    Measure* meas     = segment()->measure();
-    Segment* segm     = meas->findSegment(SegmentType::ChordRest, segment()->tick());
-    bool stop     = meas->sectionBreak();
-    while (segm) {
-        // moved to another measure?
-        if (segm->measure() != meas) {
-            // if section break has been found, stop here
-            if (stop) {
-                break;
-            }
-            // update meas and stop condition
-            meas = segm->measure();
-            stop = meas->sectionBreak();
-        }
-        // scan all relevant tracks of this segment for chords
-        for (trk = firstTrack; trk <= lastTrack; trk++) {
-            EngravingItem* e = segm->element(trk);
+    Segment* s = segment() ? segment()->measure()->findSegment(SegmentType::ChordRest, segment()->tick()) : nullptr;
+    for (; s && !s->measure()->sectionBreak(); s = s->nextCR()) {
+        for (track_idx_t t = track(); t < track() + VOICES; t++) {
+            EngravingItem* e = s->element(t);
             if (!e || !e->isChord()) {
                 continue;
             }
-            chord = toChord(e);
-            // update pitch range (with associated tpc's)
+            Chord* chord = toChord(e);
             for (Note* n : chord->notes()) {
-                if (!n->play()) {         // skip notes which are not to be played
+                if (!n->play()) {
                     continue;
                 }
-                int pitch = n->epitch();
-                if (pitch > pitchTop) {
-                    pitchTop = pitch;
-                    tpcTop   = n->tpc();
+                int pitch = n->epitch() + n->ottaveCapoFret(); // written pitch, accounting for octave offset
+                if (pitch > result.topPitch) {
+                    result.topPitch = pitch;
+                    result.topTpc   = n->tpc();
                 }
-                if (pitch < pitchBottom) {
-                    pitchBottom = pitch;
-                    tpcBottom   = n->tpc();
+                if (pitch < result.bottomPitch) {
+                    result.bottomPitch = pitch;
+                    result.bottomTpc   = n->tpc();
                 }
             }
         }
-        segm = segm->nextCR();
-    }
-
-    if (pitchTop > -1000) {               // if something has been found, update this
-        result.topPitch    = pitchTop;
-        result.bottomPitch = pitchBottom;
-        result.topTpc      = tpcTop;
-        result.bottomTpc   = tpcBottom;
     }
 
     return result;
@@ -406,7 +357,7 @@ Ambitus::Ranges Ambitus::estimateRanges() const
 
 void Ambitus::remove(EngravingItem* e)
 {
-    if (e->type() == ElementType::ACCIDENTAL) {
+    if (e->isAccidental()) {
         //! NOTE Do nothing (removing _topAccid or _bottomAccid)
         return;
     }
@@ -483,10 +434,10 @@ bool Ambitus::setProperty(Pid propertyId, const PropertyValue& v)
         setBottomPitch(v.toInt());
         break;
     case Pid::FBPARENTHESIS3:                // recycled property = octave of _topPitch
-        setTopPitch(topPitch() % 12 + (v.toInt() + 1) * 12);
+        setTopPitch(topPitch() % PITCH_DELTA_OCTAVE + (v.toInt() + 1) * PITCH_DELTA_OCTAVE);
         break;
     case Pid::FBPARENTHESIS4:                // recycled property = octave of _bottomPitch
-        setBottomPitch(bottomPitch() % 12 + (v.toInt() + 1) * 12);
+        setBottomPitch(bottomPitch() % PITCH_DELTA_OCTAVE + (v.toInt() + 1) * PITCH_DELTA_OCTAVE);
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
@@ -521,9 +472,9 @@ PropertyValue Ambitus::propertyDefault(Pid id) const
     case Pid::FBPARENTHESIS2:
         return estimateRanges().bottomPitch;
     case Pid::FBPARENTHESIS3:
-        return int(estimateRanges().topPitch / 12) - 1;
+        return int(estimateRanges().topPitch / PITCH_DELTA_OCTAVE) - 1;
     case Pid::FBPARENTHESIS4:
-        return int(estimateRanges().bottomPitch / 12) - 1;
+        return int(estimateRanges().bottomPitch / PITCH_DELTA_OCTAVE) - 1;
     default:
         return EngravingItem::propertyDefault(id);
     }
@@ -554,7 +505,7 @@ EngravingItem* Ambitus::prevSegmentElement()
 
 String Ambitus::accessibleInfo() const
 {
-    if (m_topTpc == Tpc::TPC_INVALID || m_bottomTpc == Tpc::TPC_INVALID) {
+    if (!tpcIsValid(m_topTpc) || !tpcIsValid(m_bottomTpc)) {
         return EngravingItem::accessibleInfo();
     }
     return EngravingItem::accessibleInfo() + u"; "

@@ -99,10 +99,6 @@ void AmbitusSettingsModel::resetProperties()
 
 void AmbitusSettingsModel::matchRangesToStaff()
 {
-    // TODO: The "default values" are not always actual and correct
-    // That is because the default value gets set to a fixed value
-    // only when loadProperties() is called, but for an Ambitus, it
-    // is crucial that the default value is recalculated every time.
     m_topTpc->resetToDefault();
     m_bottomTpc->resetToDefault();
     m_topPitch->resetToDefault();
