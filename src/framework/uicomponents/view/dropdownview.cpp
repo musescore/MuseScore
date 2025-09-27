@@ -79,6 +79,8 @@ void DropdownView::updateGeometry()
 
     // remove padding for arrow
     movePos(m_globalPos.x() - padding(), m_globalPos.y());
+
+    updateContentPosition();
 }
 
 int DropdownView::focusItemY() const

@@ -20,21 +20,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UICOMPONENTS_DIALOGVIEW_H
-#define MUSE_UICOMPONENTS_DIALOGVIEW_H
+#pragma once
 
-#include <QEventLoop>
+#include "types/ret.h"
 
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
 #include "ui/iwindowscontroller.h"
 
-#include "popupview.h"
+#include "windowview.h"
 
 namespace muse::uicomponents {
-class DialogView : public PopupView
+class DialogView : public WindowView
 {
     Q_OBJECT
+
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+    Q_PROPERTY(QString objectId READ objectId WRITE setObjectId NOTIFY objectIdChanged)
+    Q_PROPERTY(bool modal READ modal WRITE setModal NOTIFY modalChanged)
+    Q_PROPERTY(bool frameless READ frameless WRITE setFrameless NOTIFY framelessChanged)
+    Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
+    Q_PROPERTY(bool alwaysOnTop READ alwaysOnTop WRITE setAlwaysOnTop NOTIFY alwaysOnTopChanged)
+    Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
 
     Inject<IApplication> application = { this };
     Inject<ui::IWindowsController> windowsController = { this };
@@ -43,26 +50,57 @@ public:
     explicit DialogView(QQuickItem* parent = nullptr);
     ~DialogView() override = default;
 
-    Q_INVOKABLE void exec();
+    QString title() const;
+    void setTitle(QString title);
+
+    QString objectId() const;
+    void setObjectId(QString objectId);
+
+    bool modal() const;
+    void setModal(bool modal);
+
+    bool frameless() const;
+    void setFrameless(bool frameless);
+
+    bool resizable() const;
+    void setResizable(bool resizable);
+
+    bool alwaysOnTop() const;
+    void setAlwaysOnTop(bool alwaysOnTop);
+
+    QVariantMap ret() const;
+    void setRet(QVariantMap ret);
+    void setRetCode(Ret::Code code);
+
     Q_INVOKABLE void show();
     Q_INVOKABLE void hide();
     Q_INVOKABLE void raise();
     Q_INVOKABLE void accept();
     Q_INVOKABLE void reject(int code = -1);
 
+signals:
+    void titleChanged(QString title);
+    void objectIdChanged(QString objectId);
+    void modalChanged(bool modal);
+    void framelessChanged(bool frameless);
+    void resizableChanged(bool resizable);
+    void alwaysOnTopChanged();
+    void retChanged(QVariantMap ret);
+
 private:
-    bool isDialog() const override;
+    void initView() override;
+
     void beforeOpen() override;
     void onHidden() override;
 
-    QScreen* resolveScreen() const override;
-
     void updateGeometry() override;
-
     QRect viewGeometry() const override;
 
-    QEventLoop m_loop;
+    QString m_objectId;
+    QString m_title;
+    bool m_modal = true;
+    bool m_frameless = false;
+    bool m_alwaysOnTop = false;
+    QVariantMap m_ret;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_DIALOGVIEW_H
