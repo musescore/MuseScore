@@ -34,6 +34,7 @@
 #include "notation/inotationinteraction.h"
 #include "notation/inotationplayback.h"
 #include "notation/inotationconfiguration.h"
+#include "notation/view/abstractelementpopupmodel.h"
 
 #include "playback/iplaybackcontroller.h"
 
@@ -75,7 +76,8 @@ public:
     virtual void hideContextMenu() = 0;
 
     virtual void showElementPopup(const ElementType& elementType) = 0;
-    virtual void hideElementPopup(const ElementType& elementType = ElementType::INVALID) = 0;
+    virtual void hideElementPopup(const ElementType& elementType) = 0;
+    virtual void hideElementPopup(PopupModelType modelType = PopupModelType::TYPE_UNDEFINED) = 0;
     virtual void toggleElementPopup(const ElementType& elementType) = 0;
 
     virtual bool elementPopupIsOpen(const ElementType& elementType) const = 0;

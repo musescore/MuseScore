@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_CONTROLLEDVIEWMOCK_H
-#define MU_NOTATION_CONTROLLEDVIEWMOCK_H
+#pragma once
 
 #include <gmock/gmock.h>
 
@@ -57,6 +56,7 @@ public:
 
     MOCK_METHOD(void, showElementPopup, (const ElementType&), (override));
     MOCK_METHOD(void, hideElementPopup, (const ElementType&), (override));
+    MOCK_METHOD(void, hideElementPopup, (PopupModelType), (override));
     MOCK_METHOD(void, toggleElementPopup, (const ElementType&), (override));
 
     MOCK_METHOD(bool, elementPopupIsOpen, (const ElementType&), (const, override));
@@ -67,5 +67,3 @@ public:
     MOCK_METHOD(QQuickItem*, asItem, (), (override));
 };
 }
-
-#endif // MU_NOTATION_CONTROLLEDVIEWMOCK_H

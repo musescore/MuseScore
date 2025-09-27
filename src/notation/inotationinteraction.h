@@ -75,6 +75,7 @@ public:
     virtual void moveChordNoteSelection(MoveDirection d) = 0;
     virtual void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE,
                         engraving::staff_idx_t staffIndex = 0) = 0;
+    virtual void selectAndStartEditIfNeeded(EngravingItem* element) = 0;
     virtual void selectAll() = 0;
     virtual void selectSection() = 0;
     virtual void selectFirstElement(bool frame = true) = 0;

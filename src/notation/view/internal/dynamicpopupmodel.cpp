@@ -167,6 +167,7 @@ void DynamicPopupModel::addOrChangeDynamic(int page, int index)
 
     // Hide the bounding box which appears when called using Ctrl+D shortcut
     if (interaction->isTextEditingStarted()) {
+        interaction->endEditText();
         interaction->startEditGrip(m_item, Grip::DRAG);
     }
 
@@ -177,6 +178,11 @@ void DynamicPopupModel::addHairpinToDynamic(ItemType itemType)
 {
     IF_ASSERT_FAILED(m_item && m_item->isDynamic()) {
         return;
+    }
+
+    INotationInteractionPtr interaction = currentNotation()->interaction();
+    if (interaction->isTextEditingStarted()) {
+        interaction->endEditText();
     }
 
     engraving::Dynamic* dynamic = toDynamic(m_item);
@@ -203,5 +209,6 @@ void DynamicPopupModel::addHairpinToDynamic(ItemType itemType)
     hairpin->setHairpinType(hairpinType);
     m_item->score()->addHairpinToDynamic(hairpin, dynamic);
     endCommand();
+    interaction->selectAndStartEditIfNeeded(hairpin);
     updateNotation();
 }

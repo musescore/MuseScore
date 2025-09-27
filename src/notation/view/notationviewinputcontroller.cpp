@@ -203,7 +203,7 @@ void NotationViewInputController::onNotationChanged()
     });
 
     currNotation->interaction()->textEditingEnded().onReceive(this, [this](const TextBase*) {
-        m_view->hideElementPopup();
+        m_view->hideElementPopup(PopupModelType::TYPE_TEXT);
     });
 }
 
