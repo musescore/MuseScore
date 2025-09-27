@@ -1444,8 +1444,12 @@ void Staff::insertTime(const Fraction& tick, const Fraction& len)
     for (auto i = m_keys.lower_bound(tick.ticks()); i != m_keys.end();) {
         KeySigEvent kse = i->second;
         Fraction t = Fraction::fromTicks(i->first);
-        m_keys.erase(i++);
-        kl2[(t + len).ticks()] = kse;
+        if (t + len < score()->endTick()) {
+            m_keys.erase(i++);
+            kl2[(t + len).ticks()] = kse;
+        } else {
+            ++i;
+        }
     }
     m_keys.insert(kl2.begin(), kl2.end());
 
