@@ -2809,12 +2809,20 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
     }
 
     for (const BracketItem* i : item->brackets()) {
+        XmlWriter::Attributes attrs;
         BracketType a = i->bracketType();
+        attrs.push_back({ "type", static_cast<int>(a) });
         size_t b = i->bracketSpan();
+        attrs.push_back({ "span", b });
         size_t c = i->column();
+        attrs.push_back({ "col", c });
         bool v = i->visible();
+        attrs.push_back({ "visible", v });
+        if (i->color() != ctx.configuration()->defaultColor()) {
+            attrs.push_back({ "color", String::fromStdString(i->color().toString()) });
+        }
         if (a != BracketType::NO_BRACKET || b > 0) {
-            xml.tag("bracket", { { "type", static_cast<int>(a) }, { "span", b }, { "col", c }, { "visible", v } });
+            xml.tag("bracket", attrs);
         }
     }
 
