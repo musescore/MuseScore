@@ -21,6 +21,7 @@
  */
 
 #include "noteline.h"
+#include "dom/text.h"
 #include "linkedobjects.h"
 #include "factory.h"
 #include "note.h"
@@ -59,9 +60,11 @@ Sid NoteLineSegment::getPropertyStyle(Pid pid) const
 NoteLineSegment::NoteLineSegment(Spanner* sp, System* parent)
     : TextLineBaseSegment(ElementType::NOTELINE_SEGMENT, sp, parent, ElementFlag::MOVABLE)
 {
+    m_text->setTextStyleType(TextStyleType::NOTELINE);
+    m_endText->setTextStyleType(TextStyleType::NOTELINE);
 }
 
-EngravingItem* NoteLineSegment::propertyDelegate(Pid pid)
+EngravingObject* NoteLineSegment::propertyDelegate(Pid pid) const
 {
     if (pid == Pid::NOTELINE_PLACEMENT) {
         return noteLine();

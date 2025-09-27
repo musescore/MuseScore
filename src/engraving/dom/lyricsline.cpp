@@ -287,7 +287,7 @@ double PartialLyricsLineSegment::baseLineShift() const
     return -style().styleD(Sid::lyricsDashYposRatio) * lyrics->fontMetrics().xHeight();
 }
 
-EngravingItem* PartialLyricsLineSegment::propertyDelegate(Pid pid)
+EngravingObject* PartialLyricsLineSegment::propertyDelegate(Pid pid) const
 {
     switch (pid) {
     case Pid::VERSE:

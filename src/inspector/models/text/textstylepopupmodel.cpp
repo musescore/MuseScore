@@ -32,7 +32,7 @@ TextStylePopupModel::TextStylePopupModel(QObject* parent)
 {
     m_elementRepositoryService = new ElementRepositoryService(this);
 
-    m_textSettingsModel = new TextSettingsModel(this, m_elementRepositoryService);
+    m_textSettingsModel = new TextSettingsModel(this, m_elementRepositoryService, /*isTextLineText*/ false);
     m_textSettingsModel->init();
 }
 

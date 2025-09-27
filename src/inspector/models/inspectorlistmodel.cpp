@@ -221,7 +221,10 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
             newModel = new NotationSettingsProxyModel(this, m_repository, selectedElementKeySet);
             break;
         case InspectorSectionType::SECTION_TEXT:
-            newModel = new TextSettingsModel(this, m_repository);
+            newModel = new TextSettingsModel(this, m_repository, /*isTextLineText*/ false);
+            break;
+        case InspectorSectionType::SECTION_TEXT_LINES:
+            newModel = new TextSettingsModel(this, m_repository, /*isTextLineText*/ true);
             break;
         case InspectorSectionType::SECTION_SCORE_DISPLAY:
             newModel = new ScoreSettingsModel(this, m_repository);

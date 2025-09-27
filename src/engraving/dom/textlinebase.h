@@ -52,7 +52,7 @@ public:
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
-    EngravingItem* propertyDelegate(Pid) override;
+    EngravingObject* propertyDelegate(Pid) const override;
 
     bool setProperty(Pid id, const PropertyValue& v) override;
 

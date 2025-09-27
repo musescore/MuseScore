@@ -67,6 +67,7 @@ ExpandableBlank {
         case Inspector.SECTION_GENERAL: return generalSection
         case Inspector.SECTION_MEASURES: return measuresSection
         case Inspector.SECTION_EMPTY_STAVES: return emptyStavesSection
+        case Inspector.SECTION_TEXT_LINES:
         case Inspector.SECTION_TEXT: return textSection
         case Inspector.SECTION_NOTATION:
             if (sectionModel.isMultiModel) {

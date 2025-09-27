@@ -22,6 +22,7 @@
 
 #include "whammybar.h"
 
+#include "dom/text.h"
 #include "score.h"
 #include "system.h"
 
@@ -56,6 +57,8 @@ static const ElementStyle whammyBarStyle {
 WhammyBarSegment::WhammyBarSegment(WhammyBar* sp, System* parent)
     : TextLineBaseSegment(ElementType::WHAMMY_BAR_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
+    m_text->setTextStyleType(TextStyleType::LET_RING);
+    m_endText->setTextStyleType(TextStyleType::LET_RING);
 }
 
 //---------------------------------------------------------

@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <vector>
 
+#include "dom/text.h"
 #include "types/typesconv.h"
 
 #include "barline.h"
@@ -74,13 +75,15 @@ static const ElementStyle voltaStyle {
 VoltaSegment::VoltaSegment(Volta* sp, System* parent)
     : TextLineBaseSegment(ElementType::VOLTA_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
+    m_text->setTextStyleType(TextStyleType::VOLTA);
+    m_endText->setTextStyleType(TextStyleType::VOLTA);
 }
 
 //---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingItem* VoltaSegment::propertyDelegate(Pid pid)
+EngravingObject* VoltaSegment::propertyDelegate(Pid pid) const
 {
     if (pid == Pid::BEGIN_HOOK_TYPE || pid == Pid::END_HOOK_TYPE || pid == Pid::VOLTA_ENDING) {
         return spanner();

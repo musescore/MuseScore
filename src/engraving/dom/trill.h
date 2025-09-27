@@ -48,7 +48,7 @@ public:
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all) override;
 
-    EngravingItem* propertyDelegate(Pid) override;
+    EngravingObject* propertyDelegate(Pid) const override;
 
     void remove(EngravingItem*) override;
 
