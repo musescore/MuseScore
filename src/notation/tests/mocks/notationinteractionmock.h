@@ -172,6 +172,7 @@ public:
     MOCK_METHOD(void, addGraceNotesToSelectedNotes, (GraceNoteType), (override));
     MOCK_METHOD(bool, canAddTupletToSelectedChordRests, (), (const, override));
     MOCK_METHOD(void, addTupletToSelectedChordRests, (const TupletOptions&), (override));
+    MOCK_METHOD(void, removeTupletFromSelectedChordRests, (), (override));
     MOCK_METHOD(void, addBeamToSelectedChordRests, (BeamMode), (override));
 
     MOCK_METHOD(void, increaseDecreaseDuration, (int, bool), (override));
