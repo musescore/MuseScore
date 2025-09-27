@@ -34,6 +34,7 @@ class EngravingObject;
 }
 
 namespace mu::engraving::apiv1 {
+class ScoreElement;
 //---------------------------------------------------------
 //   Ownership
 ///   \cond PLUGIN_API \private \endcond
@@ -68,6 +69,9 @@ class ScoreElement : public QObject
     /// The EID of this element.
     /// \since MuseScore 4.6
     Q_PROPERTY(QString eid READ eid)
+    /// The children of this element. Does not include children of children.
+    /// \since MuseScore 4.7
+    Q_PROPERTY(QQmlListProperty<apiv1::ScoreElement> children READ children)
 
     Ownership m_ownership;
 
@@ -97,6 +101,8 @@ public:
 
     QString eid() const { return QString::fromStdString(element()->eid().toStdString()); }
 
+    QQmlListProperty<apiv1::ScoreElement> children();
+
     QVariant get(mu::engraving::Pid pid) const;
     void set(mu::engraving::Pid pid, const QVariant& val);
     void reset(mu::engraving::Pid pid);
@@ -106,6 +112,11 @@ public:
     Q_INVOKABLE QString userName() const;
     /// Checks whether two variables represent the same object. \since MuseScore 3.3
     Q_INVOKABLE bool is(apiv1::ScoreElement* other) { return other && element() == other->element(); }
+    /// Applies a given function to this element's children
+    /// \param func the function to apply.
+    /// \param all whether to apply the function to children of children.
+    /// \since MuseScore 4.7
+    Q_INVOKABLE void scanElements(QJSValue func, bool all);
 };
 
 //---------------------------------------------------------
