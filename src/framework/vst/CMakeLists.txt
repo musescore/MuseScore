@@ -104,13 +104,6 @@ set(MODULE_LINK
     vst_sdk_3
     )
 
-if (OS_IS_LIN)
-    set(MODULE_LINK
-        ${MODULE_LINK}
-        stdc++fs
-        )
-endif()
-
 if (QT_SUPPORT)
     list(APPEND MODULE_LINK Qt::Qml Qt::Widgets)
 endif()
