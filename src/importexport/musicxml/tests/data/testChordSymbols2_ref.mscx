@@ -53,6 +53,7 @@
         </Staff>
       <trackName>[Unnamed (treble staff)]</trackName>
       <Instrument id="grand-piano">
+        <longName>[Unnamed (treble staff)]</longName>
         <trackName></trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
