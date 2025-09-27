@@ -43,7 +43,7 @@ void SessionsManager::init()
 
 void SessionsManager::deinit()
 {
-    bool isServer = multiInstancesProvider()->isMainInstance();
+    bool isServer = multiInstancesProvider() && multiInstancesProvider()->isMainInstance();
     if (!isServer) {
         return;
     }

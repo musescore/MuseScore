@@ -200,12 +200,8 @@ void UiModule::registerUiTypes()
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(muse_ui_QML_IMPORT);
 }
 
-void UiModule::onPreInit(const IApplication::RunMode& mode)
+void UiModule::onPreInit(const IApplication::RunMode&)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     m_configuration->init();
 }
 

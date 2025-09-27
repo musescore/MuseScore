@@ -377,17 +377,8 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     return app;
 }
 
-std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& options) const
+static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
 {
-#ifdef MUE_ENABLE_CONSOLEAPP
-
-    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
-    ++m_lastID;
-    // ctx->id = m_lastID;
-    ctx->id = -1; //! NOTE At the moment global ioc
-
-    std::shared_ptr<ConsoleApp> app = std::make_shared<ConsoleApp>(options, ctx);
-
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
     //! For other modules, the order is (an should be) unimportant.
     app->addModule(new muse::diagnostics::DiagnosticsModule());
@@ -395,7 +386,6 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     //! TODO Some modules can be removed
 
     // framework
-    app->addModule(new muse::accessibility::AccessibilityModule());
     app->addModule(new muse::actions::ActionsModule());
     app->addModule(new muse::audio::AudioModule());
 #ifdef MUSE_MODULE_AUDIOPLUGINS
@@ -419,20 +409,14 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     }
 #endif
 
-    app->addModule(new muse::network::NetworkModule());
-    app->addModule(new muse::shortcuts::ShortcutsModule());
 #ifdef MUSE_MODULE_UI
     app->addModule(new muse::ui::UiModule());
-    app->addModule(new muse::uicomponents::UiComponentsModule());
 #endif
 
-#ifdef MUSE_MODULE_DOCKWINDOW
-    app->addModule(new muse::dock::DockModule());
-#endif
-    app->addModule(new muse::tours::ToursModule());
+#ifdef MUSE_MODULE_VST
     app->addModule(new muse::vst::VSTModule());
+#endif
 
-// modules
 #ifdef MUE_BUILD_APPSHELL_MODULE
     app->addModule(new mu::appshell::AppShellModule());
 #endif
@@ -443,8 +427,6 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
 
     app->addModule(new mu::braille::BrailleModule());
 
-    app->addModule(new muse::cloud::CloudModule());
-    app->addModule(new mu::commonscene::CommonSceneModule());
     app->addModule(new mu::context::ContextModule());
 
 #ifdef MUE_BUILD_CONVERTER_MODULE
@@ -492,23 +474,46 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
 #ifdef MUE_BUILD_IMPEXP_TABLEDIT_MODULE
     app->addModule(new mu::iex::tabledit::TablEditModule());
 #endif
-
-    app->addModule(new mu::inspector::InspectorModule());
-    app->addModule(new mu::instrumentsscene::InstrumentsSceneModule());
-    app->addModule(new muse::languages::LanguagesModule());
-    app->addModule(new muse::learn::LearnModule());
-    app->addModule(new muse::mi::MultiInstancesModule());
+#ifdef MUE_BUILD_NOTATION_MODULE
     app->addModule(new mu::notation::NotationModule());
-    app->addModule(new mu::palette::PaletteModule());
-    app->addModule(new mu::playback::PlaybackModule());
-    app->addModule(new muse::extensions::ExtensionsModule());
-
-#ifdef MUE_BUILD_PRINT_MODULE
-    app->addModule(new mu::print::PrintModule());
 #endif
+#ifdef MUE_BUILD_PLAYBACK_MODULE
+    app->addModule(new mu::playback::PlaybackModule());
+#endif
+#ifdef MUE_BUILD_PROJECT_MODULE
     app->addModule(new mu::project::ProjectModule());
-    app->addModule(new muse::update::UpdateModule());
-    app->addModule(new muse::workspace::WorkspaceModule());
+#endif
+}
+
+static void addAudioPluginRegistrationModules(std::shared_ptr<ConsoleApp> app)
+{
+    app->addModule(new muse::audio::AudioModule());
+
+#ifdef MUSE_MODULE_AUDIOPLUGINS
+    app->addModule(new muse::audioplugins::AudioPluginsModule());
+#endif
+
+#ifdef MUSE_MODULE_VST
+    app->addModule(new muse::vst::VSTModule());
+#endif
+}
+
+std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& options) const
+{
+#ifdef MUE_ENABLE_CONSOLEAPP
+
+    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
+    ++m_lastID;
+    // ctx->id = m_lastID;
+    ctx->id = -1; //! NOTE At the moment global ioc
+
+    std::shared_ptr<ConsoleApp> app = std::make_shared<ConsoleApp>(options, ctx);
+
+    if (options.runMode == muse::IApplication::RunMode::ConsoleApp) {
+        addConsoleModules(app);
+    } else if (options.runMode == muse::IApplication::RunMode::AudioPluginRegistration) {
+        addAudioPluginRegistrationModules(app);
+    }
 
     return app;
 
