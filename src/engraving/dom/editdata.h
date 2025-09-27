@@ -277,7 +277,7 @@ public:
     bool hasCurrentGrip() const { return curGrip != Grip::NO_GRIP; }
 
 private:
-    std::list<std::shared_ptr<ElementEditData> > m_data;
+    std::vector<std::shared_ptr<ElementEditData> > m_data;
     MuseScoreView* m_view = nullptr;
 };
 }

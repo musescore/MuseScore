@@ -82,7 +82,7 @@ private:
         std::optional<size_t> pageNum;
     };
 
-    using BatchJob = std::list<Job>;
+    using BatchJob = std::vector<Job>;
 
     muse::RetVal<BatchJob> parseBatchJob(const muse::io::path_t& batchJobFile) const;
 

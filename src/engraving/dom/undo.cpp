@@ -34,6 +34,7 @@
 
 #include "undo.h"
 
+#include "containers.h"
 #include "iengravingfont.h"
 
 #include "arpeggio.h"
@@ -192,7 +193,7 @@ static void updateStaffTextCache(const StaffTextBase* text, Score* score)
 
 UndoCommand::~UndoCommand()
 {
-    for (auto c : childList) {
+    for (auto c : m_childCommands) {
         delete c;
     }
 }
@@ -203,7 +204,7 @@ UndoCommand::~UndoCommand()
 
 void UndoCommand::cleanup(bool undo)
 {
-    for (auto c : childList) {
+    for (auto c : m_childCommands) {
         c->cleanup(undo);
     }
 }
@@ -214,7 +215,7 @@ void UndoCommand::cleanup(bool undo)
 
 void UndoCommand::undo(EditData* ed)
 {
-    for (std::list<UndoCommand*>::reverse_iterator it = childList.rbegin(); it != childList.rend(); ++it) {
+    for (auto it = m_childCommands.rbegin(); it != m_childCommands.rend(); ++it) {
         LOG_UNDO() << "<" << (*it)->name() << ">";
         (*it)->undo(ed);
     }
@@ -227,7 +228,7 @@ void UndoCommand::undo(EditData* ed)
 
 void UndoCommand::redo(EditData* ed)
 {
-    for (UndoCommand* c : childList) {
+    for (UndoCommand* c : m_childCommands) {
         LOG_UNDO() << "<" << c->name() << ">";
         c->redo(ed);
     }
@@ -241,10 +242,10 @@ void UndoCommand::redo(EditData* ed)
 ///   transferred to this UndoCommand.
 //---------------------------------------------------------
 
-void UndoCommand::appendChildren(UndoCommand* other)
+void UndoCommand::appendChildren(UndoCommand& other)
 {
-    muse::join(childList, other->childList);
-    other->childList.clear();
+    m_childCommands.insert(m_childCommands.end(), other.m_childCommands.cbegin(), other.m_childCommands.cend());
+    other.m_childCommands.clear();
 }
 
 //---------------------------------------------------------
@@ -253,7 +254,7 @@ void UndoCommand::appendChildren(UndoCommand* other)
 
 bool UndoCommand::hasFilteredChildren(UndoCommand::Filter f, const EngravingItem* target) const
 {
-    for (UndoCommand* cmd : childList) {
+    for (UndoCommand* cmd : m_childCommands) {
         if (cmd->isFiltered(f, target)) {
             return true;
         }
@@ -267,7 +268,7 @@ bool UndoCommand::hasFilteredChildren(UndoCommand::Filter f, const EngravingItem
 
 bool UndoCommand::hasUnfilteredChildren(const std::vector<UndoCommand::Filter>& filters, const EngravingItem* target) const
 {
-    for (UndoCommand* cmd : childList) {
+    for (UndoCommand* cmd : m_childCommands) {
         bool filtered = false;
         for (UndoCommand::Filter f : filters) {
             if (cmd->isFiltered(f, target)) {
@@ -288,15 +289,15 @@ bool UndoCommand::hasUnfilteredChildren(const std::vector<UndoCommand::Filter>& 
 
 void UndoCommand::filterChildren(UndoCommand::Filter f, EngravingItem* target)
 {
-    std::list<UndoCommand*> acceptedList;
-    for (UndoCommand* cmd : childList) {
+    std::vector<UndoCommand*> acceptedList;
+    for (UndoCommand* cmd : m_childCommands) {
         if (cmd->isFiltered(f, target)) {
             delete cmd;
         } else {
             acceptedList.push_back(cmd);
         }
     }
-    childList = std::move(acceptedList);
+    m_childCommands = std::move(acceptedList);
 }
 
 //---------------------------------------------------------
@@ -305,8 +306,8 @@ void UndoCommand::filterChildren(UndoCommand::Filter f, EngravingItem* target)
 
 void UndoCommand::unwind()
 {
-    while (!childList.empty()) {
-        UndoCommand* c = muse::takeLast(childList);
+    while (!m_childCommands.empty()) {
+        UndoCommand* c = muse::takeLast(m_childCommands);
         LOG_UNDO() << "unwind: " << c->name();
         c->undo(nullptr);
         delete c;
@@ -650,7 +651,7 @@ bool UndoMacro::empty() const
 
 void UndoMacro::append(UndoMacro&& other)
 {
-    appendChildren(&other);
+    appendChildren(other);
     if (m_score == other.m_score) {
         m_redoInputState = std::move(other.m_redoInputState);
         m_redoSelectionInfo = std::move(other.m_redoSelectionInfo);
@@ -1756,13 +1757,11 @@ void ChangeMeasureLen::flip(EditData*)
     // to end of measure:
     //
 
-    std::list<Segment*> sl;
     for (Segment* s = measure->first(); s; s = s->next()) {
         if (!s->isEndBarLineType() && !s->isTimeSigAnnounceType()) {
             continue;
         }
         s->setRtick(len);
-        sl.push_back(s);
         measure->remove(s);
     }
     measure->setTicks(len);
@@ -1856,16 +1855,14 @@ void ExchangeVoice::redo(EditData*)
 //   ChangeInstrumentShort
 //---------------------------------------------------------
 
-ChangeInstrumentShort::ChangeInstrumentShort(const Fraction& _tick, Part* p, std::list<StaffName> t)
+ChangeInstrumentShort::ChangeInstrumentShort(const Fraction& _tick, Part* p, const StaffNameList& t)
+    : part(p), tick(_tick), text(t)
 {
-    tick = _tick;
-    part = p;
-    text = t;
 }
 
 void ChangeInstrumentShort::flip(EditData*)
 {
-    std::list<StaffName> s = part->shortNames(tick);
+    StaffNameList s = part->shortNames(tick);
     part->setShortNames(text, tick);
     text = s;
     part->score()->setLayoutAll();
@@ -1875,16 +1872,14 @@ void ChangeInstrumentShort::flip(EditData*)
 //   ChangeInstrumentLong
 //---------------------------------------------------------
 
-ChangeInstrumentLong::ChangeInstrumentLong(const Fraction& _tick, Part* p, std::list<StaffName> t)
+ChangeInstrumentLong::ChangeInstrumentLong(const Fraction& _tick, Part* p, const StaffNameList& t)
+    : part(p), tick(_tick), text(t)
 {
-    tick = _tick;
-    part = p;
-    text = t;
 }
 
 void ChangeInstrumentLong::flip(EditData*)
 {
-    std::list<StaffName> s = part->longNames(tick);
+    StaffNameList s = part->longNames(tick);
     part->setLongNames(text, tick);
     text = s;
     part->score()->setLayoutAll();
@@ -2348,9 +2343,9 @@ void InsertRemoveMeasures::insertMeasures()
 {
     Score* score = fm->score();
 
-    std::list<Clef*> clefs;
+    std::vector<Clef*> clefs;
     std::vector<Clef*> prevMeasureClefs;
-    std::list<KeySig*> keys;
+    std::vector<KeySig*> keys;
     Segment* fs = nullptr;
     Segment* ls = nullptr;
     if (fm->isMeasure()) {
@@ -2507,7 +2502,7 @@ void InsertRemoveMeasures::removeMeasures()
         }
     }
 
-    std::list<System*> systemList;
+    std::vector<System*> systemList;
     for (MeasureBase* mb = lm;; mb = mb->prev()) {
         System* system = mb->system();
         if (system) {
@@ -2607,16 +2602,9 @@ void InsertRemoveMeasures::removeMeasures()
             Page* page = s->page();
             if (page) {
                 // erase system from page
-                std::vector<System*>& sl = page->systems();
-                auto i = std::find(sl.begin(), sl.end(), s);
-                if (i != sl.end()) {
-                    sl.erase(i);
-                }
+                muse::remove(page->systems(), s);
                 // erase system from score
-                auto k = std::find(score->systems().begin(), score->systems().end(), s);
-                if (k != score->systems().end()) {
-                    score->systems().erase(k);
-                }
+                muse::remove(score->systems(), s);
                 // finally delete system
                 score->deleteLater(s);
             }

@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ACCIDENTALSLAYOUT_DEV_H
-#define MU_ENGRAVING_ACCIDENTALSLAYOUT_DEV_H
+#pragma once
+
+#include "vectorview.h"
 
 #include "shape.h"
 
@@ -99,6 +100,8 @@ private:
         static constexpr size_t m_largeGroupLimit = 6;
     };
 
+    using AccidentalsVectorView = muse::VectorView<Accidental*>;
+
     static void collectAccidentals(const std::vector<Chord*> chords, std::vector<Accidental*>& allAccidentals,
                                    std::vector<Accidental*>& redundantAccidentals, std::vector<Accidental*>& invisibleAccidentals);
     static bool accidentalIsRedundant(const Accidental* acc, const std::vector<Accidental*>& allAccidentals);
@@ -131,11 +134,10 @@ private:
     static void computeStandardOrdering(std::vector<Accidental*>& accidentals, AccidentalsLayoutContext& ctx);
     static void computeCompactOrdering(std::vector<Accidental*>& accidentals, AccidentalsLayoutContext& ctx);
     static void computeOrderingWithLeastColumns(std::vector<Accidental*>& accidentals, AccidentalsLayoutContext& ctx);
-    static void findAndInsertSecond(Accidental* acc, std::vector<Accidental*>& accidentalsPlaced,
-                                    std::list<Accidental*>& accidentalsToPlace, AccidentalsLayoutContext& ctx);
-    static bool findAndInsertOctave(Accidental* acc, std::vector<Accidental*>& accidentalsPlaced,
-                                    std::list<Accidental*>& accidentalsToPlace, AccidentalsLayoutContext& ctx, bool acceptAbove = true,
-                                    bool acceptBelow = true);
+    static void findAndInsertSecond(Accidental* acc, std::vector<Accidental*>& accidentalsPlaced, AccidentalsVectorView& accidentalsToPlace,
+                                    AccidentalsLayoutContext& ctx);
+    static bool findAndInsertOctave(Accidental* acc, std::vector<Accidental*>& accidentalsPlaced, AccidentalsVectorView& accidentalsToPlace,
+                                    AccidentalsLayoutContext& ctx, bool acceptAbove = true, bool acceptBelow = true);
 
     static void applyOrderingOffsets(std::vector<Accidental*>& accidentals);
 
@@ -176,5 +178,3 @@ private:
     static bool keepAccidentalsCloseToChord(const Chord* chord);
 };
 }
-
-#endif // MU_ENGRAVING_ACCIDENTALSLAYOUT_DEV_H

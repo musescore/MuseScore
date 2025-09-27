@@ -51,12 +51,12 @@ class killing_ptr_vector : public std::vector<T*>
 typedef killing_ptr_vector<table_cell> table_cells;
 typedef killing_ptr_vector<table_cell_def> table_cell_defs;
 
-typedef std::list<table_cell_defs> table_cell_defs_list;
+typedef std::vector<table_cell_defs> table_cell_defs_vector;
 
 struct table_row
 {
    table_cells Cells;
-   table_cell_defs_list::iterator CellDefs;
+   table_cell_defs_vector::iterator CellDefs;
    int Height;
    int Left;
    table_row() : Height(-1000),  Left(-1000) {}

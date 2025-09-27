@@ -217,12 +217,6 @@ class UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, UndoCommand)
 
-    std::list<UndoCommand*> childList;
-
-protected:
-    virtual void flip(EditData*) {}
-    void appendChildren(UndoCommand*);
-
 public:
     enum class Filter : unsigned char {
         TextEdit,
@@ -237,11 +231,11 @@ public:
     virtual ~UndoCommand();
     virtual void undo(EditData*);
     virtual void redo(EditData*);
-    void appendChild(UndoCommand* cmd) { childList.push_back(cmd); }
-    UndoCommand* removeChild() { return muse::takeLast(childList); }
-    size_t childCount() const { return childList.size(); }
+    void appendChild(UndoCommand* cmd) { m_childCommands.push_back(cmd); }
+    UndoCommand* removeChild() { return muse::takeLast(m_childCommands); }
+    size_t childCount() const { return m_childCommands.size(); }
     void unwind();
-    const std::list<UndoCommand*>& commands() const { return childList; }
+    const std::vector<UndoCommand*>& commands() const { return m_childCommands; }
     virtual std::vector<EngravingObject*> objectItems() const { return {}; }
     virtual void cleanup(bool undo);
 // #ifndef QT_NO_DEBUG
@@ -253,6 +247,13 @@ public:
     bool hasFilteredChildren(Filter, const EngravingItem* target) const;
     bool hasUnfilteredChildren(const std::vector<Filter>& filters, const EngravingItem* target) const;
     void filterChildren(UndoCommand::Filter f, EngravingItem* target);
+
+protected:
+    virtual void flip(EditData*) {}
+    void appendChildren(UndoCommand& other);
+
+private:
+    std::vector<UndoCommand*> m_childCommands;
 };
 
 //---------------------------------------------------------
@@ -786,12 +787,12 @@ class ChangeInstrumentShort : public UndoCommand
 
     Part* part = nullptr;
     Fraction tick;
-    std::list<StaffName> text;
+    StaffNameList text;
 
     void flip(EditData*) override;
 
 public:
-    ChangeInstrumentShort(const Fraction&, Part*, std::list<StaffName>);
+    ChangeInstrumentShort(const Fraction&, Part*, const StaffNameList&);
 
     UNDO_TYPE(CommandType::ChangeInstrumentShort)
     UNDO_NAME("ChangeInstrumentShort")
@@ -804,12 +805,12 @@ class ChangeInstrumentLong : public UndoCommand
 
     Part* part = nullptr;
     Fraction tick;
-    std::list<StaffName> text;
+    StaffNameList text;
 
     void flip(EditData*) override;
 
 public:
-    ChangeInstrumentLong(const Fraction&, Part*, std::list<StaffName>);
+    ChangeInstrumentLong(const Fraction&, Part*, const StaffNameList&);
 
     UNDO_TYPE(CommandType::ChangeInstrumentLong)
     UNDO_NAME("ChangeInstrumentLong")

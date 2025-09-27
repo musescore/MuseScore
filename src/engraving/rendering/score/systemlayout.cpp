@@ -2435,7 +2435,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     }
 
     system->setPos(0.0, 0.0);
-    std::list<std::pair<size_t, SysStaff*> > visibleStaves;
+    std::vector<std::pair<size_t, SysStaff*> > visibleStaves;
 
     for (size_t i = 0; i < system->staves().size(); ++i) {
         const Staff* s  = ctx.dom().staff(i);
@@ -2828,7 +2828,7 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
             continue;
         }
 
-        const std::list<StaffName>& names = longName ? part->longNames(tick) : part->shortNames(tick);
+        const StaffNameList& names = longName ? part->longNames(tick) : part->shortNames(tick);
 
         size_t idx = 0;
         for (const StaffName& sn : names) {
