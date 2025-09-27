@@ -71,7 +71,7 @@ Q_SIGNALS:
     void tabTitlesChanged();
 
 public Q_SLOTS:
-    void updateConstriants();
+    void updateConstraints();
 
 private:
     QQuickItem *m_stackLayout = nullptr;

@@ -150,7 +150,7 @@ void NotationNavigator::mouseMoveEvent(QMouseEvent* event)
     m_startMove = logicPos;
 }
 
-bool NotationNavigator::moveCanvasToRect(const RectF& viewRect)
+bool NotationNavigator::moveCanvasToRect(const RectF& viewRect, bool userTriggeredMove)
 {
     TRACEFUNC;
 
@@ -193,7 +193,7 @@ bool NotationNavigator::moveCanvasToRect(const RectF& viewRect)
         }
     }
 
-    return moveCanvas(-dx, -dy);
+    return moveCanvas(-dx, -dy, userTriggeredMove);
 }
 
 void NotationNavigator::setCursorRect(const QRectF& rect)
@@ -233,7 +233,7 @@ void NotationNavigator::initOrientation()
 {
     ValCh<muse::Orientation> orientation = configuration()->canvasOrientation();
     orientation.ch.onReceive(this, [this](muse::Orientation) {
-        moveCanvasToPosition(PointF(0, 0));
+        moveCanvasToPosition(0, 0, false);
         emit orientationChanged();
     });
 
