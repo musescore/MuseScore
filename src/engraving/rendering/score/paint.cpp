@@ -71,6 +71,10 @@ void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::Pai
     score->setPrinting(opt.isPrinting);
     mu::engraving::MScore::pdfPrinting = opt.isPrinting;
 
+    ElementPaintOptions eopt;
+    eopt.isPrinting = opt.isPrinting;
+    eopt.invertColors = opt.invertColors;
+
     // Setup page counts
     int fromPage = opt.fromPage >= 0 ? opt.fromPage : 0;
     int toPage = (opt.toPage >= 0 && opt.toPage < int(pages.size())) ? opt.toPage : (int(pages.size()) - 1);
@@ -145,8 +149,7 @@ void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::Pai
             }
 
             std::vector<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
-            paintItems(*painter, elements);
-            //DebugPaint::paintPageTree(*painter, page);
+            paintItems(*painter, elements, eopt);
 
             if (disableClipping) {
                 painter->setClipping(false);
@@ -215,7 +218,7 @@ SizeF Paint::pageSizeInch(const Score* score, const IScoreRenderer::PaintOptions
     return pageRect.size() / mu::engraving::DPI;
 }
 
-void Paint::paintItem(Painter& painter, const EngravingItem* item)
+void Paint::paintItem(Painter& painter, const EngravingItem* item, const ElementPaintOptions& opt)
 {
     TRACEFUNC;
     if (item->ldata()->isSkipDraw()) {
@@ -225,11 +228,11 @@ void Paint::paintItem(Painter& painter, const EngravingItem* item)
     PointF itemPosition(item->pagePos());
 
     painter.translate(itemPosition);
-    TDraw::drawItem(item, &painter);
+    TDraw::drawItem(item, &painter, opt);
     painter.translate(-itemPosition);
 }
 
-void Paint::paintItems(Painter& painter, const std::vector<EngravingItem*>& items)
+void Paint::paintItems(Painter& painter, const std::vector<EngravingItem*>& items, const ElementPaintOptions& opt)
 {
     TRACEFUNC;
     std::vector<EngravingItem*> sortedItems(items.begin(), items.end());
@@ -241,6 +244,6 @@ void Paint::paintItems(Painter& painter, const std::vector<EngravingItem*>& item
             continue;
         }
 
-        paintItem(painter, item);
+        paintItem(painter, item, opt);
     }
 }

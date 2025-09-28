@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,19 +21,10 @@
  */
 #pragma once
 
-#include "draw/painter.h"
-
-namespace mu::engraving {
-class EngravingItem;
-class Page;
-}
-
-namespace mu::engraving::rendering::score {
-class PaintDebugger;
-class DebugPaint
+namespace mu::engraving::rendering {
+struct ElementPaintOptions
 {
-public:
-    static void paintElementDebug(muse::draw::Painter& painter, const EngravingItem* item);
-    static void paintPageDebug(muse::draw::Painter& painter, const Page* page, const std::vector<EngravingItem*>& items);
+    bool isPrinting = false;
+    bool invertColors = false;
 };
 }

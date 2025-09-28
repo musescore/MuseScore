@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TEXTEDIT_H
-#define MU_ENGRAVING_TEXTEDIT_H
+#pragma once
 
 #include "engravingitem.h"
 #include "undo.h"
@@ -219,5 +218,3 @@ public:
     UNDO_NAME("JoinText")
 };
 } // namespace mu::engraving
-
-#endif

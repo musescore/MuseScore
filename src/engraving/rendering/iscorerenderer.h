@@ -27,6 +27,8 @@
 
 #include "../types/types.h"
 
+#include "paintoptions.h"
+
 namespace muse::draw {
 class Painter;
 }
@@ -110,6 +112,7 @@ public:
         bool isPrinting = false;
         bool isMultiPage = false;
         bool printPageBackground = true;
+        bool invertColors = false;
         RectF frameRect;
         int fromPage = -1; // 0 is first
         int toPage = -1;
@@ -123,8 +126,8 @@ public:
 
     virtual SizeF pageSizeInch(const Score* score) const = 0;
     virtual SizeF pageSizeInch(const Score* score, const PaintOptions& opt) const = 0;
-    virtual void paintScore(muse::draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt) const = 0;
-    virtual void paintItem(muse::draw::Painter& painter, const EngravingItem* item) const = 0;
+    virtual void paintScore(muse::draw::Painter* painter, Score* score, const PaintOptions& opt) const = 0;
+    virtual void paintItem(muse::draw::Painter& painter, const EngravingItem* item, const ElementPaintOptions& opt) const = 0;
 
     // Temporary compatibility interface
     using Supported = std::variant<std::monostate,
@@ -190,9 +193,9 @@ public:
     // Layout Text 1
     virtual void layoutText1(TextBase* item, bool base = false) = 0;
 
-    void drawItem(const EngravingItem* item, muse::draw::Painter* p)
+    void drawItem(const EngravingItem* item, muse::draw::Painter* p, const ElementPaintOptions& opt)
     {
-        doDrawItem(item, p);
+        doDrawItem(item, p, opt);
     }
 
     virtual void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF()) = 0;
@@ -202,6 +205,6 @@ private:
     // Layout Single Item
     virtual void doLayoutItem(EngravingItem* item) = 0;
 
-    virtual void doDrawItem(const EngravingItem* item, muse::draw::Painter* p) = 0;
+    virtual void doDrawItem(const EngravingItem* item, muse::draw::Painter* p, const ElementPaintOptions& opt) = 0;
 };
 }

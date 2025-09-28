@@ -1120,13 +1120,13 @@ const ParsedChord* Harmony::parsedForm()const
     return m_chords.front()->getParsedChord();
 }
 
-Color Harmony::curColor() const
+Color Harmony::curColor(const rendering::ElementPaintOptions& opt) const
 {
-    if (m_isMisspelled) {
+    if (!opt.isPrinting && m_isMisspelled) {
         return configuration()->criticalColor();
     }
 
-    return EngravingItem::curColor();
+    return EngravingItem::curColor(opt);
 }
 
 void Harmony::setColor(const Color& color)

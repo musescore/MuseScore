@@ -376,19 +376,19 @@ void NotationInteraction::notifyAboutNoteInputStateChanged()
     m_noteInput->stateChanged().notify();
 }
 
-void NotationInteraction::paint(Painter* painter)
+void NotationInteraction::paint(Painter* painter, const engraving::rendering::ElementPaintOptions& opt)
 {
     if (shouldDrawInputPreview()) {
-        drawInputPreview(painter);
+        drawInputPreview(painter, opt);
     }
 
-    score()->renderer()->drawItem(score()->shadowNote(), painter);
+    score()->renderer()->drawItem(score()->shadowNote(), painter, opt);
 
     drawAnchorLines(painter);
-    drawTextEditMode(painter);
+    drawTextEditMode(painter, opt);
     drawSelectionRange(painter);
-    drawGripPoints(painter);
-    drawLasso(painter);
+    drawGripPoints(painter, opt);
+    drawLasso(painter, opt);
     drawDrop(painter);
 }
 
@@ -1416,7 +1416,10 @@ void NotationInteraction::startOutgoingDragElement(const EngravingItem* element,
     mu::engraving::MScore::pixelRatio = mu::engraving::DPI / dpi;
     p.translate(qAbs(bbox.x() * adjustedRatio), qAbs(bbox.y() * adjustedRatio));
     p.scale(adjustedRatio, adjustedRatio);
-    engravingRenderer()->drawItem(element, &p);
+
+    mu::engraving::rendering::ElementPaintOptions opt;
+    opt.invertColors = engravingConfiguration()->scoreInversionEnabled();
+    engravingRenderer()->drawItem(element, &p, opt);
 
     m_outgoingDrag->setPixmap(pixmap);
 
@@ -3495,7 +3498,7 @@ bool NotationInteraction::shouldDrawInputPreview() const
     return m_noteInput->isNoteInputMode() && m_noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION);
 }
 
-void NotationInteraction::drawInputPreview(Painter* painter)
+void NotationInteraction::drawInputPreview(Painter* painter, const engraving::rendering::ElementPaintOptions& opt)
 {
     std::vector<ShadowNoteParams> paramsList = previewNotes();
     if (paramsList.empty()) {
@@ -3545,12 +3548,12 @@ void NotationInteraction::drawInputPreview(Painter* painter)
     if (isUp) {
         for (auto it = previewList.rbegin(); it != previewList.rend(); ++it) {
             correctNotePositionIfNeed(*it);
-            score()->renderer()->drawItem(*it, painter);
+            score()->renderer()->drawItem(*it, painter, opt);
         }
     } else {
         for (auto it = previewList.begin(); it != previewList.end(); ++it) {
             correctNotePositionIfNeed(*it);
-            score()->renderer()->drawItem(*it, painter);
+            score()->renderer()->drawItem(*it, painter, opt);
         }
     }
 
@@ -3582,13 +3585,13 @@ void NotationInteraction::drawAnchorLines(Painter* painter)
     }
 }
 
-void NotationInteraction::drawTextEditMode(muse::draw::Painter* painter)
+void NotationInteraction::drawTextEditMode(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt)
 {
     if (!isTextEditingStarted()) {
         return;
     }
 
-    editModeRenderer()->drawItem(m_editData.element, painter, m_editData, currentScaling(painter));
+    editModeRenderer()->drawItem(m_editData.element, painter, m_editData, currentScaling(painter), opt);
 }
 
 void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
@@ -3623,7 +3626,7 @@ void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
     }
 }
 
-void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
+void NotationInteraction::drawGripPoints(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt)
 {
     if (isDragStarted() && !isGripEditStarted()) {
         return;
@@ -3663,16 +3666,16 @@ void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
     }
 
     editedElement->updateGrips(m_editData);
-    editModeRenderer()->drawItem(editedElement, painter, m_editData, scaling);
+    editModeRenderer()->drawItem(editedElement, painter, m_editData, scaling, opt);
 }
 
-void NotationInteraction::drawLasso(muse::draw::Painter* painter)
+void NotationInteraction::drawLasso(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt)
 {
     if (!m_lasso || m_lasso->isEmpty()) {
         return;
     }
 
-    score()->renderer()->drawItem(m_lasso, painter);
+    score()->renderer()->drawItem(m_lasso, painter, opt);
 }
 
 void NotationInteraction::drawDrop(muse::draw::Painter* painter)

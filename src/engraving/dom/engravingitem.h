@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "../iengravingconfiguration.h"
 #include "../rendering/iscorerenderer.h"
+#include "../rendering/paintoptions.h"
 
 #include "../infrastructure/ld_access.h"
 #include "../infrastructure/shape.h"
@@ -357,9 +358,9 @@ public:
 
     virtual void setColor(const Color& c);
     virtual Color color() const;
-    virtual Color curColor() const;
-    Color curColor(bool isVisible) const;
-    Color curColor(bool isVisible, Color normalColor) const;
+    virtual Color curColor(const rendering::ElementPaintOptions& opt) const;
+    Color curColor(bool isVisible, const rendering::ElementPaintOptions& opt) const;
+    Color curColor(bool isVisible, Color normalColor, const rendering::ElementPaintOptions& opt) const;
 
     void undoSetColor(const Color& c);
     void undoSetVisible(bool v);
@@ -485,9 +486,6 @@ public:
     virtual void triggerLayoutToEnd() const;
 
     double styleP(Sid idx) const;
-
-    bool colorsInversionEnabled() const;
-    void setColorsInversionEnabled(bool enabled);
 
     virtual void setParenthesesMode(const ParenthesesMode& v, bool addToLinked = true, bool generated = false);
     ParenthesesMode parenthesesMode() const;
@@ -742,8 +740,6 @@ private:
 
     Spatium m_minDistance;              // autoplace min distance
     mutable ElementFlags m_flags;
-
-    bool m_colorsInversionEnabled = true;
 
     bool m_excludeVerticalAlign = false;
 
