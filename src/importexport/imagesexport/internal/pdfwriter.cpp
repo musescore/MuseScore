@@ -186,7 +186,6 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
       <dc:title>%1</dc:title>
       <dc:creator>%2</dc:creator>
       <pdf:Author>%6</pdf:Author>
-      <dc:description>%3</dc:description>
       <dc:subject>%3</dc:subject>
       <pdf:Copyright>%4</pdf:Copyright>
       <xmp:CreateDate>%5</xmp:CreateDate>
