@@ -26,6 +26,8 @@
 #include "draw/painter.h"
 #include "dom/editdata.h"
 
+#include "paintoptions.h"
+
 namespace mu::engraving {
 class EngravingItem;
 }
@@ -38,6 +40,7 @@ class IEditModeRenderer : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IEditModeRenderer() = default;
 
-    virtual void drawItem(EngravingItem* item, muse::draw::Painter* p, EditData& ed, double currentViewScaling) = 0;
+    virtual void drawItem(const EngravingItem* item, muse::draw::Painter* p, const EditData& ed, double currentViewScaling,
+                          const ElementPaintOptions& opt) = 0;
 };
 }

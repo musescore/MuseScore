@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "iinteractive.h"
+#include "iengravingconfiguration.h"
 #include "engraving/rendering/isinglerenderer.h"
 #include "engraving/rendering/ieditmoderenderer.h"
 
@@ -37,6 +38,7 @@
 
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/elementgroup.h"
+#include "engraving/rendering/paintoptions.h"
 #include "engraving/types/symid.h"
 #include "scorecallbacks.h"
 
@@ -55,13 +57,14 @@ class NotationInteraction : public INotationInteraction, public muse::Injectable
     muse::Inject<INotationConfiguration> configuration = { this };
     muse::Inject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
     muse::Inject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
     muse::Inject<engraving::rendering::IEditModeRenderer> editModeRenderer = { this };
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
 
-    void paint(muse::draw::Painter* painter);
+    void paint(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt);
 
     // Put notes
     INotationNoteInputPtr noteInput() const override;
@@ -416,13 +419,13 @@ private:
     std::vector<ShadowNoteParams> previewNotes() const;
 
     bool shouldDrawInputPreview() const;
-    void drawInputPreview(muse::draw::Painter* painter);
+    void drawInputPreview(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt);
 
     void drawAnchorLines(muse::draw::Painter* painter);
-    void drawTextEditMode(muse::draw::Painter* painter);
+    void drawTextEditMode(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt);
     void drawSelectionRange(muse::draw::Painter* painter);
-    void drawGripPoints(muse::draw::Painter* painter);
-    void drawLasso(muse::draw::Painter* painter);
+    void drawGripPoints(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt);
+    void drawLasso(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt);
     void drawDrop(muse::draw::Painter* painter);
 
     void moveElementSelection(MoveDirection d);

@@ -60,7 +60,7 @@ public:
     double midWidth() const override;
     double dottedWidth() const override;
 
-    Color curColor() const override;
+    Color curColor(const rendering::ElementPaintOptions& opt) const override;
 
 protected:
     void changeAnchor(EditData&, EngravingItem*) override;

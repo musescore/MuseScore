@@ -605,7 +605,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
         for (Note* note : chord->notes()) {
             note->setSelected(true);
         }
-        color = element->curColor().toQColor();
+        color = element->curColor({}).toQColor();
     } else {
         color = palette().color(QPalette::Normal, QPalette::Text);
     }
@@ -1083,7 +1083,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         if (idx != m_selectedIdx) {
             // show voice colors for notes
             if (el->isChord()) {
-                color = el->curColor().toQColor();
+                color = el->curColor({}).toQColor();
             } else {
                 color = palette().color(QPalette::Normal, QPalette::Text);
             }

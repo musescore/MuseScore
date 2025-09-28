@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SCORERENDERER_DEV_H
-#define MU_ENGRAVING_SCORERENDERER_DEV_H
+#pragma once
 
 #include "../iscorerenderer.h"
 
@@ -38,8 +37,8 @@ public:
 
     SizeF pageSizeInch(const Score* score) const override;
     SizeF pageSizeInch(const Score* score, const PaintOptions& opt) const override;
-    void paintScore(muse::draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt) const override;
-    void paintItem(muse::draw::Painter& painter, const EngravingItem* item) const override;
+    void paintScore(muse::draw::Painter* painter, Score* score, const PaintOptions& opt) const override;
+    void paintItem(muse::draw::Painter& painter, const EngravingItem* item, const ElementPaintOptions& opt) const override;
 
     //! TODO Investigation is required, probably these functions or their calls should not be.
     // Other
@@ -57,8 +56,6 @@ private:
     // Layout Single Item
     void doLayoutItem(EngravingItem* item) override;
 
-    void doDrawItem(const EngravingItem* item, muse::draw::Painter* p) override;
+    void doDrawItem(const EngravingItem* item, muse::draw::Painter* p, const ElementPaintOptions& opt) override;
 };
 }
-
-#endif // MU_ENGRAVING_SCORERENDERER_DEV_H

@@ -27,6 +27,7 @@
 
 #include "draw/painter.h"
 
+#include "rendering/paintoptions.h"
 #include "style/style.h"
 
 #include "engravingitem.h"
@@ -168,6 +169,10 @@ void Score::print(Painter* painter, int pageNo)
 {
     m_printing  = true;
     MScore::pdfPrinting = true;
+
+    rendering::ElementPaintOptions opt;
+    opt.isPrinting = true;
+
     Page* page = pages().at(pageNo);
     RectF fr  = page->pageBoundingRect();
 
@@ -179,7 +184,7 @@ void Score::print(Painter* painter, int pageNo)
         }
         painter->save();
         painter->translate(e->pagePos());
-        renderer()->drawItem(e, painter);
+        renderer()->drawItem(e, painter, opt);
         painter->restore();
     }
     MScore::pdfPrinting = false;
