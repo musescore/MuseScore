@@ -98,13 +98,8 @@ int step2tpcByKey(int step, Key key)
     while (step < 0) {
         step += STEP_DELTA_OCTAVE;
     }
-    while (key < Key::MIN) {
-        key  += Key::DELTA_ENHARMONIC;
-    }
-    while (key > Key::MAX) {
-        key  -= Key::DELTA_ENHARMONIC;
-    }
-    return tpcByStepAndKey[int(key) - int(Key::MIN)][step % STEP_DELTA_OCTAVE];
+
+    return tpcByStepAndKey[int(clampKey(key)) - int(Key::MIN)][step % STEP_DELTA_OCTAVE];
 }
 
 //---------------------------------------------------------
@@ -194,15 +189,9 @@ static const int pitchByStepAndKey[int(Key::NUM_OF)][STEP_DELTA_OCTAVE] = {
 int step2deltaPitchByKey(int step, Key key)
 {
     while (step < MIN_STEP) {
-        step+= STEP_DELTA_OCTAVE;
+        step += STEP_DELTA_OCTAVE;
     }
-    while (key < Key::MIN) {
-        key += Key::DELTA_ENHARMONIC;
-    }
-    while (key > Key::MAX) {
-        key -= Key::DELTA_ENHARMONIC;
-    }
-    return pitchByStepAndKey[int(key) - int(Key::MIN)][step % STEP_DELTA_OCTAVE];
+    return pitchByStepAndKey[int(clampKey(key)) - int(Key::MIN)][step % STEP_DELTA_OCTAVE];
 }
 
 //---------------------------------------------------------
@@ -810,13 +799,7 @@ int pitch2absStepByKey(int pitch, int tpc, Key key, int& alter)
     // sanitize input data
     pitch = clampPitch(pitch, true);
     tpc = clampEnharmonic(tpc);
-
-    if (key < Key::MIN) {
-        key   += Key::DELTA_ENHARMONIC;
-    }
-    if (key > Key::MAX) {
-        key   -= Key::DELTA_ENHARMONIC;
-    }
+    key = clampKey(key);
 
     int octave = (pitch - int(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE;
     int step = tpc2step(tpc);
@@ -838,12 +821,7 @@ int absStep2pitchByKey(int step, Key key)
     if (step > MAX_STEP) {
         step -= STEP_DELTA_OCTAVE;
     }
-    if (key < Key::MIN) {
-        key  += Key::DELTA_ENHARMONIC;
-    }
-    if (key > Key::MAX) {
-        key  -= Key::DELTA_ENHARMONIC;
-    }
+    key = clampKey(key);
 
     int octave = step / STEP_DELTA_OCTAVE;
     int deltaPitch = step2deltaPitchByKey(step % STEP_DELTA_OCTAVE, key);
@@ -1164,5 +1142,25 @@ int clampPitch(int pitch, bool octaved)
         pitch += PITCH_DELTA_OCTAVE;
     }
     return pitch;
+}
+
+Key clampKey(Key key, PreferSharpFlat prefer)
+{
+    Key smallest = Key::G_B;
+    Key largest = Key::F_S;
+
+    if (prefer != PreferSharpFlat::AUTO) {
+        smallest = (prefer == PreferSharpFlat::SHARPS) ? Key::A_B : Key::MIN;
+        largest  = (prefer == PreferSharpFlat::FLATS) ? Key::E : Key::MAX;
+    }
+
+    while (key < smallest) {
+        key += Key::DELTA_ENHARMONIC;
+    }
+    while (key > largest) {
+        key -= Key::DELTA_ENHARMONIC;
+    }
+
+    return key;
 }
 }

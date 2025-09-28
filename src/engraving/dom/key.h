@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_KEY_H
-#define MU_ENGRAVING_KEY_H
+#pragma once
 
 #include <vector>
 #include <array>
@@ -131,7 +130,6 @@ private:
 struct Interval;
 
 enum class PreferSharpFlat : char;
-extern Key transposeKey(Key oldKey, const Interval&, PreferSharpFlat prefer = PreferSharpFlat(0));
+extern Key transposeKey(Key oldKey, const Interval&, PreferSharpFlat prefer = PreferSharpFlat::NONE);
 extern Interval calculateInterval(Key key1, Key key2);
 } // namespace mu::engraving
-#endif
