@@ -156,7 +156,6 @@ ProjectMeta PdfWriter::getProjectMetadata(INotationPtr notation) const
         return project->metaInfo();
     }
 
-    // If unable to get project, create a basic metadata object
     ProjectMeta meta;
     if (notation) {
         meta.title = notation->projectWorkTitle();
@@ -166,7 +165,6 @@ ProjectMeta PdfWriter::getProjectMetadata(INotationPtr notation) const
 
 QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
 {
-    // Helper function to create XMP metadata, ensuring text is properly escaped
     auto escapeXml = [](const QString& text) -> QString {
         QString escaped = text;
         escaped.replace("&", "&amp;");
@@ -187,6 +185,7 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
         xmlns:pdfx="http://ns.adobe.com/pdfx/1.3/">
       <dc:title>%1</dc:title>
       <dc:creator>%2</dc:creator>
+      <pdf:Author>%6</pdf:Author>
       <dc:description>%3</dc:description>
       <dc:subject>%3</dc:subject>
       <pdf:Copyright>%4</pdf:Copyright>
@@ -200,12 +199,8 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
   </rdf:RDF>
 </x:xmpmeta>)";
 
-    // Author field: Only use composer (as per community discussion)
     QString author = meta.composer;
-    
-    // Creator field: Use software version
-    QString creator = QString("MuseScore Studio %1").arg(application()->version().toString().toQString());
-
+    QString creator = QString("MuseScore Studio Version: ") + application()->version().toString().toQString();
     QString currentDateTime = QDateTime::currentDateTime().toString(Qt::ISODate);
     
     QString xmpData = xmpTemplate
@@ -214,6 +209,7 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
                       .arg(escapeXml(meta.subtitle))
                       .arg(escapeXml(meta.copyright))
                       .arg(currentDateTime)
+                      .arg(escapeXml(author))
                       .arg(escapeXml(meta.composer))
                       .arg(escapeXml(meta.arranger))
                       .arg(escapeXml(meta.translator))
@@ -224,37 +220,24 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
 
 void PdfWriter::preparePdfWriter(QPdfWriter& pdfWriter, INotationPtr notation, const QSizeF& size) const
 {
-    // Get project metadata
     ProjectMeta meta = getProjectMetadata(notation);
     
-    // Set basic PDF properties
     pdfWriter.setResolution(configuration()->exportPdfDpiResolution());
     
-    // Set PDF metadata fields
     QString title = meta.title.isEmpty() ? notation->projectWorkTitleAndPartName() : meta.title;
     pdfWriter.setTitle(title);
     
-    // Set author field - this sets the PDF "Author" field
-    // Author field: Only use composer (as per community discussion)
     QString author = meta.composer;
     
-    // Check if Qt version supports setAuthor method
 #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
-    // Use Qt 6.9's new method to set author
     pdfWriter.setAuthor(author);
 #endif
     
-    // Set creator tool information - this sets the PDF "Creator" field
-    QString creatorTool = QString("MuseScore Studio %1").arg(application()->version().toString().toQString());
-    pdfWriter.setCreator(creatorTool);
+    pdfWriter.setCreator(QString("MuseScore Studio Version: ") + application()->version().toString().toQString());
     
-    // Note: Producer field is automatically set by Qt to "Qt X.X.X", we don't need to set it manually
-    
-    // Generate and set XMP metadata (this is the main metadata setting method, compatible with all Qt versions)
     QByteArray xmpMetadata = generateXmpMetadata(meta);
     pdfWriter.setDocumentXmpMetadata(xmpMetadata);
     
-    // Set page properties
     pdfWriter.setPageMargins(QMarginsF());
     pdfWriter.setPageLayout(QPageLayout(QPageSize(size, QPageSize::Inch), QPageLayout::Orientation::Portrait, QMarginsF()));
 
