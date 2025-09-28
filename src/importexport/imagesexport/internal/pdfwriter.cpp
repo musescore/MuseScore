@@ -24,10 +24,10 @@
 
 #include <QPdfWriter>
 #include <QBuffer>
-#include <QDateTime>
+#include <QDateTime> // For XMP metadata timestamp generation
 
 #include "engraving/dom/masterscore.h"
-#include "project/types/projectmeta.h"
+#include "project/types/projectmeta.h" // For project metadata handling
 
 #include "log.h"
 
@@ -149,6 +149,7 @@ Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& destin
     return true;
 }
 
+// Extract project metadata from current project or notation fallback
 ProjectMeta PdfWriter::getProjectMetadata(INotationPtr notation) const
 {
     auto project = globalContext()->currentProject();
@@ -163,8 +164,10 @@ ProjectMeta PdfWriter::getProjectMetadata(INotationPtr notation) const
     return meta;
 }
 
+// Generate XMP metadata for PDF embedding with project information
 QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
 {
+    // XML escaping helper for metadata fields
     auto escapeXml = [](const QString& text) -> QString {
         QString escaped = text;
         escaped.replace("&", "&amp;");
@@ -202,6 +205,7 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
     QString creator = QString("MuseScore Studio Version: ") + application()->version().toString().toQString();
     QString currentDateTime = QDateTime::currentDateTime().toString(Qt::ISODate);
     
+    // Populate XMP template with project metadata
     QString xmpData = xmpTemplate
                       .arg(escapeXml(meta.title))
                       .arg(escapeXml(creator))
@@ -223,17 +227,20 @@ void PdfWriter::preparePdfWriter(QPdfWriter& pdfWriter, INotationPtr notation, c
     
     pdfWriter.setResolution(configuration()->exportPdfDpiResolution());
     
+    // Use project title if available, otherwise fallback to notation title
     QString title = meta.title.isEmpty() ? notation->projectWorkTitleAndPartName() : meta.title;
     pdfWriter.setTitle(title);
     
     QString author = meta.composer;
     
+    // Set author metadata (Qt 6.9+ feature)
 #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
     pdfWriter.setAuthor(author);
 #endif
     
     pdfWriter.setCreator(QString("MuseScore Studio Version: ") + application()->version().toString().toQString());
     
+    // Embed comprehensive XMP metadata
     QByteArray xmpMetadata = generateXmpMetadata(meta);
     pdfWriter.setDocumentXmpMetadata(xmpMetadata);
     
