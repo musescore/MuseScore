@@ -536,6 +536,22 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
 }
 
 //---------------------------------------------------------
+//   transposeKey
+//---------------------------------------------------------
+
+Key transposeKey(Key key, const Interval& interval, PreferSharpFlat prefer)
+{
+    Key newKey = Key(transposeTpc(int(key), interval, false));
+
+    // ignore prefer for octave transposing instruments
+    if (interval.chromatic % PITCH_DELTA_OCTAVE == 0 && interval.diatonic % STEP_DELTA_OCTAVE == 0) {
+        prefer = PreferSharpFlat::NONE;
+    }
+
+    return clampKey(newKey, prefer);
+}
+
+//---------------------------------------------------------
 //   transposeSemitone
 //---------------------------------------------------------
 

@@ -103,6 +103,7 @@ extern int function2Tpc(const String& s, Key key, size_t& idx);
 extern int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseType& noteCase, size_t& idx);
 extern int clampEnharmonic(int tpc, bool useDoubleSharpsFlats = true);
 extern int clampPitch(int pitch, bool octaved = false);
+extern Key clampKey(Key key, PreferSharpFlat prefer = PreferSharpFlat::NONE);
 
 //---------------------------------------------------------
 //   tpc2alter

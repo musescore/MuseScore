@@ -1278,6 +1278,10 @@ static inline bool operator!=(const Key a, const Key b) { return static_cast<int
 static inline Key operator+=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) + static_cast<int>(b)); }
 static inline Key operator-=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) - static_cast<int>(b)); }
 
+enum class PreferSharpFlat : char {
+    NONE, SHARPS, FLATS, AUTO
+};
+
 struct SwingParameters {
     int swingUnit = 0;
     int swingRatio = 0;
