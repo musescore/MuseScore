@@ -159,11 +159,11 @@ void Ambitus::setTopPitch(int val, bool applyLogic)
         return;
     }
 
-    int deltaPitch = val - topPitch();
-    // if deltaPitch is not an integer number of octaves, adjust tpc
+    // if pitch difference is not an integer number of octaves, adjust tpc
     // (to avoid 'wild' tpc changes with octave changes)
-    if (deltaPitch % PITCH_DELTA_OCTAVE != 0) {
-        m_topTpc = clampEnharmonic(topTpc() + deltaPitch * TPC_DELTA_SEMITONE);
+    if ((val - topPitch()) % PITCH_DELTA_OCTAVE != 0) {
+        Key key = (staff() && segment()) ? staff()->key(segment()->tick()) : Key::C;
+        m_topTpc = pitch2tpc(val, key, Prefer::NEAREST);
     }
     m_topPitch = val;
     normalize();
@@ -176,11 +176,11 @@ void Ambitus::setBottomPitch(int val, bool applyLogic)
         return;
     }
 
-    int deltaPitch = val - bottomPitch();
-    // if deltaPitch is not an integer number of octaves, adjust tpc
+    // if pitch difference is not an integer number of octaves, adjust tpc
     // (to avoid 'wild' tpc changes with octave changes)
-    if (deltaPitch % PITCH_DELTA_OCTAVE != 0) {
-        m_bottomTpc = clampEnharmonic(bottomTpc() + deltaPitch * TPC_DELTA_SEMITONE);
+    if ((val - bottomPitch()) % PITCH_DELTA_OCTAVE != 0) {
+        Key key = (staff() && segment()) ? staff()->key(segment()->tick()) : Key::C;
+        m_bottomTpc = pitch2tpc(val, key, Prefer::NEAREST);
     }
     m_bottomPitch = val;
     normalize();
@@ -195,37 +195,29 @@ void Ambitus::setBottomPitch(int val, bool applyLogic)
 
 void Ambitus::setTopTpc(int val, bool applyLogic)
 {
+    m_topTpc = val;
+
     if (!applyLogic) {
-        m_topTpc = val;
         return;
     }
 
     int octave = topPitch() / PITCH_DELTA_OCTAVE;
-    int deltaTpc = val - topTpc();
-    // get new pitch according to tpc change
-    int newPitch = topPitch() + deltaTpc * TPC_DELTA_SEMITONE;
-    // reduce pitch to the same octave as original pitch
-    newPitch = (octave * PITCH_DELTA_OCTAVE) + (newPitch % PITCH_DELTA_OCTAVE);
-    m_topPitch = newPitch;
-    m_topTpc = val;
+    int newOctavedPitch = (tpc2pitch(val) + PITCH_DELTA_OCTAVE) % PITCH_DELTA_OCTAVE;
+    m_topPitch = (octave * PITCH_DELTA_OCTAVE) + newOctavedPitch;
     normalize();
 }
 
 void Ambitus::setBottomTpc(int val, bool applyLogic)
 {
+    m_bottomTpc = val;
+
     if (!applyLogic) {
-        m_bottomTpc = val;
         return;
     }
 
     int octave = bottomPitch() / PITCH_DELTA_OCTAVE;
-    int deltaTpc = val - bottomTpc();
-    // get new pitch according to tpc change
-    int newPitch = bottomPitch() + deltaTpc * TPC_DELTA_SEMITONE;
-    // reduce pitch to the same octave as original pitch
-    newPitch = (octave * PITCH_DELTA_OCTAVE) + (newPitch % PITCH_DELTA_OCTAVE);
-    m_bottomPitch = newPitch;
-    m_bottomTpc = val;
+    int newOctavedPitch = (tpc2pitch(val) + PITCH_DELTA_OCTAVE) % PITCH_DELTA_OCTAVE;
+    m_bottomPitch = (octave * PITCH_DELTA_OCTAVE) + newOctavedPitch;
     normalize();
 }
 
