@@ -24,10 +24,10 @@
 
 #include <QPdfWriter>
 #include <QBuffer>
-#include <QDateTime> // For XMP metadata timestamp generation
+#include <QDateTime>
 
 #include "engraving/dom/masterscore.h"
-#include "project/types/projectmeta.h" // For project metadata handling
+#include "project/types/projectmeta.h"
 
 #include "log.h"
 
