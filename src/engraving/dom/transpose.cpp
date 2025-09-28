@@ -52,38 +52,26 @@ namespace mu::engraving {
 
 static Interval keydiff2Interval(Key oKey, Key nKey, TransposeDirection dir)
 {
-    static int stepTable[15] = {
-        // C  G  D  A  E  B Fis
+    static int stepTable[STEP_DELTA_OCTAVE] = {
+        // C  G  D  A  E  B F
         0, 4, 1, 5, 2, 6, 3,
     };
 
-    int cofSteps;       // circle of fifth steps
-    int diatonic;
-    if (nKey > oKey) {
-        cofSteps = int(nKey) - int(oKey);
-    } else {
-        cofSteps = 12 - (int(oKey) - int(nKey));
-    }
-    diatonic = stepTable[(int(nKey) + 7) % 7] - stepTable[(int(oKey) + 7) % 7];
+    int cofSteps = (nKey > oKey) ? int(nKey) - int(oKey) : int(nKey) - int(oKey) + PITCH_DELTA_OCTAVE; // circle of fifth steps
+    int diatonic = stepTable[(int(nKey) + 7) % 7] - stepTable[(int(oKey) + 7) % 7];
     if (diatonic < 0) {
-        diatonic += 7;
+        diatonic += STEP_DELTA_OCTAVE;
     }
-    diatonic %= 7;
-    int chromatic = (cofSteps * 7) % 12;
+    diatonic %= STEP_DELTA_OCTAVE;
+    int chromatic = (cofSteps * 7) % PITCH_DELTA_OCTAVE;
 
     if ((dir == TransposeDirection::CLOSEST) && (chromatic > 6)) {
         dir = TransposeDirection::DOWN;
     }
 
     if (dir == TransposeDirection::DOWN) {
-        chromatic = chromatic - 12;
-        diatonic  = diatonic - 7;
-        if (diatonic == -7) {
-            diatonic = 0;
-        }
-        if (chromatic == -12) {
-            chromatic = 0;
-        }
+        chromatic = chromatic == 0 ? 0 : chromatic - 12;
+        diatonic  = diatonic == 0 ? 0 : diatonic - 7;
     }
     return Interval(diatonic, chromatic);
 }
@@ -186,8 +174,7 @@ bool Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
             v.flip();
             ntpc2 = transposeTpc(ntpc1, v, useDoubleSharpsFlats);
         } else {
-            int p;
-            transposeInterval(n->pitch() - n->transposition(), n->tpc2(), &p, &ntpc2, interval, useDoubleSharpsFlats);
+            ntpc2 = transposeTpc(n->tpc2(), interval, useDoubleSharpsFlats);
         }
     } else {
         ntpc2 = ntpc1;
@@ -239,9 +226,9 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 interval = keydiff2Interval(key, trKey, direction);
             } else {          //same key, which direction?
                 if (direction == TransposeDirection::UP) {
-                    interval = Interval(12);
+                    interval = Interval(7, 12);
                 } else if (direction == TransposeDirection::DOWN) {
-                    interval = Interval(-12);
+                    interval = Interval(-7, -12);
                 } else {      //don't do anything for same key and closest direction
                     return true;
                 }
@@ -256,7 +243,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
         if (!rangeSelection) {
             trKeys = false;
         }
-        bool fullOctave = (interval.chromatic % 12) == 0;
+        bool fullOctave = (interval.chromatic % PITCH_DELTA_OCTAVE) == 0;
         if (fullOctave && (mode != TransposeMode::TO_KEY)) {
             trKeys = false;
             transposeChordNames = false;
@@ -557,39 +544,10 @@ void Score::transposeSemitone(int step)
     if (step == 0) {
         return;
     }
-    if (step > 1) {
-        step = 1;
-    }
-    if (step < -1) {
-        step = -1;
-    }
 
     TransposeDirection dir = step > 0 ? TransposeDirection::UP : TransposeDirection::DOWN;
 
-    int keyType = int(staff(0)->key(Fraction(0, 1))) + 7;     // ??
-
-    int intervalListArray[15][2] = {
-        // up - down
-        { 1, 1 },      // Cb
-        { 1, 1 },      // Gb
-        { 1, 1 },      // Db
-        { 1, 1 },      // Ab
-        { 1, 1 },      // Eb
-        { 1, 1 },      // Bb
-        { 1, 1 },      // F
-        { 1, 1 },      // C
-        { 1, 1 },      // G
-        { 1, 1 },      // D
-        { 1, 1 },      // A
-        { 1, 1 },      // E
-        { 1, 1 },      // B
-        { 1, 1 },      // F#
-        { 1, 1 }       // C#
-    };
-
-    const int interval = intervalListArray[keyType][step > 0 ? 0 : 1];
-
-    if (!transpose(TransposeMode::BY_INTERVAL, dir, Key::C, interval, true, true, false)) {
+    if (!transpose(TransposeMode::BY_INTERVAL, dir, Key::C, 1, true, true, false)) {
         LOGD("Score::transposeSemitone: failed");
         // TODO: set error message
     } else {
@@ -715,7 +673,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
                 }
                 // find chord symbols
                 for (EngravingItem* element : s->annotations()) {
-                    if (element->track() != track || element->type() != ElementType::HARMONY) {
+                    if (element->track() != track || !element->isHarmony()) {
                         continue;
                     }
                     Harmony* h  = toHarmony(element);
