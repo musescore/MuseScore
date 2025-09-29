@@ -3278,9 +3278,29 @@ void TextBase::initTextStyleType(TextStyleType tid, bool preserveDifferent)
 
 void TextBase::initTextStyleType(TextStyleType tid)
 {
+    auto getTextPID = [&](Pid p) -> Pid {
+        static const std::map<Pid, Pid> TEXT_LINE_PID_MAP = { { Pid::FONT_FACE, Pid::BEGIN_FONT_FACE },
+            { Pid::FONT_SIZE, Pid::BEGIN_FONT_SIZE },
+            { Pid::FONT_STYLE, Pid::BEGIN_FONT_STYLE },
+            { Pid::ALIGN, Pid::BEGIN_TEXT_ALIGN },
+        };
+
+        const bool isTextLine = parent()->isTextLineBaseSegment();
+        for (const auto& pidPair : TEXT_LINE_PID_MAP) {
+            const Pid textPid = pidPair.first;
+            const Pid textLinePid = pidPair.second;
+
+            if (p == textLinePid || p == textPid) {
+                return isTextLine ? textLinePid : textPid;
+            }
+        }
+
+        return p;
+    };
+
     setTextStyleType(tid);
     for (const auto& p : *textStyle(tid)) {
-        setProperty(p.pid, styleValue(p.pid, p.sid));
+        setProperty(getTextPID(p.pid), styleValue(p.pid, p.sid));
     }
 
     resetProperty(Pid::MUSIC_SYMBOL_SIZE);
