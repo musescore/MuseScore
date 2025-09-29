@@ -230,10 +230,15 @@ private:
         Qt::DropAction dropAction = Qt::DropAction::CopyAction;
         QObject* source = nullptr;
     };
+
     bool dropEvent(const DragMoveEvent& event, const QMimeData* mimeData = nullptr);
+
+    std::vector<int> pitchesBeingDragged() const;
+
     DragMoveEvent m_lastDragMoveEvent;
 
     const mu::engraving::EngravingItem* m_prevSelectedElement = nullptr;
+    std::vector<const mu::engraving::EngravingItem*> m_notesBeingDragged;
 
     bool m_hitElementWasAlreadySingleSelected = false;
     bool m_shouldSelectOnLeftClickRelease = false;
