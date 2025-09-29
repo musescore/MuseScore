@@ -85,4 +85,19 @@ ExportSettingsPage {
             root.model.pdfGrayscale = !checked
         }
     }
+
+    CheckBox {
+        width: parent.width
+        text: qsTrc("project/export", "Embed metadata")
+
+        navigation.name: "EmbedMetadataCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 4
+
+        checked: root.model.pdfEmbeddedMetadata
+
+        onClicked: {
+            root.model.pdfEmbeddedMetadata = !checked
+        }
+    }
 }

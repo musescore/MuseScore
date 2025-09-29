@@ -441,6 +441,21 @@ void ExportDialogModel::setPdfGrayscale(const bool& grayscale)
     emit pdfGrayscaleChanged(grayscale);
 }
 
+bool ExportDialogModel::pdfEmbeddedMetadata() const
+{
+    return imageExportConfiguration()->exportPdfWithEmbeddedMetadata();
+}
+
+void ExportDialogModel::setPdfEmbeddedMetadata(const bool& embedMetadata)
+{
+    if (embedMetadata == pdfEmbeddedMetadata()) {
+        return;
+    }
+
+    imageExportConfiguration()->setExportPdfWithEmbeddedMetadata(embedMetadata);
+    emit pdfEmbeddedMetadataChanged(embedMetadata);
+}
+
 int ExportDialogModel::pngResolution() const
 {
     return imageExportConfiguration()->exportPngDpiResolution();
