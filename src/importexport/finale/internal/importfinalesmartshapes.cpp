@@ -103,21 +103,21 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     case others::SmartShapeCustomLine::LineStyle::Solid:
         lineStyle   = LineType::SOLID;
         lineVisible = customLine->solidParams->lineWidth != 0;
-        lineWidth   = Spatium(FinaleTConv::doubleFromEfix(customLine->solidParams->lineWidth));
+        lineWidth   = Spatium(doubleFromEfix(customLine->solidParams->lineWidth));
         break;
     case others::SmartShapeCustomLine::LineStyle::Dashed:
         lineStyle   = LineType::DASHED; /// @todo When should we set lineStyle to LineType::DOTTED ?
         lineVisible = customLine->dashedParams->lineWidth != 0;
-        lineWidth   = Spatium(FinaleTConv::doubleFromEfix(customLine->dashedParams->lineWidth));
-        dashLineLen = FinaleTConv::doubleFromEfix(customLine->dashedParams->dashOn) / lineWidth.val();
-        dashGapLen  = FinaleTConv::doubleFromEfix(customLine->dashedParams->dashOff) / lineWidth.val();
+        lineWidth   = Spatium(doubleFromEfix(customLine->dashedParams->lineWidth));
+        dashLineLen = doubleFromEfix(customLine->dashedParams->dashOn) / lineWidth.val();
+        dashGapLen  = doubleFromEfix(customLine->dashedParams->dashOff) / lineWidth.val();
         break;
     }
     beginHookType = customLine->lineCapStartType == others::SmartShapeCustomLine::LineCapType::Hook ? HookType::HOOK_90 : HookType::NONE;
     endHookType   = customLine->lineCapEndType == others::SmartShapeCustomLine::LineCapType::Hook ? HookType::HOOK_90 : HookType::NONE;
-    beginHookHeight = Spatium(FinaleTConv::doubleFromEfix(customLine->lineCapStartHookLength));
-    endHookHeight   = Spatium(FinaleTConv::doubleFromEfix(customLine->lineCapEndHookLength));
-    gapBetweenTextAndLine = Spatium(FinaleTConv::doubleFromEvpu(customLine->lineStartX)); // Don't use lineEndX or lineContX
+    beginHookHeight = Spatium(doubleFromEfix(customLine->lineCapStartHookLength));
+    endHookHeight   = Spatium(doubleFromEfix(customLine->lineCapEndHookLength));
+    gapBetweenTextAndLine = Spatium(doubleFromEvpu(customLine->lineStartX)); // Don't use lineEndX or lineContX
     textSizeSpatiumDependent = true; /// ???
     diagonal = !customLine->makeHorz;
 
@@ -155,11 +155,11 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
 
     /// @todo I'm not yet sure how text offset affects the default offset/alignment of lines when added to the score.
     /// This may need to be accounted for in spanner segment positioning.
-    beginTextOffset    = FinaleTConv::evpuToPointF(customLine->leftStartX, customLine->lineStartY - customLine->leftStartY);
-    continueTextOffset = FinaleTConv::evpuToPointF(customLine->leftContX, customLine->lineStartY - customLine->leftContY);
-    endTextOffset      = FinaleTConv::evpuToPointF(customLine->rightEndX, customLine->lineEndY - customLine->rightEndY);
-    centerLongTextOffset  = FinaleTConv::evpuToPointF(customLine->centerFullX, customLine->lineStartY - customLine->centerFullY);
-    centerShortTextOffset = FinaleTConv::evpuToPointF(customLine->centerAbbrX, customLine->lineStartY - customLine->centerAbbrY);
+    beginTextOffset    = evpuToPointF(customLine->leftStartX, customLine->lineStartY - customLine->leftStartY);
+    continueTextOffset = evpuToPointF(customLine->leftContX, customLine->lineStartY - customLine->leftContY);
+    endTextOffset      = evpuToPointF(customLine->rightEndX, customLine->lineEndY - customLine->rightEndY);
+    centerLongTextOffset  = evpuToPointF(customLine->centerFullX, customLine->lineStartY - customLine->centerFullY);
+    centerShortTextOffset = evpuToPointF(customLine->centerAbbrX, customLine->lineStartY - customLine->centerAbbrY);
 }
 
 static bool elementsValidForSpannerType(const ElementType type, const EngravingItem* startElement, const EngravingItem* endElement)
@@ -225,9 +225,9 @@ void FinaleParser::importSmartShapes()
         if (!measure || staffIdx == muse::nidx) {
             return nullptr;
         }
-        Fraction tick = mTick + FinaleTConv::musxFractionToFraction(termSeg->endPoint->calcGlobalPosition());
+        Fraction tick = mTick + musxFractionToFraction(termSeg->endPoint->calcGlobalPosition());
         if (useNextCr && entryInfoPtr) {
-            tick += FinaleTConv::musxFractionToFraction(entryInfoPtr.calcGlobalActualDuration());
+            tick += musxFractionToFraction(entryInfoPtr.calcGlobalActualDuration());
         }
         // TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, tick, staffIdx);
         // EditTimeTickAnchors::updateLayout(measure);
@@ -266,7 +266,7 @@ void FinaleParser::importSmartShapes()
             return line;
         }();
 
-        ElementType type = FinaleTConv::elementTypeFromShapeType(smartShape->shapeType);
+        ElementType type = elementTypeFromShapeType(smartShape->shapeType);
         if (type == ElementType::INVALID) {
             if (!customLine) {
                 logger()->logWarning(String(u"Invalid spanner type"));
@@ -324,27 +324,27 @@ void FinaleParser::importSmartShapes()
         // Set properties
         newSpanner->setVisible(!smartShape->hidden);
         if (type == ElementType::OTTAVA) {
-            toOttava(newSpanner)->setOttavaType(FinaleTConv::ottavaTypeFromShapeType(smartShape->shapeType));
+            toOttava(newSpanner)->setOttavaType(ottavaTypeFromShapeType(smartShape->shapeType));
         } else if (type == ElementType::HAIRPIN) {
-            toHairpin(newSpanner)->setHairpinType(FinaleTConv::hairpinTypeFromShapeType(smartShape->shapeType));
+            toHairpin(newSpanner)->setHairpinType(hairpinTypeFromShapeType(smartShape->shapeType));
         } else if (type == ElementType::SLUR) {
-            toSlur(newSpanner)->setStyleType(FinaleTConv::slurStyleTypeFromShapeType(smartShape->shapeType));
+            toSlur(newSpanner)->setStyleType(slurStyleTypeFromShapeType(smartShape->shapeType));
             /// @todo is there a way to read the calculated direction
-            toSlur(newSpanner)->setSlurDirection(FinaleTConv::directionVFromShapeType(smartShape->shapeType));
+            toSlur(newSpanner)->setSlurDirection(directionVFromShapeType(smartShape->shapeType));
         } else if (type == ElementType::TEXTLINE && !customLine) {
             TextLineBase* textLine = toTextLineBase(newSpanner);
-            textLine->setLineStyle(FinaleTConv::lineTypeFromShapeType(smartShape->shapeType));
+            textLine->setLineStyle(lineTypeFromShapeType(smartShape->shapeType));
             /// @todo read more settings from smartshape options, set styles for more elements
-            std::pair<int, int> hookHeights = FinaleTConv::hookHeightsFromShapeType(smartShape->shapeType);
+            std::pair<int, int> hookHeights = hookHeightsFromShapeType(smartShape->shapeType);
             if (hookHeights.first != 0) {
                 textLine->setBeginHookType(HookType::HOOK_90);
-                textLine->setBeginHookHeight(Spatium(hookHeights.first * FinaleTConv::doubleFromEvpu(musxOptions().smartShapeOptions->hookLength)));
+                textLine->setBeginHookHeight(Spatium(hookHeights.first * doubleFromEvpu(musxOptions().smartShapeOptions->hookLength)));
                 // continue doesn't have no hook
             }
             if (hookHeights.second != 0) {
                 textLine->setEndHookType(HookType::HOOK_90);
                 textLine->setEndHookHeight(Spatium(hookHeights.second));
-                textLine->setBeginHookHeight(Spatium(hookHeights.first * FinaleTConv::doubleFromEvpu(musxOptions().smartShapeOptions->hookLength)));
+                textLine->setBeginHookHeight(Spatium(hookHeights.first * doubleFromEvpu(musxOptions().smartShapeOptions->hookLength)));
             }
         }
         /// @todo set guitar bend type
