@@ -96,7 +96,7 @@ Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> m
     // barline vertical offsets relative to staff
     auto calcBarlineOffsetHalfSpaces = [](Evpu offset) -> int {
         // Finale and MuseScore use opposite signs for up/down
-        return int(std::lround(FinaleTConv::doubleFromEvpu(-offset) * 2.0));
+        return int(std::lround(doubleFromEvpu(-offset) * 2.0));
     };
     s->setBarLineFrom(calcBarlineOffsetHalfSpaces(musxStaff->topBarlineOffset));
     s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset));
@@ -139,7 +139,7 @@ void FinaleParser::importMeasures()
         m_meas2Tick.emplace(musxMeasure->getCmper(), tick);
         m_tick2Meas.emplace(tick, musxMeasure->getCmper());
         MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature();
-        Fraction scoreTimeSig = FinaleTConv::simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
+        Fraction scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
         if (scoreTimeSig != currTimeSig) {
             m_score->sigmap()->add(tick.ticks(), scoreTimeSig);
             currTimeSig = scoreTimeSig;
@@ -224,7 +224,7 @@ void FinaleParser::importParts()
 
         // load default part settings
         /// @todo overwrite most of these settings later
-        const InstrumentTemplate* it = searchTemplate(FinaleTConv::instrTemplateIdfromUuid(compositeStaff->instUuid));
+        const InstrumentTemplate* it = searchTemplate(instrTemplateIdfromUuid(compositeStaff->instUuid));
         if (it) {
             part->initFromInstrTemplate(it);
         }
@@ -360,7 +360,7 @@ void FinaleParser::importBrackets()
             continue;
         }
         BracketItem* bi = Factory::createBracketItem(m_score->dummy());
-        bi->setBracketType(FinaleTConv::toMuseScoreBracketType(groupInfo.info.group->bracket->style));
+        bi->setBracketType(toMuseScoreBracketType(groupInfo.info.group->bracket->style));
         int groupSpan = int(groupInfo.info.endSlot.value() - groupInfo.info.startSlot.value() + 1);
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(groupInfo.layer));
@@ -463,7 +463,7 @@ Clef* FinaleParser::createClef(Score* score, const MusxInstance<musx::dom::other
     Staff* staff = score->staff(staffIdx);
     Fraction timeStretch = staff->timeStretch(measure->tick());
     // Clef positions in musx are staff-level, so back out any time stretch to get global position.
-    Fraction clefTick = FinaleTConv::eduToFraction(musxEduPos) / timeStretch;
+    Fraction clefTick = eduToFraction(musxEduPos) / timeStretch;
     Segment* clefSeg = measure->getSegmentR(clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
     clefSeg->add(clef);
     return clef;
@@ -503,7 +503,7 @@ void FinaleParser::importClefs(const MusxInstance<others::StaffUsed>& musxScroll
                     auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), midMeasureClef->xEduPos);
                     if (Clef* clef = createClef(m_score, currStaff, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline, visible)) {
                         // only set y offset because MuseScore automatically calculates the horizontal spacing offset
-                        clef->setOffset(0.0, -FinaleTConv::doubleFromEvpu(midMeasureClef->yEvpuPos) * clef->spatium());
+                        clef->setOffset(0.0, -doubleFromEvpu(midMeasureClef->yEvpuPos) * clef->spatium());
                         /// @todo perhaps populate other fields from midMeasureClef, such as clef-specific mag, etc.?
                         musxCurrClef = midMeasureClef->clefIndex;
                     }
@@ -539,7 +539,7 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const MusxInstance<musx
     if (changed(staffType->genTimesig(), !currStaff->hideTimeSigs, result)) {
         staffType->setGenTimesig(!currStaff->hideTimeSigs);
     }
-    StaffGroup staffGroup = FinaleTConv::staffGroupFromNotationStyle(currStaff->notationStyle);
+    StaffGroup staffGroup = staffGroupFromNotationStyle(currStaff->notationStyle);
     if (changed(staffType->group(), staffGroup, result)) {
         staffType->setGroup(staffGroup);
     }
@@ -704,7 +704,7 @@ void FinaleParser::importStaffItems()
             const MusxInstance<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
             const MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxScrollViewItem->staffId);
             if (!currMusxTimeSig || !currMusxTimeSig->isSame(*musxTimeSig) || musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always) {
-                Fraction timeSig = FinaleTConv::simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
+                Fraction timeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
                 Segment* seg = measure->getSegmentR(SegmentType::TimeSig, Fraction(0, 1));
                 TimeSig* ts = Factory::createTimeSig(seg);
                 ts->setSig(timeSig);
@@ -739,8 +739,8 @@ void FinaleParser::importStaffItems()
                     // Note that isLinear and isNonLinear can in theory both return false, although if it happens it is evidence of musx file corruption.
                     KeySigEvent& ksEvent = keySigEvent.value();
                     if (musxKeySig->isLinear() || keyless) {
-                        Key concertKey = keyless ? Key::C : FinaleTConv::keyFromAlteration(musxKeySig->getAlteration(KeySignature::KeyContext::Concert));
-                        Key key = keyless ? Key::C : FinaleTConv::keyFromAlteration(musxKeySig->getAlteration(KeySignature::KeyContext::Written));
+                        Key concertKey = keyless ? Key::C : keyFromAlteration(musxKeySig->getAlteration(KeySignature::KeyContext::Concert));
+                        Key key = keyless ? Key::C : keyFromAlteration(musxKeySig->getAlteration(KeySignature::KeyContext::Written));
                         ksEvent.setConcertKey(concertKey);
                         ksEvent.setKey(key);
                         KeyMode km = KeyMode::UNKNOWN;
@@ -751,7 +751,7 @@ void FinaleParser::importStaffItems()
                         } else if (musxKeySig->isMinor()) {
                             km = KeyMode::MINOR;
                         } else if (std::optional<music_theory::DiatonicMode> mode = musxKeySig->calcDiatonicMode()) {
-                            km = FinaleTConv::keyModeFromDiatonicMode(mode.value());
+                            km = keyModeFromDiatonicMode(mode.value());
                         }
                         ksEvent.setMode(km);
                     } else if (musxKeySig->isNonLinear()) {
@@ -769,7 +769,7 @@ void FinaleParser::importStaffItems()
                             if (amount == 0) {
                                 break;
                             }
-                            SymId accidental = FinaleTConv::acciSymbolFromAcciAmount(amount);
+                            SymId accidental = acciSymbolFromAcciAmount(amount);
                             if (accidental != SymId::noSym) {
                                 CustDef cd;
                                 cd.sym = accidental;
@@ -913,7 +913,7 @@ void FinaleParser::importPageLayout()
                     }
                     logger()->logInfo(String(u"Adding space between systems at tick %1").arg(distTick.toString()));
                     HBox* distBox = Factory::createHBox(m_score->dummy()->system());
-                    distBox->setBoxWidth(Spatium(FinaleTConv::doubleFromEvpu(dist)));
+                    distBox->setBoxWidth(Spatium(doubleFromEvpu(dist)));
                     distBox->setSizeIsSpatiumDependent(false);
                     distBox->setTick(distMeasure->tick());
                     distBox->setNext(distMeasure);
@@ -942,10 +942,10 @@ void FinaleParser::importPageLayout()
             // for the very first system, create a non-frame indent instead
             if (isFirstSystemOnPage && currentPageIndex == 0) {
                 m_score->style().set(Sid::enableIndentationOnFirstSystem, true);
-                m_score->style().set(Sid::firstSystemIndentationValue, FinaleTConv::doubleFromEvpu(leftStaffSystem->left));
+                m_score->style().set(Sid::firstSystemIndentationValue, doubleFromEvpu(leftStaffSystem->left));
             } else {
                 HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
-                leftBox->setBoxWidth(Spatium(FinaleTConv::doubleFromEvpu(leftStaffSystem->left)));
+                leftBox->setBoxWidth(Spatium(doubleFromEvpu(leftStaffSystem->left)));
                 leftBox->setSizeIsSpatiumDependent(false);
                 leftBox->setTick(startMeasure->tick());
                 leftBox->setNext(startMeasure);
@@ -960,7 +960,7 @@ void FinaleParser::importPageLayout()
         MeasureBase* sysEnd = endMeasure;
         if (!muse::RealIsEqual(double(-rightStaffSystem->right), 0.0)) {
             HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
-            rightBox->setBoxWidth(Spatium(FinaleTConv::doubleFromEvpu(-rightStaffSystem->right)));
+            rightBox->setBoxWidth(Spatium(doubleFromEvpu(-rightStaffSystem->right)));
             rightBox->setSizeIsSpatiumDependent(false);
             Fraction rightTick = endMeasure->nextMeasure() ? endMeasure->nextMeasure()->tick() : m_score->last()->endTick();
             rightBox->setTick(rightTick);
@@ -1018,7 +1018,7 @@ void FinaleParser::importPageLayout()
             Spacer* upSpacer = Factory::createSpacer(startMeasure);
             upSpacer->setSpacerType(SpacerType::UP);
             upSpacer->setTrack(0);
-            upSpacer->setGap(FinaleTConv::absoluteSpatiumFromEvpu(-leftStaffSystem->top - leftStaffSystem->distanceToPrev, upSpacer)); // (signs reversed)
+            upSpacer->setGap(absoluteSpatiumFromEvpu(-leftStaffSystem->top - leftStaffSystem->distanceToPrev, upSpacer)); // (signs reversed)
             /// @todo account for title frames / perhaps header frames
             startMeasure->add(upSpacer);
         }
@@ -1026,7 +1026,7 @@ void FinaleParser::importPageLayout()
             Spacer* downSpacer = Factory::createSpacer(startMeasure);
             downSpacer->setSpacerType(SpacerType::FIXED);
             downSpacer->setTrack((m_score->nstaves() - 1) * VOICES); // invisible staves are correctly accounted for on layout
-            downSpacer->setGap(FinaleTConv::absoluteSpatiumFromEvpu((-rightStaffSystem->bottom - 96) - staffSystems[i+1]->distanceToPrev - staffSystems[i+1]->top, downSpacer)); // (signs reversed)
+            downSpacer->setGap(absoluteSpatiumFromEvpu((-rightStaffSystem->bottom - 96) - staffSystems[i+1]->distanceToPrev - staffSystems[i+1]->top, downSpacer)); // (signs reversed)
             startMeasure->add(downSpacer);
         }
 
@@ -1045,7 +1045,7 @@ void FinaleParser::importPageLayout()
             Spacer* staffSpacer = Factory::createSpacer(startMeasure);
             staffSpacer->setSpacerType(SpacerType::FIXED);
             staffSpacer->setTrack(staff2track(prevStaffIdx));
-            Spatium dist = FinaleTConv::absoluteSpatiumFromEvpu(-nextMusxStaff->distFromTop + prevMusxStaff->distFromTop, staffSpacer)
+            Spatium dist = absoluteSpatiumFromEvpu(-nextMusxStaff->distFromTop + prevMusxStaff->distFromTop, staffSpacer)
             // This line (probably) requires importStaffItems() be called before importPageLayout().
                            - Spatium::fromMM(m_score->staff(prevStaffIdx)->staffHeight(startMeasure->tick()), staffSpacer->spatium());
             staffSpacer->setGap(dist);

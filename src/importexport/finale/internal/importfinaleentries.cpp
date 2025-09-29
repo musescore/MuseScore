@@ -118,7 +118,7 @@ std::unordered_map<int, voice_idx_t> FinaleParser::mapFinaleVoices(const std::ma
     for (const auto& [layerIndex, usesV2] : finaleVoiceMap) {
         const auto& it = m_layer2Voice.find(layerIndex);
         if (it != m_layer2Voice.end()) {
-            auto [revIt, emplaced] = reverseMap.emplace(it->second, FinaleTConv::createFinaleVoiceId(layerIndex, false));
+            auto [revIt, emplaced] = reverseMap.emplace(it->second, createFinaleVoiceId(layerIndex, false));
             if (emplaced) {
                 result.emplace(revIt->second, revIt->first);
                 continue;
@@ -130,7 +130,7 @@ std::unordered_map<int, voice_idx_t> FinaleParser::mapFinaleVoices(const std::ma
         if (usesV2) {
             bool foundVoice = false;
             for (voice_idx_t v : {0, 1, 2, 3}) {
-                auto [revIt, emplaced] = reverseMap.emplace(v, FinaleTConv::createFinaleVoiceId(layerIndex, true));
+                auto [revIt, emplaced] = reverseMap.emplace(v, createFinaleVoiceId(layerIndex, true));
                 if (emplaced) {
                     result.emplace(revIt->second, revIt->first);
                     foundVoice = true;
@@ -169,13 +169,13 @@ ChordRest* FinaleParser::chordRestFromEntryInfoPtr(const musx::dom::EntryInfoPtr
 
 static void transferTupletProperties(MusxInstance<details::TupletDef> musxTuplet, Tuplet* scoreTuplet, FinaleLoggerPtr& logger)
 {
-    scoreTuplet->setNumberType(FinaleTConv::toMuseScoreTupletNumberType(musxTuplet->numStyle));
+    scoreTuplet->setNumberType(toMuseScoreTupletNumberType(musxTuplet->numStyle));
     // actual number object is generated on score layout
 
     scoreTuplet->setAutoplace(musxTuplet->smartTuplet);
     // separate bracket/number offset not supported, just add it to the whole tuplet for now
     /// @todo needs to be negated?
-    scoreTuplet->setOffset(FinaleTConv::evpuToPointF(musxTuplet->tupOffX + musxTuplet->brackOffX,
+    scoreTuplet->setOffset(evpuToPointF(musxTuplet->tupOffX + musxTuplet->brackOffX,
                                                      musxTuplet->tupOffY + musxTuplet->brackOffY));
     scoreTuplet->setVisible(!musxTuplet->hidden);
     if (musxTuplet->autoBracketStyle != options::TupletOptions::AutoBracketStyle::Always) {
@@ -199,8 +199,8 @@ static void transferTupletProperties(MusxInstance<details::TupletDef> musxTuplet
 
     // bracket extensions
     /// @todo account for the fact that Finale always includes head widths in total bracket width, an option not yet in MuseScore. See #16973
-    scoreTuplet->setUserPoint1(FinaleTConv::evpuToPointF(-musxTuplet->leftHookExt, 0));
-    scoreTuplet->setUserPoint2(FinaleTConv::evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj));
+    scoreTuplet->setUserPoint1(evpuToPointF(-musxTuplet->leftHookExt, 0));
+    scoreTuplet->setUserPoint2(evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj));
     if (musxTuplet->alwaysFlat) {
         scoreTuplet->setUserPoint2(PointF(scoreTuplet->userP2().x(), scoreTuplet->userP1().y()));
     }
@@ -235,7 +235,7 @@ static Fraction findParentTickForGraceNote(EntryInfoPtr entryInfo, bool& insertA
     for (EntryInfoPtr entryInfoPtr = entryInfo; entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextSameV()) {
         if (!entryInfoPtr->getEntry()->graceNote) {
             if (!entryInfoPtr.calcDisplaysAsRest()) {
-                return FinaleTConv::musxFractionToFraction(entryInfoPtr.calcGlobalElapsedDuration()).reduced();
+                return musxFractionToFraction(entryInfoPtr.calcGlobalElapsedDuration()).reduced();
             }
         }
     }
@@ -243,7 +243,7 @@ static Fraction findParentTickForGraceNote(EntryInfoPtr entryInfo, bool& insertA
         if (!entryInfoPtr->getEntry()->graceNote) {
             if (!entryInfoPtr.calcDisplaysAsRest()) {
                 insertAfter = true;
-                return FinaleTConv::musxFractionToFraction(entryInfoPtr.calcGlobalElapsedDuration()).reduced();
+                return musxFractionToFraction(entryInfoPtr.calcGlobalElapsedDuration()).reduced();
             }
         }
     }
@@ -283,7 +283,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         }
         entryStartTick = findParentTickForGraceNote(entryInfo, graceAfterType, logger());
     } else {
-        entryStartTick = FinaleTConv::musxFractionToFraction(entryInfo.calcGlobalElapsedDuration()).reduced();
+        entryStartTick = musxFractionToFraction(entryInfo.calcGlobalElapsedDuration()).reduced();
     }
     if (entryStartTick.negative()) {
         // Return true for non-anchorable grace notes, else false
@@ -292,7 +292,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     Segment* segment = measure->getSegmentR(SegmentType::ChordRest, entryStartTick);
 
     // durationType
-    TDuration d = FinaleTConv::noteInfoToDuration(currentEntry->calcNoteInfo());
+    TDuration d = noteInfoToDuration(currentEntry->calcNoteInfo());
     if (!d.isValid()) {
         logger()->logWarning(String(u"Given ChordRest duration not supported in MuseScore"));
         return false;
@@ -341,7 +341,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, i);
 
             // calculate pitch & accidentals
-            NoteVal nval = FinaleTConv::notePropertiesToNoteVal(noteInfoPtr.calcNotePropertiesConcert(), baseStaff->concertKey(segment->tick()));
+            NoteVal nval = notePropertiesToNoteVal(noteInfoPtr.calcNotePropertiesConcert(), baseStaff->concertKey(segment->tick()));
             AccidentalVal accVal = tpc2alter(nval.tpc1);
             ///@todo transposition
             nval.tpc2 = nval.tpc1;
@@ -383,13 +383,13 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                         /// rightmost accidentals matching the type of an accidental on a note with ledger lines.
                         /// @todo decide when to disable autoplace
                         if (const MusxInstance<details::AccidentalAlterations>& accidentalInfo = m_doc->getDetails()->getForNote<details::AccidentalAlterations>(noteInfoPtr)) {
-                            if (muse::RealIsEqualOrLess(FinaleTConv::doubleFromPercent(accidentalInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
+                            if (muse::RealIsEqualOrLess(doubleFromPercent(accidentalInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
                                 a->setSmall(true);
                             }
                             /// @todo this calculation needs to take into account the default accidental separation amounts in accidentalOptions. The options
                             /// should allow us to calculate the default position of the accidental relative to the note. (But it may not be easy.)
                             /// The result will probably also need to be multiplied by SPATIUM20, if other items are any guide.
-                            a->setOffset(FinaleTConv::evpuToPointF(accidentalInfo->hOffset, accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0));
+                            a->setOffset(evpuToPointF(accidentalInfo->hOffset, accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0));
                         }
                     }
                     note->add(a);
@@ -398,10 +398,10 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
 
             if (currentEntry->noteDetail) {
                 if (const MusxInstance<details::NoteAlterations> noteInfo = m_doc->getDetails()->getForNote<details::NoteAlterations>(noteInfoPtr)) {
-                    if (muse::RealIsEqualOrLess(FinaleTConv::doubleFromPercent(noteInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
+                    if (muse::RealIsEqualOrLess(doubleFromPercent(noteInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
                         note->setSmall(true);
                     }
-                    note->setOffset(FinaleTConv::evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0));
+                    note->setOffset(evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0));
                     /// @todo interpret notehead type from altNhead (and perhaps useOwnFont/customFont as well).
                 }
             }
@@ -471,7 +471,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             for (const MusxInstance<details::CustomStem>& customStem : customStems) {
                 chord->stem()->setVisible(customStem->calcIsHiddenStem());
                 if (customStem->hOffset != 0 || customStem->vOffset != 0) {
-                    chord->stem()->setOffset(FinaleTConv::evpuToPointF(customStem->hOffset, -customStem->vOffset));
+                    chord->stem()->setOffset(evpuToPointF(customStem->hOffset, -customStem->vOffset));
                     chord->stem()->setAutoPlace(false); // make more nuanced?
                 }
             }
@@ -495,7 +495,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
 
     int entrySize = entryInfo.calcEntrySize();
     if (entrySize <= musx::dom::MAX_CUE_PERCENTAGE) {
-        double crMag = FinaleTConv::doubleFromPercent(entrySize);
+        double crMag = doubleFromPercent(entrySize);
         if (muse::RealIsEqualOrLess(crMag, m_score->style().styleD(Sid::smallNoteMag))) { // is just less enough here?
             if (m_smallNoteMagFound) {
                 logger()->logWarning(String(u"Inconsistent cue note sizes found. Using the smallest encountered."), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
@@ -518,7 +518,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         engraving::Chord* gc = toChord(cr);
         /// @todo Account for stem slash plugin instead of just document options
         gc->setNoteType((!graceAfterType /* && gc->beams() > 0 */ && entryInfo.calcUnbeamed() && (currentEntry->slashGrace || musxOptions().graceOptions->slashFlaggedGraceNotes))
-                         ? engraving::NoteType::ACCIACCATURA : FinaleTConv::durationTypeToNoteType(d.type(), graceAfterType));
+                         ? engraving::NoteType::ACCIACCATURA : durationTypeToNoteType(d.type(), graceAfterType));
         engraving::Chord* graceParentChord = toChord(segment->element(curTrackIdx));
         gc->setGraceIndex(static_cast<int>(graceAfterType ? graceParentChord->graceNotesAfter().size() : graceParentChord->graceNotesBefore().size()));
         graceParentChord->add(gc);
@@ -546,7 +546,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     dot->setParent(n);
                     dot->setVisible(n->visible());
                     dot->setTrack(cr->track());
-                    dot->setOffset(FinaleTConv::evpuToPointF((da->hOffset + i * museInterdot) * SPATIUM20, -da->vOffset * SPATIUM20));
+                    dot->setOffset(evpuToPointF((da->hOffset + i * museInterdot) * SPATIUM20, -da->vOffset * SPATIUM20));
                     n->add(dot);
                 }
             } else if (r) {
@@ -555,7 +555,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     dot->setParent(r);
                     dot->setVisible(r->visible());
                     dot->setTrack(cr->track());
-                    dot->setOffset(FinaleTConv::evpuToPointF((da->hOffset + i * museInterdot) * SPATIUM20, -da->vOffset * SPATIUM20));
+                    dot->setOffset(evpuToPointF((da->hOffset + i * museInterdot) * SPATIUM20, -da->vOffset * SPATIUM20));
                     r->add(dot);
                 }
             } else {
@@ -716,8 +716,8 @@ static void createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo,
             continue;
         }
         ReadableTuplet rTuplet;
-        rTuplet.startTick  = FinaleTConv::musxFractionToFraction(tuplet.startDura).reduced();
-        rTuplet.endTick    = FinaleTConv::musxFractionToFraction(tuplet.endDura).reduced();
+        rTuplet.startTick  = musxFractionToFraction(tuplet.startDura).reduced();
+        rTuplet.endTick    = musxFractionToFraction(tuplet.endDura).reduced();
         rTuplet.musxTuplet = tuplet.tuplet;
         if (tuplet.calcIsTremolo()) {
             tremoloMap.emplace_back(rTuplet);
@@ -749,7 +749,7 @@ static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std:
 {
     // create Tuplets as needed, starting with the outermost
     for (size_t i = 1; i < tupletMap.size(); ++i) {
-        TDuration baseLen = FinaleTConv::noteInfoToDuration(calcNoteInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration));
+        TDuration baseLen = noteInfoToDuration(calcNoteInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration));
         if (!baseLen.isValid()) {
             logger->logWarning(String(u"Given Tuplet duration not supported in MuseScore"));
             continue;
@@ -760,7 +760,7 @@ static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std:
         tupletMap[i].scoreTuplet->setParent(measure);
         // musxTuplet::calcRatio is the reciprocal of what MuseScore needs
         /// @todo skip case where finale numerator is 0: often used for changing beams
-        Fraction tupletRatio = FinaleTConv::musxFractionToFraction(tupletMap[i].musxTuplet->calcRatio().reciprocal());
+        Fraction tupletRatio = musxFractionToFraction(tupletMap[i].musxTuplet->calcRatio().reciprocal());
         tupletMap[i].scoreTuplet->setRatio(tupletRatio);
         tupletMap[i].scoreTuplet->setBaseLen(baseLen);
         Fraction f = baseLen.fraction() * tupletRatio.denominator();
@@ -837,7 +837,7 @@ void FinaleParser::importEntries()
                     const int maxV1V2 = finaleLayer.second ? 1 : 0;
                     for (int voice = 0; voice <= maxV1V2; voice++) {
                         // calculate current track
-                        voice_idx_t voiceOff = muse::value(finaleVoiceMap, FinaleTConv::createFinaleVoiceId(layer, bool(voice)), muse::nidx);
+                        voice_idx_t voiceOff = muse::value(finaleVoiceMap, createFinaleVoiceId(layer, bool(voice)), muse::nidx);
                         IF_ASSERT_FAILED(voiceOff != muse::nidx && voiceOff < VOICES) {
                             logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(int(layer) + 1), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                             continue;

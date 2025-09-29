@@ -45,22 +45,22 @@ using namespace musx::dom;
 
 namespace mu::iex::finale {
 
-ID FinaleTConv::createPartId(int partNumber)
+ID createPartId(int partNumber)
 {
     return "P" + std::to_string(partNumber);
 }
 
-ID FinaleTConv::createStaffId(musx::dom::StaffCmper staffId)
+ID createStaffId(musx::dom::StaffCmper staffId)
 {
     return std::to_string(staffId);
 }
 
-int FinaleTConv::createFinaleVoiceId(musx::dom::LayerIndex layerIndex, bool forV2)
+int createFinaleVoiceId(musx::dom::LayerIndex layerIndex, bool forV2)
 {
     return (layerIndex * 2 + int(forV2));
 }
 
-DurationType FinaleTConv::noteTypeToDurationType(musx::dom::NoteType noteType)
+DurationType noteTypeToDurationType(musx::dom::NoteType noteType)
 {
     static const std::unordered_map<musx::dom::NoteType, DurationType> noteTypeTable = {
         { musx::dom::NoteType::Maxima,     DurationType::V_INVALID },
@@ -83,9 +83,9 @@ DurationType FinaleTConv::noteTypeToDurationType(musx::dom::NoteType noteType)
     return muse::value(noteTypeTable, noteType, DurationType::V_INVALID);
 }
 
-TDuration FinaleTConv::noteInfoToDuration(std::pair<musx::dom::NoteType, unsigned> noteInfo)
+TDuration noteInfoToDuration(std::pair<musx::dom::NoteType, unsigned> noteInfo)
 {
-    TDuration d = FinaleTConv::noteTypeToDurationType(noteInfo.first);
+    TDuration d = noteTypeToDurationType(noteInfo.first);
     int ndots = static_cast<int>(noteInfo.second);
     if (d.isValid() && ndots <= MAX_DOTS) {
         d.setDots(ndots);
@@ -94,7 +94,7 @@ TDuration FinaleTConv::noteInfoToDuration(std::pair<musx::dom::NoteType, unsigne
     return TDuration(DurationType::V_INVALID);
 }
 
-engraving::NoteType FinaleTConv::durationTypeToNoteType(DurationType type, bool after)
+engraving::NoteType durationTypeToNoteType(DurationType type, bool after)
 {
     if (int(type) < int(DurationType::V_EIGHTH)) {
         return after ? engraving::NoteType::GRACE4 : engraving::NoteType::GRACE8_AFTER;
@@ -108,7 +108,7 @@ engraving::NoteType FinaleTConv::durationTypeToNoteType(DurationType type, bool 
     return after ? engraving::NoteType::GRACE8_AFTER : engraving::NoteType::APPOGGIATURA;
 }
 
-String FinaleTConv::instrTemplateIdfromUuid(std::string uuid)
+String instrTemplateIdfromUuid(std::string uuid)
 {
     // keep in sync with 'id' property of https://docs.google.com/spreadsheets/d/1SwqZb8lq5rfv5regPSA10drWjUAoi65EuMoYtG-4k5s/edit
     // todo: Add (sensible) defaults: woodwinds-end
@@ -925,7 +925,7 @@ String FinaleTConv::instrTemplateIdfromUuid(std::string uuid)
     return muse::value(uuidTable, uuid, u"piano");
 }
 
-BracketType FinaleTConv::toMuseScoreBracketType(details::Bracket::BracketStyle style)
+BracketType toMuseScoreBracketType(details::Bracket::BracketStyle style)
 {
     using MusxBracketStyle = details::Bracket::BracketStyle;
     static const std::unordered_map<MusxBracketStyle, BracketType> bracketTypeTable = {
@@ -939,7 +939,7 @@ BracketType FinaleTConv::toMuseScoreBracketType(details::Bracket::BracketStyle s
     return muse::value(bracketTypeTable, style, BracketType::NO_BRACKET);
 }
 
-TupletNumberType FinaleTConv::toMuseScoreTupletNumberType(options::TupletOptions::NumberStyle numberStyle)
+TupletNumberType toMuseScoreTupletNumberType(options::TupletOptions::NumberStyle numberStyle)
 {
     using MusxTupletNumberType = options::TupletOptions::NumberStyle;
     static const std::unordered_map<MusxTupletNumberType, TupletNumberType> tupletNumberTypeTable = {
@@ -952,7 +952,7 @@ TupletNumberType FinaleTConv::toMuseScoreTupletNumberType(options::TupletOptions
     return muse::value(tupletNumberTypeTable, numberStyle, TupletNumberType::SHOW_NUMBER);
 }
 
-Align FinaleTConv::justifyToAlignment(others::NamePositioning::AlignJustify alignJustify)
+Align justifyToAlignment(others::NamePositioning::AlignJustify alignJustify)
 {
     static const std::unordered_map<others::NamePositioning::AlignJustify, Align> alignTable = {
         { others::NamePositioning::AlignJustify::Left,   Align(AlignH::LEFT, AlignV::VCENTER) },
@@ -962,7 +962,7 @@ Align FinaleTConv::justifyToAlignment(others::NamePositioning::AlignJustify alig
     return muse::value(alignTable, alignJustify, Align(AlignH::HCENTER, AlignV::VCENTER));
 }
 
-CourtesyBarlineMode FinaleTConv::boolToCourtesyBarlineMode(bool useDoubleBarlines)
+CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines)
 {
     static const std::unordered_map<bool, CourtesyBarlineMode> courtesyBarlineModeTable = {
         { false, CourtesyBarlineMode::ALWAYS_SINGLE },
@@ -971,7 +971,7 @@ CourtesyBarlineMode FinaleTConv::boolToCourtesyBarlineMode(bool useDoubleBarline
     return muse::value(courtesyBarlineModeTable, useDoubleBarlines, CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY);
 }
 
-NoteVal FinaleTConv::notePropertiesToNoteVal(const musx::dom::Note::NoteProperties& noteProperties, Key key)
+NoteVal notePropertiesToNoteVal(const musx::dom::Note::NoteProperties& noteProperties, Key key)
 {
     auto [noteType, octave, alteration, staffLine] = noteProperties;
     NoteVal nval;
@@ -986,18 +986,18 @@ NoteVal FinaleTConv::notePropertiesToNoteVal(const musx::dom::Note::NoteProperti
     return nval;
 }
 
-Fraction FinaleTConv::musxFractionToFraction(const musx::util::Fraction& fraction)
+Fraction musxFractionToFraction(const musx::util::Fraction& fraction)
 {
     // unlike with time signatures, remainder does not need to be accounted for
     return Fraction(fraction.numerator(), fraction.denominator());
 }
 
-Fraction FinaleTConv::eduToFraction(Edu edu)
+Fraction eduToFraction(Edu edu)
 {
     return musxFractionToFraction(musx::util::Fraction::fromEdu(edu));
 }
 
-Fraction FinaleTConv::simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger)
+Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger)
 {
     auto [count, noteType] = simpleMusxTimeSig;
     if (count.remainder()) {
@@ -1012,12 +1012,12 @@ Fraction FinaleTConv::simpleMusxTimeSigToFraction(const std::pair<musx::util::Fr
     return Fraction(count.quotient(),  musx::util::Fraction::fromEdu(Edu(noteType)).denominator());
 }
 
-Key FinaleTConv::keyFromAlteration(int musxAlteration)
+Key keyFromAlteration(int musxAlteration)
 {
     return Key(musxAlteration);
 }
 
-KeyMode FinaleTConv::keyModeFromDiatonicMode(music_theory::DiatonicMode diatonicMode)
+KeyMode keyModeFromDiatonicMode(music_theory::DiatonicMode diatonicMode)
 {
     using DiatonicMode = music_theory::DiatonicMode;
     static const std::unordered_map<DiatonicMode, KeyMode> keyModeTypeTable = {
@@ -1032,7 +1032,7 @@ KeyMode FinaleTConv::keyModeFromDiatonicMode(music_theory::DiatonicMode diatonic
     return muse::value(keyModeTypeTable, diatonicMode, KeyMode::UNKNOWN);
 }
 
-SymId FinaleTConv::acciSymbolFromAcciAmount(int acciAmount)
+SymId acciSymbolFromAcciAmount(int acciAmount)
 {
     /// @todo add support for microtonal symbols (will require access to musx KeySignature instance)
     /// This code assumes each chromatic halfstep is 1 EDO division, but we cannot make that assumption
@@ -1041,7 +1041,7 @@ SymId FinaleTConv::acciSymbolFromAcciAmount(int acciAmount)
     return at != AccidentalType::NONE ? Accidental::subtype2symbol(at) : SymId::noSym;
 }
 
-StaffGroup FinaleTConv::staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle)
+StaffGroup staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle)
 {
     using NotationStyle = musx::dom::others::Staff::NotationStyle;
     static const std::unordered_map<NotationStyle, StaffGroup> staffGroupMapTable = {
@@ -1053,7 +1053,7 @@ StaffGroup FinaleTConv::staffGroupFromNotationStyle(musx::dom::others::Staff::No
 
 }
 
-ElementType FinaleTConv::elementTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+ElementType elementTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
 {
     using ShapeType = musx::dom::others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, ElementType> shapeTypeTable = {
@@ -1103,7 +1103,7 @@ ElementType FinaleTConv::elementTypeFromShapeType(musx::dom::others::SmartShape:
     return muse::value(shapeTypeTable, shapeType, ElementType::TEXTLINE);
 }
 
-OttavaType FinaleTConv::ottavaTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+OttavaType ottavaTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
 {
     using ShapeType = musx::dom::others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, OttavaType> ottavaTypeTable = {
@@ -1115,7 +1115,7 @@ OttavaType FinaleTConv::ottavaTypeFromShapeType(musx::dom::others::SmartShape::S
     return muse::value(ottavaTypeTable, shapeType, OttavaType::OTTAVA_8VA);
 }
 
-HairpinType FinaleTConv::hairpinTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+HairpinType hairpinTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
 {
     using ShapeType = musx::dom::others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, HairpinType> ottavaTypeTable = {
@@ -1125,7 +1125,7 @@ HairpinType FinaleTConv::hairpinTypeFromShapeType(musx::dom::others::SmartShape:
     return muse::value(ottavaTypeTable, shapeType, HairpinType::INVALID);
 }
 
-SlurStyleType FinaleTConv::slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+SlurStyleType slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
 {
     using ShapeType = musx::dom::others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, SlurStyleType> shapeTypeTable = {
@@ -1142,7 +1142,7 @@ SlurStyleType FinaleTConv::slurStyleTypeFromShapeType(musx::dom::others::SmartSh
     return muse::value(shapeTypeTable, shapeType, SlurStyleType::Solid);
 }
 
-DirectionV FinaleTConv::directionVFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+DirectionV directionVFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
 {
     using ShapeType = musx::dom::others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, DirectionV> shapeTypeTable = {
@@ -1159,7 +1159,7 @@ DirectionV FinaleTConv::directionVFromShapeType(musx::dom::others::SmartShape::S
     return muse::value(shapeTypeTable, shapeType, DirectionV::AUTO);
 }
 
-LineType FinaleTConv::lineTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+LineType lineTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
 {
     using ShapeType = musx::dom::others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, LineType> shapeTypeTable = {
@@ -1185,7 +1185,7 @@ LineType FinaleTConv::lineTypeFromShapeType(musx::dom::others::SmartShape::Shape
     return muse::value(shapeTypeTable, shapeType, LineType::SOLID);
 }
 
-std::pair<int, int> FinaleTConv::hookHeightsFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+std::pair<int, int> hookHeightsFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
 {
     using ShapeType = musx::dom::others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, std::pair<int, int> > shapeTypeTable = {
@@ -1211,7 +1211,7 @@ std::pair<int, int> FinaleTConv::hookHeightsFromShapeType(musx::dom::others::Sma
     return muse::value(shapeTypeTable, shapeType, { 0, 0 });
 }
 
-String FinaleTConv::fontStyleSuffixFromCategoryType(musx::dom::others::MarkingCategory::CategoryType categoryType)
+String fontStyleSuffixFromCategoryType(musx::dom::others::MarkingCategory::CategoryType categoryType)
 {
     using CategoryType = musx::dom::others::MarkingCategory::CategoryType;
     /// @note Any changes to this list should also be reflected in `writeMarkingPrefs` in importfinalestyles.cpp
@@ -1226,22 +1226,22 @@ String FinaleTConv::fontStyleSuffixFromCategoryType(musx::dom::others::MarkingCa
     return String::fromUtf8(muse::value(categoryTypeTable, categoryType, "default"));
 }
 
-double FinaleTConv::doubleFromEvpu(double evpuDouble)
+double doubleFromEvpu(double evpuDouble)
 {
     return evpuDouble / EVPU_PER_SPACE;
 }
 
-PointF FinaleTConv::evpuToPointF(double xEvpu, double yEvpu)
+PointF evpuToPointF(double xEvpu, double yEvpu)
 {
     return PointF(doubleFromEvpu(xEvpu), doubleFromEvpu(yEvpu));
 }
 
-double FinaleTConv::doubleFromEfix(double efix)
+double doubleFromEfix(double efix)
 {
     return efix / EFIX_PER_SPACE;
 }
 
-String FinaleTConv::metaTagFromFileInfo(texts::FileInfoText::TextType textType)
+String metaTagFromFileInfo(texts::FileInfoText::TextType textType)
 {
     using TextType = texts::FileInfoText::TextType;
     static const std::unordered_map<TextType, String> metaTagTable = {
@@ -1256,7 +1256,7 @@ String FinaleTConv::metaTagFromFileInfo(texts::FileInfoText::TextType textType)
     return muse::value(metaTagTable, textType, String());
 }
 
-String FinaleTConv::metaTagFromTextComponent(const std::string& component)
+String metaTagFromTextComponent(const std::string& component)
 {
     static const std::unordered_map<std::string_view, String> metaTagTable = {
         { "title",       u"workTitle" },
@@ -1270,12 +1270,12 @@ String FinaleTConv::metaTagFromTextComponent(const std::string& component)
     return muse::value(metaTagTable, component, String());
 }
 
-double FinaleTConv::doubleFromPercent(int percent)
+double doubleFromPercent(int percent)
 {
     return double(percent) / 100.0;
 }
 
-double FinaleTConv::spatiumScaledFontSize(const MusxInstance<FontInfo>& fontInfo)
+double spatiumScaledFontSize(const MusxInstance<FontInfo>& fontInfo)
 {
     // Finale uses music font size 24 to fill a space.
     // MuseScore uses music font size 20 to fill a space.
@@ -1285,14 +1285,14 @@ double FinaleTConv::spatiumScaledFontSize(const MusxInstance<FontInfo>& fontInfo
     return double(fontInfo->fontSize) * (fontInfo->absolute ? 1.0 : MUSE_FINALE_SCALE_DIFFERENTIAL);
 }
 
-Spatium FinaleTConv::absoluteSpatium(double value, EngravingItem* e)
+Spatium absoluteSpatium(double value, EngravingItem* e)
 {
     // Returns global spatium value adjusted to preserve value for element scaling
     // Use style .spatium value or .defaultSpatium ??? or SPATIUM20??
     return Spatium(value * e->score()->style().defaultSpatium() / e->spatium());
 }
 
-Spatium FinaleTConv::absoluteSpatiumFromEvpu(Evpu evpu, EngravingItem* e)
+Spatium absoluteSpatiumFromEvpu(Evpu evpu, EngravingItem* e)
 {
     return absoluteSpatium(doubleFromEvpu(evpu), e);
 }
