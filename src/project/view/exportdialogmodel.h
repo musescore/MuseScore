@@ -69,7 +69,8 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
     Q_PROPERTY(int pdfResolution READ pdfResolution WRITE setPdfResolution NOTIFY pdfResolutionChanged)
     Q_PROPERTY(
         bool pdfTransparentBackground READ pdfTransparentBackground WRITE setPdfTransparentBackground NOTIFY pdfTransparentBackgroundChanged)
-
+    Q_PROPERTY(
+        bool pdfEmbeddedMetadata READ pdfEmbeddedMetadata WRITE setPdfEmbeddedMetadata NOTIFY pdfEmbeddedMetadataChanged)
     Q_PROPERTY(bool pdfGrayscale READ pdfGrayscale WRITE setPdfGrayscale NOTIFY pdfGrayscaleChanged)
 
     Q_PROPERTY(int pngResolution READ pngResolution WRITE setPngResolution NOTIFY pngResolutionChanged)
@@ -130,6 +131,9 @@ public:
 
     bool pdfGrayscale() const;
     void setPdfGrayscale(const bool& grayscale);
+
+    bool pdfEmbeddedMetadata() const;
+    void setPdfEmbeddedMetadata(const bool& embedMetadata);
 
     int pngResolution() const;
     void setPngResolution(const int& resolution);
@@ -192,6 +196,7 @@ signals:
     void pdfResolutionChanged(int resolution);
     void pdfTransparentBackgroundChanged(bool transparent);
     void pdfGrayscaleChanged(bool grayscale);
+    void pdfEmbeddedMetadataChanged(bool embedMetadata);
 
     void pngResolutionChanged(int resolution);
     void pngTransparentBackgroundChanged(bool transparent);

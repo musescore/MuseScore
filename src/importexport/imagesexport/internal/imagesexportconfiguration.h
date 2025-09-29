@@ -39,6 +39,9 @@ public:
     bool exportPdfWithGrayscale() const override;
     void setExportPdfWithGrayscale(bool grayscale) override;
 
+    bool exportPdfWithEmbeddedMetadata() const override;
+    void setExportPdfWithEmbeddedMetadata(bool embedMetadata) override;
+
     float exportPngDpiResolution() const override;
     void setExportPngDpiResolution(float dpi) override;
     void setExportPngDpiResolutionOverride(std::optional<float> dpi) override;

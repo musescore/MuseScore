@@ -45,6 +45,9 @@ public:
     virtual bool exportPdfWithGrayscale() const = 0;
     virtual void setExportPdfWithGrayscale(bool grayscale) = 0;
 
+    virtual bool exportPdfWithEmbeddedMetadata() const = 0;
+    virtual void setExportPdfWithEmbeddedMetadata(bool embedMetadata) = 0;
+
     // Png
     virtual float exportPngDpiResolution() const = 0;
     virtual void setExportPngDpiResolution(float dpi) = 0;
