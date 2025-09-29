@@ -34,6 +34,7 @@
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/hairpin.h"
+#include "engraving/dom/utils.h"
 
 #include "importfinalelogger.h"
 
@@ -975,14 +976,14 @@ NoteVal notePropertiesToNoteVal(const musx::dom::Note::NoteProperties& notePrope
 {
     auto [noteType, octave, alteration, staffLine] = noteProperties;
     NoteVal nval;
-    int absStep = 35 /*middle C*/ + int(noteType) + (octave - 4) * STEP_DELTA_OCTAVE;
-    nval.pitch = absStep2pitchByKey(absStep, Key::C) + alteration; //assume EDO division is semitone
+    nval.pitch = 60 /*middle C*/ + (octave - 4) * PITCH_DELTA_OCTAVE + step2pitch(int(noteType)) + alteration;
     if (alteration < int(AccidentalVal::MIN) || alteration > int(AccidentalVal::MAX) || !pitchIsValid(nval.pitch)) {
         nval.pitch = clampPitch(nval.pitch);
         nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
     } else {
         nval.tpc1 = step2tpc(int(noteType), AccidentalVal(alteration));
     }
+    nval.tpc2 = nval.tpc1;
     return nval;
 }
 

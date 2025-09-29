@@ -342,9 +342,9 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
 
             // calculate pitch & accidentals
             NoteVal nval = notePropertiesToNoteVal(noteInfoPtr.calcNotePropertiesConcert(), baseStaff->concertKey(segment->tick()));
+            NoteVal nvalTransposed = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties(), baseStaff->key(segment->tick()));
+            nval.tpc2 = nvalTransposed.tpc2;
             AccidentalVal accVal = tpc2alter(nval.tpc1);
-            ///@todo transposition
-            nval.tpc2 = nval.tpc1;
 
             engraving::Note* note = Factory::createNote(chord);
             note->setParent(chord);
