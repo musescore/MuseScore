@@ -83,7 +83,7 @@ void WebAudioEngine::init()
 
     m_controller = std::make_shared<EngineController>(m_rpcChannel);
     m_controller->registerExports();
-    m_controller->preInit();
+    m_controller->onStart();
 
     m_rpcChannel->send(rpc::make_notification(Method::EngineStarted));
 

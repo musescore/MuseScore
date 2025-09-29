@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "common/rpc/irpcchannel.h"
+#include "../istartaudiocontroller.h"
 
 #include "../iplayer.h"
 
@@ -34,6 +35,7 @@ namespace muse::audio {
 class Playback : public IPlayback, public Injectable, public async::Asyncable
 {
     Inject<rpc::IRpcChannel> channel;
+    Inject<IStartAudioController> startAudioController;
 
 public:
     Playback(const muse::modularity::ContextPtr& iocCtx)
@@ -41,6 +43,10 @@ public:
 
     void init();
     void deinit();
+
+    // 0. Check is audio system started
+    bool isAudioStarted() const override;
+    async::Channel<bool> isAudioStartedChanged() const override;
 
     // 1. Add Sequence
     async::Promise<TrackSequenceId> addSequence() override;
@@ -107,6 +113,10 @@ public:
     void clearAllFx() override;
 
 private:
+
+    using PendingAddSequence = std::function<void ()>;
+    std::vector<PendingAddSequence> m_pendingAddSequences;
+
     async::Channel<TrackSequenceId> m_sequenceAdded;
     async::Channel<TrackSequenceId> m_sequenceRemoved;
 

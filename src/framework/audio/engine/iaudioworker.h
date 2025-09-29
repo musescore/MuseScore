@@ -23,7 +23,7 @@
 
 #include "global/modularity/imoduleinterface.h"
 
-#include "audio/common/audiotypes.h"
+#include "global/async/channel.h"
 
 namespace muse::audio::engine {
 class IAudioWorker : MODULE_EXPORT_INTERFACE
@@ -34,9 +34,10 @@ public:
 
     virtual void registerExports() = 0; // temporary
 
-    virtual void run(const OutputSpec& outputSpec, const AudioEngineConfig& conf) = 0;
+    virtual void run() = 0;
     virtual void stop() = 0;
     virtual bool isRunning() const = 0;
+    virtual async::Channel<bool> isRunningChanged() const = 0;
 
     virtual void popAudioData(float* dest, size_t sampleCount) = 0;
 };

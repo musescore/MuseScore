@@ -45,6 +45,16 @@ private:
 
     std::shared_ptr<IEnginePlayback> m_playback;
 
+    struct PendingTrack {
+        rpc::Msg msg;
+        TrackSequenceId seqId;
+        TrackName trackName;
+        mpe::PlaybackData playbackData;
+        AudioParams params;
+    };
+
+    std::map<std::string /*sfname*/, std::vector<PendingTrack> > m_pendingTracks;
+
     async::Channel<TrackSequenceId, int64_t, int64_t> m_saveSoundTrackProgressStream;
     rpc::StreamId m_saveSoundTrackProgressStreamId = 0;
 };
