@@ -1617,7 +1617,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         for (Segment& seg : nm->segments()) {
             seg.checkEmpty();
             if (seg.empty()) {
-                score->doUndoRemoveElement(&seg);
+                nm->remove(&seg);
+                delete &seg;
             }
         }
         if (!nm->hasVoices(dstStaffIdx, nm->tick(), nm->ticks())) {
