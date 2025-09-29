@@ -51,7 +51,7 @@ public:
     EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel);
 
     void registerExports() override;
-    void preInit() override;
+    void onStart() override;
     void init(const OutputSpec& outputSpec, const AudioEngineConfig& conf) override;
     void deinit() override;
 

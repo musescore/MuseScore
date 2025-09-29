@@ -32,7 +32,7 @@ let AudioDriver = (function () {
             try {
 
                 const code = await URLFromFiles([
-                    '../MuseAudio.js',
+                    './MuseAudio.js',
                     './distr/audio_worklet_processor.js'
                 ]);
 

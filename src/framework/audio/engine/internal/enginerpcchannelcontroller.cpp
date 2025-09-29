@@ -137,11 +137,20 @@ void EngineRpcChannelController::init(std::shared_ptr<IEnginePlayback> playback)
             }
             // Waiting for SF to load
             else {
+                LOGI() << "Waiting for SF to load, trackName: " << trackName;
+                m_pendingTracks[sfname].emplace_back(PendingTrack { msg, seqId, trackName, playbackData, params });
                 soundFontRepository()->soundFontsChanged().onNotify(this,
-                                                                    [this, sfname, addTrackAndSendResponce,
-                                                                     msg, seqId, trackName, playbackData, params]() {
+                                                                    [this, sfname, addTrackAndSendResponce]() {
+                    LOGD() << "isSoundFont: " << sfname << ", loaded: " << soundFontRepository()->isSoundFontLoaded(sfname);
                     if (soundFontRepository()->isSoundFontLoaded(sfname)) {
-                        addTrackAndSendResponce(msg, seqId, trackName, playbackData, params);
+                        auto it = m_pendingTracks.find(sfname);
+                        if (it != m_pendingTracks.end()) {
+                            for (const PendingTrack& t : it->second) {
+                                addTrackAndSendResponce(t.msg, t.seqId, t.trackName, t.playbackData, t.params);
+                            }
+                            it->second.clear();
+                        }
+
                         soundFontRepository()->soundFontsChanged().resetOnNotify(this);
                     }
                 });

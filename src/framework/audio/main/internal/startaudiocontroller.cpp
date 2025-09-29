@@ -23,11 +23,15 @@
 
 #include "global/realfn.h"
 
+#include "audio/common/rpc/rpcpacker.h"
+
 #include "devtools/inputlag.h"
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::audio;
+using namespace muse::audio::rpc;
 
 static void measureInputLag(const float* buf, const size_t size)
 {
@@ -39,6 +43,16 @@ static void measureInputLag(const float* buf, const size_t size)
             }
         }
     }
+}
+
+bool StartAudioController::isAudioStarted() const
+{
+    return m_isAudioStarted.val;
+}
+
+async::Channel<bool> StartAudioController::isAudioStartedChanged() const
+{
+    return m_isAudioStarted.ch;
 }
 
 void StartAudioController::startAudioProcessing(const IApplication::RunMode& mode)
@@ -54,6 +68,7 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
     engine::IAudioWorker* worker = audioWorker().get();
     if (configuration()->shouldMeasureInputLag()) {
         requiredSpec.callback = [worker](void* /*userdata*/, uint8_t* stream, int byteCount) {
+            std::memset(stream, 0, byteCount);
             auto samplesPerChannel = byteCount / (2 * sizeof(float));  // 2 == m_configuration->audioChannelsCount()
             float* dest = reinterpret_cast<float*>(stream);
             worker->popAudioData(dest, samplesPerChannel);
@@ -61,29 +76,53 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
         };
     } else {
         requiredSpec.callback = [worker](void* /*userdata*/, uint8_t* stream, int byteCount) {
+            std::memset(stream, 0, byteCount);
             auto samplesPerChannel = byteCount / (2 * sizeof(float));
             worker->popAudioData(reinterpret_cast<float*>(stream), samplesPerChannel);
         };
     }
 #endif
 
+    IAudioDriver::Spec activeSpec;
     if (mode == IApplication::RunMode::GuiApp) {
         audioDriver()->init();
 
-        IAudioDriver::Spec activeSpec;
-        if (audioDriver()->open(requiredSpec, &activeSpec)) {
-            audioWorker()->run(activeSpec.output, configuration()->engineConfig());
+        if (!audioDriver()->open(requiredSpec, &activeSpec)) {
             return;
         }
-
-        LOGE() << "audio output open failed";
+    } else {
+        activeSpec = requiredSpec;
     }
 
-    audioWorker()->run(requiredSpec.output, configuration()->engineConfig());
+    AudioEngineConfig conf = configuration()->engineConfig();
+    auto sendEngineInit = [this, activeSpec, conf]() {
+        LOGDA() << "send EngineInit";
+        rpcChannel()->send(rpc::make_request(Method::EngineInit, RpcPacker::pack(activeSpec.output, conf)), [this](const Msg&) {
+            LOGDA() << "res EngineInit";
+            m_isAudioStarted.set(true);
+        });
+    };
+
+    LOGDA() << "audioWorker()->isRunning: " << audioWorker()->isRunning();
+    if (audioWorker()->isRunning()) {
+        sendEngineInit();
+    } else {
+        audioWorker()->run();
+
+        audioWorker()->isRunningChanged().onReceive(this, [this, sendEngineInit](bool arg) {
+            LOGDA() << "audioWorker()->isRunningChanged: " << arg;
+            if (arg) {
+                sendEngineInit();
+            }
+            audioWorker()->isRunningChanged().resetOnReceive(this);
+        });
+    }
 }
 
 void StartAudioController::stopAudioProcessing()
 {
+    m_isAudioStarted.set(false);
+
     if (audioDriver()->isOpened()) {
         audioDriver()->close();
     }

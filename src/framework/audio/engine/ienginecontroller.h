@@ -33,7 +33,7 @@ public:
     virtual ~IEngineController() = default;
 
     virtual void registerExports() = 0;
-    virtual void preInit() = 0;
+    virtual void onStart() = 0;
     virtual void init(const OutputSpec& outputSpec, const AudioEngineConfig& conf) = 0;
     virtual void deinit() = 0;
 };
