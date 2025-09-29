@@ -455,6 +455,7 @@ void GuitarBendLayout::layoutTabStaff(GuitarBendSegment* item, LayoutContext& ct
     }
 
     endPos = computeEndPos(item, endNote, distAboveTab, verticalPad, arrowHeight, arrowWidth, startPos, prevEndPoint);
+    endPos.setX(std::max(startPos.x(), endPos.x())); // Edge case for ultra-ultra-narrow situations: ensure bend doesn't end before its start
 
     vertex = bend->type() == GuitarBendType::PRE_BEND && !bend->angledPreBend()
              ? 0.5 * (startPos + endPos) : PointF(endPos.x(), startPos.y());
