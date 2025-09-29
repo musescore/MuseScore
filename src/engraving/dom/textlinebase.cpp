@@ -286,8 +286,8 @@ PropertyValue TextLineBase::getProperty(Pid id) const
 bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
-    /// Text line begin, continue and end text should all have the same style
-    /// Use the same property ID to set these, but get with the specific property ID
+    /// In >=4.6 text line begin, continue, and end text should all have the same style
+    /// Use Pid::BEGIN_TEXT_... to set all of these through the inspector, but leave the other properties in place internally
     /// This preserves backwards compatibility and will allow us to style these text items separately in the future if desired
     case Pid::BEGIN_TEXT_PLACE:
         _beginTextPlace = v.value<TextPlace>();
@@ -317,6 +317,38 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         setContinueFontStyle(FontStyle(v.toInt()));
         setEndFontStyle(FontStyle(v.toInt()));
         break;
+
+    case Pid::CONTINUE_TEXT_ALIGN:
+        _continueTextAlign = v.value<Align>();
+        break;
+    case Pid::END_TEXT_ALIGN:
+        _endTextAlign = v.value<Align>();
+        break;
+    case Pid::CONTINUE_TEXT_PLACE:
+        _continueTextPlace = v.value<TextPlace>();
+        break;
+    case Pid::END_TEXT_PLACE:
+        _endTextPlace = v.value<TextPlace>();
+        break;
+    case Pid::CONTINUE_FONT_FACE:
+        setContinueFontFamily(v.value<String>());
+        break;
+    case Pid::CONTINUE_FONT_SIZE:
+        setContinueFontSize(v.toReal());
+        break;
+    case Pid::CONTINUE_FONT_STYLE:
+        setContinueFontStyle(FontStyle(v.toInt()));
+        break;
+    case Pid::END_FONT_FACE:
+        setEndFontFamily(v.value<String>());
+        break;
+    case Pid::END_FONT_SIZE:
+        setEndFontSize(v.toReal());
+        break;
+    case Pid::END_FONT_STYLE:
+        setEndFontStyle(FontStyle(v.toInt()));
+        break;
+
     case Pid::BEGIN_HOOK_HEIGHT:
         _beginHookHeight = v.value<Spatium>();
         break;
