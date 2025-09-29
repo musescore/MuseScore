@@ -81,6 +81,8 @@ EngineController::EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
         }
 
         init(spec, conf);
+
+        m_rpcChannel->send(rpc::make_response(msg));
     });
 }
 
@@ -108,7 +110,7 @@ void EngineController::registerExports()
     ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
 }
 
-void EngineController::preInit()
+void EngineController::onStart()
 {
     m_fxResolver->registerResolver(AudioFxType::MuseFx, std::make_shared<MuseFxResolver>());
     m_synthResolver->registerResolver(AudioSourceType::Fluid, std::make_shared<FluidResolver>());

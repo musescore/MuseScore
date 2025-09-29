@@ -108,21 +108,53 @@ void Playback::deinit()
     channel()->onMethod(Method::MasterOutputParamsChanged, nullptr);
 }
 
+bool Playback::isAudioStarted() const
+{
+    return startAudioController()->isAudioStarted();
+}
+
+async::Channel<bool> Playback::isAudioStartedChanged() const
+{
+    return startAudioController()->isAudioStartedChanged();
+}
+
 Promise<TrackSequenceId> Playback::addSequence()
 {
     ONLY_AUDIO_MAIN_THREAD;
     return async::make_promise<TrackSequenceId>([this](auto resolve, auto /*reject*/) {
         ONLY_AUDIO_MAIN_THREAD;
-        Msg msg = rpc::make_request(Method::AddSequence);
-        channel()->send(msg, [this, resolve](const Msg& res) {
-            ONLY_AUDIO_MAIN_THREAD;
-            TrackSequenceId seqId = 0;
-            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, seqId)) {
-                return;
-            }
-            m_sequenceAdded.send(seqId);
-            (void)resolve(seqId);
-        });
+
+        auto sendAddSequence = [this, resolve]() {
+            Msg msg = rpc::make_request(Method::AddSequence);
+            channel()->send(msg, [this, resolve](const Msg& res) {
+                ONLY_AUDIO_MAIN_THREAD;
+                TrackSequenceId seqId = 0;
+                IF_ASSERT_FAILED(RpcPacker::unpack(res.data, seqId)) {
+                    return;
+                }
+                m_sequenceAdded.send(seqId);
+                (void)resolve(seqId);
+            });
+        };
+
+        LOGD() << "isAudioStarted: " << startAudioController()->isAudioStarted();
+        if (startAudioController()->isAudioStarted()) {
+            sendAddSequence();
+        } else {
+            m_pendingAddSequences.push_back(sendAddSequence);
+            startAudioController()->isAudioStartedChanged().onReceive(this, [this](bool arg) {
+                LOGD() << "isAudioStartedChanged: " << arg;
+                if (arg) {
+                    for (auto& f : m_pendingAddSequences) {
+                        f();
+                    }
+                    m_pendingAddSequences.clear();
+                } else {
+                    LOGE() << "audio not started";
+                }
+                startAudioController()->isAudioStartedChanged().resetOnReceive(this);
+            });
+        }
 
         return Promise<TrackSequenceId>::dummy_result();
     }, PromiseType::AsyncByBody);

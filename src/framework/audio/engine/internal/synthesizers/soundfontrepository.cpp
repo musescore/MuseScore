@@ -118,6 +118,9 @@ void SoundFontRepository::addSoundFontData(const SoundFontUri& uri, const ByteAr
 
     {
         FILE* file = fopen(fileName.c_str(), "wb");
+        IF_ASSERT_FAILED(file) {
+            return;
+        }
         size_t wsize = fwrite(data.constChar(), sizeof(char), data.size(), file);
         IF_ASSERT_FAILED(wsize == data.size()) {
             return;
@@ -143,7 +146,6 @@ void SoundFontRepository::doAddSoundFont(const SoundFontUri& uri, const SoundFon
         auto it = cache->find(uri);
         if (it != cache->cend()) {
             m_soundFonts.insert(*it);
-            LOGI() << "added sound font from cache, uri: " << uri;
             if (onFinished) {
                 onFinished();
             }

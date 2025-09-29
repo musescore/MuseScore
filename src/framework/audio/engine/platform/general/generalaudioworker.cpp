@@ -65,11 +65,10 @@ void GeneralAudioWorker::registerExports()
     m_engine = audioEngine();
 }
 
-void GeneralAudioWorker::run(const OutputSpec& outputSpec, const AudioEngineConfig& conf)
+void GeneralAudioWorker::run()
 {
-    m_running = true;
-    m_thread = std::make_unique<std::thread>([this, outputSpec, conf]() {
-        th_main(outputSpec, conf);
+    m_thread = std::make_unique<std::thread>([this]() {
+        th_main();
     });
 
     if (!muse::setThreadPriority(*m_thread, ThreadPriority::High)) {
@@ -88,6 +87,7 @@ void GeneralAudioWorker::setInterval(const msecs_t interval)
 void GeneralAudioWorker::stop()
 {
     m_running = false;
+    m_isRunningChanged.send(false);
     if (m_thread) {
         m_thread->join();
     }
@@ -96,6 +96,11 @@ void GeneralAudioWorker::stop()
 bool GeneralAudioWorker::isRunning() const
 {
     return m_running;
+}
+
+async::Channel<bool> GeneralAudioWorker::isRunningChanged() const
+{
+    return m_isRunningChanged;
 }
 
 void GeneralAudioWorker::popAudioData(float* dest, size_t sampleCount)
@@ -114,7 +119,7 @@ static msecs_t audioWorkerInterval(const samples_t samples, const sample_rate_t 
     return interval;
 }
 
-void GeneralAudioWorker::th_main(const OutputSpec& outputSpec, const AudioEngineConfig& conf)
+void GeneralAudioWorker::th_main()
 {
     runtime::setThreadName("audio_engine");
     AudioSanitizer::setupEngineThread();
@@ -122,15 +127,19 @@ void GeneralAudioWorker::th_main(const OutputSpec& outputSpec, const AudioEngine
 
     m_rpcChannel->setupOnEngine();
 
-    m_engineController->preInit();
-    m_engineController->init(outputSpec, conf);
-
     m_engine->outputSpecChanged().onReceive(this, [this](const OutputSpec& spec) {
         msecs_t interval = audioWorkerInterval(spec.samplesPerChannel, spec.sampleRate);
         setInterval(interval);
     });
 
-    m_intervalMsecs = audioWorkerInterval(outputSpec.samplesPerChannel, outputSpec.sampleRate);
+    m_running = true;
+    m_isRunningChanged.send(true);
+
+    m_engineController->onStart();
+
+    m_rpcChannel->send(rpc::make_notification(rpc::Method::EngineStarted));
+
+    m_intervalMsecs = audioWorkerInterval(2, 48000); // default
     m_intervalInWinTime = toWinTime(m_intervalMsecs);
 
 #ifdef Q_OS_WIN

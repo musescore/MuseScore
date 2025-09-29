@@ -48,15 +48,16 @@ public:
 
     void registerExports() override;
 
-    void run(const OutputSpec& outputSpec, const AudioEngineConfig& conf) override;
+    void run() override;
     void setInterval(const msecs_t interval);
     void stop() override;
     bool isRunning() const override;
+    async::Channel<bool> isRunningChanged() const override;
 
     void popAudioData(float* dest, size_t sampleCount) override;
 
 private:
-    void th_main(const OutputSpec& outputSpec, const AudioEngineConfig& conf);
+    void th_main();
 
     // service
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
@@ -69,5 +70,6 @@ private:
 
     std::unique_ptr<std::thread> m_thread = nullptr;
     std::atomic<bool> m_running = false;
+    async::Channel<bool> m_isRunningChanged;
 };
 }

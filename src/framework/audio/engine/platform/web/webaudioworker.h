@@ -24,9 +24,8 @@
 
 #include <memory>
 
+#include "global/types/retval.h"
 #include "../../iaudioworker.h"
-
-#include "audio/common/audiotypes.h"
 
 namespace muse::audio::rpc {
 class IRpcChannel;
@@ -41,24 +40,17 @@ public:
     ~WebAudioWorker();
 
     void registerExports() override;
-    void run(const OutputSpec& outputSpec, const AudioEngineConfig& conf) override;
+
+    void run() override;
     void stop() override;
     bool isRunning() const override;
+    async::Channel<bool> isRunningChanged() const override;
 
     void popAudioData(float* dest, size_t sampleCount) override;
 
 private:
 
-    void init(const OutputSpec& outputSpec, const AudioEngineConfig& conf);
-
-    struct InitPending {
-        OutputSpec outputSpec;
-        AudioEngineConfig conf;
-        bool pending = false;
-    };
-
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
-    bool m_running = false;
-    InitPending m_initPending;
+    ValCh<bool> m_running;
 };
 }

@@ -44,6 +44,10 @@ public:
 
     // A quick guide how to playback something:
 
+    // 0. Check is audio system started
+    virtual bool isAudioStarted() const = 0;
+    virtual async::Channel<bool> isAudioStartedChanged() const = 0;
+
     // 1. Add Sequence
     virtual async::Promise<TrackSequenceId> addSequence() = 0;
     virtual async::Promise<TrackSequenceIdList> sequenceIdList() const = 0;

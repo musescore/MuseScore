@@ -22,10 +22,10 @@
 #include "webaudioworker.h"
 
 #include "audio/common/rpc/irpcchannel.h"
-#include "audio/common/rpc/rpcpacker.h"
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::audio::engine;
 using namespace muse::audio::rpc;
 
@@ -34,18 +34,13 @@ WebAudioWorker::WebAudioWorker(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
 {
     m_rpcChannel->onMethod(Method::EngineStarted, [this](const Msg&) {
         LOGI() << "recieved message from worker about WorkerStarted";
-        m_running = true;
-
-        if (m_initPending.pending) {
-            init(m_initPending.outputSpec, m_initPending.conf);
-            m_initPending = {};
-        }
+        m_running.set(true);
     });
 }
 
 WebAudioWorker::~WebAudioWorker()
 {
-    if (m_running) {
+    if (m_running.val) {
         stop();
     }
 }
@@ -55,33 +50,27 @@ void WebAudioWorker::registerExports()
     // noop
 }
 
-void WebAudioWorker::init(const OutputSpec& outputSpec, const AudioEngineConfig& conf)
+void WebAudioWorker::run()
 {
-    m_rpcChannel->send(rpc::make_request(Method::EngineInit, RpcPacker::pack(outputSpec, conf)));
-}
-
-void WebAudioWorker::run(const OutputSpec& outputSpec, const AudioEngineConfig& conf)
-{
-    if (m_running) {
-        init(outputSpec, conf);
-    } else {
-        m_initPending.outputSpec = outputSpec;
-        m_initPending.conf = conf;
-        m_initPending.pending = true;
-    }
+    // noop
 }
 
 void WebAudioWorker::stop()
 {
-    m_running = false;
+    m_running.set(false);
 }
 
 bool WebAudioWorker::isRunning() const
 {
-    return m_running;
+    return m_running.val;
+}
+
+async::Channel<bool> WebAudioWorker::isRunningChanged() const
+{
+    return m_running.ch;
 }
 
 void WebAudioWorker::popAudioData(float*, size_t)
 {
-    // not implemented yet
+    // noop
 }
