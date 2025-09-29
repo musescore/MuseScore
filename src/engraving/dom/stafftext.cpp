@@ -38,6 +38,7 @@ StaffText::StaffText(Segment* parent, TextStyleType tid)
     : StaffTextBase(ElementType::STAFF_TEXT, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&STAFF_STYLE);
+    resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
 StaffText::StaffText(const StaffText& t)
@@ -76,8 +77,6 @@ PropertyValue StaffText::propertyDefault(Pid id) const
     switch (id) {
     case Pid::TEXT_STYLE:
         return TextStyleType::STAFF;
-    case Pid::MUSIC_SYMBOL_SIZE:
-        return 18.0;
     default:
         return StaffTextBase::propertyDefault(id);
     }
