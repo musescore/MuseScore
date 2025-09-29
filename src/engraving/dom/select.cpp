@@ -1060,17 +1060,17 @@ static bool hasElementInTrack(Segment* startSeg, Segment* endSeg, track_idx_t tr
     return false;
 }
 
-static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, track_idx_t track)
+static EngravingItem* firstElementInTrack(Segment* startSeg, Segment* endSeg, track_idx_t track)
 {
     for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
         if (!seg->enabled()) {
             continue;
         }
-        if (seg->element(track)) {
-            return seg->tick();
+        if (EngravingItem* e = seg->element(track)) {
+            return e;
         }
     }
-    return Fraction(-1, 1);
+    return nullptr;
 }
 
 muse::ByteArray Selection::staffMimeData() const
@@ -1114,7 +1114,8 @@ muse::ByteArray Selection::staffMimeData() const
         xml.startElement("voiceOffset");
         for (voice_idx_t voice = 0; voice < VOICES; voice++) {
             if (hasElementInTrack(seg1, seg2, startTrack + voice) && filter.canSelectVoice(voice)) {
-                Fraction offset = firstElementInTrack(seg1, seg2, startTrack + voice) - tickStart();
+                const EngravingItem* first = firstElementInTrack(seg1, seg2, startTrack + voice);
+                const Fraction offset = first->tick() - tickStart();
                 xml.tag("voice", { { "id", voice } }, offset.ticks());
             }
         }
