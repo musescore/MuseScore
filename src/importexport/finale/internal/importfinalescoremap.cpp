@@ -106,6 +106,14 @@ Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> m
         s->setHideWhenEmpty(AutoOnOff::OFF);
     }
 
+    // Transposition
+    // note that transposition in MuseScore is intrument-based,
+    // so it can change throughout the score but not differ between staves of the same part
+    if (musxStaff->transposition && musxStaff->transposition->chromatic) {
+        const auto& i = *musxStaff->transposition->chromatic;
+        part->instrument()->setTranspose(Interval(i.diatonic, step2pitch(i.diatonic) + i.alteration));
+    }
+
     // clefs
     if (std::optional<ClefTypeList> defaultClefs = clefTypeListFromMusxStaff(musxStaff)) {
         s->setDefaultClefType(defaultClefs.value());
