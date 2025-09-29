@@ -169,23 +169,23 @@ static Sid styleIdx(const std::string& name)
 
 static void writeEvpuSpace(MStyle& style, Sid sid, Evpu evpu)
 {
-    style.set(sid, FinaleTConv::doubleFromEvpu(evpu));
+    style.set(sid, doubleFromEvpu(evpu));
 }
 
 static void writeEfixSpace(MStyle& style, Sid sid, Efix efix)
 {
-    style.set(sid, FinaleTConv::doubleFromEfix(efix));
+    style.set(sid, doubleFromEfix(efix));
 }
 
 static void writeEvpuPointF(MStyle& style, Sid sid, Evpu xEvpu, Evpu yEvpu)
 {
-    style.set(sid, FinaleTConv::evpuToPointF(xEvpu, yEvpu));
+    style.set(sid, evpuToPointF(xEvpu, yEvpu));
 }
 
 static void writeFontPref(MStyle& style, const std::string& namePrefix, const MusxInstance<FontInfo>& fontInfo)
 {
     style.set(styleIdx(namePrefix + "FontFace"), String::fromStdString(fontInfo->getName()));
-    style.set(styleIdx(namePrefix + "FontSize"), FinaleTConv::spatiumScaledFontSize(fontInfo));
+    style.set(styleIdx(namePrefix + "FontSize"), spatiumScaledFontSize(fontInfo));
     style.set(styleIdx(namePrefix + "FontSpatiumDependent"), !fontInfo->absolute);
     style.set(styleIdx(namePrefix + "FontStyle"), museFontEfx(fontInfo.get()));
 }
@@ -361,7 +361,7 @@ void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     writeEvpuSpace(style, Sid::keysigAccidentalDistance, (prefs.keyOptions->acciAdd + 4));  // Observed fudge factor
     writeEvpuSpace(style, Sid::keysigNaturalDistance, (prefs.keyOptions->acciAdd + 6));     // Observed fudge factor
 
-    style.set(Sid::smallClefMag, FinaleTConv::doubleFromPercent(prefs.clefOptions->clefChangePercent));
+    style.set(Sid::smallClefMag, doubleFromPercent(prefs.clefOptions->clefChangePercent));
     style.set(Sid::genClef, !prefs.clefOptions->showClefFirstSystemOnly);
     style.set(Sid::genKeysig, !prefs.keyOptions->showKeyFirstSystemOnly);
     style.set(Sid::genCourtesyTimesig, prefs.timeOptions->cautionaryTimeChanges);
@@ -369,7 +369,7 @@ void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     style.set(Sid::genCourtesyClef, prefs.clefOptions->cautionaryClefChanges);
 
     style.set(Sid::keySigCourtesyBarlineMode,
-              int(FinaleTConv::boolToCourtesyBarlineMode(prefs.barlineOptions->drawDoubleBarlineBeforeKeyChanges)));
+              int(boolToCourtesyBarlineMode(prefs.barlineOptions->drawDoubleBarlineBeforeKeyChanges)));
     style.set(Sid::timeSigCourtesyBarlineMode, int(CourtesyBarlineMode::ALWAYS_SINGLE));  // Hard-coded as 0 in Finale
     style.set(Sid::hideEmptyStaves, context.musxDocument()->calcHasVaryingSystemStaves(context.currentMusxPartId()));
 }
@@ -424,7 +424,7 @@ void writeNoteRelatedPrefs(MStyle& style, FinaleParser& context)
     // We need to add on the symbol width of one dot for the correct value.
     writeEvpuSpace(style, Sid::dotDotDistance, prefs.augDotOptions->dotOffset + context.evpuAugmentationDotWidth());
     style.set(Sid::articulationMag, museMagVal(context, options::FontOptions::FontType::Articulation));
-    style.set(Sid::graceNoteMag, FinaleTConv::doubleFromPercent(prefs.graceOptions->gracePerc));
+    style.set(Sid::graceNoteMag, doubleFromPercent(prefs.graceOptions->gracePerc));
     style.set(Sid::concertPitch, !prefs.partGlobals->showTransposed);
     style.set(Sid::multiVoiceRestTwoSpaceOffset, std::labs(prefs.layerOneAttributes->restOffset) >= 4);
     style.set(Sid::mergeMatchingRests, prefs.miscOptions->consolidateRestsAcrossLayers);
@@ -447,14 +447,14 @@ void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
     writeEvpuSpace(style, Sid::slurEndWidth, prefs.smartShapeOptions->smartSlurTipWidth);
     // Average L/R times observed fudge factor (0.75)
     // Ignore horizontal thickness values as they hardly affect mid width.
-    style.set(Sid::slurMidWidth, FinaleTConv::doubleFromEvpu(prefs.smartShapeOptions->slurThicknessCp1Y + prefs.smartShapeOptions->slurThicknessCp2Y) * 0.375);
+    style.set(Sid::slurMidWidth, doubleFromEvpu(prefs.smartShapeOptions->slurThicknessCp1Y + prefs.smartShapeOptions->slurThicknessCp2Y) * 0.375);
     writeEvpuSpace(style, Sid::slurEndWidth, prefs.smartShapeOptions->smartSlurTipWidth);
     writeEfixSpace(style, Sid::slurDottedWidth, prefs.smartShapeOptions->smartLineWidth);
 
     // Tie-related settings
     writeEvpuSpace(style, Sid::tieEndWidth, prefs.tieOptions->tieTipWidth);
     // Average L/R times observed fudge factor (0.75)
-    style.set(Sid::tieMidWidth, FinaleTConv::doubleFromEvpu(prefs.tieOptions->thicknessRight + prefs.tieOptions->thicknessLeft) * 0.375);
+    style.set(Sid::tieMidWidth, doubleFromEvpu(prefs.tieOptions->thicknessRight + prefs.tieOptions->thicknessLeft) * 0.375);
     writeEfixSpace(style, Sid::tieDottedWidth, prefs.smartShapeOptions->smartLineWidth);
     style.set(Sid::tiePlacementSingleNote, prefs.tieOptions->useOuterPlacement ? TiePlacement::OUTSIDE : TiePlacement::INSIDE);
     // Note: Finale's 'outer placement' for notes within chords is much closer to inside placement. But outside placement is closer overall.
@@ -554,7 +554,7 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
     style.set(Sid::createMultiMeasureRests, context.currentMusxPartId() != 0);
     style.set(Sid::minEmptyMeasures, prefs.mmRestOptions->numStart);
     writeEvpuSpace(style, Sid::minMMRestWidth, prefs.mmRestOptions->measWidth);
-    style.set(Sid::mmRestNumberPos, FinaleTConv::doubleFromEvpu(prefs.mmRestOptions->numAdjY) + 1);
+    style.set(Sid::mmRestNumberPos, doubleFromEvpu(prefs.mmRestOptions->numAdjY) + 1);
     style.set(Sid::oldStyleMultiMeasureRests,
               prefs.mmRestOptions->useSymbols && prefs.mmRestOptions->useSymsThreshold > 1);
     style.set(Sid::mmRestOldStyleMaxMeasures,
@@ -605,7 +605,7 @@ void writeTupletPrefs(MStyle& style, const FinaleParser& context)
         break;
     }
 
-    style.set(Sid::tupletNumberType, int(FinaleTConv::toMuseScoreTupletNumberType(tupletOptions->numStyle)));
+    style.set(Sid::tupletNumberType, int(toMuseScoreTupletNumberType(tupletOptions->numStyle)));
 
     if (tupletOptions->brackStyle == TupletOptions::BracketStyle::Nothing) {
         style.set(Sid::tupletBracketType, int(TupletBracketType::SHOW_NO_BRACKET));
@@ -671,14 +671,14 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     if (!fullPosition) {
         throw std::invalid_argument("unable to find default full name positioning for staves");
     }
-    style.set(Sid::longInstrumentAlign, FinaleTConv::justifyToAlignment(fullPosition->justify));
+    style.set(Sid::longInstrumentAlign, justifyToAlignment(fullPosition->justify));
 
     writeDefaultFontPref(style, context, "shortInstrument", FontType::AbbrvStaffNames);
     const auto abbreviatedPosition = prefs.staffOptions->namePosAbbrv;
     if (!abbreviatedPosition) {
         throw std::invalid_argument("unable to find default abbreviated name positioning for staves");
     }
-    style.set(Sid::shortInstrumentAlign, FinaleTConv::justifyToAlignment(abbreviatedPosition->justify));
+    style.set(Sid::shortInstrumentAlign, justifyToAlignment(abbreviatedPosition->justify));
 
     writeDefaultFontPref(style, context, "partInstrument", FontType::StaffNames);
     writeCategoryTextFontPref(style, context, "dynamics", CategoryType::Dynamics);

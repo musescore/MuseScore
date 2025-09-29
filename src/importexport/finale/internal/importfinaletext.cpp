@@ -57,7 +57,7 @@ namespace mu::iex::finale {
 FontTracker::FontTracker(const MusxInstance<musx::dom::FontInfo>& fontInfo, double additionalSizeScaling)
 {
     fontName = String::fromStdString(fontInfo->getName());
-    fontSize = FinaleTConv::spatiumScaledFontSize(fontInfo);
+    fontSize = spatiumScaledFontSize(fontInfo);
     uchar styles = uint8_t(FontStyle::Normal);
     if (fontInfo->bold)
         styles |= uint8_t(FontStyle::Bold);
@@ -237,7 +237,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
         }
         // Find and insert metaTags when appropriate
         if (isHeaderOrFooter) {
-            String metaTag = FinaleTConv::metaTagFromTextComponent(parsedCommand[0]);
+            String metaTag = metaTagFromTextComponent(parsedCommand[0]);
             if (!metaTag.isEmpty()) {
                 return "$:" + metaTag.toStdString() + ":";
             }
@@ -271,7 +271,7 @@ void FinaleParser::importTextExpressions()
         FontTracker firstFontInfo;
         String exprString = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
         // Option 2 (to match style setting if possible, with font info tags at the beginning if they differ)
-        options.initialFont = FontTracker(m_score->style(), FinaleTConv::fontStyleSuffixFromCategoryType(categoryType));
+        options.initialFont = FontTracker(m_score->style(), fontStyleSuffixFromCategoryType(categoryType));
         /// @todo The musicSymbol font here must be the inferred font *in Finale* that we expect, based on the detection of what kind
         /// of marking it is mentioned above. Right now this code relies on the category, but probably that is too naive a design.
         /// Whichever font we choose here will be stripped out in favor of the default for the kind of marking it is.
@@ -505,8 +505,8 @@ void FinaleParser::importPageTexts()
             case others::PageTextAssign::HorizontalAlignment::Left:
                 break;
             }
-            p.rx() += FinaleTConv::doubleFromEvpu(pageTextAssign->rightPgXDisp);
-            p.ry() += FinaleTConv::doubleFromEvpu(pageTextAssign->rightPgYDisp);
+            p.rx() += doubleFromEvpu(pageTextAssign->rightPgXDisp);
+            p.ry() += doubleFromEvpu(pageTextAssign->rightPgYDisp);
         } else {
             switch(pageTextAssign->hPosLp) {
             case others::PageTextAssign::HorizontalAlignment::Center:
@@ -518,8 +518,8 @@ void FinaleParser::importPageTexts()
             case others::PageTextAssign::HorizontalAlignment::Left:
                 break;
             }
-            p.rx() += FinaleTConv::doubleFromEvpu(pageTextAssign->xDisp);
-            p.ry() += FinaleTConv::doubleFromEvpu(pageTextAssign->yDisp);
+            p.rx() += doubleFromEvpu(pageTextAssign->xDisp);
+            p.ry() += doubleFromEvpu(pageTextAssign->yDisp);
         }
         return p;
     };
