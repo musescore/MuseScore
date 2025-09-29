@@ -2532,9 +2532,9 @@ Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff*
     if (staff->staffTypeForElement(m)->genClef() && (isFirstClef || !hideClef)) {
         if (!cSegment) {
             cSegment = Factory::createSegment(m, SegmentType::HeaderClef, Fraction(0, 1));
-            cSegment->setHeader(true);
             m->add(cSegment);
         }
+        cSegment->setHeader(true);
         if (!clef) {
             //
             // create missing clef
@@ -2602,9 +2602,9 @@ Segment* MeasureLayout::addHeaderKeySig(Measure* m, bool isFirstKeysig, const St
     if ((isFirstKeysig || ctx.conf().styleB(Sid::genKeysig)) && isPitchedStaff) {
         if (!kSegment) {
             kSegment = Factory::createSegment(m, SegmentType::KeySig, Fraction(0, 1));
-            kSegment->setHeader(true);
             m->add(kSegment);
         }
+        kSegment->setHeader(true);
         if (!keysig) {
             //
             // create missing key signature
@@ -2727,14 +2727,16 @@ void MeasureLayout::removeSystemHeader(Measure* m)
                     break;
                 }
             }
-            if (!keySigChangeHappensHere || seg->header()) {
+            if (seg->header() && !keySigChangeHappensHere) {
                 seg->setEnabled(false);
             }
         }
         if (!seg->header()) {
             break;
         }
-        seg->setEnabled(false);
+        if (!seg->isKeySigType()) {
+            seg->setEnabled(false);
+        }
     }
     m->setHeader(false);
 }
