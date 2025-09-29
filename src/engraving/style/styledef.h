@@ -362,6 +362,7 @@ enum class Sid {
 
     harmonyFretDist,
     minHarmonyDistance,
+    harmonyHarmonyDistance,
     maxHarmonyBarDistance,
     maxChordShiftAbove,
     maxChordShiftBelow,

@@ -351,6 +351,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(harmonyFretDist,                            Spatium(1.0)),
     styleDef(minHarmonyDistance,                         Spatium(0.5)),
+    styleDef(harmonyHarmonyDistance,                     Spatium(0.5)),
     styleDef(maxHarmonyBarDistance,                      Spatium(3.0)),
     styleDef(maxChordShiftAbove,                         Spatium(0.0)),
     styleDef(maxChordShiftBelow,                         Spatium(0.0)),
@@ -387,7 +388,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(chordSymbolAFrameRound,                     0),
     styleDef(chordSymbolAFrameFgColor,                   PropertyValue::fromValue(Color::BLACK)),
     styleDef(chordSymbolAFrameBgColor,                   PropertyValue::fromValue(Color::transparent)),
-    // styleDef(chordSymbolAPosition,                       AlignH::HCENTER),
 
     styleDef(chordSymbolBFontFace,                       "Edwin"),
     styleDef(chordSymbolBFontSize,                       10.0),
@@ -402,7 +402,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(chordSymbolBFrameRound,                     0),
     styleDef(chordSymbolBFrameFgColor,                   PropertyValue::fromValue(Color::BLACK)),
     styleDef(chordSymbolBFrameBgColor,                   PropertyValue::fromValue(Color::transparent)),
-    // styleDef(chordSymbolBPosition,                       AlignH::HCENTER),
 
     styleDef(romanNumeralFontFace,                       "Campania"),
     styleDef(romanNumeralFontSize,                       12.0),
