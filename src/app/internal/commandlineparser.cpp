@@ -133,7 +133,7 @@ void CommandLineParser::init()
                                           "Infer text type based on content where possible"));
 
     // Video export
-#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     m_parser.addOption(QCommandLineOption("score-video", "Generate video for the given score and export it to file"));
 // not implemented
 //    m_parser.addOption(QCommandLineOption("view-mode",
@@ -398,7 +398,7 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     // Video
-#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     if (m_parser.isSet("score-video")) {
         m_options.runMode = IApplication::RunMode::ConsoleApp;
         m_options.converterTask.type = ConvertType::ExportScoreVideo;
