@@ -42,6 +42,7 @@ SystemText::SystemText(Segment* parent, TextStyleType tid, ElementType type)
     : StaffTextBase(type, parent, tid, ElementFlag::SYSTEM | ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&systemStyle);
+    resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
 //---------------------------------------------------------
