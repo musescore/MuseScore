@@ -167,15 +167,9 @@ ProjectMeta PdfWriter::getProjectMetadata(INotationPtr notation) const
 // Generate XMP metadata for PDF embedding with project information
 QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
 {
-    // XML escaping helper for metadata fields
+    // XML escaping helper for metadata fields using Qt's built-in method
     auto escapeXml = [](const QString& text) -> QString {
-        QString escaped = text;
-        escaped.replace("&", "&amp;");
-        escaped.replace("<", "&lt;");
-        escaped.replace(">", "&gt;");
-        escaped.replace("\"", "&quot;");
-        escaped.replace("'", "&apos;");
-        return escaped;
+        return text.toHtmlEscaped();
     };
 
     QString xmpTemplate
@@ -226,7 +220,7 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
 void PdfWriter::preparePdfWriter(QPdfWriter& pdfWriter, INotationPtr notation, const QSizeF& size) const
 {
     pdfWriter.setResolution(configuration()->exportPdfDpiResolution());
-    
+
     // Always set basic metadata (original behavior)
     QString title = notation->projectWorkTitleAndPartName();
     pdfWriter.setCreator(QString("MuseScore Studio Version: ") + application()->version().toString().toQString());
@@ -234,11 +228,11 @@ void PdfWriter::preparePdfWriter(QPdfWriter& pdfWriter, INotationPtr notation, c
 
     // Check if user wants to embed extended metadata
     bool embedMetadata = configuration()->exportPdfWithEmbeddedMetadata();
-    
+
     if (embedMetadata) {
         // Add comprehensive XMP metadata
         ProjectMeta meta = getProjectMetadata(notation);
-        
+
         // Use project title if available, otherwise use the title already set
         if (!meta.title.isEmpty()) {
             pdfWriter.setTitle(meta.title);
