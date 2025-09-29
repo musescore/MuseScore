@@ -35,7 +35,7 @@ class INotationPainting
 public:
     virtual ~INotationPainting() = default;
 
-    using Options = engraving::rendering::IScoreRenderer::PaintOptions;
+    using Options = engraving::rendering::IScoreRenderer::ScorePaintOptions;
 
     virtual void setViewMode(const ViewMode& vm) = 0;
     virtual ViewMode viewMode() const = 0;

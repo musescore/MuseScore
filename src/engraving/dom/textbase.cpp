@@ -1801,7 +1801,7 @@ TextBase::~TextBase()
 //   textColor
 //---------------------------------------------------------
 
-Color TextBase::textColor(const rendering::ElementPaintOptions& opt) const
+Color TextBase::textColor(const rendering::PaintOptions& opt) const
 {
     return curColor(opt);
 }

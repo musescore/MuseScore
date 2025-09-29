@@ -104,7 +104,7 @@ public:
 
     double lineWidth() const;
 
-    Color curColor(const rendering::ElementPaintOptions& opt) const override;
+    Color curColor(const rendering::PaintOptions& opt) const override;
 
     static void adaptBendsFromTabToStandardStaff(const Staff* staff);
 
@@ -170,7 +170,7 @@ public:
 
     bool isUserModified() const override;
 
-    Color curColor(const rendering::ElementPaintOptions& opt) const override
+    Color curColor(const rendering::PaintOptions& opt) const override
     {
         return guitarBend()->curColor(opt);
     }

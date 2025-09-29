@@ -50,7 +50,7 @@ HammerOnPullOffSegment::HammerOnPullOffSegment(const HammerOnPullOffSegment& oth
 {
 }
 
-Color HammerOnPullOffSegment::curColor(const rendering::ElementPaintOptions& opt) const
+Color HammerOnPullOffSegment::curColor(const rendering::PaintOptions& opt) const
 {
     if (!opt.isPrinting && MScore::warnGuitarBends && !isValid()) {
         return selected() ? configuration()->criticalSelectedColor() : configuration()->criticalColor();
@@ -319,7 +319,7 @@ bool HammerOnPullOffText::isUserModified() const
     return TextBase::isUserModified();
 }
 
-Color HammerOnPullOffText::curColor(const rendering::ElementPaintOptions& opt) const
+Color HammerOnPullOffText::curColor(const rendering::PaintOptions& opt) const
 {
     if (!isValid() && MScore::warnGuitarBends && !opt.isPrinting) {
         return selected() ? configuration()->criticalSelectedColor() : configuration()->criticalColor();

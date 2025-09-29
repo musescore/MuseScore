@@ -36,9 +36,9 @@ public:
     void layoutScore(Score* score, const Fraction& st, const Fraction& et) const override;
 
     SizeF pageSizeInch(const Score* score) const override;
-    SizeF pageSizeInch(const Score* score, const PaintOptions& opt) const override;
-    void paintScore(muse::draw::Painter* painter, Score* score, const PaintOptions& opt) const override;
-    void paintItem(muse::draw::Painter& painter, const EngravingItem* item, const ElementPaintOptions& opt) const override;
+    SizeF pageSizeInch(const Score* score, const ScorePaintOptions& opt) const override;
+    void paintScore(muse::draw::Painter* painter, Score* score, const ScorePaintOptions& opt) const override;
+    void paintItem(muse::draw::Painter& painter, const EngravingItem* item, const PaintOptions& opt) const override;
 
     //! TODO Investigation is required, probably these functions or their calls should not be.
     // Other
@@ -56,6 +56,6 @@ private:
     // Layout Single Item
     void doLayoutItem(EngravingItem* item) override;
 
-    void doDrawItem(const EngravingItem* item, muse::draw::Painter* p, const ElementPaintOptions& opt) override;
+    void doDrawItem(const EngravingItem* item, muse::draw::Painter* p, const PaintOptions& opt) override;
 };
 }

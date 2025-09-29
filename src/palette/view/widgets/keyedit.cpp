@@ -135,7 +135,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * gpaletteScore->style().spatium());
     painter.setPen(pen);
 
-    rendering::ElementPaintOptions opt;
+    rendering::PaintOptions opt;
     opt.invertColors = engravingConfiguration()->scoreInversionEnabled();
 
     for (int i = 0; i < 5; ++i) {

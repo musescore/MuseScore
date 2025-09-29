@@ -114,7 +114,7 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
         painter.fillRect(pageRect, muse::draw::Color::WHITE);
     }
 
-    engraving::rendering::ElementPaintOptions eopt;
+    engraving::rendering::PaintOptions eopt;
     eopt.isPrinting = true;
 
     // 1st pass: StaffLines

@@ -449,7 +449,7 @@ public:
     friend class TextCursor;
     using EngravingObject::undoChangeProperty;
 
-    Color textColor(const rendering::ElementPaintOptions& opt) const;
+    Color textColor(const rendering::PaintOptions& opt) const;
     FrameType frameType() const { return m_frameType; }
     void setFrameType(FrameType val) { m_frameType = val; }
     double textLineSpacing() const { return m_textLineSpacing; }

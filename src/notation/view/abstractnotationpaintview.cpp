@@ -681,7 +681,7 @@ void AbstractNotationPaintView::paint(QPainter* qp)
         nvCtx.scaling = currentScaling();
         nvCtx.fromLogical = [this](const PointF& pos) -> PointF { return fromLogical(pos); };
 
-        engraving::rendering::ElementPaintOptions opt;
+        engraving::rendering::PaintOptions opt;
         opt.invertColors = engravingConfiguration()->scoreInversionEnabled();
         m_continuousPanel->paint(*painter, nvCtx, opt);
     }

@@ -84,7 +84,7 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
             item->setProperty(Pid::FRAME_FG_COLOR, color);
         }
 
-        rendering::ElementPaintOptions opt;
+        rendering::PaintOptions opt;
         opt.invertColors = ctx->colorsInversionEnabled;
 
         engravingRender()->drawItem(item, painter, opt);
@@ -118,7 +118,7 @@ void EngravingItemPreviewPainter::paintPreviewForActionIcon(mu::engraving::Engra
 
     painter->translate(params.rect.center() - action->ldata()->bbox().center());
 
-    rendering::ElementPaintOptions opt;
+    rendering::PaintOptions opt;
     opt.invertColors = params.colorsInversionEnabled;
     engravingRender()->drawItem(action, painter, opt);
 

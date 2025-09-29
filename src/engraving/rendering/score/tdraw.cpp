@@ -171,7 +171,7 @@ using namespace mu::engraving::rendering::score;
 using namespace muse;
 using namespace muse::draw;
 
-void TDraw::drawItem(const EngravingItem* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOptions& opt)
 {
     switch (item->type()) {
     case ElementType::ACCIDENTAL:   draw(item_cast<const Accidental*>(item), painter, opt);
@@ -423,7 +423,7 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const ElementP
     }
 }
 
-void TDraw::draw(const Accidental* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Accidental* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     IF_ASSERT_FAILED(item->ldata()) {
@@ -436,7 +436,7 @@ void TDraw::draw(const Accidental* item, Painter* painter, const ElementPaintOpt
     }
 }
 
-void TDraw::draw(const ActionIcon* item, Painter* painter, const ElementPaintOptions&)
+void TDraw::draw(const ActionIcon* item, Painter* painter, const PaintOptions&)
 {
     TRACE_DRAW_ITEM;
     const ActionIcon::LayoutData* ldata = item->ldata();
@@ -444,7 +444,7 @@ void TDraw::draw(const ActionIcon* item, Painter* painter, const ElementPaintOpt
     painter->drawText(ldata->bbox(), muse::draw::AlignCenter, Char(item->icon()));
 }
 
-void TDraw::draw(const Ambitus* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Ambitus* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -493,7 +493,7 @@ void TDraw::draw(const Ambitus* item, Painter* painter, const ElementPaintOption
     }
 }
 
-void TDraw::draw(const Arpeggio* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Arpeggio* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -554,7 +554,7 @@ void TDraw::draw(const Arpeggio* item, Painter* painter, const ElementPaintOptio
     painter->restore();
 }
 
-void TDraw::draw(const Articulation* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Articulation* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -567,12 +567,12 @@ void TDraw::draw(const Articulation* item, Painter* painter, const ElementPaintO
     }
 }
 
-void TDraw::draw(const Ornament* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Ornament* item, Painter* painter, const PaintOptions& opt)
 {
     draw(static_cast<const Articulation*>(item), painter, opt);
 }
 
-void TDraw::draw(const BagpipeEmbellishment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const BagpipeEmbellishment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -673,7 +673,7 @@ static void drawTips(const BarLine* item, const BarLine::LayoutData* data, Paint
     }
 }
 
-void TDraw::draw(const BarLine* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -857,7 +857,7 @@ void TDraw::draw(const BarLine* item, Painter* painter, const ElementPaintOption
     painter->restore();
 }
 
-void TDraw::draw(const Beam* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Beam* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (item->beamSegments().empty()) {
@@ -888,7 +888,7 @@ void TDraw::draw(const Beam* item, Painter* painter, const ElementPaintOptions& 
     }
 }
 
-void TDraw::draw(const Bend* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Bend* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -986,7 +986,7 @@ void TDraw::draw(const Bend* item, Painter* painter, const ElementPaintOptions& 
     }
 }
 
-void TDraw::draw(const Box* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Box* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (opt.isPrinting) {
@@ -1016,27 +1016,27 @@ void TDraw::draw(const Box* item, Painter* painter, const ElementPaintOptions& o
     }
 }
 
-void TDraw::draw(const HBox* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const HBox* item, Painter* painter, const PaintOptions& opt)
 {
     draw(static_cast<const Box*>(item), painter, opt);
 }
 
-void TDraw::draw(const VBox* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const VBox* item, Painter* painter, const PaintOptions& opt)
 {
     draw(static_cast<const Box*>(item), painter, opt);
 }
 
-void TDraw::draw(const FBox* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const FBox* item, Painter* painter, const PaintOptions& opt)
 {
     draw(static_cast<const Box*>(item), painter, opt);
 }
 
-void TDraw::draw(const TBox* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const TBox* item, Painter* painter, const PaintOptions& opt)
 {
     draw(static_cast<const Box*>(item), painter, opt);
 }
 
-void TDraw::draw(const Bracket* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const Bracket::LayoutData* ldata = item->ldata();
@@ -1101,14 +1101,14 @@ void TDraw::draw(const Bracket* item, Painter* painter, const ElementPaintOption
     }
 }
 
-void TDraw::draw(const Breath* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Breath* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor(opt));
     item->drawSymbol(item->symId(), painter);
 }
 
-void TDraw::draw(const ChordLine* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const ChordLine* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const ChordLine::LayoutData* ldata = item->ldata();
@@ -1128,7 +1128,7 @@ void TDraw::draw(const ChordLine* item, Painter* painter, const ElementPaintOpti
     }
 }
 
-void TDraw::draw(const Clef* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Clef* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const Clef::LayoutData* ldata = item->ldata();
@@ -1144,12 +1144,12 @@ void TDraw::draw(const Clef* item, Painter* painter, const ElementPaintOptions& 
     item->drawSymbol(ldata->symId, painter);
 }
 
-void TDraw::draw(const Capo* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Capo* item, Painter* painter, const PaintOptions& opt)
 {
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const DeadSlapped* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const DeadSlapped* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const DeadSlapped::LayoutData* ldata = item->ldata();
@@ -1163,24 +1163,24 @@ void TDraw::draw(const DeadSlapped* item, Painter* painter, const ElementPaintOp
     painter->drawPath(ldata->path2);
 }
 
-void TDraw::draw(const Dynamic* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Dynamic* item, Painter* painter, const PaintOptions& opt)
 {
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const Expression* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Expression* item, Painter* painter, const PaintOptions& opt)
 {
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const Fermata* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Fermata* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor(opt));
     item->drawSymbol(item->symId(), painter);
 }
 
-void TDraw::draw(const FiguredBass* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const FiguredBass* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const FiguredBass::LayoutData* ldata = item->ldata();
@@ -1205,7 +1205,7 @@ void TDraw::draw(const FiguredBass* item, Painter* painter, const ElementPaintOp
     }
 }
 
-void TDraw::draw(const FiguredBassItem* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1272,13 +1272,13 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const ElementPai
     }
 }
 
-void TDraw::draw(const Fingering* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Fingering* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const FretDiagram* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const FretDiagram* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const FretDiagram::LayoutData* ldata = item->ldata();
@@ -1496,7 +1496,7 @@ static std::vector<double> distributedDashPattern(double dash, double gap, doubl
     return { dash, newGap };
 }
 
-void TDraw::draw(const GlissandoSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const GlissandoSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1572,7 +1572,7 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter, const ElementPa
     painter->restore();
 }
 
-void TDraw::draw(const GuitarBendSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const GuitarBendSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1598,7 +1598,7 @@ void TDraw::draw(const GuitarBendSegment* item, Painter* painter, const ElementP
     }
 }
 
-void TDraw::draw(const GuitarBendHoldSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const GuitarBendHoldSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1613,7 +1613,7 @@ void TDraw::draw(const GuitarBendHoldSegment* item, Painter* painter, const Elem
     painter->drawLine(PointF(), item->pos2());
 }
 
-void TDraw::drawTextBase(const TextBase* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::drawTextBase(const TextBase* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const TextBase::LayoutData* ldata = item->ldata();
@@ -1649,7 +1649,7 @@ void TDraw::drawTextBase(const TextBase* item, Painter* painter, const ElementPa
     }
 }
 
-void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* painter, const PaintOptions& opt)
 {
     const TextLineBase* tl = item->textLineBase();
 
@@ -1755,13 +1755,13 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
     painter->drawPolyline(&item->points()[start], end - start);
 }
 
-void TDraw::draw(const GradualTempoChangeSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const GradualTempoChangeSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void TDraw::draw(const HairpinSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const HairpinSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1781,30 +1781,30 @@ void TDraw::draw(const HairpinSegment* item, Painter* painter, const ElementPain
     }
 }
 
-void TDraw::draw(const HammerOnPullOffSegment* item, muse::draw::Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const HammerOnPullOffSegment* item, muse::draw::Painter* painter, const PaintOptions& opt)
 {
     draw(toSlurSegment(item), painter, opt);
 }
 
-void TDraw::draw(const HammerOnPullOffText* item, muse::draw::Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const HammerOnPullOffText* item, muse::draw::Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const HarpPedalDiagram* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const HarpPedalDiagram* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const HarmonicMarkSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const HarmonicMarkSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void TDraw::draw(const Harmony* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Harmony* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1868,7 +1868,7 @@ void TDraw::draw(const Harmony* item, Painter* painter, const ElementPaintOption
     }
 }
 
-void TDraw::draw(const Hook* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Hook* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     // hide if belonging to the second chord of a cross-measure pair
@@ -1880,7 +1880,7 @@ void TDraw::draw(const Hook* item, Painter* painter, const ElementPaintOptions& 
     item->drawSymbol(item->sym(), painter);
 }
 
-void TDraw::draw(const Image* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Image* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const Image::LayoutData* ldata = item->ldata();
@@ -1939,25 +1939,25 @@ void TDraw::draw(const Image* item, Painter* painter, const ElementPaintOptions&
     }
 }
 
-void TDraw::draw(const InstrumentChange* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const InstrumentChange* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const InstrumentName* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const InstrumentName* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const Jump* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Jump* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const KeySig* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const KeySig* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const KeySig::LayoutData* ldata = item->ldata();
@@ -1988,7 +1988,7 @@ void TDraw::draw(const KeySig* item, Painter* painter, const ElementPaintOptions
     }
 }
 
-void TDraw::draw(const LaissezVibSegment* item, muse::draw::Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const LaissezVibSegment* item, muse::draw::Painter* painter, const PaintOptions& opt)
 {
     const LaissezVibSegment::LayoutData* ldata = item->ldata();
     if (item->score()->style().styleB(Sid::laissezVibUseSmuflSym)) {
@@ -1999,7 +1999,7 @@ void TDraw::draw(const LaissezVibSegment* item, muse::draw::Painter* painter, co
     }
 }
 
-void TDraw::draw(const Lasso* item, Painter* painter, const ElementPaintOptions&)
+void TDraw::draw(const Lasso* item, Painter* painter, const PaintOptions&)
 {
     TRACE_DRAW_ITEM;
     const Lasso::LayoutData* ldata = item->ldata();
@@ -2010,7 +2010,7 @@ void TDraw::draw(const Lasso* item, Painter* painter, const ElementPaintOptions&
     painter->drawRect(ldata->bbox());
 }
 
-void TDraw::draw(const LayoutBreak* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const LayoutBreak* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2028,7 +2028,7 @@ void TDraw::draw(const LayoutBreak* item, Painter* painter, const ElementPaintOp
     painter->drawSymbol(PointF(), item->iconCode());
 }
 
-void TDraw::draw(const LedgerLine* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const LedgerLine* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2046,19 +2046,19 @@ void TDraw::draw(const LedgerLine* item, Painter* painter, const ElementPaintOpt
     }
 }
 
-void TDraw::draw(const LetRingSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const LetRingSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void TDraw::draw(const Lyrics* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Lyrics* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const LyricsLineSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const LyricsLineSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2071,19 +2071,19 @@ void TDraw::draw(const LyricsLineSegment* item, Painter* painter, const ElementP
     }
 }
 
-void TDraw::draw(const Marker* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Marker* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const MeasureNumber* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const MeasureNumber* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const MeasureRepeat* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const MeasureRepeat* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2109,7 +2109,7 @@ void TDraw::draw(const MeasureRepeat* item, Painter* painter, const ElementPaint
     }
 }
 
-void TDraw::draw(const MMRest* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const MMRest* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (item->shouldNotBeDrawn() || (item->track() % VOICES)) {     //only on voice 1
@@ -2175,13 +2175,13 @@ void TDraw::draw(const MMRest* item, Painter* painter, const ElementPaintOptions
     }
 }
 
-void TDraw::draw(const MMRestRange* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const MMRestRange* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const Note* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (item->hidden()) {
@@ -2261,7 +2261,7 @@ void TDraw::draw(const Note* item, Painter* painter, const ElementPaintOptions& 
     }
 }
 
-void TDraw::draw(const NoteDot* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const NoteDot* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (item->note() && item->note()->dotsHidden()) {     // don't draw dot if note is hidden
@@ -2281,24 +2281,24 @@ void TDraw::draw(const NoteDot* item, Painter* painter, const ElementPaintOption
     }
 }
 
-void TDraw::draw(const NoteHead* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const NoteHead* item, Painter* painter, const PaintOptions& opt)
 {
     draw(static_cast<const Symbol*>(item), painter, opt);
 }
 
-void TDraw::draw(const NoteLineSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const NoteLineSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void TDraw::draw(const OttavaSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const OttavaSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void TDraw::draw(const Page* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Page* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     bool shouldDraw = item->score()->isLayoutMode(LayoutMode::PAGE) || item->score()->isLayoutMode(LayoutMode::FLOAT);
@@ -2361,7 +2361,7 @@ void TDraw::draw(const Page* item, Painter* painter, const ElementPaintOptions& 
     }
 }
 
-void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2391,54 +2391,54 @@ void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter, const El
     painter->drawPath(item->ldata()->path());
 }
 
-void TDraw::draw(const PartialTieSegment* item, muse::draw::Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const PartialTieSegment* item, muse::draw::Painter* painter, const PaintOptions& opt)
 {
     draw(static_cast<const TieSegment*>(item), painter, opt);
 }
 
-void TDraw::draw(const PalmMuteSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const PalmMuteSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void TDraw::draw(const PedalSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const PedalSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void TDraw::draw(const PickScrapeSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const PickScrapeSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void TDraw::draw(const PlayCountText* item, muse::draw::Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const PlayCountText* item, muse::draw::Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const PlayTechAnnotation* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const PlayTechAnnotation* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const RasgueadoSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const RasgueadoSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void TDraw::draw(const RehearsalMark* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const RehearsalMark* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const Rest* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Rest* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (item->shouldNotBeDrawn()) {
@@ -2457,7 +2457,7 @@ void TDraw::draw(const Rest* item, Painter* painter, const ElementPaintOptions& 
 }
 
 //! NOTE May be removed later (should be only single mode)
-void TDraw::draw(const ShadowNote* item, Painter* painter, const ElementPaintOptions&)
+void TDraw::draw(const ShadowNote* item, Painter* painter, const PaintOptions&)
 {
     TRACE_DRAW_ITEM;
 
@@ -2556,7 +2556,7 @@ void TDraw::draw(const ShadowNote* item, Painter* painter, const ElementPaintOpt
     painter->translate(-ap);
 }
 
-void TDraw::draw(const SlurSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const SlurSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2603,7 +2603,7 @@ void TDraw::draw(const SlurSegment* item, Painter* painter, const ElementPaintOp
     painter->restore();
 }
 
-void TDraw::draw(const Spacer* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Spacer* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (opt.isPrinting || !item->score()->showUnprintable()) {
@@ -2619,7 +2619,7 @@ void TDraw::draw(const Spacer* item, Painter* painter, const ElementPaintOptions
     painter->drawPath(item->ldata()->path);
 }
 
-void TDraw::draw(const StaffLines* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const StaffLines* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     painter->save();
@@ -2632,7 +2632,7 @@ void TDraw::draw(const StaffLines* item, Painter* painter, const ElementPaintOpt
     painter->restore();
 }
 
-void TDraw::draw(const StaffState* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const StaffState* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (opt.isPrinting || !item->score()->showUnprintable()) {
@@ -2649,7 +2649,7 @@ void TDraw::draw(const StaffState* item, Painter* painter, const ElementPaintOpt
     painter->drawPath(ldata->path);
 }
 
-void TDraw::draw(const StaffText* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const StaffText* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2660,7 +2660,7 @@ void TDraw::draw(const StaffText* item, Painter* painter, const ElementPaintOpti
     }
 }
 
-void TDraw::draw(const StaffTypeChange* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const StaffTypeChange* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2702,7 +2702,7 @@ void TDraw::draw(const StaffTypeChange* item, Painter* painter, const ElementPai
     }
 }
 
-void TDraw::draw(const Stem* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Stem* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (!item->chord()) { // may be need assert?
@@ -2776,7 +2776,7 @@ void TDraw::draw(const Stem* item, Painter* painter, const ElementPaintOptions& 
     }
 }
 
-void TDraw::draw(const StemSlash* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const StemSlash* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const StemSlash::LayoutData* ldata = item->ldata();
@@ -2784,13 +2784,13 @@ void TDraw::draw(const StemSlash* item, Painter* painter, const ElementPaintOpti
     painter->drawLine(ldata->line);
 }
 
-void TDraw::draw(const Sticking* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Sticking* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const StringTunings* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const StringTunings* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2831,7 +2831,7 @@ void TDraw::draw(const StringTunings* item, Painter* painter, const ElementPaint
     }
 }
 
-void TDraw::draw(const Symbol* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Symbol* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     bool tabStaff = item->staff() ? item->staff()->isTabStaff(item->tick()) : false;
@@ -2846,7 +2846,7 @@ void TDraw::draw(const Symbol* item, Painter* painter, const ElementPaintOptions
     }
 }
 
-void TDraw::draw(const FSymbol* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const FSymbol* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2857,17 +2857,17 @@ void TDraw::draw(const FSymbol* item, Painter* painter, const ElementPaintOption
     painter->drawText(PointF(0, 0), item->toString());
 }
 
-void TDraw::draw(const SystemDivider* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const SystemDivider* item, Painter* painter, const PaintOptions& opt)
 {
     draw(static_cast<const Symbol*>(item), painter, opt);
 }
 
-void TDraw::draw(const SystemText* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const SystemText* item, Painter* painter, const PaintOptions& opt)
 {
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const IndicatorIcon* item, muse::draw::Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const IndicatorIcon* item, muse::draw::Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2898,7 +2898,7 @@ void TDraw::draw(const IndicatorIcon* item, muse::draw::Painter* painter, const 
     }
 }
 
-void TDraw::draw(const SoundFlag* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const SoundFlag* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2918,7 +2918,7 @@ void TDraw::draw(const SoundFlag* item, Painter* painter, const ElementPaintOpti
     painter->drawText(item->ldata()->bbox(), muse::draw::AlignCenter, Char(item->iconCode()));
 }
 
-void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2978,7 +2978,7 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const ElementP
     painter->scale(imag, imag);
 }
 
-void TDraw::draw(const Tapping* item, muse::draw::Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Tapping* item, muse::draw::Painter* painter, const PaintOptions& opt)
 {
     painter->setPen(item->curColor(opt));
     if (item->ldata()->symId != SymId::noSym) {
@@ -2992,25 +2992,25 @@ void TDraw::draw(const Tapping* item, muse::draw::Painter* painter, const Elemen
     }
 }
 
-void TDraw::draw(const TempoText* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const TempoText* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const Text* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Text* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const TextLineSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const TextLineSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void TDraw::draw(const TieSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const TieSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -3061,7 +3061,7 @@ void TDraw::draw(const TieSegment* item, Painter* painter, const ElementPaintOpt
     painter->drawPath(item->ldata()->path());
 }
 
-void TDraw::draw(const TimeSig* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const TimeSig* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -3084,7 +3084,7 @@ void TDraw::draw(const TimeSig* item, Painter* painter, const ElementPaintOption
     }
 }
 
-void TDraw::draw(const TimeTickAnchor* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const TimeTickAnchor* item, Painter* painter, const PaintOptions& opt)
 {
     if (opt.isPrinting) {
         return;
@@ -3118,7 +3118,7 @@ void TDraw::draw(const TimeTickAnchor* item, Painter* painter, const ElementPain
     painter->drawRect(item->ldata()->bbox());
 }
 
-void TDraw::draw(const TremoloSingleChord* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const TremoloSingleChord* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -3132,7 +3132,7 @@ void TDraw::draw(const TremoloSingleChord* item, Painter* painter, const Element
     }
 }
 
-void TDraw::draw(const TremoloTwoChord* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const TremoloTwoChord* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -3164,7 +3164,7 @@ void TDraw::draw(const TremoloTwoChord* item, Painter* painter, const ElementPai
     }
 }
 
-void TDraw::draw(const TremoloBar* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const TremoloBar* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const TremoloBar::LayoutData* ldata = item->ldata();
@@ -3174,20 +3174,20 @@ void TDraw::draw(const TremoloBar* item, Painter* painter, const ElementPaintOpt
     painter->drawPolyline(ldata->polygon);
 }
 
-void TDraw::draw(const TrillSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const TrillSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->spanner()->curColor(opt));
     item->drawSymbols(item->symbols(), painter);
 }
 
-void TDraw::draw(const TripletFeel* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const TripletFeel* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const Tuplet* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const Tuplet* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -3219,20 +3219,20 @@ void TDraw::draw(const Tuplet* item, Painter* painter, const ElementPaintOptions
     }
 }
 
-void TDraw::draw(const VibratoSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const VibratoSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->spanner()->curColor(opt));
     item->drawSymbols(item->symbols(), painter);
 }
 
-void TDraw::draw(const VoltaSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const VoltaSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void TDraw::draw(const WhammyBarSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void TDraw::draw(const WhammyBarSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);

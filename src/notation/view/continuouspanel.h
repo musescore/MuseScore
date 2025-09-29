@@ -58,7 +58,7 @@ public:
         std::function<muse::PointF(const muse::PointF&)> fromLogical;
     };
 
-    void paint(muse::draw::Painter& painter, const NotationViewContext& ctx, const engraving::rendering::ElementPaintOptions& opt);
+    void paint(muse::draw::Painter& painter, const NotationViewContext& ctx, const engraving::rendering::PaintOptions& opt);
 
 private:
     qreal styleMM(const mu::engraving::Sid styleId) const;

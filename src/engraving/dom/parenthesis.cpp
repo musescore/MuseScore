@@ -86,7 +86,7 @@ void Parenthesis::setFollowParentColor(bool val)
     m_followParentColor = val;
 }
 
-Color Parenthesis::curColor(const rendering::ElementPaintOptions& opt) const
+Color Parenthesis::curColor(const rendering::PaintOptions& opt) const
 {
     if (m_followParentColor) {
         return parentItem()->curColor(opt);

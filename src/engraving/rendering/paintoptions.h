@@ -22,7 +22,7 @@
 #pragma once
 
 namespace mu::engraving::rendering {
-struct ElementPaintOptions
+struct PaintOptions
 {
     bool isPrinting = false;
     bool invertColors = false;

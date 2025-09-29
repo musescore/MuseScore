@@ -376,7 +376,7 @@ void NotationInteraction::notifyAboutNoteInputStateChanged()
     m_noteInput->stateChanged().notify();
 }
 
-void NotationInteraction::paint(Painter* painter, const engraving::rendering::ElementPaintOptions& opt)
+void NotationInteraction::paint(Painter* painter, const engraving::rendering::PaintOptions& opt)
 {
     if (shouldDrawInputPreview()) {
         drawInputPreview(painter, opt);
@@ -1417,7 +1417,7 @@ void NotationInteraction::startOutgoingDragElement(const EngravingItem* element,
     p.translate(qAbs(bbox.x() * adjustedRatio), qAbs(bbox.y() * adjustedRatio));
     p.scale(adjustedRatio, adjustedRatio);
 
-    mu::engraving::rendering::ElementPaintOptions opt;
+    mu::engraving::rendering::PaintOptions opt;
     opt.invertColors = engravingConfiguration()->scoreInversionEnabled();
     engravingRenderer()->drawItem(element, &p, opt);
 
@@ -3498,7 +3498,7 @@ bool NotationInteraction::shouldDrawInputPreview() const
     return m_noteInput->isNoteInputMode() && m_noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION);
 }
 
-void NotationInteraction::drawInputPreview(Painter* painter, const engraving::rendering::ElementPaintOptions& opt)
+void NotationInteraction::drawInputPreview(Painter* painter, const engraving::rendering::PaintOptions& opt)
 {
     std::vector<ShadowNoteParams> paramsList = previewNotes();
     if (paramsList.empty()) {
@@ -3585,7 +3585,7 @@ void NotationInteraction::drawAnchorLines(Painter* painter)
     }
 }
 
-void NotationInteraction::drawTextEditMode(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt)
+void NotationInteraction::drawTextEditMode(muse::draw::Painter* painter, const engraving::rendering::PaintOptions& opt)
 {
     if (!isTextEditingStarted()) {
         return;
@@ -3626,7 +3626,7 @@ void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
     }
 }
 
-void NotationInteraction::drawGripPoints(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt)
+void NotationInteraction::drawGripPoints(muse::draw::Painter* painter, const engraving::rendering::PaintOptions& opt)
 {
     if (isDragStarted() && !isGripEditStarted()) {
         return;
@@ -3669,7 +3669,7 @@ void NotationInteraction::drawGripPoints(muse::draw::Painter* painter, const eng
     editModeRenderer()->drawItem(editedElement, painter, m_editData, scaling, opt);
 }
 
-void NotationInteraction::drawLasso(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt)
+void NotationInteraction::drawLasso(muse::draw::Painter* painter, const engraving::rendering::PaintOptions& opt)
 {
     if (!m_lasso || m_lasso->isEmpty()) {
         return;

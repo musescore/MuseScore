@@ -170,7 +170,7 @@ void Score::print(Painter* painter, int pageNo)
     m_printing  = true;
     MScore::pdfPrinting = true;
 
-    rendering::ElementPaintOptions opt;
+    rendering::PaintOptions opt;
     opt.isPrinting = true;
 
     Page* page = pages().at(pageNo);
