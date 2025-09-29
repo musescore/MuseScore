@@ -245,12 +245,11 @@ PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, const St
 
 void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound)
 {
-    std::vector<const EngravingItem*> playableItems = filterPlayableItems(items);
-    if (playableItems.empty()) {
+    if (items.empty()) {
         return;
     }
 
-    InstrumentTrackId trackId = idKey(playableItems);
+    InstrumentTrackId trackId = idKey(items);
     if (!trackId.isValid()) {
         return;
     }
@@ -268,8 +267,8 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     }
 
     const RepeatList& repeats = repeatList();
-    const int firstItemUtick = repeats.tick2utick(playableItems.front()->tick().ticks());
-    const track_idx_t firstItemTrackIdx = playableItems.front()->track();
+    const int firstItemUtick = repeats.tick2utick(items.front()->tick().ticks());
+    const track_idx_t firstItemTrackIdx = items.front()->track();
     const PlaybackContextPtr ctx = playbackCtx(trackId);
     constexpr timestamp_t timestamp = 0;
 
@@ -295,7 +294,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
     dynamic_level_t dynamicLevel = dynamicLevelFromType(muse::mpe::DynamicType::Natural);
 
-    for (const EngravingItem* item : playableItems) {
+    for (const EngravingItem* item : items) {
         const int utick = repeats.tick2utick(item->tick().ticks());
 
         if (m_useScoreDynamicsForOffstreamPlayback) {
@@ -1056,25 +1055,6 @@ const RepeatList& PlaybackModel::repeatList() const
     m_score->masterScore()->setExpandRepeats(m_expandRepeats);
 
     return m_score->repeatList();
-}
-
-std::vector<const EngravingItem*> PlaybackModel::filterPlayableItems(const std::vector<const EngravingItem*>& items) const
-{
-    std::vector<const EngravingItem*> result;
-
-    for (const EngravingItem* item : items) {
-        IF_ASSERT_FAILED(item) {
-            continue;
-        }
-
-        if (!item->isPlayable()) {
-            continue;
-        }
-
-        result.push_back(item);
-    }
-
-    return result;
 }
 
 InstrumentTrackId PlaybackModel::idKey(const EngravingItem* item) const

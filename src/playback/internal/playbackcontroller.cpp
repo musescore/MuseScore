@@ -334,12 +334,17 @@ void PlaybackController::playElements(const std::vector<const notation::Engravin
     }
 
     std::vector<const notation::EngravingItem*> elementsForPlaying;
+    elementsForPlaying.reserve(elements.size());
 
     bool playChordWhenEditing = configuration()->playChordWhenEditing();
     bool playHarmonyWhenEditing = configuration()->playHarmonyWhenEditing();
 
     for (const EngravingItem* element : elements) {
         IF_ASSERT_FAILED(element) {
+            continue;
+        }
+
+        if (!element->isPlayable()) {
             continue;
         }
 
@@ -367,6 +372,7 @@ void PlaybackController::playNotes(const NoteValList& notes, staff_idx_t staffId
     chord->setParent(seg);
 
     std::vector<const EngravingItem*> elements;
+    elements.reserve(notes.size());
 
     for (const NoteVal& nval : notes) {
         Note* note = engraving::Factory::createNote(chord);
