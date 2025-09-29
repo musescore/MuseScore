@@ -1,13 +1,22 @@
 #!/usr/bin/env bash
 
-MUSE_CDN_URL=https://muse-cdn.com
-DEB_PACKAGE=Muse_Sounds_Manager_x64.deb
-
 echo "=== Install Muse Sounds Manager ==="
-echo "Downloading Muse Sounds Manager from $MUSE_CDN_URL/$DEB_PACKAGE"
+
+MUSE_SOUNDS_S3_URL=https://s3.amazonaws.com/extensions.musescore.org/4.0/musesounds
+
+# Download library
+LIB_FILE=libMuseSamplerCoreLib.so
+echo "Downloading $LIB_FILE from $MUSE_SOUNDS_S3_URL/$LIB_FILE"
+
+wget --show-progress -O /tmp/$LIB_FILE "$MUSE_SOUNDS_S3_URL/$LIB_FILE"
+mkdir -p ~/.local/share/MuseSampler/lib/
+mv /tmp/$LIB_FILE ~/.local/share/MuseSampler/lib/
 
 # Download DEB package
-wget --show-progress -O /tmp/$DEB_PACKAGE "$MUSE_CDN_URL/$DEB_PACKAGE"
+DEB_PACKAGE=Muse_Sounds_Manager_x64_0.0.0.890.deb
+echo "Downloading Muse Sounds Manager from $MUSE_SOUNDS_S3_URL/$DEB_PACKAGE"
+
+wget --show-progress -O /tmp/$DEB_PACKAGE "$MUSE_SOUNDS_S3_URL/$DEB_PACKAGE"
 
 # Install DEB package
 echo "Installing Muse Sounds Manager..."

@@ -40,6 +40,8 @@ if [ -z "$MU_VERSION" ]; then MU_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.
 
 if [ -z "$MU_VERSION" ]; then echo "Error: Version not set"; exit 1; fi
 
+echo "INSTALL_MUSE_SOUNDS: $INSTALL_MUSE_SOUNDS"
+
 # Make MU docker files
 echo "Prepare Docker files"
 mkdir -p $DOCKER_WORK_DIR
@@ -55,7 +57,6 @@ if [ "$INSTALL_MUSE_SOUNDS" = "on" ]; then
     cp $HERE/docker/install_muse_sounds_template.sh $DOCKER_WORK_DIR/install_muse_sounds.sh
     sed -i 's|x.x.x.xxxxxx|'${MU_VERSION}'|' $DOCKER_WORK_DIR/install_muse_sounds.sh
 fi
-
 
 cd $DOCKER_WORK_DIR
 echo "Build Docker"

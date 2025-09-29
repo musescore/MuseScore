@@ -147,6 +147,7 @@ jobs:
     - name: Build Docker (used package from S3)
       if: env.DO_PUBLISH == 'true'
       run: |
+        echo "INSTALL_MUSE_SOUNDS: ${{ env.INSTALL_MUSE_SOUNDS }}"
         bash ./buildscripts/ci/backend/build_docker.sh --install_muse_sounds ${{ env.INSTALL_MUSE_SOUNDS }}
 
     - name: Publish to Registry
