@@ -51,12 +51,14 @@ static const ElementStyle markerStyle {
 Marker::Marker(EngravingItem* parent)
     : Marker(parent, TextStyleType::REPEAT_LEFT)
 {
+    resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
 Marker::Marker(EngravingItem* parent, TextStyleType tid)
     : TextBase(ElementType::MARKER, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     initElementStyle(&markerStyle);
+    resetProperty(Pid::MUSIC_SYMBOL_SIZE);
     m_markerType = MarkerType::FINE;
 }
 
@@ -233,6 +235,8 @@ PropertyValue Marker::propertyDefault(Pid propertyId) const
         return PlacementV::ABOVE;
     case Pid::MARKER_CENTER_ON_SYMBOL:
         return true;
+    case Pid::MUSIC_SYMBOL_SIZE:
+        return 18.0;
     default:
         break;
     }
