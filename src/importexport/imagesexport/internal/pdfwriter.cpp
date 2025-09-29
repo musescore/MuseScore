@@ -178,7 +178,9 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
         return escaped;
     };
 
-    QString xmpTemplate = R"(<?xml version="1.0" encoding="UTF-8"?>
+    QString xmpTemplate
+        =
+            R"(<?xml version="1.0" encoding="UTF-8"?>
 <x:xmpmeta xmlns:x="adobe:ns:meta/">
   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <rdf:Description rdf:about=""
@@ -204,7 +206,7 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
     QString author = meta.composer;
     QString creator = QString("MuseScore Studio Version: ") + application()->version().toString().toQString();
     QString currentDateTime = QDateTime::currentDateTime().toString(Qt::ISODate);
-    
+
     // Populate XMP template with project metadata
     QString xmpData = xmpTemplate
                       .arg(escapeXml(meta.title))
@@ -224,26 +226,26 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
 void PdfWriter::preparePdfWriter(QPdfWriter& pdfWriter, INotationPtr notation, const QSizeF& size) const
 {
     ProjectMeta meta = getProjectMetadata(notation);
-    
+
     pdfWriter.setResolution(configuration()->exportPdfDpiResolution());
-    
+
     // Use project title if available, otherwise fallback to notation title
     QString title = meta.title.isEmpty() ? notation->projectWorkTitleAndPartName() : meta.title;
     pdfWriter.setTitle(title);
-    
+
     QString author = meta.composer;
-    
+
     // Set author metadata (Qt 6.9+ feature)
 #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
     pdfWriter.setAuthor(author);
 #endif
-    
+
     pdfWriter.setCreator(QString("MuseScore Studio Version: ") + application()->version().toString().toQString());
-    
+
     // Embed comprehensive XMP metadata
     QByteArray xmpMetadata = generateXmpMetadata(meta);
     pdfWriter.setDocumentXmpMetadata(xmpMetadata);
-    
+
     pdfWriter.setPageMargins(QMarginsF());
     pdfWriter.setPageLayout(QPageLayout(QPageSize(size, QPageSize::Inch), QPageLayout::Orientation::Portrait, QMarginsF()));
 
