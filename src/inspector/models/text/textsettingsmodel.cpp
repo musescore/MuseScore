@@ -62,25 +62,33 @@ void TextSettingsModel::createProperties()
     const Pid fontSizeId = textLine ? mu::engraving::Pid::BEGIN_FONT_SIZE : mu::engraving::Pid::FONT_SIZE;
     const Pid fontAlignId = textLine ? mu::engraving::Pid::BEGIN_TEXT_ALIGN : mu::engraving::Pid::ALIGN;
 
-    m_fontFamily = buildPropertyItem(fontFaceId);
-    m_fontStyle = buildPropertyItem(fontStyleId);
-    m_fontSize = buildPropertyItem(fontSizeId);
+    auto onPropertyChanged = [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        this->propertyChangedCallback(pid, newValue);
+    };
+    auto onPropertyReset = [this](const mu::engraving::Pid pid) {
+        this->propertyResetCallback(pid);
+    };
+
+    m_fontFamily = buildPropertyItem(fontFaceId, onPropertyChanged, nullptr, onPropertyReset);
+    m_fontStyle = buildPropertyItem(fontStyleId, onPropertyChanged, nullptr, onPropertyReset);
+    m_fontSize = buildPropertyItem(fontSizeId, onPropertyChanged, nullptr, onPropertyReset);
     m_textLineSpacing = buildPropertyItem(mu::engraving::Pid::TEXT_LINE_SPACING);
 
-    m_horizontalAlignment = buildPropertyItem(fontAlignId, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
+    m_horizontalAlignment = buildPropertyItem(fontAlignId, [this, onPropertyChanged](const mu::engraving::Pid pid, const QVariant& newValue) {
+        onPropertyChanged(pid, QVariantList(
+                              { newValue.toInt(), m_verticalAlignment->value().toInt() }));
     }, [this](const mu::engraving::Sid sid, const QVariant& newValue) {
         updateStyleValue(sid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
 
         emit requestReloadPropertyItems();
-    });
-    m_verticalAlignment = buildPropertyItem(fontAlignId, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
+    }, onPropertyReset);
+    m_verticalAlignment = buildPropertyItem(fontAlignId, [this, onPropertyChanged](const mu::engraving::Pid pid, const QVariant& newValue) {
+        onPropertyChanged(pid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
     }, [this](const mu::engraving::Sid sid, const QVariant& newValue) {
         updateStyleValue(sid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
 
         emit requestReloadPropertyItems();
-    });
+    }, onPropertyReset);
 
     m_symbolSize = buildPropertyItem(mu::engraving::Pid::MUSIC_SYMBOL_SIZE);
     m_isSizeSpatiumDependent = buildPropertyItem(mu::engraving::Pid::SIZE_SPATIUM_DEPENDENT);
@@ -133,7 +141,7 @@ void TextSettingsModel::loadProperties()
 
     static const PropertyIdSet textLinePropertyIdSet {
         Pid::BEGIN_FONT_FACE,
-        Pid::FONT_STYLE,
+        Pid::BEGIN_FONT_STYLE,
         Pid::BEGIN_FONT_SIZE,
         Pid::TEXT_LINE_SPACING,
         Pid::BEGIN_TEXT_ALIGN,
@@ -625,6 +633,60 @@ void TextSettingsModel::updateIsLineSpacingAvailable()
     }
 
     setIsLineSpacingAvailable(available);
+}
+
+void TextSettingsModel::propertyChangedCallback(const engraving::Pid propertyId, const QVariant& newValue)
+{
+    setPropertyValue(m_elementList, propertyId, newValue);
+
+    switch (propertyId) {
+    case Pid::BEGIN_FONT_FACE:
+        setPropertyValue(m_elementList, Pid::CONTINUE_FONT_FACE, newValue);
+        setPropertyValue(m_elementList, Pid::END_FONT_FACE, newValue);
+        break;
+    case Pid::BEGIN_FONT_SIZE:
+        setPropertyValue(m_elementList, Pid::CONTINUE_FONT_SIZE, newValue);
+        setPropertyValue(m_elementList, Pid::END_FONT_SIZE, newValue);
+        break;
+    case Pid::BEGIN_FONT_STYLE:
+        setPropertyValue(m_elementList, Pid::CONTINUE_FONT_STYLE, newValue);
+        setPropertyValue(m_elementList, Pid::END_FONT_STYLE, newValue);
+        break;
+    case Pid::BEGIN_TEXT_ALIGN:
+        setPropertyValue(m_elementList, Pid::CONTINUE_TEXT_ALIGN, newValue);
+        setPropertyValue(m_elementList, Pid::END_TEXT_ALIGN, newValue);
+        break;
+    default:
+        break;
+    }
+    loadProperties();
+}
+
+void TextSettingsModel::propertyResetCallback(const engraving::Pid propertyId)
+{
+    resetPropertyValue(m_elementList, propertyId);
+
+    switch (propertyId) {
+    case Pid::BEGIN_FONT_FACE:
+        resetPropertyValue(m_elementList, Pid::CONTINUE_FONT_FACE);
+        resetPropertyValue(m_elementList, Pid::END_FONT_FACE);
+        break;
+    case Pid::BEGIN_FONT_SIZE:
+        resetPropertyValue(m_elementList, Pid::CONTINUE_FONT_SIZE);
+        resetPropertyValue(m_elementList, Pid::END_FONT_SIZE);
+        break;
+    case Pid::BEGIN_FONT_STYLE:
+        resetPropertyValue(m_elementList, Pid::CONTINUE_FONT_STYLE);
+        resetPropertyValue(m_elementList, Pid::END_FONT_STYLE);
+        break;
+    case Pid::BEGIN_TEXT_ALIGN:
+        resetPropertyValue(m_elementList, Pid::CONTINUE_TEXT_ALIGN);
+        resetPropertyValue(m_elementList, Pid::END_TEXT_ALIGN);
+        break;
+    default:
+        break;
+    }
+    loadProperties();
 }
 
 bool TextSettingsModel::isTextEditingStarted() const

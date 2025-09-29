@@ -147,6 +147,9 @@ private:
     void updateIsScriptSizeAvailable();
     void updateIsLineSpacingAvailable();
 
+    void propertyChangedCallback(const mu::engraving::Pid propertyId, const QVariant& newValue);
+    void propertyResetCallback(const mu::engraving::Pid propertyId);
+
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
     bool isTextLineText() const;

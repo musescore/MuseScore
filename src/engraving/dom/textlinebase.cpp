@@ -291,31 +291,21 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
     /// This preserves backwards compatibility and will allow us to style these text items separately in the future if desired
     case Pid::BEGIN_TEXT_PLACE:
         _beginTextPlace = v.value<TextPlace>();
-        _continueTextPlace = v.value<TextPlace>();
-        _endTextPlace = v.value<TextPlace>();
         break;
     case Pid::BEGIN_TEXT_ALIGN:
         _beginTextAlign = v.value<Align>();
-        _continueTextAlign = v.value<Align>();
-        _endTextAlign = v.value<Align>();
         break;
     case Pid::BEGIN_FONT_FACE:
         setBeginFontFamily(v.value<String>());
-        setContinueFontFamily(v.value<String>());
-        setEndFontFamily(v.value<String>());
         break;
     case Pid::BEGIN_FONT_SIZE:
         if (v.toReal() <= 0) {
             ASSERT_X(String(u"font size is %1").arg(v.toReal()));
         }
         setBeginFontSize(v.toReal());
-        setContinueFontSize(v.toReal());
-        setEndFontSize(v.toReal());
         break;
     case Pid::BEGIN_FONT_STYLE:
         setBeginFontStyle(FontStyle(v.toInt()));
-        setContinueFontStyle(FontStyle(v.toInt()));
-        setEndFontStyle(FontStyle(v.toInt()));
         break;
 
     case Pid::CONTINUE_TEXT_ALIGN:
