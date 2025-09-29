@@ -2727,14 +2727,16 @@ void MeasureLayout::removeSystemHeader(Measure* m)
                     break;
                 }
             }
-            if (!keySigChangeHappensHere || seg->header()) {
+            if (seg->header() && !keySigChangeHappensHere) {
                 seg->setEnabled(false);
             }
         }
         if (!seg->header()) {
             break;
         }
-        seg->setEnabled(false);
+        if (!seg->isKeySigType()) {
+            seg->setEnabled(false);
+        }
     }
     m->setHeader(false);
 }
