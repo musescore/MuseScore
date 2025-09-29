@@ -348,7 +348,7 @@ double SlurSegment::dottedWidth() const
     return style().styleMM(Sid::slurDottedWidth);
 }
 
-Color SlurSegment::curColor(const rendering::ElementPaintOptions& opt) const
+Color SlurSegment::curColor(const rendering::PaintOptions& opt) const
 {
     return EngravingItem::curColor(getProperty(Pid::VISIBLE).toBool(), getProperty(Pid::COLOR).value<Color>(), opt);
 }

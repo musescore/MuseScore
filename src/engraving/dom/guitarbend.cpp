@@ -627,7 +627,7 @@ bool GuitarBendSegment::isUserModified() const
     return modified || LineSegment::isUserModified();
 }
 
-Color GuitarBend::curColor(const rendering::ElementPaintOptions& opt) const
+Color GuitarBend::curColor(const rendering::PaintOptions& opt) const
 {
     if (!opt.isPrinting && MScore::warnGuitarBends) {
         if (m_isInvalid) {

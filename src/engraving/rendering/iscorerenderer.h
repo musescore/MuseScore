@@ -106,13 +106,11 @@ public:
 
     virtual void layoutScore(Score* score, const Fraction& st, const Fraction& et) const = 0;
 
-    struct PaintOptions
+    struct ScorePaintOptions : public PaintOptions
     {
         bool isSetViewport = true;
-        bool isPrinting = false;
         bool isMultiPage = false;
         bool printPageBackground = true;
-        bool invertColors = false;
         RectF frameRect;
         int fromPage = -1; // 0 is first
         int toPage = -1;
@@ -125,9 +123,9 @@ public:
     };
 
     virtual SizeF pageSizeInch(const Score* score) const = 0;
-    virtual SizeF pageSizeInch(const Score* score, const PaintOptions& opt) const = 0;
-    virtual void paintScore(muse::draw::Painter* painter, Score* score, const PaintOptions& opt) const = 0;
-    virtual void paintItem(muse::draw::Painter& painter, const EngravingItem* item, const ElementPaintOptions& opt) const = 0;
+    virtual SizeF pageSizeInch(const Score* score, const ScorePaintOptions& opt) const = 0;
+    virtual void paintScore(muse::draw::Painter* painter, Score* score, const ScorePaintOptions& opt) const = 0;
+    virtual void paintItem(muse::draw::Painter& painter, const EngravingItem* item, const PaintOptions& opt) const = 0;
 
     // Temporary compatibility interface
     using Supported = std::variant<std::monostate,
@@ -193,7 +191,7 @@ public:
     // Layout Text 1
     virtual void layoutText1(TextBase* item, bool base = false) = 0;
 
-    void drawItem(const EngravingItem* item, muse::draw::Painter* p, const ElementPaintOptions& opt)
+    void drawItem(const EngravingItem* item, muse::draw::Painter* p, const PaintOptions& opt)
     {
         doDrawItem(item, p, opt);
     }
@@ -205,6 +203,6 @@ private:
     // Layout Single Item
     virtual void doLayoutItem(EngravingItem* item) = 0;
 
-    virtual void doDrawItem(const EngravingItem* item, muse::draw::Painter* p, const ElementPaintOptions& opt) = 0;
+    virtual void doDrawItem(const EngravingItem* item, muse::draw::Painter* p, const PaintOptions& opt) = 0;
 };
 }

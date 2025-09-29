@@ -130,7 +130,7 @@ TappingText::TappingText(const TappingText& t)
 {
 }
 
-Color TappingText::curColor(const rendering::ElementPaintOptions& opt) const
+Color TappingText::curColor(const rendering::PaintOptions& opt) const
 {
     if (parentItem()) {
         return parentItem()->curColor(opt);

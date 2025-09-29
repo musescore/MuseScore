@@ -35,7 +35,7 @@ using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt)
+void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::ScorePaintOptions& opt)
 {
     TRACEFUNC;
     if (!score) {
@@ -70,10 +70,6 @@ void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::Pai
     mu::engraving::MScore::pixelRatio = mu::engraving::DPI / DEVICE_DPI;
     score->setPrinting(opt.isPrinting);
     mu::engraving::MScore::pdfPrinting = opt.isPrinting;
-
-    ElementPaintOptions eopt;
-    eopt.isPrinting = opt.isPrinting;
-    eopt.invertColors = opt.invertColors;
 
     // Setup page counts
     int fromPage = opt.fromPage >= 0 ? opt.fromPage : 0;
@@ -149,7 +145,7 @@ void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::Pai
             }
 
             std::vector<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
-            paintItems(*painter, elements, eopt);
+            paintItems(*painter, elements, opt);
 
             if (disableClipping) {
                 painter->setClipping(false);
@@ -194,7 +190,7 @@ SizeF Paint::pageSizeInch(const Score* score)
     return SizeF(score->style().styleD(Sid::pageWidth), score->style().styleD(Sid::pageHeight));
 }
 
-SizeF Paint::pageSizeInch(const Score* score, const IScoreRenderer::PaintOptions& opt)
+SizeF Paint::pageSizeInch(const Score* score, const IScoreRenderer::ScorePaintOptions& opt)
 {
     if (!score) {
         return SizeF();
@@ -218,7 +214,7 @@ SizeF Paint::pageSizeInch(const Score* score, const IScoreRenderer::PaintOptions
     return pageRect.size() / mu::engraving::DPI;
 }
 
-void Paint::paintItem(Painter& painter, const EngravingItem* item, const ElementPaintOptions& opt)
+void Paint::paintItem(Painter& painter, const EngravingItem* item, const PaintOptions& opt)
 {
     TRACEFUNC;
     if (item->ldata()->isSkipDraw()) {
@@ -232,7 +228,7 @@ void Paint::paintItem(Painter& painter, const EngravingItem* item, const Element
     painter.translate(-itemPosition);
 }
 
-void Paint::paintItems(Painter& painter, const std::vector<EngravingItem*>& items, const ElementPaintOptions& opt)
+void Paint::paintItems(Painter& painter, const std::vector<EngravingItem*>& items, const PaintOptions& opt)
 {
     TRACEFUNC;
     std::vector<EngravingItem*> sortedItems(items.begin(), items.end());

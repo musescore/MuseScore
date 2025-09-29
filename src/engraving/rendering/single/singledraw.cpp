@@ -149,7 +149,7 @@ using namespace mu::engraving::rtti;
 using namespace muse;
 using namespace muse::draw;
 
-void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOptions& opt)
 {
     switch (item->type()) {
     case ElementType::ACCIDENTAL:   draw(item_cast<const Accidental*>(item), painter, opt);
@@ -354,7 +354,7 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const Ele
     }
 }
 
-void SingleDraw::draw(const Accidental* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Accidental* item, Painter* painter, const PaintOptions& opt)
 {
     IF_ASSERT_FAILED(item->ldata()) {
         return;
@@ -366,7 +366,7 @@ void SingleDraw::draw(const Accidental* item, Painter* painter, const ElementPai
     }
 }
 
-void SingleDraw::draw(const ActionIcon* item, Painter* painter, const ElementPaintOptions&)
+void SingleDraw::draw(const ActionIcon* item, Painter* painter, const PaintOptions&)
 {
     TRACE_DRAW_ITEM;
     const ActionIcon::LayoutData* ldata = item->ldata();
@@ -374,7 +374,7 @@ void SingleDraw::draw(const ActionIcon* item, Painter* painter, const ElementPai
     painter->drawText(ldata->bbox(), muse::draw::AlignCenter, Char(item->icon()));
 }
 
-void SingleDraw::draw(const Ambitus* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Ambitus* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -394,7 +394,7 @@ void SingleDraw::draw(const Ambitus* item, Painter* painter, const ElementPaintO
     }
 }
 
-void SingleDraw::draw(const Arpeggio* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Arpeggio* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -455,7 +455,7 @@ void SingleDraw::draw(const Arpeggio* item, Painter* painter, const ElementPaint
     painter->restore();
 }
 
-void SingleDraw::draw(const Articulation* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Articulation* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -469,7 +469,7 @@ void SingleDraw::draw(const Articulation* item, Painter* painter, const ElementP
     }
 }
 
-void SingleDraw::draw(const Note* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (item->hidden()) {
@@ -569,23 +569,23 @@ void SingleDraw::draw(const Note* item, Painter* painter, const ElementPaintOpti
     }
 }
 
-void SingleDraw::draw(const NoteHead* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const NoteHead* item, Painter* painter, const PaintOptions& opt)
 {
     draw(static_cast<const Symbol*>(item), painter, opt);
 }
 
-void SingleDraw::draw(const NoteLineSegment*, Painter*, const ElementPaintOptions&)
+void SingleDraw::draw(const NoteLineSegment*, Painter*, const PaintOptions&)
 {
     // TRACE_DRAW_ITEM;
     // To be implemented
 }
 
-void SingleDraw::draw(const Ornament* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Ornament* item, Painter* painter, const PaintOptions& opt)
 {
     draw(static_cast<const Articulation*>(item), painter, opt);
 }
 
-void SingleDraw::draw(const BagpipeEmbellishment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const BagpipeEmbellishment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -672,7 +672,7 @@ static void drawTips(const BarLine* item, Painter* painter, bool reversed, doubl
     }
 }
 
-void SingleDraw::draw(const BarLine* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const BarLine::LayoutData* ldata = item->ldata();
@@ -827,7 +827,7 @@ void SingleDraw::draw(const BarLine* item, Painter* painter, const ElementPaintO
     }
 }
 
-void SingleDraw::draw(const Beam* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Beam* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (item->beamSegments().empty()) {
@@ -858,7 +858,7 @@ void SingleDraw::draw(const Beam* item, Painter* painter, const ElementPaintOpti
     }
 }
 
-void SingleDraw::draw(const Bend* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Bend* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -952,7 +952,7 @@ void SingleDraw::draw(const Bend* item, Painter* painter, const ElementPaintOpti
     }
 }
 
-void SingleDraw::draw(const Bracket* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1009,14 +1009,14 @@ void SingleDraw::draw(const Bracket* item, Painter* painter, const ElementPaintO
     }
 }
 
-void SingleDraw::draw(const Breath* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Breath* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor(opt));
     item->drawSymbol(item->symId(), painter);
 }
 
-void SingleDraw::draw(const ChordLine* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const ChordLine* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const ChordLine::LayoutData* ldata = item->ldata();
@@ -1036,7 +1036,7 @@ void SingleDraw::draw(const ChordLine* item, Painter* painter, const ElementPain
     }
 }
 
-void SingleDraw::draw(const Clef* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Clef* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const Clef::LayoutData* ldata = item->ldata();
@@ -1051,12 +1051,12 @@ void SingleDraw::draw(const Clef* item, Painter* painter, const ElementPaintOpti
     item->drawSymbol(ldata->symId, painter);
 }
 
-void SingleDraw::draw(const Capo* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Capo* item, Painter* painter, const PaintOptions& opt)
 {
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const DeadSlapped* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const DeadSlapped* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const DeadSlapped::LayoutData* ldata = item->ldata();
@@ -1070,24 +1070,24 @@ void SingleDraw::draw(const DeadSlapped* item, Painter* painter, const ElementPa
     painter->drawPath(ldata->path2);
 }
 
-void SingleDraw::draw(const Dynamic* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Dynamic* item, Painter* painter, const PaintOptions& opt)
 {
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const Expression* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Expression* item, Painter* painter, const PaintOptions& opt)
 {
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const Fermata* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Fermata* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor(opt));
     item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
 }
 
-void SingleDraw::draw(const FiguredBass* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const FiguredBass* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (item->items().size() < 1) { // if not parseable into f.b. items
@@ -1101,7 +1101,7 @@ void SingleDraw::draw(const FiguredBass* item, Painter* painter, const ElementPa
     }
 }
 
-void SingleDraw::draw(const FiguredBassItem* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1168,13 +1168,13 @@ void SingleDraw::draw(const FiguredBassItem* item, Painter* painter, const Eleme
     }
 }
 
-void SingleDraw::draw(const Fingering* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Fingering* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const FretDiagram* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const FretDiagram* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const FretDiagram::LayoutData* ldata = item->ldata();
@@ -1341,7 +1341,7 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter, const ElementPa
     }
 }
 
-void SingleDraw::draw(const GlissandoSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const GlissandoSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1407,7 +1407,7 @@ void SingleDraw::draw(const GlissandoSegment* item, Painter* painter, const Elem
     painter->restore();
 }
 
-void SingleDraw::draw(const Stem* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Stem* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (!item->chord()) { // may be need assert?
@@ -1480,7 +1480,7 @@ void SingleDraw::draw(const Stem* item, Painter* painter, const ElementPaintOpti
     }
 }
 
-void SingleDraw::draw(const StemSlash* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const StemSlash* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1489,19 +1489,19 @@ void SingleDraw::draw(const StemSlash* item, Painter* painter, const ElementPain
     painter->drawLine(ldata->line);
 }
 
-void SingleDraw::draw(const Sticking* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Sticking* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const StringTunings* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const StringTunings* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::drawTextBase(const TextBase* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::drawTextBase(const TextBase* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1539,7 +1539,7 @@ void SingleDraw::drawTextBase(const TextBase* item, Painter* painter, const Elem
     }
 }
 
-void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* painter, const PaintOptions& opt)
 {
     const TextLineBase* tl = item->textLineBase();
 
@@ -1661,19 +1661,19 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
     painter->drawPolyline(&item->points()[start], end - start);
 }
 
-void SingleDraw::draw(const GradualTempoChangeSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const GradualTempoChangeSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void SingleDraw::draw(const GuitarBendSegment*, Painter*, const ElementPaintOptions&)
+void SingleDraw::draw(const GuitarBendSegment*, Painter*, const PaintOptions&)
 {
     // TRACE_DRAW_ITEM;
     // To be implemented
 }
 
-void SingleDraw::draw(const HairpinSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const HairpinSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1693,29 +1693,29 @@ void SingleDraw::draw(const HairpinSegment* item, Painter* painter, const Elemen
     }
 }
 
-void SingleDraw::draw(const HammerOnPullOffSegment* item, muse::draw::Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const HammerOnPullOffSegment* item, muse::draw::Painter* painter, const PaintOptions& opt)
 {
     draw(toSlurSegment(item), painter, opt);
 }
 
-void SingleDraw::draw(const HammerOnPullOffText* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const HammerOnPullOffText* item, Painter* painter, const PaintOptions& opt)
 {
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const HarpPedalDiagram* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const HarpPedalDiagram* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const HarmonicMarkSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const HarmonicMarkSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void SingleDraw::draw(const Harmony* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Harmony* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1763,14 +1763,14 @@ void SingleDraw::draw(const Harmony* item, Painter* painter, const ElementPaintO
     }
 }
 
-void SingleDraw::draw(const Hook* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Hook* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor(opt));
     item->drawSymbol(item->sym(), painter);
 }
 
-void SingleDraw::draw(const Image* item, Painter* painter, const ElementPaintOptions&)
+void SingleDraw::draw(const Image* item, Painter* painter, const PaintOptions&)
 {
     TRACE_DRAW_ITEM;
     const Image::LayoutData* ldata = item->ldata();
@@ -1820,25 +1820,25 @@ void SingleDraw::draw(const Image* item, Painter* painter, const ElementPaintOpt
     }
 }
 
-void SingleDraw::draw(const InstrumentChange* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const InstrumentChange* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const InstrumentName* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const InstrumentName* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const Jump* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Jump* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const KeySig* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const KeySig* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1876,7 +1876,7 @@ void SingleDraw::draw(const KeySig* item, Painter* painter, const ElementPaintOp
     }
 }
 
-void SingleDraw::draw(const LayoutBreak* item, Painter* painter, const ElementPaintOptions&)
+void SingleDraw::draw(const LayoutBreak* item, Painter* painter, const PaintOptions&)
 {
     TRACE_DRAW_ITEM;
 
@@ -1890,7 +1890,7 @@ void SingleDraw::draw(const LayoutBreak* item, Painter* painter, const ElementPa
     painter->drawSymbol(PointF(0.0, 0.0), item->iconCode());
 }
 
-void SingleDraw::draw(const LedgerLine* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const LedgerLine* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const LedgerLine::LayoutData* ldata = item->ldata();
@@ -1903,31 +1903,31 @@ void SingleDraw::draw(const LedgerLine* item, Painter* painter, const ElementPai
     }
 }
 
-void SingleDraw::draw(const LetRingSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const LetRingSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void SingleDraw::draw(const Lyrics* item, muse::draw::Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Lyrics* item, muse::draw::Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const Marker* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Marker* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const MeasureNumber* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const MeasureNumber* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const MeasureRepeat* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const MeasureRepeat* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -1936,55 +1936,55 @@ void SingleDraw::draw(const MeasureRepeat* item, Painter* painter, const Element
     item->drawSymbol(ldata->symId, painter);
 }
 
-void SingleDraw::draw(const OttavaSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const OttavaSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void SingleDraw::draw(const PalmMuteSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const PalmMuteSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void SingleDraw::draw(const PedalSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const PedalSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void SingleDraw::draw(const PickScrapeSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const PickScrapeSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void SingleDraw::draw(const PlayCountText* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const PlayCountText* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const PlayTechAnnotation* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const PlayTechAnnotation* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const RasgueadoSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const RasgueadoSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void SingleDraw::draw(const RehearsalMark* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const RehearsalMark* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const Rest* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Rest* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (item->shouldNotBeDrawn()) {
@@ -1995,7 +1995,7 @@ void SingleDraw::draw(const Rest* item, Painter* painter, const ElementPaintOpti
     item->drawSymbol(ldata->sym, painter);
 }
 
-void SingleDraw::draw(const ShadowNote* item, Painter* painter, const ElementPaintOptions&)
+void SingleDraw::draw(const ShadowNote* item, Painter* painter, const PaintOptions&)
 {
     TRACE_DRAW_ITEM;
 
@@ -2093,7 +2093,7 @@ void SingleDraw::draw(const ShadowNote* item, Painter* painter, const ElementPai
     painter->translate(-ap);
 }
 
-void SingleDraw::draw(const SlurSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const SlurSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2135,7 +2135,7 @@ void SingleDraw::draw(const SlurSegment* item, Painter* painter, const ElementPa
     painter->drawPath(item->ldata()->path());
 }
 
-void SingleDraw::draw(const Spacer* item, Painter* painter, const ElementPaintOptions&)
+void SingleDraw::draw(const Spacer* item, Painter* painter, const PaintOptions&)
 {
     TRACE_DRAW_ITEM;
 
@@ -2148,14 +2148,14 @@ void SingleDraw::draw(const Spacer* item, Painter* painter, const ElementPaintOp
     painter->drawPath(item->ldata()->path);
 }
 
-void SingleDraw::draw(const StaffLines* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const StaffLines* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(Pen(item->curColor(opt), item->lw(), PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLines(item->lines());
 }
 
-void SingleDraw::draw(const StaffState* item, Painter* painter, const ElementPaintOptions&)
+void SingleDraw::draw(const StaffState* item, Painter* painter, const PaintOptions&)
 {
     TRACE_DRAW_ITEM;
 
@@ -2169,7 +2169,7 @@ void SingleDraw::draw(const StaffState* item, Painter* painter, const ElementPai
     painter->drawPath(ldata->path);
 }
 
-void SingleDraw::draw(const StaffText* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const StaffText* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2181,7 +2181,7 @@ void SingleDraw::draw(const StaffText* item, Painter* painter, const ElementPain
     }
 }
 
-void SingleDraw::draw(const StaffTypeChange* item, Painter* painter, const ElementPaintOptions&)
+void SingleDraw::draw(const StaffTypeChange* item, Painter* painter, const PaintOptions&)
 {
     TRACE_DRAW_ITEM;
 
@@ -2219,7 +2219,7 @@ void SingleDraw::draw(const StaffTypeChange* item, Painter* painter, const Eleme
     }
 }
 
-void SingleDraw::draw(const Symbol* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Symbol* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     if (!item->isNoteDot() || !item->staff()->isTabStaff(item->tick())) {
@@ -2232,7 +2232,7 @@ void SingleDraw::draw(const Symbol* item, Painter* painter, const ElementPaintOp
     }
 }
 
-void SingleDraw::draw(const FSymbol* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const FSymbol* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2243,18 +2243,18 @@ void SingleDraw::draw(const FSymbol* item, Painter* painter, const ElementPaintO
     painter->drawText(PointF(0, 0), item->toString());
 }
 
-void SingleDraw::draw(const SystemDivider* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const SystemDivider* item, Painter* painter, const PaintOptions& opt)
 {
     draw(static_cast<const Symbol*>(item), painter, opt);
 }
 
-void SingleDraw::draw(const SystemText* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const SystemText* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const SoundFlag* item, Painter* painter, const ElementPaintOptions&)
+void SingleDraw::draw(const SoundFlag* item, Painter* painter, const PaintOptions&)
 {
     TRACE_DRAW_ITEM;
 
@@ -2263,30 +2263,30 @@ void SingleDraw::draw(const SoundFlag* item, Painter* painter, const ElementPain
     painter->drawText(item->ldata()->bbox(), muse::draw::AlignCenter, Char(item->iconCode()));
 }
 
-void SingleDraw::draw(const Tapping* item, muse::draw::Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Tapping* item, muse::draw::Painter* painter, const PaintOptions& opt)
 {
     drawTextBase(item->text(), painter, opt);
 }
 
-void SingleDraw::draw(const TempoText* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const TempoText* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const Text* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Text* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const TextLineSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const TextLineSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void SingleDraw::draw(const TieSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const TieSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2333,7 +2333,7 @@ void SingleDraw::draw(const TieSegment* item, Painter* painter, const ElementPai
     painter->drawPath(item->ldata()->path());
 }
 
-void SingleDraw::draw(const TimeSig* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const TimeSig* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2353,7 +2353,7 @@ void SingleDraw::draw(const TimeSig* item, Painter* painter, const ElementPaintO
     }
 }
 
-void SingleDraw::draw(const TremoloSingleChord* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const TremoloSingleChord* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2382,7 +2382,7 @@ void SingleDraw::draw(const TremoloSingleChord* item, Painter* painter, const El
     }
 }
 
-void SingleDraw::draw(const TremoloTwoChord* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const TremoloTwoChord* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2391,7 +2391,7 @@ void SingleDraw::draw(const TremoloTwoChord* item, Painter* painter, const Eleme
     painter->drawPath(item->path());
 }
 
-void SingleDraw::draw(const TremoloBar* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const TremoloBar* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     const TremoloBar::LayoutData* ldata = item->ldata();
@@ -2401,20 +2401,20 @@ void SingleDraw::draw(const TremoloBar* item, Painter* painter, const ElementPai
     painter->drawPolyline(ldata->polygon);
 }
 
-void SingleDraw::draw(const TrillSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const TrillSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->spanner()->curColor(opt));
     item->drawSymbols(item->symbols(), painter);
 }
 
-void SingleDraw::draw(const TripletFeel* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const TripletFeel* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter, opt);
 }
 
-void SingleDraw::draw(const Tuplet* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const Tuplet* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
@@ -2443,20 +2443,20 @@ void SingleDraw::draw(const Tuplet* item, Painter* painter, const ElementPaintOp
     }
 }
 
-void SingleDraw::draw(const VibratoSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const VibratoSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->spanner()->curColor(opt));
     item->drawSymbols(item->symbols(), painter);
 }
 
-void SingleDraw::draw(const VoltaSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const VoltaSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void SingleDraw::draw(const WhammyBarSegment* item, Painter* painter, const ElementPaintOptions& opt)
+void SingleDraw::draw(const WhammyBarSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);

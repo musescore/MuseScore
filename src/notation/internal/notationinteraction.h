@@ -64,7 +64,7 @@ class NotationInteraction : public INotationInteraction, public muse::Injectable
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
 
-    void paint(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt);
+    void paint(muse::draw::Painter* painter, const engraving::rendering::PaintOptions& opt);
 
     // Put notes
     INotationNoteInputPtr noteInput() const override;
@@ -419,13 +419,13 @@ private:
     std::vector<ShadowNoteParams> previewNotes() const;
 
     bool shouldDrawInputPreview() const;
-    void drawInputPreview(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt);
+    void drawInputPreview(muse::draw::Painter* painter, const engraving::rendering::PaintOptions& opt);
 
     void drawAnchorLines(muse::draw::Painter* painter);
-    void drawTextEditMode(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt);
+    void drawTextEditMode(muse::draw::Painter* painter, const engraving::rendering::PaintOptions& opt);
     void drawSelectionRange(muse::draw::Painter* painter);
-    void drawGripPoints(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt);
-    void drawLasso(muse::draw::Painter* painter, const engraving::rendering::ElementPaintOptions& opt);
+    void drawGripPoints(muse::draw::Painter* painter, const engraving::rendering::PaintOptions& opt);
+    void drawLasso(muse::draw::Painter* painter, const engraving::rendering::PaintOptions& opt);
     void drawDrop(muse::draw::Painter* painter);
 
     void moveElementSelection(MoveDirection d);

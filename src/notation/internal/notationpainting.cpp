@@ -126,7 +126,7 @@ void NotationPainting::doPaint(Painter* painter, const Options& opt)
     scoreRenderer()->paintScore(painter, score(), myopt);
 
     if (!myopt.isPrinting) {
-        rendering::ElementPaintOptions eopt;
+        rendering::PaintOptions eopt;
         eopt.isPrinting = myopt.isPrinting;
         eopt.invertColors = myopt.invertColors;
 

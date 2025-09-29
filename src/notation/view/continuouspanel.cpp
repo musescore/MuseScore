@@ -58,7 +58,7 @@ void ContinuousPanel::setNotation(INotationPtr notation)
 }
 
 //! NOTE: Copied from MU3
-void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, const engraving::rendering::ElementPaintOptions& opt)
+void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, const engraving::rendering::PaintOptions& opt)
 {
     TRACEFUNC;
 

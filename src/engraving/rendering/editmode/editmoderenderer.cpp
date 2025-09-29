@@ -36,7 +36,7 @@ using namespace mu::engraving;
 using namespace muse::draw;
 
 void EditModeRenderer::drawItem(const EngravingItem* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
-                                const ElementPaintOptions& opt)
+                                const PaintOptions& opt)
 {
     switch (item->type()) {
     case ElementType::BAR_LINE:
@@ -135,7 +135,7 @@ void EditModeRenderer::drawItem(const EngravingItem* item, muse::draw::Painter* 
 }
 
 void EditModeRenderer::drawEngravingItem(const EngravingItem* item, muse::draw::Painter* painter, const EditData& ed,
-                                         double currentViewScaling, const ElementPaintOptions&)
+                                         double currentViewScaling, const PaintOptions&)
 {
     UNUSED(currentViewScaling);
 
@@ -154,7 +154,7 @@ void EditModeRenderer::drawEngravingItem(const EngravingItem* item, muse::draw::
 }
 
 void EditModeRenderer::drawBarline(const BarLine* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
-                                   const ElementPaintOptions& opt)
+                                   const PaintOptions& opt)
 {
     drawEngravingItem(item, painter, ed, currentViewScaling, opt);
 
@@ -173,7 +173,7 @@ void EditModeRenderer::drawBarline(const BarLine* item, muse::draw::Painter* pai
 }
 
 void EditModeRenderer::drawDynamic(const Dynamic* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
-                                   const ElementPaintOptions& opt)
+                                   const PaintOptions& opt)
 {
     if (item->cursor() && item->cursor()->editing()) {
         drawTextBase(item, painter, ed, currentViewScaling, opt);
@@ -184,7 +184,7 @@ void EditModeRenderer::drawDynamic(const Dynamic* item, muse::draw::Painter* pai
 }
 
 void EditModeRenderer::drawSlurTieSegment(const SlurTieSegment* item, muse::draw::Painter* painter, const EditData& ed,
-                                          double currentViewScaling, const ElementPaintOptions& opt)
+                                          double currentViewScaling, const PaintOptions& opt)
 {
     PolygonF polygon(7);
     polygon[0] = PointF(ed.grip[int(Grip::START)].center());
@@ -212,7 +212,7 @@ static void drawTextBaseSelection(const TextBase* item, muse::draw::Painter* pai
 }
 
 void EditModeRenderer::drawTextBase(const TextBase* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
-                                    const ElementPaintOptions& opt)
+                                    const PaintOptions& opt)
 {
     PointF pos(item->canvasPos());
     painter->translate(pos);

@@ -358,9 +358,9 @@ public:
 
     virtual void setColor(const Color& c);
     virtual Color color() const;
-    virtual Color curColor(const rendering::ElementPaintOptions& opt) const;
-    Color curColor(bool isVisible, const rendering::ElementPaintOptions& opt) const;
-    Color curColor(bool isVisible, Color normalColor, const rendering::ElementPaintOptions& opt) const;
+    virtual Color curColor(const rendering::PaintOptions& opt) const;
+    Color curColor(bool isVisible, const rendering::PaintOptions& opt) const;
+    Color curColor(bool isVisible, Color normalColor, const rendering::PaintOptions& opt) const;
 
     void undoSetColor(const Color& c);
     void undoSetVisible(bool v);

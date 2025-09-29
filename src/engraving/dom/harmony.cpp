@@ -1120,7 +1120,7 @@ const ParsedChord* Harmony::parsedForm()const
     return m_chords.front()->getParsedChord();
 }
 
-Color Harmony::curColor(const rendering::ElementPaintOptions& opt) const
+Color Harmony::curColor(const rendering::PaintOptions& opt) const
 {
     if (!opt.isPrinting && m_isMisspelled) {
         return configuration()->criticalColor();

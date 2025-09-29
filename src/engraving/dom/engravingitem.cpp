@@ -613,7 +613,7 @@ Color EngravingItem::color() const
 //   curColor
 //---------------------------------------------------------
 
-Color EngravingItem::curColor(const rendering::ElementPaintOptions& opt) const
+Color EngravingItem::curColor(const rendering::PaintOptions& opt) const
 {
     return curColor(getProperty(Pid::VISIBLE).toBool(), opt);
 }
@@ -622,12 +622,12 @@ Color EngravingItem::curColor(const rendering::ElementPaintOptions& opt) const
 //   curColor
 //---------------------------------------------------------
 
-Color EngravingItem::curColor(bool isVisible, const rendering::ElementPaintOptions& opt) const
+Color EngravingItem::curColor(bool isVisible, const rendering::PaintOptions& opt) const
 {
     return curColor(isVisible, color(), opt);
 }
 
-Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering::ElementPaintOptions& opt) const
+Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering::PaintOptions& opt) const
 {
     // the default element color is always interpreted as black in printing
     if (opt.isPrinting) {
