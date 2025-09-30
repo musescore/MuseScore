@@ -357,21 +357,17 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                 // Add accidental if needed
                 /// @todo Do we really need to explicitly add the accidental object if it's not frozen?
                 /// RGP: if it has been manually moved, it looks like it.Otherwise perhaps not.
-                bool forceAccidental = noteInfoPtr->freezeAcci;
-                if (!forceAccidental) {
-                    int line = noteValToLine(nval, targetStaff, segment->tick());
-                    bool error = false;
-                    engraving::Note* startN = note->firstTiedNote();
-                    if (Segment* startSegment = startN->chord()->segment()) {
+                bool hasAccidental = noteInfoPtr->freezeAcci;
+                if (!hasAccidental) {
+                    if (Segment* startSegment = note->firstTiedNote()->chord()->segment()) {
+                        int line = noteValToLine(nval, targetStaff, segment->tick());
+                        bool error = false;
                         AccidentalVal defaultAccVal = startSegment->measure()->findAccidental(startSegment, idx, line, error);
-                        if (error) {
-                            defaultAccVal = Accidental::subtype2value(AccidentalType::NONE); // needed?
-                        }
-                        forceAccidental = defaultAccVal != accVal;
+                        hasAccidental = error || (defaultAccVal != accVal);
                     }
                 }
-                /// @todo An accidental can have AccidentalAlterations even if it is not forced.
-                if (forceAccidental) {
+
+                if (hasAccidental) {
                     AccidentalType at = Accidental::value2subtype(accVal);
                     Accidental* a = Factory::createAccidental(note);
                     a->setAccidentalType(at);
