@@ -94,10 +94,10 @@ ExportSettingsPage {
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationOrder + 4
 
-        checked: root.model.pdfEmbeddedMetadata
+        checked: root.model.pdfEmbedMetadata
 
         onClicked: {
-            root.model.pdfEmbeddedMetadata = !checked
+            root.model.pdfEmbedMetadata = !checked
         }
     }
 }
