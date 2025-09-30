@@ -256,6 +256,7 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     updateIsSymbolSizeAvailable();
     updateIsScriptSizeAvailable();
     updateIsLineSpacingAvailable();
+    updateIsPositionAvailable();
 }
 
 bool TextSettingsModel::isTextLineText() const
@@ -467,6 +468,11 @@ bool TextSettingsModel::isLineSpacingAvailable() const
     return m_isLineSpacingAvailable;
 }
 
+bool TextSettingsModel::isPositionAvailable() const
+{
+    return m_isPositionAvailable;
+}
+
 void TextSettingsModel::setAreTextPropertiesAvailable(bool areTextPropertiesAvailable)
 {
     if (m_areTextPropertiesAvailable == areTextPropertiesAvailable) {
@@ -545,6 +551,16 @@ void TextSettingsModel::setIsLineSpacingAvailable(bool isLineSpacingAvailable)
 
     m_isLineSpacingAvailable = isLineSpacingAvailable;
     emit isLineSpacingAvailableChanged(m_isLineSpacingAvailable);
+}
+
+void TextSettingsModel::setIsPositionAvailableChanged(bool isPositionAvailable)
+{
+    if (isPositionAvailable == m_isPositionAvailable) {
+        return;
+    }
+
+    m_isPositionAvailable = isPositionAvailable;
+    emit isPositionAvailableChanged(m_isPositionAvailable);
 }
 
 void TextSettingsModel::updateFramePropertiesAvailability()
@@ -633,6 +649,19 @@ void TextSettingsModel::updateIsLineSpacingAvailable()
     }
 
     setIsLineSpacingAvailable(available);
+}
+
+void TextSettingsModel::updateIsPositionAvailable()
+{
+    bool available = true;
+    for (EngravingItem* item : m_elementList) {
+        if (item->parent()->isTextLineBaseSegment()) {
+            available = false;
+            break;
+        }
+    }
+
+    setIsPositionAvailableChanged(available);
 }
 
 void TextSettingsModel::propertyChangedCallback(const engraving::Pid propertyId, const QVariant& newValue)
