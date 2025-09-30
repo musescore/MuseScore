@@ -1424,6 +1424,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
         SelectionFilter filter;
         // chord symbols can exist without chord/rest so they should not be removed
         filter.setFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL, false);
+        filter.setFiltered(ElementsSelectionFilterTypes::FRET_DIAGRAM, false);
 
         deleteAnnotationsFromRange(s1, s2, track, track + 1, filter);
         deleteSlursFromRange(t1, t2, track, track + 1, filter);
