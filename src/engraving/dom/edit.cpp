@@ -3051,7 +3051,7 @@ void Score::deleteItem(EngravingItem* el)
         // If after setting the MeasureNumberMode to AUTO, the measure number still shows,
         // We need to force the measure to hide its measure number.
         case MeasureNumberMode::SHOW:
-            if (mea->showsMeasureNumberInAutoMode()) {
+            if (mea->showMeasureNumberInAutoMode()) {
                 mea->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::HIDE));
             } else {
                 mea->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::AUTO));
