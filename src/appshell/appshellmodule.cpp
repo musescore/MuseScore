@@ -188,12 +188,15 @@ void AppShellModule::onInit(const IApplication::RunMode& mode)
 {
     m_appShellConfiguration->init();
     m_applicationActionController->init();
-    m_applicationUiActions->init();
     m_sessionsManager->init();
 
+    if (mode == IApplication::RunMode::GuiApp) {
+        m_applicationUiActions->init();
+
 #if QT_VERSION < QT_VERSION_CHECK(6, 9, 0) && defined(Q_OS_MAC)
-    m_scrollingHook->init();
+        m_scrollingHook->init();
 #endif
+    }
 }
 
 void AppShellModule::onAllInited(const IApplication::RunMode&)
