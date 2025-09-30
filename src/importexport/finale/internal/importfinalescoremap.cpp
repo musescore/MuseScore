@@ -22,6 +22,7 @@
 #include "internal/importfinaleparser.h"
 #include "internal/importfinalelogger.h"
 #include "internal/finaletypesconv.h"
+#include "internal/text/finaletextconv.h"
 
 #include <vector>
 #include <exception>
@@ -37,6 +38,7 @@
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/instrchange.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/key.h"
 #include "engraving/dom/keysig.h"
@@ -61,6 +63,90 @@ using namespace musx::dom;
 using namespace mu::iex::finale;
 
 namespace mu::iex::finale {
+
+static NoteHeadGroup consolidateDrumNoteHeads(DrumInstrument di)
+{
+    for (int direction = 1; direction >= 0; --direction) {
+        for (NoteHeadGroup group = NoteHeadGroup::HEAD_NORMAL; group < NoteHeadGroup::HEAD_GROUPS; group = NoteHeadGroup(int(group) + 1)) {
+            if (engraving::Note::noteHead(direction, group, NoteHeadType::HEAD_QUARTER) == di.noteheads[static_cast<int>(NoteHeadType::HEAD_QUARTER)]) {
+                for (NoteHeadType type = NoteHeadType::HEAD_WHOLE; type < NoteHeadType::HEAD_TYPES; type = NoteHeadType(int(type) + 1)) {
+                    if (engraving::Note::noteHead(direction, group, type) != di.noteheads[static_cast<int>(type)]) {
+                        return NoteHeadGroup::HEAD_CUSTOM;
+                    }
+                }
+                return group;
+            }
+        }
+    }
+    return NoteHeadGroup::HEAD_CUSTOM;
+}
+
+static Drumset* createDrumset(const MusxInstanceList<others::PercussionNoteInfo>& percNoteInfoList, const MusxInstance<others::Staff>& musxStaff)
+{
+    Drumset* drumset = new Drumset();
+    Drumset* defaultDrumset = mu::engraving::smDrumset;
+    int numberOfColumns = 8;
+
+    for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
+        drumset->drum(i) = DrumInstrument(String(), NoteHeadGroup::HEAD_INVALID, 0, DirectionV::AUTO);
+    }
+
+    for (size_t i = 0; i < percNoteInfoList.size(); ++i) {
+        const auto& percNoteInfo = percNoteInfoList.at(i);
+        int midiPitch = percNoteInfo->getNoteType().generalMidi;
+        const bool hasDefault = defaultDrumset->isValid(midiPitch);
+        if (!pitchIsValid(midiPitch)) {
+            /// @todo Finale percussion doesn't seem well mapped to midi, so lots of notes are currently ignored.
+            continue;
+        }
+        drumset->drum(midiPitch) = DrumInstrument(
+            String(percNoteInfo->getNoteType().rawName),
+            NoteHeadGroup::HEAD_CUSTOM,
+            -(percNoteInfo->calcStaffReferencePosition() - musxStaff->calcToplinePosition()), // staff line
+            hasDefault ? defaultDrumset->stemDirection(midiPitch) : DirectionV::AUTO,
+            int(i) / numberOfColumns, // row
+            int(i) % numberOfColumns, // column
+            hasDefault ? defaultDrumset->voice(midiPitch) : 0,
+            hasDefault ? defaultDrumset->shortcut(midiPitch) : String()
+        );
+
+        const MusxInstance<FontInfo> percFont = options::FontOptions::getFontInfo(percNoteInfo->getDocument(), options::FontOptions::FontType::Percussion);
+        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_QUARTER)] = FinaleTextConv::symIdFromFinaleChar(percNoteInfo->closedNotehead, percFont);
+        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_HALF)] = FinaleTextConv::symIdFromFinaleChar(percNoteInfo->halfNotehead, percFont);
+        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_WHOLE)] = FinaleTextConv::symIdFromFinaleChar(percNoteInfo->wholeNotehead, percFont);
+        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_BREVIS)] = FinaleTextConv::symIdFromFinaleChar(percNoteInfo->dwholeNotehead, percFont);
+
+        drumset->drum(midiPitch).notehead = consolidateDrumNoteHeads(drumset->drum(midiPitch));
+
+        // MuseScore requires a note name
+        if (drumset->drum(midiPitch).name.empty()) {
+            drumset->drum(midiPitch).name = String(u"Percussion note");
+        }
+    }
+
+    return drumset;
+}
+
+static void loadInstrument(const MusxInstance<others::Staff> musxStaff, Instrument* instrument)
+{
+    // Initialise drumset
+    if (musxStaff->percussionMapId.has_value()) {
+        const MusxInstanceList<others::PercussionNoteInfo> percNoteInfoList = musxStaff->getDocument()->getOthers()->getArray<others::PercussionNoteInfo>(musxStaff->getSourcePartId(), musxStaff->percussionMapId.value());
+        instrument->setUseDrumset(true);
+        instrument->setDrumset(createDrumset(percNoteInfoList, musxStaff));
+    } else {
+        instrument->setUseDrumset(false);
+    }
+
+    // Transposition
+    // note that transposition in MuseScore is instrument-based,
+    // so it can change throughout the score but not differ between staves of the same part
+    /// @todo convert diatonic transposition
+    if (musxStaff->transposition && musxStaff->transposition->chromatic) {
+        const auto& i = *musxStaff->transposition->chromatic;
+        instrument->setTranspose(Interval(i.diatonic, step2pitch(i.diatonic) + i.alteration));
+    }
+}
 
 Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> musxStaff, const InstrumentTemplate* it)
 {
@@ -93,6 +179,9 @@ Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> m
     }
     /// @todo Need to intialize the staff type from presets?
 
+    // Drumset and transposition
+    loadInstrument(musxStaff, part->instrument());
+
     // barline vertical offsets relative to staff
     auto calcBarlineOffsetHalfSpaces = [](Evpu offset) -> int {
         // Finale and MuseScore use opposite signs for up/down
@@ -104,14 +193,6 @@ Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> m
     // hide when empty
     if (musxStaff->noOptimize) {
         s->setHideWhenEmpty(AutoOnOff::OFF);
-    }
-
-    // Transposition
-    // note that transposition in MuseScore is intrument-based,
-    // so it can change throughout the score but not differ between staves of the same part
-    if (musxStaff->transposition && musxStaff->transposition->chromatic) {
-        const auto& i = *musxStaff->transposition->chromatic;
-        part->instrument()->setTranspose(Interval(i.diatonic, step2pitch(i.diatonic) + i.alteration));
     }
 
     // clefs
@@ -449,16 +530,13 @@ Clef* FinaleParser::createClef(Score* score, const MusxInstance<musx::dom::other
     if (entryClefType == ClefType::INVALID) {
         return nullptr;
     }
-    if (clefDef->isBlank()) {
-        visible = false;
-    }
     Clef* clef = Factory::createClef(score->dummy()->segment());
     clef->setTrack(staffIdx * VOICES);
     clef->setConcertClef(entryClefType);
     clef->setTransposingClef(entryClefType);
     // clef->setShowCourtesy();
     // clef->setForInstrumentChange();
-    clef->setVisible(visible);
+    clef->setVisible(visible && !clefDef->isBlank());
     clef->setGenerated(false);
     const bool isHeader = !afterBarline && !measure->prevMeasure() && musxEduPos == 0;
     clef->setIsHeader(isHeader);
@@ -642,6 +720,7 @@ void FinaleParser::importStaffItems()
                 }
             }
         }
+        std::string prevUuid;
         for (MeasCmper measNum : styleChanges) {
             Fraction currTick = muse::value(m_meas2Tick, measNum, Fraction(-1, 1));
             Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
@@ -679,6 +758,21 @@ void FinaleParser::importStaffItems()
                 measure->add(staffChange);
             } else if (createdStaffType) {
                 delete staffType;
+            }
+
+            // Instrument changes
+            if (isValidUuid(currStaff->instUuid)) {
+                if (currStaff->instUuid != prevUuid && tick > Fraction(0, 1)) {
+                    Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+                    InstrumentChange* c = Factory::createInstrumentChange(segment, Instrument::fromTemplate(searchTemplate(instrTemplateIdfromUuid(currStaff->instUuid))));
+                    loadInstrument(currStaff, c->instrument());
+                    c->setTrack(staff2track(staffIdx));
+                    const String newInstrChangeText = muse::mtrc("engraving", "To %1").arg(c->instrument()->trackName());
+                    c->setXmlText(TextBase::plainToXmlText(newInstrChangeText));
+                    c->setVisible(false);
+                    segment->add(c);
+                }
+                prevUuid = currStaff->instUuid;
             }
         }
         // per measure calculations
@@ -802,6 +896,7 @@ void FinaleParser::importStaffItems()
                     logger()->logWarning(String(u"Microtonal key signatures not supported."), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 }
                 if (keySigEvent && keySigEvent != currKeySigEvent) {
+                    /// @todo this creates a visible keysig even on percussion staves, but those might still need the event.
                     Segment* seg = measure->getSegmentR(SegmentType::KeySig, Fraction(0, 1));
                     KeySig* ks = Factory::createKeySig(seg);
                     ks->setKeySigEvent(keySigEvent.value());

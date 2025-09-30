@@ -34,6 +34,7 @@
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/beam.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/drumset.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/hook.h"
 #include "engraving/dom/laissezvib.h"
@@ -340,22 +341,22 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         for (size_t i = 0; i < currentEntry->notes.size(); ++i) {
             NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, i);
 
-            // calculate pitch & accidentals
-            NoteVal nval = notePropertiesToNoteVal(noteInfoPtr.calcNotePropertiesConcert(), baseStaff->concertKey(segment->tick()));
-            NoteVal nvalTransposed = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties(), baseStaff->key(segment->tick()));
-            nval.tpc2 = nvalTransposed.tpc2;
-            AccidentalVal accVal = tpc2alter(nval.tpc1);
-
             engraving::Note* note = Factory::createNote(chord);
             note->setParent(chord);
             note->setTrack(curTrackIdx);
-            note->setNval(nval);
             note->setVisible(!currentEntry->isHidden);
 
-            // Add accidental if needed
-            /// @todo Do we really need to explicitly add the accidental object if it's not frozen?
-            /// RGP: if it has been manually moved, it looks like it.Otherwise perhaps not.
             if (targetStaff->isPitchedStaff(segment->tick())) {
+                // calculate pitch & accidentals
+                NoteVal nval = notePropertiesToNoteVal(noteInfoPtr.calcNotePropertiesConcert(), baseStaff->concertKey(segment->tick()));
+                NoteVal nvalTransposed = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties(), baseStaff->key(segment->tick()));
+                nval.tpc2 = nvalTransposed.tpc2;
+                AccidentalVal accVal = tpc2alter(nval.tpc1);
+                note->setNval(nval);
+
+                // Add accidental if needed
+                /// @todo Do we really need to explicitly add the accidental object if it's not frozen?
+                /// RGP: if it has been manually moved, it looks like it.Otherwise perhaps not.
                 bool forceAccidental = noteInfoPtr->freezeAcci;
                 if (!forceAccidental) {
                     int line = noteValToLine(nval, targetStaff, segment->tick());
@@ -394,6 +395,16 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     }
                     note->add(a);
                 }
+            } else if (targetStaff->isDrumStaff(segment->tick())) {
+                NoteVal nval;
+                const Drumset* ds = targetStaff->part()->instrument()->drumset();
+                nval.pitch = noteInfoPtr.calcPercussionNoteInfo()->getNoteType().generalMidi;
+                if (!ds->isValid(nval.pitch)) {
+                    delete note;
+                    continue;
+                }
+                nval.headGroup = ds->noteHead(nval.pitch);
+                note->setNval(nval);
             }
 
             if (currentEntry->noteDetail) {
@@ -476,7 +487,13 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             }
         }
         // chord->setIsChordPlayable(!currentEntry->noPlayback); //this is an undo method
-        cr = toChordRest(chord);
+        if (!chord->notes().empty()) {
+            cr = toChordRest(chord);
+        } else {
+            delete chord;
+            cr = toChordRest(Factory::createRest(segment, d));
+            toRest(cr)->setVisible(false);
+        }
     } else {
         const MusxInstance<others::Staff> musxStaff = entryInfo.createCurrentStaff();
         if (entryInfo.calcIsFullMeasureRest()) {
