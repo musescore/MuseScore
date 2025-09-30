@@ -421,19 +421,19 @@ void ExportDialogModel::setPdfTransparentBackground(const bool& transparent)
     emit pdfTransparentBackgroundChanged(transparent);
 }
 
-bool ExportDialogModel::pdfEmbeddedMetadata() const
+bool ExportDialogModel::pdfEmbedMetadata() const
 {
     return imageExportConfiguration()->exportPdfWithEmbeddedMetadata();
 }
 
-void ExportDialogModel::setPdfEmbeddedMetadata(const bool& embedMetadata)
+void ExportDialogModel::setPdfEmbedMetadata(const bool& embedMetadata)
 {
-    if (embedMetadata == pdfEmbeddedMetadata()) {
+    if (embedMetadata == pdfEmbedMetadata()) {
         return;
     }
 
     imageExportConfiguration()->setExportPdfWithEmbeddedMetadata(embedMetadata);
-    emit pdfEmbeddedMetadataChanged(embedMetadata);
+    emit pdfEmbedMetadataChanged(embedMetadata);
 }
 
 int ExportDialogModel::pngResolution() const

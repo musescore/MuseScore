@@ -167,11 +167,6 @@ ProjectMeta PdfWriter::getProjectMetadata(INotationPtr notation) const
 // Generate XMP metadata for PDF embedding with project information
 QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
 {
-    // XML escaping helper for metadata fields using Qt's built-in method
-    auto escapeXml = [](const QString& text) -> QString {
-        return text.toHtmlEscaped();
-    };
-
     QString xmpTemplate
         =
             R"(<?xml version="1.0" encoding="UTF-8"?>
@@ -184,11 +179,11 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
         xmlns:pdfx="http://ns.adobe.com/pdfx/1.3/">
       <dc:title>%1</dc:title>
       <dc:creator>%2</dc:creator>
-      <pdf:Author>%6</pdf:Author>
       <dc:subject>%3</dc:subject>
       <pdf:Copyright>%4</pdf:Copyright>
       <xmp:CreateDate>%5</xmp:CreateDate>
       <xmp:ModifyDate>%5</xmp:ModifyDate>
+      <pdf:Author>%6</pdf:Author>
       <pdfx:Composer>%7</pdfx:Composer>
       <pdfx:Arranger>%8</pdfx:Arranger>
       <pdfx:Translator>%9</pdfx:Translator>
@@ -202,16 +197,16 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
     QString currentDateTime = QDateTime::currentDateTime().toString(Qt::ISODate);
 
     // Populate XMP template with project metadata
-    QString xmpData = xmpTemplate.arg(escapeXml(meta.title),
-                                      escapeXml(creator),
-                                      escapeXml(meta.subtitle),
-                                      escapeXml(meta.copyright),
+    QString xmpData = xmpTemplate.arg(meta.title.toHtmlEscaped(),
+                                      creator.toHtmlEscaped(),
+                                      meta.subtitle.toHtmlEscaped(),
+                                      meta.copyright.toHtmlEscaped(),
                                       currentDateTime,
-                                      escapeXml(author),
-                                      escapeXml(meta.composer),
-                                      escapeXml(meta.arranger),
-                                      escapeXml(meta.translator),
-                                      escapeXml(meta.lyricist));
+                                      author.toHtmlEscaped(),
+                                      meta.composer.toHtmlEscaped(),
+                                      meta.arranger.toHtmlEscaped(),
+                                      meta.translator.toHtmlEscaped(),
+                                      meta.lyricist.toHtmlEscaped());
 
     return xmpData.toUtf8();
 }
