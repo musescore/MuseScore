@@ -1047,19 +1047,6 @@ muse::ByteArray Selection::mimeData() const
     return a;
 }
 
-static EngravingItem* firstElementInTrack(Segment* startSeg, Segment* endSeg, track_idx_t track)
-{
-    for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
-        if (!seg->enabled()) {
-            continue;
-        }
-        if (EngravingItem* e = seg->element(track)) {
-            return e;
-        }
-    }
-    return nullptr;
-}
-
 muse::ByteArray Selection::staffMimeData() const
 {
     Buffer buffer;
@@ -1098,16 +1085,6 @@ muse::ByteArray Selection::staffMimeData() const
         if (interval.diatonic) {
             xml.tag("transposeDiatonic", interval.diatonic);
         }
-        xml.startElement("voiceOffset");
-        for (voice_idx_t voice = 0; voice < VOICES; voice++) {
-            const EngravingItem* first = firstElementInTrack(seg1, seg2, startTrack + voice);
-            if (first && filter.canSelectVoice(voice)) {
-                const Fraction offset = first->tick() - tickStart();
-                xml.tag("voice", { { "id", voice } }, offset.ticks());
-            }
-        }
-        xml.endElement();     // </voiceOffset>
-
         rw::RWRegister::writer(m_score->iocContext())->writeSegments(xml, &filter, startTrack, endTrack, seg1, seg2, false, false, curTick);
         xml.endElement();
     }
