@@ -382,6 +382,10 @@ static std::unordered_map<const Note*, int> getGraceNoteBendDurations(const Note
     const Note* bendStartNote = nullptr;
     std::unordered_set<const Note*> currentNotes;
 
+    if (note->bendFor() && note->bendFor()->type() == GuitarBendType::SLIGHT_BEND) {
+        return {};
+    }
+
     while (note->tieFor()) {
         const Tie* tieFor = note->tieFor();
         IF_ASSERT_FAILED(tieFor->endNote()) {
