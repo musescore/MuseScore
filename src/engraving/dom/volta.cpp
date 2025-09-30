@@ -75,8 +75,8 @@ static const ElementStyle voltaStyle {
 VoltaSegment::VoltaSegment(Volta* sp, System* parent)
     : TextLineBaseSegment(ElementType::VOLTA_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
-    m_text->setTextStyleType(TextStyleType::VOLTA);
-    m_endText->setTextStyleType(TextStyleType::VOLTA);
+    m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
+    m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
 //---------------------------------------------------------
@@ -261,6 +261,9 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
 
     case Pid::PLACEMENT:
         return PlacementV::ABOVE;
+
+    case Pid::TEXT_STYLE:
+        return TextStyleType::VOLTA;
 
     default:
         return TextLineBase::propertyDefault(propertyId);

@@ -68,8 +68,8 @@ const String Pedal::STAR_SYMBOL = u"<sym>keyboardPedalUp</sym>";
 PedalSegment::PedalSegment(Pedal* sp, System* parent)
     : TextLineBaseSegment(ElementType::PEDAL_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    m_text->setTextStyleType(TextStyleType::PEDAL);
-    m_endText->setTextStyleType(TextStyleType::PEDAL);
+    m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
+    m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
 //---------------------------------------------------------
@@ -175,6 +175,9 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
 
     case Pid::PLACEMENT:
         return style().styleV(Sid::pedalPlacement);
+
+    case Pid::TEXT_STYLE:
+        return TextStyleType::PEDAL;
 
     default:
         return TextLineBase::propertyDefault(propertyId);

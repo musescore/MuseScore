@@ -79,8 +79,8 @@ static const ElementStyle hairpinStyle {
 HairpinSegment::HairpinSegment(Hairpin* sp, System* parent)
     : TextLineBaseSegment(ElementType::HAIRPIN_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    m_text->setTextStyleType(TextStyleType::HAIRPIN);
-    m_endText->setTextStyleType(TextStyleType::HAIRPIN);
+    m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
+    m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
 bool HairpinSegment::acceptDrop(EditData& data) const
@@ -760,6 +760,9 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
         return true;
     case Pid::SNAP_AFTER:
         return true;
+
+    case Pid::TEXT_STYLE:
+        return TextStyleType::HAIRPIN;
 
     default:
         return TextLineBase::propertyDefault(id);

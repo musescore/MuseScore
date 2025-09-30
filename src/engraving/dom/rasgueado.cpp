@@ -58,8 +58,8 @@ static const ElementStyle rasgueadoStyle {
 RasgueadoSegment::RasgueadoSegment(Rasgueado* sp, System* parent)
     : TextLineBaseSegment(ElementType::RASGUEADO_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    m_text->setTextStyleType(TextStyleType::LET_RING);
-    m_endText->setTextStyleType(TextStyleType::LET_RING);
+    m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
+    m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
 //---------------------------------------------------------
@@ -135,6 +135,9 @@ PropertyValue Rasgueado::propertyDefault(Pid propertyId) const
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
         return TextPlace::AUTO;
+
+    case Pid::TEXT_STYLE:
+        return TextStyleType::LET_RING;
 
     default:
         return TextLineBase::propertyDefault(propertyId);

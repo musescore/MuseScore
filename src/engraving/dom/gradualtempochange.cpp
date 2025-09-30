@@ -233,6 +233,9 @@ PropertyValue GradualTempoChange::propertyDefault(Pid propertyId) const
     case Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK:
         return true;
 
+    case Pid::TEXT_STYLE:
+        return TextStyleType::TEMPO_CHANGE;
+
     default:
         return TextLineBase::propertyDefault(propertyId);
     }
@@ -358,8 +361,8 @@ GradualTempoChangeSegment::GradualTempoChangeSegment(GradualTempoChange* annotat
                           ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     initElementStyle(&tempoSegmentStyle);
-    m_text->setTextStyleType(TextStyleType::TEMPO_CHANGE);
-    m_endText->setTextStyleType(TextStyleType::TEMPO_CHANGE);
+    m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
+    m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
 GradualTempoChangeSegment* GradualTempoChangeSegment::clone() const
