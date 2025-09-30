@@ -197,8 +197,8 @@ public:
 
     void createStaves(staff_idx_t);
 
-    MeasureNumberMode measureNumberMode() const { return m_noMode; }
-    void setMeasureNumberMode(MeasureNumberMode v) { m_noMode = v; }
+    MeasureNumberMode measureNumberMode() const { return m_measureNumberMode; }
+    void setMeasureNumberMode(MeasureNumberMode v) { m_measureNumberMode = v; }
 
     Fraction timesig() const { return m_timesig; }
     void setTimesig(const Fraction& f) { m_timesig = f; }
@@ -225,8 +225,9 @@ public:
     Fraction anacrusisOffset() const;
     Fraction maxTicks() const;
 
-    bool showsMeasureNumber();
-    bool showsMeasureNumberInAutoMode();
+    bool showMeasureNumber();
+    bool showMeasureNumberInAutoMode();
+    bool showMeasureNumberOnStaff(staff_idx_t staffIdx);
 
     Chord* findChord(Fraction tick, track_idx_t track) const;
     ChordRest* findChordRest(Fraction tick, track_idx_t track) const;
@@ -407,7 +408,7 @@ private:
 
     int m_repeatCount = 0;      // end repeat marker and repeat count
 
-    MeasureNumberMode m_noMode = MeasureNumberMode::AUTO;
+    MeasureNumberMode m_measureNumberMode = MeasureNumberMode::AUTO;
     bool m_breakMultiMeasureRest = false;
 };
 } // namespace mu::engraving

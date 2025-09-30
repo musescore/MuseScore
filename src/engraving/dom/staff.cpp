@@ -239,8 +239,7 @@ bool Staff::shouldShowMeasureNumbers() const
     case MeasureNumberPlacement::ON_SYSTEM_OBJECT_STAVES:
     {
         bool isTopStave = score()->staves().front() == this;
-        bool isSystemObjectStaff = muse::contains(score()->systemObjectStaves(), const_cast<Staff*>(this));
-        return (isTopStave && m_showMeasureNumbers != AutoOnOff::OFF) || (isSystemObjectStaff && m_showMeasureNumbers == AutoOnOff::ON);
+        return (isTopStave && m_showMeasureNumbers != AutoOnOff::OFF) || (isSystemObjectStaff() && m_showMeasureNumbers == AutoOnOff::ON);
     }
     case MeasureNumberPlacement::ON_ALL_STAVES:
         return show();
