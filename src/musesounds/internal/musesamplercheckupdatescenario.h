@@ -27,7 +27,6 @@
 #include "async/asyncable.h"
 
 #include "imusesamplercheckupdateservice.h"
-#include "imusesoundsconfiguration.h"
 #include "global/iinteractive.h"
 #include "global/iprocess.h"
 #include "global/iglobalconfiguration.h"
@@ -38,7 +37,6 @@ namespace mu::musesounds {
 class MuseSamplerCheckUpdateScenario : public IMuseSamplerCheckUpdateScenario, public muse::Injectable, public muse::async::Asyncable
 {
     Inject<IMuseSamplerCheckUpdateService> service = { this };
-    Inject<IMuseSoundsConfiguration> configuration = { this };
     Inject<muse::IInteractive> interactive = { this };
     Inject<muse::IProcess> process = { this };
     Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
