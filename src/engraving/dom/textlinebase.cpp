@@ -183,6 +183,10 @@ void TextLineBase::reset()
 
 EngravingObject* TextLineBaseSegment::propertyDelegate(Pid pid) const
 {
+    if (pid == Pid::TEXT_STYLE) {
+        return spanner();
+    }
+
     for (Pid id : TextLineBasePropertyId) {
         if (pid == id) {
             return spanner();
@@ -390,6 +394,13 @@ mu::engraving::PropertyValue TextLineBase::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::GAP_BETWEEN_TEXT_AND_LINE:
         return Spatium(0.5);
+    case Pid::BEGIN_TEXT_PLACE:
+    case Pid::BEGIN_TEXT_ALIGN:
+    case Pid::BEGIN_TEXT_OFFSET:
+    case Pid::BEGIN_FONT_FACE:
+    case Pid::BEGIN_FONT_SIZE:
+    case Pid::BEGIN_FONT_STYLE:
+        return style().styleV(getPropertyStyle(propertyId));
     default:
         return SLine::propertyDefault(propertyId);
     }

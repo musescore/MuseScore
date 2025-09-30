@@ -69,10 +69,7 @@ EngravingObject* Text::propertyDelegate(Pid id) const
     }
 
     switch (id) {
-    case Pid::BEGIN_FONT_FACE:
-    case Pid::BEGIN_FONT_SIZE:
-    case Pid::BEGIN_FONT_STYLE:
-    case Pid::BEGIN_TEXT_ALIGN:
+    case Pid::TEXT_STYLE:
         return parent();
     default:
         return nullptr;
@@ -85,6 +82,10 @@ EngravingObject* Text::propertyDelegate(Pid id) const
 
 engraving::PropertyValue Text::propertyDefault(Pid id) const
 {
+    if (EngravingObject* item = propertyDelegate(id)) {
+        return item->propertyDefault(id);
+    }
+
     switch (id) {
     case Pid::TEXT_STYLE:
         return TextStyleType::DEFAULT;

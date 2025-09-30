@@ -458,6 +458,9 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
 bool TRead::readProperty(EngravingItem* item, const AsciiStringView& tag, XmlReader& xml, ReadContext& ctx, Pid pid)
 {
     if (tag == propertyName(pid)) {
+        if (pid == Pid::BEGIN_TEXT_OFFSET) {
+            LOGI() << "ofs";
+        }
         readProperty(item, xml, ctx, pid);
         return true;
     }
