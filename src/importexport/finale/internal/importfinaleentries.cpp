@@ -445,10 +445,24 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             chord->setStemDirection(dir);
         }
         // Only create explicitly if properties need changing
-        if (currentEntry->isHidden) {
+        if (chord->shouldHaveStem() || d.hasStem()) {
             Stem* stem = Factory::createStem(chord);
-            stem->setVisible(false);
+            stem->setVisible(!currentEntry->isHidden);
             chord->add(stem);
+            /// @todo We can't use CustomStem directly, we need to use CustomUpStem or CustomDownStem, which depends on (beam) layout
+            /// @todo StemAlterations and StemAlterationsUnderBeam
+            /// @todo is this where stemSlash is determined?
+            /* if (currentEntry->stemDetail) {
+                // Stem visibility and offset
+                MusxInstanceList<details::CustomStem> customStems = m_doc->getDetails()->getArray<details::CustomStem>(m_currentMusxPartId); // RGP: pass in the entry number as 2nd param here
+                for (const MusxInstance<details::CustomStem>& customStem : customStems) {
+                    chord->stem()->setVisible(customStem->calcIsHiddenStem());
+                    if (customStem->hOffset != 0 || customStem->vOffset != 0) {
+                        chord->stem()->setOffset(evpuToPointF(customStem->hOffset, -customStem->vOffset));
+                        chord->stem()->setAutoPlace(false); // make more nuanced?
+                    }
+                }
+            } */
         }
         if (d.hooks() > 0 && entryInfo.calcUnbeamed()) {
             // Notes with flags are not accounted for in beaming code,
@@ -461,21 +475,6 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                 chord->add(hook);
             }
         }
-        /// @todo We can't use CustomStem directly, we need to use CustomUpStem or CustomDownStem, which depends on (beam) layout
-        /// @todo StemAlterations and StemAlterationsUnderBeam
-        /// @todo is this where stemSlash is determined?
-        /// @todo does this chord have a stem already?
-        /* if (chord->stem() && currentEntry->stemDetail) {
-            // Stem visibility and offset
-            MusxInstanceList<details::CustomStem> customStems = m_doc->getDetails()->getArray<details::CustomStem>(m_currentMusxPartId); // RGP: pass in the entry number as 2nd param here
-            for (const MusxInstance<details::CustomStem>& customStem : customStems) {
-                chord->stem()->setVisible(customStem->calcIsHiddenStem());
-                if (customStem->hOffset != 0 || customStem->vOffset != 0) {
-                    chord->stem()->setOffset(evpuToPointF(customStem->hOffset, -customStem->vOffset));
-                    chord->stem()->setAutoPlace(false); // make more nuanced?
-                }
-            }
-        } */
         // chord->setIsChordPlayable(!currentEntry->noPlayback); //this is an undo method
         cr = toChordRest(chord);
     } else {
@@ -509,7 +508,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     cr->setDurationType(d);
     cr->setStaffMove(crossStaffMove);
     cr->setTrack(curTrackIdx);
-    if (cr->durationType().type() == DurationType::V_MEASURE) {
+    if (cr->durationType().isMeasure()) {
         cr->setTicks(measure->timesig() * baseStaff->timeStretch(measure->tick())); // baseStaff because that's the staff the cr 'belongs to'
     } else {
         cr->setTicks(cr->actualDurationType().fraction());
@@ -530,9 +529,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         logger()->logInfo(String(u"Adding entry of duration %2 at tick %1").arg(entryStartTick.toString(), cr->durationTypeTicks().toString()));
     }
 
-    /// Currently we only generate dots if they have modified properties.
-    /// Is this correct? Probably. -RGP: I think so too.
     // Dot offset
+    /// Only generate dots if they have modified properties, otherwise created automatically on layout
     /// @todo MuseScore's dot placement is smarter than Finale's, ideally we should account for the difference in effective positioning.
     if (currentEntry->dotTieAlt) {
         MusxInstanceList<details::DotAlterations> dotAlterations = m_doc->getDetails()->getArray<details::DotAlterations>(m_currentMusxPartId, currentEntryNumber);
