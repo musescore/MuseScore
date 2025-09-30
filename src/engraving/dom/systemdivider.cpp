@@ -27,8 +27,6 @@
 #include "score.h"
 #include "system.h"
 
-#include "log.h"
-
 using namespace mu;
 using namespace mu::engraving;
 
@@ -38,7 +36,7 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 SystemDivider::SystemDivider(System* parent)
-    : Symbol(ElementType::SYSTEM_DIVIDER, parent, ElementFlag::SYSTEM | ElementFlag::NOT_SELECTABLE)
+    : Symbol(ElementType::SYSTEM_DIVIDER, parent, ElementFlag::SYSTEM | ElementFlag::MOVABLE)
 {
     // default value, but not valid until setDividerType()
     m_dividerType = SystemDivider::Type::LEFT;
@@ -75,6 +73,27 @@ void SystemDivider::setDividerType(SystemDivider::Type v)
 void SystemDivider::styleChanged()
 {
     setDividerType(m_dividerType);
+}
+
+std::vector<LineF> SystemDivider::dragAnchorLines() const
+{
+    std::vector<LineF> result;
+
+    const System* system = toSystem(parentItem());
+    IF_ASSERT_FAILED(system) {
+        return result;
+    }
+
+    RectF systemBBox = system->canvasBoundingRect();
+    PointF p1 =  PointF(m_dividerType == SystemDivider::Type::LEFT
+                        ? systemBBox.left() + system->leftMargin() : systemBBox.right(), systemBBox.bottom());
+
+    RectF thisBBox = canvasBoundingRect();
+    PointF p2 = 0.5 * (thisBBox.topLeft() + thisBBox.bottomRight());
+
+    result.push_back(LineF(p1, p2));
+
+    return result;
 }
 
 //---------------------------------------------------------
