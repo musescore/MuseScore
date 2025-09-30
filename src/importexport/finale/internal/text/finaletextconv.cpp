@@ -30,13 +30,14 @@
 
 using namespace mu;
 using namespace muse;
+using namespace musx::dom;
 using namespace mu::engraving;
 namespace mu::iex::finale {
 
 /// @todo
 // MaestroTimes: import 194 as 2, 205 as 3, 202/203/193 as 2, 216 as 217 (no suitable smufl equivalent)"
 
-static std::string calcGlyphName(char32_t c, const std::shared_ptr<musx::dom::FontInfo>& font)
+static std::string calcGlyphName(char32_t c, const MusxInstance<FontInfo>& font)
 {
     if (font->calcIsSMuFL()) { /// @todo use MuseScore engraver-fonts list for this? For `calcIsSMuFL` to return true, the font must be an installed SMuFL font on the user's machine
         if (const std::string_view* glyphName = smufl_mapping::getGlyphName(c)) {
@@ -50,7 +51,7 @@ static std::string calcGlyphName(char32_t c, const std::shared_ptr<musx::dom::Fo
     return {};
 }
 
-engraving::SymId symIdFromFinaleChar(char32_t c, const std::shared_ptr<musx::dom::FontInfo>& font, engraving::SymId def)
+engraving::SymId FinaleTextConv::symIdFromFinaleChar(char32_t c, const MusxInstance<FontInfo>& font, engraving::SymId def)
 {
     const std::string glyphName = calcGlyphName(c, font);
     if (!glyphName.empty()) {
@@ -59,7 +60,7 @@ engraving::SymId symIdFromFinaleChar(char32_t c, const std::shared_ptr<musx::dom
     return def;
 }
 
-std::optional<String> FinaleTextConv::symIdInsertFromFinaleChar(char32_t c, const std::shared_ptr<musx::dom::FontInfo>& font)
+std::optional<String> FinaleTextConv::symIdInsertFromFinaleChar(char32_t c, const MusxInstance<FontInfo>& font)
 {
     const std::string glyphName = calcGlyphName(c, font);
     if (!glyphName.empty() && SymNames::symIdByName(glyphName) != SymId::noSym) {
@@ -68,7 +69,7 @@ std::optional<String> FinaleTextConv::symIdInsertFromFinaleChar(char32_t c, cons
     return std::nullopt;
 }
 
-std::optional<String> FinaleTextConv::symIdInsertsFromStdString(const std::string& text, const std::shared_ptr<musx::dom::FontInfo>& font)
+std::optional<String> FinaleTextConv::symIdInsertsFromStdString(const std::string& text, const MusxInstance<FontInfo>& font)
 {
     std::u32string u32Text = String::fromStdString(text).toStdU32String();
     String result;
@@ -82,7 +83,7 @@ std::optional<String> FinaleTextConv::symIdInsertsFromStdString(const std::strin
     return result;
 }
 
-std::optional<String> FinaleTextConv::smuflStringFromFinaleChar(char32_t c, const std::shared_ptr<musx::dom::FontInfo>& font)
+std::optional<String> FinaleTextConv::smuflStringFromFinaleChar(char32_t c, const MusxInstance<FontInfo>& font)
 {
     if (!font->calcIsSMuFL()) { /// @todo See note above about `calcIsSMuFL`
         if (const smufl_mapping::LegacyGlyphInfo* legacyGlyphInfo = smufl_mapping::getLegacyGlyphInfo(font->getName(), c)) {
