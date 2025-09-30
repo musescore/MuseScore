@@ -55,6 +55,8 @@ public:
 
     void styleChanged() override;
 
+    std::vector<LineF> dragAnchorLines() const override;
+
 private:
     Type m_dividerType = Type::LEFT;
 };
