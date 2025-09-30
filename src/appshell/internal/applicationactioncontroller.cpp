@@ -86,7 +86,7 @@ void ApplicationActionController::init()
 
 bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
 {
-    if ((event->type() == QEvent::Close && watched == mainWindow()->qWindow())
+    if ((event->type() == QEvent::Close && watched == qWindow())
         || event->type() == QEvent::Quit) {
         bool accepted = quit(false);
         event->setAccepted(accepted);
@@ -111,7 +111,7 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
         }
     }
 
-    if (watched == mainWindow()->qWindow()) {
+    if (watched == qWindow()) {
         if (event->type() == QEvent::DragEnter) {
             if (onDragEnterEvent(static_cast<QDragEnterEvent*>(event))) {
                 return true;
@@ -128,6 +128,11 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
     }
 
     return QObject::eventFilter(watched, event);
+}
+
+QWindow* ApplicationActionController::qWindow() const
+{
+    return mainWindow() ? mainWindow()->qWindow() : nullptr;
 }
 
 ApplicationActionController::DragTarget ApplicationActionController::dragTarget(const QUrl& url) const
