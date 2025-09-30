@@ -229,7 +229,7 @@ void FinaleParser::importSmartShapes()
         if (useNextCr && entryInfoPtr) {
             tick += musxFractionToFraction(entryInfoPtr.calcGlobalActualDuration());
         }
-        // TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, tick, staffIdx);
+        // TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, tick - mTick, staffIdx);
         // EditTimeTickAnchors::updateLayout(measure);
         EditTimeTickAnchors::updateAnchors(measure, staffIdx);
         logger()->logInfo(String(u"Created TimeTickAnchor"));
