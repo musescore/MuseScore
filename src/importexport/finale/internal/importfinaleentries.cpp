@@ -22,7 +22,7 @@
 #include "internal/importfinaleparser.h"
 #include "internal/importfinalelogger.h"
 #include "internal/finaletypesconv.h"
-#include "dom/sig.h"
+#include "internal/text/finaletextconv.h"
 
 #include <vector>
 #include <exception>
@@ -256,6 +256,31 @@ static Fraction findParentTickForGraceNote(EntryInfoPtr entryInfo, bool& insertA
     return Fraction(-1, 1);
 }
 
+static void setNoteHeadSymbol(engraving::Note* note, SymId noteHeadSym)
+{
+    // MuseScore doesn't allow custom symbols directly, so instead we try to find
+    // head group and head type settings that will produce the desired symbol on layout.
+    if (noteHeadSym == SymId::space || noteHeadSym == SymId::noSym) {
+        // Don't hide head for noSym, as that is the fallback value
+        if (noteHeadSym == SymId::space) {
+            note->setVisible(false);
+        }
+        return;
+    }
+
+    for (int direction = 1; direction >= 0; --direction) {
+        for (NoteHeadGroup group = NoteHeadGroup::HEAD_NORMAL; group < NoteHeadGroup::HEAD_GROUPS; group = NoteHeadGroup(int(group) + 1)) {
+            for (NoteHeadType type = NoteHeadType::HEAD_AUTO; type < NoteHeadType::HEAD_TYPES; type = NoteHeadType(int(type) + 1)) {
+                if (engraving::Note::noteHead(direction, group, type) == noteHeadSym) {
+                    note->setHeadGroup(group);
+                    note->setHeadType(type);
+                    return;
+                }
+            }
+        }
+    }
+}
+
 bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrackIdx, Measure* measure, bool graceNotes,
                                          std::vector<engraving::Note*>& notesWithUnmanagedTies,
                                          std::vector<ReadableTuplet>& tupletMap, std::unordered_map<Rest*, NoteInfoPtr>& fixedRests)
@@ -409,7 +434,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                         note->setSmall(true);
                     }
                     note->setOffset(evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0));
-                    /// @todo interpret notehead type from altNhead (and perhaps useOwnFont/customFont as well).
+                    const MusxInstance<FontInfo> noteFont = options::FontOptions::getFontInfo(m_doc, noteInfo->useOwnFont ? options::FontOptions::FontType::Noteheads : options::FontOptions::FontType::Music);
+                    setNoteHeadSymbol(note, FinaleTextConv::symIdFromFinaleChar(noteInfo->altNhead, noteFont));
                 }
             }
 
