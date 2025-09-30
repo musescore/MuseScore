@@ -202,17 +202,16 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
     QString currentDateTime = QDateTime::currentDateTime().toString(Qt::ISODate);
 
     // Populate XMP template with project metadata
-    QString xmpData = xmpTemplate
-                      .arg(escapeXml(meta.title))
-                      .arg(escapeXml(creator))
-                      .arg(escapeXml(meta.subtitle))
-                      .arg(escapeXml(meta.copyright))
-                      .arg(currentDateTime)
-                      .arg(escapeXml(author))
-                      .arg(escapeXml(meta.composer))
-                      .arg(escapeXml(meta.arranger))
-                      .arg(escapeXml(meta.translator))
-                      .arg(escapeXml(meta.lyricist));
+    QString xmpData = xmpTemplate.arg(escapeXml(meta.title),
+                                      escapeXml(creator),
+                                      escapeXml(meta.subtitle),
+                                      escapeXml(meta.copyright),
+                                      currentDateTime,
+                                      escapeXml(author),
+                                      escapeXml(meta.composer),
+                                      escapeXml(meta.arranger),
+                                      escapeXml(meta.translator),
+                                      escapeXml(meta.lyricist));
 
     return xmpData.toUtf8();
 }
