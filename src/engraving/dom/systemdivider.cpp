@@ -39,7 +39,7 @@ SystemDivider::SystemDivider(System* parent)
     : Symbol(ElementType::SYSTEM_DIVIDER, parent, ElementFlag::SYSTEM | ElementFlag::MOVABLE)
 {
     // default value, but not valid until setDividerType()
-    m_dividerType = SystemDivider::Type::LEFT;
+    m_dividerType = SystemDividerType::LEFT;
     m_sym = SymId::systemDivider;
 }
 
@@ -57,11 +57,11 @@ SystemDivider::SystemDivider(const SystemDivider& sd)
 //   setDividerType
 //---------------------------------------------------------
 
-void SystemDivider::setDividerType(SystemDivider::Type v)
+void SystemDivider::setDividerType(SystemDividerType v)
 {
     m_dividerType = v;
 
-    if (v == SystemDivider::Type::LEFT) {
+    if (v == SystemDividerType::LEFT) {
         setOffset(PointF(style().styleD(Sid::dividerLeftX), style().styleD(Sid::dividerLeftY)));
         setSym(SymNames::symIdByName(style().styleSt(Sid::dividerLeftSym)), score()->engravingFont());
     } else {
@@ -85,7 +85,7 @@ std::vector<LineF> SystemDivider::dragAnchorLines() const
     }
 
     RectF systemBBox = system->canvasBoundingRect();
-    PointF p1 =  PointF(m_dividerType == SystemDivider::Type::LEFT
+    PointF p1 =  PointF(m_dividerType == SystemDividerType::LEFT
                         ? systemBBox.left() + system->leftMargin() : systemBBox.right(), systemBBox.bottom());
 
     RectF thisBBox = canvasBoundingRect();

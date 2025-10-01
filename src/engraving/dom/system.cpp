@@ -133,8 +133,6 @@ System::~System()
     if (m_staffVisibilityIndicator) {
         delete m_staffVisibilityIndicator;
     }
-    delete m_systemDividerLeft;
-    delete m_systemDividerRight;
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -539,7 +537,7 @@ void System::add(EngravingItem* el)
     case ElementType::SYSTEM_DIVIDER:
     {
         SystemDivider* sd = toSystemDivider(el);
-        if (sd->dividerType() == SystemDivider::Type::LEFT) {
+        if (sd->dividerType() == SystemDividerType::LEFT) {
             m_systemDividerLeft = sd;
         } else {
             m_systemDividerRight = sd;
