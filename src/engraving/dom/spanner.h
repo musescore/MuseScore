@@ -99,7 +99,6 @@ public:
     using EngravingObject::undoChangeProperty;
 
     Sid getPropertyStyle(Pid id) const override;
-    PropertyFlags propertyFlags(Pid id) const override;
     void resetProperty(Pid id) override;
     void styleChanged() override;
     void reset() override;
