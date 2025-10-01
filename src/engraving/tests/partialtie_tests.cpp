@@ -24,10 +24,10 @@
 #include <gmock/gmock.h>
 #include <QMimeData>
 
-#include "dom/note.h"
-#include "dom/chord.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/note.h"
+#include "engraving/internal/qmimedataadapter.h"
 
-#include "internal/qmimedataadapter.h"
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 

@@ -22,13 +22,12 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/dom/system.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 #include "utils/testutils.h"
 
-#include "dom/system.h"
-
-using namespace mu;
 using namespace mu::engraving;
 
 static const String SYSTEM_LOCKS_DATA_DIR("system_locks_data/");

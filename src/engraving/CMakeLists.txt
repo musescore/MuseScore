@@ -333,23 +333,6 @@ else()
         )
 endif()
 
-set_source_files_properties( # For these files, Unity Build does not work
-    ${CMAKE_CURRENT_LIST_DIR}/dom/chordlist.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/compat/chordlist.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/compat/read114.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/compat/read206.cpp
-    PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
-    )
-
-set(MODULE_INCLUDE
-    # Many other modules include files from subfolders of this module;
-    # when included from another module, these files can't find their
-    # own includes, unless `engraving` is an include directory.
-    # Therefore, in the case of the `engraving` module, we include its
-    # root directory publicly, rather than privately as with most modules.
-    ${CMAKE_CURRENT_LIST_DIR}
-)
-
 set(MODULE_INCLUDE_PRIVATE
     ${PROJECT_SOURCE_DIR}/thirdparty/dtl
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure

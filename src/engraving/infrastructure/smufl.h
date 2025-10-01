@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SMUFL_H
-#define MU_ENGRAVING_SMUFL_H
+#pragma once
 
 #include <array>
 #include <map>
 
 #include "types/string.h"
-#include "types/symid.h"
+
+#include "../types/symid.h"
 
 namespace mu::engraving {
 class Smufl
@@ -56,5 +56,3 @@ private:
     static std::array<Code, size_t(SymId::lastSym) + 1> s_symIdCodes;
 };
 }
-
-#endif // MU_ENGRAVING_SMUFL_H

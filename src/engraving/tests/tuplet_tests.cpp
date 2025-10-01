@@ -22,18 +22,17 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/chord.h"
-#include "dom/factory.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/staff.h"
-#include "dom/timesig.h"
-#include "dom/tuplet.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/timesig.h"
+#include "engraving/dom/tuplet.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String TUPLET_DATA_DIR(u"tuplet_data/");

@@ -23,12 +23,10 @@
 #include "engravingitempreviewpainter.h"
 
 #include "engraving/dom/actionicon.h"
-#include "engraving/style/defaultstyle.h"
 #include "engraving/dom/masterscore.h"
-#include "engraving/dom/spanner.h"
 #include "engraving/dom/textlinebase.h"
-#include "engraving/dom/text.h"
-#include "rendering/paintoptions.h"
+#include "engraving/rendering/paintoptions.h"
+#include "engraving/style/defaultstyle.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;

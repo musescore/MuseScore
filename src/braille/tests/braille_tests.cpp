@@ -30,7 +30,6 @@
 #include "engraving/dom/masterscore.h"
 #include "../internal/braille.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String BRAILLE_DIR(u"data/");

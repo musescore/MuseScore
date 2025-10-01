@@ -22,16 +22,14 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/box.h"
-#include "dom/masterscore.h"
-#include "dom/fret.h"
-#include "dom/harmony.h"
-#include "dom/factory.h"
+#include "engraving/dom/box.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
+#include "engraving/dom/masterscore.h"
 
 #include "utils/scorerw.h"
-#include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String FRET_BOX_DATA_DIR(u"fretbox_data/");
@@ -57,7 +55,7 @@ public:
         for (const String& chord : chords) {
             Segment* segment = measure->first(SegmentType::ChordRest);
 
-            engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(score->dummy()->segment());
+            FretDiagram* diagram = Factory::createFretDiagram(score->dummy()->segment());
 
             diagram->setHarmony(chord);
             diagram->updateDiagram(chord);
@@ -88,7 +86,7 @@ public:
 
         Segment* segment = measure->first(SegmentType::ChordRest);
 
-        engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(score->dummy()->segment());
+        FretDiagram* diagram = Factory::createFretDiagram(score->dummy()->segment());
 
         diagram->setHarmony(chord);
         diagram->updateDiagram(chord);

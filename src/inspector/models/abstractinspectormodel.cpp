@@ -20,7 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "abstractinspectormodel.h"
-#include "dom/barline.h"
+
+#include "engraving/dom/barline.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/property.h"
 

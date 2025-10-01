@@ -22,13 +22,12 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/masterscore.h"
-#include "dom/measure.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String SELECTIONFILTER_DATA_DIR("selectionfilter_data/");
@@ -229,7 +228,7 @@ void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Scor
         score->select(rangeEnd, SelectType::RANGE);
     };
 
-    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::ALL, false);
+    score->selectionFilter().setFiltered(ElementsSelectionFilterTypes::ALL, false);
 
     // Measures 1 to 5 - deselect bottom notes
     //! [WHEN] Editing the selection filter and making a range selection over the first five measures...
@@ -238,9 +237,9 @@ void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Scor
     MeasureBase* auxMeasure = score->measure(25);
     EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
 
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::ALL, true);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::ALL, true);
     score->selectionFilter().setIncludeSingleNotes(true);
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::BOTTOM_NOTE, false);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::BOTTOM_NOTE, false);
     prepareSelectionRange(rangeStart, rangeEnd);
 
     //! [WHEN] Performing the given action over the selected measures...
@@ -253,10 +252,10 @@ void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Scor
     auxMeasure = score->measure(30);
     EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
 
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::ALL, true);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::ALL, true);
     score->selectionFilter().setIncludeSingleNotes(true);
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::TOP_NOTE, false);
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::THIRD_NOTE, false);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::TOP_NOTE, false);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::THIRD_NOTE, false);
     prepareSelectionRange(rangeStart, rangeEnd);
 
     //! [WHEN] Performing the given action over the selected measures...
@@ -269,7 +268,7 @@ void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Scor
     auxMeasure = score->measure(35);
     EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
 
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::ALL, true);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::ALL, true);
     score->selectionFilter().setIncludeSingleNotes(false);
     prepareSelectionRange(rangeStart, rangeEnd);
 
@@ -283,10 +282,10 @@ void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Scor
     auxMeasure = score->measure(40);
     EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
 
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::NONE, true);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::NONE, true);
     score->selectionFilter().setIncludeSingleNotes(false);
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::SECOND_NOTE, true);
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::SIXTH_NOTE, true);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::SECOND_NOTE, true);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::SIXTH_NOTE, true);
     prepareSelectionRange(rangeStart, rangeEnd);
 
     //! [WHEN] Performing the given action over the selected measures...
@@ -299,12 +298,12 @@ void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Scor
     auxMeasure = score->measure(45);
     EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
 
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::NONE, true);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::NONE, true);
     score->selectionFilter().setIncludeSingleNotes(false);
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::BOTTOM_NOTE, true);
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::THIRD_NOTE, true);
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::FOURTH_NOTE, true);
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::TOP_NOTE, true);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::BOTTOM_NOTE, true);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::THIRD_NOTE, true);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::FOURTH_NOTE, true);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::TOP_NOTE, true);
     prepareSelectionRange(rangeStart, rangeEnd);
 
     //! [WHEN] Performing the given action over the selected measures...
@@ -362,8 +361,8 @@ TEST_F(Engraving_SelectionFilterTests, gracesAndSlurs)
     EXPECT_TRUE(score);
 
     // Clear selection filter...
-    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::ALL, false);
-    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::ALL, false);
+    score->selectionFilter().setFiltered(ElementsSelectionFilterTypes::ALL, false);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::ALL, false);
     score->selectionFilter().setIncludeSingleNotes(false);
 
     // Measure 1
@@ -379,8 +378,8 @@ TEST_F(Engraving_SelectionFilterTests, gracesAndSlurs)
 
     // Measure 2
     //! [WHEN] Performing a delete with graces & slurs filtered...
-    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::SLUR, true);
-    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::GRACE_NOTE, true);
+    score->selectionFilter().setFiltered(ElementsSelectionFilterTypes::SLUR, true);
+    score->selectionFilter().setFiltered(ElementsSelectionFilterTypes::GRACE_NOTE, true);
 
     currentMeasure = score->measure(1);
     EXPECT_TRUE(currentMeasure);
@@ -393,7 +392,7 @@ TEST_F(Engraving_SelectionFilterTests, gracesAndSlurs)
 
     // Measure 3
     //! [WHEN] Performing a delete with graces only filtered...
-    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::SLUR, false);
+    score->selectionFilter().setFiltered(ElementsSelectionFilterTypes::SLUR, false);
 
     currentMeasure = score->measure(2);
     EXPECT_TRUE(currentMeasure);
@@ -406,8 +405,8 @@ TEST_F(Engraving_SelectionFilterTests, gracesAndSlurs)
 
     // Measure 4
     //! [WHEN] Performing a delete with slurs only filtered...
-    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::GRACE_NOTE, false);
-    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::SLUR, true);
+    score->selectionFilter().setFiltered(ElementsSelectionFilterTypes::GRACE_NOTE, false);
+    score->selectionFilter().setFiltered(ElementsSelectionFilterTypes::SLUR, true);
 
     currentMeasure = score->measure(3);
     EXPECT_TRUE(currentMeasure);

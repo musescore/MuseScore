@@ -35,7 +35,6 @@
 #include "importexport/mei/internal/meireader.h"
 #include "importexport/mei/internal/meiwriter.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String MEI_DIR(u"data/");

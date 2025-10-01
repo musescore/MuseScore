@@ -22,13 +22,11 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/bsp.h"
-#include "dom/page.h"
+#include "engraving/dom/bsp.h"
+#include "engraving/dom/page.h"
 
 #include "utils/scorerw.h"
-#include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String BSPTREE_DATA_DIR(u"bsptree_data/");

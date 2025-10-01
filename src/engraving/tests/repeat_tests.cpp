@@ -22,15 +22,14 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/repeatlist.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/repeatlist.h"
 
 #include "utils/scorerw.h"
 
 #include "log.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String REPEAT_DATA_DIR("repeat_data/");

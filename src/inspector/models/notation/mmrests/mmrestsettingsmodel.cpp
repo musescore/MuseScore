@@ -20,7 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "mmrestsettingsmodel.h"
-#include "dom/mmrest.h"
+
+#include "engraving/dom/mmrest.h"
 
 #include "translation.h"
 

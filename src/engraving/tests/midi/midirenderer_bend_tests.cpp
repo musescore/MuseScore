@@ -26,8 +26,8 @@
 #include "engraving/compat/midi/compatmidirender.h"
 #include "engraving/rw/mscloader.h"
 
-using namespace mu;
 using namespace mu::engraving;
+
 class MidiRendererBend_Tests : public ::testing::Test
 {
 };

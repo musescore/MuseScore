@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "dom/mscore.h"
+#include "engraving/dom/mscore.h"
 
 namespace mu::iex::musicxml {
 //---------------------------------------------------------

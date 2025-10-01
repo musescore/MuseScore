@@ -27,14 +27,15 @@
 #include <unordered_map>
 
 #include "global/modularity/ioc.h"
-#include "iengravingfontsprovider.h"
 
-#include "types/types.h"
+#include "../../iengravingfontsprovider.h"
 
-#include "dom/connector.h"
-#include "dom/interval.h"
-#include "dom/location.h"
-#include "dom/sig.h"
+#include "../../types/types.h"
+
+#include "../../dom/connector.h"
+#include "../../dom/interval.h"
+#include "../../dom/location.h"
+#include "../../dom/sig.h"
 
 #include "../linksindexer.h"
 #include "../inoutdata.h"

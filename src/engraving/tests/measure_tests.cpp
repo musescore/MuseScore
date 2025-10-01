@@ -22,20 +22,19 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/engravingitem.h"
-#include "dom/excerpt.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/measurenumber.h"
-#include "dom/rest.h"
-#include "dom/segment.h"
-#include "editing/undo.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/excerpt.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/measurenumber.h"
+#include "engraving/dom/rest.h"
+#include "engraving/dom/segment.h"
+#include "engraving/editing/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 #include "utils/testutils.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String MEASURE_DATA_DIR("measure_data/");

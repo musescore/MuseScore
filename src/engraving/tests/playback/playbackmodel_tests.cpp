@@ -29,12 +29,13 @@
 #include "mpe/tests/utils/articulationutils.h"
 #include "mpe/tests/mocks/articulationprofilesrepositorymock.h"
 
-#include "utils/scorerw.h"
-#include "dom/part.h"
-#include "dom/measure.h"
-#include "dom/chord.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/chord.h"
 
-#include "playback/playbackmodel.h"
+#include "engraving/playback/playbackmodel.h"
+
+#include "utils/scorerw.h"
 
 using ::testing::NiceMock;
 using ::testing::Return;

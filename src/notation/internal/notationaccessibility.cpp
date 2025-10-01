@@ -26,16 +26,12 @@
 #include "igetscore.h"
 #include "notation.h"
 
+#include "engraving/accessibility/accessibleroot.h"
 #include "engraving/dom/masterscore.h"
-#include "engraving/dom/spanner.h"
-#include "engraving/dom/segment.h"
-#include "engraving/dom/slur.h"
-#include "engraving/dom/staff.h"
-#include "engraving/dom/part.h"
-#include "engraving/dom/sig.h"
 #include "engraving/dom/measure.h"
-
-#include "accessibility/accessibleroot.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
 
 using namespace mu::notation;
 using namespace muse::async;

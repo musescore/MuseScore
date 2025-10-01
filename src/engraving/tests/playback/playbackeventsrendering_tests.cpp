@@ -25,16 +25,15 @@
 
 #include "mpe/tests/utils/articulationutils.h"
 
-#include "dom/note.h"
-#include "dom/factory.h"
-#include "dom/measure.h"
-#include "dom/part.h"
-#include "dom/segment.h"
-#include "dom/harppedaldiagram.h"
-#include "dom/ornament.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/ornament.h"
+
+#include "engraving/playback/playbackeventsrenderer.h"
 
 #include "utils/scorerw.h"
-#include "playback/playbackeventsrenderer.h"
 
 using namespace mu::engraving;
 using namespace muse;

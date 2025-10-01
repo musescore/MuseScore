@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_IMPORTEXPORT_MEICONVERTER_H
-#define MU_IMPORTEXPORT_MEICONVERTER_H
+#pragma once
 
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/accidental.h"
@@ -31,7 +30,7 @@
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/volta.h"
 
-#include "iengravingfontsprovider.h"
+#include "engraving/iengravingfontsprovider.h"
 
 #include "thirdparty/libmei/cmn.h"
 #include "thirdparty/libmei/cmnornaments.h"
@@ -405,5 +404,3 @@ private:
     std::unordered_map<uintptr_t, std::string> m_uids;
 };
 } // namespace
-
-#endif // MU_IMPORTEXPORT_MEICONVERTER_H

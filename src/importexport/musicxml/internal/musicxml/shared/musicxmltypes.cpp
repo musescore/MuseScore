@@ -21,7 +21,9 @@
  */
 
 #include "musicxmltypes.h"
-#include "dom/interval.h"
+
+#include "engraving/dom/interval.h"
+
 #include "log.h"
 
 using namespace mu::engraving;

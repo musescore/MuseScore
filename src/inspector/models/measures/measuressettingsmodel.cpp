@@ -21,7 +21,7 @@
  */
 #include "measuressettingsmodel.h"
 
-#include "dom/score.h"
+#include "engraving/dom/score.h"
 
 #include "translation.h"
 
