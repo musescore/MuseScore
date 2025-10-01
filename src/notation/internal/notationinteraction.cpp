@@ -2297,6 +2297,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
     switch (element->type()) {
     case ElementType::MARKER:
     case ElementType::JUMP:
+    case ElementType::MEASURE_NUMBER:
     case ElementType::SPACER:
     case ElementType::VBOX:
     case ElementType::HBOX:
