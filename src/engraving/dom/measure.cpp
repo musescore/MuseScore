@@ -186,7 +186,7 @@ Measure::Measure(System* parent)
         m_mstaves.push_back(ms);
     }
     setIrregular(false);
-    m_noMode                = MeasureNumberMode::AUTO;
+    m_measureNumberMode                = MeasureNumberMode::AUTO;
     m_userStretch           = 1.0;
     m_breakMultiMeasureRest = false;
     m_mmRest                = nullptr;
@@ -205,7 +205,7 @@ Measure::Measure(const Measure& m)
     m_timesig     = m.m_timesig;
     m_len          = m.m_len;
     m_repeatCount = m.m_repeatCount;
-    m_noMode      = m.m_noMode;
+    m_measureNumberMode      = m.m_measureNumberMode;
     m_userStretch = m.m_userStretch;
 
     m_mstaves.reserve(m.m_mstaves.size());
@@ -553,7 +553,7 @@ double Measure::tick2pos(Fraction tck) const
 ///    Whether the measure will show measure number(s) when MeasureNumberMode is set to AUTO
 //---------------------------------------------------------
 
-bool Measure::showsMeasureNumberInAutoMode()
+bool Measure::showMeasureNumberInAutoMode()
 {
     // Check whether any measure number should be shown
     if (!style().styleB(Sid::showMeasureNumber)) {
@@ -594,19 +594,29 @@ bool Measure::showsMeasureNumberInAutoMode()
     }
 }
 
+bool Measure::showMeasureNumberOnStaff(staff_idx_t staffIdx)
+{
+    IF_ASSERT_FAILED(staffIdx < score()->nstaves()) {
+        return false;
+    }
+
+    return showMeasureNumber() && score()->staff(staffIdx)->shouldShowMeasureNumbers();
+}
+
 //---------------------------------------------------------
 //   showsMeasureNumber
 ///     Whether the Measure shows a MeasureNumber
 //---------------------------------------------------------
 
-bool Measure::showsMeasureNumber()
+bool Measure::showMeasureNumber()
 {
-    if (m_noMode == MeasureNumberMode::SHOW) {
+    switch (m_measureNumberMode) {
+    case MeasureNumberMode::AUTO:
+        return showMeasureNumberInAutoMode();
+    case MeasureNumberMode::SHOW:
         return true;
-    } else if (m_noMode == MeasureNumberMode::HIDE) {
+    case MeasureNumberMode::HIDE:
         return false;
-    } else {
-        return showsMeasureNumberInAutoMode();
     }
 }
 
@@ -2120,7 +2130,7 @@ void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         MStaff* ms = m_mstaves[staffIdx];
-        if (ms->measureNumber()) {
+        if (ms->measureNumber() && showMeasureNumberOnStaff(staffIdx)) {
             func(data, ms->measureNumber());
         }
 
