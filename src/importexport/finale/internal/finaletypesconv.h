@@ -49,6 +49,7 @@ extern engraving::String instrTemplateIdfromUuid(std::string uuid);
 extern engraving::BracketType toMuseScoreBracketType(musx::dom::details::Bracket::BracketStyle bracketStyle);
 extern engraving::TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::NumberStyle numberStyle);
 extern engraving::Align justifyToAlignment(musx::dom::others::NamePositioning::AlignJustify alignJustify);
+extern engraving::AlignH toAlignH(musx::dom::others::HorizontalTextJustification hTextJustify);
 extern engraving::CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines);
 extern engraving::NoteVal notePropertiesToNoteVal(const musx::dom::Note::NoteProperties& noteProperties, engraving::Key key = engraving::Key::C);
 extern engraving::Fraction musxFractionToFraction(const musx::util::Fraction& fraction);
