@@ -20,10 +20,6 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
         required: false
-      use_qt69:
-        description: 'Use Qt 6.9'
-        default: 'on'
-        required: false   
   workflow_call:
     inputs:
       platforms:
@@ -46,14 +42,6 @@ on:
         default: ''
         type: string
         required: false
-      use_qt69:
-        description: 'Use Qt 6.9'
-        default: 'on'
-        type: string
-        required: false    
-
-env:
-  USE_QT69: ${{ inputs.use_qt69 != '' && inputs.use_qt69 || 'on' }}               
 
 jobs:
   windows_x64:
@@ -98,7 +86,7 @@ jobs:
         SENTRY_URL=""
 
         if [ "$SENTRY_MUSE_MU4_KEY" != "" ]; then
-          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then 
+          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then
             SENTRY_PROJECT="mu4"
           fi
 
@@ -161,17 +149,12 @@ jobs:
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
-      if: ${{ env.USE_QT69 == 'on' }}
       with:
-        version: '6.9.2'
+        version: 6.9.3
         host: 'windows'
         target: 'desktop'
         arch: 'win64_msvc2022_64'
         modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
-    - name: Install Qt 6.2.11
-      if: ${{ env.USE_QT69 != 'on' }}
-      run: |
-        buildscripts\ci\windows\install_qt_6_2_11.bat
     - name: Setup environment
       run: |
         buildscripts\ci\windows\setup.bat
@@ -308,7 +291,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: '6.9.2'
+        version: 6.9.3
         host: 'windows'
         target: 'desktop'
         arch: 'win64_msvc2022_64'

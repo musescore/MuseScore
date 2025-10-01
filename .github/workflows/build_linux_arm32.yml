@@ -16,10 +16,6 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
         required: false
-      use_qt69:
-        description: 'Use Qt 6.9'
-        default: 'on'
-        required: false   
   workflow_call:
     inputs:
       build_mode:
@@ -37,11 +33,6 @@ on:
         default: ''
         type: string
         required: false
-      use_qt69:
-        description: 'Use Qt 6.9'
-        default: 'on'
-        type: string
-        required: false                
 
 jobs:
   linux_arm32:

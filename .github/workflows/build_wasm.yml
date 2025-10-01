@@ -14,7 +14,7 @@ on:
         description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
         type: string
-        required: true  
+        required: true
 
 jobs:
   build:
@@ -64,13 +64,13 @@ jobs:
       run: echo "::add-matcher::.github/problem_matchers/gcc.json"
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v4 
+      uses: jurplel/install-qt-action@v4
       with:
-        version: '6.9.2'
+        version: 6.9.3
         host: all_os
         target: 'wasm'
         arch: wasm_singlethread
-        modules: 'qt5compat qtscxml qtshadertools' 
+        modules: 'qt5compat qtscxml qtshadertools'
 
     - name: Setup environment
       run: |
