@@ -243,6 +243,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
     hook.onWriteExcerpts302(score, xml, ctx);
 
     TWrite::writeSystemLocks(score, xml);
+    TWrite::writeSystemDividers(score, xml, ctx);
 
     xml.endElement(); // score
 

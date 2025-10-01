@@ -1077,6 +1077,7 @@ public:
 
     void rebuildFretBox();
 
+    const std::map<size_t, std::array<SystemDivider*, 2>> systemDividers() const { return m_systemDividers; }
     SystemDivider* systemDivider(size_t systemIdx, SystemDividerType type) const;
     void addSystemDivider(size_t systemIdx, SystemDivider* divider);
 

@@ -388,6 +388,7 @@ public:
     static void readSpanner(XmlReader& e, ReadContext& ctx, Score* current, track_idx_t track);
 
     static void readSystemLocks(Score* score, XmlReader& e);
+    static void readSystemDividers(Score* score, XmlReader& e, ReadContext& ctx);
 
     static void readItemEID(EngravingObject* item, XmlReader& xml);
     static void readItemLink(EngravingItem* item, XmlReader& xml, ReadContext& ctx);
