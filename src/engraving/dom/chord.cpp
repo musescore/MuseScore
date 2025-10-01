@@ -27,6 +27,8 @@
 
 #include "containers.h"
 
+#include "../editing/undo.h"
+
 #include "accidental.h"
 #include "arpeggio.h"
 #include "articulation.h"
@@ -61,7 +63,6 @@
 #include "tremolotwochord.h"
 #include "trill.h"
 #include "tuplet.h"
-#include "undo.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"

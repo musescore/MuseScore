@@ -23,7 +23,7 @@
 
 #include "score.h"
 #include "system.h"
-#include "undo.h"
+#include "../editing/undo.h"
 
 #include "log.h"
 

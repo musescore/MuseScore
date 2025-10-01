@@ -24,15 +24,16 @@
 
 #include "containers.h"
 #include "translation.h"
-#include "types/translatablestring.h"
 
 #include "draw/fontmetrics.h"
 #include "draw/types/brush.h"
 #include "draw/types/pen.h"
 
+#include "../editing/textedit.h"
+#include "../editing/undo.h"
+
 #include "chordlist.h"
 #include "fret.h"
-#include "line.h"
 #include "linkedobjects.h"
 #include "measure.h"
 #include "mscore.h"
@@ -44,11 +45,9 @@
 #include "segment.h"
 #include "staff.h"
 #include "textbase.h"
-#include "textedit.h"
 #include "utils.h"
 
 #include "log.h"
-#include "undo.h"
 
 using namespace mu;
 using namespace muse::draw;

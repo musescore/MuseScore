@@ -29,7 +29,7 @@
 #include "dom/measurenumber.h"
 #include "dom/rest.h"
 #include "dom/segment.h"
-#include "dom/undo.h"
+#include "editing/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

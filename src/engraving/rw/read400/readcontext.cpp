@@ -28,7 +28,7 @@
 #include "engraving/dom/linkedobjects.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/tuplet.h"
-#include "engraving/dom/undo.h"
+#include "engraving/editing/undo.h"
 #include "engraving/types/types.h"
 
 #include "connectorinforeader.h"

@@ -21,14 +21,14 @@
  */
 #include "notationparts.h"
 
-#include "dom/barline.h"
 #include "translation.h"
 
+#include "engraving/dom/barline.h"
 #include "engraving/dom/factory.h"
-#include "engraving/dom/undo.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/utils.h"
+#include "engraving/editing/undo.h"
 
 #include "igetscore.h"
 

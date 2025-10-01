@@ -22,8 +22,10 @@
 
 #pragma once
 
-#include "engravingitem.h"
+#include "elementeditdata.h"
 #include "undo.h"
+
+#include "../dom/engravingitem.h"
 
 namespace mu::engraving {
 class TextBase;

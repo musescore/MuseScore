@@ -25,11 +25,11 @@
 
 #include "mdlmigrator.h"
 
-#include "engraving/types/constants.h"
-#include "engraving/dom/score.h"
 #include "engraving/dom/excerpt.h"
-#include "engraving/dom/undo.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/editing/undo.h"
 #include "engraving/rw/compat/readstyle.h"
+#include "engraving/types/constants.h"
 
 #include "io/file.h"
 

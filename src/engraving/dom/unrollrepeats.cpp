@@ -25,6 +25,7 @@
  */
 
 #include "style/style.h"
+#include "../editing/undo.h"
 
 #include "barline.h"
 #include "engravingitem.h"
@@ -36,7 +37,6 @@
 #include "repeatlist.h"
 #include "score.h"
 #include "segment.h"
-#include "undo.h"
 
 #include "log.h"
 

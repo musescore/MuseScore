@@ -30,6 +30,8 @@
 #include <cassert>
 
 #include "translation.h"
+
+#include "../editing/undo.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
 
@@ -65,7 +67,6 @@
 #include "stafftype.h"
 #include "stringdata.h"
 #include "tie.h"
-#include "undo.h"
 #include "utils.h"
 #include "volta.h"
 
@@ -2675,9 +2676,9 @@ void Note::endDrag(EditData& ed)
         return;
     }
     for (Note* nn : tiedNotes()) {
-        for (const PropertyData& pd : ned->propertyData) {
-            setPropertyFlags(pd.id, pd.f);       // reset initial property flags state
-            score()->undoPropertyChanged(nn, pd.id, pd.data);
+        for (const auto& [id, data, flags] : ned->propertyData) {
+            setPropertyFlags(id, flags); // reset initial property flags state
+            score()->undoPropertyChanged(nn, id, data);
         }
     }
 }

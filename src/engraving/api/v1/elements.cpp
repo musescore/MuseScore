@@ -32,7 +32,8 @@
 #include "engraving/dom/spacer.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/tremolotwochord.h"
-#include "engraving/dom/undo.h"
+
+#include "engraving/editing/undo.h"
 
 // api
 #include "apistructs.h"

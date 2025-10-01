@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "../editing/undo.h"
+
 #include "factory.h"
 #include "masterscore.h"
 #include "measure.h"
@@ -28,7 +30,6 @@
 #include "spanner.h"
 #include "stafftypechange.h"
 #include "timesig.h"
-#include "undo.h"
 
 using namespace mu;
 

@@ -30,7 +30,7 @@
 #include "dom/masterscore.h"
 #include "dom/segment.h"
 #include "dom/stafftext.h"
-#include "dom/textedit.h"
+#include "editing/textedit.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

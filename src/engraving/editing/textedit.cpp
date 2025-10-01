@@ -22,15 +22,16 @@
 
 #include "textedit.h"
 
+#include "mscoreview.h"
+
 #include "iengravingfont.h"
 #include "types/symnames.h"
 
-#include "anchors.h"
-#include "mscoreview.h"
-#include "navigate.h"
-#include "score.h"
-#include "dynamic.h"
-#include "lyrics.h"
+#include "../dom/anchors.h"
+#include "../dom/navigate.h"
+#include "../dom/score.h"
+#include "../dom/dynamic.h"
+#include "../dom/lyrics.h"
 
 #include "log.h"
 

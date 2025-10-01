@@ -24,7 +24,7 @@
 
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/text.h"
-#include "engraving/dom/undo.h"
+#include "engraving/editing/undo.h"
 
 #include "log.h"
 

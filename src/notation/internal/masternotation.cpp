@@ -41,7 +41,7 @@
 #include "engraving/dom/rest.h"
 #include "engraving/dom/sig.h"
 #include "engraving/dom/tempotext.h"
-#include "engraving/dom/undo.h"
+#include "engraving/editing/undo.h"
 
 #include "excerptnotation.h"
 #include "masternotationparts.h"

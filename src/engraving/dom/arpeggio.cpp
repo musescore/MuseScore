@@ -22,11 +22,13 @@
 
 #include "arpeggio.h"
 
-#include "types/typesconv.h"
+#include "../editing/elementeditdata.h"
+#include "../editing/mscoreview.h"
+#include "../editing/undo.h"
+#include "../types/typesconv.h"
 
 #include "accidental.h"
 #include "chord.h"
-#include "mscoreview.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"
@@ -34,7 +36,6 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
-#include "undo.h"
 
 #include "log.h"
 

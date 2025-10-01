@@ -24,6 +24,9 @@
 
 #include <cmath>
 
+#include "../editing/elementeditdata.h"
+#include "../editing/undo.h"
+
 #include "actionicon.h"
 #include "factory.h"
 #include "harmony.h"
@@ -34,9 +37,7 @@
 #include "stafftext.h"
 #include "system.h"
 #include "text.h"
-#include "undo.h"
 
-#include "defer.h"
 #include "log.h"
 
 using namespace mu;

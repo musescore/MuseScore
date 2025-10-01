@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "../editing/undo.h"
+
 #include "chord.h"
 #include "factory.h"
 #include "harmony.h"
@@ -35,7 +37,6 @@
 #include "select.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "undo.h"
 #include "utils.h"
 
 #include "log.h"

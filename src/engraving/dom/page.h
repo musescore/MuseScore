@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_PAGE_H
-#define MU_ENGRAVING_PAGE_H
+#pragma once
 
 #include <vector>
 
@@ -103,5 +102,4 @@ private:
     BspTree bspTree;
     bool m_bspTreeValid = false;
 };
-} // namespace mu::engraving
-#endif
+}

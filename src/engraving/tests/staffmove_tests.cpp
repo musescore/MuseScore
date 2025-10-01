@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 
+#include "compat/scoreaccess.h"
 #include "dom/excerpt.h"
 #include "dom/factory.h"
 #include "dom/linkedobjects.h"
@@ -30,9 +31,8 @@
 #include "dom/measure.h"
 #include "dom/part.h"
 #include "dom/segment.h"
-#include "dom/undo.h"
+#include "editing/undo.h"
 
-#include "engraving/compat/scoreaccess.h"
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 

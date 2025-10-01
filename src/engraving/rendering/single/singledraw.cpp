@@ -137,7 +137,7 @@
 
 #include "dom/whammybar.h"
 
-#include "dom/mscoreview.h"
+#include "editing/mscoreview.h"
 
 #include "rendering/score/stemlayout.h"
 

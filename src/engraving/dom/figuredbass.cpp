@@ -24,8 +24,8 @@
 
 #include "io/file.h"
 
+#include "../editing/undo.h"
 #include "rw/xmlreader.h"
-
 #include "style/textstyle.h"
 
 #include "chord.h"
@@ -36,7 +36,6 @@
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
-#include "undo.h"
 
 #include "log.h"
 

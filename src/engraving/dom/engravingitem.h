@@ -40,7 +40,8 @@
 
 #include "engravingobject.h"
 #include "elementgroup.h"
-#include "editdata.h"
+
+#include "../editing/editdata.h"
 
 namespace muse::draw {
 class Painter;
@@ -746,45 +747,6 @@ private:
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;
-
-//-----------------------------------------------------------------------------
-//   ElementEditData
-//    holds element specific data during element editing:
-//
-//    startDragGrip(EditData&)    creates data and attaches it to EditData
-//         dragGrip(EditData&)
-//      endDragGrip(EditData&)    use data to create undo records
-//-----------------------------------------------------------------------------
-
-enum class EditDataType : signed char {
-    ElementEditData,
-    TextEditData,
-    BarLineEditData,
-    BeamEditData,
-    NoteEditData,
-};
-
-struct PropertyData {
-    Pid id;
-    PropertyValue data;
-    PropertyFlags f;
-};
-
-class ElementEditData
-{
-    OBJECT_ALLOCATOR(engraving, ElementEditData)
-public:
-    EngravingItem* e = nullptr;
-    std::vector<PropertyData> propertyData;
-
-    virtual ~ElementEditData() = default;
-    void pushProperty(Pid pid)
-    {
-        propertyData.emplace_back(PropertyData { pid, e->getProperty(pid), e->propertyFlags(pid) });
-    }
-
-    virtual EditDataType type() { return EditDataType::ElementEditData; }
-};
 
 //---------------------------------------------------------
 //   ElementList

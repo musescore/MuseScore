@@ -21,8 +21,9 @@
  */
 
 #include "editdata.h"
+#include "elementeditdata.h"
 
-#include "engravingitem.h"
+#include "../dom/engravingitem.h"
 
 using namespace mu::engraving;
 

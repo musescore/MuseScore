@@ -22,9 +22,9 @@
 
 #include "mmrest.h"
 
+#include "../editing/undo.h"
 #include "score.h"
 #include "system.h"
-#include "undo.h"
 
 #include "log.h"
 

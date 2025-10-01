@@ -21,18 +21,19 @@
  */
 #include "slur.h"
 
+#include "../editing/mscoreview.h"
+#include "../editing/undo.h"
+
 #include "arpeggio.h"
 #include "beam.h"
 #include "chord.h"
 #include "measure.h"
-#include "mscoreview.h"
 #include "navigate.h"
 #include "part.h"
 #include "score.h"
 #include "stem.h"
 #include "system.h"
 #include "tremolotwochord.h"
-#include "undo.h"
 
 #include "log.h"
 

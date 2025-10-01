@@ -24,6 +24,8 @@
 
 #include "engravingitem.h"
 
+#include "../editing/elementeditdata.h"
+
 namespace mu::engraving {
 class Factory;
 class Segment;

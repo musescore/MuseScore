@@ -24,6 +24,7 @@
 
 #include <cmath>
 
+#include "../editing/undo.h"
 #include "types/typesconv.h"
 
 #include "iengravingfont.h"
@@ -34,7 +35,6 @@
 #include "ornament.h"
 #include "score.h"
 #include "system.h"
-#include "undo.h"
 
 #include "log.h"
 

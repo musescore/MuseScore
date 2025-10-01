@@ -25,7 +25,7 @@
 #include "soundflag.h"
 #include "segment.h"
 #include "score.h"
-#include "undo.h"
+#include "../editing/undo.h"
 
 using namespace mu::engraving;
 

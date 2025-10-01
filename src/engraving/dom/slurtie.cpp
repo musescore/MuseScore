@@ -23,8 +23,9 @@
 
 #include "draw/types/pen.h"
 
-#include "chord.h"
-#include "mscoreview.h"
+#include "../editing/elementeditdata.h"
+#include "../editing/mscoreview.h"
+
 #include "note.h"
 #include "page.h"
 #include "score.h"
