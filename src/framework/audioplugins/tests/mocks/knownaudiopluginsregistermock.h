@@ -32,6 +32,7 @@ public:
     MOCK_METHOD(Ret, load, (), (override));
 
     MOCK_METHOD(std::vector<AudioPluginInfo>, pluginInfoList, (PluginInfoAccepted), (const, override));
+    MOCK_METHOD(async::Notification, pluginInfoListChanged, (), (const, override));
     MOCK_METHOD(const io::path_t&, pluginPath, (const audio::AudioResourceId&), (const, override));
 
     MOCK_METHOD(bool, exists, (const io::path_t&), (const, override));

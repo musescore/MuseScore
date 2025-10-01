@@ -23,6 +23,7 @@
 
 #include "modularity/imoduleinterface.h"
 
+#include "global/async/notification.h"
 #include "global/types/ret.h"
 #include "global/io/path.h"
 
@@ -41,6 +42,7 @@ public:
     using PluginInfoAccepted = std::function<bool (const AudioPluginInfo& info)>;
 
     virtual std::vector<AudioPluginInfo> pluginInfoList(PluginInfoAccepted accepted = PluginInfoAccepted()) const = 0;
+    virtual muse::async::Notification pluginInfoListChanged() const = 0;
     virtual const io::path_t& pluginPath(const audio::AudioResourceId& resourceId) const = 0;
 
     virtual bool exists(const io::path_t& pluginPath) const = 0;
