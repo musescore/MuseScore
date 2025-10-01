@@ -1614,11 +1614,16 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 }
             }
         }
+        std::vector<Segment*> emptySegments;
         for (Segment& seg : nm->segments()) {
             seg.checkEmpty();
             if (seg.empty()) {
-                score->doUndoRemoveElement(&seg);
+                emptySegments.push_back(&seg);
             }
+        }
+        for (Segment* seg : emptySegments) {
+            nm->remove(seg);
+            delete seg;
         }
         if (!nm->hasVoices(dstStaffIdx, nm->tick(), nm->ticks())) {
             promoteGapRestsToRealRests(nm, dstStaffIdx);
