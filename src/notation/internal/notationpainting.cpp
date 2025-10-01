@@ -126,7 +126,11 @@ void NotationPainting::doPaint(Painter* painter, const Options& opt)
     scoreRenderer()->paintScore(painter, score(), myopt);
 
     if (!myopt.isPrinting) {
-        static_cast<NotationInteraction*>(m_notation->interaction().get())->paint(painter);
+        rendering::PaintOptions eopt;
+        eopt.isPrinting = myopt.isPrinting;
+        eopt.invertColors = myopt.invertColors;
+
+        static_cast<NotationInteraction*>(m_notation->interaction().get())->paint(painter, eopt);
     }
 }
 
@@ -186,6 +190,7 @@ void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool 
     opt.frameRect = frameRect;
     opt.deviceDpi = uiConfiguration()->logicalDpi();
     opt.isPrinting = isPrinting;
+    opt.invertColors = engravingConfiguration()->scoreInversionEnabled();
     doPaint(painter, opt);
 }
 

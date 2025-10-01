@@ -28,6 +28,7 @@
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/textlinebase.h"
 #include "engraving/dom/text.h"
+#include "rendering/paintoptions.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -76,20 +77,6 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
 
         const Color colorBackup = item->getProperty(Pid::COLOR).value<Color>();
         const Color frameColorBackup = item->getProperty(Pid::FRAME_FG_COLOR).value<Color>();
-        const bool colorsInversionEnabledBackup = item->colorsInversionEnabled();
-
-        item->setColorsInversionEnabled(ctx->colorsInversionEnabled);
-
-        if (item->isTextLineBaseSegment()) {
-            TextLineBaseSegment* tls = item_cast<TextLineBaseSegment*>(item);
-            tls->text()->setColorsInversionEnabled(ctx->colorsInversionEnabled);
-            tls->endText()->setColorsInversionEnabled(ctx->colorsInversionEnabled);
-        }
-
-        if (item->isSpannerSegment()) {
-            SpannerSegment* ss = item_cast<SpannerSegment*>(item);
-            ss->spanner()->setColorsInversionEnabled(ctx->colorsInversionEnabled);
-        }
 
         if (!ctx->useElementColors) {
             const Color color = ctx->color;
@@ -97,22 +84,13 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
             item->setProperty(Pid::FRAME_FG_COLOR, color);
         }
 
-        engravingRender()->drawItem(item, painter);
+        rendering::PaintOptions opt;
+        opt.invertColors = ctx->colorsInversionEnabled;
 
-        item->setColorsInversionEnabled(colorsInversionEnabledBackup);
+        engravingRender()->drawItem(item, painter, opt);
+
         item->setProperty(Pid::COLOR, colorBackup);
         item->setProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
-
-        if (item->isTextLineBaseSegment()) {
-            TextLineBaseSegment* tls = item_cast<TextLineBaseSegment*>(item);
-            tls->text()->setColorsInversionEnabled(colorsInversionEnabledBackup);
-            tls->endText()->setColorsInversionEnabled(colorsInversionEnabledBackup);
-        }
-
-        if (item->isSpannerSegment()) {
-            SpannerSegment* ss = item_cast<SpannerSegment*>(item);
-            ss->spanner()->setColorsInversionEnabled(colorsInversionEnabledBackup);
-        }
 
         painter->restore();
     };
@@ -139,7 +117,11 @@ void EngravingItemPreviewPainter::paintPreviewForActionIcon(mu::engraving::Engra
     engravingRender()->layoutItem(action);
 
     painter->translate(params.rect.center() - action->ldata()->bbox().center());
-    engravingRender()->drawItem(action, painter);
+
+    rendering::PaintOptions opt;
+    opt.invertColors = params.colorsInversionEnabled;
+    engravingRender()->drawItem(action, painter, opt);
+
     painter->restore();
 }
 

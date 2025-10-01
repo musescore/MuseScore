@@ -32,7 +32,6 @@
 #include "chordlayout.h"
 #include "layoutcontext.h"
 #include "scorelayout.h"
-#include "arpeggiolayout.h"
 #include "horizontalspacing.h"
 #include "slurtielayout.h"
 
@@ -54,19 +53,19 @@ SizeF ScoreRenderer::pageSizeInch(const Score* score) const
     return Paint::pageSizeInch(score);
 }
 
-SizeF ScoreRenderer::pageSizeInch(const Score* score, const PaintOptions& opt) const
+SizeF ScoreRenderer::pageSizeInch(const Score* score, const ScorePaintOptions& opt) const
 {
     return Paint::pageSizeInch(score, opt);
 }
 
-void ScoreRenderer::paintScore(Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt) const
+void ScoreRenderer::paintScore(Painter* painter, Score* score, const ScorePaintOptions& opt) const
 {
     Paint::paintScore(painter, score, opt);
 }
 
-void ScoreRenderer::paintItem(Painter& painter, const EngravingItem* item) const
+void ScoreRenderer::paintItem(Painter& painter, const EngravingItem* item, const PaintOptions& opt) const
 {
-    Paint::paintItem(painter, item);
+    Paint::paintItem(painter, item, opt);
 }
 
 void ScoreRenderer::doLayoutItem(EngravingItem* item)
@@ -75,9 +74,9 @@ void ScoreRenderer::doLayoutItem(EngravingItem* item)
     TLayout::layoutItem(item, ctx);
 }
 
-void ScoreRenderer::doDrawItem(const EngravingItem* item, Painter* p)
+void ScoreRenderer::doDrawItem(const EngravingItem* item, Painter* p, const PaintOptions& opt)
 {
-    TDraw::drawItem(item, p);
+    TDraw::drawItem(item, p, opt);
 }
 
 void ScoreRenderer::layoutText1(TextBase* item, bool base)

@@ -58,7 +58,7 @@ void ContinuousPanel::setNotation(INotationPtr notation)
 }
 
 //! NOTE: Copied from MU3
-void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
+void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, const engraving::rendering::PaintOptions& opt)
 {
     TRACEFUNC;
 
@@ -334,7 +334,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
     newElement->renderer()->layoutText1(newElement);
     pos = PointF(styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef, y + newElement->height());
     painter.translate(pos);
-    newElement->renderer()->drawItem(newElement, &painter);
+    newElement->renderer()->drawItem(newElement, &painter, opt);
 
     pos += PointF(offsetPanel, 0);
     painter.translate(-pos);
@@ -367,7 +367,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
                 TLayout::layoutForWidth(&newStaffLines, bg.width(), cntx);
             }
             newStaffLines.setColor(color);
-            scoreRender()->drawItem(&newStaffLines, &painter);
+            scoreRender()->drawItem(&newStaffLines, &painter, opt);
 
             // Draw barline
             mu::engraving::BarLine* barLine = engraving::Factory::createBarLine(parent, ACCESSIBILITY_DISABLED);
@@ -379,7 +379,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
             barLine->setSpanTo(currentStaff->barLineTo());
             scoreRender()->layoutItem(barLine);
             barLine->setColor(color);
-            barLine->renderer()->drawItem(barLine, &painter);
+            barLine->renderer()->drawItem(barLine, &painter, opt);
 
             // Draw the current staff name
             const std::list<mu::engraving::StaffName>& staffNamesLong
@@ -407,7 +407,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
                 const double spatium2 = score->style().spatium();
                 pos = PointF(styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef, -spatium2 * 2);
                 painter.translate(pos);
-                newName->renderer()->drawItem(newName, &painter);
+                newName->renderer()->drawItem(newName, &painter, opt);
 
                 painter.translate(-pos);
             }
@@ -425,7 +425,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
             posX += styleMM(mu::engraving::Sid::clefLeftMargin);
             const PointF clefPos = PointF(posX, clef->pos().y());
             painter.translate(clefPos);
-            scoreRender()->drawItem(clef, &painter);
+            scoreRender()->drawItem(clef, &painter, opt);
             painter.translate(-clefPos);
             posX += widthClef;
 
@@ -443,7 +443,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
             posX += styleMM(mu::engraving::Sid::keysigLeftMargin);
             const PointF ksPos = PointF(posX, 0.0);
             painter.translate(ksPos);
-            scoreRender()->drawItem(newKs, &painter);
+            scoreRender()->drawItem(newKs, &painter, opt);
             painter.translate(-ksPos);
 
             posX += widthKeySig + xPosTimeSig;
@@ -462,7 +462,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
                 posX += styleMM(mu::engraving::Sid::timesigLeftMargin);
                 const PointF tsPos = PointF(posX, 0.0);
                 painter.translate(tsPos);
-                scoreRender()->drawItem(newTs, &painter);
+                scoreRender()->drawItem(newTs, &painter, opt);
                 painter.translate(-tsPos);
             }
 

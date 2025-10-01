@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SINGLERENDERER_H
-#define MU_ENGRAVING_SINGLERENDERER_H
+#pragma once
 
 #include "../isinglerenderer.h"
 
@@ -30,10 +29,7 @@ class SingleRenderer : public ISingleRenderer
 public:
     SingleRenderer() = default;
 
-protected:
-    void doLayoutItem(EngravingItem* item) override;
-    void doDrawItem(const EngravingItem* item, muse::draw::Painter* p) override;
+    void layoutItem(EngravingItem* item) override;
+    void drawItem(const EngravingItem* item, muse::draw::Painter* p, const PaintOptions& opt) override;
 };
 }
-
-#endif // MU_ENGRAVING_SINGLERENDERER_H

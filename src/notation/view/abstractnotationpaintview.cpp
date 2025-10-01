@@ -680,7 +680,10 @@ void AbstractNotationPaintView::paint(QPainter* qp)
         nvCtx.yOffset = m_matrix.dy();
         nvCtx.scaling = currentScaling();
         nvCtx.fromLogical = [this](const PointF& pos) -> PointF { return fromLogical(pos); };
-        m_continuousPanel->paint(*painter, nvCtx);
+
+        engraving::rendering::PaintOptions opt;
+        opt.invertColors = engravingConfiguration()->scoreInversionEnabled();
+        m_continuousPanel->paint(*painter, nvCtx, opt);
     }
 }
 

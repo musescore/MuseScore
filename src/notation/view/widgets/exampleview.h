@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_EXAMPLEVIEW_H
-#define MU_NOTATION_EXAMPLEVIEW_H
+#pragma once
 
 #include <QStateMachine>
 #include <QPaintEvent>
@@ -52,6 +51,7 @@ class ExampleView : public QFrame, public engraving::MuseScoreView, public muse:
     Q_OBJECT
 
     muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
     ExampleView(QWidget* parent = 0);
@@ -103,5 +103,3 @@ public:
         : QEventTransition(c, QEvent::MouseMove), canvas(c) {}
 };
 }
-
-#endif // MU_NOTATION_EXAMPLEVIEW_H

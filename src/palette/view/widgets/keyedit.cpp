@@ -135,6 +135,9 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * gpaletteScore->style().spatium());
     painter.setPen(pen);
 
+    rendering::PaintOptions opt;
+    opt.invertColors = engravingConfiguration()->scoreInversionEnabled();
+
     for (int i = 0; i < 5; ++i) {
         qreal yy = r.y() + i * gpaletteScore->style().spatium();
         painter.drawLine(LineF(r.x(), yy, r.x() + r.width(), yy));
@@ -142,13 +145,13 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     if (dragElement) {
         painter.save();
         painter.translate(dragElement->pagePos());
-        gpaletteScore->renderer()->drawItem(dragElement, &painter);
+        gpaletteScore->renderer()->drawItem(dragElement, &painter, opt);
         painter.restore();
     }
     foreach (Accidental* a, accidentals) {
         painter.save();
         painter.translate(a->pagePos());
-        gpaletteScore->renderer()->drawItem(a, &painter);
+        gpaletteScore->renderer()->drawItem(a, &painter, opt);
         painter.restore();
     }
     clef->setPos(0.0, 0.0);
@@ -156,7 +159,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     engravingRender()->layoutItem(clef);
 
     painter.translate(clef->pagePos());
-    gpaletteScore->renderer()->drawItem(clef, &painter);
+    gpaletteScore->renderer()->drawItem(clef, &painter, opt);
 }
 
 //---------------------------------------------------------

@@ -46,14 +46,20 @@ class EditModeRenderer : public IEditModeRenderer
 public:
     EditModeRenderer() = default;
 
-    void drawItem(EngravingItem* item, muse::draw::Painter* p, EditData& ed, double currentViewScaling) override;
+    void drawItem(const EngravingItem* item, muse::draw::Painter* p, const EditData& ed, double currentViewScaling,
+                  const PaintOptions& opt) override;
 
 private:
-    static void drawEngravingItem(EngravingItem* item, muse::draw::Painter* painter, EditData& ed, double currentViewScaling);
+    static void drawEngravingItem(const EngravingItem* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
+                                  const PaintOptions& opt);
 
-    static void drawBarline(BarLine* item, muse::draw::Painter* painter, EditData& ed, double currentViewScaling);
-    static void drawDynamic(Dynamic* item, muse::draw::Painter* painter, EditData& ed, double currentViewScaling);
-    static void drawSlurTieSegment(SlurTieSegment* item, muse::draw::Painter* painter, EditData& ed, double currentViewScaling);
-    static void drawTextBase(TextBase* item, muse::draw::Painter* painter, EditData& ed, double currentViewScaling);
+    static void drawBarline(const BarLine* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
+                            const PaintOptions& opt);
+    static void drawDynamic(const Dynamic* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
+                            const PaintOptions& opt);
+    static void drawSlurTieSegment(const SlurTieSegment* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
+                                   const PaintOptions& opt);
+    static void drawTextBase(const TextBase* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
+                             const PaintOptions& opt);
 };
 }

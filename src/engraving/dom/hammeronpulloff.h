@@ -50,7 +50,7 @@ public:
     bool isHammerOn() const { return m_isHammerOn; }
     void setIsHammerOn(bool v) { m_isHammerOn = v; }
 
-    Color curColor() const override;
+    Color curColor(const rendering::PaintOptions& opt) const override;
 
     PropertyValue propertyDefault(Pid id) const override;
 
@@ -74,7 +74,7 @@ public:
 
     HammerOnPullOff* hammerOnPullOff() const { return toHammerOnPullOff(spanner()); }
 
-    Color curColor() const override;
+    Color curColor(const rendering::PaintOptions& opt) const override;
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     EngravingObjectList scanChildren() const override;

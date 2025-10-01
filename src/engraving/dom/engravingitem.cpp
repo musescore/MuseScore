@@ -613,24 +613,24 @@ Color EngravingItem::color() const
 //   curColor
 //---------------------------------------------------------
 
-Color EngravingItem::curColor() const
+Color EngravingItem::curColor(const rendering::PaintOptions& opt) const
 {
-    return curColor(getProperty(Pid::VISIBLE).toBool());
+    return curColor(getProperty(Pid::VISIBLE).toBool(), opt);
 }
 
 //---------------------------------------------------------
 //   curColor
 //---------------------------------------------------------
 
-Color EngravingItem::curColor(bool isVisible) const
+Color EngravingItem::curColor(bool isVisible, const rendering::PaintOptions& opt) const
 {
-    return curColor(isVisible, color());
+    return curColor(isVisible, color(), opt);
 }
 
-Color EngravingItem::curColor(bool isVisible, Color normalColor) const
+Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering::PaintOptions& opt) const
 {
     // the default element color is always interpreted as black in printing
-    if (score() && score()->printing()) {
+    if (opt.isPrinting) {
         return (normalColor == configuration()->defaultColor()) ? Color::BLACK : normalColor;
     }
 
@@ -658,7 +658,7 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
         return configuration()->invisibleColor();
     }
 
-    if (m_colorsInversionEnabled && configuration()->scoreInversionEnabled()) {
+    if (opt.invertColors) {
         return normalColor.inverted();
     }
 
@@ -2354,16 +2354,6 @@ void EngravingItem::endEdit(EditData&)
 double EngravingItem::styleP(Sid idx) const
 {
     return style().styleMM(idx);
-}
-
-bool EngravingItem::colorsInversionEnabled() const
-{
-    return m_colorsInversionEnabled;
-}
-
-void EngravingItem::setColorsInversionEnabled(bool enabled)
-{
-    m_colorsInversionEnabled = enabled;
 }
 
 void EngravingItem::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool generated)

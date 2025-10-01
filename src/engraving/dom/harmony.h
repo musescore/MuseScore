@@ -297,7 +297,7 @@ public:
     double bassScale() const { return m_bassScale; }
     void setBassScale(double v) { m_bassScale = v; }
 
-    Color curColor() const override;
+    Color curColor(const rendering::PaintOptions& opt) const override;
     void setColor(const Color& color) override;
 
     bool doNotStackModifiers() const { return m_doNotStackModifiers; }

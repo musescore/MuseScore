@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_CONTINUOUSPANEL_H
-#define MU_NOTATION_CONTINUOUSPANEL_H
+#pragma once
 
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
@@ -59,7 +58,7 @@ public:
         std::function<muse::PointF(const muse::PointF&)> fromLogical;
     };
 
-    void paint(muse::draw::Painter& painter, const NotationViewContext& ctx);
+    void paint(muse::draw::Painter& painter, const NotationViewContext& ctx, const engraving::rendering::PaintOptions& opt);
 
 private:
     qreal styleMM(const mu::engraving::Sid styleId) const;
@@ -70,5 +69,3 @@ private:
     muse::RectF m_rect;
 };
 }
-
-#endif // MU_NOTATION_CONTINUOUSPANEL_H

@@ -149,11 +149,14 @@ void ExampleView::drawBackground(Painter* p, const RectF& r) const
 
 void ExampleView::drawElements(Painter& painter, const std::vector<EngravingItem*>& el)
 {
+    engraving::rendering::PaintOptions opt;
+    opt.invertColors = engravingConfiguration()->scoreInversionEnabled();
+
     for (EngravingItem* e : el) {
         e->itemDiscovered = 0;
         PointF pos(e->pagePos());
         painter.translate(pos);
-        e->renderer()->drawItem(e, &painter);
+        e->renderer()->drawItem(e, &painter, opt);
         painter.translate(-pos);
     }
 }

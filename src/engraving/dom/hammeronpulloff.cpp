@@ -21,6 +21,8 @@
  */
 
 #include "hammeronpulloff.h"
+
+#include "mscore.h"
 #include "note.h"
 #include "score.h"
 #include "stafftype.h"
@@ -48,14 +50,13 @@ HammerOnPullOffSegment::HammerOnPullOffSegment(const HammerOnPullOffSegment& oth
 {
 }
 
-Color HammerOnPullOffSegment::curColor() const
+Color HammerOnPullOffSegment::curColor(const rendering::PaintOptions& opt) const
 {
-    if (score()->printing() || !MScore::warnGuitarBends || isValid()) {
-        return SlurSegment::curColor();
+    if (!opt.isPrinting && MScore::warnGuitarBends && !isValid()) {
+        return selected() ? configuration()->criticalSelectedColor() : configuration()->criticalColor();
     }
 
-    auto engravingConf = configuration();
-    return selected() ? engravingConf->criticalSelectedColor() : engravingConf->criticalColor();
+    return SlurSegment::curColor(opt);
 }
 
 void HammerOnPullOffSegment::scanElements(void* data, void (*func)(void*, EngravingItem*), bool all)
@@ -318,13 +319,13 @@ bool HammerOnPullOffText::isUserModified() const
     return TextBase::isUserModified();
 }
 
-Color HammerOnPullOffText::curColor() const
+Color HammerOnPullOffText::curColor(const rendering::PaintOptions& opt) const
 {
-    if (!isValid() && MScore::warnGuitarBends && !score()->printing()) {
+    if (!isValid() && MScore::warnGuitarBends && !opt.isPrinting) {
         return selected() ? configuration()->criticalSelectedColor() : configuration()->criticalColor();
     }
 
-    return TextBase::curColor();
+    return TextBase::curColor(opt);
 }
 
 PropertyValue HammerOnPullOffText::propertyDefault(Pid id) const

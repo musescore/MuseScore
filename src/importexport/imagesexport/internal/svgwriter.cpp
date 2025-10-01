@@ -114,6 +114,9 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
         painter.fillRect(pageRect, muse::draw::Color::WHITE);
     }
 
+    engraving::rendering::PaintOptions eopt;
+    eopt.isPrinting = true;
+
     // 1st pass: StaffLines
     for (const mu::engraving::System* system : page->systems()) {
         size_t stavesCount = system->staves().size();
@@ -146,7 +149,7 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
                 if (!measure->isMeasure()) {
                     if (concatenatedSL != nullptr) {
                         printer.setElement(concatenatedSL);
-                        scoreRenderer()->paintItem(painter, concatenatedSL);
+                        scoreRenderer()->paintItem(painter, concatenatedSL, eopt);
                         concatenatedSL = nullptr;
                         prevStaffType = nullptr;
                     }
@@ -160,7 +163,7 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
                     || (score->staff(staffIndex)->staffType(m->tick()) != prevStaffType)) {
                     if (concatenatedSL != nullptr) {
                         printer.setElement(concatenatedSL);
-                        scoreRenderer()->paintItem(painter, concatenatedSL);
+                        scoreRenderer()->paintItem(painter, concatenatedSL, eopt);
                         concatenatedSL = nullptr;
                         prevStaffType = nullptr;
                     }
@@ -191,7 +194,7 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
                 concatenatedSL->mutldata()->setShape(concatenatedShape);
                 concatenatedSL->mutldata()->setMask(concatenatedMask);
                 printer.setElement(concatenatedSL);
-                scoreRenderer()->paintItem(painter, concatenatedSL);
+                scoreRenderer()->paintItem(painter, concatenatedSL, eopt);
                 concatenatedSL = nullptr;
                 prevStaffType = nullptr;
             }
@@ -259,7 +262,7 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
         printer.setElement(element);
 
         // Paint it
-        scoreRenderer()->paintItem(painter, element);
+        scoreRenderer()->paintItem(painter, element, eopt);
     }
 
     painter.endDraw();

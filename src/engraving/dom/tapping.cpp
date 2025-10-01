@@ -130,12 +130,12 @@ TappingText::TappingText(const TappingText& t)
 {
 }
 
-Color TappingText::curColor() const
+Color TappingText::curColor(const rendering::PaintOptions& opt) const
 {
     if (parentItem()) {
-        return parentItem()->curColor();
+        return parentItem()->curColor(opt);
     }
 
-    return EngravingItem::curColor();
+    return EngravingItem::curColor(opt);
 }
 }

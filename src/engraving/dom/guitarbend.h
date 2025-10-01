@@ -104,7 +104,7 @@ public:
 
     double lineWidth() const;
 
-    Color uiColor() const;
+    Color curColor(const rendering::PaintOptions& opt) const override;
 
     static void adaptBendsFromTabToStandardStaff(const Staff* staff);
 
@@ -170,7 +170,10 @@ public:
 
     bool isUserModified() const override;
 
-    Color uiColor() const { return guitarBend()->uiColor(); }
+    Color curColor(const rendering::PaintOptions& opt) const override
+    {
+        return guitarBend()->curColor(opt);
+    }
 
     struct LayoutData : public LineSegment::LayoutData
     {
