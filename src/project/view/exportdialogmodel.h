@@ -70,6 +70,8 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
     Q_PROPERTY(
         bool pdfTransparentBackground READ pdfTransparentBackground WRITE setPdfTransparentBackground NOTIFY pdfTransparentBackgroundChanged)
 
+    Q_PROPERTY(bool pdfGrayscale READ pdfGrayscale WRITE setPdfGrayscale NOTIFY pdfGrayscaleChanged)
+
     Q_PROPERTY(int pngResolution READ pngResolution WRITE setPngResolution NOTIFY pngResolutionChanged)
     Q_PROPERTY(
         bool pngTransparentBackground READ pngTransparentBackground WRITE setPngTransparentBackground NOTIFY pngTransparentBackgroundChanged)
@@ -124,6 +126,9 @@ public:
 
     bool pdfTransparentBackground() const;
     void setPdfTransparentBackground(const bool& transparent);
+
+    bool pdfGrayscale() const;
+    void setPdfGrayscale(const bool& grayscale);
 
     int pngResolution() const;
     void setPngResolution(const int& resolution);
@@ -182,6 +187,7 @@ signals:
 
     void pdfResolutionChanged(int resolution);
     void pdfTransparentBackgroundChanged(bool transparent);
+    void pdfGrayscaleChanged(bool grayscale);
 
     void pngResolutionChanged(int resolution);
     void pngTransparentBackgroundChanged(bool transparent);
