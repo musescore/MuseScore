@@ -967,6 +967,16 @@ Align justifyToAlignment(others::NamePositioning::AlignJustify alignJustify)
     return muse::value(alignTable, alignJustify, Align(AlignH::HCENTER, AlignV::VCENTER));
 }
 
+AlignH toAlignH(others::HorizontalTextJustification hTextJustify)
+{
+    static const std::unordered_map<others::HorizontalTextJustification, AlignH> hAlignTable = {
+        { others::HorizontalTextJustification::Left,   AlignH::LEFT },
+        { others::HorizontalTextJustification::Center, AlignH::HCENTER },
+        { others::HorizontalTextJustification::Right,  AlignH::RIGHT },
+    };
+    return muse::value(hAlignTable, hTextJustify, AlignH::LEFT);
+}
+
 CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines)
 {
     static const std::unordered_map<bool, CourtesyBarlineMode> courtesyBarlineModeTable = {
