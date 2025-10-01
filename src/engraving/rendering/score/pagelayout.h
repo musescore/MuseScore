@@ -24,9 +24,11 @@
 
 #include "layoutcontext.h"
 
-#include "dom/page.h"
-#include "dom/system.h"
-#include "dom/systemdivider.h"
+namespace mu::engraving {
+class Page;
+class System;
+enum class SystemDividerType : unsigned char;
+}
 
 namespace mu::engraving::rendering::score {
 class PageLayout
@@ -45,7 +47,7 @@ private:
     static void layoutArticAndFingeringOnCrossStaffBeams(LayoutContext& ctx, System* system);
 
     static void layoutSystemDividers(LayoutContext& ctx, Page* page);
-    static void updateSystemDivider(LayoutContext& ctx, System* system, System* nextSystem, SystemDivider::Type type, bool needsDivider);
+    static void updateSystemDivider(LayoutContext& ctx, System* system, System* nextSystem, SystemDividerType type, bool needsDivider);
 };
 }
 

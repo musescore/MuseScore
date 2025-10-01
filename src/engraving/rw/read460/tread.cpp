@@ -1800,9 +1800,9 @@ void TRead::read(MMRestRange* r, XmlReader& xml, ReadContext& ctx)
 void TRead::read(SystemDivider* d, XmlReader& e, ReadContext& ctx)
 {
     if (e.attribute("type") == "left") {
-        d->setDividerType(SystemDivider::Type::LEFT);
+        d->setDividerType(SystemDividerType::LEFT);
     } else {
-        d->setDividerType(SystemDivider::Type::RIGHT);
+        d->setDividerType(SystemDividerType::RIGHT);
     }
     TRead::read(static_cast<Symbol*>(d), e, ctx);
 }

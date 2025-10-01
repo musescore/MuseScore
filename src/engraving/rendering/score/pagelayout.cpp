@@ -35,6 +35,7 @@
 #include "dom/measure.h"
 #include "dom/measurebase.h"
 #include "dom/note.h"
+#include "dom/page.h"
 #include "dom/score.h"
 #include "dom/segment.h"
 #include "dom/slur.h"
@@ -42,6 +43,7 @@
 #include "dom/spannermap.h"
 #include "dom/staff.h"
 #include "dom/staffvisibilityindicator.h"
+#include "dom/system.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 #include "dom/tuplet.h"
@@ -814,19 +816,18 @@ void PageLayout::layoutSystemDividers(LayoutContext& ctx, Page* page)
         bool needsLeftDivider = needsDivider && ctx.conf().styleB(Sid::dividerLeft);
         bool needsRightDivider = needsDivider && ctx.conf().styleB(Sid::dividerRight);
 
-        updateSystemDivider(ctx, system, nextSystem, SystemDivider::Type::LEFT, needsLeftDivider);
-        updateSystemDivider(ctx, system, nextSystem, SystemDivider::Type::RIGHT, needsRightDivider);
+        updateSystemDivider(ctx, system, nextSystem, SystemDividerType::LEFT, needsLeftDivider);
+        updateSystemDivider(ctx, system, nextSystem, SystemDividerType::RIGHT, needsRightDivider);
     }
 }
 
-void PageLayout::updateSystemDivider(LayoutContext& ctx, System* system, System* nextSystem, SystemDivider::Type type, bool needsDivider)
+void PageLayout::updateSystemDivider(LayoutContext& ctx, System* system, System* nextSystem, SystemDividerType type, bool needsDivider)
 {
-    bool left = type == SystemDivider::Type::LEFT;
+    bool left = type == SystemDividerType::LEFT;
     SystemDivider* divider = left ? system->systemDividerLeft() : system->systemDividerRight();
     if (!needsDivider) {
         if (divider) {
             system->remove(divider);
-            delete divider;
         }
         return;
     }

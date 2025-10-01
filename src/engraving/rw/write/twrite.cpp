@@ -3109,7 +3109,7 @@ void TWrite::write(const System* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const SystemDivider* item, XmlWriter& xml, WriteContext& ctx)
 {
-    xml.startElement(item, { { "type", (item->dividerType() == SystemDivider::Type::LEFT ? "left" : "right") } });
+    xml.startElement(item, { { "type", (item->dividerType() == SystemDividerType::LEFT ? "left" : "right") } });
     writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
     xml.endElement();
 }
