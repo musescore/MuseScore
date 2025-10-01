@@ -426,7 +426,6 @@ void ExportDialogModel::setPdfTransparentBackground(const bool& transparent)
     emit pdfTransparentBackgroundChanged(transparent);
 }
 
-<<<<<<< HEAD
 bool ExportDialogModel::pdfGrayscale() const
 {
     return imageExportConfiguration()->exportPdfWithGrayscale();

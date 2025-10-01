@@ -28,6 +28,7 @@
 
 #include "engraving/dom/masterscore.h"
 #include "project/types/projectmeta.h"
+#include "project/inotationproject.h"
 
 #include "log.h"
 
@@ -149,19 +150,22 @@ Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& destin
     return true;
 }
 
-// Extract project metadata from current project or notation fallback
+// Extract project metadata from notation's project or notation fallback
 ProjectMeta PdfWriter::getProjectMetadata(INotationPtr notation) const
 {
-    auto project = globalContext()->currentProject();
-    if (project) {
-        return project->metaInfo();
+    if (notation) {
+        auto project = notation->project();
+        if (project) {
+            return project->metaInfo();
+        }
+
+        // Fallback to notation title if project not available
+        ProjectMeta meta;
+        meta.title = notation->projectWorkTitle();
+        return meta;
     }
 
-    ProjectMeta meta;
-    if (notation) {
-        meta.title = notation->projectWorkTitle();
-    }
-    return meta;
+    return ProjectMeta();
 }
 
 // Generate XMP metadata for PDF embedding with project information
