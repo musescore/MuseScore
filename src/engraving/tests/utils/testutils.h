@@ -20,10 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TESTUTILS_H
-#define MU_ENGRAVING_TESTUTILS_H
+#pragma once
 
-#include "dom/score.h"
+#include "engraving/dom/score.h"
 
 namespace mu::engraving {
 class TestUtils
@@ -33,5 +32,3 @@ public:
     static void createParts(MasterScore* masterScore, size_t numberOfParts);
 };
 }
-
-#endif // MU_ENGRAVING_TESTUTILS_H

@@ -21,12 +21,7 @@
  */
 #include "fretframechordssettingsmodel.h"
 
-#include "dom/box.h"
-#include "dom/fret.h"
-
-#include "fretframechorditem.h"
-
-#include "translation.h"
+#include "engraving/dom/box.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;

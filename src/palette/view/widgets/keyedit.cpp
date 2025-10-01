@@ -31,17 +31,16 @@
 #include "commonscene/commonscenetypes.h"
 #include "translation.h"
 
-#include "engraving/rw/rwregister.h"
+#include "engraving/compat/dummyelement.h"
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/clef.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/mscore.h"
-#include "engraving/dom/factory.h"
+#include "engraving/rw/rwregister.h"
 #include "engraving/style/defaultstyle.h"
-#include "engraving/compat/dummyelement.h"
-
-#include "types/symnames.h"
+#include "engraving/types/symnames.h"
 
 #include "keycanvas.h"
 #include "palettewidget.h"

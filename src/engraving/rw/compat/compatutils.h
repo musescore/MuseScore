@@ -19,13 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_COMPATUTILS_H
-#define MU_ENGRAVING_COMPATUTILS_H
+#pragma once
 
 #include <vector>
 #include <set>
 
-#include "dom/articulation.h"
+#include "../../dom/articulation.h"
 
 namespace mu::engraving {
 class Dynamic;
@@ -69,4 +68,3 @@ private:
     static void convertLaissezVibArticToTie(MasterScore* masterScore);
 };
 }
-#endif // MU_ENGRAVING_COMPATUTILS_H

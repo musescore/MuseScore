@@ -22,21 +22,20 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/barline.h"
-#include "dom/bracket.h"
-#include "dom/factory.h"
-#include "dom/layoutbreak.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/system.h"
-#include "dom/timesig.h"
+#include "engraving/dom/barline.h"
+#include "engraving/dom/bracket.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/layoutbreak.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/system.h"
+#include "engraving/dom/timesig.h"
 
-#include "editing/editproperty.h"
+#include "engraving/editing/editproperty.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String BARLINE_DATA_DIR(u"barline_data/");

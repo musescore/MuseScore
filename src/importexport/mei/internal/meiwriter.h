@@ -19,11 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_MEIWRITER_H
-#define MU_IMPORTEXPORT_MEIWRITER_H
+#pragma once
 
 #include "project/inotationwriter.h"
-#include "engravingerrors.h"
+#include "engraving/engravingerrors.h"
 
 namespace mu::iex::mei {
 class MeiWriter : public project::INotationWriter
@@ -38,5 +37,3 @@ public:
     mu::engraving::Err writeScore(mu::engraving::Score* score, const muse::io::path_t& path);
 };
 } // namespace
-
-#endif // MU_IMPORTEXPORT_MEIWRITER_H

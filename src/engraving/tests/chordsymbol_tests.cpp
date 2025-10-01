@@ -21,23 +21,22 @@
  */
 
 #include <gtest/gtest.h>
-#include "dom/score.h"
-#include "compat/scoreaccess.h"
-#include "dom/chordrest.h"
-#include "dom/durationtype.h"
-#include "dom/excerpt.h"
-#include "dom/fret.h"
-#include "dom/harmony.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/part.h"
 
-#include "dom/segment.h"
+#include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/durationtype.h"
+#include "engraving/dom/excerpt.h"
+#include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/segment.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String CHORDSYMBOL_DATA_DIR("chordsymbol_data/");

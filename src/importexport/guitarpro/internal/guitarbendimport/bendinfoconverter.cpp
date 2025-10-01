@@ -21,7 +21,7 @@
  */
 #include "bendinfoconverter.h"
 
-#include <dom/note.h>
+#include <engraving/dom/note.h>
 
 using namespace mu::engraving;
 

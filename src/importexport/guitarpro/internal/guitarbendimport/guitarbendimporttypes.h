@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include <types/fraction.h>
+#include <engraving/types/fraction.h>
 
 namespace mu::engraving {
 class Note;

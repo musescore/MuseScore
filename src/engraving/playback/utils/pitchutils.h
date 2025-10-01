@@ -20,12 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_PITCHUTILS_H
-#define MU_ENGRAVING_PITCHUTILS_H
+#pragma once
 
 #include "mpe/mpetypes.h"
 
-#include "dom/pitchspelling.h"
+#include "engraving/dom/pitchspelling.h"
 
 namespace mu::engraving {
 inline muse::mpe::PitchClass pitchClassFromTpc(const int tpc)
@@ -142,5 +141,3 @@ inline muse::mpe::pitch_level_t notePitchLevel(const int noteTpc, const int note
     return result;
 }
 }
-
-#endif // MU_ENGRAVING_PITCHUTILS_H

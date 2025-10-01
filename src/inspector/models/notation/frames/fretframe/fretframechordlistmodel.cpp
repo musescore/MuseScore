@@ -21,8 +21,8 @@
  */
 #include "fretframechordlistmodel.h"
 
-#include "dom/box.h"
-#include "dom/fret.h"
+#include "engraving/dom/box.h"
+#include "engraving/dom/fret.h"
 
 #include "fretframechorditem.h"
 

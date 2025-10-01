@@ -22,12 +22,11 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/masterscore.h"
+#include "engraving/dom/masterscore.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String UNROLLREPEATS_DATA_DIR(u"unrollrepeats_data/");

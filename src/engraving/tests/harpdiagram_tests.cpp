@@ -22,15 +22,15 @@
 
 #include <gtest/gtest.h>
 
-#include "compat/scoreaccess.h"
-#include "dom/factory.h"
-#include "dom/harppedaldiagram.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/part.h"
-#include "dom/pitchspelling.h"
-#include "dom/segment.h"
-#include "editing/editharppedaldiagram.h"
+#include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/harppedaldiagram.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/pitchspelling.h"
+#include "engraving/dom/segment.h"
+#include "engraving/editing/editharppedaldiagram.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

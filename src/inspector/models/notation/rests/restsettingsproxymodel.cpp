@@ -23,12 +23,11 @@
 #include "beams/restbeamsettingsmodel.h"
 #include "restsettingsmodel.h"
 
-#include "dom/rest.h"
+#include "engraving/dom/rest.h"
 
 #include "translation.h"
 
 using namespace mu::inspector;
-using namespace mu::engraving;
 
 RestSettingsProxyModel::RestSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorProxyModel(parent, repository)

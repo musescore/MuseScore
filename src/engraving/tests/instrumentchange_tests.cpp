@@ -22,22 +22,21 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/chordrest.h"
-#include "dom/instrchange.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/part.h"
-#include "dom/segment.h"
-#include "dom/staff.h"
-#include "editing/editinstrumentchange.h"
-#include "editing/editpart.h"
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/instrchange.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
+#include "engraving/editing/editinstrumentchange.h"
+#include "engraving/editing/editpart.h"
 
 #include "engraving/compat/midi/midipatch.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String INSTRUMENTCHANGE_DATA_DIR("instrumentchange_data/");

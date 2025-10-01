@@ -24,11 +24,11 @@
 #include "global/realfn.h"
 #include "mpe/mpetypes.h"
 
-#include "dom/score.h"
-#include "dom/repeatlist.h"
-#include "dom/tempo.h"
+#include "../../dom/score.h"
+#include "../../dom/repeatlist.h"
+#include "../../dom/tempo.h"
 
-#include "types/constants.h"
+#include "../../types/constants.h"
 
 namespace mu::engraving {
 inline muse::mpe::timestamp_t timestampFromTicks(const Score* score, const int tick)

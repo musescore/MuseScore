@@ -26,12 +26,11 @@
 
 #include "utils/scorerw.h"
 
-#include "dom/guitarbend.h"
-#include "dom/tempo.h"
-#include "dom/part.h"
+#include "engraving/dom/guitarbend.h"
+#include "engraving/dom/part.h"
 
-#include "playback/renderingcontext.h"
-#include "playback/renderers/bendsrenderer.h"
+#include "engraving/playback/renderingcontext.h"
+#include "engraving/playback/renderers/bendsrenderer.h"
 
 using namespace mu::engraving;
 using namespace muse;

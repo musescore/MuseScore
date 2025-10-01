@@ -22,13 +22,12 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/masterscore.h"
+#include "engraving/dom/masterscore.h"
 
 #include "utils/scorerw.h"
 
 #include "log.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String ALL_ELEMENTS_DATA_DIR("all_elements_data/");

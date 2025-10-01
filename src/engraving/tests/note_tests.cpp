@@ -22,25 +22,24 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/accidental.h"
-#include "dom/articulation.h"
-#include "dom/articulation.h"
-#include "dom/chord.h"
-#include "dom/chordrest.h"
-#include "dom/factory.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/mscore.h"
-#include "dom/note.h"
-#include "dom/pitchspelling.h"
-#include "dom/segment.h"
-#include "dom/tremolosinglechord.h"
-
 #include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/accidental.h"
+#include "engraving/dom/articulation.h"
+#include "engraving/dom/articulation.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/pitchspelling.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/tremolosinglechord.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String NOTE_DATA_DIR("note_data/");

@@ -22,12 +22,12 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/engravingitem.h"
-#include "dom/factory.h"
-#include "dom/masterscore.h"
+#include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/masterscore.h"
 
 #include "utils/scorerw.h"
-#include "engraving/compat/scoreaccess.h"
 
 using namespace mu::engraving;
 

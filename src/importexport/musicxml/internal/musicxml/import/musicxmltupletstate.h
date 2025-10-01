@@ -23,7 +23,7 @@
 
 #include "global/types/flags.h"
 
-#include "types/fraction.h"
+#include "engraving/types/fraction.h"
 
 namespace mu::engraving {
 class TDuration;

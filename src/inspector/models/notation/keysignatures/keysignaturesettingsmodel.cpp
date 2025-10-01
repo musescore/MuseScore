@@ -21,8 +21,9 @@
  */
 #include "keysignaturesettingsmodel.h"
 
-#include "dom/layoutbreak.h"
-#include "dom/measure.h"
+#include "engraving/dom/layoutbreak.h"
+#include "engraving/dom/measure.h"
+
 #include "translation.h"
 
 using namespace mu::inspector;

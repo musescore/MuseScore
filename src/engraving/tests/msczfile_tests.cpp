@@ -24,10 +24,10 @@
 #include <QByteArray>
 
 #include "io/buffer.h"
-#include "infrastructure/mscwriter.h"
-#include "infrastructure/mscreader.h"
 
-using namespace mu;
+#include "engraving/infrastructure/mscreader.h"
+#include "engraving/infrastructure/mscwriter.h"
+
 using namespace muse;
 using namespace muse::io;
 using namespace mu::engraving;

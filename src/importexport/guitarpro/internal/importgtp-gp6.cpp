@@ -22,14 +22,11 @@
 
 #include "importgtp.h"
 
-#include <cmath>
-
 #include "serialization/xmldom.h"
 
 #include "gtp/gp6dombuilder.h"
 #include "gtp/gpconverter.h"
 
-#include "engraving/dom/factory.h"
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/barline.h"
@@ -40,6 +37,7 @@
 #include "engraving/dom/clef.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/excerpt.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/glissando.h"
@@ -65,7 +63,6 @@
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stringdata.h"
-#include "types/symid.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/textline.h"
@@ -74,6 +71,8 @@
 #include "engraving/dom/tremolobar.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
+
+#include "engraving/types/symid.h"
 
 #include "log.h"
 

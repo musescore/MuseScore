@@ -40,7 +40,6 @@ using ::testing::Return;
 #include "global/iapplication.h"
 
 using namespace muse;
-using namespace mu;
 using namespace muse::update;
 
 namespace muse::update {

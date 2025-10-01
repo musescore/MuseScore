@@ -21,8 +21,10 @@
  */
 
 #include "musicxmlpart.h"
-#include "dom/mscore.h"
-#include "dom/interval.h"
+
+#include "engraving/dom/interval.h"
+#include "engraving/dom/mscore.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
