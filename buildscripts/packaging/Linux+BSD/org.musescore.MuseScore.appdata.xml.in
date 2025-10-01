@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2018-2022 MuseScore Limited and others -->
+<!-- Copyright 2018-2025 MuseScore Limited and others -->
 <component type="desktop-application">
     <!--
         Please write XML tags in the order they are specified in
@@ -7,13 +7,13 @@
 
         After editing, run either of these commands to check for errors in this file:
             $  appstreamcli validate [filename]
-            $  appstream-util validate-relax [filename]
+            $  appstream-util validate [filename]
     -->
     <id>org.musescore.MuseScore@MUSE_APP_INSTALL_SUFFIX@</id>
-    <metadata_license>CC0-1.0</metadata_license><!-- License of this file. See <project_license> for MuseScore license. -->
+    <metadata_license>CC0-1.0</metadata_license><!-- License of this file -->
+    <project_license>GPL-3.0-only</project_license>
     <name>MuseScore</name>
     <summary>Create, play and print beautiful sheet music</summary>
-    <icon type="stock">mscore@MUSE_APP_INSTALL_SUFFIX@</icon>
     <description>
         <p>MuseScore is cross-platform, multi-lingual, open source music notation software. It features an easy to use WYSIWYG editor with audio score playback for results that look and sound beautiful. It supports unlimited staves with up to four voices each, dynamics, articulations, lyrics, chords, lead sheet notation, import/export of MIDI and MusicXML, export to PDF and WAV, plus online score sharing.</p>
         <p>MuseScore can upload scores directly to the score sharing site musescore.com. Program support is provided on musescore.org.</p>
@@ -69,8 +69,9 @@
         <control>touch</control>
         <internet>always</internet>
     </supports>
-    <project_license>GPL-3.0-only</project_license>
-    <developer_name>MuseScore Limited</developer_name>
+    <developer id="org.musescore">
+        <name>MuseScore Limited</name>
+    </developer>
     <screenshots>
         <screenshot type="default">
             <caption>Start Center</caption>
@@ -105,7 +106,7 @@
     <translation type="qt">mscore@MUSE_APP_INSTALL_SUFFIX@-@MUSE_APP_VERSION_MAJ_MIN@/locale/musescore</translation>
     <translation type="qt">mscore@MUSE_APP_INSTALL_SUFFIX@-@MUSE_APP_VERSION_MAJ_MIN@/locale/qt</translation>
     <translation type="qt">mscore@MUSE_APP_INSTALL_SUFFIX@-@MUSE_APP_VERSION_MAJ_MIN@/locale/qtbase</translation>
-    <content_rating type="oars-1.1"/>
+    <content_rating type="oars-1.1" />
     <!-- GNOME extensions -->
     <kudos>
         <kudo>HiDpiIcon</kudo>
@@ -115,6 +116,57 @@
     </kudos>
     <!-- Only <releases> below this point please! -->
     <releases>
+        <release date="2025-09-30" version="4.6">
+            <url>https://musescore.org/en/4.6</url>
+        </release>
+        <release date="2025-04-25" version="4.5.2">
+            <url>https://musescore.org/en/4.5.2</url>
+        </release>
+        <release date="2025-03-21" version="4.5.1">
+            <url>https://musescore.org/en/4.5.1</url>
+        </release>
+        <release date="2025-03-12" version="4.5">
+            <url>https://musescore.org/en/4.5</url>
+        </release>
+        <release date="2024-12-11" version="4.4.4">
+            <url>https://musescore.org/en/4.4.4</url>
+        </release>
+        <release date="2024-10-24" version="4.4.3">
+            <url>https://musescore.org/en/4.4.3</url>
+        </release>
+        <release date="2024-09-16" version="4.4.2">
+            <url>https://musescore.org/en/4.4.2</url>
+        </release>
+        <release date="2024-09-05" version="4.4.1">
+            <url>https://musescore.org/en/4.4.1</url>
+        </release>
+        <release date="2024-08-27" version="4.4">
+            <url>https://musescore.org/en/4.4</url>
+        </release>
+        <release date="2024-06-12" version="4.3.2">
+            <url>https://musescore.org/en/4.3.2</url>
+        </release>
+        <release date="2024-05-29" version="4.3.1">
+            <url>https://musescore.org/en/4.3.1</url>
+        </release>
+        <release date="2024-05-07" version="4.3">
+            <url>https://musescore.org/en/4.3</url>
+        </release>
+        <release date="2024-01-24" version="4.2.1">
+            <url>https://musescore.org/en/4.2.1</url>
+        </release>
+        <release date="2023-12-18" version="4.2">
+            <url>https://musescore.org/en/4.2</url>
+        </release>
+        <release date="2023-07-26" version="4.1.1">
+            <url>https://musescore.org/en/4.1.1</url>
+        </release>
+        <release date="2023-07-12" version="4.1">
+            <url>https://musescore.org/en/4.1</url>
+        </release>
+        <release date="2023-03-13" version="4.0.2">
+            <url>https://musescore.org/en/4.0.2</url>
+        </release>
         <release date="2023-01-13" version="4.0.1">
             <url>https://musescore.org/en/4.0.1</url>
         </release>
