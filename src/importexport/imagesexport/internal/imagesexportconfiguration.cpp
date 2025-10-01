@@ -31,6 +31,7 @@ using namespace mu::iex::imagesexport;
 
 static const Settings::Key EXPORT_PDF_DPI_RESOLUTION_KEY("iex_imagesexport", "export/pdf/dpi");
 static const Settings::Key EXPORT_PDF_USE_TRANSPARENCY_KEY("iex_imagesexport", "export/pdf/useTransparency");
+static const Settings::Key EXPORT_PDF_USE_GRAYSCALE_KEY("iex_imagesexport", "export/pdf/useGrayscale");
 static const Settings::Key EXPORT_PNG_DPI_RESOLUTION_KEY("iex_imagesexport", "export/png/resolution");
 static const Settings::Key EXPORT_PNG_USE_TRANSPARENCY_KEY("iex_imagesexport", "export/png/useTransparency");
 static const Settings::Key EXPORT_SVG_USE_TRANSPARENCY_KEY("iex_imagesexport", "export/svg/useTransparency");
@@ -62,6 +63,16 @@ bool ImagesExportConfiguration::exportPdfWithTransparentBackground() const
 void ImagesExportConfiguration::setExportPdfWithTransparentBackground(bool transparent)
 {
     settings()->setSharedValue(EXPORT_PDF_USE_TRANSPARENCY_KEY, Val(transparent));
+}
+
+bool ImagesExportConfiguration::exportPdfWithGrayscale() const
+{
+    return settings()->value(EXPORT_PDF_USE_GRAYSCALE_KEY).toBool();
+}
+
+void ImagesExportConfiguration::setExportPdfWithGrayscale(bool grayscale)
+{
+    settings()->setSharedValue(EXPORT_PDF_USE_GRAYSCALE_KEY, Val(grayscale));
 }
 
 float ImagesExportConfiguration::exportPngDpiResolution() const

@@ -154,4 +154,10 @@ void PdfWriter::preparePdfWriter(QPdfWriter& pdfWriter, const QString& title, co
     pdfWriter.setTitle(title);
     pdfWriter.setPageMargins(QMarginsF());
     pdfWriter.setPageLayout(QPageLayout(QPageSize(size, QPageSize::Inch), QPageLayout::Orientation::Portrait, QMarginsF()));
+
+    if (configuration()->exportPdfWithGrayscale()) {
+        pdfWriter.setColorModel(QPdfWriter::ColorModel::Grayscale);
+    } else {
+        pdfWriter.setColorModel(QPdfWriter::ColorModel::Auto);
+    }
 }

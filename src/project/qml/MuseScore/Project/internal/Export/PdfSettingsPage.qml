@@ -58,11 +58,26 @@ ExportSettingsPage {
 
     CheckBox {
         width: parent.width
+        text: qsTrc("project/export", "Grayscale")
+
+        navigation.name: "GrayscaleCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 2
+
+        checked: root.model.pdfGrayscale
+
+        onClicked: {
+            root.model.pdfGrayscale = !checked
+        }
+    }
+
+    CheckBox {
+        width: parent.width
         text: qsTrc("project/export", "Transparent background")
 
         navigation.name: "TransparentBackgroundCheckbox"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationOrder + 2
+        navigation.row: root.navigationOrder + 3
 
         checked: root.model.pdfTransparentBackground
 
