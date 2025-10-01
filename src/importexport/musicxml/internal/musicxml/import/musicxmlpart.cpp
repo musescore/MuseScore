@@ -48,7 +48,7 @@ static const std::vector<String> percussionInstrumentNames = {
     u"Vibraphone",
     u"Marimba",
     u"Bell",
-    u"Drum"
+    u"Drum",
     u"Cymbal",
     u"Triangle",
     u"Claves",
