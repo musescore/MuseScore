@@ -177,7 +177,7 @@ static void transferTupletProperties(MusxInstance<details::TupletDef> musxTuplet
     // separate bracket/number offset not supported, just add it to the whole tuplet for now
     /// @todo needs to be negated?
     scoreTuplet->setOffset(evpuToPointF(musxTuplet->tupOffX + musxTuplet->brackOffX,
-                                                     musxTuplet->tupOffY + musxTuplet->brackOffY));
+                                                     musxTuplet->tupOffY + musxTuplet->brackOffY) * SPATIUM20); // correctly scaled?
     scoreTuplet->setVisible(!musxTuplet->hidden);
     if (musxTuplet->autoBracketStyle != options::TupletOptions::AutoBracketStyle::Always) {
         // Can't be determined until we write all the notes/beams
@@ -425,7 +425,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                                 /// @todo this calculation needs to take into account the default accidental separation amounts in accidentalOptions. The options
                                 /// should allow us to calculate the default position of the accidental relative to the note. (But it may not be easy.)
                                 /// The result will probably also need to be multiplied by SPATIUM20, if other items are any guide.
-                                a->setOffset(evpuToPointF(accidentalInfo->hOffset, accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0));
+                                a->setOffset(evpuToPointF(accidentalInfo->hOffset, accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0) * SPATIUM20); // correctly scaled?
                             }
                         }
                         note->add(a);
@@ -443,7 +443,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     if (muse::RealIsEqualOrLess(doubleFromPercent(noteInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
                         note->setSmall(true);
                     }
-                    note->setOffset(evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0));
+                    note->setOffset(evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0) * SPATIUM20); // correctly scaled?
                     const MusxInstance<FontInfo> noteFont = options::FontOptions::getFontInfo(m_doc, noteInfo->useOwnFont ? options::FontOptions::FontType::Noteheads : options::FontOptions::FontType::Music);
                     setNoteHeadSymbol(note, FinaleTextConv::symIdFromFinaleChar(noteInfo->altNhead, noteFont));
                 }
@@ -501,7 +501,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                 for (const MusxInstance<details::CustomStem>& customStem : customStems) {
                     chord->stem()->setVisible(customStem->calcIsHiddenStem());
                     if (customStem->hOffset != 0 || customStem->vOffset != 0) {
-                        chord->stem()->setOffset(evpuToPointF(customStem->hOffset, -customStem->vOffset));
+                        chord->stem()->setOffset(evpuToPointF(customStem->hOffset, -customStem->vOffset) * SPATIUM20); // correctly scaled?
                         chord->stem()->setAutoPlace(false); // make more nuanced?
                     }
                 }
@@ -592,7 +592,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     dot->setParent(n);
                     dot->setVisible(n->visible());
                     dot->setTrack(cr->track());
-                    dot->setOffset(evpuToPointF((da->hOffset + i * museInterdot) * SPATIUM20, -da->vOffset * SPATIUM20));
+                    dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset) * SPATIUM20); // correctly scaled?
                     n->add(dot);
                 }
             } else if (r) {
@@ -601,7 +601,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     dot->setParent(r);
                     dot->setVisible(r->visible());
                     dot->setTrack(cr->track());
-                    dot->setOffset(evpuToPointF((da->hOffset + i * museInterdot) * SPATIUM20, -da->vOffset * SPATIUM20));
+                    dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset * SPATIUM20) * SPATIUM20); // correctly scaled?
                     r->add(dot);
                 }
             } else {
