@@ -21,9 +21,7 @@
  */
 #include "generalaudioworker.h"
 
-#include "global/runtime.h"
 #include "global/concurrency/threadutils.h"
-#include "global/async/processevents.h"
 
 #ifdef Q_OS_WIN
 #include "global/platform/win/waitabletimer.h"
@@ -31,12 +29,9 @@
 
 #include "audio/common/audiosanitizer.h"
 
-#include "../../internal/enginecontroller.h"
-
 #include "log.h"
 
 using namespace muse;
-using namespace muse::modularity;
 using namespace muse::audio;
 using namespace muse::audio::engine;
 
@@ -45,10 +40,8 @@ static uint64_t toWinTime(const msecs_t msecs)
     return msecs * 10000;
 }
 
-GeneralAudioWorker::GeneralAudioWorker(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
-    : m_rpcChannel(rpcChannel)
+GeneralAudioWorker::GeneralAudioWorker()
 {
-    m_engineController = std::make_shared<EngineController>(rpcChannel);
 }
 
 GeneralAudioWorker::~GeneralAudioWorker()
@@ -58,17 +51,10 @@ GeneralAudioWorker::~GeneralAudioWorker()
     }
 }
 
-void GeneralAudioWorker::registerExports()
+void GeneralAudioWorker::run(Callback callback)
 {
-    m_engineController->registerExports();
-    // optimization
-    m_engine = audioEngine();
-}
-
-void GeneralAudioWorker::run()
-{
-    m_thread = std::make_unique<std::thread>([this]() {
-        th_main();
+    m_thread = std::make_unique<std::thread>([this, callback]() {
+        th_main(callback);
     });
 
     if (!muse::setThreadPriority(*m_thread, ThreadPriority::High)) {
@@ -84,30 +70,6 @@ void GeneralAudioWorker::setInterval(const msecs_t interval)
     m_intervalInWinTime = toWinTime(interval);
 }
 
-void GeneralAudioWorker::stop()
-{
-    m_running = false;
-    m_isRunningChanged.send(false);
-    if (m_thread) {
-        m_thread->join();
-    }
-}
-
-bool GeneralAudioWorker::isRunning() const
-{
-    return m_running;
-}
-
-async::Channel<bool> GeneralAudioWorker::isRunningChanged() const
-{
-    return m_isRunningChanged;
-}
-
-void GeneralAudioWorker::popAudioData(float* dest, size_t sampleCount)
-{
-    m_engine->popAudioData(dest, sampleCount);
-}
-
 static msecs_t audioWorkerInterval(const samples_t samples, const sample_rate_t sampleRate)
 {
     msecs_t interval = float(samples) / 4.f / float(sampleRate) * 1000.f;
@@ -119,28 +81,30 @@ static msecs_t audioWorkerInterval(const samples_t samples, const sample_rate_t 
     return interval;
 }
 
-void GeneralAudioWorker::th_main()
+void GeneralAudioWorker::setInterval(const samples_t samples, const sample_rate_t sampleRate)
 {
-    runtime::setThreadName("audio_engine");
-    AudioSanitizer::setupEngineThread();
-    ONLY_AUDIO_ENGINE_THREAD;
+    setInterval(audioWorkerInterval(samples, sampleRate));
+}
 
-    m_rpcChannel->setupOnEngine();
+void GeneralAudioWorker::stop()
+{
+    m_running = false;
+    if (m_thread) {
+        m_thread->join();
+    }
+}
 
-    m_engine->outputSpecChanged().onReceive(this, [this](const OutputSpec& spec) {
-        msecs_t interval = audioWorkerInterval(spec.samplesPerChannel, spec.sampleRate);
-        setInterval(interval);
-    });
+bool GeneralAudioWorker::isRunning() const
+{
+    return m_running;
+}
+
+void GeneralAudioWorker::th_main(Callback callback)
+{
+    m_intervalMsecs = 1;
+    m_intervalInWinTime = toWinTime(m_intervalMsecs);
 
     m_running = true;
-    m_isRunningChanged.send(true);
-
-    m_engineController->onStart();
-
-    m_rpcChannel->send(rpc::make_notification(rpc::Method::EngineStarted));
-
-    m_intervalMsecs = audioWorkerInterval(2, 48000); // default
-    m_intervalInWinTime = toWinTime(m_intervalMsecs);
 
 #ifdef Q_OS_WIN
     WaitableTimer timer;
@@ -151,9 +115,7 @@ void GeneralAudioWorker::th_main()
 #endif
 
     while (m_running) {
-        async::processEvents();
-        m_rpcChannel->process();
-        m_engine->processAudioData();
+        callback();
 
 #ifdef Q_OS_WIN
         if (!timerValid || !timer.setAndWait(m_intervalInWinTime)) {
@@ -163,6 +125,4 @@ void GeneralAudioWorker::th_main()
         std::this_thread::sleep_for(std::chrono::milliseconds(m_intervalMsecs));
 #endif
     }
-
-    m_engineController->deinit();
 }

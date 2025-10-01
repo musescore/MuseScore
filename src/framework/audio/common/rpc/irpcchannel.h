@@ -38,8 +38,8 @@ enum class Method {
     Undefined = 0,
 
     // Init
+    EngineRunning,
     EngineInit,
-    EngineStarted, // notification
 
     // Config
     EngineConfigChanged,
@@ -123,7 +123,7 @@ inline std::string to_string(Method m)
     case Method::Undefined: return "Undefined";
 
     // Init
-    case Method::EngineStarted: return "EngineStarted";
+    case Method::EngineRunning: return "EngineRunning";
     case Method::EngineInit: return "EngineInit";
 
     // Config

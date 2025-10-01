@@ -65,6 +65,7 @@ public:
     MixerPtr mixer() const override;
 
     void processAudioData() override;
+    samples_t process(float* buffer, samples_t samplesPerChannel) override;
     void popAudioData(float* dest, size_t sampleCount) override;
 
 private:

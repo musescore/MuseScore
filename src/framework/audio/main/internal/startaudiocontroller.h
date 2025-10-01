@@ -29,19 +29,26 @@
 #include "global/modularity/ioc.h"
 #include "../iaudioconfiguration.h"
 #include "audio/common/rpc/irpcchannel.h"
-#include "audio/engine/iaudioworker.h"
 #include "../../iaudiodrivercontroller.h"
+#include "../isoundfontcontroller.h"
+
+namespace muse::audio::engine {
+class EngineController;
+class GeneralAudioWorker;
+}
 
 namespace muse::audio {
 class StartAudioController : public IStartAudioController, public async::Asyncable
 {
     Inject<IAudioConfiguration> configuration;
-    Inject<engine::IAudioWorker> audioWorker;
     Inject<IAudioDriverController> audioDriverController;
-    Inject<rpc::IRpcChannel> rpcChannel;
+    Inject<ISoundFontController> soundFontController;
 
 public:
-    StartAudioController() = default;
+    StartAudioController(std::shared_ptr<rpc::IRpcChannel> rpcChannel);
+
+    void registerExports();
+    void init();
 
     bool isAudioStarted() const override;
     async::Channel<bool> isAudioStartedChanged() const override;
@@ -52,6 +59,13 @@ public:
 private:
     IAudioDriverPtr audioDriver() const;
 
+    void th_setupEngine();
+
+    std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
+    std::shared_ptr<engine::EngineController> m_engineController;
+    std::shared_ptr<engine::GeneralAudioWorker> m_worker;
+
+    ValCh<bool> m_isEngineRunning;
     ValCh<bool> m_isAudioStarted;
 };
 }
