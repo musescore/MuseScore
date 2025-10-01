@@ -677,7 +677,7 @@ std::pair<mu::engraving::Instrument*, mu::engraving::Part*> PercussionPanelModel
     return { inst, part };
 }
 
-const project::IProjectAudioSettingsPtr PercussionPanelModel::audioSettings() const
+const mu::project::IProjectAudioSettingsPtr PercussionPanelModel::audioSettings() const
 {
     return globalContext()->currentProject() ? globalContext()->currentProject()->audioSettings() : nullptr;
 }

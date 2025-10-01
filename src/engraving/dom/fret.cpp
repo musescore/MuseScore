@@ -26,7 +26,8 @@
 
 #include "io/file.h"
 
-#include "../editing/undo.h"
+#include "../editing/addremoveelement.h"
+#include "../editing/editfretboarddiagram.h"
 
 #include "anchors.h"
 #include "chord.h"
@@ -1536,60 +1537,5 @@ FretDotType FretItem::nameToDotType(String n)
     }
     LOGW("Unrecognised dot name!");
     return FretDotType::NORMAL;         // default
-}
-
-//---------------------------------------------------------
-//   updateStored
-//---------------------------------------------------------
-
-FretUndoData::FretUndoData(FretDiagram* fd)
-{
-    // We need to store the old barres and markers, since predicting how
-    // adding dots, markers, barres etc. will change things is too difficult.
-    // Update linked fret diagrams:
-    m_diagram = fd;
-    m_dots = m_diagram->m_dots;
-    m_markers = m_diagram->m_markers;
-    m_barres = m_diagram->m_barres;
-
-    m_strings = m_diagram->m_strings;
-    m_frets = m_diagram->m_frets;
-    m_fretOffset = m_diagram->m_fretOffset;
-    m_maxFrets = m_diagram->m_maxFrets;
-    m_showNut = m_diagram->m_showNut;
-    m_orientation = m_diagram->m_orientation;
-
-    m_userMag = m_diagram->m_userMag;
-
-    m_showFingering = m_diagram->m_showFingering;
-}
-
-//---------------------------------------------------------
-//   updateDiagram
-//---------------------------------------------------------
-
-void FretUndoData::updateDiagram()
-{
-    if (!m_diagram) {
-        ASSERT_X("Tried to undo fret diagram change without ever setting diagram!");
-        return;
-    }
-
-    // Reset every fret diagram property of the changed diagram
-    // FretUndoData is a friend of FretDiagram so has access to these private members
-    m_diagram->m_barres = m_barres;
-    m_diagram->m_markers = m_markers;
-    m_diagram->m_dots = m_dots;
-
-    m_diagram->m_strings = m_strings;
-    m_diagram->m_frets = m_frets;
-    m_diagram->m_fretOffset = m_fretOffset;
-    m_diagram->m_maxFrets = m_maxFrets;
-    m_diagram->m_showNut = m_showNut;
-    m_diagram->m_orientation = m_orientation;
-
-    m_diagram->m_userMag = m_userMag;
-
-    m_diagram->m_showFingering = m_showFingering;
 }
 }

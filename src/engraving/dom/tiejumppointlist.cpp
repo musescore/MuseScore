@@ -22,7 +22,7 @@
 
 #include "tiejumppointlist.h"
 
-#include "../editing/undo.h"
+#include "../editing/edittie.h"
 
 #include "barline.h"
 #include "chord.h"

@@ -28,12 +28,13 @@
 #include "engraving/dom/measurenumber.h"
 #include "engraving/dom/mmrestrange.h"
 #include "engraving/dom/property.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/spacer.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/tremolotwochord.h"
 
-#include "engraving/editing/undo.h"
+#include "engraving/editing/editnote.h"
 
 // api
 #include "apistructs.h"

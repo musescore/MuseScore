@@ -32,7 +32,7 @@
 
 #include "engraving/compat/engravingcompat.h"
 #include "engraving/dom/masterscore.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/editscoreproperties.h"
 #include "engraving/engravingerrors.h"
 #include "engraving/engravingproject.h"
 #include "engraving/infrastructure/mscio.h"

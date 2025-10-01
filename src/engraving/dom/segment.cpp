@@ -26,7 +26,7 @@
 
 #include "translation.h"
 
-#include "../editing/undo.h"
+#include "../editing/editspanner.h"
 #include "types/typesconv.h"
 #include "rendering/score/tlayout.h"
 

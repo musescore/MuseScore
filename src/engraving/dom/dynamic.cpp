@@ -30,6 +30,7 @@
 #include "measure.h"
 #include "score.h"
 #include "segment.h"
+#include "staff.h"
 #include "system.h"
 #include "tempo.h"
 

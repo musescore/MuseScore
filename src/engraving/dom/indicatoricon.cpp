@@ -23,7 +23,6 @@
 #include "indicatoricon.h"
 
 #include "mscore.h"
-#include "page.h"
 #include "system.h"
 
 using namespace mu::engraving;

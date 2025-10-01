@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "../editing/undo.h"
+#include "../editing/editkeysig.h"
 
 #include "chord.h"
 #include "factory.h"

@@ -31,7 +31,7 @@
 
 #include "translation.h"
 
-#include "../editing/undo.h"
+#include "../editing/addremoveelement.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
 

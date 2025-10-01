@@ -28,7 +28,9 @@
 #include "measure.h"
 
 #include "../editing/mscoreview.h"
-#include "../editing/undo.h"
+#include "../editing/editmeasures.h"
+#include "../editing/editstaff.h"
+#include "../editing/inserttime.h"
 
 #include "accidental.h"
 #include "actionicon.h"

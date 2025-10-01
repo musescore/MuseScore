@@ -27,7 +27,8 @@
 
 #include "containers.h"
 
-#include "../editing/undo.h"
+#include "../editing/addremoveelement.h"
+#include "../editing/editchord.h"
 
 #include "accidental.h"
 #include "arpeggio.h"

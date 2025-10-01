@@ -30,12 +30,10 @@
 #include "dom/part.h"
 #include "dom/pitchspelling.h"
 #include "dom/segment.h"
-#include "editing/undo.h"
+#include "editing/editharppedaldiagram.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
-
-#include "log.h"
 
 using namespace mu::engraving;
 

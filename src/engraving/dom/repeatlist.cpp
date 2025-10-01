@@ -22,7 +22,6 @@
 
 #include "repeatlist.h"
 
-#include <algorithm>
 #include <list>
 #include <utility> // std::pair
 

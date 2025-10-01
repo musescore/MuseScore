@@ -24,11 +24,17 @@
 #include "translation.h"
 
 #include "engraving/dom/barline.h"
-#include "engraving/dom/factory.h"
 #include "engraving/dom/excerpt.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/instrchange.h"
+#include "engraving/dom/instrument.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/utils.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/addremoveelement.h"
+#include "engraving/editing/editexcerpt.h"
+#include "engraving/editing/editpart.h"
+#include "engraving/editing/editscoreproperties.h"
+#include "engraving/editing/editstaff.h"
 
 #include "igetscore.h"
 

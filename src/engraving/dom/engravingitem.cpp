@@ -49,9 +49,10 @@
 #include "accessibility/accessibleroot.h"
 #endif
 
+#include "../editing/addremoveelement.h"
 #include "../editing/editdata.h"
+#include "../editing/editproperty.h"
 #include "../editing/elementeditdata.h"
-#include "../editing/undo.h"
 
 #include "chord.h"
 #include "factory.h"

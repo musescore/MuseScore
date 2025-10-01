@@ -25,11 +25,9 @@
 #include "elementeditdata.h"
 #include "undo.h"
 
-#include "../dom/engravingitem.h"
+#include "../dom/textbase.h"
 
 namespace mu::engraving {
-class TextBase;
-
 //---------------------------------------------------------
 //   TextEditData
 //---------------------------------------------------------

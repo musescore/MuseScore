@@ -106,6 +106,6 @@ class BspTreeVisitor
     OBJECT_ALLOCATOR(engraving, BspTreeVisitor)
 public:
     virtual ~BspTreeVisitor() {}
-    virtual void visit(std::vector<EngravingItem*>* items) = 0;
+    virtual void visit(std::vector<EngravingItem*>& items) = 0;
 };
 }

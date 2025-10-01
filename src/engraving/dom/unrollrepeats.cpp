@@ -25,7 +25,7 @@
  */
 
 #include "style/style.h"
-#include "../editing/undo.h"
+#include "../editing/editexcerpt.h"
 
 #include "barline.h"
 #include "engravingitem.h"

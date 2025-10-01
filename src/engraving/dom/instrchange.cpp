@@ -24,7 +24,7 @@
 
 #include "translation.h"
 
-#include "../editing/undo.h"
+#include "../editing/editinstrumentchange.h"
 
 #include "keysig.h"
 #include "measure.h"

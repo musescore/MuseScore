@@ -24,8 +24,9 @@
 
 #include <climits>
 
-#include "../editing/undo.h"
+#include "../editing/editsoundflag.h"
 #include "linkedobjects.h"
+#include "score.h"
 
 using namespace muse::draw;
 using namespace mu::engraving;
