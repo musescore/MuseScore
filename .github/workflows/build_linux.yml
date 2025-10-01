@@ -20,10 +20,6 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
         required: false
-      use_qt69:
-        description: 'Use Qt 6.9'
-        default: 'on'
-        required: false  
   workflow_call:
     inputs:
       platforms:
@@ -46,27 +42,9 @@ on:
         default: ''
         type: string
         required: false
-      use_qt69:
-        description: 'Use Qt 6.9'
-        default: 'on'
-        type: string
-        required: false
- 
-env:
-  USE_QT69: ${{ inputs.use_qt69 != '' && inputs.use_qt69 || 'on' }}        
 
 jobs:
-  setup:
-    runs-on: ubuntu-22.04
-    outputs:
-      use_qt69: ${{ steps.set_use_qt69.outputs.use_qt69 }}
-    steps:
-      - id: set_use_qt69
-        run: |
-          echo "use_qt69=${{ env.USE_QT69 }}" >> $GITHUB_OUTPUT
-
   build:
-    needs: setup
     if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_x64') || contains(inputs.platforms, 'linux_arm64')
     runs-on: ${{ matrix.runs-on }}
     strategy:
@@ -85,12 +63,11 @@ jobs:
             arch: x86_64
             runs-on: ubuntu-22.04
             qt-host: linux
-            qt-version: ${{ needs.setup.outputs.use_qt69 == 'on' && '6.9.2' || '6.2.4' }}
-            qt-arch: ${{ needs.setup.outputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }} 
+            qt-arch: linux_gcc_64
             dump-symbols-arch: x86-64
           - platform: linux_arm64
             arch: aarch64
-            runs-on: ${{ needs.setup.outputs.use_qt69 == 'on' && 'ubuntu-24.04-arm' || 'ubuntu-22.04-arm' }}  
+            runs-on: ubuntu-24.04-arm
             qt-host: linux_arm64
             qt-arch: linux_gcc_arm64
             dump-symbols-arch: aarch64
@@ -132,7 +109,7 @@ jobs:
         SENTRY_URL=""
 
         if [ "$SENTRY_MUSE_MU4_KEY" != "" ]; then
-          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then 
+          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then
             SENTRY_PROJECT="mu4"
           fi
 
@@ -194,18 +171,13 @@ jobs:
       run: echo "::add-matcher::.github/problem_matchers/gcc.json"
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v4 
-      if: ${{ !(matrix.qt-host == 'linux_arm64' && env.USE_QT69 != 'on') }}
+      uses: jurplel/install-qt-action@v4
       with:
-        version: ${{ env.USE_QT69 == 'on' && '6.9.2' || '6.2.4' }}
+        version: 6.9.3
         host: ${{ matrix.qt-host }}
         target: 'desktop'
         arch: ${{ matrix.qt-arch }}
         modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
-    - name: Install Qt 6.2.4 arm64
-      if: ${{ matrix.qt-host == 'linux_arm64' && env.USE_QT69 != 'on' }}  
-      run: |
-        bash ./buildscripts/ci/linux/arm64/install_qt.sh     
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh --arch ${{ matrix.arch }}
