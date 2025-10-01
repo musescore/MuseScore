@@ -37,6 +37,10 @@
 #include "inotationparts.h"
 #include "notationtypes.h"
 
+namespace mu::project {
+class INotationProject;
+}
+
 namespace mu::notation {
 class INotation;
 using INotationPtr = std::shared_ptr<INotation>;
@@ -100,6 +104,10 @@ public:
 
     // parts
     virtual INotationPartsPtr parts() const = 0;
+
+    // project
+    virtual project::INotationProject* notationProject() const = 0;
+    virtual void setNotationProject(project::INotationProject* project) = 0;
 
     // notify
     virtual muse::async::Notification notationChanged() const = 0;

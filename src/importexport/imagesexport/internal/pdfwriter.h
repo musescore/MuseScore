@@ -28,7 +28,7 @@
 #include "../iimagesexportconfiguration.h"
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
-#include "context/iglobalcontext.h"
+#include "project/types/projectmeta.h"
 
 class QPdfWriter;
 
@@ -37,7 +37,6 @@ class PdfWriter : public AbstractImageWriter
 {
     Inject<IImagesExportConfiguration> configuration = { this };
     Inject<muse::IApplication> application = { this };
-    Inject<context::IGlobalContext> globalContext = { this };
 
 public:
     PdfWriter(const muse::modularity::ContextPtr& iocCtx)
