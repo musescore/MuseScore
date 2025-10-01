@@ -438,6 +438,11 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     if (oldTuplet) {
                         tuplet->readAddTuplet(oldTuplet);
                     }
+                    if (!tuplet->tuplet()) {
+                        if (Segment* seg = score->tick2segment(tick)) {
+                            score->makeGapVoice(seg, ctx.track(), tuplet->actualTicks(), tick);
+                        }
+                    }
                 } else if (tag == "endTuplet") {
                     if (!tuplet) {
                         LOGD("Score::pasteStaff: encountered <endTuplet/> when no tuplet was started");
@@ -540,6 +545,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                 }
                             }
                         }
+                        // Note to self - is the following still needed? (DON'T MERGE W/THIS)
                         // shorten last cr to fit in the space made by makeGap
                         if ((tick - dstTick) + cr->actualTicks() > tickLen) {
                             Fraction newLength = tickLen - (tick - dstTick);
@@ -563,6 +569,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                     }
                                 }
                             }
+                            // Note to self - is the following still needed? (DON'T MERGE W/THIS)
                             if (!cr->tuplet()) {
                                 // shorten duration
                                 // exempt notes in tuplets, since we don't allow copy of partial tuplet anyhow
@@ -572,7 +579,9 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             }
                         }
                         if (Segment* pasteDestinationSeg = score->tick2segment(tick)) {
-                            score->makeGapVoice(pasteDestinationSeg, ctx.track(), cr->actualTicks(), tick);
+                            if (!cr->tuplet()) {
+                                score->makeGapVoice(pasteDestinationSeg, ctx.track(), cr->actualTicks(), tick);
+                            }
                         }
                         if (Segment* leftSeg = score->tick2leftSegment(tick)) {
                             ChordRest* prevCr = leftSeg->nextChordRest(cr->track(), /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
