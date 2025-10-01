@@ -64,16 +64,11 @@ Text::Text(EngravingItem* parent, TextStyleType tid)
 
 EngravingObject* Text::propertyDelegate(Pid id) const
 {
-    if (!parent()->isTextLineBaseSegment()) {
-        return nullptr;
+    if (id == Pid::TEXT_STYLE && parent() && parent()->isTextLineBaseSegment()) {
+        return parent();
     }
 
-    switch (id) {
-    case Pid::TEXT_STYLE:
-        return parent();
-    default:
-        return nullptr;
-    }
+    return nullptr;
 }
 
 //---------------------------------------------------------

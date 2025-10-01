@@ -220,18 +220,6 @@ Sid SpannerSegment::getPropertyStyle(Pid pid) const
 }
 
 //---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags SpannerSegment::propertyFlags(Pid pid) const
-{
-    if (EngravingObject* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
-        return e->propertyFlags(pid);
-    }
-    return EngravingItem::propertyFlags(pid);
-}
-
-//---------------------------------------------------------
 //   resetProperty
 //---------------------------------------------------------
 
