@@ -24,6 +24,9 @@
 
 #include "engraving/engravingerrors.h"
 #include "engraving/dom/masterscore.h"
+// for edit tests
+#include "engraving/dom/measure.h"
+#include "engraving/dom/segment.h"
 
 #include "importexport/finale/internal/importfinale.h"
 
@@ -45,6 +48,7 @@ class Finale_Tests : public ::testing::Test
 {
 public:
     void finaleImportTestRef(const char* file);
+    void finaleImportTestEdit(const char* file);
     void enigmaXmlImportTestRef(const char* file);
 
     MasterScore* readScore(const String& fileName, bool isAbsolutePath = false);
@@ -102,6 +106,28 @@ void Finale_Tests::finaleImportTestRef(const char* file)
     delete score;
 }
 
+void Finale_Tests::finaleImportTestEdit(const char* file)
+{
+    MScore::debugMode = false;
+
+    String fileName = String::fromUtf8(file);
+    MasterScore* score = readScore(FINALE_IO_DATA_DIR + fileName + u".musx");
+    EXPECT_TRUE(score);
+    // fixupScore(score);
+    score->doLayout();
+    if (Measure* m = score->tick2measure(Fraction(0, 1))) {
+        Segment* s = m->first(SegmentType::ChordRest);
+        if (s->element(0)) {
+            score->startCmd(TranslatableString::untranslatable("Import Finale edit tests"));
+            s->element(0)->undoChangeProperty(Pid::OFFSET, PointF(2, 3));
+            score->endCmd();
+        }
+    }
+
+    EXPECT_TRUE(score);
+    delete score;
+}
+
 //---------------------------------------------------------
 //   enigmaXmlImportTestRef
 //   read an .enigmaxml file, write to a new MuseScore mscx file
@@ -126,11 +152,18 @@ void Finale_Tests::enigmaXmlImportTestRef(const char* file)
         finaleImportTestRef(#name); \
     }
 
+#define MUSX_IMPORT_TEST_EDIT(name) \
+    TEST_F (Finale_Tests, edit_##name) { \
+        finaleImportTestEdit(#name); \
+    }
+
 #define MUSX_IMPORT_TEST_DISABLED(name) \
     TEST_F(Finale_Tests, DISABLED_##name) { \
         finaleImportTestRef(#name); \
     }
 
+MUSX_IMPORT_TEST(texts)
+MUSX_IMPORT_TEST_EDIT(texts)
 MUSX_IMPORT_TEST(smartShapes1)
 MUSX_IMPORT_TEST(multistaffInst)
 MUSX_IMPORT_TEST_DISABLED(onePartNoMeasures)
@@ -147,4 +180,5 @@ MUSX_IMPORT_TEST(v1v2Ties)
 MUSX_IMPORT_TEST(v1v2Ties2)
 
 #undef MUSX_IMPORT_TEST
+#undef MUSX_IMPORT_TEST_EDIT
 #undef MUSX_IMPORT_TEST_DISABLED
