@@ -1381,7 +1381,7 @@ bool FretDiagram::isCustom(const String& harmonyNameForCompare) const
         return false;
     }
 
-    static const std::list<Pid> props {
+    static constexpr std::array props {
         Pid::FRET_STRINGS,
         Pid::FRET_FRETS,
         Pid::FRET_NUT,

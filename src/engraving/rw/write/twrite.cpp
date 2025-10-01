@@ -3455,7 +3455,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
         }
     }
 
-    std::list<Spanner*> spanners;
+    std::vector<Spanner*> spanners;
     auto sl = score->spannerMap().findOverlapping(sseg->tick().ticks(), endTick.ticks());
     for (auto i : sl) {
         Spanner* s = i.value;

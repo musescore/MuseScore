@@ -21,7 +21,7 @@
  */
 #include "xmlstreamwriter.h"
 
-#include <list>
+#include <vector>
 
 #include <global/thirdparty/utfcpp/utf8.h>
 
@@ -34,7 +34,7 @@ using namespace std::literals;
 using namespace muse;
 
 struct XmlStreamWriter::Impl {
-    std::list<std::string> stack;
+    std::vector<std::string> stack;
     TextStream stream;
 
     void putLevel()

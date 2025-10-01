@@ -78,11 +78,6 @@ using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
 namespace mu::engraving {
-EngravingItem* EngravingItemList::at(size_t i) const
-{
-    return *std::next(begin(), i);
-}
-
 EngravingItem::EngravingItem(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : EngravingObject(type, parent)
 {
@@ -2553,12 +2548,12 @@ void EngravingItem::doInitAccessible()
     EngravingItemList parents;
     auto parent = parentItem(false /*not explicit*/);
     while (parent) {
-        parents.push_front(parent);
+        parents.push_back(parent);
         parent = parent->parentItem(false /*not explicit*/);
     }
 
-    for (EngravingItem* parent2 : parents) {
-        parent2->setupAccessible();
+    for (auto it = parents.rbegin(); it != parents.rend(); ++it) {
+        (*it)->setupAccessible();
     }
 
     setupAccessible();

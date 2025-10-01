@@ -351,7 +351,7 @@ int ScoreOrder::instrumentSortingIndex(const String& instrumentId, bool isSolois
 //   isScoreOrder
 //---------------------------------------------------------
 
-bool ScoreOrder::isScoreOrder(const std::list<int>& indices) const
+bool ScoreOrder::isScoreOrder(const std::vector<int>& indices) const
 {
     if (isCustom()) {
         return true;
@@ -369,7 +369,7 @@ bool ScoreOrder::isScoreOrder(const std::list<int>& indices) const
 
 bool ScoreOrder::isScoreOrder(const Score* score) const
 {
-    std::list<int> indices;
+    std::vector<int> indices;
     for (const Part* part : score->parts()) {
         indices.push_back(instrumentSortingIndex(part->instrument()->id(), part->soloist()));
     }

@@ -263,7 +263,7 @@ public:
 
     // static functions for font config files
     static bool readConfigFile(const String& fileName);
-    static std::list<String> fontNames();
+    static std::vector<String> fontNames();
     static bool fontData(int nIdx, String* pFamily, String* pDisplayName, double* pSize, double* pLineHeight);
 
     // standard re-implemented virtual functions

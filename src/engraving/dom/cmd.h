@@ -19,10 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_CMD_H
-#define MU_ENGRAVING_CMD_H
+#pragma once
 
-#include <list>
+#include <vector>
 
 #include "../types/types.h"
 #include "engravingobject.h"
@@ -38,7 +37,7 @@ struct UpdateState
     bool playNote = false;       ///< play selected note after command
     bool playChord = false;      ///< play whole chord for the selected note
     bool selectionChanged = false;
-    std::list<EngravingObject*> deleteList;
+    std::vector<EngravingObject*> deleteList;
 };
 
 //---------------------------------------------------------
@@ -96,5 +95,3 @@ private:
     bool m_locked = false;
 };
 }
-
-#endif // MU_ENGRAVING_CMD_H

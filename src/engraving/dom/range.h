@@ -20,10 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_RANGE_H
-#define MU_ENGRAVING_RANGE_H
+#pragma once
 
-#include <list>
 #include <vector>
 
 #include "global/allocator.h"
@@ -106,17 +104,16 @@ public:
     bool truncate(const Fraction&);
 
 protected:
-    std::list<Spanner*> m_spanner;
-    std::list<Annotation> m_annotations;
+    std::vector<Spanner*> m_spanner;
+    std::vector<Annotation> m_annotations;
 
 private:
 
     friend class TrackList;
 
-    std::list<TrackList*> m_tracks;
+    std::vector<TrackList*> m_tracks;
     std::vector<Tie*> m_startTies;
     Segment* m_first = nullptr;
     Segment* m_last = nullptr;
 };
-} // namespace mu::engraving
-#endif
+}
