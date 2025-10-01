@@ -30,3 +30,9 @@ set(API_V1_SRC
     ${CMAKE_CURRENT_LIST_DIR}/selection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/selection.h
 )
+
+# Disable unity build to avoid ambiguity errors with api vs dom classes
+set_source_files_properties(
+    ${API_V1_SRC}
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
+)
