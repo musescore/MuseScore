@@ -29,7 +29,8 @@
 #include "dom/part.h"
 #include "dom/segment.h"
 #include "dom/staff.h"
-#include "editing/undo.h"
+#include "editing/editinstrumentchange.h"
+#include "editing/editpart.h"
 
 #include "engraving/compat/midi/midipatch.h"
 

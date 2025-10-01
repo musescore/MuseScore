@@ -27,7 +27,7 @@
 #include "dom/chord.h"
 #include "dom/masterscore.h"
 #include "dom/measure.h"
-#include "editing/undo.h"
+#include "editing/editstyle.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

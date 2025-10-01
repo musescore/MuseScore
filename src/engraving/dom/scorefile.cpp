@@ -27,7 +27,7 @@
 
 #include "draw/painter.h"
 
-#include "../editing/undo.h"
+#include "../editing/editstyle.h"
 #include "rendering/paintoptions.h"
 #include "style/style.h"
 

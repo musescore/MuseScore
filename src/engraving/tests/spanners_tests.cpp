@@ -30,10 +30,11 @@
 #include "dom/line.h"
 #include "dom/masterscore.h"
 #include "dom/measure.h"
+#include "dom/note.h"
 #include "dom/part.h"
 #include "dom/staff.h"
 #include "dom/system.h"
-#include "editing/undo.h"
+#include "editing/editexcerpt.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

@@ -24,7 +24,8 @@
 
 #include "translation.h"
 
-#include "../editing/undo.h"
+#include "../editing/editmeasures.h"
+#include "../editing/inserttime.h"
 #include "infrastructure/messagebox.h"
 
 #include "accidental.h"
@@ -37,6 +38,7 @@
 #include "measure.h"
 #include "measurerepeat.h"
 #include "navigate.h"
+#include "note.h"
 #include "part.h"
 #include "range.h"
 #include "score.h"
@@ -44,6 +46,7 @@
 #include "staff.h"
 #include "stringdata.h"
 #include "tie.h"
+#include "tremolotwochord.h"
 #include "tuplet.h"
 #include "utils.h"
 

@@ -30,6 +30,7 @@
 #include "translation.h"
 
 #include "../editing/undo.h"
+#include "../editing/editproperty.h"
 #include "../types/typesconv.h"
 
 #include "ambitus.h"

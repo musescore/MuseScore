@@ -30,7 +30,8 @@
 #include "dom/measure.h"
 #include "dom/system.h"
 #include "dom/timesig.h"
-#include "editing/undo.h"
+
+#include "editing/editproperty.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

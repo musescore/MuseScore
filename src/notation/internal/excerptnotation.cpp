@@ -23,10 +23,7 @@
 #include "excerptnotation.h"
 
 #include "engraving/dom/excerpt.h"
-#include "engraving/dom/text.h"
-#include "engraving/editing/undo.h"
-
-#include "log.h"
+#include "engraving/editing/editexcerpt.h"
 
 using namespace mu::notation;
 

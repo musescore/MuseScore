@@ -130,7 +130,6 @@ class RehearsalMark;
 class RepeatList;
 class Rest;
 class Score;
-class ScoreElement;
 class IEngravingFont;
 class Segment;
 class Slur;

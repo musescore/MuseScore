@@ -71,6 +71,7 @@
 #include "dom/measurenumber.h"
 #include "dom/measurerepeat.h"
 #include "dom/mmrest.h"
+#include "dom/note.h"
 #include "dom/noteline.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"

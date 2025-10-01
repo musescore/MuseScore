@@ -77,11 +77,17 @@
 #include "../dom/system.h"
 #include "../dom/tie.h"
 #include "../dom/timesig.h"
+#include "../dom/tremolotwochord.h"
 #include "../dom/tuplet.h"
 #include "../dom/utils.h"
 
+#include "editchord.h"
+#include "editnote.h"
+#include "editproperty.h"
+#include "editspanner.h"
+#include "editstaff.h"
+#include "editvoicing.h"
 #include "mscoreview.h"
-#include "undo.h"
 
 #include "log.h"
 

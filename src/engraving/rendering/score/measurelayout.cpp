@@ -23,8 +23,6 @@
 
 #include "measurelayout.h"
 
-#include "infrastructure/rtti.h"
-
 #include "dom/ambitus.h"
 #include "dom/barline.h"
 #include "dom/beam.h"
@@ -38,7 +36,6 @@
 #include "dom/measurerepeat.h"
 #include "dom/mmrest.h"
 #include "dom/mmrestrange.h"
-#include "dom/ornament.h"
 #include "dom/part.h"
 #include "dom/parenthesis.h"
 #include "dom/spacer.h"
@@ -49,12 +46,14 @@
 #include "dom/timesig.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
-#include "dom/trill.h"
 #include "dom/utils.h"
-#include "editing/undo.h"
+
+#include "editing/addremoveelement.h"
+#include "editing/editkeysig.h"
+#include "editing/editmeasures.h"
+#include "editing/editproperty.h"
 #include "types/typesconv.h"
 
-#include "autoplace.h"
 #include "tlayout.h"
 #include "layoutcontext.h"
 #include "arpeggiolayout.h"

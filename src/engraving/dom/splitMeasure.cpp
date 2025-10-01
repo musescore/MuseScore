@@ -20,15 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "../editing/undo.h"
+#include "../editing/editspanner.h"
 
-#include "factory.h"
 #include "chordrest.h"
+#include "factory.h"
+#include "masterscore.h"
 #include "measure.h"
 #include "range.h"
-#include "score.h"
 #include "segment.h"
 #include "spanner.h"
+#include "staff.h"
 #include "stafftypechange.h"
 #include "tie.h"
 #include "utils.h"

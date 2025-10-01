@@ -33,7 +33,7 @@
 #include "containers.h"
 
 #include "editing/mscoreview.h"
-#include "editing/undo.h"
+#include "editing/addremoveelement.h"
 
 #include "style/style.h"
 #include "style/defaultstyle.h"

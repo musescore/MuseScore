@@ -26,9 +26,11 @@
 
 #include "../editing/elementeditdata.h"
 #include "../editing/undo.h"
+#include "../editing/editfretboarddiagram.h"
 
 #include "actionicon.h"
 #include "factory.h"
+#include "fret.h"
 #include "harmony.h"
 #include "layoutbreak.h"
 #include "masterscore.h"

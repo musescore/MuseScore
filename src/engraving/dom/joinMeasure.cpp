@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "../editing/undo.h"
+#include "../editing/addremoveelement.h"
 
 #include "factory.h"
 #include "masterscore.h"
@@ -28,6 +28,7 @@
 #include "range.h"
 #include "score.h"
 #include "spanner.h"
+#include "staff.h"
 #include "stafftypechange.h"
 #include "timesig.h"
 

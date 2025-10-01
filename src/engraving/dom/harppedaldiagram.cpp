@@ -25,7 +25,7 @@
 #include "translation.h"
 #include "types/typesconv.h"
 
-#include "../editing/undo.h"
+#include "../editing/editharppedaldiagram.h"
 
 #include "part.h"
 #include "score.h"

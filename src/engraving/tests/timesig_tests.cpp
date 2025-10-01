@@ -25,6 +25,7 @@
 #include "dom/factory.h"
 #include "dom/masterscore.h"
 #include "dom/measure.h"
+#include "dom/note.h"
 #include "dom/timesig.h"
 #include "editing/undo.h"
 

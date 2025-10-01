@@ -31,7 +31,7 @@
 #include "dom/measure.h"
 #include "dom/part.h"
 #include "dom/segment.h"
-#include "editing/undo.h"
+#include "editing/editstaff.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

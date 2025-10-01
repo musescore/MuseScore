@@ -22,7 +22,7 @@
 #include "layoutcontext.h"
 
 #include "editing/mscoreview.h"
-#include "editing/undo.h"
+#include "editing/addremoveelement.h"
 #include "style/defaultstyle.h"
 
 #include "dom/score.h"

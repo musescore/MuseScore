@@ -27,6 +27,7 @@
 #include "engraving/dom/beam.h"
 #include "engraving/dom/linkedobjects.h"
 #include "engraving/dom/score.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/editing/undo.h"
 #include "engraving/types/types.h"

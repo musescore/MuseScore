@@ -31,7 +31,6 @@
 #include <cmath>
 
 #include "compat/midi/event.h"
-#include "editing/undo.h"
 #include "types/constants.h"
 
 #include "dom/accidental.h"
@@ -41,9 +40,11 @@
 #include "dom/chord.h"
 #include "dom/durationtype.h"
 #include "dom/dynamic.h"
+#include "dom/fret.h"
 #include "dom/glissando.h"
 #include "dom/guitarbend.h"
 #include "dom/hairpin.h"
+#include "dom/harmony.h"
 #include "dom/instrument.h"
 #include "dom/letring.h"
 #include "dom/masterscore.h"

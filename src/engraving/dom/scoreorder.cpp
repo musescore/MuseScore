@@ -21,19 +21,15 @@
  */
 #include "scoreorder.h"
 
-#include <iostream>
-
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
-
-#include "types/translatablestring.h"
 
 #include "dom/bracketItem.h"
 #include "dom/instrtemplate.h"
 #include "dom/part.h"
 #include "dom/score.h"
 #include "dom/staff.h"
-#include "editing/undo.h"
+#include "editing/editbrackets.h"
 
 #include "log.h"
 

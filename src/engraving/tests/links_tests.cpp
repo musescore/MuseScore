@@ -30,9 +30,11 @@
 #include "dom/measure.h"
 #include "dom/part.h"
 #include "dom/segment.h"
+#include "dom/score.h"
+#include "dom/staff.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
-#include "editing/undo.h"
+#include "editing/editexcerpt.h"
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 

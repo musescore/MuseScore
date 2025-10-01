@@ -24,7 +24,8 @@
 
 #include "containers.h"
 
-#include "../editing/undo.h"
+#include "../editing/addremoveelement.h"
+#include "../editing/editexcerpt.h"
 #include "style/style.h"
 
 #include "barline.h"
@@ -32,6 +33,7 @@
 #include "box.h"
 #include "chord.h"
 #include "factory.h"
+#include "fret.h"
 #include "guitarbend.h"
 #include "harmony.h"
 #include "layoutbreak.h"

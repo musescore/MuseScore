@@ -22,7 +22,8 @@
 
 #include "mmrest.h"
 
-#include "../editing/undo.h"
+#include "../editing/addremoveelement.h"
+#include "part.h"
 #include "score.h"
 #include "system.h"
 

@@ -111,31 +111,6 @@ typedef std::map<int, FretItem::Barre> BarreMap;
 typedef std::map<int, FretItem::Marker> MarkerMap;
 typedef std::map<int, std::vector<FretItem::Dot> > DotMap;
 
-class FretUndoData
-{
-public:
-    FretUndoData() {}
-    FretUndoData(FretDiagram* fd);
-
-    void updateDiagram();
-
-private:
-
-    FretDiagram* m_diagram = nullptr;
-    BarreMap m_barres;
-    MarkerMap m_markers;
-    DotMap m_dots;
-
-    int m_strings = 0;
-    int m_frets = 0;
-    int m_fretOffset = 0;
-    int m_maxFrets = 0;
-    bool m_showNut = true;
-    bool m_showFingering = false;
-    Orientation m_orientation = Orientation::VERTICAL;
-    double m_userMag = 1.0;
-};
-
 //---------------------------------------------------------
 //   @@ FretDiagram
 ///    Fretboard diagram

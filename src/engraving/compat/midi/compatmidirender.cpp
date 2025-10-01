@@ -8,6 +8,7 @@
 #include "dom/arpeggio.h"
 #include "dom/articulation.h"
 #include "dom/chord.h"
+#include "dom/drumset.h"
 #include "dom/durationtype.h"
 #include "dom/dynamic.h"
 #include "dom/easeInOut.h"

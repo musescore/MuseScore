@@ -27,7 +27,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/masterscore.h"
 
-#include "engraving/editing/undo.h"
+#include "engraving/editing/editpart.h"
 
 using namespace mu::engraving::apiv1;
 
