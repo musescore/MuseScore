@@ -161,6 +161,7 @@ enum class HDuration : signed char;
 enum class AccidentalType : unsigned char;
 enum class LayoutBreakType : unsigned char;
 enum class CommandType : signed char;
+enum class SystemDividerType : unsigned char;
 
 enum class LoopBoundaryType : signed char {
     Unknown = -1,
@@ -1076,6 +1077,9 @@ public:
 
     void rebuildFretBox();
 
+    SystemDivider* systemDivider(size_t systemIdx, SystemDividerType type) const;
+    void addSystemDivider(size_t systemIdx, SystemDivider* divider);
+
     friend class Chord;
 
 protected:
@@ -1200,6 +1204,8 @@ private:
     //
     std::vector<Page*> m_pages;            // pages are build from systems
     std::vector<System*> m_systems;        // measures are accumulated to systems
+
+    std::map<size_t, std::array<SystemDivider*, 2>> m_systemDividers; // list of system dividers (left and right) indexed by system
 
     InputState m_is;
     MStyle m_style;

@@ -825,21 +825,31 @@ void PageLayout::updateSystemDivider(LayoutContext& ctx, System* system, System*
 {
     bool left = type == SystemDividerType::LEFT;
     SystemDivider* divider = left ? system->systemDividerLeft() : system->systemDividerRight();
+    if (divider) {
+        system->remove(divider);
+    }
+
     if (!needsDivider) {
-        if (divider) {
-            system->remove(divider);
-        }
         return;
     }
 
     DO_ASSERT(system && nextSystem);
 
+    Score* score = system->score();
+    size_t systemIdx = muse::indexOf(score->systems(), system);
+    IF_ASSERT_FAILED(systemIdx != muse::nidx) {
+        return;
+    }
+
+    divider = score->systemDivider(systemIdx, type);
     if (!divider) {
         divider = new SystemDivider(system);
         divider->setDividerType(type);
         divider->setGenerated(true);
-        system->add(divider);
+        score->addSystemDivider(systemIdx, divider);
     }
+
+    system->add(divider);
 
     SystemDivider::LayoutData* ldata = divider->mutldata();
     TLayout::layoutSystemDivider(divider, ldata, ctx);
