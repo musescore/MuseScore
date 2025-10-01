@@ -127,6 +127,16 @@ static Drumset* createDrumset(const MusxInstanceList<others::PercussionNoteInfo>
     return drumset;
 }
 
+static StringData createStringData(const MusxInstance<others::FretInstrument> fretInstrument)
+{
+    std::vector<instrString> strings;
+    strings.reserve(fretInstrument->numStrings);
+    for (auto it = fretInstrument->strings.rbegin(); it != fretInstrument->strings.rend(); ++it) {
+        strings.emplace_back(instrString((*it)->pitch, false, (*it)->nutOffset));
+    }
+    return StringData(fretInstrument->numFrets, strings);
+}
+
 static void loadInstrument(const MusxInstance<others::Staff> musxStaff, Instrument* instrument)
 {
     // Initialise drumset
@@ -145,6 +155,11 @@ static void loadInstrument(const MusxInstance<others::Staff> musxStaff, Instrume
     if (musxStaff->transposition && musxStaff->transposition->chromatic) {
         const auto& i = *musxStaff->transposition->chromatic;
         instrument->setTranspose(Interval(i.diatonic, step2pitch(i.diatonic) + i.alteration));
+    }
+
+    // Fret and string data
+    if (const MusxInstance<others::FretInstrument> fretInstrument = musxStaff->getDocument()->getOthers()->get<others::FretInstrument>(musxStaff->getSourcePartId(), musxStaff->fretInstId)) {
+        instrument->setStringData(createStringData(fretInstrument));
     }
 }
 
