@@ -209,11 +209,14 @@ void SoundFontRepository::loadSoundFonts(const std::vector<SoundFontUri>& uris)
     size_t total = uris.size();
     size_t count = 0;
     for (const SoundFontUri& uri : uris) {
+        LOGI() << "try add sound font: " << uri.toString();
         doAddSoundFont(uri, cache, [this, &count, total, cache]() {
             ++count;
+            LOGI() << "added: " << count << ", total: " << total;
             if (count == total) {
                 delete cache;
                 m_soundFontsChanged.notify();
+                LOGI() << "all added notify about sound fonts changed";
             }
         });
     }

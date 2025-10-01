@@ -22,10 +22,21 @@
 #include "startaudiocontroller.h"
 
 #include "global/realfn.h"
+#include "global/runtime.h"
+#include "global/async/processevents.h"
 
+#include "audio/common/audiosanitizer.h"
 #include "audio/common/rpc/rpcpacker.h"
 
-#include "devtools/inputlag.h"
+#include "audio/engine/platform/general/generalaudioworker.h"
+
+#ifndef Q_OS_WASM
+#include "audio/engine/internal/enginecontroller.h"
+#endif
+
+#include "audio/devtools/inputlag.h"
+
+#include "muse_framework_config.h"
 
 #include "log.h"
 
@@ -43,6 +54,74 @@ static void measureInputLag(const float* buf, const size_t size)
             }
         }
     }
+}
+
+StartAudioController::StartAudioController(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
+    : m_rpcChannel(rpcChannel)
+{
+#ifndef Q_OS_WASM
+    m_engineController = std::make_shared<engine::EngineController>(rpcChannel);
+#endif
+}
+
+void StartAudioController::registerExports()
+{
+#ifndef Q_OS_WASM
+    m_engineController->registerExports();
+#endif
+}
+
+#ifndef Q_OS_WASM
+void StartAudioController::th_setupEngine()
+{
+    LOGI() << "begin engine run";
+    runtime::setThreadName("audio_engine");
+    AudioSanitizer::setupEngineThread();
+    ONLY_AUDIO_ENGINE_THREAD;
+
+    m_rpcChannel->setupOnEngine();
+    m_engineController->onStartRunning();
+
+    LOGI() << "audio engine running";
+}
+
+#endif
+
+void StartAudioController::init()
+{
+    m_rpcChannel->onMethod(rpc::Method::EngineRunning, [this](const rpc::Msg&) {
+        soundFontController()->loadSoundFonts();
+
+        m_isEngineRunning.set(true);
+    });
+
+#ifndef Q_OS_WASM
+#ifdef MUSE_MODULE_AUDIO_WORKER
+    m_worker = std::make_shared<engine::GeneralAudioWorker>();
+    m_worker->run([this]() {
+        static bool once = false;
+        if (!once) {
+            th_setupEngine();
+
+            OutputSpec spec = m_engineController->outputSpec();
+            if (spec.isValid()) {
+                m_worker->setInterval(spec.samplesPerChannel, spec.sampleRate);
+            }
+
+            m_engineController->outputSpecChanged().onReceive(nullptr, [this](const OutputSpec& spec) {
+                if (spec.isValid()) {
+                    m_worker->setInterval(spec.samplesPerChannel, spec.sampleRate);
+                }
+            });
+
+            once = true;
+        }
+
+        m_rpcChannel->process();
+        m_engineController->process();
+    });
+#endif
+#endif
 }
 
 bool StartAudioController::isAudioStarted() const
@@ -65,23 +144,32 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
 
     //! NOTE In the web, callback works via messages and is configured in the worker
 #ifndef Q_OS_WASM
-    engine::IAudioWorker* worker = audioWorker().get();
-    if (configuration()->shouldMeasureInputLag()) {
-        requiredSpec.callback = [worker](void* /*userdata*/, uint8_t* stream, int byteCount) {
-            std::memset(stream, 0, byteCount);
-            auto samplesPerChannel = byteCount / (2 * sizeof(float));  // 2 == m_configuration->audioChannelsCount()
-            float* dest = reinterpret_cast<float*>(stream);
-            worker->popAudioData(dest, samplesPerChannel);
-            measureInputLag(dest, samplesPerChannel * 2);
-        };
-    } else {
-        requiredSpec.callback = [worker](void* /*userdata*/, uint8_t* stream, int byteCount) {
-            std::memset(stream, 0, byteCount);
-            auto samplesPerChannel = byteCount / (2 * sizeof(float));
-            worker->popAudioData(reinterpret_cast<float*>(stream), samplesPerChannel);
-        };
-    }
+
+    bool shouldMeasureInputLag = configuration()->shouldMeasureInputLag();
+    requiredSpec.callback = [this, shouldMeasureInputLag](void* /*userdata*/, uint8_t* stream, int byteCount) {
+        std::memset(stream, 0, byteCount);
+        auto samplesPerChannel = byteCount / (2 * sizeof(float));
+        float* dest = reinterpret_cast<float*>(stream);
+
+#ifdef MUSE_MODULE_AUDIO_WORKER
+        m_engineController->popAudioData(dest, samplesPerChannel);
+#else
+        static bool once = false;
+        if (!once) {
+            th_setupEngine();
+            once = true;
+        }
+
+        m_rpcChannel->process();
+        m_engineController->process(dest, samplesPerChannel);
 #endif
+
+        if (shouldMeasureInputLag) {
+            measureInputLag(dest, samplesPerChannel * 2);
+        }
+    };
+
+#endif // Q_OS_WASM
 
     IAudioDriver::Spec activeSpec;
     if (mode == IApplication::RunMode::GuiApp) {
@@ -96,25 +184,18 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
 
     AudioEngineConfig conf = configuration()->engineConfig();
     auto sendEngineInit = [this, activeSpec, conf]() {
-        LOGDA() << "send EngineInit";
-        rpcChannel()->send(rpc::make_request(Method::EngineInit, RpcPacker::pack(activeSpec.output, conf)), [this](const Msg&) {
-            LOGDA() << "res EngineInit";
+        m_rpcChannel->send(rpc::make_request(Method::EngineInit, RpcPacker::pack(activeSpec.output, conf)), [this](const Msg&) {
             m_isAudioStarted.set(true);
         });
     };
 
-    LOGDA() << "audioWorker()->isRunning: " << audioWorker()->isRunning();
-    if (audioWorker()->isRunning()) {
+    if (m_isEngineRunning.val) {
         sendEngineInit();
     } else {
-        audioWorker()->run();
-
-        audioWorker()->isRunningChanged().onReceive(this, [this, sendEngineInit](bool arg) {
-            LOGDA() << "audioWorker()->isRunningChanged: " << arg;
+        m_isEngineRunning.ch.onReceive(this, [sendEngineInit](bool arg) {
             if (arg) {
                 sendEngineInit();
             }
-            audioWorker()->isRunningChanged().resetOnReceive(this);
         });
     }
 }
@@ -126,10 +207,11 @@ void StartAudioController::stopAudioProcessing()
     if (audioDriver()->isOpened()) {
         audioDriver()->close();
     }
-
-    if (audioWorker()->isRunning()) {
-        audioWorker()->stop();
+#ifndef Q_OS_WASM
+    if (m_worker->isRunning()) {
+        m_worker->stop();
     }
+#endif
 }
 
 IAudioDriverPtr StartAudioController::audioDriver() const
