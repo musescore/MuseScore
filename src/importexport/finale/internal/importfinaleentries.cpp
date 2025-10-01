@@ -350,8 +350,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     }
     // check if the calculate cross-staff position is valid
     staff_idx_t idx = static_cast<staff_idx_t>(int(staffIdx) + crossStaffMove);
-    const Staff* baseStaff = m_score->staff(staffIdx);
-    const Staff* targetStaff = m_score->staff(idx);
+    Staff* baseStaff = m_score->staff(staffIdx);
+    Staff* targetStaff = m_score->staff(idx);
     if (!(targetStaff && targetStaff->visible() && targetStaff->isLinked() == baseStaff->isLinked()
           && staff2track(idx) >= baseStaff->part()->startTrack() && staff2track(idx) < baseStaff->part()->endTrack()
           && targetStaff->staffType(segment->tick())->group() == baseStaff->staffType(segment->tick())->group())) {
@@ -370,53 +370,10 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             note->setParent(chord);
             note->setTrack(curTrackIdx);
             note->setVisible(!currentEntry->isHidden);
+            note->setPlay(!currentEntry->noPlayback); /// @todo account for spanners
+            note->setAutoplace(!noteInfoPtr->noSpacing);
 
-            if (targetStaff->isPitchedStaff(segment->tick())) {
-                // calculate pitch & accidentals
-                NoteVal nval = notePropertiesToNoteVal(noteInfoPtr.calcNotePropertiesConcert(), baseStaff->concertKey(segment->tick()));
-                NoteVal nvalTransposed = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties(), baseStaff->key(segment->tick()));
-                nval.tpc2 = nvalTransposed.tpc2;
-                AccidentalVal accVal = tpc2alter(nval.tpc1);
-                note->setNval(nval);
-
-                // Add accidental if needed
-                /// @todo Do we really need to explicitly add the accidental object if it's not frozen?
-                /// RGP: if it has been manually moved, it looks like it.Otherwise perhaps not.
-                bool hasAccidental = noteInfoPtr->freezeAcci;
-                if (!hasAccidental) {
-                    if (Segment* startSegment = note->firstTiedNote()->chord()->segment()) {
-                        int line = noteValToLine(nval, targetStaff, segment->tick());
-                        bool error = false;
-                        AccidentalVal defaultAccVal = startSegment->measure()->findAccidental(startSegment, idx, line, error);
-                        hasAccidental = error || (defaultAccVal != accVal);
-                    }
-                }
-
-                if (hasAccidental) {
-                    AccidentalType at = Accidental::value2subtype(accVal);
-                    Accidental* a = Factory::createAccidental(note);
-                    a->setAccidentalType(at);
-                    a->setRole(noteInfoPtr->freezeAcci ? AccidentalRole::USER : AccidentalRole::AUTO);
-                    a->setVisible(note->visible());
-                    a->setParent(note);
-                    if (currentEntry->noteDetail) {
-                        // Accidental size and offset
-                        /// @todo Finale doesn't offset notes for ledger lines, MuseScore offsets
-                        /// rightmost accidentals matching the type of an accidental on a note with ledger lines.
-                        /// @todo decide when to disable autoplace
-                        if (const MusxInstance<details::AccidentalAlterations>& accidentalInfo = m_doc->getDetails()->getForNote<details::AccidentalAlterations>(noteInfoPtr)) {
-                            if (muse::RealIsEqualOrLess(doubleFromPercent(accidentalInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
-                                a->setSmall(true);
-                            }
-                            /// @todo this calculation needs to take into account the default accidental separation amounts in accidentalOptions. The options
-                            /// should allow us to calculate the default position of the accidental relative to the note. (But it may not be easy.)
-                            /// The result will probably also need to be multiplied by SPATIUM20, if other items are any guide.
-                            a->setOffset(evpuToPointF(accidentalInfo->hOffset, accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0));
-                        }
-                    }
-                    note->add(a);
-                }
-            } else if (targetStaff->isDrumStaff(segment->tick())) {
+            if (targetStaff->isDrumStaff(segment->tick())) {
                 NoteVal nval;
                 const Drumset* ds = targetStaff->part()->instrument()->drumset();
                 nval.pitch = noteInfoPtr.calcPercussionNoteInfo()->getNoteType().generalMidi;
@@ -426,8 +383,61 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                 }
                 nval.headGroup = ds->noteHead(nval.pitch);
                 note->setNval(nval);
-            }
+            } else {
+                // calculate pitch & accidentals
+                NoteVal nval = notePropertiesToNoteVal(noteInfoPtr.calcNotePropertiesConcert(), baseStaff->concertKey(segment->tick()));
+                NoteVal nvalTransposed = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties(), baseStaff->key(segment->tick()));
+                nval.tpc2 = nvalTransposed.tpc2;
+                note->setNval(nval);
 
+                if (targetStaff->isPitchedStaff(segment->tick())) {
+                    // Add accidental if needed
+                    /// @todo Do we really need to explicitly add the accidental object if it's not frozen?
+                    /// RGP: if it has been manually moved, it looks like it.Otherwise perhaps not.
+                    AccidentalVal accVal = tpc2alter(nval.tpc1);
+                    bool hasAccidental = noteInfoPtr->freezeAcci;
+                    if (!hasAccidental) {
+                        if (Segment* startSegment = note->firstTiedNote()->chord()->segment()) {
+                            int line = noteValToLine(nval, targetStaff, segment->tick());
+                            bool error = false;
+                            AccidentalVal defaultAccVal = startSegment->measure()->findAccidental(startSegment, idx, line, error);
+                            hasAccidental = error || (defaultAccVal != accVal);
+                        }
+                    }
+
+                    if (hasAccidental) {
+                        AccidentalType at = Accidental::value2subtype(accVal);
+                        Accidental* a = Factory::createAccidental(note);
+                        a->setAccidentalType(at);
+                        a->setRole(noteInfoPtr->freezeAcci ? AccidentalRole::USER : AccidentalRole::AUTO);
+                        a->setVisible(note->visible());
+                        a->setBracket(noteInfoPtr->parenAcci ? AccidentalBracket::PARENTHESIS : AccidentalBracket::NONE);
+                        a->setParent(note);
+                        if (currentEntry->noteDetail) {
+                            // Accidental size and offset
+                            /// @todo Finale doesn't offset notes for ledger lines, MuseScore offsets
+                            /// rightmost accidentals matching the type of an accidental on a note with ledger lines.
+                            /// @todo decide when to disable autoplace
+                            if (const MusxInstance<details::AccidentalAlterations>& accidentalInfo = m_doc->getDetails()->getForNote<details::AccidentalAlterations>(noteInfoPtr)) {
+                                if (muse::RealIsEqualOrLess(doubleFromPercent(accidentalInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
+                                    a->setSmall(true);
+                                }
+                                /// @todo this calculation needs to take into account the default accidental separation amounts in accidentalOptions. The options
+                                /// should allow us to calculate the default position of the accidental relative to the note. (But it may not be easy.)
+                                /// The result will probably also need to be multiplied by SPATIUM20, if other items are any guide.
+                                a->setOffset(evpuToPointF(accidentalInfo->hOffset, accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0));
+                            }
+                        }
+                        note->add(a);
+                    }
+                } else if (targetStaff->isTabStaff(segment->tick())) {
+                    if (const MusxInstance<details::TablatureNoteMods> tabInfo = m_doc->getDetails()->getForNote<details::TablatureNoteMods>(noteInfoPtr)) {
+                        note->setString(tabInfo->stringNumber - 1);
+                        const StringData* stringData = targetStaff->part()->stringData(segment->tick(), idx);
+                        note->setFret(stringData->fret(note->pitch(), note->string(), targetStaff)); // we may not need to set this
+                    }
+                }
+            }
             if (currentEntry->noteDetail) {
                 if (const MusxInstance<details::NoteAlterations> noteInfo = m_doc->getDetails()->getForNote<details::NoteAlterations>(noteInfoPtr)) {
                     if (muse::RealIsEqualOrLess(doubleFromPercent(noteInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
@@ -459,7 +469,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                 // Finale offers independent visibility controls for tie segments, MuseScore currently does not.
                 // We set the visibility based on
                 tie->setVisible(prevTied->visible());
-                tie->setParent(prevTied); //needed?
+                tie->setParent(prevTied);
                 prevTied->setTieFor(tie);
                 tie->setEndNote(note);
                 tie->setTick2(note->tick());
@@ -508,7 +518,6 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                 chord->add(hook);
             }
         }
-        // chord->setIsChordPlayable(!currentEntry->noPlayback); //this is an undo method
         if (!chord->notes().empty()) {
             cr = toChordRest(chord);
         } else {
@@ -938,7 +947,7 @@ void FinaleParser::importEntries()
                 tie->setStartNote(note);
                 tie->setTick(note->tick());
                 tie->setTrack(note->track());
-                tie->setParent(note); //needed?
+                tie->setParent(note);
                 note->setTieFor(tie);
             }
             notesWithUnmanagedTies.clear();
