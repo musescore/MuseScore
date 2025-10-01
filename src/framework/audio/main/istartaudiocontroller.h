@@ -34,10 +34,10 @@ class IStartAudioController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IStartAudioController() = default;
 
-    virtual bool isAudioStarted() const = 0;
-    virtual async::Channel<bool> isAudioStartedChanged() const = 0;
-
     virtual void startAudioProcessing(const IApplication::RunMode& mode) = 0;
     virtual void stopAudioProcessing() = 0;
+
+    virtual bool isAudioStarted() const = 0;
+    virtual async::Channel<bool> isAudioStartedChanged() const = 0;
 };
 }

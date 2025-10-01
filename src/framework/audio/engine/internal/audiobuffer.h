@@ -51,6 +51,7 @@ public:
     void init(const audioch_t audioChannelsCount);
 
     void setSource(engine::IAudioSourcePtr source);
+    engine::IAudioSourcePtr source() const;
     void setMinSamplesPerChannelToReserve(const samples_t samplesPerChannel);
     void setRenderStep(const samples_t renderStep);
 

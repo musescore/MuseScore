@@ -28,10 +28,6 @@
 #include "modularity/imodulesetup.h"
 #include "global/async/asyncable.h"
 
-namespace muse::audio::engine  {
-class IAudioWorker;
-}
-
 namespace muse::audio::rpc  {
 class IRpcChannel;
 }
@@ -63,8 +59,6 @@ private:
     std::shared_ptr<AudioOutputDeviceController> m_audioOutputController;
     std::shared_ptr<Playback> m_mainPlayback;
     std::shared_ptr<ISoundFontController> m_soundFontController;
-
-    std::shared_ptr<engine::IAudioWorker> m_audioWorker;
 
     QTimer m_rpcTimer;
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;

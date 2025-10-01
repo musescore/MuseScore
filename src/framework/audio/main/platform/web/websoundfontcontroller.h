@@ -36,7 +36,7 @@ class WebSoundFontController : public ISoundFontController, public async::Asynca
 public:
     WebSoundFontController() = default;
 
-    void init() override;
+    void loadSoundFonts() override;
 
     void addSoundFont(const synth::SoundFontUri& uri) override;
 };

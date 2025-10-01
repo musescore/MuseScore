@@ -46,7 +46,7 @@ Mixer::Mixer(const modularity::ContextPtr& iocCtx)
 
 Mixer::~Mixer()
 {
-    ONLY_AUDIO_ENGINE_THREAD;
+    ONLY_AUDIO_MAIN_OR_ENGINE_THREAD;
     delete m_taskScheduler;
 }
 

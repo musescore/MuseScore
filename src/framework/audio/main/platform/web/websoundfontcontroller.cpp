@@ -30,7 +30,7 @@
 using namespace muse::audio;
 using namespace muse::audio::rpc;
 
-void WebSoundFontController::init()
+void WebSoundFontController::loadSoundFonts()
 {
     // noop
 }
