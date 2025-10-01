@@ -1289,7 +1289,6 @@ void MeasureLayout::layoutPlayCountText(Measure* m, LayoutContext& ctx)
 
 void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
 {
-    bool showMeasureNumber = m->showsMeasureNumber();
     MeasureNumberPlacement placementMode = ctx.conf().styleV(Sid::measureNumberPlacementMode).value<MeasureNumberPlacement>();
 
     String stringNum = String::number(m->no() + 1);
@@ -1303,11 +1302,8 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
             break;
         }
 
-        Staff* staff = score->staff(staffIdx);
-        const MStaff* measureStaff = measureStaves[staffIdx];
-        MeasureNumber* measureNumber = measureStaff->measureNumber();
-
-        if (showMeasureNumber && staff->shouldShowMeasureNumbers()) {
+        if (m->showMeasureNumberOnStaff(staffIdx)) {
+            MeasureNumber* measureNumber = measureStaves[staffIdx]->measureNumber();
             if (!measureNumber) {
                 measureNumber = new MeasureNumber(m);
                 measureNumber->setTrack(staff2track(staffIdx));
@@ -1319,9 +1315,6 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
             measureNumber->setXmlText(stringNum);
             measureNumber->setSystemFlag(placementMode != MeasureNumberPlacement::ON_ALL_STAVES);
             TLayout::layoutMeasureNumber(measureNumber, measureNumber->mutldata(), ctx);
-        } else if (measureNumber) {
-            measureNumber->setTrack(staff2track(staffIdx));
-            ctx.mutDom().doUndoRemoveElement(measureNumber);
         }
     }
 }
