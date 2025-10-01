@@ -92,7 +92,7 @@ static void removeRepeatMarkings(Score* score)
 //    has been unrolled
 //---------------------------------------------------------
 
-static void createExcerpts(MasterScore* cs, const std::list<Excerpt*>& excerpts)
+static void createExcerpts(MasterScore* cs, const std::vector<Excerpt*>& excerpts)
 {
     // borrowed from musescore.cpp endsWith(".pdf")
     for (Excerpt* e : excerpts) {
@@ -140,7 +140,7 @@ MasterScore* MasterScore::unrollRepeats()
     }
 
     // remove excerpts for now (they are re-created after unrolling master score)
-    std::list<Excerpt*> excerpts;
+    std::vector<Excerpt*> excerpts;
     for (Excerpt* e : score->excerpts()) {
         excerpts.push_back(new Excerpt(*e, false));
         score->masterScore()->deleteExcerpt(e);

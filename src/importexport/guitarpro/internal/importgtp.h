@@ -170,7 +170,7 @@ protected:
 
     GPProperties m_properties;
 
-    std::list<Note*> slideList;   //list of start slide notes
+    std::vector<Note*> slideList;   //list of start slide notes
 
     // note effect bit masks
     static const uint8_t EFFECT_BEND = 0x1;

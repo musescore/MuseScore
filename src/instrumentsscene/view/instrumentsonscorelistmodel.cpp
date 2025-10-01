@@ -348,7 +348,7 @@ bool InstrumentsOnScoreListModel::matchesScoreOrder() const
 {
     const ScoreOrder currentOrder = currentScoreOrder();
 
-    std::list<int> instrumentIndices;
+    std::vector<int> instrumentIndices;
     for (const Item* item : items()) {
         auto instrument = dynamic_cast<const InstrumentItem*>(item);
         if (!instrument) {

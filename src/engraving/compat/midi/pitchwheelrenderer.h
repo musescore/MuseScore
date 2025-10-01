@@ -20,13 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_PITCTWHEELRENDERER_H
-#define MU_ENGRAVING_PITCTWHEELRENDERER_H
+#pragma once
 
-#include <limits>
-#include <list>
-#include <unordered_map>
 #include <functional>
+#include <limits>
+#include <unordered_map>
+#include <vector>
 
 #include "../../types/types.h"
 
@@ -48,7 +47,7 @@ public:
 
     EventsHolder renderPitchWheel() const noexcept;
 
-    static void generateRanges(const std::list<PitchWheelFunction>& functions, std::map<int, int, std::greater<> >& ranges);
+    static void generateRanges(const std::vector<PitchWheelFunction>& functions, std::map<int, int, std::greater<> >& ranges);
 
 private:
 
@@ -56,14 +55,14 @@ private:
     {
         int32_t startTick = std::numeric_limits<int32_t>::max();
         int32_t endTick = 0;
-        std::list<PitchWheelFunction> functions;
+        std::vector<PitchWheelFunction> functions;
     };
 
     void renderChannelPitchWheel(EventsHolder& pitchWheelEvents, const PitchWheelFunctions& functions, uint32_t channel) const noexcept;
 
-    int32_t findNextStartTick(const std::list<PitchWheelFunction>& functions) const noexcept;
+    int32_t findNextStartTick(const std::vector<PitchWheelFunction>& functions) const noexcept;
 
-    int32_t calculatePitchBend(const std::list<PitchWheelFunction>& functions, int32_t tick) const noexcept;
+    int32_t calculatePitchBend(const std::vector<PitchWheelFunction>& functions, int32_t tick) const noexcept;
 
     std::map<uint32_t /*channel*/, PitchWheelFunctions> _functions;
 
@@ -72,6 +71,4 @@ private:
     std::unordered_map<int, MidiInstrumentEffect> _effectByChannel;
     std::unordered_map<int, staff_idx_t> _staffIdxByChannel;
 };
-}  // namespace mu::engraving
-
-#endif //MU_ENGRAVING_PITCTWHEELRENDERER_H
+}

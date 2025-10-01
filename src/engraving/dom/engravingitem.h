@@ -139,13 +139,7 @@ enum class KerningType : unsigned char
     ALLOW_COLLISION,
 };
 
-class EngravingItemList : public std::list<EngravingItem*>
-{
-    OBJECT_ALLOCATOR(engraving, EngravingItemList)
-public:
-
-    EngravingItem* at(size_t i) const;
-};
+using EngravingItemList = std::vector<EngravingItem*>;
 
 //-------------------------------------------------------------------
 //    @@ EngravingItem

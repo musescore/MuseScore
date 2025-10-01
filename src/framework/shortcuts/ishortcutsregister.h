@@ -19,10 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_ISHORTCUTSREGISTER_H
-#define MUSE_SHORTCUTS_ISHORTCUTSREGISTER_H
-
-#include <list>
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 #include "shortcutstypes.h"
@@ -61,5 +58,3 @@ public:
     virtual void reload(bool onlyDef = false) = 0;
 };
 }
-
-#endif // MUSE_SHORTCUTS_ISHORTCUTSREGISTER_H

@@ -110,7 +110,7 @@ QVariantList StringData::stringList() const
 QVariantList Drumset::variants(int pitch)
 {
     QVariantList drumInstrumentVariantList;
-    for (DrumInstrumentVariant div : m_drumset->variants(pitch)) {
+    for (const DrumInstrumentVariant& div : m_drumset->variants(pitch)) {
         QVariantMap pluginDivData;
         pluginDivData["pitch"] = div.pitch;
         pluginDivData["tremolo"] = int(div.tremolo);
