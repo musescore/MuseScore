@@ -147,6 +147,7 @@ Ret KnownAudioPluginsRegister::load()
     }
 
     m_loaded = true;
+    pluginInfoListChanged().notify();
     return muse::make_ok();
 }
 
@@ -165,6 +166,11 @@ std::vector<AudioPluginInfo> KnownAudioPluginsRegister::pluginInfoList(PluginInf
     }
 
     return result;
+}
+
+muse::async::Notification KnownAudioPluginsRegister::pluginInfoListChanged() const
+{
+    return m_pluginInfoListChanged;
 }
 
 const io::path_t& KnownAudioPluginsRegister::pluginPath(const AudioResourceId& resourceId) const
