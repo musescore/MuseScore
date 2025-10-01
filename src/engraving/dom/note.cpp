@@ -3183,7 +3183,7 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
 void Note::styleChanged()
 {
     const StaffType* st = staffType();
-    if (st->isTabStaff() && st->fretUseTextStyle()) {
+    if (st && st->isTabStaff() && st->fretUseTextStyle()) {
         setProperty(Pid::COLOR, style().styleV(Sid::tabFretNumberColor));
     }
     EngravingItem::styleChanged();
