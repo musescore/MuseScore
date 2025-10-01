@@ -371,7 +371,7 @@ void FinaleParser::importTextExpressions()
         item->setVisible(!expressionAssignment->hidden);
         item->setXmlText(expression.xmlText);
         /// @todo set x-position using graceNoteIndex
-        item->setOffset(evpuToPointF(expressionAssignment->horzEvpuOff, -expressionAssignment->vertEvpuOff)); // needs to be scaled?
+        item->setOffset(evpuToPointF(expressionAssignment->horzEvpuOff, -expressionAssignment->vertEvpuOff) * SPATIUM20); // correctly scaled?
         item->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         if (item->isDynamic()) {
             Dynamic* dynamic = toDynamic(item);
