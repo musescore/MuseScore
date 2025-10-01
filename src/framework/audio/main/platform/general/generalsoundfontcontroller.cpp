@@ -32,13 +32,13 @@ using namespace muse::audio;
 using namespace muse::audio::rpc;
 using namespace muse::audio::synth;
 
-void GeneralSoundFontController::init()
+void GeneralSoundFontController::loadSoundFonts()
 {
     configuration()->soundFontDirectoriesChanged().onReceive(this, [this](const io::paths_t&) {
-        loadSoundFonts();
+        doLoadSoundFonts();
     });
 
-    loadSoundFonts();
+    doLoadSoundFonts();
 }
 
 void GeneralSoundFontController::addSoundFont(const SoundFontUri& uri)
@@ -118,7 +118,7 @@ RetVal<io::path_t> GeneralSoundFontController::resolveInstallationPath(const io:
     return RetVal<io::path_t>(make_ret(Ret::Code::UnknownError));
 }
 
-void GeneralSoundFontController::loadSoundFonts()
+void GeneralSoundFontController::doLoadSoundFonts()
 {
     TRACEFUNC;
 

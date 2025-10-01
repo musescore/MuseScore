@@ -23,8 +23,6 @@ include(GetPlatformInfo)
 if (WEBENGINE_FACADE_MODE)
 # Web Facade
 set(AUDIO_ENGINE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudioworker.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudioworker.h
     ${CMAKE_CURRENT_LIST_DIR}/platform/web/networksfloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/platform/web/networksfloader.h
 )
@@ -32,7 +30,6 @@ set(AUDIO_ENGINE_SRC
 else()
 # Real engine
 set(AUDIO_ENGINE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/iaudioworker.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioengineconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/ienginecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iengineplayback.h

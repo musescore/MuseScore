@@ -26,50 +26,31 @@
 #include <thread>
 #include <atomic>
 
-#include "global/async/asyncable.h"
-
-#include "global/modularity/ioc.h"
-#include "audio/common/rpc/irpcchannel.h"
-#include "../../iaudioengine.h"
-
-#include "../../iaudioworker.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::audio::engine {
-class EngineController;
-
 //! NOTE This is a thread for worker
-class GeneralAudioWorker : public IAudioWorker, public async::Asyncable
+class GeneralAudioWorker
 {
-    Inject<IAudioEngine> audioEngine;
-
 public:
-    GeneralAudioWorker(std::shared_ptr<rpc::IRpcChannel> rpcChannel);
+    GeneralAudioWorker();
     ~GeneralAudioWorker();
 
-    void registerExports() override;
+    using Callback = std::function<void ()>;
 
-    void run() override;
+    void run(Callback callback);
     void setInterval(const msecs_t interval);
-    void stop() override;
-    bool isRunning() const override;
-    async::Channel<bool> isRunningChanged() const override;
+    void setInterval(const samples_t samples, const sample_rate_t sampleRate);
+    void stop();
+    bool isRunning() const;
 
-    void popAudioData(float* dest, size_t sampleCount) override;
+public:
+    void th_main(Callback callback);
 
-private:
-    void th_main();
-
-    // service
-    std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
-    std::shared_ptr<EngineController> m_engineController;
-    std::shared_ptr<IAudioEngine> m_engine;
-
-    // thread
     msecs_t m_intervalMsecs = 0;
     uint64_t m_intervalInWinTime = 0;
 
     std::unique_ptr<std::thread> m_thread = nullptr;
     std::atomic<bool> m_running = false;
-    async::Channel<bool> m_isRunningChanged;
 };
 }

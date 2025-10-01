@@ -24,7 +24,7 @@
 using namespace muse;
 using namespace muse::audio;
 
-void SoundFontControllerStub::init()
+void SoundFontControllerStub::loadSoundFonts()
 {
 }
 

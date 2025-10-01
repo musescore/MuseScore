@@ -28,7 +28,6 @@
 #include "audio/common/audiothreadsecurer.h"
 #ifdef Q_OS_WASM
 #include "audio/common/rpc/platform/web/webrpcchannel.h"
-#include "audio/engine/platform/web/webaudioworker.h"
 #include "platform/web/websoundfontcontroller.h"
 #else
 #include "audio/common/rpc/platform/general/generalrpcchannel.h"
@@ -68,30 +67,29 @@ std::string AudioModule::moduleName() const
 void AudioModule::registerExports()
 {
     m_configuration = std::make_shared<AudioConfiguration>(iocContext());
-    m_startAudioController = std::make_shared<StartAudioController>();
     m_audioOutputController = std::make_shared<AudioOutputDeviceController>(iocContext());
     m_mainPlayback = std::make_shared<Playback>(iocContext());
     m_audioDriverController = std::make_shared<AudioDriverController>(iocContext());
 
 #ifdef Q_OS_WASM
     m_rpcChannel = std::make_shared<rpc::WebRpcChannel>();
-    m_audioWorker = std::make_shared<engine::WebAudioWorker>(m_rpcChannel);
     m_soundFontController = std::make_shared<WebSoundFontController>();
 #else
     m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
-    m_audioWorker = std::make_shared<engine::GeneralAudioWorker>(m_rpcChannel);
-    m_audioWorker->registerExports();
     m_soundFontController = std::make_shared<GeneralSoundFontController>();
 #endif
+
+    m_startAudioController = std::make_shared<StartAudioController>(m_rpcChannel);
 
     ioc()->registerExport<IAudioConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IStartAudioController>(moduleName(), m_startAudioController);
     ioc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
     ioc()->registerExport<rpc::IRpcChannel>(moduleName(), m_rpcChannel);
-    ioc()->registerExport<engine::IAudioWorker>(moduleName(), m_audioWorker);
     ioc()->registerExport<IAudioDriverController>(moduleName(), m_audioDriverController);
     ioc()->registerExport<ISoundFontController>(moduleName(), m_soundFontController);
     ioc()->registerExport<IPlayback>(moduleName(), m_mainPlayback);
+
+    m_startAudioController->registerExports();
 }
 
 void AudioModule::registerResources()
@@ -110,37 +108,6 @@ void AudioModule::resolveImports()
 
 void AudioModule::onInit(const IApplication::RunMode& mode)
 {
-    /** We have three layers
-        ------------------------
-        Main (main thread) - public client interface
-            see registerExports
-        ------------------------
-        Worker (worker thread) - generate and mix audio data
-            * AudioEngine
-            * Sequencer
-            * Players
-            * Synthesizers
-            * Audio decode (.ogg ...)
-            * Mixer
-        ------------------------
-        Driver (driver thread) - request audio data to play
-        ------------------------
-
-        All layers work in separate threads.
-        We need to make sure that each part of the system works only in its thread and,
-        ideally, there is no access to the same object from different threads,
-        in order to avoid problems associated with access data thread safety.
-
-        Objects from different layers (threads) must interact only through:
-            * Asynchronous API (@see thirdparty/deto) - controls and pass midi data
-            * AudioBuffer - pass audio data from worker to driver for play
-
-        AudioEngine is in the worker and operates only with the buffer,
-        in fact, it knows nothing about the data consumer, about the audio driver.
-
-    **/
-
-    // Init configuration
     m_configuration->init();
 
     m_audioDriverController->init();
@@ -160,8 +127,10 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 #endif
 
     m_audioOutputController->init();
-    m_soundFontController->init();
+
     m_mainPlayback->init();
+
+    m_startAudioController->init();
 
 #ifndef Q_OS_WASM
     m_startAudioController->startAudioProcessing(mode);
