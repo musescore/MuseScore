@@ -1799,12 +1799,9 @@ void TRead::read(MMRestRange* r, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(SystemDivider* d, XmlReader& e, ReadContext& ctx)
 {
-    if (e.attribute("type") == "left") {
-        d->setDividerType(SystemDividerType::LEFT);
-    } else {
-        d->setDividerType(SystemDividerType::RIGHT);
-    }
+    SystemDividerType type = e.attribute("type") == "left" ? SystemDividerType::LEFT : SystemDividerType::RIGHT;
     TRead::read(static_cast<Symbol*>(d), e, ctx);
+    d->setDividerType(type);
 }
 
 static void setActionIconTypeFromAction(ActionIcon* i, const std::string& actionCode)
@@ -4615,4 +4612,24 @@ void TRead::readSystemLock(Score* score, XmlReader& e)
     }
 
     score->addSystemLock(new SystemLock(startMeas, endMeas));
+}
+
+void TRead::readSystemDividers(Score* score, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "system") {
+            size_t systemIdx = e.intAttribute("idx");
+            while (e.readNextStartElement()) {
+                if (e.name() == "SystemDivider") {
+                    SystemDivider* divider = new SystemDivider(score->dummy()->system());
+                    read(divider, e, ctx);
+                    score->addSystemDivider(systemIdx, divider);
+                } else {
+                    e.unknown();
+                }
+            }
+        } else {
+            e.unknown();
+        }
+    }
 }

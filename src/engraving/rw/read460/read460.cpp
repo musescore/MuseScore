@@ -202,6 +202,8 @@ bool Read460::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
             }
         } else if (tag == "SystemLocks") {
             TRead::readSystemLocks(score, e);
+        } else if (tag == "SystemDividers") {
+            TRead::readSystemDividers(score, e, ctx);
         } else if (tag == "Part") {
             Part* part = new Part(score);
             TRead::read(part, e, ctx);

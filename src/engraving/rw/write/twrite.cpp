@@ -453,6 +453,37 @@ void TWrite::writeSystemLocks(const Score* score, XmlWriter& xml)
     xml.endElement();
 }
 
+void TWrite::writeSystemDividers(const Score* score, XmlWriter& xml, WriteContext& ctx)
+{
+    std::vector<const System*> systemsToWrite;
+    for (const System* system : score->systems()) {
+        bool writeSystem = (system->systemDividerLeft() && !system->systemDividerLeft()->generated())
+                           || (system->systemDividerRight() && !system->systemDividerRight()->generated());
+        if (writeSystem) {
+            systemsToWrite.push_back(system);
+        }
+    }
+
+    if (systemsToWrite.empty()) {
+        return;
+    }
+
+    xml.startElement("SystemDividers");
+    for (const System* system : systemsToWrite) {
+        xml.startElement("system", { { "idx", muse::indexOf(score->systems(), system) } });
+        SystemDivider* dividerLeft = system->systemDividerLeft();
+        if (dividerLeft && !dividerLeft->generated()) {
+            write(dividerLeft, xml, ctx);
+        }
+        SystemDivider* dividerRight = system->systemDividerRight();
+        if (dividerRight && !dividerRight->generated()) {
+            write(dividerRight, xml, ctx);
+        }
+        xml.endElement();
+    }
+    xml.endElement();
+}
+
 void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx)
 {
     if (ctx.configuration()->doNotSaveEIDsForBackCompat() || item->score()->isPaletteScore() || ctx.clipboardmode()) {
@@ -3110,6 +3141,11 @@ void TWrite::write(const System* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const SystemDivider* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item, { { "type", (item->dividerType() == SystemDividerType::LEFT ? "left" : "right") } });
+    if (item->scoreFont()) {
+        xml.tag("font", item->scoreFont()->name());
+        writeProperty(item, xml, Pid::SYMBOLS_SIZE);
+        writeProperty(item, xml, Pid::SYMBOL_ANGLE);
+    }
     writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
     xml.endElement();
 }
