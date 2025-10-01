@@ -50,8 +50,8 @@
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 #include "dom/trill.h"
-#include "dom/undo.h"
 #include "dom/utils.h"
+#include "editing/undo.h"
 #include "types/typesconv.h"
 
 #include "autoplace.h"

@@ -33,15 +33,15 @@
 #include "editstringdata.h"
 
 #include "engraving/dom/factory.h"
-#include "engraving/dom/part.h"
+#include "engraving/dom/instrumentname.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stringdata.h"
+#include "engraving/dom/system.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/utils.h"
-#include "engraving/dom/undo.h"
-#include "engraving/dom/instrumentname.h"
-#include "engraving/dom/system.h"
+#include "engraving/editing/undo.h"
 
 #include "log.h"
 

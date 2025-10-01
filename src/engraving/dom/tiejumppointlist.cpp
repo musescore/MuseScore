@@ -22,6 +22,8 @@
 
 #include "tiejumppointlist.h"
 
+#include "../editing/undo.h"
+
 #include "barline.h"
 #include "chord.h"
 #include "factory.h"
@@ -32,7 +34,6 @@
 #include "score.h"
 #include "segment.h"
 #include "tie.h"
-#include "undo.h"
 #include "volta.h"
 
 using namespace mu::engraving;

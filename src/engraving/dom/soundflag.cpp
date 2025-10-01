@@ -24,7 +24,7 @@
 
 #include <climits>
 
-#include "undo.h"
+#include "../editing/undo.h"
 #include "linkedobjects.h"
 
 using namespace muse::draw;

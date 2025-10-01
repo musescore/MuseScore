@@ -30,13 +30,12 @@
 #include "global/io/ioretcodes.h"
 #include "global/io/devtools/allzerosfilecorruptor.h"
 
-#include "engraving/dom/undo.h"
-
-#include "engraving/dom/masterscore.h"
-#include "engraving/engravingproject.h"
 #include "engraving/compat/engravingcompat.h"
-#include "engraving/infrastructure/mscio.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/editing/undo.h"
 #include "engraving/engravingerrors.h"
+#include "engraving/engravingproject.h"
+#include "engraving/infrastructure/mscio.h"
 #include "engraving/rw/write/writecontext.h"
 
 #include "iprojectautosaver.h"

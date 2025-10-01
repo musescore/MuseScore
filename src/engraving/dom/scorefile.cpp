@@ -27,6 +27,7 @@
 
 #include "draw/painter.h"
 
+#include "../editing/undo.h"
 #include "rendering/paintoptions.h"
 #include "style/style.h"
 
@@ -34,7 +35,6 @@
 #include "mscore.h"
 #include "page.h"
 #include "score.h"
-#include "undo.h"
 
 #include "log.h"
 

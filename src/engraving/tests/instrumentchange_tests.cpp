@@ -29,7 +29,7 @@
 #include "dom/part.h"
 #include "dom/segment.h"
 #include "dom/staff.h"
-#include "dom/undo.h"
+#include "editing/undo.h"
 
 #include "engraving/compat/midi/midipatch.h"
 

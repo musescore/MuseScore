@@ -32,6 +32,9 @@
 
 #include "containers.h"
 
+#include "editing/mscoreview.h"
+#include "editing/undo.h"
+
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "compat/dummyelement.h"
@@ -67,7 +70,6 @@
 #include "masterscore.h"
 #include "measure.h"
 #include "mscore.h"
-#include "mscoreview.h"
 #include "note.h"
 #include "ottava.h"
 #include "page.h"
@@ -96,7 +98,6 @@
 #include "tiemap.h"
 #include "timesig.h"
 #include "tuplet.h"
-#include "undo.h"
 #include "utils.h"
 #include "volta.h"
 

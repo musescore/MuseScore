@@ -23,7 +23,7 @@
 #include "systemobjectslayertreeitem.h"
 
 #include "engraving/dom/timesig.h"
-#include "engraving/dom/undo.h"
+#include "engraving/editing/undo.h"
 
 #include "layoutpanelutils.h"
 #include "translation.h"

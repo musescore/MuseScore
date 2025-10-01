@@ -33,7 +33,7 @@
 #include "dom/part.h"
 #include "dom/score.h"
 #include "dom/staff.h"
-#include "dom/undo.h"
+#include "editing/undo.h"
 
 #include "log.h"
 

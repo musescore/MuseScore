@@ -24,11 +24,11 @@
 #include "modularity/imoduleinterface.h"
 
 #include "draw/painter.h"
-#include "dom/editdata.h"
 
 #include "paintoptions.h"
 
 namespace mu::engraving {
+class EditData;
 class EngravingItem;
 }
 

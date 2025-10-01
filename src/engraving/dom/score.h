@@ -51,8 +51,9 @@
 
 #include "../compat/midi/compatmidirenderinternal.h"
 
+#include "../editing/cmd.h"
+
 #include "chordlist.h"
-#include "cmd.h"
 #include "guitarbend.h"
 #include "input.h"
 #include "mscore.h"

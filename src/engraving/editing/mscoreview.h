@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_MSCOREVIEW_H
-#define MU_ENGRAVING_MSCOREVIEW_H
+#pragma once
 
 #include "../types/types.h"
 
@@ -70,6 +69,4 @@ private:
     EngravingItem* elementAt(const PointF& p) const;
     const std::vector<EngravingItem*> elementsNear(const PointF& pos) const;
 };
-} // namespace mu::engraving
-
-#endif
+}

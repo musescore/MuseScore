@@ -98,9 +98,9 @@
 #include "dom/tremolotwochord.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tuplet.h"
-#include "dom/undo.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
+#include "editing/undo.h"
 
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"

@@ -24,6 +24,9 @@
 
 #include "imimedata.h"
 
+#include "../editing/mscoreview.h"
+#include "../editing/undo.h"
+
 #include "rw/read400/tread.h"
 #include "rw/rwregister.h"
 #include "types/typesconv.h"
@@ -42,7 +45,6 @@
 #include "lyrics.h"
 #include "measure.h"
 #include "measurerepeat.h"
-#include "mscoreview.h"
 #include "part.h"
 #include "rest.h"
 #include "score.h"
@@ -50,9 +52,7 @@
 #include "staff.h"
 #include "tie.h"
 #include "timesig.h"
-
 #include "tuplet.h"
-#include "undo.h"
 #include "utils.h"
 
 #include "log.h"

@@ -49,6 +49,10 @@
 #include "accessibility/accessibleroot.h"
 #endif
 
+#include "../editing/editdata.h"
+#include "../editing/elementeditdata.h"
+#include "../editing/undo.h"
+
 #include "chord.h"
 #include "factory.h"
 #include "linkedobjects.h"
@@ -58,6 +62,7 @@
 #include "note.h"
 #include "page.h"
 #include "parenthesis.h"
+#include "part.h"
 #include "score.h"
 #include "segment.h"
 #include "shape.h"
@@ -66,7 +71,6 @@
 #include "stafflines.h"
 #include "stafftype.h"
 #include "system.h"
-#include "undo.h"
 
 #include "log.h"
 #define LOG_PROP() if (0) LOGD()
@@ -2178,13 +2182,10 @@ void EngravingItem::endDrag(EditData& ed)
     if (!eed) {
         return;
     }
-    for (const PropertyData& pd : eed->propertyData) {
-        setPropertyFlags(pd.id, pd.f);     // reset initial property flags state
-        PropertyFlags f = pd.f;
-        if (f == PropertyFlags::STYLED) {
-            f = PropertyFlags::UNSTYLED;
-        }
-        score()->undoPropertyChanged(this, pd.id, pd.data, f);
+    for (const auto& [id, v, f] : eed->propertyData) {
+        setPropertyFlags(id, f);     // reset initial property flags state
+        score()->undoPropertyChanged(this, id, v,
+                                     f == PropertyFlags::STYLED ? PropertyFlags::UNSTYLED : f);
         setGenerated(false);
     }
     score()->hideAnchors();
@@ -2315,13 +2316,13 @@ void EngravingItem::endDragGrip(EditData& ed)
     ElementEditDataPtr eed = ed.getData(this);
     bool changed = false;
     if (eed) {
-        for (const PropertyData& pd : eed->propertyData) {
-            setPropertyFlags(pd.id, pd.f);       // reset initial property flags state
-            PropertyFlags f = pd.f;
+        for (const auto& [id, data, flags] : eed->propertyData) {
+            setPropertyFlags(id, flags);       // reset initial property flags state
+            PropertyFlags f = flags;
             if (f == PropertyFlags::STYLED) {
                 f = PropertyFlags::UNSTYLED;
             }
-            if (score()->undoPropertyChanged(this, pd.id, pd.data, f)) {
+            if (score()->undoPropertyChanged(this, id, data, f)) {
                 changed = true;
             }
         }

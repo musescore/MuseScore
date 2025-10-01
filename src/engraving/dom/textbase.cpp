@@ -49,8 +49,9 @@
 #include "mscore.h"
 #include "page.h"
 #include "score.h"
-#include "textedit.h"
-#include "undo.h"
+
+#include "../editing/textedit.h"
+#include "../editing/undo.h"
 
 #include "log.h"
 

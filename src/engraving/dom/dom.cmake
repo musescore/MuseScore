@@ -72,8 +72,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/cleflist.h
     ${CMAKE_CURRENT_LIST_DIR}/capo.cpp
     ${CMAKE_CURRENT_LIST_DIR}/capo.h
-    ${CMAKE_CURRENT_LIST_DIR}/cmd.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/cmd.h
     ${CMAKE_CURRENT_LIST_DIR}/connector.cpp
     ${CMAKE_CURRENT_LIST_DIR}/connector.h
     ${CMAKE_CURRENT_LIST_DIR}/deadslapped.cpp
@@ -92,9 +90,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dynamichairpingroup.h
     ${CMAKE_CURRENT_LIST_DIR}/easeInOut.cpp
     ${CMAKE_CURRENT_LIST_DIR}/easeInOut.h
-    ${CMAKE_CURRENT_LIST_DIR}/edit.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/editdata.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/editdata.h
     ${CMAKE_CURRENT_LIST_DIR}/elementgroup.cpp
     ${CMAKE_CURRENT_LIST_DIR}/elementgroup.h
     ${CMAKE_CURRENT_LIST_DIR}/elementmap.cpp
@@ -205,8 +200,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mmrestrange.h
     ${CMAKE_CURRENT_LIST_DIR}/mscore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mscore.h
-    ${CMAKE_CURRENT_LIST_DIR}/mscoreview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/mscoreview.h
     ${CMAKE_CURRENT_LIST_DIR}/navigate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/navigate.h
     ${CMAKE_CURRENT_LIST_DIR}/note.cpp
@@ -346,8 +339,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/text.h
     ${CMAKE_CURRENT_LIST_DIR}/textbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/textedit.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/textedit.h
     ${CMAKE_CURRENT_LIST_DIR}/textline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textline.h
     ${CMAKE_CURRENT_LIST_DIR}/textlinebase.cpp
@@ -373,8 +364,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tuplet.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tuplet.h
     ${CMAKE_CURRENT_LIST_DIR}/tupletmap.h
-    ${CMAKE_CURRENT_LIST_DIR}/undo.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/undo.h
     ${CMAKE_CURRENT_LIST_DIR}/unrollrepeats.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utils.h

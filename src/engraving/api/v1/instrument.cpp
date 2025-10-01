@@ -26,7 +26,8 @@
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/masterscore.h"
-#include "engraving/dom/undo.h"
+
+#include "engraving/editing/undo.h"
 
 using namespace mu::engraving::apiv1;
 

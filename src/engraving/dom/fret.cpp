@@ -26,6 +26,8 @@
 
 #include "io/file.h"
 
+#include "../editing/undo.h"
+
 #include "anchors.h"
 #include "chord.h"
 #include "factory.h"
@@ -38,7 +40,6 @@
 #include "staff.h"
 #include "stringdata.h"
 #include "system.h"
-#include "undo.h"
 
 #include "rw/harmonytodiagramreader.h"
 #include "rw/read460/tread.h"

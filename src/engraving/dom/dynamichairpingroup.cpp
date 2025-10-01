@@ -22,12 +22,13 @@
 
 #include "dynamichairpingroup.h"
 
+#include "../editing/undo.h"
+
 #include "dynamic.h"
 #include "expression.h"
 #include "hairpin.h"
 #include "score.h"
 #include "segment.h"
-#include "undo.h"
 
 using namespace mu;
 

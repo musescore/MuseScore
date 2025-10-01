@@ -31,6 +31,7 @@
 #include <cmath>
 
 #include "compat/midi/event.h"
+#include "editing/undo.h"
 #include "types/constants.h"
 
 #include "dom/accidental.h"
@@ -59,7 +60,6 @@
 #include "dom/swing.h"
 #include "dom/tie.h"
 #include "dom/trill.h"
-#include "dom/undo.h"
 #include "dom/utils.h"
 #include "dom/vibrato.h"
 #include "dom/volta.h"

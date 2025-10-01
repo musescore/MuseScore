@@ -23,7 +23,7 @@
 
 #include "notation/inotation.h"
 
-#include "engraving/dom/undo.h"
+#include "engraving/editing/undo.h"
 
 #include "log.h"
 

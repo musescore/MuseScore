@@ -22,7 +22,7 @@
 
 #include "selection.h"
 
-#include "engraving/dom/undo.h"
+#include "engraving/editing/undo.h"
 
 // api
 #include "score.h"

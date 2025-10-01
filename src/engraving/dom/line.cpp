@@ -26,12 +26,13 @@
 
 #include "containers.h"
 
+#include "../editing/mscoreview.h"
+
 #include "anchors.h"
 #include "barline.h"
 #include "chord.h"
 #include "dynamic.h"
 #include "measure.h"
-#include "mscoreview.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"

@@ -21,10 +21,10 @@
  */
 #include "layoutcontext.h"
 
-#include "dom/undo.h"
+#include "editing/mscoreview.h"
+#include "editing/undo.h"
 #include "style/defaultstyle.h"
 
-#include "dom/mscoreview.h"
 #include "dom/score.h"
 #include "dom/spanner.h"
 

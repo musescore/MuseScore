@@ -50,7 +50,8 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/accidental.h"
-#include "engraving/dom/undo.h"
+
+#include "engraving/editing/undo.h"
 
 #include "playevent.h"
 

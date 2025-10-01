@@ -24,7 +24,7 @@
 #include "io/buffer.h"
 
 #include "compat/writescorehook.h"
-
+#include "editing/undo.h"
 #include "rw/mscloader.h"
 #include "rw/xmlreader.h"
 #include "rw/rwregister.h"
@@ -43,7 +43,6 @@
 #include "sig.h"
 #include "tempo.h"
 #include "timesig.h"
-#include "undo.h"
 
 #include "log.h"
 

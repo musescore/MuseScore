@@ -27,6 +27,9 @@
 
 #include "measure.h"
 
+#include "../editing/mscoreview.h"
+#include "../editing/undo.h"
+
 #include "accidental.h"
 #include "actionicon.h"
 #include "anchors.h"
@@ -49,7 +52,6 @@
 #include "measurenumber.h"
 #include "measurerepeat.h"
 #include "mmrestrange.h"
-#include "mscoreview.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"
@@ -74,7 +76,6 @@
 #include "tremolotwochord.h"
 #include "tuplet.h"
 #include "tupletmap.h"
-#include "undo.h"
 #include "utils.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY

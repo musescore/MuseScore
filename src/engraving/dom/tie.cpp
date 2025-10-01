@@ -25,15 +25,16 @@
 
 #include "draw/types/transform.h"
 
+#include "../editing/mscoreview.h"
+#include "../editing/undo.h"
+
 #include "accidental.h"
 #include "barline.h"
 #include "chord.h"
 #include "factory.h"
 #include "hook.h"
 #include "ledgerline.h"
-#include "masterscore.h"
 #include "measure.h"
-#include "mscoreview.h"
 #include "note.h"
 #include "notedot.h"
 #include "part.h"
@@ -45,7 +46,6 @@
 #include "stem.h"
 #include "system.h"
 #include "tiejumppointlist.h"
-#include "undo.h"
 #include "utils.h"
 #include "volta.h"
 

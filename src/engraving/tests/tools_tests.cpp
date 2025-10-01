@@ -24,7 +24,7 @@
 
 #include "dom/masterscore.h"
 #include "dom/measure.h"
-#include "dom/undo.h"
+#include "editing/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

@@ -21,6 +21,8 @@
  */
 #include "read400.h"
 
+#include "../editing/mscoreview.h"
+
 #include "dom/audio.h"
 #include "dom/excerpt.h"
 #include "dom/factory.h"
@@ -40,7 +42,6 @@
 #include "dom/harmony.h"
 #include "dom/tie.h"
 #include "dom/breath.h"
-#include "dom/mscoreview.h"
 #include "dom/fret.h"
 #include "dom/dynamic.h"
 #include "dom/hairpin.h"

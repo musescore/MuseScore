@@ -23,6 +23,8 @@
 #include <tuple>
 
 #include "translation.h"
+
+#include "../editing/undo.h"
 #include "infrastructure/messagebox.h"
 
 #include "accidental.h"
@@ -43,7 +45,6 @@
 #include "stringdata.h"
 #include "tie.h"
 #include "tuplet.h"
-#include "undo.h"
 #include "utils.h"
 
 #include "log.h"

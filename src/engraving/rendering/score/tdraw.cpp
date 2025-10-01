@@ -153,7 +153,7 @@
 
 #include "dom/whammybar.h"
 
-#include "dom/mscoreview.h"
+#include "editing/mscoreview.h"
 
 #include "infrastructure/rtti.h"
 

@@ -93,6 +93,19 @@ set(MODULE_SRC
 
     ${DOM_SRC}
 
+    ${CMAKE_CURRENT_LIST_DIR}/editing/cmd.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/cmd.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/edit.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editdata.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editdata.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/elementeditdata.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/mscoreview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/mscoreview.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/textedit.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/textedit.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/undo.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/undo.h
+
     ${CMAKE_CURRENT_LIST_DIR}/rw/README.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/ireader.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/iwriter.h

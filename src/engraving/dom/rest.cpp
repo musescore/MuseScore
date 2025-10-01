@@ -40,7 +40,7 @@
 #include "segment.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "undo.h"
+#include "../editing/undo.h"
 
 #include "log.h"
 

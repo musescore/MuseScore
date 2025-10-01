@@ -21,6 +21,7 @@
  */
 #include "read410.h"
 
+#include "../editing/mscoreview.h"
 #include "../types/types.h"
 
 #include "dom/anchors.h"
@@ -37,7 +38,6 @@
 #include "dom/lyrics.h"
 #include "dom/masterscore.h"
 #include "dom/measurerepeat.h"
-#include "dom/mscoreview.h"
 #include "dom/note.h"
 #include "dom/part.h"
 #include "dom/score.h"
