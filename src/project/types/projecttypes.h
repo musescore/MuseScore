@@ -110,24 +110,9 @@ struct CloudAudioInfo {
 
 struct ExportInfo {
     QString id;
-    muse::io::path_t projectPath;
     muse::io::path_t exportPath;
     INotationWriter::UnitType unitType;
-    std::vector<notation::INotationPtr> notations;
-
-    bool operator==(const ExportInfo& other) const
-    {
-        return id == other.id
-               && projectPath == other.projectPath
-               && exportPath == other.exportPath
-               && unitType == other.unitType
-               && notations == other.notations;
-    }
-
-    bool operator!=(const ExportInfo other) const
-    {
-        return !(*this == other);
-    }
+    std::vector<notation::INotationWeakPtr> notations;
 };
 
 struct SaveLocation
