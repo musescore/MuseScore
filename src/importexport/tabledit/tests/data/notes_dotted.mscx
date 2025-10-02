@@ -136,8 +136,8 @@
             </Chord>
           <Beam>
             <eid>Q_Q</eid>
-            <l1>-12</l1>
-            <l2>-12</l2>
+            <l1>-6</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <eid>R_R</eid>
@@ -178,7 +178,7 @@
           <Chord>
             <eid>X_X</eid>
             <dots>1</dots>
-            <durationType>64th</durationType>
+            <durationType>32nd</durationType>
             <Note>
               <eid>Y_Y</eid>
               <pitch>55</pitch>
@@ -187,26 +187,8 @@
               <string>2</string>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/128</fractions>
-            </location>
-          <Chord>
-            <eid>Z_Z</eid>
-            <dots>1</dots>
-            <durationType>64th</durationType>
-            <Note>
-              <eid>a_a</eid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>0</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
-          <location>
-            <fractions>1/128</fractions>
-            </location>
           <BarLine>
-            <eid>b_b</eid>
+            <eid>Z_Z</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -215,17 +197,17 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>c_c</eid>
+            <eid>a_a</eid>
             <linkedTo>H_H</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <Chord>
-            <eid>d_d</eid>
+            <eid>b_b</eid>
             <linkedTo>K_K</linkedTo>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>e_e</eid>
+              <eid>c_c</eid>
               <linkedTo>L_L</linkedTo>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -234,7 +216,7 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>f_f</eid>
+            <eid>d_d</eid>
             <linkedTo>M_M</linkedTo>
             </BarLine>
           </voice>
@@ -242,12 +224,12 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>g_g</eid>
+            <eid>e_e</eid>
             <linkedTo>O_O</linkedTo>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
-              <eid>h_h</eid>
+              <eid>f_f</eid>
               <linkedTo>P_P</linkedTo>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -256,12 +238,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>i_i</eid>
+            <eid>g_g</eid>
             <linkedTo>R_R</linkedTo>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Note>
-              <eid>j_j</eid>
+              <eid>h_h</eid>
               <linkedTo>S_S</linkedTo>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -270,12 +252,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>k_k</eid>
+            <eid>i_i</eid>
             <linkedTo>T_T</linkedTo>
             <dots>1</dots>
             <durationType>16th</durationType>
             <Note>
-              <eid>l_l</eid>
+              <eid>j_j</eid>
               <linkedTo>U_U</linkedTo>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -284,12 +266,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>m_m</eid>
+            <eid>k_k</eid>
             <linkedTo>V_V</linkedTo>
             <dots>1</dots>
             <durationType>32nd</durationType>
             <Note>
-              <eid>n_n</eid>
+              <eid>l_l</eid>
               <linkedTo>W_W</linkedTo>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -298,12 +280,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>o_o</eid>
+            <eid>m_m</eid>
             <linkedTo>X_X</linkedTo>
             <dots>1</dots>
-            <durationType>64th</durationType>
+            <durationType>32nd</durationType>
             <Note>
-              <eid>p_p</eid>
+              <eid>n_n</eid>
               <linkedTo>Y_Y</linkedTo>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -311,29 +293,9 @@
               <string>2</string>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/128</fractions>
-            </location>
-          <Chord>
-            <eid>q_q</eid>
-            <linkedTo>Z_Z</linkedTo>
-            <dots>1</dots>
-            <durationType>64th</durationType>
-            <Note>
-              <eid>r_r</eid>
-              <linkedTo>a_a</linkedTo>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>0</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
-          <location>
-            <fractions>1/128</fractions>
-            </location>
           <BarLine>
-            <eid>s_s</eid>
-            <linkedTo>b_b</linkedTo>
+            <eid>o_o</eid>
+            <linkedTo>Z_Z</linkedTo>
             </BarLine>
           </voice>
         </Measure>
