@@ -24,6 +24,7 @@
 
 #include "../dom/chordlist.h"
 #include "../dom/score.h"
+#include "editing/editsystemlocks.h"
 
 using namespace mu::engraving;
 
@@ -123,7 +124,7 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
         break;
     case Sid::createMultiMeasureRests:
         if (oldValue.toBool() == true && newValue.toBool() == false) {
-            score->removeSystemLocksContainingMMRests();
+            EditSystemLocks::removeSystemLocksContainingMMRests(score);
         }
         break;
     default:

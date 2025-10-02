@@ -22,38 +22,39 @@
 
 #pragma once
 
-#include "undo.h"
+#include <vector>
 
 namespace mu::engraving {
+class Measure;
+class MeasureBase;
+class Score;
+class System;
 class SystemLock;
 
-class AddSystemLock : public UndoCommand
+enum class LayoutBreakType : unsigned char;
+
+class EditSystemLocks
 {
-    OBJECT_ALLOCATOR(engraving, AddSystemLock)
-
-    const SystemLock* m_systemLock;
 public:
-    AddSystemLock(const SystemLock* systemLock);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
-    void cleanup(bool undo) override;
+    static void undoAddSystemLock(Score* score, const SystemLock* lock);
+    static void undoRemoveSystemLock(Score* score, const SystemLock* lock);
+    static void undoRemoveAllLocks(Score* score);
 
-    UNDO_NAME("AddSystemLock")
-    std::vector<EngravingObject*> objectItems() const override;
-};
+    static void toggleSystemLock(Score* score, const std::vector<System*>& systems);
+    static void toggleScoreLock(Score* score);
 
-class RemoveSystemLock : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, RemoveSystemLock)
+    static void addRemoveSystemLocks(Score* score, int interval, bool lock);
 
-    const SystemLock* m_systemLock;
-public:
-    RemoveSystemLock(const SystemLock* systemLock);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
-    void cleanup(bool undo) override;
+    static void makeIntoSystem(Score* score, MeasureBase* first, MeasureBase* last);
+    static void moveMeasureToPrevSystem(Score* score, MeasureBase* m);
+    static void moveMeasureToNextSystem(Score* score, MeasureBase* m);
 
-    UNDO_NAME("RemoveSystemLock")
-    std::vector<EngravingObject*> objectItems() const override;
+    static void applyLockToSelection(Score* score);
+
+    static void removeSystemLocksOnAddLayoutBreak(Score* score, LayoutBreakType breakType, const MeasureBase* measure);
+    static void removeLayoutBreaksOnAddSystemLock(Score* score, const SystemLock* lock);
+    static void removeSystemLocksOnRemoveMeasures(Score* score, const MeasureBase* m1, const MeasureBase* m2);
+    static void removeSystemLocksContainingMMRests(Score* score);
+    static void updateSystemLocksOnCreateMMRests(Score* score, Measure* first, Measure* last);
 };
 }
