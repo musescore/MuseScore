@@ -45,6 +45,19 @@ NavigationPanel::~NavigationPanel()
     }
 }
 
+void NavigationPanel::componentComplete()
+{
+    if (isComponentCompleted()) {
+        return;
+    }
+
+    if (m_section) {
+        m_section->componentComplete();
+    }
+
+    AbstractNavigation::componentComplete();
+}
+
 QString NavigationPanel::name() const
 {
     return AbstractNavigation::name();
