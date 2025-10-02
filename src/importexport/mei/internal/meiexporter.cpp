@@ -23,7 +23,9 @@
 #include "meiexporter.h"
 
 #include <random>
+#include <vector>
 
+#include "containers.h"
 #include "log.h"
 #include "types/datetime.h"
 
@@ -792,7 +794,7 @@ bool MeiExporter::writeInstrDef(pugi::xml_node node, const Part* part)
 
 bool MeiExporter::writeEnding(const Measure* measure)
 {
-    std::list<const Volta*> voltas = this->findVoltasInMeasure(measure);
+    std::vector<const Volta*> voltas = this->findVoltasInMeasure(measure);
     auto voltaIter = std::find_if(voltas.begin(), voltas.end(), [measure](const Volta* volta) { return volta->startMeasure() == measure; });
 
     if (voltaIter != voltas.end()) {
@@ -810,10 +812,11 @@ bool MeiExporter::writeEnding(const Measure* measure)
 
 bool MeiExporter::writeEndingEnd(const Measure* measure)
 {
-    std::list<const Volta*> voltas = this->findVoltasInMeasure(measure);
-    auto voltaIter = std::find_if(voltas.begin(), voltas.end(), [measure](const Volta* volta) { return volta->endMeasure() == measure; });
+    std::vector<const Volta*> voltas = this->findVoltasInMeasure(measure);
 
-    if (voltaIter != voltas.end()) {
+    if (muse::contains_if(voltas, [measure](const Volta* volta) {
+        return volta->endMeasure() == measure;
+    })) {
         // non critical assert
         assert(this->isCurrentNode(libmei::Ending()));
         m_currentNode = m_currentNode.parent();
@@ -2263,9 +2266,9 @@ bool MeiExporter::isCurrentNode(const libmei::Element& element)
  * This will then be use to check if the measure is the beginning or the end or a volta.
  */
 
-std::list<const Volta*> MeiExporter::findVoltasInMeasure(const Measure* measure)
+std::vector<const Volta*> MeiExporter::findVoltasInMeasure(const Measure* measure)
 {
-    std::list<const Volta*> voltas;
+    std::vector<const Volta*> voltas;
     auto spanners = m_score->spannerMap().findOverlapping(measure->tick().ticks(), measure->endTick().ticks());
     for (auto interval : spanners) {
         Spanner* spanner = interval.value;
@@ -2532,8 +2535,8 @@ void MeiExporter::addNodeToOpenControlEvents(pugi::xml_node node, const Spanner*
 
 void MeiExporter::addEndidToControlEvents()
 {
-    std::list<const EngravingItem*> closedEvents;
-    std::list<const EngravingItem*> closedPlists;
+    std::vector<const EngravingItem*> closedEvents;
+    std::vector<const EngravingItem*> closedPlists;
 
     // Go through the list of open control events and see if the end element has been written
     for (auto controlEvent : m_openControlEventMap) {

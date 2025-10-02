@@ -320,7 +320,7 @@ public:
     static engraving::TextStyleType textFromMEI(const libmei::Rend& meiRend, bool& warning);
     static std::tuple<libmei::Rend, TextCell, muse::String> textToMEI(const engraving::Text* text);
 
-    using textWithSmufl = std::list<std::pair<bool, muse::String> >;
+    using textWithSmufl = std::vector<std::pair<bool, muse::String> >;
 
     static void textFromMEI(muse::String& text, const textWithSmufl& textBlocks);
     static void textToMEI(textWithSmufl& textBlocks, const muse::String& text);

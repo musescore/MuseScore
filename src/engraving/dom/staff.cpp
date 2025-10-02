@@ -1494,14 +1494,13 @@ void Staff::insertTime(const Fraction& tick, const Fraction& len)
 //    return list of linked staves
 //---------------------------------------------------------
 
-std::list<Staff*> Staff::staffList() const
+std::vector<Staff*> Staff::staffList() const
 {
-    std::list<Staff*> staffList;
+    std::vector<Staff*> staffList;
     if (m_links) {
         for (EngravingObject* e : *m_links) {
             staffList.push_back(toStaff(e));
         }
-//            staffList = _linkedStaves->staves();
     } else {
         staffList.push_back(const_cast<Staff*>(this));
     }

@@ -430,7 +430,7 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
         return;
     }
 
-    std::list<StaffName> newNames { StaffName(name, 0) };
+    StaffNameList newNames { StaffName(name, 0) };
     if (instrument->longNames() == newNames) {
         return;
     }
@@ -1300,8 +1300,8 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
         }
 
         Instrument instrument = Instrument::fromTemplate(&pi.instrumentTemplate);
-        const std::list<StaffName>& longNames = instrument.longNames();
-        const std::list<StaffName>& shortNames = instrument.shortNames();
+        const StaffNameList& longNames = instrument.longNames();
+        const StaffNameList& shortNames = instrument.shortNames();
 
         Part* part = new Part(score());
         part->setSoloist(pi.isSoloist);

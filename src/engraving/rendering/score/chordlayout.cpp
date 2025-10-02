@@ -3013,7 +3013,7 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
 void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutContext&)
 {
     std::set<staff_idx_t> shapesToRecreate;
-    std::list<Note*> notes;
+    std::vector<Note*> notes;
     Segment* segment = chord->segment();
     for (auto gc : chord->graceNotes()) {
         for (auto n : gc->notes()) {
@@ -3023,7 +3023,7 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
     for (auto n : chord->notes()) {
         notes.push_back(n);
     }
-    std::list<Fingering*> fingerings;
+    std::vector<Fingering*> fingerings;
     for (Note* note : notes) {
         for (EngravingItem* el : note->el()) {
             if (el->isFingering()) {
@@ -3033,7 +3033,7 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
                     if (f->placeAbove()) {
                         fingerings.push_back(f);
                     } else {
-                        fingerings.push_front(f);
+                        fingerings.insert(fingerings.begin(), f);
                     }
                 }
             }

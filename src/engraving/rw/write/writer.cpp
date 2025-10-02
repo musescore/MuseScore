@@ -90,7 +90,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
     // then some layout information is missing:
     // relayout with all parts set visible (but rollback at end)
 
-    std::list<Part*> hiddenParts;
+    std::vector<Part*> hiddenParts;
     bool unhide = false;
     if (score->style().styleB(Sid::createMultiMeasureRests)) {
         for (Part* part : score->m_parts) {

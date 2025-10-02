@@ -1957,8 +1957,8 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
         xml.tag("soundId", item->soundId());
     }
 
-    write(&item->longNames(), xml, "longName");
-    write(&item->shortNames(), xml, "shortName");
+    write(item->longNames(), xml, "longName");
+    write(item->shortNames(), xml, "shortName");
 //      if (!_trackName.empty())
     xml.tag("trackName", item->trackName());
     if (item->minPitchP() > 0) {
@@ -2135,21 +2135,21 @@ void TWrite::write(const MidiArticulation* item, XmlWriter& xml)
     xml.endElement();
 }
 
-void TWrite::write(const StaffName* item, XmlWriter& xml, const char* tag)
+void TWrite::write(const StaffName& item, XmlWriter& xml, const char* tag)
 {
-    if (!item->name().isEmpty()) {
-        if (item->pos() == 0) {
-            xml.writeXml(String::fromUtf8(tag), item->name());
+    if (!item.name().isEmpty()) {
+        if (item.pos() == 0) {
+            xml.writeXml(String::fromUtf8(tag), item.name());
         } else {
-            xml.writeXml(String(u"%1 pos=\"%2\"").arg(String::fromUtf8(tag)).arg(item->pos()), item->name());
+            xml.writeXml(String(u"%1 pos=\"%2\"").arg(String::fromUtf8(tag)).arg(item.pos()), item.name());
         }
     }
 }
 
-void TWrite::write(const StaffNameList* item, XmlWriter& xml, const char* name)
+void TWrite::write(const StaffNameList& item, XmlWriter& xml, const char* name)
 {
-    for (const StaffName& sn : *item) {
-        write(&sn, xml, name);
+    for (const StaffName& sn : item) {
+        write(sn, xml, name);
     }
 }
 
@@ -3455,7 +3455,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
         }
     }
 
-    std::list<Spanner*> spanners;
+    std::vector<Spanner*> spanners;
     auto sl = score->spannerMap().findOverlapping(sseg->tick().ticks(), endTick.ticks());
     for (auto i : sl) {
         Spanner* s = i.value;

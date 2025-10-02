@@ -110,7 +110,7 @@ QVariantList StringData::stringList() const
 QVariantList Drumset::variants(int pitch)
 {
     QVariantList drumInstrumentVariantList;
-    for (DrumInstrumentVariant div : m_drumset->variants(pitch)) {
+    for (const DrumInstrumentVariant& div : m_drumset->variants(pitch)) {
         QVariantMap pluginDivData;
         pluginDivData["pitch"] = div.pitch;
         pluginDivData["tremolo"] = int(div.tremolo);
@@ -159,8 +159,8 @@ Channel* ChannelListProperty::at(QQmlListProperty<Channel>* l, qsizetype i)
 
 QString Instrument::longName() const
 {
-    const std::list<mu::engraving::StaffName>& names = instrument()->longNames();
-    return names.empty() ? u"" : names.front().name();
+    const StaffNameList& names = instrument()->longNames();
+    return names.empty() ? QString() : names.front().name().toQString();
 }
 
 //---------------------------------------------------------
@@ -169,8 +169,8 @@ QString Instrument::longName() const
 
 QString Instrument::shortName() const
 {
-    const std::list<mu::engraving::StaffName>& names = instrument()->shortNames();
-    return names.empty() ? u"" : names.front().name();
+    const StaffNameList& names = instrument()->shortNames();
+    return names.empty() ? QString() : names.front().name().toQString();
 }
 
 //---------------------------------------------------------

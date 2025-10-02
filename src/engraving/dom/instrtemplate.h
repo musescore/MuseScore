@@ -22,7 +22,7 @@
 #pragma once
 
 #include <array>
-#include <list>
+#include <vector>
 
 #include "io/path.h"
 
@@ -108,10 +108,10 @@ public:
 
     StringData stringData;
 
-    std::list<NamedEventList> midiActions;
+    std::vector<NamedEventList> midiActions;
     std::vector<MidiArticulation> midiArticulations;
     std::vector<InstrChannel> channel;
-    std::list<const InstrumentGenre*> genres;       //; list of genres this instrument belongs to
+    std::vector<const InstrumentGenre*> genres; //; list of genres this instrument belongs to
     const InstrumentFamily* family = nullptr;   //; family the instrument belongs to
 
     ClefTypeList clefTypes[MAX_STAVES];
@@ -149,8 +149,8 @@ private:
 struct InstrumentGroup {
     String id;
     String name;
-    bool extended;            // belongs to extended instruments set if true
-    std::list<const InstrumentTemplate*> instrumentTemplates;
+    bool extended; // belongs to extended instruments set if true
+    std::vector<const InstrumentTemplate*> instrumentTemplates;
     void read(XmlReader&);
     void clear();
 
@@ -183,7 +183,7 @@ extern InstrumentIndex searchTemplateIndexForTrackName(const String& trackName);
 extern InstrumentIndex searchTemplateIndexForId(const String& id);
 extern const InstrumentTemplate* searchTemplate(const String& name);
 extern const InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId);
-extern const InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& nameList, bool useDrumset = false,
+extern const InstrumentTemplate* searchTemplateForInstrNameList(const std::vector<String>& nameList, bool useDrumset = false,
                                                                 bool caseSensitive = true);
 extern const InstrumentTemplate* searchTemplateForMidiProgram(int bank, int program, bool useDrumset = false);
 extern const InstrumentGenre* searchInstrumentGenre(const String& id);

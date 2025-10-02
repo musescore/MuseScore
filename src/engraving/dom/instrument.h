@@ -20,10 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_INSTRUMENT_H
-#define MU_ENGRAVING_INSTRUMENT_H
+#pragma once
 
-#include <list>
+#include <vector>
 
 #include "global/containers.h"
 #include "global/types/string.h"
@@ -69,20 +68,7 @@ private:
     int m_pos = 0;       // even number -> between staves
 };
 
-//---------------------------------------------------------
-//   StaffNameList
-//---------------------------------------------------------
-
-class StaffNameList : public std::list<StaffName>
-{
-    OBJECT_ALLOCATOR(engraving, StaffNameList)
-public:
-    StaffNameList() = default;
-    StaffNameList(const std::list<StaffName>& l)
-        : std::list<StaffName>(l) {}
-
-    std::list<String> toStringList() const;
-};
+using StaffNameList = std::vector<StaffName>;
 
 //---------------------------------------------------------
 //   NamedEventList
@@ -170,7 +156,7 @@ public:
 
     bool isHarmonyChannel() const { return m_name == String::fromUtf8(InstrChannel::HARMONY_NAME); }
 
-    std::list<NamedEventList> midiActions;
+    std::vector<NamedEventList> midiActions;
     std::vector<MidiArticulation> articulation;
 
     InstrChannel();
@@ -350,7 +336,7 @@ public:
     ClefTypeList clefType(size_t staffIdx) const;
     void setClefType(size_t staffIdx, const ClefTypeList& c);
 
-    const std::list<NamedEventList>& midiActions() const { return m_midiActions; }
+    const std::vector<NamedEventList>& midiActions() const { return m_midiActions; }
     void addMidiAction(const NamedEventList& l) { m_midiActions.push_back(l); }
 
     const std::vector<MidiArticulation>& articulation() const { return m_articulation; }
@@ -361,7 +347,7 @@ public:
     void removeChannel(InstrChannel* c) { muse::remove(m_channel, c); }
     void clearChannels() { m_channel.clear(); }
 
-    void setMidiActions(const std::list<NamedEventList>& l) { m_midiActions = l; }
+    void setMidiActions(const std::vector<NamedEventList>& l) { m_midiActions = l; }
     void setArticulation(const std::vector<MidiArticulation>& l) { m_articulation = l; }
     const StringData* stringData() const { return &m_stringData; }
     void setStringData(const StringData& d) { m_stringData.set(d); }
@@ -433,7 +419,7 @@ private:
     Drumset* m_drumset = nullptr;
     StringData m_stringData;
 
-    std::list<NamedEventList> m_midiActions;
+    std::vector<NamedEventList> m_midiActions;
     std::vector<MidiArticulation> m_articulation;
     std::vector<InstrChannel*> m_channel;        // at least one entry
     std::vector<ClefTypeList> m_clefType;
@@ -465,5 +451,4 @@ private:
 
     static Instrument defaultInstrument;
 };
-} // namespace mu::engraving
-#endif
+}

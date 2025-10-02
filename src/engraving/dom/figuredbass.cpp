@@ -1169,9 +1169,9 @@ bool FiguredBass::readConfigFile(const String& fileName)
 //    the index of a name in the list can be used to retrieve the font data with fontData()
 //---------------------------------------------------------
 
-std::list<String> FiguredBass::fontNames()
+std::vector<String> FiguredBass::fontNames()
 {
-    std::list<String> names;
+    std::vector<String> names;
     for (const FiguredBassFont& f : g_FBFonts) {
         names.push_back(f.displayName);
     }

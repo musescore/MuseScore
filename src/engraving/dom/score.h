@@ -1001,7 +1001,7 @@ public:
     std::shared_ptr<IEngravingFont> engravingFont() const { return m_engravingFont; }
     void setEngravingFont(std::shared_ptr<IEngravingFont> f) { m_engravingFont = f; }
 
-    std::list<staff_idx_t> uniqueStaves() const;
+    std::vector<staff_idx_t> uniqueStaves() const;
 
     void transpositionChanged(Part* part, Interval oldTransposition, Fraction tickStart = { 0, 1 }, Fraction tickEnd = { -1, 1 });
     void transpositionChanged(Part* part, const Fraction& instrumentTick, Interval oldTransposition);
@@ -1139,7 +1139,7 @@ private:
 
     bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, staff_idx_t staffIdx);
     bool rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffIdx);
-    std::list<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
+    std::vector<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
     void pasteChordRest(ChordRest* cr, const Fraction& tick);
 
     void doSelect(EngravingItem* e, SelectType type, staff_idx_t staffIdx);

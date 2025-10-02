@@ -209,7 +209,7 @@ public:
     int pitchOffset(const Fraction& tick) const { return m_pitchOffsets.pitchOffset(tick.ticks()); }
     void updateOttava();
 
-    std::list<Staff*> staffList() const;
+    std::vector<Staff*> staffList() const;
     Staff* primaryStaff() const;
     bool isPrimaryStaff() const;
 

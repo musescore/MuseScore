@@ -73,7 +73,7 @@ extern muse::String harmonyXmlParens(const engraving::HarmonyInfo* h);
 extern muse::StringList harmonyXmlDegrees(const engraving::HarmonyInfo* h);
 extern const engraving::ChordDescription* harmonyFromXml(engraving::HarmonyInfo* info, engraving::Score* score, const muse::String& kind,
                                                          const muse::String& kindText, const muse::String& symbols,
-                                                         const muse::String& parens, const std::list<engraving::HDegree>& dl);
+                                                         const muse::String& parens, const std::vector<engraving::HDegree>& dl);
 extern void setHarmonyRootTpcFromFunction(engraving::HarmonyInfo* info, const engraving::Harmony* h, const muse::String& s,
                                           engraving::Key key);
 } // namespace Ms
