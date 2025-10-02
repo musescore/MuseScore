@@ -1786,7 +1786,7 @@ public:
     mu::engraving::Measure* measure() { return toMeasure(e); }
     const mu::engraving::Measure* measure() const { return toMeasure(e); }
 
-    bool showsMeasureNumberInAutoMode() { return measure()->showsMeasureNumberInAutoMode(); }
+    bool showsMeasureNumberInAutoMode() { return measure()->showMeasureNumberInAutoMode(); }
 
     Segment* firstSegment() { return wrap<Segment>(measure()->firstEnabled(), Ownership::SCORE); }
     Segment* lastSegment() { return wrap<Segment>(measure()->last(), Ownership::SCORE); }

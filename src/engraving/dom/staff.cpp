@@ -239,8 +239,7 @@ bool Staff::shouldShowMeasureNumbers() const
     case MeasureNumberPlacement::ON_SYSTEM_OBJECT_STAVES:
     {
         bool isTopStave = score()->staves().front() == this;
-        bool isSystemObjectStaff = muse::contains(score()->systemObjectStaves(), const_cast<Staff*>(this));
-        return (isTopStave && m_showMeasureNumbers != AutoOnOff::OFF) || (isSystemObjectStaff && m_showMeasureNumbers == AutoOnOff::ON);
+        return (isTopStave && m_showMeasureNumbers != AutoOnOff::OFF) || (isSystemObjectStaff() && m_showMeasureNumbers == AutoOnOff::ON);
     }
     case MeasureNumberPlacement::ON_ALL_STAVES:
         return show();
@@ -1444,8 +1443,12 @@ void Staff::insertTime(const Fraction& tick, const Fraction& len)
     for (auto i = m_keys.lower_bound(tick.ticks()); i != m_keys.end();) {
         KeySigEvent kse = i->second;
         Fraction t = Fraction::fromTicks(i->first);
-        m_keys.erase(i++);
-        kl2[(t + len).ticks()] = kse;
+        if (t + len < score()->endTick()) {
+            m_keys.erase(i++);
+            kl2[(t + len).ticks()] = kse;
+        } else {
+            ++i;
+        }
     }
     m_keys.insert(kl2.begin(), kl2.end());
 

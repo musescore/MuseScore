@@ -1535,7 +1535,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             if (oldEl->isLayoutBreak()) {
                 continue;
             }
-            if (oldEl->systemFlag() && dstStaffIdx != 0) {
+            if ((oldEl->systemFlag() && dstStaffIdx != 0) || (!oldEl->systemFlag() && oldEl->staffIdx() != srcStaffIdx)) {
                 continue;
             }
             bool alreadyCloned = oldEl->systemFlag() && oldEl->findLinkedInScore(score);
@@ -1544,7 +1544,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             }
             EngravingItem* newEl = oldEl->linkedClone();
             newEl->setParent(nm);
-            newEl->setTrack(0);
+            newEl->setStaffIdx(oldEl->systemFlag() ? 0 : dstStaffIdx);
             newEl->setScore(score);
             newEl->styleChanged();
             addElement(newEl);
@@ -1659,11 +1659,16 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 }
             }
         }
+        std::vector<Segment*> emptySegments;
         for (Segment& seg : nm->segments()) {
             seg.checkEmpty();
             if (seg.empty()) {
-                score->doUndoRemoveElement(&seg);
+                emptySegments.push_back(&seg);
             }
+        }
+        for (Segment* seg : emptySegments) {
+            nm->remove(seg);
+            delete seg;
         }
         if (!nm->hasVoices(dstStaffIdx, nm->tick(), nm->ticks())) {
             promoteGapRestsToRealRests(nm, dstStaffIdx);
