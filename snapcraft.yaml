@@ -1,0 +1,52 @@
+name: musescore
+summary: Create, play and print beautiful sheet music.
+description: |
+    MuseScore is the world's leading free and open-source software for writing
+    music, with a user-friendly interface and immensely powerful features.
+    It is free to install on Windows, Mac, and Linux.
+
+    Some interfaces need to be connected manually:
+
+        $ sudo snap connect musescore:cups-control
+        $ sudo snap connect musescore:alsa
+        $ sudo snap connect musescore:removable-media
+
+    But most of the application functionality works without them.
+
+grade: stable
+confinement: strict
+base: core24
+version: '4.6.0'
+
+apps:
+  musescore:
+    command: usr/bin/mscore
+    desktop: usr/share/applications/org.musescore.MuseScore.desktop
+    common-id: org.musescore.MuseScore
+    extensions: [kde-neon-6]
+    plugs:
+      - alsa
+      - cups-control
+      - gsettings
+      - home
+      - pulseaudio
+      - removable-media
+
+parts:
+  musescore:
+    plugin: cmake
+    source: https://github.com/musescore/MuseScore.git
+    source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DMUSE_APP_BUILD_MODE=release
+      - -DMUE_DOWNLOAD_SOUNDFONT=ON
+      - -DMUSE_ENABLE_UNIT_TESTS=OFF
+      - -DMUE_COMPILE_USE_SYSTEM_HARFBUZZ=ON
+    build-packages:
+      - libsndfile1-dev
+    override-build: |
+      craftctl default
+      sed -i 's|Icon=mscore|Icon=${SNAP}/usr/share/icons/hicolor/512x512/apps/mscore.png|' $CRAFT_PART_INSTALL/usr/share/applications/org.musescore.MuseScore.desktop
+      sed -i 's|Exec=mscore %U|Exec=${SNAP}/usr/bin/mscore %U|' $CRAFT_PART_INSTALL/usr/share/applications/org.musescore.MuseScore.desktop
