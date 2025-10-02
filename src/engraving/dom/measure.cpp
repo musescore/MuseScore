@@ -3541,7 +3541,9 @@ void Measure::setEndBarLineType(BarLineType val, track_idx_t track, bool visible
     bl->setGenerated(false);
     bl->setBarLineType(val);
     bl->setVisible(visible);
-    bl->setColor(color.isValid() ? color : curColor());
+    if (color.isValid()) {
+        bl->setColor(color);
+    }
 }
 
 //---------------------------------------------------------

@@ -137,7 +137,9 @@ void EditModeRenderer::drawEngravingItem(EngravingItem* item, muse::draw::Painte
 {
     UNUSED(currentViewScaling);
 
-    Pen pen(item->configuration()->defaultColor(), 0.0);
+    Pen pen(item->configuration()->scoreInversionEnabled()
+            ? item->configuration()->scoreInversionColor()
+            : item->configuration()->defaultColor(), 0.0);
     painter->setPen(pen);
     for (int i = 0; i < ed.grips; ++i) {
         if (Grip(i) == ed.curGrip) {
@@ -179,8 +181,6 @@ void EditModeRenderer::drawDynamic(Dynamic* item, muse::draw::Painter* painter, 
 
 void EditModeRenderer::drawSlurTieSegment(SlurTieSegment* item, muse::draw::Painter* painter, EditData& ed, double currentViewScaling)
 {
-    UNUSED(currentViewScaling)
-
     PolygonF polygon(7);
     polygon[0] = PointF(ed.grip[int(Grip::START)].center());
     polygon[1] = PointF(ed.grip[int(Grip::BEZIER1)].center());
@@ -192,16 +192,7 @@ void EditModeRenderer::drawSlurTieSegment(SlurTieSegment* item, muse::draw::Pain
     painter->setPen(Pen(item->configuration()->scoreGreyColor(), 0.0));
     painter->drawPolyline(polygon);
 
-    painter->setPen(Pen(item->configuration()->defaultColor(), 0.0));
-    for (int i = 0; i < ed.grips; ++i) {
-        // Can't use ternary operator, because we want different overloads of `setBrush`
-        if (Grip(i) == ed.curGrip) {
-            painter->setBrush(item->configuration()->scoreGreyColor());
-        } else {
-            painter->setBrush(BrushStyle::NoBrush);
-        }
-        painter->drawRect(ed.grip[i]);
-    }
+    drawEngravingItem(item, painter, ed, currentViewScaling);
 }
 
 static void drawTextBaseSelection(TextBase* item, Painter* painter, const RectF& r)
