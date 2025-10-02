@@ -58,8 +58,6 @@ public:
     void setExportInfo(const ExportInfo& exportInfo) override;
 
 private:
-    ExportInfo m_exportInfo;
-
     enum class FileConflictPolicy {
         Undefined,
         SkipAll,
@@ -94,6 +92,7 @@ private:
 
     mutable FileConflictPolicy m_fileConflictPolicy = FileConflictPolicy::Undefined;
     mutable muse::Progress m_exportProgress;
+    ExportInfo m_exportInfo;
 };
 }
 
