@@ -397,22 +397,6 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     ctx.setTransposeChromatic(static_cast<int8_t>(e.readInt()));
                 } else if (tag == "transposeDiatonic") {
                     ctx.setTransposeDiatonic(static_cast<int8_t>(e.readInt()));
-                } else if (tag == "voiceOffset") {
-                    int voiceOffset[VOICES];
-                    std::fill(voiceOffset, voiceOffset + VOICES, -1);
-                    while (e.readNextStartElement()) {
-                        if (e.name() != "voice") {
-                            e.unknown();
-                        }
-                        voice_idx_t voiceId = static_cast<voice_idx_t>(e.intAttribute("id", -1));
-                        assert(voiceId < VOICES);
-                        voiceOffset[voiceId] = e.readInt();
-                    }
-                    if (!score->makeGap1(dstTick, dstStaffIdx, tickLen, voiceOffset)) {
-                        LOGD() << "cannot make gap in staff " << dstStaffIdx << " at tick " << dstTick.ticks();
-                        done = true;             // break main loop, cannot make gap
-                        break;
-                    }
                 } else if (tag == "location") {
                     Location loc = Location::relative();
                     TRead::read(&loc, e, ctx);
@@ -454,6 +438,11 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     if (oldTuplet) {
                         tuplet->readAddTuplet(oldTuplet);
                     }
+                    if (!tuplet->tuplet()) {
+                        if (Segment* seg = score->tick2segment(tick)) {
+                            score->makeGapVoice(seg, ctx.track(), tuplet->actualTicks(), tick);
+                        }
+                    }
                 } else if (tag == "endTuplet") {
                     if (!tuplet) {
                         LOGD("Score::pasteStaff: encountered <endTuplet/> when no tuplet was started");
@@ -477,7 +466,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     cr->setTrack(ctx.track());
                     TRead::readItem(cr, e, ctx);
                     cr->setSelected(false);
-                    Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
+                    const Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
                     // no paste into local time signature
                     if (score->staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
                         MScore::setError(MsError::DEST_LOCAL_TIME_SIGNATURE);
@@ -556,6 +545,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                 }
                             }
                         }
+                        // Note to self - is the following still needed? (DON'T MERGE W/THIS)
                         // shorten last cr to fit in the space made by makeGap
                         if ((tick - dstTick) + cr->actualTicks() > tickLen) {
                             Fraction newLength = tickLen - (tick - dstTick);
@@ -579,12 +569,24 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                     }
                                 }
                             }
+                            // Note to self - is the following still needed? (DON'T MERGE W/THIS)
                             if (!cr->tuplet()) {
                                 // shorten duration
                                 // exempt notes in tuplets, since we don't allow copy of partial tuplet anyhow
                                 // TODO: figure out a reasonable fudge factor to make sure shorten tuplets appropriately if we do ever copy a partial tuplet
                                 cr->setTicks(newLength);
                                 cr->setDurationType(newLength);
+                            }
+                        }
+                        if (Segment* pasteDestinationSeg = score->tick2segment(tick)) {
+                            if (!cr->tuplet()) {
+                                score->makeGapVoice(pasteDestinationSeg, ctx.track(), cr->actualTicks(), tick);
+                            }
+                        }
+                        if (Segment* leftSeg = score->tick2leftSegment(tick)) {
+                            ChordRest* prevCr = leftSeg->nextChordRest(cr->track(), /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
+                            if (prevCr && prevCr->endTick() > tick) {
+                                score->truncateChordRest(prevCr, tick, /*fillWithRest*/ false);
                             }
                         }
                         score->pasteChordRest(cr, tick);
