@@ -16,10 +16,6 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
         required: false
-      use_qt69:
-        description: 'Use Qt 6.9'
-        default: 'on'
-        required: false    
   workflow_call:
     inputs:
       build_mode:
@@ -37,15 +33,9 @@ on:
         default: ''
         type: string
         required: false
-      use_qt69:
-        description: 'Use Qt 6.9'
-        default: 'on'
-        type: string
-        required: false   
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_26.0.app/Contents/Developer
-  USE_QT69: ${{ inputs.use_qt69 != '' && inputs.use_qt69 || 'on' }}  
 
 jobs:
   macos_universal:
@@ -101,7 +91,7 @@ jobs:
         SENTRY_URL=""
 
         if [ "$SENTRY_MUSE_MU4_KEY" != "" ]; then
-          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then 
+          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then
             SENTRY_PROJECT="mu4"
           fi
 
@@ -163,7 +153,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: ${{ env.USE_QT69 == 'on' && '6.9.2' || '6.2.4' }}
+        version: 6.9.3
         host: 'mac'
         target: 'desktop'
         arch: 'clang_64'
