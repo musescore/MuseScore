@@ -70,6 +70,10 @@ public:
     void drawText(const muse::RectF& rect, int flags, const muse::String& text) override;
     void drawTextWorkaround(const muse::draw::Font& f, const muse::PointF& pos, const muse::String& text) override;
 
+    bool canDrawHtml() const override;
+
+    void drawHtml(const muse::PointF& point, const muse::String& htmlText) override;
+
     void drawSymbol(const muse::PointF& point, char32_t ucs4Code) override;
 
     void drawPixmap(const muse::PointF& p, const muse::draw::Pixmap& pm) override;

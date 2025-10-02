@@ -306,6 +306,16 @@ void BufferedPaintProvider::drawTextWorkaround(const Font& f, const PointF& pos,
     drawText(pos, text);
 }
 
+bool BufferedPaintProvider::canDrawHtml() const
+{
+    return false;
+}
+
+void BufferedPaintProvider::drawHtml(const PointF& point, const String& htmlText)
+{
+    //
+}
+
 void BufferedPaintProvider::drawSymbol(const PointF& point, char32_t ucs4Code)
 {
     drawText(point, String::fromUcs4(&ucs4Code, 1));

@@ -428,6 +428,11 @@ void Painter::drawText(const PointF& point, const String& text)
     }
 }
 
+void Painter::drawHtml(const PointF& point, const String& htmlText)
+{
+    m_provider->drawHtml(point, htmlText);
+}
+
 void Painter::drawText(const RectF& rect, int flags, const String& text)
 {
     m_provider->drawText(rect, flags, text);
@@ -551,4 +556,9 @@ void Painter::setMask(const RectF& background, const std::vector<RectF>& maskRec
 void Painter::setClipping(bool enable)
 {
     m_provider->setClipping(enable);
+}
+
+bool Painter::canDrawHtml() const
+{
+    return m_provider->canDrawHtml();
 }
