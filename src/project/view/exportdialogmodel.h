@@ -94,7 +94,7 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
 
 public:
     explicit ExportDialogModel(QObject* parent = nullptr);
-    ~ExportDialogModel();
+    ~ExportDialogModel() override;
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
