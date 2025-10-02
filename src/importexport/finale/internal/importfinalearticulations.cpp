@@ -31,10 +31,13 @@
 
 #include "types/string.h"
 
+#include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/ornament.h"
+#include "engraving/dom/parenthesis.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
@@ -51,6 +54,88 @@ using namespace musx::dom;
 
 namespace mu::iex::finale {
 
+static engraving::Note* findClosestNote(const MusxInstance<details::ArticulationAssign>& articAssign, const MusxInstance<others::ArticulationDef>& articDef, Chord* c)
+{
+    engraving::Note* n = c->upNote();
+    // Attach to correct note based on vertical position
+    if (c->notes().size() > 1) {
+        // This is a nonsense calculation atm
+        double referencePos = n->pos().y() - n->headHeight() / 2;
+        if (articAssign->overridePlacement) {
+            referencePos -= doubleFromEvpu(articAssign->vertOffset) * SPATIUM20;
+        }
+        referencePos -= doubleFromEvpu(articDef->yOffsetMain + articDef->defVertPos) * SPATIUM20;
+        double bestMatch = DBL_MAX;
+        for (engraving::Note* note : c->notes()) {
+            double noteDist = std::abs(note->pos().y() - referencePos);
+            if (noteDist < bestMatch) {
+                bestMatch = noteDist;
+                n = note;
+            }
+        }
+    }
+    return n;
+}
+
+static bool calculateUp(const MusxInstance<details::ArticulationAssign>& articAssign, others::ArticulationDef::AutoVerticalMode vm, ChordRest* cr)
+{
+    if (articAssign->overridePlacement) {
+        return articAssign->aboveEntry;
+    }
+
+    switch (vm) {
+        /// @todo Rests can be affected by beams, but should otherwise be treated like a note on their given line.
+        case others::ArticulationDef::AutoVerticalMode::AutoNoteStem:
+            // On notehead side (no voices) or stem side (voices);
+            if (cr->measure()->hasVoices(cr->vStaffIdx(), cr->tick(), cr->actualTicks())) {
+                return !(cr->track() & 1);
+            }
+            [[fallthrough]];
+
+        case others::ArticulationDef::AutoVerticalMode::AlwaysNoteheadSide:
+            return !cr->ldata()->up;
+        case others::ArticulationDef::AutoVerticalMode::StemSide:
+            return cr->ldata()->up;
+
+        case others::ArticulationDef::AutoVerticalMode::AboveEntry:
+            return true;
+        case others::ArticulationDef::AutoVerticalMode::BelowEntry:
+            return false;
+
+        default:
+            // Unhandled case: AlwaysOnStem - Placement here shouldn't matter in practice
+            break;
+    }
+    return true;
+}
+
+static ArticulationAnchor calculateAnchor(const MusxInstance<details::ArticulationAssign>& articAssign, others::ArticulationDef::AutoVerticalMode vm, ChordRest* cr)
+{
+    if (articAssign->overridePlacement) {
+        return articAssign->aboveEntry ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
+    }
+
+    switch (vm) {
+        /// @todo Rests can be affected by beams, but should otherwise be treated like a note on their given line.
+        case others::ArticulationDef::AutoVerticalMode::AutoNoteStem:
+            return ArticulationAnchor::AUTO;
+        case others::ArticulationDef::AutoVerticalMode::AlwaysNoteheadSide:
+            return !cr->ldata()->up ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
+        case others::ArticulationDef::AutoVerticalMode::StemSide:
+            return cr->ldata()->up ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
+
+        case others::ArticulationDef::AutoVerticalMode::AboveEntry:
+            return ArticulationAnchor::TOP;
+        case others::ArticulationDef::AutoVerticalMode::BelowEntry:
+            return ArticulationAnchor::BOTTOM;
+
+        default:
+            // Unhandled case: AlwaysOnStem - Placement here shouldn't matter in practice
+            break;
+    }
+    return ArticulationAnchor::AUTO;
+}
+
 void FinaleParser::importArticulations()
 {
     // Layout score (needed for offset calculations)
@@ -58,75 +143,17 @@ void FinaleParser::importArticulations()
     m_score->setLayoutAll();
     m_score->doLayout();
 
-    auto calculateUp = [](const MusxInstance<details::ArticulationAssign> articAssign, others::ArticulationDef::AutoVerticalMode vm, ChordRest* cr) -> bool {
-        if (articAssign->overridePlacement) {
-            return articAssign->aboveEntry;
-        }
-
-        switch (vm) {
-            /// @todo Rests can be affected by beams, but should otherwise be treated like a note on their given line.
-            case others::ArticulationDef::AutoVerticalMode::AutoNoteStem:
-                // On notehead side (no voices) or stem side (voices);
-                if (cr->measure()->hasVoices(cr->vStaffIdx(), cr->tick(), cr->actualTicks())) {
-                    return !(cr->track() & 1);
-                }
-                [[fallthrough]];
-
-            case others::ArticulationDef::AutoVerticalMode::AlwaysNoteheadSide:
-                return !cr->ldata()->up;
-            case others::ArticulationDef::AutoVerticalMode::StemSide:
-                return cr->ldata()->up;
-
-            case others::ArticulationDef::AutoVerticalMode::AboveEntry:
-                return true;
-            case others::ArticulationDef::AutoVerticalMode::BelowEntry:
-                return false;
-
-            default:
-                // Unhandled case: AlwaysOnStem - Placement here shouldn't matter in practice
-                break;
-        }
-        return true;
-    };
-
-    auto calculateAnchor = [](const MusxInstance<details::ArticulationAssign> articAssign, others::ArticulationDef::AutoVerticalMode vm, ChordRest* cr) -> ArticulationAnchor {
-        if (articAssign->overridePlacement) {
-            return articAssign->aboveEntry ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
-        }
-
-        switch (vm) {
-            /// @todo Rests can be affected by beams, but should otherwise be treated like a note on their given line.
-            case others::ArticulationDef::AutoVerticalMode::AutoNoteStem:
-                return ArticulationAnchor::AUTO;
-            case others::ArticulationDef::AutoVerticalMode::AlwaysNoteheadSide:
-                return !cr->ldata()->up ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
-            case others::ArticulationDef::AutoVerticalMode::StemSide:
-                return cr->ldata()->up ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
-
-            case others::ArticulationDef::AutoVerticalMode::AboveEntry:
-                return ArticulationAnchor::TOP;
-            case others::ArticulationDef::AutoVerticalMode::BelowEntry:
-                return ArticulationAnchor::BOTTOM;
-
-            default:
-                // Unhandled case: AlwaysOnStem - Placement here shouldn't matter in practice
-                break;
-        }
-        return ArticulationAnchor::AUTO;
-    };
-
-
     for (auto [entryNumber, cr] : m_entryNumber2CR) {
         MusxInstanceList<details::ArticulationAssign> articAssignList = m_doc->getDetails()->getArray<details::ArticulationAssign>(m_currentMusxPartId, entryNumber);
-        for (const MusxInstance<details::ArticulationAssign> articAssign : articAssignList) {
-            const MusxInstance<others::ArticulationDef> articDef = m_doc->getOthers()->get<others::ArticulationDef>(m_currentMusxPartId, articAssign->articDef);
+        for (const MusxInstance<details::ArticulationAssign>& articAssign : articAssignList) {
+            const MusxInstance<others::ArticulationDef>& articDef = m_doc->getOthers()->get<others::ArticulationDef>(m_currentMusxPartId, articAssign->articDef);
 
             if (articDef->mainShape) {
                 // shapes currently unsupported
                 continue;
             }
 
-            const MusxInstance<FontInfo> mainFont = articDef->fontMain ? articDef->fontMain : options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Articulation);
+            const MusxInstance<FontInfo>& mainFont = articDef->fontMain ? articDef->fontMain : options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Articulation);
             SymId mainSym = FinaleTextConv::symIdFromFinaleChar(articDef->charMain, mainFont);
             // const MusxInstance<FontInfo> altFont = articDef->fontAlt ? articDef->fontAlt : options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Articulation);
             // SymId altSym = FinaleTextConv::symIdFromFinaleChar(articDef->charAlt, altFont);
@@ -171,26 +198,29 @@ void FinaleParser::importArticulations()
             Chord* c = toChord(cr);
 
             // Notehead parentheses
-            if (mainSym == SymId::noteheadParenthesisLeft || mainSym == SymId::noteheadParenthesisRight) {
-                engraving::Note* n = c->upNote();
-                if (c->notes().size() > 1) {
-                    double referencePos = n->pos().y() - n->headHeight() / 2;
-                    if (articAssign->overridePlacement) {
-                        referencePos -= doubleFromEvpu(articAssign->vertOffset) * SPATIUM20;
-                    }
-                    referencePos -= doubleFromEvpu(articDef->yOffsetMain + articDef->defVertPos) * SPATIUM20;
-                    double bestMatch = DBL_MAX;
-                    for (engraving::Note* note : c->notes()) {
-                        double noteDist = std::abs(note->pos().y() - referencePos);
-                        if (noteDist < bestMatch) {
-                            bestMatch = noteDist;
-                            n = note;
-                        }
-                    }
+            if (mainSym == SymId::noteheadParenthesisLeft || (articDef->charMain == U'(' && !mainFont->calcIsSMuFL())) {
+                engraving::Note* n = findClosestNote(articAssign, articDef, c);
+                if (!n->leftParen()) {
+                    Parenthesis* p = Factory::createParenthesis(n);
+                    p->setParent(n);
+                    p->setTrack(n->track());
+                    p->setVisible(!articAssign->hide);
+                    p->setDirection(DirectionH::LEFT);
+                    n->add(p);
+                    continue;
                 }
-                n->setParenthesesMode(mainSym == SymId::noteheadParenthesisLeft ? ParenthesesMode::LEFT : ParenthesesMode::RIGHT);
-                // if we use Element::add(parenthesis) instead, that should make repositioning easier.
-                continue;
+            }
+            if (mainSym == SymId::noteheadParenthesisRight || (articDef->charMain == U')' && !mainFont->calcIsSMuFL())) {
+                engraving::Note* n = findClosestNote(articAssign, articDef, c);
+                if (!n->rightParen()) {
+                    Parenthesis* p = Factory::createParenthesis(n);
+                    p->setParent(n);
+                    p->setTrack(n->track());
+                    p->setVisible(!articAssign->hide);
+                    p->setDirection(DirectionH::RIGHT);
+                    n->add(p);
+                    continue;
+                }
             }
 
             // Single-chord tremolos
@@ -209,8 +239,31 @@ void FinaleParser::importArticulations()
 
             /// @todo Arpeggios; Their symbol is not in SMuFL.
 
+            /// @todo Ornament properties, chordlines, fingerings, trills, figured bass?, breaths & pauses, pedal lines?
+            Articulation* a;
+            switch (mainSym) {
+                case SymId::ornamentTurnInverted:
+                case SymId::ornamentMordent:
+                case SymId::ornamentTrill:
+                case SymId::ornamentTurn:
+                case SymId::ornamentShortTrill:
+                case SymId::ornamentTremblement:
+                case SymId::ornamentUpPrall:
+                case SymId::ornamentPrallUp:
+                case SymId::ornamentPrallDown:
+                case SymId::ornamentPrallMordent:
+                case SymId::ornamentUpMordent:
+                case SymId::ornamentDownMordent:
+                case SymId::ornamentPrecompMordentUpperPrefix:
+                case SymId::ornamentTurnSlash:
+                    a = toArticulation(Factory::createOrnament(c));
+                    break;
+                default:
+                    a = Factory::createArticulation(c);
+                    break;
+            }
+
             // Other articulations
-            Articulation* a = Factory::createArticulation(c);
             a->setTrack(c->track());
             a->setSymId(mainSym);
             a->setVisible(!articAssign->hide);
