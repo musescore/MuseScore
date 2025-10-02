@@ -7686,6 +7686,9 @@ void NotationInteraction::addMelisma()
         prevPartialLyricsLine->undoMoveEnd(tickDiff);
         prevPartialLyricsLine->triggerLayout();
     }
+    score()->endCmd();
+
+    score()->startCmd(TranslatableString("undoableAction", "Enter lyrics extension line"));
     if (newLyrics) {
         score()->undoAddElement(toLyrics);
     }
