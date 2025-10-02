@@ -40,8 +40,17 @@ void AbstractNavigation::classBegin()
 {
 }
 
+bool AbstractNavigation::isComponentCompleted() const
+{
+    return m_isComponentCompleted;
+}
+
 void AbstractNavigation::componentComplete()
 {
+    if (isComponentCompleted()) {
+        return;
+    }
+
     if (m_accessible) {
         m_accessible->setState(IAccessible::State::Enabled, enabled());
         m_accessible->setState(IAccessible::State::Active, active());
@@ -51,6 +60,8 @@ void AbstractNavigation::componentComplete()
     navigationController()->highlightChanged().onNotify(this, [this](){
         emit highlightChanged();
     });
+
+    m_isComponentCompleted = true;
 }
 
 void AbstractNavigation::setName(QString name)
