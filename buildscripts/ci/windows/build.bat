@@ -46,10 +46,10 @@ ECHO "Finished copy dependencies"
 SET "JACK_DIR=C:\Program Files (x86)\Jack"
 SET "PATH=%JACK_DIR%;%PATH%"
 
-SET MUSESCORE_BUILD_CONFIGURATION="app"
-IF %BUILD_WIN_PORTABLE% == ON ( 
+SET "MUSESCORE_BUILD_CONFIGURATION=app"
+IF %BUILD_WIN_PORTABLE% == ON (
     SET INSTALL_DIR=../build.install/App/MuseScore
-    SET MUSESCORE_BUILD_CONFIGURATION="app-portable"
+    SET "MUSESCORE_BUILD_CONFIGURATION=app-portable"
 )
 
 bash ./buildscripts/ci/tools/make_revision_env.sh 
