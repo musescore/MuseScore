@@ -54,6 +54,8 @@ void SymbolSettingsModel::createProperties()
 void SymbolSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::SYMBOL);
+    auto dividers = m_repository->findElementsByType(mu::engraving::ElementType::SYSTEM_DIVIDER);
+    m_elementList.append(dividers);
 }
 
 void SymbolSettingsModel::loadProperties()
