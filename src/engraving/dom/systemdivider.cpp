@@ -94,6 +94,12 @@ std::vector<LineF> SystemDivider::dragAnchorLines() const
     return result;
 }
 
+void SystemDivider::reset()
+{
+    Symbol::reset();
+    setGenerated(true);
+}
+
 //---------------------------------------------------------
 //   drag
 //---------------------------------------------------------
