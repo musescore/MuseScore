@@ -189,7 +189,7 @@ Column {
         id: textPlacementSection
         propertyItem: root.model ? root.model.textPlacement : null
 
-        visible: root.model ? !root.model.isDynamicSpecificSettings : false
+        visible: root.model ? !root.model.isDynamicSpecificSettings && root.model.isPositionAvailable: false
         enabled: root.model ? !root.model.isSystemObjectBelowBottomStaff : false
         height: visible ? implicitHeight : 0
 

@@ -37,10 +37,10 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService* repository)
+TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService* repository, bool isTextLineText)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_TEXT);
+    setSectionType(isTextLineText ? InspectorSectionType::SECTION_TEXT_LINES : InspectorSectionType::SECTION_TEXT);
     setTitle(muse::qtrc("inspector", "Text"));
     createProperties();
 
@@ -56,25 +56,42 @@ TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService*
 
 void TextSettingsModel::createProperties()
 {
-    m_fontFamily = buildPropertyItem(mu::engraving::Pid::FONT_FACE);
-    m_fontStyle = buildPropertyItem(mu::engraving::Pid::FONT_STYLE);
-    m_fontSize = buildPropertyItem(mu::engraving::Pid::FONT_SIZE);
+    /// In >=4.6 text line begin, continue, and end text should all have the same style
+    /// Use Pid::BEGIN_TEXT_... to set all of these through the inspector, but leave the other properties in place internally
+    /// This preserves backwards compatibility and will allow us to style these text items separately in the future if desired
+    const bool textLine = isTextLineText();
+    const Pid fontFaceId = textLine ? mu::engraving::Pid::BEGIN_FONT_FACE : mu::engraving::Pid::FONT_FACE;
+    const Pid fontStyleId = textLine ? mu::engraving::Pid::BEGIN_FONT_STYLE : mu::engraving::Pid::FONT_STYLE;
+    const Pid fontSizeId = textLine ? mu::engraving::Pid::BEGIN_FONT_SIZE : mu::engraving::Pid::FONT_SIZE;
+    const Pid fontAlignId = textLine ? mu::engraving::Pid::BEGIN_TEXT_ALIGN : mu::engraving::Pid::ALIGN;
+
+    auto onPropertyChanged = [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        this->propertyChangedCallback(pid, newValue);
+    };
+    auto onPropertyReset = [this](const mu::engraving::Pid pid) {
+        this->propertyResetCallback(pid);
+    };
+
+    m_fontFamily = buildPropertyItem(fontFaceId, onPropertyChanged, nullptr, onPropertyReset);
+    m_fontStyle = buildPropertyItem(fontStyleId, onPropertyChanged, nullptr, onPropertyReset);
+    m_fontSize = buildPropertyItem(fontSizeId, onPropertyChanged, nullptr, onPropertyReset);
     m_textLineSpacing = buildPropertyItem(mu::engraving::Pid::TEXT_LINE_SPACING);
 
-    m_horizontalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
+    m_horizontalAlignment = buildPropertyItem(fontAlignId, [this, onPropertyChanged](const mu::engraving::Pid pid, const QVariant& newValue) {
+        onPropertyChanged(pid, QVariantList(
+                              { newValue.toInt(), m_verticalAlignment->value().toInt() }));
     }, [this](const mu::engraving::Sid sid, const QVariant& newValue) {
         updateStyleValue(sid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
 
         emit requestReloadPropertyItems();
-    });
-    m_verticalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
+    }, onPropertyReset);
+    m_verticalAlignment = buildPropertyItem(fontAlignId, [this, onPropertyChanged](const mu::engraving::Pid pid, const QVariant& newValue) {
+        onPropertyChanged(pid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
     }, [this](const mu::engraving::Sid sid, const QVariant& newValue) {
         updateStyleValue(sid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
 
         emit requestReloadPropertyItems();
-    });
+    }, onPropertyReset);
 
     m_symbolSize = buildPropertyItem(mu::engraving::Pid::MUSIC_SYMBOL_SIZE);
     m_isSizeSpatiumDependent = buildPropertyItem(mu::engraving::Pid::SIZE_SPATIUM_DEPENDENT);
@@ -106,7 +123,10 @@ void TextSettingsModel::requestElements()
 
 void TextSettingsModel::loadProperties()
 {
-    static const PropertyIdSet propertyIdSet {
+    /// In >=4.6 text line begin, continue, and end text should all have the same style
+    /// Use Pid::BEGIN_TEXT_... to set all of these through the inspector, but leave the other properties in place internally
+    /// This preserves backwards compatibility and will allow us to style these text items separately in the future if desired
+    static const PropertyIdSet textPropertyIdSet {
         Pid::FONT_FACE,
         Pid::FONT_STYLE,
         Pid::FONT_SIZE,
@@ -125,12 +145,31 @@ void TextSettingsModel::loadProperties()
         Pid::TEXT_SCRIPT_ALIGN
     };
 
-    loadProperties(propertyIdSet);
+    static const PropertyIdSet textLinePropertyIdSet {
+        Pid::BEGIN_FONT_FACE,
+        Pid::BEGIN_FONT_STYLE,
+        Pid::BEGIN_FONT_SIZE,
+        Pid::TEXT_LINE_SPACING,
+        Pid::BEGIN_TEXT_ALIGN,
+        Pid::MUSIC_SYMBOL_SIZE,
+        Pid::TEXT_SIZE_SPATIUM_DEPENDENT,
+        Pid::FRAME_TYPE,
+        Pid::FRAME_BG_COLOR,
+        Pid::FRAME_FG_COLOR,
+        Pid::FRAME_WIDTH,
+        Pid::FRAME_PADDING,
+        Pid::FRAME_ROUND,
+        Pid::TEXT_STYLE,
+        Pid::PLACEMENT,
+        Pid::TEXT_SCRIPT_ALIGN
+    };
+
+    loadProperties(isTextLineText() ? textLinePropertyIdSet : textPropertyIdSet);
 }
 
 void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
-    if (muse::contains(propertyIdSet, Pid::FONT_FACE)) {
+    if (muse::contains(propertyIdSet, Pid::FONT_FACE) || muse::contains(propertyIdSet, Pid::BEGIN_FONT_FACE)) {
         loadPropertyItem(m_fontFamily, [](const QVariant& elementPropertyValue) -> QVariant {
             return elementPropertyValue.toString() == mu::engraving::TextBase::UNDEFINED_FONT_FAMILY
                    ? QVariant() : elementPropertyValue.toString();
@@ -139,7 +178,7 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         m_fontFamily->setIsEnabled(true);
     }
 
-    if (muse::contains(propertyIdSet, Pid::FONT_STYLE)) {
+    if (muse::contains(propertyIdSet, Pid::FONT_STYLE) || muse::contains(propertyIdSet, Pid::BEGIN_FONT_STYLE)) {
         loadPropertyItem(m_fontStyle, [](const QVariant& elementPropertyValue) -> QVariant {
             return elementPropertyValue.toInt() == static_cast<int>(mu::engraving::FontStyle::Undefined)
                    ? QVariant() : elementPropertyValue.toInt();
@@ -148,7 +187,7 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         m_fontStyle->setIsEnabled(true);
     }
 
-    if (muse::contains(propertyIdSet, Pid::FONT_SIZE)) {
+    if (muse::contains(propertyIdSet, Pid::FONT_SIZE) || muse::contains(propertyIdSet, Pid::BEGIN_FONT_SIZE)) {
         loadPropertyItem(m_fontSize, [](const QVariant& elementPropertyValue) -> QVariant {
             return muse::RealIsEqual(elementPropertyValue.toDouble(), mu::engraving::TextBase::UNDEFINED_FONT_SIZE)
                    ? QVariant() : elementPropertyValue.toDouble();
@@ -161,7 +200,7 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         loadPropertyItem(m_textLineSpacing, formatDoubleFunc);
     }
 
-    if (muse::contains(propertyIdSet, Pid::ALIGN)) {
+    if (muse::contains(propertyIdSet, Pid::ALIGN) || muse::contains(propertyIdSet, Pid::BEGIN_TEXT_ALIGN)) {
         loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
             QVariantList list = elementPropertyValue.toList();
             return list.size() >= 2 ? list[0] : QVariant();
@@ -223,6 +262,12 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     updateIsSymbolSizeAvailable();
     updateIsScriptSizeAvailable();
     updateIsLineSpacingAvailable();
+    updateIsPositionAvailable();
+}
+
+bool TextSettingsModel::isTextLineText() const
+{
+    return sectionType() == InspectorSectionType::SECTION_TEXT_LINES;
 }
 
 void TextSettingsModel::resetProperties()
@@ -429,6 +474,11 @@ bool TextSettingsModel::isLineSpacingAvailable() const
     return m_isLineSpacingAvailable;
 }
 
+bool TextSettingsModel::isPositionAvailable() const
+{
+    return m_isPositionAvailable;
+}
+
 void TextSettingsModel::setAreTextPropertiesAvailable(bool areTextPropertiesAvailable)
 {
     if (m_areTextPropertiesAvailable == areTextPropertiesAvailable) {
@@ -507,6 +557,16 @@ void TextSettingsModel::setIsLineSpacingAvailable(bool isLineSpacingAvailable)
 
     m_isLineSpacingAvailable = isLineSpacingAvailable;
     emit isLineSpacingAvailableChanged(m_isLineSpacingAvailable);
+}
+
+void TextSettingsModel::setIsPositionAvailableChanged(bool isPositionAvailable)
+{
+    if (isPositionAvailable == m_isPositionAvailable) {
+        return;
+    }
+
+    m_isPositionAvailable = isPositionAvailable;
+    emit isPositionAvailableChanged(m_isPositionAvailable);
 }
 
 void TextSettingsModel::updateFramePropertiesAvailability()
@@ -595,6 +655,73 @@ void TextSettingsModel::updateIsLineSpacingAvailable()
     }
 
     setIsLineSpacingAvailable(available);
+}
+
+void TextSettingsModel::updateIsPositionAvailable()
+{
+    bool available = true;
+    for (EngravingItem* item : m_elementList) {
+        if (item->parent()->isTextLineBaseSegment()) {
+            available = false;
+            break;
+        }
+    }
+
+    setIsPositionAvailableChanged(available);
+}
+
+void TextSettingsModel::propertyChangedCallback(const engraving::Pid propertyId, const QVariant& newValue)
+{
+    setPropertyValue(m_elementList, propertyId, newValue);
+
+    switch (propertyId) {
+    case Pid::BEGIN_FONT_FACE:
+        setPropertyValue(m_elementList, Pid::CONTINUE_FONT_FACE, newValue);
+        setPropertyValue(m_elementList, Pid::END_FONT_FACE, newValue);
+        break;
+    case Pid::BEGIN_FONT_SIZE:
+        setPropertyValue(m_elementList, Pid::CONTINUE_FONT_SIZE, newValue);
+        setPropertyValue(m_elementList, Pid::END_FONT_SIZE, newValue);
+        break;
+    case Pid::BEGIN_FONT_STYLE:
+        setPropertyValue(m_elementList, Pid::CONTINUE_FONT_STYLE, newValue);
+        setPropertyValue(m_elementList, Pid::END_FONT_STYLE, newValue);
+        break;
+    case Pid::BEGIN_TEXT_ALIGN:
+        setPropertyValue(m_elementList, Pid::CONTINUE_TEXT_ALIGN, newValue);
+        setPropertyValue(m_elementList, Pid::END_TEXT_ALIGN, newValue);
+        break;
+    default:
+        break;
+    }
+    loadProperties();
+}
+
+void TextSettingsModel::propertyResetCallback(const engraving::Pid propertyId)
+{
+    resetPropertyValue(m_elementList, propertyId);
+
+    switch (propertyId) {
+    case Pid::BEGIN_FONT_FACE:
+        resetPropertyValue(m_elementList, Pid::CONTINUE_FONT_FACE);
+        resetPropertyValue(m_elementList, Pid::END_FONT_FACE);
+        break;
+    case Pid::BEGIN_FONT_SIZE:
+        resetPropertyValue(m_elementList, Pid::CONTINUE_FONT_SIZE);
+        resetPropertyValue(m_elementList, Pid::END_FONT_SIZE);
+        break;
+    case Pid::BEGIN_FONT_STYLE:
+        resetPropertyValue(m_elementList, Pid::CONTINUE_FONT_STYLE);
+        resetPropertyValue(m_elementList, Pid::END_FONT_STYLE);
+        break;
+    case Pid::BEGIN_TEXT_ALIGN:
+        resetPropertyValue(m_elementList, Pid::CONTINUE_TEXT_ALIGN);
+        resetPropertyValue(m_elementList, Pid::END_TEXT_ALIGN);
+        break;
+    default:
+        break;
+    }
+    loadProperties();
 }
 
 bool TextSettingsModel::isTextEditingStarted() const

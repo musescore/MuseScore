@@ -24,6 +24,7 @@
 
 #include "score.h"
 #include "system.h"
+#include "text.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -56,6 +57,8 @@ static const ElementStyle pickScrapeStyle {
 PickScrapeSegment::PickScrapeSegment(PickScrape* sp, System* parent)
     : TextLineBaseSegment(ElementType::PICK_SCRAPE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
+    m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
+    m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
 //---------------------------------------------------------
@@ -132,6 +135,9 @@ PropertyValue PickScrape::propertyDefault(Pid propertyId) const
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
         return TextPlace::AUTO;
+
+    case Pid::TEXT_STYLE:
+        return TextStyleType::PALM_MUTE;
 
     default:
         return TextLineBase::propertyDefault(propertyId);

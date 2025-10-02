@@ -23,6 +23,7 @@
 
 #include "score.h"
 #include "system.h"
+#include "text.h"
 #include "undo.h"
 
 #include "log.h"
@@ -114,13 +115,16 @@ TextLineSegment::TextLineSegment(Spanner* sp, System* parent, bool system)
 {
     setSystemFlag(system);
     initStyle();
+
+    m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
+    m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
 //---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingItem* TextLineSegment::propertyDelegate(Pid pid)
+EngravingObject* TextLineSegment::propertyDelegate(Pid pid) const
 {
     if (pid == Pid::SYSTEM_FLAG) {
         return static_cast<TextLine*>(spanner());
@@ -272,6 +276,8 @@ PropertyValue TextLine::propertyDefault(Pid propertyId) const
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
         return TextPlace::LEFT;
+    case Pid::TEXT_STYLE:
+        return TextStyleType::TEXTLINE;
     default:
         return TextLineBase::propertyDefault(propertyId);
     }

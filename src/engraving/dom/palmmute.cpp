@@ -28,6 +28,7 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "system.h"
+#include "text.h"
 
 #include "log.h"
 
@@ -64,6 +65,8 @@ static const ElementStyle palmMuteStyle {
 PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
     : TextLineBaseSegment(ElementType::PALM_MUTE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
+    m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
+    m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
 //---------------------------------------------------------
@@ -103,33 +106,6 @@ PalmMute::PalmMute(EngravingItem* parent)
     resetProperty(Pid::END_TEXT_PLACE);
     resetProperty(Pid::END_TEXT);
 }
-
-//---------------------------------------------------------
-//   write
-//
-//   The removal of this function is potentially a temporary
-//   change. For now, the intended behavior does no more than
-//   the base write function and so we will just use that.
-//
-//   also see letring.cpp
-//---------------------------------------------------------
-
-/*
-void PalmMute::write(XmlWriter& xml) const
-      {
-      if (!xml.context()->canWrite(this))
-            return;
-      xml.stag(this);
-
-      for (const StyledProperty& spp : *styledProperties()) {
-            if(!isStyled(spp.pid))
-                  writeProperty(xml, spp.pid);
-            }
-
-      TextLineBase::writeProperties(xml);
-      xml.etag();
-      }
-*/
 
 //---------------------------------------------------------
 //   createLineSegment
@@ -172,9 +148,6 @@ PropertyValue PalmMute::propertyDefault(Pid propertyId) const
     case Pid::END_TEXT_OFFSET:
         return PropertyValue::fromValue(PointF(0, 0));
 
-//TODOws            case Pid::BEGIN_FONT_ITALIC:
-//                  return style().styleV(Sid::palmMuteFontItalic);
-
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:
         return style().styleV(Sid::palmMuteText);
@@ -188,6 +161,9 @@ PropertyValue PalmMute::propertyDefault(Pid propertyId) const
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
         return TextPlace::AUTO;
+
+    case Pid::TEXT_STYLE:
+        return TextStyleType::PALM_MUTE;
 
     default:
         return TextLineBase::propertyDefault(propertyId);

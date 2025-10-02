@@ -244,6 +244,7 @@ public:
     bool onSameScore(const EngravingObject* other) const;
     const MStyle& style() const;
 
+    virtual EngravingObject* propertyDelegate(Pid) const { return nullptr; }
     virtual PropertyValue getProperty(Pid) const = 0;
     virtual bool setProperty(Pid, const PropertyValue&) = 0;
     virtual PropertyValue propertyDefault(Pid) const;
@@ -697,6 +698,12 @@ static inline TextLineBase* toTextLineBase(EngravingObject* e)
 {
     assert(e == 0 || e->isTextLineBase());
     return (TextLineBase*)e;
+}
+
+static inline TextLineBaseSegment* toTextLineBaseSegment(EngravingObject* e)
+{
+    assert(e == 0 || e->isTextLineBaseSegment());
+    return (TextLineBaseSegment*)e;
 }
 
 static inline TextBase* toTextBase(EngravingObject* e)
