@@ -41,7 +41,7 @@ body:
     attributes:
       label: Supporting files, videos and screenshots
       description: |
-        * For crashes: a short screen recording (ideally 20sec or less) plus crash logs and [diagnostic files](https://github.com/musescore/MuseScore/wiki/Reporting-bugs-and-issues#33-diagnostic-files)
+        * For crashes: a short screen recording (ideally 20sec or less) plus crash logs and <a href="https://github.com/musescore/MuseScore/wiki/Reporting-bugs-and-issues#33-diagnostic-files" target="_blank">diagnostic files</a>
         * For engraving issues: one or more screenshots (or a short screen recording, 20sec or less) showing the problem and, where possible, the expected outcome
         * For playback issues: 
           * A short screen recording with audio of a minimal reproducible example 
@@ -55,17 +55,18 @@ body:
   - type: input
     id: version
     attributes:
-      label: What is the latest version of MuseScore Studio where this issue is present?
+      label: In which versions of MuseScore Studio is this issue present?
       description: |
-        You can copy the info from the Help > About dialog in MuseScore Studio. 
-        If you can, please also check whether this issue is still present in the _latest_ [nightly build](https://musescore.org/en/nightly-builds).
+        * Please provide the version number of the **newest, and if applicable also oldest** version in which this issue is present. Example: `4.6.1` or `4.5.0 - 4.6.1`.
+        * You can find which version your are using by going to **Help > About MuseScore Studio** (Windows/Linux) or **MuseScore Studio > About MuseScore Studio** (macOS).
+        * If you can, please also check whether this issue is still present in the _latest_ <a href="https://musescore.org/en/nightly-builds" target="_blank">nightly build</a>.
     validations:
       required: true
   - type: dropdown
     id: regression
     attributes:
       label: Regression
-      description: Did this work before? Older versions of MuseScore Studio can be found [here](https://github.com/musescore/MuseScore/releases).
+      description: Did this work before? Older versions of MuseScore Studio can be found <a href="https://github.com/musescore/MuseScore/releases" target="_blank">here</a>.
       options:
         - Choose option...
         - No.
