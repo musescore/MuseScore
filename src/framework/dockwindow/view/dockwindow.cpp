@@ -483,7 +483,7 @@ void DockWindow::addPanelAsTab(DockPanelView* panel, DockPanelView* destinationP
 {
     registerDock(panel);
 
-    if (panel->isVisible()) {
+    if (panel->defaultVisibility()) {
         destinationPanel->addPanelAsTab(panel);
         destinationPanel->setCurrentTabIndex(0);
     }
