@@ -76,6 +76,8 @@ public:
     double baseLine() const override { return 0.0; }
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
 
+    void reset() override;
+
 protected:
     SymId m_sym = SymId::noSym;
     std::shared_ptr<IEngravingFont> m_scoreFont = nullptr;
