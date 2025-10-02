@@ -24,7 +24,6 @@
 
 #include <cmath>
 
-#include "dom/text.h"
 #include "draw/types/transform.h"
 
 #include "types/typesconv.h"
@@ -34,6 +33,7 @@
 #include "score.h"
 #include "segment.h"
 #include "system.h"
+#include "text.h"
 
 #include "log.h"
 

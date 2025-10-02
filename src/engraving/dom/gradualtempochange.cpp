@@ -22,13 +22,13 @@
 
 #include "gradualtempochange.h"
 
-#include "dom/rehearsalmark.h"
-#include "dom/text.h"
 #include "measure.h"
+#include "rehearsalmark.h"
 #include "score.h"
 #include "segment.h"
 #include "system.h"
 #include "tempotext.h"
+#include "text.h"
 
 #include "types/typesconv.h"
 

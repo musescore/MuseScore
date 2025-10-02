@@ -22,10 +22,9 @@
 
 #include "harmonicmark.h"
 
-#include "dom/text.h"
 #include "score.h"
-#include "stafftype.h"
 #include "system.h"
+#include "text.h"
 
 using namespace mu;
 using namespace mu::engraving;

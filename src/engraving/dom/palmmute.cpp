@@ -23,12 +23,12 @@
 #include "palmmute.h"
 
 #include "chordrest.h"
-#include "dom/text.h"
 #include "part.h"
 #include "score.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "system.h"
+#include "text.h"
 
 #include "log.h"
 
