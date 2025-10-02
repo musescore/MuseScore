@@ -35,6 +35,7 @@
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editscoreproperties.h"
 #include "engraving/editing/editstaff.h"
+#include "engraving/editing/editsystemlocks.h"
 
 #include "igetscore.h"
 
@@ -288,7 +289,7 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
     part->undoChangeProperty(mu::engraving::Pid::VISIBLE, visible);
 
     if (visible) {
-        score()->removeSystemLocksContainingMMRests();
+        EditSystemLocks::removeSystemLocksContainingMMRests(score());
     }
 
     apply();
@@ -540,7 +541,7 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
     doSetStaffConfig(staff, config);
 
     if (visible) {
-        score()->removeSystemLocksContainingMMRests();
+        EditSystemLocks::removeSystemLocksContainingMMRests(score());
     }
 
     apply();
@@ -674,7 +675,7 @@ void NotationParts::insertPart(Part* part, size_t index)
 
     startEdit(TranslatableString("undoableAction", "Add instrument"));
 
-    score()->removeSystemLocksContainingMMRests();
+    EditSystemLocks::removeSystemLocksContainingMMRests(score());
 
     doInsertPart(part, index);
 

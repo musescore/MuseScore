@@ -417,12 +417,6 @@ public:
     void cmdDecDurationDotted() { cmdIncDecDuration(1, true); }
     void cmdIncDecDuration(int nSteps, bool stepDotted = false);
     void cmdToggleLayoutBreak(LayoutBreakType);
-    void cmdMoveMeasureToPrevSystem();
-    void cmdMoveMeasureToNextSystem();
-    void cmdToggleSystemLock();
-    void cmdApplyLockToSelection();
-    void cmdToggleScoreLock();
-    void cmdMakeIntoSystem();
     void cmdAddStaffTypeChange(Measure* measure, staff_idx_t staffIdx, StaffTypeChange* stc);
     void cmdAddMeasureRepeat(Measure*, int numMeasures, staff_idx_t staffIdx);
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, staff_idx_t staffIdx);
@@ -452,8 +446,6 @@ public:
     void cmdMoveLyrics(Lyrics*, DirectionV);
 
     void realtimeAdvance(bool allowTransposition);
-
-    void addRemoveSystemLocks(int interval, bool lock);
 
     bool transpose(Note* n, Interval, bool useSharpsFlats);
     void transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& tickStart, const Fraction& tickEnd, bool flip = false);
@@ -1080,17 +1072,6 @@ public:
     void addSystemLock(const SystemLock* lock);
     void removeSystemLock(const SystemLock* lock);
     void clearSystemLocks() { m_systemLocks.clear(); }
-
-    void undoAddSystemLock(const SystemLock* lock);
-    void undoRemoveSystemLock(const SystemLock* lock);
-    void undoRemoveAllLocks();
-    void toggleSystemLock(const std::vector<System*>& systems);
-    void makeIntoSystem(MeasureBase* first, MeasureBase* last);
-    void removeSystemLocksOnAddLayoutBreak(LayoutBreakType breakType, const MeasureBase* measure);
-    void removeLayoutBreaksOnAddSystemLock(const SystemLock* lock);
-    void removeSystemLocksOnRemoveMeasures(const MeasureBase* m1, const MeasureBase* m2);
-    void removeSystemLocksContainingMMRests();
-    void updateSystemLocksOnCreateMMRests(Measure* first, Measure* last);
 
     void rebuildFretBox();
 

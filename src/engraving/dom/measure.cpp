@@ -30,6 +30,7 @@
 #include "../editing/mscoreview.h"
 #include "../editing/editmeasures.h"
 #include "../editing/editstaff.h"
+#include "../editing/editsystemlocks.h"
 #include "../editing/inserttime.h"
 
 #include "accidental.h"
@@ -1799,7 +1800,7 @@ EngravingItem* Measure::drop(EditData& data)
             break;
         }
         case ActionIconType::SYSTEM_LOCK:
-            score()->makeIntoSystem(system()->first(), this);
+            EditSystemLocks::makeIntoSystem(score(), system()->first(), this);
             break;
         default:
             break;
