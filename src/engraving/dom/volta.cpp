@@ -25,9 +25,6 @@
 #include <algorithm>
 #include <vector>
 
-#include "dom/text.h"
-#include "types/typesconv.h"
-
 #include "barline.h"
 #include "keysig.h"
 #include "measure.h"
@@ -35,6 +32,7 @@
 #include "staff.h"
 #include "system.h"
 #include "tempo.h"
+#include "text.h"
 
 #include "log.h"
 

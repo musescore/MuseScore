@@ -56,6 +56,9 @@ TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService*
 
 void TextSettingsModel::createProperties()
 {
+    /// In >=4.6 text line begin, continue, and end text should all have the same style
+    /// Use Pid::BEGIN_TEXT_... to set all of these through the inspector, but leave the other properties in place internally
+    /// This preserves backwards compatibility and will allow us to style these text items separately in the future if desired
     const bool textLine = isTextLineText();
     const Pid fontFaceId = textLine ? mu::engraving::Pid::BEGIN_FONT_FACE : mu::engraving::Pid::FONT_FACE;
     const Pid fontStyleId = textLine ? mu::engraving::Pid::BEGIN_FONT_STYLE : mu::engraving::Pid::FONT_STYLE;
@@ -120,6 +123,9 @@ void TextSettingsModel::requestElements()
 
 void TextSettingsModel::loadProperties()
 {
+    /// In >=4.6 text line begin, continue, and end text should all have the same style
+    /// Use Pid::BEGIN_TEXT_... to set all of these through the inspector, but leave the other properties in place internally
+    /// This preserves backwards compatibility and will allow us to style these text items separately in the future if desired
     static const PropertyIdSet textPropertyIdSet {
         Pid::FONT_FACE,
         Pid::FONT_STYLE,

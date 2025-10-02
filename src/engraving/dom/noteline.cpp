@@ -20,12 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "noteline.h"
-#include "dom/text.h"
-#include "linkedobjects.h"
-#include "factory.h"
 #include "note.h"
-#include "textline.h"
+#include "noteline.h"
+#include "text.h"
 
 namespace mu::engraving {
 static const ElementStyle noteLineStyle {

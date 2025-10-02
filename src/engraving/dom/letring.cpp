@@ -22,10 +22,9 @@
 
 #include "letring.h"
 
-#include "dom/text.h"
 #include "score.h"
-#include "stafftype.h"
 #include "system.h"
+#include "text.h"
 
 #include "log.h"
 

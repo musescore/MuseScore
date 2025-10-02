@@ -290,9 +290,6 @@ PropertyValue TextLineBase::getProperty(Pid id) const
 bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
-    /// In >=4.6 text line begin, continue, and end text should all have the same style
-    /// Use Pid::BEGIN_TEXT_... to set all of these through the inspector, but leave the other properties in place internally
-    /// This preserves backwards compatibility and will allow us to style these text items separately in the future if desired
     case Pid::BEGIN_TEXT_PLACE:
         _beginTextPlace = v.value<TextPlace>();
         break;
@@ -394,13 +391,6 @@ mu::engraving::PropertyValue TextLineBase::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::GAP_BETWEEN_TEXT_AND_LINE:
         return Spatium(0.5);
-    case Pid::BEGIN_TEXT_PLACE:
-    case Pid::BEGIN_TEXT_ALIGN:
-    case Pid::BEGIN_TEXT_OFFSET:
-    case Pid::BEGIN_FONT_FACE:
-    case Pid::BEGIN_FONT_SIZE:
-    case Pid::BEGIN_FONT_STYLE:
-        return style().styleV(getPropertyStyle(propertyId));
     default:
         return SLine::propertyDefault(propertyId);
     }

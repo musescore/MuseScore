@@ -3279,7 +3279,7 @@ void TextBase::initTextStyleType(TextStyleType tid, bool preserveDifferent)
 void TextBase::initTextStyleType(TextStyleType tid)
 {
     auto getTextPID = [&](Pid p) -> Pid {
-        static const std::map<Pid, Pid> TEXT_LINE_PID_MAP = { { Pid::FONT_FACE, Pid::BEGIN_FONT_FACE },
+        static const std::vector<std::pair<Pid, Pid> > TEXT_LINE_PID_MAP = { { Pid::FONT_FACE, Pid::BEGIN_FONT_FACE },
             { Pid::FONT_SIZE, Pid::BEGIN_FONT_SIZE },
             { Pid::FONT_STYLE, Pid::BEGIN_FONT_STYLE },
             { Pid::ALIGN, Pid::BEGIN_TEXT_ALIGN },
