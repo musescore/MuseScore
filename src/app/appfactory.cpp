@@ -279,6 +279,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #endif
 
     app->addModule(new muse::network::NetworkModule());
+    app->addModule(new muse::shortcuts::ShortcutsModule());
 #ifdef MUSE_MODULE_UI
     app->addModule(new muse::ui::UiModule());
     app->addModule(new muse::uicomponents::UiComponentsModule());
@@ -368,9 +369,6 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new mu::project::ProjectModule());
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
-
-    //! NOTE It should be at the end of the list so all modules have registered their actions.
-    app->addModule(new muse::shortcuts::ShortcutsModule());
 
 #ifdef MUE_CONFIGURATION_IS_APPWEB
     app->addModule(new mu::appjs::AppJsModule());

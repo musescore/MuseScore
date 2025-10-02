@@ -91,12 +91,8 @@ void TextInputModel::loadShortcuts()
         "nav-prevrow-control"
     };
 
-    m_notAllowedForOverrideShortcuts.clear();
     for (const std::string& actionCode : actionCodes) {
-        const Shortcut& shortcut = shortcutsRegister()->shortcut(actionCode);
-        if (shortcut.isValid()) {
-            m_notAllowedForOverrideShortcuts.push_back(shortcut);
-        }
+        m_notAllowedForOverrideShortcuts.push_back(shortcutsRegister()->shortcut(actionCode));
     }
 }
 

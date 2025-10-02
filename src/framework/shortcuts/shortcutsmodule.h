@@ -43,7 +43,6 @@ public:
     void registerUiTypes() override;
     void onInit(const IApplication::RunMode& mode) override;
     void onAllInited(const IApplication::RunMode& mode) override;
-    void onDelayedInit() override;
 
 private:
 
