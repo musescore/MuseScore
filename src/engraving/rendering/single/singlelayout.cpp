@@ -1903,6 +1903,7 @@ void SingleLayout::layout1TextBase(const TextBase* item, const Context&, TextBas
     RectF bb;
     double y = 0;
 
+    double maxBlockWidth = -DBL_MAX;
     // adjust the bounding box for the text item
     for (size_t i = 0; i < ldata->rows(); ++i) {
         TextBlock& t = ldata->blocks[i];
@@ -1914,8 +1915,39 @@ void SingleLayout::layout1TextBase(const TextBase* item, const Context&, TextBas
         }
         y += t.lineSpacing();
         t.setY(y);
-        bb |= r->translated(0.0, y);
+        if (!item->positionSeparateFromAlignment()) {
+            bb |= r->translated(0.0, y);
+        }
+        maxBlockWidth = std::max(maxBlockWidth, t.boundingRect().width());
     }
+
+    // ALIGN TEXT
+    // TODO - implement for all text items
+    if (item->positionSeparateFromAlignment()) {
+        for (size_t i = 0; i < ldata->blocks.size(); ++i) {
+            TextBlock& t = ldata->blocks[i];
+            double diff = maxBlockWidth - t.boundingRect().width();
+            if (muse::RealIsNull(diff)) {
+                const RectF& r = t.boundingRect();
+                bb |= r.translated(PointF(0.0, t.y()));
+                continue;
+            }
+            double rx = 0.0;
+            AlignH alignH = item->align().horizontal;
+            if (alignH == AlignH::HCENTER) {
+                rx = diff * 0.5;
+            } else if (alignH == AlignH::RIGHT) {
+                rx = diff;
+            }
+
+            for (TextFragment& f : t.fragments()) {
+                f.pos.rx() += rx;
+            }
+            const RectF& r = t.boundingRect().translated(PointF(rx, 0.0));
+            bb |= r.translated(PointF(0.0, t.y()));
+        }
+    }
+
     double yoff = 0;
     double h    = 0;
 
