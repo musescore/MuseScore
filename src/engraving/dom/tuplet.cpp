@@ -22,6 +22,7 @@
 
 #include "tuplet.h"
 
+#include "../editing/elementeditdata.h"
 #include "style/textstyle.h"
 
 #include "beam.h"

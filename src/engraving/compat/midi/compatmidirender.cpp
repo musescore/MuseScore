@@ -5,11 +5,10 @@
 
 #include "global/realfn.h"
 
-#include "types/constants.h"
-
 #include "dom/arpeggio.h"
 #include "dom/articulation.h"
 #include "dom/chord.h"
+#include "dom/drumset.h"
 #include "dom/durationtype.h"
 #include "dom/dynamic.h"
 #include "dom/easeInOut.h"
@@ -34,9 +33,10 @@
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 #include "dom/trill.h"
-#include "dom/undo.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
+#include "editing/undo.h"
+#include "types/constants.h"
 
 namespace mu::engraving {
 static int slideTicks(const Chord* chord);

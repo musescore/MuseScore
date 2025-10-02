@@ -24,7 +24,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/system.h"
-#include "engraving/dom/undo.h"
+#include "engraving/editing/undo.h"
 #include "engraving/rendering/score/systemlayout.h"
 
 using namespace mu::inspector;

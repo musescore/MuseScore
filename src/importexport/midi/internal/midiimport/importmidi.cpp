@@ -84,8 +84,6 @@
 using namespace mu::engraving;
 
 namespace mu::iex::midi {
-extern void updateNoteLines(Segment*, int track);
-
 void lengthenTooShortNotes(std::multimap<int, MTrack>& tracks)
 {
     for (auto& track: tracks) {

@@ -38,7 +38,7 @@ class InsertItemBspTreeVisitor : public BspTreeVisitor
 public:
     EngravingItem* item;
 
-    inline void visit(std::vector<EngravingItem*>* items) { items->push_back(item); }
+    inline void visit(std::vector<EngravingItem*>& items) override { items.push_back(item); }
 };
 
 //---------------------------------------------------------
@@ -51,7 +51,7 @@ class RemoveItemBspTreeVisitor : public BspTreeVisitor
 public:
     EngravingItem* item;
 
-    inline void visit(std::vector<EngravingItem*>* items) { muse::remove(*items, item); }
+    inline void visit(std::vector<EngravingItem*>& items) override { muse::remove(items, item); }
 };
 
 //---------------------------------------------------------
@@ -64,9 +64,9 @@ class FindItemBspTreeVisitor : public BspTreeVisitor
 public:
     std::vector<EngravingItem*> foundItems;
 
-    void visit(std::vector<EngravingItem*>* items)
+    void visit(std::vector<EngravingItem*>& items) override
     {
-        for (auto item : *items) {
+        for (auto item : items) {
             if (!item->itemDiscovered) {
                 item->itemDiscovered = true;
                 foundItems.push_back(item);
@@ -343,7 +343,7 @@ void BspTree::climbTree(BspTreeVisitor* visitor, const PointF& pos, int index)
 
     switch (node->type) {
     case Node::Type::LEAF:
-        visitor->visit(&m_leaves[node->leafIndex]);
+        visitor->visit(m_leaves[node->leafIndex]);
         break;
     case Node::Type::VERTICAL:
         if (pos.x() < node->offset) {
@@ -377,7 +377,7 @@ void BspTree::climbTree(BspTreeVisitor* visitor, const RectF& rec, int index)
 
     switch (node->type) {
     case Node::Type::LEAF:
-        visitor->visit(&m_leaves[node->leafIndex]);
+        visitor->visit(m_leaves[node->leafIndex]);
         break;
     case Node::Type::VERTICAL:
         if (rec.left() < node->offset) {

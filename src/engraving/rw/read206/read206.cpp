@@ -71,6 +71,7 @@
 #include "dom/measurenumber.h"
 #include "dom/measurerepeat.h"
 #include "dom/mmrest.h"
+#include "dom/note.h"
 #include "dom/noteline.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
@@ -98,9 +99,9 @@
 #include "dom/tremolotwochord.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tuplet.h"
-#include "dom/undo.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
+#include "editing/undo.h"
 
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"

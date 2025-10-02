@@ -26,8 +26,8 @@
 
 #include "translation.h"
 
+#include "../editing/editspanner.h"
 #include "types/typesconv.h"
-
 #include "rendering/score/tlayout.h"
 
 #include "accidental.h"
@@ -54,7 +54,6 @@
 #include "system.h"
 #include "timesig.h"
 #include "tuplet.h"
-#include "undo.h"
 #include "utils.h"
 
 #include "navigate.h"

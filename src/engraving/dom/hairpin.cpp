@@ -26,6 +26,7 @@
 
 #include "draw/types/transform.h"
 
+#include "../editing/elementeditdata.h"
 #include "types/typesconv.h"
 
 #include "dynamic.h"

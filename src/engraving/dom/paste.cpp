@@ -24,6 +24,10 @@
 
 #include "imimedata.h"
 
+#include "../editing/editmeasures.h"
+#include "../editing/editstaff.h"
+#include "../editing/mscoreview.h"
+
 #include "rw/read400/tread.h"
 #include "rw/rwregister.h"
 #include "types/typesconv.h"
@@ -32,6 +36,7 @@
 #include "beam.h"
 #include "breath.h"
 #include "chord.h"
+#include "drumset.h"
 #include "dynamic.h"
 #include "factory.h"
 #include "figuredbass.h"
@@ -42,7 +47,7 @@
 #include "lyrics.h"
 #include "measure.h"
 #include "measurerepeat.h"
-#include "mscoreview.h"
+#include "note.h"
 #include "part.h"
 #include "rest.h"
 #include "score.h"
@@ -50,9 +55,7 @@
 #include "staff.h"
 #include "tie.h"
 #include "timesig.h"
-
 #include "tuplet.h"
-#include "undo.h"
 #include "utils.h"
 
 #include "log.h"

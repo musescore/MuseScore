@@ -28,6 +28,8 @@
 #include "containers.h"
 #include "translation.h"
 
+#include "../editing/addremoveelement.h"
+
 #include "actionicon.h"
 #include "articulation.h"
 #include "chord.h"
@@ -40,7 +42,6 @@
 #include "segment.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "undo.h"
 
 #include "log.h"
 

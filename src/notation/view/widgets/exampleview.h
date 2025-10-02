@@ -27,7 +27,7 @@
 #include <QFrame>
 #include <QEventTransition>
 
-#include "engraving/dom/mscoreview.h"
+#include "engraving/editing/mscoreview.h"
 
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"

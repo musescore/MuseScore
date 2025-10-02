@@ -25,7 +25,9 @@
 #include <functional>
 
 #include "types/translatablestring.h"
-#include "types/typesconv.h"
+
+#include "../editing/elementeditdata.h"
+#include "../types/typesconv.h"
 
 #include "chord.h"
 #include "note.h"

@@ -22,12 +22,11 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/chord.h"
-#include "dom/note.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/note.h"
 
 #include "utils/scorerw.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String VOICESWITCHING_DATA_DIR("voiceswitching_data/");

@@ -23,13 +23,14 @@
 
 #include <QVersionNumber>
 
+#include "io/path.h"
 #include "mdlmigrator.h"
 
-#include "engraving/types/constants.h"
-#include "engraving/dom/score.h"
 #include "engraving/dom/excerpt.h"
-#include "engraving/dom/undo.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/editing/editscoreproperties.h"
 #include "engraving/rw/compat/readstyle.h"
+#include "engraving/types/constants.h"
 
 #include "io/file.h"
 
@@ -44,8 +45,8 @@ using namespace mu::engraving::compat;
 using namespace muse;
 
 static const Uri MIGRATION_DIALOG_URI("musescore://project/migration");
-static const QString LELAND_STYLE_PATH(":/engraving/styles/migration-306-style-Leland.mss");
-static const QString EDWIN_STYLE_PATH(":/engraving/styles/migration-306-style-Edwin.mss");
+static const io::path_t LELAND_STYLE_PATH(":/engraving/styles/migration-306-style-Leland.mss");
+static const io::path_t EDWIN_STYLE_PATH(":/engraving/styles/migration-306-style-Edwin.mss");
 
 static MigrationType migrationTypeFromMscVersion(int mscVersion)
 {

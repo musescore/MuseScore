@@ -22,9 +22,10 @@
 
 #pragma once
 
-#include "types/types.h"
-#include "types/string.h"
-#include "dom/interval.h"
+#include "global/types/string.h"
+
+#include "engraving/dom/interval.h"
+#include "engraving/types/types.h"
 
 namespace mu::engraving {
 class Arpeggio;

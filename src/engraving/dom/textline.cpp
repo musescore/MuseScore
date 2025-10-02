@@ -23,9 +23,7 @@
 
 #include "score.h"
 #include "system.h"
-#include "undo.h"
-
-#include "log.h"
+#include "../editing/editproperty.h"
 
 using namespace mu;
 

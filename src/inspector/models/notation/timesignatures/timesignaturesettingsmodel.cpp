@@ -21,10 +21,11 @@
  */
 #include "timesignaturesettingsmodel.h"
 
-#include "dom/layoutbreak.h"
-#include "dom/measure.h"
 #include "dataformatter.h"
 #include "translation.h"
+
+#include "engraving/dom/layoutbreak.h"
+#include "engraving/dom/measure.h"
 
 using namespace mu::inspector;
 

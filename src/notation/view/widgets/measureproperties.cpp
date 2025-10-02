@@ -31,7 +31,7 @@
 #include "engraving/dom/measurerepeat.h"
 #include "engraving/dom/range.h"
 #include "engraving/dom/sig.h"
-#include "engraving/dom/undo.h"
+#include "engraving/editing/editstaff.h"
 
 #include "notation/inotationelements.h"
 

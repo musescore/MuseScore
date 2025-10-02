@@ -22,21 +22,23 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/excerpt.h"
-#include "dom/factory.h"
-#include "dom/linkedobjects.h"
-#include "dom/masterscore.h"
-#include "dom/mcursor.h"
-#include "dom/measure.h"
-#include "dom/part.h"
-#include "dom/segment.h"
-#include "dom/tempotext.h"
-#include "dom/text.h"
-#include "dom/undo.h"
+#include "engraving/dom/excerpt.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/linkedobjects.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/mcursor.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/tempotext.h"
+#include "engraving/dom/text.h"
+#include "engraving/editing/editexcerpt.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 //---------------------------------------------------------

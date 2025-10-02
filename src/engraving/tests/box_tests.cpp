@@ -22,15 +22,14 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/box.h"
-#include "dom/masterscore.h"
-#include "dom/system.h"
-#include "dom/undo.h"
+#include "engraving/dom/box.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/system.h"
+#include "engraving/editing/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String BOX_DATA_DIR(u"box_data/");

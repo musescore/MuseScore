@@ -32,6 +32,10 @@
 
 #include "containers.h"
 
+#include "editing/addremoveelement.h"
+#include "editing/mscoreview.h"
+#include "editing/splitjoinmeasure.h"
+
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "compat/dummyelement.h"
@@ -67,7 +71,6 @@
 #include "masterscore.h"
 #include "measure.h"
 #include "mscore.h"
-#include "mscoreview.h"
 #include "note.h"
 #include "ottava.h"
 #include "page.h"
@@ -96,7 +99,6 @@
 #include "tiemap.h"
 #include "timesig.h"
 #include "tuplet.h"
-#include "undo.h"
 #include "utils.h"
 #include "volta.h"
 
@@ -2269,7 +2271,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
     // check if section starts with a pick-up measure to be merged with end of previous section
     Measure* cm = firstAppendedMeasure, * pm = cm->prevMeasure();
     if (pm->timesig() == cm->timesig() && pm->ticks() + cm->ticks() == cm->timesig()) {
-        cmdJoinMeasure(pm, cm);
+        SplitJoinMeasure::joinMeasures(m_masterScore, pm->tick(), cm->tick());
     }
 
     // clone the spanners (only in the range currently copied)

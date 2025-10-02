@@ -23,9 +23,10 @@
 
 #include <cmath>
 
+#include "../editing/elementeditdata.h"
+
 #include "chord.h"
 #include "hook.h"
-
 #include "tremolosinglechord.h"
 
 #include "log.h"

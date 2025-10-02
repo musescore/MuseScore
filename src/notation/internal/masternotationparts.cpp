@@ -25,8 +25,8 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/scoreorder.h"
 #include "engraving/dom/excerpt.h"
-#include "engraving/dom/undo.h"
 #include "engraving/dom/utils.h"
+#include "engraving/editing/editexcerpt.h"
 
 #include "log.h"
 

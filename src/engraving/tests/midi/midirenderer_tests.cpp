@@ -27,8 +27,8 @@
 #include "engraving/rw/mscloader.h"
 #include "engraving/dom/noteevent.h"
 
-using namespace mu;
 using namespace mu::engraving;
+
 class MidiRenderer_Tests : public ::testing::Test
 {
 };

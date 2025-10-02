@@ -22,13 +22,12 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/masterscore.h"
-#include "dom/segment.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/segment.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String RHYTHMICGRP_DATA_DIR("rhythmicGrouping_data/");

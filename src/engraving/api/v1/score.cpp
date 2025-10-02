@@ -22,16 +22,15 @@
 
 #include "score.h"
 
-#include "engraving/compat/midi/compatmidirender.h"
-
-#include "engraving/dom/factory.h"
-#include "engraving/dom/instrtemplate.h"
-#include "engraving/dom/measure.h"
-#include "engraving/dom/score.h"
-#include "engraving/dom/segment.h"
-#include "engraving/dom/text.h"
-
-#include "engraving/types/typesconv.h"
+#include "compat/midi/compatmidirender.h"
+#include "dom/factory.h"
+#include "dom/instrtemplate.h"
+#include "dom/measure.h"
+#include "dom/score.h"
+#include "dom/segment.h"
+#include "dom/text.h"
+#include "editing/editsystemlocks.h"
+#include "types/typesconv.h"
 
 // api
 #include "apistructs.h"
@@ -305,9 +304,14 @@ void Score::doLayout(FractionWrapper* startTick, FractionWrapper* endTick)
     score()->doLayoutRange(startTick->fraction(), endTick->fraction());
 }
 
+void Score::addRemoveSystemLocks(int interval, bool lock)
+{
+    EditSystemLocks::addRemoveSystemLocks(score(), interval, lock);
+}
+
 void Score::makeIntoSystem(apiv1::MeasureBase* first, apiv1::MeasureBase* last)
 {
-    score()->makeIntoSystem(first->measureBase(), last->measureBase());
+    EditSystemLocks::makeIntoSystem(score(), first->measureBase(), last->measureBase());
 }
 
 void Score::showElementInScore(apiv1::EngravingItem* wrappedElement, int staffIdx)

@@ -27,7 +27,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "iinteractive.h"
-#include "iengravingconfiguration.h"
+#include "engraving/iengravingconfiguration.h"
 #include "engraving/rendering/isinglerenderer.h"
 #include "engraving/rendering/ieditmoderenderer.h"
 

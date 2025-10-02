@@ -24,8 +24,8 @@
 #include "translation.h"
 #include "types/bendtypes.h"
 
-#include "dom/bend.h"
-#include "dom/guitarbend.h"
+#include "engraving/dom/bend.h"
+#include "engraving/dom/guitarbend.h"
 
 using namespace mu::engraving;
 using namespace mu::inspector;

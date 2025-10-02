@@ -21,17 +21,14 @@
  */
 
 #include "mscoreview.h"
-#include "score.h"
-#include "page.h"
-#include "text.h"
+
+#include "../dom/page.h"
+#include "../dom/score.h"
+#include "../dom/text.h"
 
 using namespace mu;
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   elementLower
-//---------------------------------------------------------
-
 static bool elementLower(const EngravingItem* e1, const EngravingItem* e2)
 {
     if (!e1->selectable()) {
@@ -43,10 +40,6 @@ static bool elementLower(const EngravingItem* e1, const EngravingItem* e2)
     return e1->z() < e2->z();
 }
 
-//---------------------------------------------------------
-//   elementAt
-//---------------------------------------------------------
-
 EngravingItem* MuseScoreView::elementAt(const PointF& p) const
 {
     std::vector<EngravingItem*> el = elementsAt(p);
@@ -56,10 +49,6 @@ EngravingItem* MuseScoreView::elementAt(const PointF& p) const
     }
     return e;
 }
-
-//---------------------------------------------------------
-//   point2page
-//---------------------------------------------------------
 
 Page* MuseScoreView::point2page(const PointF& p) const
 {

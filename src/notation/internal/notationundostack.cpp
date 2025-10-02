@@ -25,7 +25,7 @@
 #include "log.h"
 
 #include "engraving/dom/masterscore.h"
-#include "engraving/dom/undo.h"
+#include "engraving/editing/undo.h"
 
 using namespace mu::notation;
 using namespace muse::async;

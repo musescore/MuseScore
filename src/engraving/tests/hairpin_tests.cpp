@@ -22,13 +22,12 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/hairpin.h"
-#include "dom/masterscore.h"
+#include "engraving/dom/hairpin.h"
+#include "engraving/dom/masterscore.h"
 
 #include "engraving/compat/scoreaccess.h"
 #include "utils/scorerw.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 class Engraving_HairpinTests : public ::testing::Test

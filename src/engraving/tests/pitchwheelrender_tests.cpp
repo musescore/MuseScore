@@ -27,7 +27,6 @@
 
 #include "engraving/compat/midi/pitchwheelrenderer.h"
 
-using namespace mu;
 using namespace mu::engraving;
 static int DEFAULT_CHANNEL = 0;
 

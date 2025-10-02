@@ -22,16 +22,15 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/chord.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/note.h"
-#include "dom/segment.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/segment.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String SELRANGE_DATA_DIR("selectionrange_data/");

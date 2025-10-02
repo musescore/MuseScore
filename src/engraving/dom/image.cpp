@@ -28,6 +28,9 @@
 #include "draw/types/pixmap.h"
 #include "draw/svgrenderer.h"
 
+#include "../editing/editdata.h"
+#include "../editing/elementeditdata.h"
+
 #include "imageStore.h"
 #include "masterscore.h"
 #include "mscore.h"

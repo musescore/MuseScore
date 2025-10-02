@@ -24,8 +24,9 @@
 
 #include "dom/linkedobjects.h"
 #include "dom/score.h"
+#include "dom/staff.h"
 #include "dom/trill.h"
-#include "dom/undo.h"
+#include "editing/undo.h"
 
 #include "connectorinforeader.h"
 

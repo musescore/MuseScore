@@ -27,6 +27,12 @@
 
 #include "measure.h"
 
+#include "../editing/mscoreview.h"
+#include "../editing/editmeasures.h"
+#include "../editing/editstaff.h"
+#include "../editing/editsystemlocks.h"
+#include "../editing/inserttime.h"
+
 #include "accidental.h"
 #include "actionicon.h"
 #include "anchors.h"
@@ -49,7 +55,6 @@
 #include "measurenumber.h"
 #include "measurerepeat.h"
 #include "mmrestrange.h"
-#include "mscoreview.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"
@@ -74,7 +79,6 @@
 #include "tremolotwochord.h"
 #include "tuplet.h"
 #include "tupletmap.h"
-#include "undo.h"
 #include "utils.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -1796,7 +1800,7 @@ EngravingItem* Measure::drop(EditData& data)
             break;
         }
         case ActionIconType::SYSTEM_LOCK:
-            score()->makeIntoSystem(system()->first(), this);
+            EditSystemLocks::makeIntoSystem(score(), system()->first(), this);
             break;
         default:
             break;

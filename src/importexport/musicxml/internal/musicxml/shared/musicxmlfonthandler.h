@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include "dom/textbase.h"
-#include "rw/xmlwriter.h"
+#include "engraving/dom/textbase.h"
+#include "engraving/rw/xmlwriter.h"
 
 namespace mu::iex::musicxml {
 //---------------------------------------------------------

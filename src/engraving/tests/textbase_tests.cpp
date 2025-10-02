@@ -25,17 +25,16 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/chordrest.h"
-#include "dom/dynamic.h"
-#include "dom/masterscore.h"
-#include "dom/segment.h"
-#include "dom/stafftext.h"
-#include "dom/textedit.h"
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/dynamic.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/stafftext.h"
+#include "engraving/editing/textedit.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String TEXTBASE_DATA_DIR("textbase_data/");

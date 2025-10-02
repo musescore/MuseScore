@@ -22,16 +22,16 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/chordrest.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/note.h"
-#include "dom/segment.h"
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/segment.h"
+#include "engraving/editing/splitjoinmeasure.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String SPLIT_DATA_DIR("split_data/");
@@ -51,10 +51,9 @@ void Engraving_SplitTests::split(const char* f1, const char* ref, int index)
     for (int i = 0; i < index; ++i) {
         s = s->next1(SegmentType::ChordRest);
     }
-    ChordRest* cr = toChordRest(s->element(0));
 
     score->startCmd(TranslatableString::untranslatable("Engraving split tests"));
-    score->cmdSplitMeasure(cr);
+    SplitJoinMeasure::splitMeasure(score, s->tick());
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(f1), SPLIT_DATA_DIR + String::fromUtf8(ref)));
@@ -154,10 +153,8 @@ TEST_F(Engraving_SplitTests, splitTieAtStart) {
 
     Tie* tie1 = checkTie();
 
-    ChordRest* splitCr = m1->nextMeasure()->findChordRest(Fraction(3, 2), 0);
-
     score->startCmd(TranslatableString::untranslatable("Engraving split tests"));
-    score->cmdSplitMeasure(splitCr);
+    SplitJoinMeasure::splitMeasure(score, Fraction(3, 2));
     score->endCmd();
 
     Tie* tie2 = checkTie();

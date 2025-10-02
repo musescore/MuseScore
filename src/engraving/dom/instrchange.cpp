@@ -24,6 +24,8 @@
 
 #include "translation.h"
 
+#include "../editing/editinstrumentchange.h"
+
 #include "keysig.h"
 #include "measure.h"
 #include "mscore.h"
@@ -31,7 +33,6 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
-#include "undo.h"
 
 #include "log.h"
 

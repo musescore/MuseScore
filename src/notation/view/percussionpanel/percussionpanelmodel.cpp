@@ -32,8 +32,8 @@
 #include "ui/view/iconcodes.h"
 
 #include "engraving/dom/factory.h"
-#include "engraving/dom/undo.h"
 #include "engraving/dom/utils.h"
+#include "engraving/editing/undo.h"
 
 static const QString PAD_NAMES_CODE("percussion-pad-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");
@@ -677,7 +677,7 @@ std::pair<mu::engraving::Instrument*, mu::engraving::Part*> PercussionPanelModel
     return { inst, part };
 }
 
-const project::IProjectAudioSettingsPtr PercussionPanelModel::audioSettings() const
+const mu::project::IProjectAudioSettingsPtr PercussionPanelModel::audioSettings() const
 {
     return globalContext()->currentProject() ? globalContext()->currentProject()->audioSettings() : nullptr;
 }

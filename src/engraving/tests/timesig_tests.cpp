@@ -22,16 +22,16 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/factory.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/timesig.h"
-#include "dom/undo.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/timesig.h"
+#include "engraving/editing/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String TIMESIG_DATA_DIR(u"timesig_data/");

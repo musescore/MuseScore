@@ -24,7 +24,7 @@
 #include "io/buffer.h"
 
 #include "compat/writescorehook.h"
-
+#include "editing/editmeasures.h"
 #include "rw/mscloader.h"
 #include "rw/xmlreader.h"
 #include "rw/rwregister.h"
@@ -37,13 +37,17 @@
 #include "excerpt.h"
 #include "factory.h"
 #include "box.h"
+#include "clef.h"
+#include "key.h"
+#include "keysig.h"
 #include "linkedobjects.h"
+#include "part.h"
 #include "repeatlist.h"
 #include "rest.h"
 #include "sig.h"
+#include "staff.h"
 #include "tempo.h"
 #include "timesig.h"
-#include "undo.h"
 
 #include "log.h"
 

@@ -22,8 +22,9 @@
 
 #pragma once
 
-#include "dom/accidental.h"
 #include "serialization/xmlstreamreader.h"
+
+#include "engraving/dom/accidental.h"
 
 namespace mu::iex::musicxml {
 class MusicXmlLogger;

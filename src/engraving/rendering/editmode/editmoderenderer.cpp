@@ -28,7 +28,7 @@
 #include "dom/dynamic.h"
 #include "dom/slurtie.h"
 #include "dom/textbase.h"
-#include "dom/textedit.h"
+#include "editing/textedit.h"
 #include "rendering/score/tdraw.h"
 
 using namespace mu::engraving::rendering::editmode;

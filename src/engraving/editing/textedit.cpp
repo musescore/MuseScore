@@ -22,22 +22,21 @@
 
 #include "textedit.h"
 
+#include "mscoreview.h"
+
 #include "iengravingfont.h"
 #include "types/symnames.h"
 
-#include "anchors.h"
-#include "mscoreview.h"
-#include "navigate.h"
-#include "score.h"
-#include "dynamic.h"
-#include "lyrics.h"
+#include "../dom/fret.h"
+#include "../dom/lyrics.h"
+#include "../dom/navigate.h"
+#include "../dom/score.h"
+#include "../dom/symbol.h"
 
 #include "log.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   ~TextEditData
 //---------------------------------------------------------
@@ -1118,4 +1117,3 @@ void ChangeTextProperties::redo(EditData*)
         cursor().text()->setProperty(m_propertyId, m_propertyVal);
     }
 }
-} // namespace mu::engraving

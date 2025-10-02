@@ -24,6 +24,9 @@
 
 #include "global/containers.h"
 
+#include "../editing/undo.h"
+#include "../editing/addremoveelement.h"
+#include "../editing/editproperty.h"
 #include "style/textstyle.h"
 #include "types/typesconv.h"
 
@@ -31,7 +34,7 @@
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "score.h"
-#include "undo.h"
+#include "staff.h"
 
 #include "log.h"
 

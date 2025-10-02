@@ -21,8 +21,10 @@
  */
 
 #include "musicxmlpart.h"
-#include "dom/mscore.h"
-#include "dom/interval.h"
+
+#include "engraving/dom/interval.h"
+#include "engraving/dom/mscore.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -48,7 +50,7 @@ static const std::vector<String> percussionInstrumentNames = {
     u"Vibraphone",
     u"Marimba",
     u"Bell",
-    u"Drum"
+    u"Drum",
     u"Cymbal",
     u"Triangle",
     u"Claves",

@@ -22,9 +22,10 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/factory.h"
-#include "dom/fret.h"
-#include "dom/harmony.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
+
 #include "utils/scorerw.h"
 
 using namespace mu::engraving;

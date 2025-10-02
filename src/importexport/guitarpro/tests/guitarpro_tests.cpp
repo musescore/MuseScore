@@ -32,7 +32,6 @@
 
 #include "modularity/ioc.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String GUITARPRO_DIR(u"data/");

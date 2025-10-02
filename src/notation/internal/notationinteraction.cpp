@@ -46,6 +46,7 @@
 // TODO: Don't include from engraving/internal
 #include "engraving/internal/qmimedataadapter.h"
 
+#include "engraving/compat/dummyelement.h"
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/actionicon.h"
 #include "engraving/dom/anchors.h"
@@ -59,11 +60,12 @@
 #include "engraving/dom/elementgroup.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/figuredbass.h"
+#include "engraving/dom/fret.h"
+#include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/image.h"
 #include "engraving/dom/instrchange.h"
-#include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/lasso.h"
 #include "engraving/dom/layoutbreak.h"
@@ -78,20 +80,21 @@
 #include "engraving/dom/rest.h"
 #include "engraving/dom/shadownote.h"
 #include "engraving/dom/slur.h"
+#include "engraving/dom/soundflag.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafflines.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stafftypechange.h"
 #include "engraving/dom/system.h"
-#include "engraving/dom/textedit.h"
 #include "engraving/dom/tuplet.h"
-#include "engraving/dom/undo.h"
 #include "engraving/dom/utils.h"
-#include "engraving/compat/dummyelement.h"
-#include "engraving/dom/utils.h"
-
-#include "engraving/rw/xmlreader.h"
+#include "engraving/editing/editchord.h"
+#include "engraving/editing/editpart.h"
+#include "engraving/editing/editsystemlocks.h"
+#include "engraving/editing/splitjoinmeasure.h"
+#include "engraving/editing/textedit.h"
 #include "engraving/rw/rwregister.h"
+#include "engraving/rw/xmlreader.h"
 
 #include "mscoreerrorscontroller.h"
 #include "notationerrors.h"
@@ -2431,7 +2434,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, bool
     }
 
     if (element->isActionIcon() && toActionIcon(element)->actionType() == ActionIconType::SYSTEM_LOCK) {
-        score->cmdApplyLockToSelection();
+        EditSystemLocks::applyLockToSelection(score);
         return;
     }
 
@@ -2714,7 +2717,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, boo
         const ActionIconType actionType = toActionIcon(element)->actionType();
         switch (actionType) {
         case ActionIconType::SYSTEM_LOCK: {
-            score->cmdApplyLockToSelection();
+            EditSystemLocks::applyLockToSelection(score);
             return;
         }
         case ActionIconType::STANDARD_BEND:
@@ -4913,7 +4916,7 @@ void NotationInteraction::splitSelectedMeasure()
     ChordRest* chordRest = dynamic_cast<ChordRest*>(selectedElement);
 
     startEdit(TranslatableString("undoableAction", "Split measure"));
-    score()->cmdSplitMeasure(chordRest);
+    SplitJoinMeasure::splitMeasure(score()->masterScore(), chordRest->tick());
     apply();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
@@ -4928,7 +4931,7 @@ void NotationInteraction::joinSelectedMeasures()
     INotationSelectionRange::MeasureRange measureRange = m_selection->range()->measureRange();
 
     startEdit(TranslatableString("undoableAction", "Join measures"));
-    score()->cmdJoinMeasure(measureRange.startMeasure, measureRange.endMeasure);
+    SplitJoinMeasure::joinMeasures(score()->masterScore(), measureRange.startMeasure->tick(), measureRange.endMeasure->tick());
     apply();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
@@ -5793,43 +5796,57 @@ void NotationInteraction::toggleLayoutBreak(LayoutBreakType breakType)
 
 void NotationInteraction::moveMeasureToPrevSystem()
 {
+    MeasureBase* m = score()->selection().endMeasureBase();
+    if (!m) {
+        return;
+    }
     startEdit(TranslatableString("undoableAction", "Move measure to previous system"));
-    score()->cmdMoveMeasureToPrevSystem();
+    EditSystemLocks::moveMeasureToPrevSystem(score(), m);
     apply();
 }
 
 void NotationInteraction::moveMeasureToNextSystem()
 {
+    MeasureBase* m = score()->selection().startMeasureBase();
+    if (!m) {
+        return;
+    }
     startEdit(TranslatableString("undoableAction", "Move measure to next system"));
-    score()->cmdMoveMeasureToNextSystem();
+    EditSystemLocks::moveMeasureToNextSystem(score(), m);
     apply();
 }
 
 void NotationInteraction::toggleSystemLock()
 {
     startEdit(TranslatableString("undoableAction", "Lock/unlock selected system(s)"));
-    score()->cmdToggleSystemLock();
+    EditSystemLocks::toggleSystemLock(score(), selection()->selectedSystems());
     apply();
 }
 
 void NotationInteraction::toggleScoreLock()
 {
     startEdit(TranslatableString("undoableAction", "Lock/unlock all systems"));
-    score()->cmdToggleScoreLock();
+    EditSystemLocks::toggleScoreLock(score());
     apply();
 }
 
 void NotationInteraction::makeIntoSystem()
 {
+    MeasureBase* first = score()->selection().startMeasureBase();
+    MeasureBase* last = score()->selection().endMeasureBase();
+    if (!first || !last) {
+        return;
+    }
+
     startEdit(TranslatableString("undoableAction", "Create system from selection"));
-    score()->cmdMakeIntoSystem();
+    EditSystemLocks::makeIntoSystem(score(), first, last);
     apply();
 }
 
 void NotationInteraction::applySystemLock()
 {
     startEdit(TranslatableString("undoableAction", "Apply system lock to selection"));
-    score()->cmdApplyLockToSelection();
+    EditSystemLocks::applyLockToSelection(score());
     apply();
 }
 
@@ -5839,7 +5856,7 @@ void NotationInteraction::addRemoveSystemLocks(AddRemoveSystemLockType intervalT
     bool afterEachSystem = intervalType == AddRemoveSystemLockType::AfterEachSystem;
 
     startEdit(TranslatableString("undoableAction", "Measures per system"));
-    score()->addRemoveSystemLocks(interval, afterEachSystem);
+    EditSystemLocks::addRemoveSystemLocks(score(), interval, afterEachSystem);
     apply();
 }
 

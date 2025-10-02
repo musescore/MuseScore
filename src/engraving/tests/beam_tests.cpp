@@ -22,18 +22,17 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/beam.h"
-#include "dom/chord.h"
-#include "dom/chordrest.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/note.h"
-#include "dom/tremolotwochord.h"
+#include "engraving/dom/beam.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/tremolotwochord.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String BEAM_DATA_DIR("beam_data/");

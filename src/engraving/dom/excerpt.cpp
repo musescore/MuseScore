@@ -24,7 +24,8 @@
 
 #include "containers.h"
 
-#include "dom/partialtie.h"
+#include "../editing/addremoveelement.h"
+#include "../editing/editexcerpt.h"
 #include "style/style.h"
 
 #include "barline.h"
@@ -32,6 +33,7 @@
 #include "box.h"
 #include "chord.h"
 #include "factory.h"
+#include "fret.h"
 #include "guitarbend.h"
 #include "harmony.h"
 #include "layoutbreak.h"
@@ -43,6 +45,7 @@
 #include "ornament.h"
 #include "page.h"
 #include "part.h"
+#include "partialtie.h"
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
@@ -53,11 +56,9 @@
 #include "textline.h"
 #include "tie.h"
 #include "tiemap.h"
-
 #include "tremolotwochord.h"
 #include "tuplet.h"
 #include "tupletmap.h"
-#include "undo.h"
 #include "utils.h"
 
 #include "log.h"

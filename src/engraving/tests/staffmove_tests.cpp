@@ -22,21 +22,20 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/excerpt.h"
-#include "dom/factory.h"
-#include "dom/linkedobjects.h"
-#include "dom/masterscore.h"
-#include "dom/mcursor.h"
-#include "dom/measure.h"
-#include "dom/part.h"
-#include "dom/segment.h"
-#include "dom/undo.h"
-
 #include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/excerpt.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/linkedobjects.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/mcursor.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/segment.h"
+#include "engraving/editing/editstaff.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String STAFF_MOVE_DIR(u"staffmove_data/");

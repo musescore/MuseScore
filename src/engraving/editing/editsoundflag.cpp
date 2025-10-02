@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,32 +20,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "editdata.h"
+#include "editsoundflag.h"
 
-#include "engravingitem.h"
+#include "../dom/soundflag.h"
 
 using namespace mu::engraving;
 
-void EditData::clear()
-{
-    *this = EditData(m_view);
-}
+//---------------------------------------------------------
+//   ChangeSoundFlag
+//---------------------------------------------------------
 
-std::shared_ptr<ElementEditData> EditData::getData(const EngravingItem* e) const
+void ChangeSoundFlag::flip(EditData*)
 {
-    for (std::shared_ptr<ElementEditData> ed : m_data) {
-        if (ed->e == e) {
-            return ed;
-        }
+    IF_ASSERT_FAILED(m_soundFlag) {
+        return;
     }
-    return 0;
-}
 
-bool EditData::control(bool textEditing) const
-{
-    if (textEditing) {
-        return modifiers & TextEditingControlModifier;
-    } else {
-        return modifiers & ControlModifier;
-    }
+    SoundFlag::PresetCodes presets = m_soundFlag->soundPresets();
+    SoundFlag::PlayingTechniqueCode technique = m_soundFlag->playingTechnique();
+
+    m_soundFlag->setSoundPresets(m_presets);
+    m_soundFlag->setPlayingTechnique(m_playingTechnique);
+
+    m_presets = std::move(presets);
+    m_playingTechnique = std::move(technique);
 }

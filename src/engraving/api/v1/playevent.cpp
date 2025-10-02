@@ -24,7 +24,8 @@
 
 #include "engraving/dom/note.h"
 #include "engraving/dom/score.h"
-#include "engraving/dom/undo.h"
+
+#include "engraving/editing/editnote.h"
 
 // api
 #include "elements.h"

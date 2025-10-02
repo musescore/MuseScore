@@ -21,17 +21,13 @@
  */
 #include "notationstyle.h"
 
-#include "engraving/style/defaultstyle.h"
+#include "io/file.h"
+#include "types/translatablestring.h"
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/excerpt.h"
-#include "engraving/dom/mscore.h"
-#include "engraving/dom/undo.h"
-
-#include "io/file.h"
-
-#include "log.h"
-#include "types/translatablestring.h"
+#include "engraving/editing/editstyle.h"
+#include "engraving/style/defaultstyle.h"
 
 using namespace mu::notation;
 using namespace muse::async;

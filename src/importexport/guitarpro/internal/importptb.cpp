@@ -45,7 +45,7 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
 
-#include "types/symid.h"
+#include "engraving/types/symid.h"
 
 #include "log.h"
 

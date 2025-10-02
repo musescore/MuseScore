@@ -29,10 +29,10 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/repeatlist.h"
 
-#include "playback/playbackcontext.h"
-#include "playback/utils/arrangementutils.h"
+#include "engraving/playback/playbackcontext.h"
+#include "engraving/playback/utils/arrangementutils.h"
 
-#include "types/typesconv.h"
+#include "engraving/types/typesconv.h"
 
 using namespace mu::engraving;
 using namespace muse::mpe;

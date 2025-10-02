@@ -23,8 +23,8 @@
 
 #include <vector>
 
+#include "../dom/engravingobject.h"
 #include "../types/types.h"
-#include "engravingobject.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------

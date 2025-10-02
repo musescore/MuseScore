@@ -22,29 +22,28 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/breath.h"
-#include "dom/chord.h"
-#include "dom/chordline.h"
-#include "dom/dynamic.h"
-#include "dom/engravingitem.h"
-#include "dom/excerpt.h"
-#include "dom/factory.h"
-#include "dom/fingering.h"
-#include "dom/image.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/measurerepeat.h"
-#include "dom/note.h"
-#include "dom/part.h"
-#include "dom/segment.h"
-#include "dom/spanner.h"
-#include "dom/staff.h"
+#include "engraving/dom/breath.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/chordline.h"
+#include "engraving/dom/dynamic.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/excerpt.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/fingering.h"
+#include "engraving/dom/image.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/measurerepeat.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/spanner.h"
+#include "engraving/dom/staff.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 #include "utils/testutils.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String PARTS_DATA_DIR("parts_data/");

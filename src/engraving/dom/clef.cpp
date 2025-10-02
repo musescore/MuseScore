@@ -29,7 +29,9 @@
 
 #include "translation.h"
 
-#include "types/typesconv.h"
+#include "../editing/undo.h"
+#include "../editing/editproperty.h"
+#include "../types/typesconv.h"
 
 #include "ambitus.h"
 #include "factory.h"
@@ -37,9 +39,6 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
-#include "undo.h"
-
-#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;

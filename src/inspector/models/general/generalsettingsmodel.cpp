@@ -21,8 +21,8 @@
  */
 #include "generalsettingsmodel.h"
 
-#include "dom/harmony.h"
-#include "dom/fret.h"
+#include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
 
 #include "translation.h"
 

@@ -34,54 +34,61 @@
 
 #include "rw/xmlreader.h"
 
-#include "accidental.h"
-#include "articulation.h"
-#include "barline.h"
-#include "box.h"
-#include "chord.h"
-#include "clef.h"
-#include "drumset.h"
-#include "dynamic.h"
-#include "factory.h"
-#include "glissando.h"
-#include "guitarbend.h"
-#include "hairpin.h"
-#include "harmony.h"
-#include "key.h"
-#include "laissezvib.h"
-#include "layoutbreak.h"
-#include "linkedobjects.h"
-#include "lyrics.h"
-#include "masterscore.h"
-#include "measure.h"
-#include "measurerepeat.h"
-#include "mscore.h"
-#include "mscoreview.h"
-#include "navigate.h"
-#include "note.h"
-#include "ornament.h"
-#include "page.h"
-#include "part.h"
-#include "pitchspelling.h"
-#include "rehearsalmark.h"
-#include "rest.h"
-#include "score.h"
-#include "segment.h"
-#include "sig.h"
-#include "slur.h"
-#include "staff.h"
-#include "stafftype.h"
-#include "stafftypechange.h"
-#include "stem.h"
-#include "stringdata.h"
-#include "system.h"
-#include "spacer.h"
-#include "tie.h"
-#include "timesig.h"
+#include "../dom/accidental.h"
+#include "../dom/articulation.h"
+#include "../dom/barline.h"
+#include "../dom/box.h"
+#include "../dom/chord.h"
+#include "../dom/clef.h"
+#include "../dom/drumset.h"
+#include "../dom/dynamic.h"
+#include "../dom/factory.h"
+#include "../dom/glissando.h"
+#include "../dom/guitarbend.h"
+#include "../dom/hairpin.h"
+#include "../dom/harmony.h"
+#include "../dom/key.h"
+#include "../dom/laissezvib.h"
+#include "../dom/layoutbreak.h"
+#include "../dom/linkedobjects.h"
+#include "../dom/lyrics.h"
+#include "../dom/masterscore.h"
+#include "../dom/measure.h"
+#include "../dom/measurerepeat.h"
+#include "../dom/mscore.h"
+#include "../dom/navigate.h"
+#include "../dom/note.h"
+#include "../dom/ornament.h"
+#include "../dom/page.h"
+#include "../dom/part.h"
+#include "../dom/pitchspelling.h"
+#include "../dom/rehearsalmark.h"
+#include "../dom/rest.h"
+#include "../dom/score.h"
+#include "../dom/segment.h"
+#include "../dom/sig.h"
+#include "../dom/slur.h"
+#include "../dom/spacer.h"
+#include "../dom/staff.h"
+#include "../dom/stafftype.h"
+#include "../dom/stafftypechange.h"
+#include "../dom/stem.h"
+#include "../dom/stringdata.h"
+#include "../dom/system.h"
+#include "../dom/tie.h"
+#include "../dom/timesig.h"
+#include "../dom/tremolotwochord.h"
+#include "../dom/tuplet.h"
+#include "../dom/utils.h"
 
-#include "tuplet.h"
-#include "undo.h"
-#include "utils.h"
+#include "editchord.h"
+#include "editnote.h"
+#include "editproperty.h"
+#include "editspanner.h"
+#include "editstaff.h"
+#include "editsystemlocks.h"
+#include "editvoicing.h"
+#include "mscoreview.h"
 
 #include "log.h"
 
@@ -2693,7 +2700,7 @@ void Score::cmdResetToDefaultLayout()
     cmdResetMeasuresLayout();
     scanElements(nullptr, resetPositionAndTextProperties);
     cmdResetAllStyles(dontResetTheseStyles);
-    undoRemoveAllLocks();
+    EditSystemLocks::undoRemoveAllLocks(this);
 }
 
 //---------------------------------------------------------
@@ -4369,62 +4376,6 @@ void Score::cmdResequenceRehearsalMarks()
     }
 }
 
-void Score::addRemoveSystemLocks(int interval, bool lock)
-{
-    bool mmrests = style().styleB(Sid::createMultiMeasureRests);
-
-    MeasureBase* startMeasure = selection().startMeasureBase();
-    MeasureBase* endMeasure = selection().endMeasureBase();
-    if (!endMeasure) {
-        endMeasure = mmrests ? lastMeasureMM() : lastMeasure();
-    }
-
-    if (!startMeasure || !endMeasure) {
-        return;
-    }
-
-    if (lock) {
-        for (const System* system : m_systems) {
-            if (system->last()->isBefore(startMeasure)) {
-                continue;
-            }
-            if (system->first()->isAfter(endMeasure)) {
-                break;
-            }
-            if (!system->isLocked()) {
-                undoAddSystemLock(new SystemLock(system->first(), system->last()));
-            }
-        }
-        return;
-    }
-
-    std::vector<const SystemLock*> currentLocks = m_systemLocks.locksContainedInRange(startMeasure, endMeasure);
-    for (const SystemLock* l : currentLocks) {
-        undoRemoveSystemLock(l);
-    }
-
-    if (interval == 0) {
-        return;
-    }
-
-    int count = 0;
-    MeasureBase* lockStart = nullptr;
-    for (MeasureBase* mb = startMeasure; mb; mb = mmrests ? mb->nextMM() : mb->next()) {
-        if (count == 0) {
-            lockStart = mb;
-        }
-        count++;
-        if (count == interval || mb == endMeasure) {
-            undoAddSystemLock(new SystemLock(lockStart, mb));
-            lockStart = nullptr;
-            count = 0;
-        }
-        if (mb == endMeasure) {
-            break;
-        }
-    }
-}
-
 //---------------------------------------------------------
 //   cmdRemoveEmptyTrailingMeasures
 //---------------------------------------------------------
@@ -4687,7 +4638,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
         case LayoutBreakType::LINE:
             val = !mb->lineBreak();
             if (val) {
-                removeSystemLocksOnAddLayoutBreak(type, mb);
+                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(this, type, mb);
             }
             mb->undoSetBreak(val, type);
             // remove page break if appropriate
@@ -4698,7 +4649,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
         case LayoutBreakType::PAGE:
             val = !mb->pageBreak();
             if (val) {
-                removeSystemLocksOnAddLayoutBreak(type, mb);
+                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(this, type, mb);
             }
             mb->undoSetBreak(val, type);
             // remove line break if appropriate
@@ -4709,7 +4660,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
         case LayoutBreakType::SECTION:
             val = !mb->sectionBreak();
             if (val) {
-                removeSystemLocksOnAddLayoutBreak(type, mb);
+                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(this, type, mb);
             }
             mb->undoSetBreak(val, type);
             break;
@@ -4730,171 +4681,6 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             break;
         }
     }
-}
-
-void Score::cmdMoveMeasureToPrevSystem()
-{
-    bool mmrests = style().styleB(Sid::createMultiMeasureRests);
-
-    MeasureBase* refMeasure = m_selection.endMeasureBase();
-    if (!refMeasure) {
-        return;
-    }
-
-    const System* prevSystem = refMeasure->prevNonVBoxSystem();
-    if (!prevSystem) {
-        return;
-    }
-
-    MeasureBase* prevSystemFirstMeas = prevSystem->first();
-
-    const SystemLock* prevSystemLock = m_systemLocks.lockStartingAt(prevSystemFirstMeas);
-    if (prevSystemLock) {
-        undoRemoveSystemLock(prevSystemLock);
-    }
-
-    const System* curSystem = refMeasure->system();
-    const SystemLock* curSystemLock = m_systemLocks.lockStartingAt(curSystem->first());
-    if (curSystemLock) {
-        undoRemoveSystemLock(curSystemLock);
-        if (curSystemLock->endMB() != refMeasure) {
-            MeasureBase* nextMB = mmrests ? refMeasure->nextMM() : refMeasure->next();
-            SystemLock* newLockOnCurSystem = new SystemLock(nextMB, curSystemLock->endMB());
-            undoAddSystemLock(newLockOnCurSystem);
-        }
-    }
-
-    SystemLock* sysLock = new SystemLock(prevSystemFirstMeas, refMeasure);
-    undoAddSystemLock(sysLock);
-}
-
-void Score::cmdMoveMeasureToNextSystem()
-{
-    bool mmrests = style().styleB(Sid::createMultiMeasureRests);
-
-    MeasureBase* refMeasure = m_selection.startMeasureBase();
-    if (!refMeasure) {
-        return;
-    }
-
-    const System* curSystem = refMeasure->system();
-    MeasureBase* startMeas = curSystem->first();
-    bool refMeasureIsStartOfSystem = refMeasure == startMeas;
-
-    const SystemLock* curLock = m_systemLocks.lockStartingAt(startMeas);
-    if (curLock) {
-        undoRemoveSystemLock(curLock);
-    }
-
-    if (!refMeasureIsStartOfSystem) {
-        MeasureBase* prevMeas = mmrests ? refMeasure->prevMM() : refMeasure->prev();
-        SystemLock* sysLock = new SystemLock(startMeas, prevMeas);
-        undoAddSystemLock(sysLock);
-    }
-
-    const System* nextSystem = refMeasure->nextNonVBoxSystem();
-    if (!nextSystem) {
-        return;
-    }
-
-    const SystemLock* nextSysLock = m_systemLocks.lockStartingAt(nextSystem->first());
-    if (nextSysLock) {
-        undoRemoveSystemLock(nextSysLock);
-    }
-
-    if (nextSysLock || refMeasureIsStartOfSystem) {
-        SystemLock* newNextSysLock = new SystemLock(refMeasure, nextSystem->last());
-        undoAddSystemLock(newNextSysLock);
-    }
-}
-
-void Score::cmdToggleSystemLock()
-{
-    toggleSystemLock(m_selection.selectedSystems());
-}
-
-void Score::cmdApplyLockToSelection()
-{
-    MeasureBase* first = nullptr;
-    MeasureBase* last = nullptr;
-
-    if (selection().isRange()) {
-        first = selection().startMeasureBase();
-        last = selection().endMeasureBase();
-    } else {
-        for (EngravingItem* el : selection().elements()) {
-            if (el->isSystemLockIndicator()) {
-                const SystemLock* lock = toSystemLockIndicator(el)->systemLock();
-                first = lock->startMB();
-                last = lock->endMB();
-                break;
-            }
-            MeasureBase* mb = el->findMeasureBase();
-            if (!mb) {
-                continue;
-            }
-            if (!first || mb->isBefore(first)) {
-                first = mb;
-            }
-            if (!last || mb->isAfter(last)) {
-                last = mb;
-            }
-        }
-    }
-
-    if (!first || !last) {
-        return;
-    }
-
-    const SystemLock* lockOnLast = systemLocks()->lockContaining(last);
-    if (lockOnLast && lockOnLast->endMB() == last) {
-        undoRemoveSystemLock(lockOnLast);
-    } else if (first != last) {
-        makeIntoSystem(first, last);
-    } else {
-        makeIntoSystem(first->system()->first(), last);
-    }
-}
-
-void Score::cmdToggleScoreLock()
-{
-    bool unlockAll = true;
-    for (const System* system : m_systems) {
-        const MeasureBase* first = system->first();
-        if (!(first->isMeasure() || first->isHBox())) {
-            continue;
-        }
-        if (!system->isLocked()) {
-            unlockAll = false;
-            break;
-        }
-    }
-
-    for (System* system : m_systems) {
-        MeasureBase* startMeas = system->first();
-        if (!(startMeas->isMeasure() || startMeas->isHBox())) {
-            continue;
-        }
-        const SystemLock* currentLock = m_systemLocks.lockStartingAt(startMeas);
-        if (currentLock && unlockAll) {
-            undoRemoveSystemLock(currentLock);
-            continue;
-        } else if (!currentLock && !unlockAll) {
-            SystemLock* newSystemLock = new SystemLock(startMeas, system->last());
-            undoAddSystemLock(newSystemLock);
-        }
-    }
-}
-
-void Score::cmdMakeIntoSystem()
-{
-    MeasureBase* firstSelected = m_selection.startMeasureBase();
-    MeasureBase* lastSelected = m_selection.endMeasureBase();
-    if (!(firstSelected && lastSelected)) {
-        return;
-    }
-
-    makeIntoSystem(firstSelected, lastSelected);
 }
 
 void Score::cmdAddStaffTypeChange(Measure* measure, staff_idx_t staffIdx, StaffTypeChange* stc)

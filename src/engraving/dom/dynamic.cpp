@@ -21,20 +21,18 @@
  */
 #include "dynamic.h"
 
-#include "types/translatablestring.h"
-#include "types/typesconv.h"
+#include "../editing/undo.h"
+#include "../types/typesconv.h"
 
-#include "anchors.h"
 #include "dynamichairpingroup.h"
 #include "expression.h"
 #include "hairpin.h"
 #include "measure.h"
-#include "mscore.h"
 #include "score.h"
 #include "segment.h"
+#include "staff.h"
 #include "system.h"
 #include "tempo.h"
-#include "undo.h"
 
 #include "log.h"
 

@@ -21,18 +21,22 @@
  */
 #include "slur.h"
 
+#include "../editing/editspanner.h"
+#include "../editing/mscoreview.h"
+
 #include "arpeggio.h"
 #include "beam.h"
 #include "chord.h"
 #include "measure.h"
-#include "mscoreview.h"
 #include "navigate.h"
+#include "note.h"
 #include "part.h"
 #include "score.h"
+#include "staff.h"
+#include "stafftype.h"
 #include "stem.h"
 #include "system.h"
 #include "tremolotwochord.h"
-#include "undo.h"
 
 #include "log.h"
 

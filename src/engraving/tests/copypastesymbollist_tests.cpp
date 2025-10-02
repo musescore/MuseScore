@@ -24,18 +24,17 @@
 
 #include <QMimeData>
 
-#include "internal/qmimedataadapter.h"
+#include "engraving/internal/qmimedataadapter.h"
 
-#include "dom/factory.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
 #include "log.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String CPSYMBOLLIST_DATA_DIR(u"copypastesymbollist_data/");

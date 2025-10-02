@@ -22,16 +22,15 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/keysig.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/part.h"
-#include "dom/undo.h"
+#include "engraving/dom/keysig.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
+#include "engraving/editing/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String KEYSIG_DATA_DIR("keysig_data/");

@@ -93,6 +93,69 @@ set(MODULE_SRC
 
     ${DOM_SRC}
 
+    ${CMAKE_CURRENT_LIST_DIR}/editing/addremoveelement.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/addremoveelement.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/cmd.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/cmd.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/edit.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editbrackets.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editbrackets.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editchord.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editchord.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editclef.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editclef.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editharppedaldiagram.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editharppedaldiagram.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editinstrumentchange.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editinstrumentchange.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editdata.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editdata.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editexcerpt.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editexcerpt.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editfretboarddiagram.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editfretboarddiagram.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editkeysig.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editkeysig.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editmeasures.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editmeasures.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editnote.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editnote.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editpart.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editpart.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editproperty.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editproperty.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editscoreproperties.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editscoreproperties.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editsoundflag.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editsoundflag.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editspanner.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editspanner.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editstaff.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editstaff.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editstyle.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editstyle.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editsystemlocks.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editsystemlocks.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/edittie.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/edittie.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/edittremolo.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/edittremolo.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editvoicing.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editvoicing.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/inserttime.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/inserttime.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/elementeditdata.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/mscoreview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/mscoreview.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/splitjoinmeasure.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/splitjoinmeasure.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/textedit.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/textedit.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/transpose.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/transpose.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/undo.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/undo.h
+
     ${CMAKE_CURRENT_LIST_DIR}/rw/README.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/ireader.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/iwriter.h
@@ -271,23 +334,6 @@ else()
         ${API_V1_SRC}
         )
 endif()
-
-set_source_files_properties( # For these files, Unity Build does not work
-    ${CMAKE_CURRENT_LIST_DIR}/dom/chordlist.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/compat/chordlist.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/compat/read114.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/compat/read206.cpp
-    PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
-    )
-
-set(MODULE_INCLUDE
-    # Many other modules include files from subfolders of this module;
-    # when included from another module, these files can't find their
-    # own includes, unless `engraving` is an include directory.
-    # Therefore, in the case of the `engraving` module, we include its
-    # root directory publicly, rather than privately as with most modules.
-    ${CMAKE_CURRENT_LIST_DIR}
-)
 
 set(MODULE_INCLUDE_PRIVATE
     ${PROJECT_SOURCE_DIR}/thirdparty/dtl

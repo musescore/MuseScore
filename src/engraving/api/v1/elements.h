@@ -29,6 +29,7 @@
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/barline.h"
 #include "engraving/dom/beam.h"
+#include "engraving/dom/bracketItem.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/hook.h"
 #include "engraving/dom/lyrics.h"
@@ -50,7 +51,8 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/accidental.h"
-#include "engraving/dom/undo.h"
+
+#include "engraving/editing/undo.h"
 
 #include "playevent.h"
 

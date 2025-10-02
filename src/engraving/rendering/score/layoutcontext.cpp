@@ -21,10 +21,11 @@
  */
 #include "layoutcontext.h"
 
-#include "dom/undo.h"
+#include "editing/addremoveelement.h"
+#include "editing/editsystemlocks.h"
+#include "editing/mscoreview.h"
 #include "style/defaultstyle.h"
 
-#include "dom/mscoreview.h"
 #include "dom/score.h"
 #include "dom/spanner.h"
 
@@ -453,7 +454,7 @@ void DomAccessor::updateSystemLocksOnCreateMMRest(Measure* first, Measure* last)
     IF_ASSERT_FAILED(score()) {
         return;
     }
-    score()->updateSystemLocksOnCreateMMRests(first, last);
+    EditSystemLocks::updateSystemLocksOnCreateMMRests(score(), first, last);
 }
 
 void DomAccessor::addUnmanagedSpanner(Spanner* s)

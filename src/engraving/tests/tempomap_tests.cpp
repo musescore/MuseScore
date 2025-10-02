@@ -22,12 +22,13 @@
 
 #include <gtest/gtest.h>
 
-#include "utils/scorerw.h"
 #include "realfn.h"
-#include "types/constants.h"
-#include "dom/tempo.h"
 
-using namespace mu;
+#include "engraving/dom/tempo.h"
+#include "engraving/types/constants.h"
+
+#include "utils/scorerw.h"
+
 using namespace mu::engraving;
 
 static const String TEMPOMAP_TEST_FILES_DIR("tempomap_data/");

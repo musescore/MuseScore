@@ -28,6 +28,8 @@
 #include "containers.h"
 #include "realfn.h"
 
+#include "../editing/elementeditdata.h"
+
 #include "actionicon.h"
 #include "chord.h"
 #include "groups.h"
@@ -36,7 +38,6 @@
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
-
 #include "tremolotwochord.h"
 #include "tuplet.h"
 

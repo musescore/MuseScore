@@ -22,15 +22,14 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/excerpt.h"
-#include "dom/masterscore.h"
-#include "dom/spanner.h"
+#include "engraving/dom/excerpt.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/spanner.h"
 
 #include "utils/scorerw.h"
 
 #include "log.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String REMOVE_DATA_DIR("remove_data/");

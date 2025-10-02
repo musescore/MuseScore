@@ -22,21 +22,20 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/lyrics.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/page.h"
-#include "dom/rest.h"
-#include "dom/staff.h"
-#include "dom/system.h"
-#include "dom/tuplet.h"
-#include "dom/note.h"
+#include "engraving/dom/lyrics.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/page.h"
+#include "engraving/dom/rest.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/system.h"
+#include "engraving/dom/tuplet.h"
+#include "engraving/dom/note.h"
 
 #include "utils/scorerw.h"
 
 #include "log.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String ALL_ELEMENTS_DATA_DIR("all_elements_data/");

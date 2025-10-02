@@ -24,17 +24,18 @@
 
 #include <cmath>
 
+#include "../editing/addremoveelement.h"
 #include "types/typesconv.h"
 
 #include "iengravingfont.h"
 
 #include "accidental.h"
 #include "chord.h"
+#include "clef.h"
 #include "factory.h"
 #include "ornament.h"
 #include "score.h"
 #include "system.h"
-#include "undo.h"
 
 #include "log.h"
 

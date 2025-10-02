@@ -21,13 +21,12 @@
  */
 
 #include <gtest/gtest.h>
-#include <utility>
 
-#include "dom/masterscore.h"
-#include "dom/part.h"
-#include "dom/staff.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/staff.h"
+#include "engraving/types/types.h"
 
-#include "types/types.h"
 #include "utils/scorerw.h"
 
 using namespace mu::engraving;

@@ -28,11 +28,14 @@
 #include "engraving/dom/measurenumber.h"
 #include "engraving/dom/mmrestrange.h"
 #include "engraving/dom/property.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/spacer.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/tremolotwochord.h"
-#include "engraving/dom/undo.h"
+
+#include "engraving/editing/editnote.h"
+#include "engraving/editing/editsystemlocks.h"
 
 // api
 #include "apistructs.h"
@@ -497,9 +500,9 @@ void System::setIsLocked(bool locked)
     }
     const mu::engraving::SystemLock* currentLock = system()->systemLock();
     if (currentLock && !locked) {
-        system()->score()->undoRemoveSystemLock(currentLock);
+        EditSystemLocks::undoRemoveSystemLock(system()->score(), currentLock);
     } else if (!currentLock && locked) {
-        system()->score()->undoAddSystemLock(new mu::engraving::SystemLock(system()->first(), system()->last()));
+        EditSystemLocks::undoAddSystemLock(system()->score(), new mu::engraving::SystemLock(system()->first(), system()->last()));
     }
 }
 

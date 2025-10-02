@@ -21,13 +21,12 @@
  */
 #include <gtest/gtest.h>
 
-#include "dom/masterscore.h"
-#include "dom/undo.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/editing/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String RWUNDORESET_DATA_DIR("readwriteundoreset_data/");

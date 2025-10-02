@@ -22,15 +22,14 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/breath.h"
-#include "dom/factory.h"
-#include "dom/masterscore.h"
-#include "dom/undo.h"
+#include "engraving/dom/breath.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/editing/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static const String BREATH_DATA_DIR("breath_data/");

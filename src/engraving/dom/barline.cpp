@@ -22,16 +22,17 @@
 
 #include "barline.h"
 
-#include "dom/playcounttext.h"
 #include "translation.h"
-#include "types/symnames.h"
+
+#include "../editing/undo.h"
+#include "../types/symnames.h"
 
 #include "articulation.h"
 #include "marker.h"
 #include "masterscore.h"
 #include "measure.h"
 #include "part.h"
-#include "part.h"
+#include "playcounttext.h"
 #include "score.h"
 #include "segment.h"
 #include "spanner.h"
@@ -39,7 +40,6 @@
 #include "stafflines.h"
 #include "stafftype.h"
 #include "system.h"
-#include "undo.h"
 
 #include "log.h"
 

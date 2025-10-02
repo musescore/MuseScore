@@ -23,15 +23,14 @@
 
 #include "gtest/gtest.h"
 
-#include "dom/excerpt.h"
-#include "dom/masterscore.h"
-#include "dom/part.h"
-#include "dom/score.h"
+#include "engraving/dom/excerpt.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/score.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
-mu::engraving::Score* mu::engraving::TestUtils::createPart(MasterScore* masterScore, size_t partNumber)
+Score* TestUtils::createPart(MasterScore* masterScore, size_t partNumber)
 {
     std::vector<Part*> parts;
     parts.push_back(masterScore->parts().at(partNumber));

@@ -22,9 +22,10 @@
 
 #include "laissezvib.h"
 
+#include "../editing/mscoreview.h"
+
 #include "chord.h"
 #include "measure.h"
-#include "mscoreview.h"
 #include "note.h"
 #include "score.h"
 #include "staff.h"
