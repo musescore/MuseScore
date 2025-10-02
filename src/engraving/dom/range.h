@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_RANGE_H
-#define MU_ENGRAVING_RANGE_H
+#pragma once
 
 #include <list>
 #include <vector>
@@ -41,6 +40,7 @@ class ScoreRange;
 class ChordRest;
 class Score;
 class Tie;
+class BarLine;
 
 //---------------------------------------------------------
 //   TrackList
@@ -106,17 +106,36 @@ public:
     bool truncate(const Fraction&);
 
 protected:
-    std::list<Spanner*> m_spanner;
-    std::list<Annotation> m_annotations;
+    std::vector<Spanner*> m_spanners;
+    std::vector<Annotation> m_annotations;
 
 private:
+    struct BarLinesBackup
+    {
+        Fraction sPosition;
+        bool formerMeasureStartOrEnd;
+        BarLine* bl = nullptr;
+    };
+    void backupBarLines(Segment* first, Segment* last);
+    bool insertBarLine(Measure* m, const BarLinesBackup& barLine) const;
+    void restoreBarLines(Score* score, const Fraction& tick) const;
+    void deleteBarLines();
+
+    void backupBreaks(Segment* first, Segment* last);
+    void restoreBreaks(Score* score, const Fraction& tick) const;
 
     friend class TrackList;
 
-    std::list<TrackList*> m_tracks;
+    std::vector<TrackList*> m_tracks;
     std::vector<Tie*> m_startTies;
+    struct BreaksBackup
+    {
+        Fraction sPosition;
+        LayoutBreakType lBreakType;
+    };
     Segment* m_first = nullptr;
     Segment* m_last = nullptr;
+    std::vector<BarLinesBackup> m_barLines;
+    std::vector<BreaksBackup> m_breaks;
 };
-} // namespace mu::engraving
-#endif
+}
