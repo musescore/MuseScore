@@ -85,12 +85,8 @@ void BrailleModule::registerUiTypes()
     ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(braille_QML_IMPORT);
 }
 
-void BrailleModule::onInit(const IApplication::RunMode& mode)
+void BrailleModule::onInit(const IApplication::RunMode&)
 {
-    if (IApplication::RunMode::GuiApp != mode) {
-        return;
-    }
-
     m_brailleConfiguration->init();
     m_notationBraille->init();
 }

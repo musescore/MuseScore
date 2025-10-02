@@ -102,11 +102,7 @@ void InstrumentsSceneModule::registerUiTypes()
     }
 }
 
-void InstrumentsSceneModule::onInit(const IApplication::RunMode& mode)
+void InstrumentsSceneModule::onInit(const IApplication::RunMode&)
 {
-    if (mode != IApplication::RunMode::GuiApp) {
-        return;
-    }
-
     m_actionsController->init();
 }

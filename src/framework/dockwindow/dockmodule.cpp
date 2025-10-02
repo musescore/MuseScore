@@ -148,12 +148,8 @@ void DockModule::registerUiTypes()
     qmlRegisterUncreatableType<DockLocation>("Muse.Dock", 1, 0, "Location", "Not creatable from QML");
 }
 
-void DockModule::onInit(const IApplication::RunMode& mode)
+void DockModule::onInit(const IApplication::RunMode&)
 {
-    if (mode != IApplication::RunMode::GuiApp) {
-        return;
-    }
-
     m_actionsController->init();
 
     // ===================================
