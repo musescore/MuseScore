@@ -150,8 +150,8 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
         Marker* marker = toMarker(item);
         Marker* newMarker = marker->clone();
 
-        AsciiStringView s(newMarker->label().toStdString());
-        MarkerType mt = TConv::fromXml(s, MarkerType::USER);
+        std::string label = newMarker->label().toStdString();
+        MarkerType mt = TConv::fromXml(label, MarkerType::USER);
         newMarker->setMarkerType(mt);
 
         cell->element.reset(newMarker);
