@@ -152,6 +152,11 @@ void EngravingFontsController::scanDirectory(const muse::io::path_t& path, bool 
             continue;
         }
 
+        LOGI() << "Adding custom SMuFL font: " << fontName
+               << "\n    symbol font path: " << symbolFontPath
+               << "\n    text font path: " << textFontPath
+               << "\n    metadata path: " << metadataPath;
+
         muse::String fontNameStr = muse::String::fromQString(fontName);
         engravingFonts()->addExternalFont(fontName.toStdString(), fontFamily.toStdString(), symbolFontPath, metadataPath);
         fdb->addFont(FontDataKey(fontNameStr), symbolFontPath);
