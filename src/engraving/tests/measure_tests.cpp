@@ -29,6 +29,7 @@
 #include "engraving/dom/measurenumber.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
+#include "engraving/editing/splitjoinmeasure.h"
 #include "engraving/editing/undo.h"
 
 #include "utils/scorerw.h"
@@ -589,7 +590,7 @@ TEST_F(Engraving_MeasureTests, measureSplit) {
     ChordRest* cr = m->first(SegmentType::ChordRest)->next()->nextChordRest(0);
     EXPECT_TRUE(cr);
 
-    score->cmdSplitMeasure(cr);
+    SplitJoinMeasure::splitMeasure(score->masterScore(), cr->tick());
 
     score->setLayoutAll();
     score->endCmd();

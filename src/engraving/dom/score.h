@@ -913,9 +913,6 @@ public:
     //@ sets the metatag named 'tag' to 'val'
     void setMetaTag(const String& tag, const String& val);
 
-    void cmdSplitMeasure(ChordRest*);
-    void cmdJoinMeasure(Measure*, Measure*);
-
     int pageNumberOffset() const { return m_pageNumberOffset; }
     void setPageNumberOffset(int v) { m_pageNumberOffset = v; }
 

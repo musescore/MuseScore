@@ -147,6 +147,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/editing/elementeditdata.h
     ${CMAKE_CURRENT_LIST_DIR}/editing/mscoreview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/editing/mscoreview.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/splitjoinmeasure.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/splitjoinmeasure.h
     ${CMAKE_CURRENT_LIST_DIR}/editing/textedit.cpp
     ${CMAKE_CURRENT_LIST_DIR}/editing/textedit.h
     ${CMAKE_CURRENT_LIST_DIR}/editing/transpose.cpp

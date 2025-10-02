@@ -27,6 +27,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
+#include "engraving/editing/splitjoinmeasure.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -50,10 +51,9 @@ void Engraving_SplitTests::split(const char* f1, const char* ref, int index)
     for (int i = 0; i < index; ++i) {
         s = s->next1(SegmentType::ChordRest);
     }
-    ChordRest* cr = toChordRest(s->element(0));
 
     score->startCmd(TranslatableString::untranslatable("Engraving split tests"));
-    score->cmdSplitMeasure(cr);
+    SplitJoinMeasure::splitMeasure(score, s->tick());
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(f1), SPLIT_DATA_DIR + String::fromUtf8(ref)));
@@ -153,10 +153,8 @@ TEST_F(Engraving_SplitTests, splitTieAtStart) {
 
     Tie* tie1 = checkTie();
 
-    ChordRest* splitCr = m1->nextMeasure()->findChordRest(Fraction(3, 2), 0);
-
     score->startCmd(TranslatableString::untranslatable("Engraving split tests"));
-    score->cmdSplitMeasure(splitCr);
+    SplitJoinMeasure::splitMeasure(score, Fraction(3, 2));
     score->endCmd();
 
     Tie* tie2 = checkTie();

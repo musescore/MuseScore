@@ -117,6 +117,7 @@
 #include "editvoicing.h"
 #include "inserttime.h"
 #include "mscoreview.h"
+#include "splitjoinmeasure.h"
 #include "transpose.h"
 
 #include "log.h"
@@ -4847,7 +4848,7 @@ void Score::cmdTimeDelete()
 
     if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
         Measure* m = toBarLine(e)->segment()->measure();
-        cmdJoinMeasure(m, m->nextMeasure());
+        SplitJoinMeasure::joinMeasures(m_masterScore, m->tick(), m->nextMeasure()->tick());
         return;
     }
 

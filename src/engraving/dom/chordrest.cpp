@@ -57,6 +57,8 @@
 #include "utils.h"
 #include "volta.h"
 
+#include "editing/splitjoinmeasure.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -173,7 +175,7 @@ EngravingItem* ChordRest::drop(EditData& data)
 
     case ElementType::BAR_LINE:
         if (data.control()) {
-            score()->cmdSplitMeasure(this);
+            SplitJoinMeasure::splitMeasure(masterScore(), tick());
         } else {
             BarLine* bl = toBarLine(e);
             bl->setPos(PointF());
