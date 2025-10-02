@@ -264,7 +264,6 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
 
 void FinaleParser::importTextExpressions()
 {
-    using Chord = mu::engraving::Chord; // seemingly needed for Windows builds (20251001)
     struct ReadableExpression {
         String xmlText = String();
         ElementType elementType = ElementType::STAFF_TEXT;
