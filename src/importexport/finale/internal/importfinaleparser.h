@@ -191,6 +191,8 @@ struct ReadableCustomLine
 };
 using ReadableCustomLineMap = std::map<musx::dom::Cmper, ReadableCustomLine*>;
 
+using Chord = mu::engraving::Chord; // seemingly needed for Windows builds (20251003)
+
 class FinaleParser : public muse::Injectable
 {
 public:
