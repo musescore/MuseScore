@@ -90,6 +90,7 @@
 #include "engraving/dom/utils.h"
 #include "engraving/editing/editchord.h"
 #include "engraving/editing/editpart.h"
+#include "engraving/editing/splitjoinmeasure.h"
 #include "engraving/editing/textedit.h"
 #include "engraving/rw/rwregister.h"
 #include "engraving/rw/xmlreader.h"
@@ -4914,7 +4915,7 @@ void NotationInteraction::splitSelectedMeasure()
     ChordRest* chordRest = dynamic_cast<ChordRest*>(selectedElement);
 
     startEdit(TranslatableString("undoableAction", "Split measure"));
-    score()->cmdSplitMeasure(chordRest);
+    SplitJoinMeasure::splitMeasure(score()->masterScore(), chordRest->tick());
     apply();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
@@ -4929,7 +4930,7 @@ void NotationInteraction::joinSelectedMeasures()
     INotationSelectionRange::MeasureRange measureRange = m_selection->range()->measureRange();
 
     startEdit(TranslatableString("undoableAction", "Join measures"));
-    score()->cmdJoinMeasure(measureRange.startMeasure, measureRange.endMeasure);
+    SplitJoinMeasure::joinMeasures(score()->masterScore(), measureRange.startMeasure->tick(), measureRange.endMeasure->tick());
     apply();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();

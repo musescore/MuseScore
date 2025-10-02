@@ -148,7 +148,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/instrumentname.h
     ${CMAKE_CURRENT_LIST_DIR}/interval.cpp
     ${CMAKE_CURRENT_LIST_DIR}/interval.h
-    ${CMAKE_CURRENT_LIST_DIR}/joinMeasure.cpp
     ${CMAKE_CURRENT_LIST_DIR}/jump.cpp
     ${CMAKE_CURRENT_LIST_DIR}/jump.h
     ${CMAKE_CURRENT_LIST_DIR}/key.cpp
@@ -284,7 +283,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/spanner.h
     ${CMAKE_CURRENT_LIST_DIR}/spannermap.cpp
     ${CMAKE_CURRENT_LIST_DIR}/spannermap.h
-    ${CMAKE_CURRENT_LIST_DIR}/splitMeasure.cpp
     ${CMAKE_CURRENT_LIST_DIR}/staff.cpp
     ${CMAKE_CURRENT_LIST_DIR}/staff.h
     ${CMAKE_CURRENT_LIST_DIR}/stafflines.cpp
