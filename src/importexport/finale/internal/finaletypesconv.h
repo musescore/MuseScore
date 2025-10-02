@@ -69,6 +69,7 @@ extern engraving::DirectionV directionVFromShapeType(musx::dom::others::SmartSha
 extern engraving::LineType lineTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern std::pair<int, int> hookHeightsFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::String fontStyleSuffixFromCategoryType(musx::dom::others::MarkingCategory::CategoryType categoryType);
+extern engraving::TremoloType tremoloTypeFromSymId(engraving::SymId sym);
 
 // unit conversion
 extern double doubleFromEvpu(double evpu);

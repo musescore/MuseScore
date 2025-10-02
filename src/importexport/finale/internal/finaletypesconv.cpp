@@ -1241,6 +1241,27 @@ String fontStyleSuffixFromCategoryType(musx::dom::others::MarkingCategory::Categ
     return String::fromUtf8(muse::value(categoryTypeTable, categoryType, "default"));
 }
 
+TremoloType tremoloTypeFromSymId(SymId sym)
+{
+    static const std::unordered_map<SymId, TremoloType> tremoloTypeTable = {
+        { SymId::tremolo1,                TremoloType::R8 },
+        { SymId::tremoloFingered1,        TremoloType::R8 },
+        { SymId::tremolo2,                TremoloType::R16 },
+        { SymId::tremoloFingered2,        TremoloType::R16 },
+        { SymId::tremolo3,                TremoloType::R32 },
+        { SymId::tremoloFingered3,        TremoloType::R32 },
+        { SymId::tremolo4,                TremoloType::R64 },
+        { SymId::tremoloFingered4,        TremoloType::R64 },
+        { SymId::tremolo5,                TremoloType::R64 },
+        { SymId::tremoloFingered5,        TremoloType::R64 },
+        { SymId::buzzRoll,                TremoloType::BUZZ_ROLL },
+        { SymId::pendereckiTremolo,       TremoloType::BUZZ_ROLL },
+        { SymId::unmeasuredTremolo,       TremoloType::BUZZ_ROLL },
+        { SymId::unmeasuredTremoloSimple, TremoloType::BUZZ_ROLL },
+    };
+    return muse::value(tremoloTypeTable, sym, TremoloType::INVALID_TREMOLO);
+}
+
 double doubleFromEvpu(double evpuDouble)
 {
     return evpuDouble / EVPU_PER_SPACE;

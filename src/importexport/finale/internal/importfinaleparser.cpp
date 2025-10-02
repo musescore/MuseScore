@@ -80,6 +80,7 @@ void FinaleParser::parse()
     // entries (notes, rests & tuplets)
     mapLayers();
     importEntries();
+    importArticulations();
 
     // smart shapes (lines)
     importSmartShapes(); //WIP
