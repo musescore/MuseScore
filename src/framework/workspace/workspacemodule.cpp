@@ -93,12 +93,8 @@ void WorkspaceModule::registerUiTypes()
     qmlRegisterType<NewWorkspaceModel>("Muse.Workspace", 1, 0, "NewWorkspaceModel");
 }
 
-void WorkspaceModule::onInit(const IApplication::RunMode& mode)
+void WorkspaceModule::onInit(const IApplication::RunMode&)
 {
-    if (mode != IApplication::RunMode::GuiApp) {
-        return;
-    }
-
     m_configuration->init();
     m_manager->init();
     m_provider->init();
