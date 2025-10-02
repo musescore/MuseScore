@@ -77,8 +77,6 @@ signals:
     void orientationChanged();
 
 private:
-    INotationPtr currentNotation() const;
-
     void initOrientation();
     void initVisible();
 
