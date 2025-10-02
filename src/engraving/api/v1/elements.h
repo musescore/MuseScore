@@ -1495,10 +1495,10 @@ class Chord : public ChordRest
     Q_PROPERTY(apiv1::EngravingItem * spanArpeggio READ spanArpeggio)
     /// The single-chord tremolo for this chord, if it exists.
     /// \since MuseScore 4.6
-    Q_PROPERTY(apiv1::EngravingItem * tremoloSingleChord READ tremoloTwoChord)
+    Q_PROPERTY(apiv1::EngravingItem * tremoloSingleChord READ tremoloSingleChord)
     /// The two-chord tremolo for this chord, if it exists.
     /// \since MuseScore 4.6
-    Q_PROPERTY(apiv1::EngravingItem * tremoloTwoChord READ tremoloSingleChord)
+    Q_PROPERTY(apiv1::EngravingItem * tremoloTwoChord READ tremoloTwoChord)
 
 public:
     /// \cond MS_INTERNAL
