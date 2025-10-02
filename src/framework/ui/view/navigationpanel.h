@@ -86,6 +86,8 @@ public:
     Q_INVOKABLE void requestActive(INavigationControl* control = nullptr, bool enableHighlight = false,
                                    ActivationType activationType = ActivationType::None) override;
 
+    void componentComplete() override;
+
 public slots:
     void setSection_property(NavigationSection* section);
     void setSection(INavigationSection* section);

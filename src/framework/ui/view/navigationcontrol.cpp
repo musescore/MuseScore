@@ -42,6 +42,19 @@ NavigationControl::~NavigationControl()
     }
 }
 
+void NavigationControl::componentComplete()
+{
+    if (isComponentCompleted()) {
+        return;
+    }
+
+    if (m_panel) {
+        m_panel->componentComplete();
+    }
+
+    AbstractNavigation::componentComplete();
+}
+
 QString NavigationControl::name() const
 {
     return AbstractNavigation::name();
