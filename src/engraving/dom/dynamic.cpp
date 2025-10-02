@@ -21,19 +21,17 @@
  */
 #include "dynamic.h"
 
-#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
-#include "anchors.h"
 #include "dynamichairpingroup.h"
 #include "expression.h"
 #include "hairpin.h"
 #include "measure.h"
-#include "mscore.h"
 #include "score.h"
 #include "segment.h"
 #include "system.h"
 #include "tempo.h"
+#include "textedit.h"
 #include "undo.h"
 
 #include "log.h"
@@ -597,8 +595,8 @@ String Dynamic::screenReaderInfo() const
 
 bool Dynamic::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Key_Tab) {
-        return false;
+    if (!dynamic_cast<TextEditData*>(ed.getData(this).get())) {
+        return EngravingItem::isEditAllowed(ed);
     }
 
     return TextBase::isEditAllowed(ed);
