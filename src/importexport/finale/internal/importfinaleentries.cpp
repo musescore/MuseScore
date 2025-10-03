@@ -445,6 +445,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     }
                     note->setOffset(evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0) * SPATIUM20); // correctly scaled?
                     const MusxInstance<FontInfo> noteFont = options::FontOptions::getFontInfo(m_doc, noteInfo->useOwnFont ? options::FontOptions::FontType::Noteheads : options::FontOptions::FontType::Music);
+                    /// @todo some noteheads may have parentheses baked in, but not in SymId yet.
                     setNoteHeadSymbol(note, FinaleTextConv::symIdFromFinaleChar(noteInfo->altNhead, noteFont));
                 }
             }
