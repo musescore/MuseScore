@@ -19,16 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "dom/score.h"
-#include "dom/mscore.h"
-#include "dom/textbase.h"
-#include "dom/mmrestrange.h"
-#include "global/stringutils.h"
-#include "types/types.h"
-#include "internal/importfinalelogger.h"
 #include "internal/importfinaleparser.h"
+#include "internal/importfinalelogger.h"
 #include "internal/finaletypesconv.h"
+
 #include "musx/musx.h"
+
+#include "types/string.h"
+
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/mmrestrange.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/textbase.h"
+
+#include "engraving/types/types.h"
 
 using namespace mu::engraving;
 using namespace musx::dom;
