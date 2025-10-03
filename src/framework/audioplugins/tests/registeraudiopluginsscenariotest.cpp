@@ -190,7 +190,7 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterNewPlugins)
     }
 
     // [THEN] All plugins remain in the register
-    EXPECT_CALL(*m_knownPlugins, unregisterPlugin(_))
+    EXPECT_CALL(*m_knownPlugins, unregisterPlugins(_))
     .Times(0);
 
     // [THEN] The register is refreshed
@@ -268,6 +268,9 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterPlugin)
     .WillByDefault(Return(RetVal<AudioResourceMetaList>::make_ok(metaList)));
 
     // [THEN] The plugin has been registered
+    AudioPluginInfoList expectedInfoList;
+    expectedInfoList.reserve(metaList.size());
+
     for (const AudioResourceMeta& meta : metaList) {
         AudioPluginInfo expectedPluginInfo;
         expectedPluginInfo.type = AudioPluginType::Fx;
@@ -275,10 +278,11 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterPlugin)
         expectedPluginInfo.path = pluginPath;
         expectedPluginInfo.enabled = true;
         expectedPluginInfo.errorCode = 0;
-
-        EXPECT_CALL(*m_knownPlugins, registerPlugin(expectedPluginInfo))
-        .WillOnce(Return(true));
+        expectedInfoList.emplace_back(std::move(expectedPluginInfo));
     }
+
+    EXPECT_CALL(*m_knownPlugins, registerPlugins(expectedInfoList))
+    .WillOnce(Return(true));
 
     // [WHEN] Register the plugin
     Ret ret = m_scenario->registerPlugin(pluginPath);
@@ -300,7 +304,7 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterFailedPlugin)
     expectedPluginInfo.enabled = false;
     expectedPluginInfo.errorCode = -42;
 
-    EXPECT_CALL(*m_knownPlugins, registerPlugin(expectedPluginInfo))
+    EXPECT_CALL(*m_knownPlugins, registerPlugins(AudioPluginInfoList { expectedPluginInfo }))
     .WillOnce(Return(true));
 
     // [WHEN] Register the incompatible plugin
