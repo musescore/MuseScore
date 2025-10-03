@@ -1023,6 +1023,7 @@ void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System
             continue;
         }
 
+        TLayout::layoutHarmony(h, h->mutldata(), ctx);
         autoplaceHarmony(h);
         harmonyItemsAlign.push_back(h);
         harmonyPositions.insert({ h->tick(), h->staffIdx() });

@@ -458,7 +458,7 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
         }
 
         const Harmony* chordSymbol = findChordSymbol(item);
-        if (!chordSymbol || !chordSymbol->play()) {
+        if (!chordSymbol) {
             continue;
         }
 
@@ -475,10 +475,11 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
             continue;
         }
 
-        const PlaybackContextPtr ctx = playbackCtx(trackId);
-
-        m_renderer.renderChordSymbol(chordSymbol, tickPositionOffset, profile, ctx,
-                                     m_playbackDataMap[trackId].originEvents);
+        if (chordSymbol->play()) {
+            const PlaybackContextPtr ctx = playbackCtx(trackId);
+            m_renderer.renderChordSymbol(chordSymbol, tickPositionOffset, profile, ctx,
+                                         m_playbackDataMap[trackId].originEvents);
+        }
 
         collectChangesTracks(trackId, trackChanges);
     }
