@@ -139,19 +139,18 @@ MasterPalette::MasterPalette(QWidget* parent)
     child->setData(0, Qt::UserRole, m_idxAllSymbols);
     m_symbolItem->addChild(child);
 
-    const auto& ranges = Smufl::smuflRanges();
-    size_t idx = 0;
-    for (auto it = ranges.cbegin(); it != ranges.cend(); ++it) {
-        const String& rangeName = it->first;
+    int idx = 0;
+    for (const auto& [rangeName, _] : Smufl::smuflRanges()) {
+        ++idx;
+
         if (rangeName == Smufl::SMUFL_ALL_SYMBOLS) {
             continue;
         }
 
         QTreeWidgetItem* chld = new QTreeWidgetItem({ rangeName });
-        chld->setData(0, Qt::UserRole, m_idxAllSymbols + static_cast<int>(idx) + 1);
+        chld->setData(0, Qt::UserRole, m_idxAllSymbols + idx);
 
         m_symbolItem->addChild(chld);
-        ++idx;
     }
 
     connect(treeWidget, &QTreeWidget::currentItemChanged, this, &MasterPalette::currentChanged);
