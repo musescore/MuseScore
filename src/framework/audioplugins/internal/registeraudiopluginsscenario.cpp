@@ -68,9 +68,14 @@ io::paths_t RegisterAudioPluginsScenario::scanForNewPluginPaths() const
     return newPluginPaths;
 }
 
-Ret RegisterAudioPluginsScenario::registerNewPlugins(io::paths_t newPluginPaths)
+Ret RegisterAudioPluginsScenario::updatePluginsRegistry(io::paths_t newPluginPaths)
 {
     TRACEFUNC;
+
+    Ret ret = unregisterUninstalledPlugins();
+    if (!ret) {
+        return ret;
+    }
 
     if (newPluginPaths.empty()) {
         newPluginPaths = scanForNewPluginPaths();
@@ -82,7 +87,7 @@ Ret RegisterAudioPluginsScenario::registerNewPlugins(io::paths_t newPluginPaths)
 
     processPluginsRegistration(newPluginPaths);
 
-    Ret ret = knownPluginsRegister()->load();
+    ret = knownPluginsRegister()->load();
     return ret;
 }
 
@@ -172,6 +177,27 @@ Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& pluginP
     info.errorCode = failCode;
 
     Ret ret = knownPluginsRegister()->registerPlugins({ info });
+    return ret;
+}
+
+Ret RegisterAudioPluginsScenario::unregisterUninstalledPlugins()
+{
+    TRACEFUNC;
+
+    const AudioPluginInfoList list = knownPluginsRegister()->pluginInfoList();
+    AudioResourceIdList pluginsToUnregister;
+
+    for (const AudioPluginInfo& info : list) {
+        if (!fileSystem()->exists(info.path)) {
+            pluginsToUnregister.push_back(info.meta.id);
+        }
+    }
+
+    if (pluginsToUnregister.empty()) {
+        return make_ok();
+    }
+
+    Ret ret = knownPluginsRegister()->unregisterPlugins(pluginsToUnregister);
     return ret;
 }
 
