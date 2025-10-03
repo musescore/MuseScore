@@ -21,7 +21,7 @@
     <score-part id="P1">
       <part-name>Music</part-name>
       <score-instrument id="P1-I1">
-        <instrument-name>Music</instrument-name>
+        <instrument-name>Musicc</instrument-name>
         </score-instrument>
       <midi-device id="P1-I1" port="1"></midi-device>
       <midi-instrument id="P1-I1">
