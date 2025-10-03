@@ -620,8 +620,9 @@ bool Measure::showMeasureNumber()
     case MeasureNumberMode::SHOW:
         return true;
     case MeasureNumberMode::HIDE:
-        return false;
+        break;
     }
+    return false;
 }
 
 //---------------------------------------------------------
