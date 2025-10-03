@@ -38,4 +38,6 @@ struct AudioPluginInfo {
     bool enabled = false;
     int errorCode = 0;
 };
+
+using AudioPluginInfoList = std::vector<AudioPluginInfo>;
 }

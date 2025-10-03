@@ -41,15 +41,16 @@ public:
 
     Ret load() override;
 
-    std::vector<AudioPluginInfo> pluginInfoList(PluginInfoAccepted accepted = PluginInfoAccepted()) const override;
+    AudioPluginInfoList pluginInfoList(PluginInfoAccepted accepted = PluginInfoAccepted()) const override;
     muse::async::Notification pluginInfoListChanged() const override;
+
     const io::path_t& pluginPath(const audio::AudioResourceId& resourceId) const override;
 
     bool exists(const io::path_t& pluginPath) const override;
     bool exists(const audio::AudioResourceId& resourceId) const override;
 
-    Ret registerPlugin(const AudioPluginInfo& info) override;
-    Ret unregisterPlugin(const audio::AudioResourceId& resourceId) override;
+    Ret registerPlugins(const AudioPluginInfoList& list) override;
+    Ret unregisterPlugins(const audio::AudioResourceIdList& resourceIds) override;
 
 private:
     Ret writePluginsInfo();

@@ -129,16 +129,19 @@ Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPath)
         return false;
     }
 
-    IAudioPluginMetaReaderPtr reader = metaReader(pluginPath);
+    const IAudioPluginMetaReaderPtr reader = metaReader(pluginPath);
     if (!reader) {
         return make_ret(Err::UnknownPluginType);
     }
 
-    RetVal<AudioResourceMetaList> metaList = reader->readMeta(pluginPath);
+    const RetVal<AudioResourceMetaList> metaList = reader->readMeta(pluginPath);
     if (!metaList.ret) {
         LOGE() << metaList.ret.toString();
         return metaList.ret;
     }
+
+    AudioPluginInfoList infoList;
+    infoList.reserve(metaList.val.size());
 
     for (const AudioResourceMeta& meta : metaList.val) {
         AudioPluginInfo info;
@@ -146,14 +149,11 @@ Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPath)
         info.meta = meta;
         info.path = pluginPath;
         info.enabled = true;
-
-        Ret ret = knownPluginsRegister()->registerPlugin(info);
-        if (!ret) {
-            return ret;
-        }
+        infoList.emplace_back(std::move(info));
     }
 
-    return muse::make_ok();
+    Ret ret = knownPluginsRegister()->registerPlugins(infoList);
+    return ret;
 }
 
 Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& pluginPath, int failCode)
@@ -166,13 +166,12 @@ Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& pluginP
 
     AudioPluginInfo info;
     info.meta.id = io::completeBasename(pluginPath).toStdString();
-
     info.meta.type = metaType(pluginPath);
     info.path = pluginPath;
     info.enabled = false;
     info.errorCode = failCode;
 
-    Ret ret = knownPluginsRegister()->registerPlugin(info);
+    Ret ret = knownPluginsRegister()->registerPlugins({ info });
     return ret;
 }
 
