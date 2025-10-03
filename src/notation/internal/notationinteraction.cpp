@@ -2506,11 +2506,11 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, bool
     }
 
     if (isMeasureAnchoredElement) {
-        // we add the following measure-based items to each measure containing selected items
-        std::vector<Measure*> measuresWithSelectedContent;
+        // find the MeasureBase of each selected item - apply the drop there...
+        std::vector<MeasureBase*> measuresWithSelectedContent;
         for (EngravingItem* e : sel.elements()) {
-            Measure* m = e->findMeasure();
-            if (!m) {
+            MeasureBase* mb = e->findMeasureBase();
+            if (!mb) {
                 continue;
             }
             if (elementType == ElementType::MARKER && e->isBarLine()
@@ -2518,15 +2518,13 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, bool
                 && toBarLine(e)->segment()->segmentType() != SegmentType::StartRepeatBarLine) {
                 // exception: markers are anchored to the start of a measure,
                 // so when the user selects an end barline we take the next measure
-                m = m->nextMeasureMM() ? m->nextMeasureMM() : m;
+                mb = mb->nextMeasureMM() ? mb->nextMeasureMM() : mb;
             }
-            if (muse::contains(measuresWithSelectedContent, m)) {
+            if (muse::contains(measuresWithSelectedContent, mb)) {
                 continue;
             }
-            measuresWithSelectedContent.push_back(m);
-            const RectF r = m->staffPageBoundingRect(e->staff()->idx());
-            const PointF pt = r.center() + m->system()->page()->pos();
-            applyDropPaletteElement(score, m, element, modifiers, pt);
+            measuresWithSelectedContent.push_back(mb);
+            applyDropPaletteElement(score, mb, element, modifiers);
             if (elementType == ElementType::BRACKET) {
                 break;
             }
@@ -2547,9 +2545,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, boo
     if (elementType == ElementType::BAR_LINE || isMeasureAnchoredElement) {
         Measure* last = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
         for (Measure* m = sel.startSegment()->measure(); m; m = m->nextMeasureMM()) {
-            const RectF r = m->staffPageBoundingRect(sel.staffStart());
-            const PointF pt = r.center() + m->system()->page()->pos();
-            applyDropPaletteElement(score, m, element, modifiers, pt);
+            applyDropPaletteElement(score, m, element, modifiers);
             if (m == last || elementType == ElementType::BRACKET) {
                 break;
             }
