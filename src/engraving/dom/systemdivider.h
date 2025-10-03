@@ -52,6 +52,8 @@ public:
     Segment* segment() const override { return nullptr; }
     System* system() const { return (System*)explicitParent(); }
 
+    PropertyValue propertyDefault(Pid id) const override;
+
     void styleChanged() override;
 
     std::vector<LineF> dragAnchorLines() const override;

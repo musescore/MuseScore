@@ -183,6 +183,10 @@ enum class Sid : short {
     dividerRightSym,
     dividerRightX,
     dividerRightY,
+    dividerLeftAlignToSystemBarline,
+    dividerRightAlignToSystemBarline,
+    dividerLeftSize,
+    dividerRightSize,
 
     clefLeftMargin,
     keysigLeftMargin,

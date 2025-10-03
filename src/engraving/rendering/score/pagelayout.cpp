@@ -856,8 +856,13 @@ void PageLayout::updateSystemDivider(LayoutContext& ctx, System* system, System*
 
     double spatium = system->spatium();
     RectF systemBBox = system->ldata()->bbox();
-    double xPos = -0.5 * ldata->bbox().width() + (left ? system->leftMargin() : systemBBox.right())
-                  + spatium * (left ? ctx.conf().styleD(Sid::dividerLeftX) : ctx.conf().styleD(Sid::dividerRightX));
+    double xDefault = 0.0;
+    if (left) {
+        xDefault = ctx.conf().styleB(Sid::dividerLeftAlignToSystemBarline) ? system->leftMargin() - 0.5 * ldata->bbox().width() : 0.0;
+    } else {
+        xDefault = systemBBox.right() - (ctx.conf().styleB(Sid::dividerRightAlignToSystemBarline) ? 0.5 : 1.0) * ldata->bbox().width();
+    }
+    double xPos = xDefault + spatium * (left ? ctx.conf().styleD(Sid::dividerLeftX) : ctx.conf().styleD(Sid::dividerRightX));
 
     double yInnerPos = -ldata->bbox().top() - 0.5 * ldata->bbox().height()
                        + spatium * (left ? ctx.conf().styleD(Sid::dividerLeftY) : ctx.conf().styleD(Sid::dividerRightY));

@@ -71,7 +71,7 @@ public:
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
-    PropertyValue propertyDefault(Pid) const override;
+    virtual PropertyValue propertyDefault(Pid) const override;
 
     double baseLine() const override { return 0.0; }
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
