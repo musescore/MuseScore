@@ -46,6 +46,7 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/sig.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/stafftext.h"
 #include "engraving/dom/stafftextbase.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/tempotext.h"
@@ -276,8 +277,7 @@ void FinaleParser::importTextExpressions()
 
     // 1st: map all expressions to strings
     std::unordered_map<Cmper, ReadableExpression> mappedExpressions;
-    MusxInstanceList<others::TextExpressionDef> textExpressionList = m_doc->getOthers()->getArray<others::TextExpressionDef>(m_currentMusxPartId);
-    for (const auto& textExpression : textExpressionList) {
+    for (const auto& textExpression : m_doc->getOthers()->getArray<others::TextExpressionDef>(m_currentMusxPartId)) {
         ReadableExpression readableExpression;
         /// @todo Rather than rely only on marking category, it probably makes more sense to interpret the playback features to detect what kind of marking
         /// this is. Or perhaps a combination of both. This would provide better support to legacy files whose expressions are all Misc.
@@ -367,8 +367,7 @@ void FinaleParser::importTextExpressions()
     }
 
     // 2nd: iterate each expression assignment and assign the mapped String instances as needed
-    MusxInstanceList<others::MeasureExprAssign> expressionAssignments = m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId);
-    for (const auto& expressionAssignment : expressionAssignments) {
+    for (const auto& expressionAssignment : m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId)) {
         if (!expressionAssignment->textExprId) {
             // Shapes are currently unsupported
             continue;
@@ -402,7 +401,7 @@ void FinaleParser::importTextExpressions()
             continue;
         }
         track_idx_t curTrackIdx = staff2track(curStaffIdx) + static_cast<voice_idx_t>(std::clamp(expressionAssignment->layer - 1, 0, int(VOICES) - 1));
-        Fraction rTick = musxFractionToFraction(expressionAssignment->eduPosition);
+        Fraction rTick = eduToFraction(expressionAssignment->eduPosition);
         Segment* s = measure->findSegmentR(Segment::CHORD_REST_OR_TIME_TICK_TYPE, rTick);
         if (!s) {
             TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, rTick, curStaffIdx);
@@ -710,6 +709,58 @@ void FinaleParser::importTextExpressions()
         /// features to suggest an exact import strategy. (I may need to add staff lists to musx. I don't remember adding them yet. But since
         /// Finale adds an assignment on every staff dictated by the staff list, we may not need to reference it.)
         /// @todo use expressionAssignment->showStaffList to control sharing between score/parts. some elements can be hidden entirely, others will be made invisible
+    }
+
+    // Measure-anchored text (MeasureTextAssign)
+    MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
+        // per staff style calculations
+        const MusxInstance<others::Staff>& rawStaff = m_doc->getOthers()->get<others::Staff>(m_currentMusxPartId, musxScrollViewItem->staffId);
+
+        staff_idx_t curStaffIdx = muse::value(m_inst2Staff, musxScrollViewItem->staffId, muse::nidx);
+        IF_ASSERT_FAILED(curStaffIdx != muse::nidx) {
+            logger()->logWarning(String(u"MeasureTextAssign: Musx inst value not found for staff cmper %1").arg(String::fromStdString(std::to_string(rawStaff->getCmper()))));
+            continue;
+        }
+        track_idx_t curTrackIdx = staff2track(curStaffIdx);
+
+        for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
+            Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
+            Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
+            IF_ASSERT_FAILED(measure) {
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, 0, musxMeasure->getCmper());
+                return;
+            }
+
+            for (const auto& measureTextAssign : m_doc->getDetails()->getArray<details::MeasureTextAssign>(m_currentMusxPartId, rawStaff->getCmper(), musxMeasure->getCmper())) {
+                EnigmaParsingOptions options;
+                musx::util::EnigmaParsingContext parsingContext = measureTextAssign->getRawTextCtx(m_currentMusxPartId);
+                FontTracker firstFontInfo;
+                String measureText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
+
+                Fraction rTick = eduToFraction(measureTextAssign->xDispEdu);
+                Segment* s = measure->findSegmentR(Segment::CHORD_REST_OR_TIME_TICK_TYPE, rTick);
+                if (!s) {
+                    TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, rTick, curStaffIdx);
+                    EditTimeTickAnchors::updateLayout(measure);
+                    s = anchor->segment();
+                }
+
+                StaffText* text = Factory::createStaffText(s);
+                text->setTrack(curTrackIdx);
+                text->setXmlText(measureText);
+                if (text->plainText().empty()) {
+                    delete text;
+                    continue;
+                }
+                text->setVisible(!measureTextAssign->hidden);
+                text->setAutoplace(false);
+                text->setOffset(evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp) * SPATIUM20);
+                text->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
+                s->add(text);
+            }
+        }
     }
 }
 
