@@ -167,6 +167,7 @@ private:
     void togglePlay();
     void rewind(const muse::actions::ActionData& args);
     void play();
+    void playFromSelection();
     void pause(bool select = false);
     void stop();
     void resume();
