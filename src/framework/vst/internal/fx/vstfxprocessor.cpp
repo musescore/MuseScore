@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -46,8 +46,7 @@ void VstFxProcessor::init(const audio::OutputSpec& spec)
 
     auto onPluginLoaded = [this]() {
         m_pluginPtr->updatePluginConfig(m_params.configuration);
-        m_vstAudioClient->setSampleRate(m_outputSpec.sampleRate);
-        m_vstAudioClient->setMaxSamplesPerBlock(m_outputSpec.samplesPerChannel);
+        m_vstAudioClient->setOutputSpec(m_outputSpec);
         m_inited = true;
     };
 
@@ -85,7 +84,10 @@ async::Channel<AudioFxParams> VstFxProcessor::paramsChanged() const
 void VstFxProcessor::setOutputSpec(const audio::OutputSpec& spec)
 {
     m_outputSpec = spec;
-    m_vstAudioClient->setSampleRate(spec.sampleRate);
+
+    if (m_inited) {
+        m_vstAudioClient->setOutputSpec(spec);
+    }
 }
 
 bool VstFxProcessor::active() const
