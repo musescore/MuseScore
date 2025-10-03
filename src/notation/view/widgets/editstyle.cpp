@@ -315,6 +315,14 @@ EditStyle::EditStyle(QWidget* parent)
     mmRestConstantWidth->addButton(mmRestWidthProportional, 0);
     mmRestConstantWidth->addButton(mmRestWidthConstant, 1);
 
+    QButtonGroup* dividerLeftAlignToSystemBarline = new QButtonGroup(this);
+    dividerLeftAlignToSystemBarline->addButton(leftDividerAlignToSystemBarline, 1);
+    dividerLeftAlignToSystemBarline->addButton(leftDividerAlignToMargin, 0);
+
+    QButtonGroup* dividerRightAlignToSystemBarline = new QButtonGroup(this);
+    dividerRightAlignToSystemBarline->addButton(rightDividerAlignToSystemBarline, 1);
+    dividerRightAlignToSystemBarline->addButton(rightDividerAlignToPageMargin, 0);
+
     // ====================================================
     // Style widgets
     // ====================================================
@@ -475,6 +483,10 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::dividerRight,            false, dividerRight,            0 },
         { StyleId::dividerRightX,           false, dividerRightX,           0 },
         { StyleId::dividerRightY,           false, dividerRightY,           0 },
+        { StyleId::dividerLeftSize,         true,  dividerLeftSize,         0 },
+        { StyleId::dividerRightSize,        true,  dividerRightSize,        0 },
+        { StyleId::dividerLeftAlignToSystemBarline, true, dividerLeftAlignToSystemBarline, 0 },
+        { StyleId::dividerRightAlignToSystemBarline, false, dividerRightAlignToSystemBarline, 0 },
         { StyleId::articulationMinDistance, false, articMinVerticalDist,    resetArticMinVerticalDist },
         { StyleId::propertyDistanceHead,    false, articNoteHeadDist,       resetArticNoteHeadDist },
         { StyleId::propertyDistanceStem,    false, articStemDist,           resetArticStemDist },
@@ -2077,6 +2089,8 @@ bool EditStyle::isBoolStyleRepresentedByButtonGroup(StyleId id)
     case StyleId::singleMeasureMMRestUseNormalRest:
     case StyleId::mmRestConstantWidth:
     case StyleId::angleHangingSlursAwayFromStaff:
+    case StyleId::dividerLeftAlignToSystemBarline:
+    case StyleId::dividerRightAlignToSystemBarline:
         return true;
     default:
         return false;

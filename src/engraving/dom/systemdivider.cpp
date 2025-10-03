@@ -63,8 +63,10 @@ void SystemDivider::setDividerType(SystemDividerType v)
 
     if (v == SystemDividerType::LEFT) {
         setSym(SymNames::symIdByName(style().styleSt(Sid::dividerLeftSym)), score()->engravingFont());
+        m_symbolsSize = style().styleD(Sid::dividerLeftSize);
     } else {
         setSym(SymNames::symIdByName(style().styleSt(Sid::dividerRightSym)), score()->engravingFont());
+        m_symbolsSize = style().styleD(Sid::dividerRightSize);
     }
 }
 
@@ -108,5 +110,15 @@ RectF SystemDivider::drag(EditData& ed)
 {
     setGenerated(false);
     return Symbol::drag(ed);
+}
+
+PropertyValue SystemDivider::propertyDefault(Pid id) const
+{
+    switch (id) {
+    case Pid::SYMBOLS_SIZE:
+        return style().styleD(m_dividerType == SystemDividerType::LEFT ? Sid::dividerLeftSize : Sid::dividerRightSize);
+    default:
+        return Symbol::propertyDefault(id);
+    }
 }
 } // namespace mu::engraving

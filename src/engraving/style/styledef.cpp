@@ -167,6 +167,10 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(dividerRightSym,                            String(u"systemDivider")),
     styleDef(dividerRightX,                              0.0),
     styleDef(dividerRightY,                              0.0),
+    styleDef(dividerLeftAlignToSystemBarline,            true),
+    styleDef(dividerRightAlignToSystemBarline,           true),
+    styleDef(dividerLeftSize,                            1.0),
+    styleDef(dividerRightSize,                           1.0),
 
     styleDef(clefLeftMargin,                             0.75_sp),
     styleDef(keysigLeftMargin,                           0.5_sp),

@@ -1800,8 +1800,8 @@ void TRead::read(MMRestRange* r, XmlReader& xml, ReadContext& ctx)
 void TRead::read(SystemDivider* d, XmlReader& e, ReadContext& ctx)
 {
     SystemDividerType type = e.attribute("type") == "left" ? SystemDividerType::LEFT : SystemDividerType::RIGHT;
-    TRead::read(static_cast<Symbol*>(d), e, ctx);
     d->setDividerType(type);
+    TRead::read(static_cast<Symbol*>(d), e, ctx);
 }
 
 static void setActionIconTypeFromAction(ActionIcon* i, const std::string& actionCode)
@@ -2404,7 +2404,9 @@ void TRead::read(Symbol* sym, XmlReader& e, ReadContext& ctx)
     }
 
     sym->setPos(PointF());
-    sym->setSym(symId, scoreFont);
+    if (!sym->isSystemDivider()) {
+        sym->setSym(symId, scoreFont);
+    }
 }
 
 void TRead::read(SoundFlag* item, XmlReader& xml, ReadContext&)
