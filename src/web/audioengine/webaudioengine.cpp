@@ -83,11 +83,9 @@ void WebAudioEngine::init()
 
     m_controller = std::make_shared<EngineController>(m_rpcChannel);
     m_controller->registerExports();
-    m_controller->onStart();
+    m_controller->onStartRunning();
 
-    m_rpcChannel->send(rpc::make_notification(Method::EngineStarted));
-
-    LOGI() << "Web audio engine inited";
+    LOGI() << "Web audio engine running";
 }
 
 void WebAudioEngine::process(float* stream, unsigned samplesPerChannel)

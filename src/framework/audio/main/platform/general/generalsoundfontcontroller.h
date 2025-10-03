@@ -43,7 +43,7 @@ class GeneralSoundFontController : public ISoundFontController, public async::As
 public:
     GeneralSoundFontController() = default;
 
-    void init() override;
+    void loadSoundFonts() override;
 
     void addSoundFont(const synth::SoundFontUri& uri) override;
 
@@ -53,7 +53,7 @@ private:
 
     RetVal<io::path_t> resolveInstallationPath(const io::path_t& path) const;
 
-    void loadSoundFonts();
+    void doLoadSoundFonts();
     void loadSoundFonts(const std::vector<io::path_t>& paths);
 };
 }

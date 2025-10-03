@@ -51,11 +51,17 @@ public:
     EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel);
 
     void registerExports() override;
-    void onStart() override;
+    void onStartRunning() override;
     void init(const OutputSpec& outputSpec, const AudioEngineConfig& conf) override;
     void deinit() override;
 
+    OutputSpec outputSpec() const;
+    async::Channel<OutputSpec> outputSpecChanged() const;
+
     void process(float* stream, unsigned samplesPerChannel);
+
+    void process();
+    void popAudioData(float* stream, unsigned samplesPerChannel);
 
 private:
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;

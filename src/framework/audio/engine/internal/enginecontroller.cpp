@@ -110,12 +110,22 @@ void EngineController::registerExports()
     ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
 }
 
-void EngineController::onStart()
+void EngineController::onStartRunning()
 {
+    //! NOTE After sending a EngineRunning,
+    //! we may receive RPC messages, such as for example load a soundfont.
+    //! Therefore, we need to subscribe all the necessary services to RPC messages.
+
+    m_soundFontRepository->init();
+
+    //! NOTE It is also possible to do internal registrations of some services
+    //! that do not depend on anything.
     m_fxResolver->registerResolver(AudioFxType::MuseFx, std::make_shared<MuseFxResolver>());
     m_synthResolver->registerResolver(AudioSourceType::Fluid, std::make_shared<FluidResolver>());
 
-    m_soundFontRepository->init();
+    //! NOTE We inform that the engine is running and can receive messages
+    //! (it has not yet been initialized)
+    m_rpcChannel->send(rpc::make_notification(rpc::Method::EngineRunning));
 }
 
 void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfig& conf)
@@ -160,8 +170,27 @@ void EngineController::deinit()
     m_audioEngine->deinit();
 }
 
+OutputSpec EngineController::outputSpec() const
+{
+    return m_audioEngine->outputSpec();
+}
+
+async::Channel<OutputSpec> EngineController::outputSpecChanged() const
+{
+    return m_audioEngine->outputSpecChanged();
+}
+
 void EngineController::process(float* stream, unsigned samplesPerChannel)
 {
+    m_audioEngine->process(stream, samplesPerChannel);
+}
+
+void EngineController::process()
+{
     m_audioEngine->processAudioData();
+}
+
+void EngineController::popAudioData(float* stream, unsigned samplesPerChannel)
+{
     m_audioEngine->popAudioData(stream, samplesPerChannel);
 }

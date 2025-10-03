@@ -203,6 +203,16 @@ void AudioEngine::processAudioData()
     m_buffer->forward();
 }
 
+samples_t AudioEngine::process(float* buffer, samples_t samplesPerChannel)
+{
+    if (m_inited) {
+        return m_mixer->process(buffer, samplesPerChannel);
+    } else {
+        std::memset(buffer, 0, samplesPerChannel * sizeof(float) * m_outputSpec.audioChannelCount);
+        return 0;
+    }
+}
+
 void AudioEngine::popAudioData(float* dest, size_t sampleCount)
 {
     // driver thread
