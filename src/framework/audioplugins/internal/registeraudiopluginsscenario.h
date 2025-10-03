@@ -27,6 +27,7 @@
 #include "global/iglobalconfiguration.h"
 #include "global/iinteractive.h"
 #include "global/async/asyncable.h"
+#include "global/io/ifilesystem.h"
 
 #include "../iregisteraudiopluginsscenario.h"
 #include "../iknownaudiopluginsregister.h"
@@ -43,6 +44,7 @@ public:
     Inject<IGlobalConfiguration> globalConfiguration = { this };
     Inject<IInteractive> interactive = { this };
     Inject<IProcess> process = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
 
 public:
     RegisterAudioPluginsScenario(const modularity::ContextPtr& iocCtx)
@@ -51,11 +53,14 @@ public:
     void init();
 
     io::paths_t scanForNewPluginPaths() const override;
-    Ret registerNewPlugins(io::paths_t newPluginPaths = {}) override;
+
+    Ret updatePluginsRegistry(io::paths_t newPluginPaths = {}) override;
     Ret registerPlugin(const io::path_t& pluginPath) override;
     Ret registerFailedPlugin(const io::path_t& pluginPath, int failCode) override;
 
 private:
+    Ret unregisterUninstalledPlugins();
+
     void processPluginsRegistration(const io::paths_t& pluginPaths);
     IAudioPluginMetaReaderPtr metaReader(const io::path_t& pluginPath) const;
     audio::AudioResourceType metaType(const io::path_t& pluginPath) const;
