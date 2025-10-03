@@ -87,6 +87,8 @@ public:
 
     // QQmlParserStatus
     void classBegin() override;
+
+    bool isComponentCompleted() const;
     void componentComplete() override;
 
 public slots:
@@ -125,6 +127,8 @@ protected:
     NavigationEvent* m_event = nullptr;
 
     mutable AccessibleItem* m_accessible = nullptr;
+
+    bool m_isComponentCompleted = false;
 };
 }
 

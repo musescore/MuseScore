@@ -69,6 +69,8 @@ public:
 
     Q_INVOKABLE void notifyAboutControlWasTriggered();
 
+    void componentComplete() override;
+
 public slots:
     void setPanel(NavigationPanel* panel);
 
