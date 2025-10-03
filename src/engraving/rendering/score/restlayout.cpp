@@ -601,7 +601,7 @@ void RestLayout::checkFullMeasureRestCollisions(const System* system, LayoutCont
             }
 
             double xRest = fullMeasureRest->pagePos().x() - system->pagePos().x();
-            Shape restShape = fullMeasureRest->shape().translate(PointF(xRest, fullMeasureRest->y()));
+            Shape restShape = fullMeasureRest->shape().translate(PointF(xRest, fullMeasureRest->ldata()->pos().y()));
 
             Shape measureShape;
             for (const Segment& segment : measure->segments()) {
