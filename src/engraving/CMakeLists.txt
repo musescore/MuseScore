@@ -346,6 +346,14 @@ set(MODULE_LINK
 
 set_source_files_properties( 
     # For these files, Unity Build does not work
+    ${CMAKE_CURRENT_LIST_DIR}/dom/excerpt.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dom/instrument.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dom/part.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dom/score.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dom/transpose.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/transpose.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/style/style.cpp
+
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/mscreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/mscwriter.cpp
 
