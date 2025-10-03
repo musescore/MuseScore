@@ -51,6 +51,7 @@ public:
     void setMaxSamplesPerBlock(audio::samples_t samples);
 
     void setSampleRate(unsigned int sampleRate);
+    void setProcessMode(VstProcessMode mode);
 
     ParamsMapping paramsMapping(const std::set<Steinberg::Vst::CtrlNumber>& controllers) const;
 
@@ -97,6 +98,7 @@ private:
     VstParameterChanges m_paramChanges;
     VstProcessData m_processData;
     VstProcessContext m_processContext;
+    VstProcessMode m_processMode = VstProcessMode::kRealtime;
 
     std::unordered_map<size_t, VstEvent> m_playingNotes;
     std::vector<PluginParamId> m_playingParams;

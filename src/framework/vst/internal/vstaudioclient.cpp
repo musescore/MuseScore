@@ -240,7 +240,16 @@ void VstAudioClient::setSampleRate(unsigned int sampleRate)
     }
 
     m_samplesInfo.sampleRate = sampleRate;
+    updateProcessSetup();
+}
 
+void VstAudioClient::setProcessMode(VstProcessMode mode)
+{
+    if (m_processMode == mode) {
+        return;
+    }
+
+    m_processMode = mode;
     updateProcessSetup();
 }
 
@@ -377,7 +386,7 @@ void VstAudioClient::updateProcessSetup()
     disableActivity();
 
     VstProcessSetup setup;
-    setup.processMode = Steinberg::Vst::kRealtime;
+    setup.processMode = m_processMode;
     setup.symbolicSampleSize = Steinberg::Vst::kSample32;
     setup.maxSamplesPerBlock = m_samplesInfo.maxSamplesPerBlock;
     setup.sampleRate = m_samplesInfo.sampleRate;

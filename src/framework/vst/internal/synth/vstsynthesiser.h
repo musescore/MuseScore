@@ -71,6 +71,8 @@ public:
     muse::audio::samples_t process(float* buffer, muse::audio::samples_t samplesPerChannel) override;
 
 private:
+    void updateRenderingMode(const audio::RenderMode mode) override;
+
     void toggleVolumeGain(const bool isActive);
     audio::samples_t processSequence(const VstSequencer::EventSequence& sequence, const audio::samples_t samples, float* buffer);
 
