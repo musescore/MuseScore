@@ -128,7 +128,7 @@ void ChordArticulationsParser::parseSpanners(const Chord* chord, const Rendering
         spannerContext.nominalDurationTicks = SpannerFilter::spannerActualDurationTicks(spanner, interval.stop - interval.start);
         spannerContext.nominalPositionEndTick = spannerContext.nominalPositionStartTick + spannerContext.nominalDurationTicks;
 
-        SpannersMetaParser::parse(spanner, std::move(spannerContext), result);
+        SpannersMetaParser::parse(spanner, spannerContext, result);
     }
 }
 

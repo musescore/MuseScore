@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_MPE_EVENTS_H
-#define MUSE_MPE_EVENTS_H
+#pragma once
 
 #include <variant>
 #include <vector>
@@ -31,6 +29,7 @@
 #include "global/types/number.h"
 #include "types/flags.h"
 #include "types/number.h"
+#include "types/sharedmap.h"
 
 #include "mpetypes.h"
 #include "playbacksetupdata.h"
@@ -336,10 +335,10 @@ using PlaybackEvent = std::variant<std::monostate,
                                    ControllerChangeEvent>;
 
 using PlaybackEventList = std::vector<PlaybackEvent>;
-using PlaybackEventsMap = std::map<timestamp_t, PlaybackEventList>;
+using PlaybackEventsMap = SharedMap<timestamp_t, PlaybackEventList>;
 
-using DynamicLevelMap = std::map<timestamp_t, dynamic_level_t>;
-using DynamicLevelLayers = std::map<layer_idx_t, DynamicLevelMap>;
+using DynamicLevelMap = SharedMap<timestamp_t, dynamic_level_t>;
+using DynamicLevelLayers = SharedMap<layer_idx_t, DynamicLevelMap>;
 
 using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers>;
 using OffStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, bool /*flushOffstream*/>;
@@ -365,5 +364,3 @@ struct PlaybackData {
     }
 };
 }
-
-#endif // MUSE_MPE_EVENTS_H
