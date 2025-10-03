@@ -1099,7 +1099,12 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
                 mode = DragMode::OnlyX;
             }
 
+            const std::vector<int> oldPitches = pitchesBeingDragged();
             viewInteraction()->drag(m_mouseDownInfo.logicalBeginPoint, logicPos, mode);
+
+            if (!oldPitches.empty() && oldPitches != pitchesBeingDragged()) {
+                playbackController()->playElements(m_notesBeingDragged);
+            }
 
             return;
         } else if (hitElement == nullptr && (keyState & Qt::ShiftModifier)) {
@@ -1138,6 +1143,16 @@ void NotationViewInputController::startDragElements(ElementType elementsType, co
     };
 
     viewInteraction()->startDrag(elements, elementsOffset, isDraggable);
+
+    if (!viewInteraction()->isDragStarted()) {
+        return;
+    }
+
+    for (const EngravingItem* item : elements) {
+        if (item->isNote()) {
+            m_notesBeingDragged.push_back(item);
+        }
+    }
 }
 
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
@@ -1202,6 +1217,8 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
     if (interaction->isOutgoingDragStarted()) {
         interaction->endOutgoingDrag();
     }
+
+    m_notesBeingDragged.clear();
 }
 
 void NotationViewInputController::handleLeftClickRelease(const QPointF& releasePoint)
@@ -1589,6 +1606,18 @@ bool NotationViewInputController::dropEvent(const DragMoveEvent& event, const QM
     }
 
     return isAccepted;
+}
+
+std::vector<int> NotationViewInputController::pitchesBeingDragged() const
+{
+    std::vector<int> pitches;
+    pitches.reserve(m_notesBeingDragged.size());
+
+    for (const EngravingItem* item : m_notesBeingDragged) {
+        pitches.push_back(toNote(item)->pitch());
+    }
+
+    return pitches;
 }
 
 float NotationViewInputController::hitWidth() const
