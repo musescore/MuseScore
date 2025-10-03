@@ -25,8 +25,6 @@
 #include <unordered_map>
 #include <memory>
 
-#include "style/style.h"
-
 #include "engraving/iengravingfontsprovider.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/staff.h"
