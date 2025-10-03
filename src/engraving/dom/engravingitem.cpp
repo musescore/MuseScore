@@ -486,6 +486,19 @@ staff_idx_t EngravingItem::effectiveStaffIdx() const
         return muse::nidx;
     }
 
+    const Measure* m = findMeasure();
+
+    // TODO - make more system markings ignore empty cutaway measures
+    auto cutawayMeasureNo =[&](staff_idx_t staffIdx) {
+        if (!m) {
+            return false;
+        }
+        bool measureNo = isMeasureNumber();
+        bool staffVisible = m->mstaves()[staffIdx]->visible();
+        bool cutaway = score()->staff(staffIdx)->cutaway() && m->isEmpty(staffIdx);
+        return (cutaway || !staffVisible) && measureNo;
+    };
+
     const std::vector<Staff*>& systemObjectStaves = m_score->systemObjectStaves(); // CAUTION: may not be ordered
     if (originalStaffIdx > 0) {
         staff_idx_t prevSysObjStaffIdx = 0;
@@ -498,7 +511,7 @@ staff_idx_t EngravingItem::effectiveStaffIdx() const
 
         bool omitObject = true;
         for (staff_idx_t stfIdx = prevSysObjStaffIdx; stfIdx < originalStaffIdx; ++stfIdx) {
-            if (m_score->staff(stfIdx)->show() && system->staff(stfIdx)->show()) {
+            if (m_score->staff(stfIdx)->show() && system->staff(stfIdx)->show() && !cutawayMeasureNo(stfIdx)) {
                 omitObject = false;
                 break;
             }
@@ -511,7 +524,7 @@ staff_idx_t EngravingItem::effectiveStaffIdx() const
         }
     }
 
-    if (m_score->staff(originalStaffIdx)->show() && system->staff(originalStaffIdx)->show()) {
+    if (m_score->staff(originalStaffIdx)->show() && system->staff(originalStaffIdx)->show() && !cutawayMeasureNo(originalStaffIdx)) {
         return originalStaffIdx;
     }
 
