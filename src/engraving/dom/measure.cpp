@@ -622,6 +622,7 @@ bool Measure::showMeasureNumber()
     case MeasureNumberMode::HIDE:
         return false;
     }
+    return false; // can't really happen
 }
 
 //---------------------------------------------------------
