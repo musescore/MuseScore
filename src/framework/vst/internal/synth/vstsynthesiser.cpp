@@ -90,6 +90,15 @@ void VstSynthesiser::init(const OutputSpec& spec)
     });
 }
 
+void VstSynthesiser::updateRenderingMode(const RenderMode mode)
+{
+    if (mode == RenderMode::OfflineMode) {
+        m_vstAudioClient->setProcessMode(VstProcessMode::kOffline);
+    } else {
+        m_vstAudioClient->setProcessMode(VstProcessMode::kRealtime);
+    }
+}
+
 void VstSynthesiser::toggleVolumeGain(const bool isActive)
 {
     static constexpr muse::audio::gain_t NON_ACTIVE_GAIN = 0.5f;
