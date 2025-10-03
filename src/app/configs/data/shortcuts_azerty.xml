@@ -1185,10 +1185,6 @@
     <seq>Ctrl+u</seq>
     </SC>
   <SC>
-    <key>startcenter</key>
-    <seq>F4</seq>
-    </SC>
-  <SC>
     <key>toggle-insert-mode</key>
     <seq>Ctrl+I</seq>
     </SC>
