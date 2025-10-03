@@ -256,8 +256,7 @@ MenuView {
             root.subMenuLoader.hasSiblingMenus = root.hasSiblingMenus
 
             root.subMenuLoader.handleMenuItem.connect(function(itemId) {
-                Qt.callLater(root.handleMenuItem, itemId)
-                root.subMenuLoader.close()
+                root.handleMenuItem(itemId)
             })
 
             root.subMenuLoader.opened.connect(function(itemId) {
