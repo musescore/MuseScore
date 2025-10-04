@@ -660,6 +660,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     };
 
     m_shouldStartEditOnLeftClickRelease = false;
+    m_ignoreNextMouseContextMenuEvent = false;
 
     // When using MiddleButton, just start moving the canvas
     if (button == Qt::MiddleButton) {
@@ -756,6 +757,7 @@ void NotationViewInputController::handleClickInNoteInputMode(QMouseEvent* event)
     const PointF logicPos = m_view->toLogical(event->pos());
 
     if (event->button() == Qt::RightButton) {
+        m_ignoreNextMouseContextMenuEvent = true;
         dispatcher()->dispatch("remove-note", ActionData::make_arg1<PointF>(logicPos));
         return;
     }

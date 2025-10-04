@@ -134,6 +134,8 @@ public:
     bool canHandleInputMethodQuery(Qt::InputMethodQuery query) const;
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
 
+    bool ignoreNextMouseContextMenuEvent() const { return m_ignoreNextMouseContextMenuEvent; }
+
     void dragEnterEvent(QDragEnterEvent* event);
     void dragLeaveEvent(QDragLeaveEvent* event);
     void dragMoveEvent(QDragMoveEvent* event);
@@ -240,5 +242,6 @@ private:
     bool m_hitElementWasAlreadySingleSelected = false;
     bool m_shouldSelectOnLeftClickRelease = false;
     bool m_shouldStartEditOnLeftClickRelease = false;
+    bool m_ignoreNextMouseContextMenuEvent = false;
 };
 }

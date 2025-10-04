@@ -1277,10 +1277,15 @@ bool AbstractNotationPaintView::event(QEvent* event)
 
     if (isContextMenuEvent) {
         QContextMenuEvent* contextMenuEvent = dynamic_cast<QContextMenuEvent*>(event);
+        if (contextMenuEvent && contextMenuEvent->reason() == QContextMenuEvent::Mouse
+            && m_inputController->ignoreNextMouseContextMenuEvent()) {
+            return true;
+        }
         QPointF pos = contextMenuEvent && !contextMenuEvent->pos().isNull()
                       ? mapFromGlobal(contextMenuEvent->globalPos())
                       : fromLogical(m_inputController->selectionElementPos()).toQPointF();
         showContextMenu(m_inputController->selectionType(), pos);
+        return true;
     } else if (eventType == QEvent::Type::ShortcutOverride) {
         bool shouldOverrideShortcut = shortcutOverride(keyEvent);
 
