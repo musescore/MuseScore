@@ -21,7 +21,7 @@
  */
 #include "dynamic.h"
 
-#include "../editing/undo.h"
+#include "../editing/textedit.h"
 #include "../types/typesconv.h"
 
 #include "dynamichairpingroup.h"
@@ -595,8 +595,8 @@ String Dynamic::screenReaderInfo() const
 
 bool Dynamic::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Key_Tab) {
-        return false;
+    if (!dynamic_cast<TextEditData*>(ed.getData(this).get())) {
+        return EngravingItem::isEditAllowed(ed);
     }
 
     return TextBase::isEditAllowed(ed);
