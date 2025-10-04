@@ -110,10 +110,6 @@ void PlaybackModule::registerUiTypes()
 
 void PlaybackModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     m_configuration->init();
     m_soundProfileRepo->init();
     m_playbackController->init();
@@ -125,11 +121,7 @@ void PlaybackModule::onInit(const IApplication::RunMode& mode)
     m_playbackUiActions->init();
 }
 
-void PlaybackModule::onAllInited(const IApplication::RunMode& mode)
+void PlaybackModule::onAllInited(const IApplication::RunMode&)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     m_soundProfileRepo->refresh();
 }

@@ -70,6 +70,8 @@ private:
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
 
     std::shared_ptr<AudioDriverController> m_audioDriverController;
+
+    bool m_audioInited = false;
 };
 }
 
