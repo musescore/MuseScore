@@ -105,7 +105,7 @@ void BspTree::initialize(const RectF& rec, int n)
     m_leafCnt    = 0;
 
     m_nodes.resize((1 << (m_depth + 1)) - 1);
-    m_leaves.resize(1LL << m_depth);
+    m_leaves.assign(1LL << m_depth, std::vector<EngravingItem*>());
     initialize(rec, m_depth, 0);
 }
 
