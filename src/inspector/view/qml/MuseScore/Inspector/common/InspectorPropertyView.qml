@@ -45,6 +45,8 @@ Column {
     property alias showTitle: titleLabelLoader.visible
     property alias showButton: buttonLoader.visible
 
+    property string accessibleName: titleText
+
     readonly property bool isStyled: propertyItem ? propertyItem.isStyled : false
     property bool isModified: propertyItem ? propertyItem.isModified : false
 
@@ -124,8 +126,8 @@ Column {
                     navigation.name: root.navigationName + "Reset"
                     navigation.panel: root.navigationPanel
                     navigation.row: root.buttonNavigationRow
-                    navigation.accessible.name: root.titleText ? qsTrc("inspector", "Reset “%1” to default value").arg(root.titleText)
-                                                               : qsTrc("inspector", "Reset property to default value")
+                    navigation.accessible.name: root.accessibleName ? qsTrc("inspector", "Reset “%1” to default value").arg(root.accessibleName)
+                                                                    : qsTrc("inspector", "Reset property to default value")
 
                     enabled: root.isModified
 
@@ -145,7 +147,9 @@ Column {
                     navigation.name: root.navigationName + " Menu Button"
                     navigation.panel: root.navigationPanel
                     navigation.row: root.buttonNavigationRow
-                    navigation.accessible.name: root.titleText + " " + qsTrc("inspector", "Menu")
+
+                    //: %1 is replaced with the name of the property
+                    navigation.accessible.name: qsTrc("inspector", "Menu for “%1”").arg(root.accessibleName)
 
                     menuModel: {
                         var result = []

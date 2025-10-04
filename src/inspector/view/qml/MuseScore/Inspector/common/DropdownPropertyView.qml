@@ -47,7 +47,7 @@ InspectorPropertyView {
         navigation.name: root.navigationName + " Dropdown"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
-        navigation.accessible.name: root.titleText + " " + currentText
+        navigation.accessible.name: root.accessibleName + " " + currentText
 
         currentIndex: root.propertyItem && !root.propertyItem.isUndefined
                       ? dropdownItem.indexOfValue(root.propertyItem.value)
