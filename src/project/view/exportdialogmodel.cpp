@@ -421,6 +421,21 @@ void ExportDialogModel::setPdfTransparentBackground(const bool& transparent)
     emit pdfTransparentBackgroundChanged(transparent);
 }
 
+bool ExportDialogModel::pdfGrayscale() const
+{
+    return imageExportConfiguration()->exportPdfWithGrayscale();
+}
+
+void ExportDialogModel::setPdfGrayscale(const bool& grayscale)
+{
+    if (grayscale == pdfGrayscale()) {
+        return;
+    }
+
+    imageExportConfiguration()->setExportPdfWithGrayscale(grayscale);
+    emit pdfGrayscaleChanged(grayscale);
+}
+
 int ExportDialogModel::pngResolution() const
 {
     return imageExportConfiguration()->exportPngDpiResolution();
