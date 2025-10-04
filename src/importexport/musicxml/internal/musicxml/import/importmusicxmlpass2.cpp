@@ -7718,7 +7718,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
 
     FretDiagram* fd = nullptr;
     Harmony* ha = Factory::createHarmony(m_score->dummy()->segment());
-    HarmonyInfo* info = new HarmonyInfo(m_score);
+    HarmonyInfo* info = nullptr;
     Fraction offset;
     if (!placement.empty()) {
         ha->setPlacement(placement == "below" ? PlacementV::BELOW : PlacementV::ABOVE);
@@ -7727,6 +7727,19 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
     }
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "root") {
+            if (info) {
+                const ChordDescription* d = nullptr;
+                if (info->rootTpc() != Tpc::TPC_INVALID) {
+                    d = harmonyFromXml(info, m_score, kind, kindText, symbols, parens, degreeList);
+                }
+                if (d) {
+                    info->setId(d->id);
+                    info->setTextName(d->names.front());
+                }
+                ha->addChord(info);
+                degreeList.clear();
+            }
+            info = new HarmonyInfo(m_score);
             String step;
             int alter = 0;
             bool invalidRoot = false;
@@ -7755,11 +7768,13 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
         } else if (m_e.name() == "function") {
             // deprecated in MusicXML 4.0
             // attributes: print-style
+            info = new HarmonyInfo(m_score);
             info->setRootTpc(Tpc::TPC_INVALID);
             info->setBassTpc(Tpc::TPC_INVALID);
             functionText = m_e.readText();
             ha->setHarmonyType(HarmonyType::ROMAN);
         } else if (m_e.name() == "numeral") {
+            info = new HarmonyInfo(m_score);
             info->setRootTpc(Tpc::TPC_INVALID);
             info->setBassTpc(Tpc::TPC_INVALID);
             while (m_e.readNextStartElement()) {
