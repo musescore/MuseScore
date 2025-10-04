@@ -214,7 +214,8 @@ AbstractElementPopup {
                             Layout.preferredHeight: parent.height - ui.theme.borderWidth * 2
                             Layout.preferredWidth: 64
 
-                            currentValue: modelData["valueStr"]
+                            currentValue: modelData["value"]
+                            currentText: modelData["valueStr"]
 
                             minValue: 0
                             maxValue: 127
@@ -223,12 +224,10 @@ AbstractElementPopup {
                             navigation.row: index
                             navigation.column: 3
 
-                            canIncrease: modelData["value"] < maxValue
                             onIncrement: function() {
                                 return stringTuningsModel.increaseStringValue(currentValue)
                             }
 
-                            canDecrease: modelData["value"] > minValue
                             onDecrement: function() {
                                 return stringTuningsModel.decreaseStringValue(currentValue)
                             }
@@ -237,8 +236,8 @@ AbstractElementPopup {
                                 var ok = stringTuningsModel.setStringValue(index, newValue)
                                 if (!ok) {
                                     //! NOTE: reset the text entered by the user
-                                    currentValue = modelData["valueStr"]
-                                    currentValue = Qt.binding( function() { return modelData["valueStr"] } )
+                                    currentText = modelData["valueStr"]
+                                    currentText = Qt.binding( function() { return modelData["valueStr"] } )
                                 }
                             }
                         }

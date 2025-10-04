@@ -59,8 +59,8 @@ public:
     Q_INVOKABLE void toggleString(int stringIndex);
     Q_INVOKABLE bool setStringValue(int stringIndex, const QString& stringValue);
 
-    Q_INVOKABLE QString increaseStringValue(const QString& stringValue);
-    Q_INVOKABLE QString decreaseStringValue(const QString& stringValue);
+    Q_INVOKABLE QString increaseStringValue(int currentPitch);
+    Q_INVOKABLE QString decreaseStringValue(int currentPitch);
 
     QVariantList presets(bool withCustom = true) const;
 
