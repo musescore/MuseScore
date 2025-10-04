@@ -35,6 +35,8 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
+export MUSESCORE_DIAGNOSTICS_CRASHPAD_CLIENT=OFF
+
 if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
 
 BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
@@ -59,6 +61,7 @@ MUSESCORE_REVISION=$MUSESCORE_REVISION \
 MUSESCORE_CRASHREPORT_URL=$CRASH_REPORT_URL \
 MUSESCORE_BUILD_VST_MODULE="ON" \
 MUSESCORE_BUILD_WEBSOCKET="ON" \
+MUSESCORE_DIAGNOSTICS_CRASHPAD_CLIENT=$MUSESCORE_DIAGNOSTICS_CRASHPAD_CLIENT \
 bash ./ninja_build.sh -t install
 
 bash ./buildscripts/ci/tools/make_release_channel_env.sh -c $MUSE_APP_BUILD_MODE
