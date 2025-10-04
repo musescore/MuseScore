@@ -74,6 +74,11 @@ qreal ScoreElement::spatium() const
     return e->isEngravingItem() ? toEngravingItem(e)->spatium() : e->score()->style().spatium();
 }
 
+QQmlListProperty<ScoreElement> ScoreElement::children()
+{
+    return wrapContainerProperty<ScoreElement>(this, e->children());
+}
+
 //---------------------------------------------------------
 //   ScoreElement::get
 //---------------------------------------------------------
@@ -214,6 +219,25 @@ void ScoreElement::reset(mu::engraving::Pid pid)
     } else {
         e->resetProperty(pid);
     }
+}
+
+void ScoreElement::scanElements(QJSValue func, bool all)
+{
+    if (!func.isCallable()) {
+        return;
+    }
+
+    auto wrapper = [](void* data, mu::engraving::EngravingItem* item) {
+        auto* callback = static_cast<QJSValue*>(data);
+        if (!callback->isCallable()) {
+            return;
+        }
+
+        QJSValueList args;
+        args << wrap(item); //ctx->engine->toScriptValue(wrap(item, ctx->ownership));
+        callback->call(args);
+    };
+    e->scanElements(&func, wrapper, all);
 }
 
 //---------------------------------------------------------
