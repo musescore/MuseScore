@@ -252,10 +252,6 @@ const ExportInfo& ExportProjectScenario::exportInfo() const
 
 void ExportProjectScenario::setExportInfo(const ExportInfo& exportInfo)
 {
-    if (m_exportInfo == exportInfo) {
-        return;
-    }
-
     m_exportInfo = exportInfo;
 }
 
