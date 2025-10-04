@@ -30,7 +30,7 @@ cd "${BASH_SOURCE%/*}/../.." # go to repository root
 if [[ "$LUPDATE_ARGS" = *"-no-obsolete"* ]]; then
     echo "Note: cleaning up obsolete strings"
 else
-    echo "Note: preserving obsolete strings (set LUPDATE_ARGS to \"-no-obsolete\" to clean them up)"
+    echo "Note: preserving obsolete strings (set LUPDATE_ARGS=\"-no-obsolete\" to clean them up)"
 fi
 
 LUPDATE=lupdate

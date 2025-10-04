@@ -25,7 +25,7 @@ LRELEASE=lrelease
 TS_DIR=$HERE/../../share/locale 
 QM_DIR=$HERE/../../share/locale 
 
-for f in $TS_DIR/{musescore,instruments,qt}_*.ts
+for f in $TS_DIR/{musescore,instruments}_*.ts
 do
   FILE_NAME=$(basename $f .ts)
   $LRELEASE $f -qm $QM_DIR/${FILE_NAME}.qm 
