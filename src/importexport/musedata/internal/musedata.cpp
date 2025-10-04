@@ -188,8 +188,7 @@ void MuseData::readChord(Part*, QStringView s)
             staffIdx = s.mid(23, 1).toInt() - 1;
         }
     }
-    int pitch = table[step] + alter + (octave + 1) * 12;
-    pitch = std::clamp(pitch, 0, 127);
+    int pitch = clampPitch(table[step] + alter + (octave + 1) * 12);
 
     Chord* chord = (Chord*)chordRest;
     Note* note = Factory::createNote(chord);

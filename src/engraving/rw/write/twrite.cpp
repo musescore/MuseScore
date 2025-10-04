@@ -1961,16 +1961,16 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
     write(item->shortNames(), xml, "shortName");
 //      if (!_trackName.empty())
     xml.tag("trackName", item->trackName());
-    if (item->minPitchP() > 0) {
+    if (item->minPitchP() > MIN_PITCH) {
         xml.tag("minPitchP", item->minPitchP());
     }
-    if (item->maxPitchP() < 127) {
+    if (item->maxPitchP() < MAX_PITCH) {
         xml.tag("maxPitchP", item->maxPitchP());
     }
-    if (item->minPitchA() > 0) {
+    if (item->minPitchA() > MIN_PITCH) {
         xml.tag("minPitchA", item->minPitchA());
     }
-    if (item->maxPitchA() < 127) {
+    if (item->maxPitchA() < MAX_PITCH) {
         xml.tag("maxPitchA", item->maxPitchA());
     }
     if (item->transpose().diatonic) {

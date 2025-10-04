@@ -3232,11 +3232,11 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
     const AsciiStringView tag(e.name());
 
     if (tag == "pitch") {
-        n->setPitch(std::clamp(e.readInt(), 0, 127), false);
+        n->setPitch(clampPitch(e.readInt()), false);
     } else if (tag == "tpc") {
-        int tcp = e.readInt();
-        n->setTpc1(tcp);
-        n->setTpc2(tcp);
+        int tpc = e.readInt();
+        n->setTpc1(tpc);
+        n->setTpc2(tpc);
     } else if (tag == "track") {          // for performance
         n->setTrack(e.readInt());
     } else if (tag == "Accidental") {

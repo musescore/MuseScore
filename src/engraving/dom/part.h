@@ -38,14 +38,6 @@ class Score;
 class InstrumentTemplate;
 
 //---------------------------------------------------------
-//   PreferSharpFlat
-//---------------------------------------------------------
-
-enum class PreferSharpFlat : char {
-    NONE, SHARPS, FLATS, AUTO
-};
-
-//---------------------------------------------------------
 //   @@ Part
 //   @P endTrack        int         (read only)
 //   @P harmonyCount    int         (read only)

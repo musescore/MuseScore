@@ -98,13 +98,8 @@ int step2tpcByKey(int step, Key key)
     while (step < 0) {
         step += STEP_DELTA_OCTAVE;
     }
-    while (key < Key::MIN) {
-        key  += Key::DELTA_ENHARMONIC;
-    }
-    while (key > Key::MAX) {
-        key  -= Key::DELTA_ENHARMONIC;
-    }
-    return tpcByStepAndKey[int(key) - int(Key::MIN)][step % STEP_DELTA_OCTAVE];
+
+    return tpcByStepAndKey[int(clampKey(key)) - int(Key::MIN)][step % STEP_DELTA_OCTAVE];
 }
 
 //---------------------------------------------------------
@@ -193,16 +188,10 @@ static const int pitchByStepAndKey[int(Key::NUM_OF)][STEP_DELTA_OCTAVE] = {
 
 int step2deltaPitchByKey(int step, Key key)
 {
-    while (step < 0) {
-        step+= STEP_DELTA_OCTAVE;
+    while (step < MIN_STEP) {
+        step += STEP_DELTA_OCTAVE;
     }
-    while (key < Key::MIN) {
-        key += Key::DELTA_ENHARMONIC;
-    }
-    while (key > Key::MAX) {
-        key -= Key::DELTA_ENHARMONIC;
-    }
-    return pitchByStepAndKey[int(key) - int(Key::MIN)][step % STEP_DELTA_OCTAVE];
+    return pitchByStepAndKey[int(clampKey(key)) - int(Key::MIN)][step % STEP_DELTA_OCTAVE];
 }
 
 //---------------------------------------------------------
@@ -698,7 +687,7 @@ void changeAllTpcs(Note* n, int tpc1)
         v = n->staff()->transpose(tick);
         v.flip();
     }
-    int tpc2 = mu::engraving::transposeTpc(tpc1, v, true);
+    int tpc2 = transposeTpc(tpc1, v, true);
     n->undoChangeProperty(Pid::TPC1, tpc1);
     n->undoChangeProperty(Pid::TPC2, tpc2);
 }
@@ -808,24 +797,9 @@ int pitch2tpc(int pitch, Key key, Prefer prefer)
 int pitch2absStepByKey(int pitch, int tpc, Key key, int& alter)
 {
     // sanitize input data
-    if (pitch < 0) {
-        pitch += PITCH_DELTA_OCTAVE;
-    }
-    if (pitch > 127) {
-        pitch -= PITCH_DELTA_OCTAVE;
-    }
-    if (tpc < Tpc::TPC_MIN) {
-        tpc   += TPC_DELTA_ENHARMONIC;
-    }
-    if (tpc > Tpc::TPC_MAX) {
-        tpc   -= TPC_DELTA_ENHARMONIC;
-    }
-    if (key < Key::MIN) {
-        key   += Key::DELTA_ENHARMONIC;
-    }
-    if (key > Key::MAX) {
-        key   -= Key::DELTA_ENHARMONIC;
-    }
+    pitch = clampPitch(pitch, true);
+    tpc = clampEnharmonic(tpc);
+    key = clampKey(key);
 
     int octave = (pitch - int(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE;
     int step = tpc2step(tpc);
@@ -841,18 +815,13 @@ int pitch2absStepByKey(int pitch, int tpc, Key key, int& alter)
 int absStep2pitchByKey(int step, Key key)
 {
     // sanitize input data
-    if (step < 0) {
+    if (step < MIN_STEP) {
         step += STEP_DELTA_OCTAVE;
     }
-    if (step > 74) {
+    if (step > MAX_STEP) {
         step -= STEP_DELTA_OCTAVE;
     }
-    if (key < Key::MIN) {
-        key  += Key::DELTA_ENHARMONIC;
-    }
-    if (key > Key::MAX) {
-        key  -= Key::DELTA_ENHARMONIC;
-    }
+    key = clampKey(key);
 
     int octave = step / STEP_DELTA_OCTAVE;
     int deltaPitch = step2deltaPitchByKey(step % STEP_DELTA_OCTAVE, key);
@@ -887,17 +856,9 @@ int tpcInterval(int startTpc, int interval, int alter)
         0, 2, 4, -1, 1, 3, 5
     };
 
-    int result = startTpc + intervals[(interval - 1) % 7] + alter * TPC_DELTA_SEMITONE;
     //ensure that we don't have anything more than double sharp or double flat
     //(I know, breaking some convention, but it's the best we can do for now)
-    while (result > Tpc::TPC_MAX) {
-        result -= TPC_DELTA_ENHARMONIC;
-    }
-    while (result < Tpc::TPC_MIN) {
-        result += TPC_DELTA_ENHARMONIC;
-    }
-
-    return result;
+    return clampEnharmonic(startTpc + intervals[(interval - 1) % 7] + alter * TPC_DELTA_SEMITONE);
 }
 
 //---------------------------------------------------------
@@ -1156,5 +1117,50 @@ int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseType& no
     }
     r = spellings[r * 5 + alter + 2];
     return r;
+}
+
+int clampEnharmonic(int tpc, bool useDoubleSharpsFlats)
+{
+    while (tpc > (useDoubleSharpsFlats ? Tpc::TPC_MAX : Tpc::TPC_F_SS)) {
+        tpc -= TPC_DELTA_ENHARMONIC;
+    }
+    while (tpc < (useDoubleSharpsFlats ? Tpc::TPC_MIN : Tpc::TPC_B_BB)) {
+        tpc += TPC_DELTA_ENHARMONIC;
+    }
+    return tpc;
+}
+
+int clampPitch(int pitch, bool octaved)
+{
+    if (!octaved) {
+        return std::clamp(pitch, MIN_PITCH, MAX_PITCH);
+    }
+    while (pitch > MAX_PITCH) {
+        pitch -= PITCH_DELTA_OCTAVE;
+    }
+    while (pitch < MIN_PITCH) {
+        pitch += PITCH_DELTA_OCTAVE;
+    }
+    return pitch;
+}
+
+Key clampKey(Key key, PreferSharpFlat prefer)
+{
+    Key smallest = Key::G_B;
+    Key largest = Key::F_S;
+
+    if (prefer != PreferSharpFlat::AUTO) {
+        smallest = (prefer == PreferSharpFlat::SHARPS) ? Key::A_B : Key::MIN;
+        largest  = (prefer == PreferSharpFlat::FLATS) ? Key::E : Key::MAX;
+    }
+
+    while (key < smallest) {
+        key += Key::DELTA_ENHARMONIC;
+    }
+    while (key > largest) {
+        key -= Key::DELTA_ENHARMONIC;
+    }
+
+    return key;
 }
 }

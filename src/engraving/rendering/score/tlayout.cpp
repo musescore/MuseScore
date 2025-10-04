@@ -643,7 +643,7 @@ void TLayout::layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, con
         const double lineDist = stf->lineDistance(tick) * spatium;
 
         // top notehead
-        if (item->topPitch() == INVALID_PITCH || item->topTpc() == Tpc::TPC_INVALID) {
+        if (!pitchIsValid(item->topPitch()) || !tpcIsValid(item->topTpc())) {
             ldata->topPos.setY(0.0); // if uninitialized, set to top staff line
         } else {
             int topLine = Ambitus::staffLine(item->topTpc(), item->topPitch(), clf);
@@ -656,7 +656,7 @@ void TLayout::layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, con
         }
 
         // bottom notehead
-        if (item->bottomPitch() == INVALID_PITCH || item->bottomTpc() == Tpc::TPC_INVALID) {
+        if (!pitchIsValid(item->bottomPitch()) || !tpcIsValid(item->bottomTpc())) {
             const int numOfLines = stf->lines(tick);
             ldata->bottomPos.setY((numOfLines - 1) * lineDist);         // if uninitialized, set to last staff line
         } else {
