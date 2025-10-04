@@ -46,6 +46,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/sig.h"
 #include "engraving/dom/spacer.h"
