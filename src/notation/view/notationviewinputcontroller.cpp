@@ -623,8 +623,8 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
         stepsX = dx / static_cast<qreal>(PIXELSSTEPSFACTOR);
         stepsY = dy / static_cast<qreal>(PIXELSSTEPSFACTOR);
     } else if (!stepsScrolled.isNull()) {
-        dx = (stepsScrolled.x() * qMax(2.0, m_view->width() / 10.0)) / QWheelEvent::DefaultDeltasPerStep;
-        dy = (stepsScrolled.y() * qMax(2.0, m_view->height() / 10.0)) / QWheelEvent::DefaultDeltasPerStep;
+        dx = (stepsScrolled.x() * qMax(2.0, m_view->width() / 10.0)) / static_cast<qreal>(QWheelEvent::DefaultDeltasPerStep);
+        dy = (stepsScrolled.y() * qMax(2.0, m_view->height() / 10.0)) / static_cast<qreal>(QWheelEvent::DefaultDeltasPerStep);
         stepsX = static_cast<qreal>(stepsScrolled.x()) / static_cast<qreal>(QWheelEvent::DefaultDeltasPerStep);
         stepsY = static_cast<qreal>(stepsScrolled.y()) / static_cast<qreal>(QWheelEvent::DefaultDeltasPerStep);
     }

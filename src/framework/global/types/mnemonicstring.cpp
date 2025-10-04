@@ -36,14 +36,14 @@ static QString processMnemonic(const QString& str, bool showUnderlines)
     const QChar* c = str.data();
     int l = str.length();
     while (l) {
-        if (*c == '&') {
+        if (*c == QChar('&')) {
             ++c;
             --l;
             if (!l) {
                 break;
             }
 
-            if (showUnderlines && *c != '&') {
+            if (showUnderlines && *c != QChar('&')) {
                 result.append(QStringLiteral("<u>")).append(*c).append(QStringLiteral("</u>"));
                 ++c;
                 --l;
