@@ -189,22 +189,22 @@ void SplitJoinMeasure::splitMeasure(MasterScore* score, const Fraction& tick)
 //   joinMeasure
 //---------------------------------------------------------
 
-void SplitJoinMeasure::joinMeasures(MasterScore* score, const Fraction& tick1, const Fraction& tick2)
+void SplitJoinMeasure::joinMeasures(MasterScore* masterScore, const Fraction& tick1, const Fraction& tick2)
 {
-    Measure* m1 = score->tick2measure(tick1);
-    Measure* m2 = score->tick2measure(tick2);
+    Measure* m1 = masterScore->tick2measure(tick1);
+    Measure* m2 = masterScore->tick2measure(tick2);
 
     if (!m1 || !m2) {
         return;
     }
 
-    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
         if (m1->isMeasureRepeatGroupWithPrevM(static_cast<int>(staffIdx))
             || m2->isMeasureRepeatGroupWithNextM(static_cast<int>(staffIdx))) {
             MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
             return;
         }
-        if (score->staves().at(staffIdx)->staffTypeRange(tick2).first > tick1.ticks()) {
+        if (masterScore->staves().at(staffIdx)->staffTypeRange(tick2).first > tick1.ticks()) {
             MScore::setError(MsError::CANNOT_JOIN_MEASURE_STAFFTYPE_CHANGE);
             return;
         }
@@ -217,7 +217,7 @@ void SplitJoinMeasure::joinMeasures(MasterScore* score, const Fraction& tick1, c
         m2 = m2->mmRestLast();
     }
 
-    score->deselectAll();
+    masterScore->deselectAll();
 
     ScoreRange range;
     range.read(m1->first(), m2->last());
@@ -225,13 +225,13 @@ void SplitJoinMeasure::joinMeasures(MasterScore* score, const Fraction& tick1, c
     Fraction startTick = m1->tick();
     Fraction endTick = m2->endTick();
 
-    auto spanners = score->spannerMap().findContained(startTick.ticks(), endTick.ticks());
+    auto spanners = masterScore->spannerMap().findContained(startTick.ticks(), endTick.ticks());
     for (auto i : spanners) {
-        score->doUndoRemoveElement(i.value);
+        masterScore->doUndoRemoveElement(i.value);
     }
 
     std::map<Spanner*, Fraction> spannersEndingInRange;
-    std::multimap<int, Spanner*> spannerMap = score->spanner();
+    std::multimap<int, Spanner*> spannerMap = masterScore->spanner();
     for (std::pair<int, Spanner*> i : spannerMap) {
         Spanner* s = i.second;
         if (s->tick() >= startTick && s->tick() < endTick) {
@@ -247,19 +247,19 @@ void SplitJoinMeasure::joinMeasures(MasterScore* score, const Fraction& tick1, c
         // Remove spanners starting within join range and ending outside
         // These will be replaced on range.write
         if (s->tick() > startTick && s->tick() < endTick && s->tick2() > endTick) {
-            score->doUndoRemoveElement(s);
+            masterScore->doUndoRemoveElement(s);
         }
     }
 
     MeasureBase* next = m2->next();
-    score->deleteMeasures(m1, m2, true);
+    masterScore->deleteMeasures(m1, m2, true);
 
     Score::InsertMeasureOptions options;
     options.createEmptyMeasures = true;
     options.moveSignaturesClef = false;
     options.moveStaffTypeChanges = false;
     options.ignoreBarLines = true;
-    Measure* joinedMeasure = toMeasure(score->insertMeasure(next, options));
+    Measure* joinedMeasure = toMeasure(masterScore->insertMeasure(next, options));
 
     for (auto spannerToFixup : spannersEndingInRange) {
         Spanner* sp = spannerToFixup.first;
@@ -268,13 +268,13 @@ void SplitJoinMeasure::joinMeasures(MasterScore* score, const Fraction& tick1, c
         sp->setTick2(spEndTick);
     }
 
-    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-        Staff* staff = score->staves().at(staffIdx);
+    for (size_t staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
+        Staff* staff = masterScore->staves().at(staffIdx);
         if (staff->isStaffTypeStartFrom(tick1)) {
             StaffTypeChange* stc = engraving::Factory::createStaffTypeChange(joinedMeasure);
             stc->setParent(joinedMeasure);
             stc->setTrack(staffIdx * VOICES);
-            score->addElement(stc);
+            masterScore->addElement(stc);
         }
     }
 
@@ -289,7 +289,7 @@ void SplitJoinMeasure::joinMeasures(MasterScore* score, const Fraction& tick1, c
 
     // The loop since measures are not currently linked in MuseScore
     // change nominal time sig, as inserted measure took it from next measure
-    for (Score* s : score->scoreList()) {
+    for (Score* s : masterScore->scoreList()) {
         Measure* ins = s->tick2measure(startTick);
         ins->undoChangeProperty(Pid::TIMESIG_NOMINAL, newTimesig);
         // set correct barline types if needed
@@ -301,17 +301,17 @@ void SplitJoinMeasure::joinMeasures(MasterScore* score, const Fraction& tick1, c
             ins->undoChangeProperty(Pid::REPEAT_START, true);
         }
     }
-    Measure* inserted = (next ? next->prevMeasure() : score->lastMeasure());
+    Measure* inserted = (next ? next->prevMeasure() : masterScore->lastMeasure());
     inserted->adjustToLen(newLen, /* appendRests... */ false);
 
-    range.write(score, m1->tick());
+    range.write(masterScore, m1->tick());
 
     // if there are some Time Signatures in joined measures, move last one to the next measure (if there is not one already)
     Segment* ts = inserted->last()->prev(SegmentType::TimeSig);
     if (ts && ts->rtick().isNotZero()) {
         for (Segment* insMSeg = inserted->last()->prev(SegmentType::TimeSig); insMSeg && insMSeg->rtick().isNotZero();
              insMSeg = insMSeg->prev(SegmentType::TimeSig)) {
-            for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            for (staff_idx_t staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
                 if (TimeSig* insTimeSig = toTimeSig(insMSeg->element(staffIdx * VOICES))) {
                     TimeSig* lts = nullptr;
                     for (EngravingObject* l : insTimeSig->linkList()) {
