@@ -28,6 +28,7 @@
 #include "../iimagesexportconfiguration.h"
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
+#include "project/types/projectmeta.h"
 
 class QPdfWriter;
 
@@ -47,7 +48,9 @@ public:
                         const Options& options = Options()) override;
 
 private:
-    void preparePdfWriter(QPdfWriter& pdfWriter, const QString& title, const QSizeF& size) const;
+    void preparePdfWriter(QPdfWriter& pdfWriter, notation::INotationPtr notation, const QSizeF& size) const;
+    project::ProjectMeta getProjectMetadata(notation::INotationPtr notation) const;
+    QByteArray generateXmpMetadata(const project::ProjectMeta& meta) const;
 };
 }
 

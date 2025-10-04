@@ -35,6 +35,10 @@ namespace mu::engraving {
 class Score;
 }
 
+namespace mu::project {
+class INotationProject;
+}
+
 namespace mu::notation {
 class NotationInteraction;
 class NotationPlayback;
@@ -78,6 +82,9 @@ public:
     INotationAccessibilityPtr accessibility() const override;
     INotationPartsPtr parts() const override;
 
+    project::INotationProject* notationProject() const override;
+    void setNotationProject(project::INotationProject* project) override;
+
     muse::async::Notification notationChanged() const override;
 
 protected:
@@ -108,6 +115,8 @@ private:
     INotationMidiInputPtr m_midiInput = nullptr;
     INotationAccessibilityPtr m_accessibility = nullptr;
     INotationElementsPtr m_elements = nullptr;
+
+    project::INotationProject* m_project = nullptr;
 };
 }
 

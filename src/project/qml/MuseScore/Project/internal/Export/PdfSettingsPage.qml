@@ -70,4 +70,19 @@ ExportSettingsPage {
             root.model.pdfTransparentBackground = !checked
         }
     }
+
+    CheckBox {
+        width: parent.width
+        text: qsTrc("project/export", "Embed metadata")
+
+        navigation.name: "EmbedMetadataCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 3
+
+        checked: root.model.pdfEmbedMetadata
+
+        onClicked: {
+            root.model.pdfEmbedMetadata = !checked
+        }
+    }
 }
