@@ -889,6 +889,10 @@
     <std>22</std>
     </SC>
   <SC>
+    <key>nav-search-control</key>
+    <std>22</std>
+    </SC>
+  <SC>
     <key>zoomin</key>
     <seq>Ctrl++</seq>
     <seq>Ctrl+=</seq>
