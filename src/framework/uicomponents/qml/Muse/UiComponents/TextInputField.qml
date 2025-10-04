@@ -78,8 +78,8 @@ FocusScope {
     }
 
     function ensureActiveFocus() {
-        if (Window.window && Window.window.objectName.includes("PopupWindow_QQuickView")) {
-            // See also PopupWindow_QQuickView::eventFilter
+        if (Window.window && Window.window.objectName.includes("_WindowView_QQuickView")) {
+            // See also WindowView::eventFilter
             Window.window.flags &= ~Qt.WindowDoesNotAcceptFocus
             Window.window.requestActivate()
         }
