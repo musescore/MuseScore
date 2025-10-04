@@ -1356,7 +1356,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(rehearsalMarkFontStyle,                     int(FontStyle::Bold)),
     styleDef(rehearsalMarkColor,                         PropertyValue::fromValue(Color::BLACK)),
     styleDef(rehearsalMarkAlign,                         Align(AlignH::HCENTER, AlignV::BASELINE)),
-    styleDef(rehearsalMarkFrameType,                     int(FrameType::SQUARE)),
+    styleDef(rehearsalMarkFrameType,                     int(FrameType::RECTANGLE)),
     styleDef(rehearsalMarkFramePadding,                  0.5),
     styleDef(rehearsalMarkFrameWidth,                    0.16),
     styleDef(rehearsalMarkFrameRound,                    0),
