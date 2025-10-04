@@ -220,7 +220,7 @@ MuseScore {
                     currentIndex = index
                 }
             }
-            Button {
+            FlatButton {
                 id: applyButton
                 text: qsTranslate("PrefsDialogBase", "Apply")
                 onClicked: {
@@ -228,7 +228,7 @@ MuseScore {
                     quit()
                 }
             }
-            Button {
+            FlatButton {
                 id: cancelButton
                 text: qsTranslate("PrefsDialogBase", "Cancel")
                 onClicked: {
