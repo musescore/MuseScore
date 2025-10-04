@@ -46,11 +46,11 @@ namespace mu::iex::finale {
 FinaleParser::FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, MusxEmbeddedGraphicsMap&& graphics, FinaleLoggerPtr& logger)
     : m_score(score), m_doc(doc), m_logger(logger), m_embeddedGraphics(std::move(graphics))
 {
-    m_finaleOptions.init(*this);
     const std::vector<IEngravingFontPtr> fonts = engravingFonts()->fonts();
     for (const IEngravingFontPtr& font : fonts) {
         m_engravingFonts.emplace(muse::strings::toLower(font->name()), font);
     }
+    m_finaleOptions.init(*this); // this must come after initializing m_engravingFonts
 }
 
 void FinaleParser::parse()
