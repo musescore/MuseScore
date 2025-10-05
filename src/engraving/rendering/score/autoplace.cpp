@@ -233,6 +233,9 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
             ldata->setIsSkipDraw(false);
         }
         const System* system = item->system();
+        IF_ASSERT_FAILED(system) {
+            return;
+        }
         const Skyline& staffSkyline = system->staff(stfIdx)->skyline();
         const SkylineLine& skyline = above ? staffSkyline.north() : staffSkyline.south();
         SkylineLine filteredSkyline = skyline.getFilteredCopy([item](const ShapeElement& shapeEl){
