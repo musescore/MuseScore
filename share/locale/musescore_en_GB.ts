@@ -11154,7 +11154,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public Licence vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="81"/>
         <source>When pressing a key, begin note input at the selected measure, note, or rest</source>
-        <translation>When pressing a key, begin note input at the selected measure, note, or rest</translation>
+        <translation>When pressing a key, begin note input at the selected bar, note, or rest</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="96"/>
@@ -11225,7 +11225,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public Licence vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="89"/>
         <source>On staff</source>
-        <translation>On staff</translation>
+        <translation>On stave</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="53"/>
@@ -12166,12 +12166,12 @@ Fret %1 on strings %2</translation>
         <translation>Start and end of %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3593"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3594"/>
         <source>Current contents of measures will be replaced</source>
         <translation>Current contents of bars will be replaced</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3594"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3595"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>Continue with inserting bar repeat?</translation>
     </message>
@@ -12799,7 +12799,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="140"/>
         <source>Score grey color</source>
-        <translation>Score grey color</translation>
+        <translation>Score grey colour</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="144"/>
@@ -17425,6 +17425,1728 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2097"/>
         <source>Ring</source>
         <translation>Ring</translation>
+    </message>
+</context>
+<context>
+    <name>engraving/propertyName</name>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="60"/>
+        <source>subtype</source>
+        <translation>subtype</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="61"/>
+        <source>selected</source>
+        <translation>selected</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="62"/>
+        <source>generated</source>
+        <translation>generated</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="63"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="310"/>
+        <source>color</source>
+        <translation>colour</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="64"/>
+        <source>visible</source>
+        <translation>visible</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="65"/>
+        <source>z</source>
+        <translation>z</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="66"/>
+        <source>small</source>
+        <translation>small</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="67"/>
+        <source>hide when empty</source>
+        <translation>hide when empty</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="68"/>
+        <source>hide staves when individually empty</source>
+        <translation>hide staves when individually empty</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="69"/>
+        <source>show if entire system empty</source>
+        <translation>show if entire system empty</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="70"/>
+        <source>show courtesy</source>
+        <translation>show courtesy</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="71"/>
+        <source>key signature mode</source>
+        <translation>key signature mode</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="72"/>
+        <source>line type</source>
+        <translation>line type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="73"/>
+        <source>pitch</source>
+        <translation>pitch</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="75"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="76"/>
+        <source>tonal pitch class</source>
+        <translation>tonal pitch class</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="77"/>
+        <source>line</source>
+        <translation>line</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="78"/>
+        <source>fixed</source>
+        <translation>fixed</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="79"/>
+        <source>fixed line</source>
+        <translation>fixed line</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="80"/>
+        <source>head type</source>
+        <translation>head type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="81"/>
+        <source>head</source>
+        <translation>head</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="82"/>
+        <source>velocity type</source>
+        <translation>velocity type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="83"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="203"/>
+        <source>velocity</source>
+        <translation>velocity</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="84"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="255"/>
+        <source>anchor</source>
+        <translation>anchor</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="86"/>
+        <source>direction</source>
+        <translation>direction</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="87"/>
+        <source>horizontal direction</source>
+        <translation>horizontal direction</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="88"/>
+        <source>stem direction</source>
+        <translation>stem direction</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="89"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="308"/>
+        <source>stemless</source>
+        <translation>stemless</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="90"/>
+        <source>up</source>
+        <translation>up</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="91"/>
+        <source>leading space</source>
+        <translation>leading space</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="92"/>
+        <source>mirror</source>
+        <translation>mirror</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="93"/>
+        <source>parentheses</source>
+        <translation>parentheses</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="94"/>
+        <source>dot position</source>
+        <translation>dot position</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="95"/>
+        <source>combine voice</source>
+        <translation>combine voice</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="96"/>
+        <source>tuning</source>
+        <translation>tuning</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="97"/>
+        <source>pause</source>
+        <translation>pause</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="99"/>
+        <source>barline type</source>
+        <translation>barline type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="100"/>
+        <source>span</source>
+        <translation>span</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="101"/>
+        <source>span from</source>
+        <translation>span from</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="102"/>
+        <source>span to</source>
+        <translation>span to</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="103"/>
+        <source>show tips</source>
+        <translation>show tips</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="105"/>
+        <source>offset</source>
+        <translation>offset</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="106"/>
+        <source>fret</source>
+        <translation>fret</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="107"/>
+        <source>string</source>
+        <translation>string</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="108"/>
+        <source>ghost</source>
+        <translation>ghost</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="109"/>
+        <source>dead</source>
+        <translation>dead</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="110"/>
+        <source>played</source>
+        <translation>played</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="111"/>
+        <source>nominal time signature</source>
+        <translation>nominal time signature</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="112"/>
+        <source>actual time signature</source>
+        <translation>actual time signature</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="113"/>
+        <source>number type</source>
+        <translation>number type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="114"/>
+        <source>bracket type</source>
+        <translation>bracket type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="115"/>
+        <source>normal notes</source>
+        <translation>normal notes</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="116"/>
+        <source>actual notes</source>
+        <translation>actual notes</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="117"/>
+        <source>p1</source>
+        <translation>p1</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="118"/>
+        <source>p2</source>
+        <translation>p2</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="119"/>
+        <source>grow left</source>
+        <translation>grow left</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="120"/>
+        <source>grow right</source>
+        <translation>grow right</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="122"/>
+        <source>height</source>
+        <translation>height</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="123"/>
+        <source>width</source>
+        <translation>width</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="124"/>
+        <source>autosize frame</source>
+        <translation>autosize frame</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="125"/>
+        <source>top gap</source>
+        <translation>top gap</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="126"/>
+        <source>bottom gap</source>
+        <translation>bottom gap</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="127"/>
+        <source>left padding</source>
+        <translation>left padding</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="128"/>
+        <source>right padding</source>
+        <translation>right padding</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="129"/>
+        <source>top padding</source>
+        <translation>top padding</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="130"/>
+        <source>bottom padding</source>
+        <translation>bottom padding</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="131"/>
+        <source>padding to notation above</source>
+        <translation>padding to notation above</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="132"/>
+        <source>padding to notation below</source>
+        <translation>padding to notation below</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="134"/>
+        <source>layout break type</source>
+        <translation>layout break type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="135"/>
+        <source>autoscale</source>
+        <translation>autoscale</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="136"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="327"/>
+        <source>size</source>
+        <translation>size</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="138"/>
+        <source>imageHeight</source>
+        <translation>imageHeight</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="139"/>
+        <source>imageWidth</source>
+        <translation>imageWidth</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="140"/>
+        <source>imageFramed</source>
+        <translation>imageFramed</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="142"/>
+        <source>text scale</source>
+        <translation>text scale</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="143"/>
+        <source>diagram scale</source>
+        <translation>diagram scale</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="144"/>
+        <source>column gap</source>
+        <translation>column gap</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="145"/>
+        <source>row gap</source>
+        <translation>row gap</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="146"/>
+        <source>chords per row</source>
+        <translation>chords per row</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="147"/>
+        <source>horizontal alignment</source>
+        <translation>horizontal alignment</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="148"/>
+        <source>diagrams order</source>
+        <translation>diagrams order</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="150"/>
+        <source>scale</source>
+        <translation>scale</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="151"/>
+        <source>aspect ratio locked</source>
+        <translation>aspect ratio locked</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="152"/>
+        <source>size is spatium</source>
+        <translation>size is spatium</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="153"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="219"/>
+        <source>text</source>
+        <translation>text</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="156"/>
+        <source>beam position</source>
+        <translation>beam position</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="157"/>
+        <source>beam mode</source>
+        <translation>beam mode</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="158"/>
+        <source>without slope</source>
+        <translation>without slope</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="159"/>
+        <source>beam staff move</source>
+        <translation>beam stave move</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="160"/>
+        <source>length</source>
+        <translation>length</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="161"/>
+        <source>show stem slash</source>
+        <translation>show stem slash</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="163"/>
+        <source>space</source>
+        <translation>space</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="164"/>
+        <source>tempo</source>
+        <translation>tempo</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="165"/>
+        <source>following text</source>
+        <translation>following text</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="166"/>
+        <source>tempo align right of rehearsal mark</source>
+        <translation>tempo align right of rehearsal mark</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="168"/>
+        <source>bracket</source>
+        <translation>bracket</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="169"/>
+        <source>accidental type</source>
+        <translation>accidental type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="170"/>
+        <source>stacking order offset</source>
+        <translation>stacking order offset</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="171"/>
+        <source>numerator string</source>
+        <translation>numerator string</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="172"/>
+        <source>denominator string</source>
+        <translation>denominator string</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="173"/>
+        <source>prefix</source>
+        <translation>prefix</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="174"/>
+        <source>digit</source>
+        <translation>digit</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="175"/>
+        <source>suffix</source>
+        <translation>suffix</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="176"/>
+        <source>continuation line</source>
+        <translation>continuation line</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="184"/>
+        <source>ottava type</source>
+        <translation>ottava type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="185"/>
+        <source>numbers only</source>
+        <translation>numbers only</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="186"/>
+        <source>trill type</source>
+        <translation>trill type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="187"/>
+        <source>vibrato type</source>
+        <translation>vibrato type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="188"/>
+        <source>hairpin with circled tip</source>
+        <translation>hairpin with circled tip</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="190"/>
+        <source>hairpin type</source>
+        <translation>hairpin type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="191"/>
+        <source>hairpin height</source>
+        <translation>hairpin height</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="192"/>
+        <source>hairpin cont height</source>
+        <translation>hairpin cont height</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="193"/>
+        <source>velocity change</source>
+        <translation>velocity change</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="194"/>
+        <source>velocity change method</source>
+        <translation>velocity change method</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="195"/>
+        <source>velocity change speed</source>
+        <translation>velocity change speed</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="196"/>
+        <source>dynamic type</source>
+        <translation>dynamic type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="198"/>
+        <source>single note dynamics</source>
+        <translation>single note dynamics</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="199"/>
+        <source>change method</source>
+        <translation>change method</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="200"/>
+        <source>placement</source>
+        <translation>placement</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="201"/>
+        <source>horizontal placement</source>
+        <translation>horizontal placement</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="202"/>
+        <source>multimeasure rest range bracket type</source>
+        <translation>multimbar rest range bracket type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="204"/>
+        <source>jump to</source>
+        <translation>jump to</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="205"/>
+        <source>play until</source>
+        <translation>play until</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="206"/>
+        <source>continue at</source>
+        <translation>continue at</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="207"/>
+        <source>label</source>
+        <translation>label</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="208"/>
+        <source>marker type</source>
+        <translation>marker type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="209"/>
+        <source>music symbol size</source>
+        <translation>music symbol size</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="210"/>
+        <source>marker center on symbol</source>
+        <translation>marker center on symbol</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="211"/>
+        <source>length 1</source>
+        <translation>length 1</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="212"/>
+        <source>length 2</source>
+        <translation>length 2</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="213"/>
+        <source>repeatEnd</source>
+        <translation>repeatEnd</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="214"/>
+        <source>repeatStart</source>
+        <translation>repeatStart</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="215"/>
+        <source>repeatJump</source>
+        <translation>repeatJump</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="216"/>
+        <source>measure number mode</source>
+        <translation>bar number mode</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="218"/>
+        <source>glissando type</source>
+        <translation>glissando type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="220"/>
+        <source>showing text</source>
+        <translation>showing text</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="221"/>
+        <source>glissando style</source>
+        <translation>glissando style</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="222"/>
+        <source>glissando shift</source>
+        <translation>glissando shift</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="223"/>
+        <source>ease in</source>
+        <translation>ease in</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="224"/>
+        <source>ease out</source>
+        <translation>ease out</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="225"/>
+        <source>diagonal</source>
+        <translation>diagonal</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="226"/>
+        <source>groups</source>
+        <translation>groups</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="227"/>
+        <source>line style</source>
+        <translation>line style</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="228"/>
+        <source>line width</source>
+        <translation>line width</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="229"/>
+        <source>time stretch</source>
+        <translation>time stretch</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="230"/>
+        <source>ornament style</source>
+        <translation>ornament style</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="231"/>
+        <source>interval above</source>
+        <translation>interval above</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="232"/>
+        <source>interval below</source>
+        <translation>interval below</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="233"/>
+        <source>ornament show accidental</source>
+        <translation>ornament show accidental</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="234"/>
+        <source>ornament show cue note</source>
+        <translation>ornament show cue note</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="235"/>
+        <source>start on upper note</source>
+        <translation>start on upper note</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="237"/>
+        <source>time signature</source>
+        <translation>time signature</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="238"/>
+        <source>time signature stretch</source>
+        <translation>time signature stretch</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="239"/>
+        <source>time signature type</source>
+        <translation>time signature type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="240"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="294"/>
+        <source>tick</source>
+        <translation>tick</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="241"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="264"/>
+        <source>ticks</source>
+        <translation>ticks</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="242"/>
+        <source>track2</source>
+        <translation>track2</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="243"/>
+        <source>offset2</source>
+        <translation>offset2</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="244"/>
+        <source>breaking multimeasure rest</source>
+        <translation>breaking multibar rest</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="245"/>
+        <source>vertical position of multimeasure rest number</source>
+        <translation>vertical position of multibar rest number</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="246"/>
+        <source>vertical offset of multimeasure rest number</source>
+        <translation>vertical offset of multibar rest number</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="247"/>
+        <source>visibility of multimeasure rest number</source>
+        <translation>visibility of multibar rest number</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="249"/>
+        <source>vertical position of measure repeat number</source>
+        <translation>vertical position of bar repeat number</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="250"/>
+        <source>repeat count</source>
+        <translation>repeat count</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="252"/>
+        <source>stretch</source>
+        <translation>stretch</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="253"/>
+        <source>numbering offset</source>
+        <translation>numbering offset</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="254"/>
+        <source>irregular</source>
+        <translation>irregular</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="256"/>
+        <source>o1</source>
+        <translation>o1</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="257"/>
+        <source>o2</source>
+        <translation>o2</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="258"/>
+        <source>o3</source>
+        <translation>o3</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="259"/>
+        <source>o4</source>
+        <translation>o4</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="260"/>
+        <source>staff move</source>
+        <translation>stave move</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="261"/>
+        <source>verse</source>
+        <translation>verse</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="263"/>
+        <source>syllabic</source>
+        <translation>syllabic</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="265"/>
+        <source>endings</source>
+        <translation>endings</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="266"/>
+        <source>visible line</source>
+        <translation>visible line</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="267"/>
+        <source>mag</source>
+        <translation>mag</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="268"/>
+        <source>using drumset</source>
+        <translation>using drumset</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="269"/>
+        <source>duration</source>
+        <translation>duration</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="270"/>
+        <source>duration type</source>
+        <translation>duration type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="271"/>
+        <source>role</source>
+        <translation>role</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="272"/>
+        <source>track</source>
+        <translation>track</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="274"/>
+        <source>strings</source>
+        <translation>strings</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="275"/>
+        <source>frets</source>
+        <translation>frets</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="276"/>
+        <source>show nut</source>
+        <translation>show nut</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="277"/>
+        <source>fret offset</source>
+        <translation>fret offset</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="278"/>
+        <source>fret number position</source>
+        <translation>fret number position</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="279"/>
+        <source>orientation</source>
+        <translation>orientation</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="280"/>
+        <source>fretShowFingering</source>
+        <translation>fretShowFingering</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="281"/>
+        <source>fretFingering</source>
+        <translation>fretFingering</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="283"/>
+        <source>chord symbol interpretation</source>
+        <translation>chord symbol interpretation</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="284"/>
+        <source>chord symbol voicing</source>
+        <translation>chord symbol voicing</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="285"/>
+        <source>chord symbol duration</source>
+        <translation>chord symbol duration</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="286"/>
+        <source>chord symbol bass scale</source>
+        <translation>chord symbol bass scale</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="287"/>
+        <source>chord symbol do not stack modifiers</source>
+        <translation>chord symbol do not stack modifiers</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="289"/>
+        <source>type</source>
+        <translation>type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="290"/>
+        <source>gap</source>
+        <translation>gap</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="291"/>
+        <source>autoplace</source>
+        <translation>autoplace</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="292"/>
+        <source>dash line length</source>
+        <translation>dash line length</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="293"/>
+        <source>dash gap length</source>
+        <translation>dash gap length</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="295"/>
+        <source>playback voice 1</source>
+        <translation>playback voice 1</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="296"/>
+        <source>playback voice 2</source>
+        <translation>playback voice 2</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="297"/>
+        <source>playback voice 3</source>
+        <translation>playback voice 3</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="299"/>
+        <source>playback voice 4</source>
+        <translation>playback voice 4</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="300"/>
+        <source>symbol</source>
+        <translation>symbol</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="301"/>
+        <source>playing repeats</source>
+        <translation>playing repeats</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="302"/>
+        <source>creating system header</source>
+        <translation>creating system header</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="303"/>
+        <source>lines</source>
+        <translation>lines</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="304"/>
+        <source>line distance</source>
+        <translation>line distance</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="305"/>
+        <source>step offset</source>
+        <translation>step offset</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="306"/>
+        <source>showing barlines</source>
+        <translation>showing barlines</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="307"/>
+        <source>showing ledgerlines</source>
+        <translation>showing legerlines</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="309"/>
+        <source>invisible</source>
+        <translation>invisible</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="312"/>
+        <source>notehead scheme</source>
+        <translation>notehead scheme</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="313"/>
+        <source>generating clefs</source>
+        <translation>generating clefs</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="314"/>
+        <source>generating time signature</source>
+        <translation>generating time signature</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="315"/>
+        <source>generating key signature</source>
+        <translation>generating key signature</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="316"/>
+        <source>y-offset</source>
+        <translation>y-offset</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="317"/>
+        <source>distance offset</source>
+        <translation>distance offset</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="318"/>
+        <source>barline span</source>
+        <translation>barline span</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="319"/>
+        <source>barline span from</source>
+        <translation>barline span from</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="320"/>
+        <source>barline span to</source>
+        <translation>barline span to</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="321"/>
+        <source>bracket span</source>
+        <translation>bracket span</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="323"/>
+        <source>level</source>
+        <translation>level</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="324"/>
+        <source>layout position</source>
+        <translation>layout position</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="325"/>
+        <source>style</source>
+        <translation>style</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="326"/>
+        <source>family</source>
+        <translation>family</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="328"/>
+        <source>font style</source>
+        <translation>font style</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="329"/>
+        <source>user line distancing</source>
+        <translation>user line distancing</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="331"/>
+        <source>frame type</source>
+        <translation>frame type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="332"/>
+        <source>frame width</source>
+        <translation>frame width</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="333"/>
+        <source>frame padding</source>
+        <translation>frame padding</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="334"/>
+        <source>frame round</source>
+        <translation>frame round</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="335"/>
+        <source>frame foreground color</source>
+        <translation>frame foreground colour</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="336"/>
+        <source>frame background color</source>
+        <translation>frame background colour</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="337"/>
+        <source>spatium dependent size</source>
+        <translation>spatium dependent size</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="338"/>
+        <source>spatium dependent text size</source>
+        <translation>spatium dependent text size</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="339"/>
+        <source>musical symbols scale</source>
+        <translation>musical symbols scale</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="340"/>
+        <source>align</source>
+        <translation>align</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="341"/>
+        <source>text script align</source>
+        <translation>text script align</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="342"/>
+        <source>system flag</source>
+        <translation>system flag</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="344"/>
+        <source>begin text</source>
+        <translation>begin text</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="345"/>
+        <source>begin text align</source>
+        <translation>begin text align</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="346"/>
+        <source>begin text place</source>
+        <translation>begin text place</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="347"/>
+        <source>begin hook type</source>
+        <translation>begin hook type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="348"/>
+        <source>begin hook height</source>
+        <translation>begin hook height</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="349"/>
+        <source>begin font face</source>
+        <translation>begin font face</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="350"/>
+        <source>begin font size</source>
+        <translation>begin font size</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="351"/>
+        <source>begin font style</source>
+        <translation>begin font style</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="352"/>
+        <source>begin text offset</source>
+        <translation>begin text offset</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="353"/>
+        <source>gap between text and line</source>
+        <translation>gap between text and line</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="355"/>
+        <source>continue text</source>
+        <translation>continue text</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="356"/>
+        <source>continue text align</source>
+        <translation>continue text align</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="357"/>
+        <source>continue text place</source>
+        <translation>continue text place</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="358"/>
+        <source>continue font face</source>
+        <translation>continue font face</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="359"/>
+        <source>continue font size</source>
+        <translation>continue font size</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="360"/>
+        <source>continue font style</source>
+        <translation>continue font style</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="361"/>
+        <source>continue text offset</source>
+        <translation>continue text offset</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="363"/>
+        <source>end text</source>
+        <translation>end text</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="364"/>
+        <source>end text align</source>
+        <translation>end text align</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="365"/>
+        <source>end text place</source>
+        <translation>end text place</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="366"/>
+        <source>end hook type</source>
+        <translation>end hook type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="367"/>
+        <source>end hook height</source>
+        <translation>end hook height</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="368"/>
+        <source>end font face</source>
+        <translation>end font face</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="369"/>
+        <source>end font size</source>
+        <translation>end font size</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="370"/>
+        <source>end font style</source>
+        <translation>end font style</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="371"/>
+        <source>end text offset</source>
+        <translation>end text offset</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="373"/>
+        <source>note-anchored line placement</source>
+        <translation>note-anchored line placement</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="375"/>
+        <source>avoid barlines</source>
+        <translation>avoid barlines</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="376"/>
+        <source>dynamic size</source>
+        <translation>dynamic size</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="377"/>
+        <source>use text alignment</source>
+        <translation>use text alignment</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="378"/>
+        <source>anchor to end of previous</source>
+        <translation>anchor to end of previous</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="380"/>
+        <source>snap expression</source>
+        <translation>snap expression</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="381"/>
+        <source>snap before</source>
+        <translation>snap before</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="382"/>
+        <source>snap after</source>
+        <translation>snap after</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="384"/>
+        <source>voice assignment</source>
+        <translation>voice assignment</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="385"/>
+        <source>center between staves</source>
+        <translation>centre between staves</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="387"/>
+        <source>position above</source>
+        <translation>position above</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="389"/>
+        <source>staves distance</source>
+        <translation>staves distance</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="390"/>
+        <source>voices distance</source>
+        <translation>voices distance</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="391"/>
+        <source>measures distance</source>
+        <translation>bar distance</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="392"/>
+        <source>position distance</source>
+        <translation>position distance</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="393"/>
+        <source>grace note index</source>
+        <translation>grace note index</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="394"/>
+        <source>note index</source>
+        <translation>note index</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="396"/>
+        <source>voice</source>
+        <translation>voice</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="397"/>
+        <source>position</source>
+        <translation>position</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="399"/>
+        <source>concert clef type</source>
+        <translation>concert clef type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="400"/>
+        <source>transposing clef type</source>
+        <translation>transposing clef type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="401"/>
+        <source>clef to barline position</source>
+        <translation>clef to barline position</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="402"/>
+        <source>is header</source>
+        <translation>is header</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="403"/>
+        <source>concert key</source>
+        <translation>concert key</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="404"/>
+        <source>key</source>
+        <translation>key</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="406"/>
+        <source>autoplace minimum distance</source>
+        <translation>autoplace minimum distance</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="408"/>
+        <source>arpeggio type</source>
+        <translation>arpeggio type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="409"/>
+        <source>chord line type</source>
+        <translation>chord line type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="410"/>
+        <source>straight chord line</source>
+        <translation>straight chord line</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="411"/>
+        <source>wavy chord line</source>
+        <translation>wavy chord line</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="412"/>
+        <source>tremolo type</source>
+        <translation>tremolo type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="413"/>
+        <source>tremolo style</source>
+        <translation>tremolo style</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="414"/>
+        <source>harmony type</source>
+        <translation>harmony type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="416"/>
+        <source>arpeggio span</source>
+        <translation>arpeggio span</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="418"/>
+        <source>bend type</source>
+        <translation>bend type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="419"/>
+        <source>bend curve</source>
+        <translation>bend curve</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="420"/>
+        <source>bend vertex offset</source>
+        <translation>bend vertex offset</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="421"/>
+        <source>bend show hold line</source>
+        <translation>bend show hold line</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="422"/>
+        <source>bend start time factor</source>
+        <translation>bend start time factor</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="423"/>
+        <source>bend end time factor</source>
+        <translation>bend end time factor</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="425"/>
+        <source>tremolobar type</source>
+        <translation>tremolobar type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="426"/>
+        <source>tremolobar curve</source>
+        <translation>tremolobar curve</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="428"/>
+        <source>start with long names</source>
+        <translation>start with long names</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="429"/>
+        <source>start with measure one</source>
+        <translation>start with bar one</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="430"/>
+        <source>first system indentation</source>
+        <translation>first system indentation</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="432"/>
+        <source>path</source>
+        <translation>path</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="434"/>
+        <source>prefer sharps or flats</source>
+        <translation>prefer sharps or flats</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="436"/>
+        <source>playing technique type</source>
+        <translation>playing technique type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="438"/>
+        <source>gradual tempo change type</source>
+        <translation>gradual tempo change type</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="439"/>
+        <source>tempo easing method</source>
+        <translation>tempo easing method</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="440"/>
+        <source>tempo change factor</source>
+        <translation>tempo change factor</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="442"/>
+        <source>is diagram</source>
+        <translation>is diagram</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="444"/>
+        <source>active</source>
+        <translation>active</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="446"/>
+        <source>fret position</source>
+        <translation>fret position</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="447"/>
+        <source>ignored strings</source>
+        <translation>ignored strings</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="448"/>
+        <source>automatically generate text</source>
+        <translation>automatically generate text</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="450"/>
+        <source>tie placement</source>
+        <translation>tie placement</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="451"/>
+        <source>minimum length</source>
+        <translation>minimum length</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="452"/>
+        <source>partial spanner direction</source>
+        <translation>partial spanner direction</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="454"/>
+        <source>position linked to master</source>
+        <translation>position linked to master</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="455"/>
+        <source>appearance linked to master</source>
+        <translation>appearance linked to master</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="456"/>
+        <source>text linked to master</source>
+        <translation>text linked to master</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="457"/>
+        <source>exclude from parts</source>
+        <translation>exclude from parts</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="459"/>
+        <source>strings count</source>
+        <translation>strings count</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="460"/>
+        <source>strings preset</source>
+        <translation>strings preset</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="461"/>
+        <source>visible strings</source>
+        <translation>visible strings</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="463"/>
+        <source>score font</source>
+        <translation>score font</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="464"/>
+        <source>symbols size</source>
+        <translation>symbols size</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="465"/>
+        <source>symbol angle</source>
+        <translation>symbol angle</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="467"/>
+        <source>apply to all staves</source>
+        <translation>apply to all staves</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="468"/>
+        <source>is courtesy</source>
+        <translation>is courtesy</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="469"/>
+        <source>exclude vertical align</source>
+        <translation>exclude vertical align</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="471"/>
+        <source>show bar numbers</source>
+        <translation>show bar numbers</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="472"/>
+        <source>play count text setting</source>
+        <translation>play count text setting</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="473"/>
+        <source>play count text</source>
+        <translation>play count text</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="475"/>
+        <source>align with other rests</source>
+        <translation>align with other rests</translation>
     </message>
 </context>
 <context>
@@ -24523,55 +26245,55 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Sorry, we are unable to load these sounds right now</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="68"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="96"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="63"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="91"/>
         <source>Not now</source>
         <translation>Not now</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="72"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="100"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="67"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="95"/>
         <source>Quit &amp; launch MuseSounds Manager</source>
         <translation>Quit &amp; launch MuseSounds Manager</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="74"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="69"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. Your MuseSounds libraries won’t work until the update is complete.</source>
         <translation>To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. Your MuseSounds libraries won’t work until the update is complete.</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="78"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="107"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="73"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="102"/>
         <source>Quit &amp; launch MuseHub</source>
         <translation>Quit &amp; launch MuseHub</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="80"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="75"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseHub will open. Your MuseSounds libraries won’t work until the update is complete.</source>
         <translation>To apply this update, MuseScore Studio will need to close briefly and MuseHub will open. Your MuseSounds libraries won’t work until the update is complete.</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="84"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="79"/>
         <source>MuseSounds needs an update</source>
         <translation>MuseSounds needs an update</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="102"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="97"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseSounds Manager can apply the update. You’ll need to restart MuseScore Studio when the update is complete.</source>
         <translation>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseSounds Manager can apply the update. You’ll need to restart MuseScore Studio when the update is complete.</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="109"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="104"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseHub can apply the update. You’ll be prompted to relaunch MuseScore Studio when it’s ready.</source>
         <translation>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseHub can apply the update. You’ll be prompted to relaunch MuseScore Studio when it’s ready.</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="114"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="109"/>
         <source>An update for MuseSounds is available</source>
         <translation>An update for MuseSounds is available</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesoundsconfiguration.cpp" line="60"/>
+        <location filename="../../src/musesounds/internal/musesoundsconfiguration.cpp" line="59"/>
         <source>Show occasional MuseHub promotions</source>
         <translation>Show occasional MuseHub promotions</translation>
     </message>
@@ -27305,7 +29027,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="412"/>
         <source>End-of-staff alignment:</source>
-        <translation>End-of-staff alignment:</translation>
+        <translation>End-of-stave alignment:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="416"/>
@@ -27754,7 +29476,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="436"/>
         <source>Select an unpitched percussion staff to see available sounds</source>
-        <translation>Select an unpitched percussion staff to see available sounds</translation>
+        <translation>Select an unpitched percussion stave to see available sounds</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="117"/>
@@ -27869,17 +29591,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Reset all</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="282"/>
+        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="285"/>
         <source>Reset all staff visibility</source>
         <translation>Reset all stave visibility</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="323"/>
+        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="341"/>
         <source>Change part visibility: %1</source>
         <translation>Change part visibility: %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="340"/>
+        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="363"/>
         <source>Change staff visibility: %1</source>
         <translation>Change stave visibility: %1</translation>
     </message>
@@ -28053,7 +29775,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="56"/>
         <source>Insert mode (grow measures)</source>
-        <translation>Insert mode (grow measures)</translation>
+        <translation>Insert mode (grow bars)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="61"/>
@@ -28316,39 +30038,39 @@ failed.</source>
 failed.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="249"/>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="251"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="261"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="263"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1805"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1806"/>
         <source>Capo</source>
         <translation>Capo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="259"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="271"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1811"/>
         <source>String tunings</source>
         <translation>String tunings</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="275"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="287"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1843"/>
         <source>Left-hand tapping</source>
         <translation>Left-hand tapping</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="279"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="291"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1847"/>
         <source>Right-hand tapping</source>
         <translation>Right-hand tapping</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="285"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="297"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1850"/>
         <source>Hammer-on / pull-off</source>
         <translation>Hammer-on / pull-off</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="332"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="344"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1711"/>
         <source>Blank</source>
         <translation>Blank</translation>
@@ -31390,23 +33112,23 @@ failed: %2</translation>
         <translation>Saving online…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2369"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2390"/>
         <source>File “%1” seems not corrupted</source>
         <translation>File “%1” seems not corrupted</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2370"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2391"/>
         <source>This file does not seem to contain errors.</source>
         <translation>This file does not seem to contain errors.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2373"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2394"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1795"/>
         <source>File “%1” is corrupted</source>
         <translation>File &quot;%1&quot; is corrupted</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2375"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2396"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</source>
         <translation>This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</translation>
     </message>
@@ -33465,17 +35187,17 @@ failed: %2</translation>
         <translation>Black</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="140"/>
+        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="153"/>
         <source>direction is horizontal</source>
         <translation>direction is horizontal</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="141"/>
+        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="154"/>
         <source>direction is vertical</source>
         <translation>direction is vertical</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="142"/>
+        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="155"/>
         <source>direction is both</source>
         <translation>direction is both</translation>
     </message>
@@ -33645,7 +35367,7 @@ failed: %2</translation>
         <translation>Corrupt score</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="2866"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="2867"/>
         <source>Reset all positions</source>
         <translation>Reset all positions</translation>
     </message>
@@ -33681,7 +35403,7 @@ failed: %2</translation>
         <translation>Update play count text</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/textedit.cpp" line="914"/>
+        <location filename="../../src/engraving/dom/textedit.cpp" line="915"/>
         <source>Paste text</source>
         <translation>Paste text</translation>
     </message>
@@ -33746,7 +35468,7 @@ failed: %2</translation>
     <message>
         <location filename="../../src/inspector/models/notation/barlines/barlinesettingsmodel.cpp" line="233"/>
         <source>Set barline span interval as staff default</source>
-        <translation>Set barline span interval as staff default</translation>
+        <translation>Set barline span interval as stave default</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/bends/bendsettingsmodel.cpp" line="277"/>
@@ -33865,7 +35587,7 @@ failed: %2</translation>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="166"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="648"/>
         <source>Add linked staff</source>
-        <translation>Add linked staff</translation>
+        <translation>Add linked stave</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="190"/>
@@ -33930,12 +35652,12 @@ failed: %2</translation>
         <translation>Enter full-bar rest</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2193"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2214"/>
         <source>Display concert pitch</source>
         <translation>Display concert pitch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2194"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2215"/>
         <source>Display transposed</source>
         <translation>Display transposed</translation>
     </message>
@@ -34130,7 +35852,7 @@ failed: %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5556"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8023"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8033"/>
         <source>Toggle articulation</source>
         <translation>Toggle articulation</translation>
     </message>
@@ -34385,95 +36107,95 @@ failed: %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6971"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7059"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7061"/>
         <source>Navigate to next chord symbol</source>
         <translation>Navigate to next chord symbol</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7100"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7104"/>
         <source>Navigate to chord symbol</source>
         <translation>Navigate to chord symbol</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7155"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7199"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7161"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7207"/>
         <source>Navigate to next figured bass</source>
         <translation>Navigate to next figured bass</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7247"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7255"/>
         <source>Navigate to figured bass</source>
         <translation>Navigate to figured bass</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7544"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7551"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7611"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7554"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7561"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7621"/>
         <source>Enter lyrics extension line</source>
         <translation>Enter lyrics extension line</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7693"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7703"/>
         <source>Add lyrics verse</source>
         <translation>Add lyrics verse</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7741"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7751"/>
         <source>Enter guitar bend</source>
         <translation>Enter guitar bend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7814"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7824"/>
         <source>Add fretboard diagram</source>
         <translation>Add fretboard diagram</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7947"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7957"/>
         <source>Format text</source>
         <translation>Format text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7967"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7977"/>
         <source>Toggle subscript</source>
         <translation>Toggle subscript</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7969"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7979"/>
         <source>Toggle superscript</source>
         <translation>Toggle superscript</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7971"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7981"/>
         <source>Toggle subscript/superscript</source>
         <translation>Toggle subscript/superscript</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8028"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8038"/>
         <source>Toggle ornament</source>
         <translation>Toggle ornament</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8033"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8043"/>
         <source>Toggle automatic placement</source>
         <translation>Toggle automatic placement</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8044"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8054"/>
         <source>Add clef</source>
         <translation>Add clef</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8049"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8059"/>
         <source>Add accidental</source>
         <translation>Add accidental</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8054"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8064"/>
         <source>Transpose semitone</source>
         <translation>Transpose semitone</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8060"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8070"/>
         <source>Transpose diatonically</source>
         <translation>Transpose diatonically</translation>
     </message>
@@ -34584,22 +36306,22 @@ failed: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="528"/>
         <source>Show staff</source>
-        <translation>Show staff</translation>
+        <translation>Show stave</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="529"/>
         <source>Hide staff</source>
-        <translation>Hide staff</translation>
+        <translation>Hide stave</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="560"/>
         <source>Set staff type</source>
-        <translation>Set staff type</translation>
+        <translation>Set stave type</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="582"/>
         <source>Edit staff properties</source>
-        <translation>Edit staff properties</translation>
+        <translation>Edit stave properties</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="669"/>
@@ -34659,7 +36381,7 @@ failed: %2</translation>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="316"/>
         <source>Edit measure properties</source>
-        <translation>Edit measure properties</translation>
+        <translation>Edit bar properties</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.cpp" line="99"/>
@@ -34669,7 +36391,7 @@ failed: %2</translation>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="148"/>
         <source>Edit staff text properties</source>
-        <translation>Edit staff text properties</translation>
+        <translation>Edit stave text properties</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.cpp" line="216"/>
