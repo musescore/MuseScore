@@ -18335,8 +18335,8 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="65"/>
-        <source>z</source>
-        <translation type="unfinished">z</translation>
+        <source>stacking order</source>
+        <translation type="unfinished">stacking order</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="66"/>
@@ -18380,9 +18380,13 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="75"/>
-        <location filename="../../src/engraving/dom/property.cpp" line="76"/>
         <source>tonal pitch class</source>
         <translation type="unfinished">tonal pitch class</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="76"/>
+        <source>transposed tonal pitch class</source>
+        <translation type="unfinished">transposed tonal pitch class</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="77"/>
@@ -18574,13 +18578,13 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="117"/>
-        <source>p1</source>
-        <translation type="unfinished">p1</translation>
+        <source>bracket start offset</source>
+        <translation type="unfinished">bracket start offset</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="118"/>
-        <source>p2</source>
-        <translation type="unfinished">p2</translation>
+        <source>bracket end offset</source>
+        <translation type="unfinished">bracket end offset</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="119"/>
@@ -18665,18 +18669,18 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="138"/>
-        <source>imageHeight</source>
-        <translation type="unfinished">imageHeight</translation>
+        <source>image height</source>
+        <translation type="unfinished">image height</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="139"/>
-        <source>imageWidth</source>
-        <translation type="unfinished">imageWidth</translation>
+        <source>image width</source>
+        <translation type="unfinished">image width</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="140"/>
-        <source>imageFramed</source>
-        <translation type="unfinished">imageFramed</translation>
+        <source>image framed</source>
+        <translation type="unfinished">image framed</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="142"/>
@@ -18700,8 +18704,8 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="146"/>
-        <source>chords per row</source>
-        <translation type="unfinished">chords per row</translation>
+        <source>chord symbols per row</source>
+        <translation type="unfinished">chord symbols per row</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="147"/>
@@ -18961,18 +18965,18 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="213"/>
-        <source>repeatEnd</source>
-        <translation type="unfinished">repeatEnd</translation>
+        <source>repeat end</source>
+        <translation type="unfinished">repeat end</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="214"/>
-        <source>repeatStart</source>
-        <translation type="unfinished">repeatStart</translation>
+        <source>repeat start</source>
+        <translation type="unfinished">repeat start</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="215"/>
-        <source>repeatJump</source>
-        <translation type="unfinished">repeatJump</translation>
+        <source>repeat jump</source>
+        <translation type="unfinished">repeat jump</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="216"/>
@@ -19093,13 +19097,14 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="242"/>
-        <source>track2</source>
-        <translation type="unfinished">track2</translation>
+        <source>end track</source>
+        <translation type="unfinished">end track</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="243"/>
-        <source>offset2</source>
-        <translation type="unfinished">offset2</translation>
+        <location filename="../../src/engraving/dom/property.cpp" line="259"/>
+        <source>end offset</source>
+        <translation type="unfinished">end offset</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="244"/>
@@ -19148,23 +19153,18 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="256"/>
-        <source>o1</source>
-        <translation type="unfinished">o1</translation>
+        <source>start offset</source>
+        <translation type="unfinished">start offset</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="257"/>
-        <source>o2</source>
-        <translation type="unfinished">o2</translation>
+        <source>left shoulder offset</source>
+        <translation type="unfinished">left shoulder offset</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="258"/>
-        <source>o3</source>
-        <translation type="unfinished">o3</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="259"/>
-        <source>o4</source>
-        <translation type="unfinished">o4</translation>
+        <source>right shoulder offset</source>
+        <translation type="unfinished">right shoulder offset</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="260"/>
@@ -19193,8 +19193,8 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="267"/>
-        <source>mag</source>
-        <translation type="unfinished">mag</translation>
+        <source>magnification</source>
+        <translation type="unfinished">magnification</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="268"/>
@@ -19253,13 +19253,13 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="280"/>
-        <source>fretShowFingering</source>
-        <translation type="unfinished">fretShowFingering</translation>
+        <source>fretboard diagram fingering visible</source>
+        <translation type="unfinished">fretboard diagram fingering visible</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="281"/>
-        <source>fretFingering</source>
-        <translation type="unfinished">fretFingering</translation>
+        <source>fretboard diagram fingering</source>
+        <translation type="unfinished">fretboard diagram fingering</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="283"/>
@@ -19943,18 +19943,18 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="454"/>
-        <source>position linked to master</source>
-        <translation type="unfinished">position linked to master</translation>
+        <source>position linked to main score</source>
+        <translation type="unfinished">position linked to main score</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="455"/>
-        <source>appearance linked to master</source>
-        <translation type="unfinished">appearance linked to master</translation>
+        <source>appearance linked to main score</source>
+        <translation type="unfinished">appearance linked to main score</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="456"/>
-        <source>text linked to master</source>
-        <translation type="unfinished">text linked to master</translation>
+        <source>text linked to main score</source>
+        <translation type="unfinished">text linked to main score</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="457"/>
@@ -20023,8 +20023,8 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="475"/>
-        <source>align with other rests</source>
-        <translation type="unfinished">align with other rests</translation>
+        <source>align with other rests in the same voice</source>
+        <translation type="unfinished">align with other rests in the same voice</translation>
     </message>
 </context>
 <context>
