@@ -13915,21 +13915,21 @@
         <source>Bird call.</source>
         <comment>bird-call description</comment>
         <extracomment>description for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>鸟鸣。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4633"/>
         <source>Bird Call</source>
         <comment>bird-call trackName</comment>
         <extracomment>trackName for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>鸟鸣</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4635"/>
         <source>Bird Call</source>
         <comment>bird-call longName</comment>
         <extracomment>longName for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>鸟鸣</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4637"/>
@@ -13943,21 +13943,21 @@
         <source>Ocean drum.</source>
         <comment>ocean-drum description</comment>
         <extracomment>description for Ocean Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>海洋鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4642"/>
         <source>Ocean Drum</source>
         <comment>ocean-drum trackName</comment>
         <extracomment>trackName for Ocean Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>海洋鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4644"/>
         <source>Ocean Drum</source>
         <comment>ocean-drum longName</comment>
         <extracomment>longName for Ocean Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>海洋鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4646"/>
@@ -18619,21 +18619,21 @@
         <source>Guzheng</source>
         <comment>guzheng trackName</comment>
         <extracomment>trackName for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>古筝</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6147"/>
         <source>Guzheng</source>
         <comment>guzheng longName</comment>
         <extracomment>longName for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>古筝</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6149"/>
         <source>Gz.</source>
         <comment>guzheng shortName</comment>
         <extracomment>shortName for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>古筝</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6152"/>

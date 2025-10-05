@@ -97,7 +97,7 @@
         <source>D♭</source>
         <comment>db-piccolo traitName</comment>
         <extracomment>traitName for Piccolo; transposition: D♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>D♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="237"/>
@@ -21050,7 +21050,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="47"/>
         <source>Solo</source>
-        <translation type="unfinished"/>
+        <translation>Solo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="52"/>
