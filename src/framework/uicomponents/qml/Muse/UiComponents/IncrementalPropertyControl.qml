@@ -151,7 +151,7 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
-        currentText: ui.df.formatReal(root.currentValue ? root.currentValue : 0.0, decimals)
+        currentText: Qt.locale().toString(root.currentValue ? root.currentValue : 0.0, 'f', decimals)
 
         navigation.accessible.role: MUAccessible.SpinBox
         navigation.accessible.value: currentValue + (measureUnitsSymbol !== "" ? " " + measureUnitsSymbol : "")
