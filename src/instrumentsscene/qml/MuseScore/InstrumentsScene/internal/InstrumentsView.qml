@@ -63,7 +63,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        navigation.name: "SearchInstruments"
+        navigation.name: "SearchControl"
         navigation.panel: instrumentsView.navigation
         navigation.row: 1
         navigation.column: 0
