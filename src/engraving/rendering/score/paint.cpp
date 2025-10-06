@@ -68,8 +68,10 @@ void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::Pai
 
     // Setup score draw system
     mu::engraving::MScore::pixelRatio = mu::engraving::DPI / DEVICE_DPI;
-    score->setPrinting(opt.isPrinting);
     mu::engraving::MScore::pdfPrinting = opt.isPrinting;
+
+    const bool wasPrinting = score->printing();
+    score->setPrinting(opt.isPrinting);
 
     // Setup page counts
     int fromPage = opt.fromPage >= 0 ? opt.fromPage : 0;
@@ -173,6 +175,8 @@ void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::Pai
             }
         }
     }
+
+    score->setPrinting(wasPrinting);
 }
 
 SizeF Paint::pageSizeInch(const Score* score)

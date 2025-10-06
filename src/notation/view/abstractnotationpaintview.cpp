@@ -601,14 +601,20 @@ void AbstractNotationPaintView::hideElementPopup(const ElementType& elementType)
 {
     TRACEFUNC;
 
+    hideElementPopup(AbstractElementPopupModel::modelTypeFromElement(elementType));
+}
+
+void AbstractNotationPaintView::hideElementPopup(PopupModelType modelType)
+{
+    TRACEFUNC;
+
     if (m_currentElementPopupType == PopupModelType::TYPE_UNDEFINED) {
         // Popup is already hidden...
         return;
     }
 
-    const PopupModelType modelType = AbstractElementPopupModel::modelTypeFromElement(elementType);
-    // Hide the popup if the model type matches the currently open model type, or if no element type was specified...
-    if (modelType == m_currentElementPopupType || elementType == ElementType::INVALID) {
+    // Hide the popup if the model type matches the currently open model type, or if no element type was specified
+    if (modelType == m_currentElementPopupType || modelType == PopupModelType::TYPE_UNDEFINED) {
         m_currentElementPopupType = PopupModelType::TYPE_UNDEFINED;
         emit hideElementPopupRequested();
     }
