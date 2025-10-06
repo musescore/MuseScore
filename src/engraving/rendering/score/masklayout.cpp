@@ -201,7 +201,9 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
             }
         }
         for (EngravingItem* item : toMeasure(mb)->el()) {
-            if ((item->isMarker() || item->isJump()) && item->visible() && system->staff(item->staffIdx())->show()) {
+            const SysStaff* staff = system ? system->staff(item->staffIdx()) : nullptr;
+            const bool staffVisible = staff && staff->show();
+            if ((item->isMarker() || item->isJump()) && item->visible() && staffVisible) {
                 allText.push_back(toTextBase(item));
             }
         }
@@ -210,7 +212,9 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
                 continue;
             }
             for (EngravingItem* annotation : s.annotations()) {
-                if (annotation->isTextBase() && annotation->visible() && system->staff(annotation->staffIdx())->show()) {
+                const SysStaff* staff = system ? system->staff(annotation->staffIdx()) : nullptr;
+                const bool staffVisible = staff && staff->show();
+                if (annotation->isTextBase() && annotation->visible() && staffVisible) {
                     allText.push_back(toTextBase(annotation));
                 }
             }
