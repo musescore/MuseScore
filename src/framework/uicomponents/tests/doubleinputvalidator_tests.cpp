@@ -44,13 +44,17 @@ protected:
     DoubleInputValidator* m_validator = nullptr;
 };
 
-TEST_F(DoubleInputValidatorTests, Validate) {
+TEST_F(DoubleInputValidatorTests, ValidateDotLocale) {
     struct Input
     {
         QString str;
         QValidator::State expectedState;
         QString fixedStr = {};
     };
+
+    // Use a dot-decimal locale explicitly
+    QLocale prev = QLocale();
+    QLocale::setDefault(QLocale("en_US"));
 
     m_validator->setTop(100.0);
     m_validator->setBottom(-100.0);
@@ -69,7 +73,7 @@ TEST_F(DoubleInputValidatorTests, Validate) {
         { "2.", QValidator::Intermediate, "2" },
         { "-100.1", QValidator::Intermediate, "-100" },
         { "100.1", QValidator::Intermediate, "100" },
-        { "1.123", QValidator::Invalid }, // more than 2 decimal
+        { "1.123", QValidator::Invalid }, // more than 2 decimal places
         { "abc", QValidator::Invalid },
         { "", QValidator::Intermediate, "0" }
     };
@@ -88,5 +92,61 @@ TEST_F(DoubleInputValidatorTests, Validate) {
         QString expectedStr = QValidator::Acceptable == input.expectedState ? input.str : input.fixedStr;
         EXPECT_EQ(expectedStr, fixInput);
     }
+
+    // Restore previous locale
+    QLocale::setDefault(prev);
+}
+
+TEST_F(DoubleInputValidatorTests, ValidateCommaLocale) {
+    struct Input
+    {
+        QString str;
+        QValidator::State expectedState;
+        QString fixedStr = {};
+    };
+
+    // Use a comma-decimal locale explicitly
+    QLocale prev = QLocale();
+    QLocale::setDefault(QLocale("ro_RO"));
+
+    m_validator->setTop(100.0);
+    m_validator->setBottom(-100.0);
+    m_validator->setDecimal(2);
+
+    std::vector<Input> inputs = {
+        { "-0,1", QValidator::Acceptable },
+        { "0", QValidator::Acceptable },
+        { "1,23", QValidator::Acceptable },
+        { "99,99", QValidator::Acceptable },
+        { "-100", QValidator::Acceptable },
+        { "2,5", QValidator::Acceptable },
+        { "0,0", QValidator::Intermediate, "0" },
+        { "00,", QValidator::Intermediate, "0" },
+        { "2,00", QValidator::Intermediate, "2" },
+        { "2,", QValidator::Intermediate, "2" },
+        { "-100,1", QValidator::Intermediate, "-100" },
+        { "100,1", QValidator::Intermediate, "100" },
+        { "1,123", QValidator::Invalid }, // more than 2 decimal places
+        { "abc", QValidator::Invalid },
+        { "", QValidator::Intermediate, "0" }
+    };
+
+    int pos = 0;
+    for (Input& input : inputs) {
+        EXPECT_EQ(m_validator->validate(input.str, pos), input.expectedState);
+
+        if (QValidator::Invalid == input.expectedState) {
+            continue;
+        }
+
+        QString fixInput = input.str;
+        m_validator->fixup(fixInput);
+
+        QString expectedStr = QValidator::Acceptable == input.expectedState ? input.str : input.fixedStr;
+        EXPECT_EQ(expectedStr, fixInput);
+    }
+
+    // Restore previous locale
+    QLocale::setDefault(prev);
 }
 }
