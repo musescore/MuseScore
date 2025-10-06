@@ -5149,14 +5149,33 @@ Ret NotationInteraction::repeatSelection()
     const Selection& selection = score()->selection();
     if (score()->noteEntryMode() && selection.isSingle()) {
         EngravingItem* el = selection.element();
-        if (el && el->type() == ElementType::NOTE && !score()->inputState().endOfScore()) {
-            startEdit(TranslatableString("undoableAction", "Repeat selection"));
-            Chord* c = toNote(el)->chord();
-            for (Note* note : c->notes()) {
-                NoteVal nval = note->noteVal();
-                score()->addPitch(nval, note != c->notes()[0]);
+
+        if (el && !score()->inputState().endOfScore()) {
+            Chord* c = nullptr;
+            if (el->type() == ElementType::NOTE) {
+                c = toNote(el)->chord();
+            } else if (el->type() == ElementType::REST) {
+                Segment* prevSegment = toRest(el)->segment()->prev1WithElemsOnTrack(el->track());
+
+                // Looking for the previous Chord
+                while (prevSegment)
+                {
+                    if (prevSegment->elementAt(el->track())->isChord()) {
+                        c = toChord(prevSegment->elementAt(el->track()));
+                        break;
+                    } else {
+                        prevSegment = prevSegment->prev1WithElemsOnTrack(el->track());
+                    }
+                }
             }
-            apply();
+            if (c) {
+                startEdit(TranslatableString("undoableAction", "Repeat selection"));
+                for (Note* note : c->notes()) {
+                    NoteVal nval = note->noteVal();
+                    score()->addPitch(nval, note != c->notes()[0]);
+                }
+                apply();
+            }
         }
         return muse::make_ok();
     }
