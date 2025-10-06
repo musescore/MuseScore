@@ -34,6 +34,7 @@ Item {
 
     property alias isIndeterminate: textInputField.isIndeterminate
     property real currentValue: 0.0
+    property alias currentText: textInputField.currentText
 
     property real step: 0.5
     property int decimals: 2
