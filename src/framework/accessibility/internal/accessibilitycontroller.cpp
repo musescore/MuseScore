@@ -28,7 +28,6 @@
 
 #ifdef Q_OS_LINUX
 #include <QKeyEvent>
-#include <private/qcoreapplication_p.h>
 #endif
 
 #include "accessibleobject.h"
@@ -474,9 +473,8 @@ void AccessibilityController::cancelPreviousReading()
 
 #ifdef Q_OS_LINUX
     //! HACK: it needs for canceling reading the name of previous control on accessibility
-    QKeyEvent* keyEvent = new QKeyEvent(QEvent::KeyPress, Qt::Key_Cancel, Qt::KeyboardModifier::NoModifier, 0, 1, 0);
-    QCoreApplicationPrivate::setEventSpontaneous(keyEvent, true);
-    application()->notify(mainWindow()->qWindow(), keyEvent);
+    QKeyEvent* keyEvent = new QKeyEvent(QEvent::KeyPress, Qt::Key_Cancel, Qt::NoModifier);
+    QCoreApplication::postEvent(mainWindow()->qWindow(), keyEvent);
 #endif
 }
 
