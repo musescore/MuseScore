@@ -73,7 +73,9 @@ void SequencePlayer::seek(const secs_t newPosition, const bool flushSound)
     ONLY_AUDIO_ENGINE_THREAD;
 
     m_flushSoundOnSeek = flushSound;
-    m_clock->seek(secsToMicrosecs(newPosition));
+    msecs_t newPos = secsToMicrosecs(newPosition);
+    m_clock->seek(newPos);
+    seekAllTracks(newPos);
     m_flushSoundOnSeek = true;
 }
 

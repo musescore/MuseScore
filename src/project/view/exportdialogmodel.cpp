@@ -105,8 +105,8 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      "MeiSettingsPage.qml")
     };
 
-    ExportInfo info = exportProjectScenario()->exportInfo();
-    if (info.id == "") {
+    const ExportInfo& info = exportProjectScenario()->exportInfo();
+    if (info.id.isEmpty()) {
         setExportType(m_exportTypeList.front());
     } else {
         selectExportTypeById(info.id);
@@ -214,9 +214,14 @@ void ExportDialogModel::selectCurrentNotation()
 
 void ExportDialogModel::selectSavedNotations()
 {
-    ExportInfo info = exportProjectScenario()->exportInfo();
-    for (const INotationPtr& notation : info.notations) {
-        auto it = std::find(m_notations.begin(), m_notations.end(), notation);
+    const ExportInfo& info = exportProjectScenario()->exportInfo();
+    for (const INotationWeakPtr& notation : info.notations) {
+        const INotationPtr ptr = notation.lock();
+        if (!ptr) {
+            continue;
+        }
+
+        auto it = std::find(m_notations.begin(), m_notations.end(), ptr);
         if (it != m_notations.end()) {
             setSelected(std::distance(m_notations.begin(), it), true);
         }
@@ -672,14 +677,9 @@ void ExportDialogModel::updateExportInfo()
     info.exportPath = m_exportPath;
     info.unitType = m_selectedUnitType;
 
-    INotationProjectPtr project = context()->currentProject();
-    info.projectPath = project ? project->path() : "";
-
-    std::vector<INotationPtr> notations;
     for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
-        notations.emplace_back(m_notations[index.row()]);
+        info.notations.emplace_back(m_notations[index.row()]);
     }
-    info.notations = notations;
 
     exportProjectScenario()->setExportInfo(info);
 }

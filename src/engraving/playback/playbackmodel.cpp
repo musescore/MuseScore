@@ -432,13 +432,17 @@ void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
     PlaybackData& trackData = m_playbackDataMap[trackId];
     trackData.dynamics = ctx->dynamicLevelLayers(m_score);
 
-    const auto appendEvents = [&trackData](auto&& events) {
+    std::set<timestamp_t> newEventTimestamps;
+
+    const auto appendEvents = [&trackData, &newEventTimestamps](auto&& events) {
         for (auto& pair : events) {
             PlaybackEventList& list = trackData.originEvents[pair.first];
 
             //! NOTE: this assumes that the list has already been cleared in clearExpiredEvents
-            if (list.empty()) {
+            //! Necessary to prevent event duplication (unchanged lists should not be modified)
+            if (list.empty() || muse::contains(newEventTimestamps, pair.first)) {
                 list.insert(list.end(), std::make_move_iterator(pair.second.begin()), std::make_move_iterator(pair.second.end()));
+                newEventTimestamps.insert(pair.first);
             }
         }
     };
