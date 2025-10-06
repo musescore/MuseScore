@@ -694,6 +694,21 @@ muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notatio
 
     QJsonArray rootArray;
 
+    auto writeLocation = [](const ScoreElementScanner::ElementInfo::Location& loc, QJsonObject& obj) {
+        if (loc.trackIdx != muse::nidx) {
+            obj["staffIdx"] = (int)mu::engraving::track2staff(loc.trackIdx);
+            obj["voiceIdx"] = (int)mu::engraving::track2voice(loc.trackIdx);
+        }
+
+        if (loc.measureIdx != muse::nidx) {
+            obj["measureIdx"] = static_cast<int>(loc.measureIdx);
+        }
+
+        if (RealIsEqualOrMore(loc.beat, 0.f)) {
+            obj["beat"] = loc.beat;
+        }
+    };
+
     for (const auto& instrumentPair : elements) {
         QJsonArray typeArray;
 
@@ -715,20 +730,14 @@ muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notatio
                     obj["text"] = element.text.toQString();
                 }
 
-                if (element.staffIdx != muse::nidx) {
-                    obj["staffIdx"] = static_cast<int>(element.staffIdx);
-                }
-
-                if (element.voiceIdx != muse::nidx) {
-                    obj["voiceIdx"] = static_cast<int>(element.voiceIdx);
-                }
-
-                if (element.measureIdx != muse::nidx) {
-                    obj["measureIdx"] = static_cast<int>(element.measureIdx);
-                }
-
-                if (RealIsEqualOrMore(element.beat, 0.f)) {
-                    obj["beat"] = element.beat;
+                if (element.start == element.end) {
+                    writeLocation(element.start, obj);
+                } else {
+                    QJsonObject start, end;
+                    writeLocation(element.start, start);
+                    writeLocation(element.end, end);
+                    obj["start"] = start;
+                    obj["end"] = end;
                 }
 
                 if (!obj.empty()) {
