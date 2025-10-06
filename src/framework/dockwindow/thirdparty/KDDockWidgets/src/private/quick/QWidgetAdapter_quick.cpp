@@ -33,9 +33,6 @@
 #include <QQuickView>
 #include <QScopedValueRollback>
 
-#include <qpa/qplatformwindow.h>
-#include <QtGui/private/qhighdpiscaling_p.h>
-
 using namespace KDDockWidgets;
 
 namespace KDDockWidgets {
@@ -230,12 +227,12 @@ void QWidgetAdapter::updateNormalGeometry()
     }
 
     QRect normalGeometry;
-    if (const QPlatformWindow *pw = window->handle()) {
-        normalGeometry = QHighDpi::fromNativePixels(pw->normalGeometry(), pw->window());
+    if (isNormalWindowState(window->windowState())) {
+        normalGeometry = window->geometry();
     }
 
-    if (!normalGeometry.isValid() && isNormalWindowState(window->windowState())) {
-        normalGeometry = window->geometry();
+    if (!normalGeometry.isValid()) {
+        normalGeometry = window->frameGeometry();
     }
 
     if (normalGeometry.isValid()) {
