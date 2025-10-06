@@ -1389,12 +1389,12 @@ void EditStyle::setHeaderFooterMacroInfoText()
     if (!score->isMaster()) {
         for (const auto& tag : score->masterScore()->metaTags()) {
             toolTipHeaderFooter += "<tr><td>%1</td><td width=\"12\"/><td><i>%2</i></td></tr>"_L1
-                                   .arg(tag.first, tag.second.empty() ? QAnyStringView { "-" } : QAnyStringView { tag.second });
+                                   .arg(tag.first, tag.second.empty() ? u"-"_s : tag.second.toQString());
         }
     }
     for (const auto& tag : score->metaTags()) {
         toolTipHeaderFooter += "<tr><td>%1</td><td width=\"12\"/><td><i>%2</i></td></tr>"_L1
-                               .arg(tag.first, tag.second.empty() ? QAnyStringView { "-" } : QAnyStringView { tag.second });
+                               .arg(tag.first, tag.second.empty() ? u"-"_s : tag.second.toQString());
     }
 
     toolTipHeaderFooter += "</table></body></html>"_L1;
