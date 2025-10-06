@@ -1989,11 +1989,14 @@ void SlurTieLayout::setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos)
     double widthToSegment = 0.0;
     if (adjSeg) {
         EngravingItem* element = adjSeg->element(staff2track(item->vStaffIdx()));
+        double elPos = 0.0;
+        double elementWidth = 0.0;
+        if (element) {
+            const Shape& elemShape = element->shape();
+            elPos = element->pos().x() + elemShape.bbox().x();
+            elementWidth = elemShape.bbox().width();
+        }
 
-        const Shape& elemShape = element->shape();
-        double elPos = element->pos().x() + elemShape.bbox().x();
-
-        const double elementWidth = element ? elemShape.bbox().width() : 0.0;
         const double elPosInSystemCoords = adjSeg->xPosInSystemCoords() + elPos;
         widthToSegment = outgoing ? elPosInSystemCoords - sPos.p1.x() : sPos.p2.x() - (elPosInSystemCoords + elementWidth);
         bool incomingFromBarline = !outgoing && element->isBarLine() && toBarLine(element)->barLineType() != BarLineType::START_REPEAT;
