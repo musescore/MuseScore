@@ -24,6 +24,8 @@
 
 #include "engraving/types/types.h"
 
+#include "global/realfn.h"
+
 namespace mu::engraving {
 class Score;
 }
@@ -37,10 +39,17 @@ public:
         muse::String name;
         muse::String notes;
         muse::String text;
-        mu::engraving::staff_idx_t staffIdx = 0;
-        mu::engraving::voice_idx_t voiceIdx = 0;
-        size_t measureIdx = 0;
-        float beat = 0.f;
+
+        struct Location {
+            mu::engraving::track_idx_t trackIdx = muse::nidx;
+            size_t measureIdx = muse::nidx;
+            float beat = -1.f;
+
+            bool operator==(const Location& l) const
+            {
+                return trackIdx == l.trackIdx && measureIdx == l.measureIdx && muse::RealIsEqual(beat, l.beat);
+            }
+        } start, end;
     };
 
     struct Options {
