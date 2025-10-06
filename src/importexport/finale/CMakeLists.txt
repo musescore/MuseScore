@@ -15,8 +15,8 @@ set(MUSX_DISPLAY_NODE_NAMES ON CACHE BOOL "Log node names to trace as they are p
 set(musx_BUILD_TESTING OFF CACHE BOOL "Do not build tests for musx")
 FetchContent_Declare(
     musx
-    GIT_REPOSITORY https://github.com/rpatters1/musxdom.git
-    GIT_TAG        dev/musescore-experiment
+    URL https://github.com/rpatters1/musxdom/archive/refs/tags/v2.0.0.tar.gz
+    URL_HASH SHA256=f976d65257f391bf6ceb0b6a1a3050deedb63a206c2bf2d193b5a0a581f5b3b4
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
@@ -25,8 +25,8 @@ FetchContent_MakeAvailable(musx)
 set(smufl_mapping_BUILD_TESTING OFF CACHE BOOL "Do not build tests for musx")
 FetchContent_Declare(
     smufl_mapping
-    GIT_REPOSITORY https://github.com/rpatters1/smufl-mapping.git
-    GIT_TAG        main
+    URL https://github.com/rpatters1/smufl-mapping/archive/refs/tags/v1.0.0.tar.gz
+    URL_HASH SHA256=53db1524ecfae1e8d3022a796b05bf4dc85ebbcd522c88c431e3db221263d3ab
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
