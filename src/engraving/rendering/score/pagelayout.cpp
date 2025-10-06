@@ -439,7 +439,7 @@ void PageLayout::layoutCrossStaffSlurs(LayoutContext& ctx, System* system)
             continue;
         }
         Slur* slur = toSlur(sp);
-        if (slur->isCrossStaff()) {
+        if (slur->isCrossStaff() || slur->hasCrossBeams()) {
             SlurTieLayout::layoutSystem(slur, system, ctx);
 
             ChordRest* scr = toChordRest(slur->startElement());

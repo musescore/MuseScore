@@ -50,6 +50,7 @@ ChordSymbolsPageModel::ChordSymbolsPageModel(QObject* parent)
     StyleId::allCapsNoteNames,
     StyleId::harmonyFretDist,
     StyleId::minHarmonyDistance,
+    StyleId::harmonyHarmonyDistance,
     StyleId::harmonyVoiceLiteral,
     StyleId::harmonyVoicing,
     StyleId::harmonyDuration,
@@ -174,6 +175,7 @@ StyleItem* ChordSymbolsPageModel::allCapsNoteNames() const { return styleItem(St
 
 StyleItem* ChordSymbolsPageModel::harmonyFretDist() const { return styleItem(StyleId::harmonyFretDist); }
 StyleItem* ChordSymbolsPageModel::minHarmonyDist() const { return styleItem(StyleId::minHarmonyDistance); }
+StyleItem* ChordSymbolsPageModel::harmonyHarmonyDist() const { return styleItem(StyleId::harmonyHarmonyDistance); }
 
 QVariantList ChordSymbolsPageModel::possibleHarmonyVoiceLiteralOptions() const
 {

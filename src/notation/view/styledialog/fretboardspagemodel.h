@@ -30,6 +30,7 @@ class FretboardsPageModel : public AbstractStyleDialogModel
     Q_OBJECT
 
     Q_PROPERTY(StyleItem * fretY READ fretY CONSTANT)
+    Q_PROPERTY(StyleItem * fretMinDistance READ fretMinDistance CONSTANT)
     Q_PROPERTY(StyleItem * fretMag READ fretMag CONSTANT)
     Q_PROPERTY(StyleItem * fretOrientation READ fretOrientation CONSTANT)
     Q_PROPERTY(StyleItem * fretNutThickness READ fretNutThickness CONSTANT)
@@ -48,6 +49,7 @@ public:
     explicit FretboardsPageModel(QObject* parent = nullptr);
 
     StyleItem* fretY() const;
+    StyleItem* fretMinDistance() const;
     StyleItem* fretMag() const;
     StyleItem* fretOrientation() const;
     StyleItem* fretNutThickness() const;

@@ -658,6 +658,8 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             set(Sid::ottavaHookBelow, -value(Sid::ottavaHookBelow).value<Spatium>());
         }
         set(Sid::repeatPlayCountShow, false);
+
+        set(Sid::harmonyHarmonyDistance, value(Sid::minHarmonyDistance));
     }
 
     if (m_version == 450) {

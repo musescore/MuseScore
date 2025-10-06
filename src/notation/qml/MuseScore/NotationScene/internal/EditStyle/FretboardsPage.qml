@@ -53,9 +53,18 @@ StyledFlickable {
 
             StyleSpinboxWithReset {
                 styleItem: fretboardsPage.fretY
-                label: qsTrc("notation", "Position above:")
+                label: qsTrc("notation", "Position above staff:")
                 suffix: qsTrc("global", "sp")
                 controlAreaWidth: root.controlAreaWidth
+                step: 0.05
+            }
+
+            StyleSpinboxWithReset {
+                styleItem: fretboardsPage.fretMinDistance
+                label: qsTrc("notation", "Min. space to notation:")
+                suffix: qsTrc("global", "sp")
+                controlAreaWidth: root.controlAreaWidth
+                step: 0.05
             }
 
             StyleSpinboxWithReset {

@@ -1503,7 +1503,7 @@ void SystemLayout::collectSpannersToLayout(ElementsToLayout& elements, const Lay
         if (spanner->tick2() == stick) {
             // Only these two spanner types are laid out if at the end of the previous system
             // TODO: pedal makes sense, but slur doesn't... to figure out
-            if (spanner->isSlur() && !toSlur(spanner)->isCrossStaff()) {
+            if (spanner->isSlur() && !toSlur(spanner)->isCrossStaff() && !toSlur(spanner)->hasCrossBeams()) {
                 elements.slurs.push_back(spanner);
             } else if (spanner->isPedal() && toPedal(spanner)->connect45HookToNext()) {
                 elements.pedal.push_back(spanner);
@@ -1512,7 +1512,7 @@ void SystemLayout::collectSpannersToLayout(ElementsToLayout& elements, const Lay
             switch (spanner->type()) {
             case ElementType::SLUR:
             case ElementType::HAMMER_ON_PULL_OFF:
-                if (!toSlur(spanner)->isCrossStaff()) {
+                if (!toSlur(spanner)->isCrossStaff() && !toSlur(spanner)->hasCrossBeams()) {
                     elements.slurs.push_back(spanner);
                 }
                 break;

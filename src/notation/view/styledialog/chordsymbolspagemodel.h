@@ -56,6 +56,7 @@ class ChordSymbolsPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * allCapsNoteNames READ allCapsNoteNames CONSTANT)
     Q_PROPERTY(StyleItem * harmonyFretDist READ harmonyFretDist CONSTANT)
     Q_PROPERTY(StyleItem * minHarmonyDist READ minHarmonyDist CONSTANT)
+    Q_PROPERTY(StyleItem * harmonyHarmonyDist READ harmonyHarmonyDist CONSTANT)
     Q_PROPERTY(StyleItem * harmonyVoiceLiteral READ harmonyVoiceLiteral CONSTANT)
     Q_PROPERTY(StyleItem * harmonyVoicing READ harmonyVoicing CONSTANT)
     Q_PROPERTY(StyleItem * harmonyDuration READ harmonyDuration CONSTANT)
@@ -105,6 +106,7 @@ public:
 
     StyleItem* harmonyFretDist() const;
     StyleItem* minHarmonyDist() const;
+    StyleItem* harmonyHarmonyDist() const;
 
     Q_INVOKABLE QVariantList possibleHarmonyVoiceLiteralOptions() const;
     Q_INVOKABLE QVariantList possibleHarmonyVoicingOptions() const;
