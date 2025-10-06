@@ -53,6 +53,7 @@ parts:
       - -DMUE_COMPILE_USE_SYSTEM_HARFBUZZ=ON
     build-packages:
       - libsndfile1-dev
+      - zlib1g-dev
     override-build: |
       craftctl default
       sed -i 's|Icon=mscore|Icon=${SNAP}/usr/share/icons/hicolor/512x512/apps/mscore.png|' $CRAFT_PART_INSTALL/usr/share/applications/org.musescore.MuseScore.desktop
