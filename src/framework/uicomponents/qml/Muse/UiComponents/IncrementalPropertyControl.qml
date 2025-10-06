@@ -258,7 +258,7 @@ Item {
                 return
             }
 
-            var newVal = parseFloat(newTextValue)
+            var newVal = Number.fromLocaleString(Qt.locale(), newTextValue)
 
             if (isNaN(newVal)) {
                 newVal = 0
@@ -273,7 +273,7 @@ Item {
                 return
             }
 
-            var newVal = parseFloat(newTextValue)
+            var newVal = Number.fromLocaleString(Qt.locale(), newTextValue)
 
             if (isNaN(newVal)) {
                 newVal = 0
