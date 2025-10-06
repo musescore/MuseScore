@@ -51,7 +51,7 @@ FocusableItem {
 
             navigation.name: "Scale with staff size"
             navigation.panel: root.navigationPanel
-            navigation.row: alignmentSection.navigationRowEnd + 1
+            navigation.row: root.navigationRowStart
         }
 
         FretFrameScalesSection {
@@ -60,7 +60,7 @@ FocusableItem {
             diagramScale: root.model ? root.model.diagramScale : null
 
             navigationPanel: root.navigationPanel
-            navigationRowStart: root.navigationRowStart + 1
+            navigationRowStart: matchStaffSize.navigation.row + 1
         }
 
         FretFrameGapsSection {
@@ -116,7 +116,7 @@ FocusableItem {
             notationGapBelow: root.model ? root.model.paddingToNotationBelow : null
 
             navigationPanel: root.navigationPanel
-            navigationRowStart: matchStaffSize.navigationRowEnd + 1
+            navigationRowStart: alignmentSection.navigationRowEnd + 1
         }
 
         SeparatorLine { anchors.margins: -12 }
