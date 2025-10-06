@@ -67,6 +67,8 @@ void NotationNavigator::load()
     });
 
     AbstractNotationPaintView::load();
+
+    rescale();
 }
 
 bool NotationNavigator::isVerticalOrientation() const
@@ -76,24 +78,21 @@ bool NotationNavigator::isVerticalOrientation() const
 
 const PageList& NotationNavigator::pages() const
 {
-    static const PageList dummyPages;
-
-    auto notation = globalContext()->currentNotation();
-    if (!notation) {
+    if (!notation()) {
+        static const PageList dummyPages;
         return dummyPages;
     }
 
-    auto elements = notation->elements();
-    if (!elements) {
-        return dummyPages;
-    }
-
-    return elements->pages();
+    return notation()->elements()->pages();
 }
 
 void NotationNavigator::rescale()
 {
     TRACEFUNC;
+
+    if (!isVisible() || size().isEmpty()) {
+        return;
+    }
 
     const PageList& pages = this->pages();
     if (pages.empty()) {
@@ -209,7 +208,6 @@ void NotationNavigator::setCursorRect(const QRectF& rect)
     bool moved = moveCanvasToRect(newCursorRect);
     m_cursorRect = newCursorRect;
 
-    rescale();
     m_cursorRectView->setSize(this->size());
     m_cursorRectView->setRect(fromLogical(newCursorRect));
 
@@ -222,11 +220,6 @@ void NotationNavigator::setCursorRect(const QRectF& rect)
 int NotationNavigator::orientation() const
 {
     return static_cast<int>(configuration()->canvasOrientation().val);
-}
-
-INotationPtr NotationNavigator::currentNotation() const
-{
-    return globalContext()->currentNotation();
 }
 
 void NotationNavigator::initOrientation()
@@ -243,18 +236,19 @@ void NotationNavigator::initOrientation()
 void NotationNavigator::initVisible()
 {
     connect(this, &NotationNavigator::visibleChanged, [this]() {
-        update();
+        if (isVisible()) {
+            rescale();
+        }
     });
 }
 
 ViewMode NotationNavigator::notationViewMode() const
 {
-    auto notation = currentNotation();
-    if (!notation) {
+    if (!notation()) {
         return ViewMode::PAGE;
     }
 
-    return notation->viewMode();
+    return notation()->viewMode();
 }
 
 void NotationNavigator::paint(QPainter* painter)
@@ -272,6 +266,11 @@ void NotationNavigator::paint(QPainter* painter)
 
 void NotationNavigator::onViewSizeChanged()
 {
+    if (!isVisible()) {
+        return;
+    }
+
+    rescale();
 }
 
 void NotationNavigator::paintPageNumbers(QPainter* painter)
