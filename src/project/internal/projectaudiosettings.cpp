@@ -628,7 +628,7 @@ QJsonObject ProjectAudioSettings::buildTrackObject(notation::INotationSoloMuteSt
     }
 
     if (masterSoloMuteStatePtr && masterSoloMuteStatePtr->trackSoloMuteStateExists(id)) {
-        SoloMuteState soloMuteState = masterSoloMuteStatePtr->trackSoloMuteState(id);
+        const SoloMuteState& soloMuteState = masterSoloMuteStatePtr->trackSoloMuteState(id);
         result.insert("soloMuteState", soloMuteStateToJson(soloMuteState));
     }
 

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -298,13 +298,12 @@ Promise<SoundPresetList> PlaybackController::availableSoundPresets(const Instrum
     return playback()->availableSoundPresets(params.resourceMeta);
 }
 
-mu::notation::INotationSoloMuteState::SoloMuteState PlaybackController::trackSoloMuteState(const InstrumentTrackId& trackId) const
+const PlaybackController::SoloMuteState& PlaybackController::trackSoloMuteState(const InstrumentTrackId& trackId) const
 {
     return m_notation->soloMuteState()->trackSoloMuteState(trackId);
 }
 
-void PlaybackController::setTrackSoloMuteState(const InstrumentTrackId& trackId,
-                                               const notation::INotationSoloMuteState::SoloMuteState& state)
+void PlaybackController::setTrackSoloMuteState(const InstrumentTrackId& trackId, const SoloMuteState& state)
 {
     if (trackId == notationPlayback()->metronomeTrackId()) {
         if (state.mute != notationConfiguration()->isMetronomeEnabled()) {
@@ -1596,7 +1595,7 @@ void PlaybackController::updateSoloMuteStates()
         }
 
         // 1. Recall the solo-mute state for this notation
-        auto soloMuteState = m_notation->soloMuteState()->trackSoloMuteState(instrumentTrackId);
+        const auto& soloMuteState = m_notation->soloMuteState()->trackSoloMuteState(instrumentTrackId);
 
         // 2. Evaluate "force mute" (disabling the mute button)
         bool shouldForceMute = hasSolo && !soloMuteState.solo;

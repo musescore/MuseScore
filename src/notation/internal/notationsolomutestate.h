@@ -34,7 +34,7 @@ public:
     muse::Ret write(muse::io::IODevice* out) override;
 
     bool trackSoloMuteStateExists(const engraving::InstrumentTrackId& trackId) const override;
-    SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;
+    const SoloMuteState& trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;
     void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) override;
     void removeTrackSoloMuteState(const engraving::InstrumentTrackId& trackId) override;
     muse::async::Channel<engraving::InstrumentTrackId, SoloMuteState> trackSoloMuteStateChanged() const override;

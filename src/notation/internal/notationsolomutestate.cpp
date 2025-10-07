@@ -92,12 +92,13 @@ bool NotationSoloMuteState::trackSoloMuteStateExists(const engraving::Instrument
     return search != m_trackSoloMuteStatesMap.end();
 }
 
-mu::notation::INotationSoloMuteState::SoloMuteState NotationSoloMuteState::trackSoloMuteState(const InstrumentTrackId& partId) const
+const INotationSoloMuteState::SoloMuteState& NotationSoloMuteState::trackSoloMuteState(const InstrumentTrackId& partId) const
 {
     auto search = m_trackSoloMuteStatesMap.find(partId);
 
     if (search == m_trackSoloMuteStatesMap.end()) {
-        return {};
+        static const SoloMuteState dummySoloMuteState;
+        return dummySoloMuteState;
     }
 
     return search->second;
