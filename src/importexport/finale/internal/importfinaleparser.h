@@ -135,7 +135,11 @@ struct ReadableCustomLine
     ReadableCustomLine() = default;
     ReadableCustomLine(const FinaleParser&, const musx::dom::MusxInstance<musx::dom::others::SmartShapeCustomLine>&);
 
+    // General
     engraving::ElementType elementType;
+    bool playSpanner = true;
+
+    // Line and hook settings
     bool lineVisible;
     engraving::HookType beginHookType;
     engraving::HookType endHookType;
@@ -149,6 +153,12 @@ struct ReadableCustomLine
     double dashLineLen;
     double dashGapLen;
 
+    // Type-specific settings
+    engraving::TrillType trillType;
+    engraving::VibratoType vibratoType;
+    // engraving::OttavaType ottavaType;
+
+    // Begin text
     engraving::TextPlace beginTextPlace;
     engraving::String beginText;
     engraving::Align beginTextAlign;
@@ -157,6 +167,7 @@ struct ReadableCustomLine
     engraving::FontStyle beginFontStyle;
     engraving::PointF beginTextOffset;
 
+    // Continue text
     engraving::TextPlace continueTextPlace;
     engraving::String continueText;
     engraving::Align continueTextAlign;
@@ -165,6 +176,7 @@ struct ReadableCustomLine
     engraving::FontStyle continueFontStyle;
     engraving::PointF continueTextOffset;
 
+    // End text
     engraving::TextPlace endTextPlace;
     engraving::String endText;
     engraving::Align endTextAlign;
@@ -173,6 +185,7 @@ struct ReadableCustomLine
     engraving::FontStyle endFontStyle;
     engraving::PointF endTextOffset;
 
+    // Center text (long), unused
     engraving::String centerLongText;
     engraving::AlignH centerLongTextAlign; // Doesn't have vertical AlignV property
     engraving::String centerLongFontFamily;
@@ -180,6 +193,7 @@ struct ReadableCustomLine
     engraving::FontStyle centerLongFontStyle;
     engraving::PointF centerLongTextOffset;
 
+    // Center text (short), unused
     engraving::String centerShortText;
     engraving::AlignH centerShortTextAlign; // Doesn't have vertical AlignV property
     engraving::String centerShortFontFamily;
