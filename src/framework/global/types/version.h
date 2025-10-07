@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_VERSION_H
-#define MUSE_GLOBAL_VERSION_H
+
+#pragma once
 
 #include <string>
 
@@ -39,7 +39,7 @@ public:
     int minor() const;
     int patch() const;
 
-    String suffix() const;
+    const String& suffix() const;
     int suffixVersion() const;
     void setSuffix(const String& suffix);
 
@@ -62,5 +62,3 @@ private:
     int m_suffixVersion = 0;
 };
 }
-
-#endif // MUSE_GLOBAL_VERSION_H

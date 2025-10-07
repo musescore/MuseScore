@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -78,7 +78,7 @@ bool Uri::isValid() const
     return true;
 }
 
-Uri::Scheme Uri::scheme() const
+const Uri::Scheme& Uri::scheme() const
 {
     return m_scheme;
 }
@@ -88,7 +88,7 @@ void Uri::setScheme(const Scheme& scheme)
     m_scheme = scheme;
 }
 
-std::string Uri::path() const
+const std::string& Uri::path() const
 {
     return m_path;
 }
