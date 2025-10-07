@@ -1090,6 +1090,7 @@ void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* 
             continue;
         }
 
+        TLayout::layoutFretDiagram(fd, fd->mutldata(), ctx);
         Autoplace::autoplaceSegmentElement(fd, fd->mutldata());
         fretItemsAlign.push_back(fd);
         fretHarmonyPositions.insert({ fd->tick(), fd->staffIdx() });
