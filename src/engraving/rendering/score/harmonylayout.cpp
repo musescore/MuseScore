@@ -787,6 +787,7 @@ void HarmonyLayout::kernCharacters(const Harmony* item, const String& text, Harm
         return;
     }
     // Character pair and distance to move the second
+    // Blank strings will apply the kerning no matter the following character
     static const std::map<std::pair<String, String>, double> KERNED_CHARACTERS {
         { { u"A", u"\uE870" }, -0.4 },  // dim
         { { u"A", u"\uE871" }, -0.3 },  // half-dim
@@ -795,9 +796,15 @@ void HarmonyLayout::kernCharacters(const Harmony* item, const String& text, Harm
         { { u"A", u"/" }, 0.1 },
 
         { { u"A", u"\uE18E" }, -0.15 },  // dim JAZZ
-        { { u"A", u"\uE18F" }, -0.15 },  // hal-dim JAZZ
+        { { u"A", u"\uE18F" }, -0.15 },  // half-dim JAZZ
         { { u"\uE18A", u"\uE18E" }, -0.15 },  // triangle - dim JAZZ
         { { u"\uE18A", u"\uE18F" }, -0.15 },  // triangle - half-dim JAZZ
+
+        { { u"\u266D", u"" }, -0.15 },  // b JAZZ
+        { { u"\u266E", u"" }, -0.15 },  // natural JAZZ
+        { { u"\u266F", u"" }, -0.15 },  // # JAZZ
+        { { u"\u1D12A", u"" }, -0.15 }, // ## JAZZ
+        { { u"\u1D12B", u"" }, -0.15 }, // bb JAZZ
     };
 
     HarmonyRenderItem* prevSeg = harmonyCtx.renderItemList.back();
@@ -808,7 +815,10 @@ void HarmonyLayout::kernCharacters(const Harmony* item, const String& text, Harm
 
     for (auto& kernInfo : KERNED_CHARACTERS) {
         const std::pair<String, String> kernPair = kernInfo.first;
-        if (ts->text().endsWith(kernPair.first) && text.startsWith(kernPair.second)) {
+        bool endChar = ts->text().endsWith(kernPair.first);
+        bool startChar = text.startsWith(kernPair.second);
+        bool startMatchAny = kernPair.second.isEmpty();
+        if ((endChar && startChar) || (endChar && startMatchAny)) {
             const FontMetrics fm = FontMetrics(item->font());
             const double scale = harmonyCtx.scale * item->mag();
             harmonyCtx.pos = harmonyCtx.pos + PointF(kernInfo.second, 0.0) * FontMetrics::capHeight(item->font()) * scale;
