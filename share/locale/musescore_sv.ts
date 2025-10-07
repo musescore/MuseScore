@@ -2918,7 +2918,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3811"/>
         <source>Using variables in the header/footer</source>
-        <translation type="unfinished"/>
+        <translation>Använder variabler i sidhuvud/sidfot</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3867"/>
@@ -7773,12 +7773,12 @@ som följs av streck</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="968"/>
         <source>Tenth above</source>
-        <translation type="unfinished"/>
+        <translation>Decima ovanför</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="969"/>
         <source>Enter interval: tenth above</source>
-        <translation type="unfinished"/>
+        <translation>Mata in intervall: decima ovanför</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="974"/>
@@ -7863,12 +7863,12 @@ som följs av streck</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1022"/>
         <source>Tenth below</source>
-        <translation type="unfinished"/>
+        <translation>Decima nedanför</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1023"/>
         <source>Enter interval: tenth below</source>
-        <translation type="unfinished"/>
+        <translation>Mata in intervall: decima nedanför</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1147"/>
@@ -9895,12 +9895,12 @@ som följs av streck</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="52"/>
         <source>Pause and select</source>
-        <translation type="unfinished"/>
+        <translation>Pausa och markera</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="53"/>
         <source>Pause and select playback position</source>
-        <translation type="unfinished"/>
+        <translation>Pausa och markera uppspelningsposition</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="59"/>
@@ -10227,77 +10227,77 @@ som följs av streck</translation>
         <translation>Huvudverktygsfält</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="116"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="119"/>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="55"/>
         <source>Notation toolbar</source>
         <translation>Notationsverktygsfält</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="138"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="141"/>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="77"/>
         <source>Playback controls</source>
         <translation>Uppspelningskontroller</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="165"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="168"/>
         <source>Extensions toolbar</source>
         <translation>Verktygsfält för utökningar</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="193"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="196"/>
         <source>Undo/redo</source>
         <translation>Ångra/gör om</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="217"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="220"/>
         <source>Note input</source>
         <translation>Notinmatning</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="249"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="252"/>
         <location filename="../../src/appshell_web/qml/NotationFrame.qml" line="62"/>
         <source>Palettes</source>
         <translation>Paletter</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="275"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="281"/>
         <location filename="../../src/appshell_web/qml/NotationFrame.qml" line="65"/>
         <source>Layout</source>
         <translation>Layout</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="301"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="310"/>
         <location filename="../../src/appshell_web/qml/NotationFrame.qml" line="68"/>
         <source>Properties</source>
         <translation>Egenskaper</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="324"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="336"/>
         <source>Selection filter</source>
         <translation>Markeringsfilter</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="379"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="397"/>
         <source>Mixer</source>
         <translation>Mixer</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="429"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="450"/>
         <source>Piano keyboard</source>
         <translation>Klaviatur</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="460"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="484"/>
         <source>Timeline</source>
         <translation>Tidslinje</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="487"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="514"/>
         <source>Drumset tools</source>
         <translation>Trumsetsverktyg</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="513"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="540"/>
         <source>Percussion</source>
         <translation>Slagverk</translation>
     </message>
@@ -10905,7 +10905,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioApiSection.qml" line="44"/>
         <source>Audio API:</source>
-        <translation type="unfinished"/>
+        <translation>Ljud-API:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioEngineSection.qml" line="31"/>
@@ -12166,12 +12166,12 @@ Band %1 på strängar %2</translation>
         <translation>Start och slut för %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3593"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3594"/>
         <source>Current contents of measures will be replaced</source>
         <translation>Aktuellt taktinnehåll kommer att ersättas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3594"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3595"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>Fortsätt att infoga taktrepris?</translation>
     </message>
@@ -12181,18 +12181,18 @@ Band %1 på strängar %2</translation>
         <translation>Kan inte skapa notvärden med förhållandet %1 mot %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8029"/>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8177"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8031"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8179"/>
         <source>Remove stale partial tie</source>
         <translation>Ta bort överflödig delvis bindning</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8087"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8089"/>
         <source>Reset incoming partial slur</source>
         <translation>Återställ inkommande delvis legato</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8097"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8099"/>
         <source>Reset outgoing partial slur</source>
         <translation>Återställ utgående delvis legato</translation>
     </message>
@@ -13445,22 +13445,22 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="368"/>
         <source>staff type change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>byte av notradstyp</numerusform><numerusform>byten av notradstyp</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="369"/>
         <source>Staff type change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Byte av notradstyp</numerusform><numerusform>Byten av notradstyp</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="371"/>
         <source>chord symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>ackordtecken</numerusform><numerusform>ackordtecken</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="372"/>
         <source>Chord symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ackordtecken</numerusform><numerusform>Ackordtecken</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="374"/>
@@ -13555,152 +13555,152 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="401"/>
         <source>gradual tempo change segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>stegvis tempoändringssegment</numerusform><numerusform>stegvisa tempoändringssegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="402"/>
         <source>Gradual tempo change segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Stegvis tempoändringssegment</numerusform><numerusform>Stegvisa tempoändringssegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="404"/>
         <source>vibrato segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>vibratosegment</numerusform><numerusform>vibratosegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="405"/>
         <source>Vibrato segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Vibratosegment</numerusform><numerusform>Vibratosegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="407"/>
         <source>palm mute segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>handdämpningssegment</numerusform><numerusform>handdämpningssegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="408"/>
         <source>Palm mute segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Handdämpningssegment</numerusform><numerusform>Handdämpningssegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="410"/>
         <source>whammy bar segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>whammybalksegment</numerusform><numerusform>whammybalksegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="411"/>
         <source>Whammy bar segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Whammybalksegment</numerusform><numerusform>Whammybalksegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="413"/>
         <source>rasgueado segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>rasgueadosegment</numerusform><numerusform>rasgueadosegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="414"/>
         <source>Rasgueado segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Rasgueadosegment</numerusform><numerusform>Rasgueadosegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="416"/>
         <source>harmonic mark segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>flageolettmarkeringssegment</numerusform><numerusform>flageolettmarkeringssegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="417"/>
         <source>Harmonic mark segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Flageolettmarkeringssegment</numerusform><numerusform>Flageolettmarkeringssegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="419"/>
         <source>pick scrape segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>plektrumskrapsegment</numerusform><numerusform>plektrumskrapsegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="420"/>
         <source>Pick scrape segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Plektrumskrapsegment</numerusform><numerusform>Plektrumskrapsegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="422"/>
         <source>text line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>textlinjesegment</numerusform><numerusform>textlinjesegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="423"/>
         <source>Text line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Textlinjesegment</numerusform><numerusform>Textlinjesegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="425"/>
         <source>volta segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>voltasegment</numerusform><numerusform>voltasegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="426"/>
         <source>Volta segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Voltasegment</numerusform><numerusform>Voltasegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="428"/>
         <source>pedal segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>pedalsegment</numerusform><numerusform>pedalsegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="429"/>
         <source>Pedal segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pedalsegment</numerusform><numerusform>Pedalsegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="431"/>
         <source>extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>förlängningslinjesegment</numerusform><numerusform>förlängningslinjesegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="432"/>
         <source>Extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Förlängningslinjesegment</numerusform><numerusform>Förlängningslinjesegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="434"/>
         <source>partial extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segment av förlängningslinjedel</numerusform><numerusform>segment av förlängningslinjedel</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="435"/>
         <source>Partial extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segment av förlängningslinjedel</numerusform><numerusform>Segment av förlängningslinjedel</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="437"/>
         <source>glissando segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>glissandosegment</numerusform><numerusform>glissandosegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="438"/>
         <source>Glissando segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Glissandosegment</numerusform><numerusform>Glissandosegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="440"/>
         <source>note-anchored line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>notförankringslinjesegment</numerusform><numerusform>notförankringslinjesegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="441"/>
         <source>Note-anchored line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Notförankringslinjesegment</numerusform><numerusform>Notförankringslinjesegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="443"/>
         <source>layout break(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>layoutbrytning</numerusform><numerusform>layoutbrytningar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="444"/>
         <source>Layout break(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Layoutbrytning</numerusform><numerusform>Layoutbrytningar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="446"/>
@@ -13715,22 +13715,22 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="449"/>
         <source>system lock(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>notsystemlås</numerusform><numerusform>notsystemlås</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="450"/>
         <source>System lock(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Notsystemlås</numerusform><numerusform>Notsystemlås</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="452"/>
         <source>spacer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>avdelare</numerusform><numerusform>avdelare</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="453"/>
         <source>Spacer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Avdelare</numerusform><numerusform>Avdelare</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="455"/>
@@ -13745,72 +13745,72 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="458"/>
         <source>notehead(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>nothuvud</numerusform><numerusform>nothuvuden</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="459"/>
         <source>Notehead(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Nothuvud</numerusform><numerusform>Nothuvuden</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="461"/>
         <source>note dot(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>notpunkt</numerusform><numerusform>notpunkter</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="462"/>
         <source>Note dot(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Notpunkt</numerusform><numerusform>Notpunkter</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="464"/>
         <source>image(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>bild</numerusform><numerusform>bilder</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="465"/>
         <source>Image(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Bild</numerusform><numerusform>Bilder</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="467"/>
         <source>measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>takt</numerusform><numerusform>takter</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="468"/>
         <source>Measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Takt</numerusform><numerusform>Takter</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="470"/>
         <source>selection(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>markering</numerusform><numerusform>markeringar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="471"/>
         <source>Selection(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Markering</numerusform><numerusform>Markeringar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="473"/>
         <source>lasso(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>lasso</numerusform><numerusform>lasson</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="474"/>
         <source>Lasso(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Lasso</numerusform><numerusform>Lasson</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="476"/>
         <source>shadow note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>skuggnot</numerusform><numerusform>skuggnoter</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="477"/>
         <source>Shadow note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Skuggnot</numerusform><numerusform>Skuggnoter</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="479"/>
@@ -13825,32 +13825,32 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="482"/>
         <source>font symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>teckensnittssymbol</numerusform><numerusform>teckensnittssymboler</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="483"/>
         <source>Font symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Teckensnittssymbol</numerusform><numerusform>Teckensnittssymboler</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="485"/>
         <source>page(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>sida</numerusform><numerusform>sidor</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="486"/>
         <source>Page(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Sida</numerusform><numerusform>Sidor</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="488"/>
         <source>parenthesis</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>parentes</numerusform><numerusform>parenteser</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="489"/>
         <source>Parenthesis</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Parentes</numerusform><numerusform>Parenteser</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="491"/>
@@ -13865,43 +13865,43 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="494"/>
         <source>ottava(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>ottava</numerusform><numerusform>ottavor</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="495"/>
         <source>Ottava(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ottava</numerusform><numerusform>Ottavor</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="497"/>
         <source>pedal(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>pedal</numerusform><numerusform>pedaler</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="498"/>
         <source>Pedal(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pedal</numerusform><numerusform>Pedaler</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="500"/>
         <source>trill(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>drill</numerusform><numerusform>drillar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="501"/>
         <source>Trill(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Drill</numerusform><numerusform>Drillar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="503"/>
         <source>let ring</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>låt klinga</numerusform><numerusform>låt klinga</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="504"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1744"/>
         <source>Let ring</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Låt klinga</numerusform><numerusform>Låt klinga</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="506"/>
@@ -13916,22 +13916,22 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="509"/>
         <source>vibrato(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>vibrato</numerusform><numerusform>vibraton</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="510"/>
         <source>Vibrato(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Vibrato</numerusform><numerusform>Vibraton</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="512"/>
         <source>palm mute(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>handdämpning</numerusform><numerusform>handdämpningar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="513"/>
         <source>Palm mute(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Handdämpning</numerusform><numerusform>Handdämpningar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="515"/>
@@ -13956,12 +13956,12 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="521"/>
         <source>harmonic mark(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>flageolettmarkering</numerusform><numerusform>flageolettmarkeringar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="522"/>
         <source>Harmonic mark(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Flageolettmarkering</numerusform><numerusform>Flageolettmarkeringar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="524"/>
@@ -13976,22 +13976,22 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="527"/>
         <source>text line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>textlinje</numerusform><numerusform>textlinjer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="528"/>
         <source>Text line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Textlinje</numerusform><numerusform>Textlinjer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="530"/>
         <source>text line base(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>textlinjebas</numerusform><numerusform>textlinjebaser</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="531"/>
         <source>Text line base(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Textlinjebas</numerusform><numerusform>Textlinjebaser</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="533"/>
@@ -14006,12 +14006,12 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="536"/>
         <source>extension line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>förlängningslinje</numerusform><numerusform>förlängningslinjer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="537"/>
         <source>Extension line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Förlängningslinje</numerusform><numerusform>Förlängningslinjer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="539"/>
@@ -14026,82 +14026,82 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="542"/>
         <source>glissando(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>glissando</numerusform><numerusform>glissandon</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="543"/>
         <source>Glissando(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Glissando</numerusform><numerusform>Glissandon</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="548"/>
         <source>segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segment</numerusform><numerusform>segment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="549"/>
         <source>Segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segment</numerusform><numerusform>Segment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="551"/>
         <source>system(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>system</numerusform><numerusform>system</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="552"/>
         <source>System(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>System</numerusform><numerusform>System</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="554"/>
         <source>chord(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>ackord</numerusform><numerusform>ackord</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="555"/>
         <source>Chord(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ackord</numerusform><numerusform>Ackord</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="557"/>
         <source>slur(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>legatobåge</numerusform><numerusform>legatobågar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="558"/>
         <source>Slur(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Legatobåge</numerusform><numerusform>Legatobågar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="560"/>
         <source>horizontal frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>horisontell ram</numerusform><numerusform>horisontella ramar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="561"/>
         <source>Horizontal frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Horisontell ram</numerusform><numerusform>Horisontella ramar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="563"/>
         <source>vertical frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>vertikal ram</numerusform><numerusform>vertikala ramar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="564"/>
         <source>Vertical frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Vertikal ram</numerusform><numerusform>Vertikala ramar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="566"/>
         <source>text frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>textram</numerusform><numerusform>textramar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="567"/>
         <source>Text frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Textram</numerusform><numerusform>Textramar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="569"/>
@@ -14116,12 +14116,12 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="575"/>
         <source>bagpipe embellishment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>säckpipsornament</numerusform><numerusform>säckpipsornament</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="576"/>
         <source>Bagpipe embellishment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Säckpipsornament</numerusform><numerusform>Säckpipsornament</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="578"/>
@@ -14136,104 +14136,104 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="584"/>
         <source>guitar bend(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>gitarrbend</numerusform><numerusform>gitarrbends</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="585"/>
         <source>Guitar bend(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Gitarrbend</numerusform><numerusform>Gitarrbends</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="587"/>
         <source>guitar bend segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>gitarrbendsegment</numerusform><numerusform>gitarrbendsegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="588"/>
         <source>Guitar bend segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Gitarrbendsegment</numerusform><numerusform>Gitarrbendsegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="590"/>
         <source>guitar bend hold(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>gitarrbend, håll</numerusform><numerusform>gitarrbends, håll</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="591"/>
         <source>Guitar bend hold(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Gitarrbend, håll</numerusform><numerusform>Gitarrbends, håll</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="593"/>
         <source>guitar bend hold segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>gitarrbend, hållsegment</numerusform><numerusform>gitarrbends, hållsegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="594"/>
         <source>Guitar bend hold segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Gitarrbend, hållsegment</numerusform><numerusform>Gitarrbends, hållsegment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="596"/>
         <source>guitar bend text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>gitarrbendtext</numerusform><numerusform>gitarrbendtexter</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="597"/>
         <source>Guitar bend text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Gitarrbendtext</numerusform><numerusform>Gitarrbendtexter</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="599"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="602"/>
         <source>tremolo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>tremolo</numerusform><numerusform>tremolon</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="600"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="603"/>
         <source>Tremolo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Tremolo</numerusform><numerusform>Tremolon</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="605"/>
         <source>time tick anchor(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>tidsstrecksankare</numerusform><numerusform>tidsstrecksankare</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="606"/>
         <source>Time tick anchor(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Tidsstrecksankare</numerusform><numerusform>Tidsstrecksankare</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="608"/>
         <source>hammer-on / pull-off(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>hammer-on/pull-off</numerusform><numerusform>hammer-on/pull-offs</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="609"/>
         <source>Hammer-on / pull-off(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Hammer-on/pull-off</numerusform><numerusform>Hammer-on/pull-offs</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="611"/>
         <source>hammer-on / pull-off segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>hammer-on/pull-off-segment</numerusform><numerusform>hammer-on/pull-off-segment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="612"/>
         <source>Hammer-on / pull-off segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Hammer-on/pull-off-segment</numerusform><numerusform>Hammer-on/pull-off-segment</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="614"/>
         <source>hammer-on / pull-off text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>hammer-on/pull-off-text</numerusform><numerusform>hammer-on/pull-off-texter</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="615"/>
         <source>Hammer-on / pull-off text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Hammer-on/pull-off-text</numerusform><numerusform>Hammer-on/pull-off-texter</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="617"/>
@@ -17428,6 +17428,1728 @@ Band %1 på strängar %2</translation>
     </message>
 </context>
 <context>
+    <name>engraving/propertyName</name>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="60"/>
+        <source>subtype</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="61"/>
+        <source>selected</source>
+        <translation>vald</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="62"/>
+        <source>generated</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="63"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="310"/>
+        <source>color</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="64"/>
+        <source>visible</source>
+        <translation>synlig</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="65"/>
+        <source>stacking order</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="66"/>
+        <source>small</source>
+        <translation>liten</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="67"/>
+        <source>hide when empty</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="68"/>
+        <source>hide staves when individually empty</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="69"/>
+        <source>show if entire system empty</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="70"/>
+        <source>show courtesy</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="71"/>
+        <source>key signature mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="72"/>
+        <source>line type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="73"/>
+        <source>pitch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="75"/>
+        <source>tonal pitch class</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="76"/>
+        <source>transposed tonal pitch class</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="77"/>
+        <source>line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="78"/>
+        <source>fixed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="79"/>
+        <source>fixed line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="80"/>
+        <source>head type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="81"/>
+        <source>head</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="82"/>
+        <source>velocity type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="83"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="203"/>
+        <source>velocity</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="84"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="255"/>
+        <source>anchor</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="86"/>
+        <source>direction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="87"/>
+        <source>horizontal direction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="88"/>
+        <source>stem direction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="89"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="308"/>
+        <source>stemless</source>
+        <translation>Skaftlös</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="90"/>
+        <source>up</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="91"/>
+        <source>leading space</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="92"/>
+        <source>mirror</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="93"/>
+        <source>parentheses</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="94"/>
+        <source>dot position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="95"/>
+        <source>combine voice</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="96"/>
+        <source>tuning</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="97"/>
+        <source>pause</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="99"/>
+        <source>barline type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="100"/>
+        <source>span</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="101"/>
+        <source>span from</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="102"/>
+        <source>span to</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="103"/>
+        <source>show tips</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="105"/>
+        <source>offset</source>
+        <translation>förskjutning</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="106"/>
+        <source>fret</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="107"/>
+        <source>string</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="108"/>
+        <source>ghost</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="109"/>
+        <source>dead</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="110"/>
+        <source>played</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="111"/>
+        <source>nominal time signature</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="112"/>
+        <source>actual time signature</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="113"/>
+        <source>number type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="114"/>
+        <source>bracket type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="115"/>
+        <source>normal notes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="116"/>
+        <source>actual notes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="117"/>
+        <source>bracket start offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="118"/>
+        <source>bracket end offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="119"/>
+        <source>grow left</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="120"/>
+        <source>grow right</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="122"/>
+        <source>height</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="123"/>
+        <source>width</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="124"/>
+        <source>autosize frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="125"/>
+        <source>top gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="126"/>
+        <source>bottom gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="127"/>
+        <source>left padding</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="128"/>
+        <source>right padding</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="129"/>
+        <source>top padding</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="130"/>
+        <source>bottom padding</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="131"/>
+        <source>padding to notation above</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="132"/>
+        <source>padding to notation below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="134"/>
+        <source>layout break type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="135"/>
+        <source>autoscale</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="136"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="327"/>
+        <source>size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="138"/>
+        <source>image height</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="139"/>
+        <source>image width</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="140"/>
+        <source>image framed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="142"/>
+        <source>text scale</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="143"/>
+        <source>diagram scale</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="144"/>
+        <source>column gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="145"/>
+        <source>row gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="146"/>
+        <source>chord symbols per row</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="147"/>
+        <source>horizontal alignment</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="148"/>
+        <source>diagrams order</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="150"/>
+        <source>scale</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="151"/>
+        <source>aspect ratio locked</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="152"/>
+        <source>size is spatium</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="153"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="219"/>
+        <source>text</source>
+        <translation>text</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="156"/>
+        <source>beam position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="157"/>
+        <source>beam mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="158"/>
+        <source>without slope</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="159"/>
+        <source>beam staff move</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="160"/>
+        <source>length</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="161"/>
+        <source>show stem slash</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="163"/>
+        <source>space</source>
+        <translation>mellanslag</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="164"/>
+        <source>tempo</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="165"/>
+        <source>following text</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="166"/>
+        <source>tempo align right of rehearsal mark</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="168"/>
+        <source>bracket</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="169"/>
+        <source>accidental type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="170"/>
+        <source>stacking order offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="171"/>
+        <source>numerator string</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="172"/>
+        <source>denominator string</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="173"/>
+        <source>prefix</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="174"/>
+        <source>digit</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="175"/>
+        <source>suffix</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="176"/>
+        <source>continuation line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="184"/>
+        <source>ottava type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="185"/>
+        <source>numbers only</source>
+        <translation>endast nummer</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="186"/>
+        <source>trill type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="187"/>
+        <source>vibrato type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="188"/>
+        <source>hairpin with circled tip</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="190"/>
+        <source>hairpin type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="191"/>
+        <source>hairpin height</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="192"/>
+        <source>hairpin cont height</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="193"/>
+        <source>velocity change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="194"/>
+        <source>velocity change method</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="195"/>
+        <source>velocity change speed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="196"/>
+        <source>dynamic type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="198"/>
+        <source>single note dynamics</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="199"/>
+        <source>change method</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="200"/>
+        <source>placement</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="201"/>
+        <source>horizontal placement</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="202"/>
+        <source>multimeasure rest range bracket type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="204"/>
+        <source>jump to</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="205"/>
+        <source>play until</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="206"/>
+        <source>continue at</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="207"/>
+        <source>label</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="208"/>
+        <source>marker type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="209"/>
+        <source>music symbol size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="210"/>
+        <source>marker center on symbol</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="211"/>
+        <source>length 1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="212"/>
+        <source>length 2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="213"/>
+        <source>repeat end</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="214"/>
+        <source>repeat start</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="215"/>
+        <source>repeat jump</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="216"/>
+        <source>measure number mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="218"/>
+        <source>glissando type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="220"/>
+        <source>showing text</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="221"/>
+        <source>glissando style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="222"/>
+        <source>glissando shift</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="223"/>
+        <source>ease in</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="224"/>
+        <source>ease out</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="225"/>
+        <source>diagonal</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="226"/>
+        <source>groups</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="227"/>
+        <source>line style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="228"/>
+        <source>line width</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="229"/>
+        <source>time stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="230"/>
+        <source>ornament style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="231"/>
+        <source>interval above</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="232"/>
+        <source>interval below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="233"/>
+        <source>ornament show accidental</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="234"/>
+        <source>ornament show cue note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="235"/>
+        <source>start on upper note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="237"/>
+        <source>time signature</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="238"/>
+        <source>time signature stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="239"/>
+        <source>time signature type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="240"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="294"/>
+        <source>tick</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="241"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="264"/>
+        <source>ticks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="242"/>
+        <source>end track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="243"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="259"/>
+        <source>end offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="244"/>
+        <source>breaking multimeasure rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="245"/>
+        <source>vertical position of multimeasure rest number</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="246"/>
+        <source>vertical offset of multimeasure rest number</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="247"/>
+        <source>visibility of multimeasure rest number</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="249"/>
+        <source>vertical position of measure repeat number</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="250"/>
+        <source>repeat count</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="252"/>
+        <source>stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="253"/>
+        <source>numbering offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="254"/>
+        <source>irregular</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="256"/>
+        <source>start offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="257"/>
+        <source>left shoulder offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="258"/>
+        <source>right shoulder offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="260"/>
+        <source>staff move</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="261"/>
+        <source>verse</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="263"/>
+        <source>syllabic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="265"/>
+        <source>endings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="266"/>
+        <source>visible line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="267"/>
+        <source>magnification</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="268"/>
+        <source>using drumset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="269"/>
+        <source>duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="270"/>
+        <source>duration type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="271"/>
+        <source>role</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="272"/>
+        <source>track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="274"/>
+        <source>strings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="275"/>
+        <source>frets</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="276"/>
+        <source>show nut</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="277"/>
+        <source>fret offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="278"/>
+        <source>fret number position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="279"/>
+        <source>orientation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="280"/>
+        <source>fretboard diagram fingering visible</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="281"/>
+        <source>fretboard diagram fingering</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="283"/>
+        <source>chord symbol interpretation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="284"/>
+        <source>chord symbol voicing</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="285"/>
+        <source>chord symbol duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="286"/>
+        <source>chord symbol bass scale</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="287"/>
+        <source>chord symbol do not stack modifiers</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="289"/>
+        <source>type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="290"/>
+        <source>gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="291"/>
+        <source>autoplace</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="292"/>
+        <source>dash line length</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="293"/>
+        <source>dash gap length</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="295"/>
+        <source>playback voice 1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="296"/>
+        <source>playback voice 2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="297"/>
+        <source>playback voice 3</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="299"/>
+        <source>playback voice 4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="300"/>
+        <source>symbol</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="301"/>
+        <source>playing repeats</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="302"/>
+        <source>creating system header</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="303"/>
+        <source>lines</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="304"/>
+        <source>line distance</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="305"/>
+        <source>step offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="306"/>
+        <source>showing barlines</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="307"/>
+        <source>showing ledgerlines</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="309"/>
+        <source>invisible</source>
+        <translation>osynlig</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="312"/>
+        <source>notehead scheme</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="313"/>
+        <source>generating clefs</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="314"/>
+        <source>generating time signature</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="315"/>
+        <source>generating key signature</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="316"/>
+        <source>y-offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="317"/>
+        <source>distance offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="318"/>
+        <source>barline span</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="319"/>
+        <source>barline span from</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="320"/>
+        <source>barline span to</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="321"/>
+        <source>bracket span</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="323"/>
+        <source>level</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="324"/>
+        <source>layout position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="325"/>
+        <source>style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="326"/>
+        <source>family</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="328"/>
+        <source>font style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="329"/>
+        <source>user line distancing</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="331"/>
+        <source>frame type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="332"/>
+        <source>frame width</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="333"/>
+        <source>frame padding</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="334"/>
+        <source>frame round</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="335"/>
+        <source>frame foreground color</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="336"/>
+        <source>frame background color</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="337"/>
+        <source>spatium dependent size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="338"/>
+        <source>spatium dependent text size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="339"/>
+        <source>musical symbols scale</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="340"/>
+        <source>align</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="341"/>
+        <source>text script align</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="342"/>
+        <source>system flag</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="344"/>
+        <source>begin text</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="345"/>
+        <source>begin text align</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="346"/>
+        <source>begin text place</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="347"/>
+        <source>begin hook type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="348"/>
+        <source>begin hook height</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="349"/>
+        <source>begin font face</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="350"/>
+        <source>begin font size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="351"/>
+        <source>begin font style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="352"/>
+        <source>begin text offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="353"/>
+        <source>gap between text and line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="355"/>
+        <source>continue text</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="356"/>
+        <source>continue text align</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="357"/>
+        <source>continue text place</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="358"/>
+        <source>continue font face</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="359"/>
+        <source>continue font size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="360"/>
+        <source>continue font style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="361"/>
+        <source>continue text offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="363"/>
+        <source>end text</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="364"/>
+        <source>end text align</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="365"/>
+        <source>end text place</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="366"/>
+        <source>end hook type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="367"/>
+        <source>end hook height</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="368"/>
+        <source>end font face</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="369"/>
+        <source>end font size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="370"/>
+        <source>end font style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="371"/>
+        <source>end text offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="373"/>
+        <source>note-anchored line placement</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="375"/>
+        <source>avoid barlines</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="376"/>
+        <source>dynamic size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="377"/>
+        <source>use text alignment</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="378"/>
+        <source>anchor to end of previous</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="380"/>
+        <source>snap expression</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="381"/>
+        <source>snap before</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="382"/>
+        <source>snap after</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="384"/>
+        <source>voice assignment</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="385"/>
+        <source>center between staves</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="387"/>
+        <source>position above</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="389"/>
+        <source>staves distance</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="390"/>
+        <source>voices distance</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="391"/>
+        <source>measures distance</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="392"/>
+        <source>position distance</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="393"/>
+        <source>grace note index</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="394"/>
+        <source>note index</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="396"/>
+        <source>voice</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="397"/>
+        <source>position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="399"/>
+        <source>concert clef type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="400"/>
+        <source>transposing clef type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="401"/>
+        <source>clef to barline position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="402"/>
+        <source>is header</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="403"/>
+        <source>concert key</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="404"/>
+        <source>key</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="406"/>
+        <source>autoplace minimum distance</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="408"/>
+        <source>arpeggio type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="409"/>
+        <source>chord line type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="410"/>
+        <source>straight chord line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="411"/>
+        <source>wavy chord line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="412"/>
+        <source>tremolo type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="413"/>
+        <source>tremolo style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="414"/>
+        <source>harmony type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="416"/>
+        <source>arpeggio span</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="418"/>
+        <source>bend type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="419"/>
+        <source>bend curve</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="420"/>
+        <source>bend vertex offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="421"/>
+        <source>bend show hold line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="422"/>
+        <source>bend start time factor</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="423"/>
+        <source>bend end time factor</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="425"/>
+        <source>tremolobar type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="426"/>
+        <source>tremolobar curve</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="428"/>
+        <source>start with long names</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="429"/>
+        <source>start with measure one</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="430"/>
+        <source>first system indentation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="432"/>
+        <source>path</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="434"/>
+        <source>prefer sharps or flats</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="436"/>
+        <source>playing technique type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="438"/>
+        <source>gradual tempo change type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="439"/>
+        <source>tempo easing method</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="440"/>
+        <source>tempo change factor</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="442"/>
+        <source>is diagram</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="444"/>
+        <source>active</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="446"/>
+        <source>fret position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="447"/>
+        <source>ignored strings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="448"/>
+        <source>automatically generate text</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="450"/>
+        <source>tie placement</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="451"/>
+        <source>minimum length</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="452"/>
+        <source>partial spanner direction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="454"/>
+        <source>position linked to main score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="455"/>
+        <source>appearance linked to main score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="456"/>
+        <source>text linked to main score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="457"/>
+        <source>exclude from parts</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="459"/>
+        <source>strings count</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="460"/>
+        <source>strings preset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="461"/>
+        <source>visible strings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="463"/>
+        <source>score font</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="464"/>
+        <source>symbols size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="465"/>
+        <source>symbol angle</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="467"/>
+        <source>apply to all staves</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="468"/>
+        <source>is courtesy</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="469"/>
+        <source>exclude vertical align</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="471"/>
+        <source>show bar numbers</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="472"/>
+        <source>play count text setting</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="473"/>
+        <source>play count text</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="475"/>
+        <source>align with other rests in the same voice</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>engraving/scoreorder</name>
     <message>
         <location filename="../../src/engraving/dom/scoreorder.cpp" line="225"/>
@@ -19032,6 +20754,51 @@ Band %1 på strängar %2</translation>
         <translation>Sväll volym</translation>
     </message>
     <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4392"/>
+        <source>Gyro</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4393"/>
+        <source>Hand martellato</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4394"/>
+        <source>Mallet, bell on table</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4395"/>
+        <source>Mallet, bell suspended</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4396"/>
+        <source>Mallet lift</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4397"/>
+        <source>Martellato</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4398"/>
+        <source>Martellato lift</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4399"/>
+        <source>Muted martellato</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="4400"/>
+        <source>Pluck lift</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4595"/>
         <source>Right-hand fingering, first finger</source>
         <translation>Fingersättning, högerhandens första finger</translation>
@@ -19603,8 +21370,8 @@ Band %1 på strängar %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3213"/>
-        <source>Vibrate</source>
-        <translation type="unfinished"/>
+        <source>Vibrato</source>
+        <translation>Vibrato</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="372"/>
@@ -24477,55 +26244,55 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
         <translation>Beklagar, vi kan inte ladda dessa ljud just nu</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="68"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="96"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="63"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="91"/>
         <source>Not now</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="72"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="100"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="67"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="95"/>
         <source>Quit &amp; launch MuseSounds Manager</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="74"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="69"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. Your MuseSounds libraries won’t work until the update is complete.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="78"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="107"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="73"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="102"/>
         <source>Quit &amp; launch MuseHub</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="80"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="75"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseHub will open. Your MuseSounds libraries won’t work until the update is complete.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="84"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="79"/>
         <source>MuseSounds needs an update</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="102"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="97"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseSounds Manager can apply the update. You’ll need to restart MuseScore Studio when the update is complete.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="109"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="104"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseHub can apply the update. You’ll be prompted to relaunch MuseScore Studio when it’s ready.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="114"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="109"/>
         <source>An update for MuseSounds is available</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesoundsconfiguration.cpp" line="60"/>
+        <location filename="../../src/musesounds/internal/musesoundsconfiguration.cpp" line="59"/>
         <source>Show occasional MuseHub promotions</source>
         <translation type="unfinished"/>
     </message>
@@ -24561,7 +26328,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
 <context>
     <name>notation</name>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="349"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="364"/>
         <source>History</source>
         <translation>Historik</translation>
     </message>
@@ -26559,7 +28326,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1352"/>
         <source>Using variables in the header/footer</source>
-        <translation type="unfinished"/>
+        <translation>Använder variabler i sidhuvud/sidfot</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1354"/>
@@ -27823,17 +29590,17 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="282"/>
+        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="285"/>
         <source>Reset all staff visibility</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="323"/>
+        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="341"/>
         <source>Change part visibility: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="340"/>
+        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="363"/>
         <source>Change staff visibility: %1</source>
         <translation type="unfinished"/>
     </message>
@@ -28270,39 +30037,39 @@ failed.</source>
 misslyckades.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="249"/>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="251"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="261"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="263"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1805"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1806"/>
         <source>Capo</source>
         <translation>Capo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="259"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="271"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1811"/>
         <source>String tunings</source>
         <translation>Stämningar</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="275"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="287"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1843"/>
         <source>Left-hand tapping</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="279"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="291"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1847"/>
         <source>Right-hand tapping</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="285"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="297"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1850"/>
         <source>Hammer-on / pull-off</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="332"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="344"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1711"/>
         <source>Blank</source>
         <translation>Tom</translation>
@@ -30743,24 +32510,24 @@ misslyckades: %2</translation>
 <context>
     <name>playback</name>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="594"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="624"/>
         <source>This sound processes online</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="595"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="625"/>
         <source>An animated bar will let you know when sounds are processing online. You’ll also see a notification in the status bar. You can change when these notifications appear in Preferences &gt; Audio &amp; MIDI…</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="609"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="639"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="116"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="126"/>
         <source>Online sounds</source>
         <translation>Online-ljud</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="610"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="640"/>
         <source>Click to manually process online sounds.</source>
         <translation type="unfinished"/>
     </message>
@@ -31344,23 +33111,23 @@ misslyckades: %2</translation>
         <translation>Sparar online…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2369"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2390"/>
         <source>File “%1” seems not corrupted</source>
         <translation>Filen “%1” verkar inte vara trasig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2370"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2391"/>
         <source>This file does not seem to contain errors.</source>
         <translation>Filen verkar inte innehålla några fel.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2373"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2394"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1795"/>
         <source>File “%1” is corrupted</source>
         <translation>Filen ”%1” är trasig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2375"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2396"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</source>
         <translation>Filen innehåller fel som skulle kunna leda till att MuseScore Studio inte fungerar korrekt. Åtgärda dessa så fort som möjligt, för att förhindra krascher och att annat går sönder.</translation>
     </message>
@@ -33419,17 +35186,17 @@ misslyckades: %2</translation>
         <translation>Svart</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="140"/>
+        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="153"/>
         <source>direction is horizontal</source>
         <translation>riktning är horisontell</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="141"/>
+        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="154"/>
         <source>direction is vertical</source>
         <translation>riktning är vertikal</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="142"/>
+        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="155"/>
         <source>direction is both</source>
         <translation>riktning är båda</translation>
     </message>
@@ -33599,7 +35366,7 @@ misslyckades: %2</translation>
         <translation>Trasigt partitur</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="2866"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="2867"/>
         <source>Reset all positions</source>
         <translation>Återställ alla positioner</translation>
     </message>
@@ -33614,7 +35381,7 @@ misslyckades: %2</translation>
         <translation>Laissez vibrer på/av</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="4438"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="4440"/>
         <source>Enter rest</source>
         <translation>Mata in paus</translation>
     </message>
@@ -33635,7 +35402,7 @@ misslyckades: %2</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/textedit.cpp" line="914"/>
+        <location filename="../../src/engraving/dom/textedit.cpp" line="915"/>
         <source>Paste text</source>
         <translation>Klistra in text</translation>
     </message>
@@ -33884,12 +35651,12 @@ misslyckades: %2</translation>
         <translation>Mata in heltaktspaus</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2193"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2214"/>
         <source>Display concert pitch</source>
         <translation>Visa klingande tonhöjd</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2194"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2215"/>
         <source>Display transposed</source>
         <translation>Visa transponerad</translation>
     </message>
@@ -34085,7 +35852,7 @@ misslyckades: %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5556"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8023"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8033"/>
         <source>Toggle articulation</source>
         <translation>Artikulation på/av</translation>
     </message>
@@ -34340,95 +36107,95 @@ misslyckades: %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6971"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7059"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7061"/>
         <source>Navigate to next chord symbol</source>
         <translation>Navigera till nästa ackordsymbol</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7100"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7104"/>
         <source>Navigate to chord symbol</source>
         <translation>Navigera till ackordsymbol</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7155"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7199"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7161"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7207"/>
         <source>Navigate to next figured bass</source>
         <translation>Navigera till nästa generalbas</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7247"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7255"/>
         <source>Navigate to figured bass</source>
         <translation>Navigera till generalbas</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7544"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7551"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7611"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7554"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7561"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7621"/>
         <source>Enter lyrics extension line</source>
         <translation>Mata in förlängningslinje för sångtext</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7693"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7703"/>
         <source>Add lyrics verse</source>
         <translation>Infoga textvers</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7741"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7751"/>
         <source>Enter guitar bend</source>
         <translation>Mata in gitarr-bend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7814"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7824"/>
         <source>Add fretboard diagram</source>
         <translation>Infoga greppbrädediagram</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7947"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7957"/>
         <source>Format text</source>
         <translation>Formatera text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7967"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7977"/>
         <source>Toggle subscript</source>
         <translation>Nedsänkning på/av</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7969"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7979"/>
         <source>Toggle superscript</source>
         <translation>Upphöjning på/av</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7971"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7981"/>
         <source>Toggle subscript/superscript</source>
         <translation>Nedsänkning/upphöjning på/av</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8028"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8038"/>
         <source>Toggle ornament</source>
         <translation>Ornament på/av</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8033"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8043"/>
         <source>Toggle automatic placement</source>
         <translation>Automatisk placering på/av</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8044"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8054"/>
         <source>Add clef</source>
         <translation>Infoga klav</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8049"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8059"/>
         <source>Add accidental</source>
         <translation>Lägg till förtecken</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8054"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8064"/>
         <source>Transpose semitone</source>
         <translation>Transponera halvton</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8060"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8070"/>
         <source>Transpose diatonically</source>
         <translation>Transponera diatoniskt</translation>
     </message>

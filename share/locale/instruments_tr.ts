@@ -18612,7 +18612,7 @@
         <source>Chinese plucked half-tube zither.</source>
         <comment>guzheng description</comment>
         <extracomment>description for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Yarım silindir gövdeli, çekilerek çalınan Çin sazı.</translation>
+        <translation>Yarım silindir gövdeli, parmaklarla çalınan Çin sazı.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6145"/>
@@ -18990,28 +18990,28 @@
         <source>Small Spanish 5-string guitar (staff notation).</source>
         <comment>timple-canario description</comment>
         <extracomment>description for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Küçük İspanyol 5 telli gitar (dizek notasyonu).</translation>
+        <translation>Küçük İspanyol 5 telli gitar (dizek notasyonu). (Kanarya Adaları&apos;na özgü küçük 5 telli gitar benzeri bir çalgıdır.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6267"/>
         <source>Timple Canario</source>
         <comment>timple-canario trackName</comment>
         <extracomment>trackName for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Timple Canario (Kanarya Adaları&apos;na özgü küçük 5 telli gitar benzeri bir çalgıdır.)</translation>
+        <translation>Timple Canario</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6269"/>
         <source>Timple Canario</source>
         <comment>timple-canario longName</comment>
         <extracomment>longName for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Timple Canario (Kanarya Adaları&apos;na özgü küçük 5 telli gitar benzeri bir çalgıdır.)</translation>
+        <translation>Timple Canario</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6271"/>
         <source>Timpl.</source>
         <comment>timple-canario shortName</comment>
         <extracomment>shortName for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Timplc.</translation>
+        <translation>Timpl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6274"/>
@@ -19032,7 +19032,7 @@
         <source>Timple Canario</source>
         <comment>timple-canario-tablature longName</comment>
         <extracomment>longName for Timple Canario (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Timple Canario (Kanarya Adaları&apos;na özgü küçük 5 telli gitar benzeri bir çalgıdır.)</translation>
+        <translation>Timple Canario</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6284"/>
