@@ -296,7 +296,7 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
 
         if (ChordSymbolParen* paren = dynamic_cast<ChordSymbolParen*>(renderItem)) {
             if (paren->parenItem->direction() == DirectionH::LEFT) {
-                additionalSpace += paren->parenItem->width() + padding;
+                additionalSpace += paren->parenItem->width() / 3 + padding;
                 paren->movex(additionalSpace);
             }
             if (paren->parenItem->direction() == DirectionH::RIGHT) {
