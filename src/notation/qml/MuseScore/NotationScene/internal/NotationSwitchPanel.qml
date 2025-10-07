@@ -30,7 +30,7 @@ import MuseScore.NotationScene 1.0
 Rectangle {
     id: root
 
-    height: 26
+    height: 34
     visible: notationsView.count > 0
     color: ui.theme.backgroundSecondaryColor
 
