@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_NOTATIONSTYLE_H
-#define MU_NOTATION_NOTATIONSTYLE_H
+#pragma once
 
 #include "inotationstyle.h"
 #include "inotationundostack.h"
@@ -34,8 +33,8 @@ class NotationStyle : public INotationStyle
 public:
     NotationStyle(IGetScore* getScore, INotationUndoStackPtr);
 
-    PropertyValue styleValue(const StyleId& styleId) const override;
-    PropertyValue defaultStyleValue(const StyleId& styleId) const override;
+    const PropertyValue& styleValue(const StyleId& styleId) const override;
+    const PropertyValue& defaultStyleValue(const StyleId& styleId) const override;
     void setStyleValue(const StyleId& styleId, const PropertyValue& newValue) override;
     void resetStyleValue(const StyleId& styleId) override;
     void resetStyleValues(const std::vector<StyleId>& styleIds) override;
@@ -58,5 +57,3 @@ private:
     INotationUndoStackPtr m_undoStack;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONSTYLE_H
