@@ -116,7 +116,7 @@
     </kudos>
     <!-- Only <releases> below this point please! -->
     <releases>
-        <release date="2025-10-06" version="4.6.1">
+        <release date="2025-10-07" version="4.6.1">
             <url>https://musescore.org/en/4.6.1</url>
         </release>
         <release date="2025-09-30" version="4.6">

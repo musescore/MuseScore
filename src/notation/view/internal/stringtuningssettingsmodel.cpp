@@ -149,16 +149,14 @@ bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& 
     return true;
 }
 
-QString StringTuningsSettingsModel::increaseStringValue(const QString& stringValue)
+QString StringTuningsSettingsModel::increaseStringValue(int currentPitch)
 {
-    String value = engraving::convertPitchStringFlatsAndSharpsToUnicode(stringValue);
-    return engraving::pitch2string(engraving::string2pitch(value) + 1, false /* useFlats */);
+    return engraving::pitch2string(currentPitch + 1, false /* useFlats */);
 }
 
-QString StringTuningsSettingsModel::decreaseStringValue(const QString& stringValue)
+QString StringTuningsSettingsModel::decreaseStringValue(int currentPitch)
 {
-    String value = engraving::convertPitchStringFlatsAndSharpsToUnicode(stringValue);
-    return engraving::pitch2string(engraving::string2pitch(value) - 1, true /* useFlats */);
+    return engraving::pitch2string(currentPitch - 1, true /* useFlats */);
 }
 
 QVariantList StringTuningsSettingsModel::presets(bool withCustom) const

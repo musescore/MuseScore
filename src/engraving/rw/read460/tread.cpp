@@ -3636,20 +3636,13 @@ bool TRead::readProperties(SLine* l, XmlReader& e, ReadContext& ctx)
         ls->setVisible(l->visible());
     } else if (tag == "length") {
         l->setLen(e.readDouble());
-    } else if (tag == "diagonal") {
-        l->setDiagonal(e.readInt());
-    } else if (tag == "anchor") {
-        l->setAnchor(SLine::Anchor(e.readInt()));
-    } else if (tag == "lineWidth") {
-        l->setLineWidth(Spatium(e.readDouble()));
+    } else if (TRead::readProperty(l, tag, e, ctx, Pid::DIAGONAL)) {
+    } else if (TRead::readProperty(l, tag, e, ctx, Pid::ANCHOR)) {
+    } else if (TRead::readProperty(l, tag, e, ctx, Pid::LINE_WIDTH)) {
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::LINE_STYLE)) {
-    } else if (tag == "dashLineLength") {
-        l->setDashLineLen(e.readDouble());
-    } else if (tag == "dashGapLength") {
-        l->setDashGapLen(e.readDouble());
-    } else if (tag == "lineColor") {
-        l->setLineColor(e.readColor());
-    } else if (tag == "color") {
+    } else if (TRead::readProperty(l, tag, e, ctx, Pid::DASH_LINE_LEN)) {
+    } else if (TRead::readProperty(l, tag, e, ctx, Pid::DASH_GAP_LEN)) {
+    } else if (tag == "lineColor" || tag == "color") {
         l->setLineColor(e.readColor());
     } else if (!readProperties(static_cast<Spanner*>(l), e, ctx)) {
         return false;
