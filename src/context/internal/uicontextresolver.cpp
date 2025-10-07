@@ -52,57 +52,65 @@ void UiContextResolver::init()
     interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
         //! NOTE Let the page/dialog open and show itself first
         QTimer::singleShot(CURRENT_URI_CHANGED_TIMEOUT, [this]() {
-            notifyAboutContextChanged();
+            updateCurrentUiContext();
         });
     });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
-        notifyAboutContextChanged();
+        updateCurrentUiContext();
     });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         auto notation = globalContext()->currentNotation();
         if (notation) {
             notation->interaction()->selectionChanged().onNotify(this, [this]() {
-                notifyAboutContextChanged();
+                updateCurrentUiContext();
             });
 
             notation->interaction()->textEditingStarted().onNotify(this, [this]() {
-                notifyAboutContextChanged();
+                updateCurrentUiContext();
             });
 
             notation->interaction()->textEditingEnded().onReceive(this, [this](engraving::TextBase*) {
-                notifyAboutContextChanged();
+                updateCurrentUiContext();
             });
 
             notation->undoStack()->stackChanged().onNotify(this, [this]() {
-                notifyAboutContextChanged();
+                updateCurrentUiContext();
             });
 
             notation->interaction()->noteInput()->noteInputStarted().onReceive(this, [this](bool) {
-                notifyAboutContextChanged();
+                updateCurrentUiContext();
             });
 
             notation->interaction()->noteInput()->noteInputEnded().onNotify(this, [this]() {
-                notifyAboutContextChanged();
+                updateCurrentUiContext();
             });
         }
-        notifyAboutContextChanged();
+        updateCurrentUiContext();
     });
 
     navigationController()->navigationChanged().onNotify(this, [this]() {
-        notifyAboutContextChanged();
+        updateCurrentUiContext();
     });
 }
 
-void UiContextResolver::notifyAboutContextChanged()
+void UiContextResolver::updateCurrentUiContext()
 {
+    UiContext ctx = resolveCurrentUiContext();
+
+    if (!m_currentUiContext.isNull() && m_currentUiContext == ctx) {
+        return;
+    }
+
+    m_currentUiContext = ctx;
     m_currentUiContextChanged.notify();
 }
 
-UiContext UiContextResolver::currentUiContext() const
+UiContext UiContextResolver::resolveCurrentUiContext() const
 {
     TRACEFUNC;
+
     Uri currentUri = interactive()->currentUri().val;
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
@@ -174,8 +182,17 @@ bool UiContextResolver::matchWithCurrent(const UiContext& ctx) const
         return true;
     }
 
-    UiContext currentCtx = currentUiContext();
+    const UiContext& currentCtx = currentUiContext();
     return match(currentCtx, ctx);
+}
+
+const muse::ui::UiContext& UiContextResolver::currentUiContext() const
+{
+    if (m_currentUiContext.isNull()) {
+        const_cast<UiContextResolver*>(this)->updateCurrentUiContext();
+    }
+
+    return m_currentUiContext;
 }
 
 muse::async::Notification UiContextResolver::currentUiContextChanged() const

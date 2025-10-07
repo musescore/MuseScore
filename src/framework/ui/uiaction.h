@@ -25,6 +25,8 @@ struct UiContext
         return !this->operator ==(ctx);
     }
 
+    inline bool isNull() const { return const_data == nullptr; }
+
     std::string toString() const { return const_data ? std::string(const_data) : std::string(); }
 
 private:
