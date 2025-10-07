@@ -7,6 +7,7 @@
 #endif
 
 #include <cstdlib>
+#include <string>
 #include <vector>
 
 struct table_cell
