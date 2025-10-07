@@ -71,10 +71,7 @@ ListItemBlank {
             id: titleLabel
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignLeft
-
             text: rowDelegate.modelData.title
-
-            textFormat: Text.RichText
         }
     }
 }
