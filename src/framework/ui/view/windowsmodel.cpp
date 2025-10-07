@@ -22,6 +22,8 @@
 
 #include "windowsmodel.h"
 
+#include <QRect>
+
 using namespace muse::ui;
 
 WindowsModel::WindowsModel(QObject* parent)

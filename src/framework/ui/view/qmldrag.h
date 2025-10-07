@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QQmlEngine>
+#include <QQuickItem>
 
 #include "global/modularity/ioc.h"
 #include "../idragcontroller.h"
