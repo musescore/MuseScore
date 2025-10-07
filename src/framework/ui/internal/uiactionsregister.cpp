@@ -187,7 +187,7 @@ void UiActionsRegister::updateEnabled(const ActionCodeList& codes)
 
     ActionCodeList changedList;
     auto ctxResolver = uicontextResolver();
-    ui::UiContext currentCtx = ctxResolver->currentUiContext();
+    const ui::UiContext& currentCtx = ctxResolver->currentUiContext();
     for (const ActionCode& code : codes) {
         Info& inf = info(code);
         if (!inf.isValid()) {
@@ -225,7 +225,7 @@ void UiActionsRegister::updateEnabledAll()
 
     ActionCodeList changedList;
     auto ctxResolver = uicontextResolver();
-    ui::UiContext currentCtx = ctxResolver->currentUiContext();
+    const ui::UiContext& currentCtx = ctxResolver->currentUiContext();
     LOGD() << "currentCtx: " << currentCtx.toString();
     for (auto it = m_actions.begin(); it != m_actions.end(); ++it) {
         Info& inf = it->second;

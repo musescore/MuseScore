@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CONTEXT_UICONTEXTRESOLVER_H
-#define MU_CONTEXT_UICONTEXTRESOLVER_H
+#pragma once
 
 #include "../iuicontextresolver.h"
 #include "async/asyncable.h"
@@ -44,7 +43,7 @@ public:
 
     void init();
 
-    muse::ui::UiContext currentUiContext() const override;
+    const muse::ui::UiContext& currentUiContext() const override;
     muse::async::Notification currentUiContextChanged() const override;
 
     bool match(const muse::ui::UiContext& currentCtx, const muse::ui::UiContext& actCtx) const override;
@@ -53,10 +52,10 @@ public:
     bool isShortcutContextAllowed(const std::string& scContext) const override;
 
 private:
-    void notifyAboutContextChanged();
+    void updateCurrentUiContext();
+    muse::ui::UiContext resolveCurrentUiContext() const;
 
+    muse::ui::UiContext m_currentUiContext;
     muse::async::Notification m_currentUiContextChanged;
 };
 }
-
-#endif // MU_CONTEXT_UICONTEXTRESOLVER_H
