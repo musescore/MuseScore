@@ -134,6 +134,7 @@
     <sym code="0xE18B" name="sadd"/>
     <sym code="0xE185" name="ssus"/>
     <sym code="no" name="sno"/>
+    <sym code="omit" name="somit"/>
 
     <sym code="st" name="sst"/>
     <sym code="nd" name="snd"/>
