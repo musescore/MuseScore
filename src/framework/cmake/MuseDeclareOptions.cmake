@@ -58,6 +58,7 @@ declare_muse_module_opt(UI ON)
 option(MUSE_MODULE_UI_DISABLE_MODALITY "Disable dialogs modality for testing purpose" OFF)
 option(MUSE_MODULE_UI_SYSTEMDRAG_SUPPORTED "System drag supported" ON)
 option(MUSE_MODULE_UI_SYNCINTERACTIVE_SUPPORTED "Sync interactive supported" ON)
+option(MUSE_MODULE_UI_NAVIGATION_EXCLUDEPROJECT "Exclude the main project view from navigation" ON)
 
 declare_muse_module_opt(UPDATE ON)
 
