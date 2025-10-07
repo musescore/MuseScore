@@ -232,8 +232,8 @@ void FinaleParser::importMeasures()
     m_score->sigmap()->clear();
     m_score->sigmap()->add(0, currTimeSig);
 
-    // create global time signatures. local timesigs are set up later
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
         MeasureBase* lastMeasure = m_score->measures()->last();
         Fraction tick(lastMeasure ? lastMeasure->endTick() : Fraction(0, 1));
@@ -242,6 +242,7 @@ void FinaleParser::importMeasures()
         measure->setTick(tick);
         m_meas2Tick.emplace(musxMeasure->getCmper(), tick);
         m_tick2Meas.emplace(tick, musxMeasure->getCmper());
+        // create global time signatures. local timesigs are set up later
         MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature();
         Fraction scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
         if (scoreTimeSig != currTimeSig) {
@@ -251,55 +252,112 @@ void FinaleParser::importMeasures()
         measure->setTimesig(scoreTimeSig);
         measure->setTicks(scoreTimeSig);
         m_score->measures()->append(measure);
+
+        // Needed for later calculations, saves a global layout call
         if (!m_score->noStaves()) {
             measure->createStaves(m_score->nstaves() - 1);
         }
 
+        // Barlines
         /// @todo choose when to set generated based on default staff barline settings
         /// (and presence of keysigs for double barlines)
-        auto changeBarline = [&](BarLine* bl, others::Measure::BarlineType type) {
-            switch (type) {
-            case others::Measure::BarlineType::None:
-                bl->setVisible(false);
-                break;
-            case others::Measure::BarlineType::OptionsDefault:
-                // not yet supported
-                break;
-            case others::Measure::BarlineType::Normal:
-                bl->setBarLineType(engraving::BarLineType::NORMAL);
-                break;
-            case others::Measure::BarlineType::Double:
-                bl->setBarLineType(engraving::BarLineType::DOUBLE);
-                break;
-            case others::Measure::BarlineType::Final:
-                bl->setBarLineType(engraving::BarLineType::FINAL);
-                if (measure->nextMeasure()) {
-                    bl->setGenerated(false);
-                }
-                break;
-            case others::Measure::BarlineType::Solid:
-                bl->setBarLineType(engraving::BarLineType::HEAVY);
-                // bl->setGenerated(false);
-                break;
-            case others::Measure::BarlineType::Dashed:
-                bl->setBarLineType(engraving::BarLineType::DASHED);
-                break;
-            case others::Measure::BarlineType::Tick:
-                bl->setSpanFrom(mu::engraving::BARLINE_SPAN_TICK1_FROM);
-                bl->setSpanTo(mu::engraving::BARLINE_SPAN_TICK1_TO);
-                break;
-            case others::Measure::BarlineType::Custom:
-                // unsupported
+        bool startsStaffSystem = false;
+        bool endsStaffSystem = false;
+        for (MusxInstance<others::StaffSystem> staffSystem : staffSystems) {
+            startsStaffSystem = staffSystem->startMeas == musxMeasure->getCmper();
+            endsStaffSystem = staffSystem->getLastMeasure() == musxMeasure->getCmper();
+            if (startsStaffSystem || endsStaffSystem) {
                 break;
             }
-        };
+        }
 
-        // set repeats after barline type
+        auto changeBarline = [&](bool start, others::Measure::BarlineType type) {
+            /// @todo separate into two methods, always checking for start is excessively complicated
+            if (start) {
+                /// @todo filter by visibility as well?
+                if (startsStaffSystem) {
+                    if (m_score->nstaves() > 1) {
+                        m_score->style().set(Sid::startBarlineMultiple, true); // default
+                    } else {
+                        m_score->style().set(Sid::startBarlineSingle, true); // not default
+                    }
+                } else {
+                    return;
+                }
+            }
+
+            engraving::BarLineType blt = engraving::BarLineType::NORMAL;
+            bool blVisible = musxOptions().barlineOptions->drawBarlines;
+            if (start && startsStaffSystem && blVisible) {
+                blVisible = (m_score->nstaves() > 1) ? musxOptions().barlineOptions->drawLeftBarlineMultipleStaves : musxOptions().barlineOptions->drawLeftBarlineSingleStaff;
+            }
+            bool blSpan = start ? startsStaffSystem : (endsStaffSystem && musxOptions().barlineOptions->drawCloseSystemBarline);
+            if (!start && endsStaffSystem && !measure->nextMeasureMM()) {
+                blSpan = musxOptions().barlineOptions->drawCloseFinalBarline; // && drawFinalBarlineOnLastMeas ?
+            }
+            switch (type) {
+            case others::Measure::BarlineType::None:
+                blVisible = false;
+                break;
+            case others::Measure::BarlineType::OptionsDefault:
+                if (start && musxOptions().barlineOptions->leftBarlineUsePrevStyle) {
+                    Measure* prevM = measure->prevMeasureMM();
+                    if (prevM && prevM->endBarLine() && !prevM->repeatEnd()) {
+                        blt = prevM->endBarLine()->barLineType();
+                    }
+                    break;
+                }
+                [[fallthrough]];
+            case others::Measure::BarlineType::Custom:
+                /// @todo support?
+                [[fallthrough]];
+            default:
+                blt = toMuseScoreBarLineType(type);
+                break;
+            }
+            Segment* bls = start ? measure->getSegmentR(SegmentType::BeginBarLine, Fraction(0, 1)) : measure->getSegmentR(SegmentType::EndBarLine, measure->ticks());
+            for (track_idx_t track = 0; track < m_score->ntracks(); track += VOICES) {
+                BarLine* bl = Factory::createBarLine(bls);
+                bl->setTrack(track);
+                if (!blVisible) {
+                    bl->setVisible(false);
+                    // Finale adds distance between 'segments' even if barlines are invisible,
+                    // but (like MuseScore) not their width. So we add the distance as leading space.
+                    /// @todo these segments probably don't exist yet?
+                    if (startsStaffSystem && bls->next()) {
+                        if (bls->next()->isKeySigType()) {
+                            bls->next()->setExtraLeadingSpace(m_score->style().styleS(Sid::keysigLeftMargin));
+                        } else if (bls->next()->isTimeSigType()) {
+                            bls->next()->setExtraLeadingSpace(m_score->style().styleS(Sid::timesigLeftMargin));
+                        } else /* if (bls->next()->isClefType()) */ {
+                            // default to clef distance
+                            bls->next()->setExtraLeadingSpace(m_score->style().styleS(Sid::clefLeftMargin));
+                        }
+                    }
+                }
+                if (blSpan) {
+                    bl->setSpanStaff(true);
+                } else if (startsStaffSystem) {
+                    // MuseScore spans barlines at start of system by default, so here
+                    // we need to disable (reset to staff preset) span if not set by Finale
+                    bl->setSpanStaff(bl->staff()->barLineSpan());
+                }
+                bl->setBarLineType(blt);
+                if (type == others::Measure::BarlineType::Tick) {
+                    bl->setSpanFrom(mu::engraving::BARLINE_SPAN_TICK1_FROM);
+                    bl->setSpanTo(mu::engraving::BARLINE_SPAN_TICK1_TO);
+                }
+                bls->add(bl);
+            }
+        };
+        changeBarline(true, musxMeasure->leftBarlineType);
+        changeBarline(false, musxMeasure->barlineType);
+
+        // Set repeats and other measure properties
         measure->setRepeatStart(musxMeasure->forwardRepeatBar);
         measure->setRepeatEnd(musxMeasure->backwardsRepeatBar);
         measure->setBreakMultiMeasureRest(musxMeasure->breakMmRest);
         measure->setIrregular(musxMeasure->noMeasNum);
-
     }
 }
 

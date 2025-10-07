@@ -1273,6 +1273,22 @@ TremoloType tremoloTypeFromSymId(SymId sym)
     return muse::value(tremoloTypeTable, sym, TremoloType::INVALID_TREMOLO);
 }
 
+engraving::BarLineType toMuseScoreBarLineType(others::Measure::BarlineType blt)
+{
+    static const std::unordered_map<others::Measure::BarlineType, engraving::BarLineType> barLineTable = {
+        { others::Measure::BarlineType::None,           engraving::BarLineType::NORMAL },
+        { others::Measure::BarlineType::OptionsDefault, engraving::BarLineType::NORMAL },
+        { others::Measure::BarlineType::Normal,         engraving::BarLineType::NORMAL },
+        { others::Measure::BarlineType::Double,         engraving::BarLineType::DOUBLE },
+        { others::Measure::BarlineType::Final,          engraving::BarLineType::FINAL  },
+        { others::Measure::BarlineType::Solid,          engraving::BarLineType::HEAVY  },
+        { others::Measure::BarlineType::Dashed,         engraving::BarLineType::DASHED },
+        { others::Measure::BarlineType::Tick,           engraving::BarLineType::NORMAL },
+        { others::Measure::BarlineType::Custom,         engraving::BarLineType::NORMAL },
+    };
+    return muse::value(barLineTable, blt, engraving::BarLineType::NORMAL);
+}
+
 double doubleFromEvpu(double evpuDouble)
 {
     return evpuDouble / EVPU_PER_SPACE;
