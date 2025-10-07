@@ -1027,6 +1027,9 @@ TEST_F(MusicXml_Tests, placementDefaults) {
 TEST_F(MusicXml_Tests, playtech) {
     musicXmlIoTest("testPlaytech");
 }
+TEST_F(MusicXml_Tests, polychord) {
+    musicXmlIoTest("testPolychords");
+}
 TEST_F(MusicXml_Tests, printSpacingNo) {
     musicXmlIoTestRef("testPrintSpacingNo");
 }
