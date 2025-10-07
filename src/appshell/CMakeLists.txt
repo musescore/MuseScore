@@ -140,6 +140,19 @@ if (NOT OS_IS_MAC)
 
     # we use QKeyMapper to fix https://github.com/musescore/MuseScore/issues/10181
     set(MODULE_INCLUDE_PRIVATE ${Qt6Gui_PRIVATE_INCLUDE_DIRS} )
+
+    get_target_property(QT_GUI_INCLUDE_DIRS Qt::Gui INTERFACE_INCLUDE_DIRECTORIES)
+    set(QT_PRIVATE_HEADER_FOUND FALSE)
+    foreach(dir IN LISTS QT_GUI_INCLUDE_DIRS)
+        file(GLOB PRIVATE_HEADER "${dir}/QtGui/*/QtGui/private/*.h")
+        if (PRIVATE_HEADER)
+            set(QT_PRIVATE_HEADER_FOUND TRUE)
+            break()
+        endif()
+    endforeach()
+    if (NOT QT_PRIVATE_HEADER_FOUND)
+        message(FATAL_ERROR "Qt private headers not found. Ensure your Qt installation includes private headers.")
+    endif()
 endif(NOT OS_IS_MAC)
 
 if (QT_SUPPORT)
