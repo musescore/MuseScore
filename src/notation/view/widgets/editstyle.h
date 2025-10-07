@@ -119,8 +119,8 @@ private:
     PropertyValue getValue(StyleId idx);
     void setValues();
 
-    PropertyValue styleValue(StyleId id) const;
-    PropertyValue defaultStyleValue(StyleId id) const;
+    const PropertyValue& styleValue(StyleId id) const;
+    const PropertyValue& defaultStyleValue(StyleId id) const;
     bool hasDefaultStyleValue(StyleId id) const;
     bool dynamicsAndHairpinPosPropertiesHaveDefaultStyleValue() const;
     void setStyleQVariantValue(StyleId id, const QVariant& value);
