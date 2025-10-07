@@ -35,7 +35,7 @@ static const std::string CTX_ANY("any");
 static const std::string CTX_PROJECT_OPENED("project-opened");
 static const std::string CTX_PROJECT_FOCUSED("project-focused");
 
-//! NOTE special context for navigation shortcuts because the project has its own navigation system
+//! NOTE special context for navigation shortcuts because the project in MuseScore has its own navigation system
 static const std::string CTX_NOT_PROJECT_FOCUSED("not-project-focused");
 
 class IShortcutContextPriority : MODULE_EXPORT_INTERFACE
