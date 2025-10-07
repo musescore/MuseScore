@@ -37,6 +37,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/noteline.h"
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/score.h"
@@ -44,7 +45,9 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/textlinebase.h"
+#include "engraving/dom/trill.h"
 #include "engraving/dom/utils.h"
+#include "engraving/dom/vibrato.h"
 
 #include "engraving/types/typesconv.h"
 
@@ -68,12 +71,51 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     centerLongText  = context.stringFromEnigmaText(customLine->getCenterFullRawTextCtx(context.currentMusxPartId()));
     centerShortText = context.stringFromEnigmaText(customLine->getCenterAbbrRawTextCtx(context.currentMusxPartId()));
 
+    switch (customLine->lineStyle) {
+    case others::SmartShapeCustomLine::LineStyle::Char:
+        lineVisible = customLine->charParams->lineChar != U' '; /// @todo general space symbols
+        break;
+    case others::SmartShapeCustomLine::LineStyle::Solid:
+        lineStyle   = LineType::SOLID;
+        lineVisible = customLine->solidParams->lineWidth != 0;
+        lineWidth   = Spatium(doubleFromEfix(customLine->solidParams->lineWidth));
+        break;
+    case others::SmartShapeCustomLine::LineStyle::Dashed:
+        lineStyle   = LineType::DASHED; /// @todo When should we set lineStyle to LineType::DOTTED ?
+        lineVisible = customLine->dashedParams->lineWidth != 0;
+        lineWidth   = Spatium(doubleFromEfix(customLine->dashedParams->lineWidth)); /// @todo de-apply staff scaling later
+        dashLineLen = doubleFromEfix(customLine->dashedParams->dashOn) / lineWidth.val();
+        dashGapLen  = doubleFromEfix(customLine->dashedParams->dashOff) / lineWidth.val();
+        break;
+    }
+
     elementType = [&]() {
-        if (customLine->lineStyle == others::SmartShapeCustomLine::LineStyle::Char
-            && customLine->charParams->lineChar != U' ') {
+        if (customLine->lineStyle == others::SmartShapeCustomLine::LineStyle::Char && lineVisible) {
+            SymId lineSym = FinaleTextConv::symIdFromFinaleChar(customLine->charParams->lineChar, customLine->charParams->font);
+            switch (lineSym) {
+                // Trills
+                case SymId::wiggleTrill:
+                    // Also used for glissandos, but those are not possible as custom lines
+                    trillType = TrillType::TRILL_LINE;
+                    return ElementType::TRILL;
+                case SymId::ornamentZigZagLineNoRightEnd:
+                case SymId::ornamentZigZagLineWithRightEnd:
+                    /// @todo detect prall type
+                    trillType = TrillType::UPPRALL_LINE;
+                    return ElementType::TRILL;
+
+                // Vibratos
+                case SymId::guitarVibratoStroke:
+                case SymId::guitarWideVibratoStroke:
+                case SymId::wiggleSawtooth:
+                case SymId::wiggleSawtoothWide:
+                    vibratoType = vibratoTypeFromSymId(lineSym);
+                    return ElementType::VIBRATO;
+
+                default: break;
+            }
             /// @todo use customLine->charParams->lineChar and customLine->charParams->font
             /// to decide between trill, vibrato, tremolobar. For now, assume trill.
-            return ElementType::TRILL;
         }
         // MusxInstanceList<texts::SmartShapeText> customLineTexts = m_doc->getTexts()->getArray<texts::SmartShapeText>();
         if (std::regex_search(beginText.toStdString(), pedalRegex) || std::regex_search(continueText.toStdString(), pedalRegex)
@@ -93,26 +135,8 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
         /// ElementType::GLISSANDO, ElementType::GUITAR_BEND, ElementType::NOTELINE, ElementType::GRADUAL_TEMPO_CHANGE, ElementType::VIBRATO, /* ElementType::VOLTA, */
         /// /* ElementType::SLUR, *//* ElementType::HAMMER_ON_PULL_OFF */
         return ElementType::TEXTLINE;
-
     }();
 
-    switch (customLine->lineStyle) {
-    case others::SmartShapeCustomLine::LineStyle::Char:
-        lineVisible = customLine->charParams->lineChar != U' '; /// @todo general space symbols
-        break;
-    case others::SmartShapeCustomLine::LineStyle::Solid:
-        lineStyle   = LineType::SOLID;
-        lineVisible = customLine->solidParams->lineWidth != 0;
-        lineWidth   = Spatium(doubleFromEfix(customLine->solidParams->lineWidth));
-        break;
-    case others::SmartShapeCustomLine::LineStyle::Dashed:
-        lineStyle   = LineType::DASHED; /// @todo When should we set lineStyle to LineType::DOTTED ?
-        lineVisible = customLine->dashedParams->lineWidth != 0;
-        lineWidth   = Spatium(doubleFromEfix(customLine->dashedParams->lineWidth));
-        dashLineLen = doubleFromEfix(customLine->dashedParams->dashOn) / lineWidth.val();
-        dashGapLen  = doubleFromEfix(customLine->dashedParams->dashOff) / lineWidth.val();
-        break;
-    }
     beginHookType = customLine->lineCapStartType == others::SmartShapeCustomLine::LineCapType::Hook ? HookType::HOOK_90 : HookType::NONE;
     endHookType   = customLine->lineCapEndType == others::SmartShapeCustomLine::LineCapType::Hook ? HookType::HOOK_90 : HookType::NONE;
     beginHookHeight = Spatium(doubleFromEfix(customLine->lineCapStartHookLength));
@@ -166,12 +190,13 @@ static bool elementsValidForSpannerType(const ElementType type, const EngravingI
 {
     switch (type) {
     case ElementType::GLISSANDO:
+    case ElementType::GUITAR_BEND:
     case ElementType::NOTELINE:
-        return startElement->isNote() && endElement->isNote();
+        return startElement && startElement->isNote() && endElement && endElement->isNote();
     case ElementType::SLUR:
-        return startElement->isChordRest() && endElement->isChordRest();
+        return startElement && startElement->isChordRest() && endElement && endElement->isChordRest();
     case ElementType::OTTAVA:
-        return startElement->isChordRest(); // the end may be the end of the piece.
+        return startElement && startElement->isChordRest() && (!endElement || endElement->isChordRest()); // the end may be the end of the piece.
     default:
         break;
     }
@@ -180,7 +205,7 @@ static bool elementsValidForSpannerType(const ElementType type, const EngravingI
 
 static ElementType spannerTypeFromElements(EngravingItem* startElement, EngravingItem* endElement)
 {
-    if (startElement->isNote() && endElement->isNote()) {
+    if (startElement && startElement->isNote() && endElement && endElement->isNote()) {
         return ElementType::NOTELINE;
     }
     return ElementType::TEXTLINE;
@@ -188,53 +213,46 @@ static ElementType spannerTypeFromElements(EngravingItem* startElement, Engravin
 
 void FinaleParser::importSmartShapes()
 {
-    auto elementFromTerminationSeg = [&](ElementType type, const MusxInstance<others::SmartShape>& smartShape, bool start) -> EngravingItem* {
+    auto tickFromTerminationSeg = [&](ElementType type, const MusxInstance<others::SmartShape>& smartShape, EngravingItem*& e, bool start) -> Fraction {
+        logger()->logInfo(String(u"Finding spanner element..."));
         bool findExactEntry = type != ElementType::OTTAVA && type != ElementType::SLUR;
         bool useNextCr = !start && type == ElementType::OTTAVA;
-        logger()->logInfo(String(u"Finding spanner element..."));
         const MusxInstance<others::SmartShape::TerminationSeg>& termSeg = start ? smartShape->startTermSeg : smartShape->endTermSeg;
         EntryInfoPtr entryInfoPtr = termSeg->endPoint->calcAssociatedEntry(m_currentMusxPartId, findExactEntry);
         if (entryInfoPtr) {
             NoteNumber nn = start ? smartShape->startNoteId : smartShape->endNoteId;
             if (nn) {
-                logger()->logInfo(String(u"Found note to anchor to"));
-                return toEngravingItem(noteFromEntryInfoAndNumber(entryInfoPtr, nn));
-            }
-            ChordRest* cr = chordRestFromEntryInfoPtr(entryInfoPtr);
-            if (useNextCr) {
-                if (Segment* nextSeg = cr->nextSegmentAfterCR(SegmentType::ChordRest)) {
-                    if (ChordRest* nextCr = nextSeg->nextChordRest(cr->track())) {
-                        cr = nextCr;
-                    } else {
-                        cr = nullptr;
+                e = toEngravingItem(noteFromEntryInfoAndNumber(entryInfoPtr, nn));
+            } else {
+                ChordRest* cr = chordRestFromEntryInfoPtr(entryInfoPtr);
+                if (useNextCr) {
+                    if (Segment* nextSeg = cr->nextSegmentAfterCR(SegmentType::ChordRest)) {
+                        cr = nextSeg->nextChordRest(cr->track());
                     }
-                } else {
-                    cr = nullptr;
                 }
+                e = toEngravingItem(cr);
             }
-            EngravingItem* e = toEngravingItem(cr);
             if (e) {
-                logger()->logInfo(String(u"Found CR to anchor to"));
-                return e;
+                logger()->logInfo(String(u"Found %1 to anchor to").arg(TConv::userName(e->type()).translated()));
+                return e->tick();
+            } else {
+                logger()->logInfo(String(u"Can't anchor to note/CR!"));
+                return Fraction(-1, 1); // dbg
             }
         }
-        logger()->logInfo(String(u"No CR found! Creating TimeTickAnchor"));
+        logger()->logInfo(String(u"No anchor found"));
         staff_idx_t staffIdx = muse::value(m_inst2Staff, termSeg->endPoint->staffId, muse::nidx);
         Fraction mTick = muse::value(m_meas2Tick, termSeg->endPoint->measId, Fraction(-1, 1));
         Measure* measure = !mTick.negative() ? m_score->tick2measure(mTick) : nullptr;
         if (!measure || staffIdx == muse::nidx) {
-            return nullptr;
+            return Fraction(-1, 1);
         }
-        Fraction tick = mTick + musxFractionToFraction(termSeg->endPoint->calcGlobalPosition());
+        Fraction rTick = musxFractionToFraction(termSeg->endPoint->calcGlobalPosition());
         if (useNextCr && entryInfoPtr) {
-            tick += musxFractionToFraction(entryInfoPtr.calcGlobalActualDuration());
+            rTick += musxFractionToFraction(entryInfoPtr.calcGlobalActualDuration());
         }
-        // TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, tick - mTick, staffIdx);
-        // EditTimeTickAnchors::updateLayout(measure);
-        EditTimeTickAnchors::updateAnchors(measure, staffIdx);
-        logger()->logInfo(String(u"Created TimeTickAnchor"));
-        // return toEngravingItem(anchor->segment());
-        return toEngravingItem(measure->getChordRestOrTimeTickSegment(tick));
+        // logger()->logInfo(String(u"Created TimeTickAnchor"));
+        return mTick + rTick; //toEngravingItem(measure->getChordRestOrTimeTickSegment(tick)); // Do we have to create a segment, or will layout handle this for us?
     };
 
     /// @note Getting the entire array of smart shapes works for SCORE_PARTID, but if we ever need to do it for excerpts it could fail.
@@ -276,27 +294,32 @@ void FinaleParser::importSmartShapes()
         }
 
         // Find start and end elements, and change element type if needed
-        EngravingItem* startElement = elementFromTerminationSeg(type, smartShape, true);
-        EngravingItem* endElement = elementFromTerminationSeg(type, smartShape, false);
-        IF_ASSERT_FAILED(startElement && endElement) {
+        EngravingItem* startElement = nullptr;
+        EngravingItem* endElement = nullptr;
+        Fraction startTick = tickFromTerminationSeg(type, smartShape, startElement, true);
+        Fraction endTick = tickFromTerminationSeg(type, smartShape, endElement, false);
+        if (customLine && type == ElementType::TEXTLINE) {
+            /// @todo create notelines instead of textlines also for non-custom?
+            type = spannerTypeFromElements(startElement, endElement);
+        }
+        if (startTick.negative() || endTick.negative() || !elementsValidForSpannerType(type, startElement, endElement)) {
+            logger()->logInfo(String(u"Cannot create spanner of %1 type with given start/end elements. Start: %2, end: %3").arg(TConv::userName(type).translated(), startTick.toString(), endTick.toString()));
             continue;
         }
-        if (!elementsValidForSpannerType(type, startElement, endElement) || (customLine && type == ElementType::TEXTLINE)) {
-            if (customLine) {
-                type = spannerTypeFromElements(startElement, endElement);
-                /// @todo create notelines instead of textlines also for non-custom?
-            } else {
-                logger()->logInfo(String(u"Cannot create spanner of %1 type with given start/end element").arg(TConv::userName(type).translated()));
-                continue;
-            }
-        }
 
+        // Create spanner
         logger()->logInfo(String(u"Creating spanner of %1 type").arg(TConv::userName(type).translated()));
         Spanner* newSpanner = toSpanner(Factory::createItem(type, m_score->dummy()));
         newSpanner->setScore(m_score);
         newSpanner->styleChanged();
 
         if (smartShape->entryBased) {
+            if (!startElement || !endElement) {
+                // should never happen
+                logger()->logInfo(String(u"No start/end element for spanner of %1 type").arg(TConv::userName(type).translated()));
+                delete newSpanner;
+                continue;
+            }
             if (smartShape->startNoteId && smartShape->endNoteId) {
                 newSpanner->setAnchor(Spanner::Anchor::NOTE);
             } else {
@@ -311,6 +334,7 @@ void FinaleParser::importSmartShapes()
             staff_idx_t staffIdx1 = muse::value(m_inst2Staff, smartShape->startTermSeg->endPoint->staffId, muse::nidx);
             staff_idx_t staffIdx2 = muse::value(m_inst2Staff, smartShape->endTermSeg->endPoint->staffId, muse::nidx);
             if (staffIdx1 == muse::nidx || staffIdx2 == muse::nidx) {
+                logger()->logInfo(String(u"No start/end staff for spanner of %1 type").arg(TConv::userName(type).translated()));
                 delete newSpanner;
                 continue;
             }
@@ -318,81 +342,88 @@ void FinaleParser::importSmartShapes()
             newSpanner->setTrack2(staff2track(staffIdx2));
             // don't set end elements, instead a computed start/end segment is called
         }
-        newSpanner->setTick(startElement->tick());
-        newSpanner->setTick2(endElement->tick());
+        newSpanner->setTick(startTick);
+        newSpanner->setTick2(endTick);
 
         // Set properties
+        /// @todo guitar bends and their type
         newSpanner->setVisible(!smartShape->hidden);
-        if (type == ElementType::OTTAVA) {
-            toOttava(newSpanner)->setOttavaType(ottavaTypeFromShapeType(smartShape->shapeType));
-        } else if (type == ElementType::HAIRPIN) {
-            toHairpin(newSpanner)->setHairpinType(hairpinTypeFromShapeType(smartShape->shapeType));
-        } else if (type == ElementType::SLUR) {
-            toSlur(newSpanner)->setStyleType(slurStyleTypeFromShapeType(smartShape->shapeType));
-            /// @todo is there a way to read the calculated direction
-            toSlur(newSpanner)->setSlurDirection(directionVFromShapeType(smartShape->shapeType));
-        } else if (type == ElementType::TEXTLINE && !customLine) {
-            TextLineBase* textLine = toTextLineBase(newSpanner);
-            textLine->setLineStyle(lineTypeFromShapeType(smartShape->shapeType));
-            /// @todo read more settings from smartshape options, set styles for more elements
-            std::pair<int, int> hookHeights = hookHeightsFromShapeType(smartShape->shapeType);
-            if (hookHeights.first != 0) {
-                textLine->setBeginHookType(HookType::HOOK_90);
-                textLine->setBeginHookHeight(Spatium(hookHeights.first * doubleFromEvpu(musxOptions().smartShapeOptions->hookLength)));
-                // continue doesn't have no hook
+
+        if (customLine) {
+            if (newSpanner->isTextLineBase()) {
+                TextLineBase* textLineBase = toTextLineBase(newSpanner);
+
+                textLineBase->setLineVisible(customLine->lineVisible);
+                textLineBase->setBeginHookType(customLine->beginHookType);
+                textLineBase->setEndHookType(customLine->endHookType);
+                textLineBase->setBeginHookHeight(customLine->beginHookHeight);
+                textLineBase->setEndHookHeight(customLine->endHookHeight);
+                textLineBase->setGapBetweenTextAndLine(customLine->gapBetweenTextAndLine);
+                textLineBase->setTextSizeSpatiumDependent(customLine->textSizeSpatiumDependent);
+                textLineBase->setDiagonal(customLine->diagonal);
+                textLineBase->setLineWidth(customLine->lineWidth);
+                textLineBase->setDashLineLen(customLine->dashLineLen);
+                textLineBase->setDashGapLen(customLine->dashGapLen);
+
+                textLineBase->setBeginTextPlace(customLine->beginTextPlace);
+                textLineBase->setBeginText(customLine->beginText);
+                textLineBase->setBeginTextAlign(customLine->beginTextAlign);
+                // textLineBase->setBeginFontFamily(customLine->beginFontFamily);
+                // textLineBase->setBeginFontSize(customLine->beginFontSize);
+                // textLineBase->setBeginFontStyle(customLine->beginFontStyle);
+                textLineBase->setBeginTextOffset(customLine->beginTextOffset);
+
+                textLineBase->setContinueTextPlace(customLine->continueTextPlace);
+                textLineBase->setContinueText(customLine->continueText);
+                textLineBase->setContinueTextAlign(customLine->continueTextAlign);
+                // textLineBase->setContinueFontFamily(customLine->continueFontFamily);
+                // textLineBase->setContinueFontSize(customLine->continueFontSize);
+                // textLineBase->setContinueFontStyle(customLine->continueFontStyle);
+                textLineBase->setContinueTextOffset(customLine->continueTextOffset);
+
+                textLineBase->setEndTextPlace(customLine->endTextPlace);
+                textLineBase->setEndText(customLine->endText);
+                textLineBase->setEndTextAlign(customLine->endTextAlign);
+                // textLineBase->setEndFontFamily(customLine->endFontFamily);
+                // textLineBase->setEndFontSize(customLine->endFontSize);
+                // textLineBase->setEndFontStyle(customLine->endFontStyle);
+                textLineBase->setEndTextOffset(customLine->endTextOffset);
+            } else if (newSpanner->isTrill()) {
+                toTrill(newSpanner)->setTrillType(customLine->trillType);
+            } else if (newSpanner->isVibrato()) {
+                toVibrato(newSpanner)->setVibratoType(customLine->vibratoType);
             }
-            if (hookHeights.second != 0) {
-                textLine->setEndHookType(HookType::HOOK_90);
-                textLine->setEndHookHeight(Spatium(hookHeights.second));
-                textLine->setBeginHookHeight(Spatium(hookHeights.first * doubleFromEvpu(musxOptions().smartShapeOptions->hookLength)));
+        } else {
+            if (type == ElementType::OTTAVA) {
+                toOttava(newSpanner)->setOttavaType(ottavaTypeFromShapeType(smartShape->shapeType));
+            } else if (type == ElementType::HAIRPIN) {
+                toHairpin(newSpanner)->setHairpinType(hairpinTypeFromShapeType(smartShape->shapeType));
+            } else if (type == ElementType::SLUR) {
+                toSlur(newSpanner)->setStyleType(slurStyleTypeFromShapeType(smartShape->shapeType));
+                /// @todo is there a way to read the calculated direction
+                toSlur(newSpanner)->setSlurDirection(directionVFromShapeType(smartShape->shapeType));
+            } else if (type == ElementType::TEXTLINE) {
+                TextLineBase* textLine = toTextLineBase(newSpanner);
+                textLine->setLineStyle(lineTypeFromShapeType(smartShape->shapeType));
+                /// @todo read more settings from smartshape options, set styles for more elements
+                auto [beginHook, endHook] = hookHeightsFromShapeType(smartShape->shapeType);
+                if (beginHook) {
+                    textLine->setBeginHookType(HookType::HOOK_90);
+                    textLine->setBeginHookHeight(Spatium(beginHook * doubleFromEvpu(musxOptions().smartShapeOptions->hookLength)));
+                    // continue doesn't have no hook
+                }
+                if (endHook) {
+                    textLine->setEndHookType(HookType::HOOK_90);
+                    textLine->setEndHookHeight(Spatium(endHook * doubleFromEvpu(musxOptions().smartShapeOptions->hookLength)));
+                }
             }
         }
-        /// @todo set guitar bend type
 
-        if (customLine && newSpanner->isTextLineBase()) {
-            TextLineBase* textLineBase = toTextLineBase(newSpanner);
+        /// Not needed? segments don't exist yet
+        // for (auto ss : newSpanner->spannerSegments()) {
+            // ss->setTrack(newSpanner->track());
+        // }
 
-            textLineBase->setLineVisible(customLine->lineVisible);
-            textLineBase->setBeginHookType(customLine->beginHookType);
-            textLineBase->setEndHookType(customLine->endHookType);
-            textLineBase->setBeginHookHeight(customLine->beginHookHeight);
-            textLineBase->setEndHookHeight(customLine->endHookHeight);
-            textLineBase->setGapBetweenTextAndLine(customLine->gapBetweenTextAndLine);
-            textLineBase->setTextSizeSpatiumDependent(customLine->textSizeSpatiumDependent);
-            textLineBase->setDiagonal(customLine->diagonal);
-            textLineBase->setLineWidth(customLine->lineWidth);
-            textLineBase->setDashLineLen(customLine->dashLineLen);
-            textLineBase->setDashGapLen(customLine->dashGapLen);
-
-            textLineBase->setBeginTextPlace(customLine->beginTextPlace);
-            textLineBase->setBeginText(customLine->beginText);
-            textLineBase->setBeginTextAlign(customLine->beginTextAlign);
-            // textLineBase->setBeginFontFamily(customLine->beginFontFamily);
-            // textLineBase->setBeginFontSize(customLine->beginFontSize);
-            // textLineBase->setBeginFontStyle(customLine->beginFontStyle);
-            textLineBase->setBeginTextOffset(customLine->beginTextOffset);
-
-            textLineBase->setContinueTextPlace(customLine->continueTextPlace);
-            textLineBase->setContinueText(customLine->continueText);
-            textLineBase->setContinueTextAlign(customLine->continueTextAlign);
-            // textLineBase->setContinueFontFamily(customLine->continueFontFamily);
-            // textLineBase->setContinueFontSize(customLine->continueFontSize);
-            // textLineBase->setContinueFontStyle(customLine->continueFontStyle);
-            textLineBase->setContinueTextOffset(customLine->continueTextOffset);
-
-            textLineBase->setEndTextPlace(customLine->endTextPlace);
-            textLineBase->setEndText(customLine->endText);
-            textLineBase->setEndTextAlign(customLine->endTextAlign);
-            // textLineBase->setEndFontFamily(customLine->endFontFamily);
-            // textLineBase->setEndFontSize(customLine->endFontSize);
-            // textLineBase->setEndFontStyle(customLine->endFontStyle);
-            textLineBase->setEndTextOffset(customLine->endTextOffset);
-        }
-        /// @todo custom trills
-
-        for (auto ss : newSpanner->spannerSegments()) {
-            ss->setTrack(newSpanner->track());
-        }
         // if (isMeasureAnchor) {
             // Measure* endMeasure = tick2measureMM(tick2);
             // if (endMeasure->tick() != tick2) {
@@ -406,7 +437,7 @@ void FinaleParser::importSmartShapes()
         if (newSpanner->anchor() == Spanner::Anchor::NOTE) {
             toNote(startElement)->add(newSpanner);
         } else {
-            m_score->addElement(newSpanner);
+            m_score->addSpanner(newSpanner);
         }
     }
 }

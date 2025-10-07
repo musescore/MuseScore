@@ -1157,6 +1157,17 @@ SlurStyleType slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeTyp
     return muse::value(shapeTypeTable, shapeType, SlurStyleType::Solid);
 }
 
+VibratoType vibratoTypeFromSymId(SymId vibratoSym)
+{
+    static const std::unordered_map<SymId, VibratoType> vibratoTypeTable = {
+        { SymId::guitarVibratoStroke,     VibratoType::GUITAR_VIBRATO },
+        { SymId::guitarWideVibratoStroke, VibratoType::GUITAR_VIBRATO_WIDE },
+        { SymId::wiggleSawtooth,          VibratoType::VIBRATO_SAWTOOTH },
+        { SymId::wiggleSawtoothWide,      VibratoType::VIBRATO_SAWTOOTH_WIDE },
+    };
+    return muse::value(vibratoTypeTable, vibratoSym, VibratoType::GUITAR_VIBRATO);
+}
+
 DirectionV directionVFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
 {
     using ShapeType = musx::dom::others::SmartShape::ShapeType;
