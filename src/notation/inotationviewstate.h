@@ -48,7 +48,7 @@ public:
     virtual bool isMatrixInited() const = 0;
     virtual void setMatrixInited(bool inited) = 0;
 
-    virtual muse::draw::Transform matrix() const = 0;
+    virtual const muse::draw::Transform& matrix() const = 0;
     virtual muse::async::Channel<muse::draw::Transform /*newMatrix*/, NotationPaintView* /*sender*/> matrixChanged() const = 0;
     virtual void setMatrix(const muse::draw::Transform& matrix, NotationPaintView* sender) = 0;
 

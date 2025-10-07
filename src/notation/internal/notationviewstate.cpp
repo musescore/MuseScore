@@ -116,7 +116,7 @@ void NotationViewState::setMatrixInited(bool inited)
     m_isMatrixInited = inited;
 }
 
-Transform NotationViewState::matrix() const
+const Transform& NotationViewState::matrix() const
 {
     return m_matrix;
 }
