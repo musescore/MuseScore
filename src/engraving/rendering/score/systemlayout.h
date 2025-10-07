@@ -86,6 +86,7 @@ public:
     static void centerBigTimeSigsAcrossStaves(const System* system);
 
     static void updateSkylineForElement(EngravingItem* element, const System* system, double yMove);
+    static void removeElementFromSkyline(EngravingItem* element, const System* system);
 
     static void layoutSystemLockIndicators(System* system, LayoutContext& ctx);
 
