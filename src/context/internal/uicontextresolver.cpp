@@ -56,37 +56,7 @@ void UiContextResolver::init()
         });
     });
 
-    playbackController()->isPlayingChanged().onNotify(this, [this]() {
-        updateCurrentUiContext();
-    });
-
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        auto notation = globalContext()->currentNotation();
-        if (notation) {
-            notation->interaction()->selectionChanged().onNotify(this, [this]() {
-                updateCurrentUiContext();
-            });
-
-            notation->interaction()->textEditingStarted().onNotify(this, [this]() {
-                updateCurrentUiContext();
-            });
-
-            notation->interaction()->textEditingEnded().onReceive(this, [this](engraving::TextBase*) {
-                updateCurrentUiContext();
-            });
-
-            notation->undoStack()->stackChanged().onNotify(this, [this]() {
-                updateCurrentUiContext();
-            });
-
-            notation->interaction()->noteInput()->noteInputStarted().onReceive(this, [this](bool) {
-                updateCurrentUiContext();
-            });
-
-            notation->interaction()->noteInput()->noteInputEnded().onNotify(this, [this]() {
-                updateCurrentUiContext();
-            });
-        }
         updateCurrentUiContext();
     });
 
