@@ -24,7 +24,6 @@
 #include "../iuicontextresolver.h"
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
-#include "playback/iplaybackcontroller.h"
 #include "iinteractive.h"
 #include "../iglobalcontext.h"
 #include "ui/inavigationcontroller.h"
@@ -33,7 +32,6 @@ namespace mu::context {
 class UiContextResolver : public IUiContextResolver, public muse::Injectable, public muse::async::Asyncable
 {
     muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<playback::IPlaybackController> playbackController = { this };
     muse::Inject<IGlobalContext> globalContext = { this };
     muse::Inject<muse::ui::INavigationController> navigationController = { this };
 
