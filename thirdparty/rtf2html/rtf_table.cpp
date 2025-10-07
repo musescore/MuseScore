@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
+#include <tgmath.h>
 
 #include "common.h"
 
