@@ -616,7 +616,7 @@ void HarmonyLayout::renderAction(Harmony* item, Harmony::LayoutData* ldata, cons
 {
     switch (a->actionType()) {
     case RenderAction::RenderActionType::SET:
-        renderActionSet(item, ldata, std::static_pointer_cast<RenderActionSet>(a), harmonyCtx);
+        renderActionSet(item, ldata, std::static_pointer_cast<RenderActionSet>(a), harmonyCtx, ctx);
         break;
     case RenderAction::RenderActionType::MOVE:
         renderActionMove(item, std::static_pointer_cast<RenderActionMove>(a), harmonyCtx);
@@ -781,13 +781,14 @@ void HarmonyLayout::renderActionParen(Harmony* item, const RenderActionParenPtr&
     harmonyCtx.renderItemList.push_back(parenItem);
 }
 
-void HarmonyLayout::kernCharacters(const Harmony* item, const String& text, HarmonyRenderCtx& harmonyCtx)
+void HarmonyLayout::kernCharacters(const Harmony* item, const String& text, HarmonyRenderCtx& harmonyCtx, const LayoutContext& ctx)
 {
     if (harmonyCtx.renderItemList.empty()) {
         return;
     }
     // Character pair and distance to move the second
     // Blank strings will apply the kerning no matter the following character
+    // TODO - move this information to the XML file
     static const std::map<std::pair<String, String>, double> KERNED_CHARACTERS {
         { { u"A", u"\uE870" }, -0.4 },  // dim
         { { u"A", u"\uE871" }, -0.3 },  // half-dim
@@ -817,6 +818,12 @@ void HarmonyLayout::kernCharacters(const Harmony* item, const String& text, Harm
         const std::pair<String, String> kernPair = kernInfo.first;
         bool endChar = ts->text().endsWith(kernPair.first);
         bool startChar = text.startsWith(kernPair.second);
+        // VERY DIRTY HACK ALERT
+        // "Match any" should only be applied to the Jazz preset currently.
+        // Remove the jazz condition when these kern values are moved to the XML files
+        if (kernPair.second.isEmpty() && ctx.conf().styleV(Sid::chordStyle).value<ChordStylePreset>() != ChordStylePreset::JAZZ) {
+            continue;
+        }
         bool startMatchAny = kernPair.second.isEmpty();
         if ((endChar && startChar) || (endChar && startMatchAny)) {
             const FontMetrics fm = FontMetrics(item->font());
@@ -827,7 +834,8 @@ void HarmonyLayout::kernCharacters(const Harmony* item, const String& text, Harm
     }
 }
 
-void HarmonyLayout::renderActionSet(Harmony* item, Harmony::LayoutData* ldata, const RenderActionSetPtr& a, HarmonyRenderCtx& harmonyCtx)
+void HarmonyLayout::renderActionSet(Harmony* item, Harmony::LayoutData* ldata, const RenderActionSetPtr& a, HarmonyRenderCtx& harmonyCtx,
+                                    const LayoutContext& ctx)
 {
     const ChordList* chordList = item->score()->chordList();
     const ChordSymbol cs = chordList->symbol(a->text());
@@ -839,7 +847,7 @@ void HarmonyLayout::renderActionSet(Harmony* item, Harmony::LayoutData* ldata, c
         font.setPointSizeF(font.pointSizeF() * nmag);
     }
 
-    kernCharacters(item, text, harmonyCtx);
+    kernCharacters(item, text, harmonyCtx, ctx);
 
     TextSegment* ts = new TextSegment(text, font, harmonyCtx.x(), harmonyCtx.y(), harmonyCtx.hAlign);
     harmonyCtx.movex(ts->width());
