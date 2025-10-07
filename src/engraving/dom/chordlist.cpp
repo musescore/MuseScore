@@ -1596,11 +1596,7 @@ double ChordList::position(const StringList& names, bool stackModifiers, bool su
         return yAdj;
     }
     default:
-        if (name == "o" || name == "0") {
-            return m_eadjust;
-        } else {
-            return 0.0;
-        }
+        return 0.0;
     }
 }
 
