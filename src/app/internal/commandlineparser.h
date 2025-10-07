@@ -42,15 +42,7 @@ public:
     void processBuiltinArgs(const QCoreApplication& app);
 
     muse::IApplication::RunMode runMode() const;
-
-    // CmdOptions
     const CmdOptions& options() const;
-
-    // Tasks
-    CmdOptions::ConverterTask converterTask() const;
-    CmdOptions::Diagnostic diagnostic() const;
-    CmdOptions::Autobot autobot() const;
-    CmdOptions::AudioPluginRegistration audioPluginRegistration() const;
 
 private:
     void printLongVersion() const;

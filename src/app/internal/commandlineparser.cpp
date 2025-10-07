@@ -549,26 +549,6 @@ const CmdOptions& CommandLineParser::options() const
     return m_options;
 }
 
-CmdOptions::ConverterTask CommandLineParser::converterTask() const
-{
-    return m_options.converterTask;
-}
-
-CmdOptions::Diagnostic CommandLineParser::diagnostic() const
-{
-    return m_options.diagnostic;
-}
-
-CmdOptions::Autobot CommandLineParser::autobot() const
-{
-    return m_options.autobot;
-}
-
-CmdOptions::AudioPluginRegistration CommandLineParser::audioPluginRegistration() const
-{
-    return m_options.audioPluginRegistration;
-}
-
 void CommandLineParser::printLongVersion() const
 {
     if (BaseApplication::appUnstable()) {
