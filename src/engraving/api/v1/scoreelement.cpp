@@ -227,17 +227,25 @@ void ScoreElement::scanElements(QJSValue func, bool all)
         return;
     }
 
+    struct CallbackContext {
+        QJSValue callback;
+        QJSEngine* engine;
+        Ownership ownership;
+    };
+
+    CallbackContext ctx{ func, qmlEngine(this), ownership() };
+
     auto wrapper = [](void* data, mu::engraving::EngravingItem* item) {
-        auto* callback = static_cast<QJSValue*>(data);
-        if (!callback->isCallable()) {
+        auto* ctx = static_cast<CallbackContext*>(data);
+        if (!ctx->callback.isCallable()) {
             return;
         }
 
         QJSValueList args;
-        args << wrap(item); //ctx->engine->toScriptValue(wrap(item, ctx->ownership));
-        callback->call(args);
+        args << ctx->engine->toScriptValue(wrap(item, ctx->ownership));
+        ctx->callback.call(args);
     };
-    e->scanElements(&func, wrapper, all);
+    e->scanElements(&ctx, wrapper, all);
 }
 
 //---------------------------------------------------------
