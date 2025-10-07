@@ -138,7 +138,6 @@ public:
     static ChordRest* chordRest(EngravingItem*);
 
 private:
-
     Segment* nextInputPos() const;
 
     track_idx_t m_track = 0;
