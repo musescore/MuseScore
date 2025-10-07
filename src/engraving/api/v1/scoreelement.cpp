@@ -76,7 +76,8 @@ qreal ScoreElement::spatium() const
 
 QQmlListProperty<ScoreElement> ScoreElement::children()
 {
-    return wrapContainerProperty<ScoreElement>(this, e->children());
+    const EngravingObjectList& children = e->scanChildren();
+    return wrapContainerProperty<ScoreElement>(this, children);
 }
 
 //---------------------------------------------------------
