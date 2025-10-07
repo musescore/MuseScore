@@ -112,11 +112,6 @@ public:
     Q_INVOKABLE QString userName() const;
     /// Checks whether two variables represent the same object. \since MuseScore 3.3
     Q_INVOKABLE bool is(apiv1::ScoreElement* other) { return other && element() == other->element(); }
-    /// Applies a given function to this element's children
-    /// \param func the function to apply.
-    /// \param all whether to apply the function to children of children.
-    /// \since MuseScore 4.7
-    Q_INVOKABLE void scanElements(QJSValue func, bool all);
 };
 
 //---------------------------------------------------------
