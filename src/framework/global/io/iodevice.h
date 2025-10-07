@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_IO_IODEVICE_H
-#define MUSE_IO_IODEVICE_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -67,12 +65,12 @@ public:
     size_t write(const QByteArray& ba);
 #endif
 
-    std::string meta(const std::string& key) const;
+    const std::string& meta(const std::string& key) const;
     void setMeta(const std::string& key, const std::string& val);
 
     bool hasError() const;
     int error() const;
-    std::string errorString() const;
+    const std::string& errorString() const;
 
 protected:
 
@@ -99,5 +97,3 @@ private:
     std::string m_errorString;
 };
 }
-
-#endif // MUSE_IO_IODEVICE_H

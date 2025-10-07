@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_IO_FILE_H
-#define MUSE_IO_FILE_H
+#pragma once
 
 #include "global/modularity/ioc.h"
 #include "ifilesystem.h"
@@ -37,9 +36,9 @@ public:
 
     File() = default;
     File(const path_t& filePath);
-    ~File();
+    ~File() override;
 
-    path_t filePath() const;
+    const path_t& filePath() const;
 
     bool exists() const;
     bool remove();
@@ -65,5 +64,3 @@ private:
     ByteArray m_data;
 };
 }
-
-#endif // MUSE_IO_FILE_H

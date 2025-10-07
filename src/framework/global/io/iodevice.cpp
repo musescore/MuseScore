@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -229,13 +229,15 @@ size_t IODevice::write(const QByteArray& ba)
 
 #endif
 
-std::string IODevice::meta(const std::string& key) const
+const std::string& IODevice::meta(const std::string& key) const
 {
     auto it = m_meta.find(key);
     if (it != m_meta.end()) {
         return it->second;
     }
-    return std::string();
+
+    static const std::string dummyVal;
+    return dummyVal;
 }
 
 void IODevice::setMeta(const std::string& key, const std::string& val)
@@ -253,7 +255,7 @@ int IODevice::error() const
     return m_error;
 }
 
-std::string IODevice::errorString() const
+const std::string& IODevice::errorString() const
 {
     return m_errorString;
 }
