@@ -26,6 +26,7 @@
 #include "smufl_mapping.h"
 
 #include "engraving/types/symnames.h"
+#include "engraving/types/types.h"
 #include "engraving/iengravingfont.h"
 
 using namespace mu;
@@ -36,6 +37,26 @@ namespace mu::iex::finale {
 
 /// @todo
 // MaestroTimes: import 194 as 2, 205 as 3, 202/203/193 as 2, 216 as 217 (no suitable smufl equivalent)"
+
+FontStyle FinaleTextConv::museFontEfx(const MusxInstance<FontInfo>& fontInfo)
+{
+    FontStyle retval = FontStyle::Normal;
+
+    if (fontInfo->bold) {
+        retval = retval | FontStyle::Bold;
+    }
+    if (fontInfo->italic) {
+        retval = retval | FontStyle::Italic;
+    }
+    if (fontInfo->underline) {
+        retval = retval | FontStyle::Underline;
+    }
+    if (fontInfo->strikeout) {
+        retval = retval | FontStyle::Strike;
+    }
+
+    return retval;
+}
 
 static std::string calcGlyphName(char32_t c, const MusxInstance<FontInfo>& font)
 {

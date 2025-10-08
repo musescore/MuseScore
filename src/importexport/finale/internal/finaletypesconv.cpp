@@ -959,12 +959,12 @@ TupletNumberType toMuseScoreTupletNumberType(options::TupletOptions::NumberStyle
 
 Align justifyToAlignment(others::NamePositioning::AlignJustify alignJustify)
 {
-    static const std::unordered_map<others::NamePositioning::AlignJustify, Align> alignTable = {
-        { others::NamePositioning::AlignJustify::Left,   Align(AlignH::LEFT, AlignV::VCENTER) },
-        { others::NamePositioning::AlignJustify::Right,  Align(AlignH::RIGHT, AlignV::VCENTER) },
-        { others::NamePositioning::AlignJustify::Center, Align(AlignH::HCENTER, AlignV::VCENTER) },
+    static const std::unordered_map<others::NamePositioning::AlignJustify, AlignH> alignTable = {
+        { others::NamePositioning::AlignJustify::Left,   AlignH::LEFT },
+        { others::NamePositioning::AlignJustify::Right,  AlignH::RIGHT },
+        { others::NamePositioning::AlignJustify::Center, AlignH::HCENTER },
     };
-    return muse::value(alignTable, alignJustify, Align(AlignH::HCENTER, AlignV::VCENTER));
+    return Align(muse::value(alignTable, alignJustify, AlignH::HCENTER), AlignV::VCENTER);
 }
 
 AlignH toAlignH(others::HorizontalTextJustification hTextJustify)
@@ -975,6 +975,16 @@ AlignH toAlignH(others::HorizontalTextJustification hTextJustify)
         { others::HorizontalTextJustification::Right,  AlignH::RIGHT },
     };
     return muse::value(hAlignTable, hTextJustify, AlignH::LEFT);
+}
+
+AlignH toAlignH(others::MeasureNumberRegion::AlignJustify align)
+{
+    static const std::unordered_map<others::MeasureNumberRegion::AlignJustify, AlignH> hAlignTable = {
+        { others::MeasureNumberRegion::AlignJustify::Left,   AlignH::LEFT },
+        { others::MeasureNumberRegion::AlignJustify::Center, AlignH::HCENTER },
+        { others::MeasureNumberRegion::AlignJustify::Right,  AlignH::RIGHT },
+    };
+    return muse::value(hAlignTable, align, AlignH::LEFT);
 }
 
 CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines)

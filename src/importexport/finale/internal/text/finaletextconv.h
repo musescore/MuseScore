@@ -33,6 +33,9 @@ namespace mu::iex::finale {
 class FinaleTextConv
 {
 public:
+    /// @brief Converts the font style of a finale instance into a value of MuseScore's FontStyle enum.
+    static engraving::FontStyle museFontEfx(const musx::dom::MusxInstance<musx::dom::FontInfo>& font);
+
     /// @brief Maps a codepoint in the font's encoding to a SymId
     static engraving::SymId symIdFromFinaleChar(char32_t c, const musx::dom::MusxInstance<musx::dom::FontInfo>& font, engraving::SymId def = engraving::SymId::noSym);
 
