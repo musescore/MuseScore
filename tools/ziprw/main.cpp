@@ -1,9 +1,9 @@
 #include "modularity/ioc.h"
 
-#include "global/serialization/zipreader.h"
-#include "global/serialization/zipwriter.h"
+#include "serialization/zipreader.h"
+#include "serialization/zipwriter.h"
 
-#include "global/io/internal/filesystem.h"
+#include "io/internal/filesystem.h"
 
 #include "log.h"
 

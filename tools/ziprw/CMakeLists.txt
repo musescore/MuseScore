@@ -19,12 +19,13 @@ set(CMAKE_MODULE_PATH
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
 
-set(QT_MIN_VERSION "6.2.4")
+set(QT_MIN_VERSION "6.9.2")
 include(SetupQt6)
 
 include_directories(
     ${CMAKE_CURRENT_LIST_DIR}
     ${MU_ROOT}/src/framework
+    ${MU_ROOT}/src/framework/global
 )
 
 add_compile_definitions(
@@ -37,6 +38,10 @@ include(DeclareModuleSetup)
 
 set(GLOBAL_NO_INTERNAL ON)
 add_subdirectory(${MU_ROOT}/src/framework/global global)
+
+target_link_libraries(muse_global PUBLIC
+    ${QT_LIBRARIES}
+)
 
 set(ENGRAVING_NO_INTERNAL ON)
 set(ENGRAVING_NO_ACCESSIBILITY ON)
