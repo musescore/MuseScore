@@ -1026,6 +1026,12 @@ void NotationProject::listenIfNeedSaveChanges()
             markAsUnsaved();
             m_hasNonUndoStackChanges = true;
         });
+
+        notation->soloMuteState()->trackSoloMuteStateChanged().onReceive(
+            this, [this](const InstrumentTrackId&, const notation::INotationSoloMuteState::SoloMuteState&) {
+            markAsUnsaved();
+            m_hasNonUndoStackChanges = true;
+        });
     };
 
     listenNonUndoStackChanges(m_masterNotation->notation());
