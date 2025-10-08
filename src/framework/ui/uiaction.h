@@ -62,7 +62,6 @@ struct UiAction
     IconCode::Code iconCode = IconCode::Code::NONE;
     QString iconColor;
     Checkable checkable = Checkable::No;
-    std::vector<std::string> shortcuts;
 
     UiAction() = default;
     UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, Checkable ch = Checkable::No)
@@ -102,8 +101,7 @@ struct UiAction
                && description == other.description
                && iconCode == other.iconCode
                && iconColor == other.iconColor
-               && checkable == other.checkable
-               && shortcuts == other.shortcuts;
+               && checkable == other.checkable;
     }
 };
 
