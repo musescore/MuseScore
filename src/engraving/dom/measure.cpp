@@ -619,9 +619,9 @@ bool Measure::showMeasureNumber()
         return true;
     case MeasureNumberMode::HIDE:
         return false;
+    default:
+        return showMeasureNumberInAutoMode();
     }
-
-    return showMeasureNumberInAutoMode();
 }
 
 //---------------------------------------------------------
