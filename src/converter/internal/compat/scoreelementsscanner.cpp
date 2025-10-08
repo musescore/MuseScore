@@ -47,7 +47,23 @@ struct ScannerData {
 static bool itemAccepted(const EngravingItem* item, const ElementTypeSet& acceptedTypes)
 {
     // Ignore temporary / invalid elements and elements that cannot be interacted with
-    if (!item || !item->part() || item->generated() || !item->selectable() || !item->isInteractionAvailable()) {
+    if (!item || !item->part() || !item->selectable() || !item->isInteractionAvailable()) {
+        return false;
+    }
+
+    static const ElementTypeSet NOTE_PARTS {
+        ElementType::ACCIDENTAL,
+        ElementType::STEM,
+        ElementType::HOOK,
+        ElementType::BEAM,
+        ElementType::NOTEDOT,
+    };
+
+    if (muse::contains(NOTE_PARTS, item->type())) {
+        return false;
+    }
+
+    if (item->isBarLine() && item->tick().ticks() == 0) {
         return false;
     }
 
