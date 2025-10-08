@@ -202,6 +202,8 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
     std::vector<ChordSymbolParen*> openingParenStack;
     double lastTextSegHeight = 0.0;
     double lastTextSegTop = 0.0;
+    double rootRefHeight = 0.0;
+    double parenExtension = 0.1 * spatium * (item->size() / 10.0);
     for (HarmonyRenderItem* renderItem : itemList) {
         if (ChordSymbolParen* curParen = dynamic_cast<ChordSymbolParen*>(renderItem)) {
             if (curParen->parenItem->direction() == DirectionH::LEFT) {
@@ -218,9 +220,8 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                 curParen->bottom = openingParen->bottom;
 
                 // Layout parenthesis pair
-                double extension = 0.1 * spatium * (item->size() / 10.0);
-                double startY = openingParen->top - extension;
-                double height = (openingParen->bottom - openingParen->top) + 2 * extension;
+                double startY = openingParen->top - parenExtension;
+                double height = (openingParen->bottom - openingParen->top) + 2 * parenExtension;
                 if (std::isinf(height)) {
                     height = lastTextSegHeight;
                 }
@@ -259,6 +260,14 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
             // Set top paren height
             lastTextSegHeight = textSeg->height();
             lastTextSegTop = textSeg->tightBoundingRect().translated(textSeg->pos()).y();
+            if (muse::RealIsNull(rootRefHeight)) {
+                rootRefHeight = textSeg->height();
+                double top = textSeg->tightBoundingRect().translated(textSeg->pos()).y();
+                double bottom = textSeg->bboxBaseLine() + textSeg->pos().y();
+                double height = (bottom - top) + 2 * parenExtension;
+
+                rootRefHeight = height;
+            }
             if (!openingParenStack.empty() && textSeg->font().type() != Font::Type::MusicSymbolText) {
                 ChordSymbolParen* topParen = openingParenStack.back();
                 topParen->top = std::min(topParen->top, textSeg->tightBoundingRect().translated(textSeg->pos()).y());
@@ -290,22 +299,32 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
     // TODO - STACKED C7((#11)#13)
     // C7(#11(#13))
     double additionalSpace = 0.0;
+    bool prevParen = false;
+
     for (size_t i = 0; i < itemList.size(); i++) {
         HarmonyRenderItem* renderItem = itemList.at(i);
         double padding = i != 0 ? computePadding(itemList.at(i - 1), renderItem) : 0.0;
 
         if (ChordSymbolParen* paren = dynamic_cast<ChordSymbolParen*>(renderItem)) {
             if (paren->parenItem->direction() == DirectionH::LEFT) {
-                additionalSpace += paren->parenItem->width() / 3 + padding;
+                double heightToRefRatio = std::max(paren->height(), rootRefHeight) / rootRefHeight;
+                bool scaleParenWidth = !prevParen && !muse::RealIsEqual(heightToRefRatio, 1.0);
+                const double PAREN_PADDING_SCALER = 0.6;
+                double scaledParenWidth = paren->parenItem->width() * PAREN_PADDING_SCALER / heightToRefRatio;
+
+                double parenWidth = scaleParenWidth ? scaledParenWidth : paren->parenItem->width();
+                additionalSpace += parenWidth + padding;
                 paren->movex(additionalSpace);
             }
             if (paren->parenItem->direction() == DirectionH::RIGHT) {
                 paren->movex(additionalSpace + padding);
                 additionalSpace += paren->parenItem->width() + padding;
             }
+            prevParen = true;
         } else if (TextSegment* ts = dynamic_cast<TextSegment*>(renderItem)) {
             additionalSpace += padding;
             ts->movex(additionalSpace);
+            prevParen = false;
         }
     }
 }
