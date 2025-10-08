@@ -2811,11 +2811,19 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
     for (const BracketItem* i : item->brackets()) {
         BracketType a = i->bracketType();
         size_t b = i->bracketSpan();
-        size_t c = i->column();
-        bool v = i->visible();
-        if (a != BracketType::NO_BRACKET || b > 0) {
-            xml.tag("bracket", { { "type", static_cast<int>(a) }, { "span", b }, { "col", c }, { "visible", v } });
+        if (a == BracketType::NO_BRACKET || b == 0) {
+            continue;
         }
+        XmlWriter::Attributes attrs = {
+            { "type", static_cast<int>(a) },
+            { "span", b },
+            { "col", i->column() },
+            { "visible", i->visible() }
+        };
+        if (i->color() != ctx.configuration()->defaultColor()) {
+            attrs.push_back({ "color", String::fromStdString(i->color().toString()) });
+        }
+        xml.tag("bracket", attrs);
     }
 
     writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN);
