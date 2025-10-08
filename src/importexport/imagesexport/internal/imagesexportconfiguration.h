@@ -36,6 +36,9 @@ public:
     bool exportPdfWithTransparentBackground() const override;
     void setExportPdfWithTransparentBackground(bool transparent) override;
 
+    bool exportPdfWithGrayscale() const override;
+    void setExportPdfWithGrayscale(bool grayscale) override;
+
     float exportPngDpiResolution() const override;
     void setExportPngDpiResolution(float dpi) override;
     void setExportPngDpiResolutionOverride(std::optional<float> dpi) override;
