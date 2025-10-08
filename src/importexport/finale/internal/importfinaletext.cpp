@@ -315,28 +315,6 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
     FontTracker firstFontInfo;
     xmlText = context.stringFromEnigmaText(parsingContext, options, &firstFontInfo);
 
-    // Option 2 (to match style setting if possible, with font info tags at the beginning if they differ)
-    options.initialFont = FontTracker(context.score()->style(), fontStyleSuffixFromCategoryType(categoryType));
-    /// @todo The musicSymbol font here must be the inferred font *in Finale* that we expect, based on the detection of what kind
-    /// of marking it is mentioned above. Right now this code relies on the category, but probably that is too naive a design.
-    /// Whichever font we choose here will be stripped out in favor of the default for the kind of marking it is.
-    options.musicSymbolFont = [&]() -> std::optional<FontTracker> {
-        if (!catMusicFont) {
-            return FontTracker(context.musxOptions().defaultMusicFont); // we get here for the Misc category, and this seems like the best choice for legacy files. See todo comments, though.
-        } else if (context.fontIsEngravingFont(catMusicFont->getName())) {
-            return FontTracker(catMusicFont); // if it's an engraving font use it
-        } else if (catMusicFont->calcIsDefaultMusic() && !context.musxOptions().calculatedEngravingFontName.empty()) {
-            return FontTracker(catMusicFont); // if it's not an engraving font, but we are using an alternative as engraving font,
-                                              // specify the non-engraving font here. The parsing routine strips it out and MuseScore
-                                              // uses the engraving font instead.
-        }
-        return std::nullopt;
-    }();
-    if (catMusicFont && (context.fontIsEngravingFont(catMusicFont->getName()) || catMusicFont->calcIsDefaultMusic())) {
-        options.musicSymbolFont = FontTracker(catMusicFont);
-    }
-    // String exprString2 = stringFromEnigmaText(parsingContext, options); // currently unused
-
     // Text frame/border (Finale: Enclosure)
     frameSettings = FrameSettings(textExpression->getEnclosure().get());
 
@@ -402,6 +380,25 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
         };
         return muse::value(categoryTypeTable, categoryType, ElementType::STAFF_TEXT);
     }();
+
+    FontTracker defaultFontForElement(context.score()->style(), fontStyleSuffixFromElementType(elementType));
+    if (firstFontInfo != defaultFontForElement) {
+        options.initialFont = defaultFontForElement;
+        // Whichever font we choose here will be stripped out in favor of the default for the kind of marking it is.
+        options.musicSymbolFont = [&]() -> std::optional<FontTracker> {
+            if (!catMusicFont) {
+                return FontTracker(context.musxOptions().defaultMusicFont); // we get here for the Misc category, and this seems like the best choice for legacy files. See todo comments, though.
+            } else if (context.fontIsEngravingFont(catMusicFont->getName())) {
+                return FontTracker(catMusicFont); // if it's an engraving font use it
+            } else if (catMusicFont->calcIsDefaultMusic() && !context.musxOptions().calculatedEngravingFontName.empty()) {
+                return FontTracker(catMusicFont); // if it's not an engraving font, but we are using an alternative as engraving font,
+                // specify the non-engraving font here. The parsing routine strips it out and MuseScore
+                // uses the engraving font instead.
+            }
+            return std::nullopt;
+        }();
+        xmlText = context.stringFromEnigmaText(parsingContext, options);
+    }
 
     context.logger()->logInfo(String(u"Converted expression of %1 type").arg(TConv::userName(elementType).translated()));
 }
