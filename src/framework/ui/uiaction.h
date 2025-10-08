@@ -55,6 +55,7 @@ enum class Checkable {
 struct UiAction
 {
     actions::ActionCode code;
+    actions::ActionCode parentCode; // example: action://copy -> action://project/copy
     UiContext uiCtx = UiCtxAny;
     std::string scCtx = "any";
     MnemonicString title;
@@ -67,6 +68,10 @@ struct UiAction
     UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), checkable(ch) {}
 
+    UiAction(const actions::ActionCode& code, const actions::ActionCode& parentCode, UiContext ctx, std::string scCtx,
+             Checkable ch = Checkable::No)
+        : code(code), parentCode(parentCode), uiCtx(ctx), scCtx(scCtx), checkable(ch) {}
+
     UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title,
              Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), checkable(ch) {}
@@ -78,6 +83,10 @@ struct UiAction
     UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title,
              const TranslatableString& desc, IconCode::Code icon, Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc), iconCode(icon), checkable(ch) {}
+
+    UiAction(const actions::ActionCode& code, const actions::ActionCode& parentCode, UiContext ctx, std::string scCtx,
+             const MnemonicString& title, const TranslatableString& desc, IconCode::Code icon, Checkable ch = Checkable::No)
+        : code(code), parentCode(parentCode), uiCtx(ctx), scCtx(scCtx), title(title), description(desc), iconCode(icon), checkable(ch) {}
 
     UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title,
              const TranslatableString& desc, IconCode::Code icon, QString iconColor, Checkable ch = Checkable::No)
