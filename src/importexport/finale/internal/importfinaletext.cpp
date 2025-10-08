@@ -64,6 +64,21 @@ using namespace musx::dom;
 
 namespace mu::iex::finale {
 
+FrameSettings::FrameSettings(const others::Enclosure* enclosure) {
+    if (!enclosure || enclosure->shape == others::Enclosure::Shape::NoEnclosure || enclosure->lineWidth == 0) {
+        return;
+    }
+    if (enclosure->shape == others::Enclosure::Shape::Ellipse) {
+        frameType = FrameType::CIRCLE;
+    } else {
+        frameType = FrameType::SQUARE;
+    }
+
+    frameWidth   = doubleFromEfix(enclosure->lineWidth);
+    paddingWidth = doubleFromEvpu(enclosure->xMargin);
+    frameRound   = enclosure->roundCorners ? int(lround(doubleFromEfix(enclosure->cornerRadius))) : 0;
+}
+
 FontTracker::FontTracker(const MusxInstance<musx::dom::FontInfo>& fontInfo, double additionalSizeScaling)
 {
     fontName = String::fromStdString(fontInfo->getName());
@@ -268,6 +283,7 @@ void FinaleParser::importTextExpressions()
         String xmlText = String();
         ElementType elementType = ElementType::STAFF_TEXT;
         DynamicType dynamicType = DynamicType::OTHER;
+        FrameSettings frameSettings = FrameSettings(); // initialisation not needed??
     };
 
     // Layout score (needed for offset calculations)
@@ -362,6 +378,7 @@ void FinaleParser::importTextExpressions()
             };
             return muse::value(categoryTypeTable, categoryType, ElementType::STAFF_TEXT);
         }();
+        readableExpression.frameSettings = FrameSettings(textExpression->getEnclosure().get());
         mappedExpressions.emplace(textExpression->getCmper(), readableExpression);
     }
 
@@ -416,6 +433,13 @@ void FinaleParser::importTextExpressions()
         item->setXmlText(expression.xmlText);
         item->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         AlignH hAlign = toAlignH(expressionDef->horzExprJustification);
+        item->setFrameType(expression.frameSettings.frameType);
+        if (item->frameType() != FrameType::NO_FRAME) {
+            item->setFrameWidth(absoluteSpatium(expression.frameSettings.frameWidth, item)); // is this the correct scaling?
+            item->setPaddingWidth(absoluteSpatium(expression.frameSettings.paddingWidth, item)); // is this the correct scaling?
+            item->setFrameRound(expression.frameSettings.frameRound);
+        }
+
         item->setAlign(Align(hAlign, AlignV::BASELINE));
         s->add(item);
 

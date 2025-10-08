@@ -37,6 +37,8 @@ namespace mu::engraving {
 class InstrumentTemplate;
 class Part;
 class Score;
+
+enum class FrameType;
 }
 
 namespace mu::iex::finale {
@@ -85,6 +87,15 @@ struct ReadableTuplet {
     engraving::Tuplet* scoreTuplet = nullptr; // to be created tuplet object.
     int layer = 0; // for nested tuplets. 0 = outermost
 };
+
+struct FrameSettings {
+    FrameSettings() = default;
+    FrameSettings(const others::Enclosure* enclosure);
+    engraving::FrameType frameType = engraving::FrameType::NO_FRAME;
+    double frameWidth = 0.1;
+    double paddingWidth = 0.2;
+    int frameRound = 0;
+}
 
 enum class HeaderFooterType {
     None,
