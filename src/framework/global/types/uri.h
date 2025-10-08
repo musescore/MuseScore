@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_URI_H
-#define MUSE_GLOBAL_URI_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,10 +42,10 @@ public:
 
     bool isValid() const;
 
-    Scheme scheme() const;
+    const Scheme& scheme() const;
     void setScheme(const Scheme& scheme);
 
-    std::string path() const;
+    const std::string& path() const;
     void setPath(const std::string& path);
 
     inline bool operator==(const Uri& uri) const { return m_path == uri.m_path && m_scheme == uri.m_scheme; }
@@ -132,5 +131,3 @@ struct std::hash<muse::Uri>
         return std::hash<std::string> {}(uri.toString());
     }
 };
-
-#endif // MUSE_GLOBAL_URI_H

@@ -2414,12 +2414,12 @@ void EditStyle::setSwingParams(bool checked)
     setStyleQVariantValue(StyleId::swingUnit, val);
 }
 
-PropertyValue EditStyle::styleValue(StyleId id) const
+const PropertyValue& EditStyle::styleValue(StyleId id) const
 {
     return globalContext()->currentNotation()->style()->styleValue(id);
 }
 
-PropertyValue EditStyle::defaultStyleValue(StyleId id) const
+const PropertyValue& EditStyle::defaultStyleValue(StyleId id) const
 {
     return globalContext()->currentNotation()->style()->defaultStyleValue(id);
 }

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -185,19 +185,14 @@ Settings::Items Settings::readItems() const
     return result;
 }
 
-Val Settings::value(const Key& key) const
+const Val& Settings::value(const Key& key) const
 {
     return findItem(key).value;
 }
 
-Val Settings::defaultValue(const Key& key) const
+const Val& Settings::defaultValue(const Key& key) const
 {
     return findItem(key).defaultValue;
-}
-
-std::string Settings::description(const Key& key) const
-{
-    return findItem(key).description;
 }
 
 void Settings::setSharedValue(const Key& key, const Val& value)

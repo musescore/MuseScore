@@ -42,7 +42,7 @@ public:
     bool isMatrixInited() const override;
     void setMatrixInited(bool inited) override;
 
-    muse::draw::Transform matrix() const override;
+    const muse::draw::Transform& matrix() const override;
     muse::async::Channel<muse::draw::Transform, NotationPaintView*> matrixChanged() const override;
     void setMatrix(const muse::draw::Transform& matrix, NotationPaintView* sender) override;
 

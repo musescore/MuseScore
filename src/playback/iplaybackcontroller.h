@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLAYBACK_IPLAYBACKCONTROLLER_H
-#define MU_PLAYBACK_IPLAYBACKCONTROLLER_H
+
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 #include "async/notification.h"
@@ -71,9 +71,10 @@ public:
     const
         = 0;
 
-    virtual notation::INotationSoloMuteState::SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const = 0;
-    virtual void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId,
-                                       const notation::INotationSoloMuteState::SoloMuteState& state) = 0;
+    using SoloMuteState = notation::INotationSoloMuteState::SoloMuteState;
+
+    virtual const SoloMuteState& trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const = 0;
+    virtual void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) = 0;
 
     struct PlayParams {
         PlayParams() {}
@@ -120,5 +121,3 @@ public:
     virtual muse::Progress onlineSoundsProcessingProgress() const = 0;
 };
 }
-
-#endif // MU_PLAYBACK_IPLAYBACKCONTROLLER_H

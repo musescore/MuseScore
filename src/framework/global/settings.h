@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_SETTINGS_H
-#define MUSE_GLOBAL_SETTINGS_H
+
+#pragma once
 
 #include <string>
 
@@ -86,10 +86,8 @@ public:
 
     void reset(bool keepDefaultSettings = false, bool notifyAboutChanges = true, bool notifyOtherInstances = true);
 
-    Val value(const Key& key) const;
-    Val defaultValue(const Key& key) const;
-
-    std::string description(const Key& key) const;
+    const Val& value(const Key& key) const;
+    const Val& defaultValue(const Key& key) const;
 
     //! NOTE Will be write to global config and sync between all instances
     void setSharedValue(const Key& key, const Val& value);
@@ -138,5 +136,3 @@ inline Settings* settings()
     return Settings::instance();
 }
 }
-
-#endif // MUSE_GLOBAL_SETTINGS_H
