@@ -410,6 +410,10 @@ void FinaleParser::importTextExpressions()
 {
     // Layout score (needed for offset calculations)
     logger()->logInfo(String(u"Laying out score before importing text..."));
+    /// @todo see which are needed
+    m_score->connectTies();
+    m_score->setUpTempoMap();
+    m_score->setPlaylistDirty();
     m_score->setLayoutAll();
     m_score->doLayout();
 
