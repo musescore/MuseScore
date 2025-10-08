@@ -44,7 +44,7 @@ static const std::string SHORTCUTS_RESOURCE_NAME("SHORTCUTS");
 
 static const Shortcut& findShortcut(const ShortcutList& shortcuts, const std::string& actionCode)
 {
-    for (const Shortcut& shortcut: shortcuts) {
+    for (const Shortcut& shortcut : shortcuts) {
         if (shortcut.action == actionCode) {
             return shortcut;
         }
@@ -391,12 +391,24 @@ Ret ShortcutsRegister::setAdditionalShortcuts(const std::string& context, const 
 
 const Shortcut& ShortcutsRegister::shortcut(const std::string& actionCode) const
 {
-    return findShortcut(m_shortcuts, actionCode);
+    const Shortcut& sh = findShortcut(m_shortcuts, actionCode);
+    if (sh.isValid()) {
+        return sh;
+    }
+
+    const ui::UiAction& action = uiactionsRegister()->action(actionCode);
+    return findShortcut(m_shortcuts, action.parentCode);
 }
 
 const Shortcut& ShortcutsRegister::defaultShortcut(const std::string& actionCode) const
 {
-    return findShortcut(m_defaultShortcuts, actionCode);
+    const Shortcut& sh = findShortcut(m_defaultShortcuts, actionCode);
+    if (sh.isValid()) {
+        return sh;
+    }
+
+    const ui::UiAction& action = uiactionsRegister()->action(actionCode);
+    return findShortcut(m_defaultShortcuts, action.parentCode);
 }
 
 bool ShortcutsRegister::isRegistered(const std::string& sequence) const
