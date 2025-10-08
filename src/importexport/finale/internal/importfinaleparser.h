@@ -26,6 +26,7 @@
 #include <memory>
 
 #include "engraving/iengravingfontsprovider.h"
+#include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/staff.h"
 
@@ -138,6 +139,21 @@ struct MusxEmbeddedGraphic {
     muse::ByteArray fileData;
 };
 using MusxEmbeddedGraphicsMap = std::unordered_map<musx::dom::Cmper, MusxEmbeddedGraphic>;
+
+struct ReadableExpression
+{
+    ReadableExpression() = default;
+    ReadableExpression(const FinaleParser&, const musx::dom::MusxInstance<musx::dom::others::TextExpressionDef>&);
+
+    String xmlText = String();
+    FrameSettings frameSettings;
+    ElementType elementType = ElementType::STAFF_TEXT;
+
+    // Element-specific
+    DynamicType dynamicType = DynamicType::OTHER;
+    std::array<PedalPosition, HARP_STRING_NO> pedalState;
+};
+using ReadableExpressionMap = std::map<musx::dom::Cmper, ReadableExpression*>;
 
 struct ReadableCustomLine
 {
@@ -310,6 +326,7 @@ private:
     std::map<std::pair<musx::dom::EntryNumber, musx::dom::NoteNumber>, engraving::Note*> m_entryNoteNumber2Note; // use std::map to avoid need for std::pair hash function
     std::unordered_map<musx::dom::EntryNumber, engraving::ChordRest*> m_entryNumber2CR;
     ReadableCustomLineMap m_customLines;
+    ReadableExpressionMap m_expressions;
 };
 
 }
