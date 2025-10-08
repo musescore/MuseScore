@@ -37,8 +37,6 @@ namespace mu::engraving {
 class InstrumentTemplate;
 class Part;
 class Score;
-
-enum class FrameType;
 }
 
 namespace mu::iex::finale {
@@ -95,7 +93,7 @@ struct FrameSettings {
     double frameWidth = 0.1;
     double paddingWidth = 0.2;
     int frameRound = 0;
-}
+};
 
 enum class HeaderFooterType {
     None,
