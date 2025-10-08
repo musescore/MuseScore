@@ -83,16 +83,7 @@ FontTracker::FontTracker(const MusxInstance<musx::dom::FontInfo>& fontInfo, doub
 {
     fontName = String::fromStdString(fontInfo->getName());
     fontSize = spatiumScaledFontSize(fontInfo);
-    uchar styles = uint8_t(FontStyle::Normal);
-    if (fontInfo->bold)
-        styles |= uint8_t(FontStyle::Bold);
-    if (fontInfo->italic)
-        styles |= uint8_t(FontStyle::Italic);
-    if (fontInfo->underline)
-        styles |= uint8_t(FontStyle::Underline);
-    if (fontInfo->strikeout)
-        styles |= uint8_t(FontStyle::Strike);
-    fontStyle = FontStyle(styles);
+    fontStyle = FinaleTextConv::museFontEfx(fontInfo);
     spatiumIndependent = fontInfo->absolute;
     if (!fontInfo->absolute) {
         fontSize *= additionalSizeScaling;

@@ -22,15 +22,20 @@
 #include "internal/importfinaleparser.h"
 #include "internal/importfinalelogger.h"
 #include "internal/finaletypesconv.h"
+#include "internal/text/finaletextconv.h"
 
 #include "musx/musx.h"
 
 #include "types/string.h"
 
+#include "global/stringutils.h"
+
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/mmrestrange.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/textbase.h"
+
+#include "engraving/style/defaultstyle.h"
 
 #include "engraving/types/types.h"
 
@@ -39,6 +44,7 @@ using namespace musx::dom;
 
 namespace mu::iex::finale {
 
+// Unused; we read the installed fonts instead (custom fonts since 4.6)
 static const std::set<std::string_view> museScoreSMuFLFonts {
     "Bravura",
     "Leland",
@@ -48,6 +54,17 @@ static const std::set<std::string_view> museScoreSMuFLFonts {
     "Petaluma",
     "Finale Maestro",
     "Finale Broadway"
+};
+
+static const std::unordered_map<std::string, std::string_view> finaleToSMuFLFontMap {
+    { "AshMusic",         "Finale Ash" },
+    { "Broadway Copyist", "Finale Broadway" },
+    { "Engraver",         "Finale Engraver" },
+    { "Jazz",             "Finale Jazz" },
+    { "Maestro",          "Finale Maestro" },
+    { "Petrucci",         "Finale Legacy" },
+    { "Pmusic",           "Finale Maestro" },
+    { "Sonata",           "Finale Maestro" },
 };
 
 template <typename T>
@@ -108,52 +125,26 @@ void FinaleOptions::init(const FinaleParser& context)
         throw std::invalid_argument("document contains no options for Layer 1");
     }
     combinedDefaultStaffScaling = pageFormat->calcCombinedSystemScaling();
-    calculatedEngravingFontName = [&]() {
-        const auto& defaultMusicFont = context.musxOptions().defaultMusicFont;
-        std::string fontName = defaultMusicFont->getName();
-        if (context.fontIsEngravingFont(defaultMusicFont)) {
-            return String::fromStdString(fontName);
-        } else if (fontName == "AshMusic" && context.fontIsEngravingFont("Finale Ash")) {
-            return String("Finale Ash");
-        } else if (fontName == "Broadway Copyist" && context.fontIsEngravingFont("Finale Broadway")) {
-            return String("Finale Broadway");
-        } else if (fontName == "Engraver" && context.fontIsEngravingFont("Finale Engraver")) {
-            return String("Finale Engraver");
-        } else if (fontName == "Jazz" && context.fontIsEngravingFont("Finale Jazz")) {
-            return String("Finale Jazz");
-        } else if ((fontName == "Maestro" || fontName == "Pmusic" || fontName == "Sonata") && context.fontIsEngravingFont("Finale Maestro")) {
-            return String("Finale Maestro");
-        } else if (fontName == "Petrucci" && context.fontIsEngravingFont("Finale Legacy")) {
-            return String("Finale Legacy");
-        } // other `else if` checks as required go here
-        return String();
-    }();
+
+    // Musical symbols font
+    std::string defaultMusicFont = context.musxOptions().defaultMusicFont->getName();
+    defaultMusicFont = muse::value(finaleToSMuFLFontMap, defaultMusicFont, defaultMusicFont);
+    if (context.fontIsEngravingFont(defaultMusicFont)) {
+        calculatedEngravingFontName = String::fromStdString(defaultMusicFont);
+    } else {
+        calculatedEngravingFontName = engraving::DefaultStyle::defaultStyle().styleSt(Sid::musicalSymbolFont);
+    }
 }
 
 bool FinaleParser::fontIsEngravingFont(const std::string& fontName) const
 {
-    if (muse::value(m_engravingFonts, muse::strings::toLower(fontName), nullptr)) {
-        return true;
-    }
-    return false;
+    return muse::contains(m_engravingFonts, muse::strings::toLower(fontName));
 }
 
 EvpuFloat FinaleParser::evpuAugmentationDotWidth() const
 {
     EvpuFloat result = m_score->engravingFont()->width(SymId::augmentationDot, m_score->style().styleD(Sid::dotMag));
     return result * (EVPU_PER_SPACE / SPATIUM20);
-}
-
-static uint16_t museFontEfx(const FontInfo* fontInfo)
-{
-    uint16_t retval = 0;
-
-    if (fontInfo->bold) { retval |= uint16_t(FontStyle::Bold); }
-    if (fontInfo->italic) { retval |= uint16_t(FontStyle::Italic); }
-    if (fontInfo->underline) { retval |= uint16_t(FontStyle::Underline); }
-    if (fontInfo->strikeout) { retval |= uint16_t(FontStyle::Strike); }
-
-    return retval;
 }
 
 static double museMagVal(const FinaleParser& context, const options::FontOptions::FontType type)
@@ -186,12 +177,17 @@ static void writeEvpuPointF(MStyle& style, Sid sid, Evpu xEvpu, Evpu yEvpu)
     style.set(sid, evpuToPointF(xEvpu, yEvpu));
 }
 
+static void writeEvpuInch(MStyle& style, Sid sid, Evpu evpu)
+{
+    style.set(sid, double(evpu) / EVPU_PER_INCH);
+}
+
 static void writeFontPref(MStyle& style, const std::string& namePrefix, const MusxInstance<FontInfo>& fontInfo)
 {
     style.set(styleIdx(namePrefix + "FontFace"), String::fromStdString(fontInfo->getName()));
     style.set(styleIdx(namePrefix + "FontSize"), spatiumScaledFontSize(fontInfo));
     style.set(styleIdx(namePrefix + "FontSpatiumDependent"), !fontInfo->absolute);
-    style.set(styleIdx(namePrefix + "FontStyle"), museFontEfx(fontInfo.get()));
+    style.set(styleIdx(namePrefix + "FontStyle"), int(FinaleTextConv::museFontEfx(fontInfo)));
 }
 
 static void writeDefaultFontPref(MStyle& style, const FinaleParser& context, const std::string& namePrefix, options::FontOptions::FontType type)
@@ -199,18 +195,18 @@ static void writeDefaultFontPref(MStyle& style, const FinaleParser& context, con
     if (auto fontPrefs = options::FontOptions::getFontInfo(context.musxDocument(), type)) {
         writeFontPref(style, namePrefix, fontPrefs);
     } else {
-        context.logger()->logWarning(String::fromStdString("unable to load default font info for type " + std::to_string(int(type))));
+        context.logger()->logWarning(String::fromStdString("unable to load default font info for %1 FontType").arg(int(type)));
     }
 }
 
 void writeLinePrefs(MStyle& style, const std::string& namePrefix, double widthEfix, double dashLength,
                     double dashGap, const std::optional<LineType>& lineStyle = std::nullopt)
 {
-    const double lineWidthEvpu = widthEfix / EFIX_PER_EVPU;
-    style.set(styleIdx(namePrefix + "LineWidth"), widthEfix / EFIX_PER_SPACE);
-    if (lineStyle) {
+    writeEfixSpace(style, styleIdx(namePrefix + "LineWidth"), widthEfix);
+    if (lineStyle.has_value()) {
         style.set(styleIdx(namePrefix + "LineStyle"), lineStyle.value());
     }
+    const double lineWidthEvpu = widthEfix / EFIX_PER_EVPU;
     style.set(styleIdx(namePrefix + "DashLineLen"), dashLength / lineWidthEvpu);
     style.set(styleIdx(namePrefix + "DashGapLen"), dashGap / lineWidthEvpu);
 }
@@ -220,14 +216,14 @@ static void writeFramePrefs(MStyle& style, const std::string& namePrefix, const 
     FrameSettings settings = FrameSettings(enclosure);
     style.set(styleIdx(namePrefix + "FrameType"), int(settings.frameType));
 
-    if (frameType == FrameType::NO_FRAME) {
+    if (settings.frameType == FrameType::NO_FRAME) {
         // Do not override any other defaults if no enclosure
         return;
     }
 
     style.set(styleIdx(namePrefix + "FrameWidth"), settings.frameWidth);
     style.set(styleIdx(namePrefix + "FramePadding"), settings.paddingWidth);
-    style.set(styleIdx(namePrefix + "FrameRound"), settings.frameRound)
+    style.set(styleIdx(namePrefix + "FrameRound"), settings.frameRound);
 }
 
 static void writeCategoryTextFontPref(MStyle& style, const FinaleParser& context, const std::string& namePrefix, others::MarkingCategory::CategoryType categoryType)
@@ -257,19 +253,26 @@ static void writePagePrefs(MStyle& style, const FinaleParser& context)
     const auto& prefs = context.musxOptions();
     const auto& pagePrefs = prefs.pageFormat;
 
-    style.set(Sid::pageWidth, double(pagePrefs->pageWidth) / EVPU_PER_INCH);
-    style.set(Sid::pageHeight, double(pagePrefs->pageHeight) / EVPU_PER_INCH);
-    style.set(Sid::pagePrintableWidth,
-               double(pagePrefs->pageWidth - pagePrefs->leftPageMarginLeft + pagePrefs->leftPageMarginRight) / EVPU_PER_INCH);
-    style.set(Sid::pageEvenLeftMargin, pagePrefs->leftPageMarginLeft / EVPU_PER_INCH);
-    style.set(Sid::pageOddLeftMargin,
-               double(pagePrefs->facingPages ? pagePrefs->rightPageMarginLeft : pagePrefs->leftPageMarginLeft) / EVPU_PER_INCH);
-    style.set(Sid::pageEvenTopMargin, double(-pagePrefs->leftPageMarginTop) / EVPU_PER_INCH);
-    style.set(Sid::pageEvenBottomMargin, double(pagePrefs->leftPageMarginBottom) / EVPU_PER_INCH);
-    style.set(Sid::pageOddTopMargin,
-               double(pagePrefs->facingPages ? -pagePrefs->rightPageMarginTop : -pagePrefs->leftPageMarginTop) / EVPU_PER_INCH);
-    style.set(Sid::pageOddBottomMargin,
-               double(pagePrefs->facingPages ? pagePrefs->rightPageMarginBottom : pagePrefs->leftPageMarginBottom) / EVPU_PER_INCH);
+    writeEvpuInch(style, Sid::pageWidth, pagePrefs->pageWidth);
+    writeEvpuInch(style, Sid::pageHeight, pagePrefs->pageHeight);
+    writeEvpuInch(style, Sid::pagePrintableWidth,
+                  pagePrefs->pageWidth - pagePrefs->leftPageMarginLeft + pagePrefs->leftPageMarginRight);
+    writeEvpuInch(style, Sid::pageEvenLeftMargin, pagePrefs->leftPageMarginLeft);
+    writeEvpuInch(style, Sid::pageEvenTopMargin, -pagePrefs->leftPageMarginTop);
+    writeEvpuInch(style, Sid::pageEvenBottomMargin, pagePrefs->leftPageMarginBottom);
+    if (pagePrefs->facingPages) {
+        writeEvpuInch(style, Sid::pageOddLeftMargin, pagePrefs->rightPageMarginLeft);
+        writeEvpuInch(style, Sid::pageOddTopMargin, -pagePrefs->rightPageMarginTop);
+        writeEvpuInch(style, Sid::pageOddBottomMargin, pagePrefs->rightPageMarginBottom);
+    } else {
+        for (auto [odd, even] : {
+             std::make_pair(Sid::pageOddLeftMargin, Sid::pageEvenLeftMargin),
+             std::make_pair(Sid::pageOddTopMargin, Sid::pageEvenTopMargin),
+             std::make_pair(Sid::pageEvenBottomMargin, Sid::pageEvenBottomMargin)
+         }) {
+             style.set(odd, style.styleD(even));
+        }
+    }
     style.set(Sid::pageTwosided, pagePrefs->facingPages);
     style.set(Sid::enableIndentationOnFirstSystem, pagePrefs->differentFirstSysMargin);
     writeEvpuSpace(style, Sid::firstSystemIndentationValue, pagePrefs->firstSysMarginLeft);
@@ -288,10 +291,8 @@ static void writePagePrefs(MStyle& style, const FinaleParser& context)
     }
 
     // Default music font
-    if (!prefs.calculatedEngravingFontName.empty()) {
-        style.set(Sid::musicalSymbolFont, prefs.calculatedEngravingFontName);
-        style.set(Sid::musicalTextFont, prefs.calculatedEngravingFontName + " Text");
-    }
+    style.set(Sid::musicalSymbolFont, prefs.calculatedEngravingFontName);
+    style.set(Sid::musicalTextFont, prefs.calculatedEngravingFontName + " Text"); // Perhaps this should be more sophisticated
 }
 
 static void writeLyricsPrefs(MStyle& style, const FinaleParser& context)
@@ -493,53 +494,30 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
         style.set(Sid::measureNumberInterval, scorePart->incidence);
         style.set(Sid::measureNumberSystem, scorePart->showOnStart && !scorePart->showOnEvery);
 
-        auto justificationAlign = [](MeasureNumberRegion::AlignJustify justi) -> Align {
-            switch (justi) {
-            default:
-            case MeasureNumberRegion::AlignJustify::Left: return Align(AlignH::LEFT, AlignV::BASELINE);
-            case MeasureNumberRegion::AlignJustify::Center: return Align(AlignH::HCENTER, AlignV::BASELINE);
-            case MeasureNumberRegion::AlignJustify::Right: return Align(AlignH::RIGHT, AlignV::BASELINE);
-            }
-        };
-
-        auto horizontalAlignment = [](MeasureNumberRegion::AlignJustify align) -> AlignH {
-            switch (align) {
-            default:
-            case MeasureNumberRegion::AlignJustify::Left: return AlignH::LEFT;
-            case MeasureNumberRegion::AlignJustify::Center: return AlignH::HCENTER;
-            case MeasureNumberRegion::AlignJustify::Right: return AlignH::RIGHT;
-            }
-        };
-
-        auto verticalAlignment = [](Evpu vertical) -> PlacementV {
-            return (vertical >= 0) ? PlacementV::ABOVE : PlacementV::BELOW;
-        };
-
         auto processSegment = [&](const MusxInstance<FontInfo>& fontInfo,
-                                  const MusxInstance<others::Enclosure>& enclosure,
-                                  bool useEnclosure,
+                                  const others::Enclosure* enclosure,
                                   MeasureNumberRegion::AlignJustify justification,
                                   MeasureNumberRegion::AlignJustify alignment,
                                   Evpu vertical,
                                   const std::string& prefix)
         {
             writeFontPref(style, prefix, fontInfo);
-            style.set(styleIdx(prefix + "VPlacement"), verticalAlignment(vertical));
-            style.set(styleIdx(prefix + "HPlacement"), horizontalAlignment(alignment));
-            style.set(styleIdx(prefix + "Align"), justificationAlign(justification));
-            writeFramePrefs(style, prefix, useEnclosure ? enclosure.get() : nullptr);
+            style.set(styleIdx(prefix + "VPlacement"), (vertical >= 0) ? PlacementV::ABOVE : PlacementV::BELOW);
+            style.set(styleIdx(prefix + "HPlacement"), toAlignH(alignment));
+            style.set(styleIdx(prefix + "Align"), Align(toAlignH(justification), AlignV::BASELINE));
+            writeFramePrefs(style, prefix, enclosure);
         };
 
         // Determine source for primary segment
-        auto fontInfo       = scorePart->showOnStart ? scorePart->startFont         : scorePart->multipleFont;
-        auto enclosure      = scorePart->showOnStart ? scorePart->startEnclosure    : scorePart->multipleEnclosure;
-        auto useEnclosure   = scorePart->showOnStart ? scorePart->useStartEncl      : scorePart->useMultipleEncl;
-        auto justification  = scorePart->showOnEvery ? scorePart->multipleJustify   : scorePart->startJustify;
-        auto alignment      = scorePart->showOnEvery ? scorePart->multipleAlign     : scorePart->startAlign;
-        auto vertical       = scorePart->showOnStart ? scorePart->startYdisp        : scorePart->multipleYdisp;
+        auto fontInfo      = scorePart->showOnStart ? scorePart->startFont       : scorePart->multipleFont;
+        auto enclosure     = scorePart->showOnStart ? scorePart->startEnclosure  : scorePart->multipleEnclosure;
+        auto useEnclosure  = scorePart->showOnStart ? scorePart->useStartEncl    : scorePart->useMultipleEncl;
+        auto justification = scorePart->showOnEvery ? scorePart->multipleJustify : scorePart->startJustify;
+        auto alignment     = scorePart->showOnEvery ? scorePart->multipleAlign   : scorePart->startAlign;
+        auto vertical      = scorePart->showOnStart ? scorePart->startYdisp      : scorePart->multipleYdisp;
 
         style.set(Sid::measureNumberOffsetType, int(OffsetType::SPATIUM)); // Hardcoded offset type
-        processSegment(fontInfo, enclosure, useEnclosure, justification, alignment, vertical, "measureNumber");
+        processSegment(fontInfo, useEnclosure ? enclosure.get() : nullptr, justification, alignment, vertical, "measureNumber");
 
         style.set(Sid::mmRestShowMeasureNumberRange, scorePart->showMmRange);
         if (scorePart->leftMmBracketChar == 0) {
@@ -550,7 +528,7 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
             style.set(Sid::mmRestRangeBracketType, int(MMRestRangeBracketType::BRACKETS));
         }
 
-        processSegment(scorePart->mmRestFont, scorePart->multipleEnclosure, scorePart->useMultipleEncl,
+        processSegment(scorePart->mmRestFont, scorePart->useMultipleEncl ? scorePart->multipleEnclosure.get() : nullptr,
                        scorePart->mmRestJustify, scorePart->mmRestAlign, scorePart->mmRestYdisp, "mmRestRange");
     }
 
@@ -578,6 +556,8 @@ void writeRepeatEndingPrefs(MStyle& style, const FinaleParser& context)
     writeEvpuPointF(style, Sid::voltaOffset, prefs.repeatOptions->bracketTextHPos,
                     prefs.repeatOptions->bracketHookLen - prefs.repeatOptions->bracketTextHPos);
     // style.set(Sid::voltaAlignStartBeforeKeySig, false);
+    // This option actually moves the front of the volta after the repeat forwards.
+    // Finale only has the option to move the end of the volta before the repeat backwards, so we leave this unset.
     // style.set(Sid::voltaAlignEndLeftOfBarline, false);
 }
 
@@ -595,6 +575,11 @@ void writeTupletPrefs(MStyle& style, const FinaleParser& context)
     writeEvpuSpace(style, Sid::tupletNoteLeftDistance, tupletOptions->leftHookExt);
     writeEvpuSpace(style, Sid::tupletNoteRightDistance, tupletOptions->rightHookExt);
     writeEfixSpace(style, Sid::tupletBracketWidth, tupletOptions->tupLineWidth);
+
+    // manualSlopeAdj does not translate well, so else leave value as default
+    if (tupletOptions->alwaysFlat) {
+        style.set(Sid::tupletMaxSlope, 0.0);
+    }
 
     switch (tupletOptions->posStyle) {
     case TupletOptions::PositioningStyle::Above:
@@ -633,7 +618,7 @@ void writeTupletPrefs(MStyle& style, const FinaleParser& context)
     }
 
     writeEvpuSpace(style, Sid::tupletBracketHookHeight,
-                (std::max)(-tupletOptions->leftHookLen, -tupletOptions->rightHookLen)); /// or use average
+                -(std::max)(tupletOptions->leftHookLen, tupletOptions->rightHookLen)); /// or use average
 }
 
 void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
@@ -653,7 +638,7 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
         if (override) {
             style.set(Sid::dynamicsFont, String::fromStdString(catFontInfo->getName()));
             style.set(Sid::dynamicsSize, double(catFontInfo->fontSize) / double(prefs.defaultMusicFont->fontSize));
-        } else if (!prefs.calculatedEngravingFontName.empty()) {
+        } else {
             style.set(Sid::dynamicsFont, prefs.calculatedEngravingFontName);
             style.set(Sid::dynamicsSize, double(catFontInfo->fontSize) / double(prefs.defaultMusicFont->fontSize));
         }
