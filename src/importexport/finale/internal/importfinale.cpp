@@ -112,7 +112,11 @@ Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data, MusxEmbeddedGraphi
         FinaleParser parser(score, doc, std::move(graphics), logger);
         parser.parse();
 
-        score->setUpTempoMap(); //??
+        /// @todo see which are needed
+        score->connectTies();
+        score->setUpTempoMap();
+        score->setPlaylistDirty();
+        score->setLayoutAll();
         return Err::NoError;
     } catch (const std::exception& ex) {
         logger->logError(String::fromUtf8(ex.what()));
