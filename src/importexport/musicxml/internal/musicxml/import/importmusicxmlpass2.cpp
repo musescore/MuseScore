@@ -7727,6 +7727,14 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
     }
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "root") {
+            if (info->rootTpc() != Tpc::TPC_INVALID) {
+                const ChordDescription* d = harmonyFromXml(info, m_score, kind, kindText, symbols, parens, degreeList);
+                info->setId(d->id);
+                info->setTextName(d->names.front());
+                ha->addChord(info);
+                degreeList.clear();
+                info = new HarmonyInfo(m_score);
+            }
             String step;
             int alter = 0;
             bool invalidRoot = false;
