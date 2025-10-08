@@ -35,6 +35,7 @@
 #include <QMimeData>
 #include <QResizeEvent>
 #include <QToolTip>
+#include <QWindow>
 
 #include "translation.h"
 #include "types/bytearray.h"
