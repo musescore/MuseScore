@@ -660,6 +660,10 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
         }
     }
 
+    if (auto tabFretNumFont = options::FontOptions::getFontInfo(context.musxDocument(), FontType::Tablature)) {
+        writeFontPref(style, "tabFretNumber", tabFretNumFont);
+    }
+
     auto textBlockFont = options::FontOptions::getFontInfo(context.musxDocument(), FontType::TextBlock);
     if (!textBlockFont) {
         throw std::invalid_argument("unable to find font prefs for Text Blocks");
