@@ -102,12 +102,12 @@ bool EngravingProject::readOnly() const
     return m_masterScore->readOnly();
 }
 
-Ret EngravingProject::setupMasterScore(bool forceMode)
+void EngravingProject::setMasterScore(MasterScore* score)
 {
-    return doSetupMasterScore(forceMode);
+    m_masterScore = score;
 }
 
-Ret EngravingProject::doSetupMasterScore(bool forceMode)
+Ret EngravingProject::setupMasterScore(bool forceMode)
 {
     TRACEFUNC;
 

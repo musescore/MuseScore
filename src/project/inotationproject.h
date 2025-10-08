@@ -46,8 +46,9 @@ public:
     virtual muse::async::Notification displayNameChanged() const = 0;
 
     virtual muse::Ret load(const muse::io::path_t& path,
-                           const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
+                           const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false, bool unrollRepeats = false,
                            const std::string& format = "") = 0;
+
     virtual muse::Ret createNew(const ProjectCreateOptions& projectInfo) = 0;
 
     virtual bool isCloudProject() const = 0;
