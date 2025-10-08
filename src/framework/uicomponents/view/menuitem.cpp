@@ -86,7 +86,7 @@ MenuItemList MenuItem::subitems() const
     return m_subitems;
 }
 
-UiAction MenuItem::action() const
+const UiAction& MenuItem::action() const
 {
     return m_action;
 }
@@ -113,12 +113,12 @@ bool MenuItem::isValid() const
 
 QString MenuItem::shortcutsTitle() const
 {
-    return shortcuts::sequencesToNativeText(m_action.shortcuts);
+    return shortcuts::sequencesToNativeText(m_shortcuts);
 }
 
 QString MenuItem::portableShortcuts() const
 {
-    return QString::fromStdString(shortcuts::Shortcut::sequencesToString(m_action.shortcuts));
+    return QString::fromStdString(shortcuts::Shortcut::sequencesToString(m_shortcuts));
 }
 
 void MenuItem::setId(const QString& id)
@@ -229,6 +229,16 @@ void MenuItem::setAction(const UiAction& action)
 
     m_action = action;
     emit actionChanged();
+}
+
+void MenuItem::setShortcuts(const std::vector<std::string>& shortcuts)
+{
+    if (m_shortcuts == shortcuts) {
+        return;
+    }
+
+    m_shortcuts = shortcuts;
+    emit shortcutsChanged();
 }
 
 void MenuItem::setArgs(const muse::actions::ActionData& args)

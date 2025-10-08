@@ -151,6 +151,8 @@ void AbstractToolBarModel::setItems(const ToolBarItemList& items)
         m_items << item;
     }
 
+    updateShortcutsAll();
+
     endResetModel();
 
     emit itemsChanged();
@@ -190,7 +192,7 @@ ToolBarItem& AbstractToolBarModel::findItem(const ActionCode& actionCode)
 
 ToolBarItem* AbstractToolBarModel::findItemPtr(const actions::ActionCode& actionCode)
 {
-    for (ToolBarItem* toolBarItem : m_items) {
+    for (ToolBarItem* toolBarItem : std::as_const(m_items)) {
         if (toolBarItem->action().code == actionCode) {
             return toolBarItem;
         }
@@ -206,7 +208,7 @@ ToolBarItem& AbstractToolBarModel::findItem(const QString& itemId)
 
 ToolBarItem* AbstractToolBarModel::findItemPtr(const QString& itemId)
 {
-    for (ToolBarItem* toolBarItem : m_items) {
+    for (ToolBarItem* toolBarItem : std::as_const(m_items)) {
         if (toolBarItem->id() == itemId) {
             return toolBarItem;
         }
@@ -329,16 +331,15 @@ ToolBarItem& AbstractToolBarModel::item(const ToolBarItemList& items, const Acti
 
 void AbstractToolBarModel::updateShortcutsAll()
 {
-    for (ToolBarItem* toolBarItem : m_items) {
+    for (ToolBarItem* toolBarItem : std::as_const(m_items)) {
         if (!toolBarItem) {
             continue;
         }
 
-        UiAction action = toolBarItem->action();
-        action.shortcuts = shortcutsRegister()->shortcut(action.code).sequences;
-        toolBarItem->setAction(action);
+        std::vector<std::string> shortcuts = shortcutsRegister()->shortcut(toolBarItem->action().code).sequences;
+        toolBarItem->setShortcuts(shortcuts);
 
-        for (MenuItem* menuItem : toolBarItem->menuItems()) {
+        for (MenuItem* menuItem : std::as_const(toolBarItem->menuItems())) {
             if (!menuItem) {
                 continue;
             }
@@ -350,9 +351,8 @@ void AbstractToolBarModel::updateShortcutsAll()
 
 void AbstractToolBarModel::updateShortcuts(MenuItem* menuItem)
 {
-    UiAction action = menuItem->action();
-    action.shortcuts = shortcutsRegister()->shortcut(action.code).sequences;
-    menuItem->setAction(action);
+    std::vector<std::string> shortcuts = shortcutsRegister()->shortcut(menuItem->action().code).sequences;
+    menuItem->setShortcuts(shortcuts);
 
     for (MenuItem* subItem : menuItem->subitems()) {
         if (!subItem) {

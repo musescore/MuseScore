@@ -82,12 +82,12 @@ ToolBarItemType::Type ToolBarItem::type() const
     return m_type;
 }
 
-QList<MenuItem*> ToolBarItem::menuItems() const
+const QList<MenuItem*>& ToolBarItem::menuItems() const
 {
     return m_menuItems;
 }
 
-UiAction ToolBarItem::action() const
+const UiAction& ToolBarItem::action() const
 {
     return m_action;
 }
@@ -104,7 +104,7 @@ bool ToolBarItem::isValid() const
 
 QString ToolBarItem::shortcutsTitle() const
 {
-    return shortcuts::sequencesToNativeText(m_action.shortcuts);
+    return shortcuts::sequencesToNativeText(m_shortcuts);
 }
 
 void ToolBarItem::setId(const QString& id)
@@ -185,6 +185,16 @@ void ToolBarItem::setAction(const UiAction& action)
 
     m_action = action;
     emit actionChanged();
+}
+
+void ToolBarItem::setShortcuts(const std::vector<std::string>& shortcuts)
+{
+    if (m_shortcuts == shortcuts) {
+        return;
+    }
+
+    m_shortcuts = shortcuts;
+    emit shortcutsChanged();
 }
 
 void ToolBarItem::setArgs(const muse::actions::ActionData& args)

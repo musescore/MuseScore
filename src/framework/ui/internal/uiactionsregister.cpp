@@ -38,18 +38,10 @@ void UiActionsRegister::init()
     updateCheckedAll();
     updateEnabledAll();
 
-    updateShortcutsAll();
-
     // listen
     if (uicontextResolver()) {
         uicontextResolver()->currentUiContextChanged().onNotify(this, [this]() {
             requestUpdateEnabledAll();
-        });
-    }
-
-    if (shortcutsRegister()) {
-        shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
-            updateShortcutsAll();
         });
     }
 }
@@ -69,7 +61,6 @@ void UiActionsRegister::reg(const IUiActionsModulePtr& module)
 
     updateEnabled(newActionCodeList);
     updateChecked(newActionCodeList);
-    updateShortcuts(newActionCodeList);
 
     module->actionsChanged().onReceive(this, [this](const UiActionList& actions) {
         updateActions(actions);
@@ -147,38 +138,6 @@ UiActionState UiActionsRegister::actionState(const ActionCode& code) const
     }
 
     return inf.state;
-}
-
-void UiActionsRegister::updateShortcuts(const ActionCodeList& codes)
-{
-    if (!shortcutsRegister()) {
-        return;
-    }
-
-    auto screg = shortcutsRegister();
-    for (const ActionCode& code : codes) {
-        Info& inf = info(code);
-        if (!inf.isValid()) {
-            continue;
-        }
-
-        inf.action.shortcuts = screg->shortcut(inf.action.code).sequences;
-    }
-}
-
-void UiActionsRegister::updateShortcutsAll()
-{
-    TRACEFUNC;
-
-    if (!shortcutsRegister()) {
-        return;
-    }
-
-    auto screg = shortcutsRegister();
-    for (auto it = m_actions.begin(); it != m_actions.end(); ++it) {
-        Info& inf = it->second;
-        inf.action.shortcuts = screg->shortcut(inf.action.code).sequences;
-    }
 }
 
 void UiActionsRegister::updateActions(const UiActionList& actions)
