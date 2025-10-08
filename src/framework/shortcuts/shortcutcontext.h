@@ -31,6 +31,7 @@ namespace muse::shortcuts {
 //! which do not depend on the specifics of the application.
 //! Application-specific UI contexts are declared in the `context/shortcutcontext.h` file
 
+static const std::string CTX_DISABLED("disabled");
 static const std::string CTX_ANY("any");
 static const std::string CTX_PROJECT_OPENED("project-opened");
 static const std::string CTX_PROJECT_FOCUSED("project-focused");
