@@ -121,6 +121,7 @@ struct FontTracker
         return fontName == src.fontName && muse::RealIsEqual(fontSize, src.fontSize)
                && fontStyle == src.fontStyle && spatiumIndependent == src.spatiumIndependent;
     }
+    bool operator!=(const FontTracker& src) const { return !(*this == src); }
 };
 
 struct EnigmaParsingOptions

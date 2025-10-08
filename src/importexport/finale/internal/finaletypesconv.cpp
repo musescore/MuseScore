@@ -1247,19 +1247,17 @@ std::pair<int, int> hookHeightsFromShapeType(musx::dom::others::SmartShape::Shap
     return muse::value(shapeTypeTable, shapeType, { 0, 0 });
 }
 
-String fontStyleSuffixFromCategoryType(musx::dom::others::MarkingCategory::CategoryType categoryType)
+String fontStyleSuffixFromElementType(ElementType elementType)
 {
-    using CategoryType = musx::dom::others::MarkingCategory::CategoryType;
-    /// @note Any changes to this list should also be reflected in `writeMarkingPrefs` in importfinalestyles.cpp
-    static const std::unordered_map<CategoryType, std::string_view> categoryTypeTable = {
-        { CategoryType::Dynamics, "dynamics" },
-        { CategoryType::ExpressiveText, "expression" },
-        { CategoryType::TempoMarks, "tempo" },
-        { CategoryType::TempoAlterations, "tempoChange" },
-        { CategoryType::TechniqueText, "staffText" },
-        { CategoryType::RehearsalMarks, "rehearsalMark" },
+    static const std::unordered_map<ElementType, std::string_view> elementTypeTable = {
+        { ElementType::DYNAMIC, "dynamics" },
+        { ElementType::EXPRESSION, "expression" },
+        { ElementType::TEMPO_TEXT, "tempo" },
+//        { ElementType::TEMPO_TEXT, "tempoChange" }, // maybe add "tempoChange" back if we switch to TextStyleType
+        { ElementType::STAFF_TEXT, "staffText" },
+        { ElementType::REHEARSAL_MARK, "rehearsalMark" },
     };
-    return String::fromUtf8(muse::value(categoryTypeTable, categoryType, "default"));
+    return String::fromUtf8(muse::value(elementTypeTable, elementType, "default"));
 }
 
 TremoloType tremoloTypeFromSymId(SymId sym)
