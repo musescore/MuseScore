@@ -96,7 +96,7 @@ void StartAudioController::init()
     });
 
 #ifndef Q_OS_WASM
-#ifdef MUSE_MODULE_AUDIO_WORKER
+#ifdef MUSE_MODULE_AUDIO_WORKER_ENABLED
     m_worker = std::make_shared<engine::GeneralAudioWorker>();
     m_worker->run([this]() {
         static bool once = false;
@@ -151,7 +151,7 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
         auto samplesPerChannel = byteCount / (2 * sizeof(float));
         float* dest = reinterpret_cast<float*>(stream);
 
-#ifdef MUSE_MODULE_AUDIO_WORKER
+#ifdef MUSE_MODULE_AUDIO_WORKER_ENABLED
         m_engineController->popAudioData(dest, samplesPerChannel);
 #else
         static bool once = false;
