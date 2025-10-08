@@ -456,6 +456,21 @@ void ExportDialogModel::setPngTransparentBackground(const bool& transparent)
     emit pngTransparentBackgroundChanged(transparent);
 }
 
+bool ExportDialogModel::pngGrayscale() const
+{
+    return imageExportConfiguration()->exportPngWithGrayscale();
+}
+
+void ExportDialogModel::setPngGrayscale(const bool& grayscale)
+{
+    if (grayscale == pngGrayscale()) {
+        return;
+    }
+
+    imageExportConfiguration()->setExportPngWithGrayscale(grayscale);
+    emit pngGrayscaleChanged(grayscale);
+}
+
 bool ExportDialogModel::svgTransparentBackground() const
 {
     return imageExportConfiguration()->exportSvgWithTransparentBackground();

@@ -69,6 +69,21 @@ ExportSettingsPage {
         }
     }
 
+     CheckBox {
+        width: parent.width
+        text: qsTrc("project/export", "Grayscale")
+
+        navigation.name: "GrayscaleCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 3
+
+        checked: root.model.pngGrayscale
+
+        onClicked: {
+            root.model.pngGrayscale = !checked
+        }
+    }
+    
     StyledTextLabel {
         width: parent.width
         text: qsTrc("project/export", "Each page of the selected parts will be exported as a separate %1 file.").arg("PNG")
