@@ -83,10 +83,6 @@
       <seq>Space</seq>
       <autorepeat>0</autorepeat>
     </SC>
-    <SC>
-      <key>nav-escape</key>
-      <seq>Esc</seq>
-    </SC>
 <!-- end Keyboard navigation -->
 
 <!-- Global actions -->

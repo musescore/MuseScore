@@ -82,7 +82,7 @@ const UiActionList NavigationUiActions::m_actions = {
              ),
     UiAction("nav-escape",
              ui::UiCtxAny,
-             NAVIGATION_SHORTCUTS_CTX
+             muse::shortcuts::CTX_DISABLED
              ),
     UiAction("nav-trigger-control",
              ui::UiCtxAny,
