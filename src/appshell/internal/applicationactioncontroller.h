@@ -40,6 +40,7 @@
 #include "iapplication.h"
 #include "extensions/iextensioninstaller.h"
 #include "context/iglobalcontext.h"
+#include "context/iuicontextresolver.h"
 
 class QDragEnterEvent;
 class QDragMoveEvent;
@@ -61,6 +62,7 @@ class ApplicationActionController : public QObject, public muse::Injectable, pub
     muse::Inject<muse::IApplication> application = { this };
     muse::Inject<muse::extensions::IExtensionInstaller> extensionInstaller = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<context::IUiContextResolver> uiContextResolver = { this };
 
 public:
     ApplicationActionController(const muse::modularity::ContextPtr& iocCtx)
@@ -103,6 +105,15 @@ private:
     void doOpenPreferencesDialog();
 
     void revertToFactorySettings();
+
+    bool hasProjectAndIsFocused() const;
+    void doGlobalCopy();
+    void doGlobalCut();
+    void doGlobalPaste();
+    void doGlobalUndo();
+    void doGlobalRedo();
+    void doGlobalDelete();
+    void doGlobalCancel();
 
     bool m_quiting = false;
 
