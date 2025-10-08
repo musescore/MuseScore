@@ -307,12 +307,15 @@ void FinaleParser::importTextExpressions()
     };
 
     // Layout score (needed for offset calculations)
+    logger()->logInfo(String(u"Laying out score before importing text..."));
     m_score->setLayoutAll();
     m_score->doLayout();
 
     // 1st: map all expressions to strings
     std::unordered_map<Cmper, ReadableExpression> mappedExpressions;
-    for (const auto& textExpression : m_doc->getOthers()->getArray<others::TextExpressionDef>(m_currentMusxPartId)) {
+    const MusxInstanceList<others::TextExpressionDef> textExpressions = m_doc->getOthers()->getArray<others::TextExpressionDef>(m_currentMusxPartId);
+    logger()->logInfo(String(u"Converting library of %1 text expressions.").arg(textExpressions.size())); /// @todo switch to smartshape model: only convert used texts
+    for (const auto& textExpression : textExpressions) {
         ReadableExpression readableExpression;
         /// @todo Rather than rely only on marking category, it probably makes more sense to interpret the playback features to detect what kind of marking
         /// this is. Or perhaps a combination of both. This would provide better support to legacy files whose expressions are all Misc.
@@ -411,12 +414,15 @@ void FinaleParser::importTextExpressions()
             };
             return muse::value(categoryTypeTable, categoryType, ElementType::STAFF_TEXT);
         }();
+        logger()->logInfo(String(u"Converted expression of %1 type").arg(TConv::userName(readableExpression.elementType).translated()));
         readableExpression.frameSettings = FrameSettings(textExpression->getEnclosure().get());
         mappedExpressions.emplace(textExpression->getCmper(), readableExpression);
     }
 
     // 2nd: iterate each expression assignment and assign the mapped String instances as needed
-    for (const auto& expressionAssignment : m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId)) {
+    const MusxInstanceList<others::MeasureExprAssign> expressionAssignments = m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId);
+    logger()->logInfo(String(u"Import text expressions: Found %1 expressions.").arg(expressionAssignments.size()));
+    for (const auto& expressionAssignment : expressionAssignments) {
         if (!expressionAssignment->textExprId) {
             // Shapes are currently unsupported
             continue;
@@ -459,6 +465,7 @@ void FinaleParser::importTextExpressions()
         }
 
         // Create item
+        logger()->logInfo(String(u"Creating a %1 at tick %2 on track %3.").arg(TConv::userName(elementType).translated(), s->tick().toString(), String::number(curTrackIdx)));
         TextBase* item = toTextBase(Factory::createItem(elementType, s));
         const MusxInstance<others::TextExpressionDef> expressionDef = expressionAssignment->getTextExpression();
         item->setTrack(curTrackIdx);
