@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONUIACTIONS_H
-#define MU_NOTATION_NOTATIONUIACTIONS_H
+#pragma once
 
 #include "ui/iuiactionsmodule.h"
 #include "notationtypes.h"
@@ -60,9 +59,12 @@ public:
     static const muse::ui::ToolConfig& defaultNoteInputBarConfig();
 
 private:
-    static const muse::ui::UiActionList m_actions;
-    static const muse::ui::UiActionList m_scoreConfigActions;
-    static const muse::ui::UiActionList m_engravingDebuggingActions;
+    static const muse::ui::UiActionList s_actions;
+    static const muse::ui::UiActionList s_undoRedoActions;
+    static const muse::ui::UiActionList s_scoreConfigActions;
+    static const muse::ui::UiActionList s_engravingDebuggingActions;
+
+    void updateActionsEnabled(const muse::ui::UiActionList& actions);
 
     bool isScoreConfigAction(const muse::actions::ActionCode& code) const;
     bool isScoreConfigChecked(const muse::actions::ActionCode& code, const ScoreConfig& cfg) const;
@@ -70,7 +72,7 @@ private:
     std::shared_ptr<NotationActionController> m_controller;
     muse::async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;
     muse::async::Channel<muse::actions::ActionCodeList> m_actionCheckedChanged;
+
+    std::unordered_map<muse::actions::ActionCode, bool> m_actionEnabledMap;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONUIACTIONS_H
