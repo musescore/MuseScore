@@ -194,17 +194,7 @@ static ContiniousElementsBuilder::ImportType hairpinToImportType(GPBeat::Hairpin
 
 static void setPitchByOttavaType(mu::engraving::Note* note, mu::engraving::OttavaType type)
 {
-    int pitch = note->pitch();
-
-    if (type == mu::engraving::OttavaType::OTTAVA_8VA) {
-        note->setPitch((pitch - 12 > 0) ? pitch - 12 : pitch);
-    } else if (type == mu::engraving::OttavaType::OTTAVA_8VB) {
-        note->setPitch((pitch + 12 < 127) ? pitch + 12 : pitch);
-    } else if (type == mu::engraving::OttavaType::OTTAVA_15MA) {
-        note->setPitch((pitch - 24 > 0) ? pitch - 24 : (pitch - 12 > 0 ? pitch - 12 : pitch));
-    } else if (type == mu::engraving::OttavaType::OTTAVA_15MB) {
-        note->setPitch((pitch + 24 < 127) ? pitch + 24 : ((pitch + 12 < 127) ? pitch + 12 : pitch));
-    }
+    note->setPitch(clampPitch(note->pitch() - ottavaDefault[int(type)].shift, true));
 }
 
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom, const muse::modularity::ContextPtr& iocCtx)

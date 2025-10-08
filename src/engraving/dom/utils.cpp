@@ -424,23 +424,12 @@ int y2pitch(double y, ClefType clef, double _spatium)
 
 int line2pitch(int line, ClefType clef, Key key)
 {
-    int l      = ClefInfo::pitchOffset(clef) - line;
-    int octave = 0;
-    if (l < 0) {
-        l = 0;
-    }
+    int l = std::max(ClefInfo::pitchOffset(clef) - line, 0);
+    int octave = l / STEP_DELTA_OCTAVE;
+    l %= STEP_DELTA_OCTAVE;
 
-    octave += l / 7;
-    l       = l % 7;
-
-    int pitch = pitchKeyAdjust(l, key) + octave * 12;
-
-    if (pitch > 127) {
-        pitch = 127;
-    } else if (pitch < 0) {
-        pitch = 0;
-    }
-    return pitch;
+    int pitch = pitchKeyAdjust(l, key) + octave * PITCH_DELTA_OCTAVE;
+    return clampPitch(pitch);
 }
 
 //---------------------------------------------------------
@@ -498,7 +487,7 @@ static const char16_t* valFlat[] = {
  */
 String pitch2string(int v, bool useFlats)
 {
-    if (v < 0 || v > 127) {
+    if (!pitchIsValid(v)) {
         return String(u"----");
     }
     int octave = (v / PITCH_DELTA_OCTAVE) - 1;
@@ -526,7 +515,7 @@ String pitch2string(int v, bool useFlats)
 int string2pitch(const String& s)
 {
     if (s == String(u"----")) {
-        return -1;
+        return INVALID_PITCH;
     }
 
     String value = s;
@@ -678,96 +667,6 @@ int searchInterval(int steps, int semitones)
 }
 
 //---------------------------------------------------------
-//   diatonicUpDown
-//    used to find the second note of a trill, mordent etc.
-//    key  -7 ... +7
-//---------------------------------------------------------
-
-int diatonicUpDown(Key k, int pitch, int steps)
-{
-    static int ptab[15][7] = {
-//             c  c#   d  d#    e   f  f#   g  g#  a  a#   b
-        { -1,      1,       3,  4,      6,     8,      10 },         // Cb Ces
-        { -1,      1,       3,  5,      6,     8,      10 },         // Gb Ges
-        { 0,      1,       3,  5,      6,     8,      10 },          // Db Des
-        { 0,      1,       3,  5,      7,     8,      10 },          // Ab As
-        { 0,      2,       3,  5,      7,     8,      10 },          // Eb Es
-        { 0,      2,       3,  5,      7,     9,      10 },          // Bb B
-        { 0,      2,       4,  5,      7,     9,      10 },          // F  F
-
-        { 0,      2,       4,  5,      7,     9,      11 },          // C  C
-
-        { 0,      2,       4,  6,      7,     9,      11 },          // G  G
-        { 1,      2,       4,  6,      7,     9,      11 },          // D  D
-        { 1,      2,       4,  6,      8,     9,      11 },          // A  A
-        { 1,      3,       4,  6,      8,     9,      11 },          // E  E
-        { 1,      3,       4,  6,      8,    10,      11 },          // B  H
-        { 1,      3,       5,  6,      8,    10,      11 },          // F# Fis
-        { 1,      3,       5,  6,      8,    10,      12 },          // C# Cis
-    };
-
-    int key    = int(k) + 7;
-    int step   = pitch % 12;
-    int octave = pitch / 12;
-
-    // loop through the diatonic steps of the key looking for the given note
-    // or the gap where it would fit
-    int i = 0;
-    while (i < 7) {
-        if (ptab[key][i] >= step) {
-            break;
-        }
-        ++i;
-    }
-
-    // neither step nor gap found
-    // reset to beginning
-    if (i == 7) {
-        ++octave;
-        i = 0;
-    }
-    // if given step not found (gap found instead), and we are stepping up
-    // then we've already accounted for one step
-    if (ptab[key][i] > step && steps > 0) {
-        --steps;
-    }
-
-    // now start counting diatonic steps up or down
-    if (steps > 0) {
-        // count up
-        while (steps--) {
-            ++i;
-            if (i == 7) {
-                // hit last step; reset to beginning
-                ++octave;
-                i = 0;
-            }
-        }
-    } else if (steps < 0) {
-        // count down
-        while (steps++) {
-            --i;
-            if (i < 0) {
-                // hit first step; reset to end
-                --octave;
-                i = 6;
-            }
-        }
-    }
-
-    // convert step to pitch
-    step = ptab[key][i];
-    pitch = octave * 12 + step;
-    if (pitch < 0) {
-        pitch = 0;
-    }
-    if (pitch > 127) {
-        pitch = 128;
-    }
-    return pitch;
-}
-
-//---------------------------------------------------------
 //   searchTieNote
 //    search Note to tie to "note"
 //---------------------------------------------------------
@@ -883,13 +782,13 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
 
 int absStep(int tpc, int pitch)
 {
-    int line     = tpc2step(tpc) + (pitch / 12) * 7;
+    int line = tpc2step(tpc) + (pitch / PITCH_DELTA_OCTAVE) * STEP_DELTA_OCTAVE;
     int tpcPitch = tpc2pitch(tpc);
 
-    if (tpcPitch < 0) {
-        line += 7;
+    if (tpcPitch < MIN_PITCH) {
+        line += STEP_DELTA_OCTAVE;
     } else {
-        line -= (tpcPitch / 12) * 7;
+        line -= (tpcPitch / PITCH_DELTA_OCTAVE) * STEP_DELTA_OCTAVE;
     }
     return line;
 }
@@ -956,10 +855,10 @@ int convertLine(int lineL2, ClefType clefL, ClefType clefR)
     int lineR2 = lineL2;
     int goalpitch = line2pitch(lineL2, clefL, Key::C);
     int p;
-    while ((p = line2pitch(lineR2, clefR, Key::C)) > goalpitch && p < 127) {
+    while ((p = line2pitch(lineR2, clefR, Key::C)) > goalpitch && p < MAX_PITCH) {
         lineR2++;
     }
-    while ((p = line2pitch(lineR2, clefR, Key::C)) < goalpitch && p > 0) {
+    while ((p = line2pitch(lineR2, clefR, Key::C)) < goalpitch && p > MIN_PITCH) {
         lineR2--;
     }
     return lineR2;

@@ -52,38 +52,26 @@ namespace mu::engraving {
 
 static Interval keydiff2Interval(Key oKey, Key nKey, TransposeDirection dir)
 {
-    static int stepTable[15] = {
-        // C  G  D  A  E  B Fis
+    static int stepTable[STEP_DELTA_OCTAVE] = {
+        // C  G  D  A  E  B F
         0, 4, 1, 5, 2, 6, 3,
     };
 
-    int cofSteps;       // circle of fifth steps
-    int diatonic;
-    if (nKey > oKey) {
-        cofSteps = int(nKey) - int(oKey);
-    } else {
-        cofSteps = 12 - (int(oKey) - int(nKey));
-    }
-    diatonic = stepTable[(int(nKey) + 7) % 7] - stepTable[(int(oKey) + 7) % 7];
+    int cofSteps = (nKey > oKey) ? int(nKey) - int(oKey) : int(nKey) - int(oKey) + PITCH_DELTA_OCTAVE; // circle of fifth steps
+    int diatonic = stepTable[(int(nKey) + 7) % 7] - stepTable[(int(oKey) + 7) % 7];
     if (diatonic < 0) {
-        diatonic += 7;
+        diatonic += STEP_DELTA_OCTAVE;
     }
-    diatonic %= 7;
-    int chromatic = (cofSteps * 7) % 12;
+    diatonic %= STEP_DELTA_OCTAVE;
+    int chromatic = (cofSteps * 7) % PITCH_DELTA_OCTAVE;
 
     if ((dir == TransposeDirection::CLOSEST) && (chromatic > 6)) {
         dir = TransposeDirection::DOWN;
     }
 
     if (dir == TransposeDirection::DOWN) {
-        chromatic = chromatic - 12;
-        diatonic  = diatonic - 7;
-        if (diatonic == -7) {
-            diatonic = 0;
-        }
-        if (chromatic == -12) {
-            chromatic = 0;
-        }
+        chromatic = chromatic == 0 ? 0 : chromatic - 12;
+        diatonic  = diatonic == 0 ? 0 : diatonic - 7;
     }
     return Interval(diatonic, chromatic);
 }
@@ -118,11 +106,6 @@ void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interval inte
 /*!
  * Transposes a pitch spelling given an interval.
  *
- * This function transposes a pitch spelling using first
- * a diatonic transposition and then calculating any accidentals.
- * This insures that the note is changed by the correct number of
- * scale degrees unless it would require too many accidentals.
- *
  * @param tpc
  *  The initial pitch spelling.
  * @param interval
@@ -137,64 +120,11 @@ void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interval inte
 
 int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
 {
-    if (tpc == Tpc::TPC_INVALID) { // perfect unison & perfect octave
+    int deltaTpc = (interval.chromatic * TPC_DELTA_SEMITONE) - (interval.diatonic * TPC_DELTA_ENHARMONIC);
+    if (!tpcIsValid(tpc) || deltaTpc == 0) { // perfect unison & perfect octave
         return tpc;
     }
-
-    int minAlter;
-    int maxAlter;
-    if (useDoubleSharpsFlats) {
-        minAlter = -2;
-        maxAlter = 2;
-    } else {
-        minAlter = -1;
-        maxAlter = 1;
-    }
-    int steps     = interval.diatonic;
-    int semitones = interval.chromatic;
-
-// LOGD("transposeTpc tpc %d steps %d semitones %d", tpc, steps, semitones);
-    if (semitones == 0 && steps == 0) {
-        return tpc;
-    }
-
-    int step;
-    int alter;
-    int pitch = tpc2pitch(tpc);
-
-    for (int k = 0; k < 10; ++k) {
-        step = tpc2step(tpc) + steps;
-        while (step < 0) {
-            step += 7;
-        }
-        step   %= 7;
-        int p1 = tpc2pitch(step2tpc(step, AccidentalVal::NATURAL));
-        alter  = semitones - (p1 - pitch);
-        // alter  = p1 + semitones - pitch;
-
-//            if (alter < 0) {
-//                  alter *= -1;
-//                  alter = 12 - alter;
-//                  }
-        while (alter < 0) {
-            alter += 12;
-        }
-
-        alter %= 12;
-        if (alter > 6) {
-            alter -= 12;
-        }
-        if (alter > maxAlter) {
-            ++steps;
-        } else if (alter < minAlter) {
-            --steps;
-        } else {
-            break;
-        }
-//            LOGD("  again alter %d steps %d, step %d", alter, steps, step);
-    }
-//      LOGD("  = step %d alter %d  tpc %d", step, alter, step2tpc(step, alter));
-    return step2tpc(step, AccidentalVal(alter));
+    return clampEnharmonic(tpc + deltaTpc, useDoubleSharpsFlats);
 }
 
 //---------------------------------------------------------
@@ -207,7 +137,7 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
 
 int transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepAlteredDegrees, bool useDoubleSharpsFlats)
 {
-    if (tpc == Tpc::TPC_INVALID) {
+    if (!tpcIsValid(tpc)) {
         return tpc;
     }
 
@@ -225,24 +155,7 @@ int transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepAlteredDegre
     }
 
     // check results are in ranges
-    while (newTpc > Tpc::TPC_MAX) {
-        newTpc   -= TPC_DELTA_ENHARMONIC;
-    }
-    while (newTpc < Tpc::TPC_MIN) {
-        newTpc   += TPC_DELTA_ENHARMONIC;
-    }
-
-    // if required, reduce double alterations
-    if (!useDoubleSharpsFlats) {
-        if (newTpc >= Tpc::TPC_F_SS) {
-            newTpc   -= TPC_DELTA_ENHARMONIC;
-        }
-        if (newTpc <= Tpc::TPC_B_BB) {
-            newTpc   += TPC_DELTA_ENHARMONIC;
-        }
-    }
-
-    return newTpc;
+    return clampEnharmonic(newTpc, useDoubleSharpsFlats);
 }
 
 //---------------------------------------------------------
@@ -261,13 +174,12 @@ bool Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
             v.flip();
             ntpc2 = transposeTpc(ntpc1, v, useDoubleSharpsFlats);
         } else {
-            int p;
-            transposeInterval(n->pitch() - n->transposition(), n->tpc2(), &p, &ntpc2, interval, useDoubleSharpsFlats);
+            ntpc2 = transposeTpc(n->tpc2(), interval, useDoubleSharpsFlats);
         }
     } else {
         ntpc2 = ntpc1;
     }
-    if (npitch > 127) {
+    if (!pitchIsValid(npitch)) {
         return false;
     }
     undoChangePitch(n, npitch, ntpc1, ntpc2);
@@ -314,9 +226,9 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 interval = keydiff2Interval(key, trKey, direction);
             } else {          //same key, which direction?
                 if (direction == TransposeDirection::UP) {
-                    interval = Interval(12);
+                    interval = Interval(7, 12);
                 } else if (direction == TransposeDirection::DOWN) {
-                    interval = Interval(-12);
+                    interval = Interval(-7, -12);
                 } else {      //don't do anything for same key and closest direction
                     return true;
                 }
@@ -331,7 +243,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
         if (!rangeSelection) {
             trKeys = false;
         }
-        bool fullOctave = (interval.chromatic % 12) == 0;
+        bool fullOctave = (interval.chromatic % PITCH_DELTA_OCTAVE) == 0;
         if (fullOctave && (mode != TransposeMode::TO_KEY)) {
             trKeys = false;
             transposeChordNames = false;
@@ -624,6 +536,22 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
 }
 
 //---------------------------------------------------------
+//   transposeKey
+//---------------------------------------------------------
+
+Key transposeKey(Key key, const Interval& interval, PreferSharpFlat prefer)
+{
+    Key newKey = Key(transposeTpc(int(key), interval, false));
+
+    // ignore prefer for octave transposing instruments
+    if (interval.chromatic % PITCH_DELTA_OCTAVE == 0 && interval.diatonic % STEP_DELTA_OCTAVE == 0) {
+        prefer = PreferSharpFlat::NONE;
+    }
+
+    return clampKey(newKey, prefer);
+}
+
+//---------------------------------------------------------
 //   transposeSemitone
 //---------------------------------------------------------
 
@@ -632,39 +560,10 @@ void Score::transposeSemitone(int step)
     if (step == 0) {
         return;
     }
-    if (step > 1) {
-        step = 1;
-    }
-    if (step < -1) {
-        step = -1;
-    }
 
     TransposeDirection dir = step > 0 ? TransposeDirection::UP : TransposeDirection::DOWN;
 
-    int keyType = int(staff(0)->key(Fraction(0, 1))) + 7;     // ??
-
-    int intervalListArray[15][2] = {
-        // up - down
-        { 1, 1 },      // Cb
-        { 1, 1 },      // Gb
-        { 1, 1 },      // Db
-        { 1, 1 },      // Ab
-        { 1, 1 },      // Eb
-        { 1, 1 },      // Bb
-        { 1, 1 },      // F
-        { 1, 1 },      // C
-        { 1, 1 },      // G
-        { 1, 1 },      // D
-        { 1, 1 },      // A
-        { 1, 1 },      // E
-        { 1, 1 },      // B
-        { 1, 1 },      // F#
-        { 1, 1 }       // C#
-    };
-
-    const int interval = intervalListArray[keyType][step > 0 ? 0 : 1];
-
-    if (!transpose(TransposeMode::BY_INTERVAL, dir, Key::C, interval, true, true, false)) {
+    if (!transpose(TransposeMode::BY_INTERVAL, dir, Key::C, 1, true, true, false)) {
         LOGD("Score::transposeSemitone: failed");
         // TODO: set error message
     } else {
@@ -697,52 +596,19 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
     // transpose appropriately
     int newTpc1 = TPC_INVALID;
     int newTpc2 = TPC_INVALID;
-    Interval v   = staff() ? staff()->transpose(tick) : Interval(0);
+    Interval v  = staff() ? staff()->transpose(tick) : Interval(0);
     if (concertPitch()) {
         v.flip();
-        newTpc1 = newTpc;
-        newTpc2 = mu::engraving::transposeTpc(newTpc, v, true);
+        newTpc1 = clampEnharmonic(newTpc, useDoubleAccidentals);
+        newTpc2 = mu::engraving::transposeTpc(newTpc, v, useDoubleAccidentals);
     } else {
         newPitch += v.chromatic;
-        newTpc1 = mu::engraving::transposeTpc(newTpc, v, true);
-        newTpc2 = newTpc;
+        newTpc1 = mu::engraving::transposeTpc(newTpc, v, useDoubleAccidentals);
+        newTpc2 = clampEnharmonic(newTpc, useDoubleAccidentals);
     }
 
-    // check results are in ranges
-    while (newPitch > 127) {
-        newPitch -= PITCH_DELTA_OCTAVE;
-    }
-    while (newPitch < 0) {
-        newPitch += PITCH_DELTA_OCTAVE;
-    }
-    while (newTpc1 > Tpc::TPC_MAX) {
-        newTpc1 -= TPC_DELTA_ENHARMONIC;
-    }
-    while (newTpc1 < Tpc::TPC_MIN) {
-        newTpc1 += TPC_DELTA_ENHARMONIC;
-    }
-    while (newTpc2 > Tpc::TPC_MAX) {
-        newTpc2 -= TPC_DELTA_ENHARMONIC;
-    }
-    while (newTpc2 < Tpc::TPC_MIN) {
-        newTpc2 += TPC_DELTA_ENHARMONIC;
-    }
-
-    // if required, reduce double alterations
-    if (!useDoubleAccidentals) {
-        if (newTpc1 >= Tpc::TPC_F_SS) {
-            newTpc1 -= TPC_DELTA_ENHARMONIC;
-        }
-        if (newTpc1 <= Tpc::TPC_B_BB) {
-            newTpc1 += TPC_DELTA_ENHARMONIC;
-        }
-        if (newTpc2 >= Tpc::TPC_F_SS) {
-            newTpc2 -= TPC_DELTA_ENHARMONIC;
-        }
-        if (newTpc2 <= Tpc::TPC_B_BB) {
-            newTpc2 += TPC_DELTA_ENHARMONIC;
-        }
-    }
+    // check pitch is in range
+    newPitch = clampPitch(newPitch, true);
 
     // store new data
     score()->undoChangePitch(this, newPitch, newTpc1, newTpc2);
@@ -823,7 +689,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
                 }
                 // find chord symbols
                 for (EngravingItem* element : s->annotations()) {
-                    if (element->track() != track || element->type() != ElementType::HARMONY) {
+                    if (element->track() != track || !element->isHarmony()) {
                         continue;
                     }
                     Harmony* h  = toHarmony(element);
