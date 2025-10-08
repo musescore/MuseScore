@@ -70,7 +70,7 @@ extern engraving::VibratoType vibratoTypeFromSymId(engraving::SymId vibratoSym);
 extern engraving::DirectionV directionVFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::LineType lineTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern std::pair<int, int> hookHeightsFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
-extern engraving::String fontStyleSuffixFromElementType(engraving::ElementType elementType);
+extern engraving::String fontStylePrefixFromElementType(engraving::ElementType elementType);
 extern engraving::TremoloType tremoloTypeFromSymId(engraving::SymId sym);
 extern engraving::BarLineType toMuseScoreBarLineType(musx::dom::others::Measure::BarlineType blt);
 
