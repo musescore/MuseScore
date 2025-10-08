@@ -309,6 +309,12 @@ void FinaleParser::importMeasures()
                     break;
                 }
                 [[fallthrough]];
+            case others::Measure::BarlineType::Normal:
+                if (!start && !measure->nextMeasureMM() && musxOptions().barlineOptions->drawFinalBarlineOnLastMeas) {
+                    blt = engraving::BarLineType::FINAL;
+                    break;
+                }
+                [[fallthrough]];
             case others::Measure::BarlineType::Custom:
                 /// @todo support?
                 [[fallthrough]];
