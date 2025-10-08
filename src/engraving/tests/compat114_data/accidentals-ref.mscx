@@ -37,7 +37,6 @@
         <eid>C_C</eid>
         <StaffType group="pitched">
           </StaffType>
-        <bracket type="-1" span="1" col="0" visible="1"/>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument id="flute">
