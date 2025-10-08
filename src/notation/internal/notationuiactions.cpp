@@ -81,10 +81,53 @@ static const TranslatableString X_TAB = TranslatableString("action", "%1 (TAB)")
 //! Because actions can be dispatched not only shortcuts, but another way, ex by click Button, Menu and etc
 
 const UiActionList NotationUiActions::m_actions = {
+    UiAction("action://notation/copy",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_DISABLED,
+             TranslatableString("action", "&Copy"),
+             TranslatableString("action", "Copy"),
+             IconCode::Code::COPY
+             ),
+    UiAction("action://notation/cut",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_DISABLED,
+             TranslatableString("action", "Cu&t"),
+             TranslatableString("action", "Cut"),
+             IconCode::Code::CUT
+             ),
+    UiAction("action://notation/paste",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_DISABLED,
+             TranslatableString("action", "Past&e"),
+             TranslatableString("action", "Paste"),
+             IconCode::Code::PASTE
+             ),
+    UiAction("action://notation/undo",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_DISABLED,
+             TranslatableString("action", "Undo"),
+             TranslatableString("action", "Undo"),
+             IconCode::Code::UNDO
+             ),
+    UiAction("action://notation/redo",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_DISABLED,
+             TranslatableString("action", "Redo"),
+             TranslatableString("action", "Redo"),
+             IconCode::Code::REDO
+             ),
+    UiAction("action://notation/delete",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_DISABLED,
+             TranslatableString("action", "De&lete"),
+             TranslatableString("action", "Delete"),
+             IconCode::Code::DELETE_TANK
+             ),
     UiAction("action://notation/cancel",
              mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_FOCUSED
+             mu::context::CTX_DISABLED
              ),
+
     UiAction("put-note", // args: PointF pos, bool replace, bool insert
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -301,27 +344,6 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Halve selected duration (dotted)"),
              TranslatableString("action", "Halve selected duration (includes dotted values)")
              ),
-    UiAction("action://notation/copy",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_FOCUSED,
-             TranslatableString("action", "&Copy"),
-             TranslatableString("action", "Copy"),
-             IconCode::Code::COPY
-             ),
-    UiAction("action://notation/cut",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_FOCUSED,
-             TranslatableString("action", "Cu&t"),
-             TranslatableString("action", "Cut"),
-             IconCode::Code::CUT
-             ),
-    UiAction("action://notation/paste",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_FOCUSED,
-             TranslatableString("action", "Past&e"),
-             TranslatableString("action", "Paste"),
-             IconCode::Code::PASTE
-             ),
     UiAction("notation-paste-half",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
@@ -387,13 +409,6 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "More…"),
              TranslatableString("action", "Select similar elements with more options…")
-             ),
-    UiAction("action://notation/delete",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_FOCUSED,
-             TranslatableString("action", "De&lete"),
-             TranslatableString("action", "Delete"),
-             IconCode::Code::DELETE_TANK
              ),
     UiAction("edit-style",
              mu::context::UiCtxProjectOpened,
@@ -575,20 +590,6 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Measures per s&ystem…"),
              TranslatableString("action", "Measures per system…")
-             ),
-    UiAction("action://notation/undo",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Undo"),
-             TranslatableString("action", "Undo"),
-             IconCode::Code::UNDO
-             ),
-    UiAction("action://notation/redo",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Redo"),
-             TranslatableString("action", "Redo"),
-             IconCode::Code::REDO
              ),
     UiAction("voice-x12",
              mu::context::UiCtxProjectOpened,
