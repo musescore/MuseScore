@@ -615,13 +615,13 @@ bool Measure::showMeasureNumberOnStaff(staff_idx_t staffIdx)
 bool Measure::showMeasureNumber()
 {
     switch (m_measureNumberMode) {
-    case MeasureNumberMode::AUTO:
-        return showMeasureNumberInAutoMode();
     case MeasureNumberMode::SHOW:
         return true;
     case MeasureNumberMode::HIDE:
         return false;
     }
+
+    return showMeasureNumberInAutoMode();
 }
 
 //---------------------------------------------------------
