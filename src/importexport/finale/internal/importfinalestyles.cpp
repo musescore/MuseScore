@@ -217,18 +217,17 @@ void writeLinePrefs(MStyle& style, const std::string& namePrefix, double widthEf
 
 static void writeFramePrefs(MStyle& style, const std::string& namePrefix, const others::Enclosure* enclosure = nullptr)
 {
-    if (!enclosure || enclosure->shape == others::Enclosure::Shape::NoEnclosure || enclosure->lineWidth == 0) {
-        style.set(styleIdx(namePrefix + "FrameType"), int(FrameType::NO_FRAME));
-        if (!enclosure) return; // Do not override any other defaults if no enclosure
-    } else if (enclosure->shape == others::Enclosure::Shape::Ellipse) {
-        style.set(styleIdx(namePrefix + "FrameType"), int(FrameType::CIRCLE));
-    } else {
-        style.set(styleIdx(namePrefix + "FrameType"), int(FrameType::SQUARE));
+    FrameSettings settings = FrameSettings(enclosure);
+    style.set(styleIdx(namePrefix + "FrameType"), int(settings.frameType));
+
+    if (frameType == FrameType::NO_FRAME) {
+        // Do not override any other defaults if no enclosure
+        return;
     }
-    writeEvpuSpace(style, styleIdx(namePrefix + "FramePadding"), enclosure->xMargin);
-    writeEfixSpace(style, styleIdx(namePrefix + "FrameWidth"), enclosure->lineWidth);
-    style.set(styleIdx(namePrefix + "FrameRound"),
-              enclosure->roundCorners ? int(lround(enclosure->cornerRadius / EFIX_PER_EVPU)) : 0);
+
+    style.set(styleIdx(namePrefix + "FrameWidth"), settings.frameWidth);
+    style.set(styleIdx(namePrefix + "FramePadding"), settings.paddingWidth);
+    style.set(styleIdx(namePrefix + "FrameRound"), settings.frameRound)
 }
 
 static void writeCategoryTextFontPref(MStyle& style, const FinaleParser& context, const std::string& namePrefix, others::MarkingCategory::CategoryType categoryType)
@@ -545,7 +544,7 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
         style.set(Sid::mmRestShowMeasureNumberRange, scorePart->showMmRange);
         if (scorePart->leftMmBracketChar == 0) {
             style.set(Sid::mmRestRangeBracketType, int(MMRestRangeBracketType::NONE));
-        } else if (scorePart->leftMmBracketChar == '(') {
+        } else if (scorePart->leftMmBracketChar == U'(') {
             style.set(Sid::mmRestRangeBracketType, int(MMRestRangeBracketType::PARENTHESES));
         } else {
             style.set(Sid::mmRestRangeBracketType, int(MMRestRangeBracketType::BRACKETS));
