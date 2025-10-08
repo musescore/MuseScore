@@ -436,10 +436,13 @@ void FinaleParser::importSmartShapes()
 
         if (newSpanner->anchor() == Spanner::Anchor::NOTE) {
             toNote(startElement)->add(newSpanner);
+            logger()->logInfo(String(u"Added spanner of %1 type to note at tick %2, end: %3").arg(TConv::userName(type).translated(), startTick.toString(), endTick.toString()));
         } else {
             m_score->addSpanner(newSpanner);
+            logger()->logInfo(String(u"Added spanner of %1 type at tick %2, end: %3").arg(TConv::userName(type).translated(), startTick.toString(), endTick.toString()));
         }
     }
+    logger()->logInfo(String(u"Import smart shapes: Finished importing smart shapes"));
 }
 
 }
