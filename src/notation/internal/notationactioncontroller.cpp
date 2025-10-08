@@ -49,8 +49,8 @@ static constexpr bool NEAR_NOTE_OR_REST = true;
 
 static constexpr bool DONT_PLAY_CHORD = false;
 
-static const ActionCode UNDO_ACTION_CODE = "undo";
-static const ActionCode REDO_ACTION_CODE = "redo";
+static const ActionCode UNDO_ACTION_CODE = "action://notation/undo";
+static const ActionCode REDO_ACTION_CODE = "action://notation/redo";
 
 static const QMap<ActionCode, Fraction> DURATIONS_FOR_TEXT_NAVIGATION {
     { "advance-longa", Fraction(4, 1) },
@@ -87,7 +87,7 @@ void NotationActionController::init()
     TRACEFUNC;
 
     //! NOTE For historical reasons, the name of the action does not match what needs to be done
-    registerAction("notation-escape", &Controller::resetState, &Controller::isNotationPage);
+    registerAction("action://notation/cancel", &Controller::resetState, &Controller::isNotationPage);
 
     registerAction("note-input", &Controller::toggleNoteInput, &Controller::startNoteInputAllowed);
     registerNoteInputAction("note-input-by-note-name", NoteInputMethod::BY_NOTE_NAME);
@@ -218,14 +218,14 @@ void NotationActionController::init()
     registerAction("inc-duration-dotted", &Interaction::increaseDecreaseDuration, -1, true);
     registerAction("dec-duration-dotted", &Interaction::increaseDecreaseDuration, 1, true);
 
-    registerAction("notation-cut", &Controller::cutSelection, &Controller::hasSelection);
-    registerAction("notation-copy", &Interaction::copySelection, &Controller::hasSelection);
-    registerAction("notation-paste", [this]() { pasteSelection(PastingType::Default); }, &Controller::isNotationPage);
+    registerAction("action://notation/copy", &Interaction::copySelection, &Controller::hasSelection);
+    registerAction("action://notation/cut", &Controller::cutSelection, &Controller::hasSelection);
+    registerAction("action://notation/paste", [this]() { pasteSelection(PastingType::Default); }, &Controller::isNotationPage);
     registerAction("notation-paste-half", [this]() { pasteSelection(PastingType::Half); });
     registerAction("notation-paste-double", [this]() { pasteSelection(PastingType::Double); });
     registerAction("notation-paste-special", [this]() { pasteSelection(PastingType::Special); });
     registerAction("notation-swap", &Interaction::swapSelection, &Controller::hasSelection);
-    registerAction("notation-delete", &Interaction::deleteSelection, &Controller::hasSelection);
+    registerAction("action://notation/delete", &Interaction::deleteSelection, &Controller::hasSelection);
 
     registerAction("flip", &Interaction::flipSelection, &Controller::hasSelection);
     registerAction("flip-horizontally", &Interaction::flipSelectionHorizontally, &Controller::hasSelection);
