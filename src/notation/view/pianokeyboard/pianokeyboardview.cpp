@@ -266,7 +266,8 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
 
             int octaveNumber = (key / 12) - 1;
 
-            QString octaveLabel = "C" + QString::number(octaveNumber);
+            QString octaveLabel = "C " + QString::number(octaveNumber);
+            octaveLabel = muse::qtrc("EditPitchBase", octaveLabel.toStdString().c_str());
             QRect octaveLabelRect(left, top, right - left, bottom - top - bottomOffset);
 
             painter->setPen(backgroundColor);
