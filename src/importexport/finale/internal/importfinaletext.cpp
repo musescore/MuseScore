@@ -37,6 +37,7 @@
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/measurenumber.h"
@@ -268,12 +269,40 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     return endString;
 };
 
+static std::optional<std::array<PedalPosition, HARP_STRING_NO> > parseHarpPedalDiagram(const std::string& utf8Tag)
+{
+    const std::regex hpdFragmentRegex(R"(?:<sym>harpPedal[^>]*?<\/sym>)");
+    auto begin = std::sregex_iterator(utf8Tag.begin(), utf8Tag.end(), hpdFragmentRegex);
+    size_t matchIdx = 0;
+    std::array<PedalPosition, HARP_STRING_NO> pedalState;
+    std::fill(pedalState.begin(), pedalState.end(), PedalPosition::NATURAL);
+
+    for (auto it = begin; it != std::sregex_iterator() && int(matchIdx) < HARP_STRING_NO; ++it, ++matchIdx) {
+        const std::string harpSym = (*it).str();
+        if (harpSym == "<sym>harpPedalRaised</sym>") {
+            pedalState[matchIdx] = PedalPosition::FLAT;
+        } else if (harpSym == "<sym>harpPedalCentered</sym>") {
+            pedalState[matchIdx] = PedalPosition::NATURAL;
+        } else if (harpSym == "<sym>harpPedalLowered</sym>") {
+            pedalState[matchIdx] = PedalPosition::SHARP;
+        } else if (harpSym == "<sym>harpPedalDivider</sym>" && matchIdx == 3 /* SEPARATOR_IDX */) {
+            // Don't count separator in pedal state index
+            --matchIdx;
+        } else {
+            // Bad symbol or separator at invalid location, don't import
+            return std::nullopt;
+        }
+    }
+    return pedalState;
+}
+
 void FinaleParser::importTextExpressions()
 {
     struct ReadableExpression {
         String xmlText = String();
         ElementType elementType = ElementType::STAFF_TEXT;
         DynamicType dynamicType = DynamicType::OTHER;
+        std::array<PedalPosition, HARP_STRING_NO> pedalState;
         FrameSettings frameSettings = FrameSettings(); // initialisation not needed??
     };
 
@@ -342,9 +371,10 @@ void FinaleParser::importTextExpressions()
             }
             /// @todo introduce more sophisticated (regex-based) checks
 
-            // Dynamics (adapted from engraving/dom/dynamic.cpp)
             std::string utf8Tag = readableExpression.xmlText.toStdString();
-            const std::regex dynamicRegex(R"((?:<sym>.*?</sym>)+|(?:\b)[fmnprsz]+(?:\b(?=[^>]|$)))");
+
+            // Dynamics (adapted from engraving/dom/dynamic.cpp)
+            const std::regex dynamicRegex(R"((?:<sym>dynamic.*?</sym>)+|(?:\b)[fmnprsz]+(?:\b(?=[^>]|$)))");
             auto begin = std::sregex_iterator(utf8Tag.begin(), utf8Tag.end(), dynamicRegex);
             for (auto it = begin; it != std::sregex_iterator(); ++it) {
                 const std::smatch match = *it;
@@ -357,6 +387,18 @@ void FinaleParser::importTextExpressions()
                         return ElementType::DYNAMIC;
                     }
                 }
+            }
+
+            // Harp pedal (not text) diagrams
+            /// @todo allow font style/face/size tags
+            const std::regex hpdDetectRegex(R"(^ *?(?:<sym>harpPedal[^>]*?<\/sym> *?)+$)");
+            if (std::regex_search(utf8Tag, hpdDetectRegex)) {
+                std::optional<std::array<PedalPosition, HARP_STRING_NO> > maybePedalState = parseHarpPedalDiagram(utf8Tag);
+                if (maybePedalState.has_value()) {
+                    readableExpression.pedalState = maybePedalState.value();
+                    return ElementType::HARP_DIAGRAM;
+                }
+                logger()->logWarning(String(u"Cannot create harp pedal diagram!"));
             }
 
             static const std::unordered_map<others::MarkingCategory::CategoryType, ElementType> categoryTypeTable = {
@@ -433,6 +475,66 @@ void FinaleParser::importTextExpressions()
 
         item->setAlign(Align(hAlign, AlignV::BASELINE));
         s->add(item);
+
+        switch (elementType) {
+            case ElementType::DYNAMIC: {
+                Dynamic* dynamic = toDynamic(item);
+                dynamic->setDynamicType(expression.dynamicType);
+                if (expressionAssignment->layer != 0) {
+                    dynamic->setVoiceAssignment(VoiceAssignment::CURRENT_VOICE_ONLY);
+                }
+                switch (expressionDef->playbackType) {
+                case others::PlaybackType::None: break;
+                case others::PlaybackType::KeyVelocity: {
+                    dynamic->setVelocity(expressionDef->value);
+                    break;
+                }
+                default: break;
+                }
+                break;
+            }
+            case ElementType::REHEARSAL_MARK: {
+                if (expressionDef->hideMeasureNum && measure->measureNumber(curStaffIdx)) {
+                    /// @todo needs to be created via layout first???
+                    measure->measureNumber(curStaffIdx)->setVisible(false);
+                }
+                break;
+            }
+            case ElementType::TEMPO_TEXT: {
+                TempoText* tt = toTempoText(item);
+                switch (expressionDef->playbackType) {
+                case others::PlaybackType::None: break;
+                case others::PlaybackType::Tempo: {
+                    tt->setFollowText(false); /// @todo detect this
+                    tt->setTempo(expressionDef->value / 60.0); // Assume quarter for now
+                    break;
+                }
+                default: break;
+                }
+                break;
+            }
+            case ElementType::STAFF_TEXT:
+            case ElementType::SYSTEM_TEXT: {
+                StaffTextBase* stb = toStaffTextBase(item);
+                switch (expressionDef->playbackType) {
+                case others::PlaybackType::None: break;
+                case others::PlaybackType::Swing: {
+                    int swingValue = expressionDef->value;
+                    int swingUnit = Fraction(1, measure->timesig().denominator() > 8 ? 16 : 8).ticks();
+                    stb->setSwing(swingValue != 0);
+                    stb->setSwingParameters(swingUnit, 50 + (swingValue / 6));
+                    break;
+                }
+                default: break;
+                }
+                break;
+            }
+            case ElementType::HARP_DIAGRAM: {
+                toHarpPedalDiagram(item)->setPedalState(expression.pedalState);
+                break;
+            }
+            default: break;
+        }
 
         // Calculate position in score
         PointF p;
@@ -662,61 +764,6 @@ void FinaleParser::importTextExpressions()
         p += evpuToPointF(expressionAssignment->horzEvpuOff, -expressionAssignment->vertEvpuOff) * SPATIUM20; // assignment offset
         item->setOffset(p);
 
-        switch (elementType) {
-            case ElementType::DYNAMIC: {
-                Dynamic* dynamic = toDynamic(item);
-                dynamic->setDynamicType(expression.dynamicType);
-                if (expressionAssignment->layer != 0) {
-                    dynamic->setVoiceAssignment(VoiceAssignment::CURRENT_VOICE_ONLY);
-                }
-                switch (expressionDef->playbackType) {
-                case others::PlaybackType::None: break;
-                case others::PlaybackType::KeyVelocity: {
-                    dynamic->setVelocity(expressionDef->value);
-                    break;
-                }
-                default: break;
-                }
-                break;
-            }
-            case ElementType::REHEARSAL_MARK: {
-                if (expressionDef->hideMeasureNum && measure->measureNumber(curStaffIdx)) {
-                    /// @todo needs to be created via layout first???
-                    measure->measureNumber(curStaffIdx)->setVisible(false);
-                }
-                break;
-            }
-            case ElementType::TEMPO_TEXT: {
-                TempoText* tt = toTempoText(item);
-                switch (expressionDef->playbackType) {
-                case others::PlaybackType::None: break;
-                case others::PlaybackType::Tempo: {
-                    tt->setFollowText(false); /// @todo detect this
-                    tt->setTempo(expressionDef->value / 60.0); // Assume quarter for now
-                    break;
-                }
-                default: break;
-                }
-                break;
-            }
-            case ElementType::STAFF_TEXT:
-            case ElementType::SYSTEM_TEXT: {
-                StaffTextBase* stb = toStaffTextBase(item);
-                switch (expressionDef->playbackType) {
-                case others::PlaybackType::None: break;
-                case others::PlaybackType::Swing: {
-                    int swingValue = expressionDef->value;
-                    int swingUnit = Fraction(1, measure->timesig().denominator() > 8 ? 16 : 8).ticks();
-                    stb->setSwing(swingValue != 0);
-                    stb->setSwingParameters(swingUnit, 50 + (swingValue / 6));
-                    break;
-                }
-                default: break;
-                }
-                break;
-            }
-            default: break;
-        }
         /// @todo assign this to the appropriate location(s), taking into account if this is a single-staff or stafflist assignment.
         /// @note Finale provides a per-staff assignment *in addition* to top-staff (-1) or bot-staff (-2) assignments. Whether it is visible is
         /// determined by the stafflist (if any) or by whether it is assigned to score or part or both. I don't know enough about MuseScore
