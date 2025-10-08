@@ -381,7 +381,7 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
         return muse::value(categoryTypeTable, categoryType, ElementType::STAFF_TEXT);
     }();
 
-    FontTracker defaultFontForElement(context.score()->style(), fontStyleSuffixFromElementType(elementType));
+    FontTracker defaultFontForElement(context.score()->style(), fontStylePrefixFromElementType(elementType));
     if (firstFontInfo != defaultFontForElement) {
         options.initialFont = defaultFontForElement;
         // Whichever font we choose here will be stripped out in favor of the default for the kind of marking it is.

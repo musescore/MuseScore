@@ -1247,7 +1247,7 @@ std::pair<int, int> hookHeightsFromShapeType(musx::dom::others::SmartShape::Shap
     return muse::value(shapeTypeTable, shapeType, { 0, 0 });
 }
 
-String fontStyleSuffixFromElementType(ElementType elementType)
+String fontStylePrefixFromElementType(ElementType elementType)
 {
     static const std::unordered_map<ElementType, std::string_view> elementTypeTable = {
         { ElementType::DYNAMIC, "dynamics" },
