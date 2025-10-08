@@ -40,7 +40,6 @@
           <lines>1</lines>
           <keysig>0</keysig>
           </StaffType>
-        <bracket type="-1" span="1" col="0" visible="1"/>
         <barLineSpanFrom>-4</barLineSpanFrom>
         <barLineSpanTo>4</barLineSpanTo>
         </Staff>
