@@ -713,7 +713,7 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const MusxInstance<musx
     if (changed(staffType->invisible(), staffInvisible, result)) {
         staffType->setInvisible(staffInvisible);
     }
-    Spatium lineDistance = Spatium(double(currStaff->lineSpace) / EVPU_PER_SPACE);
+    Spatium lineDistance = Spatium(doubleFromEvpu(currStaff->lineSpace));
     if (changed(staffType->lineDistance(), lineDistance, result)) {
         staffType->setLineDistance(lineDistance);
     }
@@ -728,11 +728,40 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const MusxInstance<musx
     if (changed(staffType->showBarlines(), !currStaff->hideBarlines, result)) {
         staffType->setShowBarlines(!currStaff->hideBarlines);
     }
-    if (changed(staffType->showRests(), !currStaff->hideRests, result)) {
-        staffType->setShowRests(!currStaff->hideRests);
-    }
     if (changed(staffType->stemless(), currStaff->hideStems, result)) {
         staffType->setStemless(currStaff->hideStems);
+    }
+
+    // Tablature settings
+    if (staffType->isTabStaff()) {
+        if (changed(staffType->useNumbers(), !currStaff->useTabLetters, result)) {
+            staffType->setUseNumbers(!currStaff->useTabLetters);
+        }
+        if (changed(staffType->linesThrough(), !currStaff->breakTabLinesAtNotes, result)) {
+            staffType->setLinesThrough(!currStaff->breakTabLinesAtNotes);
+        }
+        // Finale offers an exact vertical offset for tab numbers.
+        // MuseScore does too, but using it results in much more
+        // limited font options (only face and pt size available).
+        // We import the numbers without offset but use the toggleable
+        // above/on staff line property to approximate positioning instead.
+        // Alternative: set onLines to false, and use regular offset conversion to get exact Y.
+        /// @todo account for font size, currently using default values and offset (-2/3, Arial/11pt)
+        bool tabNumsNearStaffLine = muse::RealIsEqualOrMore(doubleFromEfix(-currStaff->vertTabNumOff), 0.66);
+        if (changed(staffType->onLines(), tabNumsNearStaffLine, result)) {
+            staffType->setOnLines(tabNumsNearStaffLine);
+        }
+        // Only available for tablature staves in MuseScore
+        if (changed(staffType->showRests(), !currStaff->hideRests, result)) {
+            staffType->setShowRests(!currStaff->hideRests);
+        }
+        // Use the fret number font settings from Finale
+        staffType->setFretUseTextStyle(true);
+        staffType->setFretTextStyle(TextStyleType::TAB_FRET_NUMBER); /// @todo fix default in editstafftype.cpp?
+
+        /// @todo some element visibility options are available as style settings (see styledef.cpp, near bottom)
+        /// We could track what is used on tab styles and then (if possible) set the correct values globally.
+        /// @todo better integration with showing note values/stems on tab staves.
     }
 
     // userMag is not based on staff styles but on others::StaffUsed
