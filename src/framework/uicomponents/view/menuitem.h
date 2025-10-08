@@ -50,7 +50,7 @@ class MenuItem : public QObject, public async::Asyncable
     Q_PROPERTY(QString id READ id NOTIFY idChanged)
 
     Q_PROPERTY(QString code READ code_property NOTIFY actionChanged)
-    Q_PROPERTY(QString shortcuts READ shortcutsTitle NOTIFY actionChanged)
+    Q_PROPERTY(QString shortcuts READ shortcutsTitle NOTIFY shortcutsChanged)
     Q_PROPERTY(QString portableShortcuts READ portableShortcuts NOTIFY actionChanged)
 
     Q_PROPERTY(QString title READ translatedTitle NOTIFY actionChanged)
@@ -89,7 +89,7 @@ public:
 
     MenuItemList subitems() const;
 
-    ui::UiAction action() const;
+    const ui::UiAction& action() const;
     ui::UiActionState state() const;
     muse::actions::ActionData args() const;
     const muse::actions::ActionQuery& query() const;
@@ -111,6 +111,7 @@ public slots:
     void setRole(muse::uicomponents::MenuItemRole role);
     void setSubitems(const uicomponents::MenuItemList& subitems);
     void setAction(const muse::ui::UiAction& action);
+    void setShortcuts(const std::vector<std::string>& shortcuts);
     void setArgs(const muse::actions::ActionData& args);
     void setQuery(const muse::actions::ActionQuery& query);
 
@@ -124,6 +125,7 @@ signals:
     void roleChanged(int role);
     void subitemsChanged(uicomponents::MenuItemList subitems, const QString& menuId);
     void actionChanged();
+    void shortcutsChanged();
 
 private:
     QString code_property() const;
@@ -154,6 +156,7 @@ private:
     MenuItemList m_subitems;
 
     ui::UiAction m_action;
+    std::vector<std::string> m_shortcuts;
 };
 
 inline QVariantList menuItemListToVariantList(const uicomponents::MenuItemList& list)

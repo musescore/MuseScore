@@ -42,7 +42,7 @@ class ToolBarItem : public QObject, public Injectable, public async::Asyncable
     Q_PROPERTY(QString id READ id NOTIFY idChanged)
 
     Q_PROPERTY(QString code READ code_property NOTIFY actionChanged)
-    Q_PROPERTY(QString shortcuts READ shortcutsTitle NOTIFY actionChanged)
+    Q_PROPERTY(QString shortcuts READ shortcutsTitle NOTIFY shortcutsChanged)
 
     Q_PROPERTY(QString title READ translatedTitle NOTIFY actionChanged)
     Q_PROPERTY(bool showTitle READ showTitle WRITE setShowTitle NOTIFY showTitleChanged)
@@ -82,12 +82,12 @@ public:
 
     ToolBarItemType::Type type() const;
 
-    QList<MenuItem*> menuItems() const;
+    const QList<MenuItem*>& menuItems() const;
 
     bool isMenuSecondary() const;
     void setIsMenuSecondary(bool secondary);
 
-    ui::UiAction action() const;
+    const ui::UiAction& action() const;
     ui::UiActionState state() const;
     muse::actions::ActionData args() const;
 
@@ -113,6 +113,7 @@ public slots:
     void setType(muse::uicomponents::ToolBarItemType::Type type);
     void setMenuItems(const QList<uicomponents::MenuItem*>& menuItems);
     void setAction(const ui::UiAction& action);
+    void setShortcuts(const std::vector<std::string>& shortcuts);
     void setArgs(const muse::actions::ActionData& args);
 
 signals:
@@ -124,6 +125,7 @@ signals:
     void menuItemsChanged(QList<uicomponents::MenuItem*> menuItems, const QString& menuId);
     void isMenuSecondaryChanged(bool secondary);
     void actionChanged();
+    void shortcutsChanged();
 
     void showTitleChanged();
     void isTitleBoldChanged();
@@ -150,6 +152,7 @@ private:
     bool m_isTitleBold = false;
 
     ui::UiAction m_action;
+    std::vector<std::string> m_shortcuts;
     bool m_isTransparent = true;
 };
 using ToolBarItemList = QList<ToolBarItem*>;
