@@ -269,9 +269,12 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     return endString;
 };
 
+static const std::regex dynamicRegex(R"((?:<sym>dynamic.*?</sym>)+|(?:\b)[fmnprsz]+(?:\b(?=[^>]|$)))");
+static const std::regex hpdDetectRegex(R"(^ *?(?:<sym>harpPedal[^>]*?<\/sym> *?)+$)");
+static const std::regex hpdFragmentRegex(R"(<sym>harpPedal[^>]*?<\/sym>)");
+
 static std::optional<std::array<PedalPosition, HARP_STRING_NO> > parseHarpPedalDiagram(const std::string& utf8Tag)
 {
-    const std::regex hpdFragmentRegex(R"(?:<sym>harpPedal[^>]*?<\/sym>)");
     auto begin = std::sregex_iterator(utf8Tag.begin(), utf8Tag.end(), hpdFragmentRegex);
     size_t matchIdx = 0;
     std::array<PedalPosition, HARP_STRING_NO> pedalState;
@@ -296,130 +299,121 @@ static std::optional<std::array<PedalPosition, HARP_STRING_NO> > parseHarpPedalD
     return pedalState;
 }
 
+ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxInstance<musx::dom::others::TextExpressionDef>& textExpression)
+{
+    // Text
+    /// @todo Rather than rely only on marking category, it probably makes more sense to interpret the playback features to detect what kind of marking
+    /// this is. Or perhaps a combination of both. This would provide better support to legacy files whose expressions are all Misc.
+    others::MarkingCategory::CategoryType categoryType = others::MarkingCategory::CategoryType::Misc;
+    MusxInstance<FontInfo> catMusicFont;
+    if (MusxInstance<others::MarkingCategory> category = context.musxDocument()->getOthers()->get<others::MarkingCategory>(context.currentMusxPartId(), textExpression->categoryId)) {
+        categoryType = category->categoryType;
+        catMusicFont = category->musicFont;
+    }
+    EnigmaParsingOptions options;
+    musx::util::EnigmaParsingContext parsingContext = textExpression->getRawTextCtx(context.currentMusxPartId());
+    FontTracker firstFontInfo;
+    xmlText = context.stringFromEnigmaText(parsingContext, options, &firstFontInfo);
+
+    // Option 2 (to match style setting if possible, with font info tags at the beginning if they differ)
+    options.initialFont = FontTracker(context.score()->style(), fontStyleSuffixFromCategoryType(categoryType));
+    /// @todo The musicSymbol font here must be the inferred font *in Finale* that we expect, based on the detection of what kind
+    /// of marking it is mentioned above. Right now this code relies on the category, but probably that is too naive a design.
+    /// Whichever font we choose here will be stripped out in favor of the default for the kind of marking it is.
+    options.musicSymbolFont = [&]() -> std::optional<FontTracker> {
+        if (!catMusicFont) {
+            return FontTracker(context.musxOptions().defaultMusicFont); // we get here for the Misc category, and this seems like the best choice for legacy files. See todo comments, though.
+        } else if (context.fontIsEngravingFont(catMusicFont->getName())) {
+            return FontTracker(catMusicFont); // if it's an engraving font use it
+        } else if (catMusicFont->calcIsDefaultMusic() && !context.musxOptions().calculatedEngravingFontName.empty()) {
+            return FontTracker(catMusicFont); // if it's not an engraving font, but we are using an alternative as engraving font,
+                                              // specify the non-engraving font here. The parsing routine strips it out and MuseScore
+                                              // uses the engraving font instead.
+        }
+        return std::nullopt;
+    }();
+    if (catMusicFont && (context.fontIsEngravingFont(catMusicFont->getName()) || catMusicFont->calcIsDefaultMusic())) {
+        options.musicSymbolFont = FontTracker(catMusicFont);
+    }
+    // String exprString2 = stringFromEnigmaText(parsingContext, options); // currently unused
+
+    // Text frame/border (Finale: Enclosure)
+    frameSettings = FrameSettings(textExpression->getEnclosure().get());
+
+    // Element type and element-based options
+    elementType = [&]() {
+        switch (textExpression->playbackType) {
+        case others::PlaybackType::None: break;
+        case others::PlaybackType::Tempo: return ElementType::TEMPO_TEXT;
+        case others::PlaybackType::MidiController: break; // staff text is best?
+        case others::PlaybackType::KeyVelocity: break; // dynamics, but let's process the string and dynamic type later
+        case others::PlaybackType::Transpose: break; // instrument change is best?
+        case others::PlaybackType::Channel: break; // instrument change is best?
+        case others::PlaybackType::MidiPatchChange: break; // instrument change is best?
+        case others::PlaybackType::PercussionMidiMap: break; // instrument change is best?
+        case others::PlaybackType::MidiPitchWheel: break; // instrument change is best?
+        case others::PlaybackType::ChannelPressure: break; // instrument change is best?
+        case others::PlaybackType::RestrikeKeys: break; // add/remove invisible pedal lines?
+        case others::PlaybackType::Dump: break; // staff text is best?
+        case others::PlaybackType::PlayTempoToolChanges: return ElementType::TEMPO_TEXT;
+        case others::PlaybackType::IgnoreTempoToolChanges: return ElementType::TEMPO_TEXT;
+        case others::PlaybackType::Swing: return ElementType::STAFF_TEXT; // possibly system text is better for playback, but could mess up layout
+        case others::PlaybackType::SmartPlaybackOn: break; // staff text is best?
+        case others::PlaybackType::SmartPlaybackOff: break; // staff text is best?
+        }
+        /// @todo introduce more sophisticated (regex-based) checks
+
+        std::string utf8Tag = xmlText.toStdString();
+
+        // Dynamics (adapted from engraving/dom/dynamic.cpp)
+        /// @todo This regex fails for `dynamicMF` and `dynamicMP`, among several others.
+        auto begin = std::sregex_iterator(utf8Tag.begin(), utf8Tag.end(), dynamicRegex);
+        for (auto it = begin; it != std::sregex_iterator(); ++it) {
+            const std::smatch match = *it;
+            const std::string matchStr = match.str();
+            for (auto dyn : Dynamic::dynamicList()) {
+                if (TConv::toXml(dyn.type).ascii() == matchStr || dyn.text == matchStr) {
+                    utf8Tag.replace(match.position(0), match.length(0), dyn.text);
+                    xmlText = String::fromStdString(utf8Tag); // do we want this?
+                    dynamicType = dyn.type;
+                    return ElementType::DYNAMIC;
+                }
+            }
+        }
+
+        // Harp pedal (not text) diagrams
+        /// @todo allow font style/face/size tags
+        if (std::regex_search(utf8Tag, hpdDetectRegex)) {
+            std::optional<std::array<PedalPosition, HARP_STRING_NO> > maybePedalState = parseHarpPedalDiagram(utf8Tag);
+            if (maybePedalState.has_value()) {
+                pedalState = maybePedalState.value();
+                return ElementType::HARP_DIAGRAM;
+            }
+            context.logger()->logWarning(String(u"Cannot create harp pedal diagram!"));
+        }
+
+        static const std::unordered_map<others::MarkingCategory::CategoryType, ElementType> categoryTypeTable = {
+            { others::MarkingCategory::CategoryType::Dynamics, ElementType::DYNAMIC },
+            { others::MarkingCategory::CategoryType::ExpressiveText, ElementType::EXPRESSION },
+            { others::MarkingCategory::CategoryType::TempoMarks, ElementType::TEMPO_TEXT },
+            { others::MarkingCategory::CategoryType::TempoAlterations, ElementType::TEMPO_TEXT },
+            { others::MarkingCategory::CategoryType::TechniqueText, ElementType::STAFF_TEXT },
+            { others::MarkingCategory::CategoryType::RehearsalMarks, ElementType::REHEARSAL_MARK },
+        };
+        return muse::value(categoryTypeTable, categoryType, ElementType::STAFF_TEXT);
+    }();
+
+    context.logger()->logInfo(String(u"Converted expression of %1 type").arg(TConv::userName(elementType).translated()));
+}
+
 void FinaleParser::importTextExpressions()
 {
-    struct ReadableExpression {
-        String xmlText = String();
-        ElementType elementType = ElementType::STAFF_TEXT;
-        DynamicType dynamicType = DynamicType::OTHER;
-        std::array<PedalPosition, HARP_STRING_NO> pedalState;
-        FrameSettings frameSettings = FrameSettings(); // initialisation not needed??
-    };
-
     // Layout score (needed for offset calculations)
     logger()->logInfo(String(u"Laying out score before importing text..."));
     m_score->setLayoutAll();
     m_score->doLayout();
 
-    // 1st: map all expressions to strings
-    std::unordered_map<Cmper, ReadableExpression> mappedExpressions;
-    const MusxInstanceList<others::TextExpressionDef> textExpressions = m_doc->getOthers()->getArray<others::TextExpressionDef>(m_currentMusxPartId);
-    logger()->logInfo(String(u"Converting library of %1 text expressions.").arg(textExpressions.size())); /// @todo switch to smartshape model: only convert used texts
-    for (const auto& textExpression : textExpressions) {
-        ReadableExpression readableExpression;
-        /// @todo Rather than rely only on marking category, it probably makes more sense to interpret the playback features to detect what kind of marking
-        /// this is. Or perhaps a combination of both. This would provide better support to legacy files whose expressions are all Misc.
-        others::MarkingCategory::CategoryType categoryType = others::MarkingCategory::CategoryType::Misc;
-        MusxInstance<FontInfo> catMusicFont;
-        if (MusxInstance<others::MarkingCategory> category = m_doc->getOthers()->get<others::MarkingCategory>(m_currentMusxPartId, textExpression->categoryId)) {
-            categoryType = category->categoryType;
-            catMusicFont = category->musicFont;
-        }
-        EnigmaParsingOptions options;
-        musx::util::EnigmaParsingContext parsingContext = textExpression->getRawTextCtx(m_currentMusxPartId);
-        FontTracker firstFontInfo;
-        readableExpression.xmlText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
-        // Option 2 (to match style setting if possible, with font info tags at the beginning if they differ)
-        options.initialFont = FontTracker(m_score->style(), fontStyleSuffixFromCategoryType(categoryType));
-        /// @todo The musicSymbol font here must be the inferred font *in Finale* that we expect, based on the detection of what kind
-        /// of marking it is mentioned above. Right now this code relies on the category, but probably that is too naive a design.
-        /// Whichever font we choose here will be stripped out in favor of the default for the kind of marking it is.
-        options.musicSymbolFont = [&]() -> std::optional<FontTracker> {
-            if (!catMusicFont) {
-                return FontTracker(musxOptions().defaultMusicFont); // we get here for the Misc category, and this seems like the best choice for legacy files. See todo comments, though.
-            } else if (fontIsEngravingFont(catMusicFont->getName())) {
-                return FontTracker(catMusicFont); // if it's an engraving font use it
-            } else if (catMusicFont->calcIsDefaultMusic() && !musxOptions().calculatedEngravingFontName.empty()) {
-                return FontTracker(catMusicFont); // if it's not an engraving font, but we are using an alternative as engraving font,
-                                                  // specify the non-engraving font here. The parsing routine strips it out and MuseScore
-                                                  // uses the engraving font instead.
-            }
-            return std::nullopt;
-        }();
-        if (catMusicFont && (fontIsEngravingFont(catMusicFont->getName()) || catMusicFont->calcIsDefaultMusic())) {
-            options.musicSymbolFont = FontTracker(catMusicFont);
-        }
-        String exprString2 = stringFromEnigmaText(parsingContext, options); // currently unused
-
-        // Element type
-        readableExpression.elementType = [&]() {
-            switch (textExpression->playbackType) {
-            case others::PlaybackType::None: break;
-            case others::PlaybackType::Tempo: return ElementType::TEMPO_TEXT;
-            case others::PlaybackType::MidiController: break; // staff text is best?
-            case others::PlaybackType::KeyVelocity: break; // dynamics, but let's process the string and dynamic type later
-            case others::PlaybackType::Transpose: break; // instrument change is best?
-            case others::PlaybackType::Channel: break; // instrument change is best?
-            case others::PlaybackType::MidiPatchChange: break; // instrument change is best?
-            case others::PlaybackType::PercussionMidiMap: break; // instrument change is best?
-            case others::PlaybackType::MidiPitchWheel: break; // instrument change is best?
-            case others::PlaybackType::ChannelPressure: break; // instrument change is best?
-            case others::PlaybackType::RestrikeKeys: break; // add/remove invisible pedal lines?
-            case others::PlaybackType::Dump: break; // staff text is best?
-            case others::PlaybackType::PlayTempoToolChanges: return ElementType::TEMPO_TEXT;
-            case others::PlaybackType::IgnoreTempoToolChanges: return ElementType::TEMPO_TEXT;
-            case others::PlaybackType::Swing: return ElementType::STAFF_TEXT; // possibly system text is better for playback, but could mess up layout
-            case others::PlaybackType::SmartPlaybackOn: break; // staff text is best?
-            case others::PlaybackType::SmartPlaybackOff: break; // staff text is best?
-            }
-            /// @todo introduce more sophisticated (regex-based) checks
-
-            std::string utf8Tag = readableExpression.xmlText.toStdString();
-
-            // Dynamics (adapted from engraving/dom/dynamic.cpp)
-            const std::regex dynamicRegex(R"((?:<sym>dynamic.*?</sym>)+|(?:\b)[fmnprsz]+(?:\b(?=[^>]|$)))");
-            auto begin = std::sregex_iterator(utf8Tag.begin(), utf8Tag.end(), dynamicRegex);
-            for (auto it = begin; it != std::sregex_iterator(); ++it) {
-                const std::smatch match = *it;
-                const std::string matchStr = match.str();
-                for (auto dyn : Dynamic::dynamicList()) {
-                    if (TConv::toXml(dyn.type).ascii() == matchStr || dyn.text == matchStr) {
-                        utf8Tag.replace(match.position(0), match.length(0), dyn.text);
-                        readableExpression.xmlText = String::fromStdString(utf8Tag); // do we want this?
-                        readableExpression.dynamicType = dyn.type;
-                        return ElementType::DYNAMIC;
-                    }
-                }
-            }
-
-            // Harp pedal (not text) diagrams
-            /// @todo allow font style/face/size tags
-            const std::regex hpdDetectRegex(R"(^ *?(?:<sym>harpPedal[^>]*?<\/sym> *?)+$)");
-            if (std::regex_search(utf8Tag, hpdDetectRegex)) {
-                std::optional<std::array<PedalPosition, HARP_STRING_NO> > maybePedalState = parseHarpPedalDiagram(utf8Tag);
-                if (maybePedalState.has_value()) {
-                    readableExpression.pedalState = maybePedalState.value();
-                    return ElementType::HARP_DIAGRAM;
-                }
-                logger()->logWarning(String(u"Cannot create harp pedal diagram!"));
-            }
-
-            static const std::unordered_map<others::MarkingCategory::CategoryType, ElementType> categoryTypeTable = {
-                { others::MarkingCategory::CategoryType::Dynamics, ElementType::DYNAMIC },
-                { others::MarkingCategory::CategoryType::ExpressiveText, ElementType::EXPRESSION },
-                { others::MarkingCategory::CategoryType::TempoMarks, ElementType::TEMPO_TEXT },
-                { others::MarkingCategory::CategoryType::TempoAlterations, ElementType::TEMPO_TEXT },
-                { others::MarkingCategory::CategoryType::TechniqueText, ElementType::STAFF_TEXT },
-                { others::MarkingCategory::CategoryType::RehearsalMarks, ElementType::REHEARSAL_MARK },
-            };
-            return muse::value(categoryTypeTable, categoryType, ElementType::STAFF_TEXT);
-        }();
-        logger()->logInfo(String(u"Converted expression of %1 type").arg(TConv::userName(readableExpression.elementType).translated()));
-        readableExpression.frameSettings = FrameSettings(textExpression->getEnclosure().get());
-        mappedExpressions.emplace(textExpression->getCmper(), readableExpression);
-    }
-
-    // 2nd: iterate each expression assignment and assign the mapped String instances as needed
+    // Iterate through assigned expressions
     const MusxInstanceList<others::MeasureExprAssign> expressionAssignments = m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId);
     logger()->logInfo(String(u"Import text expressions: Found %1 expressions.").arg(expressionAssignments.size()));
     for (const auto& expressionAssignment : expressionAssignments) {
@@ -427,9 +421,15 @@ void FinaleParser::importTextExpressions()
             // Shapes are currently unsupported
             continue;
         }
-        ReadableExpression def;
-        ReadableExpression expression = muse::value(mappedExpressions, expressionAssignment->textExprId, def);
-        if (expression.xmlText.empty()) {
+
+        // Search our converted expression library, or if not found add to it
+        ReadableExpression* expression = muse::value(m_expressions, expressionAssignment->textExprId, nullptr); /// @todo does this code work for part scores?
+        if (!expression) {
+            expression = new ReadableExpression(*this, m_doc->getOthers()->get<others::TextExpressionDef>(m_currentMusxPartId, expressionAssignment->textExprId));
+            m_expressions.emplace(expressionAssignment->textExprId, expression);
+        }
+
+        if (expression->xmlText.empty()) {
             continue;
         }
 
@@ -447,7 +447,8 @@ void FinaleParser::importTextExpressions()
             logger()->logWarning(String(u"Add text: Musx inst value not found."), m_doc, expressionAssignment->staffAssign);
             continue;
         }
-        ElementType elementType = expression.elementType == ElementType::STAFF_TEXT && expressionAssignment->staffAssign < 0 ? ElementType::SYSTEM_TEXT : expression.elementType;
+
+        ElementType elementType = expression->elementType == ElementType::STAFF_TEXT && expressionAssignment->staffAssign < 0 ? ElementType::SYSTEM_TEXT : expression->elementType;
 
         // Find location in measure
         Fraction mTick = muse::value(m_meas2Tick, expressionAssignment->getCmper(), Fraction(-1, 1));
@@ -468,76 +469,64 @@ void FinaleParser::importTextExpressions()
         logger()->logInfo(String(u"Creating a %1 at tick %2 on track %3.").arg(TConv::userName(elementType).translated(), s->tick().toString(), String::number(curTrackIdx)));
         TextBase* item = toTextBase(Factory::createItem(elementType, s));
         const MusxInstance<others::TextExpressionDef> expressionDef = expressionAssignment->getTextExpression();
+        item->setParent(s);
         item->setTrack(curTrackIdx);
         item->setVisible(!expressionAssignment->hidden);
-        item->setXmlText(expression.xmlText);
+        item->setXmlText(expression->xmlText);
         item->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         AlignH hAlign = toAlignH(expressionDef->horzExprJustification);
-        item->setFrameType(expression.frameSettings.frameType);
+        item->setFrameType(expression->frameSettings.frameType);
         if (item->frameType() != FrameType::NO_FRAME) {
-            item->setFrameWidth(absoluteSpatium(expression.frameSettings.frameWidth, item)); // is this the correct scaling?
-            item->setPaddingWidth(absoluteSpatium(expression.frameSettings.paddingWidth, item)); // is this the correct scaling?
-            item->setFrameRound(expression.frameSettings.frameRound);
+            item->setFrameWidth(absoluteSpatium(expression->frameSettings.frameWidth, item)); // is this the correct scaling?
+            item->setPaddingWidth(absoluteSpatium(expression->frameSettings.paddingWidth, item)); // is this the correct scaling?
+            item->setFrameRound(expression->frameSettings.frameRound);
         }
 
         item->setAlign(Align(hAlign, AlignV::BASELINE));
         s->add(item);
 
+        // Set element-specific properties
         switch (elementType) {
             case ElementType::DYNAMIC: {
                 Dynamic* dynamic = toDynamic(item);
-                dynamic->setDynamicType(expression.dynamicType);
+                dynamic->setDynamicType(expression->dynamicType);
                 if (expressionAssignment->layer != 0) {
                     dynamic->setVoiceAssignment(VoiceAssignment::CURRENT_VOICE_ONLY);
                 }
-                switch (expressionDef->playbackType) {
-                case others::PlaybackType::None: break;
-                case others::PlaybackType::KeyVelocity: {
+                if (expressionDef->playbackType == others::PlaybackType::KeyVelocity) {
                     dynamic->setVelocity(expressionDef->value);
-                    break;
-                }
-                default: break;
+                } else {
+                    dynamic->setPlayDynamic(false);
                 }
                 break;
             }
             case ElementType::REHEARSAL_MARK: {
                 if (expressionDef->hideMeasureNum && measure->measureNumber(curStaffIdx)) {
-                    /// @todo needs to be created via layout first???
                     measure->measureNumber(curStaffIdx)->setVisible(false);
                 }
                 break;
             }
             case ElementType::TEMPO_TEXT: {
                 TempoText* tt = toTempoText(item);
-                switch (expressionDef->playbackType) {
-                case others::PlaybackType::None: break;
-                case others::PlaybackType::Tempo: {
+                if (expressionDef->playbackType == others::PlaybackType::Tempo) {
                     tt->setFollowText(false); /// @todo detect this
                     tt->setTempo(expressionDef->value / 60.0); // Assume quarter for now
-                    break;
-                }
-                default: break;
                 }
                 break;
             }
             case ElementType::STAFF_TEXT:
             case ElementType::SYSTEM_TEXT: {
                 StaffTextBase* stb = toStaffTextBase(item);
-                switch (expressionDef->playbackType) {
-                case others::PlaybackType::None: break;
-                case others::PlaybackType::Swing: {
+                if (expressionDef->playbackType == others::PlaybackType::Swing) {
                     int swingValue = expressionDef->value;
                     int swingUnit = Fraction(1, measure->timesig().denominator() > 8 ? 16 : 8).ticks();
                     stb->setSwing(swingValue != 0);
                     stb->setSwingParameters(swingUnit, 50 + (swingValue / 6));
-                    break;
-                }
-                default: break;
                 }
                 break;
             }
             case ElementType::HARP_DIAGRAM: {
-                toHarpPedalDiagram(item)->setPedalState(expression.pedalState);
+                toHarpPedalDiagram(item)->setPedalState(expression->pedalState);
                 break;
             }
             default: break;
