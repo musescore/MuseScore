@@ -39,6 +39,13 @@ const UiActionList PlaybackUiActions::s_mainActions = {
              TranslatableString("action", "Play"),
              IconCode::Code::PLAY
              ),
+    UiAction("play-from-selection",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Play from selection"),
+             TranslatableString("action", "Play from selection"),
+             IconCode::Code::PLAY
+             ),
     UiAction("stop",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

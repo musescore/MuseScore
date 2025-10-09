@@ -44,6 +44,7 @@ using namespace mu::notation;
 using namespace mu::playback;
 
 static const ActionCode PLAY_CODE("play");
+static const ActionCode PLAY_FROM_SELECTION("play-from-selection");
 static const ActionCode STOP_CODE("stop");
 static const ActionCode PAUSE_AND_SELECT_CODE("pause-and-select");
 static const ActionCode REWIND_CODE("rewind");
@@ -91,6 +92,7 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
 void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
+    dispatcher()->reg(this, PLAY_FROM_SELECTION, this, &PlaybackController::playFromSelection);
     dispatcher()->reg(this, STOP_CODE, [this]() { PlaybackController::pause(/*select*/ false); });
     dispatcher()->reg(this, PAUSE_AND_SELECT_CODE, [this]() { PlaybackController::pause(/*select*/ true); });
     dispatcher()->reg(this, REWIND_CODE, this, &PlaybackController::rewind);
@@ -659,6 +661,44 @@ void PlaybackController::play()
     }
 
     currentPlayer()->play(delay);
+}
+
+void PlaybackController::playFromSelection()
+{
+    const LoopBoundaries& loop = notationPlayback()->loopBoundaries();
+    const int loopInTick = loop.loopInTick.ticks();
+    const int loopOutTick = loop.loopOutTick.ticks();
+
+    int minTick = INT_MAX;
+
+    for (const EngravingItem* item : selection()->elements()) {
+        const RetVal<midi::tick_t> retval = notationPlayback()->playPositionTickByElement(item);
+        if (!retval.ret) {
+            continue;
+        }
+
+        const int tick = static_cast<int>(retval.val);
+
+        if (loop.enabled) {
+            if (tick < loopInTick || tick > loopOutTick) {
+                continue;
+            }
+        }
+
+        minTick = std::min(minTick, tick);
+    }
+
+    if (minTick == INT_MAX) {
+        return;
+    }
+
+    seek(playedTickToSecs(minTick));
+
+    if (isPaused()) {
+        resume();
+    } else if (!isPlaying()) {
+        play();
+    }
 }
 
 void PlaybackController::rewind(const ActionData& args)
@@ -1847,9 +1887,18 @@ void PlaybackController::setIsExportingAudio(bool exporting)
     }
 }
 
-bool PlaybackController::canReceiveAction(const ActionCode&) const
+bool PlaybackController::canReceiveAction(const ActionCode& code) const
 {
-    return m_masterNotation != nullptr && m_masterNotation->hasParts();
+    if (!m_masterNotation || !m_masterNotation->hasParts()) {
+        return false;
+    }
+
+    if (code == PLAY_FROM_SELECTION) {
+        const INotationInteractionPtr interaction = this->interaction();
+        return interaction && !interaction->selection()->isNone() && !interaction->isElementEditStarted();
+    }
+
+    return true;
 }
 
 const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& PlaybackController::onlineSounds() const
