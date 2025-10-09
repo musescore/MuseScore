@@ -360,6 +360,18 @@ void FinaleParser::importSmartShapes()
         newSpanner->setVisible(!smartShape->hidden);
 
         if (customLine) {
+            if (!newSpanner->isSLine()) {
+                throw std::invalid_argument("Spanner is not line-based.");
+            }
+
+            SLine* line = (SLine*)newSpanner; /// @todo add to engraving/dom
+
+            line->setDiagonal(customLine->diagonal);
+            line->setLineStyle(customLine->lineStyle);
+            line->setLineWidth(customLine->lineWidth);
+            line->setDashLineLen(customLine->dashLineLen);
+            line->setDashGapLen(customLine->dashGapLen);
+
             if (newSpanner->isTextLineBase()) {
                 TextLineBase* textLineBase = toTextLineBase(newSpanner);
 
@@ -370,10 +382,6 @@ void FinaleParser::importSmartShapes()
                 textLineBase->setEndHookHeight(customLine->endHookHeight);
                 textLineBase->setGapBetweenTextAndLine(customLine->gapBetweenTextAndLine);
                 textLineBase->setTextSizeSpatiumDependent(customLine->textSizeSpatiumDependent);
-                textLineBase->setDiagonal(customLine->diagonal);
-                textLineBase->setLineWidth(customLine->lineWidth);
-                textLineBase->setDashLineLen(customLine->dashLineLen);
-                textLineBase->setDashGapLen(customLine->dashGapLen);
 
                 textLineBase->setBeginTextPlace(customLine->beginTextPlace);
                 textLineBase->setBeginText(customLine->beginText);
@@ -405,6 +413,7 @@ void FinaleParser::importSmartShapes()
             } else if (newSpanner->isGlissando()) {
                 Glissando* glissando = toGlissando(newSpanner);
                 glissando->setGlissandoType(customLine->glissandoType);
+                /// @todo we must remove HTML formatting here, it's laid out as plain text.
                 glissando->setText(customLine->centerShortText.empty() ? (customLine->centerLongText.empty() ? String() : customLine->centerLongText) : customLine->centerShortText);
                 glissando->setShowText(!glissando->text().empty());
             }
