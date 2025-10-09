@@ -56,6 +56,14 @@ if [ "$INSTALL_MUSE_SOUNDS" = "on" ]; then
     echo "Copying Muse Sounds installation template"
     cp $HERE/docker/install_muse_sounds_template.sh $DOCKER_WORK_DIR/install_muse_sounds.sh
     sed -i 's|x.x.x.xxxxxx|'${MU_VERSION}'|' $DOCKER_WORK_DIR/install_muse_sounds.sh
+
+    echo "Copying Muse Sounds installation template"
+    cp $HERE/docker/muse_sounds_install_all_template.sh $DOCKER_WORK_DIR/muse_sounds_install_all.sh
+    sed -i 's|x.x.x.xxxxxx|'${MU_VERSION}'|' $DOCKER_WORK_DIR/muse_sounds_install_all.sh
+
+    echo "Copying Muse Sounds clear all template"
+    cp $HERE/docker/muse_sounds_clear_all_template.sh $DOCKER_WORK_DIR/muse_sounds_clear_all.sh
+    sed -i 's|x.x.x.xxxxxx|'${MU_VERSION}'|' $DOCKER_WORK_DIR/muse_sounds_clear_all.sh
 fi
 
 cd $DOCKER_WORK_DIR
