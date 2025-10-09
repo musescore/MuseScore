@@ -3986,7 +3986,7 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
     while (m_e.readNextStartElement()) {
         m_defaultY = m_e.asciiAttribute("default-y").toDouble(&m_hasDefaultY) * -0.1;
         m_relativeX = m_e.doubleAttribute("relative-x") / 10 * m_score->style().spatium();
-        m_visible = m_e.asciiAttribute("print-object") != "no";
+        m_visible = m_e.asciiAttribute("print-object") != "no"; // only available for "metronome" and "other-direction"
         const String number = m_e.attribute("number");
         int n = 0;
         if (!number.empty()) {
@@ -6893,6 +6893,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
     int velocity = round(m_e.doubleAttribute("dynamics") * 0.9);
     bool graceSlash = false;
     bool printObject = m_e.asciiAttribute("print-object") != "no";
+    bool printLyric = (printObject && m_e.asciiAttribute("print-lyric") != "no") || m_e.asciiAttribute("print-lyric") == "yes";
     bool isSingleDrumset = false;
     BeamMode bm;
     std::map<int, String> beamTypes;
@@ -6933,7 +6934,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
         } else if (m_e.name() == "lyric") {
             // lyrics on grace notes not (yet) supported by MuseScore
             // add to main note instead
-            lyric.parse();
+            lyric.parse(printLyric);
         } else if (m_e.name() == "notations") {
             notations.parse();
             addError(notations.errors());
@@ -8043,12 +8044,12 @@ void MusicXmlParserLyric::readElision(String& formattedText)
 //   parse
 //---------------------------------------------------------
 
-void MusicXmlParserLyric::parse()
+void MusicXmlParserLyric::parse(bool visibility)
 {
     bool hasExtend = false;
     const String lyricNumber = m_e.attribute("number");
     const Color lyricColor = Color::fromString(m_e.asciiAttribute("color").ascii());
-    const bool printLyric = m_e.asciiAttribute("print-object") != "no";
+    const bool printLyric = visibility ? m_e.asciiAttribute("print-object") != "no" : m_e.asciiAttribute("print-object") == "yes";
     m_placement = m_e.attribute("placement");
     double relX = m_e.doubleAttribute("relative-x") * 0.1 * DPMM;
     m_relativeY = m_e.doubleAttribute("relative-y") * -0.1 * DPMM;

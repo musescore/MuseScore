@@ -236,7 +236,7 @@ public:
     std::set<engraving::Lyrics*> extendedLyrics() const { return m_extendedLyrics; }
     std::map<int, engraving::Lyrics*> numberedLyrics() const { return m_numberedLyrics; }
     std::vector<engraving::Sticking*> inferredStickings() const { return m_inferredStickings; }
-    void parse();
+    void parse(bool visibility = true);
 private:
     void skipLogCurrElem();
     void readElision(muse::String& formattedText);
