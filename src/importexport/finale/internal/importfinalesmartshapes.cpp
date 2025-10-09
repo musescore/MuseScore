@@ -258,8 +258,8 @@ void FinaleParser::importSmartShapes()
         if (useNextCr && entryInfoPtr) {
             rTick += musxFractionToFraction(entryInfoPtr.calcGlobalActualDuration());
         }
-        // logger()->logInfo(String(u"Created TimeTickAnchor"));
-        return mTick + rTick; //toEngravingItem(measure->getChordRestOrTimeTickSegment(tick)); // Do we have to create a segment, or will layout handle this for us?
+        // Layout seems to handle segment creation for us
+        return mTick + rTick; //toEngravingItem(measure->getChordRestOrTimeTickSegment(tick));
     };
 
     /// @note Getting the entire array of smart shapes works for SCORE_PARTID, but if we ever need to do it for excerpts it could fail.
