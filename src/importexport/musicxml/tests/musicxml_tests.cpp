@@ -454,6 +454,9 @@ TEST_F(MusicXml_Tests, breaksPage) {
 TEST_F(MusicXml_Tests, breaksSystem) {
     musicXmlMscxExportTestRefBreaks("testBreaksSystem");
 }
+TEST_F(MusicXml_Tests, breaksSection) {
+    musicXmlImportTestRef("testBreaksSection");
+}
 TEST_F(MusicXml_Tests, breathMarks) {
     musicXmlIoTest("testBreathMarks");
 }
