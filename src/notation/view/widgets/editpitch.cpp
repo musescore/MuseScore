@@ -103,5 +103,9 @@ void EditPitch::on_tableWidget_cellDoubleClicked(int row, int col)
 {
     // topmost row contains notes for 10-th MIDI octave (numbered as '9')
     int pitch = (tableWidget->rowCount() - 1 - row) * 12 + col;
+<<<<<<< HEAD
     done(std::min(pitch, engraving::MAX_PITCH));
+=======
+    done(std::min(pitch, mu::engraving::MAX_PITCH));
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
 }
