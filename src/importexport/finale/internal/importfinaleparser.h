@@ -284,6 +284,8 @@ private:
                      musx::dom::ClefIndex& musxCurrClef,
                      const musx::dom::MusxInstance<musx::dom::others::Measure>& nextMusxMeasure);
     bool applyStaffSyles(engraving::StaffType* staffType, const musx::dom::MusxInstance<musx::dom::others::StaffComposite>& currStaff);
+    void createLeftBarline(engraving::Measure* measure, musx::dom::others::Measure::BarlineType musxBarlineType);
+    void createRightBarline(engraving::Measure* measure, musx::dom::others::Measure::BarlineType musxBarlineType, bool endsStaffSystem);
 
     // entries
     void mapLayers();
