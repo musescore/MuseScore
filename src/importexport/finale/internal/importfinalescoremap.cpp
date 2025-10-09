@@ -698,8 +698,9 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const MusxInstance<musx
     if (changed(staffType->genClef(), !currStaff->hideClefs, result)) {
         staffType->setGenClef(!currStaff->hideClefs);
     }
-    if (changed(staffType->genKeysig(), !currStaff->hideKeySigs, result)) {
-        staffType->setGenKeysig(!currStaff->hideKeySigs);
+    bool displayKeySigs = !currStaff->hideKeySigs && !staffType->isDrumStaff(); // Is this hard-coded?
+    if (changed(staffType->genKeysig(), displayKeySigs, result)) {
+        staffType->setGenKeysig(displayKeySigs);
     }
     if (changed(staffType->genTimesig(), !currStaff->hideTimeSigs, result)) {
         staffType->setGenTimesig(!currStaff->hideTimeSigs);
@@ -848,6 +849,22 @@ void FinaleParser::importStaffItems()
                 return;
             }
             Fraction tick = measure->tick();
+
+            // Instrument changes
+            if (isValidUuid(currStaff->instUuid)) {
+                if (currStaff->instUuid != prevUuid && tick > Fraction(0, 1)) {
+                    Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+                    InstrumentChange* c = Factory::createInstrumentChange(segment, Instrument::fromTemplate(searchTemplate(instrTemplateIdfromUuid(currStaff->instUuid))));
+                    loadInstrument(currStaff, c->instrument());
+                    c->setTrack(staff2track(staffIdx));
+                    const String newInstrChangeText = muse::mtrc("engraving", "To %1").arg(c->instrument()->trackName());
+                    c->setXmlText(TextBase::plainToXmlText(newInstrChangeText));
+                    c->setVisible(false);
+                    segment->add(c);
+                }
+                prevUuid = currStaff->instUuid;
+            }
+
             StaffType* staffType = staff->staffType(tick);
             IF_ASSERT_FAILED(staffType) {
                 logger()->logWarning(String(u"Unable to create MuseScore staff type"), m_doc, musxScrollViewItem->staffId, measNum);
@@ -866,21 +883,6 @@ void FinaleParser::importStaffItems()
                 measure->add(staffChange);
             } else if (createdStaffType) {
                 delete staffType;
-            }
-
-            // Instrument changes
-            if (isValidUuid(currStaff->instUuid)) {
-                if (currStaff->instUuid != prevUuid && tick > Fraction(0, 1)) {
-                    Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-                    InstrumentChange* c = Factory::createInstrumentChange(segment, Instrument::fromTemplate(searchTemplate(instrTemplateIdfromUuid(currStaff->instUuid))));
-                    loadInstrument(currStaff, c->instrument());
-                    c->setTrack(staff2track(staffIdx));
-                    const String newInstrChangeText = muse::mtrc("engraving", "To %1").arg(c->instrument()->trackName());
-                    c->setXmlText(TextBase::plainToXmlText(newInstrChangeText));
-                    c->setVisible(false);
-                    segment->add(c);
-                }
-                prevUuid = currStaff->instUuid;
             }
         }
         // per measure calculations
@@ -1004,7 +1006,6 @@ void FinaleParser::importStaffItems()
                     logger()->logWarning(String(u"Microtonal key signatures not supported."), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 }
                 if (keySigEvent && keySigEvent != currKeySigEvent) {
-                    /// @todo this creates a visible keysig even on percussion staves, but those might still need the event.
                     Segment* seg = measure->getSegmentR(SegmentType::KeySig, Fraction(0, 1));
                     KeySig* ks = Factory::createKeySig(seg);
                     ks->setKeySigEvent(keySigEvent.value());
