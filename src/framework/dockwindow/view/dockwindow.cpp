@@ -251,12 +251,10 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
     if (isFirstOpening) {
         async::Async::call(this, [this, notifyAboutPageLoaded]() {
             if (!m_hasGeometryBeenRestored
-                || (m_mainWindow->windowHandle()->windowStates() & QWindow::FullScreen)) {
+                || (m_mainWindow->windowHandle()->windowStates() & Qt::WindowFullScreen)) {
                 //! NOTE: show window as maximized if no geometry has been restored
                 //! or if the user had closed app in FullScreen mode
                 m_mainWindow->windowHandle()->showMaximized();
-            } else {
-                m_mainWindow->windowHandle()->setVisible(true);
             }
 
             notifyAboutPageLoaded();
