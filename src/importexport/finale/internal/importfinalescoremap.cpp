@@ -1272,6 +1272,7 @@ void FinaleParser::importPageLayout()
         // In Finale, up is positive and down is negative. That means we have to reverse the signs of the vertical axis for MuseScore.
         // HOWEVER, the top and right margins have signs reversed from the U.I. Are we confused yet?
         // create system top and bottom margins
+        /// @todo these are not added if the top/bottom staff hides itself
         if (isFirstSystemOnPage) {
             Spacer* upSpacer = Factory::createSpacer(startMeasure);
             upSpacer->setSpacerType(SpacerType::UP);
@@ -1288,13 +1289,24 @@ void FinaleParser::importPageLayout()
             startMeasure->add(downSpacer);
         }
 
-        // Add distance between the staves
-        /// @todo do we need to account for staff visibility here, using startMeasure->system()->staff(staffIdx)->show() ?
-        /// Possibly a layout call would needed before here, since we may need check for the visibility of SysStaves
+        // Hide systems (when empty, but ideally whenever)
         auto instrumentsUsedInSystem = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, leftStaffSystem->getCmper());
+        std::vector<staff_idx_t> visibleStaves;
+        visibleStaves.reserve(instrumentsUsedInSystem.size());
+        for (const MusxInstance<others::StaffUsed>& musxStaff : instrumentsUsedInSystem) {
+            visibleStaves.emplace_back(muse::value(m_inst2Staff, musxStaff->staffId, muse::nidx));
+        }
+        for (Measure* m = startMeasure; m && m->tick() <= endMeasure->tick(); m = m->nextMeasureMM()) {
+            for (staff_idx_t j = 0; j < m_score->nstaves(); ++j) {
+                m->setHideStaffIfEmpty(j, muse::contains(visibleStaves, j) ? AutoOnOff::OFF : AutoOnOff::ON);
+            }
+        }
+
+        // Add distance between the staves
+        /// Possibly a layout call would needed before here, since we may need check for the visibility of SysStaves
         for (size_t j = 1; j < instrumentsUsedInSystem.size(); ++j) {
-            MusxInstance<others::StaffUsed>& prevMusxStaff = instrumentsUsedInSystem[j - 1];
-            MusxInstance<others::StaffUsed>& nextMusxStaff = instrumentsUsedInSystem[j];
+            const MusxInstance<others::StaffUsed>& prevMusxStaff = instrumentsUsedInSystem[j - 1];
+            const MusxInstance<others::StaffUsed>& nextMusxStaff = instrumentsUsedInSystem[j];
             staff_idx_t prevStaffIdx = muse::value(m_inst2Staff, prevMusxStaff->staffId, muse::nidx);
             staff_idx_t nextStaffIdx = muse::value(m_inst2Staff, nextMusxStaff->staffId, muse::nidx);
             if (nextStaffIdx == muse::nidx || prevStaffIdx == muse::nidx) {
