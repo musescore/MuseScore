@@ -11431,77 +11431,77 @@ Afinada en Do.</translation>
         <source>Janggu</source>
         <comment>janggu trackName</comment>
         <extracomment>trackName for Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Janggu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3834"/>
         <source>Janggu</source>
         <comment>janggu longName</comment>
         <extracomment>longName for Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Janggu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3836"/>
         <source>Jngu.</source>
         <comment>janggu shortName</comment>
         <extracomment>shortName for Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Jngu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3839"/>
         <source>Japanese hourglass-shaped drum. Smaller and lower-pitched than the o-tsuzumi. One head is struck while the other is squeezed/released to change pitch.</source>
         <comment>ko-tsuzumi description</comment>
         <extracomment>description for Ko-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tambor japonés en forma de reloj de arena. Más pequeño y de tono más bajo que el o-tsuzumi. Se golpea una cabeza mientras que la otra se aprieta/suelta para cambiar de tono.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3841"/>
         <source>Ko-Tsuzumi</source>
         <comment>ko-tsuzumi trackName</comment>
         <extracomment>trackName for Ko-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ko-Tsuzumi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3843"/>
         <source>Ko-Tsuzumi</source>
         <comment>ko-tsuzumi longName</comment>
         <extracomment>longName for Ko-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ko-Tsuzumi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3845"/>
         <source>K-Tszmi.</source>
         <comment>ko-tsuzumi shortName</comment>
         <extracomment>shortName for Ko-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>K-Tszmi.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3848"/>
         <source>Japanese hourglass-shaped drum. Larger and higher-pitched than the ko-tsuzumi. One head is struck while the other is squeezed/released to change pitch.</source>
         <comment>o-tsuzumi description</comment>
         <extracomment>description for O-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tambor japonés en forma de reloj de arena. Más grande y agudo que el ko-tsuzumi. Se golpea una cabeza mientras que la otra se aprieta/suelta para cambiar de tono.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3850"/>
         <source>O-Tsuzumi</source>
         <comment>o-tsuzumi trackName</comment>
         <extracomment>trackName for O-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>O-Tsuzumi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3852"/>
         <source>O-Tsuzumi</source>
         <comment>o-tsuzumi longName</comment>
         <extracomment>longName for O-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>O-Tsuzumi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3854"/>
         <source>O-Tszmi.</source>
         <comment>o-tsuzumi shortName</comment>
         <extracomment>shortName for O-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>O-Tszmi.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3857"/>
@@ -11536,7 +11536,7 @@ Afinada en Do.</translation>
         <source>Small Korean drum held by an attached stick.</source>
         <comment>sogo description</comment>
         <extracomment>description for Sogo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pequeño tambor coreano sostenido por un palo adjunto.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3868"/>
@@ -11592,7 +11592,7 @@ Afinada en Do.</translation>
         <source>Japanese bucket-shaped, lace-headed drum.</source>
         <comment>okedo-daiko description</comment>
         <extracomment>description for Okedo-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tambor japonés en forma de cubo, con cabeza de encaje.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3886"/>
@@ -11711,21 +11711,21 @@ Afinada en Do.</translation>
         <source>Shime-Daiko</source>
         <comment>shime-daiko trackName</comment>
         <extracomment>trackName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Shime-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3924"/>
         <source>Shime-Daiko</source>
         <comment>shime-daiko longName</comment>
         <extracomment>longName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Shime-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3926"/>
         <source>S-Dko.</source>
         <comment>shime-daiko shortName</comment>
         <extracomment>shortName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>S-Dko.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3929"/>
@@ -11739,21 +11739,21 @@ Afinada en Do.</translation>
         <source>Kakko</source>
         <comment>kakko trackName</comment>
         <extracomment>trackName for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kakko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3933"/>
         <source>Kakko</source>
         <comment>kakko longName</comment>
         <extracomment>longName for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kakko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3935"/>
         <source>Kakko</source>
         <comment>kakko shortName</comment>
         <extracomment>shortName for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kakko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3938"/>
@@ -11767,21 +11767,21 @@ Afinada en Do.</translation>
         <source>Xiaogu</source>
         <comment>xiaogu trackName</comment>
         <extracomment>trackName for Xiaogu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xiaogu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3942"/>
         <source>Xiaogu</source>
         <comment>xiaogu longName</comment>
         <extracomment>longName for Xiaogu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xiaogu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3944"/>
         <source>Xiaogu</source>
         <comment>xiaogu shortName</comment>
         <extracomment>shortName for Xiaogu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xiaogu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3947"/>
@@ -11795,21 +11795,21 @@ Afinada en Do.</translation>
         <source>Doumbek</source>
         <comment>doumbek trackName</comment>
         <extracomment>trackName for Doumbek; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Derbake</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3951"/>
         <source>Doumbek</source>
         <comment>doumbek longName</comment>
         <extracomment>longName for Doumbek; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Derbake</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3953"/>
         <source>Dbk.</source>
         <comment>doumbek shortName</comment>
         <extracomment>shortName for Doumbek; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dbk.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3956"/>
@@ -11823,14 +11823,14 @@ Afinada en Do.</translation>
         <source>Djembe</source>
         <comment>djembe trackName</comment>
         <extracomment>trackName for Djembe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Yembé</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3960"/>
         <source>Djembe</source>
         <comment>djembe longName</comment>
         <extracomment>longName for Djembe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Yembé</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3962"/>
@@ -11844,49 +11844,49 @@ Afinada en Do.</translation>
         <source>Peruvian wooden box drum.</source>
         <comment>cajon description</comment>
         <extracomment>description for Cajón; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tambor de caja de madera peruano.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3967"/>
         <source>Cajón</source>
         <comment>cajon trackName</comment>
         <extracomment>trackName for Cajón; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cajón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3969"/>
         <source>Cajón</source>
         <comment>cajon longName</comment>
         <extracomment>longName for Cajón; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cajón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3971"/>
         <source>Cjn.</source>
         <comment>cajon shortName</comment>
         <extracomment>shortName for Cajón; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cjn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3974"/>
         <source>Brazilian friction drum played by rubbing a stick permanently fastened to the drum membrane on the inside. Applying pressure to the outside increases the pitch.</source>
         <comment>cuica description</comment>
         <extracomment>description for Cuíca; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tambor de fricción brasileño que se toca frotando un palo fijado permanentemente a la membrana del tambor en el interior. Aplicar presión al exterior aumenta el tono.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3976"/>
         <source>Cuíca</source>
         <comment>cuica trackName</comment>
         <extracomment>trackName for Cuíca; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cuica</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3978"/>
         <source>Cuíca</source>
         <comment>cuica longName</comment>
         <extracomment>longName for Cuíca; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cuica</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3980"/>
@@ -12047,21 +12047,21 @@ Afinada en Do.</translation>
         <source>Bangu</source>
         <comment>bangu trackName</comment>
         <extracomment>trackName for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bangu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4032"/>
         <source>Bangu</source>
         <comment>bangu longName</comment>
         <extracomment>longName for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bangu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4034"/>
         <source>Bgu.</source>
         <comment>bangu shortName</comment>
         <extracomment>shortName for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bgu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4037"/>
@@ -12187,28 +12187,28 @@ Afinada en Do.</translation>
         <source>Buk</source>
         <comment>buk trackName</comment>
         <extracomment>trackName for Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Buk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4077"/>
         <source>Buk</source>
         <comment>buk longName</comment>
         <extracomment>longName for Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Buk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4079"/>
         <source>Buk</source>
         <comment>buk shortName</comment>
         <extracomment>shortName for Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Buk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4082"/>
         <source>Generic Japanese drum.</source>
         <comment>taiko description</comment>
         <extracomment>description for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tambor japonés genérico.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4084"/>
@@ -12236,84 +12236,84 @@ Afinada en Do.</translation>
         <source>Traditionally ornate Japanese drum hung on circular frame.</source>
         <comment>tsuri-daiko description</comment>
         <extracomment>description for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tambor japonés tradicionalmente adornado colgado en un marco circular.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4093"/>
         <source>Tsuri-Daiko</source>
         <comment>tsuri-daiko trackName</comment>
         <extracomment>trackName for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tsuri-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4095"/>
         <source>Tsuri-Daiko</source>
         <comment>tsuri-daiko longName</comment>
         <extracomment>longName for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tsuri-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4097"/>
         <source>T-Daiko</source>
         <comment>tsuri-daiko shortName</comment>
         <extracomment>shortName for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>T-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4100"/>
         <source>Robust, barrel-shaped Japanese drum. Also known as nagadou, they are the most common taiko.</source>
         <comment>miya-daiko description</comment>
         <extracomment>description for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Robusto tambor japonés en forma de barril. También conocidos como nagadou, son el taiko más común.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4102"/>
         <source>Miya-Daiko</source>
         <comment>miya-daiko trackName</comment>
         <extracomment>trackName for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Miya-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4104"/>
         <source>Miya-Daiko</source>
         <comment>miya-daiko longName</comment>
         <extracomment>longName for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Miya-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4106"/>
         <source>M-Daiko</source>
         <comment>miya-daiko shortName</comment>
         <extracomment>shortName for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>M-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4109"/>
         <source>Large Chinese drum.</source>
         <comment>dagu description</comment>
         <extracomment>description for Dagu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gran tambor chino.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4111"/>
         <source>Dagu</source>
         <comment>dagu trackName</comment>
         <extracomment>trackName for Dagu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dagu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4113"/>
         <source>Dagu</source>
         <comment>dagu longName</comment>
         <extracomment>longName for Dagu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dagu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4115"/>
         <source>Dagu</source>
         <comment>dagu shortName</comment>
         <extracomment>shortName for Dagu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dagu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4118"/>
@@ -15393,7 +15393,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>atmosphere-synth shortName</comment>
         <extracomment>shortName for Atmosphere Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5122"/>
@@ -15421,7 +15421,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>bass-synthesizer shortName</comment>
         <extracomment>shortName for Bass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5130"/>
@@ -15463,7 +15463,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>bowed-synth shortName</comment>
         <extracomment>shortName for Bowed Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5144"/>
@@ -15491,7 +15491,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>brass-synthesizer shortName</comment>
         <extracomment>shortName for Brass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5152"/>
@@ -15533,7 +15533,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>brightness-synth shortName</comment>
         <extracomment>shortName for Brightness Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5166"/>
@@ -15561,7 +15561,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>choir-synth shortName</comment>
         <extracomment>shortName for Choir Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5175"/>
@@ -15589,7 +15589,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>crystal-synth shortName</comment>
         <extracomment>shortName for Crystal Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5184"/>
@@ -15617,7 +15617,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>echoes-synth shortName</comment>
         <extracomment>shortName for Echoes Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5193"/>
@@ -15645,7 +15645,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>effect-synth shortName</comment>
         <extracomment>shortName for Effect Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5201"/>
@@ -15729,7 +15729,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>goblins-synth shortName</comment>
         <extracomment>shortName for Goblins Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5227"/>
@@ -15757,7 +15757,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>halo-synth shortName</comment>
         <extracomment>shortName for Halo Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5236"/>
@@ -15785,7 +15785,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>metallic-synth shortName</comment>
         <extracomment>shortName for Metallic Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5245"/>
@@ -15813,7 +15813,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>new-age-synth shortName</comment>
         <extracomment>shortName for New Age Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5254"/>
@@ -15841,7 +15841,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>pad-synth shortName</comment>
         <extracomment>shortName for Pad Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5262"/>
@@ -15925,7 +15925,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>poly-synth shortName</comment>
         <extracomment>shortName for Poly Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5288"/>
@@ -15953,7 +15953,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>rain-synth shortName</comment>
         <extracomment>shortName for Rain Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5297"/>
@@ -15981,7 +15981,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>saw-synth shortName</comment>
         <extracomment>shortName for Saw Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5306"/>
@@ -16009,7 +16009,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>sci-fi-synth shortName</comment>
         <extracomment>shortName for Sci-fi Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5315"/>
@@ -16037,7 +16037,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>sine-synth shortName</comment>
         <extracomment>shortName for Sine Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5324"/>
@@ -16065,7 +16065,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>soundtrack-synth shortName</comment>
         <extracomment>shortName for Soundtrack Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5333"/>
@@ -16093,7 +16093,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>square-synth shortName</comment>
         <extracomment>shortName for Square Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5342"/>
@@ -16121,7 +16121,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>string-synthesizer shortName</comment>
         <extracomment>shortName for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5350"/>
@@ -16163,7 +16163,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>sweep-synth shortName</comment>
         <extracomment>shortName for Sweep Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5364"/>
@@ -16219,7 +16219,7 @@ Afinada en Do.</translation>
         <source>Synth.</source>
         <comment>warm-synth shortName</comment>
         <extracomment>shortName for Warm Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sint. Cuerd.</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5385"/>

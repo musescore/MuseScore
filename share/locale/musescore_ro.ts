@@ -1329,7 +1329,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="906"/>
         <source>Edit string data…</source>
-        <translation>Editează date coardă...</translation>
+        <translation>Editează date coarde...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="913"/>
@@ -28178,7 +28178,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="222"/>
         <source>Always open</source>
-        <translation>Mereu libere</translation>
+        <translation>Mereu liberă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="223"/>
