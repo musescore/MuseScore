@@ -164,6 +164,7 @@ void Finale_Tests::enigmaXmlImportTestRef(const char* file)
 
 MUSX_IMPORT_TEST(texts)
 MUSX_IMPORT_TEST_EDIT(texts)
+MUSX_IMPORT_TEST_EDIT(shapess)
 MUSX_IMPORT_TEST(smartShapes1)
 MUSX_IMPORT_TEST(multistaffInst)
 MUSX_IMPORT_TEST_DISABLED(onePartNoMeasures)
