@@ -38,6 +38,7 @@
 //#include "audio/driver/platform/win/winmmdriver.h"
 //#include "audio/driver/platform/win/wincoreaudiodriver.h"
 #include "audio/driver/platform/win/wasapiaudiodriver.h"
+#include "audio/driver/platform/win/wasapiaudiodriver2.h"
 #endif
 
 #ifdef Q_OS_MACOS
@@ -84,7 +85,8 @@ void AudioDriverController::init()
 #ifdef Q_OS_WIN
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new WinmmDriver());
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new CoreAudioDriver());
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver());
+    //m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver());
+    m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver2());
 #endif
 
 #ifdef Q_OS_MACOS
