@@ -2072,9 +2072,7 @@ void SlurTieLayout::layoutLaissezVibChord(Chord* chord, LayoutContext& ctx)
             ldata->setPos(sPos.p1);
         }
 
-        const System* system = sPos.system1;
-        const SysStaff* staff = system->staff(chord->vStaffIdx());
-        const PointF chordPos = chord->pos() + chord->segment()->pos() + chord->measure()->pos() + PointF(0.0, staff->y());
+        const PointF chordPos = chord->pos() + chord->segment()->pos() + chord->measure()->pos();
         const PointF notePos = chordPos + note->pos();
         ldata->posRelativeToNote = sPos.p1 - notePos;
     }
