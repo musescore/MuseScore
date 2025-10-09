@@ -34,9 +34,9 @@ static const muse::String CONVERTER_DATA_DIR("data/");
 class Converter_ScoreElementsTests : public ::testing::Test
 {
 public:
-    ScoreElementScanner::ElementInfo makeInfo(const String& name, const String& notes = u"") const
+    ElementInfo makeInfo(const String& name, const String& notes = u"") const
     {
-        ScoreElementScanner::ElementInfo info;
+        ElementInfo info;
         info.name = name;
         info.notes = notes;
 
@@ -76,10 +76,11 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
     };
 
     // [WHEN] Scan the score
-    ScoreElementScanner::InstrumentElementMap result = ScoreElementScanner::scanElements(score, options);
+    InstrumentElementMap result = ScoreElementScanner::scanElements(score, options);
 
     // [THEN] The map matches the expected one
-    ScoreElementScanner::ElementMap expectedMap;
+    ElementMap expectedMap;
+
     // 1st measure
     expectedMap[ElementType::KEYSIG] = { makeInfo(u"C major / A minor") };
     expectedMap[ElementType::TIMESIG] = { makeInfo(u"4/4 time") };
@@ -104,19 +105,19 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
     const mu::engraving::InstrumentTrackId expectedTrackId { muse::ID(1), u"piano" };
     EXPECT_EQ(result.begin()->first, expectedTrackId);
 
-    const ScoreElementScanner::ElementMap& actualMap = result.begin()->second;
+    const ElementMap& actualMap = result.begin()->second;
     EXPECT_EQ(actualMap.size(), expectedMap.size());
 
     for (const auto& pair : actualMap) {
         auto it = expectedMap.find(pair.first);
         ASSERT_TRUE(it != expectedMap.end());
 
-        const ScoreElementScanner::ElementInfoList& expectedInfoList = it->second;
+        const ElementInfoList& expectedInfoList = it->second;
         ASSERT_EQ(pair.second.size(), expectedInfoList.size());
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const ScoreElementScanner::ElementInfo& actualInfo = pair.second.at(i);
-            const ScoreElementScanner::ElementInfo& expectedInfo = expectedInfoList.at(i);
+            const ElementInfo& actualInfo = pair.second.at(i);
+            const ElementInfo& expectedInfo = expectedInfoList.at(i);
 
             EXPECT_EQ(actualInfo.name, expectedInfo.name);
             EXPECT_EQ(actualInfo.notes, expectedInfo.notes);

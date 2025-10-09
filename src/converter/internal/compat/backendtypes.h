@@ -19,26 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "backendtypes.h"
+#include "global/types/string.h"
+#include "global/realfn.h"
 
-namespace mu::engraving {
-class Score;
-}
+#include "engraving/types/types.h"
 
 namespace mu::converter {
-class ScoreElementScanner
+struct ElementInfo
 {
-public:
-    struct Options {
-        Options() {}
+    muse::String name;
+    muse::String notes;
+    muse::String duration;
+    muse::String text;
 
-        mu::engraving::ElementTypeSet acceptedTypes;
-        bool avoidDuplicates = false;
-    };
+    struct Location {
+        mu::engraving::track_idx_t trackIdx = muse::nidx;
+        size_t measureIdx = muse::nidx;
+        float beat = -1.f;
 
-    static InstrumentElementMap scanElements(mu::engraving::Score* score, const Options& options = {});
+        bool operator==(const Location& l) const
+        {
+            return trackIdx == l.trackIdx && measureIdx == l.measureIdx && muse::RealIsEqual(beat, l.beat);
+        }
+    } start, end;
 };
+
+// Instrument -> ElementType -> Elements
+using ElementInfoList = std::vector<ElementInfo>;
+using ElementMap = std::map<mu::engraving::ElementType, ElementInfoList>;
+using InstrumentElementMap = std::map<mu::engraving::InstrumentTrackId, ElementMap>;
 }
