@@ -203,7 +203,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
         logger->setLevel(m_loggerLevel.value());
     } else {
 #ifdef MUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL
-        logger->setLevel(muse::logger::Level::Normal);
+        logger->setLevel(muse::logger::Level::Debug);
 #else
         logger->setLevel(muse::logger::Level::Normal);
 #endif

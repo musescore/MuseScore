@@ -175,6 +175,8 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
     if (mode == IApplication::RunMode::GuiApp) {
         audioDriver()->init();
 
+        audioDriver()->selectOutputDevice(configuration()->audioOutputDeviceId());
+
         if (!audioDriver()->open(requiredSpec, &activeSpec)) {
             return;
         }
