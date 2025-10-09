@@ -32,7 +32,6 @@
 
 #include "types/string.h"
 
-#include "engraving/dom/anchors.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/excerpt.h"
@@ -456,12 +455,7 @@ void FinaleParser::importTextExpressions()
         }
         track_idx_t curTrackIdx = staff2track(curStaffIdx) + static_cast<voice_idx_t>(std::clamp(expressionAssignment->layer - 1, 0, int(VOICES) - 1));
         Fraction rTick = eduToFraction(expressionAssignment->eduPosition);
-        Segment* s = measure->findSegmentR(Segment::CHORD_REST_OR_TIME_TICK_TYPE, rTick);
-        if (!s) {
-            TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, rTick, curStaffIdx);
-            EditTimeTickAnchors::updateLayout(measure);
-            s = anchor->segment();
-        }
+        Segment* s = measure->getChordRestOrTimeTickSegment(measure->tick() + rTick);
 
         // Create item
         logger()->logInfo(String(u"Creating a %1 at tick %2 on track %3.").arg(TConv::userName(elementType).translated(), s->tick().toString(), String::number(curTrackIdx)));
@@ -795,12 +789,7 @@ void FinaleParser::importTextExpressions()
                 String measureText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
 
                 Fraction rTick = eduToFraction(measureTextAssign->xDispEdu);
-                Segment* s = measure->findSegmentR(Segment::CHORD_REST_OR_TIME_TICK_TYPE, rTick);
-                if (!s) {
-                    TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, rTick, curStaffIdx);
-                    EditTimeTickAnchors::updateLayout(measure);
-                    s = anchor->segment();
-                }
+                Segment* s = measure->getChordRestOrTimeTickSegment(measure->tick() + rTick);
 
                 StaffText* text = Factory::createStaffText(s);
                 text->setTrack(curTrackIdx);
