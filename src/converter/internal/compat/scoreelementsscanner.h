@@ -38,6 +38,7 @@ public:
     {
         muse::String name;
         muse::String notes;
+        muse::String duration;
         muse::String text;
 
         struct Location {
