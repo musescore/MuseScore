@@ -225,9 +225,9 @@ public:
     Fraction anacrusisOffset() const;
     Fraction maxTicks() const;
 
-    bool showMeasureNumber();
-    bool showMeasureNumberInAutoMode();
-    bool showMeasureNumberOnStaff(staff_idx_t staffIdx);
+    bool showMeasureNumber() const;
+    bool showMeasureNumberInAutoMode() const;
+    bool showMeasureNumberOnStaff(staff_idx_t staffIdx) const;
 
     Chord* findChord(Fraction tick, track_idx_t track) const;
     ChordRest* findChordRest(Fraction tick, track_idx_t track) const;
