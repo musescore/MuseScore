@@ -267,6 +267,7 @@ private:
     void importMeasures();
     void importPageLayout();
     void importStaffItems();
+    void importBarlines();
 
     engraving::Staff* createStaff(engraving::Part* part, const musx::dom::MusxInstance<musx::dom::others::Staff> musxStaff, const engraving::InstrumentTemplate* it = nullptr);
     engraving::ClefType toMuseScoreClefType(const musx::dom::MusxInstance<musx::dom::options::ClefOptions::ClefDef>& clefDef,
