@@ -315,29 +315,29 @@ void SplitJoinMeasure::joinMeasures(MasterScore* score, const Fraction& tick1, c
                 if (TimeSig* insTimeSig = toTimeSig(insMSeg->element(staffIdx * VOICES))) {
                     TimeSig* lts = nullptr;
                     for (EngravingObject* l : insTimeSig->linkList()) {
-                        Score* score = l->score();
+                        Score* currentScore = l->score();
                         TimeSig* timeSig = toTimeSig(l);
                         Segment* tSeg = timeSig->segment();
                         track_idx_t track = timeSig->track();
-                        Measure* sNext = next ? score->tick2measure(next->tick()) : nullptr;
+                        Measure* sNext = next ? currentScore->tick2measure(next->tick()) : nullptr;
                         Segment* nextTSeg = sNext ? sNext->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1)) : nullptr;
                         if (sNext && !nextTSeg->element(track)) {
                             TimeSig* nsig = Factory::copyTimeSig(*timeSig);
-                            nsig->setScore(score);
+                            nsig->setScore(currentScore);
                             nsig->setTrack(track);
                             nsig->setParent(nextTSeg);
 
-                            score->doUndoAddElement(nsig);
+                            currentScore->doUndoAddElement(nsig);
 
                             if (!lts) {
                                 lts = nsig;
                             } else {
-                                score->undo(new Link(lts, nsig));
+                                currentScore->undo(new Link(lts, nsig));
                             }
                         }
-                        score->doUndoRemoveElement(timeSig);
+                        currentScore->doUndoRemoveElement(timeSig);
                         if (tSeg->empty()) {
-                            score->doUndoRemoveElement(tSeg);
+                            currentScore->doUndoRemoveElement(tSeg);
                         }
                     }
                 }
