@@ -21,7 +21,9 @@
  */
 
 #pragma once
+
 #include "global/types/string.h"
+#include "global/types/translatablestring.h"
 
 namespace mu::engraving {
 class Note;
@@ -48,7 +50,7 @@ public:
     void setJumpPointList(TieJumpPointList* jumpPointList) { m_jumpPointList = jumpPointList; }
     TieJumpPointList* jumpPointList() { return m_jumpPointList; }
 
-    const muse::String menuTitle() const;
+    muse::TranslatableString menuTitle() const;
 
 private:
     muse::String precedingJumpItemName() const;
