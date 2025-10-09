@@ -89,14 +89,13 @@ Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
 
 void PngWriter::convertImageToGrayscale(QImage& image)
 {
-    // We convert every pixel to gray keeping alpha channel (a need for transparent background)
+    // We convert every pixel to gray, preserving alpha channel (necessary for transparent background)
     for (int y = 0; y < image.height(); ++y) {
-        QRgb* scanLine = (QRgb*)image.scanLine(y);
+        QRgb* scanLine = reinterpret_cast<QRgb*>(image.scanLine(y));
         for (int x = 0; x < image.width(); ++x) {
-            QRgb pixel = *scanLine;
+            QRgb& pixel = scanLine[x];
             uint ci = uint(qGray(pixel));
-            *scanLine = qRgba(ci, ci, ci, qAlpha(pixel));
-            ++scanLine;
+            pixel = qRgba(ci, ci, ci, qAlpha(pixel));
         }
     }
 }
