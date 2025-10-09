@@ -567,8 +567,6 @@ void NotationActionController::init()
 
 bool NotationActionController::canReceiveAction(const ActionCode& code) const
 {
-    TRACEFUNC;
-
     // If no notation is loaded, we cannot handle any action.
     auto masterNotation = currentMasterNotation();
     if (!masterNotation) {
@@ -2265,7 +2263,7 @@ bool NotationActionController::startNoteInputAllowed() const
         return false;
     }
 
-    const UiContext ctx = uiContextResolver()->currentUiContext();
+    const UiContext& ctx = uiContextResolver()->currentUiContext();
     const INavigationControl* ctrl = navigationController()->activeControl();
 
     return ctx == ui::UiCtxProjectFocused
