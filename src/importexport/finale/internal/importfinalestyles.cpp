@@ -275,6 +275,7 @@ static void writePagePrefs(MStyle& style, const FinaleParser& context)
     }
     style.set(Sid::pageTwosided, pagePrefs->facingPages);
     style.set(Sid::enableIndentationOnFirstSystem, pagePrefs->differentFirstSysMargin);
+    style.set(Sid::lastSystemFillLimit, 0.0); // Always fill systems
     writeEvpuSpace(style, Sid::firstSystemIndentationValue, pagePrefs->firstSysMarginLeft);
 
     // Calculate Spatium
