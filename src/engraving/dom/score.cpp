@@ -1163,7 +1163,7 @@ static Segment* getNextValidInputSegment(Segment* segment, track_idx_t track, vo
         }
     }
 
-    for (segment; segment; segment = segment->next(SegmentType::ChordRest)) {
+    for (; segment; segment = segment->next(SegmentType::ChordRest)) {
         if (segment->element(track + voice) || (voice && segment->tick() == nextTick)) {
             break;
         }
