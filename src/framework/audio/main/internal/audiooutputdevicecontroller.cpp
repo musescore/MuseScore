@@ -30,11 +30,9 @@ using namespace muse::audio::rpc;
 
 void AudioOutputDeviceController::init()
 {
-    checkConnection();
-
     audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
         LOGI() << "Available output devices changed, checking connection...";
-        checkConnection();
+        changeOutputDevice();
     });
 
     configuration()->audioOutputDeviceIdChanged().onNotify(this, [this]() {
@@ -68,32 +66,12 @@ void AudioOutputDeviceController::init()
     });
 }
 
-void AudioOutputDeviceController::checkConnection()
+void AudioOutputDeviceController::changeOutputDevice()
 {
-    auto containsDevice = [](const AudioDeviceList& devices, const AudioDeviceID& deviceId) {
-        for (const AudioDevice& device : devices) {
-            if (device.id == deviceId) {
-                return true;
-            }
-        }
-
-        return false;
-    };
-
     AudioDeviceID preferredDeviceId = configuration()->audioOutputDeviceId();
-    AudioDeviceID currentDeviceId = audioDriver()->outputDevice();
-    AudioDeviceList devices = audioDriver()->availableOutputDevices();
-
-    bool deviceChanged = false;
-
-    if (!preferredDeviceId.empty() && preferredDeviceId != currentDeviceId && containsDevice(devices, preferredDeviceId)) {
-        LOGI() << "Changing output device: " << preferredDeviceId;
-        deviceChanged = audioDriver()->selectOutputDevice(preferredDeviceId);
-    } else if (!containsDevice(devices, currentDeviceId)) {
-        LOGW() << "Device " << currentDeviceId << " not found, resetting to default";
-        deviceChanged = audioDriver()->resetToDefaultOutputDevice();
-    }
-
+    //! NOTE If the driver cannot open with the selected device,
+    //! it will open with the default device.
+    bool deviceChanged = audioDriver()->selectOutputDevice(preferredDeviceId);
     if (deviceChanged) {
         onOutputDeviceChanged();
     }
