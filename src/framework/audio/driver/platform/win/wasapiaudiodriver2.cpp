@@ -39,12 +39,35 @@ struct WasapiAudioDriver2::DeviceListener : public IMMNotificationClient
     DeviceListener(WasapiAudioDriver2* driver)
         : m_driver(driver) {}
 
+<<<<<<< HEAD
     STDMETHOD_(ULONG, AddRef)() { return 1; }
     STDMETHOD_(ULONG, Release)() { return 1; }
     STDMETHOD(QueryInterface)(REFIID, void**) { return S_OK; }
     STDMETHOD(OnDeviceStateChanged)(LPCWSTR, DWORD) { return S_OK; }
     STDMETHOD(OnDeviceAdded)(LPCWSTR) { m_driver->updateAudioDeviceList(); return S_OK;}
     STDMETHOD(OnDeviceRemoved)(LPCWSTR) { m_driver->updateAudioDeviceList(); return S_OK;}
+=======
+    STDMETHOD_(ULONG, AddRef)() {
+        return 1;
+    }
+    STDMETHOD_(ULONG, Release)() {
+        return 1;
+    }
+    STDMETHOD(QueryInterface)(REFIID, void**) {
+        return S_OK;
+    }
+    STDMETHOD(OnDeviceStateChanged)(LPCWSTR, DWORD) {
+        return S_OK;
+    }
+    STDMETHOD(OnDeviceAdded)(LPCWSTR) {
+        m_driver->updateAudioDeviceList();
+        return S_OK;
+    }
+    STDMETHOD(OnDeviceRemoved)(LPCWSTR) {
+        m_driver->updateAudioDeviceList();
+        return S_OK;
+    }
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
     STDMETHOD(OnDefaultDeviceChanged)(EDataFlow flow, ERole role, LPCWSTR) {
         if ((role != eConsole && role != eCommunications) || (flow != eRender)) {
             return S_OK;
@@ -54,7 +77,13 @@ struct WasapiAudioDriver2::DeviceListener : public IMMNotificationClient
 
         return S_OK;
     }
+<<<<<<< HEAD
     STDMETHOD(OnPropertyValueChanged)(LPCWSTR, const PROPERTYKEY) { return S_OK; }
+=======
+    STDMETHOD(OnPropertyValueChanged)(LPCWSTR, const PROPERTYKEY) {
+        return S_OK;
+    }
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
 
     WasapiAudioDriver2* m_driver = nullptr;
 };
@@ -111,13 +140,21 @@ static samples_t to_samples(const REFERENCE_TIME& t, double sampleRate)
 
 static std::wstring to_wstring(const std::string& str)
 {
+<<<<<<< HEAD
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+=======
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t> > converter;
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
     return converter.from_bytes(str);
 }
 
 static std::string to_string(LPWSTR wstr)
 {
+<<<<<<< HEAD
     std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+=======
+    std::wstring_convert<std::codecvt_utf8<wchar_t> > converter;
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
     return converter.to_bytes(wstr);
 }
 
@@ -165,12 +202,21 @@ void WasapiAudioDriver2::init()
     }
 
     hr = CoCreateInstance(
+<<<<<<< HEAD
                 __uuidof(MMDeviceEnumerator),
                 nullptr,
                 CLSCTX_ALL,
                 __uuidof(IMMDeviceEnumerator),
                 (void**)&m_data->enumerator
                 );
+=======
+        __uuidof(MMDeviceEnumerator),
+        nullptr,
+        CLSCTX_ALL,
+        __uuidof(IMMDeviceEnumerator),
+        (void**)&m_data->enumerator
+        );
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
 
     if (FAILED(hr)) {
         LOGE() << "failed create DeviceEnumerator";
@@ -187,7 +233,11 @@ void WasapiAudioDriver2::init()
     LOGI() << "success driver init";
 }
 
+<<<<<<< HEAD
 static std::pair<std::vector<AudioDevice>, std::string/*defaultId*/> audioDevices(IMMDeviceEnumerator* enumerator)
+=======
+static std::pair<std::vector<AudioDevice>, std::string /*defaultId*/> audioDevices(IMMDeviceEnumerator* enumerator)
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
 {
     IF_ASSERT_FAILED(enumerator) {
         return {};
@@ -274,11 +324,19 @@ static IAudioClient* audioClientForDevice(IMMDeviceEnumerator* enumerator, const
 
     IAudioClient* audioClient = nullptr;
     hr = device->Activate(
+<<<<<<< HEAD
                 __uuidof(IAudioClient),
                 CLSCTX_ALL,
                 nullptr,
                 (void**)&audioClient
                 );
+=======
+        __uuidof(IAudioClient),
+        CLSCTX_ALL,
+        nullptr,
+        (void**)&audioClient
+        );
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
     if (FAILED(hr)) {
         LOGE() << "failed get audioClient";
         return nullptr;
@@ -330,7 +388,10 @@ void WasapiAudioDriver2::th_audioThread()
     m_opened = th_audioInitialize();
 
     while (m_opened) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
         DWORD waitResult = WaitForSingleObject(m_data->audioEvent, 100);
         if (waitResult == WAIT_OBJECT_0) {
             th_processAudioData();
@@ -351,6 +412,7 @@ bool WasapiAudioDriver2::th_audioInitialize()
                                                m_activeSpec.output.sampleRate);
 
     HRESULT hr = m_data->audioClient->Initialize(
+<<<<<<< HEAD
                 AUDCLNT_SHAREMODE_SHARED,
                 AUDCLNT_STREAMFLAGS_EVENTCALLBACK,
                 bufferDuration,
@@ -358,6 +420,15 @@ bool WasapiAudioDriver2::th_audioInitialize()
                 m_data->mixFormat,
                 nullptr
                 );
+=======
+        AUDCLNT_SHAREMODE_SHARED,
+        AUDCLNT_STREAMFLAGS_EVENTCALLBACK,
+        bufferDuration,
+        0,
+        m_data->mixFormat,
+        nullptr
+        );
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
 
     if (FAILED(hr)) {
         LOGE() << "failed audioClient->Initialize";
@@ -372,9 +443,15 @@ bool WasapiAudioDriver2::th_audioInitialize()
     m_minimumPeriod = to_samples(minimumPeriod, m_activeSpec.output.sampleRate);
 
     hr = m_data->audioClient->GetService(
+<<<<<<< HEAD
                 __uuidof(IAudioRenderClient),
                 (void**)&m_data->renderClient
                 );
+=======
+        __uuidof(IAudioRenderClient),
+        (void**)&m_data->renderClient
+        );
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
     if (FAILED(hr)) {
         LOGE() << "failed get renderClient";
         return false;
@@ -585,10 +662,16 @@ std::vector<unsigned int> WasapiAudioDriver2::availableOutputDeviceSampleRates()
 
 void WasapiAudioDriver2::resume()
 {
+<<<<<<< HEAD
 
+=======
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
 }
 
 void WasapiAudioDriver2::suspend()
 {
+<<<<<<< HEAD
 
+=======
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
 }

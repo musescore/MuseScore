@@ -196,9 +196,13 @@ HRESULT WasapiAudioClient::ActivateCompleted(IActivateAudioInterfaceAsyncOperati
 
         // Create Async callback for sample events
         check_hresult(CreateAsyncResult(nullptr, &m_sampleReadyCallback, nullptr, m_sampleReadyAsyncResult.put()));
+<<<<<<< HEAD
 MF
+=======
+        MF
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
         // Sets the event handle that the system signals when an audio buffer is ready to be processed by the client
-        check_hresult(m_audioClient->SetEventHandle(m_sampleReadyEvent.get()));
+            check_hresult(m_audioClient->SetEventHandle(m_sampleReadyEvent.get()));
 
         // Everything succeeded
         setStateAndNotify(DeviceState::Initialized, S_OK);

@@ -94,5 +94,8 @@ private:
     async::Notification m_outputDeviceBufferSizeChanged;
     async::Notification m_outputDeviceSampleRateChanged;
 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> ba26e91143 (added new implementation of WasapiAudioDriver)
 }
