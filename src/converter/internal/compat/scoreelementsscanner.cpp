@@ -38,7 +38,7 @@ struct ScannerData {
     ScoreElementScanner::Options options;
 
     // out
-    ScoreElementScanner::InstrumentElementMap elements;
+    InstrumentElementMap elements;
     std::set<Chord*> chords;
     std::set<Spanner*> spanners;
     std::map<InstrumentTrackId, std::map<ElementKey, std::set<muse::String> > > uniqueNames;
@@ -129,7 +129,7 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
     }
 
     ElementType type = item->type();
-    ScoreElementScanner::ElementInfo info;
+    ElementInfo info;
     bool locationIsSet = false;
 
     if (item->isNote()) {
@@ -228,7 +228,7 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
     scannerData->elements[trackId][type].push_back(info);
 }
 
-ScoreElementScanner::InstrumentElementMap ScoreElementScanner::scanElements(Score* score, const Options& options)
+InstrumentElementMap ScoreElementScanner::scanElements(Score* score, const Options& options)
 {
     TRACEFUNC;
 

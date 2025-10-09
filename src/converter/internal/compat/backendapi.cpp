@@ -680,11 +680,11 @@ muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notatio
 {
     mu::engraving::Score* score = notation->elements()->msScore();
     ScoreElementScanner::Options options = parseScoreElementScannerOptions(optionsJson);
-    ScoreElementScanner::InstrumentElementMap elements = ScoreElementScanner::scanElements(score, options);
+    InstrumentElementMap elements = ScoreElementScanner::scanElements(score, options);
 
     QJsonArray rootArray;
 
-    auto writeLocation = [](const ScoreElementScanner::ElementInfo::Location& loc, QJsonObject& obj) {
+    auto writeLocation = [](const ElementInfo::Location& loc, QJsonObject& obj) {
         if (loc.trackIdx != muse::nidx) {
             obj["staffIdx"] = (int)mu::engraving::track2staff(loc.trackIdx);
             obj["voiceIdx"] = (int)mu::engraving::track2voice(loc.trackIdx);
@@ -705,7 +705,7 @@ muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notatio
         for (const auto& pair: instrumentPair.second) {
             QJsonArray elementArray;
 
-            for (const ScoreElementScanner::ElementInfo& element : pair.second) {
+            for (const ElementInfo& element : pair.second) {
                 QJsonObject obj;
 
                 if (!element.name.empty()) {
