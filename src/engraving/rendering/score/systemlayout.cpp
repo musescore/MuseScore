@@ -1339,9 +1339,10 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
 
     System* system = elements.system;
     for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        MeasureNumber* mno = measure->measureNumber(staffIdx);
-        if (mno) {
-            elements.measureNumbers.push_back(mno);
+        if (measure->showMeasureNumberOnStaff(staffIdx)) {
+            if (MeasureNumber* mno = measure->measureNumber(staffIdx)) {
+                elements.measureNumbers.push_back(mno);
+            }
         }
 
         if (!system->staff(staffIdx)->show()) {
