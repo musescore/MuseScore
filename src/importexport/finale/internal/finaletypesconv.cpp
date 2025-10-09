@@ -1167,6 +1167,16 @@ SlurStyleType slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeTyp
     return muse::value(shapeTypeTable, shapeType, SlurStyleType::Solid);
 }
 
+GlissandoType glissandoTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+{
+    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    static const std::unordered_map<ShapeType, GlissandoType> shapeTypeTable = {
+        { ShapeType::Glissando,           GlissandoType::WAVY },
+        { ShapeType::TabSlide,            GlissandoType::STRAIGHT },
+    };
+    return muse::value(shapeTypeTable, shapeType, GlissandoType::WAVY);
+}
+
 VibratoType vibratoTypeFromSymId(SymId vibratoSym)
 {
     static const std::unordered_map<SymId, VibratoType> vibratoTypeTable = {

@@ -34,6 +34,7 @@
 #include "engraving/dom/anchors.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/glissando.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
@@ -102,10 +103,12 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
 
     elementType = [&]() {
         if (customLine->lineStyle == others::SmartShapeCustomLine::LineStyle::Char && lineVisible) {
+            glissandoType = GlissandoType::WAVY;
             switch (lineSym) {
                 // Trills
                 case SymId::wiggleTrill:
-                    // Also used for glissandos, but those are not possible as custom lines
+                    // Also used for glissandos (in MuseScore), but those don't read element type from custom line
+                    // Tab slide and guitar bend also use custom lines but don't read element type.
                     trillType = TrillType::TRILL_LINE;
                     return ElementType::TRILL;
                 case SymId::ornamentZigZagLineNoRightEnd:
@@ -140,7 +143,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
         /// @todo lines with up hooks below piano staves as pedal, detect other pedal types (sostenuto)
         /// @todo use symbols to detect line types before resorting to plaintext regex searches
         /// @todo regex search with font style/size/face tags removed
-        /// Not detected / needed: VOLTA, SLUR, HAMMER_ON_PULL_OFF, GLISSANDO, NOTELINE, HARMONIC_MARK, GUITAR_BEND
+        /// Not detected / needed: VOLTA, SLUR, HAMMER_ON_PULL_OFF, NOTELINE, HARMONIC_MARK, (GLISSANDO, GUITAR_BEND)
         return ElementType::TEXTLINE;
     }();
 
@@ -399,6 +402,11 @@ void FinaleParser::importSmartShapes()
                 toTrill(newSpanner)->setTrillType(customLine->trillType);
             } else if (newSpanner->isVibrato()) {
                 toVibrato(newSpanner)->setVibratoType(customLine->vibratoType);
+            } else if (newSpanner->isGlissando()) {
+                Glissando* glissando = toGlissando(newSpanner);
+                glissando->setGlissandoType(customLine->glissandoType);
+                glissando->setText(customLine->centerShortText.empty() ? (customLine->centerLongText.empty() ? String() : customLine->centerLongText) : customLine->centerShortText);
+                glissando->setShowText(!glissando->text().empty());
             }
         } else {
             if (type == ElementType::OTTAVA) {
@@ -409,6 +417,9 @@ void FinaleParser::importSmartShapes()
                 toSlur(newSpanner)->setStyleType(slurStyleTypeFromShapeType(smartShape->shapeType));
                 /// @todo is there a way to read the calculated direction
                 toSlur(newSpanner)->setSlurDirection(directionVFromShapeType(smartShape->shapeType));
+            } else if (type == ElementType::GLISSANDO) {
+                toGlissando(newSpanner)->setGlissandoType(glissandoTypeFromShapeType(smartShape->shapeType));
+                toGlissando(newSpanner)->setShowText(false); /// @todo Is this the correct default?
             } else if (type == ElementType::TEXTLINE) {
                 TextLineBase* textLine = toTextLineBase(newSpanner);
                 textLine->setLineStyle(lineTypeFromShapeType(smartShape->shapeType));
