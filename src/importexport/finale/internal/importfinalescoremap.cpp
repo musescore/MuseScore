@@ -236,8 +236,7 @@ void FinaleParser::importMeasures()
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
-        MeasureBase* lastMeasure = m_score->measures()->last();
-        Fraction tick(lastMeasure ? lastMeasure->endTick() : Fraction(0, 1));
+        Fraction tick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
 
         Measure* measure = Factory::createMeasure(m_score->dummy()->system());
         measure->setTick(tick);
@@ -1173,7 +1172,7 @@ void FinaleParser::importPageLayout()
         if (!muse::RealIsEqual(double(-rightStaffSystem->right), 0.0)) {
             HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
             rightBox->setBoxWidth(Spatium(doubleFromEvpu(-rightStaffSystem->right)));
-            rightBox->setSizeIsSpatiumDependent(false);
+            rightBox->setSizeIsSpatiumDependent(false); /// @todo still doesn't seem to be scaled correctly, should involve SPATIUM20?
             Fraction rightTick = endMeasure->nextMeasure() ? endMeasure->nextMeasure()->tick() : m_score->last()->endTick();
             rightBox->setTick(rightTick);
             rightBox->setNext(endMeasure->next());
