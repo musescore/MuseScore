@@ -105,12 +105,18 @@ static bool isChordArticulation(const EngravingItem* item)
     return muse::contains(CHORD_ARTICULATION_TYPES, item->type());
 }
 
+static muse::String noteName(const Note* note)
+{
+    return tpc2name(note->tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO) + String::number(note->octave());
+}
+
 static muse::String chordToNotes(const Chord* chord)
 {
     muse::StringList notes;
+    notes.reserve(chord->notes().size());
 
     for (const Note* note : chord->notes()) {
-        notes.push_back(note->tpcUserName());
+        notes.push_back(noteName(note));
     }
 
     return notes.join(u" ");
@@ -138,13 +144,17 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
             scannerData->chords.insert(chord);
             info.notes = chordToNotes(chord);
         } else {
-            info.name = note->tpcUserName();
+            info.name = noteName(note);
         }
+        info.duration = chord->durationUserName();
     } else if (isChordArticulation(item)) {
         Chord* chord = toChord(item->parentItem());
         scannerData->chords.insert(chord);
         info.name = item->translatedSubtypeUserName();
         info.notes = chordToNotes(chord);
+        info.duration = chord->durationUserName();
+    } else if (item->isRest()) {
+        info.duration = toRest(item)->durationUserName();
     } else if (item->isSpannerSegment()) {
         Spanner* spanner = toSpannerSegment(item)->spanner();
         if (muse::contains(scannerData->spanners, spanner)) {
