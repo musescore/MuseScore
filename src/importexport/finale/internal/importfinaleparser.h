@@ -30,6 +30,8 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/staff.h"
 
+#include "engraving/types/types.h"
+
 #include "musx/musx.h"
 
 #include "importfinalelogger.h"
@@ -183,6 +185,7 @@ struct ReadableCustomLine
     engraving::TrillType trillType;
     engraving::VibratoType vibratoType;
     // engraving::OttavaType ottavaType;
+    engraving::GlissandoType glissandoType = GlissandoType::STRAIGHT;
 
     // Begin text
     engraving::TextPlace beginTextPlace;
