@@ -195,8 +195,8 @@ HRESULT WasapiAudioClient::ActivateCompleted(IActivateAudioInterfaceAsyncOperati
         m_audioRenderClient.capture(m_audioClient, &IAudioClient::GetService);
 
         // Create Async callback for sample events
-        check_hresult(MFCreateAsyncResult(nullptr, &m_sampleReadyCallback, nullptr, m_sampleReadyAsyncResult.put()));
-
+        check_hresult(CreateAsyncResult(nullptr, &m_sampleReadyCallback, nullptr, m_sampleReadyAsyncResult.put()));
+MF
         // Sets the event handle that the system signals when an audio buffer is ready to be processed by the client
         check_hresult(m_audioClient->SetEventHandle(m_sampleReadyEvent.get()));
 

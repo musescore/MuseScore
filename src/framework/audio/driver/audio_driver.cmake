@@ -33,6 +33,8 @@ if (OS_IS_WIN)
         ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapiaudiodriver.h
         ${CMAKE_CURRENT_LIST_DIR}/platform/win/audiodeviceslistener.cpp
         ${CMAKE_CURRENT_LIST_DIR}/platform/win/audiodeviceslistener.h
+        ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapiaudiodriver2.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapiaudiodriver2.h
     )
 elseif(OS_IS_LIN OR OS_IS_FBSD)
     set(AUDIO_DRIVER_SRC
