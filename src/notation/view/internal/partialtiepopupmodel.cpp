@@ -155,11 +155,9 @@ muse::uicomponents::MenuItem* PartialTiePopupModel::makeMenuItem(const engraving
 {
     MenuItem* item = new MenuItem(this);
     item->setId(jumpPoint->id());
-    TranslatableString title = TranslatableString("notation", jumpPoint->menuTitle());
-    item->setTitle(title);
 
     UiAction action;
-    action.title = title;
+    action.title = jumpPoint->menuTitle();
     action.checkable = Checkable::Yes;
     item->setAction(action);
 
