@@ -379,17 +379,26 @@ Segment* InputState::nextInputPos() const
     Measure* m = m_segment->measure();
     Segment* s = m_segment->next1(SegmentType::ChordRest);
     while (s) {
-        if (s->element(m_track) || s->measure() != m) {
+        if (s->measure() != m) {
             return s;
+        }
+        if (EngravingItem* elem = s->element(m_track)) {
+            if (!elem->isChord()) {
+                return s;
+            }
+            Chord* chord = toChord(elem);
+            while (Chord* nextTiedChord = chord->nextTiedChord()) {
+                chord = nextTiedChord;
+            }
+            return chord->segment()->next1(SegmentType::ChordRest);
         }
         s = s->next1(SegmentType::ChordRest);
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
 //   moveToNextInputPos
-//   TODO: special case: note is first note of tie: goto to last note of tie
 //---------------------------------------------------------
 
 void InputState::moveToNextInputPos()
