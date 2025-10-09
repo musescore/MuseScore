@@ -535,17 +535,16 @@ public:
         return isHairpin()
                || isLetRing()
                || isGradualTempoChange()
-               || isNoteLine()
+               || isTextLine()
                || isOttava()
                || isPalmMute()
-               || isWhammyBar()
                || isPickScrape()
+               || isWhammyBar()
                || isRasgueado()
                || isHarmonicMark()
                || isPedal()
-               || isTextLine()
                || isVolta()
-        ;
+               || isNoteLine();
     }
 
     bool isLyricsLine() const { return type() == ElementType::LYRICSLINE || type() == ElementType::PARTIAL_LYRICSLINE; }
@@ -562,13 +561,7 @@ public:
 
     bool isSpanner() const
     {
-        return isSlur()
-               || isTie()
-               || isGlissando()
-               || isLyricsLine()
-               || isTextLineBase()
-               || isSLine()
-        ;
+        return isSlur() || isTie() || isLyricsLine() || isSLine();
     }
 
     bool isStaffTextBase() const
@@ -590,42 +583,12 @@ public:
 };
 
 //---------------------------------------------------
-// safe casting of ScoreElement
+// safe casting of EngravingObject
 //
 // Example for ChordRest:
 //
 //    ChordRest* toChordRest(EngravingItem* e)
 //---------------------------------------------------
-
-static inline ChordRest* toChordRest(EngravingObject* e)
-{
-    assert(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
-           || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT);
-    return (ChordRest*)e;
-}
-
-static inline const ChordRest* toChordRest(const EngravingObject* e)
-{
-    assert(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
-           || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT);
-    return (const ChordRest*)e;
-}
-
-static inline DurationElement* toDurationElement(EngravingObject* e)
-{
-    assert(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
-           || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT
-           || e->type() == ElementType::TUPLET);
-    return (DurationElement*)e;
-}
-
-static inline const DurationElement* toDurationElement(const EngravingObject* e)
-{
-    assert(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
-           || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT
-           || e->type() == ElementType::TUPLET);
-    return (const DurationElement*)e;
-}
 
 static inline Rest* toRest(EngravingObject* e)
 {
@@ -639,129 +602,21 @@ static inline const Rest* toRest(const EngravingObject* e)
     return (const Rest*)e;
 }
 
-static inline SlurTieSegment* toSlurTieSegment(EngravingObject* e)
-{
-    assert(
-        e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT
-        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT || e->type() == ElementType::PARTIAL_TIE_SEGMENT
-        || e->type() == ElementType::HAMMER_ON_PULL_OFF_SEGMENT || e->type() == ElementType::TAPPING_HALF_SLUR_SEGMENT);
-    return (SlurTieSegment*)e;
-}
-
-static inline const SlurTieSegment* toSlurTieSegment(const EngravingObject* e)
-{
-    assert(
-        e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT
-        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT || e->type() == ElementType::PARTIAL_TIE_SEGMENT
-        || e->type() == ElementType::HAMMER_ON_PULL_OFF_SEGMENT || e->type() == ElementType::TAPPING_HALF_SLUR_SEGMENT);
-    return (const SlurTieSegment*)e;
-}
-
-static inline const MeasureBase* toMeasureBase(const EngravingObject* e)
-{
-    assert(e == 0 || e->isMeasure() || e->isVBox() || e->isHBox() || e->isTBox() || e->isFBox());
-    return (const MeasureBase*)e;
-}
-
-static inline MeasureBase* toMeasureBase(EngravingObject* e)
-{
-    assert(e == 0 || e->isMeasureBase());
-    return (MeasureBase*)e;
-}
-
-static inline Box* toBox(EngravingObject* e)
-{
-    assert(e == 0 || e->isBox());
-    return (Box*)e;
-}
-
-static inline SpannerSegment* toSpannerSegment(EngravingObject* e)
-{
-    assert(e == 0 || e->isSpannerSegment());
-    return (SpannerSegment*)e;
-}
-
-static inline const SpannerSegment* toSpannerSegment(const EngravingObject* e)
-{
-    assert(e == 0 || e->isSpannerSegment());
-    return (const SpannerSegment*)e;
-}
-
-static inline BSymbol* toBSymbol(EngravingObject* e)
-{
-    assert(e == 0 || e->isBSymbol());
-    return (BSymbol*)e;
-}
-
-static inline TextLineBase* toTextLineBase(EngravingObject* e)
-{
-    assert(e == 0 || e->isTextLineBase());
-    return (TextLineBase*)e;
-}
-
-static inline TextBase* toTextBase(EngravingObject* e)
-{
-    assert(e == 0 || e->isTextBase());
-    return (TextBase*)e;
-}
-
-static inline const TextBase* toTextBase(const EngravingObject* e)
-{
-    assert(e == 0 || e->isTextBase());
-    return (const TextBase*)e;
-}
-
-static inline StaffTextBase* toStaffTextBase(EngravingObject* e)
-{
-    assert(e == 0 || e->isStaffTextBase());
-    return (StaffTextBase*)e;
-}
-
-static inline const StaffTextBase* toStaffTextBase(const EngravingObject* e)
-{
-    assert(e == 0 || e->isStaffTextBase());
-    return (const StaffTextBase*)e;
-}
-
-static inline Bend* toBend(EngravingObject* e)
-{
-    assert(e == 0 || e->isBend());
-    return (Bend*)e;
-}
-
-static inline const Bend* toBend(const EngravingObject* e)
-{
-    assert(e == 0 || e->isBend());
-    return (const Bend*)e;
-}
-
 static inline Articulation* toArticulation(EngravingObject* e)
 {
-    assert(e == 0 || e->isArticulationFamily());
+    assert(!e || e->isArticulationFamily());
     return (Articulation*)e;
 }
 
 static inline const Articulation* toArticulation(const EngravingObject* e)
 {
-    assert(e == 0 || e->isArticulationFamily());
+    assert(!e || e->isArticulationFamily());
     return (const Articulation*)e;
 }
 
-static inline Tie* toTie(EngravingObject* e)
-{
-    assert(e == 0 || e->isTie() || e->isLaissezVib());
-    return (Tie*)e;
-}
-
-static inline const Tie* toTie(const EngravingObject* e)
-{
-    assert(e == 0 || e->isTie() || e->isLaissezVib());
-    return (const Tie*)e;
-}
-
 #define CONVERT(a)  \
-    static inline a* to##a(EngravingObject * e) { assert(e == 0 || e->is##a()); return (a*)e; } \
-    static inline const a* to##a(const EngravingObject * e) { assert(e == 0 || e->is##a()); return (const a*)e; }
+    static inline a* to##a(EngravingObject * e) { assert(!e || e->is##a()); return (a*)e; } \
+    static inline const a* to##a(const EngravingObject * e) { assert(!e || e->is##a()); return (const a*)e; }
 
 CONVERT(EngravingItem)
 CONVERT(Note)
@@ -774,14 +629,18 @@ CONVERT(Clef)
 CONVERT(KeySig)
 CONVERT(TimeSig)
 CONVERT(Measure)
+CONVERT(MeasureBase)
+CONVERT(DurationElement)
+CONVERT(ChordRest)
 CONVERT(TempoText)
 CONVERT(Breath)
+CONVERT(Box)
 CONVERT(HBox)
 CONVERT(VBox)
 CONVERT(TBox)
 CONVERT(FBox)
 CONVERT(Spanner)
-CONVERT(Slur)
+CONVERT(SpannerSegment)
 CONVERT(Glissando)
 CONVERT(GlissandoSegment)
 CONVERT(GuitarBend)
@@ -791,11 +650,14 @@ CONVERT(GuitarBendHoldSegment)
 CONVERT(GuitarBendText)
 CONVERT(SystemDivider)
 CONVERT(RehearsalMark)
+CONVERT(Bend)
 CONVERT(TripletFeel)
 CONVERT(Harmony)
-CONVERT(Volta)
 CONVERT(Jump)
 CONVERT(StaffText)
+CONVERT(StaffTextBase)
+CONVERT(TextBase)
+CONVERT(TextLineBase)
 CONVERT(PlayCountText)
 CONVERT(PlayTechAnnotation)
 CONVERT(Capo)
@@ -812,8 +674,11 @@ CONVERT(Beam)
 CONVERT(Hook)
 CONVERT(StemSlash)
 CONVERT(LineSegment)
+CONVERT(Slur)
 CONVERT(SlurSegment)
+CONVERT(Tie)
 CONVERT(TieSegment)
+CONVERT(SlurTieSegment)
 CONVERT(LaissezVibSegment)
 CONVERT(PartialTieSegment)
 CONVERT(Spacer)
@@ -843,6 +708,7 @@ CONVERT(PedalSegment)
 CONVERT(OttavaSegment)
 CONVERT(LedgerLine)
 CONVERT(ActionIcon)
+CONVERT(Volta)
 CONVERT(VoltaSegment)
 CONVERT(NoteLine)
 CONVERT(NoteLineSegment)
@@ -866,6 +732,7 @@ CONVERT(PickScrape)
 CONVERT(PickScrapeSegment)
 CONVERT(Symbol)
 CONVERT(FSymbol)
+CONVERT(BSymbol)
 CONVERT(Fingering)
 CONVERT(NoteHead)
 CONVERT(LyricsLine)
