@@ -124,7 +124,7 @@
      </column>
      <column>
       <property name="text">
-       <string>E♭</string>
+       <string>D♯</string>
       </property>
      </column>
      <column>
@@ -149,7 +149,7 @@
      </column>
      <column>
       <property name="text">
-       <string>A♭</string>
+       <string>G♯</string>
       </property>
      </column>
      <column>
@@ -159,7 +159,7 @@
      </column>
      <column>
       <property name="text">
-       <string>B♭</string>
+       <string>A♯</string>
       </property>
      </column>
      <column>
@@ -189,7 +189,7 @@
      </item>
      <item row="0" column="3">
       <property name="text">
-       <string>E♭ 9</string>
+       <string>D♯ 9</string>
       </property>
      </item>
      <item row="0" column="4">
@@ -269,7 +269,7 @@
      </item>
      <item row="1" column="3">
       <property name="text">
-       <string>E♭ 8</string>
+       <string>D♯ 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -309,7 +309,7 @@
      </item>
      <item row="1" column="8">
       <property name="text">
-       <string>A♭ 8</string>
+       <string>G♯ 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -325,7 +325,7 @@
      </item>
      <item row="1" column="10">
       <property name="text">
-       <string>B♭ 8</string>
+       <string>A♯ 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -379,7 +379,7 @@
      </item>
      <item row="2" column="3">
       <property name="text">
-       <string>E♭ 7</string>
+       <string>D♯ 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -419,7 +419,7 @@
      </item>
      <item row="2" column="8">
       <property name="text">
-       <string>A♭ 7</string>
+       <string>G♯ 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -435,7 +435,7 @@
      </item>
      <item row="2" column="10">
       <property name="text">
-       <string>B♭ 7</string>
+       <string>A♯ 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -489,7 +489,7 @@
      </item>
      <item row="3" column="3">
       <property name="text">
-       <string>E♭ 6</string>
+       <string>D♯ 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -529,7 +529,7 @@
      </item>
      <item row="3" column="8">
       <property name="text">
-       <string>A♭ 6</string>
+       <string>G♯ 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -545,7 +545,7 @@
      </item>
      <item row="3" column="10">
       <property name="text">
-       <string>B♭ 6</string>
+       <string>A♯ 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -599,7 +599,7 @@
      </item>
      <item row="4" column="3">
       <property name="text">
-       <string>E♭ 5</string>
+       <string>D♯ 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -639,7 +639,7 @@
      </item>
      <item row="4" column="8">
       <property name="text">
-       <string>A♭ 5</string>
+       <string>G♯ 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -655,7 +655,7 @@
      </item>
      <item row="4" column="10">
       <property name="text">
-       <string>B♭ 5</string>
+       <string>A♯ 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -709,7 +709,7 @@
      </item>
      <item row="5" column="3">
       <property name="text">
-       <string>E♭ 4</string>
+       <string>D♯ 4</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -749,7 +749,7 @@
      </item>
      <item row="5" column="8">
       <property name="text">
-       <string>A♭ 4</string>
+       <string>G♯ 4</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -765,7 +765,7 @@
      </item>
      <item row="5" column="10">
       <property name="text">
-       <string>B♭ 4</string>
+       <string>A♯ 4</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -819,7 +819,7 @@
      </item>
      <item row="6" column="3">
       <property name="text">
-       <string>E♭ 3</string>
+       <string>D♯ 3</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -859,7 +859,7 @@
      </item>
      <item row="6" column="8">
       <property name="text">
-       <string>A♭ 3</string>
+       <string>G♯ 3</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -875,7 +875,7 @@
      </item>
      <item row="6" column="10">
       <property name="text">
-       <string>B♭ 3</string>
+       <string>A♯ 3</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -929,7 +929,7 @@
      </item>
      <item row="7" column="3">
       <property name="text">
-       <string>E♭ 2</string>
+       <string>D♯ 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -969,7 +969,7 @@
      </item>
      <item row="7" column="8">
       <property name="text">
-       <string>A♭ 2</string>
+       <string>G♯ 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -985,7 +985,7 @@
      </item>
      <item row="7" column="10">
       <property name="text">
-       <string>B♭ 2</string>
+       <string>A♯ 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1039,7 +1039,7 @@
      </item>
      <item row="8" column="3">
       <property name="text">
-       <string>E♭ 1</string>
+       <string>D♯ 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1079,7 +1079,7 @@
      </item>
      <item row="8" column="8">
       <property name="text">
-       <string>A♭ 1</string>
+       <string>G♯ 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1095,7 +1095,7 @@
      </item>
      <item row="8" column="10">
       <property name="text">
-       <string>B♭ 1</string>
+       <string>A♯ 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1149,7 +1149,7 @@
      </item>
      <item row="9" column="3">
       <property name="text">
-       <string>E♭ 0</string>
+       <string>D♯ 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1189,7 +1189,7 @@
      </item>
      <item row="9" column="8">
       <property name="text">
-       <string>A♭ 0</string>
+       <string>G♯ 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1205,7 +1205,7 @@
      </item>
      <item row="9" column="10">
       <property name="text">
-       <string>B♭ 0</string>
+       <string>A♯ 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1259,7 +1259,7 @@
      </item>
      <item row="10" column="3">
       <property name="text">
-       <string>E♭ -1</string>
+       <string>D♯ -1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1299,7 +1299,7 @@
      </item>
      <item row="10" column="8">
       <property name="text">
-       <string>A♭ -1</string>
+       <string>G♯ -1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1315,7 +1315,7 @@
      </item>
      <item row="10" column="10">
       <property name="text">
-       <string>B♭ -1</string>
+       <string>A♯ -1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
