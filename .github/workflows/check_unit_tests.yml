@@ -7,7 +7,8 @@ on:
       code_coverage:
         description: 'Enable code coverage'
         required: false
-        default: 'false'
+        type: boolean
+        default: false
   schedule:
     - cron: "0 3 * * 4" # Every Thursday night at 03:00 for master branch
 
@@ -67,7 +68,7 @@ jobs:
 
         ENABLE_CODE_COVERAGE='false'
 
-        if [[ "$GITHUB_EVENT_NAME" == "schedule" || "$CODE_COVERAGE" == "true" ]]; then
+        if [[ "$GITHUB_EVENT_NAME" == "schedule" || "$CODE_COVERAGE" == true ]]; then
           ENABLE_CODE_COVERAGE='true'
         else
           ENABLE_CODE_COVERAGE='false'
@@ -83,7 +84,7 @@ jobs:
         ASAN_OPTIONS: "detect_leaks=0"
 
     - name: Code coverage
-      if: github.event_name == 'schedule' || inputs.code_coverage == 'true'
+      if: ( github.event_name == 'schedule' || inputs.code_coverage ) && github.repository == 'musescore/MuseScore'
       run: |
         lcov --capture --directory "$(pwd)/build.debug/" --output-file coverage.info
         lcov --remove coverage.info '/usr/*' '*/tests/*' '*/thirdparty/*' '*/moc_*' '*framework/Headers/*' '*/hb-*' '*/Qt/*' --output-file filtered_coverage.info
@@ -91,7 +92,7 @@ jobs:
         python3 buildscripts/ci/linux/tools/lcov_badger.py filtered_coverage.info coverage_badge.svg
 
     - name: Push to S3
-      if: ( github.event_name == 'schedule' || inputs.code_coverage == 'true' ) && github.repository == 'musescore/MuseScore'
+      if: ( github.event_name == 'schedule' || inputs.code_coverage ) && github.repository == 'musescore/MuseScore'
       run: |
         S3_URL='s3://extensions.musescore.org/test/code_coverage/coverage_badge.svg'
 
