@@ -1227,6 +1227,9 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     processLines(system, ctx, elementsToLayout.allOtherSpanners);
 
     for (MeasureNumber* mno : elementsToLayout.measureNumbers) {
+        if (!mno->visible()) {
+            continue;
+        }
         Autoplace::autoplaceMeasureElement(mno, mno->mutldata());
         system->staff(mno->staffIdx())->skyline().add(mno->ldata()->bbox().translated(mno->measure()->pos() + mno->pos()
                                                                                       + mno->staffOffset()), mno);
@@ -1320,9 +1323,10 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
 
     System* system = elements.system;
     for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        MeasureNumber* mno = measure->measureNumber(staffIdx);
-        if (mno) {
-            elements.measureNumbers.push_back(mno);
+        if (measure->showMeasureNumberOnStaff(staffIdx)) {
+            if (MeasureNumber* mno = measure->measureNumber(staffIdx)) {
+                elements.measureNumbers.push_back(mno);
+            }
         }
 
         if (!system->staff(staffIdx)->show()) {

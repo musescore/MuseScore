@@ -243,17 +243,17 @@ MenuItemList AppMenuModel::makePublishOnlineSubItems()
 MenuItem* AppMenuModel::makeEditMenu()
 {
     MenuItemList editItems {
-        makeMenuItem("undo"),
-        makeMenuItem("redo"),
+        makeMenuItem("action://notation/undo"),
+        makeMenuItem("action://notation/redo"),
         makeMenuItem(TOGGLE_UNDO_HISTORY_PANEL_CODE),
         makeSeparator(),
-        makeMenuItem("notation-cut"),
-        makeMenuItem("notation-copy"),
-        makeMenuItem("notation-paste"),
+        makeMenuItem("action://notation/cut"),
+        makeMenuItem("action://notation/copy"),
+        makeMenuItem("action://notation/paste"),
         makeMenuItem("notation-paste-half"),
         makeMenuItem("notation-paste-double"),
         makeMenuItem("notation-swap"),
-        makeMenuItem("notation-delete"),
+        makeMenuItem("action://notation/delete"),
         makeSeparator(),
         makeMenuItem("notation-select-all"),
         makeMenuItem("notation-select-section"),
@@ -275,13 +275,13 @@ void AppMenuModel::updateUndoRedoItems()
 {
     auto stack = undoStack();
 
-    MenuItem& undoItem = findItem(ActionCode("undo"));
+    MenuItem& undoItem = findItem(ActionCode("action://notation/undo"));
     const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
     undoItem.setTitle(undoActionName.isEmpty()
                       ? TranslatableString("action", "Undo")
                       : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
 
-    MenuItem& redoItem = findItem(ActionCode("redo"));
+    MenuItem& redoItem = findItem(ActionCode("action://notation/redo"));
     const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
     redoItem.setTitle(redoActionName.isEmpty()
                       ? TranslatableString("action", "Redo")

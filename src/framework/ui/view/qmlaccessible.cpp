@@ -38,10 +38,6 @@ AccessibleItem::AccessibleItem(QObject* parent)
 
 AccessibleItem::~AccessibleItem()
 {
-    if (m_accessibleParent) {
-        m_accessibleParent->removeChild(this);
-    }
-
     QList<AccessibleItem*> children = m_children;
     for (AccessibleItem* ch : children) {
         ch->setAccessibleParent(nullptr);
@@ -50,6 +46,10 @@ AccessibleItem::~AccessibleItem()
     if (m_registred) {
         accessibilityController()->unreg(this);
         m_registred = false;
+    }
+
+    if (m_accessibleParent) {
+        m_accessibleParent->removeChild(this);
     }
 }
 
@@ -501,10 +501,10 @@ void AccessibleItem::setAccessibleParent(AccessibleItem* p)
 
     if (m_accessibleParent) {
         m_accessibleParent->addChild(this);
+        m_accessiblePropertyChanged.send(IAccessible::Property::Parent, Val());
     }
 
     emit accessiblePrnChanged();
-    m_accessiblePropertyChanged.send(IAccessible::Property::Parent, Val());
 }
 
 void AccessibleItem::setRole(MUAccessible::Role role)

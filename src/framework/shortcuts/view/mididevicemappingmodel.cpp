@@ -55,7 +55,7 @@ inline ActionCodeList allMidiActions()
         "pad-note-16",
         "pad-note-32",
         "pad-note-64",
-        "undo",
+        "action://notation/undo",
         "rest",
         "pad-rest",
         "tie",

@@ -137,6 +137,7 @@ void AbstractMenuModel::setItems(const MenuItemList& items)
 
     beginResetModel();
     m_items = items;
+    updateShortcutsAll();
     endResetModel();
 
     emit itemsChanged();
@@ -392,9 +393,8 @@ void AbstractMenuModel::updateShortcutsAll()
 
 void AbstractMenuModel::updateShortcuts(MenuItem* item)
 {
-    UiAction action = item->action();
-    action.shortcuts = shortcutsRegister()->shortcut(action.code).sequences;
-    item->setAction(action);
+    std::vector<std::string> shortcuts = shortcutsRegister()->shortcut(item->action().code).sequences;
+    item->setShortcuts(shortcuts);
 
     for (MenuItem* subItem : item->subitems()) {
         if (!subItem) {

@@ -83,11 +83,40 @@
       <seq>Space</seq>
       <autorepeat>0</autorepeat>
     </SC>
+<!-- end Keyboard navigation -->
+
+<!-- Global actions -->
     <SC>
-      <key>nav-escape</key>
+        <key>action://copy</key>
+        <seq>Ctrl+C</seq>
+    </SC>
+    <SC>
+        <key>action://cut</key>
+        <seq>Ctrl+X</seq>
+    </SC>
+    <SC>
+        <key>action://paste</key>
+        <seq>Ctrl+V</seq>
+    </SC>
+    <SC>
+        <key>action://undo</key>
+        <std>11</std>
+    </SC>
+    <SC>
+        <key>action://redo</key>
+        <std>12</std>
+    </SC>
+    <SC>
+        <key>action://delete</key>
+        <seq>Del</seq>
+        <seq>Backspace</seq>
+    </SC>
+    <SC>
+      <key>action://cancel</key>
       <seq>Esc</seq>
     </SC>
-<!-- end Keyboard navigation -->
+<!-- end Global actions -->
+
   <SC>
     <key>help</key>
     <seq>F1</seq>
@@ -122,22 +151,6 @@
     <key>print</key>
     <seq>Ctrl+P</seq>
     <autorepeat>0</autorepeat>
-    </SC>
-  <SC>
-    <key>undo</key>
-    <std>11</std>
-    </SC>
-  <SC>
-    <key>redo</key>
-    <std>12</std>
-    </SC>
-  <SC>
-    <key>notation-cut</key>
-    <seq>Ctrl+X</seq>
-    </SC>
-  <SC>
-    <key>notation-copy</key>
-    <seq>Ctrl+C</seq>
     </SC>
   <SC>
     <key>paste</key>
@@ -606,15 +619,6 @@
   <SC>
     <key>add-hairpin-reverse</key>
     <seq>Shift+.</seq>
-    </SC>
-  <SC>
-    <key>notation-escape</key>
-    <seq>Esc</seq>
-    </SC>
-  <SC>
-    <key>notation-delete</key>
-    <seq>Del</seq>
-    <seq>Backspace</seq>
     </SC>
   <SC>
     <key>time-delete</key>

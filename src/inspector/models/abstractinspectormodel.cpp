@@ -147,8 +147,8 @@ static const QMap<mu::engraving::TempoTextType, InspectorModelType> TEMPO_TEXT_E
 
 QString AbstractInspectorModel::shortcutsForActionCode(std::string code) const
 {
-    const muse::ui::UiAction& action = uiActionsRegister()->action(code);
-    return muse::shortcuts::sequencesToNativeText(action.shortcuts);
+    std::vector<std::string> shortcuts = shortcutsRegister()->shortcut(code).sequences;
+    return muse::shortcuts::sequencesToNativeText(shortcuts);
 }
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository,

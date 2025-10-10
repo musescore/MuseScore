@@ -25,7 +25,7 @@
 #include "translation.h"
 #include "types/mnemonicstring.h"
 #include "types/translatablestring.h"
-#include "ui/view/iconcodes.h"
+#include "../shortcutcontext.h"
 
 #include "log.h"
 
@@ -56,7 +56,9 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     case RoleSequence: return sequencesToNativeText(shortcut.sequences);
     case RoleSearchKey: {
         const UiAction& action = this->action(shortcut.action);
-        return QString::fromStdString(action.code) + action.title.qTranslatedWithoutMnemonic() + action.description.qTranslated()
+        return QString::fromStdString(action.code)
+               + action.title.qTranslatedWithoutMnemonic()
+               + action.description.qTranslated()
                + sequencesToNativeText(shortcut.sequences);
     }
     }
@@ -103,6 +105,10 @@ void ShortcutsModel::load()
     m_shortcuts.clear();
 
     for (const UiAction& action : uiactionsRegister()->actionList()) {
+        if (action.scCtx == CTX_DISABLED) {
+            continue;
+        }
+
         Shortcut shortcut = shortcutsRegister()->shortcut(action.code);
         if (!shortcut.isValid()) {
             shortcut.action = action.code;

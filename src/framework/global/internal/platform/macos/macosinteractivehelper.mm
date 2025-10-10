@@ -51,56 +51,48 @@ Ret MacOSInteractiveHelper::isAppExists(const std::string& appIdentifier)
 
 Ret MacOSInteractiveHelper::canOpenApp(const UriQuery& uri)
 {
-    if (__builtin_available(macOS 10.15, *)) {
-        NSString* nsUrlString = [NSString stringWithUTF8String:uri.toString().c_str()];
-        if (nsUrlString == nil) {
-            return make_ret(Ret::Code::InternalError, std::string("Invalid UTF-8 string passed as URI"));
-        }
-
-        NSURL* nsUrl = [NSURL URLWithString:nsUrlString];
-        if (nsUrl == nil) {
-            return make_ret(Ret::Code::InternalError, std::string("Invalid URI"));
-        }
-
-        NSURL* appURL = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:nsUrl];
-        return appURL != nil;
-    } else {
-        return false;
+    NSString* nsUrlString = [NSString stringWithUTF8String:uri.toString().c_str()];
+    if (nsUrlString == nil) {
+        return make_ret(Ret::Code::InternalError, std::string("Invalid UTF-8 string passed as URI"));
     }
+
+    NSURL* nsUrl = [NSURL URLWithString:nsUrlString];
+    if (nsUrl == nil) {
+        return make_ret(Ret::Code::InternalError, std::string("Invalid URI"));
+    }
+
+    NSURL* appURL = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:nsUrl];
+    return appURL != nil;
 }
 
 async::Promise<Ret> MacOSInteractiveHelper::openApp(const UriQuery& uri)
 {
     return Promise<Ret>([uri](auto resolve, auto reject) {
-        if (__builtin_available(macOS 10.15, *)) {
-            NSString* nsUrlString = [NSString stringWithUTF8String:uri.toString().c_str()];
-            if (nsUrlString == nil) {
-                return reject(int(Ret::Code::InternalError), "Invalid UTF-8 string passed as URI");
-            }
-
-            NSURL* nsUrl = [NSURL URLWithString:nsUrlString];
-            if (nsUrl == nil) {
-                return reject(int(Ret::Code::InternalError), "Invalid URI");
-            }
-
-            auto configuration = [NSWorkspaceOpenConfiguration configuration];
-            [configuration setPromptsUserIfNeeded:NO];
-            [[NSWorkspace sharedWorkspace]
-             openURL: nsUrl
-             configuration: configuration
-             completionHandler: ^(NSRunningApplication*, NSError* error) {
-                 if (error) {
-                     std::string errorStr = [[error description] UTF8String];
-                     (void)reject(int(Ret::Code::InternalError), errorStr);
-                 } else {
-                     (void)resolve(make_ok());
-                 }
-             }
-            ];
-
-            return Promise<Ret>::Result::unchecked();
-        } else {
-            return reject(int(Ret::Code::NotSupported), "macOS 10.15 or later is required");
+        NSString* nsUrlString = [NSString stringWithUTF8String:uri.toString().c_str()];
+        if (nsUrlString == nil) {
+            return reject(int(Ret::Code::InternalError), "Invalid UTF-8 string passed as URI");
         }
+
+        NSURL* nsUrl = [NSURL URLWithString:nsUrlString];
+        if (nsUrl == nil) {
+            return reject(int(Ret::Code::InternalError), "Invalid URI");
+        }
+
+        auto configuration = [NSWorkspaceOpenConfiguration configuration];
+        [configuration setPromptsUserIfNeeded:NO];
+        [[NSWorkspace sharedWorkspace]
+         openURL: nsUrl
+         configuration: configuration
+         completionHandler: ^(NSRunningApplication*, NSError* error) {
+             if (error) {
+                 std::string errorStr = [[error description] UTF8String];
+                 (void)reject(int(Ret::Code::InternalError), errorStr);
+             } else {
+                 (void)resolve(make_ok());
+             }
+         }
+        ];
+
+        return Promise<Ret>::Result::unchecked();
     });
 }

@@ -96,11 +96,11 @@ MenuItemList NotationContextMenuModel::makePageItems()
 MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 {
     MenuItemList items {
-        makeMenuItem("notation-cut"),
-        makeMenuItem("notation-copy"),
-        makeMenuItem("notation-paste"),
+        makeMenuItem("action://notation/cut"),
+        makeMenuItem("action://notation/copy"),
+        makeMenuItem("action://notation/paste"),
         makeMenuItem("notation-swap"),
-        makeMenuItem("notation-delete"),
+        makeMenuItem("action://notation/delete"),
     };
 
     return items;
@@ -109,15 +109,15 @@ MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 MenuItemList NotationContextMenuModel::makeMeasureItems()
 {
     MenuItemList items = {
-        makeMenuItem("notation-cut"),
-        makeMenuItem("notation-copy"),
-        makeMenuItem("notation-paste"),
+        makeMenuItem("action://notation/cut"),
+        makeMenuItem("action://notation/copy"),
+        makeMenuItem("action://notation/paste"),
         makeMenuItem("notation-swap"),
     };
 
     items << makeSeparator();
 
-    MenuItem* clearItem = makeMenuItem("notation-delete");
+    MenuItem* clearItem = makeMenuItem("action://notation/delete");
     clearItem->setTitle(TranslatableString("notation", "Clear measures"));
     MenuItem* deleteItem = makeMenuItem("time-delete");
     deleteItem->setTitle(TranslatableString("notation", "Delete measures"));
@@ -223,10 +223,10 @@ MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
 MenuItemList NotationContextMenuModel::makeElementInFretBoxItems()
 {
     MenuItemList items {
-        makeMenuItem("notation-copy")
+        makeMenuItem("action://notation/copy")
     };
 
-    MenuItem* hideItem = makeMenuItem("notation-delete");
+    MenuItem* hideItem = makeMenuItem("action://notation/delete");
 
     ui::UiAction action = hideItem->action();
     action.iconCode = ui::IconCode::Code::NONE;

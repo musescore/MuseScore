@@ -38,7 +38,6 @@ NavigationControl::~NavigationControl()
 {
     if (m_panel) {
         m_panel->removeControl(this);
-        setAccessibleParent(nullptr);
     }
 }
 
@@ -50,9 +49,8 @@ void NavigationControl::componentComplete()
 
     if (m_panel) {
         m_panel->componentComplete();
+        AbstractNavigation::componentComplete();
     }
-
-    AbstractNavigation::componentComplete();
 }
 
 QString NavigationControl::name() const
@@ -161,14 +159,18 @@ void NavigationControl::setPanel(NavigationPanel* panel)
 
     m_panel = panel;
 
+    setAccessibleParent(m_panel ? m_panel->accessible() : nullptr);
+
     if (m_panel) {
         m_panel->addControl(this);
         connect(m_panel, &NavigationPanel::destroyed, this, &NavigationControl::onPanelDestroyed);
+
+        if (!isComponentCompleted()) {
+            AbstractNavigation::componentComplete();
+        }
     }
 
     emit panelChanged(m_panel);
-
-    setAccessibleParent(m_panel ? m_panel->accessible() : nullptr);
 }
 
 void NavigationControl::onPanelDestroyed()

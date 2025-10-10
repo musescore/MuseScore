@@ -94,5 +94,4 @@ private:
     async::Notification m_outputDeviceBufferSizeChanged;
     async::Notification m_outputDeviceSampleRateChanged;
 };
-
 }

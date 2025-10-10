@@ -859,6 +859,9 @@ TEST_F(MusicXml_Tests, lyricBracket) {
 TEST_F(MusicXml_Tests, lyricColor) {
     musicXmlIoTest("testLyricColor");
 }
+TEST_F(MusicXml_Tests, lyricVisibility) {
+    musicXmlImportTestRef("testLyricVisibility");
+}
 TEST_F(MusicXml_Tests, lyricPos) {
     musicXmlImportTestRef("testLyricPos");
 }

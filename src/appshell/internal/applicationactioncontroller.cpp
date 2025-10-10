@@ -72,6 +72,15 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "manage-plugins", [this]() {
         interactive()->open("musescore://home?section=plugins");
     });
+
+    // Global actions
+    dispatcher()->reg(this, "action://copy", this, &ApplicationActionController::doGlobalCopy);
+    dispatcher()->reg(this, "action://cut", this, &ApplicationActionController::doGlobalCut);
+    dispatcher()->reg(this, "action://paste", this, &ApplicationActionController::doGlobalPaste);
+    dispatcher()->reg(this, "action://undo", this, &ApplicationActionController::doGlobalUndo);
+    dispatcher()->reg(this, "action://redo", this, &ApplicationActionController::doGlobalRedo);
+    dispatcher()->reg(this, "action://delete", this, &ApplicationActionController::doGlobalDelete);
+    dispatcher()->reg(this, "action://cancel", this, &ApplicationActionController::doGlobalCancel);
 }
 
 bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
@@ -355,4 +364,74 @@ void ApplicationActionController::revertToFactorySettings()
             }
         });
     });
+}
+
+bool ApplicationActionController::hasProjectAndIsFocused() const
+{
+    bool hasProject = globalContext()->currentProject() != nullptr;
+    bool isFocused = uiContextResolver()->currentUiContext() == context::UiCtxProjectFocused;
+    return hasProject && isFocused;
+}
+
+void ApplicationActionController::doGlobalCopy()
+{
+    if (hasProjectAndIsFocused()) {
+        dispatcher()->dispatch("action://notation/copy");
+    } else {
+        // resolve other actions
+    }
+}
+
+void ApplicationActionController::doGlobalCut()
+{
+    if (hasProjectAndIsFocused()) {
+        dispatcher()->dispatch("action://notation/cut");
+    } else {
+        // resolve other actions
+    }
+}
+
+void ApplicationActionController::doGlobalPaste()
+{
+    if (hasProjectAndIsFocused()) {
+        dispatcher()->dispatch("action://notation/paste");
+    } else {
+        // resolve other actions
+    }
+}
+
+void ApplicationActionController::doGlobalUndo()
+{
+    if (hasProjectAndIsFocused()) {
+        dispatcher()->dispatch("action://notation/undo");
+    } else {
+        // resolve other actions
+    }
+}
+
+void ApplicationActionController::doGlobalRedo()
+{
+    if (hasProjectAndIsFocused()) {
+        dispatcher()->dispatch("action://notation/redo");
+    } else {
+        // resolve other actions
+    }
+}
+
+void ApplicationActionController::doGlobalDelete()
+{
+    if (hasProjectAndIsFocused()) {
+        dispatcher()->dispatch("action://notation/delete");
+    } else {
+        // resolve other actions
+    }
+}
+
+void ApplicationActionController::doGlobalCancel()
+{
+    if (hasProjectAndIsFocused()) {
+        dispatcher()->dispatch("action://notation/cancel");
+    } else {
+        dispatcher()->dispatch("nav-escape");
+    }
 }

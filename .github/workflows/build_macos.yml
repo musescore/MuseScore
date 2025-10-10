@@ -151,13 +151,15 @@ jobs:
         bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v4
-      with:
-        version: 6.9.3
-        host: 'mac'
-        target: 'desktop'
-        arch: 'clang_64'
-        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
+      # uses: jurplel/install-qt-action@v4
+      # with:
+      #   version: 6.9.3
+      #   host: 'mac'
+      #   target: 'desktop'
+      #   arch: 'clang_64'
+      #   modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
+      run: |
+        bash ./buildscripts/ci/macos/install_qt.sh
 
     - name: Download dependencies
       run: |

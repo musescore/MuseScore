@@ -68,6 +68,7 @@
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pedal.h"
+#include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
@@ -255,10 +256,7 @@ static int MusicXmlStepAltOct2Pitch(int step, int alter, int octave)
     }
     int pitch = table[step] + alter + (octave + 1) * 12;
 
-    if (pitch < 0) {
-        pitch = -1;
-    }
-    if (pitch > 127) {
+    if (!pitchIsValid(pitch)) {
         pitch = -1;
     }
 
@@ -1883,6 +1881,11 @@ static void cleanupUnterminatedTie(Tie* tie, const Score* score, bool fixForCros
     // Delete unterminated ties pending fully featured l.v. ties & ties over repeats
     unterminatedTieNote->remove(tie);
     delete tie;
+
+    // Add Laissez Vibrer instead
+    LaissezVib* lvTie = Factory::createLaissezVib(unterminatedTieNote);
+    lvTie->setParent(unterminatedTieNote);
+    unterminatedTieNote->score()->undoAddElement(lvTie);
 }
 
 //---------------------------------------------------------
@@ -3981,7 +3984,7 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
     while (m_e.readNextStartElement()) {
         m_defaultY = m_e.asciiAttribute("default-y").toDouble(&m_hasDefaultY) * -0.1;
         m_relativeX = m_e.doubleAttribute("relative-x") / 10 * m_score->style().spatium();
-        m_visible = m_e.asciiAttribute("print-object") != "no";
+        m_visible = m_e.asciiAttribute("print-object") != "no"; // only available for "metronome" and "other-direction"
         const String number = m_e.attribute("number");
         int n = 0;
         if (!number.empty()) {
@@ -6888,6 +6891,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
     int velocity = round(m_e.doubleAttribute("dynamics") * 0.9);
     bool graceSlash = false;
     bool printObject = m_e.asciiAttribute("print-object") != "no";
+    bool printLyric = (printObject && m_e.asciiAttribute("print-lyric") != "no") || m_e.asciiAttribute("print-lyric") == "yes";
     bool isSingleDrumset = false;
     BeamMode bm;
     std::map<int, String> beamTypes;
@@ -6928,7 +6932,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
         } else if (m_e.name() == "lyric") {
             // lyrics on grace notes not (yet) supported by MuseScore
             // add to main note instead
-            lyric.parse();
+            lyric.parse(printLyric);
         } else if (m_e.name() == "notations") {
             notations.parse();
             addError(notations.errors());
@@ -8038,12 +8042,12 @@ void MusicXmlParserLyric::readElision(String& formattedText)
 //   parse
 //---------------------------------------------------------
 
-void MusicXmlParserLyric::parse()
+void MusicXmlParserLyric::parse(bool visibility)
 {
     bool hasExtend = false;
     const String lyricNumber = m_e.attribute("number");
     const Color lyricColor = Color::fromString(m_e.asciiAttribute("color").ascii());
-    const bool printLyric = m_e.asciiAttribute("print-object") != "no";
+    const bool printLyric = visibility ? m_e.asciiAttribute("print-object") != "no" : m_e.asciiAttribute("print-object") == "yes";
     m_placement = m_e.attribute("placement");
     double relX = m_e.doubleAttribute("relative-x") * 0.1 * DPMM;
     m_relativeY = m_e.doubleAttribute("relative-y") * -0.1 * DPMM;

@@ -35,6 +35,7 @@
 #include "notation/inotation.h"
 #include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"
+#include "shortcuts/ishortcutsregister.h"
 #include "modularity/ioc.h"
 #include "models/propertyitem.h"
 #include "models/pointfpropertyitem.h"
@@ -56,9 +57,10 @@ class AbstractInspectorModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(bool isSystemObjectBelowBottomStaff READ isSystemObjectBelowBottomStaff NOTIFY isSystemObjectBelowBottomStaffChanged)
 
 public:
-    INJECT(context::IGlobalContext, context)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(muse::ui::IUiActionsRegister, uiActionsRegister)
+    muse::Inject<context::IGlobalContext> context;
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher;
+    muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister;
+    muse::Inject<muse::shortcuts::IShortcutsRegister> shortcutsRegister;
 
 public:
     enum class InspectorSectionType {

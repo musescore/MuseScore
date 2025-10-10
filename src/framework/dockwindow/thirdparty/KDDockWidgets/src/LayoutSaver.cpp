@@ -248,7 +248,7 @@ bool LayoutSaver::restoreLayout(const QByteArray &data)
 
         if (!(d->m_restoreOptions & InternalRestoreOption::SkipMainWindowGeometry)) {
             d->deserializeWindowGeometry(mw, mainWindow->window()); // window(), as the MainWindow can be embedded
-            if (mw.windowState != Qt::WindowNoState) {
+            if (mw.windowState != Qt::WindowNoState && mw.windowState != Qt::WindowMinimized) {
                 if (auto w = mainWindow->windowHandle()) {
                     w->setWindowState(mw.windowState);
                 }

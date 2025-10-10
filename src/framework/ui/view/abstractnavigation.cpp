@@ -287,9 +287,7 @@ void AbstractNavigation::setAccessible(AccessibleItem* accessible)
 
 void AbstractNavigation::setAccessibleParent(AccessibleItem* p)
 {
-    if (m_accessible) {
-        m_accessible->setAccessibleParent(p);
-    }
+    accessible()->setAccessibleParent(p);
 }
 
 bool AbstractNavigation::highlight() const

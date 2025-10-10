@@ -27,7 +27,6 @@
 
 #include "../iuiactionsregister.h"
 #include "modularity/ioc.h"
-#include "shortcuts/ishortcutsregister.h"
 #include "iuicontextresolver.h"
 #include "async/asyncable.h"
 
@@ -35,7 +34,6 @@ namespace muse::ui {
 class UiActionsRegister : public IUiActionsRegister, public Injectable, public async::Asyncable
 {
     Inject<IUiContextResolver> uicontextResolver = { this };
-    Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     UiActionsRegister(const modularity::ContextPtr& iocCtx)
@@ -69,9 +67,6 @@ private:
 
     Info& info(const actions::ActionCode& code);
     const Info& info(const actions::ActionCode& code) const;
-
-    void updateShortcuts(const actions::ActionCodeList& codes);
-    void updateShortcutsAll();
 
     void updateActions(const UiActionList& actions);
 
