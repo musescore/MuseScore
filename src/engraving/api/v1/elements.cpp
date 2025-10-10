@@ -139,7 +139,7 @@ int ChordRest::actualBeamMode(bool beamRests)
             }
         }
     }
-    return int(mu::engraving::Groups::endBeam(chordRest(), prev));
+    return int(mu::engraving::Groups::baseBeamMode(chordRest(), prev));
 }
 
 //---------------------------------------------------------
