@@ -34,9 +34,10 @@ static const muse::String CONVERTER_DATA_DIR("data/");
 class Converter_ScoreElementsTests : public ::testing::Test
 {
 public:
-    ElementInfo makeInfo(const String& name, const String& notes = u"") const
+    ElementInfo makeInfo(ElementType type, const String& name, const String& notes = u"") const
     {
         ElementInfo info;
+        info.type = type;
         info.name = name;
         info.notes = notes;
 
@@ -76,53 +77,46 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
     };
 
     // [WHEN] Scan the score
-    InstrumentElementMap result = ScoreElementScanner::scanElements(score, options);
+    ElementMap result = ScoreElementScanner::scanElements(score, options);
 
-    // [THEN] The map matches the expected one
-    ElementMap expectedMap;
+    // [THEN] The list matches the expected one
+    ElementInfoList expectedList;
 
     // 1st measure
-    expectedMap[ElementType::KEYSIG] = { makeInfo(u"C major / A minor") };
-    expectedMap[ElementType::TIMESIG] = { makeInfo(u"4/4 time") };
-    expectedMap[ElementType::ARPEGGIO] = { makeInfo(u"Up arpeggio", u"C5 E5 G5 B5") };
-    expectedMap[ElementType::CHORD] = { makeInfo(u"", u"C5 E5 G5 B5") };
-    expectedMap[ElementType::TREMOLO_SINGLECHORD] = { makeInfo(u"32nd through stem", u"F4 A4 C5") };
+    expectedList.emplace_back(makeInfo(ElementType::KEYSIG, u"C major / A minor"));
+    expectedList.emplace_back(makeInfo(ElementType::TIMESIG, u"4/4 time"));
+    expectedList.emplace_back(makeInfo(ElementType::ARPEGGIO, u"Up arpeggio", u"C5 E5 G5 B5"));
+    expectedList.emplace_back(makeInfo(ElementType::CHORD, u"", u"C5 E5 G5 B5"));
+    expectedList.emplace_back(makeInfo(ElementType::TREMOLO_SINGLECHORD, u"32nd through stem", u"F4 A4 C5"));
 
     // 2nd measure
-    expectedMap[ElementType::ORNAMENT] = { makeInfo(u"Turn", u"A4 E5") }; // skip duplicates
+    expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", u"A4 E5")); // skip duplicates
 
     // 3rd measure
-    expectedMap[ElementType::TRILL] = { makeInfo(u"Trill line") };
+    expectedList.emplace_back(makeInfo(ElementType::TRILL, u"Trill line"));
 
     // 4th measure
-    expectedMap[ElementType::GRADUAL_TEMPO_CHANGE] = { makeInfo(u"accel.") };
-    expectedMap[ElementType::HAIRPIN] = { makeInfo(u"Crescendo hairpin") };
+    expectedList.emplace_back(makeInfo(ElementType::HAIRPIN, u"Crescendo hairpin"));
+    expectedList.emplace_back(makeInfo(ElementType::GRADUAL_TEMPO_CHANGE, u"accel."));
 
     // 5th measure
-    expectedMap[ElementType::PLAYTECH_ANNOTATION] = { makeInfo(u"Pizzicato") };
+    expectedList.emplace_back(makeInfo(ElementType::PLAYTECH_ANNOTATION, u"Pizzicato"));
 
     ASSERT_EQ(result.size(), 1);
     const mu::engraving::InstrumentTrackId expectedTrackId { muse::ID(1), u"piano" };
     EXPECT_EQ(result.begin()->first, expectedTrackId);
 
-    const ElementMap& actualMap = result.begin()->second;
-    EXPECT_EQ(actualMap.size(), expectedMap.size());
+    const ElementInfoList& actualList = result.begin()->second;
+    EXPECT_EQ(expectedList.size(), actualList.size());
 
-    for (const auto& pair : actualMap) {
-        auto it = expectedMap.find(pair.first);
-        ASSERT_TRUE(it != expectedMap.end());
+    for (size_t i = 0; i < actualList.size(); ++i) {
+        const ElementInfo& actualInfo = actualList.at(i);
+        const ElementInfo& expectedInfo = expectedList.at(i);
 
-        const ElementInfoList& expectedInfoList = it->second;
-        ASSERT_EQ(pair.second.size(), expectedInfoList.size());
-
-        for (size_t i = 0; i < pair.second.size(); ++i) {
-            const ElementInfo& actualInfo = pair.second.at(i);
-            const ElementInfo& expectedInfo = expectedInfoList.at(i);
-
-            EXPECT_EQ(actualInfo.name, expectedInfo.name);
-            EXPECT_EQ(actualInfo.notes, expectedInfo.notes);
-            EXPECT_EQ(actualInfo.text, expectedInfo.text);
-        }
+        EXPECT_EQ(actualInfo.type, expectedInfo.type);
+        EXPECT_EQ(actualInfo.name, expectedInfo.name);
+        EXPECT_EQ(actualInfo.notes, expectedInfo.notes);
+        EXPECT_EQ(actualInfo.text, expectedInfo.text);
     }
 
     delete score;

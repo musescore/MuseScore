@@ -39,6 +39,6 @@ public:
         bool avoidDuplicates = false;
     };
 
-    static InstrumentElementMap scanElements(mu::engraving::Score* score, const Options& options = {});
+    static ElementMap scanElements(mu::engraving::Score* score, const Options& options = {});
 };
 }
