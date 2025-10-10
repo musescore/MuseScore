@@ -564,7 +564,7 @@ void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
     }
 
     for (ChordRest* cr : graceNotes) {
-        bm = Groups::endBeam(cr);
+        bm = Groups::baseBeamMode(cr);
         if ((cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
             if (beam) {
                 beam->setIsGrace(true);
@@ -728,7 +728,7 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
             if (cr->isRest() && cr->beamMode() == BeamMode::AUTO) {
                 bm = BeamMode::NONE;                   // do not beam rests set to BeamMode::AUTO or with only other rests
             } else {
-                bm = Groups::endBeam(cr, prev);          // get defaults from time signature properties
+                bm = Groups::baseBeamMode(cr, prev);          // get defaults from time signature properties
             }
             // perform additional context-dependent checks
             if (bm == BeamMode::AUTO) {
@@ -745,7 +745,7 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                         TDuration saveCMDuration      = cr->crossMeasureDurationType();
                         CrossMeasure saveCrossMeasVal = cr->crossMeasure();
                         cr->setDurationType(minDuration);
-                        bm = Groups::endBeam(cr, prev);
+                        bm = Groups::baseBeamMode(cr, prev);
                         cr->setDurationType(saveDuration);
                         cr->setCrossMeasure(saveCrossMeasVal);
                         cr->setCrossMeasureDurationType(saveCMDuration);
