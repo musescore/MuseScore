@@ -97,10 +97,11 @@ static std::vector<NoteGroup> noteGroups {
 };
 
 //---------------------------------------------------------
-//   endBeam
+//   baseBeamMode
+//    based on time signature properties but respecting manual settings
 //---------------------------------------------------------
 
-BeamMode Groups::endBeam(const ChordRest* cr, const ChordRest* prev)
+BeamMode Groups::baseBeamMode(const ChordRest* cr, const ChordRest* prev)
 {
     if (cr->isGrace() || cr->beamMode() != BeamMode::AUTO) {
         return cr->beamMode();
