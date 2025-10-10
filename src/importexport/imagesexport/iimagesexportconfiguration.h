@@ -55,6 +55,9 @@ public:
     virtual bool exportPngWithTransparentBackground() const = 0;
     virtual void setExportPngWithTransparentBackground(bool transparent) = 0;
 
+    virtual bool exportPngWithGrayscale() const = 0;
+    virtual void setExportPngWithGrayscale(bool grayscale) = 0;
+
     // Svg
     virtual bool exportSvgWithTransparentBackground() const = 0;
     virtual void setExportSvgWithTransparentBackground(bool transparent) = 0;

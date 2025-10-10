@@ -46,6 +46,9 @@ public:
     bool exportPngWithTransparentBackground() const override;
     void setExportPngWithTransparentBackground(bool transparent) override;
 
+    bool exportPngWithGrayscale() const override;
+    void setExportPngWithGrayscale(bool grayscale) override;
+
     bool exportSvgWithTransparentBackground() const override;
     void setExportSvgWithTransparentBackground(bool transparent) override;
     bool exportSvgWithIllustratorCompat() const override;

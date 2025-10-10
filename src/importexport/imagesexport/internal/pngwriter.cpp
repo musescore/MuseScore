@@ -71,13 +71,31 @@ Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
 
     notation->painting()->paintPng(&painter, opt);
 
+    if (configuration()->exportPngWithGrayscale()) {
+        convertImageToGrayscale(image);
+    }
+
     QByteArray qdata;
     QBuffer buf(&qdata);
     buf.open(QIODevice::WriteOnly);
+
     image.save(&buf, "png");
 
     ByteArray data = ByteArray::fromQByteArrayNoCopy(qdata);
     destinationDevice.write(data);
 
     return true;
+}
+
+void PngWriter::convertImageToGrayscale(QImage& image)
+{
+    // We convert every pixel to gray, preserving alpha channel (necessary for transparent background)
+    for (int y = 0; y < image.height(); ++y) {
+        QRgb* scanLine = reinterpret_cast<QRgb*>(image.scanLine(y));
+        for (int x = 0; x < image.width(); ++x) {
+            QRgb& pixel = scanLine[x];
+            uint ci = uint(qGray(pixel));
+            pixel = qRgba(ci, ci, ci, qAlpha(pixel));
+        }
+    }
 }

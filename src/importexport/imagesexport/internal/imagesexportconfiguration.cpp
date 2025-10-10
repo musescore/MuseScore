@@ -34,6 +34,7 @@ static const Settings::Key EXPORT_PDF_USE_TRANSPARENCY_KEY("iex_imagesexport", "
 static const Settings::Key EXPORT_PDF_USE_GRAYSCALE_KEY("iex_imagesexport", "export/pdf/useGrayscale");
 static const Settings::Key EXPORT_PNG_DPI_RESOLUTION_KEY("iex_imagesexport", "export/png/resolution");
 static const Settings::Key EXPORT_PNG_USE_TRANSPARENCY_KEY("iex_imagesexport", "export/png/useTransparency");
+static const Settings::Key EXPORT_PNG_USE_GRAYSCALE_KEY("iex_imagesexport", "export/png/useGrayscale");
 static const Settings::Key EXPORT_SVG_USE_TRANSPARENCY_KEY("iex_imagesexport", "export/svg/useTransparency");
 static const Settings::Key EXPORT_SVG_ILLUSTRATOR_COMPAT("iex_imagesexport", "export/svg/illustratorCompat");
 
@@ -102,6 +103,16 @@ bool ImagesExportConfiguration::exportPngWithTransparentBackground() const
 void ImagesExportConfiguration::setExportPngWithTransparentBackground(bool transparent)
 {
     settings()->setSharedValue(EXPORT_PNG_USE_TRANSPARENCY_KEY, Val(transparent));
+}
+
+bool ImagesExportConfiguration::exportPngWithGrayscale() const
+{
+    return settings()->value(EXPORT_PNG_USE_GRAYSCALE_KEY).toBool();
+}
+
+void ImagesExportConfiguration::setExportPngWithGrayscale(bool grayscale)
+{
+    settings()->setSharedValue(EXPORT_PNG_USE_GRAYSCALE_KEY, Val(grayscale));
 }
 
 bool ImagesExportConfiguration::exportSvgWithTransparentBackground() const
