@@ -165,6 +165,37 @@ BeamMode Groups::baseBeamMode(const ChordRest* cr, const ChordRest* prev)
 //    final beam mode after applying contextual corrections
 //---------------------------------------------------------
 
+BeamMode Groups::actualBeamMode(const ChordRest* cr, const ChordRest* prev)
+{
+    Measure* measure = cr->measure();
+    const Staff* stf = cr->staff();
+    TimeSig* ts = stf->timeSig(measure->tick());
+    bool checkBeats = ts && ts->denominator() == 4;
+
+    std::unordered_map<int, TDuration> beatSubdivision;
+    if (checkBeats && cr->rtick().isNotZero()) {
+        Fraction stretch = ts->stretch();
+        Fraction tick = cr->rtick() * stretch;
+
+        if ((tick.ticks() % Constants::DIVISION) == 0) {
+            for (Segment* s = measure->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                ChordRest* mcr = toChordRest(s->element(cr->track()));
+                if (mcr == 0) {
+                    continue;
+                }
+                int beat = (mcr->rtick() * stretch).ticks() / Constants::DIVISION;
+                if (muse::contains(beatSubdivision, beat)) {
+                    beatSubdivision[beat] = std::min(beatSubdivision[beat], mcr->durationType());
+                } else {
+                    beatSubdivision[beat] = mcr->durationType();
+                }
+            }
+        }
+    }
+
+    return actualBeamMode(cr, prev, &beatSubdivision);
+}
+
 BeamMode Groups::actualBeamMode(const ChordRest* cr, const ChordRest* prev,
                                 const std::unordered_map<int, TDuration>* beatSubdivision)
 {
