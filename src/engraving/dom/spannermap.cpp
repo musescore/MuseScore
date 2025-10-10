@@ -117,10 +117,10 @@ void SpannerMap::collectIntervals(IntervalList& regularIntervals, IntervalList& 
         int newSpannerEndTick = spanner->tick2().ticks();
 
         IntervalsByType& intervalsByType = intervalsByPart[spanner->part()->id()];
-        IntervalList& intervalList = intervalsByType[spanner->type()];
+        IntervalList& intervalListType = intervalsByType[spanner->type()];
 
-        if (!intervalList.empty()) {
-            auto lastIntervalIt = intervalList.rbegin();
+        if (!intervalListType.empty()) {
+            auto lastIntervalIt = intervalListType.rbegin();
             if (lastIntervalIt->stop >= newSpannerStartTick) {
                 if (!lastIntervalIt->value->isLinked(spanner)) {
                     lastIntervalIt->stop = newSpannerStartTick - collidingSpannersPadding;
@@ -128,9 +128,9 @@ void SpannerMap::collectIntervals(IntervalList& regularIntervals, IntervalList& 
             }
         }
 
-        intervalList.emplace_back(interval_tree::Interval<Spanner*>(newSpannerStartTick,
-                                                                    newSpannerEndTick,
-                                                                    spanner));
+        intervalListType.emplace_back(interval_tree::Interval<Spanner*>(newSpannerStartTick,
+                                                                        newSpannerEndTick,
+                                                                        spanner));
 
         regularIntervals.push_back(interval_tree::Interval(newSpannerStartTick,
                                                            newSpannerEndTick,
