@@ -1239,4 +1239,9 @@
     <key>grace-note-bend</key>
     <seq>Ctrl+Alt+B</seq>
     </SC>
+  <SC>
+    <key>add-simple-arpeggio</key>
+    <seq>Ctrl+Shift+R</seq>
+    <autorepeat>0</autorepeat>
+    </SC>
   </Shortcuts>
