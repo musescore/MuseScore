@@ -79,7 +79,8 @@ private:
 
     static void renderAction(Harmony* item, Harmony::LayoutData* ldata, const RenderActionPtr& a, HarmonyRenderCtx& harmonyCtx,
                              const LayoutContext& ctx);
-    static void renderActionSet(Harmony* item, Harmony::LayoutData* ldata, const RenderActionSetPtr& a, HarmonyRenderCtx& harmonyCtx);
+    static void renderActionSet(Harmony* item, Harmony::LayoutData* ldata, const RenderActionSetPtr& a, HarmonyRenderCtx& harmonyCtx,
+                                const LayoutContext& ctx);
     static void renderActionMove(Harmony* item, const RenderActionMovePtr& a, HarmonyRenderCtx& harmonyCtx);
     static void renderActionMoveXHeight(Harmony* item, const RenderActionMoveXHeightPtr& a, HarmonyRenderCtx& harmonyCtx);
     static void renderActionPush(HarmonyRenderCtx& harmonyCtx);
@@ -90,6 +91,6 @@ private:
     static void renderActionScale(const RenderActionScalePtr& a, HarmonyRenderCtx& harmonyCtx);
     static void renderActionParen(Harmony* item, const RenderActionParenPtr& a, HarmonyRenderCtx& harmonyCtx);
 
-    static void kernCharacters(const Harmony* item, const String& text, HarmonyRenderCtx& harmonyCtx);
+    static void kernCharacters(const Harmony* item, const String& text, HarmonyRenderCtx& harmonyCtx, const LayoutContext& ctx);
 };
 }
