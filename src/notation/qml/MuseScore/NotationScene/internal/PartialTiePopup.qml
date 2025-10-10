@@ -32,8 +32,8 @@ AbstractElementPopup {
     id: root
     margins: 0
 
-    contentWidth: content.width
-    contentHeight: content.height
+    contentWidth: content.implicitWidth
+    contentHeight: content.implicitHeight
 
     property NavigationSection notationViewNavigationSection: null
     property int navigationOrderStart: 0
@@ -67,8 +67,6 @@ AbstractElementPopup {
 
     Column {
         id: content
-        width: tieMenuList.width
-        height: tieMenuList.height
         spacing: 0
 
         StyledListView {
@@ -76,8 +74,8 @@ AbstractElementPopup {
 
             property int itemHeight: 32
 
-            implicitWidth: contentItem.childrenRect.width
-            height: itemHeight * count
+            implicitWidth: calculateWidth()
+            implicitHeight: itemHeight * count
 
             spacing: 0
             arrowControlsAvailable: false
@@ -96,17 +94,16 @@ AbstractElementPopup {
                     if (!(row instanceof ListItemBlank)) {
                         continue
                     }
-                    result = Math.max(result, tieMenuList.contentItem.children[item].calculateWidth())
+                    result = Math.max(result, row.implicitWidth)
                 }
 
-                tieMenuList.width = result
+                return result
             }
 
             delegate: PartialTieMenuRowItem {
+                width: ListView.view.width
                 implicitHeight: tieMenuList.itemHeight
                 hoverHitColor: ui.theme.accentColor
-                anchors.left: parent ? parent.left : undefined
-                anchors.right: parent ? parent.right : undefined
 
                 navigation.panel: tieMenuList.navigation
                 navigation.row: model.index

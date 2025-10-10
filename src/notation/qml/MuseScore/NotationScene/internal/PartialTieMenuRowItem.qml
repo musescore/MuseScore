@@ -29,25 +29,12 @@ import Muse.UiComponents 1.0
 import MuseScore.NotationScene 1.0
 
 ListItemBlank {
-    function calculateWidth() {
-        let result = 0
-
-        result += rowLayout.anchors.leftMargin
-
-        result += Math.ceil(checkIcon.Layout.preferredWidth)
-        result += rowLayout.spacing
-
-        result += Math.ceil(titleLabel.implicitWidth)
-        result += rowLayout.spacing
-        result += rowLayout.anchors.rightMargin
-
-        return result
-    }
-
     id: rowDelegate
 
     required property var modelData
     required property var model
+
+    implicitWidth: rowLayout.implicitWidth + rowLayout.anchors.leftMargin + rowLayout.anchors.rightMargin
 
     RowLayout {
         id: rowLayout
@@ -71,10 +58,7 @@ ListItemBlank {
             id: titleLabel
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignLeft
-
             text: rowDelegate.modelData.title
-
-            textFormat: Text.RichText
         }
     }
 }
