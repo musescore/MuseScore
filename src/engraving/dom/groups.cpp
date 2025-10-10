@@ -168,22 +168,39 @@ BeamMode Groups::baseBeamMode(const ChordRest* cr, const ChordRest* prev)
 BeamMode Groups::actualBeamMode(const ChordRest* cr, const ChordRest* prev,
                                 const std::unordered_map<int, TDuration>* beatSubdivision)
 {
+    // do not beam rests set to BeamMode::AUTO or with only other rests
     if (cr->isRest() && cr->beamMode() == BeamMode::AUTO) {
-        return BeamMode::NONE; // do not beam rests set to BeamMode::AUTO or with only other rests
+        return BeamMode::NONE;
     }
 
-    BeamMode bm = Groups::baseBeamMode(cr, prev); // get defaults from time signature properties
+    TDuration durationType = cr->durationType();
+    // chord with no hooks cannot be beamed
+    if (cr->isChord() && durationType.hooks() == 0) {
+        return BeamMode::NONE;
+    }
+    // if chord has hooks and is 2nd element of a cross-measure value
+    // set beam mode to NONE (do not combine with following chord beam/hook, if any)
+    if (durationType.hooks() > 0 && cr->crossMeasure() == CrossMeasure::SECOND) {
+        return BeamMode::NONE;
+    }
 
-    // perform additional context-dependent checks
-    Measure* measure = cr->measure();
-    const Staff* stf = cr->staff();
-    TimeSig* ts = stf->timeSig(measure->tick());
-    bool checkBeats = ts && ts->denominator() == 4;
-    Fraction stretch = ts ? ts->stretch() : Fraction(1, 1);
+    BeamMode bm = Groups::baseBeamMode(cr, prev);
 
     if (bm == BeamMode::AUTO) {
+        // start beam at the beginning of measures
+        if (cr->rtick().isZero()) {
+            return BeamMode::BEGIN;
+        }
+
+        // perform additional context-dependent checks
+        Measure* measure = cr->measure();
+        const Staff* stf = cr->staff();
+        TimeSig* ts = stf->timeSig(measure->tick());
+        bool checkBeats = ts && ts->denominator() == 4;
+        Fraction stretch = ts ? ts->stretch() : Fraction(1, 1);
+
         // check if we need to break beams according to minimum duration in current / previous beat
-        if (checkBeats && cr->rtick().isNotZero()) {
+        if (checkBeats) {
             Fraction tick = cr->rtick() * stretch;
             // check if on the beat
             if ((tick.ticks() % Constants::DIVISION) == 0) {
@@ -203,14 +220,7 @@ BeamMode Groups::actualBeamMode(const ChordRest* cr, const ChordRest* prev,
         }
     }
 
-    // if chord has hooks and is 2nd element of a cross-measure value
-    // set beam mode to NONE (do not combine with following chord beam/hook, if any)
-    TDuration durationType = cr->durationType();
-    if (durationType.hooks() > 0 && cr->crossMeasure() == CrossMeasure::SECOND) {
-        bm = BeamMode::NONE;
-    }
-
-    return bm;
+    return bm == BeamMode::AUTO ? BeamMode::MID : bm;
 }
 
 //---------------------------------------------------------
