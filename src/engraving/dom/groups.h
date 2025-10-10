@@ -67,6 +67,7 @@ public:
 
     static const Groups& endings(const Fraction& f);
     static BeamMode baseBeamMode(const ChordRest* cr, const ChordRest* prev = 0);
+    static BeamMode actualBeamMode(const ChordRest* cr, const ChordRest* prev);
     static BeamMode actualBeamMode(const ChordRest* cr, const ChordRest* prev, const std::unordered_map<int, TDuration>* beatSubdivision);
 
 private:
