@@ -44,7 +44,7 @@ public:
     void init();
 
 private:
-    void checkConnection();
+    void changeOutputDevice();
     void onOutputDeviceChanged();
 
     IAudioDriverPtr audioDriver() const;
