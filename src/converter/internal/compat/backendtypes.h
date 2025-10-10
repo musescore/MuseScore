@@ -29,25 +29,29 @@
 namespace mu::converter {
 struct ElementInfo
 {
+    mu::engraving::ElementType type = mu::engraving::ElementType::INVALID;
     muse::String name;
     muse::String notes;
     muse::String duration;
     muse::String text;
 
     struct Location {
-        mu::engraving::track_idx_t trackIdx = muse::nidx;
+        mu::engraving::staff_idx_t staffIdx = muse::nidx;
+        mu::engraving::voice_idx_t voiceIdx = muse::nidx;
         size_t measureIdx = muse::nidx;
         float beat = -1.f;
 
         bool operator==(const Location& l) const
         {
-            return trackIdx == l.trackIdx && measureIdx == l.measureIdx && muse::RealIsEqual(beat, l.beat);
+            return staffIdx == l.staffIdx
+                   && voiceIdx == l.voiceIdx
+                   && measureIdx == l.measureIdx
+                   && muse::RealIsEqual(beat, l.beat);
         }
     } start, end;
 };
 
-// Instrument -> ElementType -> Elements
+// Instrument -> Elements
 using ElementInfoList = std::vector<ElementInfo>;
-using ElementMap = std::map<mu::engraving::ElementType, ElementInfoList>;
-using InstrumentElementMap = std::map<mu::engraving::InstrumentTrackId, ElementMap>;
+using ElementMap = std::map<mu::engraving::InstrumentTrackId, ElementInfoList>;
 }

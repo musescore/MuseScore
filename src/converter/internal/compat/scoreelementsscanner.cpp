@@ -38,7 +38,7 @@ struct ScannerData {
     ScoreElementScanner::Options options;
 
     // out
-    InstrumentElementMap elements;
+    ElementMap elements;
     std::set<Chord*> chords;
     std::set<Spanner*> spanners;
     std::map<InstrumentTrackId, std::map<ElementKey, std::set<muse::String> > > uniqueNames;
@@ -171,7 +171,8 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
             const EngravingItem::BarBeat barbeat = startSegment->barbeat();
             info.start.measureIdx = barbeat.bar - 1;
             info.start.beat = barbeat.beat - 1.;
-            info.start.trackIdx = spanner->track();
+            info.start.staffIdx = track2staff(spanner->track());
+            info.start.voiceIdx = track2voice(spanner->track());
         }
 
         const Segment* endSegment = spanner->endSegment();
@@ -179,7 +180,8 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
             const EngravingItem::BarBeat barbeat = endSegment->barbeat();
             info.end.measureIdx = barbeat.bar - 1;
             info.end.beat = barbeat.beat - 1.;
-            info.end.trackIdx = spanner->track2();
+            info.end.staffIdx = track2staff(spanner->track2());
+            info.end.voiceIdx = track2voice(spanner->track2());
         }
 
         locationIsSet = startSegment || endSegment;
@@ -198,6 +200,8 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
     if (info.name.empty() && info.notes.empty() && info.text.empty()) {
         info.name = item->typeUserName().translated();
     }
+
+    info.type = type;
 
     const Part* part = item->part();
     const InstrumentTrackId trackId {
@@ -219,16 +223,17 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
 
     if (!locationIsSet) {
         const EngravingItem::BarBeat barbeat = item->barbeat();
-        info.start.trackIdx = item->track();
+        info.start.staffIdx = item->staffIdx();
+        info.start.voiceIdx = item->voice();
         info.start.measureIdx = barbeat.bar - 1;
         info.start.beat = barbeat.beat - 1.;
         info.end = info.start;
     }
 
-    scannerData->elements[trackId][type].push_back(info);
+    scannerData->elements[trackId].emplace_back(std::move(info));
 }
 
-InstrumentElementMap ScoreElementScanner::scanElements(Score* score, const Options& options)
+ElementMap ScoreElementScanner::scanElements(Score* score, const Options& options)
 {
     TRACEFUNC;
 
@@ -236,6 +241,22 @@ InstrumentElementMap ScoreElementScanner::scanElements(Score* score, const Optio
     data.options = options;
 
     score->scanElements([&](mu::engraving::EngravingItem* item) { addElementInfoIfNeed(&data, item); });
+
+    // Sort elements: staff -> measure -> beat -> voice
+    for (auto& pair : data.elements) {
+        std::stable_sort(pair.second.begin(), pair.second.end(), [](const ElementInfo& a, const ElementInfo& b) {
+            if (a.start.staffIdx != b.start.staffIdx) {
+                return a.start.staffIdx < b.start.staffIdx;
+            }
+            if (a.start.measureIdx != b.start.measureIdx) {
+                return a.start.measureIdx < b.start.measureIdx;
+            }
+            if (a.start.beat != b.start.beat) {
+                return a.start.beat < b.start.beat;
+            }
+            return a.start.voiceIdx < b.start.voiceIdx;
+        });
+    }
 
     return data.elements;
 }
