@@ -195,19 +195,22 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
         if (!mb->isMeasure()) {
             continue;
         }
-        for (const MStaff* mstaff : toMeasure(mb)->mstaves()) {
-            if (MeasureNumber* measureNumber = mstaff->measureNumber()) {
-                allText.push_back(measureNumber);
+        const Measure* measure = toMeasure(mb);
+        for (staff_idx_t i = 0; i < measure->mstaves().size(); ++i) {
+            if (measure->showMeasureNumberOnStaff(i)) {
+                if (MeasureNumber* measureNumber = measure->measureNumber(i)) {
+                    allText.push_back(measureNumber);
+                }
             }
         }
-        for (EngravingItem* item : toMeasure(mb)->el()) {
+        for (EngravingItem* item : measure->el()) {
             const SysStaff* staff = system ? system->staff(item->staffIdx()) : nullptr;
             const bool staffVisible = staff && staff->show();
             if ((item->isMarker() || item->isJump()) && item->visible() && staffVisible) {
                 allText.push_back(toTextBase(item));
             }
         }
-        for (const Segment& s : toMeasure(mb)->segments()) {
+        for (const Segment& s : measure->segments()) {
             if (!s.isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE) || !s.enabled()) {
                 continue;
             }
