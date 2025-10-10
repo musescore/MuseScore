@@ -5133,10 +5133,55 @@ Ret NotationInteraction::repeatSelection()
         return muse::make_ok();
     }
 
+    if (!score()->noteEntryMode() && selection.isList()) {
+        const Fraction& firstTick = selection.tickStart();
+        const Fraction& lastTick = selection.tickEnd();
+        // Only "single-tick" list selections are currently supported...
+        if (firstTick != lastTick) {
+            MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
+            MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+            return 0;
+        }
+        startEdit(TranslatableString("undoableAction", "Repeat selection"));
+        std::list<Note*> notes = selection.uniqueNotes();
+        InputState& is = score()->inputState();
+        std::vector<Note*> nList;
+        Chord* sourceChord = nullptr;
+        Note* newNote = nullptr;
+        NoteVal nval;
+        for (Note* n : notes) {
+            if (n->chord() == sourceChord) {
+                nval = n->noteVal();
+                newNote = score()->addPitch(nval, true);
+                nList.push_back(newNote);
+                continue;
+            }
+            sourceChord = n->chord();
+            is.setTrack(sourceChord->track());
+            is.setSegment(sourceChord->segment());
+            if (score()->inputState().endOfScore()) {
+                continue;
+            }
+            is.moveToNextInputPos();
+            is.setDuration(sourceChord->durationType());
+            nval = n->noteVal();
+            newNote = score()->addPitch(nval, false);
+            nList.push_back(newNote);
+            newNote->chord()->updateArticulations(sourceChord->articulationSymbolIds());
+        }
+        for (Note* n : nList) {
+            score()->select(n, SelectType::ADD);
+        }
+        apply();
+        return muse::make_ok();
+    }
+
     if (!selection.isRange()) {
         ChordRest* cr = score()->getSelectedChordRest();
         if (!cr) {
-            return make_ret(Err::NoteOrRestIsNotSelected);
+            MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
+            MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+            return 0;
         }
         score()->select(cr, SelectType::RANGE);
     }
