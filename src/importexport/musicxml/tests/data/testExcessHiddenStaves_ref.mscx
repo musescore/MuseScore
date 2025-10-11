@@ -16,6 +16,7 @@
       <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
       <hideEmptyStaves>1</hideEmptyStaves>
       <dontHideStavesInFirstSystem>0</dontHideStavesInFirstSystem>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <tupletFontSize>10</tupletFontSize>
       <fingeringFontSize>10</fingeringFontSize>
       <lhGuitarFingeringFontSize>10</lhGuitarFingeringFontSize>
@@ -789,7 +790,7 @@
           <Beam>
             <eid>OC_OC</eid>
             <StemDirection>down</StemDirection>
-            <l1>72</l1>
+            <l1>70</l1>
             <l2>76</l2>
             </Beam>
           <Chord>
@@ -906,7 +907,7 @@
             <eid>mC_mC</eid>
             <StemDirection>down</StemDirection>
             <l1>80</l1>
-            <l2>76</l2>
+            <l2>74</l2>
             </Beam>
           <Chord>
             <eid>nC_nC</eid>
