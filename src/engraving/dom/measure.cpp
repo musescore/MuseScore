@@ -1391,8 +1391,14 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::JUMP:
     case ElementType::MARKER:
     case ElementType::LAYOUT_BREAK:
+    case ElementType::VBOX:
+    case ElementType::TBOX:
+    case ElementType::FBOX:
+    case ElementType::HBOX:
         // Always drop to all staves
-        viewer->setDropRectangle(canvasBoundingRect());
+        if (viewer) {
+            viewer->setDropRectangle(canvasBoundingRect());
+        }
         return true;
 
     case ElementType::VOLTA:
@@ -1400,10 +1406,12 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::KEYSIG:
     case ElementType::TIMESIG:
         // Drop to all staves or single staff depending on modifier
-        if (data.modifiers & ControlModifier) {
-            viewer->setDropRectangle(staffRect);
-        } else {
-            viewer->setDropRectangle(canvasBoundingRect());
+        if (viewer) {
+            if (data.modifiers & ControlModifier) {
+                viewer->setDropRectangle(staffRect);
+            } else {
+                viewer->setDropRectangle(canvasBoundingRect());
+            }
         }
         return true;
 
@@ -1417,7 +1425,8 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::CLEF:
     case ElementType::STAFFTYPE_CHANGE:
         // Always drop to single staff
-        viewer->setDropRectangle(staffRect);
+        if (viewer) {
+            viewer->setDropRectangle(staffRect);
         }
         return true;
 
@@ -1428,19 +1437,25 @@ bool Measure::acceptDrop(EditData& data) const
         case ActionIconType::TFRAME:
         case ActionIconType::FFRAME:
         case ActionIconType::MEASURE:
-            viewer->setDropRectangle(canvasBoundingRect());
+            if (viewer) {
+                viewer->setDropRectangle(canvasBoundingRect());
+            }
             return true;
         case ActionIconType::STAFF_TYPE_CHANGE:
             if (!canAddStaffTypeChange(staffIdx)) {
                 return false;
             }
-            viewer->setDropRectangle(staffRect);
+            if (viewer) {
+                viewer->setDropRectangle(staffRect);
+            }
             return true;
         case ActionIconType::SYSTEM_LOCK:
         {
             LayoutMode layoutMode = score()->layoutMode();
             if (layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM) {
-                viewer->setDropRectangle(canvasBoundingRect().adjusted(-x(), 0.0, 0.0, 0.0));
+                if (viewer) {
+                    viewer->setDropRectangle(canvasBoundingRect().adjusted(-x(), 0.0, 0.0, 0.0));
+                }
                 return true;
             }
             return false;
@@ -1752,6 +1767,19 @@ EngravingItem* Measure::drop(EditData& data)
         e->setParent(this);
         e->setTrack(trackZeroVoice(data.track));
         score()->undoAddElement(e);
+    }
+    break;
+
+    case ElementType::VBOX:
+    case ElementType::TBOX:
+    case ElementType::FBOX:
+    case ElementType::HBOX:
+    {
+        MeasureBase* newBox = toMeasureBase(e);
+        newBox->setTick(tick());
+        newBox->setNext(this);
+        newBox->setPrev(prev());
+        score()->undo(new InsertMeasures(newBox, newBox));
     }
     break;
 
