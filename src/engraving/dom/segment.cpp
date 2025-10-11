@@ -451,6 +451,17 @@ Segment* Segment::prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segTyp
     return prev;
 }
 
+Segment* Segment::prev1WithElemsOnTrack(track_idx_t trackIdx, SegmentType segType) const
+{
+    Segment* prev = prev1(segType);
+
+    while (prev && !prev->hasElements(trackIdx, trackIdx)) {
+        prev = prev->prev1(segType);
+    }
+
+    return prev;
+}
+
 Segment* Segment::prev1enabled() const
 {
     Segment* s = prev1();

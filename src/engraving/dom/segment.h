@@ -164,6 +164,7 @@ public:
 
     Segment* prev1() const;
     Segment* prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType = SegmentType::ChordRest) const;
+    Segment* prev1WithElemsOnTrack(track_idx_t trackIdx, SegmentType segType = SegmentType::ChordRest) const;
     Segment* prev1enabled() const;
     Segment* prev1MM() const;
     Segment* prev1MMenabled() const;
