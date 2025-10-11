@@ -39,6 +39,7 @@ class Rest;
 class Measure;
 class Score;
 class Segment;
+class Selection;
 class Spanner;
 class System;
 class Staff;
@@ -127,4 +128,6 @@ extern bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const 
 extern bool isValidBarLineForRepeatSection(const Segment* firstSeg, const Segment* secondSeg);
 
 extern bool isElementInFretBox(const EngravingItem* item);
+
+extern std::vector<EngravingItem*> filterTargetElements(const Selection& sel, EngravingItem* dropElement, bool& unique);
 } // namespace mu::engraving

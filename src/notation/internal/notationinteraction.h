@@ -365,10 +365,10 @@ private:
     void doEndDrag();
 
     //! NOTE: Helper methods for applyPaletteElement
-    void applyPaletteElementToList(EngravingItem* element, bool isMeasureAnchoredElement, mu::engraving::Score* score,
-                                   const mu::engraving::Selection& sel, Qt::KeyboardModifiers modifiers = {});
-    void applyPaletteElementToRange(EngravingItem* element, bool isMeasureAnchoredElement, mu::engraving::Score* score,
-                                    const mu::engraving::Selection& sel, Qt::KeyboardModifiers modifiers = {});
+    void applyPaletteElementToList(EngravingItem* element, mu::engraving::Score* score, const mu::engraving::Selection& sel,
+                                   Qt::KeyboardModifiers modifiers = {});
+    void applyPaletteElementToRange(EngravingItem* element, mu::engraving::Score* score, const mu::engraving::Selection& sel,
+                                    Qt::KeyboardModifiers modifiers = {});
 
     bool doDropStandard();
     bool doDropTextBaseAndSymbols(const muse::PointF& pos, bool applyUserOffset);

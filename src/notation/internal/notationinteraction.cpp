@@ -2331,39 +2331,10 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
 
     startEdit(TranslatableString("undoableAction", "Apply palette element: %1").arg(element->typeUserName()));
 
-    bool isMeasureAnchoredElement = false;
-    switch (element->type()) {
-    case ElementType::MARKER:
-    case ElementType::JUMP:
-    case ElementType::MEASURE_NUMBER:
-    case ElementType::SPACER:
-    case ElementType::VBOX:
-    case ElementType::HBOX:
-    case ElementType::TBOX:
-    case ElementType::FBOX:
-    case ElementType::MEASURE:
-    case ElementType::BRACKET:
-        isMeasureAnchoredElement = true;
-    default: break;
-    }
-    if (element->isActionIcon()) {
-        const ActionIconType actionType = toActionIcon(element)->actionType();
-        switch (actionType) {
-        case ActionIconType::VFRAME:
-        case ActionIconType::HFRAME:
-        case ActionIconType::TFRAME:
-        case ActionIconType::FFRAME:
-        case ActionIconType::STAFF_TYPE_CHANGE:
-        case ActionIconType::MEASURE:
-            isMeasureAnchoredElement = true;
-        default: break;
-        }
-    }
-
     if (sel.isList()) {
-        applyPaletteElementToList(element, isMeasureAnchoredElement, score, sel, modifiers);
+        applyPaletteElementToList(element, score, sel, modifiers);
     } else if (sel.isRange()) {
-        applyPaletteElementToRange(element, isMeasureAnchoredElement, score, sel, modifiers);
+        applyPaletteElementToRange(element, score, sel, modifiers);
     } else {
         LOGD("unknown selection state");
     }
@@ -2379,7 +2350,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
     return true;
 }
 
-void NotationInteraction::applyPaletteElementToList(EngravingItem* element, bool isMeasureAnchoredElement, mu::engraving::Score* score,
+void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::engraving::Score* score,
                                                     const mu::engraving::Selection& sel, Qt::KeyboardModifiers modifiers)
 {
     const ElementType elementType = element->type();
@@ -2538,49 +2509,30 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, bool
         return;
     }
 
-    if (isMeasureAnchoredElement) {
-        // find the MeasureBase of each selected item - apply the drop there...
-        std::vector<MeasureBase*> measuresWithSelectedContent;
-        for (EngravingItem* e : sel.elements()) {
-            MeasureBase* mb = e->findMeasureBase();
-            if (!mb) {
-                continue;
-            }
-            if (elementType == ElementType::MARKER && e->isBarLine()
-                && toBarLine(e)->segment()->segmentType() != SegmentType::BeginBarLine
-                && toBarLine(e)->segment()->segmentType() != SegmentType::StartRepeatBarLine) {
-                // exception: markers are anchored to the start of a measure,
-                // so when the user selects an end barline we take the next measure
-                mb = mb->nextMeasureMM() ? mb->nextMeasureMM() : mb;
-            }
-            if (muse::contains(measuresWithSelectedContent, mb)) {
-                continue;
-            }
-            measuresWithSelectedContent.push_back(mb);
-            applyDropPaletteElement(score, mb, element, modifiers);
-            if (elementType == ElementType::BRACKET) {
-                break;
-            }
-        }
-        return;
-    }
+    bool unique;
+    std::vector<EngravingItem*> targetElements = mu::engraving::filterTargetElements(sel, element, unique);
 
-    for (EngravingItem* e : sel.elements()) {
-        applyDropPaletteElement(score, e, element, modifiers);
+    for (EngravingItem* target : targetElements) {
+        applyDropPaletteElement(score, target, element, modifiers);
     }
 }
 
-void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, bool isMeasureAnchoredElement, mu::engraving::Score* score,
+void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu::engraving::Score* score,
                                                      const mu::engraving::Selection& sel, Qt::KeyboardModifiers modifiers)
 {
     const ElementType elementType = element->type();
 
-    if (elementType == ElementType::BAR_LINE || isMeasureAnchoredElement) {
-        Measure* last = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
-        for (Measure* m = sel.startSegment()->measure(); m; m = m->nextMeasureMM()) {
-            applyDropPaletteElement(score, m, element, modifiers);
-            if (m == last || elementType == ElementType::BRACKET) {
-                break;
+    bool isMeasureAnchoredElement = false;
+    std::vector<EngravingItem*> targetElements = mu::engraving::filterTargetElements(sel, element, isMeasureAnchoredElement);
+    if (isMeasureAnchoredElement) {
+        if (elementType == ElementType::BAR_LINE) {
+            // In a range selection, add barlines to all selected measures
+            for (EngravingItem* target : targetElements) {
+                applyDropPaletteElement(score, target->findMeasure(), element, modifiers, target->track());
+            }
+        } else {
+            for (EngravingItem* target : targetElements) {
+                applyDropPaletteElement(score, target, element, modifiers);
             }
         }
         return;
