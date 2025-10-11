@@ -3585,7 +3585,7 @@ void MusicXmlParserDirection::direction(const String& partId,
             } else if (m_enclosure == "none") {
                 t->setFrameType(FrameType::NO_FRAME);
             } else if (m_enclosure == "rectangle") {
-                t->setFrameType(FrameType::SQUARE);
+                t->setFrameType(FrameType::RECTANGLE);
                 t->setFrameRound(0);
             }
 
@@ -3683,7 +3683,7 @@ void MusicXmlParserDirection::direction(const String& partId,
         } else if (m_enclosure == "none") {
             dynamic->setFrameType(FrameType::NO_FRAME);
         } else if (m_enclosure == "rectangle") {
-            dynamic->setFrameType(FrameType::SQUARE);
+            dynamic->setFrameType(FrameType::RECTANGLE);
             dynamic->setFrameRound(0);
         }
 
