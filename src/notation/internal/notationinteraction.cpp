@@ -1063,8 +1063,8 @@ void NotationInteraction::selectElementsWithSameTypeOnSegment(mu::engraving::Ele
 
     std::vector<EngravingItem*> elementsToSelect;
 
-    for (size_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-        EngravingItem* element = segment->element(staffIdx * mu::engraving::VOICES);
+    for (track_idx_t track = 0; track < score()->ntracks(); track += VOICES) {
+        EngravingItem* element = segment->element(track);
         if (element && element->type() == elementType) {
             elementsToSelect.push_back(element);
         }
@@ -2108,14 +2108,6 @@ bool NotationInteraction::doDropStandard()
     }
     score()->addRefresh(el->canvasBoundingRect());
 
-    // TODO: HACK ALERT!
-    if (el->isMeasure() && edd.ed.dropElement->isLayoutBreak()) {
-        Measure* m = toMeasure(el);
-        if (m->isMMRest()) {
-            el = m->mmRestLast();
-        }
-    }
-
     EngravingItem* dropElement = el->drop(edd.ed);
 
     if (dropElement && dropElement->isInstrumentChange()) {
@@ -2145,13 +2137,13 @@ bool NotationInteraction::doDropTextBaseAndSymbols(const PointF& pos, bool apply
     ElementDropData& edd = m_dropData.elementDropData.value();
 
     EngravingItem* el = edd.dropTarget ? edd.dropTarget : elementAt(pos);
-    if (el == 0 || el->type() == ElementType::STAFF_LINES) {
+    if (!el || el->type() == ElementType::STAFF_LINES) {
         mu::engraving::staff_idx_t staffIdx;
         mu::engraving::Segment* seg;
         PointF offset;
         el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
         if (el && el->isMeasure()) {
-            edd.ed.dropElement->setTrack(staffIdx * mu::engraving::VOICES);
+            edd.ed.dropElement->setTrack(staff2track(staffIdx));
             edd.ed.dropElement->setParent(seg);
 
             if (applyUserOffset) {
@@ -2373,7 +2365,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
 
     auto isEntryDrumStaff = [score]() {
         const mu::engraving::InputState& is = score->inputState();
-        const mu::engraving::Staff* staff = score->staff(is.track() / mu::engraving::VOICES);
+        const mu::engraving::Staff* staff = score->staff(track2staff(is.track()));
         return staff ? staff->staffType(is.tick())->group() == mu::engraving::StaffGroup::PERCUSSION : false;
     };
 
@@ -2419,7 +2411,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
                 e = toChord(e)->upNote();
             }
 
-            applyDropPaletteElement(score, e, element, modifiers, PointF(), true);
+            applyDropPaletteElement(score, e, element, modifiers);
             // note has already been played (and what would play otherwise may be *next* input position)
             score->setPlayNote(false);
             score->setPlayChord(false);
@@ -2556,7 +2548,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
     }
 
     if (elementType == ElementType::LAYOUT_BREAK) {
-        mu::engraving::LayoutBreak* breakElement = static_cast<mu::engraving::LayoutBreak*>(element);
+        LayoutBreak* breakElement = toLayoutBreak(element);
         score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
         return;
     }
@@ -2580,17 +2572,17 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
             // use mid-measure clef changes as appropriate
             if (elementType == ElementType::CLEF) {
                 if (sel.startSegment()->isChordRestType() && sel.startSegment()->rtick().isNotZero()) {
-                    ChordRest* cr = static_cast<ChordRest*>(sel.startSegment()->nextChordRest(i * mu::engraving::VOICES));
+                    ChordRest* cr = toChordRest(sel.startSegment()->nextChordRest(staff2track(i)));
                     if (cr && cr->isChord()) {
-                        e1 = static_cast<mu::engraving::Chord*>(cr)->upNote();
+                        e1 = toChord(cr)->upNote();
                     } else {
                         e1 = cr;
                     }
                 }
                 if (sel.endSegment() && sel.endSegment()->segmentType() == mu::engraving::SegmentType::ChordRest) {
-                    ChordRest* cr = static_cast<ChordRest*>(sel.endSegment()->nextChordRest(i * mu::engraving::VOICES));
+                    ChordRest* cr = toChordRest(sel.endSegment()->nextChordRest(staff2track(i)));
                     if (cr && cr->isChord()) {
-                        e2 = static_cast<mu::engraving::Chord*>(cr)->upNote();
+                        e2 = toChord(cr)->upNote();
                     } else {
                         e2 = cr;
                     }
@@ -2653,13 +2645,13 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
     }
 
     if (element->isSLine() && elementType != ElementType::GLISSANDO) {
-        mu::engraving::Segment* startSegment = sel.startSegment();
-        mu::engraving::Segment* endSegment = sel.endSegment();
+        Segment* startSegment = sel.startSegment();
+        Segment* endSegment = sel.endSegment();
         bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & Qt::ControlModifier);
         staff_idx_t startStaff = firstStaffOnly ? 0 : sel.staffStart();
         staff_idx_t endStaff   = firstStaffOnly ? 1 : sel.staffEnd();
         for (staff_idx_t i = startStaff; i < endStaff; ++i) {
-            mu::engraving::Spanner* spanner = static_cast<mu::engraving::Spanner*>(element->clone());
+            Spanner* spanner = toSpanner(element->clone());
             spanner->setScore(score);
             spanner->styleChanged();
             score->cmdAddSpanner(spanner, i, startSegment, endSegment, modifiers & Qt::ControlModifier);
@@ -2672,7 +2664,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
     }
 
     if (element->isTextBase() && !element->isFingering() && !element->isSticking()) {
-        mu::engraving::Segment* firstSegment = sel.startSegment();
+        Segment* firstSegment = sel.startSegment();
         staff_idx_t firstStaffIndex = sel.staffStart();
         staff_idx_t lastStaffIndex = sel.staffEnd();
 
@@ -2706,8 +2698,8 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
                     segList.push_back(seg);
                 }
             }
-            const track_idx_t track1 = sel.staffStart() * mu::engraving::VOICES;
-            const track_idx_t track2 = sel.staffEnd() * mu::engraving::VOICES;
+            const track_idx_t track1 = staff2track(sel.staffStart());
+            const track_idx_t track2 = staff2track(sel.staffEnd());
             for (Segment* seg : segList) {
                 for (track_idx_t track = track1; track < track2; ++track) {
                     EngravingItem* item = seg->elementAt(track);
@@ -2725,10 +2717,10 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         }
     }
 
-    const track_idx_t track1 = sel.staffStart() * mu::engraving::VOICES;
-    const track_idx_t track2 = sel.staffEnd() * mu::engraving::VOICES;
-    mu::engraving::Segment* startSegment = sel.startSegment();
-    mu::engraving::Segment* endSegment = sel.endSegment();           //keep it, it could change during the loop
+    const track_idx_t track1 = staff2track(sel.staffStart());
+    const track_idx_t track2 = staff2track(sel.staffEnd());
+    Segment* startSegment = sel.startSegment();
+    Segment* endSegment = sel.endSegment();           //keep it, it could change during the loop
 
     const bool rangeContainsMultiNoteChords = sel.rangeContainsMultiNoteChords();
 
@@ -2747,9 +2739,9 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         }
     };
 
-    for (mu::engraving::Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
+    for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
         for (track_idx_t track = track1; track < track2; ++track) {
-            mu::engraving::EngravingItem* e = s->element(track);
+            EngravingItem* e = s->element(track);
             if (!e || !score->selectionFilter().canSelect(e) || !score->selectionFilter().canSelectVoice(track)) {
                 continue;
             }
@@ -2884,8 +2876,8 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
     auto el = sel.uniqueElements();
 
     if (sel.isRange()) {
-        track_idx_t startTrack = sel.staffStart() * VOICES;
-        track_idx_t endTrack = sel.staffEnd() * VOICES;
+        track_idx_t startTrack = staff2track(sel.staffStart());
+        track_idx_t endTrack = staff2track(sel.staffEnd());
         for (track_idx_t track = startTrack; track < endTrack; ++track) {
             firstChordRest = nullptr;
             secondChordRest = nullptr;
@@ -3275,7 +3267,7 @@ bool NotationInteraction::prepareDropTimeAnchorElement(const PointF& pos)
     mu::engraving::staff_idx_t staffIdx = 0;
     mu::engraving::Segment* seg = nullptr;
     mu::engraving::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
-    mu::engraving::track_idx_t track = staffIdx * mu::engraving::VOICES;
+    mu::engraving::track_idx_t track = staff2track(staffIdx);
 
     if (mb && mb->isMeasure() && seg->element(track)) {
         mu::engraving::Measure* m = mu::engraving::toMeasure(mb);
@@ -4151,7 +4143,7 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
 void NotationInteraction::moveStringSelection(MoveDirection d)
 {
     mu::engraving::InputState& is = score()->inputState();
-    mu::engraving::Staff* staff = score()->staff(is.track() / mu::engraving::VOICES);
+    mu::engraving::Staff* staff = score()->staff(track2staff(is.track()));
     int instrStrgs = static_cast<int>(staff->part()->stringData(is.tick(), staff->idx())->strings());
     int delta = (staff->staffType(is.tick())->upsideDown() ? -1 : 1);
 
@@ -5186,7 +5178,7 @@ Ret NotationInteraction::repeatSelection()
         endSegment = endSegment->next1(SegmentType::ChordRest);
     }
     if (endSegment) {
-        for (track_idx_t track = dStaff * VOICES; track < (dStaff + 1) * VOICES; ++track) {
+        for (track_idx_t track = staff2track(dStaff); track < staff2track(dStaff + 1); ++track) {
             EngravingItem* e = endSegment->element(track);
             if (e) {
                 startEdit(TranslatableString("undoableAction", "Repeat selection"));
@@ -6529,7 +6521,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
             }
         }
     }
-    if (nextSegment == 0) {
+    if (!nextSegment) {
         return;
     }
 
@@ -6659,7 +6651,7 @@ void NotationInteraction::navigateToNextSyllable()
     while ((nextSegment = nextSegment->next1(SegmentType::ChordRest))) {
         EngravingItem* el = nextSegment->element(track);
         if (!el || !el->isChord()) {
-            const track_idx_t strack = track2staff(track) * VOICES;
+            const track_idx_t strack = trackZeroVoice(track);
             const track_idx_t etrack = strack + VOICES;
             for (track_idx_t t = strack; t < etrack; ++t) {
                 el = nextSegment->element(t);
@@ -6772,7 +6764,7 @@ void NotationInteraction::navigateToNextSyllable()
 
     // If no lyrics in current track, check others
     if (!toLyrics) {
-        const track_idx_t strack = track2staff(track) * VOICES;
+        const track_idx_t strack = trackZeroVoice(track);
         const track_idx_t etrack = strack + VOICES;
         for (track_idx_t t = strack; t < etrack; ++t) {
             if (t == track) {
@@ -7026,8 +7018,8 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
         }
 
         if (nearNoteOrRest) {
-            track_idx_t minTrack = (track / mu::engraving::VOICES) * mu::engraving::VOICES;
-            track_idx_t maxTrack = minTrack + (mu::engraving::VOICES - 1);
+            track_idx_t minTrack = trackZeroVoice(track);
+            track_idx_t maxTrack = minTrack + VOICES - 1;
             if (segment->hasAnnotationOrElement(ElementType::HARMONY, minTrack, maxTrack)) {
                 break;
             }
@@ -7166,8 +7158,8 @@ void NotationInteraction::navigateToNearFiguredBass(MoveDirection direction)
     // search next chord segment in same staff
     mu::engraving::Segment* nextSegm = backDirection ? segm->prev1(mu::engraving::SegmentType::ChordRest) : segm->next1(
         mu::engraving::SegmentType::ChordRest);
-    track_idx_t minTrack = (track / mu::engraving::VOICES) * mu::engraving::VOICES;
-    track_idx_t maxTrack = minTrack + (mu::engraving::VOICES - 1);
+    track_idx_t minTrack = trackZeroVoice(track);
+    track_idx_t maxTrack = minTrack + VOICES - 1;
 
     while (nextSegm) { // look for a ChordRest in the compatible track range
         if (nextSegm->hasAnnotationOrElement(ElementType::FIGURED_BASS, minTrack, maxTrack)) {
@@ -7314,9 +7306,8 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
     ElementType type = ot->type();
     mu::engraving::staff_idx_t staffIdx = ot->staffIdx();
     bool back = direction == MoveDirection::Left;
-    int curTrack = static_cast<int>(oe->track());
-    int minTrack = (curTrack / mu::engraving::VOICES) * mu::engraving::VOICES;
-    int maxTrack = minTrack + mu::engraving::VOICES - 1;
+    int minTrack = static_cast<int>(trackZeroVoice(oe->track()));
+    int maxTrack = minTrack + VOICES - 1;
 
     mu::engraving::EngravingItem* el = nullptr;
 
@@ -7357,9 +7348,9 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
                 LOGD("navigateToNearText: no segment");
                 return;
             }
-            int sTrack = back ? curTrack - 1 : curTrack + 1;
-            int eTrack = back ? minTrack : maxTrack;
             int inc = back ? -1 : 1;
+            int sTrack =  int(oe->track()) + inc;
+            int eTrack = back ? minTrack : maxTrack;
             for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
                 EngravingItem* e = seg->element(track);
                 if (e && e->isChord()) {
@@ -7587,7 +7578,7 @@ void NotationInteraction::addMelisma()
         score()->endCmd();
     }
 
-    if (nextSegment == 0) {
+    if (!nextSegment) {
         score()->startCmd(TranslatableString("undoableAction", "Enter lyrics extension line"));
         if (fromLyrics) {
             switch (fromLyrics->syllabic()) {
