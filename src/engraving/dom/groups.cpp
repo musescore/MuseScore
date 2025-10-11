@@ -237,7 +237,11 @@ BeamMode Groups::actualBeamMode(const ChordRest* cr, const ChordRest* prev,
             if ((tick.ticks() % Constants::DIVISION) == 0) {
                 int beat = tick.ticks() / Constants::DIVISION;
                 // get minimum duration for this & previous beat
-                TDuration minDuration = std::min(beatSubdivision->at(beat), beatSubdivision->at(beat - 1));
+                auto it_current = beatSubdivision->find(beat);
+                auto it_prev = beatSubdivision->find(beat - 1);
+                TDuration current_min = (it_current != beatSubdivision->end()) ? it_current->second : TDuration(DurationType::V_INVALID);
+                TDuration prev_min = (it_prev != beatSubdivision->end()) ? it_prev->second : TDuration(DurationType::V_INVALID);
+                TDuration minDuration = std::min(current_min, prev_min);
                 // re-calculate beam as if this were the duration of current chordrest
                 TDuration saveDuration        = cr->actualDurationType();
                 TDuration saveCMDuration      = cr->crossMeasureDurationType();
