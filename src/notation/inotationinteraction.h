@@ -216,6 +216,7 @@ public:
     virtual bool canAddTupletToSelectedChordRests() const = 0;
     virtual void addTupletToSelectedChordRests(const TupletOptions& options) = 0;
     virtual void addBeamToSelectedChordRests(BeamMode mode) = 0;
+    virtual void beamSelectedChordRests() = 0;
 
     virtual void increaseDecreaseDuration(int steps, bool stepByDots) = 0;
 
