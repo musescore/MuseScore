@@ -869,8 +869,10 @@ void SystemLayout::layoutSticking(const std::vector<Sticking*> stickings, System
 void SystemLayout::layoutLyrics(const ElementsToLayout& elements, LayoutContext& ctx)
 {
     System* system = elements.system;
-    Fraction stick = elements.measures.front()->tick();
-    Fraction etick = elements.measures.back()->endTick();
+    // NOTE: in continuous view, this means we layout spanners for the entire score.
+    // TODO: find way to optimize this and only layout where necessary.
+    Fraction stick = system->measures().front()->tick();
+    Fraction etick = system->measures().back()->endTick();
 
     for (Spanner* sp : elements.partialLyricsLines) {
         TLayout::layoutSystem(sp, system, ctx);
