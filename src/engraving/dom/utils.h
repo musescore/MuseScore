@@ -60,7 +60,6 @@ extern String pitch2string(int v, bool useFlats = false);
 extern int string2pitch(const String& s);
 extern String convertPitchStringFlatsAndSharpsToUnicode(const String& str);
 
-extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interval, bool useDoubleSharpsFlats);
 extern int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
 extern int transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepAlteredDegrees, bool useDoubleSharpsFlats);
 
