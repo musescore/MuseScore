@@ -131,7 +131,7 @@ void Engraving_TupletTests::split(const char16_t* p1, const char16_t* p2)
     dd.dropElement = ts;
     dd.modifiers = {};
     dd.dragOffset = QPointF();
-    dd.pos = m->pagePos();
+    dd.track = 0;
     m->drop(dd);
     score->endCmd();
 

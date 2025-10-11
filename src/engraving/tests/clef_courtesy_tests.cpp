@@ -52,8 +52,8 @@ static void dropClef(EngravingItem* m, ClefType t)
     Clef* clef = Factory::createClef(m->score()->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
     clef->setClefType(t);
     EditData dropData(0);
-    dropData.pos = m->pagePos();
     dropData.dropElement = clef;
+    dropData.track = m->isClef() ? m->track() : 0;
     m->score()->startCmd(TranslatableString::untranslatable("Courtesy clef tests"));
     if (m->isMeasure()) {
         toMeasure(m)->drop(dropData);
@@ -149,8 +149,8 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy02)
     Clef* clef = Factory::createClef(score->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
     clef->setClefType(ClefType::G8_VA);
     EditData dropData(0);
-    dropData.pos = m1->pagePos();
     dropData.dropElement = clef;
+    dropData.track = 0;
     m1->drop(dropData);
 
     // 'go' to 7th measure
@@ -161,8 +161,8 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy02)
     // make a clef-drop object and drop it to the measure
     clef = Factory::createClef(score->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
     clef->setClefType(ClefType::G);
-    dropData.pos = m2->pagePos();
     dropData.dropElement = clef;
+    dropData.track = 0;
     m2->drop(dropData);
     score->doLayout();
 
@@ -206,8 +206,8 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy03)
     Clef* clef = Factory::createClef(score->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
     clef->setClefType(ClefType::G8_VA);
     EditData dropData(0);
-    dropData.pos = m2->pagePos();
     dropData.dropElement = clef;
+    dropData.track = 0;
     m2->drop(dropData);
     score->doLayout();
 
