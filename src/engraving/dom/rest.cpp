@@ -198,24 +198,21 @@ bool Rest::acceptDrop(EditData& data) const
     }
 
     if (type == ElementType::STRING_TUNINGS) {
-        staff_idx_t staffIdx = 0;
-        Segment* seg = nullptr;
-        if (!score()->pos2measure(data.pos, &staffIdx, 0, &seg, 0)) {
-            return false;
-        }
-
-        return measure()->canAddStringTunings(staffIdx);
+        return measure()->canAddStringTunings(staffIdx());
     }
 
     // prevent 'hanging' slurs, avoid crash on tie
-    static const std::set<ElementType> ignoredTypes {
-        ElementType::SLUR,
-        ElementType::HAMMER_ON_PULL_OFF,
-        ElementType::TIE,
-        ElementType::GLISSANDO
-    };
+    if (e->isSpanner()) {
+        static const std::set<ElementType> ignoredTypes {
+            ElementType::SLUR,
+            ElementType::HAMMER_ON_PULL_OFF,
+            ElementType::TIE,
+            ElementType::GLISSANDO
+        };
+        return !muse::contains(ignoredTypes, type);
+    }
 
-    return e->isSpanner() && !muse::contains(ignoredTypes, type);
+    return measure()->acceptDrop(data);
 }
 
 //---------------------------------------------------------
@@ -264,8 +261,6 @@ EngravingItem* Rest::drop(EditData& data)
         }
         break;
     }
-    case ElementType::STRING_TUNINGS:
-        return measure()->drop(data);
 
     default:
         return ChordRest::drop(data);
