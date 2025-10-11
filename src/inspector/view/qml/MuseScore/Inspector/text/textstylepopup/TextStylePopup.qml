@@ -388,10 +388,10 @@ AbstractElementPopup {
 
                         measureUnitsSymbol: qsTrc("global", "li")
 
-                        decimals: 1
-                        step: 1
-                        minValue: 1
-                        maxValue: 99
+                        decimals: 2
+                        step: 0.1
+                        minValue: 0
+                        maxValue: 10
 
                         onValueEditingFinished: function (newValue) {
                             textStyleModel.textSettingsModel.textLineSpacing.value = newValue;
