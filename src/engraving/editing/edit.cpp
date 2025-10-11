@@ -2447,6 +2447,61 @@ void Score::cmdSetBeamMode(BeamMode mode)
 }
 
 //---------------------------------------------------------
+//   cmdSetBeamSelected
+//---------------------------------------------------------
+
+void Score::cmdBeamSelected()
+{
+    if (!selection().isRange()) {
+        return;
+    }
+
+    cmdResetBeamMode();
+
+    const track_idx_t startTrack = staff2track(selection().staffStart());
+    const track_idx_t endTrack = staff2track(selection().staffEnd());
+    const SelectionFilter filter = selectionFilter();
+
+    for (staff_idx_t trackIdx = startTrack; trackIdx < endTrack; ++trackIdx) {
+        if (!filter.canSelectVoice(trackIdx)) {
+            continue;
+        }
+
+        ChordRest* firstChordRest = selection().firstChordRest(trackIdx);
+        ChordRest* lastChordRest = selection().lastChordRest(trackIdx);
+
+        if (!firstChordRest || !lastChordRest) {
+            continue;
+        }
+
+        ChordRest* prev = prevChordRest(firstChordRest);
+        ChordRest* cr = firstChordRest;
+        BeamMode actualBeamMode = Groups::actualBeamMode(cr, prev);
+        if (actualBeamMode != BeamMode::BEGIN) {
+            cr->undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN);
+        }
+
+        while (cr != lastChordRest) {
+            prev = cr;
+            cr = nextChordRest(cr);
+            actualBeamMode = Groups::actualBeamMode(cr, prev);
+            if (actualBeamMode == BeamMode::BEGIN || actualBeamMode == BeamMode::NONE) {
+                cr->undoChangeProperty(Pid::BEAM_MODE, BeamMode::MID);
+            }
+        }
+
+        prev = cr;
+        cr = nextChordRest(cr);
+        if (cr) {
+            actualBeamMode = Groups::actualBeamMode(cr, prev);
+            if (actualBeamMode != BeamMode::BEGIN && actualBeamMode != BeamMode::NONE) {
+                cr->undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   cmdFlip
 //---------------------------------------------------------
 

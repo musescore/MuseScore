@@ -5913,6 +5913,17 @@ void NotationInteraction::addBeamToSelectedChordRests(BeamMode mode)
     apply();
 }
 
+void NotationInteraction::beamSelectedChordRests()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Beam selected"));
+    score()->cmdBeamSelected();
+    apply();
+}
+
 void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
 {
     if (selection()->isNone()) {
