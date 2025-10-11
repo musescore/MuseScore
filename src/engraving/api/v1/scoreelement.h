@@ -34,6 +34,7 @@ class EngravingObject;
 }
 
 namespace mu::engraving::apiv1 {
+class ScoreElement;
 //---------------------------------------------------------
 //   Ownership
 ///   \cond PLUGIN_API \private \endcond
@@ -68,6 +69,9 @@ class ScoreElement : public QObject
     /// The EID of this element.
     /// \since MuseScore 4.6
     Q_PROPERTY(QString eid READ eid)
+    /// The children of this element. Does not include children of children.
+    /// \since MuseScore 4.7
+    Q_PROPERTY(QQmlListProperty<apiv1::ScoreElement> children READ children)
 
     Ownership m_ownership;
 
@@ -96,6 +100,8 @@ public:
     int type() const;
 
     QString eid() const { return QString::fromStdString(element()->eid().toStdString()); }
+
+    QQmlListProperty<apiv1::ScoreElement> children();
 
     QVariant get(mu::engraving::Pid pid) const;
     void set(mu::engraving::Pid pid, const QVariant& val);
