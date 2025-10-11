@@ -64,10 +64,14 @@ static ExcerptNotation* get_impl(const IExcerptNotationPtr& excerpt)
     return static_cast<ExcerptNotation*>(excerpt.get());
 }
 
-static IExcerptNotationPtr createAndInitExcerptNotation(mu::engraving::Excerpt* excerpt, const muse::modularity::ContextPtr& iocCtx)
+static IExcerptNotationPtr createAndInitExcerptNotation(mu::engraving::Excerpt* excerpt, const muse::modularity::ContextPtr& iocCtx,
+                                                        project::INotationProject* project = nullptr)
 {
     auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt, iocCtx);
     excerptNotation->init();
+    if (project) {
+        excerptNotation->notation()->setNotationProject(project);
+    }
 
     return excerptNotation;
 }
@@ -617,7 +621,7 @@ void MasterNotation::updateExcerpts()
             continue;
         }
 
-        IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(excerpt, iocContext());
+        IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(excerpt, iocContext(), notationProject());
         bool open = excerpt->excerptScore()->isOpen();
         if (open) {
             excerptNotation->notation()->elements()->msScore()->doLayout();
@@ -770,7 +774,7 @@ void MasterNotation::initExcerptNotations(const std::vector<mu::engraving::Excer
             masterScore()->initEmptyExcerpt(excerpt);
         }
 
-        IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(excerpt, iocContext());
+        IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(excerpt, iocContext(), notationProject());
         notationExcerpts.push_back(excerptNotation);
     }
 

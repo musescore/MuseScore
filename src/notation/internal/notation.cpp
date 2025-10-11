@@ -318,6 +318,16 @@ INotationPartsPtr Notation::parts() const
     return m_parts;
 }
 
+project::INotationProject* Notation::notationProject() const
+{
+    return m_project;
+}
+
+void Notation::setNotationProject(project::INotationProject* project)
+{
+    m_project = project;
+}
+
 Score* Notation::score() const
 {
     return m_score;
