@@ -5123,6 +5123,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
 void NotationInteraction::copySelection()
 {
     if (!selection()->canCopy()) {
+        MScoreErrorsController(iocContext()).checkAndShowMScoreError();
         return;
     }
 
