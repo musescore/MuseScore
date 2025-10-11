@@ -89,10 +89,7 @@ void Score::transposeChord(Chord* c, const Fraction& tick)
     } else {
         dstTranspose.flip();
         for (Note* n : c->notes()) {
-            int npitch;
-            int ntpc;
-            transposeInterval(n->pitch(), n->tpc1(), &npitch, &ntpc, dstTranspose, true);
-            n->setTpc2(ntpc);
+            n->setTpc2(transposeTpc(n->tpc1(), dstTranspose, true));
         }
     }
 }

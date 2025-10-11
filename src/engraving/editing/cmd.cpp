@@ -753,7 +753,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
                 if (val < 0) {
                     interval.flip();
                 }
-                transposeInterval(on->pitch(), on->tpc(), &nval.pitch, &nval.tpc1, interval, false);
+                nval.pitch = on->pitch() + interval.chromatic;
                 nval.tpc1 = on->tpc1();
                 nval.tpc2 = on->tpc2();
             } else {

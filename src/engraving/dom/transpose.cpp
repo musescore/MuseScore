@@ -77,47 +77,12 @@ static Interval keydiff2Interval(Key oKey, Key nKey, TransposeDirection dir)
     return Interval(diatonic, chromatic);
 }
 
-/*!
- * Transposes both pitch and spelling for a note given an interval.
- *
- * Uses addition for pitch and transposeTpc() for spelling.
- *
- * @param pitch
- *  The initial (current) pitch. (pitch)
- * @param tpc
- *  The initial spelling. (tpc)
- * @param rpitch
- *  A pointer to the transposed pitch, calculated by this function. (pitch)
- * @param rtpc
- *  A pointer to the transposed spelling. (tcp)
- * @param interval
- *  The interval to transpose by.
- * @param useDoubleSharpsFlats
- *  Determines whether the output may include double sharps or flats (Abb)
- *  or should use an enharmonic pitch (Abb = G).
- */
-
-void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interval interval,
-                       bool useDoubleSharpsFlats)
-{
-    *rpitch = pitch + interval.chromatic;
-    *rtpc   = transposeTpc(tpc, interval, useDoubleSharpsFlats);
-}
-
-/*!
- * Transposes a pitch spelling given an interval.
- *
- * @param tpc
- *  The initial pitch spelling.
- * @param interval
- *  The interval to be transposed by.
- * @param useDoubleSharpsFlats
- *  Determines whether the output may include double sharps or flats (Abb)
- *  or should use an enharmonic pitch (Abb = G).
- *
- * @return
- *  The transposed pitch spelling (tpc).
- */
+//---------------------------------------------------------
+//   transposeTpc
+//
+// transposes a pitch spelling by a given interval.
+// option to enharmonically reduce tpc using double alterations
+//---------------------------------------------------------
 
 int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
 {
@@ -166,9 +131,12 @@ int transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepAlteredDegre
 
 bool Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
 {
-    int npitch;
-    int ntpc1, ntpc2;
-    transposeInterval(n->pitch(), n->tpc1(), &npitch, &ntpc1, interval, useDoubleSharpsFlats);
+    int npitch = n->pitch() + interval.chromatic;
+    if (!pitchIsValid(npitch)) {
+        return false;
+    }
+    int ntpc1 = transposeTpc(n->tpc1(), interval, useDoubleSharpsFlats);
+    int ntpc2 = ntpc1;
     if (n->transposition()) {
         if (n->staff()) {
             Interval v = n->staff()->transpose(n->tick());
@@ -177,11 +145,6 @@ bool Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
         } else {
             ntpc2 = transposeTpc(n->tpc2(), interval, useDoubleSharpsFlats);
         }
-    } else {
-        ntpc2 = ntpc1;
-    }
-    if (!pitchIsValid(npitch)) {
-        return false;
     }
     undoChangePitch(n, npitch, ntpc1, ntpc2);
     return true;
