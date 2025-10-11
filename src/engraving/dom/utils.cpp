@@ -27,6 +27,7 @@
 
 #include "containers.h"
 
+#include "actionicon.h"
 #include "accidental.h"
 #include "arpeggio.h"
 #include "chord.h"
@@ -42,6 +43,7 @@
 #include "keysig.h"
 #include "measure.h"
 #include "measurenumber.h"
+#include "measurerepeat.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"
@@ -51,6 +53,7 @@
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
+#include "select.h"
 #include "sig.h"
 #include "staff.h"
 #include "system.h"
@@ -1831,5 +1834,84 @@ bool isElementInFretBox(const EngravingItem* item)
         return toFretDiagram(item)->isInFretBox();
     }
     return false;
+}
+
+std::vector<EngravingItem*> filterTargetElements(const Selection& sel, EngravingItem* dropElement, bool& unique)
+{
+    bool uniqueMeasures = sel.isRange() && dropElement->isBarLine();
+    bool uniqueStaves = dropElement->isBracket();
+
+    switch (dropElement->type()) {
+    case ElementType::MEASURE_REPEAT:
+        if (!sel.isSingle() && toMeasureRepeat(dropElement)->numMeasures() != 1) {
+            return {};
+        }
+        [[fallthrough]];
+    case ElementType::SPACER:
+        uniqueStaves = true;
+        [[fallthrough]];
+    case ElementType::MARKER:
+    case ElementType::JUMP:
+    case ElementType::MEASURE_NUMBER:
+    case ElementType::VBOX:
+    case ElementType::HBOX:
+    case ElementType::TBOX:
+    case ElementType::FBOX:
+    case ElementType::MEASURE:
+        uniqueMeasures = true;
+    default: break;
+    }
+    if (dropElement->isActionIcon()) {
+        const ActionIconType actionType = toActionIcon(dropElement)->actionType();
+        switch (actionType) {
+        case ActionIconType::STAFF_TYPE_CHANGE:
+            uniqueStaves = true;
+            [[fallthrough]];
+        case ActionIconType::VFRAME:
+        case ActionIconType::HFRAME:
+        case ActionIconType::TFRAME:
+        case ActionIconType::FFRAME:
+        case ActionIconType::MEASURE:
+            uniqueMeasures = true;
+        default: break;
+        }
+    }
+
+    unique = uniqueStaves || uniqueMeasures;
+    if (!unique) {
+        return sel.elements();
+    }
+
+    std::vector<EngravingItem*> result;
+    if (uniqueStaves && uniqueMeasures) {
+        std::vector<MStaff*> foundMStaves;
+        for (EngravingItem* e : sel.elements()) {
+            if (Measure* m = e->findMeasure()) {
+                if (!muse::contains(foundMStaves, m->mstaves().at(e->staffIdx()))) {
+                    result.emplace_back(e);
+                    foundMStaves.emplace_back(m->mstaves().at(e->staffIdx()));
+                }
+            }
+        }
+    } else if (uniqueStaves) {
+        std::vector<staff_idx_t> foundStaves;
+        for (EngravingItem* e : sel.elements()) {
+            if (!muse::contains(foundStaves, e->staffIdx())) {
+                result.emplace_back(e);
+                foundStaves.emplace_back(e->staffIdx());
+            }
+        }
+    } else {
+        std::vector<MeasureBase*> foundMeasures;
+        for (EngravingItem* e : sel.elements()) {
+            if (MeasureBase* mb = e->findMeasureBase()) {
+                if (!muse::contains(foundMeasures, mb)) {
+                    result.emplace_back(e);
+                    foundMeasures.emplace_back(mb);
+                }
+            }
+        }
+    }
+    return result;
 }
 }
