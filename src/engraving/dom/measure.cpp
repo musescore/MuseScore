@@ -1388,12 +1388,25 @@ bool Measure::acceptDrop(EditData& data) const
 
     //! NOTE: Should match NotationInteraction::dragMeasureAnchorElement
     switch (e->type()) {
+    case ElementType::VBOX:
+    case ElementType::TBOX:
+    case ElementType::FBOX:
+    case ElementType::HBOX:
+        for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+            if (isMeasureRepeatGroupWithPrevM(staffIdx)) {
+                return false;
+            }
+        }
+        [[fallthrough]];
+
     case ElementType::MEASURE_NUMBER:
     case ElementType::JUMP:
     case ElementType::MARKER:
     case ElementType::LAYOUT_BREAK:
         // Always drop to all staves
-        viewer->setDropRectangle(canvasBoundingRect());
+        if (viewer) {
+            viewer->setDropRectangle(canvasBoundingRect());
+        }
         return true;
 
     case ElementType::VOLTA:
@@ -1401,10 +1414,12 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::KEYSIG:
     case ElementType::TIMESIG:
         // Drop to all staves or single staff depending on modifier
-        if (data.modifiers & ControlModifier) {
-            viewer->setDropRectangle(staffRect);
-        } else {
-            viewer->setDropRectangle(canvasBoundingRect());
+        if (viewer) {
+            if (data.modifiers & ControlModifier) {
+                viewer->setDropRectangle(staffRect);
+            } else {
+                viewer->setDropRectangle(canvasBoundingRect());
+            }
         }
         return true;
 
@@ -1418,7 +1433,8 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::CLEF:
     case ElementType::STAFFTYPE_CHANGE:
         // Always drop to single staff
-        viewer->setDropRectangle(staffRect);
+        if (viewer) {
+            viewer->setDropRectangle(staffRect);
         }
         return true;
 
@@ -1429,19 +1445,30 @@ bool Measure::acceptDrop(EditData& data) const
         case ActionIconType::TFRAME:
         case ActionIconType::FFRAME:
         case ActionIconType::MEASURE:
-            viewer->setDropRectangle(canvasBoundingRect());
+            for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+                if (isMeasureRepeatGroupWithPrevM(staffIdx)) {
+                    return false;
+                }
+            }
+            if (viewer) {
+                viewer->setDropRectangle(canvasBoundingRect());
+            }
             return true;
         case ActionIconType::STAFF_TYPE_CHANGE:
             if (!canAddStaffTypeChange(staffIdx)) {
                 return false;
             }
-            viewer->setDropRectangle(staffRect);
+            if (viewer) {
+                viewer->setDropRectangle(staffRect);
+            }
             return true;
         case ActionIconType::SYSTEM_LOCK:
         {
             LayoutMode layoutMode = score()->layoutMode();
             if (layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM) {
-                viewer->setDropRectangle(canvasBoundingRect().adjusted(-x(), 0.0, 0.0, 0.0));
+                if (viewer) {
+                    viewer->setDropRectangle(canvasBoundingRect().adjusted(-x(), 0.0, 0.0, 0.0));
+                }
                 return true;
             }
             return false;
@@ -1712,20 +1739,16 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {
         case ActionIconType::VFRAME:
-            score()->insertBox(ElementType::VBOX, this);
-            break;
+            return score()->insertBox(ElementType::VBOX, this);
         case ActionIconType::HFRAME:
-            score()->insertBox(ElementType::HBOX, this);
-            break;
+            return score()->insertBox(ElementType::HBOX, this);
         case ActionIconType::TFRAME:
-            score()->insertBox(ElementType::TBOX, this);
-            break;
+            return score()->insertBox(ElementType::TBOX, this);
         case ActionIconType::FFRAME:
         {
             Score::InsertMeasureOptions options;
             options.cloneBoxToAllParts = false;
-            score()->insertBox(ElementType::FBOX, this, options);
-            break;
+            return score()->insertBox(ElementType::FBOX, this, options);
         }
         case ActionIconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, this);
@@ -1753,6 +1776,20 @@ EngravingItem* Measure::drop(EditData& data)
         e->setParent(this);
         e->setTrack(trackZeroVoice(data.track));
         score()->undoAddElement(e);
+    }
+    break;
+
+    case ElementType::VBOX:
+    case ElementType::TBOX:
+    case ElementType::FBOX:
+    case ElementType::HBOX:
+    {
+        MeasureBase* newBox = toMeasureBase(e);
+        newBox->setTick(tick());
+        newBox->setNext(this);
+        newBox->setPrev(prev());
+        score()->undo(new InsertMeasures(newBox, newBox));
+        return newBox;
     }
     break;
 

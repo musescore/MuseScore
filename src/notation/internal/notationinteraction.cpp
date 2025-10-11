@@ -3227,6 +3227,10 @@ bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
     case ElementType::LAYOUT_BREAK:
     case ElementType::MARKER:
     case ElementType::MEASURE_NUMBER:
+    case ElementType::VBOX:
+    case ElementType::TBOX:
+    case ElementType::FBOX:
+    case ElementType::HBOX:
         // Target all staves
         staffIdx = 0;
     // fall through

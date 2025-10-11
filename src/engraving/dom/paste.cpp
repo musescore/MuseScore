@@ -75,13 +75,12 @@ void Score::transposeChord(Chord* c, const Fraction& tick)
     // check if staffMove moves a note to a
     // nonexistent staff
     //
-    track_idx_t track = c->track();
-    size_t nn = (track / VOICES) + c->staffMove();
-    if (nn >= c->score()->nstaves()) {
+
+    if (c->vStaffIdx() >= c->score()->nstaves()) {
         c->setStaffMove(0);
     }
-    Staff* staff = c->staff();
-    Interval dstTranspose = staff->transpose(tick);
+
+    Interval dstTranspose = c->staff()->transpose(tick);
 
     if (dstTranspose.isZero()) {
         for (Note* n : c->notes()) {
@@ -518,7 +517,8 @@ std::vector<EngravingItem*> Score::cmdPasteSymbol(muse::ByteArray& data, MuseSco
         UNREACHABLE;
         return {};
     case SelState::LIST:
-        targetElements = m_selection.elements();
+        bool unique;
+        targetElements = filterTargetElements(m_selection, el.get(), unique);
         break;
     case SelState::RANGE:
         // TODO: make this as smart as `NotationInteraction::applyPaletteElement`,
@@ -538,28 +538,22 @@ std::vector<EngravingItem*> Score::cmdPasteSymbol(muse::ByteArray& data, MuseSco
         return {};
     }
 
+    const bool systemObj = el->systemFlag();
+
     for (EngravingItem* target : targetElements) {
         addRefresh(target->pageBoundingRect()); // layout() ?!
         el->setTrack(target->track());
 
         EditData ddata(view);
+        ddata.pos = target->pagePos();
         ddata.dropElement = el.get();
-        ddata.pos = target->pageBoundingRect().topLeft();
+        ddata.track = target->track();
 
         if (target->acceptDrop(ddata)) {
             if (!el->isNote() || (target = prepareTarget(target, toNote(el.get()), duration))) {
                 ddata.dropElement = el->clone();
 
-                if (ddata.dropElement->systemFlag()) {
-                    EngravingItem* newEl = pasteSystemObject(ddata, target);
-                    if (newEl) {
-                        droppedElements.emplace_back(newEl);
-                    }
-
-                    continue;
-                }
-
-                EngravingItem* dropped = target->drop(ddata);
+                EngravingItem* dropped = systemObj ? pasteSystemObject(ddata, target) : target->drop(ddata);
                 if (dropped) {
                     droppedElements.emplace_back(dropped);
                 }
