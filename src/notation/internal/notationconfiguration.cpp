@@ -54,6 +54,9 @@ static const Settings::Key NOTE_INPUT_PREVIEW_COLOR(module_name, "ui/canvas/note
 static const Settings::Key USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION(module_name,
                                                                       "ui/canvas/useNoteInputCursorInInputByDuration");
 
+static const Settings::Key ENTER_NOTE_INPUT_MODE_ON_KEYBOARD_ENTRY(module_name,
+                                                                      "ui/canvas/enterNoteInputModeOnKeyboardEntry");
+
 static const Settings::Key THIN_NOTE_INPUT_CURSOR(module_name, "ui/canvas/thinNoteInputCursor");
 
 static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/selectionProximity");
@@ -187,6 +190,11 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION, Val(false));
     settings()->valueChanged(USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION).onReceive(nullptr, [this](const Val&) {
         m_useNoteInputCursorInInputByDurationChanged.notify();
+    });
+
+    settings()->setDefaultValue(ENTER_NOTE_INPUT_MODE_ON_KEYBOARD_ENTRY, Val(false));
+    settings()->valueChanged(ENTER_NOTE_INPUT_MODE_ON_KEYBOARD_ENTRY).onReceive(nullptr, [this](const Val&) {
+        m_enterNoteInputModeOnKeyboardEntryChanged.notify();
     });
 
     settings()->setDefaultValue(THIN_NOTE_INPUT_CURSOR, Val(false)); // accessible via DevTools/Settings
@@ -649,6 +657,21 @@ void NotationConfiguration::setUseNoteInputCursorInInputByDuration(bool use)
 muse::async::Notification NotationConfiguration::useNoteInputCursorInInputByDurationChanged() const
 {
     return m_useNoteInputCursorInInputByDurationChanged;
+}
+
+bool NotationConfiguration::enterNoteInputModeOnKeyboardEntry() const
+{
+    return settings()->value(ENTER_NOTE_INPUT_MODE_ON_KEYBOARD_ENTRY).toBool();
+}
+
+void NotationConfiguration::setEnterNoteInputModeOnKeyboardEntry(bool use)
+{
+    settings()->setSharedValue(ENTER_NOTE_INPUT_MODE_ON_KEYBOARD_ENTRY, Val(use));
+}
+
+muse::async::Notification NotationConfiguration::enterNoteInputModeOnKeyboardEntryChanged() const
+{
+    return m_enterNoteInputModeOnKeyboardEntryChanged;
 }
 
 int NotationConfiguration::selectionProximity() const
