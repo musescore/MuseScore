@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_INSPECTOR_INSPECTORPOPUPCONTROLLER_H
-#define MU_INSPECTOR_INSPECTORPOPUPCONTROLLER_H
+#pragma once
 
 #include <QObject>
 
@@ -86,5 +85,3 @@ private:
     QQuickItem* m_notationView = nullptr;
 };
 }
-
-#endif // MU_INSPECTOR_INSPECTORPOPUPCONTROLLER_H
