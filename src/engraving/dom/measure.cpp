@@ -1425,16 +1425,8 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::STAFFTYPE_CHANGE:
         // Always drop to single staff
         viewer->setDropRectangle(staffRect);
-        return true;
-
-    case ElementType::STRING_TUNINGS: {
-        if (!canAddStringTunings(staffIdx)) {
-            return false;
         }
-
-        viewer->setDropRectangle(staffRect);
         return true;
-    }
 
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {
@@ -1496,43 +1488,6 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::JUMP:
         e->setParent(this);
         e->setTrack(0);
-        score()->undoAddElement(e);
-        return e;
-
-    case ElementType::DYNAMIC:
-    case ElementType::EXPRESSION:
-    case ElementType::FRET_DIAGRAM:
-        e->setParent(seg);
-        e->setTrack(staffIdx * VOICES);
-        score()->undoAddElement(e);
-        return e;
-
-    case ElementType::STRING_TUNINGS:
-        if (!staff->isPrimaryStaff()) {
-            staff = staff->primaryStaff();
-            if (!staff) {
-                return nullptr;
-            }
-
-            staffIdx = staff->idx();
-        }
-
-        e->setParent(seg);
-        e->setTrack(staffIdx * VOICES);
-        score()->undoAddElement(e);
-        return e;
-
-    case ElementType::IMAGE:
-    case ElementType::SYMBOL:
-        e->setParent(seg);
-        e->setTrack(staffIdx * VOICES);
-
-        renderer()->layoutItem(e);
-
-        {
-            PointF uo(data.pos - e->canvasPos() - data.dragOffset);
-            e->setOffset(uo);
-        }
         score()->undoAddElement(e);
         return e;
 
