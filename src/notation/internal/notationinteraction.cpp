@@ -2600,10 +2600,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
                     if (e2) {
                         applyDropPaletteElement(score, e2, oelement, modifiers);
                     } else {
-                        RectF r = m2->staffPageBoundingRect(i);
-                        PointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
-                        pt += m2->system()->page()->pos();
-                        applyDropPaletteElement(score, m2, oelement, modifiers, pt);
+                        applyDropPaletteElement(score, m2, oelement, modifiers, staff2track(i));
                     }
                     delete oelement;
                 }
@@ -2612,10 +2609,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
             if (e1) {
                 applyDropPaletteElement(score, e1, element, modifiers);
             } else {
-                RectF r = m1->staffPageBoundingRect(i);
-                PointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
-                pt += m1->system()->page()->pos();
-                applyDropPaletteElement(score, m1, element, modifiers, pt);
+                applyDropPaletteElement(score, m1, element, modifiers, staff2track(i));
             }
         }
         return;
@@ -2747,12 +2741,9 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
 
 //! NOTE Copied from Palette applyDrop
 void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, mu::engraving::EngravingItem* target,
-                                                  mu::engraving::EngravingItem* e,
-                                                  Qt::KeyboardModifiers modifiers,
-                                                  PointF pt, bool pasteMode)
+                                                  mu::engraving::EngravingItem* e, Qt::KeyboardModifiers modifiers,
+                                                  track_idx_t track)
 {
-    UNUSED(pasteMode);
-
     if (!target) {
         return;
     }
@@ -2764,10 +2755,9 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         dropData = &m_editData;
     }
 
-    dropData->pos         = pt.isNull() ? target->pagePos() : pt;
-    dropData->dragOffset  = QPointF();
-    dropData->modifiers   = keyboardModifier(modifiers);
+    dropData->modifiers = keyboardModifier(modifiers);
     dropData->dropElement = e;
+    dropData->track = (track == muse::nidx) ? target->track() : track;
 
     if (target->acceptDrop(*dropData)) {
         // use same code path as drag&drop
@@ -3157,6 +3147,7 @@ bool NotationInteraction::prepareDropStandardElement(const PointF& pos, Qt::Keyb
             RectF measureRect = targetMeasure->staffPageBoundingRect(targetElem->staffIdx());
             measureRect.adjust(page->x(), page->y(), page->x(), page->y());
             edd.ed.pos = measureRect.center();
+            edd.ed.track = trackZeroVoice(targetElem->track());
             setAnchorLines({ LineF(pos, measureRect.topLeft()) });
 
             return targetMeasure->acceptDrop(edd.ed);
@@ -3219,6 +3210,7 @@ bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
     if (mb && mb->isMeasure()) {
         mu::engraving::Measure* targetMeasure = mu::engraving::toMeasure(mb);
         setDropTarget(targetMeasure, true);
+        edd.ed.track = staff2track(staffIdx);
 
         RectF measureRect = targetMeasure->staffPageBoundingRect(staffIdx);
         measureRect.adjust(page->x(), page->y(), page->x(), page->y());
@@ -3281,12 +3273,14 @@ void NotationInteraction::setDropTarget(EngravingItem* item, bool notify)
     if (edd.dropTarget != item) {
         if (edd.dropTarget) {
             edd.dropTarget->setDropTarget(false);
+            edd.ed.track = muse::nidx;
             edd.dropTarget = nullptr;
         }
 
         edd.dropTarget = item;
         if (edd.dropTarget) {
             edd.dropTarget->setDropTarget(true);
+            edd.ed.track = edd.dropTarget->track();
         }
     }
 
