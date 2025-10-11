@@ -93,7 +93,7 @@ private:
 
     void paintPageNumbers(QPainter* painter);
 
-    bool moveCanvasToRect(const muse::RectF& viewRect);
+    bool moveCanvasToRect(const muse::RectF& viewRect, bool userTriggeredMove = true);
 
     bool isVerticalOrientation() const;
 
