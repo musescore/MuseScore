@@ -43,7 +43,8 @@ PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryServic
         { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
         { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, muse::qtrc("inspector", "Hooked 90°", "hook type") },
         { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, muse::qtrc("inspector", "Hooked 45°", "hook type") },
-        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK, muse::qtrc("inspector", "Hooked 90° T-style", "hook type") },
+        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK,
+          muse::qtrc("inspector", "Hooked 90° T-style", "hook type") },
         { HOOK_STAR, IconCode::LINE_PEDAL_STAR_ENDING, muse::qtrc("inspector", "Asterisk", "hook type") }
     };
 
