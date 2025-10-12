@@ -23,10 +23,10 @@
 
 #include <QKeyEvent>
 
-#include "translation.h"
-#include "ui/view/iconcodes.h"
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetnavigationfix.h"
+
+#include "engraving/dom/pitchspelling.h"
 
 using namespace mu::notation;
 using namespace muse::ui;
@@ -103,5 +103,5 @@ void EditPitch::on_tableWidget_cellDoubleClicked(int row, int col)
 {
     // topmost row contains notes for 10-th MIDI octave (numbered as '9')
     int pitch = (tableWidget->rowCount() - 1 - row) * 12 + col;
-    done(std::min(pitch, MAX_PITCH));
+    done(std::min(pitch, engraving::MAX_PITCH));
 }
