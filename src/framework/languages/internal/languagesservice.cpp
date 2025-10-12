@@ -42,6 +42,8 @@
 
 #include "log.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 using namespace muse;
 using namespace muse::languages;
 using namespace muse::network;
@@ -211,37 +213,27 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
 
 QString LanguagesService::effectiveLanguageCode(QString languageCode) const
 {
-    languageCode.replace('-', '_');
-    // Tries decreasingly specific versions of `code`. For example:
-    // "nl_NL" -> not found -> try just "nl" -> found -> returns "nl".
-    auto tryCode = [this](QString code) -> QString {
-        for (;;) {
-            if (m_languagesHash.contains(code)) {
-                return code;
-            }
+    languageCode.replace(u'-', u'_');
 
-            static const std::map<QString, QString> SPECIAL_CASES {
-                { "ca_valencia", "ca@valencia" },
-                { "ca_ES_valencia", "ca@valencia" },
-                { "en_AU", "en_GB" },
-                { "en_NZ", "en_GB" },
-                { "en", "en_US" },
-                { "hi", "hi_IN" },
-                { "mn", "mn_MN" },
-                { "zh", "zh_CN" }
-            };
+    auto tryCode = [this](const QString& code) -> QString {
+        if (m_languagesHash.contains(code)) {
+            return code;
+        }
 
-            auto it = SPECIAL_CASES.find(code);
-            if (it != SPECIAL_CASES.cend()) {
-                return it->second;
-            }
+        static const std::map<QString, QString> SPECIAL_CASES {
+            { u"ca_valencia"_s, u"ca@valencia"_s },
+            { u"ca_ES_valencia"_s, u"ca@valencia"_s },
+            { u"en_AU"_s, u"en_GB"_s },
+            { u"en_NZ"_s, u"en_GB"_s },
+            { u"en"_s, u"en_US"_s },
+            { u"hi"_s, u"hi_IN"_s },
+            { u"mn"_s, u"mn_MN"_s },
+            { u"zh"_s, u"zh_CN"_s }
+        };
 
-            int rightmost = code.lastIndexOf('_');
-            if (rightmost <= 0) {
-                break;
-            }
-
-            code.truncate(rightmost);
+        auto it = SPECIAL_CASES.find(code);
+        if (it != SPECIAL_CASES.cend()) {
+            return it->second;
         }
 
         // Not found
@@ -249,18 +241,21 @@ QString LanguagesService::effectiveLanguageCode(QString languageCode) const
     };
 
     if (languageCode.isEmpty() || languageCode == SYSTEM_LANGUAGE_CODE) {
-        for (const QString& code : QLocale::system().uiLanguages()) {
-            LOGI() << "System language code: " << code;
-            QString effectiveCode = code;
-            effectiveCode.replace('-', '_');
+        const QStringList systemLanguages = QLocale::system().uiLanguages();
+        LOGI() << "System languages: " << systemLanguages;
+
+        for (QString code : systemLanguages) {
+            code.replace(u'-', u'_');
+
             // Prefer Swedish (Modern) over Swedish (Traditional)
             // when using system language.
-            if (effectiveCode == "sv_SE") {
-                effectiveCode = "sv";
+            if (code == u"sv_SE"_s) {
+                code = u"sv"_s;
             }
-            effectiveCode = tryCode(effectiveCode);
-            if (!effectiveCode.isEmpty()) {
-                return effectiveCode;
+
+            code = tryCode(code);
+            if (!code.isEmpty()) {
+                return code;
             }
         }
 
