@@ -17452,7 +17452,7 @@ Riggel %1 op snare %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="65"/>
-        <source>z</source>
+        <source>stacking order</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -17497,8 +17497,12 @@ Riggel %1 op snare %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="75"/>
-        <location filename="../../src/engraving/dom/property.cpp" line="76"/>
         <source>tonal pitch class</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="76"/>
+        <source>transposed tonal pitch class</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -17691,12 +17695,12 @@ Riggel %1 op snare %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="117"/>
-        <source>p1</source>
+        <source>bracket start offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="118"/>
-        <source>p2</source>
+        <source>bracket end offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -17782,17 +17786,17 @@ Riggel %1 op snare %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="138"/>
-        <source>imageHeight</source>
+        <source>image height</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="139"/>
-        <source>imageWidth</source>
+        <source>image width</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="140"/>
-        <source>imageFramed</source>
+        <source>image framed</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -17817,7 +17821,7 @@ Riggel %1 op snare %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="146"/>
-        <source>chords per row</source>
+        <source>chord symbols per row</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -18078,17 +18082,17 @@ Riggel %1 op snare %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="213"/>
-        <source>repeatEnd</source>
+        <source>repeat end</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="214"/>
-        <source>repeatStart</source>
+        <source>repeat start</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="215"/>
-        <source>repeatJump</source>
+        <source>repeat jump</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -18210,12 +18214,13 @@ Riggel %1 op snare %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="242"/>
-        <source>track2</source>
+        <source>end track</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="243"/>
-        <source>offset2</source>
+        <location filename="../../src/engraving/dom/property.cpp" line="259"/>
+        <source>end offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -18265,22 +18270,17 @@ Riggel %1 op snare %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="256"/>
-        <source>o1</source>
+        <source>start offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="257"/>
-        <source>o2</source>
+        <source>left shoulder offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="258"/>
-        <source>o3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="259"/>
-        <source>o4</source>
+        <source>right shoulder offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -18310,7 +18310,7 @@ Riggel %1 op snare %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="267"/>
-        <source>mag</source>
+        <source>magnification</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -18370,12 +18370,12 @@ Riggel %1 op snare %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="280"/>
-        <source>fretShowFingering</source>
+        <source>fretboard diagram fingering visible</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="281"/>
-        <source>fretFingering</source>
+        <source>fretboard diagram fingering</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -19060,17 +19060,17 @@ Riggel %1 op snare %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="454"/>
-        <source>position linked to master</source>
+        <source>position linked to main score</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="455"/>
-        <source>appearance linked to master</source>
+        <source>appearance linked to main score</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="456"/>
-        <source>text linked to master</source>
+        <source>text linked to main score</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -19140,7 +19140,7 @@ Riggel %1 op snare %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="475"/>
-        <source>align with other rests</source>
+        <source>align with other rests in the same voice</source>
         <translation type="unfinished"/>
     </message>
 </context>

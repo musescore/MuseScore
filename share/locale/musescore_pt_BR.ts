@@ -17457,8 +17457,8 @@ Casa %1 nas cordas %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="65"/>
-        <source>z</source>
-        <translation>z</translation>
+        <source>stacking order</source>
+        <translation>ordem de empilhamento</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="66"/>
@@ -17502,9 +17502,13 @@ Casa %1 nas cordas %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="75"/>
-        <location filename="../../src/engraving/dom/property.cpp" line="76"/>
         <source>tonal pitch class</source>
         <translation>classe de altura tonal</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="76"/>
+        <source>transposed tonal pitch class</source>
+        <translation>classe tonal de altura transposta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="77"/>
@@ -17696,13 +17700,13 @@ Casa %1 nas cordas %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="117"/>
-        <source>p1</source>
-        <translation>p1</translation>
+        <source>bracket start offset</source>
+        <translation>deslocamento inicial do colchete</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="118"/>
-        <source>p2</source>
-        <translation>p2</translation>
+        <source>bracket end offset</source>
+        <translation>deslocamento final do colchete</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="119"/>
@@ -17787,18 +17791,18 @@ Casa %1 nas cordas %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="138"/>
-        <source>imageHeight</source>
+        <source>image height</source>
         <translation>altura da imagem</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="139"/>
-        <source>imageWidth</source>
+        <source>image width</source>
         <translation>largura da imagem</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="140"/>
-        <source>imageFramed</source>
-        <translation>imagem emoldurada</translation>
+        <source>image framed</source>
+        <translation>imagem moldurada</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="142"/>
@@ -17822,8 +17826,8 @@ Casa %1 nas cordas %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="146"/>
-        <source>chords per row</source>
-        <translation>acordes por linha</translation>
+        <source>chord symbols per row</source>
+        <translation>cifras por linha</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="147"/>
@@ -18083,18 +18087,18 @@ Casa %1 nas cordas %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="213"/>
-        <source>repeatEnd</source>
-        <translation>fim da repetição</translation>
+        <source>repeat end</source>
+        <translation>repetir fim</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="214"/>
-        <source>repeatStart</source>
-        <translation>início da repetição</translation>
+        <source>repeat start</source>
+        <translation>repetir início</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="215"/>
-        <source>repeatJump</source>
-        <translation>pular repetição</translation>
+        <source>repeat jump</source>
+        <translation>repetir salto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="216"/>
@@ -18215,13 +18219,14 @@ Casa %1 nas cordas %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="242"/>
-        <source>track2</source>
-        <translation>trilha2</translation>
+        <source>end track</source>
+        <translation>faixa final</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="243"/>
-        <source>offset2</source>
-        <translation>deslocamento2</translation>
+        <location filename="../../src/engraving/dom/property.cpp" line="259"/>
+        <source>end offset</source>
+        <translation>deslocamento final</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="244"/>
@@ -18270,23 +18275,18 @@ Casa %1 nas cordas %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="256"/>
-        <source>o1</source>
-        <translation>o1</translation>
+        <source>start offset</source>
+        <translation>deslocamento inicial</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="257"/>
-        <source>o2</source>
-        <translation>o2</translation>
+        <source>left shoulder offset</source>
+        <translation>deslocamento do ombro esquerdo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="258"/>
-        <source>o3</source>
-        <translation>o3</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="259"/>
-        <source>o4</source>
-        <translation>o4</translation>
+        <source>right shoulder offset</source>
+        <translation>deslocamento do ombro direito</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="260"/>
@@ -18315,8 +18315,8 @@ Casa %1 nas cordas %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="267"/>
-        <source>mag</source>
-        <translation>mag</translation>
+        <source>magnification</source>
+        <translation>ampliação</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="268"/>
@@ -18375,13 +18375,13 @@ Casa %1 nas cordas %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="280"/>
-        <source>fretShowFingering</source>
-        <translation>mostrar digitação de traste</translation>
+        <source>fretboard diagram fingering visible</source>
+        <translation>dedilhado visível no diagrama de escala </translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="281"/>
-        <source>fretFingering</source>
-        <translation>digitação de traste</translation>
+        <source>fretboard diagram fingering</source>
+        <translation>dedilhado do diagrama de escala </translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="283"/>
@@ -19065,18 +19065,18 @@ Casa %1 nas cordas %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="454"/>
-        <source>position linked to master</source>
-        <translation>posição vinculada ao mestre</translation>
+        <source>position linked to main score</source>
+        <translation>posição vinculada à partitura principal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="455"/>
-        <source>appearance linked to master</source>
-        <translation>aparência vinculada ao mestre</translation>
+        <source>appearance linked to main score</source>
+        <translation>aparência ligada à partitura principal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="456"/>
-        <source>text linked to master</source>
-        <translation>texto vinculado ao mestre</translation>
+        <source>text linked to main score</source>
+        <translation>texto ligado à partitura principal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="457"/>
@@ -19145,8 +19145,8 @@ Casa %1 nas cordas %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="475"/>
-        <source>align with other rests</source>
-        <translation>alinhar com outras pausas</translation>
+        <source>align with other rests in the same voice</source>
+        <translation>alinhar com outras pausas na mesma voz</translation>
     </message>
 </context>
 <context>
