@@ -877,23 +877,23 @@ void FinaleParser::importStaffItems()
                         ksEvent.setConcertKey(Key::C);
                         ksEvent.setKey(Key::C);
                         ksEvent.setCustom(true);
-                        for (size_t x = 0; x < musxAccis->values.size(); x++) {
-                            int amount = musxAmounts->values[x];
+                        for (size_t i = 0; i < musxAccis->values.size(); ++i) {
+                            int amount = musxAmounts->values[i];
                             if (amount == 0) {
                                 break;
                             }
                             SymId accidental = acciSymbolFromAcciAmount(amount);
-                            if (accidental != SymId::noSym) {
-                                CustDef cd;
-                                cd.sym = accidental;
-                                cd.degree = musxAccis->values[x];
-                                /// @todo calculate any octave offset. Finale specifies the exact octave for every clef
-                                /// while MuseScore specifies an offset from the default octave for the currently active clef.
-                                /// Since this is a poor mapping, we are taking the MuseScore default for now.
-                                ksEvent.customKeyDefs().push_back(cd);
-                            } else {
+                            if (accidental == SymId::noSym) {
                                 logger()->logWarning(String(u"Skipping unknown accidental amount %1 in nonlinear key %2.").arg(amount, musxKeySig->getKeyMode()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                                continue;
                             }
+                            CustDef cd;
+                            cd.sym = accidental;
+                            cd.degree = musxAccis->values[i];
+                            /// @todo calculate any octave offset. Finale specifies the exact octave for every clef
+                            /// while MuseScore specifies an offset from the default octave for the currently active clef.
+                            /// Since this is a poor mapping, we are taking the MuseScore default for now.
+                            ksEvent.customKeyDefs().emplace_back(cd);
                         }
                         if (ksEvent.customKeyDefs().empty()) {
                             ksEvent.setCustom(false);
@@ -906,15 +906,20 @@ void FinaleParser::importStaffItems()
                 } else {
                     logger()->logWarning(String(u"Microtonal key signatures not supported."), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 }
-                if (keySigEvent && keySigEvent != currKeySigEvent) {
-                    Segment* seg = measure->getSegmentR(SegmentType::KeySig, Fraction(0, 1));
-                    KeySig* ks = Factory::createKeySig(seg);
-                    ks->setKeySigEvent(keySigEvent.value());
-                    ks->setTrack(staffIdx * VOICES);
-                    ks->setVisible(musxMeasure->showKey != others::Measure::ShowKeySigMode::Never);
-                    ks->setShowCourtesy(!prevMusxMeasure || !prevMusxMeasure->hideCaution);
-                    seg->add(ks);
-                    staff->setKey(currTick, ks->keySigEvent());
+                if (keySigEvent.has_value()) {
+                    if (currKeySigEvent.has_value() && !musxOptions().keyOptions->redisplayOnModeChange) {
+                        currKeySigEvent.value().setMode(keySigEvent.value().mode());
+                    }
+                    if (keySigEvent != currKeySigEvent) {
+                        Segment* seg = measure->getSegmentR(SegmentType::KeySig, Fraction(0, 1));
+                        KeySig* ks = Factory::createKeySig(seg);
+                        ks->setKeySigEvent(keySigEvent.value());
+                        ks->setTrack(staffIdx * VOICES);
+                        ks->setVisible(musxMeasure->showKey != others::Measure::ShowKeySigMode::Never);
+                        ks->setShowCourtesy(!prevMusxMeasure || !prevMusxMeasure->hideCaution);
+                        seg->add(ks);
+                        staff->setKey(currTick, ks->keySigEvent());
+                    }
                 }
                 currKeySigEvent = keySigEvent;
             }
