@@ -13566,12 +13566,12 @@ Próg %1 na strunach %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="404"/>
         <source>vibrato segment(s)</source>
-        <translation><numerusform>segment vibrato</numerusform><numerusform>segmenty vibrato</numerusform><numerusform>segmentów vibrato</numerusform><numerusform>segmenty vibrato</numerusform></translation>
+        <translation><numerusform>segment vibrata</numerusform><numerusform>segmenty vibrata</numerusform><numerusform>segmentów vibrata</numerusform><numerusform>segmenty vibrata</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="405"/>
         <source>Vibrato segment(s)</source>
-        <translation><numerusform>Segment vibrato</numerusform><numerusform>Segmenty vibrato</numerusform><numerusform>Segmentów vibrato</numerusform><numerusform>Segmenty vibrato</numerusform></translation>
+        <translation><numerusform>Segment vibrata</numerusform><numerusform>Segmenty vibrata</numerusform><numerusform>Segmentów vibrata</numerusform><numerusform>Segmenty vibrata</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="407"/>
@@ -13676,12 +13676,12 @@ Próg %1 na strunach %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="437"/>
         <source>glissando segment(s)</source>
-        <translation><numerusform>segment glissando</numerusform><numerusform>segmenty glissando</numerusform><numerusform>segmentów glissando</numerusform><numerusform>segmenty glissando</numerusform></translation>
+        <translation><numerusform>segment glissanda</numerusform><numerusform>segmenty glissanda</numerusform><numerusform>segmentów glissanda</numerusform><numerusform>segmenty glissanda</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="438"/>
         <source>Glissando segment(s)</source>
-        <translation><numerusform>Segment glissando</numerusform><numerusform>Segmenty glissando</numerusform><numerusform>Segmentów glissando</numerusform><numerusform>Segmenty glissando</numerusform></translation>
+        <translation><numerusform>Segment glissanda</numerusform><numerusform>Segmenty glissanda</numerusform><numerusform>Segmentów glissanda</numerusform><numerusform>Segmenty glissanda</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="440"/>
@@ -13917,12 +13917,12 @@ Próg %1 na strunach %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="509"/>
         <source>vibrato(s)</source>
-        <translation><numerusform>vibrato</numerusform><numerusform>vibrato</numerusform><numerusform>vibrato</numerusform><numerusform>vibrato</numerusform></translation>
+        <translation><numerusform>vibrato</numerusform><numerusform>vibrata</numerusform><numerusform>vibrat</numerusform><numerusform>vibrata</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="510"/>
         <source>Vibrato(s)</source>
-        <translation><numerusform>Vibrato</numerusform><numerusform>Vibrato</numerusform><numerusform>Vibrato</numerusform><numerusform>Vibrato</numerusform></translation>
+        <translation><numerusform>Vibrato</numerusform><numerusform>Vibrata</numerusform><numerusform>Vibrat</numerusform><numerusform>Vibrata</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="512"/>
@@ -17458,8 +17458,8 @@ Próg %1 na strunach %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="65"/>
-        <source>z</source>
-        <translation>z</translation>
+        <source>stacking order</source>
+        <translation>kolejność nakładania</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="66"/>
@@ -17503,9 +17503,13 @@ Próg %1 na strunach %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="75"/>
-        <location filename="../../src/engraving/dom/property.cpp" line="76"/>
         <source>tonal pitch class</source>
         <translation>klasa wysokości tonalnej</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="76"/>
+        <source>transposed tonal pitch class</source>
+        <translation>transposowana klasa wysokości tonalnej</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="77"/>
@@ -17653,12 +17657,12 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="108"/>
         <source>ghost</source>
-        <translation>duch</translation>
+        <translation>nieakcentowana</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="109"/>
         <source>dead</source>
-        <translation>martwa</translation>
+        <translation>wytłumiona</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="110"/>
@@ -17683,7 +17687,7 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="114"/>
         <source>bracket type</source>
-        <translation>typ nawiasów</translation>
+        <translation>typ klamry</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="115"/>
@@ -17697,13 +17701,13 @@ Próg %1 na strunach %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="117"/>
-        <source>p1</source>
-        <translation>p1</translation>
+        <source>bracket start offset</source>
+        <translation>przesunięcie nawiasu początkowego</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="118"/>
-        <source>p2</source>
-        <translation>p2</translation>
+        <source>bracket end offset</source>
+        <translation>przesunięcie nawiasu końcowego</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="119"/>
@@ -17788,18 +17792,18 @@ Próg %1 na strunach %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="138"/>
-        <source>imageHeight</source>
-        <translation>wysokośćObrazu</translation>
+        <source>image height</source>
+        <translation>wysokość obrazu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="139"/>
-        <source>imageWidth</source>
-        <translation>szerokośćObrazu</translation>
+        <source>image width</source>
+        <translation>szerokość obrazu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="140"/>
-        <source>imageFramed</source>
-        <translation>obramowanieObrazu</translation>
+        <source>image framed</source>
+        <translation>obramowanie obrazu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="142"/>
@@ -17823,8 +17827,8 @@ Próg %1 na strunach %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="146"/>
-        <source>chords per row</source>
-        <translation>akordy/ów na wiersz</translation>
+        <source>chord symbols per row</source>
+        <translation>symbole akordów na wiersz</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="147"/>
@@ -17970,7 +17974,7 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="187"/>
         <source>vibrato type</source>
-        <translation>typ vibrato</translation>
+        <translation>typ vibrata</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="188"/>
@@ -18084,17 +18088,17 @@ Próg %1 na strunach %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="213"/>
-        <source>repeatEnd</source>
-        <translation>koniecRepetycji</translation>
+        <source>repeat end</source>
+        <translation>koniec repetycji</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="214"/>
-        <source>repeatStart</source>
-        <translation>początekRepetycji</translation>
+        <source>repeat start</source>
+        <translation>początek repetycji</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="215"/>
-        <source>repeatJump</source>
+        <source>repeat jump</source>
         <translation>repetycja</translation>
     </message>
     <message>
@@ -18216,13 +18220,14 @@ Próg %1 na strunach %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="242"/>
-        <source>track2</source>
-        <translation>ścieżka2</translation>
+        <source>end track</source>
+        <translation>ścieżka końcowa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="243"/>
-        <source>offset2</source>
-        <translation>przesunięcie2</translation>
+        <location filename="../../src/engraving/dom/property.cpp" line="259"/>
+        <source>end offset</source>
+        <translation>przesunięcie końcowe</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="244"/>
@@ -18271,23 +18276,18 @@ Próg %1 na strunach %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="256"/>
-        <source>o1</source>
-        <translation>o1</translation>
+        <source>start offset</source>
+        <translation>przesunięcie początkowe</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="257"/>
-        <source>o2</source>
-        <translation>o2</translation>
+        <source>left shoulder offset</source>
+        <translation>przesunięcie lewego ramienia</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="258"/>
-        <source>o3</source>
-        <translation>o3</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="259"/>
-        <source>o4</source>
-        <translation>o4</translation>
+        <source>right shoulder offset</source>
+        <translation>przesunięcie prawego ramienia</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="260"/>
@@ -18316,8 +18316,8 @@ Próg %1 na strunach %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="267"/>
-        <source>mag</source>
-        <translation>lupa</translation>
+        <source>magnification</source>
+        <translation>powiększenie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="268"/>
@@ -18376,13 +18376,13 @@ Próg %1 na strunach %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="280"/>
-        <source>fretShowFingering</source>
-        <translation>prógPokażPalcowania</translation>
+        <source>fretboard diagram fingering visible</source>
+        <translation>widoczne palcowanie diagramu akordu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="281"/>
-        <source>fretFingering</source>
-        <translation>prógPalcowania</translation>
+        <source>fretboard diagram fingering</source>
+        <translation>palcowanie diagramu akordu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="283"/>
@@ -18902,7 +18902,7 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="408"/>
         <source>arpeggio type</source>
-        <translation>typ arpeggio</translation>
+        <translation>typ arpeggia</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="409"/>
@@ -18922,12 +18922,12 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="412"/>
         <source>tremolo type</source>
-        <translation>typ tremolo</translation>
+        <translation>typ tremola</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="413"/>
         <source>tremolo style</source>
-        <translation>styl tremolo</translation>
+        <translation>styl tremola</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="414"/>
@@ -18937,7 +18937,7 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="416"/>
         <source>arpeggio span</source>
-        <translation>połączenie arpeggio</translation>
+        <translation>połączenie arpeggia</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="418"/>
@@ -19066,18 +19066,18 @@ Próg %1 na strunach %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="454"/>
-        <source>position linked to master</source>
-        <translation>pozycja połączona z głównym</translation>
+        <source>position linked to main score</source>
+        <translation>pozycja połączona z partyturą główną</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="455"/>
-        <source>appearance linked to master</source>
-        <translation>wygląd połączony z głównym</translation>
+        <source>appearance linked to main score</source>
+        <translation>wygląd połączony z partyturą główną</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="456"/>
-        <source>text linked to master</source>
-        <translation>tekst połączony z głównym</translation>
+        <source>text linked to main score</source>
+        <translation>tekst połączony z partyturą główną</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="457"/>
@@ -19146,8 +19146,8 @@ Próg %1 na strunach %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="475"/>
-        <source>align with other rests</source>
-        <translation>wyrównaj z innymi pauzami</translation>
+        <source>align with other rests in the same voice</source>
+        <translation>wyrównaj z innymi pauzami w tym samym głosie</translation>
     </message>
 </context>
 <context>

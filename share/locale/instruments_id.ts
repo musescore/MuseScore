@@ -10842,14 +10842,14 @@
         <source>Handbells</source>
         <comment>hand-bells trackName</comment>
         <extracomment>trackName for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lonceng tangan</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3642"/>
         <source>Handbells</source>
         <comment>hand-bells longName</comment>
         <extracomment>longName for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lonceng tangan</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3644"/>
@@ -13985,7 +13985,7 @@
         <source>Percussion</source>
         <comment>percussion-synthesizer longName</comment>
         <extracomment>longName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Perkusi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4655"/>
@@ -14013,7 +14013,7 @@
         <source>Percussion</source>
         <comment>percussion longName</comment>
         <extracomment>longName for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Perkusi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4664"/>
@@ -20500,7 +20500,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="170"/>
         <source>Voices</source>
-        <translation type="unfinished"/>
+        <translation>Suara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="171"/>
