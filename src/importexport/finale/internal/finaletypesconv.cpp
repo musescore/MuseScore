@@ -1062,8 +1062,10 @@ SymId acciSymbolFromAcciAmount(int acciAmount)
     /// @todo add support for microtonal symbols (will require access to musx KeySignature instance)
     /// This code assumes each chromatic halfstep is 1 EDO division, but we cannot make that assumption
     /// with microtonal symbols.
-    AccidentalType at = Accidental::value2subtype(AccidentalVal(acciAmount));
-    return at != AccidentalType::NONE ? Accidental::subtype2symbol(at) : SymId::noSym;
+    if (acciAmount == std::clamp(acciAmount, int(AccidentalVal::MIN), int(AccidentalVal::MIN))) {
+        return Accidental::subtype2symbol(Accidental::value2subtype(AccidentalVal(acciAmount)));
+    }
+    return SymId::noSym;
 }
 
 StaffGroup staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle)
