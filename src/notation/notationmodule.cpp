@@ -35,7 +35,6 @@
 #include "internal/positionswriter.h"
 #include "internal/mscnotationwriter.h"
 #include "internal/instrumentsrepository.h"
-#include "internal/notationcreator.h"
 #include "internal/engravingfontscontroller.h"
 
 #include "view/notationpaintview.h"
@@ -141,7 +140,6 @@ void NotationModule::registerExports()
 #endif
 
     ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
     ioc()->registerExport<IInstrumentsRepository>(moduleName(), m_instrumentsRepository);
 }
 

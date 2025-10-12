@@ -64,7 +64,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationparts.h
     ${CMAKE_CURRENT_LIST_DIR}/iinstrumentsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/iselectinstrumentscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/inotationcreator.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationuiactions.h
@@ -122,8 +121,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationselectionrange.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscoreerrorscontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscoreerrorscontroller.h
 

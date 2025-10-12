@@ -71,7 +71,7 @@ public:
     void initNotationSoloMuteState(const INotationPtr notation) override;
 
 private:
-    friend class NotationCreator;
+    friend class project::NotationProject;
     explicit MasterNotation(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx);
 
     void initAfterSettingScore(const engraving::MasterScore* score);
