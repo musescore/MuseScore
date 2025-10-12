@@ -37,6 +37,10 @@
 #include "inotationparts.h"
 #include "notationtypes.h"
 
+namespace mu::project {
+class INotationProject;
+}
+
 namespace mu::notation {
 class INotation;
 using INotationPtr = std::shared_ptr<INotation>;
@@ -47,6 +51,8 @@ class INotation
 {
 public:
     virtual ~INotation() = default;
+
+    virtual project::INotationProject* project() const = 0;
 
     /// For MasterScores: the filename without extension
     /// For Scores: the excerpt name

@@ -25,7 +25,7 @@
 
 using namespace mu::notation;
 
-IMasterNotationPtr NotationCreator::newMasterNotationPtr(const muse::modularity::ContextPtr& iocCtx) const
+IMasterNotationPtr NotationCreator::newMasterNotationPtr(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx) const
 {
-    return std::shared_ptr<IMasterNotation>(new MasterNotation(iocCtx));
+    return std::shared_ptr<IMasterNotation>(new MasterNotation(project, iocCtx));
 }

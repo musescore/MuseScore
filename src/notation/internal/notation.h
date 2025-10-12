@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATION_H
-#define MU_NOTATION_NOTATION_H
+#pragma once
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
@@ -44,8 +43,10 @@ class Notation : virtual public INotation, public IGetScore, public muse::Inject
     muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
-    explicit Notation(const muse::modularity::ContextPtr& iocCtx, engraving::Score* score = nullptr);
+    explicit Notation(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx, engraving::Score* score = nullptr);
     ~Notation() override;
+
+    project::INotationProject* project() const override;
 
     QString name() const override;
     QString projectName() const override;
@@ -95,6 +96,8 @@ private:
     friend class NotationInteraction;
     friend class NotationPainting;
 
+    project::INotationProject* m_project = nullptr;
+
     engraving::Score* m_score = nullptr;
     muse::async::Notification m_scoreInited;
 
@@ -110,5 +113,3 @@ private:
     INotationElementsPtr m_elements = nullptr;
 };
 }
-
-#endif // MU_NOTATION_NOTATION_H

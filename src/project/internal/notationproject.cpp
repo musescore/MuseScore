@@ -95,7 +95,7 @@ void NotationProject::setupProject()
 
     m_engravingProject = EngravingProject::create(iocContext());
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
-    m_masterNotation = notationCreator()->newMasterNotationPtr(iocContext());
+    m_masterNotation = notationCreator()->newMasterNotationPtr(this, iocContext());
     m_projectAudioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
 }
 

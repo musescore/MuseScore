@@ -43,8 +43,9 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 
-Notation::Notation(const muse::modularity::ContextPtr& iocCtx, mu::engraving::Score* score)
+Notation::Notation(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx, mu::engraving::Score* score)
     : muse::Injectable(iocCtx)
+    , m_project(project)
 {
     m_painting = std::make_shared<NotationPainting>(this);
     m_viewState = std::make_shared<NotationViewState>(this);
@@ -114,6 +115,11 @@ Notation::~Notation()
     //! NOTE: The master score will be deleted later from ~EngravingProject()
     //! Its excerpts will be deleted directly in ~MasterScore()
     m_score = nullptr;
+}
+
+mu::project::INotationProject* Notation::project() const
+{
+    return m_project;
 }
 
 void Notation::setScore(Score* score)

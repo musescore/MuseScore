@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_NOTATIONCREATOR_H
-#define MU_NOTATION_NOTATIONCREATOR_H
+#pragma once
 
 #include "../inotationcreator.h"
 
@@ -31,8 +30,6 @@ class NotationCreator : public INotationCreator
 public:
     NotationCreator() = default;
 
-    IMasterNotationPtr newMasterNotationPtr(const muse::modularity::ContextPtr& iocCtx) const override;
+    IMasterNotationPtr newMasterNotationPtr(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx) const override;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONCREATOR_H

@@ -19,12 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONCREATOR_H
-#define MU_NOTATION_INOTATIONCREATOR_H
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 
 #include "imasternotation.h"
+
+namespace mu::project {
+class INotationProject;
+}
 
 namespace mu::notation {
 class INotationCreator : MODULE_EXPORT_INTERFACE
@@ -33,8 +36,6 @@ class INotationCreator : MODULE_EXPORT_INTERFACE
 public:
     virtual ~INotationCreator() = default;
 
-    virtual IMasterNotationPtr newMasterNotationPtr(const muse::modularity::ContextPtr& iocCtx) const = 0;
+    virtual IMasterNotationPtr newMasterNotationPtr(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx) const = 0;
 };
 }
-
-#endif // MU_NOTATION_INOTATIONCREATOR_H
