@@ -37,6 +37,7 @@
 #include "engraving/dom/clef.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/groups.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/instrtemplate.h"
@@ -237,13 +238,11 @@ void FinaleParser::importMeasures()
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
-        Fraction tick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
-
         Measure* measure = Factory::createMeasure(m_score->dummy()->system());
+        Fraction tick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
         measure->setTick(tick);
         m_meas2Tick.emplace(musxMeasure->getCmper(), tick);
         m_tick2Meas.emplace(tick, musxMeasure->getCmper());
-        // create global time signatures. local timesigs are set up later
         MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature();
         Fraction scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
         if (scoreTimeSig != currTimeSig) {
@@ -687,6 +686,98 @@ bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<mus
     return result;
 }
 
+static Groups computeTimeSignatureGroups(const MusxInstance<TimeSignature> timeSig, FinaleLoggerPtr& logger)
+{
+    // Other beaming options (such as over rests or beamThreeEighthsInCommonTime) not supported
+    const MusxInstance<options::BeamOptions> config = timeSig->getDocument()->getOptions()->get<options::BeamOptions>();
+    if (config->beamFourEighthsInCommonTime && timeSig->isCommonTime()) {
+        return Groups({ { 8, 0x110 }, { 16, 0x111 }, { 24, 0x110 } });
+    }
+
+    Groups groups;
+    int pos = 0;
+    const Fraction measureLength = musxFractionToFraction(timeSig->calcTotalDuration());
+    for (TimeSignature::TimeSigComponent component : timeSig->components) {
+        Fraction f = musxFractionToFraction(component.sumCounts()).reduced();
+        if (f.denominator() != 1) {
+            logger->logWarning(String(u"Unable to read beam groups for time signature"));
+            return Groups::endings(measureLength);
+        }
+        for (int i = 0; i < f.numerator(); ++i) {
+            for (Edu d : component.units) {
+                Fraction beat = eduToFraction(d * 32).reduced();
+                if (beat.denominator() != 1) {
+                    logger->logWarning(String(u"Unable to read beam groups for time signature"));
+                    return Groups::endings(measureLength);
+                }
+                pos += beat.numerator();
+                if (Fraction(pos, 32) >= measureLength) {
+                    return groups;
+                }
+                GroupNode n;
+                n.pos    = pos;
+                n.action = 0x111;
+                groups.addNode(n);
+            }
+        }
+    }
+    return groups;
+}
+
+static String computeTimeSignatureString(const MusxInstance<TimeSignature> timeSig, FinaleLoggerPtr& logger)
+{
+    String numerator;
+    String denominator;
+    for (size_t j = 0; j < timeSig->components.size(); ++j) {
+        TimeSignature::TimeSigComponent component = timeSig->components.at(j);
+        bool canUseMismatchedSizes = component.counts.size() == component.units.size()
+                                     || j + 1 >= timeSig->components.size();
+
+        // MuseScore can't center a plus symbol between lines, so just add one to both.
+        if (j > 0) {
+            numerator.append(u"+");
+            denominator.append(u"+");
+        }
+
+        for (size_t i = 0; i < component.units.size(); ++i) {
+            if (i > 0) {
+                denominator.append(u"+");
+            }
+            Fraction f = eduToFraction(component.units.at(i));
+            denominator.append(String::number(f.denominator()));
+        }
+
+        // For compound meters: If there is one unit value, Finale modifies the numerators
+        int multiplier = component.units.size() == 1 ? eduToFraction(component.units.front()).numerator() : 1;
+
+        for (size_t i = 0; i < component.counts.size(); ++i) {
+            if (i > 0) {
+                numerator.append(u"+");
+            }
+            Fraction f = musxFractionToFraction(component.counts.at(i)).reduced();
+            if (f.denominator() != 1) {
+                logger->logWarning(String(u"Time signature has fractional portion that could not be reduced."));
+                return String();
+            }
+            numerator.append(String::number(f.numerator() * multiplier));
+        }
+
+        // Hack: MuseScore doesn't have a concept of components, and will not align
+        // text accordingly. To compensate, we repeat the last used number as many
+        // times as needed, so it visually still lines up.
+        if (!canUseMismatchedSizes) {
+            int diff = int(component.units.size()) - int(component.counts.size());
+            String* target = diff > 0 ? &numerator : &denominator;
+            size_t x = target->lastIndexOf(u'+');
+            const String toAdd = String(u"+") + (x == muse::nidx ? *target : (*target).mid(x + 1));
+            for (int i = 0; i < std::abs(diff); ++i) {
+                (*target).append(toAdd);
+            }
+        }
+    }
+    return String(numerator + u"/" + denominator);
+}
+
 void FinaleParser::importStaffItems()
 {
     if (!m_score->firstMeasure()) {
@@ -808,23 +899,36 @@ void FinaleParser::importStaffItems()
                 return;
             }
 
-            // timesig
-            /// @todo figure out how to deal with display vs actual time signature.
-            const MusxInstance<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
-            const MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxStaffId);
-            if (!currMusxTimeSig || !currMusxTimeSig->isSame(*musxTimeSig) || musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always) {
-                Fraction timeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
+            // Time signatures
+            const MusxInstance<TimeSignature> localTimeSig = musxMeasure->createTimeSignature(musxStaffId);
+            if (!currMusxTimeSig || !currMusxTimeSig->isSame(*localTimeSig) || musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always) {
+                const MusxInstance<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
                 Segment* seg = measure->getSegmentR(SegmentType::TimeSig, Fraction(0, 1));
                 TimeSig* ts = Factory::createTimeSig(seg);
-                ts->setSig(timeSig);
+                Fraction timeSig = simpleMusxTimeSigToFraction(localTimeSig->calcSimplified(), logger());
+
+                // Display text: Attempt to inherit it, where possible
+                const MusxInstance<TimeSignature> visualTimeSig = musxMeasure->createDisplayTimeSignature(musxStaffId);
+                if (visualTimeSig->getAbbreviatedSymbol().has_value()) {
+                    ts->setSig(timeSig, visualTimeSig->isCutTime() ? TimeSigType::ALLA_BREVE : TimeSigType::FOUR_FOUR);
+                } else {
+                    ts->setSig(timeSig);
+                    bool ok = true;
+                    String visualString = computeTimeSignatureString(visualTimeSig, logger());
+                    if (!visualString.empty() && (timeSig != Fraction::fromString(visualString, &ok) || !ok)) {
+                        const size_t i = visualString.indexOf(u'/');
+                        ts->setNumeratorString(visualString.left(i));
+                        ts->setDenominatorString(visualString.mid(i + 1));
+                    }
+                }
+
                 ts->setTrack(curTrackIdx);
                 ts->setVisible(musxMeasure->showTime != others::Measure::ShowTimeSigMode::Never);
                 ts->setShowCourtesySig(!prevMusxMeasure || !prevMusxMeasure->hideCaution);
-                Fraction stretch = Fraction(localTimeSig->calcTotalDuration().calcEduDuration(), globalTimeSig->calcTotalDuration().calcEduDuration()).reduced();
-                ts->setStretch(stretch);
-                /// @todo other time signature options? Beaming? Composite list?
+                ts->setGroups(computeTimeSignatureGroups(localTimeSig, logger()));
+                Fraction stretch { localTimeSig->calcTotalDuration().calcEduDuration(), globalTimeSig->calcTotalDuration().calcEduDuration() };
+                ts->setStretch(stretch.reduced());
                 seg->add(ts);
-                staff->addTimeSig(ts);
             }
             currMusxTimeSig = localTimeSig;
 
@@ -923,7 +1027,6 @@ void FinaleParser::importStaffItems()
             prevMusxMeasure = musxMeasure;
         }
     }
-    firstPass = false;
 }
 
 void FinaleParser::createLeftBarline(Measure* measure, others::Measure::BarlineType musxBarlineType)
