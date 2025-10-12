@@ -32,6 +32,7 @@
 #include "types/string.h"
 
 #include "engraving/dom/articulation.h"
+#include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/measure.h"
@@ -191,8 +192,28 @@ void FinaleParser::importArticulations()
                 continue;
             }
 
+            // Breaths and pauses
+            bool breathCreated = false;
+            for (BreathType breathType : Breath::BREATH_LIST) {
+                if (mainSym == breathType.id) {
+                    Segment* breathSegment = cr->measure()->getSegment(SegmentType::Breath, cr->endTick());
+                    Breath* breath = Factory::createBreath(breathSegment);
+                    breath->setTrack(cr->track());
+                    breath->setPlacement(breath->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
+                    breath->setSymId(breathType.id);
+                    // breath->setPause(breathType.pause); until there is a toggleable play property, leave unset
+                    breath->setVisible(!articAssign->hide);
+                    breathSegment->add(breath);
+                    breathCreated = true;
+                    break;
+                }
+            }
+            if (breathCreated) {
+                continue;
+            }
+
             if (!cr->isChord()) {
-                // Rests can only have fermatas, no other articulations
+                // Rests can only have fermatas or breaths, no other articulations
                 continue;
             }
             Chord* c = toChord(cr);
@@ -239,7 +260,7 @@ void FinaleParser::importArticulations()
 
             /// @todo Arpeggios; Their symbol is not in SMuFL.
 
-            /// @todo Ornament properties, chordlines, fingerings, trills, figured bass?, breaths & pauses, pedal lines?
+            /// @todo Ornament properties, chordlines, fingerings, trills, figured bass?, pedal lines?
             Articulation* a;
             switch (mainSym) {
                 case SymId::ornamentTurnInverted:
