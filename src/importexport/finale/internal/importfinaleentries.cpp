@@ -558,7 +558,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     cr->setStaffMove(crossStaffMove);
     cr->setTrack(curTrackIdx);
     if (cr->durationType().isMeasure()) {
-        cr->setTicks(measure->timesig() * baseStaff->timeStretch(measure->tick())); // baseStaff because that's the staff the cr 'belongs to'
+        cr->setTicks(measure->stretchedLen(baseStaff)); // baseStaff because that's the staff the cr 'belongs to'
     } else {
         cr->setTicks(cr->actualDurationType().fraction());
     }
@@ -602,7 +602,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     dot->setParent(r);
                     dot->setVisible(r->visible());
                     dot->setTrack(cr->track());
-                    dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset * SPATIUM20) * SPATIUM20); // correctly scaled?
+                    dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset) * SPATIUM20); // correctly scaled?
                     r->add(dot);
                 }
             } else {
@@ -766,7 +766,7 @@ static void createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo,
         rTuplet.startTick  = musxFractionToFraction(tuplet.startDura).reduced();
         rTuplet.endTick    = musxFractionToFraction(tuplet.endDura).reduced();
         rTuplet.musxTuplet = tuplet.tuplet;
-        if (tuplet.calcIsTremolo()) {
+        if (tuplet.calcIsTremolo() && tuplet.numEntries() == 2) {
             tremoloMap.emplace_back(rTuplet);
         } else {
             tupletMap.emplace_back(rTuplet);
@@ -844,26 +844,28 @@ void FinaleParser::importEntries()
     MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     std::vector<engraving::Note*> notesWithUnmanagedTies;
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
-        staff_idx_t curStaffIdx = muse::value(m_inst2Staff, StaffCmper(musxScrollViewItem->staffId), muse::nidx);
-        track_idx_t staffTrackIdx = curStaffIdx * VOICES;
+        StaffCmper musxStaffId = musxScrollViewItem->staffId;
+        staff_idx_t curStaffIdx = muse::value(m_inst2Staff, musxStaffId, muse::nidx);
         IF_ASSERT_FAILED (curStaffIdx != muse::nidx) {
-            logger()->logWarning(String(u"Add entries: Musx inst value not found."), m_doc, musxScrollViewItem->staffId, 1);
+            logger()->logWarning(String(u"Add entries: Musx inst value not found."), m_doc, musxStaffId, 1);
             continue;
         }
+        track_idx_t staffTrackIdx = staff2track(curStaffIdx);
 
         Staff* curStaff = m_score->staff(curStaffIdx);
 
         for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
-            Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
+            MeasCmper measureId = musxMeasure->getCmper();
+            Fraction currTick = muse::value(m_meas2Tick, measureId, Fraction(-1, 1));
             Measure* measure = !currTick.negative()  ? m_score->tick2measure(currTick) : nullptr;
             if (!measure) {
-                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measureId);
                 break;
             }
-            details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
+            details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxStaffId, measureId);
             bool processContext = bool(gfHold);
             if (processContext && gfHold.calcIsCuesOnly()) {
-                logger()->logWarning(String(u"Cue notes not yet supported"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                logger()->logWarning(String(u"Cue notes not yet supported"), m_doc, musxStaffId, measureId);
                 processContext = false;
             }
             // Note from RGP: You cannot short-circuit out of this code with a `if (!processContext) continue` statement.
@@ -871,14 +873,14 @@ void FinaleParser::importEntries()
             if (processContext) {
                 // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
                 std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
-                std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxStaffId, measureId);
                 std::unordered_map<Rest*, musx::dom::NoteInfoPtr> fixedRests;
                 for (const auto& finaleLayer : finaleLayers) {
                     const LayerIndex layer = finaleLayer.first;
                     /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
                     MusxInstance<EntryFrame> entryFrame = gfHold.createEntryFrame(layer);
                     if (!entryFrame) {
-                        logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                        logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxStaffId, measureId);
                         continue;
                     }
                     const int maxV1V2 = finaleLayer.second ? 1 : 0;
@@ -886,7 +888,7 @@ void FinaleParser::importEntries()
                         // calculate current track
                         voice_idx_t voiceOff = muse::value(finaleVoiceMap, createFinaleVoiceId(layer, bool(voice)), muse::nidx);
                         IF_ASSERT_FAILED(voiceOff != muse::nidx && voiceOff < VOICES) {
-                            logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(int(layer) + 1), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                            logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(int(layer) + 1), m_doc, musxStaffId, measureId);
                             continue;
                         }
 
@@ -896,7 +898,7 @@ void FinaleParser::importEntries()
                         // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback
                         ReadableTuplet rTuplet;
                         rTuplet.startTick = Fraction(0, 1);
-                        rTuplet.endTick = (measure->timesig() * curStaff->timeStretch(measure->tick())).reduced(); // account for local timesigs (needed?)
+                        rTuplet.endTick = measure->stretchedLen(curStaff).reduced(); // accounts for local timesigs (needed?)
                         rTuplet.layer = -1;
                         std::vector<ReadableTuplet> tupletMap = { rTuplet };
                         std::vector<ReadableTuplet> tremoloMap;
@@ -929,7 +931,7 @@ void FinaleParser::importEntries()
             measure->checkMeasure(curStaffIdx);
             // ...and make sure voice 1 exists.
             if (!measure->hasVoice(staffTrackIdx)) {
-                MusxInstance<others::StaffComposite> currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
+                MusxInstance<others::StaffComposite> currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measureId, 0);
                 Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
                 Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
                 rest->setScore(m_score);
