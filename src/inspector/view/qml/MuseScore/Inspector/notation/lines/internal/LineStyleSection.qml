@@ -79,9 +79,9 @@ Column {
         navigationRowStart: thicknessSection.navigationRowEnd + 1
 
         model: [
-            { iconCode: IconCode.LINE_NORMAL, value: LineTypes.LINE_STYLE_SOLID, title: qsTrc("inspector", "Normal") },
-            { iconCode: IconCode.LINE_DASHED, value: LineTypes.LINE_STYLE_DASHED, title: qsTrc("inspector", "Dashed") },
-            { iconCode: IconCode.LINE_DOTTED, value: LineTypes.LINE_STYLE_DOTTED, title: qsTrc("inspector", "Dotted") },
+            { iconCode: IconCode.LINE_NORMAL, value: LineTypes.LINE_STYLE_SOLID, title: qsTrc("inspector", "Normal", "line type") },
+            { iconCode: IconCode.LINE_DASHED, value: LineTypes.LINE_STYLE_DASHED, title: qsTrc("inspector", "Dashed", "line type") },
+            { iconCode: IconCode.LINE_DOTTED, value: LineTypes.LINE_STYLE_DOTTED, title: qsTrc("inspector", "Dotted", "line type") },
         ]
     }
 

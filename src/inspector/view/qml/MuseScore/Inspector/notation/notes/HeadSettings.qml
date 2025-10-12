@@ -105,9 +105,9 @@ FocusableItem {
             navigationRowStart: smallNoteheadCheckBox.navigation.row + 1
 
             model: [
-                { text: qsTrc("inspector", "Auto"), value: NoteHead.DOT_POSITION_AUTO, title: qsTrc("inspector", "Auto") },
-                { iconCode: IconCode.DOT_BELOW_LINE, value: NoteHead.DOT_POSITION_DOWN, title: qsTrc("inspector", "Down") },
-                { iconCode: IconCode.DOT_ABOVE_LINE, value: NoteHead.DOT_POSITION_UP, title: qsTrc("inspector", "Up") }
+                { text: qsTrc("inspector", "Auto"), value: NoteHead.DOT_POSITION_AUTO, title: qsTrc("inspector", "Auto", "augmentation dot position") },
+                { iconCode: IconCode.DOT_BELOW_LINE, value: NoteHead.DOT_POSITION_DOWN, title: qsTrc("inspector", "Down", "augmentation dot position") },
+                { iconCode: IconCode.DOT_ABOVE_LINE, value: NoteHead.DOT_POSITION_UP, title: qsTrc("inspector", "Up", "augmentation dot position") }
             ]
         }
 

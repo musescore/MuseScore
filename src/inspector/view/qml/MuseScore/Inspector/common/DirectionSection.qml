@@ -43,9 +43,9 @@ FlatRadioButtonGroupPropertyView {
             PropertyChanges {
                 target: root
                 model: [
-                    { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO, title: qsTrc("inspector", "Auto") },
-                    { iconCode: IconCode.ARROW_DOWN, value: DirectionTypes.VERTICAL_DOWN, title: qsTrc("inspector", "Down") },
-                    { iconCode: IconCode.ARROW_UP, value: DirectionTypes.VERTICAL_UP, title: qsTrc("inspector", "Up") }
+                    { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO, title: qsTrc("inspector", "Auto", "direction") },
+                    { iconCode: IconCode.ARROW_DOWN, value: DirectionTypes.VERTICAL_DOWN, title: qsTrc("inspector", "Down", "direction") },
+                    { iconCode: IconCode.ARROW_UP, value: DirectionTypes.VERTICAL_UP, title: qsTrc("inspector", "Up", "direction") }
                 ]
             }
         },
@@ -57,9 +57,9 @@ FlatRadioButtonGroupPropertyView {
             PropertyChanges {
                 target: root
                 model: [
-                   { text: qsTrc("inspector", "Auto"), value: DirectionTypes.HORIZONTAL_AUTO, title: qsTrc("inspector", "Auto") },
-                   { iconCode: IconCode.ARROW_LEFT, value: DirectionTypes.HORIZONTAL_LEFT, title: qsTrc("inspector", "Left") },
-                   { iconCode: IconCode.ARROW_RIGHT, value: DirectionTypes.HORIZONTAL_RIGHT, title: qsTrc("inspector", "Right") }
+                   { text: qsTrc("inspector", "Auto"), value: DirectionTypes.HORIZONTAL_AUTO, title: qsTrc("inspector", "Auto", "direction") },
+                   { iconCode: IconCode.ARROW_LEFT, value: DirectionTypes.HORIZONTAL_LEFT, title: qsTrc("inspector", "Left", "direction") },
+                   { iconCode: IconCode.ARROW_RIGHT, value: DirectionTypes.HORIZONTAL_RIGHT, title: qsTrc("inspector", "Right", "direction") }
                 ]
             }
         }

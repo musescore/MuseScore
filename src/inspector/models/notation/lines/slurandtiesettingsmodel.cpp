@@ -111,10 +111,10 @@ bool SlurAndTieSettingsModel::isLineStyleAvailable() const
 QVariantList SlurAndTieSettingsModel::possibleLineStyles() const
 {
     QVariantList result {
-        object(SlurStyleType::Solid, muse::qtrc("inspector", "Normal"), IconCode::LINE_NORMAL),
-        object(SlurStyleType::WideDashed, muse::qtrc("inspector", "Wide dashed"), IconCode::LINE_WIDE_DASHED),
-        object(SlurStyleType::Dashed, muse::qtrc("inspector", "Dashed"), IconCode::LINE_DASHED),
-        object(SlurStyleType::Dotted, muse::qtrc("inspector", "Dotted"), IconCode::LINE_DOTTED)
+        object(SlurStyleType::Solid, muse::qtrc("inspector", "Normal", "slur style"), IconCode::LINE_NORMAL),
+        object(SlurStyleType::WideDashed, muse::qtrc("inspector", "Wide dashed", "slur style"), IconCode::LINE_WIDE_DASHED),
+        object(SlurStyleType::Dashed, muse::qtrc("inspector", "Dashed", "slur style"), IconCode::LINE_DASHED),
+        object(SlurStyleType::Dotted, muse::qtrc("inspector", "Dotted", "slur style"), IconCode::LINE_DOTTED)
     };
 
     return result;

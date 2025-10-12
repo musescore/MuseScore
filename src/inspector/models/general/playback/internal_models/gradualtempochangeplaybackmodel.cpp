@@ -49,9 +49,9 @@ PropertyItem* GradualTempoChangePlaybackModel::tempoEasingMethod() const
 QVariantList GradualTempoChangePlaybackModel::possibleEasingMethods() const
 {
     QVariantList methods {
-        object(ChangeMethod::NORMAL, muse::qtrc("inspector", "Normal")),
-        object(ChangeMethod::EASE_IN, muse::qtrc("inspector", "Ease in")),
-        object(ChangeMethod::EASE_OUT, muse::qtrc("inspector", "Ease out"))
+        object(ChangeMethod::NORMAL, muse::qtrc("inspector", "Normal", "gradual tempo change method")),
+        object(ChangeMethod::EASE_IN, muse::qtrc("inspector", "Ease in", "gradual tempo change method")),
+        object(ChangeMethod::EASE_OUT, muse::qtrc("inspector", "Ease out", "gradual tempo change method"))
     };
 
     return methods;
