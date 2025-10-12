@@ -151,6 +151,53 @@ void ChordRest::undoSetSmall(bool val)
 //   drop
 //---------------------------------------------------------
 
+bool ChordRest::acceptDrop(EditData& data) const
+{
+    EngravingItem* e = data.dropElement;
+
+    switch (e->type()) {
+    case ElementType::FERMATA:
+    case ElementType::CLEF:
+    case ElementType::KEYSIG:
+    case ElementType::TIMESIG:
+    case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
+    case ElementType::STAFF_TEXT:
+    case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
+    case ElementType::BAR_LINE:
+    case ElementType::BREATH:
+    case ElementType::STAFF_STATE:
+    case ElementType::INSTRUMENT_CHANGE:
+    case ElementType::DYNAMIC:
+    case ElementType::EXPRESSION:
+    case ElementType::HARMONY:
+    case ElementType::TEMPO_TEXT:
+    case ElementType::REHEARSAL_MARK:
+    case ElementType::FRET_DIAGRAM:
+    case ElementType::TREMOLOBAR:
+    case ElementType::HARP_DIAGRAM:
+        return true;
+    case  ElementType::STRING_TUNINGS:
+        return measure()->canAddStringTunings(staffIdx());
+    case ElementType::ACTION_ICON: {
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::BEAM_AUTO:
+        case ActionIconType::BEAM_NONE:
+        case ActionIconType::BEAM_BREAK_LEFT:
+        case ActionIconType::BEAM_BREAK_INNER_8TH:
+        case ActionIconType::BEAM_BREAK_INNER_16TH:
+        case ActionIconType::BEAM_JOIN:
+            return true;
+        default: break;
+        }
+        break;
+    }
+    default: break;
+    }
+    return measure()->acceptDrop(data);
+}
+
 EngravingItem* ChordRest::drop(EditData& data)
 {
     EngravingItem* e = data.dropElement;
