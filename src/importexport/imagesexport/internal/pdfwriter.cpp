@@ -26,11 +26,11 @@
 #include <QBuffer>
 #include <QDateTime>
 
-#include "engraving/dom/masterscore.h"
-#include "project/types/projectmeta.h"
 #include "project/inotationproject.h"
 
 #include "log.h"
+
+using namespace Qt::Literals::StringLiterals;
 
 using namespace mu::iex::imagesexport;
 using namespace mu::project;
@@ -150,30 +150,10 @@ Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& destin
     return true;
 }
 
-// Extract project metadata from notation's project or notation fallback
-ProjectMeta PdfWriter::getProjectMetadata(INotationPtr notation) const
+QByteArray PdfWriter::generateXmpMetadata(const QString& title, const QString& creator, const ProjectMeta& meta) const
 {
-    if (notation) {
-        auto project = notation->project();
-        if (project) {
-            return project->metaInfo();
-        }
-
-        // Fallback to notation title if project not available
-        ProjectMeta meta;
-        meta.title = notation->projectWorkTitle();
-        return meta;
-    }
-
-    return ProjectMeta();
-}
-
-// Generate XMP metadata for PDF embedding with project information
-QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
-{
-    QString xmpTemplate
-        =
-            R"(<?xml version="1.0" encoding="UTF-8"?>
+    const QString& xmpTemplate {
+        uR"(<?xml version="1.0" encoding="UTF-8"?>
 <x:xmpmeta xmlns:x="adobe:ns:meta/">
   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <rdf:Description rdf:about=""
@@ -188,63 +168,48 @@ QByteArray PdfWriter::generateXmpMetadata(const ProjectMeta& meta) const
       <xmp:CreateDate>%5</xmp:CreateDate>
       <xmp:ModifyDate>%5</xmp:ModifyDate>
       <pdf:Author>%6</pdf:Author>
-      <pdfx:Composer>%7</pdfx:Composer>
-      <pdfx:Arranger>%8</pdfx:Arranger>
-      <pdfx:Translator>%9</pdfx:Translator>
-      <pdfx:Lyricist>%10</pdfx:Lyricist>
+      <pdfx:Composer>%6</pdfx:Composer>
+      <pdfx:Arranger>%7</pdfx:Arranger>
+      <pdfx:Translator>%8</pdfx:Translator>
+      <pdfx:Lyricist>%9</pdfx:Lyricist>
     </rdf:Description>
   </rdf:RDF>
-</x:xmpmeta>)";
+</x:xmpmeta>)"_s
+    };
 
-    QString author = meta.composer;
-    QString creator = QString("MuseScore Studio Version: ") + application()->version().toString().toQString();
-    QString currentDateTime = QDateTime::currentDateTime().toString(Qt::ISODate);
+    const QString currentDateTime = QDateTime::currentDateTime().toString(Qt::ISODate);
 
-    // Populate XMP template with project metadata
-    QString xmpData = xmpTemplate.arg(meta.title.toHtmlEscaped(),
-                                      creator.toHtmlEscaped(),
-                                      meta.subtitle.toHtmlEscaped(),
-                                      meta.copyright.toHtmlEscaped(),
-                                      currentDateTime,
-                                      author.toHtmlEscaped(),
-                                      meta.composer.toHtmlEscaped(),
-                                      meta.arranger.toHtmlEscaped(),
-                                      meta.translator.toHtmlEscaped(),
-                                      meta.lyricist.toHtmlEscaped());
-
-    return xmpData.toUtf8();
+    return xmpTemplate.arg(title.toHtmlEscaped(),
+                           creator.toHtmlEscaped(),
+                           meta.subtitle.toHtmlEscaped(),
+                           meta.copyright.toHtmlEscaped(),
+                           currentDateTime,
+                           meta.composer.toHtmlEscaped(),
+                           meta.arranger.toHtmlEscaped(),
+                           meta.translator.toHtmlEscaped(),
+                           meta.lyricist.toHtmlEscaped())
+           .toUtf8();
 }
 
 void PdfWriter::preparePdfWriter(QPdfWriter& pdfWriter, INotationPtr notation, const QSizeF& size) const
 {
     pdfWriter.setResolution(configuration()->exportPdfDpiResolution());
 
-    // Always set basic metadata (original behavior)
-    QString title = notation->projectWorkTitleAndPartName();
-    pdfWriter.setCreator(QString("MuseScore Studio Version: ") + application()->version().toString().toQString());
+    const QString title = notation->projectWorkTitleAndPartName();
+    const QString creator = u"MuseScore Studio "_s + application()->version().toString().toQString();
+
     pdfWriter.setTitle(title);
+    pdfWriter.setCreator(creator);
 
-    // Check if user wants to embed extended metadata
-    bool embedMetadata = configuration()->exportPdfWithEmbeddedMetadata();
-
-    if (embedMetadata) {
+    if (configuration()->exportPdfWithEmbeddedMetadata() && notation->project()) {
         // Add comprehensive XMP metadata
-        ProjectMeta meta = getProjectMetadata(notation);
+        const ProjectMeta meta = notation->project()->metaInfo();
 
-        // Use project title if available, otherwise use the title already set
-        if (!meta.title.isEmpty()) {
-            pdfWriter.setTitle(meta.title);
-        }
-
-        QString author = meta.composer;
-
-        // Set author metadata (Qt 6.9+ feature)
 #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
-        pdfWriter.setAuthor(author);
+        pdfWriter.setAuthor(meta.composer);
 #endif
 
-        // Embed comprehensive XMP metadata
-        QByteArray xmpMetadata = generateXmpMetadata(meta);
+        const QByteArray xmpMetadata = generateXmpMetadata(title, creator, meta);
         pdfWriter.setDocumentXmpMetadata(xmpMetadata);
     }
 

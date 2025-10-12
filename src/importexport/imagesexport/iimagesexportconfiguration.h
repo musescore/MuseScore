@@ -19,10 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_IIMAGESEXPORTCONFIGURATION_H
-#define MU_IMPORTEXPORT_IIMAGESEXPORTCONFIGURATION_H
+#pragma once
 
-#include <string>
 #include <optional>
 
 #include "modularity/imoduleinterface.h"
@@ -71,5 +69,3 @@ public:
     virtual void setTrimMarginPixelSize(std::optional<int> pixelSize) = 0;
 };
 }
-
-#endif // MU_IMPORTEXPORT_IIMAGESEXPORTCONFIGURATION_H

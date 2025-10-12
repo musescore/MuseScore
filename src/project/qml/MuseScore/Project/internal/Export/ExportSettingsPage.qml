@@ -26,7 +26,7 @@ import MuseScore.Project 1.0
 
 Column {
     id: root
-    spacing: 16
+    spacing: 12
 
     property ExportDialogModel model
 

@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_IMPORTEXPORT_PDFWRITER_H
-#define MU_IMPORTEXPORT_PDFWRITER_H
+#pragma once
 
 #include "abstractimagewriter.h"
 
@@ -49,9 +48,7 @@ public:
 
 private:
     void preparePdfWriter(QPdfWriter& pdfWriter, notation::INotationPtr notation, const QSizeF& size) const;
-    project::ProjectMeta getProjectMetadata(notation::INotationPtr notation) const;
-    QByteArray generateXmpMetadata(const project::ProjectMeta& meta) const;
+
+    QByteArray generateXmpMetadata(const QString& title, const QString& creator, const project::ProjectMeta& meta) const;
 };
 }
-
-#endif // MU_IMPORTEXPORT_PDFWRITER_H

@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_IMAGESEXPORTCONFIGURATION_H
-#define MU_IMPORTEXPORT_IMAGESEXPORTCONFIGURATION_H
+#pragma once
 
 #include "../iimagesexportconfiguration.h"
 
@@ -65,5 +64,3 @@ private:
     std::optional<float> m_customExportPngDpiOverride;
 };
 }
-
-#endif // MU_IMPORTEXPORT_IMAGESEXPORTCONFIGURATION_H
