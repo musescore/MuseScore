@@ -507,7 +507,7 @@ Clef* FinaleParser::createClef(Score* score, const MusxInstance<musx::dom::other
         return nullptr;
     }
     Clef* clef = Factory::createClef(score->dummy()->segment());
-    clef->setTrack(staffIdx * VOICES);
+    clef->setTrack(staff2track(staffIdx));
     clef->setConcertClef(entryClefType);
     clef->setTransposingClef(entryClefType);
     // clef->setShowCourtesy();
@@ -589,7 +589,7 @@ static bool changed(const T& a, const T& b, bool& result)
     return isNotEqual;
 }
 
-bool FinaleParser::applyStaffSyles(StaffType* staffType, const MusxInstance<musx::dom::others::StaffComposite>& currStaff)
+bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<musx::dom::others::StaffComposite>& currStaff)
 {
     bool result = false;
     if (changed(staffType->genClef(), !currStaff->hideClefs, result)) {
@@ -673,8 +673,7 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const MusxInstance<musx
     if (MusxInstance<others::StaffSystem> system = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, currStaff->getMeasureId())) {
         const MusxInstanceList<others::StaffUsed> systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, system->getCmper());
         if (std::optional<size_t> index = systemStaves.getIndexForStaff(currStaff->getCmper())) {
-            const size_t x = index.value();
-            const double newUserMag = (systemStaves[x]->calcEffectiveScaling() / musxOptions().combinedDefaultStaffScaling).toDouble();
+            const double newUserMag = (systemStaves[index.value()]->calcEffectiveScaling() / musxOptions().combinedDefaultStaffScaling).toDouble();
             if (changed(staffType->userMag(), newUserMag, result)) {
                 staffType->setUserMag(newUserMag);
             }
@@ -690,20 +689,31 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const MusxInstance<musx
 
 void FinaleParser::importStaffItems()
 {
-    MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     if (!m_score->firstMeasure()) {
         return;
     }
+    MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     MusxInstanceList<others::StaffSystem> musxSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
-        // per staff style calculations
-        const MusxInstance<others::Staff>& rawStaff = m_doc->getOthers()->get<others::Staff>(m_currentMusxPartId, musxScrollViewItem->staffId);
+        // Retrieve staff
+        const StaffCmper musxStaffId = musxScrollViewItem->staffId;
+        const MusxInstance<others::Staff>& rawStaff = m_doc->getOthers()->get<others::Staff>(m_currentMusxPartId, musxStaffId);
         IF_ASSERT_FAILED(rawStaff) {
-            logger()->logWarning(String(u"Unable to retrieve musx raw staff"), m_doc, musxScrollViewItem->staffId, 1);
+            logger()->logWarning(String(u"Unable to retrieve musx raw staff"), m_doc, musxStaffId, 1);
             return;
         }
-        std::set<MeasCmper> styleChanges; // MuseScore style changes must occur on measure boundaries
+        staff_idx_t staffIdx = muse::value(m_inst2Staff, musxStaffId, muse::nidx);
+        Staff* staff = staffIdx != muse::nidx ? m_score->staff(staffIdx) : nullptr;
+        IF_ASSERT_FAILED(staff) {
+            logger()->logWarning(String(u"Unable to retrieve staff by idx"), m_doc, musxStaffId);
+            return;
+        }
+        track_idx_t curTrackIdx = staff2track(staffIdx);
+
+        // Find locations where staff styles or instruments change
+        // In MuseScore, these must occur on measure boundaries
+        std::set<MeasCmper> styleChanges;
         styleChanges.emplace(1); // there is always a style change on the first measure.
         if (rawStaff->hasStyles) {
             MusxInstanceList<others::StaffStyleAssign> musxStyleChanges = m_doc->getOthers()->getArray<others::StaffStyleAssign>(m_currentMusxPartId, rawStaff->getCmper());
@@ -727,30 +737,27 @@ void FinaleParser::importStaffItems()
                 }
             }
         }
+
+        // Apply any given changes
         std::string prevUuid;
         for (MeasCmper measNum : styleChanges) {
             Fraction currTick = muse::value(m_meas2Tick, measNum, Fraction(-1, 1));
             Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
             IF_ASSERT_FAILED(measure) {
-                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxScrollViewItem->staffId, measNum);
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measNum);
                 return;
             }
-            staff_idx_t staffIdx = muse::value(m_inst2Staff, musxScrollViewItem->staffId, muse::nidx);
-            Staff* staff = staffIdx != muse::nidx ? m_score->staff(staffIdx) : nullptr;
-            IF_ASSERT_FAILED(staff) {
-                logger()->logWarning(String(u"Unable to retrieve staff by idx"), m_doc, musxScrollViewItem->staffId, measNum);
-                return;
-            }
-            MusxInstance<others::StaffComposite> currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, measNum, 0);
+
+            MusxInstance<others::StaffComposite> currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measNum, 0);
             IF_ASSERT_FAILED(currStaff) {
-                logger()->logWarning(String(u"Unable to retrieve musx current staff"), m_doc, musxScrollViewItem->staffId, measNum);
+                logger()->logWarning(String(u"Unable to retrieve musx current staff"), m_doc, musxStaffId, measNum);
                 return;
             }
             Fraction tick = measure->tick();
 
             // Instrument changes
             if (isValidUuid(currStaff->instUuid)) {
-                if (currStaff->instUuid != prevUuid && tick > Fraction(0, 1)) {
+                if (currStaff->instUuid != prevUuid && tick.isNotZero()) {
                     Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
                     InstrumentChange* c = Factory::createInstrumentChange(segment, Instrument::fromTemplate(searchTemplate(instrTemplateIdfromUuid(currStaff->instUuid))));
                     loadInstrument(currStaff, c->instrument());
@@ -763,80 +770,69 @@ void FinaleParser::importStaffItems()
                 prevUuid = currStaff->instUuid;
             }
 
-            StaffType* staffType = staff->staffType(tick);
+            // Staff type
+            StaffType* staffType = tick.isZero() ? staff->staffType(tick) : new StaffType(*(staff->staffType(tick)));
             IF_ASSERT_FAILED(staffType) {
-                logger()->logWarning(String(u"Unable to create MuseScore staff type"), m_doc, musxScrollViewItem->staffId, measNum);
-                return;
+                logger()->logWarning(String(u"Unable to create MuseScore staff type"), m_doc, musxStaffId, measNum);
+                break;
             }
-            bool createdStaffType = false;
-            if (tick > Fraction(0, 1)) {
-                staffType = new StaffType(*staffType);
-                createdStaffType = true;
-            } else {
-                // Initialise default staff type (score-wide settings)
-                staffType->setShowBarlines(musxOptions().barlineOptions->drawBarlines);
-            }
-            if (applyStaffSyles(staffType, currStaff) && tick > Fraction(0, 1)) {
-                StaffTypeChange* staffChange = Factory::createStaffTypeChange(measure);
-                staffChange->setParent(measure);
-                staffChange->setTrack(staffIdx * VOICES);
-                staffChange->setStaffType(staffType, true);
-                measure->add(staffChange);
-            } else if (createdStaffType) {
+            if (collectStaffType(staffType, currStaff) && tick.isNotZero()) {
+                StaffTypeChange* stc = Factory::createStaffTypeChange(measure);
+                stc->setParent(measure);
+                stc->setTrack(curTrackIdx);
+                stc->setStaffType(staffType, true);
+                measure->add(stc);
+            } else if (tick.isNotZero()) {
                 delete staffType;
             }
         }
-        // per measure calculations
+
+        // Clefs, key signatures, and time signatures
         MusxInstance<TimeSignature> currMusxTimeSig;
         MusxInstance<KeySignature> currMusxKeySig;
         std::optional<KeySigEvent> currKeySigEvent;
         MusxInstance<others::Measure> prevMusxMeasure;
-        ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId);
+        ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxStaffId);
         /// @todo handle pickup measures and other measures where display and actual timesigs differ
         for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
             Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
             Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
             IF_ASSERT_FAILED(measure) {
-                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, musxMeasure->getCmper());
                 return;
             }
-            staff_idx_t staffIdx = muse::value(m_inst2Staff, musxScrollViewItem->staffId, muse::nidx);
-            Staff* staff = staffIdx != muse::nidx ? m_score->staff(staffIdx) : nullptr;
-            IF_ASSERT_FAILED(staff) {
-                logger()->logWarning(String(u"Unable to retrieve staff by idx"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
-                return;
-            }
-            auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
+
+            auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, musxMeasure->getCmper(), 0);
             IF_ASSERT_FAILED(currStaff) {
-                logger()->logWarning(String(u"Unable to retrieve composite staff information"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                logger()->logWarning(String(u"Unable to retrieve composite staff information"), m_doc, musxStaffId, musxMeasure->getCmper());
                 return;
             }
 
             // timesig
             /// @todo figure out how to deal with display vs actual time signature.
             const MusxInstance<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
-            const MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxScrollViewItem->staffId);
+            const MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxStaffId);
             if (!currMusxTimeSig || !currMusxTimeSig->isSame(*musxTimeSig) || musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always) {
                 Fraction timeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
                 Segment* seg = measure->getSegmentR(SegmentType::TimeSig, Fraction(0, 1));
                 TimeSig* ts = Factory::createTimeSig(seg);
                 ts->setSig(timeSig);
-                ts->setTrack(staffIdx * VOICES);
+                ts->setTrack(curTrackIdx);
                 ts->setVisible(musxMeasure->showTime != others::Measure::ShowTimeSigMode::Never);
                 ts->setShowCourtesySig(!prevMusxMeasure || !prevMusxMeasure->hideCaution);
-                Fraction stretch = Fraction(musxTimeSig->calcTotalDuration().calcEduDuration(), globalTimeSig->calcTotalDuration().calcEduDuration()).reduced();
+                Fraction stretch = Fraction(localTimeSig->calcTotalDuration().calcEduDuration(), globalTimeSig->calcTotalDuration().calcEduDuration()).reduced();
                 ts->setStretch(stretch);
                 /// @todo other time signature options? Beaming? Composite list?
                 seg->add(ts);
                 staff->addTimeSig(ts);
             }
-            currMusxTimeSig = musxTimeSig;
+            currMusxTimeSig = localTimeSig;
 
             // clefs
             importClefs(musxScrollViewItem, musxMeasure, measure, staffIdx, musxCurrClef, prevMusxMeasure);
 
             // keysig
-            const MusxInstance<KeySignature> musxKeySig = musxMeasure->createKeySignature(musxScrollViewItem->staffId);
+            const MusxInstance<KeySignature> musxKeySig = musxMeasure->createKeySignature(musxStaffId);
             if (!currMusxKeySig || !currMusxKeySig->isSame(*musxKeySig) || musxMeasure->showKey == others::Measure::ShowKeySigMode::Always) {
                 /// @todo microtonal keysigs
                 std::optional<KeySigEvent> keySigEvent;
@@ -845,7 +841,7 @@ void FinaleParser::importStaffItems()
                                                             && (currStaff->transposition->chromatic->alteration || currStaff->transposition->chromatic->diatonic);
                     if (usesChromaticTransposition && musxKeySig->getAlteration(KeySignature::KeyContext::Concert) != 0) {
                         logger()->logWarning(String(u"Finale's chromatic transposition with a key signature is not supported. Using Keyless instead.").arg(musxKeySig->getKeyMode()),
-                                             m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                                             m_doc, musxStaffId, musxMeasure->getCmper());
                     }
                     const bool keyless = usesChromaticTransposition || musxKeySig->keyless || musxKeySig->hideKeySigShowAccis || currStaff->hideKeySigsShowAccis;
                     keySigEvent = KeySigEvent();
@@ -871,7 +867,7 @@ void FinaleParser::importStaffItems()
                         MusxInstance<others::AcciOrderSharps> musxAccis = m_doc->getOthers()->get<others::AcciOrderSharps>(m_currentMusxPartId, musxKeySig->getKeyMode());
                         MusxInstance<others::AcciAmountSharps> musxAmounts = m_doc->getOthers()->get<others::AcciAmountSharps>(m_currentMusxPartId, musxKeySig->getKeyMode());
                         IF_ASSERT_FAILED(musxAccis->values.size() >= musxAmounts->values.size()) {
-                            logger()->logWarning(String(u"Nonlinear key %1 has insufficient AcciOrderSharps.").arg(musxKeySig->getKeyMode()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                            logger()->logWarning(String(u"Nonlinear key %1 has insufficient AcciOrderSharps.").arg(musxKeySig->getKeyMode()), m_doc, musxStaffId, musxMeasure->getCmper());
                             return;
                         }
                         ksEvent.setConcertKey(Key::C);
@@ -884,7 +880,7 @@ void FinaleParser::importStaffItems()
                             }
                             SymId accidental = acciSymbolFromAcciAmount(amount);
                             if (accidental == SymId::noSym) {
-                                logger()->logWarning(String(u"Skipping unknown accidental amount %1 in nonlinear key %2.").arg(amount, musxKeySig->getKeyMode()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                                logger()->logWarning(String(u"Skipping unknown accidental amount %1 in nonlinear key %2.").arg(amount, musxKeySig->getKeyMode()), m_doc, musxStaffId, musxMeasure->getCmper());
                                 continue;
                             }
                             CustDef cd;
@@ -898,13 +894,13 @@ void FinaleParser::importStaffItems()
                         if (ksEvent.customKeyDefs().empty()) {
                             ksEvent.setCustom(false);
                             ksEvent.setMode(KeyMode::NONE);
-                            logger()->logWarning(String(u"Converting non-linear Finale key %1 that has no accidentals to Keyless.").arg(musxKeySig->getKeyMode()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                            logger()->logWarning(String(u"Converting non-linear Finale key %1 that has no accidentals to Keyless.").arg(musxKeySig->getKeyMode()), m_doc, musxStaffId, musxMeasure->getCmper());
                         }
                     } else {
-                        logger()->logWarning(String(u"Skipping Finale key %1 that is neither linear nor non-linear.").arg(musxKeySig->getKeyMode()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                        logger()->logWarning(String(u"Skipping Finale key %1 that is neither linear nor non-linear.").arg(musxKeySig->getKeyMode()), m_doc, musxStaffId, musxMeasure->getCmper());
                     }
                 } else {
-                    logger()->logWarning(String(u"Microtonal key signatures not supported."), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                    logger()->logWarning(String(u"Microtonal key signatures not supported."), m_doc, musxStaffId, musxMeasure->getCmper());
                 }
                 if (keySigEvent.has_value()) {
                     if (currKeySigEvent.has_value() && !musxOptions().keyOptions->redisplayOnModeChange) {
@@ -914,7 +910,7 @@ void FinaleParser::importStaffItems()
                         Segment* seg = measure->getSegmentR(SegmentType::KeySig, Fraction(0, 1));
                         KeySig* ks = Factory::createKeySig(seg);
                         ks->setKeySigEvent(keySigEvent.value());
-                        ks->setTrack(staffIdx * VOICES);
+                        ks->setTrack(curTrackIdx);
                         ks->setVisible(musxMeasure->showKey != others::Measure::ShowKeySigMode::Never);
                         ks->setShowCourtesy(!prevMusxMeasure || !prevMusxMeasure->hideCaution);
                         seg->add(ks);
@@ -927,6 +923,7 @@ void FinaleParser::importStaffItems()
             prevMusxMeasure = musxMeasure;
         }
     }
+    firstPass = false;
 }
 
 void FinaleParser::createLeftBarline(Measure* measure, others::Measure::BarlineType musxBarlineType)
