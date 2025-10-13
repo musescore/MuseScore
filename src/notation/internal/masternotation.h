@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_MASTERNOTATION_H
-#define MU_NOTATION_MASTERNOTATION_H
+#pragma once
 
 #include <memory>
 
@@ -72,9 +71,8 @@ public:
     void initNotationSoloMuteState(const INotationPtr notation) override;
 
 private:
-
-    friend class NotationCreator;
-    explicit MasterNotation(const muse::modularity::ContextPtr& iocCtx);
+    friend class project::NotationProject;
+    explicit MasterNotation(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx);
 
     void initAfterSettingScore(const engraving::MasterScore* score);
 
@@ -109,5 +107,3 @@ private:
 
 using MasterNotationPtr = std::shared_ptr<MasterNotation>;
 }
-
-#endif // MU_NOTATION_MASTERNOTATION_H

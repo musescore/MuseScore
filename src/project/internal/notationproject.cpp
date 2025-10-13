@@ -40,6 +40,7 @@
 #include "engraving/rw/write/writecontext.h"
 
 #include "iprojectautosaver.h"
+#include "notation/internal/masternotation.h"
 #include "notation/notationerrors.h"
 #include "projectaudiosettings.h"
 #include "projectfileinfoprovider.h"
@@ -95,7 +96,7 @@ void NotationProject::setupProject()
 
     m_engravingProject = EngravingProject::create(iocContext());
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
-    m_masterNotation = notationCreator()->newMasterNotationPtr(iocContext());
+    m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation(this, iocContext()));
     m_projectAudioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
 }
 

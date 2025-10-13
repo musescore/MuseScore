@@ -33,7 +33,6 @@
 
 #include "engraving/engravingproject.h"
 
-#include "notation/inotationcreator.h"
 #include "notation/inotationconfiguration.h"
 #include "projectaudiosettings.h"
 #include "iprojectmigrator.h"
@@ -51,7 +50,6 @@ class NotationProject : public INotationProject, public muse::Injectable, public
     muse::Inject<muse::io::IFileSystem> fileSystem = { this };
     muse::Inject<IProjectConfiguration> configuration = { this };
     muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<notation::INotationCreator> notationCreator = { this };
     muse::Inject<INotationReadersRegister> readers = { this };
     muse::Inject<INotationWritersRegister> writers = { this };
     muse::Inject<IProjectMigrator> migrator = { this };
