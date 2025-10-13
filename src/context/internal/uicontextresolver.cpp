@@ -199,6 +199,10 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
     //! quite clearly not an optimal solution. In future, we need a general system to
     //! allow/disallow shortcuts based on any property of the currentNotation. [M.S.]
 
+    if (CTX_DISABLED == scContext) {
+        return false;
+    }
+
     if (CTX_NOTATION_OPENED == scContext) {
         return matchWithCurrent(context::UiCtxProjectOpened);
     } else if (CTX_NOTATION_FOCUSED == scContext) {
