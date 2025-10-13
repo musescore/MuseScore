@@ -63,19 +63,19 @@ Column {
         navigationRowStart: root.navigationRowStart + 2
 
         model: [
-            { text: qsTrc("inspector", "Unknown"), value: KeySignatureTypes.MODE_UNKNOWN },
-            { text: qsTrc("inspector", "None"), value: KeySignatureTypes.MODE_NONE },
+            { text: qsTrc("inspector", "Unknown", "key signature mode"), value: KeySignatureTypes.MODE_UNKNOWN },
+            { text: qsTrc("inspector", "None", "key signature mode"), value: KeySignatureTypes.MODE_NONE },
             //: mode of a key signature, not an interval
             { text: qsTrc("inspector", "Major", "key signature mode"), value: KeySignatureTypes.MODE_MAJOR },
             //: mode of a key signature, not an interval
             { text: qsTrc("inspector", "Minor", "key signature mode"), value: KeySignatureTypes.MODE_MINOR },
-            { text: qsTrc("inspector", "Dorian"), value: KeySignatureTypes.MODE_DORIAN },
-            { text: qsTrc("inspector", "Phrygian"), value: KeySignatureTypes.MODE_PHRYGIAN },
-            { text: qsTrc("inspector", "Lydian"), value: KeySignatureTypes.MODE_LYDIAN },
-            { text: qsTrc("inspector", "Mixolydian"), value: KeySignatureTypes.MODE_MIXOLYDIAN },
-            { text: qsTrc("inspector", "Aeolian"), value: KeySignatureTypes.MODE_AEOLIAN },
-            { text: qsTrc("inspector", "Ionian"), value: KeySignatureTypes.MODE_IONIAN },
-            { text: qsTrc("inspector", "Locrian"), value: KeySignatureTypes.MODE_LOCRIAN }
+            { text: qsTrc("inspector", "Dorian", "key signature mode"), value: KeySignatureTypes.MODE_DORIAN },
+            { text: qsTrc("inspector", "Phrygian", "key signature mode"), value: KeySignatureTypes.MODE_PHRYGIAN },
+            { text: qsTrc("inspector", "Lydian", "key signature mode"), value: KeySignatureTypes.MODE_LYDIAN },
+            { text: qsTrc("inspector", "Mixolydian", "key signature mode"), value: KeySignatureTypes.MODE_MIXOLYDIAN },
+            { text: qsTrc("inspector", "Aeolian", "key signature mode"), value: KeySignatureTypes.MODE_AEOLIAN },
+            { text: qsTrc("inspector", "Ionian", "key signature mode"), value: KeySignatureTypes.MODE_IONIAN },
+            { text: qsTrc("inspector", "Locrian", "key signature mode"), value: KeySignatureTypes.MODE_LOCRIAN }
         ]
     }
 }

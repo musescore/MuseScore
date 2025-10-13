@@ -64,9 +64,9 @@ QVariantList TupletSettingsModel::possibleNumberTypes() const
     using Type = mu::engraving::TupletNumberType;
 
     QVariantList types {
-        object(Type::SHOW_NUMBER, muse::qtrc("inspector", "Number")),
-        object(Type::SHOW_RELATION, muse::qtrc("inspector", "Ratio")),
-        object(Type::NO_TEXT, muse::qtrc("inspector", "None"))
+        object(Type::SHOW_NUMBER, muse::qtrc("inspector", "Number", "tuplet number type")),
+        object(Type::SHOW_RELATION, muse::qtrc("inspector", "Ratio", "tuplet number type")),
+        object(Type::NO_TEXT, muse::qtrc("inspector", "None", "tuplet number type"))
     };
 
     return types;
@@ -77,9 +77,9 @@ QVariantList TupletSettingsModel::possibleBracketTypes() const
     using Type = mu::engraving::TupletBracketType;
 
     QVariantList types {
-        object(Type::AUTO_BRACKET, muse::qtrc("inspector", "Auto")),
-        object(Type::SHOW_BRACKET, muse::qtrc("inspector", "Bracket"), Icon::TUPLET_NUMBER_WITH_BRACKETS),
-        object(Type::SHOW_NO_BRACKET, muse::qtrc("inspector", "None"), Icon::TUPLET_NUMBER_ONLY)
+        object(Type::AUTO_BRACKET, muse::qtrc("inspector", "Auto", "tuplet bracket type")),
+        object(Type::SHOW_BRACKET, muse::qtrc("inspector", "Bracket", "tuplet bracket type"), Icon::TUPLET_NUMBER_WITH_BRACKETS),
+        object(Type::SHOW_NO_BRACKET, muse::qtrc("inspector", "None", "tuplet bracket type"), Icon::TUPLET_NUMBER_ONLY)
     };
 
     return types;

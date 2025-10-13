@@ -53,9 +53,9 @@ Column {
         navigationRowStart: root.navigationRowStart
 
         model: [
-            { text: qsTrc("inspector", "None"), value: AccidentalTypes.BRACKET_TYPE_NONE },
-            { iconCode: IconCode.BRACKET_PARENTHESES, value: AccidentalTypes.BRACKET_TYPE_PARENTHESIS, title: qsTrc("inspector", "Parentheses") },
-            { iconCode: IconCode.BRACKET_PARENTHESES_SQUARE, value: AccidentalTypes.BRACKET_TYPE_SQUARE, title: qsTrc("inspector", "Brackets") }
+            { text: qsTrc("inspector", "None", "bracket type"), value: AccidentalTypes.BRACKET_TYPE_NONE },
+            { iconCode: IconCode.BRACKET_PARENTHESES, value: AccidentalTypes.BRACKET_TYPE_PARENTHESIS, title: qsTrc("inspector", "Parentheses", "bracket type") },
+            { iconCode: IconCode.BRACKET_PARENTHESES_SQUARE, value: AccidentalTypes.BRACKET_TYPE_SQUARE, title: qsTrc("inspector", "Brackets", "bracket type") }
         ]
     }
 
