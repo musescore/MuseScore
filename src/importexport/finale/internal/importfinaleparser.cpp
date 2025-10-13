@@ -91,4 +91,16 @@ void FinaleParser::parse()
     // importPageTexts(); //WIP
 }
 
+void setAndStyleProperty(EngravingObject* e, Pid id, PropertyValue v, bool leaveStyled)
+{
+    if (v.isValid()) {
+        e->setProperty(id, v);
+    }
+    if (e->propertyFlags(id) == PropertyFlags::NOSTYLE) {
+        return;
+    }
+    const bool canLeaveStyled = leaveStyled && (e->getProperty(id) == e->propertyDefault(id));
+    e->setPropertyFlags(id, canLeaveStyled ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED);
+}
+
 }

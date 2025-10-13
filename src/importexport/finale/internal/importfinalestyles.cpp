@@ -356,6 +356,9 @@ void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     const double timeSigSpaceBefore = context.currentMusxPartId()
                                           ? prefs.timeOptions->timeFrontParts
                                           : prefs.timeOptions->timeFront;
+    const double timeSigSpaceAfter = context.currentMusxPartId()
+                                          ? prefs.timeOptions->timeBackParts
+                                          : prefs.timeOptions->timeBack;
     writeEvpuSpace(style, Sid::timesigLeftMargin, timeSigSpaceBefore);
 
     writeEvpuSpace(style, Sid::clefKeyDistance,
@@ -367,6 +370,7 @@ void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     writeEvpuSpace(style, Sid::keyBarlineDistance, prefs.repeatOptions->afterKeySpace);
 
     // Skipped: systemHeaderDistance, systemHeaderTimeSigDistance: these do not translate well from Finale
+    // writeEvpuSpace(style, Sid::headerToLineStartDistance, (prefs.keyOptions->keyBack + timeSigSpaceAfter) / 2);
 
     writeEvpuSpace(style, Sid::clefBarlineDistance, -prefs.clefOptions->clefChangeOffset);
     writeEvpuSpace(style, Sid::timesigBarlineDistance, prefs.repeatOptions->afterClefSpace);
@@ -467,7 +471,7 @@ void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
     const auto& prefs = context.musxOptions();
 
     // Hairpin-related settings
-    writeEvpuSpace(style, Sid::hairpinHeight, prefs.smartShapeOptions->shortHairpinOpeningWidth);
+    writeEvpuSpace(style, Sid::hairpinHeight, (prefs.smartShapeOptions->shortHairpinOpeningWidth + prefs.smartShapeOptions->crescHeight) * 0.5);
     style.set(Sid::hairpinContHeight, 0.5); // Hardcoded to a half space
     writeCategoryTextFontPref(style, context, "hairpin", others::MarkingCategory::CategoryType::Dynamics);
     writeLinePrefs(style, "hairpin",
