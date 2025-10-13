@@ -1247,21 +1247,21 @@ static void addFraction(const Fraction& len)
 
 void ExportMusicXml::calcDivMoveToTick(const Fraction& t, const Fraction& stretch)
 {
-    Fraction stretched_tick { t + stretch * (tick() - t) };
+    Fraction stretchedTick { t + stretch * (tick() - t) };
 #ifdef DEBUG_TICK
     LOGD() << "t (target) " << fractionToStdString(t) << " stretch " << fractionToStdString(stretch)
-           << " m_tick (current) " << fractionToStdString(m_tick) << " stretchedM_tick " << fractionToStdString(stretched_tick);
+           << " m_tick (current) " << fractionToStdString(m_tick) << " stretchedTick " << fractionToStdString(stretchedTick);
 #endif
     if (t < tick()) {
 #ifdef DEBUG_TICK
         LOGD() << "backup " << fractionToStdString(tick() - t);
 #endif
-        addFraction(stretched_tick - t);
+        addFraction(stretchedTick - t);
     } else if (t > tick()) {
 #ifdef DEBUG_TICK
         LOGD() << "forward " << fractionToStdString(t - tick());
 #endif
-        addFraction(t - stretched_tick);
+        addFraction(t - stretchedTick);
     }
     tick() = t;
 }
@@ -2208,10 +2208,10 @@ static int calculateDurationInDivisions(const Fraction& tick, const int division
 
 void ExportMusicXml::moveToTick(const Fraction& t, const Fraction& stretch)
 {
-    Fraction stretchedM_tick { t + stretch * (tick() - t) };
+    Fraction stretchedTick { t + stretch * (tick() - t) };
 #ifdef DEBUG_TICK
     LOGD() << "t (target) " << fractionToStdString(t) << " stretch " << fractionToStdString(stretch)
-           << " tick() (current) " << fractionToStdString(m_tick) << " stretchedM_tick " << fractionToStdString(stretchedM_tick);
+           << " tick() (current) " << fractionToStdString(m_tick) << " stretchedTick " << fractionToStdString(stretchedTick);
 #endif
     if (t < m_tick) {
 #ifdef DEBUG_TICK
@@ -2219,7 +2219,7 @@ void ExportMusicXml::moveToTick(const Fraction& t, const Fraction& stretch)
 #endif
         m_attr.doAttr(m_xml, false);
         m_xml.startElement("backup");
-        m_xml.tag("duration", calculateTimeDeltaInDivisions(stretchedM_tick, t, m_div));
+        m_xml.tag("duration", calculateTimeDeltaInDivisions(stretchedTick, t, m_div));
         m_xml.endElement();
     } else if (t > m_tick) {
 #ifdef DEBUG_TICK
@@ -2227,7 +2227,7 @@ void ExportMusicXml::moveToTick(const Fraction& t, const Fraction& stretch)
 #endif
         m_attr.doAttr(m_xml, false);
         m_xml.startElement("forward");
-        m_xml.tag("duration", calculateTimeDeltaInDivisions(t, stretchedM_tick, m_div));
+        m_xml.tag("duration", calculateTimeDeltaInDivisions(t, stretchedTick, m_div));
         m_xml.endElement();
     }
     m_tick = t;
@@ -6988,8 +6988,9 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
     track_idx_t etrack = p->endTrack();
     //LOGD("keysigTimesig m %p strack %zu etrack %zu", m, strack, etrack);
 
-    // search all staves for non-generated key signatures
-    std::map<staff_idx_t, KeySig*> keysigs;   // map staff to key signature
+    // search all staves for non-generated time and key signatures
+    std::map<staff_idx_t, KeySig*> keysigs;     // map staff to key signature
+    std::map<staff_idx_t, TimeSig*> timesigs;   // map staff to time signature
     for (Segment* seg = m->first(); seg; seg = seg->next()) {
         if (seg->tick() > m->tick()) {
             break;
@@ -7006,10 +7007,16 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
                     keysigs[st] = toKeySig(el);
                 }
             }
+
+            if (el->isTimeSig()) {
+                LOGN(" found timesig %p tick %d track %zu", el, el->tick().ticks(), el->track());
+                staff_idx_t st = (t - strack) / VOICES;
+                if (!el->generated()) {
+                    timesigs[st] = toTimeSig(el);
+                }
+            }
         }
     }
-
-    //ClefType ct = rest->staff()->clef(rest->tick());
 
     // write the key signatues
     if (!keysigs.empty()) {
@@ -7052,27 +7059,6 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
             ks->setKey(Key::C);
             keysig(ks, p->staff(0)->clef(m->tick()));
             delete ks;
-        }
-    }
-
-    // search all staves for non-generated time signatures
-    std::map<staff_idx_t, TimeSig*> timesigs;   // map staff to time signature
-    for (Segment* seg = m->first(); seg; seg = seg->next()) {
-        if (seg->tick() > m->tick()) {
-            break;
-        }
-        for (track_idx_t t = strack; t < etrack; t += VOICES) {
-            EngravingItem* el = seg->element(t);
-            if (!el) {
-                continue;
-            }
-            if (el->type() == ElementType::TIMESIG) {
-                LOGN(" found timesig %p tick %d track %zu", el, el->tick().ticks(), el->track());
-                staff_idx_t st = (t - strack) / VOICES;
-                if (!el->generated()) {
-                    timesigs[st] = toTimeSig(el);
-                }
-            }
         }
     }
 
