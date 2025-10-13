@@ -31,10 +31,13 @@
 #include "types/string.h"
 #include "types/translatablestring.h"
 
+#include "draw/fontmetrics.h"
+
 #include "engraving/dom/anchors.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/glissando.h"
+#include "engraving/dom/line.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
@@ -62,14 +65,17 @@ namespace mu::iex::finale {
 
 static const std::map<std::string, ElementType> elementByRegexTable = {
     { R"(\bped(ale?)?\b)",                               ElementType::PEDAL },
+    { R"(<sym>keyboardPedal)",                           ElementType::PEDAL },
     { R"(\b(((de)?cresc)|(dim))\.?\b)",                  ElementType::HAIRPIN },
     { R"(\b((rit(\.|ardando)?)|(rall(\.|entando)?))\b)", ElementType::GRADUAL_TEMPO_CHANGE },
     { R"(\blet ring\b)",                                 ElementType::LET_RING },
     { R"(\b(?:(?:8v)|(?:(?:15|22)m))(a|b)\b)",           ElementType::OTTAVA },
+    { R"(<sym>((ottava|quindicesima)|ventiduesima))",    ElementType::OTTAVA },
     { R"(\bw(?:\/|(?:hammy ))bar\b)",                    ElementType::WHAMMY_BAR },
     { R"(\brasg(?:ueado)?\b)",                           ElementType::RASGUEADO },
     { R"(\bp(?:\.|ick) ?s(?:\.\B|crape\b))",             ElementType::PICK_SCRAPE },
     { R"(\bp(?:\.|alm) ?m(?:\.\B|ute\b))",               ElementType::PALM_MUTE },
+    { R"(<sym>ornamentTrill)",                           ElementType::TRILL },
 };
 
 ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxInstance<musx::dom::others::SmartShapeCustomLine>& customLine)
@@ -147,6 +153,13 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
         return ElementType::TEXTLINE;
     }();
 
+    if (elementType == ElementType::HAIRPIN) {
+        if (beginText.contains(u"decresc", CaseSensitivity::CaseInsensitive)
+            || beginText.contains(u"decresc", CaseSensitivity::CaseInsensitive)) {
+            hairpinType = HairpinType::DIM_LINE;
+        }
+    }
+
     beginHookType = customLine->lineCapStartType == others::SmartShapeCustomLine::LineCapType::Hook ? HookType::HOOK_90 : HookType::NONE;
     endHookType   = customLine->lineCapEndType == others::SmartShapeCustomLine::LineCapType::Hook ? HookType::HOOK_90 : HookType::NONE;
     beginHookHeight = Spatium(doubleFromEfix(customLine->lineCapStartHookLength));
@@ -223,48 +236,6 @@ static ElementType spannerTypeFromElements(EngravingItem* startElement, Engravin
 
 void FinaleParser::importSmartShapes()
 {
-    auto tickFromTerminationSeg = [&](ElementType type, const MusxInstance<others::SmartShape>& smartShape, EngravingItem*& e, bool start) -> Fraction {
-        logger()->logInfo(String(u"Finding spanner element..."));
-        bool findExactEntry = type != ElementType::OTTAVA && type != ElementType::SLUR;
-        bool useNextCr = !start && type == ElementType::OTTAVA;
-        const MusxInstance<others::SmartShape::TerminationSeg>& termSeg = start ? smartShape->startTermSeg : smartShape->endTermSeg;
-        EntryInfoPtr entryInfoPtr = termSeg->endPoint->calcAssociatedEntry(m_currentMusxPartId, findExactEntry);
-        if (entryInfoPtr) {
-            NoteNumber nn = start ? smartShape->startNoteId : smartShape->endNoteId;
-            if (nn) {
-                e = toEngravingItem(noteFromEntryInfoAndNumber(entryInfoPtr, nn));
-            } else {
-                ChordRest* cr = chordRestFromEntryInfoPtr(entryInfoPtr);
-                if (useNextCr) {
-                    if (Segment* nextSeg = cr->nextSegmentAfterCR(SegmentType::ChordRest)) {
-                        cr = nextSeg->nextChordRest(cr->track());
-                    }
-                }
-                e = toEngravingItem(cr);
-            }
-            if (e) {
-                logger()->logInfo(String(u"Found %1 to anchor to").arg(TConv::userName(e->type()).translated()));
-                return e->tick();
-            } else {
-                logger()->logInfo(String(u"Can't anchor to note/CR!"));
-                return Fraction(-1, 1); // dbg
-            }
-        }
-        logger()->logInfo(String(u"No anchor found"));
-        staff_idx_t staffIdx = muse::value(m_inst2Staff, termSeg->endPoint->staffId, muse::nidx);
-        Fraction mTick = muse::value(m_meas2Tick, termSeg->endPoint->measId, Fraction(-1, 1));
-        Measure* measure = !mTick.negative() ? m_score->tick2measure(mTick) : nullptr;
-        if (!measure || staffIdx == muse::nidx) {
-            return Fraction(-1, 1);
-        }
-        Fraction rTick = musxFractionToFraction(termSeg->endPoint->calcGlobalPosition());
-        if (useNextCr && entryInfoPtr) {
-            rTick += musxFractionToFraction(entryInfoPtr.calcGlobalActualDuration());
-        }
-        // Layout seems to handle segment creation for us
-        return mTick + rTick; //toEngravingItem(measure->getChordRestOrTimeTickSegment(tick));
-    };
-
     /// @note Getting the entire array of smart shapes works for SCORE_PARTID, but if we ever need to do it for excerpts it could fail.
     /// This is because `getArray` currently cannot pull a mix of score and partially shared part instances. Adding the ability to do so
     /// would require significant refactoring of musx. -- RGP
@@ -280,6 +251,55 @@ void FinaleParser::importSmartShapes()
             // Unassigned shape, no need to import
             continue;
         }
+
+        bool endsOnBarline = false;
+        bool startsOnBarline = false;
+        auto tickFromTerminationSeg = [&](ElementType type, const MusxInstance<others::SmartShape>& smartShape, EngravingItem*& e, bool start) -> Fraction {
+            logger()->logInfo(String(u"Finding spanner element..."));
+            bool findExactEntry = type != ElementType::OTTAVA && type != ElementType::SLUR;
+            bool useNextCr = !start && type == ElementType::OTTAVA;
+            const MusxInstance<others::SmartShape::TerminationSeg>& termSeg = start ? smartShape->startTermSeg : smartShape->endTermSeg;
+            EntryInfoPtr entryInfoPtr = termSeg->endPoint->calcAssociatedEntry(m_currentMusxPartId, findExactEntry);
+            if (entryInfoPtr) {
+                NoteNumber nn = start ? smartShape->startNoteId : smartShape->endNoteId;
+                if (nn) {
+                    e = toEngravingItem(noteFromEntryInfoAndNumber(entryInfoPtr, nn));
+                } else {
+                    ChordRest* cr = chordRestFromEntryInfoPtr(entryInfoPtr);
+                    if (useNextCr) {
+                        if (Segment* nextSeg = cr->nextSegmentAfterCR(SegmentType::ChordRest)) {
+                            cr = nextSeg->nextChordRest(cr->track());
+                        }
+                    }
+                    e = toEngravingItem(cr);
+                }
+                if (e) {
+                    logger()->logInfo(String(u"Found %1 to anchor to").arg(TConv::userName(e->type()).translated()));
+                    return e->tick();
+                } else {
+                    logger()->logInfo(String(u"Can't anchor to note/CR!"));
+                    return Fraction(-1, 1); // dbg
+                }
+            }
+            logger()->logInfo(String(u"No anchor found"));
+            staff_idx_t staffIdx = muse::value(m_inst2Staff, termSeg->endPoint->staffId, muse::nidx);
+            Fraction mTick = muse::value(m_meas2Tick, termSeg->endPoint->measId, Fraction(-1, 1));
+            Measure* measure = !mTick.negative() ? m_score->tick2measure(mTick) : nullptr;
+            if (!measure || staffIdx == muse::nidx) {
+                return Fraction(-1, 1);
+            }
+            Fraction rTick = musxFractionToFraction(termSeg->endPoint->calcGlobalPosition());
+            if (useNextCr && entryInfoPtr) {
+                rTick += musxFractionToFraction(entryInfoPtr.calcGlobalActualDuration());
+            }
+            if (start) {
+                startsOnBarline = rTick >= measure->ticks();
+            } else {
+                endsOnBarline = rTick >= measure->ticks();
+            }
+            return mTick + rTick;
+        };
+
         ReadableCustomLine* customLine = [&]() -> ReadableCustomLine* {
             if (smartShape->lineStyleId == 0) {
                 // Shape does not use custom line
@@ -321,7 +341,6 @@ void FinaleParser::importSmartShapes()
         logger()->logInfo(String(u"Creating spanner of %1 type").arg(TConv::userName(type).translated()));
         Spanner* newSpanner = toSpanner(Factory::createItem(type, m_score->dummy()));
         newSpanner->setScore(m_score);
-        newSpanner->styleChanged();
 
         if (smartShape->entryBased) {
             if (!startElement || !endElement) {
@@ -416,12 +435,30 @@ void FinaleParser::importSmartShapes()
                 /// @todo we must remove HTML formatting here, it's laid out as plain text.
                 glissando->setText(customLine->centerShortText.empty() ? (customLine->centerLongText.empty() ? String() : customLine->centerLongText) : customLine->centerShortText);
                 glissando->setShowText(!glissando->text().empty());
+            } else if (newSpanner->isOttava()) {
+                newSpanner->setPlaySpanner(false); // Can custom ottavas have playback?
             }
         } else {
+            /// @todo line width not inheriting from style?
             if (type == ElementType::OTTAVA) {
                 toOttava(newSpanner)->setOttavaType(ottavaTypeFromShapeType(smartShape->shapeType));
+
+                // Account for odd text offset
+                muse::draw::Font f(score()->engravingFont()->family(), muse::draw::Font::Type::MusicSymbol);
+                f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * MScore::pixelRatio * newSpanner->magS());
+                muse::draw::FontMetrics fm(f);
+                const PointF textoffset(0.0, -fm.boundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))).bottom() - fm.descent()); // Assume 8va symbol for now
+                toOttava(newSpanner)->setBeginTextOffset(textoffset);
+                toOttava(newSpanner)->setContinueTextOffset(textoffset);
+                toOttava(newSpanner)->setEndTextOffset(textoffset);
             } else if (type == ElementType::HAIRPIN) {
-                toHairpin(newSpanner)->setHairpinType(hairpinTypeFromShapeType(smartShape->shapeType));
+                HairpinType ht = hairpinTypeFromShapeType(smartShape->shapeType);
+                toHairpin(newSpanner)->setHairpinType(ht);
+                // Hairpin height: A per-system setting in Finale; We just read the first or last one.
+                const auto& termSeg = ht == HairpinType::DIM_HAIRPIN ? smartShape->startTermSeg : smartShape->endTermSeg;
+                if (termSeg->ctlPtAdj->active) {
+                    setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT, absoluteSpatiumFromEvpu(termSeg->ctlPtAdj->startCtlPtY, newSpanner));
+                }
             } else if (type == ElementType::SLUR) {
                 toSlur(newSpanner)->setStyleType(slurStyleTypeFromShapeType(smartShape->shapeType));
                 /// @todo is there a way to read the calculated direction
@@ -429,44 +466,234 @@ void FinaleParser::importSmartShapes()
             } else if (type == ElementType::GLISSANDO) {
                 toGlissando(newSpanner)->setGlissandoType(glissandoTypeFromShapeType(smartShape->shapeType));
                 toGlissando(newSpanner)->setShowText(false); /// @todo Is this the correct default?
+            } else if (type == ElementType::TRILL) {
+                // Selecting trills and opening properties causes a crash
+                toTrill(newSpanner)->setTrillType(TrillType::TRILL_LINE);
             } else if (type == ElementType::TEXTLINE) {
                 TextLineBase* textLine = toTextLineBase(newSpanner);
-                textLine->setLineStyle(lineTypeFromShapeType(smartShape->shapeType));
-                /// @todo read more settings from smartshape options, set styles for more elements
+                setAndStyleProperty(textLine, Pid::LINE_STYLE, lineTypeFromShapeType(smartShape->shapeType));
+                /// @todo read more settings from smartshape options
+                /// @todo these values will need to be flipped depending on placement
                 auto [beginHook, endHook] = hookHeightsFromShapeType(smartShape->shapeType);
                 if (beginHook) {
                     textLine->setBeginHookType(HookType::HOOK_90);
-                    textLine->setBeginHookHeight(Spatium(beginHook * doubleFromEvpu(musxOptions().smartShapeOptions->hookLength)));
-                    // continue doesn't have no hook
+                    Spatium s = absoluteSpatiumFromEvpu(beginHook * musxOptions().smartShapeOptions->hookLength, textLine);
+                    setAndStyleProperty(textLine, Pid::BEGIN_HOOK_HEIGHT, s, true);
+                } else {
+                    textLine->setBeginHookType(HookType::NONE);
                 }
                 if (endHook) {
-                    textLine->setEndHookType(HookType::HOOK_90);
-                    textLine->setEndHookHeight(Spatium(endHook * doubleFromEvpu(musxOptions().smartShapeOptions->hookLength)));
+                    textLine->setBeginHookType(HookType::NONE);
+                    Spatium s = absoluteSpatiumFromEvpu(endHook * musxOptions().smartShapeOptions->hookLength, textLine);
+                    setAndStyleProperty(textLine, Pid::END_HOOK_HEIGHT, s, true);
+                } else {
+                    textLine->setBeginHookType(HookType::NONE);
                 }
+                setAndStyleProperty(textLine, Pid::BEGIN_HOOK_TYPE, PropertyValue());
+                setAndStyleProperty(textLine, Pid::END_HOOK_TYPE, PropertyValue());
             }
         }
-
-        /// Not needed? segments don't exist yet
-        // for (auto ss : newSpanner->spannerSegments()) {
-            // ss->setTrack(newSpanner->track());
-        // }
-
-        // if (isMeasureAnchor) {
-            // Measure* endMeasure = tick2measureMM(tick2);
-            // if (endMeasure->tick() != tick2) {
-                // tick2 = endMeasure->endTick();
-            // }
-        // }
-        // if (newSpanner->hasVoiceAssignmentProperties()) {
-            // newSpanner->setInitialTrackAndVoiceAssignment(newSpanner->track(), false);
-        // }
 
         if (newSpanner->anchor() == Spanner::Anchor::NOTE) {
             toNote(startElement)->add(newSpanner);
             logger()->logInfo(String(u"Added spanner of %1 type to note at tick %2, end: %3").arg(TConv::userName(type).translated(), startTick.toString(), endTick.toString()));
         } else {
-            m_score->addSpanner(newSpanner);
+            m_score->addElement(newSpanner);
             logger()->logInfo(String(u"Added spanner of %1 type at tick %2, end: %3").arg(TConv::userName(type).translated(), startTick.toString(), endTick.toString()));
+        }
+
+        if (!newSpanner->isSLine()) {
+            continue;
+        }
+
+        // Calculate position in score
+
+        // Hack: Finale distinguishes between barline and CR anchoring, account for that here
+        Measure* startMeasure = m_score->tick2measureMM(newSpanner->tick());
+        const bool startsOnSystemStart = startMeasure->isFirstInSystem() && startMeasure->prevMeasure();
+        if (startsOnBarline && startsOnSystemStart) {
+            newSpanner->setTick(newSpanner->tick() - Fraction::eps());
+        }
+        Measure* endMeasure = m_score->tick2measureMM(newSpanner->tick2());
+        const bool endsOnSystemEnd = !endMeasure || endMeasure->isFirstInSystem();
+        if (!endsOnBarline && endsOnSystemEnd) {
+            newSpanner->setTick2(newSpanner->tick2() + Fraction::eps());
+        }
+
+        m_score->renderer()->layoutItem(newSpanner);
+        logger()->logInfo(String(u"Repositioning %1 spanner segments...").arg(newSpanner->spannerSegments().size()));
+
+        // Determine placement by spanner position
+        setAndStyleProperty(newSpanner, Pid::PLACEMENT, PlacementV::ABOVE, true);
+        const bool diagonal = newSpanner->isSLine() && ((SLine*)newSpanner)->diagonal();
+        bool canPlaceBelow = !diagonal;
+        bool isEntirelyInStaff = !diagonal;
+        // Current layout code only uses staff height at start tick
+        const double staffHeight = newSpanner->staff()->staffHeight(newSpanner->tick());
+
+        for (SpannerSegment* ss : newSpanner->spannerSegments()) {
+            ss->setAutoplace(false);
+
+            auto positionSegmentFromEndPoints = [&](std::shared_ptr<smartshape::EndPointAdjustment> leftPoint, std::shared_ptr<smartshape::EndPointAdjustment> rightPoint) {
+                if (leftPoint->active) {
+                    ss->setOffset(evpuToPointF(leftPoint->horzOffset, -leftPoint->vertOffset) * SPATIUM20);
+                    if (leftPoint->contextDir == smartshape::DirectionType::Under) {
+                        ss->ryoffset() += staffHeight;
+                    }
+                }
+                if (rightPoint->active) {
+                    ss->setUserOff2(evpuToPointF(rightPoint->horzOffset, -rightPoint->vertOffset) * SPATIUM20);
+                    // For non-diagonal line segments, MS resets userOff2's Y component.
+                    // If the left point doesn't set the value, get it from the right point instead.
+                    // Points can be active but still not specify a value.
+                    if (leftPoint->horzOffset == 0 || (!leftPoint->active && !diagonal)) {
+                        ss->ryoffset() = ss->userOff2().y();
+                    }
+                }
+            };
+
+            if (ss->isSingleType()) {
+                positionSegmentFromEndPoints(smartShape->startTermSeg->endPointAdj, smartShape->endTermSeg->endPointAdj);
+            } else if (ss->isBeginType()) {
+                positionSegmentFromEndPoints(smartShape->startTermSeg->endPointAdj, smartShape->startTermSeg->breakAdj);
+            } else if (ss->isEndType()) {
+                positionSegmentFromEndPoints(smartShape->endTermSeg->breakAdj, smartShape->endTermSeg->endPointAdj);
+            } else if (ss->isMiddleType()) {
+                MeasCmper measId = muse::value(m_tick2Meas, ss->system()->firstMeasure()->tick(), MeasCmper());
+                if (auto measure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, measId)) {
+                    if (!measure->hasSmartShape) {
+                        continue;
+                    }
+                    auto assigns = m_doc->getOthers()->getArray<others::SmartShapeMeasureAssign>(m_currentMusxPartId, measId);
+                    for (const auto& assign : assigns) {
+                        if (assign->shapeNum != smartShape->getCmper()) {
+                            continue;
+                        }
+                        const auto& centerShape = m_doc->getDetails()->get<details::CenterShape>(m_currentMusxPartId, assign->shapeNum, assign->centerShapeNum);
+                        positionSegmentFromEndPoints(centerShape->startBreakAdj, centerShape->endBreakAdj);
+                        break;
+                    }
+                }
+            }
+
+            // Adjust start pos
+            if (ss->isSingleBeginType()) {
+                Segment* startSeg = ss->spanner()->startSegment();
+                if (startsOnBarline && startsOnSystemStart) {
+                    Segment* bls = startSeg->next(SegmentType::EndBarLine);
+                    if (bls && bls->tick() == ss->spanner()->tick() + Fraction::eps()) {
+                        startSeg = bls;
+                    }
+                } else if (startsOnBarline && !startsOnSystemStart) {
+                    Segment* bls = startSeg->prev1(SegmentType::EndBarLine);
+                    if (bls && bls->tick() == ss->spanner()->tick()) {
+                        startSeg = bls;
+                    }
+                }
+                System* s;
+                ss->rxoffset() += startSeg->x() + startSeg->measure()->x() - ((SLine*)newSpanner)->linePos(Grip::START, &s).x();
+            } else {
+                Segment* firstCRseg = ss->system()->firstMeasure()->first(SegmentType::ChordRest);
+                for (Segment* s = firstCRseg->prevActive(); s; s = s->prev(SegmentType::HeaderClef | SegmentType::KeySig | SegmentType::TimeSigType)) {
+                    if (!s->isActive() || s->allElementsInvisible() || s->hasTimeSigAboveStaves()) {
+                        continue;
+                    }
+                    ss->rxoffset() += firstCRseg->x() + firstCRseg->measure()->x() - ss->system()->firstNoteRestSegmentX(true);
+                    if (s->isHeaderClefType()) {
+                        ss->rxoffset() -= doubleFromEvpu(musxOptions().clefOptions->clefBackSepar) * SPATIUM20;
+                    } else if (s->isKeySigType()) {
+                        ss->rxoffset() -= doubleFromEvpu(musxOptions().keyOptions->keyBack) * SPATIUM20;
+                    } else if (s->isTimeSigType()) {
+                        ss->rxoffset() -= doubleFromEvpu(currentMusxPartId() ? musxOptions().timeOptions->timeBackParts
+                                                 : musxOptions().timeOptions->timeBack) * SPATIUM20;
+                    }
+                    break;
+                }
+            }
+
+            // In MuseScore, userOff2 is relative/added to offset
+            ss->setUserOff2(ss->userOff2() - ss->offset());
+
+            // Adjust end pos
+            if (ss->isSingleEndType()) {
+                Segment* endSeg = ss->spanner()->endSegment();
+                if (!endsOnBarline && endsOnSystemEnd) {
+                    Segment* systemStartSeg = endSeg->prev(SegmentType::ChordRest);
+                    if (systemStartSeg && systemStartSeg->tick() + Fraction::eps() == endSeg->tick()) {
+                        endSeg = systemStartSeg;
+                    }
+                } else if (endsOnBarline) {
+                    Segment* bls = endSeg->prev1(SegmentType::EndBarLine);
+                    if (bls && bls->tick() == ss->spanner()->tick2()) {
+                        endSeg = bls;
+                    }
+                } else if (type == ElementType::OTTAVA) {
+                    if (ss->spanner()->endElement() && ss->spanner()->endElement()->isChordRest()) {
+                        endSeg = toChordRest(ss->spanner()->endElement())->segment();
+                    }
+                }
+                System* s;
+                ss->rUserXoffset2() += endSeg->x() + endSeg->measure()->x() - ((SLine*)newSpanner)->linePos(Grip::END, &s).x();
+            } else {
+                ss->rUserXoffset2() += ss->style().styleMM(Sid::lineEndToBarlineDistance);
+            }
+
+            // Adjust ottava positioning
+            if (type == ElementType::OTTAVA) {
+                ss->ryoffset() -= .75 * SPATIUM20;
+            }
+
+            canPlaceBelow = canPlaceBelow && ss->offset().y() > 0;
+            isEntirelyInStaff = isEntirelyInStaff && canPlaceBelow && (ss->offset().y() < staffHeight);
+            setAndStyleProperty(ss, Pid::OFFSET, PropertyValue(), true);
+        }
+
+        const bool shouldPlaceBelow = canPlaceBelow && (!isEntirelyInStaff || newSpanner->propertyDefault(Pid::PLACEMENT) == PlacementV::BELOW);
+        if (customLine && type == ElementType::OTTAVA) {
+            int below = 0;
+            const std::regex belowRegex(R"((?:v|m)b)", std::regex_constants::icase);
+            const std::regex aboveRegex(R"((?:v|m)(?:a|e))", std::regex_constants::icase);
+            if (std::regex_search(customLine->beginText.toStdString(), belowRegex)) {
+                below = 1;
+            } else if (!std::regex_search(customLine->beginText.toStdString(), aboveRegex)) {
+                below = shouldPlaceBelow;
+            }
+            if (customLine->beginText.contains(u"15") || customLine->beginText.contains(u"16")) {
+                toOttava(newSpanner)->setOttavaType(OttavaType(int(OttavaType::OTTAVA_15MA) + below));
+            } else if (customLine->beginText.contains(u"22")) {
+                toOttava(newSpanner)->setOttavaType(OttavaType(int(OttavaType::OTTAVA_22MA) + below));
+            } else {
+                toOttava(newSpanner)->setOttavaType(OttavaType(int(OttavaType::OTTAVA_8VA) + below));
+            }
+        }
+
+        // Apply placement changes after setting ottava type, to inherit style if possible
+        if (shouldPlaceBelow) {
+            setAndStyleProperty(newSpanner, Pid::PLACEMENT, PlacementV::BELOW, true);
+            for (SpannerSegment* ss : newSpanner->spannerSegments()) {
+                ss->ryoffset() -= staffHeight;
+                setAndStyleProperty(ss, Pid::OFFSET, PropertyValue(), true);
+            }
+            // MuseScore inverts hook lengths on elements placed below the staff, so invert for custom set hook heights
+            if (!customLine && type == ElementType::TEXTLINE) {
+                TextLineBase* textLine = toTextLineBase(newSpanner);
+                setAndStyleProperty(textLine, Pid::BEGIN_HOOK_HEIGHT, -textLine->beginHookHeight(), true);
+                setAndStyleProperty(textLine, Pid::END_HOOK_HEIGHT, -textLine->endHookHeight(), true);
+            }
+        }
+
+        /// @todo fix hairpin placement
+        if (type == ElementType::HAIRPIN) {
+            // todo: declare hairpin placement in hairpin elementStyle?
+            newSpanner->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+            SpannerSegment* ss = toHairpin(newSpanner)->hairpinType() == HairpinType::DIM_HAIRPIN ? newSpanner->frontSegment() : newSpanner->backSegment();
+            if (ss->ipos2().x() > (doubleFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth) * SPATIUM20)) {
+                setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
+                                    absoluteSpatiumFromEvpu(musxOptions().smartShapeOptions->crescHeight, newSpanner), true);
+            } else {
+                setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
+                                    absoluteSpatiumFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth, newSpanner), true);
+            }
         }
     }
     logger()->logInfo(String(u"Import smart shapes: Finished importing smart shapes"));

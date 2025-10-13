@@ -465,7 +465,6 @@ void FinaleParser::importTextExpressions()
         item->setTrack(curTrackIdx);
         item->setVisible(!expressionAssignment->hidden);
         item->setXmlText(expression->xmlText);
-        item->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         AlignH hAlign = toAlignH(expressionDef->horzExprJustification);
         item->setFrameType(expression->frameSettings.frameType);
         if (item->frameType() != FrameType::NO_FRAME) {
@@ -525,13 +524,13 @@ void FinaleParser::importTextExpressions()
         }
 
         // Calculate position in score
-        PointF p;
-        item->setOffset(PointF());
         item->setAutoplace(false);
+        setAndStyleProperty(item, Pid::OFFSET, PointF());
         m_score->renderer()->layoutItem(item);
         // if (measure->system()) {
             // m_score->doLayoutRange(measure->system()->first()->tick(), measure->system()->last()->endTick());
         // }
+        PointF p;
         switch (expressionDef->horzMeasExprAlign) {
             case others::HorizontalMeasExprAlign::LeftBarline: {
                 if (measure == measure->system()->first()) {
@@ -616,6 +615,7 @@ void FinaleParser::importTextExpressions()
                 break;
             }
             case others::HorizontalMeasExprAlign::StartTimeSig: {
+                // Observed: Elements placed .45sp too far left when there is a custom offset
                 Segment* seg = measure->findSegmentR(SegmentType::TimeSig, rTick);
                 p.rx() = seg ? seg->pageX() : s->pageX();
                 break;
@@ -800,8 +800,7 @@ void FinaleParser::importTextExpressions()
                 }
                 text->setVisible(!measureTextAssign->hidden);
                 text->setAutoplace(false);
-                text->setOffset(evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp) * SPATIUM20);
-                text->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
+                setAndStyleProperty(text, Pid::OFFSET, (evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp) * SPATIUM20), true);
                 s->add(text);
             }
         }
