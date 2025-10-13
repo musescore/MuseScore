@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -80,7 +80,7 @@ static const TranslatableString X_TAB = TranslatableString("action", "%1 (TAB)")
 //! then you should set the shortcut context accordingly, not the action context.
 //! Because actions can be dispatched not only shortcuts, but another way, ex by click Button, Menu and etc
 
-const UiActionList NotationUiActions::m_actions = {
+const UiActionList NotationUiActions::s_actions = {
     UiAction("action://notation/copy",
              "action://copy",
              mu::context::UiCtxProjectOpened,
@@ -104,22 +104,6 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Past&e"),
              TranslatableString("action", "Paste"),
              IconCode::Code::PASTE
-             ),
-    UiAction("action://notation/undo",
-             "action://undo",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_DISABLED,
-             TranslatableString("action", "Undo"),
-             TranslatableString("action", "Undo"),
-             IconCode::Code::UNDO
-             ),
-    UiAction("action://notation/redo",
-             "action://redo",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_DISABLED,
-             TranslatableString("action", "Redo"),
-             TranslatableString("action", "Redo"),
-             IconCode::Code::REDO
              ),
     UiAction("action://notation/delete",
              "action://delete",
@@ -2581,7 +2565,7 @@ const UiActionList NotationUiActions::m_actions = {
              )
 };
 
-const UiActionList NotationUiActions::m_scoreConfigActions = {
+const UiActionList NotationUiActions::s_scoreConfigActions = {
     UiAction(SHOW_INVISIBLE_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -2626,7 +2610,26 @@ const UiActionList NotationUiActions::m_scoreConfigActions = {
              )
 };
 
-const UiActionList NotationUiActions::m_engravingDebuggingActions = {
+const UiActionList NotationUiActions::s_undoRedoActions = {
+    UiAction("action://notation/undo",
+             "action://undo",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_DISABLED,
+             TranslatableString("action", "Undo"),
+             TranslatableString("action", "Undo"),
+             IconCode::Code::UNDO
+             ),
+    UiAction("action://notation/redo",
+             "action://redo",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_DISABLED,
+             TranslatableString("action", "Redo"),
+             TranslatableString("action", "Redo"),
+             IconCode::Code::REDO
+             )
+};
+
+const UiActionList NotationUiActions::s_engravingDebuggingActions = {
     UiAction("show-element-bounding-rects",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -2719,14 +2722,41 @@ void NotationUiActions::init()
 
     m_controller->currentNotationChanged().onNotify(this, [this]() {
         ActionCodeList actions;
-        for (const UiAction& action : m_scoreConfigActions) {
+        actions.reserve(s_scoreConfigActions.size());
+        for (const UiAction& action : s_scoreConfigActions) {
             actions.push_back(action.code);
         }
         m_actionCheckedChanged.send(actions);
 
-        if (m_controller->currentNotationInteraction()) {
-            m_controller->currentNotationInteraction()->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
-                static const std::unordered_map<ScoreConfigType, std::string> configActions = {
+        const INotationInteractionPtr interaction = m_controller->currentNotationInteraction();
+
+        if (interaction) {
+            interaction->selectionChanged().onNotify(this, [this]() {
+                updateActionsEnabled(s_actions);
+            });
+
+            interaction->textEditingStarted().onNotify(this, [this]() {
+                updateActionsEnabled(s_actions);
+            });
+
+            interaction->textEditingEnded().onReceive(this, [this](TextBase*) {
+                updateActionsEnabled(s_actions);
+            });
+
+            interaction->noteInput()->noteInputStarted().onReceive(this, [this](bool) {
+                updateActionsEnabled(s_actions);
+            });
+
+            interaction->noteInput()->noteInputEnded().onNotify(this, [this]() {
+                updateActionsEnabled(s_actions);
+            });
+
+            m_controller->currentNotationUndoStack()->stackChanged().onNotify(this, [this]() {
+                updateActionsEnabled(s_undoRedoActions);
+            });
+
+            interaction->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
+                static const std::unordered_map<ScoreConfigType, std::string> configActions {
                     { ScoreConfigType::ShowInvisibleElements, SHOW_INVISIBLE_CODE },
                     { ScoreConfigType::ShowUnprintableElements, SHOW_UNPRINTABLE_CODE },
                     { ScoreConfigType::ShowFrames, SHOW_FRAMES_CODE },
@@ -2747,36 +2777,66 @@ void NotationUiActions::init()
 
     engravingConfiguration()->debuggingOptionsChanged().onNotify(this, [this]() {
         ActionCodeList actions;
-        for (const UiAction& action : m_engravingDebuggingActions) {
+        actions.reserve(s_engravingDebuggingActions.size());
+        for (const UiAction& action : s_engravingDebuggingActions) {
             actions.push_back(action.code);
         }
         m_actionCheckedChanged.send(actions);
     });
+
+    m_actionEnabledMap.reserve(s_actions.size());
+    for (const UiAction& action : s_actions) {
+        m_actionEnabledMap.insert({ action.code, false });
+    }
 }
 
 const UiActionList& NotationUiActions::actionsList() const
 {
     static UiActionList alist;
     if (alist.empty()) {
-        alist.insert(alist.end(), m_actions.begin(), m_actions.end());
-        alist.insert(alist.end(), m_scoreConfigActions.begin(), m_scoreConfigActions.end());
-        alist.insert(alist.end(), m_engravingDebuggingActions.begin(), m_engravingDebuggingActions.end());
+        alist.insert(alist.end(), s_actions.begin(), s_actions.end());
+        alist.insert(alist.end(), s_undoRedoActions.begin(), s_undoRedoActions.end());
+        alist.insert(alist.end(), s_scoreConfigActions.begin(), s_scoreConfigActions.end());
+        alist.insert(alist.end(), s_engravingDebuggingActions.begin(), s_engravingDebuggingActions.end());
     }
     return alist;
 }
 
 bool NotationUiActions::actionEnabled(const UiAction& act) const
 {
-    if (!m_controller->canReceiveAction(act.code)) {
-        return false;
+    return m_controller->canReceiveAction(act.code);
+}
+
+void NotationUiActions::updateActionsEnabled(const UiActionList& actions)
+{
+    TRACEFUNC;
+
+    ActionCodeList codes;
+
+    for (const UiAction& action : actions) {
+        const bool enabled = m_controller->canReceiveAction(action.code);
+
+        auto it = m_actionEnabledMap.find(action.code);
+        if (it == m_actionEnabledMap.end()) {
+            m_actionEnabledMap.insert({ action.code, enabled });
+            codes.push_back(action.code);
+            continue;
+        }
+
+        if (it->second != enabled) {
+            it->second = enabled;
+            codes.push_back(action.code);
+        }
     }
 
-    return true;
+    if (!codes.empty()) {
+        m_actionEnabledChanged.send(codes);
+    }
 }
 
 bool NotationUiActions::isScoreConfigAction(const ActionCode& code) const
 {
-    for (const UiAction& a : m_scoreConfigActions) {
+    for (const UiAction& a : s_scoreConfigActions) {
         if (a.code == code) {
             return true;
         }

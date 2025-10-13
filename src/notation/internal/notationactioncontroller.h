@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONACTIONCONTROLLER_H
-#define MU_NOTATION_NOTATIONACTIONCONTROLLER_H
+#pragma once
 
 #include "async/asyncable.h"
 #include "actions/actionable.h"
@@ -63,6 +62,7 @@ public:
     muse::async::Notification currentNotationNoteInputChanged() const;
 
     INotationInteractionPtr currentNotationInteraction() const;
+    INotationUndoStackPtr currentNotationUndoStack() const;
 
     INotationStylePtr currentNotationStyle() const;
     muse::async::Notification currentNotationStyleChanged() const;
@@ -75,7 +75,6 @@ private:
     IMasterNotationPtr currentMasterNotation() const;
     INotationElementsPtr currentNotationElements() const;
     INotationSelectionPtr currentNotationSelection() const;
-    INotationUndoStackPtr currentNotationUndoStack() const;
     INotationMidiInputPtr currentNotationMidiInput() const;
 
     mu::engraving::Score* currentNotationScore() const;
@@ -276,5 +275,3 @@ private:
     std::map<muse::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONACTIONCONTROLLER_H

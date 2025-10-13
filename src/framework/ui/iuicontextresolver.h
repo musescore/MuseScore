@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_IUICONTEXTRESOLVER_H
-#define MUSE_UI_IUICONTEXTRESOLVER_H
+#pragma once
 
 #include <memory>
 
@@ -36,7 +35,7 @@ class IUiContextResolver : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUiContextResolver() = default;
 
-    virtual ui::UiContext currentUiContext() const = 0;
+    virtual const ui::UiContext& currentUiContext() const = 0;
     virtual async::Notification currentUiContextChanged() const = 0;
 
     virtual bool match(const ui::UiContext& currentCtx, const ui::UiContext& actCtx) const = 0;
@@ -47,5 +46,3 @@ public:
 
 using IUiContextResolverPtr = std::shared_ptr<IUiContextResolver>;
 }
-
-#endif // MUSE_UI_IUICONTEXTRESOLVER_H
