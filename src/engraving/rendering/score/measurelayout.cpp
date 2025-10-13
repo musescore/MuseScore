@@ -83,23 +83,16 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
     assert(item->explicitParent());
     assert(ctx.dom().nstaves() == item->mstaves().size());
 
-    double _spatium = item->spatium();
-
     for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        const MStaff* ms = item->mstaves().at(staffIdx);
-        Spacer* sp = ms->vspacerDown();
-        if (sp) {
+        if (Spacer* sp = item->vspacerDown(staffIdx)) {
             TLayout::layoutSpacer(sp, ctx);
-            const Staff* staff = ctx.dom().staff(staffIdx);
-            int n = staff->lines(item->tick()) - 1;
-            double y = item->system()->staff(staffIdx)->y();
-            sp->setPos(_spatium * .5, y + n * _spatium * staff->staffMag(item->tick()));
+            double y = item->system()->staff(staffIdx)->y() + sp->staffOffsetY();
+            sp->setPos(item->spatium() * .5, y + sp->staff()->staffHeight(item->tick()));
         }
-        sp = ms->vspacerUp();
-        if (sp) {
+        if (Spacer* sp = item->vspacerUp(staffIdx)) {
             TLayout::layoutSpacer(sp, ctx);
-            double y = item->system()->staff(staffIdx)->y();
-            sp->setPos(_spatium * .5, y - sp->absoluteGap());
+            double y = item->system()->staff(staffIdx)->y() + sp->staffOffsetY();
+            sp->setPos(item->spatium() * .5, y - sp->absoluteGap());
         }
     }
 
@@ -131,7 +124,7 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
     const size_t tracks = ctx.dom().ntracks();
     static const SegmentType st { SegmentType::ChordRest };
     for (track_idx_t track = 0; track < tracks; ++track) {
-        if (!ctx.dom().staff(track / VOICES)->show()) {
+        if (!ctx.dom().staff(track2staff(track))->show()) {
             track += VOICES - 1;
             continue;
         }
