@@ -679,6 +679,9 @@ TEST_F(MusicXml_Tests, graceFermata) {
 TEST_F(MusicXml_Tests, groupTime) {
     musicXmlIoTest("testGroupTime");
 }
+TEST_F(MusicXml_Tests, groupTime2) {
+    musicXmlIoTest("testGroupTime2");
+}
 TEST_F(MusicXml_Tests, guitarBends) {
     musicXmlMscxExportTestRef("testGuitarBends");
 }

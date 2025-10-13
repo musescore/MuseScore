@@ -2238,7 +2238,7 @@ void ExportMusicXml::timesig(const TimeSig* tsig)
     } else if (!ns.empty() && ds.empty()) {
         attrs = { { "symbol", "single-number" } };
     }
-    if (!tsig->visible()) {
+    if (!tsig->visible() || !tsig->showOnThisStaff()) {
         attrs.emplace_back(std::make_pair("print-object", "no"));
     }
 
