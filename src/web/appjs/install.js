@@ -9,7 +9,7 @@ console.log("__dirname:", __dirname);
 const HERE=__dirname
 const ROOT=HERE+"/../.."
 const OUTPUT_DIR = args.length > 0 ? args[0] : "./out"
-const MUSE_MODULE_AUDIO_WORKER = args.length > 1 ? args[1] : "OFF"
+const MUSE_MODULE_AUDIO_WORKER = "OFF"
 
 function copyFile(src, dst) {
     try {

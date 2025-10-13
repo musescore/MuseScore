@@ -428,7 +428,7 @@ elseif(OS_IS_WASM)
     add_custom_command(
         TARGET MuseScoreStudio
         POST_BUILD
-        COMMAND node ${PROJECT_SOURCE_DIR}/src/web/appjs/install.js ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${MUSE_MODULE_AUDIO_WORKER_ENABLED}
+        COMMAND node ${PROJECT_SOURCE_DIR}/src/web/appjs/install.js ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Install js api..."
     )
