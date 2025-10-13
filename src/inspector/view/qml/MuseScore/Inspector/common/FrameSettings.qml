@@ -54,9 +54,9 @@ Column {
         navigationRowStart: root.navigationRowStart
 
         model: [
-            { text: qsTrc("inspector", "None"), value: TextTypes.FRAME_TYPE_NONE, titleRole: qsTrc("inspector", "None") },
-            { iconCode: IconCode.FRAME_SQUARE, value: TextTypes.FRAME_TYPE_SQUARE, titleRole: qsTrc("inspector", "Rectangle") },
-            { iconCode: IconCode.FRAME_CIRCLE, value: TextTypes.FRAME_TYPE_CIRCLE, titleRole: qsTrc("inspector", "Circle") }
+            { text: qsTrc("inspector", "None", "text frame type"), value: TextTypes.FRAME_TYPE_NONE, titleRole: qsTrc("inspector", "None", "text frame type") },
+            { iconCode: IconCode.FRAME_SQUARE, value: TextTypes.FRAME_TYPE_SQUARE, titleRole: qsTrc("inspector", "Rectangle", "text frame type") },
+            { iconCode: IconCode.FRAME_CIRCLE, value: TextTypes.FRAME_TYPE_CIRCLE, titleRole: qsTrc("inspector", "Circle", "text frame type") }
         ]
     }
 

@@ -93,9 +93,9 @@ FocusableItem {
                     width: parent.width
 
                     model: [
-                        { text: qsTrc("inspector", "None"), value: Beam.FEATHERING_NONE, title: qsTrc("inspector", "None") },
-                        { iconCode: IconCode.BEAM_FEATHERED_DECELERATE, value: Beam.FEATHERED_DECELERATE, title: qsTrc("inspector", "Decelerate") },
-                        { iconCode: IconCode.BEAM_FEATHERED_ACCELERATE, value: Beam.FEATHERED_ACCELERATE, title: qsTrc("inspector", "Accelerate") }
+                        { text: qsTrc("inspector", "None", "beam feathering type"), value: Beam.FEATHERING_NONE, title: qsTrc("inspector", "None", "beam feathering type") },
+                        { iconCode: IconCode.BEAM_FEATHERED_DECELERATE, value: Beam.FEATHERED_DECELERATE, title: qsTrc("inspector", "Decelerate", "beam feathering type") },
+                        { iconCode: IconCode.BEAM_FEATHERED_ACCELERATE, value: Beam.FEATHERED_ACCELERATE, title: qsTrc("inspector", "Accelerate", "beam feathering type") }
                     ]
 
                     delegate: FlatRadioButton {
