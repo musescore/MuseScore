@@ -832,18 +832,20 @@ static String slurTieBezier(const SlurTie* st, const bool start)
 
     String attributeString;
     const int spatium = st->spatium();
-    if (start) {
-        const SlurTieSegment* front = toSlurTieSegment(st->frontSegment());
-        const PointF startP = front->ups(Grip::START).pos();
-        const PointF bezierP = front->ups(Grip::BEZIER1).pos();
-        attributeString += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - startP.x()) / spatium);
-        attributeString += String(u" bezier-y=\"%1\"").arg(-10 * (bezierP.y() - startP.y()) / spatium);
-    } else {
-        const SlurTieSegment* back = toSlurTieSegment(st->backSegment());
-        const PointF endP = back->ups(Grip::END).pos();
-        const PointF bezierP = back->ups(Grip::BEZIER2).pos();
-        attributeString += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - endP.x()) / spatium);
-        attributeString += String(u" bezier-y=\"%1\"").arg(-10 * (bezierP.y() - endP.y()) / spatium);
+    if (!st->spannerSegments().empty()) {
+        if (start) {
+            const SlurTieSegment* front = toSlurTieSegment(st->frontSegment());
+            const PointF startP = front->ups(Grip::START).pos();
+            const PointF bezierP = front->ups(Grip::BEZIER1).pos();
+            attributeString += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - startP.x()) / spatium);
+            attributeString += String(u" bezier-y=\"%1\"").arg(-10 * (bezierP.y() - startP.y()) / spatium);
+        } else {
+            const SlurTieSegment* back = toSlurTieSegment(st->backSegment());
+            const PointF endP = back->ups(Grip::END).pos();
+            const PointF bezierP = back->ups(Grip::BEZIER2).pos();
+            attributeString += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - endP.x()) / spatium);
+            attributeString += String(u" bezier-y=\"%1\"").arg(-10 * (bezierP.y() - endP.y()) / spatium);
+        }
     }
     return attributeString;
 }
@@ -936,9 +938,11 @@ void SlurHandler::doSlurs(const ChordRest* chordRest, Notations& notations, XmlW
             if (sp->generated() || !sp->isSlur()) {
                 continue;
             }
-            if (sp->isHammerOnPullOff()) {
+            if (sp->isHammerOnPullOff() && !sp->spannerSegments().empty()) {
                 const HammerOnPullOffSegment* hopoSeg = static_cast<const HammerOnPullOffSegment*>(sp->spannerSegments().front());
-                tagName = hopoSeg->hopoText().front()->isHammerOn() ? u"hammer-on" : u"pull-off";
+                if (!hopoSeg->hopoText().empty()) {
+                    tagName = hopoSeg->hopoText().front()->isHammerOn() ? u"hammer-on" : u"pull-off";
+                }
             }
             if (chordRest == sp->startElement() || chordRest == sp->endElement()) {
                 const Slur* s = static_cast<const Slur*>(sp);
