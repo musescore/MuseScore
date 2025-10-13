@@ -316,6 +316,20 @@ static bool barlineWithPlayText(const QList<mu::engraving::EngravingItem*>& sele
     return false;
 }
 
+static bool textLineBaseSegment(const QList<mu::engraving::EngravingItem*>& selectedElementList)
+{
+    if (selectedElementList.empty()) {
+        return false;
+    }
+
+    for (const EngravingItem* item : selectedElementList) {
+        if (item->isTextLineBaseSegment()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
                                                                           const QList<mu::engraving::EngravingItem*>& selectedElementList)
 {
@@ -330,6 +344,10 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
         // Don't show the "Text" inspector panel for "pure" dynamics (i.e. without custom text)
         if ((TEXT_ELEMENT_TYPES.contains(key.type) && !isPureDynamics(selectedElementList)) || barlineWithPlayText(selectedElementList)) {
             types << InspectorSectionType::SECTION_TEXT;
+        }
+
+        if (textLineBaseSegment(selectedElementList)) {
+            types << InspectorSectionType::SECTION_TEXT_LINES;
         }
 
         if (key.type != mu::engraving::ElementType::INSTRUMENT_NAME) {

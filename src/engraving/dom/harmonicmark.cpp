@@ -23,8 +23,8 @@
 #include "harmonicmark.h"
 
 #include "score.h"
-#include "stafftype.h"
 #include "system.h"
+#include "text.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -57,6 +57,8 @@ static const ElementStyle harmonicMarkStyle {
 HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp, System* parent)
     : TextLineBaseSegment(ElementType::HARMONIC_MARK_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
+    m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
+    m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
 //---------------------------------------------------------
@@ -141,6 +143,9 @@ PropertyValue HarmonicMark::propertyDefault(Pid propertyId) const
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
         return TextPlace::AUTO;
+
+    case Pid::TEXT_STYLE:
+        return TextStyleType::LET_RING;
 
     default:
         return TextLineBase::propertyDefault(propertyId);

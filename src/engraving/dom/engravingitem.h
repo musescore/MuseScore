@@ -434,7 +434,6 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
     PropertyValue propertyDefault(Pid) const override;
-    virtual EngravingItem* propertyDelegate(Pid) { return 0; }     // return Spanner for SpannerSegment for some properties
 
     bool custom(Pid) const;
     virtual bool isUserModified() const;

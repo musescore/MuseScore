@@ -379,12 +379,14 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
     const TextFragment* tf = ldata->textBlock(static_cast<int>(startRow)).fragment(static_cast<int>(selectionStartCol));
     CharFormat resultFormat = tf ? tf->format : CharFormat();
 
+    bool allBlocksEmpty = true;
     for (size_t row = startRow; row <= endRow; ++row) {
         const TextBlock& block = ldata->blocks.at(row);
 
         if (block.fragments().empty()) {
             continue;
         }
+        allBlocksEmpty = false;
 
         const size_t startColumn = (row == startRow) ? selectionStartCol : 0;
         const size_t endColumn = (row == endRow && hasSelection()) ? selectionEndCol : block.columns();
@@ -429,7 +431,17 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
         }
     }
 
-    return resultFormat;
+    if (!allBlocksEmpty) {
+        return resultFormat;
+    }
+
+    CharFormat defaultFormat;
+    defaultFormat.setStyle(m_text->propertyDefault(Pid::FONT_STYLE).value<FontStyle>());
+    defaultFormat.setFontFamily(m_text->propertyDefault(Pid::FONT_FACE).value<String>());
+    defaultFormat.setFontSize(m_text->propertyDefault(Pid::FONT_SIZE).toDouble());
+    defaultFormat.setValign(VerticalAlignment(m_text->propertyDefault(Pid::TEXT_SCRIPT_ALIGN).toInt()));
+
+    return defaultFormat;
 }
 
 //---------------------------------------------------------
@@ -3266,9 +3278,29 @@ void TextBase::initTextStyleType(TextStyleType tid, bool preserveDifferent)
 
 void TextBase::initTextStyleType(TextStyleType tid)
 {
+    auto getTextPID = [&](Pid p) -> Pid {
+        static const std::vector<std::pair<Pid, Pid> > TEXT_LINE_PID_MAP = { { Pid::FONT_FACE, Pid::BEGIN_FONT_FACE },
+            { Pid::FONT_SIZE, Pid::BEGIN_FONT_SIZE },
+            { Pid::FONT_STYLE, Pid::BEGIN_FONT_STYLE },
+            { Pid::ALIGN, Pid::BEGIN_TEXT_ALIGN },
+        };
+
+        const bool isTextLine = parent()->isTextLineBaseSegment();
+        for (const auto& pidPair : TEXT_LINE_PID_MAP) {
+            const Pid textPid = pidPair.first;
+            const Pid textLinePid = pidPair.second;
+
+            if (p == textLinePid || p == textPid) {
+                return isTextLine ? textLinePid : textPid;
+            }
+        }
+
+        return p;
+    };
+
     setTextStyleType(tid);
     for (const auto& p : *textStyle(tid)) {
-        setProperty(p.pid, styleValue(p.pid, p.sid));
+        setProperty(getTextPID(p.pid), styleValue(p.pid, p.sid));
     }
 
     resetProperty(Pid::MUSIC_SYMBOL_SIZE);

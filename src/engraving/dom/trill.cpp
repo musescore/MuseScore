@@ -144,7 +144,7 @@ void TrillSegment::scanElements(void* data, void (* func)(void*, EngravingItem*)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingItem* TrillSegment::propertyDelegate(Pid pid)
+EngravingObject* TrillSegment::propertyDelegate(Pid pid) const
 {
     if (pid == Pid::TRILL_TYPE || pid == Pid::ORNAMENT_STYLE || pid == Pid::PLACEMENT) {
         return spanner();

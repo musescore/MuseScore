@@ -2583,7 +2583,7 @@ void Score::cmdFlip()
             e->undoChangeProperty(Pid::AUTOPLACE, true);
             // TODO: undoChangeProperty() should probably do this directly
             // see https://musescore.org/en/node/281432
-            EngravingItem* ee = e->propertyDelegate(Pid::PLACEMENT);
+            EngravingItem* ee = toEngravingItem(e->propertyDelegate(Pid::PLACEMENT));
             if (!ee) {
                 ee = e;
             }

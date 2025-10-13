@@ -181,8 +181,12 @@ void TextLineBase::reset()
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingItem* TextLineBaseSegment::propertyDelegate(Pid pid)
+EngravingObject* TextLineBaseSegment::propertyDelegate(Pid pid) const
 {
+    if (pid == Pid::TEXT_STYLE) {
+        return spanner();
+    }
+
     for (Pid id : TextLineBasePropertyId) {
         if (pid == id) {
             return spanner();
@@ -292,6 +296,19 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
     case Pid::BEGIN_TEXT_ALIGN:
         _beginTextAlign = v.value<Align>();
         break;
+    case Pid::BEGIN_FONT_FACE:
+        setBeginFontFamily(v.value<String>());
+        break;
+    case Pid::BEGIN_FONT_SIZE:
+        if (v.toReal() <= 0) {
+            ASSERT_X(String(u"font size is %1").arg(v.toReal()));
+        }
+        setBeginFontSize(v.toReal());
+        break;
+    case Pid::BEGIN_FONT_STYLE:
+        setBeginFontStyle(FontStyle(v.toInt()));
+        break;
+
     case Pid::CONTINUE_TEXT_ALIGN:
         _continueTextAlign = v.value<Align>();
         break;
@@ -304,6 +321,25 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
     case Pid::END_TEXT_PLACE:
         _endTextPlace = v.value<TextPlace>();
         break;
+    case Pid::CONTINUE_FONT_FACE:
+        setContinueFontFamily(v.value<String>());
+        break;
+    case Pid::CONTINUE_FONT_SIZE:
+        setContinueFontSize(v.toReal());
+        break;
+    case Pid::CONTINUE_FONT_STYLE:
+        setContinueFontStyle(FontStyle(v.toInt()));
+        break;
+    case Pid::END_FONT_FACE:
+        setEndFontFamily(v.value<String>());
+        break;
+    case Pid::END_FONT_SIZE:
+        setEndFontSize(v.toReal());
+        break;
+    case Pid::END_FONT_STYLE:
+        setEndFontStyle(FontStyle(v.toInt()));
+        break;
+
     case Pid::BEGIN_HOOK_HEIGHT:
         _beginHookHeight = v.value<Spatium>();
         break;
@@ -339,36 +375,6 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::LINE_VISIBLE:
         setLineVisible(v.toBool());
-        break;
-    case Pid::BEGIN_FONT_FACE:
-        setBeginFontFamily(v.value<String>());
-        break;
-    case Pid::BEGIN_FONT_SIZE:
-        if (v.toReal() <= 0) {
-            ASSERT_X(String(u"font size is %1").arg(v.toReal()));
-        }
-        setBeginFontSize(v.toReal());
-        break;
-    case Pid::BEGIN_FONT_STYLE:
-        setBeginFontStyle(FontStyle(v.toInt()));
-        break;
-    case Pid::CONTINUE_FONT_FACE:
-        setContinueFontFamily(v.value<String>());
-        break;
-    case Pid::CONTINUE_FONT_SIZE:
-        setContinueFontSize(v.toReal());
-        break;
-    case Pid::CONTINUE_FONT_STYLE:
-        setContinueFontStyle(FontStyle(v.toInt()));
-        break;
-    case Pid::END_FONT_FACE:
-        setEndFontFamily(v.value<String>());
-        break;
-    case Pid::END_FONT_SIZE:
-        setEndFontSize(v.toReal());
-        break;
-    case Pid::END_FONT_STYLE:
-        setEndFontStyle(FontStyle(v.toInt()));
         break;
     case Pid::TEXT_SIZE_SPATIUM_DEPENDENT:
         setTextSizeSpatiumDependent(v.toBool());

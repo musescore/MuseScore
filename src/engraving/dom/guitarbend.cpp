@@ -592,7 +592,7 @@ PropertyValue GuitarBendSegment::propertyDefault(Pid id) const
     }
 }
 
-EngravingItem* GuitarBendSegment::propertyDelegate(Pid id)
+EngravingObject* GuitarBendSegment::propertyDelegate(Pid id) const
 {
     switch (id) {
     case Pid::DIRECTION:

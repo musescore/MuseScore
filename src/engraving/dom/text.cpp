@@ -62,12 +62,25 @@ Text::Text(EngravingItem* parent, TextStyleType tid)
     initElementStyle(&defaultStyle);
 }
 
+EngravingObject* Text::propertyDelegate(Pid id) const
+{
+    if (id == Pid::TEXT_STYLE && parent() && parent()->isTextLineBaseSegment()) {
+        return parent();
+    }
+
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
 engraving::PropertyValue Text::propertyDefault(Pid id) const
 {
+    if (EngravingObject* item = propertyDelegate(id)) {
+        return item->propertyDefault(id);
+    }
+
     switch (id) {
     case Pid::TEXT_STYLE:
         return TextStyleType::DEFAULT;

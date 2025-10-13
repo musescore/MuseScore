@@ -478,7 +478,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
         }
     } else if (id == Pid::EXCLUDE_FROM_OTHER_PARTS) {
         if (isEngravingItem() && getProperty(Pid::EXCLUDE_FROM_OTHER_PARTS) != v) {
-            EngravingItem* delegate = toEngravingItem(this)->propertyDelegate(id);
+            EngravingItem* delegate = toEngravingItem(propertyDelegate(id));
             if (delegate) {
                 delegate->manageExclusionFromParts(v.toBool());
             } else {
@@ -633,6 +633,10 @@ int EngravingObject::getPropertyFlagsIdx(Pid id) const
 
 PropertyFlags EngravingObject::propertyFlags(Pid id) const
 {
+    if (EngravingObject* e = propertyDelegate(id)) {
+        return e->propertyFlags(id);
+    }
+
     static PropertyFlags f = PropertyFlags::NOSTYLE;
 
     int i = getPropertyFlagsIdx(id);
@@ -648,6 +652,11 @@ PropertyFlags EngravingObject::propertyFlags(Pid id) const
 
 void EngravingObject::setPropertyFlags(Pid id, PropertyFlags f)
 {
+    if (EngravingObject* e = propertyDelegate(id)) {
+        e->setPropertyFlags(id, f);
+        return;
+    }
+
     int i = getPropertyFlagsIdx(id);
     if (i == -1) {
         return;

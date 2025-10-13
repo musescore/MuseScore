@@ -20,11 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "noteline.h"
-#include "linkedobjects.h"
-#include "factory.h"
 #include "note.h"
-#include "textline.h"
+#include "noteline.h"
+#include "text.h"
 
 namespace mu::engraving {
 static const ElementStyle noteLineStyle {
@@ -59,9 +57,11 @@ Sid NoteLineSegment::getPropertyStyle(Pid pid) const
 NoteLineSegment::NoteLineSegment(Spanner* sp, System* parent)
     : TextLineBaseSegment(ElementType::NOTELINE_SEGMENT, sp, parent, ElementFlag::MOVABLE)
 {
+    m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
+    m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
-EngravingItem* NoteLineSegment::propertyDelegate(Pid pid)
+EngravingObject* NoteLineSegment::propertyDelegate(Pid pid) const
 {
     if (pid == Pid::NOTELINE_PLACEMENT) {
         return noteLine();
@@ -159,6 +159,9 @@ PropertyValue NoteLine::propertyDefault(Pid propertyId) const
         return false;
     case Pid::ANCHOR:
         return int(Spanner::Anchor::NOTE);
+
+    case Pid::TEXT_STYLE:
+        return TextStyleType::NOTELINE;
     default:
         return TextLineBase::propertyDefault(propertyId);
     }

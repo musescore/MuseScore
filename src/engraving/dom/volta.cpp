@@ -25,8 +25,6 @@
 #include <algorithm>
 #include <vector>
 
-#include "types/typesconv.h"
-
 #include "barline.h"
 #include "keysig.h"
 #include "measure.h"
@@ -34,6 +32,7 @@
 #include "staff.h"
 #include "system.h"
 #include "tempo.h"
+#include "text.h"
 
 #include "log.h"
 
@@ -74,13 +73,15 @@ static const ElementStyle voltaStyle {
 VoltaSegment::VoltaSegment(Volta* sp, System* parent)
     : TextLineBaseSegment(ElementType::VOLTA_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
+    m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
+    m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
 //---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingItem* VoltaSegment::propertyDelegate(Pid pid)
+EngravingObject* VoltaSegment::propertyDelegate(Pid pid) const
 {
     if (pid == Pid::BEGIN_HOOK_TYPE || pid == Pid::END_HOOK_TYPE || pid == Pid::VOLTA_ENDING) {
         return spanner();
@@ -258,6 +259,9 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
 
     case Pid::PLACEMENT:
         return PlacementV::ABOVE;
+
+    case Pid::TEXT_STYLE:
+        return TextStyleType::VOLTA;
 
     default:
         return TextLineBase::propertyDefault(propertyId);

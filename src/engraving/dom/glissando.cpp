@@ -80,7 +80,7 @@ GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingItem* GlissandoSegment::propertyDelegate(Pid pid)
+EngravingObject* GlissandoSegment::propertyDelegate(Pid pid) const
 {
     switch (pid) {
     case Pid::GLISS_TYPE:

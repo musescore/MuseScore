@@ -60,7 +60,7 @@ public:
     PointF circledTip() const { return m_circledTip; }
     void setCircledTip(const PointF& p) { m_circledTip = p; }
 
-    EngravingItem* propertyDelegate(Pid) override;
+    EngravingObject* propertyDelegate(Pid) const override;
 
     int gripsCount() const override;
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;

@@ -66,9 +66,10 @@ class TextSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool isSymbolSizeAvailable READ isSymbolSizeAvailable NOTIFY isSymbolSizeAvailableChanged)
     Q_PROPERTY(bool isScriptSizeAvailable READ isScriptSizeAvailable NOTIFY isScriptSizeAvailableChanged)
     Q_PROPERTY(bool isLineSpacingAvailable READ isLineSpacingAvailable NOTIFY isLineSpacingAvailableChanged)
+    Q_PROPERTY(bool isPositionAvailable READ isPositionAvailable NOTIFY isPositionAvailableChanged)
 
 public:
-    explicit TextSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit TextSettingsModel(QObject* parent, IElementRepositoryService* repository, bool isTextLineText);
 
     Q_INVOKABLE void insertSpecialCharacters();
     Q_INVOKABLE void showStaffTextProperties();
@@ -111,6 +112,7 @@ public:
     bool isSymbolSizeAvailable() const;
     bool isScriptSizeAvailable() const;
     bool isLineSpacingAvailable() const;
+    bool isPositionAvailable() const;
 
 public slots:
     void setAreTextPropertiesAvailable(bool areTextPropertiesAvailable);
@@ -120,7 +122,8 @@ public slots:
     void setIsHorizontalAlignmentAvailable(bool isHorizontalAlignmentAvailable);
     void setIsSymbolSizeAvailable(bool isSymbolSizeAvailable);
     void setIsScriptSizeAvailable(bool isScriptSizeAvailable);
-    void setIsLineSpacingAvailable(bool isScriptSizeAvailable);
+    void setIsLineSpacingAvailable(bool isLineSpacingAvailable);
+    void setIsPositionAvailableChanged(bool isPositionAvailable);
 
 signals:
     void textStylesChanged();
@@ -131,8 +134,9 @@ signals:
     void isDynamicSpecificSettingsChanged(bool isDynamicSpecificSettings);
     void isHorizontalAlignmentAvailableChanged(bool isHorizontalAlignmentAvailable);
     void isSymbolSizeAvailableChanged(bool isSymbolSizeAvailable);
-    void isScriptSizeAvailableChanged(bool isSymbolSizeAvailable);
-    void isLineSpacingAvailableChanged(bool isSymbolSizeAvailable);
+    void isScriptSizeAvailableChanged(bool isScriptSizeAvailable);
+    void isLineSpacingAvailableChanged(bool isLineSpacingAvailable);
+    void isPositionAvailableChanged(bool isPositionAvailable);
 
 private:
     bool isTextEditingStarted() const;
@@ -146,8 +150,14 @@ private:
     void updateIsSymbolSizeAvailable();
     void updateIsScriptSizeAvailable();
     void updateIsLineSpacingAvailable();
+    void updateIsPositionAvailable();
+
+    void propertyChangedCallback(const mu::engraving::Pid propertyId, const QVariant& newValue);
+    void propertyResetCallback(const mu::engraving::Pid propertyId);
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
+
+    bool isTextLineText() const;
 
     PropertyItem* m_fontFamily = nullptr;
     PropertyItem* m_fontStyle = nullptr;
@@ -179,6 +189,7 @@ private:
     bool m_isSymbolSizeAvailable = false;
     bool m_isScriptSizeAvailable = false;
     bool m_isLineSpacingAvailable = false;
+    bool m_isPositionAvailable = false;
 };
 }
 

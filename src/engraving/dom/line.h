@@ -62,7 +62,7 @@ public:
 
     friend class SLine;
 
-    virtual EngravingItem* propertyDelegate(Pid) override;
+    virtual EngravingObject* propertyDelegate(Pid) const override;
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 3; }

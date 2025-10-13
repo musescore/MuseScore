@@ -133,7 +133,7 @@ muse::ByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingItem* SpannerSegment::propertyDelegate(Pid pid)
+EngravingObject* SpannerSegment::propertyDelegate(Pid pid) const
 {
     switch (pid) {
     case Pid::PLAY:
@@ -159,7 +159,7 @@ EngravingItem* SpannerSegment::propertyDelegate(Pid pid)
 
 engraving::PropertyValue SpannerSegment::getProperty(Pid pid) const
 {
-    if (EngravingItem* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
+    if (EngravingObject* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
         return e->getProperty(pid);
     }
     switch (pid) {
@@ -176,7 +176,7 @@ engraving::PropertyValue SpannerSegment::getProperty(Pid pid) const
 
 bool SpannerSegment::setProperty(Pid pid, const PropertyValue& v)
 {
-    if (EngravingItem* e = propertyDelegate(pid)) {
+    if (EngravingObject* e = propertyDelegate(pid)) {
         return e->setProperty(pid, v);
     }
     switch (pid) {
@@ -196,7 +196,7 @@ bool SpannerSegment::setProperty(Pid pid, const PropertyValue& v)
 
 PropertyValue SpannerSegment::propertyDefault(Pid pid) const
 {
-    if (EngravingItem* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
+    if (EngravingObject* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
         return e->propertyDefault(pid);
     }
     switch (pid) {
@@ -213,22 +213,10 @@ PropertyValue SpannerSegment::propertyDefault(Pid pid) const
 
 Sid SpannerSegment::getPropertyStyle(Pid pid) const
 {
-    if (EngravingItem* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
+    if (EngravingObject* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
         return e->getPropertyStyle(pid);
     }
     return EngravingItem::getPropertyStyle(pid);
-}
-
-//---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags SpannerSegment::propertyFlags(Pid pid) const
-{
-    if (EngravingItem* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
-        return e->propertyFlags(pid);
-    }
-    return EngravingItem::propertyFlags(pid);
 }
 
 //---------------------------------------------------------
@@ -237,7 +225,7 @@ PropertyFlags SpannerSegment::propertyFlags(Pid pid) const
 
 void SpannerSegment::resetProperty(Pid pid)
 {
-    if (EngravingItem* e = propertyDelegate(pid)) {
+    if (EngravingObject* e = propertyDelegate(pid)) {
         return e->resetProperty(pid);
     }
     return EngravingItem::resetProperty(pid);
