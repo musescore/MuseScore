@@ -2791,6 +2791,86 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp, bool experimental)
     }
 }
 
+static int autotrack(mu::engraving::Score* score)
+{
+    const std::array<int, 18> instrumentByPriority = { 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 0, 1, 2, 3, 4, 5 };
+    std::vector<int> availableTracks;
+    std::vector<int> instruments;
+    int counter              = 0;
+
+    for (mu::engraving::Part* part: score->parts()) {
+        if (part->hasDrumStaff()) {
+            ++counter;
+            continue;
+        }
+
+        int index = part->midiProgram();
+        if (std::find(instrumentByPriority.begin(), instrumentByPriority.end(), index) != instrumentByPriority.end()) {
+            availableTracks.push_back(counter);
+            instruments.push_back(part->midiProgram());
+        }
+        ++counter;
+    }
+
+    int n = availableTracks.size();
+    std::vector<int> minIndexes(n, 10000);
+
+    for (auto m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        int segmentIndex = -1;
+        bool founded      = false;
+        for (auto seg          = m->first(); seg; seg = seg->next()) {
+            ++segmentIndex;
+            if (seg->segmentType() != mu::engraving::SegmentType::ChordRest) {
+                continue;
+            }
+            for (size_t i = 0; i < availableTracks.size(); ++i) {
+                if (minIndexes[i] != 10000) {
+                    continue;
+                }
+
+                auto startTrack = score->parts()[availableTracks[i]]->startTrack();
+                auto endTrack   = score->parts()[availableTracks[i]]->endTrack();
+                for (auto track      = startTrack; track < endTrack; ++track) {
+                    auto e = seg->elementAt(track);
+                    if (e && e->type() == mu::engraving::ElementType::CHORD) {
+                        minIndexes[i] = segmentIndex;
+                        founded = true;
+                    }
+                }
+            }
+
+            if (founded) {
+                break;
+            }
+        }
+
+        if (founded) {
+            break;
+        }
+    }
+
+    int min = 10000;
+    for (int i: minIndexes) {
+        min = std::min(min, i);
+    }
+
+    std::vector<int> minTracks;
+    for (int i = 0; i < n; ++i) {
+        if (minIndexes[i] == min) {
+            minTracks.push_back(i);
+        }
+    }
+    for (auto prior: instrumentByPriority) {
+        for (auto m: minTracks) {
+            if (instruments[m] == prior) {
+                return availableTracks[m];
+            }
+        }
+    }
+
+    return 0;
+}
+
 //---------------------------------------------------------
 //   importGTP
 //---------------------------------------------------------
@@ -2904,6 +2984,43 @@ Err importGTP(MasterScore* score, muse::io::IODevice* io, const muse::modularity
     for (Part* p : score->parts()) {
         p->updateHarmonyChannels(false);
     }
+
+    int autotrackIndex = autotrack(score);
+    Fraction fr = Fraction(0, 1);
+    for (int i = 0; i < score->parts().size(); i++) {
+        Part* part = score->parts()[i];
+        for (int j = 0; j < part->nstaves(); j++) {
+            Staff* st = part->staff(j);
+            if (i == autotrackIndex) {
+                size_t lines = part->instrument()->stringData()->strings();
+
+                bool needsTabStaff = !part->staff(0)->isDrumStaff(fr);
+                if (!needsTabStaff) {
+                    continue;
+                }
+
+                static const std::vector<StaffTypes> types {
+                    StaffTypes::TAB_4COMMON,
+                    StaffTypes::TAB_5COMMON,
+                    StaffTypes::TAB_6COMMON,
+                    StaffTypes::TAB_7COMMON,
+                    StaffTypes::TAB_8COMMON,
+                    StaffTypes::TAB_9COMMON,
+                    StaffTypes::TAB_10COMMON,
+                };
+
+                size_t index = (lines >= 4 && lines <= 10) ? lines - 4 : 2;
+
+                st->setStaffType(fr, *StaffType::preset(types.at(index)));
+                st->setLines(fr, static_cast<int>(lines));
+            } else {
+                st->setVisible(false);
+            }
+        }
+    }
+
+    score->setShowInstrumentNames(false);
+    score->setShowVBox(false);
 
     delete gp;
 

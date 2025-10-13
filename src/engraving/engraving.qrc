@@ -21,5 +21,11 @@
         <file alias="engraving/styles/cchords_rb.xml">data/chords/cchords_rb.xml</file>
         <file alias="engraving/styles/cchords_nrb.xml">data/chords/cchords_nrb.xml</file>
         <file alias="engraving/styles/cchords_muse.xml">data/chords/cchords_muse.xml</file>
+        <file>qml/MuseScore/Engraving/EngravingElementsDialog.qml</file>
+        <file>qml/MuseScore/Engraving/EngravingElementsPanel.qml</file>
+        <file>qml/MuseScore/Engraving/qmldir</file>
+        <file alias="engraving/styles/svg-import-style-phone.mss">data/styles/svg-import-style-phone.mss</file>
+        <file alias="engraving/styles/svg-import-style-tablet.mss">data/styles/svg-import-style-tablet.mss</file>
+        <file alias="engraving/styles/svg-import-style-desktop.mss">data/styles/svg-import-style-desktop.mss</file>
     </qresource>
 </RCC>

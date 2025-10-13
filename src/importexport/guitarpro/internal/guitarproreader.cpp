@@ -36,12 +36,27 @@ muse::Ret GuitarProReader::read(mu::engraving::MasterScore* score, const muse::i
     muse::io::File file(path);
     mu::engraving::Err err = importGTP(score, &file, iocContext(), guitarProConfiguration()->experimental());
 
-    if (guitarProConfiguration()->linkedTabStaffCreated()) {
-        engraving::Excerpt::createLinkedTabs(score);
+    score->cmdResetToDefaultLayout();
+    switch (guitarProConfiguration()->deviceForSvgExport()) {
+    case 0:
+    {
+        muse::io::File styleFile(":/engraving/styles/svg-import-style-phone.mss");
+        score->loadStyle(styleFile);
+        break;
     }
-
-    muse::io::File styleFile(":/engraving/styles/gp-style.mss");
-    score->loadStyle(styleFile);
+    case 1:
+    {
+        muse::io::File styleFile(":/engraving/styles/svg-import-style-tablet.mss");
+        score->loadStyle(styleFile);
+        break;
+    }
+    case 2:
+    {
+        muse::io::File styleFile(":/engraving/styles/svg-import-style-desktop.mss");
+        score->loadStyle(styleFile);
+        break;
+    }
+    }
 
     return mu::engraving::make_ret(err, path);
 }

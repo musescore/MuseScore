@@ -161,6 +161,7 @@ void CommandLineParser::init()
 
     m_parser.addOption(QCommandLineOption("gp-linked", "create tabulature linked staves for guitar pro"));
     m_parser.addOption(QCommandLineOption("gp-experimental", "experimental features for guitar pro import"));
+    m_parser.addOption(QCommandLineOption("device", "device type for svg export", "value"));
 
     //! NOTE Currently only implemented `full` mode
     m_parser.addOption(QCommandLineOption("migration", "Whether to do migration with given mode, `full` - full migration", "mode"));
@@ -487,6 +488,10 @@ void CommandLineParser::parse(int argc, char** argv)
 
     if (m_parser.isSet("gp-experimental")) {
         m_options.guitarPro.experimental = true;
+    }
+
+    if (m_parser.isSet("device")) {
+        m_options.guitarPro.deviceType = m_parser.value("device").toInt();
     }
 
     if (m_options.runMode == IApplication::RunMode::ConsoleApp) {

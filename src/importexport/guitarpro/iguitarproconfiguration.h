@@ -37,6 +37,9 @@ public:
     virtual bool linkedTabStaffCreated() const = 0;
     virtual void setLinkedTabStaffCreated(std::optional<bool> created) = 0;
 
+    virtual int deviceForSvgExport() const = 0;
+    virtual void setDeviceForSvgExport(std::optional<int> deviceType) = 0;
+
     virtual bool experimental() const = 0;
     virtual void setExperimental(std::optional<bool> experimental) = 0;
 };

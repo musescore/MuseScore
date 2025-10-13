@@ -452,7 +452,7 @@ bool EngravingConfiguration::allowReadingImagesFromOutsideMscz() const
 
 bool EngravingConfiguration::guitarProImportExperimental() const
 {
-    return guitarProConfiguration() ? guitarProConfiguration()->experimental() : false;
+    return true;
 }
 
 bool EngravingConfiguration::negativeFretsAllowed() const
