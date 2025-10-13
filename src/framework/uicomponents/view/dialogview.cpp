@@ -22,65 +22,100 @@
 
 #include "dialogview.h"
 
-#include <QStyle>
-#include <QWindow>
-#include <QScreen>
 #include <QApplication>
+#include <QQuickView>
+#include <QScreen>
+#include <QStyle>
 
 #include "log.h"
+
+using namespace Qt::Literals::StringLiterals;
 
 using namespace muse::uicomponents;
 
 static const int DIALOG_WINDOW_FRAME_HEIGHT(20);
 
 DialogView::DialogView(QQuickItem* parent)
-    : PopupView(parent)
+    : WindowView(parent)
 {
     setObjectName("DialogView");
-    setClosePolicies(ClosePolicy::NoAutoClose);
+    setRetCode(Ret::Code::Ok);
 }
 
-bool DialogView::isDialog() const
+void DialogView::initView()
 {
-    return true;
+    QQuickWindow::setDefaultAlphaBuffer(m_frameless);
+
+    WindowView::initView();
+
+    m_view->setFlags(Qt::Dialog);
+    m_view->setIcon(QIcon(uiConfiguration()->appIconPath().toString()));
+
+    if (m_frameless) {
+        m_view->setColor(QColor(Qt::transparent));
+    } else {
+        auto updateBackgroundColor = [this]() {
+            if (!m_view) {
+                return;
+            }
+
+            QString bgColorStr = uiConfiguration()->currentTheme().values.value(ui::BACKGROUND_PRIMARY_COLOR).toString();
+            m_view->setColor(QColor(bgColorStr));
+        };
+
+        uiConfiguration()->currentThemeChanged().onNotify(this, updateBackgroundColor);
+
+        updateBackgroundColor();
+    }
 }
 
 void DialogView::beforeOpen()
 {
+    IF_ASSERT_FAILED(m_view) {
+        return;
+    }
+
     //! NOTE Set default title
     if (m_title.isEmpty()) {
         setTitle(application()->title());
     }
 
-    windowsController()->regWindow(qWindow()->winId());
+    m_view->setTitle(m_title);
+    m_view->setFlag(Qt::FramelessWindowHint, m_frameless);
+
+#ifdef Q_OS_MAC
+    if (m_alwaysOnTop) {
+        auto updateStayOnTopHint = [this]() {
+            bool stay = qApp->applicationState() == Qt::ApplicationActive;
+            m_view->setFlag(Qt::WindowStaysOnTopHint, stay);
+        };
+        updateStayOnTopHint();
+        connect(qApp, &QApplication::applicationStateChanged, this, updateStayOnTopHint);
+    }
+#endif
+
+#ifdef MUSE_MODULE_UI_DISABLE_MODALITY
+    m_view->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
+#else
+    m_view->setModality(Qt::NonModal);
+#endif
+
+    //! NOTE ok will be if they call accept
+    setRetCode(Ret::Code::Cancel);
+
+    windowsController()->regWindow(m_view->winId());
 }
 
 void DialogView::onHidden()
 {
-    PopupView::onHidden();
+    WindowView::onHidden();
 
-    if (m_loop.isRunning()) {
-        m_loop.exit();
-    }
-
-    activateNavigationParentControl();
-}
-
-QScreen* DialogView::resolveScreen() const
-{
-    QWindow* qMainWindow = mainWindow()->qWindow();
-    QScreen* mainWindowScreen = qMainWindow->screen();
-    if (!mainWindowScreen) {
-        mainWindowScreen = QGuiApplication::primaryScreen();
-    }
-
-    return mainWindowScreen;
+    windowsController()->unregWindow(m_view->winId());
 }
 
 void DialogView::updateGeometry()
 {
-    const QScreen* screen = resolveScreen();
-    QRect anchorRect = screen->availableGeometry();
+    QRect anchorRect = currentScreenGeometry();
 
     const QWindow* qMainWindow = mainWindow()->qWindow();
     bool mainWindowVisible = qMainWindow->isVisible();
@@ -96,8 +131,8 @@ void DialogView::updateGeometry()
     dlgRect.moveLeft(referenceRect.x() + (referenceRect.width() - dlgRect.width()) / 2);
     dlgRect.moveTop(referenceRect.y() + (referenceRect.height() - dlgRect.height()) / 2 + DIALOG_WINDOW_FRAME_HEIGHT);
 
-    dlgRect.moveLeft(dlgRect.x() + m_localPos.x());
-    dlgRect.moveTop(dlgRect.y() + m_localPos.y());
+    dlgRect.moveLeft(dlgRect.x());
+    dlgRect.moveTop(dlgRect.y());
 
     // try to move the dialog if it doesn't fit on the screen
 
@@ -130,9 +165,6 @@ void DialogView::updateGeometry()
 
     setContentWidth(dlgRect.width());
     setContentHeight(dlgRect.height());
-
-    //! NOTE ok will be if they call accept
-    setErrCode(Ret::Code::Cancel);
 }
 
 QRect DialogView::viewGeometry() const
@@ -140,12 +172,124 @@ QRect DialogView::viewGeometry() const
     return QRect(m_globalPos.toPoint(), QSize(contentWidth(), contentHeight()));
 }
 
-void DialogView::exec()
+QString DialogView::title() const
 {
-    open();
-    m_loop.exec();
+    return m_title;
+}
 
-    activateNavigationParentControl();
+void DialogView::setTitle(QString title)
+{
+    if (m_title == title) {
+        return;
+    }
+
+    m_title = title;
+    emit titleChanged(m_title);
+
+    if (isOpened()) {
+        m_view->setTitle(title);
+    }
+}
+
+QString DialogView::objectId() const
+{
+    return m_objectId;
+}
+
+void DialogView::setObjectId(QString objectId)
+{
+    if (m_objectId == objectId) {
+        return;
+    }
+
+    m_objectId = objectId;
+    emit objectIdChanged(m_objectId);
+}
+
+bool DialogView::modal() const
+{
+    return m_modal;
+}
+
+void DialogView::setModal(bool modal)
+{
+    if (m_modal == modal) {
+        return;
+    }
+
+    m_modal = modal;
+    emit modalChanged(m_modal);
+}
+
+bool DialogView::frameless() const
+{
+    return m_frameless;
+}
+
+void DialogView::setFrameless(bool frameless)
+{
+    if (m_frameless == frameless) {
+        return;
+    }
+
+    m_frameless = frameless;
+    emit framelessChanged(m_frameless);
+}
+
+bool DialogView::resizable() const
+{
+    return m_resizable;
+}
+
+void DialogView::setResizable(bool resizable)
+{
+    if (m_resizable == resizable) {
+        return;
+    }
+
+    m_resizable = resizable;
+    emit resizableChanged(m_resizable);
+
+    if (isOpened()) {
+        updateSize(m_view->size());
+    }
+}
+
+bool DialogView::alwaysOnTop() const
+{
+    return m_alwaysOnTop;
+}
+
+void DialogView::setAlwaysOnTop(bool alwaysOnTop)
+{
+    if (m_alwaysOnTop == alwaysOnTop) {
+        return;
+    }
+
+    m_alwaysOnTop = alwaysOnTop;
+    emit alwaysOnTopChanged();
+}
+
+QVariantMap DialogView::ret() const
+{
+    return m_ret;
+}
+
+void DialogView::setRet(QVariantMap ret)
+{
+    if (m_ret == ret) {
+        return;
+    }
+
+    m_ret = ret;
+    emit retChanged(m_ret);
+}
+
+void DialogView::setRetCode(Ret::Code code)
+{
+    QVariantMap ret;
+    ret[u"errcode"_s] = static_cast<int>(code);
+    setRet(ret);
 }
 
 void DialogView::show()
@@ -161,22 +305,22 @@ void DialogView::hide()
 void DialogView::raise()
 {
     if (isOpened()) {
-        m_window->raise();
+        m_view->raise();
     }
 }
 
 void DialogView::accept()
 {
-    setErrCode(Ret::Code::Ok);
+    setRetCode(Ret::Code::Ok);
     close();
 }
 
 void DialogView::reject(int code)
 {
     if (code > 0) {
-        setErrCode(static_cast<Ret::Code>(code));
+        setRetCode(static_cast<Ret::Code>(code));
     } else {
-        setErrCode(Ret::Code::Cancel);
+        setRetCode(Ret::Code::Cancel);
     }
 
     close();
