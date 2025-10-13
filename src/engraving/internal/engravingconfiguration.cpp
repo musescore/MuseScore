@@ -457,7 +457,7 @@ void EngravingConfiguration::setDoNotSaveEIDsForBackCompat(bool doNotSave)
 
 bool EngravingConfiguration::guitarProImportExperimental() const
 {
-    return guitarProConfiguration() ? guitarProConfiguration()->experimental() : false;
+    return true;
 }
 
 bool EngravingConfiguration::shouldAddParenthesisOnStandardStaff() const

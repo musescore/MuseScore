@@ -121,7 +121,7 @@ double LayoutConfiguration::maxSystemDistance() const
 
 bool LayoutConfiguration::isShowInstrumentNames() const
 {
-    return score()->showInstrumentNames();
+    return false;
 }
 
 // ================================================

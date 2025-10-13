@@ -31,12 +31,16 @@ public:
     bool linkedTabStaffCreated() const override;
     void setLinkedTabStaffCreated(std::optional<bool> created) override;
 
+    int deviceForSvgExport() const;
+    void setDeviceForSvgExport(std::optional<int> deviceType) override;
+
     bool experimental() const override;
     void setExperimental(std::optional<bool> experimental) override;
 
 private:
     std::optional<bool> m_linkedTabStaffCreated;
     std::optional<bool> m_experimental;
+    std::optional<int> m_deviceType = 0;
 };
 }
 

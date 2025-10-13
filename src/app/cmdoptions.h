@@ -87,6 +87,7 @@ struct CmdOptions {
     struct {
         std::optional<bool> linkedTabStaffCreated;
         std::optional<bool> experimental;
+        std::optional<int> deviceType;
     } guitarPro;
 
     struct {

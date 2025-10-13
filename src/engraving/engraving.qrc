@@ -24,5 +24,8 @@
         <file>qml/MuseScore/Engraving/EngravingElementsDialog.qml</file>
         <file>qml/MuseScore/Engraving/EngravingElementsPanel.qml</file>
         <file>qml/MuseScore/Engraving/qmldir</file>
+        <file alias="engraving/styles/svg-import-style-phone.mss">data/styles/svg-import-style-phone.mss</file>
+        <file alias="engraving/styles/svg-import-style-tablet.mss">data/styles/svg-import-style-tablet.mss</file>
+        <file alias="engraving/styles/svg-import-style-desktop.mss">data/styles/svg-import-style-desktop.mss</file>
     </qresource>
 </RCC>

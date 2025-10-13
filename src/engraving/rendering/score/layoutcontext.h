@@ -102,7 +102,7 @@ public:
     bool isPaletteMode() const;
     bool isPrintingMode() const;
 
-    bool isShowVBox() const { return options().isShowVBox; }
+    bool isShowVBox() const { return false; }
     double noteHeadWidth() const { return options().noteHeadWidth; }
     bool isShowInvisible() const;
     int pageNumberOffset() const;

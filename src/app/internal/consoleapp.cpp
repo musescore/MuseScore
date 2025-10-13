@@ -276,6 +276,7 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
 #ifdef MUE_BUILD_IMPEXP_GUITARPRO_MODULE
     guitarProConfiguration()->setLinkedTabStaffCreated(options.guitarPro.linkedTabStaffCreated);
     guitarProConfiguration()->setExperimental(options.guitarPro.experimental);
+    guitarProConfiguration()->setDeviceForSvgExport(options.guitarPro.deviceType);
 #endif
     if (options.app.revertToFactorySettings) {
         appshellConfiguration()->revertToFactorySettings(options.app.revertToFactorySettings.value());

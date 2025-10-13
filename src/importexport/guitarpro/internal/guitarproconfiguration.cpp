@@ -32,6 +32,16 @@ void GuitarProConfiguration::setLinkedTabStaffCreated(std::optional<bool> create
     m_linkedTabStaffCreated = created;
 }
 
+int GuitarProConfiguration::deviceForSvgExport() const
+{
+    return m_deviceType ? m_deviceType.value() : 0;
+}
+
+void GuitarProConfiguration::setDeviceForSvgExport(std::optional<int> deviceType)
+{
+    m_deviceType = deviceType;
+}
+
 bool GuitarProConfiguration::experimental() const
 {
     return m_experimental ? m_experimental.value() : false;
