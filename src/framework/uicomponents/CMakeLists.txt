@@ -122,8 +122,6 @@ if(QT_SUPPORT)
     list(APPEND MODULE_LINK Qt::Widgets Qt::Quick)
 endif()
 
-set(MODULE_USE_UNITY OFF)
-
 setup_module()
 
 qt_add_shaders(${MODULE} "${MODULE}_shaders"
