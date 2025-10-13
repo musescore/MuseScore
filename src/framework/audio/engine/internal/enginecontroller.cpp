@@ -42,14 +42,6 @@
 #include "synthesizers/synthresolver.h"
 #include "synthesizers/soundfontrepository.h"
 
-#include "muse_framework_config.h"
-
-#ifdef MUSE_MODULE_AUDIO_WORKER_ENABLED
-#ifdef Q_OS_WASM
-#include "audio/driver/platform/web/webaudiochannel.h"
-#endif
-#endif
-
 #include "log.h"
 
 using namespace muse;
@@ -145,26 +137,10 @@ void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfi
 
     m_playback->init();
     m_rpcChannelController->init(m_playback);
-
-#ifdef MUSE_MODULE_AUDIO_WORKER_ENABLED
-#ifdef Q_OS_WASM
-    m_webAudioChannel = std::make_shared<WebAudioChannel>();
-    m_webAudioChannel->open([this](float* stream, size_t samples) {
-        unsigned samplesPerChannel = samples / 2;
-        process(stream, samplesPerChannel);
-    });
-#endif
-#endif
 }
 
 void EngineController::deinit()
 {
-#ifdef MUSE_MODULE_AUDIO_WORKER_ENABLED
-#ifdef Q_OS_WASM
-    m_webAudioChannel->close();
-#endif
-#endif
-
     m_playback->deinit();
     m_rpcChannelController->deinit();
     m_audioEngine->deinit();
