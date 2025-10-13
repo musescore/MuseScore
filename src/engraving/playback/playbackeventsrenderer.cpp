@@ -354,7 +354,7 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
     RenderingContext ctx(actualTimestamp,
                          actualDuration,
                          actualDynamicLevel,
-                         0,
+                         note->tick().ticks(),
                          0,
                          ticksFromTempoAndDuration(Constants::DEFAULT_TEMPO.val, actualDuration),
                          Constants::DEFAULT_TEMPO,
