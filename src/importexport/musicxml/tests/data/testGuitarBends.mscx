@@ -283,6 +283,113 @@
                 </Spanner>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>double</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="30" pitch="-100" vibrato="0"/>
+            <point time="60" pitch="0" vibrato="0"/>
+            </TremoloBar>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>51</pitch>
+              <tpc>11</tpc>
+              <fret>1</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="60" pitch="-150" vibrato="0"/>
+            </TremoloBar>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>58</pitch>
+              <tpc>24</tpc>
+              <fret>3</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <TremoloBar>
+            <point time="0" pitch="-150" vibrato="0"/>
+            <point time="60" pitch="0" vibrato="0"/>
+            </TremoloBar>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>50</pitch>
+              <tpc>16</tpc>
+              <fret>5</fret>
+              <string>4</string>
+              </Note>
+            </Chord>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="30" pitch="100" vibrato="0"/>
+            <point time="60" pitch="0" vibrato="0"/>
+            </TremoloBar>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              <fret>5</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="60" pitch="150" vibrato="0"/>
+            </TremoloBar>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <TremoloBar>
+            <point time="0" pitch="150" vibrato="0"/>
+            <point time="60" pitch="0" vibrato="0"/>
+            </TremoloBar>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
+              <fret>0</fret>
+              <string>4</string>
+              </Note>
+            </Chord>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="60" pitch="0" vibrato="0"/>
+            </TremoloBar>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>50</pitch>
+              <tpc>16</tpc>
+              <fret>0</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       </Staff>
