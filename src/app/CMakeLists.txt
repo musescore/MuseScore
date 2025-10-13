@@ -362,7 +362,7 @@ if (OS_IS_WIN)
         DEPLOY_TOOL_OPTIONS ${deploy_tool_options_arg}
     )
 
-    #install(SCRIPT ${deploy_script})
+    install(SCRIPT ${deploy_script})
 
 ###########################################
 # Linux
