@@ -37,10 +37,12 @@ BaseSection {
 
     property bool addAccidentalDotsArticulationsToNextNoteEntered: true
     property bool useNoteInputCursorInInputByDuration: false
+    property alias pitchNotationSPN: pitchNotationSPNCheckBox.checked
 
     signal defaultNoteInputMethodChangeRequested(int method)
     signal addAccidentalDotsArticulationsToNextNoteEnteredChangeRequested(bool add)
     signal useNoteInputCursorInInputByDurationChangeRequested(bool use)
+    signal pitchNotationSPNChangeRequested(bool spnPitch)
 
     ComboBoxWithTitle {
         id: defaultNoteInputMethodDropdown
@@ -93,6 +95,21 @@ BaseSection {
 
         onValueEdited: function(newIndex, newValue) {
             root.useNoteInputCursorInInputByDurationChangeRequested(newIndex === 1)
+        }
+    }
+
+    CheckBox {
+        id: pitchNotationSPNCheckBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Always display pitch names in Scientific Pitch Notation")
+
+        navigation.name: "PitchNotationSPNCheckBox"
+        navigation.panel: root.navigation
+        navigation.row: 3
+
+        onClicked: {
+            root.pitchNotationSPNChangeRequested(!checked)
         }
     }
 }
