@@ -391,9 +391,6 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, b
     if (item->isStyled(pid)) {
         return;
     }
-    if (pid == Pid::VISIBLE && item->isChord()) {
-        return; // We don't use VISIBLE property for Chord, only for their elements
-    }
     PropertyValue p = item->getProperty(pid);
     if (!p.isValid()) {
         LOGD("%s invalid property %d <%s>", item->typeName(), int(pid), propertyName(pid));
