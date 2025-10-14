@@ -67,7 +67,7 @@ option(MUE_BUILD_BRAILLE_TESTS "Build braille tests" ON)
 option(MUE_BUILD_CONVERTER_MODULE "Build converter module" ON)
 option(MUE_BUILD_ENGRAVING_TESTS "Build engraving tests" ON)
 option(MUE_BUILD_ENGRAVING_DEVTOOLS "Build engraving devtools" ON)
-option(MUE_BUILD_ENGRAVING_PLAYBACK "Build engraving playback" ON)
+option(MUE_BUILD_ENGRAVING_PLAYBACK "Build engraving playback" OFF)
 
 # IMPORT EXPORT MODULES
 option(MUE_BUILD_IMPEXP_BB_MODULE "Build importexport bb module" ON)
