@@ -95,6 +95,8 @@ private:
     void doRebuildBspTree();
     TextBlock replaceTextMacros(const TextBlock&) const;
     const CharFormat formatForMacro(const String&) const;
+    void appendFormattedString(std::list<TextFragment>& fragments, const String& string, const CharFormat& defaultFormat,
+                               const CharFormat& newFormat) const;
 
     std::vector<System*> m_systems;
     page_idx_t m_no = 0;                        // page number

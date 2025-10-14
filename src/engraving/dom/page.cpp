@@ -402,26 +402,22 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                     [[fallthrough]];
                 case 'P': // on all pages
                 {
-                    int no = static_cast<int>(m_no) + 1 + score()->pageNumberOffset();
+                    size_t no = m_no + 1 + score()->pageNumberOffset();
                     if (no > 0) {
                         const String pageNumberString = String::number(no);
                         const CharFormat pageNumberFormat = formatForMacro(String('$' + nc));
-                        // If the default format equals the format for this macro, we don't need to create a new fragment...
-                        if (defaultFormat == pageNumberFormat) {
-                            newFragments.back().text += pageNumberString;
-                            break;
-                        }
-                        TextFragment pageNumberFragment(pageNumberString);
-                        pageNumberFragment.format = pageNumberFormat;
-                        newFragments.emplace_back(pageNumberFragment);
-                        newFragments.emplace_back(TextFragment());    // Start next fragment
-                        newFragments.back().format = defaultFormat;   // reset to default for next fragment
+                        appendFormattedString(newFragments, pageNumberString, defaultFormat, pageNumberFormat);
                     }
                 }
                 break;
                 case 'n':
-                    newFragments.back().text += String::number(score()->npages() + score()->pageNumberOffset());
-                    break;
+                {
+                    size_t no = score()->npages() + score()->pageNumberOffset();
+                    const String numberOfPagesString = String::number(no);
+                    const CharFormat pageNumberFormat = formatForMacro(String('$' + nc));
+                    appendFormattedString(newFragments, numberOfPagesString, defaultFormat, pageNumberFormat);
+                }
+                break;
                 case 'i': // not on first page
                     if (!m_no) {
                         break;
@@ -476,16 +472,7 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                 {
                     const String copyrightString = score()->metaTag(u"copyright");
                     const CharFormat copyrightFormat = formatForMacro(String('$' + nc));
-                    // If the default format equals the format for this macro, we don't need to create a new fragment...
-                    if (defaultFormat == copyrightFormat) {
-                        newFragments.back().text += copyrightString;
-                        break;
-                    }
-                    TextFragment copyrightFragment(copyrightString);
-                    copyrightFragment.format = copyrightFormat;
-                    newFragments.emplace_back(copyrightFragment);
-                    newFragments.emplace_back(TextFragment());    // Start next fragment
-                    newFragments.back().format = defaultFormat;   // reset to default for next fragment
+                    appendFormattedString(newFragments, copyrightString, defaultFormat, copyrightFormat);
                 }
                 break;
                 case 'v':
@@ -521,7 +508,13 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                         tag += s.at(k);
                     }
                     if (k != n) {      // found ':' ?
-                        newFragments.back().text += score()->metaTag(tag);
+                        if (tag == u"copyright") {
+                            const String copyrightString = score()->metaTag(tag);
+                            const CharFormat copyrightFormat = formatForMacro(String(u"$:" + tag + u":"));
+                            appendFormattedString(newFragments, copyrightString, defaultFormat, copyrightFormat);
+                        } else {
+                            newFragments.back().text += score()->metaTag(tag);
+                        }
                         i = k - 1;
                     }
                 }
@@ -550,7 +543,7 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
 const CharFormat Page::formatForMacro(const String& s) const
 {
     CharFormat format;
-    if (s == "$c" || s == "$C") {
+    if (s == "$c" || s == "$C" || s == "$:copyright:") {
         format.setStyle(style().styleV(Sid::copyrightFontStyle).value<FontStyle>());
         format.setFontSize(style().styleD(Sid::copyrightFontSize));
         format.setFontFamily(style().styleSt(Sid::copyrightFontFace));
@@ -560,6 +553,25 @@ const CharFormat Page::formatForMacro(const String& s) const
         format.setFontFamily(style().styleSt(Sid::pageNumberFontFace));
     }
     return format;
+}
+
+//---------------------------------------------------------
+//   appendFormattedString
+//---------------------------------------------------------
+
+void Page::appendFormattedString(std::list<TextFragment>& fragments, const String& string, const CharFormat& defaultFormat,
+                                 const CharFormat& newFormat) const
+{
+    // If the default format equals the format for this macro, we don't need to create a new fragment...
+    if (defaultFormat == newFormat) {
+        fragments.back().text += string;
+        return;
+    }
+    TextFragment newFragment(string);
+    newFragment.format = newFormat;
+    fragments.emplace_back(newFragment);
+    fragments.emplace_back(TextFragment());    // Start next fragment
+    fragments.back().format = defaultFormat;   // reset to default for next fragment
 }
 
 //---------------------------------------------------------
