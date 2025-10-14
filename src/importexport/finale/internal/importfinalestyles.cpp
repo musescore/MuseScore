@@ -67,6 +67,19 @@ static const std::unordered_map<std::string, std::string_view> finaleToSMuFLFont
     { "Sonata",           "Finale Maestro" },
 };
 
+static const std::unordered_set<std::string> solidLinesWithHooks {
+    "textLine",
+    "systemTextLine",
+    "letRing",
+    "palmMute",
+    "pedal"
+};
+
+static const std::unordered_set<std::string> solidLinesNoHooks {
+    "noteLine",
+    "glissando"
+};
+
 template <typename T>
 static MusxInstance<T> getDocOptions(const FinaleParser& context, const std::string& prefsName)
 {
@@ -192,10 +205,10 @@ static void writeFontPref(MStyle& style, const std::string& namePrefix, const Mu
 
 static void writeDefaultFontPref(MStyle& style, const FinaleParser& context, const std::string& namePrefix, options::FontOptions::FontType type)
 {
-    if (auto fontPrefs = options::FontOptions::getFontInfo(context.musxDocument(), type)) {
+    if (const auto& fontPrefs = options::FontOptions::getFontInfo(context.musxDocument(), type)) {
         writeFontPref(style, namePrefix, fontPrefs);
     } else {
-        context.logger()->logWarning(String::fromStdString("unable to load default font info for %1 FontType").arg(int(type)));
+        context.logger()->logWarning(String(u"Unable to load default font info for %1 FontType").arg(int(type)));
     }
 }
 
@@ -375,6 +388,8 @@ void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
 
     style.set(Sid::keySigCourtesyBarlineMode,
               int(boolToCourtesyBarlineMode(prefs.barlineOptions->drawDoubleBarlineBeforeKeyChanges)));
+    style.set(Sid::keySigNaturals, prefs.keyOptions->doKeyCancel ? int(KeySigNatural::BEFORE) : int(KeySigNatural::NONE));
+    style.set(Sid::keySigShowNaturalsChangingSharpsFlats, prefs.keyOptions->doKeyCancelBetweenSharpsFlats);
     style.set(Sid::timeSigCourtesyBarlineMode, int(CourtesyBarlineMode::ALWAYS_SINGLE));  // Hard-coded as 0 in Finale
     style.set(Sid::hideEmptyStaves, context.musxDocument()->calcHasVaryingSystemStaves(context.currentMusxPartId()));
 }
@@ -459,6 +474,10 @@ void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
                    prefs.smartShapeOptions->crescLineWidth,
                    prefs.smartShapeOptions->smartDashOn,
                    prefs.smartShapeOptions->smartDashOff);
+    // Cresc. / Decresc. lines
+    const double hairpinLineLineWidthEvpu = prefs.smartShapeOptions->smartLineWidth / EFIX_PER_EVPU;
+    style.set(Sid::hairpinLineDashLineLen, prefs.smartShapeOptions->smartDashOn / hairpinLineLineWidthEvpu);
+    style.set(Sid::hairpinLineDashGapLen, prefs.smartShapeOptions->smartDashOff / hairpinLineLineWidthEvpu);
 
     // Slur-related settings
     writeEvpuSpace(style, Sid::slurEndWidth, prefs.smartShapeOptions->smartSlurTipWidth);
@@ -479,18 +498,20 @@ void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
 
     // Ottava settings
     writeEvpuSpace(style, Sid::ottavaHookAbove, prefs.smartShapeOptions->hookLength);
-    writeEvpuSpace(style, Sid::ottavaHookBelow, -prefs.smartShapeOptions->hookLength);
-    writeLinePrefs(style, "ottava",
-                   prefs.smartShapeOptions->smartLineWidth,
-                   prefs.smartShapeOptions->smartDashOn,
-                   prefs.smartShapeOptions->smartDashOff,
-                   LineType::DASHED);
+    writeEvpuSpace(style, Sid::ottavaHookBelow, prefs.smartShapeOptions->hookLength);
+    writeLinePrefs(style, "ottava", prefs.smartShapeOptions->smartLineWidth, prefs.smartShapeOptions->smartDashOn,
+                   prefs.smartShapeOptions->smartDashOff, LineType::DASHED);
     style.set(Sid::ottavaNumbersOnly, prefs.smartShapeOptions->showOctavaAsText);
 
     // Other lines
-    for (Sid styleId : { Sid::textLineHookHeight, Sid::systemTextLineHookHeight,
-                         Sid::letRingHookHeight, Sid::palmMuteHookHeight, Sid::pedalHookHeight }) {
-        writeEvpuSpace(style, styleId, prefs.smartShapeOptions->hookLength);
+    for (const std::string& prefix : solidLinesWithHooks) {
+        writeLinePrefs(style, prefix, prefs.smartShapeOptions->smartLineWidth,
+                       prefs.smartShapeOptions->smartDashOn, prefs.smartShapeOptions->smartDashOff);
+       writeEvpuSpace(style, styleIdx(prefix + "HookHeight"), prefs.smartShapeOptions->hookLength);
+    }
+    for (const std::string& prefix : solidLinesNoHooks) {
+        writeLinePrefs(style, prefix, prefs.smartShapeOptions->smartLineWidth,
+                       prefs.smartShapeOptions->smartDashOn, prefs.smartShapeOptions->smartDashOff);
     }
 }
 
@@ -531,6 +552,8 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
 
         style.set(Sid::measureNumberOffsetType, int(OffsetType::SPATIUM)); // Hardcoded offset type
         processSegment(fontInfo, useEnclosure ? enclosure.get() : nullptr, justification, alignment, vertical, "measureNumber");
+        /// @todo write other stored styles to measureNumberAlternate (VPlacement/HPlacement not supported)
+        processSegment(fontInfo, useEnclosure ? enclosure.get() : nullptr, justification, alignment, vertical, "measureNumberAlternate");
 
         style.set(Sid::mmRestShowMeasureNumberRange, scorePart->showMmRange);
         if (scorePart->leftMmBracketChar == 0) {
@@ -657,11 +680,7 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
         }
     }
 
-    if (auto tabFretNumFont = options::FontOptions::getFontInfo(context.musxDocument(), FontType::Tablature)) {
-        writeFontPref(style, "tabFretNumber", tabFretNumFont);
-    }
-
-    auto textBlockFont = options::FontOptions::getFontInfo(context.musxDocument(), FontType::TextBlock);
+    const auto& textBlockFont = options::FontOptions::getFontInfo(context.musxDocument(), FontType::TextBlock);
     if (!textBlockFont) {
         throw std::invalid_argument("unable to find font prefs for Text Blocks");
     }
@@ -686,6 +705,7 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     style.set(Sid::shortInstrumentAlign, justifyToAlignment(abbreviatedPosition->justify));
 
     writeDefaultFontPref(style, context, "partInstrument", FontType::StaffNames);
+    writeDefaultFontPref(style, context, "tabFretNumber",  FontType::Tablature);
     writeCategoryTextFontPref(style, context, "dynamics", CategoryType::Dynamics);
     writeCategoryTextFontPref(style, context, "expression", CategoryType::ExpressiveText);
     writeCategoryTextFontPref(style, context, "tempo", CategoryType::TempoMarks);
@@ -703,9 +723,12 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     writeDefaultFontPref(style, context, "repeatLeft", FontType::Repeat);
     writeDefaultFontPref(style, context, "repeatRight", FontType::Repeat);
     writeFontPref(style, "frame", textBlockFont);
-    writeFontPref(style, "textLine", textBlockFont);
-    writeFontPref(style, "systemTextLine", textBlockFont);
-    writeFontPref(style, "glissando", textBlockFont);
+    for (const std::string& prefix : solidLinesWithHooks) {
+        writeFontPref(style, prefix, textBlockFont);
+    }
+    for (const std::string& prefix : solidLinesNoHooks) {
+        writeFontPref(style, prefix, textBlockFont);
+    }
     writeFontPref(style, "bend", textBlockFont);
     writeFontPref(style, "header", textBlockFont);
     writeFontPref(style, "footer", textBlockFont);
@@ -713,6 +736,7 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     writeFontPref(style, "pageNumber", textBlockFont);
     writeFontPref(style, "instrumentChange", textBlockFont);
     writeFontPref(style, "sticking", textBlockFont);
+    writeFontPref(style, "fingering", textBlockFont);
     for (int i = 1; i <= 12; ++i) {
         writeFontPref(style, "user" + std::to_string(i), textBlockFont);
     }
