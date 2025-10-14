@@ -6312,6 +6312,14 @@ void MusicXmlParserPass2::time(const String& partId, Measure* measure, const Fra
             }
         }
     }
+
+    if (printObject && m_score->style().styleV(Sid::timeSigPlacement) == TimeSigPlacement::ACROSS_STAVES) {
+        track_idx_t track = m_pass1.trackForPart(partId);
+        Staff* st = m_score->staff(track2staff(track));
+        if (!st->isSystemObjectStaff() && st->idx() != 0) {
+            m_score->addSystemObjectStaff(st);
+        }
+    }
 }
 
 //---------------------------------------------------------

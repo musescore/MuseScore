@@ -2375,6 +2375,9 @@ void MusicXmlParserPass1::partGroup(const int scoreParts,
             if (m_e.readText() == "no") {
                 barlineSpan = false;
             }
+        } else if (m_e.name() == "group-time") {
+            m_score->style().set(Sid::timeSigPlacement, TimeSigPlacement::ACROSS_STAVES);
+            m_e.skipCurrentElement();          // skip but don't log
         } else {
             skipLogCurrElem();
         }
