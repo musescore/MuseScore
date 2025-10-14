@@ -28,6 +28,8 @@
 #include <set>
 #include <thread>
 
+#include "muse_framework_config.h"
+
 namespace muse::audio {
 class AudioSanitizer
 {
@@ -44,17 +46,17 @@ public:
 };
 }
 
+#define AUDIO_SANITIZER_ENABLED
+
 #ifdef Q_OS_WASM
+#undef AUDIO_SANITIZER_ENABLED
+#endif
 
-#define ONLY_AUDIO_ENGINE_THREAD
-#define ONLY_AUDIO_RPC_THREAD
-#define ONLY_AUDIO_PROC_THREAD
-#define ONLY_AUDIO_RPC_OR_PROC_THREAD
-#define ONLY_AUDIO_MAIN_THREAD
-#define ONLY_AUDIO_MAIN_OR_ENGINE_THREAD
+#if MUSE_MODULE_AUDIO_WORKMODE == MUSE_MODULE_AUDIO_WORKERRPC_MODE
+#undef AUDIO_SANITIZER_ENABLED
+#endif
 
-#else
-
+#ifdef AUDIO_SANITIZER_ENABLED
 #define ONLY_AUDIO_ENGINE_THREAD assert(muse::audio::AudioSanitizer::isEngineThread())
 #define ONLY_AUDIO_RPC_THREAD assert(muse::audio::AudioSanitizer::isEngineThread())
 #define ONLY_AUDIO_PROC_THREAD assert(muse::audio::AudioSanitizer::isEngineThread())
@@ -62,7 +64,13 @@ public:
 #define ONLY_AUDIO_MAIN_THREAD assert(muse::audio::AudioSanitizer::isMainThread())
 #define ONLY_AUDIO_MAIN_OR_ENGINE_THREAD assert((muse::audio::AudioSanitizer::isEngineThread() \
                                                  || muse::audio::AudioSanitizer::isMainThread()))
-
+#else
+#define ONLY_AUDIO_ENGINE_THREAD
+#define ONLY_AUDIO_RPC_THREAD
+#define ONLY_AUDIO_PROC_THREAD
+#define ONLY_AUDIO_RPC_OR_PROC_THREAD
+#define ONLY_AUDIO_MAIN_THREAD
+#define ONLY_AUDIO_MAIN_OR_ENGINE_THREAD
 #endif
 
 #endif // MUSE_AUDIO_AUDIOSANITIZER_H

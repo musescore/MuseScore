@@ -177,8 +177,16 @@ void EngineRpcController::init()
             return;
         }
 
-        channel()->addReceiveStream(StreamName::PlaybackDataMainStream, mainStreamId, playbackData.mainStream);
-        channel()->addReceiveStream(StreamName::PlaybackDataOffStream, offStreamId, playbackData.offStream);
+        RpcStreamExec mainExec = [this](const std::function<void()>& func) {
+            audioEngine()->execOperation(OperationType::QuickOperation, func);
+        };
+
+        RpcStreamExec offExec = [this](const std::function<void()>& func) {
+            audioEngine()->execOperation(OperationType::QuickOperation, func);
+        };
+
+        channel()->addReceiveStream(StreamName::PlaybackDataMainStream, mainStreamId, playbackData.mainStream, mainExec);
+        channel()->addReceiveStream(StreamName::PlaybackDataOffStream, offStreamId, playbackData.offStream, offExec);
 
         auto addTrackAndSendResponce = [this](const Msg& msg, const TrackSequenceId& seqId, const TrackName& trackName,
                                               const mpe::PlaybackData& playbackData, const AudioParams& params) {

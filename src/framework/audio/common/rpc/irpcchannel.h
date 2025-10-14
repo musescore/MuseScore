@@ -309,13 +309,18 @@ struct IRpcStream {
     virtual bool inited() const = 0;
 };
 
+using RpcStreamExec = std::function<void (const std::function<void ()>&)>;
+
 class IRpcChannel;
 template<typename ... Types>
 class RpcStream : public IRpcStream, public async::Asyncable
 {
 public:
-    RpcStream(IRpcChannel* rpc, StreamName name, StreamId id, StreamType type, const async::Channel<Types...>& ch)
-        : m_rpc(rpc), m_name(name), m_streamId(id), m_type(type), m_ch(ch) {}
+
+    RpcStream(IRpcChannel* rpc, StreamName name, StreamId id, StreamType type,
+              const async::Channel<Types...>& ch,
+              const RpcStreamExec& exec)
+        : m_rpc(rpc), m_name(name), m_streamId(id), m_type(type), m_ch(ch), m_exec(exec) {}
 
     ~RpcStream()
     {
@@ -335,6 +340,7 @@ private:
     StreamId m_streamId = 0;
     StreamType m_type = StreamType::Undefined;
     async::Channel<Types...> m_ch;
+    RpcStreamExec m_exec = nullptr;
     bool m_inited = false;
 };
 
@@ -358,16 +364,16 @@ public:
     StreamId addSendStream(StreamName name, const async::Channel<Types...>& ch)
     {
         StreamId id = new_stream_id();
-        std::shared_ptr<IRpcStream> s = std::shared_ptr<IRpcStream>(new RpcStream<Types...>(this, name, id, StreamType::Send, ch));
-        addStream(s);
+        auto s = new RpcStream<Types...>(this, name, id, StreamType::Send, ch, nullptr);
+        addStream(std::shared_ptr<IRpcStream>(s));
         return id;
     }
 
     template<typename ... Types>
-    void addReceiveStream(StreamName name, rpc::StreamId id, const async::Channel<Types...>& ch)
+    void addReceiveStream(StreamName name, rpc::StreamId id, const async::Channel<Types...>& ch, const RpcStreamExec& exec = nullptr)
     {
-        std::shared_ptr<IRpcStream> s = std::shared_ptr<IRpcStream>(new RpcStream<Types...>(this, name, id, StreamType::Receive, ch));
-        addStream(s);
+        auto s = new RpcStream<Types...>(this, name, id, StreamType::Receive, ch, exec);
+        addStream(std::shared_ptr<IRpcStream>(s));
     }
 
     virtual void addStream(std::shared_ptr<IRpcStream> s) = 0;
@@ -392,15 +398,22 @@ void RpcStream<Types...>::init()
     } break;
     case StreamType::Receive: {
         m_rpc->onStream(m_streamId, [this](const StreamMsg& msg) {
-                std::tuple<Types...> values;
-                bool success = std::apply([msg](auto&... args) {
-                    return RpcPacker::unpack(msg.data, args ...);
-                }, values);
-
-                if (success) {
-                    std::apply([this](const auto&... args) {
-                        m_ch.send(args ...);
+                std::function<void()> func = [this, msg]() {
+                    std::tuple<Types...> values;
+                    bool success = std::apply([msg](auto&... args) {
+                        return RpcPacker::unpack(msg.data, args ...);
                     }, values);
+
+                    if (success) {
+                        std::apply([this](const auto&... args) {
+                            m_ch.send(args ...);
+                        }, values);
+                    }
+                };
+                if (m_exec) {
+                    m_exec(func);
+                } else {
+                    func();
                 }
             });
     } break;
