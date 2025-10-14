@@ -402,7 +402,7 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                     [[fallthrough]];
                 case 'P': // on all pages
                 {
-                    int no = static_cast<int>(m_no) + 1 + score()->pageNumberOffset();
+                    size_t no = m_no + 1 + score()->pageNumberOffset();
                     if (no > 0) {
                         const String pageNumberString = String::number(no);
                         const CharFormat pageNumberFormat = formatForMacro(String('$' + nc));
@@ -420,8 +420,22 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                 }
                 break;
                 case 'n':
-                    newFragments.back().text += String::number(score()->npages() + score()->pageNumberOffset());
-                    break;
+                {
+                    size_t no = score()->npages() + score()->pageNumberOffset();
+                    const String numberOfPagesString = String::number(no);
+                    const CharFormat pageNumberFormat = formatForMacro(String('$' + nc));
+                    // If the default format equals the format for this macro, we don't need to create a new fragment...
+                    if (defaultFormat == pageNumberFormat) {
+                        newFragments.back().text += numberOfPagesString;
+                        break;
+                    }
+                    TextFragment numberOfPagesFragment(numberOfPagesString);
+                    numberOfPagesFragment.format = pageNumberFormat;
+                    newFragments.emplace_back(numberOfPagesFragment);
+                    newFragments.emplace_back(TextFragment());    // Start next fragment
+                    newFragments.back().format = defaultFormat;   // reset to default for next fragment
+                }
+                break;
                 case 'i': // not on first page
                     if (!m_no) {
                         break;
