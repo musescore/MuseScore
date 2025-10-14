@@ -535,7 +535,23 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                         tag += s.at(k);
                     }
                     if (k != n) {      // found ':' ?
-                        newFragments.back().text += score()->metaTag(tag);
+                        if (tag == u"copyright") {
+                            const String copyrightString = score()->metaTag(tag);
+                            const CharFormat copyrightFormat = formatForMacro(String(u"$:" + tag + u":"));
+                            // If the default format equals the format for this macro, we don't need to create a new fragment...
+                            if (defaultFormat == copyrightFormat) {
+                                newFragments.back().text += copyrightString;
+                                i = k - 1;
+                                break;
+                            }
+                            TextFragment copyrightFragment(copyrightString);
+                            copyrightFragment.format = copyrightFormat;
+                            newFragments.emplace_back(copyrightFragment);
+                            newFragments.emplace_back(TextFragment());    // Start next fragment
+                            newFragments.back().format = defaultFormat;   // reset to default for next fragment
+                        } else {
+                            newFragments.back().text += score()->metaTag(tag);
+                        }
                         i = k - 1;
                     }
                 }
@@ -564,7 +580,7 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
 const CharFormat Page::formatForMacro(const String& s) const
 {
     CharFormat format;
-    if (s == "$c" || s == "$C") {
+    if (s == "$c" || s == "$C" || s == "$:copyright:") {
         format.setStyle(style().styleV(Sid::copyrightFontStyle).value<FontStyle>());
         format.setFontSize(style().styleD(Sid::copyrightFontSize));
         format.setFontFamily(style().styleSt(Sid::copyrightFontFace));
