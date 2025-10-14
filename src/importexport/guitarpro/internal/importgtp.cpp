@@ -2974,6 +2974,13 @@ Err importGTP(MasterScore* score, muse::io::IODevice* io, const muse::modularity
         score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
     }
 
+    for (Part* part: score->parts()) {
+        if (part->longName().startsWith(u'@') && part->longName().endsWith(u'@')) {
+            score->cmdRemovePart(part);
+            part->moveToDummy();
+        }
+    }
+
     for (Part* part : score->parts()) {
         for (const auto& pair : part->instruments()) {
             pair.second->updateInstrumentId();
