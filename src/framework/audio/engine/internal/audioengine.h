@@ -23,21 +23,15 @@
 #define MUSE_AUDIO_AUDIOENGINE_H
 
 #include <memory>
-#include <atomic>
 
 #include "../iaudioengine.h"
 
 #include "global/types/ret.h"
 
-#include "global/modularity/ioc.h"
-#include "audio/common/rpc/irpcchannel.h"
-
 namespace muse::audio::engine {
 class AudioBuffer;
 class AudioEngine : public IAudioEngine
 {
-    Inject<rpc::IRpcChannel> rpcChannel;
-
 public:
     AudioEngine();
     ~AudioEngine();

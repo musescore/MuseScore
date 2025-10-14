@@ -44,23 +44,14 @@ static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META = {
     AudioResourceType::FluidSoundfont,
     false /*hasNativeEditor*/ };
 
-void AudioEngineConfiguration::init(const AudioEngineConfig& conf)
+void AudioEngineConfiguration::setConfig(const AudioEngineConfig& conf)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    m_conf = conf;
-
-    rpcChannel()->onMethod(rpc::Method::EngineConfigChanged, [this](const Msg& msg) {
-        AudioEngineConfig conf;
-        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, conf)) {
-            return;
-        }
-
-        if (conf.autoProcessOnlineSoundsInBackground != m_conf.autoProcessOnlineSoundsInBackground) {
-            m_conf.autoProcessOnlineSoundsInBackground = conf.autoProcessOnlineSoundsInBackground;
-            m_autoProcessOnlineSoundsInBackgroundChanged.send(m_conf.autoProcessOnlineSoundsInBackground);
-        }
-    });
+    if (conf.autoProcessOnlineSoundsInBackground != m_conf.autoProcessOnlineSoundsInBackground) {
+        m_conf.autoProcessOnlineSoundsInBackground = conf.autoProcessOnlineSoundsInBackground;
+        m_autoProcessOnlineSoundsInBackgroundChanged.send(m_conf.autoProcessOnlineSoundsInBackground);
+    }
 }
 
 bool AudioEngineConfiguration::autoProcessOnlineSoundsInBackground() const

@@ -243,7 +243,7 @@ void StartAudioController::stopAudioProcessing()
         audioDriver()->close();
     }
 #ifndef Q_OS_WASM
-    if (m_worker->isRunning()) {
+    if (m_worker && m_worker->isRunning()) {
         m_worker->stop();
     }
 #endif

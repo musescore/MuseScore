@@ -33,7 +33,7 @@
 #include "audioengineconfiguration.h"
 #include "audioengine.h"
 #include "engineplayback.h"
-#include "enginerpcchannelcontroller.h"
+#include "enginerpccontroller.h"
 
 #include "fx/fxresolver.h"
 #include "fx/musefxresolver.h"
@@ -89,7 +89,7 @@ void EngineController::registerExports()
     m_configuration = std::make_shared<AudioEngineConfiguration>();
     m_audioEngine = std::make_shared<AudioEngine>();
     m_playback = std::make_shared<EnginePlayback>();
-    m_rpcChannelController  = std::make_shared<EngineRpcChannelController>();
+    m_rpcController  = std::make_shared<EngineRpcController>();
     m_fxResolver = std::make_shared<FxResolver>();
     m_synthResolver = std::make_shared<SynthResolver>();
     m_soundFontRepository = std::make_shared<SoundFontRepository>();
@@ -106,9 +106,8 @@ void EngineController::onStartRunning()
 {
     //! NOTE After sending a EngineRunning,
     //! we may receive RPC messages, such as for example load a soundfont.
-    //! Therefore, we need to subscribe all the necessary services to RPC messages.
-
-    m_soundFontRepository->init();
+    //! Therefore, we need to subscribe to RPC messages.
+    m_rpcController->init();
 
     //! NOTE It is also possible to do internal registrations of some services
     //! that do not depend on anything.
@@ -122,7 +121,7 @@ void EngineController::onStartRunning()
 
 void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfig& conf)
 {
-    m_configuration->init(conf);
+    m_configuration->setConfig(conf);
 
     engine::AudioEngine::RenderConstraints consts;
     consts.minSamplesToReserveWhenIdle = minSamplesToReserve(RenderMode::IdleMode);
@@ -136,13 +135,12 @@ void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfi
     m_synthResolver->init(m_configuration->defaultAudioInputParams(), outputSpec);
 
     m_playback->init();
-    m_rpcChannelController->init(m_playback);
 }
 
 void EngineController::deinit()
 {
     m_playback->deinit();
-    m_rpcChannelController->deinit();
+    m_rpcController->deinit();
     m_audioEngine->deinit();
 }
 

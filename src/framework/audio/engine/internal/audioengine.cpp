@@ -77,14 +77,6 @@ Ret AudioEngine::init(const OutputSpec& outputSpec, const RenderConstraints& con
     m_mixer->init(consts.desiredAudioThreadNumber, consts.minTrackCountForMultithreading);
     m_mixer->setOutputSpec(outputSpec);
 
-    rpcChannel()->onMethod(Method::SetOutputSpec, [this](const Msg& msg) {
-        OutputSpec spec;
-        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, spec)) {
-            return;
-        }
-        this->setOutputSpec(spec);
-    });
-
     setMode(RenderMode::IdleMode);
 
     m_inited = true;

@@ -52,8 +52,8 @@ set(AUDIO_ENGINE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/enginecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/engineplayback.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/engineplayback.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/enginerpcchannelcontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/enginerpcchannelcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/enginerpccontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/enginerpccontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiobuffer.cpp

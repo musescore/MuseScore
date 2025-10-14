@@ -23,20 +23,15 @@
 
 #include "../iaudioengineconfiguration.h"
 
-#include "global/modularity/ioc.h"
-#include "audio/common/rpc/irpcchannel.h"
-
 #include "audio/common/audiotypes.h"
 
 namespace muse::audio::engine {
 class AudioEngineConfiguration : public IAudioEngineConfiguration
 {
-    Inject<rpc::IRpcChannel> rpcChannel;
-
 public:
     AudioEngineConfiguration() = default;
 
-    void init(const AudioEngineConfig& conf);
+    void setConfig(const AudioEngineConfig& conf) override;
 
     bool autoProcessOnlineSoundsInBackground() const override;
     async::Channel<bool> autoProcessOnlineSoundsInBackgroundChanged() const override;

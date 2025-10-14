@@ -43,7 +43,7 @@ class AudioEngineConfiguration;
 class AudioEngine;
 class WebAudioChannel;
 class EnginePlayback;
-class EngineRpcChannelController;
+class EngineRpcController;
 
 class EngineController : public IEngineController
 {
@@ -68,7 +68,7 @@ private:
     std::shared_ptr<AudioEngineConfiguration> m_configuration;
     std::shared_ptr<AudioEngine> m_audioEngine;
     std::shared_ptr<EnginePlayback> m_playback;
-    std::shared_ptr<EngineRpcChannelController> m_rpcChannelController;
+    std::shared_ptr<EngineRpcController> m_rpcController;
     std::shared_ptr<fx::FxResolver> m_fxResolver;
     std::shared_ptr<synth::SynthResolver> m_synthResolver;
     std::shared_ptr<synth::SoundFontRepository> m_soundFontRepository;

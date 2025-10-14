@@ -47,12 +47,18 @@ public:
 #ifdef Q_OS_WASM
 
 #define ONLY_AUDIO_ENGINE_THREAD
+#define ONLY_AUDIO_RPC_THREAD
+#define ONLY_AUDIO_PROC_THREAD
+#define ONLY_AUDIO_RPC_OR_PROC_THREAD
 #define ONLY_AUDIO_MAIN_THREAD
 #define ONLY_AUDIO_MAIN_OR_ENGINE_THREAD
 
 #else
 
 #define ONLY_AUDIO_ENGINE_THREAD assert(muse::audio::AudioSanitizer::isEngineThread())
+#define ONLY_AUDIO_RPC_THREAD assert(muse::audio::AudioSanitizer::isEngineThread())
+#define ONLY_AUDIO_PROC_THREAD assert(muse::audio::AudioSanitizer::isEngineThread())
+#define ONLY_AUDIO_RPC_OR_PROC_THREAD assert(muse::audio::AudioSanitizer::isEngineThread())
 #define ONLY_AUDIO_MAIN_THREAD assert(muse::audio::AudioSanitizer::isMainThread())
 #define ONLY_AUDIO_MAIN_OR_ENGINE_THREAD assert((muse::audio::AudioSanitizer::isEngineThread() \
                                                  || muse::audio::AudioSanitizer::isMainThread()))

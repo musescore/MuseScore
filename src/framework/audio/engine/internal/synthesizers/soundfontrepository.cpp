@@ -22,7 +22,6 @@
 #include "soundfontrepository.h"
 
 #include "audio/common/audiosanitizer.h"
-#include "audio/common/rpc/rpcpacker.h"
 
 #include "fluidsynth/fluidsoundfontparser.h"
 
@@ -35,41 +34,7 @@
 using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::synth;
-using namespace muse::audio::rpc;
 using namespace muse::async;
-
-void SoundFontRepository::init()
-{
-    ONLY_AUDIO_ENGINE_THREAD;
-
-    channel()->onMethod(Method::LoadSoundFonts, [this](const Msg& msg) {
-        std::vector<SoundFontUri> uris;
-        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, uris)) {
-            return;
-        }
-
-        this->loadSoundFonts(uris);
-    });
-
-    channel()->onMethod(Method::AddSoundFont, [this](const Msg& msg) {
-        SoundFontUri uri;
-        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, uri)) {
-            return;
-        }
-
-        this->addSoundFont(uri);
-    });
-
-    channel()->onMethod(Method::AddSoundFontData, [this](const Msg& msg) {
-        SoundFontUri uri;
-        ByteArray data;
-        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, uri, data)) {
-            return;
-        }
-
-        this->addSoundFontData(uri, data);
-    });
-}
 
 bool SoundFontRepository::isSoundFontLoaded(const std::string& name) const
 {
