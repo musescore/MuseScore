@@ -47,7 +47,9 @@ public:
 
 private:
 
-    void onMethod(rpc::Method method, rpc::Handler h);
+    void onLongMethod(rpc::Method method, const rpc::Handler& h);
+    void onQuickMethod(rpc::Method method, const rpc::Handler& h);
+    void onMethod(OperationType type, rpc::Method method, const rpc::Handler& h);
 
     std::vector<rpc::Method> m_usedMethods;
 

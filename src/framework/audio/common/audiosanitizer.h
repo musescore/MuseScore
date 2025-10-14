@@ -44,7 +44,7 @@ public:
 };
 }
 
-#ifndef Q_OS_WASM
+#ifdef Q_OS_WASM
 
 #define ONLY_AUDIO_ENGINE_THREAD
 #define ONLY_AUDIO_RPC_THREAD

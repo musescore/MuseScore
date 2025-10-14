@@ -462,7 +462,7 @@ enum class RenderMode {
     OfflineMode
 };
 
-//! NOTE When commands arrive at the engine, it processes them.
+//! NOTE When commands arrive at the engine, it exec them.
 //! These can be quick commands like changing the volume,
 //! or longer commands like add a new track.
 enum class OperationType {
