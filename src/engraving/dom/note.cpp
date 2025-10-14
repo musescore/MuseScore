@@ -834,11 +834,9 @@ String Note::tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full)
         pitchStr.replace(u"#", u"♯");
     }
 
-    pitchStr = muse::mtrc("global", pitchStr);
-
     const String octaveStr = String::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
 
-    return pitchStr + (explicitAccidental ? u" " : u"") + octaveStr;
+    return pitchStr + u" " + octaveStr;
 }
 
 //---------------------------------------------------------
@@ -848,6 +846,12 @@ String Note::tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full)
 String Note::tpcUserName(const bool explicitAccidental, bool full) const
 {
     String pitchName = tpcUserName(tpc(), epitch() + ottaveCapoFret(), explicitAccidental, full);
+
+    if (configuration()->pitchNotationSPN()) {
+        pitchName.remove(u" ");
+    } else {
+        pitchName = muse::mtrc("global/pitchName", pitchName);
+    }
 
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         // see Note::accessibleInfo(), but we return what we have
@@ -872,6 +876,11 @@ String Note::tpcUserName(const bool explicitAccidental, bool full) const
 
     if (!concertPitch() && transposition()) {
         String soundingPitch = tpcUserName(tpc1(), ppitch(), explicitAccidental);
+        if (configuration()->pitchNotationSPN()) {
+            soundingPitch.remove(u" ");
+        } else {
+            soundingPitch = muse::mtrc("global/pitchName", soundingPitch);
+        }
         return muse::mtrc("engraving", "%1 (sounding as %2%3)").arg(pitchName, soundingPitch, pitchOffset);
     }
     return pitchName + pitchOffset;
