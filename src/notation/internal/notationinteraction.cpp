@@ -5143,21 +5143,23 @@ Ret NotationInteraction::repeatSelection()
             return 0;
         }
         startEdit(TranslatableString("undoableAction", "Repeat selection"));
-        std::list<Note*> notes = selection.uniqueNotes();
+
         InputState& is = score()->inputState();
-        std::vector<Note*> nList;
-        Chord* sourceChord = nullptr;
+        std::vector<EngravingItem*> toSelect;
         Note* newNote = nullptr;
         NoteVal nval;
-        for (Note* n : notes) {
-            if (n->chord() == sourceChord) {
+
+        std::unordered_set<const Chord*> foundChords;
+        for (Note* n : selection.uniqueNotes()) {
+            const Chord* sourceChord = n->chord();
+            is.setTrack(sourceChord->track());
+            if (muse::contains(foundChords, sourceChord)) {
                 nval = n->noteVal();
                 newNote = score()->addPitch(nval, true);
-                nList.push_back(newNote);
+                toSelect.push_back(newNote);
                 continue;
             }
-            sourceChord = n->chord();
-            is.setTrack(sourceChord->track());
+            foundChords.emplace(sourceChord);
             is.setSegment(sourceChord->segment());
             if (score()->inputState().endOfScore()) {
                 continue;
@@ -5166,12 +5168,10 @@ Ret NotationInteraction::repeatSelection()
             is.setDuration(sourceChord->durationType());
             nval = n->noteVal();
             newNote = score()->addPitch(nval, false);
-            nList.push_back(newNote);
+            toSelect.push_back(newNote);
             newNote->chord()->updateArticulations(sourceChord->articulationSymbolIds());
         }
-        for (Note* n : nList) {
-            score()->select(n, SelectType::ADD);
-        }
+        score()->select(toSelect, SelectType::ADD);
         apply();
         return muse::make_ok();
     }
