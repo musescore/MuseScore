@@ -45,6 +45,10 @@ void NoteInputPreferencesModel::load()
         emit useNoteInputCursorInInputByDurationChanged(useNoteInputCursorInInputByDuration());
     });
 
+    engravingConfiguration()->pitchNotationSPNChanged().onNotify(this, [this]() {
+        emit pitchNotationSPNChanged(pitchNotationSPN());
+    });
+
     notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
         emit midiInputEnabledChanged(midiInputEnabled());
     });
@@ -149,6 +153,11 @@ bool NoteInputPreferencesModel::useNoteInputCursorInInputByDuration() const
     return notationConfiguration()->useNoteInputCursorInInputByDuration();
 }
 
+bool NoteInputPreferencesModel::pitchNotationSPN() const
+{
+    return engravingConfiguration()->pitchNotationSPN();
+}
+
 bool NoteInputPreferencesModel::midiInputEnabled() const
 {
     return notationConfiguration()->isMidiInputEnabled();
@@ -249,6 +258,15 @@ void NoteInputPreferencesModel::setUseNoteInputCursorInInputByDuration(bool valu
     }
 
     notationConfiguration()->setUseNoteInputCursorInInputByDuration(value);
+}
+
+void NoteInputPreferencesModel::setPitchNotationSPN(bool value)
+{
+    if (value == pitchNotationSPN()) {
+        return;
+    }
+
+    engravingConfiguration()->setPitchNotationSPN(value);
 }
 
 void NoteInputPreferencesModel::setMidiInputEnabled(bool value)

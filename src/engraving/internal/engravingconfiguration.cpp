@@ -57,6 +57,8 @@ static const Settings::Key FRETBOARD_DIAGRAMS_AUTO_UPDATE("engraving", "score/fr
 
 static const Settings::Key DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT("engraving", "engraving/compat/doNotSaveEIDsForBackCompat");
 
+static const Settings::Key PITCH_NOTATION_SPN("engraving", "score/pitchNotationSPN");
+
 struct VoiceColor {
     Settings::Key key;
     Color color;
@@ -164,6 +166,11 @@ void EngravingConfiguration::init()
     settings()->setDefaultValue(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, Val(false));
     settings()->setDescription(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, muse::trc("engraving", "Do not save EIDs"));
     settings()->setCanBeManuallyEdited(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, false);
+
+    settings()->setDefaultValue(PITCH_NOTATION_SPN, Val(false));
+    settings()->valueChanged(PITCH_NOTATION_SPN).onReceive(nullptr, [this](const Val&) {
+        m_pitchNotationSPNChanged.notify();
+    });
 }
 
 muse::io::path_t EngravingConfiguration::appDataPath() const
@@ -505,4 +512,19 @@ bool EngravingConfiguration::minDistanceForPartialSkylineCalculated() const
 bool EngravingConfiguration::specificSlursLayoutWorkaround() const
 {
     return guitarProImportExperimental();
+}
+
+bool EngravingConfiguration::pitchNotationSPN() const
+{
+    return settings()->value(PITCH_NOTATION_SPN).toBool();
+}
+
+void EngravingConfiguration::setPitchNotationSPN(bool use)
+{
+    settings()->setSharedValue(PITCH_NOTATION_SPN, Val(use));
+}
+
+muse::async::Notification EngravingConfiguration::pitchNotationSPNChanged() const
+{
+    return m_pitchNotationSPNChanged;
 }

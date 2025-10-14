@@ -292,7 +292,7 @@ static constexpr const char* flatNotes[] = {
     QT_TRANSLATE_NOOP("global/noteName", "B")
 };
 
-std::string muse::pitchToString(int pitch, bool addoctave, bool useFlats /* = false */)
+std::string muse::pitchToString(int pitch, bool useSPN, bool addoctave, bool useFlats /* = false */)
 {
     if (pitch < 0 || pitch > 127) {
         return std::string();
@@ -303,8 +303,17 @@ std::string muse::pitchToString(int pitch, bool addoctave, bool useFlats /* = fa
     int i = pitch % 12;
     if (addoctave) {
         int octave = (pitch / 12) - 1;
-        std::string key = std::string(source[i]) + std::to_string(octave);
-        return muse::trc("global/pitchName", key.c_str());
+        if (useSPN) {
+            return std::string(source[i]) + std::to_string(octave);
+        } else {
+            std::string key = std::string(source[i]) + std::to_string(octave);
+            return muse::trc("global/pitchName", key.c_str());
+        }
     }
-    return muse::trc("global/noteName", source[i]);
+
+    if (useSPN) {
+        return std::string(source[i]);
+    } else {
+        return muse::trc("global/noteName", source[i]);
+    }
 }

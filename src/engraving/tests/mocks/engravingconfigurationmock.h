@@ -109,6 +109,10 @@ public:
     MOCK_METHOD(bool, guitarProMultivoiceEnabled, (), (const, override));
     MOCK_METHOD(bool, minDistanceForPartialSkylineCalculated, (), (const, override));
     MOCK_METHOD(bool, specificSlursLayoutWorkaround, (), (const, override));
+
+    MOCK_METHOD(bool, pitchNotationSPN, (), (const, override));
+    MOCK_METHOD(void, setPitchNotationSPN, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, pitchNotationSPNChanged, (), (const, override));
 };
 }
 

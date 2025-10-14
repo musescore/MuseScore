@@ -44,6 +44,8 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
         bool addAccidentalDotsArticulationsToNextNoteEntered READ addAccidentalDotsArticulationsToNextNoteEntered WRITE setAddAccidentalDotsArticulationsToNextNoteEntered NOTIFY addAccidentalDotsArticulationsToNextNoteEnteredChanged)
     Q_PROPERTY(
         bool useNoteInputCursorInInputByDuration READ useNoteInputCursorInInputByDuration WRITE setUseNoteInputCursorInInputByDuration NOTIFY useNoteInputCursorInInputByDurationChanged)
+    Q_PROPERTY(
+        bool pitchNotationSPN READ pitchNotationSPN WRITE setPitchNotationSPN NOTIFY pitchNotationSPNChanged)
 
     Q_PROPERTY(bool midiInputEnabled READ midiInputEnabled WRITE setMidiInputEnabled NOTIFY midiInputEnabledChanged)
     Q_PROPERTY(
@@ -93,6 +95,7 @@ public:
     int defaultNoteInputMethod() const;
     bool addAccidentalDotsArticulationsToNextNoteEntered() const;
     bool useNoteInputCursorInInputByDuration() const;
+    bool pitchNotationSPN() const;
 
     bool midiInputEnabled() const;
     bool startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const;
@@ -119,6 +122,7 @@ public slots:
     void setDefaultNoteInputMethod(int value);
     void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value);
     void setUseNoteInputCursorInInputByDuration(bool value);
+    void setPitchNotationSPN(bool use);
 
     void setMidiInputEnabled(bool value);
     void setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool value);
@@ -145,6 +149,7 @@ signals:
     void defaultNoteInputMethodChanged(int value);
     void addAccidentalDotsArticulationsToNextNoteEnteredChanged(bool value);
     void useNoteInputCursorInInputByDurationChanged(bool value);
+    void pitchNotationSPNChanged(bool value);
 
     void midiInputEnabledChanged(bool value);
     void startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged(bool value);
