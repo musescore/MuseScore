@@ -339,6 +339,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                     prevMeasureState.restoreMeasure();
                     MeasureLayout::layoutMeasureElements(m, ctx);
                     BeamLayout::restoreBeams(m, ctx);
+                    SystemLayout::restoreOldSystemLayout(m->system(), ctx);
                     if (m == nm || !m->noBreak()) {
                         break;
                     }
