@@ -377,8 +377,8 @@ public:
 
     void write(muse::io::IODevice* dev);
     void credits(XmlWriter& xml);
-    void moveToTick(const Fraction& t);
-    void moveToTickIfNeed(const Fraction& t);
+    void moveToTick(const Fraction& t, const Fraction& stretch = { 1, 1 });
+    void moveToTickIfNeed(const Fraction& t, track_idx_t track, const Fraction& measureTick);
     void words(TextBase const* const text, staff_idx_t staff);
     void tboxTextAsWords(TextBase const* const text, const staff_idx_t staff, PointF position);
     void rehearsal(RehearsalMark const* const rmk, staff_idx_t staff);
@@ -414,14 +414,14 @@ private:
     void chord(Chord* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll, bool useDrumset);
     void rest(Rest* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll);
     void clef(staff_idx_t staff, const ClefType ct, const String& extraAttributes = u"");
-    void timesig(const TimeSig* tsig);
+    void timesig(const TimeSig* tsig, staff_idx_t staff);
     void keysig(const KeySig* ks, ClefType ct, staff_idx_t staff = 0, bool visible = true);
     void barlineLeft(const Measure* const m, const track_idx_t track);
     void barlineMiddle(const BarLine* bl);
     void barlineRight(const Measure* const m, const track_idx_t strack, const track_idx_t etrack);
     void lyrics(const std::vector<Lyrics*>& ll, const track_idx_t trk);
     void work(const MeasureBase* measure);
-    void calcDivMoveToTick(const Fraction& t);
+    void calcDivMoveToTick(const Fraction& t, const Fraction& stretch = { 1, 1 });
     void calcDivisions();
     void keysigTimesig(const Measure* m, const Part* p);
     void chordAttributes(Chord* chord, Notations& notations, Technical& technical, TrillHash& trillStart, TrillHash& trillStop);
@@ -1245,18 +1245,23 @@ static void addFraction(const Fraction& len)
 //   calcDivMoveToTick
 //---------------------------------------------------------
 
-void ExportMusicXml::calcDivMoveToTick(const Fraction& t)
+void ExportMusicXml::calcDivMoveToTick(const Fraction& t, const Fraction& stretch)
 {
+    Fraction stretchedTick { t + stretch * (tick() - t) };
+#ifdef DEBUG_TICK
+    LOGD() << "t (target) " << fractionToStdString(t) << " stretch " << fractionToStdString(stretch)
+           << " m_tick (current) " << fractionToStdString(m_tick) << " stretchedTick " << fractionToStdString(stretchedTick);
+#endif
     if (t < tick()) {
 #ifdef DEBUG_TICK
         LOGD() << "backup " << fractionToStdString(tick() - t);
 #endif
-        addFraction(tick() - t);
+        addFraction(stretchedTick - t);
     } else if (t > tick()) {
 #ifdef DEBUG_TICK
         LOGD() << "forward " << fractionToStdString(t - tick());
 #endif
-        addFraction(t - tick());
+        addFraction(t - stretchedTick);
     }
     tick() = t;
 }
@@ -1271,10 +1276,25 @@ static bool isTwoNoteTremolo(Chord* chord)
 }
 
 //---------------------------------------------------------
+//  stretch
+//---------------------------------------------------------
+
+static Fraction stretch(Score* score, track_idx_t st, Fraction tick)
+{
+    Staff* staff { score->staff(track2staff(st)) };
+    Fraction res { staff->timeStretch(tick) };
+#ifdef DEBUG_TICK
+    LOGD() << "track " << st << " tick " << fractionToStdString(tick) << " stretch " << fractionToStdString(res);
+#endif
+    return res;
+}
+
+//---------------------------------------------------------
 //  calcDivisions
 //---------------------------------------------------------
 
 // Loop over all voices in all staves and determine a suitable value for divisions.
+// All parts are taken into account, a global divisions value results.
 
 // Length of time in MusicXML is expressed in "units", which should allow expressing all time values
 // as an integral number of units. Divisions contains the number of units in a quarter note.
@@ -1308,9 +1328,10 @@ void ExportMusicXml::calcDivisions()
                         if (e->track() == st && e->isFiguredBass()) {
                             const FiguredBass* fb = toFiguredBass(e);
 #ifdef DEBUG_TICK
-                            LOGD("figuredbass tick %d duration %d", fb->tick().ticks(), fb->ticks().ticks());
+                            LOGD() << "figuredbass tick " << fractionToStdString(fb->tick())
+                                   << " tickLen " << fractionToStdString(fb->ticks());
 #endif
-                            addFraction(fb->ticks());
+                            addFraction(stretch(m_score, st, m->tick()) * fb->ticks());
                         }
                     }
 
@@ -1325,7 +1346,7 @@ void ExportMusicXml::calcDivisions()
                     }
 
                     if (m_tick != seg->tick()) {
-                        calcDivMoveToTick(seg->tick());
+                        calcDivMoveToTick(seg->tick(), stretch(m_score, st, m->tick()));
                     }
 
                     if (el->isChordRest()) {
@@ -1339,13 +1360,13 @@ void ExportMusicXml::calcDivisions()
                         LOGD() << "chordrest tick " << fractionToStdString(el->tick())
                                << " tickLen" << durElemTicksToStdString(*toChordRest(el));
 #endif
-                        addFraction(l);
+                        addFraction(stretch(m_score, st, m->tick()) * l);
                         m_tick += l;
                     }
                 }
             }
             // move to end of measure (in case of incomplete last voice)
-            calcDivMoveToTick(m->endTick());
+            calcDivMoveToTick(m->endTick(), stretch(m_score, etrack - 1, m->tick()));
         }
     }
 
@@ -2185,16 +2206,20 @@ static int calculateDurationInDivisions(const Fraction& tick, const int division
 //   moveToTick
 //---------------------------------------------------------
 
-void ExportMusicXml::moveToTick(const Fraction& t)
+void ExportMusicXml::moveToTick(const Fraction& t, const Fraction& stretch)
 {
-    //LOGD("ExportMusicXml::moveToTick(t=%s) _tick=%s", muPrintable(t.print()), muPrintable(_tick.print()));
+    Fraction stretchedTick { t + stretch * (tick() - t) };
+#ifdef DEBUG_TICK
+    LOGD() << "t (target) " << fractionToStdString(t) << " stretch " << fractionToStdString(stretch)
+           << " tick() (current) " << fractionToStdString(m_tick) << " stretchedTick " << fractionToStdString(stretchedTick);
+#endif
     if (t < m_tick) {
 #ifdef DEBUG_TICK
         LOGD(" -> backup");
 #endif
         m_attr.doAttr(m_xml, false);
         m_xml.startElement("backup");
-        m_xml.tag("duration", calculateTimeDeltaInDivisions(m_tick, t, m_div));
+        m_xml.tag("duration", calculateTimeDeltaInDivisions(stretchedTick, t, m_div));
         m_xml.endElement();
     } else if (t > m_tick) {
 #ifdef DEBUG_TICK
@@ -2202,17 +2227,17 @@ void ExportMusicXml::moveToTick(const Fraction& t)
 #endif
         m_attr.doAttr(m_xml, false);
         m_xml.startElement("forward");
-        m_xml.tag("duration", calculateTimeDeltaInDivisions(t, m_tick, m_div));
+        m_xml.tag("duration", calculateTimeDeltaInDivisions(t, stretchedTick, m_div));
         m_xml.endElement();
     }
     m_tick = t;
 }
 
-void ExportMusicXml::moveToTickIfNeed(const Fraction& t)
+void ExportMusicXml::moveToTickIfNeed(const Fraction& t, track_idx_t track, const Fraction& measureTick)
 {
     if (m_tick != t) {
         m_attr.doAttr(m_xml, false);
-        moveToTick(t);
+        moveToTick(t, stretch(m_score, track, measureTick));
     }
 }
 
@@ -2220,7 +2245,7 @@ void ExportMusicXml::moveToTickIfNeed(const Fraction& t)
 //   timesig
 //---------------------------------------------------------
 
-void ExportMusicXml::timesig(const TimeSig* tsig)
+void ExportMusicXml::timesig(const TimeSig* tsig, staff_idx_t staff)
 {
     const TimeSigType st = tsig->timeSigType();
     const Fraction ts = tsig->sig();
@@ -2238,6 +2263,10 @@ void ExportMusicXml::timesig(const TimeSig* tsig)
     } else if (!ns.empty() && ds.empty()) {
         attrs = { { "symbol", "single-number" } };
     }
+    if (staff) {
+        attrs.push_back({ "number", staff });
+    }
+
     if (!tsig->visible() || !tsig->showOnThisStaff()) {
         attrs.emplace_back(std::make_pair("print-object", "no"));
     }
@@ -4160,18 +4189,6 @@ static void writeNotationSymbols(XmlWriter& xml, Notations& notations, const Ele
 }
 
 //---------------------------------------------------------
-//   stretchCorrActFraction
-//---------------------------------------------------------
-
-static Fraction stretchCorrActFraction(const Note* const note)
-{
-    // time signature stretch factor
-    const Fraction str = note->chord()->staff()->timeStretch(note->chord()->tick());
-    // chord's actual ticks corrected for stretch
-    return note->chord()->actualTicks() * str;
-}
-
-//---------------------------------------------------------
 //   tremoloCorrection
 //---------------------------------------------------------
 
@@ -4233,7 +4250,7 @@ static void writeType(XmlWriter& xml, const Note* const note)
     int dots = 0;
     const Fraction ratio = timeModification(note->chord()->tuplet());
 
-    const Fraction strActFraction = stretchCorrActFraction(note);
+    const Fraction strActFraction = note->chord()->globalTicks();
     const Fraction tt  = strActFraction * ratio * tremoloCorrection(note);
     const String s = tick2xml(tt, &dots);
     if (s.isEmpty()) {
@@ -4428,7 +4445,7 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
 
         // duration
         if (!grace) {
-            m_xml.tag("duration", calculateDurationInDivisions(stretchCorrActFraction(note), m_div));
+            m_xml.tag("duration", calculateDurationInDivisions(chord->globalTicks(), m_div));
         }
 
         if (!isCueNote(note)) {
@@ -4656,12 +4673,10 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyric
         m_xml.endElement();
     }
 
-    Fraction tickLen = rest->actualTicks();
-    if (d.isMeasure()) {
-        // to avoid forward since rest->ticklen=0 in this case.
-        tickLen = rest->measure()->ticks();
-    }
-    m_tick += tickLen;
+    Fraction tickLen;
+    // regular rest
+    tickLen = rest->globalTicks(); // MusicXML requires unstretched duration
+    m_tick += rest->actualTicks(); // prevent <backward> or <forward> by moving to next note's tick
 #ifdef DEBUG_TICK
     LOGD() << "tickLen " << fractionToStdString(tickLen)
            << "newtick " << fractionToStdString(tick());
@@ -5418,6 +5433,8 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
 {
     const bool isLineType = hp->isLineType();
     const bool isStart = hp->tick() == tick;
+    const Measure* measure = hp->startElement() ? hp->startElement()->findMeasure() : nullptr;
+    const Fraction measureStart = measure ? measure->tick() : Fraction(0, 1);
     int n;
     if (isLineType) {
         if (!hp->lineVisible()) {
@@ -5426,7 +5443,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
             }
             // generate backup or forward to the start time of the element
             const Fraction tickToWrite = isStart ? hp->tick() : hp->tick2();
-            moveToTickIfNeed(tickToWrite);
+            moveToTickIfNeed(tickToWrite, hp->track(), measureStart);
             directionTag(m_xml, m_attr, hp);
             writeHairpinText(m_xml, hp, isStart);
             directionETag(m_xml, staff);
@@ -5461,7 +5478,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
 
     // generate backup or forward to the start time of the element
     const Fraction tickToWrite = isStart ? hp->tick() : hp->tick2();
-    moveToTickIfNeed(tickToWrite);
+    moveToTickIfNeed(tickToWrite, hp->track(), measureStart);
 
     directionTag(m_xml, m_attr, hp);
     if (isStart) {
@@ -5559,6 +5576,8 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
 {
     int n = findOttava(ot);
     bool isStart = ot->tick() == tick;
+    const Measure* measure = ot->startElement() ? ot->startElement()->findMeasure() : nullptr;
+    const Fraction measureStart = measure ? measure->tick() : Fraction(0, 1);
     if (n >= 0) {
         m_ottavas[n] = 0;
     } else {
@@ -5612,7 +5631,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
     if (!octaveShiftXml.empty()) {
         // generate backup or forward to the start time of the element
         const Fraction tickToWrite = isStart ? ot->tick() : ot->tick2();
-        moveToTickIfNeed(tickToWrite);
+        moveToTickIfNeed(tickToWrite, ot->track(), measureStart);
 
         directionTag(m_xml, m_attr, ot);
         m_xml.startElement("direction-type");
@@ -5636,9 +5655,12 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
     }
     bool isStart = pd->tick() == tick;
 
+    const Measure* measure = pd->startElement() ? pd->startElement()->findMeasure() : nullptr;
+    const Fraction measureStart = measure ? measure->tick() : Fraction(0, 1);
+
     // generate backup or forward to the start time of the element
     const Fraction tickToWrite = isStart ? pd->tick() : pd->tick2();
-    moveToTickIfNeed(tickToWrite);
+    moveToTickIfNeed(tickToWrite, pd->track(), measureStart);
 
     directionTag(m_xml, m_attr, pd);
     m_xml.startElement("direction-type");
@@ -5719,6 +5741,9 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
     // special case: a dashed line w/o hooks is written as dashes
     const bool isDashes = tl->lineStyle() == LineType::DASHED && (tl->beginHookType() == HookType::NONE)
                           && (tl->endHookType() == HookType::NONE);
+
+    const Measure* measure = tl->startElement() ? tl->startElement()->findMeasure() : nullptr;
+    const Fraction measureStart = measure ? measure->tick() : Fraction(0, 1);
 
     if (isDashes) {
         n = findDashes(tl);
@@ -5808,7 +5833,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
 
     // generate backup or forward to the start time of the element
     const Fraction tickToWrite = isStart ? tl->tick() : tl->tick2();
-    moveToTickIfNeed(tickToWrite);
+    moveToTickIfNeed(tickToWrite, tl->track(), measureStart);
 
     directionTag(m_xml, m_attr, tl);
 
@@ -6961,10 +6986,11 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
 {
     track_idx_t strack = p->startTrack();
     track_idx_t etrack = p->endTrack();
-    //LOGD("keysigTimesig m %p strack %d etrack %d", m, strack, etrack);
+    //LOGD("keysigTimesig m %p strack %zu etrack %zu", m, strack, etrack);
 
-    // search all staves for non-generated key signatures
-    std::map<staff_idx_t, KeySig*> keysigs;   // map staff to key signature
+    // search all staves for non-generated time and key signatures
+    std::map<staff_idx_t, KeySig*> keysigs;     // map staff to key signature
+    std::map<staff_idx_t, TimeSig*> timesigs;   // map staff to time signature
     for (Segment* seg = m->first(); seg; seg = seg->next()) {
         if (seg->tick() > m->tick()) {
             break;
@@ -6981,10 +7007,16 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
                     keysigs[st] = toKeySig(el);
                 }
             }
+
+            if (el->isTimeSig()) {
+                LOGN(" found timesig %p tick %d track %zu", el, el->tick().ticks(), el->track());
+                staff_idx_t st = (t - strack) / VOICES;
+                if (!el->generated()) {
+                    timesigs[st] = toTimeSig(el);
+                }
+            }
         }
     }
-
-    //ClefType ct = rest->staff()->clef(rest->tick());
 
     // write the key signatues
     if (!keysigs.empty()) {
@@ -7030,18 +7062,39 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         }
     }
 
-    TimeSig* tsig = 0;
-    for (Segment* seg = m->first(); seg; seg = seg->next()) {
-        if (seg->tick() > m->tick()) {
-            break;
+    // write the time signatues
+    if (!timesigs.empty()) {
+        // determine if all staves have a timesig and all timesigs are identical
+        // in that case a single <time> is written, without number=... attribute
+        size_t nstaves = p->nstaves();
+        bool singleTime = true;
+        // check if all staves have a keysig
+        for (staff_idx_t i = 0; i < nstaves; i++) {
+            if (!muse::contains(timesigs, i)) {
+                singleTime = false;
+            }
         }
-        EngravingItem* el = seg->element(strack);
-        if (el && el->isTimeSig()) {
-            tsig = toTimeSig(el);
+        // check if all timesigs are identical
+        if (singleTime) {
+            for (staff_idx_t i = 1; i < nstaves; i++) {
+                if (!(timesigs.at(i)->sig() == timesigs.at(0)->sig())) {
+                    singleTime = false;
+                    break;
+                }
+            }
         }
-    }
-    if (tsig) {
-        timesig(tsig);
+
+        // write the timesigs
+        LOGN(" singleTime %d", singleTime);
+        if (singleTime) {
+            // timesig applies to all staves
+            timesig(timesigs.at(0), 0);
+        } else {
+            // staff-specific timesig
+            for (staff_idx_t st : muse::keys(timesigs)) {
+                timesig(timesigs.at(st), st + 1);
+            }
+        }
     }
 }
 
@@ -8253,7 +8306,7 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
             }
 
             // generate backup or forward to the start time of the element
-            moveToTickIfNeed(seg->tick());
+            moveToTickIfNeed(seg->tick(), track, m->tick());
 
             EngravingItem* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, strack, etrack - 1);
             if (ic && (track == strack)) {
@@ -8336,7 +8389,7 @@ void ExportMusicXml::writeMeasureStaves(const Measure* m,
         IF_ASSERT_FAILED(m == origM) {
             return;
         }
-        moveToTick(m->tick());
+        moveToTick(m->tick());  // move tick to start of measure
 
         staff_idx_t partRelStaffNo = (nstaves > 1 ? staffIdx - startStaff + 1 : 0); // xml staff number, counting from 1 for this instrument
         // special number 0 -> don’t show staff number in xml output
@@ -8368,6 +8421,10 @@ void ExportMusicXml::writeMeasureStaves(const Measure* m,
         // restore m and _tick before advancing to next staff in part
         m = origM;
         m_tick += tickDelta;
+        if (!isLastStaffOfPart) {
+            // move tick to start of measure, generates backup to next staff, needs this staff's stretch
+            moveToTick(m->tick(), stretch(m_score, staffIdx * VOICES, m->tick()));
+        }
     }
 }
 
@@ -8476,10 +8533,10 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     annotationsWithoutNote(this, strack, static_cast<int>(staves), m);
 
     // move to end of measure (in case of incomplete last voice)
-       #ifdef DEBUG_TICK
+#ifdef DEBUG_TICK
     LOGD("end of measure");
-       #endif
-    moveToTick(m->endTick());
+#endif
+    moveToTick(m->endTick(), stretch(m_score, etrack - 1, m->tick()));
     if (partIndex == 0) {
         repeatAtMeasureStop(m, strack, etrack, strack);
     }
