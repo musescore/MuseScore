@@ -33,6 +33,8 @@ class IAudioEngineConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAudioEngineConfiguration() = default;
 
+    virtual void setConfig(const AudioEngineConfig& conf) = 0;
+
     virtual bool autoProcessOnlineSoundsInBackground() const = 0;
     virtual async::Channel<bool> autoProcessOnlineSoundsInBackgroundChanged() const = 0;
 

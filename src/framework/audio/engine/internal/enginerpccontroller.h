@@ -25,25 +25,31 @@
 
 #include "global/modularity/ioc.h"
 #include "audio/common/rpc/irpcchannel.h"
-
+#include "../iaudioengine.h"
 #include "../iengineplayback.h"
 #include "../isoundfontrepository.h"
+#include "../iaudioengineconfiguration.h"
 
 namespace muse::audio::engine {
-class EngineRpcChannelController : public async::Asyncable
+class EngineRpcController : public async::Asyncable
 {
     Inject<rpc::IRpcChannel> channel;
+    Inject<IAudioEngine> engine;
+    Inject<IEnginePlayback> playback;
     Inject<synth::ISoundFontRepository> soundFontRepository;
+    Inject<IAudioEngineConfiguration> configuration;
 
 public:
-    EngineRpcChannelController() = default;
+    EngineRpcController() = default;
 
-    void init(std::shared_ptr<IEnginePlayback> playback);
+    void init();
     void deinit();
 
 private:
 
-    std::shared_ptr<IEnginePlayback> m_playback;
+    void onMethod(rpc::Method method, rpc::Handler h);
+
+    std::vector<rpc::Method> m_usedMethods;
 
     struct PendingTrack {
         rpc::Msg msg;

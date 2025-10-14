@@ -36,6 +36,10 @@ class ISoundFontRepository : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISoundFontRepository() = default;
 
+    virtual void loadSoundFonts(const std::vector<SoundFontUri>& uris) = 0;
+    virtual void addSoundFont(const SoundFontUri& uri) = 0;
+    virtual void addSoundFontData(const SoundFontUri& uri, const ByteArray& data) = 0;
+
     virtual bool isSoundFontLoaded(const std::string& name) const = 0;
     virtual const SoundFontsMap& soundFonts() const = 0;
     virtual async::Notification soundFontsChanged() const = 0;

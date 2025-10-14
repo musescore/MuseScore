@@ -22,33 +22,23 @@
 #ifndef MUSE_AUDIO_SOUNDFONTREPOSITORY_H
 #define MUSE_AUDIO_SOUNDFONTREPOSITORY_H
 
-#include "global/async/asyncable.h"
-
-#include "global/modularity/ioc.h"
-#include "audio/common/rpc/irpcchannel.h"
-
 #include "../../isoundfontrepository.h"
 
 namespace muse::audio::synth {
-class SoundFontRepository : public ISoundFontRepository, public Injectable, public async::Asyncable
+class SoundFontRepository : public ISoundFontRepository
 {
-    Inject<rpc::IRpcChannel> channel;
-
 public:
-    SoundFontRepository(const modularity::ContextPtr& iocCtx = nullptr)
-        : Injectable(iocCtx) {}
+    SoundFontRepository() = default;
 
-    void init();
+    void loadSoundFonts(const std::vector<SoundFontUri>& uris) override;
+    void addSoundFont(const SoundFontUri& uri) override;
+    void addSoundFontData(const SoundFontUri& uri, const ByteArray& data) override;
 
     bool isSoundFontLoaded(const std::string& name) const override;
     const SoundFontsMap& soundFonts() const override;
     async::Notification soundFontsChanged() const override;
 
 private:
-
-    void loadSoundFonts(const std::vector<SoundFontUri>& uris);
-    void addSoundFont(const SoundFontUri& uri);
-    void addSoundFontData(const SoundFontUri& uri, const ByteArray& data);
 
     void doAddSoundFont(const SoundFontUri& uri, const SoundFontsMap* cache = nullptr, std::function<void()> onFinished = nullptr);
 
