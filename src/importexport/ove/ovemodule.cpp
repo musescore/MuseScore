@@ -53,11 +53,7 @@ void OveModule::resolveImports()
     }
 }
 
-void OveModule::onInit(const IApplication::RunMode& mode)
+void OveModule::onInit(const IApplication::RunMode&)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     m_configuration->init();
 }

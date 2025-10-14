@@ -110,11 +110,11 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 {
     m_configuration->init();
 
-    m_audioDriverController->init();
-
     if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
+
+    m_audioDriverController->init();
 
     // rpc
     m_rpcChannel->setupOnMain();
@@ -144,10 +144,16 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
             pr->reg("soundfonts", p);
         }
     }
+
+    m_audioInited = true;
 }
 
 void AudioModule::onDeinit()
 {
+    if (!m_audioInited) {
+        return;
+    }
+
     m_mainPlayback->deinit();
     m_rpcTimer.stop();
 

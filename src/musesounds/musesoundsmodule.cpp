@@ -87,12 +87,8 @@ void MuseSoundsModule::registerUiTypes()
     qmlRegisterType<MuseSoundsListModel>("MuseScore.MuseSounds", 1, 0, "MuseSoundsListModel");
 }
 
-void MuseSoundsModule::onInit(const IApplication::RunMode& mode)
+void MuseSoundsModule::onInit(const IApplication::RunMode&)
 {
-    if (mode != IApplication::RunMode::GuiApp) {
-        return;
-    }
-
     m_configuration->init();
     m_repository->init();
 }

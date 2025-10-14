@@ -79,7 +79,6 @@ void ConsoleApp::perform()
     m_globalModule.setApplication(shared_from_this());
     m_globalModule.registerResources();
     m_globalModule.registerExports();
-    m_globalModule.registerUiTypes();
 
     for (modularity::IModuleSetup* m : m_modules) {
         m->setApplication(shared_from_this());
@@ -91,11 +90,9 @@ void ConsoleApp::perform()
     }
 
     m_globalModule.resolveImports();
-    m_globalModule.registerApi();
+
     for (modularity::IModuleSetup* m : m_modules) {
-        m->registerUiTypes();
         m->resolveImports();
-        m->registerApi();
     }
 
     // ====================================================
@@ -225,6 +222,14 @@ void ConsoleApp::finish()
 
 void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication::RunMode runMode)
 {
+    if (options.app.loggerLevel) {
+        m_globalModule.setLoggerLevel(options.app.loggerLevel.value());
+    }
+
+    if (runMode == IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
     uiConfiguration()->setPhysicalDotsPerInch(options.ui.physicalDotsPerInch);
 
     notationConfiguration()->setTemplateModeEnabled(options.notation.templateModeEnabled);
@@ -279,10 +284,6 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
 #endif
     if (options.app.revertToFactorySettings) {
         appshellConfiguration()->revertToFactorySettings(options.app.revertToFactorySettings.value());
-    }
-
-    if (options.app.loggerLevel) {
-        m_globalModule.setLoggerLevel(options.app.loggerLevel.value());
     }
 }
 

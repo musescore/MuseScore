@@ -121,12 +121,8 @@ void DiagnosticsModule::registerUiTypes()
     qmlRegisterType<CrashHandlerDevToolsModel>("Muse.Diagnostics", 1, 0, "CrashHandlerDevToolsModel");
 }
 
-void DiagnosticsModule::onInit(const IApplication::RunMode& mode)
+void DiagnosticsModule::onInit(const IApplication::RunMode&)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     m_configuration->init();
     m_actionsController->init();
 
