@@ -5176,68 +5176,106 @@ void NotationInteraction::copySelection()
     }
 }
 
-Ret NotationInteraction::repeatSelection()
+void NotationInteraction::repeatSelection()
 {
     const Selection& selection = score()->selection();
     if (score()->noteEntryMode() && selection.isSingle()) {
+        // Single selections require special handling in note entry mode...
         EngravingItem* el = selection.element();
+        if (!el || score()->inputState().endOfScore()) {
+            return;
+        }
+        Chord* c = nullptr;
+        if (el->type() == ElementType::NOTE) {
+            c = toNote(el)->chord();
+        } else if (el->type() == ElementType::REST) {
+            Segment* prevSegment = toRest(el)->segment()->prev1WithElemsOnTrack(el->track());
 
-        if (el && !score()->inputState().endOfScore()) {
-            Chord* c = nullptr;
-            if (el->type() == ElementType::NOTE) {
-                c = toNote(el)->chord();
-            } else if (el->type() == ElementType::REST) {
-                Segment* prevSegment = toRest(el)->segment()->prev1WithElemsOnTrack(el->track());
-
-                // Looking for the previous Chord
-                while (prevSegment)
-                {
-                    if (prevSegment->elementAt(el->track())->isChord()) {
-                        c = toChord(prevSegment->elementAt(el->track()));
-                        break;
-                    } else {
-                        prevSegment = prevSegment->prev1WithElemsOnTrack(el->track());
-                    }
+            // Looking for the previous Chord
+            while (prevSegment)
+            {
+                if (prevSegment->elementAt(el->track())->isChord()) {
+                    c = toChord(prevSegment->elementAt(el->track()));
+                    break;
                 }
-            }
-            if (c) {
-                startEdit(TranslatableString("undoableAction", "Repeat selection"));
-                for (Note* note : c->notes()) {
-                    NoteVal nval = note->noteVal();
-                    score()->addPitch(nval, note != c->notes()[0]);
-                }
-                apply();
+                prevSegment = prevSegment->prev1WithElemsOnTrack(el->track());
             }
         }
-        return muse::make_ok();
+        if (c) {
+            startEdit(TranslatableString("undoableAction", "Repeat selection"));
+            for (Note* note : c->notes()) {
+                NoteVal nval = note->noteVal();
+                score()->addPitch(nval, note != c->notes()[0]);
+            }
+            apply();
+        }
+        return;
     }
 
-    if (!score()->noteEntryMode() && selection.isList()) {
-        const Fraction& firstTick = selection.tickStart();
-        const Fraction& lastTick = selection.tickEnd();
-        // Only "single-tick" list selections are currently supported...
-        if (firstTick != lastTick) {
-            MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
-            MScoreErrorsController(iocContext()).checkAndShowMScoreError();
-            return 0;
+    if (selection.isList()) {
+        //! NOTE: Ideally we would use our copy-paste logic for this case, but this isn't
+        //! fully compatible with list selections right now...
+        repeatListSelection(selection);
+        return;
+    }
+
+    // Use copy-paste logic for range selections...
+    if (!selection.isRange() || !m_selection->canCopy()) {
+        MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
+        MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+        return;
+    }
+
+    XmlReader xml(selection.mimeData());
+    const staff_idx_t dStaff = selection.staffStart();
+    mu::engraving::Segment* endSegment = selection.endSegment();
+
+    if (endSegment && endSegment->segmentType() != SegmentType::ChordRest) {
+        endSegment = endSegment->next1(SegmentType::ChordRest);
+    }
+    if (!endSegment) {
+        return;
+    }
+    for (track_idx_t track = dStaff * VOICES; track < (dStaff + 1) * VOICES; ++track) {
+        EngravingItem* e = endSegment->element(track);
+        if (e) {
+            startEdit(TranslatableString("undoableAction", "Repeat selection"));
+            ChordRest* cr = toChordRest(e);
+            score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
+            apply();
+
+            showItem(cr);
+            break;
         }
-        startEdit(TranslatableString("undoableAction", "Repeat selection"));
+    }
 
-        InputState& is = score()->inputState();
-        std::vector<EngravingItem*> toSelect;
-        Note* newNote = nullptr;
-        NoteVal nval;
+    return;
+}
 
-        std::unordered_set<const Chord*> foundChords;
-        for (Note* n : selection.uniqueNotes()) {
-            const Chord* sourceChord = n->chord();
-            is.setTrack(sourceChord->track());
-            if (muse::contains(foundChords, sourceChord)) {
-                nval = n->noteVal();
-                newNote = score()->addPitch(nval, true);
-                toSelect.push_back(newNote);
-                continue;
-            }
+void NotationInteraction::repeatListSelection(const Selection& selection)
+{
+    const Fraction& firstTick = selection.tickStart();
+    const Fraction& lastTick = selection.tickEnd();
+    // Only "single-tick" list selections are currently supported...
+    if (firstTick != lastTick) {
+        MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
+        MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+        return;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Repeat selection"));
+
+    InputState& is = score()->inputState();
+
+    std::vector<EngravingItem*> toSelect;
+    std::unordered_set<const Chord*> foundChords;
+    for (Note* n : selection.uniqueNotes()) {
+        const Chord* sourceChord = n->chord();
+        is.setTrack(sourceChord->track());
+
+        const bool addFlag = muse::contains(foundChords, sourceChord);
+        if (!addFlag) {
+            // If the note doesn't belong to a chord we've seen before...
             foundChords.emplace(sourceChord);
             is.setSegment(sourceChord->segment());
             if (score()->inputState().endOfScore()) {
@@ -5245,54 +5283,20 @@ Ret NotationInteraction::repeatSelection()
             }
             is.moveToNextInputPos();
             is.setDuration(sourceChord->durationType());
-            nval = n->noteVal();
-            newNote = score()->addPitch(nval, false);
-            toSelect.push_back(newNote);
-            newNote->chord()->updateArticulations(sourceChord->articulationSymbolIds());
         }
-        score()->select(toSelect, SelectType::ADD);
-        apply();
-        return muse::make_ok();
-    }
 
-    if (!selection.isRange()) {
-        ChordRest* cr = score()->getSelectedChordRest();
-        if (!cr) {
-            MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
-            MScoreErrorsController(iocContext()).checkAndShowMScoreError();
-            return 0;
+        NoteVal nval = n->noteVal();
+        Note* newNote = score()->addPitch(nval, addFlag);
+        IF_ASSERT_FAILED(newNote) {
+            continue;
         }
-        score()->select(cr, SelectType::RANGE);
+        newNote->chord()->updateArticulations(sourceChord->articulationSymbolIds());
+        toSelect.push_back(newNote);
     }
+    score()->select(toSelect, SelectType::ADD);
 
-    Ret ret = m_selection->canCopy();
-    if (!ret) {
-        return ret;
-    }
-
-    XmlReader xml(selection.mimeData());
-    staff_idx_t dStaff = selection.staffStart();
-    mu::engraving::Segment* endSegment = selection.endSegment();
-
-    if (endSegment && endSegment->segmentType() != SegmentType::ChordRest) {
-        endSegment = endSegment->next1(SegmentType::ChordRest);
-    }
-    if (endSegment) {
-        for (track_idx_t track = dStaff * VOICES; track < (dStaff + 1) * VOICES; ++track) {
-            EngravingItem* e = endSegment->element(track);
-            if (e) {
-                startEdit(TranslatableString("undoableAction", "Repeat selection"));
-                ChordRest* cr = toChordRest(e);
-                score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
-                apply();
-
-                showItem(cr);
-                break;
-            }
-        }
-    }
-
-    return ret;
+    apply();
+    return;
 }
 
 void NotationInteraction::copyLyrics()
