@@ -440,7 +440,7 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
 
     converter::OpenParams openParams;
     openParams.stylePath = task.params[CmdOptions::ParamKey::StylePath].toString();
-    openParams.forceMode = task.params[CmdOptions::ParamKey::ForceMode].toBool();
+    openParams.forceMode = true;
     openParams.unrollRepeats = task.params[CmdOptions::ParamKey::UnrollRepeats].toBool();
 
     switch (task.type) {
