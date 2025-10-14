@@ -604,6 +604,10 @@ void TRead::read(TextBase* t, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
 {
+    /// This property was written in the wrong order from 4.6.0-4.6.2
+    /// It was written before the text style and was reset on initialising the text style
+    std::optional<double> symbolSize;
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (readProperty(t, tag, e, ctx, Pid::PLAY)) {
@@ -622,6 +626,8 @@ void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
             } else {
                 e.unknown();
             }
+        } else if (tag == "musicSymbolSize") {
+            symbolSize = e.readDouble();
         } else if (!readProperties(static_cast<TextBase*>(t), e, ctx)) {
             e.unknown();
         }
@@ -630,6 +636,13 @@ void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
     if (t->xmlText().isEmpty()) {
         t->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(int(lrint(t->tempo().toBPM().val))));
         t->setVisible(false);
+    }
+
+    if (symbolSize.has_value()) {
+        t->setProperty(Pid::MUSIC_SYMBOL_SIZE, symbolSize.value());
+        if (t->isStyled(Pid::MUSIC_SYMBOL_SIZE)) {
+            t->setPropertyFlags(Pid::MUSIC_SYMBOL_SIZE, PropertyFlags::UNSTYLED);
+        }
     }
 }
 
@@ -651,9 +664,24 @@ void TRead::read(StaffTextBase* t, XmlReader& xml, ReadContext& ctx)
 {
     t->clear();
 
+    /// This property was written in the wrong order from 4.6.0-4.6.2
+    /// It was written before the text style and was reset on initialising the text style
+    std::optional<double> symbolSize;
+
     while (xml.readNextStartElement()) {
-        if (!readProperties(t, xml, ctx)) {
+        const AsciiStringView tag(xml.name());
+
+        if (tag == "musicSymbolSize") {
+            symbolSize = xml.readDouble();
+        } else if (!readProperties(t, xml, ctx)) {
             xml.unknown();
+        }
+    }
+
+    if (symbolSize.has_value()) {
+        t->setProperty(Pid::MUSIC_SYMBOL_SIZE, symbolSize.value());
+        if (t->isStyled(Pid::MUSIC_SYMBOL_SIZE)) {
+            t->setPropertyFlags(Pid::MUSIC_SYMBOL_SIZE, PropertyFlags::UNSTYLED);
         }
     }
 }
@@ -1716,6 +1744,10 @@ void TRead::read(Accidental* a, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Marker* m, XmlReader& e, ReadContext& ctx)
 {
+    /// This property was written in the wrong order from 4.6.0-4.6.2
+    /// It was written before the text style and was reset on initialising the text style
+    std::optional<double> symbolSize;
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "label") {
@@ -1723,8 +1755,17 @@ void TRead::read(Marker* m, XmlReader& e, ReadContext& ctx)
             m->setLabel(String::fromAscii(s.ascii()));
         } else if (readProperty(m, tag, e, ctx, Pid::MARKER_TYPE)) {
         } else if (readProperty(m, tag, e, ctx, Pid::MARKER_CENTER_ON_SYMBOL)) {
+        } else if (tag == "musicSymbolSize") {
+            symbolSize = e.readDouble();
         } else if (!readProperties(static_cast<TextBase*>(m), e, ctx)) {
             e.unknown();
+        }
+    }
+
+    if (symbolSize.has_value()) {
+        m->setProperty(Pid::MUSIC_SYMBOL_SIZE, symbolSize.value());
+        if (m->isStyled(Pid::MUSIC_SYMBOL_SIZE)) {
+            m->setPropertyFlags(Pid::MUSIC_SYMBOL_SIZE, PropertyFlags::UNSTYLED);
         }
     }
 }
