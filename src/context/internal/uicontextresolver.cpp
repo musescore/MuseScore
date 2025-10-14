@@ -136,14 +136,22 @@ bool UiContextResolver::match(const muse::ui::UiContext& currentCtx, const muse:
         return true;
     }
 
+    UiContext currCtx = currentCtx;
+
+    //! NOTE We are on the braille panel, but we allow all project focused actions because the braille panel is
+    //! just another representation of the project...
+    if (currCtx == context::UiCtxBrailleFocused) {
+        currCtx = context::UiCtxProjectFocused;
+    }
+
     //! NOTE: Context could be unknown if a plugin is currently open, in which case we should return true under
     //! the following circumstances (see issue #24673)...
-    if ((currentCtx == context::UiCtxProjectFocused || currentCtx == context::UiCtxUnknown)
+    if ((currCtx == context::UiCtxProjectFocused || currCtx == context::UiCtxUnknown)
         && actCtx == context::UiCtxProjectOpened && globalContext()->currentNotation()) {
         return true;
     }
 
-    return currentCtx == actCtx;
+    return currCtx == actCtx;
 }
 
 bool UiContextResolver::matchWithCurrent(const UiContext& ctx) const
