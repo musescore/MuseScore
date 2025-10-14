@@ -45,6 +45,9 @@ public:
     virtual void setMode(const RenderMode newMode) = 0;
     virtual async::Channel<RenderMode> modeChanged() const = 0;
 
+    using Operation = std::function<void ()>;
+    virtual void execOperation(OperationType type, const Operation& func) = 0;
+
     virtual MixerPtr mixer() const = 0;
 
     virtual void processAudioData() = 0;

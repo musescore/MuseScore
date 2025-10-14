@@ -462,6 +462,16 @@ enum class RenderMode {
     OfflineMode
 };
 
+//! NOTE When commands arrive at the engine, it processes them.
+//! These can be quick commands like changing the volume,
+//! or longer commands like add a new track.
+enum class OperationType {
+    Undefined = -1,
+    NoOperation,
+    QuickOperation,
+    LongOperation,
+};
+
 struct InputProcessingProgress {
     struct ChunkInfo {
         secs_t start = 0.0;

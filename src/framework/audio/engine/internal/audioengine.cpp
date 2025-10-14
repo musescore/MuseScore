@@ -22,8 +22,9 @@
 
 #include "audioengine.h"
 
+#include "global/defer.h"
+
 #include "audio/common/audiosanitizer.h"
-#include "audio/common/rpc/rpcpacker.h"
 
 #include "audiobuffer.h"
 
@@ -32,7 +33,6 @@
 using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::engine;
-using namespace muse::audio::rpc;
 
 static constexpr int MAX_SUPPORTED_AUDIO_CHANNELS = 2;
 
@@ -78,6 +78,8 @@ Ret AudioEngine::init(const OutputSpec& outputSpec, const RenderConstraints& con
     m_mixer->setOutputSpec(outputSpec);
 
     setMode(RenderMode::IdleMode);
+
+    m_operationType = OperationType::NoOperation;
 
     m_inited = true;
 
@@ -183,6 +185,28 @@ async::Channel<RenderMode> AudioEngine::modeChanged() const
     return m_modeChanged;
 }
 
+void AudioEngine::execOperation(OperationType type, const Operation& func)
+{
+    // wait end of processing
+    while (m_processing) {
+        LOGD() << "wait end of processing";
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(1ms);
+    }
+
+    m_operationType = type;
+    if (m_operationType == OperationType::QuickOperation) {
+        m_quickOperationWaitMutex.lock();
+    }
+
+    func();
+
+    if (m_operationType == OperationType::QuickOperation) {
+        m_quickOperationWaitMutex.unlock();
+    }
+    m_operationType = OperationType::NoOperation;
+}
+
 MixerPtr AudioEngine::mixer() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
@@ -195,20 +219,62 @@ void AudioEngine::processAudioData()
     m_buffer->forward();
 }
 
-samples_t AudioEngine::process(float* buffer, samples_t samplesPerChannel)
-{
-    if (m_inited) {
-        return m_mixer->process(buffer, samplesPerChannel);
-    } else {
-        std::memset(buffer, 0, samplesPerChannel * sizeof(float) * m_outputSpec.audioChannelCount);
-        return 0;
-    }
-}
-
 void AudioEngine::popAudioData(float* dest, size_t sampleCount)
 {
     // driver thread
     m_buffer->pop(dest, sampleCount);
+}
+
+samples_t AudioEngine::fillSilent(float* buffer, samples_t samplesPerChannel)
+{
+    std::memset(buffer, 0, samplesPerChannel * sizeof(float) * m_outputSpec.audioChannelCount);
+    return 0;
+}
+
+samples_t AudioEngine::process(float* buffer, samples_t samplesPerChannel)
+{
+    m_processing = true;
+    DEFER {
+        m_processing = false;
+    };
+
+    if (!m_inited) {
+        return fillSilent(buffer, samplesPerChannel);
+    }
+
+    switch (m_mode) {
+    case RenderMode::Undefined:  {
+        return fillSilent(buffer, samplesPerChannel);
+    }
+    case RenderMode::RealTimeMode: {
+        switch (m_operationType) {
+        case OperationType::Undefined: {
+            return fillSilent(buffer, samplesPerChannel);
+        }
+        case OperationType::NoOperation: {
+            // normal playing
+            return m_mixer->process(buffer, samplesPerChannel);
+        }
+        case OperationType::QuickOperation: {
+            // wait
+            LOGD() << "wait end of quick operation";
+            std::scoped_lock<std::mutex> lock(m_quickOperationWaitMutex);
+            return m_mixer->process(buffer, samplesPerChannel);
+        }
+        case OperationType::LongOperation: {
+            return fillSilent(buffer, samplesPerChannel);
+        }
+        }
+    }
+    case RenderMode::IdleMode: {
+        //! TODO
+        return m_mixer->process(buffer, samplesPerChannel);
+    }
+    case RenderMode::OfflineMode: {
+        //! NOTE Called in the RPC thread
+        return m_mixer->process(buffer, samplesPerChannel);
+    }
+    }
 }
 
 void AudioEngine::updateBufferConstraints()

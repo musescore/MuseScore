@@ -34,7 +34,7 @@ namespace muse::audio::engine {
 class EngineRpcController : public async::Asyncable
 {
     Inject<rpc::IRpcChannel> channel;
-    Inject<IAudioEngine> engine;
+    Inject<IAudioEngine> audioEngine;
     Inject<IEnginePlayback> playback;
     Inject<synth::ISoundFontRepository> soundFontRepository;
     Inject<IAudioEngineConfiguration> configuration;
