@@ -9,7 +9,7 @@
 # OS X terminal build
 #MSCORE=../../../applebuild/mscore.app/Contents/MacOS/mscore
 # OS X Xcode build
-MSCORE=../../../../../builds/Mac-Qt6.2.4-macos-Make-RelWithDebInfo/install/mscore.app/Contents/MacOS/mscore
+MSCORE=../../../../../builds/Mac-Qt6.9.3-macos-Make-RelWithDebInfo/install/mscore.app/Contents/MacOS/mscore
 
 echo "----------------------------------------------"
 echo "Regression Tests for MuseScore TablEdit import"

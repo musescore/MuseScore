@@ -66,9 +66,6 @@
 #ifdef Q_OS_MAC
 #include "view/appmenumodel.h"
 #include "view/internal/platform/macos/macosappmenumodelhook.h"
-#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
-#include "view/internal/platform/macos/macosscrollinghook.h"
-#endif
 #else
 #include "view/navigableappmenumodel.h"
 #endif
@@ -95,10 +92,6 @@ void AppShellModule::registerExports()
     m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController, iocContext());
     m_appShellConfiguration = std::make_shared<AppShellConfiguration>(iocContext());
     m_sessionsManager = std::make_shared<SessionsManager>(iocContext());
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0) && defined(Q_OS_MAC)
-    m_scrollingHook = std::make_shared<MacOSScrollingHook>();
-#endif
 
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), m_appShellConfiguration);
     ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario(iocContext()));
@@ -198,10 +191,6 @@ void AppShellModule::onInit(const IApplication::RunMode& mode)
     m_applicationActionController->init();
     m_applicationUiActions->init();
     m_sessionsManager->init();
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0) && defined(Q_OS_MAC)
-    m_scrollingHook->init();
-#endif
 }
 
 void AppShellModule::onAllInited(const IApplication::RunMode& mode)

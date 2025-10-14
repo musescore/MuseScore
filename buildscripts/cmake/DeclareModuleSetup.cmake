@@ -104,13 +104,8 @@ macro(setup_module)
     endif()
 
     if (MODULE_USE_QT AND QT_SUPPORT)
-        if (${Qt6_VERSION} VERSION_GREATER_EQUAL "6.7.0")
-            # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
-            qt_add_library(${MODULE} ${MODULE_SRC})
-        else()
-            # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
-            add_library(${MODULE} ${MODULE_SRC})
-        endif()
+        # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
+        qt_add_library(${MODULE} ${MODULE_SRC})
     else()
         # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
         add_library(${MODULE} ${MODULE_SRC})
