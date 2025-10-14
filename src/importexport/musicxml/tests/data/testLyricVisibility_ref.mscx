@@ -110,7 +110,6 @@
             </TimeSig>
           <Chord>
             <eid>I_I</eid>
-            <visible>0</visible>
             <durationType>half</durationType>
             <Lyrics>
               <eid>J_J</eid>
@@ -186,7 +185,6 @@
         <voice>
           <Chord>
             <eid>X_X</eid>
-            <visible>0</visible>
             <durationType>half</durationType>
             <Lyrics>
               <eid>Y_Y</eid>

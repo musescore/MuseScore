@@ -841,6 +841,23 @@ bool Chord::allNotesTiedToNext() const
     return true;
 }
 
+bool Chord::allElementsInvisible() const
+{
+    for (EngravingObject* child : scanChildren()) {
+        if (toEngravingItem(child)->visible()) {
+            return false;
+        }
+    }
+
+    for (Chord* grace : m_graceNotes) {
+        if (!grace->allElementsInvisible()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 //---------------------------------------------------------
 //   processSiblings
 //---------------------------------------------------------
@@ -1535,6 +1552,7 @@ PropertyValue Chord::getProperty(Pid propertyId) const
     case Pid::STEM_DIRECTION:  return PropertyValue::fromValue<DirectionV>(stemDirection());
     case Pid::PLAY: return isChordPlayable();
     case Pid::COMBINE_VOICE: return PropertyValue::fromValue<AutoOnOff>(combineVoice());
+    case Pid::VISIBLE: return true; // Chord cannot be set invisible, only its elements can
     default:
         return ChordRest::getProperty(propertyId);
     }

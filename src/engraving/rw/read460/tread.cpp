@@ -2535,6 +2535,13 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
     } else {
         return false;
     }
+
+    if (!ch->visible()) {
+        // By convention, the chord can't be set to invisible (only its elements can).
+        // If it was written and read as invisible that was an error so we fix it here.
+        ch->setVisible(true);
+    }
+
     return true;
 }
 
