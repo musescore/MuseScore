@@ -39,7 +39,7 @@ void EngineRpcController::init()
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, spec)) {
             return;
         }
-        engine()->setOutputSpec(spec);
+        audioEngine()->setOutputSpec(spec);
     });
 
     // Soundfont
@@ -576,10 +576,14 @@ void EngineRpcController::onMethod(rpc::Method method, rpc::Handler handler)
 {
     m_usedMethods.push_back(method);
 
-    channel()->onMethod(method, [handler](const Msg& msg) {
-        //! TODO pre
-        handler(msg);
-        //! TODO post
+    //! TODO
+    OperationType type = OperationType::QuickOperation;
+
+    channel()->onMethod(method, [this, type, handler](const Msg& msg) {
+        IAudioEngine::Operation func = [handler, msg]() {
+            handler(msg);
+        };
+        audioEngine()->execOperation(type, func);
     });
 }
 
