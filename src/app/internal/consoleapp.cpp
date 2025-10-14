@@ -300,7 +300,7 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
 
     converter::IConverterController::OpenParams openParams;
     openParams.stylePath = task.params[CmdOptions::ParamKey::StylePath].toString();
-    openParams.forceMode = task.params[CmdOptions::ParamKey::ForceMode].toBool();
+    openParams.forceMode = true;
 
     switch (task.type) {
     case ConvertType::Batch:
