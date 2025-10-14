@@ -69,6 +69,8 @@ void PaddingTable::createTable(const MStyle& style)
         elem[ElementType::STEM] = elem[ElementType::NOTE];
     }
 
+    table[ElementType::NOTE][ElementType::STEM] = style.styleMM(Sid::minNoteDistance);
+    table[ElementType::STEM][ElementType::NOTE] = style.styleMM(Sid::minNoteDistance);
     table[ElementType::STEM][ElementType::STEM] = 0.85 * spatium;
     table[ElementType::STEM][ElementType::ACCIDENTAL] = 0.35 * spatium;
     table[ElementType::STEM][ElementType::LEDGER_LINE] = 0.35 * spatium;
