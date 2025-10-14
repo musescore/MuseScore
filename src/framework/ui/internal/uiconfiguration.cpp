@@ -60,11 +60,7 @@ static const Settings::Key UI_MUSICAL_TEXT_FONT_SIZE_KEY("ui", "ui/theme/musical
 
 static const QString WINDOW_GEOMETRY_KEY("window");
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
 static const int FLICKABLE_MAX_VELOCITY = 4000;
-#else
-static const int FLICKABLE_MAX_VELOCITY = 1500;
-#endif
 
 static const int TOOLTIP_DELAY = 500;
 

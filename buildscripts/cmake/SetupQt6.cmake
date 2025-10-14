@@ -92,19 +92,13 @@ if (OS_IS_WASM)
     set(QT_WASM_EXTRA_EXPORTED_METHODS ccall)
 endif()
 
-find_package(Qt6 6.2 REQUIRED COMPONENTS ${qt_components})
+find_package(Qt6 6.8 REQUIRED COMPONENTS ${qt_components})
 
 include(QtInstallPaths)
 
 message(STATUS "Qt version: ${Qt6_VERSION}")
 
-if (${Qt6_VERSION} VERSION_GREATER_EQUAL "6.3.0")
-    qt_standard_project_setup(REQUIRES 6.3 SUPPORTS_UP_TO 6.9)
-else()
-    set(CMAKE_AUTOUIC ON)
-    set(CMAKE_AUTOMOC ON)
-    set(CMAKE_AUTORCC ON)
-endif()
+qt_standard_project_setup(REQUIRES 6.8 SUPPORTS_UP_TO 6.9)
 
 if (QT_IS_STATIC)
     qt_add_library(all_qml_plugins STATIC)

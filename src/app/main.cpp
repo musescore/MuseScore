@@ -99,11 +99,9 @@ int main(int argc, char** argv)
         qputenv("QV4_GC_TIMELIMIT", "0");
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
     if (!qEnvironmentVariableIsSet("QT_QUICK_FLICKABLE_WHEEL_DECELERATION")) {
         qputenv("QT_QUICK_FLICKABLE_WHEEL_DECELERATION", "5000");
     }
-#endif
 
 #ifdef Q_OS_LINUX
     if (qEnvironmentVariable("MU_QT_QPA_PLATFORM") != "offscreen") {

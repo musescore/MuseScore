@@ -117,13 +117,6 @@ if (OS_IS_MAC)
         ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosappmenumodelhook.h
     )
 
-    if (${Qt6_VERSION} VERSION_LESS "6.9.0")
-        set(MODULE_SRC ${MODULE_SRC}
-            ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosscrollinghook.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosscrollinghook.h
-        )
-    endif()
-
     set_source_files_properties(
         ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosappmenumodelhook.mm
         PROPERTIES
