@@ -242,13 +242,12 @@ samples_t AudioEngine::process(float* buffer, samples_t samplesPerChannel)
         return fillSilent(buffer, samplesPerChannel);
     }
 
-    switch (m_mode) {
-    case RenderMode::Undefined:  {
-        return fillSilent(buffer, samplesPerChannel);
-    }
-    case RenderMode::RealTimeMode: {
+    if (m_mode == RenderMode::RealTimeMode // playing
+        || m_mode == RenderMode::IdleMode) { // individual events can be played
+        // check current operation
         switch (m_operationType) {
         case OperationType::Undefined: {
+            UNREACHABLE;
             return fillSilent(buffer, samplesPerChannel);
         }
         case OperationType::NoOperation: {
@@ -266,15 +265,8 @@ samples_t AudioEngine::process(float* buffer, samples_t samplesPerChannel)
         }
         }
     }
-    case RenderMode::IdleMode: {
-        //! TODO
-        return m_mixer->process(buffer, samplesPerChannel);
-    }
-    case RenderMode::OfflineMode: {
-        //! NOTE Called in the RPC thread
-        return m_mixer->process(buffer, samplesPerChannel);
-    }
-    }
+
+    return fillSilent(buffer, samplesPerChannel);
 }
 
 void AudioEngine::updateBufferConstraints()
