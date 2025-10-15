@@ -129,6 +129,10 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
 
     m_progress.finish(ret);
 
+    if (reply) {
+        reply->disconnect();
+    }
+
     if (outgoingData && outgoingData->device()) {
         closeDevice(outgoingData->device());
     }
