@@ -619,7 +619,7 @@ void RestLayout::checkFullMeasureRestCollisions(const System* system, LayoutCont
 
             const double spatium = fullMeasureRest->spatium();
             const double lineDist = fullMeasureRest->staff()->lineDistance(fullMeasureRest->tick()) * spatium;
-            const double minHorizontalDistance = 4 * spatium;
+            const double minHorizontalDistance = 1.5 * spatium;
             const double minVertClearance = 0.75 * spatium;
 
             bool alignAbove = fullMeasureRest->voice() == 0;
