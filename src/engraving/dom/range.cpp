@@ -743,6 +743,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
 
     backupBarLines(first, last);
     backupBreaks(first, last);
+    backupRepeats(first, last);
 }
 
 //---------------------------------------------------------
@@ -830,6 +831,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
 
     restoreBarLines(score, tick);
     restoreBreaks(score, tick);
+    restoreRepeats(score, tick);
     return true;
 }
 
@@ -1082,6 +1084,43 @@ void ScoreRange::restoreBreaks(Score* score, const Fraction& tick) const
                 break;
             }
             if (m->tick() > bb.sPosition) {
+                break;
+            }
+        }
+    }
+}
+
+void ScoreRange::backupRepeats(Segment* first, Segment* last)
+{
+    Measure* fm = first->measure();
+    Measure* lm = last->measure();
+    for (Measure* m = fm; m && m != lm->nextMeasure(); m = m->nextMeasure()) {
+        if (m->repeatStart()) {
+            StartEndRepeatBackup repeatBackup;
+            repeatBackup.sPosition = m->tick();
+            repeatBackup.isStartRepeat = true;
+            m_startEndRepeats.push_back(repeatBackup);
+        } else if (m->repeatEnd()) {
+            StartEndRepeatBackup repeatBackup;
+            repeatBackup.sPosition = m->endTick();
+            repeatBackup.isStartRepeat = false;
+            m_startEndRepeats.push_back(repeatBackup);
+        }
+    }
+}
+
+void ScoreRange::restoreRepeats(Score* score, const Fraction& tick) const
+{
+    Fraction refTick = tick.isZero() ? tick : tick - Fraction::eps(); // start checking one measure before
+    for (const StartEndRepeatBackup& startEndRepeat : m_startEndRepeats) {
+        for (Measure* m = score->tick2measure(refTick); m; m = m->nextMeasure()) {
+            Fraction mTick = m->tick();
+            if (startEndRepeat.isStartRepeat && startEndRepeat.sPosition == mTick) {
+                m->undoChangeProperty(Pid::REPEAT_START, true);
+            } else if (!startEndRepeat.isStartRepeat && startEndRepeat.sPosition == mTick) {
+                m->undoChangeProperty(Pid::REPEAT_END, true);
+            }
+            if (mTick > startEndRepeat.sPosition) {
                 break;
             }
         }
