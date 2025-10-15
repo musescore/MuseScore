@@ -53,40 +53,26 @@ StyledFlickable {
                 spacing: 10
 
                 StyledTextLabel {
+                    Layout.fillWidth: true
                     text: qsTrc("notation/editstyle/hammeronpulloff", "Show ‘H’ and ‘P’ symbols on")
+                    horizontalAlignment: Text.AlignLeft
                 }
 
-                RowLayout {
-                    spacing: 6
-
-                    ToggleButton {
-                        checked: hopoPage.showOnStandardStaves.value === true
-                        onToggled: {
-                            hopoPage.showOnStandardStaves.value = !hopoPage.showOnStandardStaves.value
-                        }
-                    }
-
-                    StyledTextLabel {
-                        Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignLeft
-                        text: qsTrc("notation/editstyle/hammeronpulloff", "Standard staves")
+                ToggleButton {
+                    Layout.fillWidth: true
+                    text: qsTrc("notation/editstyle/hammeronpulloff", "Standard staves")
+                    checked: hopoPage.showOnStandardStaves.value === true
+                    onToggled: {
+                        hopoPage.showOnStandardStaves.value = !hopoPage.showOnStandardStaves.value
                     }
                 }
 
-                RowLayout {
-                    spacing: 6
-
-                    ToggleButton {
-                        checked: hopoPage.showOnTabStaves.value === true
-                        onToggled: {
-                            hopoPage.showOnTabStaves.value = !hopoPage.showOnTabStaves.value
-                        }
-                    }
-
-                    StyledTextLabel {
-                        Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignLeft
-                        text: qsTrc("notation/editstyle/hammeronpulloff", "Tablature staves")
+                ToggleButton {
+                    Layout.fillWidth: true
+                    text: qsTrc("notation/editstyle/hammeronpulloff", "Tablature staves")
+                    checked: hopoPage.showOnTabStaves.value === true
+                    onToggled: {
+                        hopoPage.showOnTabStaves.value = !hopoPage.showOnTabStaves.value
                     }
                 }
             }

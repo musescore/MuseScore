@@ -42,34 +42,18 @@ BaseSection {
     signal advanceToNextNoteChangeRequested(bool advance)
     signal delayBetweenNotesChangeRequested(int delay)
 
-    Row {
+    ToggleButton {
+        id: enableMidiInputToggle
         width: parent.width
-        height: enableMidiInputToggle.height
 
-        spacing: 6
+        text: qsTrc("appshell/preferences", "Enable MIDI input")
 
-        ToggleButton {
-            id: enableMidiInputToggle
+        navigation.name: "EnableMidiInputToggle"
+        navigation.panel: root.navigation
+        navigation.row: 0
 
-            navigation.name: "EnableMidiInputToggle"
-            navigation.panel: root.navigation
-            navigation.row: 0
-
-            navigation.accessible.name: enableMidiInputLabel.text
-
-            onToggled: {
-                root.midiInputEnabledChangeRequested(!checked)
-            }
-        }
-
-        StyledTextLabel {
-            id: enableMidiInputLabel
-
-            anchors.verticalCenter: parent.verticalCenter
-            horizontalAlignment: Text.AlignLeft
-            wrapMode: Text.Wrap
-
-            text: qsTrc("appshell/preferences", "Enable MIDI input")
+        onToggled: {
+            root.midiInputEnabledChangeRequested(!checked)
         }
     }
 

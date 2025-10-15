@@ -38,8 +38,8 @@ FocusableItem {
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
 
-    implicitHeight: beamTypeSection.height
-    width: parent.width
+    implicitWidth: beamTypeSection.implicitWidth
+    implicitHeight: beamTypeSection.implicitHeight
 
     BeamTypeSelector {
         id: beamTypeSection

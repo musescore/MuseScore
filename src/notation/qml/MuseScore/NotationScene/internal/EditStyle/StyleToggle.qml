@@ -27,23 +27,11 @@ import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
-RowLayout {
-    id: root
-
-    spacing: 6
-
+ToggleButton {
     required property StyleItem styleItem
-    property alias text : label.text
 
-    ToggleButton {
-        checked: root.styleItem.value === true
-        onToggled: {
-            root.styleItem.value = !root.styleItem.value
-        }
-    }
-
-    StyledTextLabel {
-        id: label
-        horizontalAlignment: Text.AlignLeft
+    checked: styleItem.value === true
+    onToggled: {
+        styleItem.value = !styleItem.value
     }
 }

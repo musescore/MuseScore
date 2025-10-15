@@ -141,37 +141,17 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: autoShowSection.navigation.order + 1
 
-            Row {
-                id: useLegacyToggleRow
+            ToggleButton {
+                id: useLegacyToggle
 
-                height: useLegacyToggle.height
-                width: parent.width
+                text: qsTrc("notation/percussion", "Use legacy percussion panel")
+                checked: !percussionPreferencesModel.useNewPercussionPanel
 
-                spacing: 6
+                navigation.name: "UseLegacyPercussionPanel"
+                navigation.panel: legacyToggleSection.navigation
 
-                ToggleButton {
-                    id: useLegacyToggle
-
-                    checked: !percussionPreferencesModel.useNewPercussionPanel
-
-                    navigation.name: "UseLegacyPercussionPanel"
-                    navigation.panel: legacyToggleSection.navigation
-
-                    onToggled: {
-                        percussionPreferencesModel.useNewPercussionPanel = !percussionPreferencesModel.useNewPercussionPanel
-                    }
-                }
-
-                StyledTextLabel {
-                    id: legacyToggleInfo
-
-                    height: parent.height
-
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: Text.AlignVCenter
-
-                    wrapMode: Text.Wrap
-                    text: qsTrc("notation/percussion", "Use legacy percussion panel")
+                onToggled: {
+                    percussionPreferencesModel.useNewPercussionPanel = !percussionPreferencesModel.useNewPercussionPanel
                 }
             }
         }
