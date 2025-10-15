@@ -2501,16 +2501,16 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             Spacer* sp = m->vspacerDown(si1);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = staff->staffHeight() + sp->absoluteGap();
+                    dist = staff->staffHeight(m->tick()) + sp->absoluteGap();
                     fixedSpace = true;
                     break;
                 } else {
-                    dist = std::max(dist, staff->staffHeight() + sp->absoluteGap());
+                    dist = std::max(dist, staff->staffHeight(m->tick()) + sp->absoluteGap());
                 }
             }
             sp = m->vspacerUp(si2);
             if (sp) {
-                dist = std::max(dist, sp->absoluteGap() + staff->staffHeight());
+                dist = std::max(dist, staff->staffHeight(m->tick()) + sp->absoluteGap());
             }
         }
         if (!fixedSpace) {

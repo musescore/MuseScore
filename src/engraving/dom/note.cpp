@@ -2713,26 +2713,21 @@ void Note::dragInEditMode(EditData& editData)
 
 void Note::verticalDrag(EditData& ed)
 {
-    Fraction _tick      = chord()->tick();
-    const Staff* stf    = staff();
-    const StaffType* st = stf->staffType(_tick);
-    const Instrument* instr = part()->instrument(_tick);
-
-    if (instr->useDrumset()) {
+    Fraction _tick = chord()->tick();
+    if (part()->instrument(_tick)->useDrumset()) {
         return;
     }
 
     NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this).get());
 
-    double _spatium      = spatium();
-    bool tab            = st->isTabStaff();
-    double step          = _spatium * (tab ? st->lineDistance().val() : 0.5);
-    int lineOffset      = lrint(ed.moveDelta.y() / step);
+    const bool tab = staffType()->isTabStaff();
+    double step    = spatium() * staffType()->lineDistance().val() * (tab ? 1.0 : 0.5);
+    int lineOffset = lrint(ed.moveDelta.y() / step);
 
     if (tab) {
-        const StringData* strData = part()->stringData(_tick, stf->idx());
-        const int pitchOffset = stf->pitchOffset(_tick);
-        int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
+        const StringData* strData = part()->stringData(_tick, staffIdx());
+        const int pitchOffset = staff()->pitchOffset(_tick);
+        int nString = ned->string + (staffType()->upsideDown() ? -lineOffset : lineOffset);
         int nFret   = strData->fret(m_pitch + pitchOffset, nString, staff());
 
         if (nFret >= 0) {                        // no fret?

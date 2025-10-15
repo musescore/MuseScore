@@ -1776,7 +1776,7 @@ void TLayout::layoutBreath(const Breath* item, Breath::LayoutData* ldata, const 
         return;
     }
 
-    int voiceOffset = item->placeBelow() * (item->staff()->lines(item->tick()) - 1) * item->spatium();
+    const double voiceOffset = item->placeBelow() ? item->staff()->staffHeight(item->tick()) : 0.0;
     if (item->isCaesura()) {
         ldata->setPosY(item->spatium() + voiceOffset);
     } else if ((conf.styleSt(Sid::musicalSymbolFont) == "Emmentaler") && (item->symId() == SymId::breathMarkComma)) {
