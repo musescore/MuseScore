@@ -893,30 +893,18 @@ Fraction ScoreRange::ticks() const
 //---------------------------------------------------------
 void ScoreRange::backupBarLines(Segment* first, Segment* last)
 {
-    Measure* fm = first->measure();
-    Measure* lm = last->measure();
-
-    for (Measure* m = fm; m && m != lm->nextMeasure(); m = m->nextMeasure()) {
-        // Backup BarLines (Segments's sons)
-        for (Segment* s = m->first(); s; s = s->next1()) {
-            for (EngravingItem* e : s->elist()) {
-                if (e && e->isBarLine() && (toBarLine(e)->barLineType() != BarLineType::NORMAL)) {
-                    BarLinesBackup blBackup;
-                    blBackup.sPosition = s->tick();
-                    blBackup.formerMeasureStartOrEnd
-                        = ((blBackup.sPosition == m->tick()) || (blBackup.sPosition == m->endTick()) ? true : false);
-                    blBackup.bl = toBarLine(e)->clone();
-                    m_barLines.push_back(blBackup);
-                }
-            }
-            // Last segment
-            if (s == m->last()) {
-                break;
-            }
+    for (Segment* s = first; s && (s->isBefore(last) || s == last); s = s->next1()) {
+        if (!s->isType(SegmentType::BarLineType)) {
+            continue;
         }
-        // Last Measure
-        if (m->sectionBreak() || (m->nextMeasure() && (m->nextMeasure()->first(SegmentType::TimeSig)))) {
-            break;
+        for (EngravingItem* e : s->elist()) {
+            if (e && !e->generated()) {
+                BarLinesBackup blBackup;
+                blBackup.sPosition = s->tick();
+                blBackup.formerMeasureStartOrEnd = s->rtick().isZero() || s->rtick() == s->measure()->ticks();
+                blBackup.bl = toBarLine(e)->clone();
+                m_barLines.push_back(blBackup);
+            }
         }
     }
 }
