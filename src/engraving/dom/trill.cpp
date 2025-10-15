@@ -398,12 +398,10 @@ bool Trill::setProperty(Pid propertyId, const PropertyValue& val)
         break;
     case Pid::COLOR:
         setColor(val.value<Color>());
-        [[fallthrough]];
-    default:
-        if (!SLine::setProperty(propertyId, val)) {
-            return false;
-        }
+        setLineColor(val.value<Color>());
         break;
+    default:
+        return SLine::setProperty(propertyId, val);
     }
     triggerLayout();
     return true;
