@@ -301,6 +301,10 @@
               <tpc>17</tpc>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>0_0</eid>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

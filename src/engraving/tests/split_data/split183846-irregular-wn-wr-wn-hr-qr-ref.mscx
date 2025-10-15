@@ -124,6 +124,10 @@
             <eid>M_M</eid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>N_N</eid>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

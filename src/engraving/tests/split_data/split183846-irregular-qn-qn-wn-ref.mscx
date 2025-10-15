@@ -121,6 +121,10 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>M_M</eid>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

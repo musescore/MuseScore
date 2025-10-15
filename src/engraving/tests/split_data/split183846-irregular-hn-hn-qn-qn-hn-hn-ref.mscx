@@ -148,6 +148,10 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>S_S</eid>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

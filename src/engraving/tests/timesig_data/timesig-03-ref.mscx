@@ -337,6 +337,7 @@
         </Measure>
       <Measure>
         <eid>9_9</eid>
+        <startRepeat/>
         <voice>
           <Dynamic>
             <subtype>p</subtype>

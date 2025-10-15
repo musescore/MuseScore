@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <list>
 #include <vector>
 
 #include "global/allocator.h"
@@ -39,6 +40,7 @@ class ScoreRange;
 class ChordRest;
 class Score;
 class Tie;
+class BarLine;
 
 //---------------------------------------------------------
 //   TrackList
@@ -108,6 +110,38 @@ protected:
     std::vector<Annotation> m_annotations;
 
 private:
+    struct BarLinesBackup
+    {
+        Fraction sPosition;
+        bool formerMeasureStartOrEnd;
+        BarLine* bl = nullptr;
+    };
+    std::vector<BarLinesBackup> m_barLines;
+
+    void backupBarLines(Segment* first, Segment* last);
+    bool insertBarLine(Measure* m, const BarLinesBackup& barLine) const;
+    void restoreBarLines(Score* score, const Fraction& tick) const;
+    void deleteBarLines();
+
+    struct BreaksBackup
+    {
+        Fraction sPosition;
+        LayoutBreakType lBreakType;
+    };
+    std::vector<BreaksBackup> m_breaks;
+
+    void backupBreaks(Segment* first, Segment* last);
+    void restoreBreaks(Score* score, const Fraction& tick) const;
+
+    struct StartEndRepeatBackup
+    {
+        Fraction sPosition;
+        bool isStartRepeat;
+    };
+    std::vector<StartEndRepeatBackup> m_startEndRepeats;
+
+    void backupRepeats(Segment* first, Segment* last);
+    void restoreRepeats(Score* score, const Fraction& tick) const;
 
     friend class TrackList;
 
