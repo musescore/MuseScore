@@ -1097,6 +1097,7 @@ void ScoreRange::deleteBarLines()
     for (const BarLinesBackup& bbl : m_barLines) {
         delete bbl.bl;
     }
+    m_barLines.clear();
 }
 
 //---------------------------------------------------------
