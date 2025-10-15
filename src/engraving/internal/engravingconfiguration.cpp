@@ -280,6 +280,11 @@ Color EngravingConfiguration::criticalColor() const
     return Color::RED;
 }
 
+Color EngravingConfiguration::criticalBackgroundColor() const
+{
+    return Color::RED;
+}
+
 Color EngravingConfiguration::criticalSelectedColor() const
 {
     return "#8B0000";

@@ -67,6 +67,7 @@ public:
     Color warningColor() const override;
     Color warningSelectedColor() const override;
     Color criticalColor() const override;
+    Color criticalBackgroundColor() const override;
     Color criticalSelectedColor() const override;
     Color thumbnailBackgroundColor() const override;
     Color noteBackgroundColor() const override;
