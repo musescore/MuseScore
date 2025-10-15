@@ -28,6 +28,8 @@
 
 #include "engraving/dom/pitchspelling.h"
 
+#define SPN_PITCH_DISPLAY(wantSPN, pitch) (wantSPN ? muse::String(pitch).remove(u" ") : muse::mtrc("global/pitchName", pitch))
+
 using namespace mu::notation;
 using namespace muse::ui;
 
