@@ -198,8 +198,22 @@ StyledFlickable {
                 }
 
                 StyledGroupBox {
+                    Layout.fillWidth: true
+                    title: qsTrc("notation/editstyle/chordsymbols", "Capitalization")
 
-                    label: CheckBox {
+                    ColumnLayout {
+                        spacing: 12
+                        Layout.fillWidth: true
+
+                        RowLayout {
+                            spacing: 6
+                            Layout.fillWidth: true
+
+                            Item {
+                                Layout.preferredWidth: 450
+                                implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
+
+                                CheckBox {
                         id: capitaliseCheckBox
                         text: qsTrc("notation/editstyle/chordsymbols", "Automatically capitalize note names")
 
@@ -210,12 +224,15 @@ StyledFlickable {
                             }
                         }
                     }
+                            }
 
-                    Layout.fillWidth: true
-
-                    RowLayout {
-                        spacing: 6
-                        anchors.fill: parent
+                            FlatButton {
+                                Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                                icon: IconCode.UNDO
+                                enabled: isResetEnabled(root.capitalizationStyles)
+                                onClicked: resetStyles(root.capitalizationStyles)
+                            }
+                        }
 
                         CheckBox {
                             text: qsTrc("notation/editstyle/chordsymbols", "Lowercase minor chords")
@@ -233,13 +250,6 @@ StyledFlickable {
                             text: qsTrc("notation/editstyle/chordsymbols", "All caps note names")
                             checked: chordSymbolsModel.allCapsNoteNames.value === true
                             onClicked: chordSymbolsModel.allCapsNoteNames.value = !chordSymbolsModel.allCapsNoteNames.value
-                        }
-
-                        FlatButton {
-                            Layout.alignment: Qt.AlignTop | Qt.AlignRight
-                            icon: IconCode.UNDO
-                            enabled: isResetEnabled(root.capitalizationStyles)
-                            onClicked: resetStyles(root.capitalizationStyles)
                         }
                     }
                 }
@@ -597,7 +607,7 @@ StyledFlickable {
                     Layout.fillWidth: true
 
                     Item {
-                        Layout.preferredWidth: 452
+                        Layout.preferredWidth: 480
                         implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
 
                         CheckBox {
