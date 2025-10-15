@@ -18,8 +18,8 @@
     </identification>
   <part-list>
     <score-part id="P1">
-      <part-name>Harp</part-name>
-      <part-abbreviation>Hrp.</part-abbreviation>
+      <part-name print-object="no">Harp</part-name>
+      <part-abbreviation print-object="no">Hrp.</part-abbreviation>
       <score-instrument id="P1-I1">
         <instrument-name>Harp</instrument-name>
         </score-instrument>

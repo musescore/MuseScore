@@ -189,6 +189,7 @@ public:
     bool hasPart(const muse::String& id) const;
     engraving::Part* getPart(const muse::String& id) const { return muse::value(m_partMap, id); }
     MusicXmlPart getMusicXmlPart(const muse::String& id) const { return muse::value(m_parts, id); }
+    size_t nparts() const { return m_parts.size(); }
     MusicXmlInstruments getInstruments(const muse::String& id) const { return muse::value(m_instruments, id); }
     void setDrumsetDefault(const muse::String& id, const muse::String& instrId, const engraving::NoteHeadGroup hg, const int line,
                            const engraving::DirectionV sd);
