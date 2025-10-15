@@ -105,7 +105,7 @@ static Drumset* createDrumset(const MusxInstanceList<others::PercussionNoteInfo>
         drumset->drum(midiPitch) = DrumInstrument(
             String(percNoteInfo->getNoteType().rawName),
             NoteHeadGroup::HEAD_CUSTOM,
-            -(percNoteInfo->calcStaffReferencePosition() - musxStaff->calcToplinePosition()), // staff line
+            -(percNoteInfo->calcStaffReferencePosition() - musxStaff->calcTopLinePosition()), // staff line
             hasDefault ? defaultDrumset->stemDirection(midiPitch) : DirectionV::AUTO,
             int(i) / numberOfColumns, // row
             int(i) % numberOfColumns, // column
@@ -620,7 +620,7 @@ bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<mus
     if (changed(staffType->lineDistance(), lineDistance, result)) {
         staffType->setLineDistance(lineDistance);
     }
-    int stepOffset = currStaff->calcToplinePosition();
+    int stepOffset = currStaff->calcTopLinePosition();
     Spatium yoffset = Spatium(-stepOffset /2.0);
     if (changed(staffType->yoffset(), yoffset, result)) {
         staffType->setYoffset(yoffset);
