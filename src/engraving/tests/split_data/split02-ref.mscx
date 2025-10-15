@@ -153,6 +153,11 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            <eid>U_U</eid>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

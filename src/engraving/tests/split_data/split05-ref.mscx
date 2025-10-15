@@ -145,13 +145,17 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
+          <BarLine>
+            <span>1</span>
+            <eid>U_U</eid>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>U_U</eid>
+        <eid>V_V</eid>
         <voice>
           <Chord>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -162,28 +166,28 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>Z_Z</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <eid>a_a</eid>
+            <eid>b_b</eid>
             </BarLine>
           </voice>
         </Measure>

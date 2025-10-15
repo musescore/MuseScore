@@ -194,36 +194,40 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
+          <BarLine>
+            <span>1</span>
+            <eid>d_d</eid>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>d_d</eid>
+        <eid>e_e</eid>
         <voice>
           <Chord>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>f_f</eid>
+              <eid>g_g</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>g_g</eid>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>h_h</eid>
+              <eid>i_i</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>i_i</eid>
+            <eid>j_j</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <span>1</span>
-            <eid>j_j</eid>
+            <eid>k_k</eid>
             </BarLine>
           </voice>
         </Measure>
