@@ -836,7 +836,7 @@ String Note::tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full)
 
     const String octaveStr = String::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
 
-    return pitchStr + u" " + octaveStr;
+    return pitchStr + octaveStr;
 }
 
 //---------------------------------------------------------
