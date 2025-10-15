@@ -695,7 +695,7 @@ bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom:
             // omit call to computeWholeOrBreveRestOffset because it requires layout rectangles to have been created
             int finalLine = 0; //naturalLine + voiceOffset;
             // convert finalLine to staff position offset for Finale rest. This value is measured in 0.5sp steps.
-            const int staffPositionOffset = 2 * finalLine - currMusxStaff->calcToplinePosition();
+            const int staffPositionOffset = 2 * finalLine - currMusxStaff->calcTopLinePosition();
             const double lineSpacing = staffType->lineDistance().val();
             if (rest->isWholeRest()) {
                 staffPosition += 2; // account for a whole rest's staff line discrepancy between Finale and MuseScore
