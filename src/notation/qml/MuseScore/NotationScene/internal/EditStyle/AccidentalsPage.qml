@@ -38,7 +38,7 @@ StyledFlickable {
 
     ColumnLayout {
         id: contentLayout
-        anchors.fill: parent
+        width: root.width
         spacing: 12
 
         StyledGroupBox {

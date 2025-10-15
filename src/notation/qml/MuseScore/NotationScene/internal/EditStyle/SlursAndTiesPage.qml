@@ -39,7 +39,7 @@ StyledFlickable {
 
     ColumnLayout {
         id: contentLayout
-        width: parent.width
+        width: root.width
         spacing: 18
 
         SlursSection {
