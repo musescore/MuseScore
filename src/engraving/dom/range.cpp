@@ -1063,11 +1063,6 @@ void ScoreRange::backupBreaks(Segment* first, Segment* last)
             bBackup.lBreakType = LayoutBreakType::PAGE;
             m_breaks.push_back(bBackup);
         }
-
-        // Last Measure
-        if (m->sectionBreak() || (m->nextMeasure() && (m->nextMeasure()->first(SegmentType::TimeSig)))) {
-            break;
-        }
     }
 }
 
@@ -1086,8 +1081,7 @@ void ScoreRange::restoreBreaks(Score* score, const Fraction& tick) const
                 m->undoSetBreak(true, bb.lBreakType);
                 break;
             }
-            // Last Measure
-            if (m->sectionBreak() || (m->nextMeasure() && (m->nextMeasure()->first(SegmentType::TimeSig)))) {
+            if (m->tick() > bb.sPosition) {
                 break;
             }
         }
