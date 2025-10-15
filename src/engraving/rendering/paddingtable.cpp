@@ -63,17 +63,6 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::NOTE][ElementType::KEYSIG] = 0.75 * spatium;
     table[ElementType::NOTE][ElementType::TIMESIG] = 0.75 * spatium;
 
-    // Obtain the Stem -> * and * -> Stem values from the note equivalents
-    table[ElementType::STEM] = table[ElementType::NOTE];
-    for (auto& elem: table) {
-        elem[ElementType::STEM] = elem[ElementType::NOTE];
-    }
-
-    table[ElementType::STEM][ElementType::STEM] = 0.85 * spatium;
-    table[ElementType::STEM][ElementType::ACCIDENTAL] = 0.35 * spatium;
-    table[ElementType::STEM][ElementType::LEDGER_LINE] = 0.35 * spatium;
-    table[ElementType::LEDGER_LINE][ElementType::STEM] = 0.35 * spatium;
-
     table[ElementType::LEDGER_LINE][ElementType::NOTE] = table[ElementType::NOTE][ElementType::LEDGER_LINE];
     table[ElementType::LEDGER_LINE][ElementType::LEDGER_LINE] = ledgerPad;
     table[ElementType::LEDGER_LINE][ElementType::ACCIDENTAL]
@@ -115,7 +104,6 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::NOTEDOT][ElementType::TIMESIG] = 1.35 * spatium;
 
     table[ElementType::REST][ElementType::NOTE] = table[ElementType::NOTE][ElementType::REST];
-    table[ElementType::REST][ElementType::STEM] = table[ElementType::NOTE][ElementType::STEM];
     table[ElementType::REST][ElementType::LEDGER_LINE]
         = std::max(table[ElementType::REST][ElementType::NOTE] - ledgerLength / 2, ledgerPad);
     table[ElementType::REST][ElementType::ACCIDENTAL] = 0.45 * spatium;
@@ -129,7 +117,6 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::CLEF][ElementType::LEDGER_LINE]
         = std::max(table[ElementType::CLEF][ElementType::NOTE] - ledgerLength / 2, ledgerPad);
     table[ElementType::CLEF][ElementType::ACCIDENTAL] = 0.6 * spatium;
-    table[ElementType::CLEF][ElementType::STEM] = 0.75 * spatium;
     table[ElementType::CLEF][ElementType::REST] = table[ElementType::CLEF][ElementType::NOTE];
     table[ElementType::CLEF][ElementType::CLEF] = 0.75 * spatium;
     table[ElementType::CLEF][ElementType::ARPEGGIO] = 0.65 * spatium;
@@ -221,7 +208,6 @@ void PaddingTable::createTable(const MStyle& style)
     // Accidental -> padding (used by accidental placement algorithm)
     table[ElementType::ACCIDENTAL][ElementType::NOTE] = style.styleMM(Sid::accidentalNoteDistance);
     table[ElementType::ACCIDENTAL][ElementType::LEDGER_LINE] = 0.18 * spatium;
-    table[ElementType::ACCIDENTAL][ElementType::STEM] = table[ElementType::ACCIDENTAL][ElementType::NOTE];
 
     table[ElementType::ARTICULATION][ElementType::NOTE] = 0.25 * spatium;
     table[ElementType::ARTICULATION][ElementType::REST] = 0.25 * spatium;
@@ -231,7 +217,6 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::REST] = 0.5 * spatium;
     table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::ACCIDENTAL] = 0.35 * spatium;
     table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::BAR_LINE] = 0.35 * spatium;
-    table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::STEM] = 0.35 * spatium;
 
     table[ElementType::PARENTHESIS][ElementType::PARENTHESIS] = 1.0 * spatium;
 
@@ -240,6 +225,23 @@ void PaddingTable::createTable(const MStyle& style)
     for (auto& elem : table) {
         elem[ElementType::MEASURE_REPEAT] = elem[ElementType::NOTE];
     }
+
+    // Obtain the Stem -> * and * -> Stem values from the note equivalents
+    table[ElementType::STEM] = table[ElementType::NOTE];
+    for (auto& elem: table) {
+        elem[ElementType::STEM] = elem[ElementType::NOTE];
+    }
+
+    table[ElementType::NOTE][ElementType::STEM] = style.styleMM(Sid::minNoteDistance);
+    table[ElementType::REST][ElementType::STEM] = table[ElementType::NOTE][ElementType::STEM];
+    table[ElementType::CLEF][ElementType::STEM] = 0.75 * spatium;
+    table[ElementType::ACCIDENTAL][ElementType::STEM] = table[ElementType::ACCIDENTAL][ElementType::NOTE];
+    table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::STEM] = 0.35 * spatium;
+    table[ElementType::STEM][ElementType::NOTE] = style.styleMM(Sid::minNoteDistance);
+    table[ElementType::STEM][ElementType::STEM] = 0.85 * spatium;
+    table[ElementType::STEM][ElementType::ACCIDENTAL] = 0.35 * spatium;
+    table[ElementType::STEM][ElementType::LEDGER_LINE] = 0.35 * spatium;
+    table[ElementType::LEDGER_LINE][ElementType::STEM] = 0.35 * spatium;
 
     const double articulationAndFermataPadding = 0.35 * spatium;
     table[ElementType::ARTICULATION].fill(articulationAndFermataPadding);
