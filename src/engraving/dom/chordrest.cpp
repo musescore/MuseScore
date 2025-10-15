@@ -665,7 +665,7 @@ Slur* ChordRest::slur(const ChordRest* secondChordRest) const
 void ChordRest::undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps)
 {
     if (id == Pid::BEAM_MODE) {
-        if (m_durationType.hooks() == 0) {
+        if (isChord() && m_durationType.hooks() == 0) {
             return;
         }
         BeamMode newBeamMode = newValue.value<BeamMode>();
