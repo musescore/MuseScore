@@ -465,12 +465,17 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
             setNeedRemoveInvalidSegments();
         }
         break;
-    case Pid::VERSE:
+    case Pid::VERSE: {
         if (Lyrics* l = prevLyrics(this)) {
             l->setNeedRemoveInvalidSegments();
         }
+        bool followTextStyle = getProperty(Pid::TEXT_STYLE) == propertyDefault(Pid::TEXT_STYLE);
         m_no = v.toInt();
+        if (followTextStyle) {
+            setProperty(Pid::TEXT_STYLE, propertyDefault(Pid::TEXT_STYLE));
+        }
         break;
+    }
     case Pid::AVOID_BARLINES:
         m_avoidBarlines = v.toBool();
         break;
