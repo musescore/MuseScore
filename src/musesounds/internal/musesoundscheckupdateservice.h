@@ -64,8 +64,6 @@ private:
 
     muse::RetVal<muse::update::ReleaseInfo> m_lastCheckResult;
     muse::io::path_t m_installatorPath;
-
-    muse::network::INetworkManagerPtr m_networkManager;
     muse::Progress m_updateProgress;
 };
 }
