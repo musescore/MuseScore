@@ -28,6 +28,8 @@
 
 #include "engraving/dom/pitchspelling.h"
 
+#define SPN_PITCH_DISPLAY(wantSPN, pitch) (wantSPN ? muse::String(pitch).remove(u" ") : muse::mtrc("global/pitchName", pitch))
+
 using namespace mu::notation;
 using namespace muse::ui;
 
@@ -92,6 +94,158 @@ void EditPitch::setup()
     setFocus();
 
     qApp->installEventFilter(this);
+
+    // Display pitch names according to user preference
+    bool wantSPN = engravingConfiguration()->pitchNotationSPN();
+    // octave 9
+    tableWidget->setItem(0, 0, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C 9")));
+    tableWidget->setItem(0, 1, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C♯ 9")));
+    tableWidget->setItem(0, 2, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D 9")));
+    tableWidget->setItem(0, 3, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D♯ 9")));
+    tableWidget->setItem(0, 4, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "E 9")));
+    tableWidget->setItem(0, 5, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F 9")));
+    tableWidget->setItem(0, 6, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F♯ 9")));
+    tableWidget->setItem(0, 7, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G 9")));
+    // octave 8
+    tableWidget->setItem(1, 0, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C 8")));
+    tableWidget->setItem(1, 1, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C♯ 8")));
+    tableWidget->setItem(1, 2, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D 8")));
+    tableWidget->setItem(1, 3, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D♯ 8")));
+    tableWidget->setItem(1, 4, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "E 8")));
+    tableWidget->setItem(1, 5, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F 8")));
+    tableWidget->setItem(1, 6, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F♯ 8")));
+    tableWidget->setItem(1, 7, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G 8")));
+    tableWidget->setItem(1, 8, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G♯ 8")));
+    tableWidget->setItem(1, 9, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A 8")));
+    tableWidget->setItem(1, 10, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A♯ 8")));
+    tableWidget->setItem(1, 11, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "B 8")));
+    // octave 7
+    tableWidget->setItem(2, 0, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C 7")));
+    tableWidget->setItem(2, 1, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C♯ 7")));
+    tableWidget->setItem(2, 2, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D 7")));
+    tableWidget->setItem(2, 3, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D♯ 7")));
+    tableWidget->setItem(2, 4, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "E 7")));
+    tableWidget->setItem(2, 5, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F 7")));
+    tableWidget->setItem(2, 6, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F♯ 7")));
+    tableWidget->setItem(2, 7, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G 7")));
+    tableWidget->setItem(2, 8, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G♯ 7")));
+    tableWidget->setItem(2, 9, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A 7")));
+    tableWidget->setItem(2, 10, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A♯ 7")));
+    tableWidget->setItem(2, 11, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "B 7")));
+    // octave 6
+    tableWidget->setItem(3, 0, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C 6")));
+    tableWidget->setItem(3, 1, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C♯ 6")));
+    tableWidget->setItem(3, 2, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D 6")));
+    tableWidget->setItem(3, 3, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D♯ 6")));
+    tableWidget->setItem(3, 4, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "E 6")));
+    tableWidget->setItem(3, 5, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F 6")));
+    tableWidget->setItem(3, 6, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F♯ 6")));
+    tableWidget->setItem(3, 7, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G 6")));
+    tableWidget->setItem(3, 8, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G♯ 6")));
+    tableWidget->setItem(3, 9, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A 6")));
+    tableWidget->setItem(3, 10, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A♯ 6")));
+    tableWidget->setItem(3, 11, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "B 6")));
+    // octave 5
+    tableWidget->setItem(4, 0, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C 5")));
+    tableWidget->setItem(4, 1, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C♯ 5")));
+    tableWidget->setItem(4, 2, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D 5")));
+    tableWidget->setItem(4, 3, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D♯ 5")));
+    tableWidget->setItem(4, 4, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "E 5")));
+    tableWidget->setItem(4, 5, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F 5")));
+    tableWidget->setItem(4, 6, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F♯ 5")));
+    tableWidget->setItem(4, 7, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G 5")));
+    tableWidget->setItem(4, 8, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G♯ 5")));
+    tableWidget->setItem(4, 9, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A 5")));
+    tableWidget->setItem(4, 10, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A♯ 5")));
+    tableWidget->setItem(4, 11, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "B 5")));
+    // octave 4
+    tableWidget->setItem(5, 0, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C 4")));
+    tableWidget->setItem(5, 1, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C♯ 4")));
+    tableWidget->setItem(5, 2, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D 4")));
+    tableWidget->setItem(5, 3, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D♯ 4")));
+    tableWidget->setItem(5, 4, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "E 4")));
+    tableWidget->setItem(5, 5, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F 4")));
+    tableWidget->setItem(5, 6, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F♯ 4")));
+    tableWidget->setItem(5, 7, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G 4")));
+    tableWidget->setItem(5, 8, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G♯ 4")));
+    tableWidget->setItem(5, 9, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A 4")));
+    tableWidget->setItem(5, 10, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A♯ 4")));
+    tableWidget->setItem(5, 11, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "B 4")));
+    // octave 3
+    tableWidget->setItem(6, 0, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C 3")));
+    tableWidget->setItem(6, 1, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C♯ 3")));
+    tableWidget->setItem(6, 2, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D 3")));
+    tableWidget->setItem(6, 3, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D♯ 3")));
+    tableWidget->setItem(6, 4, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "E 3")));
+    tableWidget->setItem(6, 5, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F 3")));
+    tableWidget->setItem(6, 6, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F♯ 3")));
+    tableWidget->setItem(6, 7, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G 3")));
+    tableWidget->setItem(6, 8, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G♯ 3")));
+    tableWidget->setItem(6, 9, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A 3")));
+    tableWidget->setItem(6, 10, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A♯ 3")));
+    tableWidget->setItem(6, 11, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "B 3")));
+    // octave 2
+    tableWidget->setItem(7, 0, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C 2")));
+    tableWidget->setItem(7, 1, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C♯ 2")));
+    tableWidget->setItem(7, 2, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D 2")));
+    tableWidget->setItem(7, 3, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D♯ 2")));
+    tableWidget->setItem(7, 4, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "E 2")));
+    tableWidget->setItem(7, 5, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F 2")));
+    tableWidget->setItem(7, 6, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F♯ 2")));
+    tableWidget->setItem(7, 7, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G 2")));
+    tableWidget->setItem(7, 8, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G♯ 2")));
+    tableWidget->setItem(7, 9, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A 2")));
+    tableWidget->setItem(7, 10, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A♯ 2")));
+    tableWidget->setItem(7, 11, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "B 2")));
+    // octave 1
+    tableWidget->setItem(8, 0, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C 1")));
+    tableWidget->setItem(8, 1, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C♯ 1")));
+    tableWidget->setItem(8, 2, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D 1")));
+    tableWidget->setItem(8, 3, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D♯ 1")));
+    tableWidget->setItem(8, 4, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "E 1")));
+    tableWidget->setItem(8, 5, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F 1")));
+    tableWidget->setItem(8, 6, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F♯ 1")));
+    tableWidget->setItem(8, 7, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G 1")));
+    tableWidget->setItem(8, 8, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G♯ 1")));
+    tableWidget->setItem(8, 9, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A 1")));
+    tableWidget->setItem(8, 10, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A♯ 1")));
+    tableWidget->setItem(8, 11, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "B 1")));
+    // octave 0
+    tableWidget->setItem(9, 0, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C 0")));
+    tableWidget->setItem(9, 1, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C♯ 0")));
+    tableWidget->setItem(9, 2, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D 0")));
+    tableWidget->setItem(9, 3, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D♯ 0")));
+    tableWidget->setItem(9, 4, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "E 0")));
+    tableWidget->setItem(9, 5, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F 0")));
+    tableWidget->setItem(9, 6, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F♯ 0")));
+    tableWidget->setItem(9, 7, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G 0")));
+    tableWidget->setItem(9, 8, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G♯ 0")));
+    tableWidget->setItem(9, 9, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A 0")));
+    tableWidget->setItem(9, 10, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A♯ 0")));
+    tableWidget->setItem(9, 11, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "B 0")));
+    // octave -1
+    tableWidget->setItem(10, 0, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C -1")));
+    tableWidget->setItem(10, 1, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "C♯ -1")));
+    tableWidget->setItem(10, 2, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D -1")));
+    tableWidget->setItem(10, 3, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "D♯ -1")));
+    tableWidget->setItem(10, 4, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "E -1")));
+    tableWidget->setItem(10, 5, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F -1")));
+    tableWidget->setItem(10, 6, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "F♯ -1")));
+    tableWidget->setItem(10, 7, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G -1")));
+    tableWidget->setItem(10, 8, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "G♯ -1")));
+    tableWidget->setItem(10, 9, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A -1")));
+    tableWidget->setItem(10, 10, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "A♯ -1")));
+    tableWidget->setItem(10, 11, new QTableWidgetItem(SPN_PITCH_DISPLAY(wantSPN, "B -1")));
+
+    // Center cell contents
+    for (int row = 0; row < tableWidget->rowCount(); ++row) {
+        for (int col = 0; col < tableWidget->columnCount(); ++col) {
+            QTableWidgetItem* item = tableWidget->item(row, col);
+            if (item) {
+                item->setTextAlignment(Qt::AlignCenter);
+            }
+        }
+    }
 }
 
 void EditPitch::accept()
