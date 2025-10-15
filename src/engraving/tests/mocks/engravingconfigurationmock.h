@@ -50,6 +50,7 @@ public:
     MOCK_METHOD(Color, warningColor, (), (const, override));
     MOCK_METHOD(Color, warningSelectedColor, (), (const, override));
     MOCK_METHOD(Color, criticalColor, (), (const, override));
+    MOCK_METHOD(Color, criticalBackgroundColor, (), (const, override));
     MOCK_METHOD(Color, criticalSelectedColor, (), (const, override));
     MOCK_METHOD(Color, thumbnailBackgroundColor, (), (const, override));
     MOCK_METHOD(Color, noteBackgroundColor, (), (const, override));
