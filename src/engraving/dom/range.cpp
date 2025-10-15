@@ -1032,17 +1032,13 @@ bool ScoreRange::insertBarLine(Measure* m, const BarLinesBackup& barLine) const
 void ScoreRange::restoreBarLines(Score* score, const Fraction& tick) const
 {
     for (const BarLinesBackup& bbl : m_barLines) {
-        // We only insert the necessary BarLines
-        if ((bbl.bl->barLineType() != BarLineType::NORMAL) && (bbl.bl->barLineType() != BarLineType::END)) {
-            for (Measure* m = score->tick2measure(tick); m; m = m->nextMeasure()) {
-                // if inserted within a suitable measure ... to the next barline
-                if (((bbl.sPosition >= m->tick()) && (bbl.sPosition <= m->endTick())) && (insertBarLine(m, bbl))) {
-                    break;
-                }
-                // Last Measure
-                if (m->sectionBreak() || (m->nextMeasure() && (m->nextMeasure()->first(SegmentType::TimeSig)))) {
-                    break;
-                }
+        for (Measure* m = score->tick2measure(tick); m; m = m->nextMeasure()) {
+            // if inserted within a suitable measure ... to the next barline
+            if (((bbl.sPosition >= m->tick()) && (bbl.sPosition <= m->endTick())) && (insertBarLine(m, bbl))) {
+                break;
+            }
+            if (m->tick() > bbl.sPosition) {
+                break;
             }
         }
     }
