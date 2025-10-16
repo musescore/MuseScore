@@ -151,11 +151,24 @@ private:
     void backupRepeats(Segment* first, Segment* last);
     void restoreRepeats(Score* score, const Fraction& tick) const;
 
+    struct SpacerBackup
+    {
+        Fraction sPosition;
+        staff_idx_t staffIdx;
+        Spacer* s = nullptr;
+    };
+
     void backupSpacers(Segment* first, Segment* last);
     void restoreSpacers(Score* score, const Fraction& tick) const;
     void deleteSpacers();
 
-    bool endOfMeasure(EngravingItem* e) const;
+    struct JumpsMarkersBackup
+    {
+        Fraction sPosition;
+        EngravingItem* e = nullptr;
+    };
+
+    bool endOfMeasureElement(EngravingItem* e) const;
     void backupJumpsAndMarkers(Segment* first, Segment* last);
     void restoreJumpsAndMarkers(Score* score, const Fraction& tick) const;
     void deleteJumpsAndMarkers();
@@ -164,17 +177,6 @@ private:
 
     friend class TrackList;
 
-    struct SpacerBackup
-    {
-        Fraction sPosition;
-        staff_idx_t staffIdx;
-        Spacer* s = nullptr;
-    };
-    struct JumpsMarkersBackup
-    {
-        Fraction sPosition;
-        EngravingItem* e = nullptr;
-    };
     std::vector<TrackList*> m_tracks;
     std::vector<Tie*> m_startTies;
     std::vector<SpacerBackup> m_spacers;

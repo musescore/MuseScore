@@ -1392,10 +1392,10 @@ void ScoreRange::deleteSpacers()
 }
 
 //---------------------------------------------------------
-//   endOfMeasure
+//   endOfMeasureElement
 //---------------------------------------------------------
 
-bool ScoreRange::endOfMeasure(EngravingItem* e) const
+bool ScoreRange::endOfMeasureElement(EngravingItem* e) const
 {
     bool result = false;
 
@@ -1422,7 +1422,7 @@ void ScoreRange::backupJumpsAndMarkers(Segment* first, Segment* last)
         for (EngravingItem* e : m->el()) {
             if (e && (e->isMarker() || e->isJump())) {
                 JumpsMarkersBackup mJMBackup;
-                mJMBackup.sPosition = (endOfMeasure(e) ? m->endTick() : m->tick());
+                mJMBackup.sPosition = (endOfMeasureElement(e) ? m->endTick() : m->tick());
                 mJMBackup.e = e->clone();
                 m_jumpsMarkers.push_back(mJMBackup);
             }
@@ -1451,8 +1451,8 @@ void ScoreRange::restoreJumpsAndMarkers(Score* score, const Fraction& tick) cons
         for (Measure* m = score->tick2measure(tick); m; m = m->nextMeasure()) {
             // Markers: we keep them as long as they are in the measure before the final tick
             // Jumps: we keep them as long as they are in the measure after the start tick
-            if ((endOfMeasure(jmb.e) && jmb.sPosition > m->tick() && jmb.sPosition <= m->endTick())
-                || (!endOfMeasure(jmb.e) && jmb.sPosition >= m->tick() && jmb.sPosition < m->endTick())) {
+            if ((endOfMeasureElement(jmb.e) && jmb.sPosition > m->tick() && jmb.sPosition <= m->endTick())
+                || (!endOfMeasureElement(jmb.e) && jmb.sPosition >= m->tick() && jmb.sPosition < m->endTick())) {
                 addJumpMarker(m, jmb.e);
                 LOGI() << "tpacebes hago restore";
             }
