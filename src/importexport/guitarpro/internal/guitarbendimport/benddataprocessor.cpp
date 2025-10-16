@@ -200,7 +200,8 @@ static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engrav
                 const auto& graceData = tickInfo.at(noteIndex);
 
                 const auto& graceVectorData = graceData.data;
-                bool shouldMoveTie = graceData.shouldMoveTie;
+                const auto& lastGraceData = graceData.lastNoteData;
+                bool shouldMoveTie = lastGraceData.shouldMoveTie;
 
                 Note* currentNote = mainNote;
                 for (size_t graceIndex = 0; graceIndex < graceVectorData.size(); graceIndex++) {
@@ -237,7 +238,8 @@ static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engrav
                     if (tieFor && tieFor->endNote()) {
                         Note* tiedNote = tieFor->endNote();
                         mainNote->remove(tieFor);
-                        score->addGuitarBend(GuitarBendType::BEND, currentNote, tiedNote);
+                        GuitarBend* bend = score->addGuitarBend(GuitarBendType::BEND, currentNote, tiedNote);
+                        bend->setEndTimeFactor(lastGraceData.endFactor);
                     }
                 }
             }

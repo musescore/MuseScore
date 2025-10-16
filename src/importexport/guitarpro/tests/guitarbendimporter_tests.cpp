@@ -196,5 +196,8 @@ TEST_F(GuitarBendImporter_Tests, gpGraceChordDiffBends) {
 TEST_F(GuitarBendImporter_Tests, gpTiedBendsReleaseOrHold) {
     gpReadTest(u"tied_bends_release_or_hold", u"gp");
 }
+TEST_F(GuitarBendImporter_Tests, gpBendReleaseGraceAfter) {
+    gpReadTest(u"bends_release_grace_after", u"gp");
+}
 #endif
 }

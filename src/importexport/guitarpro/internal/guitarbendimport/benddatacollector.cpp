@@ -155,7 +155,10 @@ static void fillNormalBendData(BendDataContext& bendDataCtx, const ImportedBendI
         if (importedInfo.connectionType == ConnectionToNextNoteType::MAIN_NOTE_CONNECTS) {
             bendDataCtx.tiedNotesBendsData[track][tick][noteIdx] = std::move(data);
         } else if (importedInfo.connectionType == ConnectionToNextNoteType::LAST_GRACE_CONNECTS && i == importedInfo.segments.size() - 1) {
-            bendDataCtx.graceAfterBendData[track][tick][noteIdx].shouldMoveTie = true;
+            LastGraceNoteData lastNoteData;
+            lastNoteData.shouldMoveTie = true;
+            lastNoteData.endFactor = data.endFactor;
+            bendDataCtx.graceAfterBendData[track][tick][noteIdx].lastNoteData = lastNoteData;
         } else {
             bendDataCtx.graceAfterBendData[track][tick][noteIdx].data.push_back(std::move(data));
         }
