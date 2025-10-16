@@ -7269,7 +7269,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
     // handle notations
     if (cr) {
         notations.addToScore(cr, note,
-                             noteStartTime.ticks(), m_slurs, m_glissandi, m_spanners, m_trills, m_ties, m_unstartedTieNotes,
+                             noteStartTime, m_slurs, m_glissandi, m_spanners, m_trills, m_ties, m_unstartedTieNotes,
                              m_unendedTieNotes, arpMap, delayedArps);
 
         // if no tie added yet, convert the "tie" into "tied" and add it.
@@ -8208,7 +8208,7 @@ void MusicXmlParserNotations::slur()
 //   addSlur
 //---------------------------------------------------------
 
-static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, Note* note, const int tick,
+static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, Note* note, const Fraction& tick,
                     MusicXmlLogger* logger, const XmlStreamReader* const xmlreader)
 {
     int slurNo = notation.attribute(u"number").toInt();
@@ -8244,17 +8244,16 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
                 note->score()->undoAddElement(lvTie);
                 return;
             }
-            const Fraction newSlurTick = Fraction::fromTicks(tick);
-            const Fraction newSlurTick2 = newSlur->endElement()->tick();
-            if (newSlurTick2 < newSlurTick) {
+            const Fraction tick2 = newSlur->endElement()->tick();
+            if (tick2 < tick) {
                 logger->logError(String(u"slur end is before slur start"), xmlreader);
                 delete newSlur;
                 return;
             }
             newSlur->setTrack(track);
-            newSlur->setTick(newSlurTick);
+            newSlur->setTick(tick);
             newSlur->setStartElement(cr);
-            newSlur->setTick2(newSlurTick2);
+            newSlur->setTick2(tick2);
             score->addElement(newSlur);
         } else {
             // slur start for new slur: init
@@ -8274,7 +8273,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
             }
             newSlur->setVisible(notation.visible());
             colorItem(newSlur, Color::fromString(notation.attribute(u"color")));
-            newSlur->setTick(Fraction::fromTicks(tick));
+            newSlur->setTick(tick);
             newSlur->setStartElement(cr);
             if (configuration()->importLayout()) {
                 const String orientation = notation.attribute(u"orientation");
@@ -8310,7 +8309,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
             }
 
             if (!(cr->isGrace())) {
-                newSlur->setTick2(Fraction::fromTicks(tick));
+                newSlur->setTick2(tick);
                 newSlur->setTrack2(track);
             }
             newSlur->setEndElement(cr);
@@ -9357,14 +9356,14 @@ void MusicXmlParserNotations::addNotation(const Notation& notation, ChordRest* c
  as in that case note is a nullptr.
  */
 
-void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
+void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, const Fraction& tick, SlurStack& slurs,
                                          Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners,
                                          TrillStack& trills, MusicXmlTieMap& ties, std::vector<Note*>& unstartedTieNotes,
                                          std::vector<Note*>& unendedTieNotes, ArpeggioMap& arpMap,
                                          DelayedArpMap& delayedArps)
 {
     addArpeggio(cr, m_arpeggioType, m_arpeggioNo, m_arpeggioColor, arpMap, delayedArps);
-    addWavyLine(cr, Fraction::fromTicks(tick), m_wavyLineNo, m_wavyLineType, spanners, trills, m_logger, &m_e);
+    addWavyLine(cr, tick, m_wavyLineNo, m_wavyLineType, spanners, trills, m_logger, &m_e);
 
     for (const Notation& notation : m_notations) {
         if (notation.symId() != SymId::noSym) {
@@ -9389,7 +9388,7 @@ void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, 
         Dynamic* dynamic = Factory::createDynamic(m_score->dummy()->segment());
         dynamic->setDynamicType(d);
         colorItem(dynamic, m_dynamicsColor);
-        m_pass2.addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick));
+        m_pass2.addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), tick);
     }
 }
 
