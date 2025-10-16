@@ -214,16 +214,16 @@ StyledFlickable {
                                 implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
 
                                 CheckBox {
-                        id: capitaliseCheckBox
-                        text: qsTrc("notation/editstyle/chordsymbols", "Automatically capitalize note names")
+                                    id: capitaliseCheckBox
+                                    text: qsTrc("notation/editstyle/chordsymbols", "Automatically capitalize note names")
 
-                        checked: chordSymbolsModel.automaticCapitalization && Boolean(chordSymbolsModel.automaticCapitalization.value)
-                        onClicked: {
-                            if (chordSymbolsModel.automaticCapitalization) {
-                                chordSymbolsModel.automaticCapitalization.value = !checked
-                            }
-                        }
-                    }
+                                    checked: chordSymbolsModel.automaticCapitalization && Boolean(chordSymbolsModel.automaticCapitalization.value)
+                                    onClicked: {
+                                        if (chordSymbolsModel.automaticCapitalization) {
+                                            chordSymbolsModel.automaticCapitalization.value = !checked
+                                        }
+                                    }
+                                }
                             }
 
                             FlatButton {
