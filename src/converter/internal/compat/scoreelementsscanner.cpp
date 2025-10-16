@@ -32,19 +32,13 @@ using namespace mu::converter;
 using namespace mu::engraving;
 
 struct ScannerData {
-    using ElementKey = std::pair<ElementType, int /*subtype*/>;
-
-    // in
-    ScoreElementScanner::Options options;
-
     // out
     ElementMap elements;
     std::set<Chord*> chords;
     std::set<Spanner*> spanners;
-    std::map<InstrumentTrackId, std::map<ElementKey, std::set<muse::String> > > uniqueNames;
 };
 
-static bool itemAccepted(const EngravingItem* item, const ElementTypeSet& acceptedTypes)
+static bool itemAccepted(const EngravingItem* item)
 {
     // Ignore temporary / invalid elements and elements that cannot be interacted with
     if (!item || !item->part() || !item->selectable() || !item->isInteractionAvailable()) {
@@ -67,26 +61,7 @@ static bool itemAccepted(const EngravingItem* item, const ElementTypeSet& accept
         return false;
     }
 
-    if (!item->visible() && !item->score()->isShowInvisible()) {
-        return false;
-    }
-
-    if (acceptedTypes.empty()) {
-        return true;
-    }
-
-    ElementType type = item->type();
-
-    if (item->isNote()) {
-        const Chord* chord = toNote(item)->chord();
-        if (chord->notes().size() > 1) {
-            type = chord->type();
-        }
-    } else if (item->isSpannerSegment()) {
-        type = toSpannerSegment(item)->spanner()->type();
-    }
-
-    return muse::contains(acceptedTypes, type);
+    return true;
 }
 
 static bool isChordArticulation(const EngravingItem* item)
@@ -96,7 +71,7 @@ static bool isChordArticulation(const EngravingItem* item)
         return false;
     }
 
-    static const std::unordered_set<ElementType> CHORD_ARTICULATION_TYPES {
+    static const ElementTypeSet CHORD_ARTICULATION_TYPES {
         ElementType::ARPEGGIO,
         ElementType::TREMOLO_SINGLECHORD,
         ElementType::ORNAMENT,
@@ -124,7 +99,7 @@ static muse::String chordToNotes(const Chord* chord)
 
 static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
 {
-    if (!itemAccepted(item, scannerData->options.acceptedTypes)) {
+    if (!itemAccepted(item)) {
         return;
     }
 
@@ -209,18 +184,6 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
         part->instrumentId(item->tick())
     };
 
-    if (scannerData->options.avoidDuplicates) {
-        const muse::String& name = !info.name.empty() ? info.name : info.notes;
-        const ScannerData::ElementKey key = std::make_pair(type, item->subtype());
-        std::set<muse::String>& uniqueNames = scannerData->uniqueNames[trackId][key];
-
-        if (muse::contains(uniqueNames, name)) {
-            return;
-        }
-
-        uniqueNames.insert(name);
-    }
-
     if (!locationIsSet) {
         const EngravingItem::BarBeat barbeat = item->barbeat();
         info.start.staffIdx = item->staffIdx();
@@ -233,13 +196,11 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
     scannerData->elements[trackId].emplace_back(std::move(info));
 }
 
-ElementMap ScoreElementScanner::scanElements(Score* score, const Options& options)
+ElementMap ScoreElementScanner::scanElements(Score* score)
 {
     TRACEFUNC;
 
     ScannerData data;
-    data.options = options;
-
     score->scanElements([&](mu::engraving::EngravingItem* item) { addElementInfoIfNeed(&data, item); });
 
     // Sort elements: staff -> measure -> beat -> voice

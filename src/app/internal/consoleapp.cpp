@@ -338,8 +338,7 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
         ret = converter()->exportScoreTranspose(task.inputFile, task.outputFile, scoreTranspose, openParams);
     } break;
     case ConvertType::ExportScoreElements: {
-        std::string options = task.params[CmdOptions::ParamKey::ScoreElementsOptions].toString().toStdString();
-        ret = converter()->exportScoreElements(task.inputFile, task.outputFile, options, openParams);
+        ret = converter()->exportScoreElements(task.inputFile, task.outputFile, openParams);
     } break;
     case ConvertType::ExportScoreVideo: {
         ret = converter()->exportScoreVideo(task.inputFile, task.outputFile, openParams);

@@ -58,8 +58,7 @@ public:
     static muse::Ret exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
                                           const OpenParams& openParams = {});
 
-    static muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
-                                         const OpenParams& openParams = {});
+    static muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {});
 
     static muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode = false);
 
@@ -93,7 +92,7 @@ private:
     static muse::Ret doExportScoreTranspose(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter,
                                             bool addSeparator = false);
 
-    static muse::Ret doExportScoreElements(const notation::INotationPtr notation, const std::string& optionsJson, QIODevice& out);
+    static muse::Ret doExportScoreElements(const notation::INotationPtr notation, QIODevice& out);
 
     static muse::RetVal<QByteArray> scorePartJson(mu::engraving::Score* score, const std::string& fileName);
 

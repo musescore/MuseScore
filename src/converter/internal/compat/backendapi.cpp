@@ -68,40 +68,6 @@ static const std::string DEV_INFO_NAME = "devinfo";
 
 static constexpr bool ADD_SEPARATOR = true;
 
-static ScoreElementScanner::Options parseScoreElementScannerOptions(const std::string& json)
-{
-    if (json.empty()) {
-        return {};
-    }
-
-    QJsonParseError parseError;
-    const QJsonDocument doc = QJsonDocument::fromJson(QByteArray::fromStdString(json), &parseError);
-    if (parseError.error != QJsonParseError::NoError) {
-        LOGE() << "JSON parse error:" << parseError.errorString();
-        return {};
-    }
-
-    const QJsonObject obj = doc.object();
-
-    ScoreElementScanner::Options options;
-    options.avoidDuplicates = obj.value("avoidDuplicates").toBool();
-
-    const QJsonArray typeArray = obj.value("types").toArray();
-    for (const auto typeObj : typeArray) {
-        if (!typeObj.isString()) {
-            continue;
-        }
-
-        const std::string typeStr = typeObj.toString().toStdString();
-        const ElementType type = TConv::fromXml(typeStr, ElementType::INVALID);
-        if (type != ElementType::INVALID) {
-            options.acceptedTypes.insert(type);
-        }
-    }
-
-    return options;
-}
-
 Ret BackendApi::exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,
                                  const OpenParams& openParams)
 {
@@ -224,7 +190,7 @@ Ret BackendApi::exportScoreTranspose(const muse::io::path_t& in, const muse::io:
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
+Ret BackendApi::exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out,
                                     const OpenParams& openParams)
 {
     TRACEFUNC;
@@ -239,7 +205,7 @@ Ret BackendApi::exportScoreElements(const muse::io::path_t& in, const muse::io::
     QFile outputFile;
     openOutputFile(outputFile, out);
 
-    return doExportScoreElements(notation, optionsJson, outputFile);
+    return doExportScoreElements(notation, outputFile);
 }
 
 Ret BackendApi::openOutputFile(QFile& file, const muse::io::path_t& out)
@@ -676,11 +642,10 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
     return ret;
 }
 
-muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notation, const std::string& optionsJson, QIODevice& out)
+muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notation, QIODevice& out)
 {
     mu::engraving::Score* score = notation->elements()->msScore();
-    ScoreElementScanner::Options options = parseScoreElementScannerOptions(optionsJson);
-    ElementMap elements = ScoreElementScanner::scanElements(score, options);
+    ElementMap elements = ScoreElementScanner::scanElements(score);
 
     QJsonArray rootArray;
 

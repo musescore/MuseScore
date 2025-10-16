@@ -32,13 +32,6 @@ namespace mu::converter {
 class ScoreElementScanner
 {
 public:
-    struct Options {
-        Options() {}
-
-        mu::engraving::ElementTypeSet acceptedTypes;
-        bool avoidDuplicates = false;
-    };
-
-    static ElementMap scanElements(mu::engraving::Score* score, const Options& options = {});
+    static ElementMap scanElements(mu::engraving::Score* score);
 };
 }

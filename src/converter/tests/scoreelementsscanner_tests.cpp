@@ -34,7 +34,7 @@ static const muse::String CONVERTER_DATA_DIR("data/");
 class Converter_ScoreElementsTests : public ::testing::Test
 {
 public:
-    ElementInfo makeInfo(ElementType type, const String& name, const String& notes = u"") const
+    ElementInfo makeInfo(ElementType type, const String& name = u"", const String& notes = u"") const
     {
         ElementInfo info;
         info.type = type;
@@ -51,56 +51,53 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
     Score* score = ScoreRW::readScore(CONVERTER_DATA_DIR + "score_elements.mscx");
     ASSERT_TRUE(score);
 
-    // [GIVEN] Scanner options
-    ScoreElementScanner::Options options;
-    options.avoidDuplicates = true;
-    options.acceptedTypes = {
-        // 1st measure
-        ElementType::KEYSIG,
-        ElementType::TIMESIG,
-        ElementType::ARPEGGIO,
-        ElementType::CHORD,
-        ElementType::TREMOLO_SINGLECHORD,
-
-        // 2nd measure
-        ElementType::ORNAMENT,
-
-        // 3rd measure
-        ElementType::TRILL,
-
-        // 4th measure
-        ElementType::GRADUAL_TEMPO_CHANGE,
-        ElementType::HAIRPIN,
-
-        // 5th measure
-        ElementType::PLAYTECH_ANNOTATION,
-    };
-
     // [WHEN] Scan the score
-    ElementMap result = ScoreElementScanner::scanElements(score, options);
+    ElementMap result = ScoreElementScanner::scanElements(score);
 
     // [THEN] The list matches the expected one
     ElementInfoList expectedList;
 
     // 1st measure
+    expectedList.emplace_back(makeInfo(ElementType::CLEF, u"Treble clef"));
     expectedList.emplace_back(makeInfo(ElementType::KEYSIG, u"C major / A minor"));
     expectedList.emplace_back(makeInfo(ElementType::TIMESIG, u"4/4 time"));
     expectedList.emplace_back(makeInfo(ElementType::ARPEGGIO, u"Up arpeggio", u"C5 E5 G5 B5"));
     expectedList.emplace_back(makeInfo(ElementType::CHORD, u"", u"C5 E5 G5 B5"));
     expectedList.emplace_back(makeInfo(ElementType::TREMOLO_SINGLECHORD, u"32nd through stem", u"F4 A4 C5"));
+    expectedList.emplace_back(makeInfo(ElementType::REST, u"Rest(s)"));
 
     // 2nd measure
-    expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", u"A4 E5")); // skip duplicates
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
+    expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", u"A4 E5"));
+    expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", u"A4 E5"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"C5"));
+    expectedList.emplace_back(makeInfo(ElementType::REST, u"Rest(s)"));
 
     // 3rd measure
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
     expectedList.emplace_back(makeInfo(ElementType::TRILL, u"Trill line"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"C5"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"D5"));
 
     // 4th measure
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
     expectedList.emplace_back(makeInfo(ElementType::HAIRPIN, u"Crescendo hairpin"));
     expectedList.emplace_back(makeInfo(ElementType::GRADUAL_TEMPO_CHANGE, u"accel."));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
 
     // 5th measure
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
     expectedList.emplace_back(makeInfo(ElementType::PLAYTECH_ANNOTATION, u"Pizzicato"));
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Final barline"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
 
     ASSERT_EQ(result.size(), 1);
     const mu::engraving::InstrumentTrackId expectedTrackId { muse::ID(1), u"piano" };
