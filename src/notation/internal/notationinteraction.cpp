@@ -2011,20 +2011,9 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     case ElementType::FIGURED_BASS:
     case ElementType::LYRICS:
     case ElementType::HARP_DIAGRAM:
+    case ElementType::STAFFTYPE_CHANGE:
         accepted = doDropStandard();
         break;
-    case ElementType::STAFFTYPE_CHANGE: {
-        EngravingItem* el = dropTarget(edd.ed);
-        Measure* m = el ? el->findMeasure() : nullptr;
-        if (m) {
-            System* s = m->system();
-            double y = pos.y() - s->canvasPos().y();
-            staff_idx_t staffIndex = s->searchStaff(y);
-            StaffTypeChange* stc = toStaffTypeChange(edd.ed.dropElement);
-            score()->cmdAddStaffTypeChange(m, staffIndex, stc);
-        }
-    }
-    break;
     case ElementType::SLUR:
     case ElementType::HAMMER_ON_PULL_OFF:
     {
@@ -2493,23 +2482,6 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         } else {
             for (EngravingItem* target : targetElements) {
                 applyDropPaletteElement(score, target, element, modifiers);
-            }
-        }
-        return;
-    }
-
-    if (element->isStaffTypeChange()) {
-        Measure* measure = sel.startSegment() ? sel.startSegment()->measure() : nullptr;
-        if (measure) {
-            ByteArray a = element->mimeData();
-
-            for (staff_idx_t i = sel.staffStart(); i < sel.staffEnd(); ++i) {
-                mu::engraving::XmlReader n(a);
-                StaffTypeChange* stc = engraving::Factory::createStaffTypeChange(measure);
-                rw::RWRegister::reader()->readItem(stc, n);
-                stc->styleChanged(); // update to local style
-
-                score->cmdAddStaffTypeChange(measure, i, stc);
             }
         }
         return;
@@ -3173,7 +3145,6 @@ bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
 
     //! NOTE: Should match Measure::acceptDrop
     switch (dropElem->type()) {
-    case ElementType::STAFFTYPE_CHANGE:
     case ElementType::VOLTA:
     case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::KEYSIG:
