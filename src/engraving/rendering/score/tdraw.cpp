@@ -2206,10 +2206,10 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
 
-        if (negativeFret || (item->fretConflict() && !opt.isPrinting && item->score()->showUnprintable())) {                    //on fret conflict, draw on red background
+        if (negativeFret || (item->fretConflict() && !opt.isPrinting && item->score()->showUnprintable())) {                    // fret conflict
             painter->save();
             painter->setPen(config->criticalColor());
-            painter->setBrush(config->criticalColor());
+            painter->setBrush(config->criticalBackgroundColor());
             painter->drawRect(ldata->bbox());
             painter->restore();
         }
