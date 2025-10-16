@@ -1764,6 +1764,7 @@ std::vector<EngravingItem*> filterTargetElements(const Selection& sel, Engraving
 
     // Add these elements only once per staff in range selections, else once per staff per measure:
     case ElementType::SPACER:
+    case ElementType::STAFFTYPE_CHANGE:
         uniqueStaves = true;
         [[fallthrough]];
 

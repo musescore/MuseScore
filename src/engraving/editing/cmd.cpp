@@ -4691,21 +4691,6 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
     }
 }
 
-void Score::cmdAddStaffTypeChange(Measure* measure, staff_idx_t staffIdx, StaffTypeChange* stc)
-{
-    if (!measure) {
-        return;
-    }
-
-    if (measure->isMMRest()) {
-        measure = measure->mmRestFirst();
-    }
-
-    stc->setParent(measure);
-    stc->setTrack(staffIdx * VOICES);
-    score()->undoAddElement(stc);
-}
-
 //---------------------------------------------------------
 //   cmdToggleMmrest
 //---------------------------------------------------------
