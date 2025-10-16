@@ -2469,7 +2469,7 @@ ParenthesesMode EngravingItem::parenthesesMode() const
     if (m_leftParenthesis) {
         p |= ParenthesesMode::LEFT;
     }
-    if (m_leftParenthesis) {
+    if (m_rightParenthesis) {
         p |= ParenthesesMode::RIGHT;
     }
 
