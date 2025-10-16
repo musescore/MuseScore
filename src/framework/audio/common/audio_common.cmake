@@ -35,6 +35,14 @@ set(AUDIO_COMMON_SRC
     # Rpc
     ${CMAKE_CURRENT_LIST_DIR}/rpc/irpcchannel.h
     ${CMAKE_CURRENT_LIST_DIR}/rpc/rpcpacker.h
+
+    # Async
+    ${CMAKE_CURRENT_LIST_DIR}/async/asyncable.h
+    ${CMAKE_CURRENT_LIST_DIR}/async/channel.h
+    ${CMAKE_CURRENT_LIST_DIR}/async/processevents.h
+    ${CMAKE_CURRENT_LIST_DIR}/async/internal/channelimpl.h
+    ${CMAKE_CURRENT_LIST_DIR}/async/internal/queuepool.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/async/internal/queuepool.h
 )
 
 if(OS_IS_WASM)
