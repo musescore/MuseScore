@@ -45,6 +45,9 @@ public:
     void init() override;
     void reload() override;
 
+    void setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send) override;
+    void sendEventsForChangedTracks() override;
+
     muse::async::Channel<InstrumentTrackIdSet> tracksDataChanged() const override;
 
     const engraving::InstrumentTrackId& metronomeTrackId() const override;

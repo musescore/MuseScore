@@ -152,6 +152,7 @@ private:
 
     void onNotationChanged();
     void onPartChanged(const engraving::Part* part);
+    void onPlaybackStatusChanged();
 
     void onSelectionChanged();
     void seekRangeSelection();

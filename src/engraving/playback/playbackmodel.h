@@ -60,6 +60,9 @@ public:
     void load(Score* score);
     void reload();
 
+    void setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send);
+    void sendEventsForChangedTracks();
+
     muse::async::Channel<InstrumentTrackIdSet> tracksDataChanged() const;
 
     bool isPlayRepeatsEnabled() const;
@@ -169,6 +172,9 @@ private:
 
     std::unordered_map<InstrumentTrackId, PlaybackContextPtr> m_playbackCtxMap;
     std::unordered_map<InstrumentTrackId, muse::mpe::PlaybackData> m_playbackDataMap;
+    std::unordered_map<InstrumentTrackId, bool> m_sendEventsOnScoreChangeMap;
+
+    InstrumentTrackIdSet m_changedTrackIdSet;
 
     muse::async::Channel<InstrumentTrackIdSet> m_tracksDataChanged;
     muse::async::Channel<InstrumentTrackId> m_trackAdded;
