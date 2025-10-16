@@ -8233,8 +8233,9 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
         } else if (slurs[slurNo].isStop()) {
             // slur start when slur already stopped: wrap up
             Slur* newSlur = slurs[slurNo].slur();
+            slurs[slurNo] = SlurDesc();
+
             if (newSlur->endElement() == cr && note) {
-                slurs[slurNo] = SlurDesc();
                 delete newSlur;
 
                 // Slur starts & ends on same chord - add lv instead
@@ -8243,16 +8244,17 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
                 note->score()->undoAddElement(lvTie);
                 return;
             }
-            newSlur->setTrack(track);
-            newSlur->setTick(Fraction::fromTicks(tick));
-            newSlur->setStartElement(cr);
-            newSlur->setTick2(newSlur->endElement()->tick());
-            if (newSlur->ticks().negative()) {
+            const Fraction newSlurTick = Fraction::fromTicks(tick);
+            const Fraction newSlurTick2 = newSlur->endElement()->tick();
+            if (newSlurTick2 < newSlurTick) {
                 logger->logError(String(u"slur end is before slur start"), xmlreader);
-                slurs[slurNo] = SlurDesc();
                 delete newSlur;
                 return;
             }
+            newSlur->setTrack(track);
+            newSlur->setTick(newSlurTick);
+            newSlur->setStartElement(cr);
+            newSlur->setTick2(newSlurTick2);
             score->addElement(newSlur);
         } else {
             // slur start for new slur: init
@@ -8295,9 +8297,9 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
         if (slurs[slurNo].isStart()) {
             // slur stop when slur already started: wrap up
             Slur* newSlur = slurs[slurNo].slur();
+            slurs[slurNo] = SlurDesc();
 
             if (newSlur->startElement() == cr && note) {
-                slurs[slurNo] = SlurDesc();
                 delete newSlur;
 
                 // Slur starts & ends on same chord - add lv instead
@@ -8312,7 +8314,6 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
                 newSlur->setTrack2(track);
             }
             newSlur->setEndElement(cr);
-            slurs[slurNo] = SlurDesc();
             score->addElement(newSlur);
         } else if (slurs[slurNo].isStop()) {
             // slur stop when slur already stopped: report error
