@@ -273,7 +273,7 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
             if (muse::RealIsNull(rootRefHeight)) {
                 rootRefHeight = textSeg->height();
                 double top = textSeg->tightBoundingRect().translated(textSeg->pos()).y();
-                double bottom = textSeg->bboxBaseLine() + textSeg->pos().y();
+                double bottom =  textSeg->pos().y();
                 double height = (bottom - top) + 2 * parenExtension;
 
                 rootRefHeight = height;
@@ -282,7 +282,7 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
             if (!openingParenStack.empty() && textSeg->font().type() != Font::Type::MusicSymbolText) {
                 ChordSymbolParen* topParen = openingParenStack.back();
                 topParen->top = std::min(topParen->top, textSeg->tightBoundingRect().translated(textSeg->pos()).y());
-                topParen->bottom = std::max(topParen->bottom, textSeg->bboxBaseLine() + textSeg->pos().y());
+                topParen->bottom = std::max(topParen->bottom, textSeg->pos().y());
                 topParen->closingParenPos = std::max(topParen->closingParenPos, textSeg->x() + textSeg->width());
                 continue;
             }
