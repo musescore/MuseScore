@@ -509,24 +509,20 @@ std::vector<EngravingItem*> Score::cmdPasteSymbol(muse::ByteArray& data, MuseSco
     }
 
     std::vector<EngravingItem*> targetElements;
-    switch (m_selection.state()) {
-    case SelState::NONE:
+    if (m_selection.isNone()) {
         UNREACHABLE;
         return {};
-    case SelState::LIST:
-        bool unique;
-        targetElements = filterTargetElements(m_selection, el.get(), unique);
-        break;
-    case SelState::RANGE:
+    } else {
         // TODO: make this as smart as `NotationInteraction::applyPaletteElement`,
         // without duplicating logic. (Currently, for range selections, we only
-        // paste onto the "top-left corner".
-        mu::engraving::Segment* firstSegment = m_selection.startSegment();
-        staff_idx_t firstStaffIndex = m_selection.staffStart();
-
-        // The usage of `firstElementForNavigation` is inspired by `NotationInteraction::applyPaletteElement`.
-        targetElements = { firstSegment->firstElementForNavigation(firstStaffIndex) };
-        break;
+        // paste onto the "top-left corner" for non-measure based elements.)
+        bool unique;
+        targetElements = filterTargetElements(m_selection, el.get(), unique);
+        if (!unique && m_selection.isRange()) {
+            // The usage of `firstElementForNavigation` is inspired by `NotationInteraction::applyPaletteElement`.
+            Segment* firstSegment = m_selection.startSegment();
+            targetElements = { firstSegment->firstElementForNavigation(m_selection.staffStart()) };
+        }
     }
 
     if (targetElements.empty()) {
