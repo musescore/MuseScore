@@ -359,6 +359,7 @@ public:
     StartEndSlurs& startEndSlurs() { return m_startEndSlurs; }
 
     bool allNotesTiedToNext() const;
+    bool allElementsInvisible() const;
 
 private:
 
