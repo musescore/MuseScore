@@ -347,6 +347,7 @@ struct MeasurePrintContext final
     bool pageStart = true;
     bool systemStart = true;
     size_t pageNumber = 0;
+    bool writePageNo = false;
     const Measure* prevMeasure = nullptr;
     const System* prevSystem = nullptr;
     const System* lastSystemPrevPage = nullptr;
@@ -443,6 +444,7 @@ private:
     void repeatAtMeasureStart(Attributes& attr, const Measure* const m, track_idx_t strack, track_idx_t etrack, track_idx_t track);
     void repeatAtMeasureStop(const Measure* const m, track_idx_t strack, track_idx_t etrack, track_idx_t track);
     void writeParts();
+    bool shouldWritePageNo(const Page* page);
 
     static String elementPosition(const ExportMusicXml* const expMxml, const EngravingItem* const elm);
     static String positioningAttributesForTboxText(const PointF position, float spatium);
@@ -7361,7 +7363,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
     }
 
     if (mpc.pageStart) {
-        if (exportBreaksType != IMusicXmlConfiguration::MusicXmlExportBreaksType::No) {
+        if (exportBreaksType != IMusicXmlConfiguration::MusicXmlExportBreaksType::No && mpc.writePageNo) {
             attributes.push_back({ "page-number", mpc.pageNumber });
         }
     }
@@ -8587,6 +8589,50 @@ void MeasurePrintContext::measureWritten(const Measure* m)
     prevMeasure = m;
 }
 
+bool ExportMusicXml::shouldWritePageNo(const Page* page)
+{
+    const MStyle& style = m_score->style();
+    if (!style.styleB(Sid::showHeader) || !(page->no() || style.styleB(Sid::headerFirstPage))) {
+        return false;
+    }
+
+    auto macroPrintPageNo = [&](const Text* text) -> bool {
+        String xmlText = text->xmlText();
+        std::wregex pageNo = std::wregex(L"\\$([p|N|P])");
+        StringList results = xmlText.search(pageNo, { 1 }, SplitBehavior::SkipEmptyParts);
+
+        for (const String& s : results) {
+            Char c = s.at(0);
+            if ((c == 'P')
+                || (c == 'p' && page->no() > 0)
+                || (c == 'N' && (page->no() + m_score->pageNumberOffset() > 0 || m_score->npages() > 1))) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    bool printPageNo = false;
+    for (int i = 0; i < MAX_HEADERS; i++) {
+        Text* text = m_score->headerText(i);
+        if (!text) {
+            continue;
+        }
+
+        printPageNo |= macroPrintPageNo(text);
+    }
+
+    for (int i = 0; i < MAX_FOOTERS; i++) {
+        Text* text = m_score->footerText(i);
+        if (!text) {
+            continue;
+        }
+
+        printPageNo |= macroPrintPageNo(text);
+    }
+    return printPageNo;
+}
+
 //---------------------------------------------------------
 //  writeParts
 //---------------------------------------------------------
@@ -8623,6 +8669,7 @@ void ExportMusicXml::writeParts()
             const Page* page = pages.at(pageIndex);
             mpc.pageStart = true;
             mpc.pageNumber = page->no() + 1 + m_score->pageNumberOffset();
+            mpc.writePageNo = shouldWritePageNo(page);
             const auto& systems = page->systems();
 
             for (int systemIndex = 0; systemIndex < static_cast<int>(systems.size()); ++systemIndex) {
