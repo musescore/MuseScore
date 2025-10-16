@@ -38,6 +38,7 @@
 #include "dom/actionicon.h"
 #include "dom/ambitus.h"
 #include "dom/articulation.h"
+#include "dom/box.h"
 #include "dom/bagpembell.h"
 #include "dom/barline.h"
 #include "dom/bend.h"
@@ -148,6 +149,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::EXPRESSION:   layout(toExpression(item), ctx);
         break;
+    case ElementType::FBOX:         layout(toBox(item), ctx);
+        break;
     case ElementType::FERMATA:      layout(toFermata(item), ctx);
         break;
     case ElementType::FINGERING:    layout(toFingering(item), ctx);
@@ -167,6 +170,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::HAMMER_ON_PULL_OFF: layout(toHammerOnPullOff(item), ctx);
         break;
     case ElementType::HARP_DIAGRAM: layout(toHarpPedalDiagram(item), ctx);
+        break;
+    case ElementType::HBOX:         layout(toBox(item), ctx);
         break;
     case ElementType::IMAGE:        layout(toImage(item), ctx);
         break;
@@ -226,6 +231,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::TAPPING:      layout(toTapping(item), ctx);
         break;
+    case ElementType::TBOX:         layout(toBox(item), ctx);
+        break;
     case ElementType::TEMPO_TEXT:   layout(toTempoText(item), ctx);
         break;
     case ElementType::TEXT:         layout(toText(item), ctx);
@@ -241,6 +248,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::TREMOLOBAR:   layout(toTremoloBar(item), ctx);
         break;
     case ElementType::TRILL:        layout(toTrill(item), ctx);
+        break;
+    case ElementType::VBOX:         layout(toBox(item), ctx);
         break;
     case ElementType::VIBRATO:      layout(toVibrato(item), ctx);
         break;
@@ -716,6 +725,12 @@ void SingleLayout::layout(Bend* item, const Context&)
     bb.adjust(-lw, -lw, lw, lw);
     ldata->setBbox(bb);
     ldata->setPos(0.0, 0.0);
+}
+
+void SingleLayout::layout(Box* item, const Context&)
+{
+    FontMetrics fontMetrics(item->iconFont());
+    item->setbbox(fontMetrics.boundingRect(Char(item->iconCode())));
 }
 
 void SingleLayout::layout(Bracket* item, const Context& ctx)

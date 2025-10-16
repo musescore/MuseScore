@@ -43,6 +43,7 @@ class BagpipeEmbellishment;
 class BarLine;
 class Beam;
 class Bend;
+class Box;
 class Bracket;
 class Breath;
 
@@ -183,6 +184,7 @@ private:
     static void draw(const BarLine* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Beam* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Bend* item, muse::draw::Painter* painter, const PaintOptions& opt);
+    static void draw(const Box* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Bracket* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Breath* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
