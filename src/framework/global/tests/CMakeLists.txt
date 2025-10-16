@@ -56,3 +56,8 @@ set(MODULE_TEST_SRC
 )
 
 include(SetupGTest)
+
+target_sources(muse_global_tests
+  PRIVATE
+    rpcqueue_tests.cpp
+)

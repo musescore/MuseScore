@@ -161,6 +161,7 @@ if (MUSE_THREADS_SUPPORT)
         ${CMAKE_CURRENT_LIST_DIR}/concurrency/concurrent.h
         ${CMAKE_CURRENT_LIST_DIR}/concurrency/threadutils.h
         ${CMAKE_CURRENT_LIST_DIR}/concurrency/ringqueue.h
+        ${CMAKE_CURRENT_LIST_DIR}/concurrency/rpcqueue.h
     )
 endif()
 
