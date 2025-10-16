@@ -690,6 +690,10 @@ void changeAllTpcs(Note* n, int tpc1)
     int tpc2 = transposeTpc(tpc1, v, true);
     n->undoChangeProperty(Pid::TPC1, tpc1);
     n->undoChangeProperty(Pid::TPC2, tpc2);
+    for (Note* tied : n->tiedNotes()) {
+        tied->undoChangeProperty(Pid::TPC1, tpc1);
+        tied->undoChangeProperty(Pid::TPC2, tpc2);
+    }
 }
 
 //---------------------------------------------------------
