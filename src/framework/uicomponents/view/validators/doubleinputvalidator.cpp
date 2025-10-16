@@ -108,16 +108,15 @@ void DoubleInputValidator::fixup(QString& string) const
 QValidator::State DoubleInputValidator::validate(QString& inputStr, int& cursorPos) const
 {
     QLocale locale;
-    QString decimalSep = locale.decimalPoint();
     QValidator::State state = Invalid;
 
-    QString dec = QRegularExpression::escape(decimalSep);
-    QRegularExpression validRegex(QString("^\\-?\\d{1,3}(" + dec + "\\d{1,%1})?$").arg(m_decimal));
+    QString decimalSep = QRegularExpression::escape(locale.decimalPoint());
+    QRegularExpression validRegex(QString("^\\-?\\d{1,3}(" + decimalSep + "\\d{1,%1})?$").arg(m_decimal));
 
     if (inputStr.contains(validRegex)) {
-        QRegularExpression invalidZeroRegex("^\\-?0{2,3}" + dec); // for '-000,' or '-000.'
-        QRegularExpression invalidTrailingZeroRegex("^\\-?\\d+" + dec + "0{1,}$"); // for '1,00' or '1.00'
-        QRegularExpression invalidTrailingDotRegex("^\\-?\\d+" + dec + "$"); // for '1,' or '1.'
+        QRegularExpression invalidZeroRegex("^\\-?0{2,3}" + decimalSep); // for '-000,' or '-000.'
+        QRegularExpression invalidTrailingZeroRegex("^\\-?\\d+" + decimalSep + "0{1,}$"); // for '1,00' or '1.00'
+        QRegularExpression invalidTrailingDotRegex("^\\-?\\d+" + decimalSep + "$"); // for '1,' or '1.'
 
         bool ok = false;
         double val = locale.toDouble(inputStr, &ok);
@@ -129,8 +128,8 @@ QValidator::State DoubleInputValidator::validate(QString& inputStr, int& cursorP
         } else {
             state = Acceptable;
         }
-    } else if (inputStr.contains(QRegularExpression("^\\-?\\d{0,3}" + dec + "?$"))
-               || inputStr.contains(QRegularExpression(QString("^\\-?\\d{0,3}" + dec + "\\d{0,%1}$").arg(m_decimal)))) {
+    } else if (inputStr.contains(QRegularExpression("^\\-?\\d{0,3}" + decimalSep + "?$"))
+               || inputStr.contains(QRegularExpression(QString("^\\-?\\d{0,3}" + decimalSep + "\\d{0,%1}$").arg(m_decimal)))) {
         state = Intermediate;
     } else {
         cursorPos = 0;
