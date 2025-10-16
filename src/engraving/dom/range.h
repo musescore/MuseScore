@@ -45,6 +45,7 @@ class Tie;
 class BarLine;
 class Spacer;
 class Marker;
+class Volta;
 
 //---------------------------------------------------------
 //   TrackList
@@ -158,6 +159,8 @@ private:
     void backupJumpsAndMarkers(Segment* first, Segment* last);
     void restoreJumpsAndMarkers(Score* score, const Fraction& tick) const;
     void deleteJumpsAndMarkers();
+
+    void restoreVolta(Score* score, const Fraction& tick, Volta* v) const;
 
     friend class TrackList;
 

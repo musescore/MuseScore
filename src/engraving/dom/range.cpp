@@ -38,6 +38,7 @@
 #include "tie.h"
 #include "spacer.h"
 #include "marker.h"
+#include "volta.h"
 
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
@@ -856,6 +857,62 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
 }
 
 //---------------------------------------------------------
+//   restoreVolta
+//---------------------------------------------------------
+
+void ScoreRange::restoreVolta(Score* score, const Fraction& tick, Volta* v) const
+{
+    bool voltaStartOK = false;
+    bool voltaEndOK = false;
+    Fraction measureSize;
+
+    if (v->voltaType() == Volta::Type::OPEN) {
+        voltaEndOK = true;
+    }
+
+    // Check if we should keep this volta
+    for (Measure* m = score->tick2measure(tick); m; m = m->nextMeasure()) {
+        if (m->tick() == (v->tick() + tick)) {
+            voltaStartOK = true;
+            measureSize = m->endTick() - m->tick();
+        }
+        if (m->endTick() == (v->tick2() + tick)) {
+            voltaEndOK = true;
+            // No need to continue looking for
+            break;
+        }
+        // Last Measure
+        if (m->sectionBreak() || (m->nextMeasure() && (m->nextMeasure()->first(SegmentType::TimeSig)))) {
+            break;
+        }
+    }
+    bool shouldKeepVolta = voltaStartOK && voltaEndOK;
+
+    if (shouldKeepVolta) {
+        // Volta start
+        v->setTick(v->tick() + tick);
+
+        // Review Volta endings with open Voltas
+        if (v->voltaType() == Volta::Type::OPEN) {
+            Fraction voltaFormerTicks = v->ticks();
+            Fraction voltaNewTicks = voltaFormerTicks;
+
+            if (voltaFormerTicks < measureSize) {
+                voltaNewTicks = measureSize;
+            } else if (voltaFormerTicks > measureSize) {
+                if ((voltaFormerTicks / measureSize).reduced().denominator() != 1) {
+                    voltaNewTicks = (std::floor((voltaFormerTicks / measureSize).toDouble()) + 1) * measureSize;
+                }
+            }
+            if (voltaFormerTicks != voltaNewTicks) {
+                v->setTicks(voltaNewTicks);
+            }
+        }
+        score->undoAddElement(v);
+    }
+}
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -884,6 +941,10 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
         ++track;
     }
     for (Spanner* s : m_spanner) {
+        if (s->isVolta()) {
+            restoreVolta(score, tick, toVolta(s));
+            continue;
+        }
         s->setTick(s->tick() + tick);
         if (s->isSlur()) {
             Slur* slur = toSlur(s);
