@@ -40,6 +40,14 @@ void NotationPlaybackStub::reload()
 {
 }
 
+void NotationPlaybackStub::setSendEventsOnScoreChange(const InstrumentTrackId&, bool)
+{
+}
+
+void NotationPlaybackStub::sendEventsForChangedTracks()
+{
+}
+
 muse::async::Channel<InstrumentTrackIdSet> NotationPlaybackStub::tracksDataChanged() const
 {
     return {};

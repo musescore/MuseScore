@@ -890,20 +890,27 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     // [GIVEN] The articulation profiles repository will be returning profiles for StringsArticulation family
     ON_CALL(*m_repositoryMock, defaultProfile(_)).WillByDefault(Return(m_defaultProfile));
 
-    // [GIVEN] Expected amount of changed events
-    int expectedChangedEventsCount = 24;
-
     // [GIVEN] The playback model requested to be loaded
     PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
-    PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
-    EXPECT_EQ(result.originEvents.size(), expectedChangedEventsCount);
+    InstrumentTrackId trackId {
+        part->id(),
+        part->instrumentId()
+    };
+
+    PlaybackData result = model.resolveTrackPlaybackData(trackId);
+    size_t expectedEventCount = 24;
+    EXPECT_EQ(result.originEvents.size(), expectedEventCount);
+
+    // [WHEN] Notify on score change
+    size_t receivedEventCount = 0;
+    model.setSendEventsOnScoreChange(trackId, true);
 
     // [THEN] Updated events map will match our expectations
-    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelLayers&) {
-        EXPECT_EQ(updatedEvents.size(), expectedChangedEventsCount);
+    result.mainStream.onReceive(this, [&receivedEventCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelLayers&) {
+        receivedEventCount = updatedEvents.size();
     });
 
     // [WHEN] Score has been changed: the range starts ouside the repeat and ends inside it
@@ -916,6 +923,13 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
 
     score->changesChannel().send(changes);
 
+    // [THEN] Main stream events received
+    EXPECT_EQ(receivedEventCount, expectedEventCount);
+
+    // [WHEN] Notify on score change
+    receivedEventCount = 0;
+    model.setSendEventsOnScoreChange(trackId, false);
+
     // [WHEN] Score has been changed: the range is inside the repeat and tickTo == the end tick of the repeat
     // See: https://github.com/musescore/MuseScore/issues/25899
     changes.tickFrom = 4800; // 3rd note of the 3rd measure (inside the repeat)
@@ -925,6 +939,15 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     changes.changedTypes = { ElementType::PEDAL };
 
     score->changesChannel().send(changes);
+
+    // [THEN] Events not sent despite score change
+    EXPECT_EQ(receivedEventCount, 0);
+
+    // [WHEN] Send events
+    model.sendEventsForChangedTracks();
+
+    // [THEN] Events received
+    EXPECT_EQ(receivedEventCount, expectedEventCount);
 }
 
 /**
