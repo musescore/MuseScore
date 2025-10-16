@@ -126,7 +126,11 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
         return false;
     }
 #endif
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(60, 31, 102)
     m_ffmpeg->codecCtx->profile = FF_PROFILE_H264_HIGH;
+#else
+    m_ffmpeg->codecCtx->profile = AV_PROFILE_H264_HIGH;
+#endif
 
     m_ffmpeg->codecCtx->bit_rate = bitrate;
     m_ffmpeg->codecCtx->width = width;
