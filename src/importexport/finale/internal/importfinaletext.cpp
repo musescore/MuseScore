@@ -439,6 +439,7 @@ void FinaleParser::importTextExpressions()
             default: return muse::value(m_inst2Staff, StaffCmper(expressionAssignment->staffAssign), muse::nidx);
             }
         }();
+        StaffCmper effectiveMusxStaffId = expressionAssignment->staffAssign >= 0 ? expressionAssignment->staffAssign : muse::value(m_staff2Inst, curStaffIdx, 1);
         if (curStaffIdx == muse::nidx) {
             /// @todo system object staves
             logger()->logWarning(String(u"Add text: Musx inst value not found."), m_doc, expressionAssignment->staffAssign);
@@ -656,25 +657,39 @@ void FinaleParser::importTextExpressions()
                 p.rx() -= item->ldata()->bbox().center().y();
                 break;
         } */
+
+        const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, effectiveMusxStaffId, expressionAssignment->getCmper(), 0);
+        const Staff* staff = m_score->staff(curStaffIdx);
+        const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick()) * staff->staffType(s->tick())->lineDistance().val();
+
         switch (expressionDef->vertMeasExprAlign) {
             case others::VerticalMeasExprAlign::AboveStaff: {
                 item->setPlacement(PlacementV::ABOVE);
-                p.ry() = item->pagePos().y() + doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
+                p.ry() = item->pagePos().y() - doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
+
+                SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, expressionAssignment->getCmper())->getCmper();
+                double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
+                p.ry() -= (baselinepos - staffReferenceOffset);
                 break;
             }
             case others::VerticalMeasExprAlign::Manual: {
                 item->setPlacement(PlacementV::ABOVE); // Finale default
-                p.ry() = item->pagePos().y() + doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
+                p.ry() = item->pagePos().y();
+                // Add staffreferenceoffset?
                 break;
             }
             case others::VerticalMeasExprAlign::RefLine: {
                 item->setPlacement(PlacementV::ABOVE);
-                p.ry() = item->pagePos().y() + doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
+                p.ry() = item->pagePos().y() - staffReferenceOffset - doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
                 break;
             }
             case others::VerticalMeasExprAlign::BelowStaff: {
                 item->setPlacement(PlacementV::BELOW);
-                p.ry() = item->pagePos().y() + doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
+                p.ry() = item->pagePos().y() - doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
+
+                SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, expressionAssignment->getCmper())->getCmper();
+                double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
+                p.ry() -= (baselinepos - staffReferenceOffset);
                 break;
             }
             case others::VerticalMeasExprAlign::TopNote: {
@@ -721,34 +736,45 @@ void FinaleParser::importTextExpressions()
             }
             case others::VerticalMeasExprAlign::AboveEntry:
             case others::VerticalMeasExprAlign::AboveStaffOrEntry: {
-                // maybe always set entry to entry value?
                 item->setPlacement(PlacementV::ABOVE);
-                Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
-                if (seg && seg->element(item->track())) { // should be all tracks?
-                    p.ry() = item->pagePos().y() - doubleFromEvpu(expressionDef->yAdjustEntry) * SPATIUM20;
-                } else {
-                    p.ry() = item->pagePos().y() + doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
-                }
+                Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick); // why is this needed
+
+                // should this really be all tracks?
+                Shape staffShape = seg->staffShape(curStaffIdx);
+                // staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
+                double entryY = staffShape.translated(seg->pagePos()).top() - doubleFromEvpu(expressionDef->yAdjustEntry) * SPATIUM20;
+
+                SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, expressionAssignment->getCmper())->getCmper();
+                double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
+                baselinepos = item->pagePos().y() - (baselinepos - staffReferenceOffset) - doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
+                p.ry() = std::min(baselinepos, entryY);
                 break;
             }
             case others::VerticalMeasExprAlign::BelowEntry:
             case others::VerticalMeasExprAlign::BelowStaffOrEntry: {
-                /// use std::max (entrypos, baselinepos, 1sp below staffline).
                 item->setPlacement(PlacementV::BELOW);
-                Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
-                if (seg && seg->element(item->track())) { // should be all tracks?
-                    p.ry() = item->pagePos().y() - doubleFromEvpu(expressionDef->yAdjustEntry) * SPATIUM20;
-                } else {
-                    p.ry() = item->pagePos().y() + doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
-                }
+
+                // should this really be all tracks?
+                Shape staffShape = s->staffShape(curStaffIdx);
+                // staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
+                double entryY = staffShape.translated(s->pagePos()).bottom() - doubleFromEvpu(expressionDef->yAdjustEntry) * SPATIUM20;
+
+                SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, expressionAssignment->getCmper())->getCmper();
+                double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
+                baselinepos = item->pagePos().y() - (baselinepos - staffReferenceOffset) - doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
+                p.ry() = std::max(baselinepos, entryY);
                 break;
             }
             default: {
+                item->setPlacement(PlacementV::ABOVE); // Finale default
                 p.ry() = item->pagePos().y() - doubleFromEvpu(expressionDef->yAdjustEntry) * SPATIUM20;
                 break;
             }
         }
-        p -= item->pagePos(); // is this correct? or do we need the pagex of first cr segment, or measure position
+        p -= item->pagePos();
+        if (item->placeBelow()) {
+            p.ry() -= staff->staffHeight(s->tick());
+        }
         p += evpuToPointF(expressionAssignment->horzEvpuOff, -expressionAssignment->vertEvpuOff) * SPATIUM20; // assignment offset
         item->setOffset(p);
 
