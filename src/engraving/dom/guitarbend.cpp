@@ -61,7 +61,7 @@ LineSegment* GuitarBend::createLineSegment(System* parent)
 {
     GuitarBendSegment* seg = new GuitarBendSegment(this, parent);
     seg->setTrack(track());
-    seg->setColor(color());
+    seg->setColor(lineColor());
     return seg;
 }
 
@@ -301,6 +301,10 @@ bool GuitarBend::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::BEND_END_TIME_FACTOR:
         setEndTimeFactor(v.toReal());
+        break;
+    case Pid::COLOR:
+        setColor(v.value<Color>());
+        setLineColor(v.value<Color>());
         break;
     default:
         return SLine::setProperty(propertyId, v);
@@ -601,7 +605,7 @@ EngravingObject* GuitarBendSegment::propertyDelegate(Pid id) const
     case Pid::APPEARANCE_LINKED_TO_MASTER:
         return guitarBend();
     default:
-        return nullptr;
+        return LineSegment::propertyDelegate(id);
     }
 }
 
@@ -698,7 +702,7 @@ LineSegment* GuitarBendHold::createLineSegment(System* parent)
 {
     GuitarBendHoldSegment* seg = new GuitarBendHoldSegment(this, parent);
     seg->setTrack(track());
-    seg->setColor(color());
+    seg->setColor(lineColor());
     return seg;
 }
 

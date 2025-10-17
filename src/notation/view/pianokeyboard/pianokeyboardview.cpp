@@ -266,15 +266,19 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
 
             int octaveNumber = (key / 12) - 1;
 
-            QString octaveLabel = "C" + QString::number(octaveNumber);
+            std::string octaveLabel = "C" + std::to_string(octaveNumber);
+            QString octaveLabelTr;
             if (!engravingConfiguration()->pitchNotationSPN()) {
-                octaveLabel = muse::qtrc("global/pitchName", octaveLabel.toStdString().c_str());
+                octaveLabelTr = muse::qtrc("global/pitchName", octaveLabel.c_str());
+            } else {
+                octaveLabelTr = QString::fromStdString(octaveLabel);
             }
+
             QRect octaveLabelRect(left, top, right - left, bottom - top - bottomOffset);
 
             painter->setPen(backgroundColor);
             painter->setFont(m_octaveLabelsFont);
-            painter->drawText(octaveLabelRect, Qt::AlignHCenter | Qt::AlignBottom, octaveLabel);
+            painter->drawText(octaveLabelRect, Qt::AlignHCenter | Qt::AlignBottom, octaveLabelTr);
         }
 
         painter->translate(-rect.topLeft());

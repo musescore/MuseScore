@@ -150,18 +150,12 @@ Rectangle {
                 width: parent.width
                 spacing: 12
 
-                RowLayout {
-                    ToggleButton {
-                        checked: repeatPlayCountTextModel.repeatPlayCountShow.value === true
-                        onToggled: {
-                            repeatPlayCountTextModel.repeatPlayCountShow.value = !repeatPlayCountTextModel.repeatPlayCountShow.value
-                        }
-                    }
-
-                    StyledTextLabel {
-                        Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignLeft
-                        text: qsTrc("notation/editstyle/repeatplaycount", "Automatically show text at repeat barlines")
+                ToggleButton {
+                    Layout.fillWidth: true
+                    text: qsTrc("notation/editstyle/repeatplaycount", "Automatically show text at repeat barlines")
+                    checked: repeatPlayCountTextModel.repeatPlayCountShow.value === true
+                    onToggled: {
+                        repeatPlayCountTextModel.repeatPlayCountShow.value = !repeatPlayCountTextModel.repeatPlayCountShow.value
                     }
                 }
 

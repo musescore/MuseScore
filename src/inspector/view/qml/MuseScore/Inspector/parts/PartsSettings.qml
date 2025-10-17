@@ -59,6 +59,7 @@ InspectorSectionView {
 
             PropertyToggle {
                 id: positionLinkedToMasterToggle
+                width: parent.width
 
                 navigation.name: "Position linked to score"
                 navigation.panel: root.navigationPanel
@@ -70,10 +71,11 @@ InspectorSectionView {
 
             PropertyToggle {
                 id: appearanceLinkedToMasterToggle
+                width: parent.width
 
                 navigation.name: "Style / appearance linked to score"
                 navigation.panel: root.navigationPanel
-                navigation.row: positionLinkedToMasterToggle.navigationRow + 1
+                navigation.row: positionLinkedToMasterToggle.navigation.row + 1
 
                 propertyItem: root.model ? root.model.appearanceLinkedToMaster : null
                 text: qsTrc("inspector", "Style/appearance")
@@ -81,12 +83,13 @@ InspectorSectionView {
 
             PropertyToggle {
                 id: textLinkedToMasterToggle
+                width: parent.width
 
                 visible: root.model ? root.model.showTextLinkingOption : false
 
                 navigation.name: "Text linked to score"
                 navigation.panel: root.navigationPanel
-                navigation.row: appearanceLinkedToMasterToggle.navigationRow + 1
+                navigation.row: appearanceLinkedToMasterToggle.navigation.row + 1
 
                 propertyItem: root.model ? root.model.textLinkedToMaster : null
                 text: qsTrc("inspector", "Text")
@@ -104,7 +107,7 @@ InspectorSectionView {
 
             navigation.name: "Exclude from other parts"
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart
+            navigation.row: textLinkedToMasterToggle.navigation.row + 1
 
             text: root.model && root.model.isMasterScore
                   ? qsTrc("inspector", "Exclude from parts")

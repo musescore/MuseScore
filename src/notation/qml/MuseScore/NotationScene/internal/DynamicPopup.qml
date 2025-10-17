@@ -24,7 +24,7 @@ AbstractElementPopup {
     showArrow: false
 
     focusPolicies: PopupView.DefaultFocus & ~PopupView.ClickFocus
-    placementPolicies: PopupView.PreferBelow
+    placementPolicies: dynamicModel.placeAbove ? PopupView.PreferAbove : PopupView.PreferBelow
 
     model: DynamicPopupModel {
         id: dynamicModel

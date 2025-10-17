@@ -38,9 +38,14 @@ class Segment;
 class Spanner;
 class ScoreRange;
 class ChordRest;
+class Chord;
+class Note;
 class Score;
 class Tie;
 class BarLine;
+class Spacer;
+class Marker;
+class Volta;
 
 //---------------------------------------------------------
 //   TrackList
@@ -51,6 +56,8 @@ class TrackList : public std::vector<EngravingItem*>
     OBJECT_ALLOCATOR(engraving, TrackList)
 
 public:
+    typedef std::map<Chord*, Chord*> ClonedChordMap;
+
     TrackList(ScoreRange* r) { m_range = r; }
     ~TrackList();
 
@@ -77,6 +84,7 @@ private:
     Fraction m_duration;
     ScoreRange* m_range = nullptr;
     track_idx_t m_track = 0;
+    ClonedChordMap m_clonedChord;
 };
 
 //---------------------------------------------------------
@@ -143,10 +151,36 @@ private:
     void backupRepeats(Segment* first, Segment* last);
     void restoreRepeats(Score* score, const Fraction& tick) const;
 
+    struct SpacerBackup
+    {
+        Fraction sPosition;
+        staff_idx_t staffIdx;
+        Spacer* s = nullptr;
+    };
+
+    void backupSpacers(Segment* first, Segment* last);
+    void restoreSpacers(Score* score, const Fraction& tick) const;
+    void deleteSpacers();
+
+    struct JumpsMarkersBackup
+    {
+        Fraction sPosition;
+        EngravingItem* e = nullptr;
+    };
+
+    bool endOfMeasureElement(EngravingItem* e) const;
+    void backupJumpsAndMarkers(Segment* first, Segment* last);
+    void restoreJumpsAndMarkers(Score* score, const Fraction& tick) const;
+    void deleteJumpsAndMarkers();
+
+    void restoreVolta(Score* score, const Fraction& tick, Volta* v) const;
+
     friend class TrackList;
 
     std::vector<TrackList*> m_tracks;
     std::vector<Tie*> m_startTies;
+    std::vector<SpacerBackup> m_spacers;
+    std::vector<JumpsMarkersBackup> m_jumpsMarkers;
     Segment* m_first = nullptr;
     Segment* m_last = nullptr;
 };

@@ -199,13 +199,13 @@ FocusScope {
                         }
 
                         function doUpdateShow() {
+                            updateShowScheduled = false;
+
                             if (popupType !== AbstractElementPopupModel.TYPE_UNDEFINED) {
                                 show(popupType);
                             } else {
                                 close();
                             }
-
-                            updateShowScheduled = false;
                         }
 
                         onOpened: function(popupType) {

@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
+import QtQuick.Layouts
 
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import Muse.Ui
+import Muse.UiComponents
 
 FocusScope {
     id: root
@@ -31,14 +32,16 @@ FocusScope {
 
     property bool checked: false
 
+    property alias text: label.text
+
     property string toolTipTitle: ""
     property string toolTipDescription: ""
     property string toolTipShortcut: ""
 
-    signal toggled()
+    signal toggled
 
-    implicitHeight: 20
-    implicitWidth: 36
+    implicitWidth: contentRow.implicitWidth
+    implicitHeight: contentRow.implicitHeight
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
@@ -54,59 +57,90 @@ FocusScope {
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.CheckBox
+        accessible.name: root.text
         accessible.checked: root.checked
+
+        onActiveChanged: {
+            if (!root.activeFocus) {
+                root.forceActiveFocus()
+            }
+        }
 
         onTriggered: root.toggled()
     }
 
-    Rectangle {
-        id: backgroundRect
-
-        anchors.fill: parent
-
-        color: root.checked ? ui.theme.accentColor : ui.theme.buttonColor
-
-        border.width: ui.theme.borderWidth
-        border.color: ui.theme.strokeColor
-        radius: root.height / 2
-
-        NavigationFocusBorder {
-            navigationCtrl: navCtrl
-        }
-
-        StyledRectangularShadow {
-            anchors.fill: handleRect
-            offset.y: 1
-            blur: 4
-            radius: handleRect.radius
-        }
+    RowLayout {
+        id: contentRow
+        width: Math.min(implicitWidth, parent.width)
+        spacing: 6
 
         Rectangle {
-            id: handleRect
+            id: buttonBackground
 
-            readonly property int margins: 2
+            implicitHeight: 20
+            implicitWidth: 36
 
-            anchors.verticalCenter: parent.verticalCenter
-            x: root.checked ? parent.width - width - margins : margins
-            width: root.height - margins * 2
-            height: width
+            color: root.checked ? ui.theme.accentColor : ui.theme.buttonColor
 
+            border.width: ui.theme.borderWidth
+            border.color: ui.theme.strokeColor
+            radius: root.height / 2
 
-            radius: width / 2
-            color: "#FFFFFF"
+            NavigationFocusBorder {
+                navigationCtrl: navCtrl
+            }
+
+            StyledRectangularShadow {
+                anchors.fill: buttonHandle
+                offset.y: 1
+                blur: 4
+                radius: buttonHandle.radius
+            }
+
+            Rectangle {
+                id: buttonHandle
+
+                readonly property int margins: 2
+
+                anchors.verticalCenter: parent.verticalCenter
+                x: root.checked ? parent.width - width - margins : margins
+                width: height
+                height: parent.height - margins * 2
+
+                radius: width / 2
+                color: "#FFFFFF"
+
+                Behavior on x {
+                    NumberAnimation {
+                        duration: 100
+                        easing.type: Easing.OutCubic
+                    }
+                }
+            }
+        }
+
+        StyledTextLabel {
+            id: label
+            visible: !isEmpty
+
+            Layout.fillWidth: true
+
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.WordWrap
         }
     }
 
     MouseArea {
         id: mouseArea
-        anchors.fill: parent
+        anchors.fill: contentRow
 
         enabled: root.enabled
-        hoverEnabled: true
+        hoverEnabled: !label.hoveredLink
+        z: label.z - 1 // enable clicking on links in label text
+
         onClicked: {
             navigation.requestActiveByInteraction()
 
-            root.ensureActiveFocus()
             root.toggled()
         }
 

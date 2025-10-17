@@ -27,13 +27,13 @@ import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
 ColumnLayout {
-    id: column
+    id: root
 
     required property StyleItem styleItem
     required property string imageON
     required property string imageOFF
 
-    property alias text: toggleText.text
+    property alias text: toggleButton.text
 
     RowLayout {
         spacing: 15
@@ -47,23 +47,13 @@ ColumnLayout {
             source: toggleButton.checked ? imageON : imageOFF
         }
 
-        RowLayout {
-            id: toggle
+        ToggleButton {
+            id: toggleButton
 
-            ToggleButton {
-                id: toggleButton
-                checked: styleItem.value === true
-                onToggled: {
-                    styleItem.value = !styleItem.value
-                }
-            }
-
-            StyledTextLabel {
-                id : toggleText
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignLeft
+            checked: root.styleItem.value === true
+            onToggled: {
+                root.styleItem.value = !root.styleItem.value
             }
         }
     }
-
 }

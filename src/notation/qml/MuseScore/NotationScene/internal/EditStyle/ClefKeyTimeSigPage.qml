@@ -485,7 +485,7 @@ StyledFlickable {
             component CourtesyShowAndParenToggle: GridLayout {
                 required property StyleItem showStyleItem
                 required property StyleItem parensStyleItem
-                property alias text: toggleText.text
+                property alias text: toggleButton.text
 
                 flow: GridLayout.TopToBottom
 
@@ -495,30 +495,19 @@ StyledFlickable {
                 width: parent.width
                 rowSpacing: 8
 
-                RowLayout {
+                ToggleButton {
+                    id: toggleButton
+
                     Layout.row: 0
                     Layout.column: 0
                     Layout.maximumWidth: 232
                     Layout.preferredWidth: 232
-                    Layout.fillWidth: false
-                    ToggleButton {
-                        id: toggleButton
-                        checked: showStyleItem.value === true
-                        onToggled: {
-                            showStyleItem.value = !showStyleItem.value
-                        }
-                    }
 
-                    StyledTextLabel {
-                        id: toggleText
-                        Layout.alignment: Qt.AlignLeft
-                        horizontalAlignment: Text.AlignLeft
-                        Layout.maximumWidth: 232 - toggleButton.width
-                        Layout.preferredWidth: 232 - toggleButton.width
-                        wrapMode: Text.Wrap
+                    checked: showStyleItem.value === true
+                    onToggled: {
+                        showStyleItem.value = !showStyleItem.value
                     }
                 }
-
 
                 CheckBox {
                     id: parensCheckbox

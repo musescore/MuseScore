@@ -95,9 +95,9 @@ void DialogView::beforeOpen()
 #endif
 
 #ifdef MUSE_MODULE_UI_DISABLE_MODALITY
-    m_view->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
-#else
     m_view->setModality(Qt::NonModal);
+#else
+    m_view->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
 #endif
 
     //! NOTE ok will be if they call accept

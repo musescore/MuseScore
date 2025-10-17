@@ -154,41 +154,20 @@ Item {
                         }
                     }
 
-                    Row {
-                        id: singleNotesToggleRow
+                    ToggleButton {
+                        Layout.fillWidth: true
 
-                        height: singleNotesToggle.height
-                        width: parent.width
+                        text: qsTrc("notation", "Include single notes")
+                        checked: notesInChordModel.includeSingleNotes
 
-                        spacing: notesInChordSection.spacing
+                        navigation.name: "SingleNotesToggle"
+                        navigation.panel: notesInChordSection.navigation
+                        navigation.row: 100
 
-                        ToggleButton {
-                            id: singleNotesToggle
-
-                            checked: notesInChordModel.includeSingleNotes
-
-                            navigation.name: "SingleNotesToggle"
-                            navigation.panel: notesInChordSection.navigation
-                            navigation.row: 100
-
-                            onToggled: {
-                                notesInChordModel.includeSingleNotes = !notesInChordModel.includeSingleNotes
-                            }
-                        }
-
-                        StyledTextLabel {
-                            id: singleNotesInfo
-
-                            height: parent.height
-
-                            horizontalAlignment: Text.AlignLeft
-                            verticalAlignment: Text.AlignVCenter
-
-                            wrapMode: Text.Wrap
-                            text: qsTrc("notation", "Include single notes")
+                        onToggled: {
+                            notesInChordModel.includeSingleNotes = !notesInChordModel.includeSingleNotes
                         }
                     }
-
                 }
             }
 

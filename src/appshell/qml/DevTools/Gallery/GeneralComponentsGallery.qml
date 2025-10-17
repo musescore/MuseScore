@@ -714,6 +714,8 @@ Rectangle {
         ToggleButton {
             id: toggleButton
 
+            text: checked ? "On" : "Off"
+
             onToggled: {
                 checked = !checked
             }

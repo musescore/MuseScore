@@ -84,6 +84,7 @@ Item {
 
             PropertyToggle {
                 id: showFingerings
+                width: parent.width
 
                 text: qsTrc("inspector", "Show fingerings")
                 propertyItem: root.model ? root.model.showFingerings : null

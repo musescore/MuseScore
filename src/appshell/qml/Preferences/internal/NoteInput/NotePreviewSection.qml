@@ -52,34 +52,18 @@ BaseSection {
 
     title: qsTrc("appshell/preferences", "Note preview")
 
-    Row {
+    ToggleButton {
+        id: playNotesToggle
         width: parent.width
-        height: playNotesToggle.height
 
-        spacing: 6
+        text: qsTrc("appshell/preferences", "Hear playback when adding, editing, and selecting notes")
 
-        ToggleButton {
-            id: playNotesToggle
+        navigation.name: "PlayNotesToggle"
+        navigation.panel: root.navigation
+        navigation.row: 0
 
-            navigation.name: "PlayNotesToggle"
-            navigation.panel: root.navigation
-            navigation.row: 0
-
-            navigation.accessible.name: playNotesBoxLabel.text
-
-            onToggled: {
-                root.playNotesWhenEditingChangeRequested(!checked)
-            }
-        }
-
-        StyledTextLabel {
-            id: playNotesBoxLabel
-
-            anchors.verticalCenter: parent.verticalCenter
-            horizontalAlignment: Text.AlignLeft
-            wrapMode: Text.Wrap
-
-            text: qsTrc("appshell/preferences", "Hear playback when adding, editing, and selecting notes")
+        onToggled: {
+            root.playNotesWhenEditingChangeRequested(!checked)
         }
     }
 

@@ -51,8 +51,7 @@ Column {
 
     RestBeamSettings {
         id: restBeamSettings
-        
-        height: implicitHeight
+        width: parent.width
 
         model: root.beamModel
 
@@ -62,6 +61,7 @@ Column {
 
     PropertyToggle {
         id: alignWithOtherRests
+        width: parent.width
 
         navigation.name: "Align with other rests"
         navigation.panel: root.navigationPanel

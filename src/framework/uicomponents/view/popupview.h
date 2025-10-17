@@ -117,11 +117,11 @@ public:
     void setPadding(int padding);
 
 signals:
-    void closePoliciesChanged(ClosePolicies closePolicies);
+    void closePoliciesChanged(muse::uicomponents::PopupView::ClosePolicies closePolicies);
 
     void anchorItemChanged(QQuickItem* anchorItem);
-    void placementPoliciesChanged(PlacementPolicies placementPolicies);
-    void popupPositionChanged(PopupPosition::Type position);
+    void placementPoliciesChanged(muse::uicomponents::PopupView::PlacementPolicies placementPolicies);
+    void popupPositionChanged(muse::uicomponents::PopupPosition::Type position);
 
     void xChanged(qreal x);
     void yChanged(qreal y);

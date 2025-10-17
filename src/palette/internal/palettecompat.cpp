@@ -148,6 +148,11 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
 
     if (item->isMarker()) {
         Marker* marker = toMarker(item);
+
+        if (marker->markerType() == MarkerType::TOCODASYM) {
+            return;
+        }
+
         Marker* newMarker = marker->clone();
 
         std::string label = newMarker->label().toStdString();

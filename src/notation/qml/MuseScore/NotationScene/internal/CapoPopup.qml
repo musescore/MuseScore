@@ -165,36 +165,19 @@ AbstractElementPopup {
 
                 model: capoModel.strings
 
-                Item {
-                    height: toggleBtn.height
-                    width: (content.width / 2 - content.columnsSpacing / applyToStringsGrid.columns)
+                ToggleButton {
+                    Layout.preferredWidth: (content.width - applyToStringsGrid.columnSpacing) / 2
 
-                    ToggleButton {
-                        id: toggleBtn
+                    navigation.name: "String" + model.index + "Control"
+                    navigation.panel: capoSettingsNavPanel
+                    navigation.row: applyToStringsGrid.navigationRowStart + model.index
+                    navigation.accessible.name: applyToLabel.text + " " + text
 
-                        anchors.left: parent.left
-                        anchors.top: parent.top
+                    text: qsTrc("notation", "String %1").arg(model.index + 1)
+                    checked: modelData.applyCapo
 
-                        navigation.name: "String" + model.index + "Control"
-                        navigation.panel: capoSettingsNavPanel
-                        navigation.row: applyToStringsGrid.navigationRowStart + model.index
-                        navigation.accessible.name: applyToLabel.text + " " + stringLabel.text
-
-                        checked: modelData.applyCapo
-
-                        onToggled: {
-                            capoModel.toggleCapoForString(model.index)
-                        }
-                    }
-
-                    StyledTextLabel {
-                        id: stringLabel
-
-                        anchors.left: toggleBtn.right
-                        anchors.leftMargin: 4
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        text: qsTrc("notation", "String %1").arg(model.index + 1)
+                    onToggled: {
+                        capoModel.toggleCapoForString(model.index)
                     }
                 }
             }
