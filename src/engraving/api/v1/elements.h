@@ -1891,6 +1891,12 @@ public:
     /// This can differ from \ref Staff.show (e.g. due to 'hide when empty' rules).
     /// \param staffIdx staff number
     Q_INVOKABLE bool show(int staffIdx);
+    /// Override the staff default behaviour for hiding when empty.
+    /// \param staffIdx staff number
+    /// \param hide controls the new hiding behaviour.
+    /// One of PluginAPI::PluginAPI::AutoOnOff values.
+    /// \since MuseScore 4.7
+    Q_INVOKABLE void setHideStaffIfEmpty(int staffIdx, int hide);
 };
 
 //---------------------------------------------------------

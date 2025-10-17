@@ -493,6 +493,11 @@ bool System::show(int staffIdx)
     return ss ? ss->show() : false;
 }
 
+void System::setHideStaffIfEmpty(int staffIdx, int hide)
+{
+    system()->score()->cmdSetHideStaffIfEmptyOverride(static_cast<staff_idx_t>(staffIdx), system(), AutoOnOff(hide));
+}
+
 void System::setIsLocked(bool locked)
 {
     if (locked == isLocked()) {
