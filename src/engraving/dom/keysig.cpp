@@ -207,9 +207,12 @@ EngravingObject* KeySig::propertyDelegate(Pid propertyId) const
     case Pid::KEY_CONCERT:
     case Pid::SHOW_COURTESY:
     case Pid::KEYSIG_MODE:
-    case Pid::IS_COURTESY: {
-        if (Segment* s = segment()->next1(SegmentType::KeySig)) {
-            return s->tick() == segment()->tick() ? toKeySig(s->element(track())) : nullptr;
+    case Pid::IS_COURTESY:
+    {
+        Segment* thisSeg = segment();
+        Segment* nextKSSeg = thisSeg ? thisSeg->next1(SegmentType::KeySig) : nullptr;
+        if (nextKSSeg && nextKSSeg->tick() == thisSeg->tick()) {
+            return nextKSSeg->element(track());
         }
         break;
     }
