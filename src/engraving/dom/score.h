@@ -447,6 +447,8 @@ public:
 
     void realtimeAdvance(bool allowTransposition);
 
+    void addRemovePageBreaks(int interval, bool afterEachPage);
+
     bool transpose(Note* n, Interval, bool useSharpsFlats);
     void transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& tickStart, const Fraction& tickEnd, bool flip = false);
     bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval, bool trKeys, bool transposeChordNames,
