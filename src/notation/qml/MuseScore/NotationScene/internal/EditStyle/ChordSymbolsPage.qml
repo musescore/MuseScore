@@ -169,27 +169,27 @@ StyledFlickable {
                     title: qsTrc("notation/editstyle/chordsymbols", "Spelling")
 
                     RowLayout {
-                        spacing: 6
+                        spacing: 12
                         anchors.fill: parent
 
-                        RadioButtonGroup {
-                            id: spellingRadioButtonGroup
-                            Layout.fillWidth: true
-                            model: chordSymbolsModel.possibleChordSymbolSpellings()
+                        ButtonGroup { id: spellingButtonGroup }
 
+                        Repeater {
+                            model: chordSymbolsModel.possibleChordSymbolSpellings()
                             delegate: RoundedRadioButton {
                                 height: 30
                                 checked: modelData.value === chordSymbolsModel.chordSymbolSpelling.value
                                 text: modelData.text ? modelData.text : ""
-
                                 onToggled: {
                                     chordSymbolsModel.chordSymbolSpelling.value = modelData.value
                                 }
+                                ButtonGroup.group: spellingButtonGroup
+                                Layout.alignment: Qt.AlignVCenter
                             }
                         }
 
                         FlatButton {
-                            Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                            Layout.alignment: Qt.AlignVCenter
                             icon: IconCode.UNDO
                             enabled: !chordSymbolsModel.chordSymbolSpelling.isDefault
                             onClicked: chordSymbolsModel.chordSymbolSpelling.value = chordSymbolsModel.chordSymbolSpelling.defaultValue
@@ -206,24 +206,13 @@ StyledFlickable {
                         Layout.fillWidth: true
 
                         RowLayout {
-                            spacing: 6
+                            spacing: 8
                             Layout.fillWidth: true
 
-                            Item {
-                                Layout.preferredWidth: 450
-                                implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
-
-                                CheckBox {
-                                    id: capitaliseCheckBox
-                                    text: qsTrc("notation/editstyle/chordsymbols", "Automatically capitalize note names")
-
-                                    checked: chordSymbolsModel.automaticCapitalization && Boolean(chordSymbolsModel.automaticCapitalization.value)
-                                    onClicked: {
-                                        if (chordSymbolsModel.automaticCapitalization) {
-                                            chordSymbolsModel.automaticCapitalization.value = !checked
-                                        }
-                                    }
-                                }
+                            StyleToggle {
+                                Layout.preferredWidth: 460
+                                styleItem: chordSymbolsModel.automaticCapitalization
+                                text: qsTrc("notation/editstyle/chordsymbols", "Automatically capitalize note names")
                             }
 
                             FlatButton {
@@ -234,22 +223,32 @@ StyledFlickable {
                             }
                         }
 
-                        CheckBox {
-                            text: qsTrc("notation/editstyle/chordsymbols", "Lowercase minor chords")
-                            checked: chordSymbolsModel.lowerCaseMinorChords.value === true
-                            onClicked: chordSymbolsModel.lowerCaseMinorChords.value = !chordSymbolsModel.lowerCaseMinorChords.value
-                        }
+                        ColumnLayout {
+                            spacing: 8
+                            Layout.fillWidth: true
 
-                        CheckBox {
-                            text: qsTrc("notation/editstyle/chordsymbols", "Lowercase bass notes")
-                            checked: chordSymbolsModel.lowerCaseBassNotes.value === true
-                            onClicked: chordSymbolsModel.lowerCaseBassNotes.value = !chordSymbolsModel.lowerCaseBassNotes.value
-                        }
+                            CheckBox {
+                                text: qsTrc("notation/editstyle/chordsymbols", "Lowercase minor chords")
+                                checked: chordSymbolsModel.lowerCaseMinorChords.value === true
+                                enabled: chordSymbolsModel.automaticCapitalization.value === true
+                                onClicked: chordSymbolsModel.lowerCaseMinorChords.value = !chordSymbolsModel.lowerCaseMinorChords.value
+                            }
 
-                        CheckBox {
-                            text: qsTrc("notation/editstyle/chordsymbols", "All caps note names")
-                            checked: chordSymbolsModel.allCapsNoteNames.value === true
-                            onClicked: chordSymbolsModel.allCapsNoteNames.value = !chordSymbolsModel.allCapsNoteNames.value
+                            CheckBox {
+                                text: qsTrc("notation/editstyle/chordsymbols", "Lowercase bass notes")
+                                checked: chordSymbolsModel.lowerCaseBassNotes.value === true
+                                enabled: chordSymbolsModel.automaticCapitalization.value === true
+                                onClicked: chordSymbolsModel.lowerCaseBassNotes.value = !chordSymbolsModel.lowerCaseBassNotes.value
+                            }
+
+                            CheckBox {
+                                text: qsTrc("notation/editstyle/chordsymbols", "All caps (for Solfeggio and French)")
+                                checked: chordSymbolsModel.allCapsNoteNames.value === true
+                                enabled: chordSymbolsModel.automaticCapitalization.value === true &&
+                                        (chordSymbolsModel.chordSymbolSpelling.value === 3 ||
+                                         chordSymbolsModel.chordSymbolSpelling.value === 4)
+                                onClicked: chordSymbolsModel.allCapsNoteNames.value = !chordSymbolsModel.allCapsNoteNames.value
+                            }
                         }
                     }
                 }
