@@ -7362,99 +7362,100 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
         }
     }
 
+    bool doBreak = mpc.scoreStart || !attributes.empty();
+    bool doLayout = configuration()->exportLayout();
+
     if (mpc.pageStart) {
-        if (exportBreaksType != IMusicXmlConfiguration::MusicXmlExportBreaksType::No && mpc.writePageNo) {
+        bool exportPageNo = exportBreaksType == IMusicXmlConfiguration::MusicXmlExportBreaksType::All
+                            || (exportBreaksType == IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual && mpc.pageStart
+                                && prevPageBreak);
+        if (exportPageNo && mpc.writePageNo) {
             attributes.push_back({ "page-number", mpc.pageNumber });
         }
     }
 
-    bool doBreak = mpc.scoreStart || !attributes.empty();
-    bool doLayout = configuration()->exportLayout();
+    if (doBreak && doLayout) {
+        m_xml.startElement("print", attributes);
+        const MStyle& style = score()->style();
+        const double pageWidth = getTenthsFromInches(style.styleD(Sid::pageWidth));
+        const double lm = getTenthsFromInches(style.styleD(Sid::pageOddLeftMargin));
+        const double rm = getTenthsFromInches(style.styleD(Sid::pageWidth)
+                                              - style.styleD(Sid::pagePrintableWidth)
+                                              - style.styleD(Sid::pageOddLeftMargin));
+        const double tm = getTenthsFromInches(style.styleD(Sid::pageOddTopMargin));
 
-    if (doBreak) {
-        if (doLayout) {
-            m_xml.startElement("print", attributes);
-            const MStyle& style = score()->style();
-            const double pageWidth = getTenthsFromInches(style.styleD(Sid::pageWidth));
-            const double lm = getTenthsFromInches(style.styleD(Sid::pageOddLeftMargin));
-            const double rm = getTenthsFromInches(style.styleD(Sid::pageWidth)
-                                                  - style.styleD(Sid::pagePrintableWidth)
-                                                  - style.styleD(Sid::pageOddLeftMargin));
-            const double tm = getTenthsFromInches(style.styleD(Sid::pageOddTopMargin));
+        // System Layout
 
-            // System Layout
+        // For a multi-measure rest positioning is valid only
+        // in the replacing measure
+        // note: for a normal measure, mmRest1 is the measure itself,
+        // for a multi-measure rest, it is the replacing measure
+        const Measure* mmR1 = m->coveringMMRestOrThis();
+        const System* system = mmR1->system();
 
-            // For a multi-measure rest positioning is valid only
-            // in the replacing measure
-            // note: for a normal measure, mmRest1 is the measure itself,
-            // for a multi-measure rest, it is the replacing measure
-            const Measure* mmR1 = m->coveringMMRestOrThis();
-            const System* system = mmR1->system();
+        // Put the system print suggestions only for the first part in a score...
+        if (partNr == 0) {
+            // Find the right margin of the system.
+            double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
+            double systemRM = pageWidth - rm - (getTenthsFromDots(system->ldata()->bbox().width()) + lm);
 
-            // Put the system print suggestions only for the first part in a score...
-            if (partNr == 0) {
-                // Find the right margin of the system.
-                double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
-                double systemRM = pageWidth - rm - (getTenthsFromDots(system->ldata()->bbox().width()) + lm);
+            m_xml.startElement("system-layout");
+            m_xml.startElement("system-margins");
+            m_xml.tag("left-margin", String::number(systemLM, 2));
+            m_xml.tag("right-margin", String::number(systemRM, 2));
+            m_xml.endElement();
 
-                m_xml.startElement("system-layout");
-                m_xml.startElement("system-margins");
-                m_xml.tag("left-margin", String::number(systemLM, 2));
-                m_xml.tag("right-margin", String::number(systemRM, 2));
-                m_xml.endElement();
-
-                if (mpc.systemStart && !mpc.pageStart) {
-                    // see System::layout2() for the factor 2 * score()->spatium()
-                    const Measure* prevSystemMeasure = mpc.prevMeasure->coveringMMRestOrThis();
-                    const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
-                                                             - prevSystemMeasure->pagePos().y()
-                                                             - prevSystemMeasure->ldata()->bbox().height()
-                                                             + 2 * score()->style().spatium()
-                                                             );
-                    m_xml.tag("system-distance", String::number(sysDist, 2));
-                }
-
-                if (mpc.pageStart || mpc.scoreStart) {
-                    const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
-                    m_xml.tag("top-system-distance", String::number(topSysDist, 2));
-                }
-
-                m_xml.endElement();
+            if (mpc.systemStart && !mpc.pageStart) {
+                // see System::layout2() for the factor 2 * score()->spatium()
+                const Measure* prevSystemMeasure = mpc.prevMeasure->coveringMMRestOrThis();
+                const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
+                                                         - prevSystemMeasure->pagePos().y()
+                                                         - prevSystemMeasure->ldata()->bbox().height()
+                                                         + 2 * score()->style().spatium()
+                                                         );
+                m_xml.tag("system-distance", String::number(sysDist, 2));
             }
 
-            // Staff layout elements.
-            for (size_t staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; ++staffIdx) {
-                // calculate distance between this and previous staff using the bounding boxes
-                const staff_idx_t staffNr = firstStaffOfPart + staffIdx;
-                const staff_idx_t prevStaffNr = system->prevVisibleStaff(staffNr);
-                if (prevStaffNr == muse::nidx) {
-                    continue;
-                }
-                if (!system->staff(staffNr)->show()) {
-                    m_hiddenStaves.push_back(staffIdx);
-                    continue;
-                }
-                const RectF& prevBbox = system->staff(prevStaffNr)->bbox();
-                const double staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
-
-                if (staffDist > 0) {
-                    m_xml.startElement("staff-layout", { { "number", staffIdx + 1 } });
-                    m_xml.tag("staff-distance", String::number(getTenthsFromDots(staffDist), 2));
-                    m_xml.endElement();
-                } else {
-                    m_hiddenStaves.push_back(staffIdx);
-                }
-            }
-
-            // Measure layout elements.
-            if (m->prev() && m->prev()->isHBox()) {
-                measureLayout(m->prev()->width());
+            if (mpc.pageStart || mpc.scoreStart) {
+                const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
+                m_xml.tag("top-system-distance", String::number(topSysDist, 2));
             }
 
             m_xml.endElement();
-        } else if (!attributes.empty()) {
-            m_xml.tag("print", attributes);
         }
+
+        // Staff layout elements.
+        for (size_t staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; ++staffIdx) {
+            // calculate distance between this and previous staff using the bounding boxes
+            const staff_idx_t staffNr = firstStaffOfPart + staffIdx;
+            const staff_idx_t prevStaffNr = system->prevVisibleStaff(staffNr);
+            if (prevStaffNr == muse::nidx) {
+                continue;
+            }
+            if (!system->staff(staffNr)->show()) {
+                m_hiddenStaves.push_back(staffIdx);
+                continue;
+            }
+            const RectF& prevBbox = system->staff(prevStaffNr)->bbox();
+            const double staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
+
+            if (staffDist > 0) {
+                m_xml.startElement("staff-layout", { { "number", staffIdx + 1 } });
+                m_xml.tag("staff-distance", String::number(getTenthsFromDots(staffDist), 2));
+                m_xml.endElement();
+            } else {
+                m_hiddenStaves.push_back(staffIdx);
+            }
+        }
+
+        // Measure layout elements.
+        if (m->prev() && m->prev()->isHBox()) {
+            measureLayout(m->prev()->width());
+        }
+
+        m_xml.endElement();
+    } else if (!attributes.empty()) {
+        m_xml.tag("print", attributes);
     } else if (m->prev() && m->prev()->isHBox()) {
         m_xml.startElement("print");
         measureLayout(m->prev()->width());
