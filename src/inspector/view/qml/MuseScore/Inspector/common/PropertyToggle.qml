@@ -25,38 +25,17 @@ import QtQuick.Layouts 1.15
 import Muse.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
-RowLayout {
-    id: root
-
-    width: parent.width
-
+ToggleButton {
     required property PropertyItem propertyItem
-    property alias label: label
-    property alias text: label.text
-    property alias navigation: toggle.navigation
 
     visible: propertyItem && propertyItem.isVisible
     enabled: propertyItem && propertyItem.isEnabled
 
-    spacing: 4
+    checked: propertyItem && Boolean(propertyItem.value)
 
-    ToggleButton {
-        id: toggle
-
-        checked: root.propertyItem && Boolean(root.propertyItem.value)
-
-        onToggled: {
-            if (root.propertyItem) {
-                root.propertyItem.value = !checked
-            }
+    onToggled: {
+        if (propertyItem) {
+            propertyItem.value = !checked
         }
-    }
-
-    StyledTextLabel {
-        id: label
-
-        Layout.fillWidth: true
-
-        horizontalAlignment: Text.AlignLeft
     }
 }

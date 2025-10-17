@@ -28,7 +28,6 @@ import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
-
 Rectangle {
     id: root
     anchors.fill: parent
@@ -42,22 +41,12 @@ Rectangle {
         width: parent.width
         spacing: 12
 
-        RowLayout {
-            id: beforeSigChangesToggle
-
-            ToggleButton {
-                id: toggleButton
-                checked: repeatBarlinesSectionModel.barlineBeforeSigChange.value === true
-                onToggled: {
-                    repeatBarlinesSectionModel.barlineBeforeSigChange.value = !repeatBarlinesSectionModel.barlineBeforeSigChange.value
-                }
-            }
-
-            StyledTextLabel {
-                id : toggleText
-                text: qsTrc("notation/editstyle/barlines", "Show barline before key and time signature changes")
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignLeft
+        ToggleButton {
+            Layout.fillWidth: true
+            text: qsTrc("notation/editstyle/barlines", "Show barline before key and time signature changes")
+            checked: repeatBarlinesSectionModel.barlineBeforeSigChange.value === true
+            onToggled: {
+                repeatBarlinesSectionModel.barlineBeforeSigChange.value = !repeatBarlinesSectionModel.barlineBeforeSigChange.value
             }
         }
 
