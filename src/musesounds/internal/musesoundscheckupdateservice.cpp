@@ -83,9 +83,9 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
 
     QBuffer buff;
     QUrl url = configuration()->checkForMuseSoundsUpdateUrl();
-    m_networkManager = networkManagerCreator()->makeNetworkManager();
+    INetworkManagerPtr networkManager = networkManagerCreator()->makeNetworkManager();
 
-    Ret getUpdateInfo = m_networkManager->get(url, &buff);
+    Ret getUpdateInfo = networkManager->get(url, &buff);
 
     if (!getUpdateInfo) {
         LOGE() << getUpdateInfo.toString();

@@ -84,7 +84,8 @@ private:
     Ret waitForReplyFinished(QNetworkReply* reply, int timeoutMs);
     Ret errorFromReply(const QNetworkReply* reply) const;
 
-private:
+    static String requestTypeToString(RequestType type);
+
     QNetworkAccessManager* m_manager = nullptr;
     IncomingDevice* m_incomingData = nullptr;
     QNetworkReply* m_reply = nullptr;
