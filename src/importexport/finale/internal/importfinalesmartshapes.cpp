@@ -442,15 +442,6 @@ void FinaleParser::importSmartShapes()
             /// @todo line width not inheriting from style?
             if (type == ElementType::OTTAVA) {
                 toOttava(newSpanner)->setOttavaType(ottavaTypeFromShapeType(smartShape->shapeType));
-
-                // Account for odd text offset
-                muse::draw::Font f(score()->engravingFont()->family(), muse::draw::Font::Type::MusicSymbol);
-                f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * MScore::pixelRatio * newSpanner->magS());
-                muse::draw::FontMetrics fm(f);
-                const PointF textoffset(0.0, -fm.boundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))).bottom() - fm.descent()); // Assume 8va symbol for now
-                toOttava(newSpanner)->setBeginTextOffset(textoffset);
-                toOttava(newSpanner)->setContinueTextOffset(textoffset);
-                toOttava(newSpanner)->setEndTextOffset(textoffset);
             } else if (type == ElementType::HAIRPIN) {
                 HairpinType ht = hairpinTypeFromShapeType(smartShape->shapeType);
                 toHairpin(newSpanner)->setHairpinType(ht);
@@ -634,12 +625,13 @@ void FinaleParser::importSmartShapes()
                 }
                 System* s;
                 ss->rUserXoffset2() += endSeg->x() + endSeg->measure()->x() - ((SLine*)newSpanner)->linePos(Grip::END, &s).x();
+                /// @todo account for presence of text
             } else {
                 ss->rUserXoffset2() += ss->style().styleMM(Sid::lineEndToBarlineDistance);
             }
 
             // Adjust ottava positioning
-            if (type == ElementType::OTTAVA) {
+            if (!customLine && type == ElementType::OTTAVA) {
                 ss->ryoffset() -= .75 * SPATIUM20;
             }
 
@@ -682,18 +674,35 @@ void FinaleParser::importSmartShapes()
             }
         }
 
-        /// @todo fix hairpin placement
         if (type == ElementType::HAIRPIN) {
             // todo: declare hairpin placement in hairpin elementStyle?
-            newSpanner->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
-            SpannerSegment* ss = toHairpin(newSpanner)->hairpinType() == HairpinType::DIM_HAIRPIN ? newSpanner->frontSegment() : newSpanner->backSegment();
-            if (ss->ipos2().x() > (doubleFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth) * SPATIUM20)) {
-                setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
-                                    absoluteSpatiumFromEvpu(musxOptions().smartShapeOptions->crescHeight, newSpanner), true);
-            } else {
-                setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
-                                    absoluteSpatiumFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth, newSpanner), true);
+            /// @todo make hairpins account for anchored dynamics
+            setAndStyleProperty(newSpanner, Pid::DIRECTION, newSpanner->placeAbove() ? DirectionV::UP : DirectionV::DOWN);
+
+            // If not otherwise set, determine hairpin height by length
+            if (toHairpin(newSpanner)->isLineType() && newSpanner->isStyled(Pid::HAIRPIN_HEIGHT)) {
+                SpannerSegment* ss = toHairpin(newSpanner)->hairpinType() == HairpinType::DIM_HAIRPIN ? newSpanner->frontSegment() : newSpanner->backSegment();
+                if (ss->ipos2().x() > (doubleFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth) * SPATIUM20)) {
+                    setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
+                                        absoluteSpatiumFromEvpu(musxOptions().smartShapeOptions->crescHeight, newSpanner), true);
+                } else {
+                    setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
+                                        absoluteSpatiumFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth, newSpanner), true);
+                }
             }
+        } else if (type == ElementType::OTTAVA && !customLine) {
+            // Account for odd text offset
+            muse::draw::Font f(score()->engravingFont()->family(), muse::draw::Font::Type::MusicSymbol);
+            f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * MScore::pixelRatio * newSpanner->magS());
+            muse::draw::FontMetrics fm(f);
+            RectF r = fm.boundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))); // Assume 8va symbol for now
+            PointF textoffset(0.0, r.bottom() - fm.descent());
+            if (newSpanner->placeAbove()) {
+                textoffset.ry() += r.height();
+            }
+            toOttava(newSpanner)->setBeginTextOffset(textoffset);
+            toOttava(newSpanner)->setContinueTextOffset(textoffset);
+            toOttava(newSpanner)->setEndTextOffset(textoffset);
         }
     }
     logger()->logInfo(String(u"Import smart shapes: Finished importing smart shapes"));
