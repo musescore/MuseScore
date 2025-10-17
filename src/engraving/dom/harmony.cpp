@@ -1163,12 +1163,6 @@ RectF TextSegment::boundingRect() const
     return FontMetrics::boundingRect(m_font, m_text);
 }
 
-double TextSegment::bboxBaseLine() const
-{
-    FontMetrics fm(m_font);
-    return boundingRect().bottom() - fm.descent();
-}
-
 void TextSegment::setFont(const muse::draw::Font& f)
 {
     m_font = f;
