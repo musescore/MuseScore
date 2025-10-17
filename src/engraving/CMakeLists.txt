@@ -346,28 +346,41 @@ set(MODULE_LINK
 
 set_source_files_properties( 
     # For these files, Unity Build does not work
+    ${CMAKE_CURRENT_LIST_DIR}/dom/excerpt.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/api/vi/excerpt.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dom/instrument.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/api/vi/instrument.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dom/part.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/api/vi/part.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dom/score.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/api/vi/score.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dom/transpose.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/transpose.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/style/style.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/api/vi/style.cpp
+
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/mscreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/mscwriter.cpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read114/read114.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/rw/read114/read114.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read206/read206.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read302/read302.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/rw/read302/read302.cpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/read400.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/staffrw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/measurerw.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/rw/read400/read400.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/rw/read400/staffrw.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/rw/read400/measurerw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read400/readcontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read400/tread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read400/connectorinforeader.cpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/read410.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/rw/read410/read410.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/staffread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/measureread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/readcontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/tread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/connectorinforeader.cpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/read460.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/rw/read460/read460.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read460/staffread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read460/measureread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read460/readcontext.cpp
