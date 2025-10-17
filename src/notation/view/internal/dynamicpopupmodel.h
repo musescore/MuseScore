@@ -35,6 +35,7 @@ class DynamicPopupModel : public AbstractElementPopupModel
 
     Q_PROPERTY(QString fontFamily READ fontFamily CONSTANT)
     Q_PROPERTY(QVariantList pages READ pages NOTIFY pagesChanged)
+    Q_PROPERTY(bool placeAbove READ placeAbove NOTIFY placeAboveChanged)
 
 public:
     explicit DynamicPopupModel(QObject* parent = nullptr);
@@ -60,13 +61,19 @@ public:
     QString fontFamily() const;
     QVariantList pages() const;
 
+    bool placeAbove() const;
+
 signals:
     void pagesChanged();
+    void placeAboveChanged();
 
 private:
     // Represents different pages of the popup, each containing dynamic/hairpin symbols as strings, width, offset and ItemType
     QVariantList m_pages;
 
     QString xmlTextToQString(const std::string& text, engraving::IEngravingFontPtr engravingFont) const;
+
+    void updateItemRect() override;
+    bool m_placeAbove = true;
 };
 } // namespace mu::notation
