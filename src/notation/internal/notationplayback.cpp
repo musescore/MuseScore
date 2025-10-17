@@ -126,6 +126,16 @@ void NotationPlayback::reload()
     m_playbackModel.reload();
 }
 
+void NotationPlayback::setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send)
+{
+    m_playbackModel.setSendEventsOnScoreChange(trackId, send);
+}
+
+void NotationPlayback::sendEventsForChangedTracks()
+{
+    m_playbackModel.sendEventsForChangedTracks();
+}
+
 muse::async::Channel<InstrumentTrackIdSet> NotationPlayback::tracksDataChanged() const
 {
     return m_playbackModel.tracksDataChanged();

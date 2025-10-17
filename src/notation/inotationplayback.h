@@ -40,6 +40,9 @@ public:
     virtual void init() = 0;
     virtual void reload() = 0;
 
+    virtual void setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send) = 0;
+    virtual void sendEventsForChangedTracks() = 0;
+
     virtual muse::async::Channel<InstrumentTrackIdSet> tracksDataChanged() const = 0;
 
     virtual const engraving::InstrumentTrackId& metronomeTrackId() const = 0;
