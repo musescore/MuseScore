@@ -522,7 +522,7 @@ InterruptionPoints RestLayout::computeInterruptionPoints(const Measure* measure,
             return true;
         }
 
-        BeamMode beamModeChordRest = Groups::endBeam(chordRest);
+        BeamMode beamModeChordRest = Groups::baseBeamMode(chordRest);
         switch (beamModeChordRest) {
         case BeamMode::BEGIN:
             // Beam certainly starts here
