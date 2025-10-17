@@ -346,6 +346,7 @@ struct MeasurePrintContext final
     bool scoreStart = true;
     bool pageStart = true;
     bool systemStart = true;
+    size_t pageNumber = 0;
     const Measure* prevMeasure = nullptr;
     const System* prevSystem = nullptr;
     const System* lastSystemPrevPage = nullptr;
@@ -7340,33 +7341,39 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
     const bool prevMeasSectionBreak = prevSysMB ? prevSysMB->sectionBreak() : false;
     const bool prevPageBreak = hasPageBreak(mpc.lastSystemPrevPage);
 
-    String newSystemOrPage;               // new-[system|page]="yes" or empty
-    if (!mpc.scoreStart) {
-        IMusicXmlConfiguration::MusicXmlExportBreaksType exportBreaksType = configuration()->exportBreaksType();
+    XmlWriter::Attributes attributes;
 
+    IMusicXmlConfiguration::MusicXmlExportBreaksType exportBreaksType = configuration()->exportBreaksType();
+    if (!mpc.scoreStart) {
         if (exportBreaksType == IMusicXmlConfiguration::MusicXmlExportBreaksType::All) {
             if (mpc.pageStart) {
-                newSystemOrPage = u" new-page=\"yes\"";
+                attributes.push_back({ "new-page", "yes" });
             } else if (mpc.systemStart) {
-                newSystemOrPage = u" new-system=\"yes\"";
+                attributes.push_back({ "new-system", "yes" });
             }
         } else if (exportBreaksType == IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual) {
             if (mpc.pageStart && prevPageBreak) {
-                newSystemOrPage = u" new-page=\"yes\"";
+                attributes.push_back({ "new-page", "yes" });
             } else if (mpc.systemStart && (prevMeasLineBreak || prevMeasSectionBreak)) {
-                newSystemOrPage = u" new-system=\"yes\"";
+                attributes.push_back({ "new-system", "yes" });
             }
         }
     }
 
-    bool doBreak = mpc.scoreStart || (!newSystemOrPage.empty());
+    if (mpc.pageStart) {
+        if (exportBreaksType != IMusicXmlConfiguration::MusicXmlExportBreaksType::No) {
+            attributes.push_back({ "page-number", mpc.pageNumber });
+        }
+    }
+
+    bool doBreak = mpc.scoreStart || !attributes.empty();
     bool doLayout = configuration()->exportLayout();
 
     if (doBreak) {
         if (doLayout) {
-            m_xml.startElementRaw(String(u"print%1").arg(newSystemOrPage));
+            m_xml.startElement("print", attributes);
             const MStyle& style = score()->style();
-            const double pageWidth  = getTenthsFromInches(style.styleD(Sid::pageWidth));
+            const double pageWidth = getTenthsFromInches(style.styleD(Sid::pageWidth));
             const double lm = getTenthsFromInches(style.styleD(Sid::pageOddLeftMargin));
             const double rm = getTenthsFromInches(style.styleD(Sid::pageWidth)
                                                   - style.styleD(Sid::pagePrintableWidth)
@@ -7414,7 +7421,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
             }
 
             // Staff layout elements.
-            for (staff_idx_t staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; staffIdx++) {
+            for (size_t staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; ++staffIdx) {
                 // calculate distance between this and previous staff using the bounding boxes
                 const staff_idx_t staffNr = firstStaffOfPart + staffIdx;
                 const staff_idx_t prevStaffNr = system->prevVisibleStaff(staffNr);
@@ -7443,8 +7450,8 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
             }
 
             m_xml.endElement();
-        } else if (!newSystemOrPage.empty()) {
-            m_xml.tagRaw(String(u"print%1").arg(newSystemOrPage));
+        } else if (!attributes.empty()) {
+            m_xml.tag("print", attributes);
         }
     } else if (m->prev() && m->prev()->isHBox()) {
         m_xml.startElement("print");
@@ -8615,6 +8622,7 @@ void ExportMusicXml::writeParts()
         for (size_t pageIndex = 0; pageIndex < pages.size(); ++pageIndex) {
             const Page* page = pages.at(pageIndex);
             mpc.pageStart = true;
+            mpc.pageNumber = page->no() + 1 + m_score->pageNumberOffset();
             const auto& systems = page->systems();
 
             for (int systemIndex = 0; systemIndex < static_cast<int>(systems.size()); ++systemIndex) {
