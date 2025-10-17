@@ -212,3 +212,23 @@ void DynamicPopupModel::addHairpinToDynamic(ItemType itemType)
     interaction->selectAndStartEditIfNeeded(hairpin);
     updateNotation();
 }
+
+void DynamicPopupModel::updateItemRect()
+{
+    bool placeAbove = true;
+    if (m_item) {
+        placeAbove = m_item->placeAbove() || !m_item->hasStaff();
+    }
+
+    AbstractElementPopupModel::updateItemRect();
+
+    if (m_placeAbove != placeAbove) {
+        m_placeAbove = placeAbove;
+        emit placeAboveChanged();
+    }
+}
+
+bool DynamicPopupModel::placeAbove() const
+{
+    return m_placeAbove;
+}
