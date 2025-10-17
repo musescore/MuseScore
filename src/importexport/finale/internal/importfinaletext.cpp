@@ -526,7 +526,7 @@ void FinaleParser::importTextExpressions()
 
         // Calculate position in score
         item->setAutoplace(false);
-        setAndStyleProperty(item, Pid::OFFSET, PointF());
+        setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
         m_score->renderer()->layoutItem(item);
         // if (measure->system()) {
             // m_score->doLayoutRange(measure->system()->first()->tick(), measure->system()->last()->endTick());
@@ -773,7 +773,19 @@ void FinaleParser::importTextExpressions()
         }
         p -= item->pagePos();
         if (item->placeBelow()) {
-            p.ry() -= staff->staffHeight(s->tick());
+            if (p.y() < staff->staffHeight(s->tick()) / 2) {
+                setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE, true);
+            } else {
+                p.ry() -= staff->staffHeight(s->tick());
+            }
+        } else {
+            if (p.y() > staff->staffHeight(s->tick()) / 2) {
+                setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::BELOW, true);
+                p.ry() -= staff->staffHeight(s->tick());
+            }
+        }
+        if (item->hasVoiceAssignmentProperties()) {
+            setAndStyleProperty(item, Pid::DIRECTION, item->placeAbove() ? DirectionV::UP : DirectionV::DOWN);
         }
         p += evpuToPointF(expressionAssignment->horzEvpuOff, -expressionAssignment->vertEvpuOff) * SPATIUM20; // assignment offset
         item->setOffset(p);
