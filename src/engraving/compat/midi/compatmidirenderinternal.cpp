@@ -510,9 +510,11 @@ static void collectGuitarBend(const Note* note,
             pitchWheelRenderer.addPitchWheelFunction(pitchWheelSquareFunc, channel, note->staffIdx(), effect);
             quarterOffsetFromStartNote += currentQuarterTones;
 
-            if (bendPlaybackInfo.endTick < curPitchBendSegmentStart + duration) {
-                int constPitchWheelduration = (quarterOffsetFromStartNote == 0 ? wheelSpec.mStep : duration);
-                addConstPitchWheel(bendPlaybackInfo.endTick, curPitchBendSegmentStart + constPitchWheelduration,
+            const int curPitchBendSegmentEnd = curPitchBendSegmentStart + duration;
+            if (bendPlaybackInfo.endTick < curPitchBendSegmentEnd) {
+                int constPitchWheelduration
+                    = (quarterOffsetFromStartNote == 0 ? wheelSpec.mStep : curPitchBendSegmentEnd - bendPlaybackInfo.endTick);
+                addConstPitchWheel(bendPlaybackInfo.endTick, bendPlaybackInfo.endTick + constPitchWheelduration,
                                    quarterOffsetFromStartNote / 2.0, pitchWheelRenderer, channel,
                                    note->staffIdx(),
                                    effect);
