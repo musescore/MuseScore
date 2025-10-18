@@ -116,6 +116,9 @@ void MScoreErrorsController::checkAndShowMScoreError()
     case MsError::NO_DEST:
         title = muse::trc("notation", "No destination to paste");
         break;
+    case MsError::SOURCE_PARTIAL_TUPLET:
+        title = muse::trc("notation", "Cannot partially copy tuplet");
+        break;
     case MsError::DEST_TUPLET:
         title = muse::trc("notation", "Cannot paste into tuplet");
         break;
@@ -124,6 +127,9 @@ void MScoreErrorsController::checkAndShowMScoreError()
         break;
     case MsError::DEST_LOCAL_TIME_SIGNATURE:
         title = muse::trc("notation", "Cannot paste in local time signature");
+        break;
+    case MsError::SOURCE_PARTIAL_TREMOLO:
+        title = muse::trc("notation", "Cannot partially copy tremolo");
         break;
     case MsError::DEST_TREMOLO:
         title = muse::trc("notation", "Cannot paste in tremolo");
