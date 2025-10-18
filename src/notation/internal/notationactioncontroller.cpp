@@ -1274,14 +1274,8 @@ void NotationActionController::repeatSelection()
     if (!interaction) {
         return;
     }
-
-    Ret ret = interaction->repeatSelection();
-
+    interaction->repeatSelection();
     seekAndPlaySelectedElement(true);
-
-    if (!ret && !ret.text().empty()) {
-        interactive()->error("", ret.text());
-    }
 }
 
 void NotationActionController::pasteSelection(PastingType type)
