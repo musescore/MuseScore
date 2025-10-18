@@ -190,6 +190,21 @@ muse::async::Notification NotationConfigurationStub::useNoteInputCursorInInputBy
     return n;
 }
 
+bool NotationConfigurationStub::enterNoteInputModeOnKeyboardEntry() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setEnterNoteInputModeOnKeyboardEntry(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::enterNoteInputModeOnKeyboardEntryChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 int NotationConfigurationStub::selectionProximity() const
 {
     return 1;
