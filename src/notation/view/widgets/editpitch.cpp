@@ -92,6 +92,16 @@ void EditPitch::setup()
     setFocus();
 
     qApp->installEventFilter(this);
+
+    // Center cell contents
+    for (int row = 0; row < tableWidget->rowCount(); ++row) {
+        for (int col = 0; col < tableWidget->columnCount(); ++col) {
+            QTableWidgetItem* item = tableWidget->item(row, col);
+            if (item) {
+                item->setTextAlignment(Qt::AlignCenter);
+            }
+        }
+    }
 }
 
 void EditPitch::accept()
