@@ -64,7 +64,9 @@ ClefKeyTimeSigPageModel::ClefKeyTimeSigPageModel(QObject* parent)
                                          StyleId::useParensRepeatCourtesiesAfterCancelling,
                                          StyleId::showCourtesiesAfterCancellingOtherJumps,
                                          StyleId::useParensOtherJumpCourtesiesAfterCancelling,
-                                         StyleId::smallParens })
+                                         StyleId::smallParens,
+                                         StyleId::keySigNaturals,
+                                         StyleId::keySigShowNaturalsChangingSharpsFlats, })
 {
 }
 
@@ -305,4 +307,14 @@ StyleItem* ClefKeyTimeSigPageModel::useParensOtherJumpCourtesiesAfterCancelling(
 StyleItem* ClefKeyTimeSigPageModel::smallParens() const
 {
     return styleItem(StyleId::smallParens);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::keySigNaturals() const
+{
+    return styleItem(StyleId::keySigNaturals);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::keySigShowNaturalsChangingSharpsFlats() const
+{
+    return styleItem(StyleId::keySigShowNaturalsChangingSharpsFlats);
 }

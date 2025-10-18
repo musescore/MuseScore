@@ -62,30 +62,6 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            title: qsTrc("notation/editstyle/accidentals", "♮ in key signature changes")
-
-            RadioButtonGroup {
-                width: parent.width
-                orientation: ListView.Vertical
-                spacing: 8
-
-                model: [
-                    { text: qsTrc("notation/editstyle/accidentals", "Only for a change to C major / A minor"), value: /* KeySigNatural::NONE */ 0 },
-                    { text: qsTrc("notation/editstyle/accidentals", "Before key signature if changing to fewer ♯ or ♭"), value: /* KeySigNatural::BEFORE */ 1 },
-                    { text: qsTrc("notation/editstyle/accidentals", "After key signature if changing to fewer ♯ or ♭; before if changing between ♯ and ♭"), value: /* KeySigNatural::AFTER */ 2 }
-                ]
-
-                delegate: RoundedRadioButton {
-                    width: ListView.view.width
-                    text: modelData.text
-                    checked: accidentalsPageModel.keySigNaturals.value === modelData.value
-                    onToggled: accidentalsPageModel.keySigNaturals.value = modelData.value
-                }
-            }
-        }
-
-        StyledGroupBox {
-            Layout.fillWidth: true
             title: qsTrc("notation/editstyle/accidentals", "Multiple accidentals in chords")
 
             ColumnLayout {

@@ -27,8 +27,6 @@ AccidentalsPageModel::AccidentalsPageModel(QObject* parent)
     : AbstractStyleDialogModel(parent, {
     StyleId::bracketedAccidentalPadding,
 
-    StyleId::keySigNaturals,
-
     StyleId::accidentalOrderFollowsNoteDisplacement,
     StyleId::alignAccidentalOctavesAcrossSubChords,
     StyleId::keepAccidentalSecondsTogether,
@@ -40,11 +38,6 @@ AccidentalsPageModel::AccidentalsPageModel(QObject* parent)
 StyleItem* AccidentalsPageModel::bracketedAccidentalPadding() const
 {
     return styleItem(StyleId::bracketedAccidentalPadding);
-}
-
-StyleItem* AccidentalsPageModel::keySigNaturals() const
-{
-    return styleItem(StyleId::keySigNaturals);
 }
 
 StyleItem* AccidentalsPageModel::accidFollowNoteOffset() const
