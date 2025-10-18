@@ -554,7 +554,7 @@ TEST_F(MidiRendererBend_Tests, bendGraceAfter)
     EventsHolder events = renderMidiEvents(u"bend-grace-after.mscx");
 
     EXPECT_EQ(events.size(), 1);
-    EXPECT_EQ(events[0].size(), 122);
+    EXPECT_EQ(events[0].size(), 123);
 
     checkEventInterval(events, 0, 479, 60, defVol);
 
@@ -593,6 +593,7 @@ TEST_F(MidiRendererBend_Tests, bendGraceAfter)
     checkPitchBend(events, 2248, 8721);
     checkPitchBend(events, 2258, 8521);
     checkPitchBend(events, 2268, 8299);
+    checkPitchBend(events, 2278, 8192);
 
     checkPitchBend(events, 3830, pwReset);
     checkEventInterval(events, 3840, 4319, 64, defVol);
