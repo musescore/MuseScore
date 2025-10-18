@@ -1205,9 +1205,11 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             break;
         }
 
+        if (tick >= score()->endTick()) {
+            appendMeasures(1);
+        }
         Segment* nseg = tick2segment(tick, false, SegmentType::ChordRest);
         if (!nseg) {
-            LOGD("reached end of score");
             break;
         }
         segment = nseg;
@@ -1673,9 +1675,8 @@ std::vector<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction
         }
         flist.push_back(rest);
         gap -= rest;
-        m = m->nextMeasure();
-        if (m == 0) {
-            return flist;
+        if (m->nextMeasure() != 0) {
+            m = m->nextMeasure();
         }
         s = m->first(SegmentType::ChordRest);
     }
@@ -1861,6 +1862,11 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
             }
         }
         const Measure* m  = cr1->measure();
+        if (m->nextMeasure() == 0) {
+            if (f.isNotZero()) {
+                appendMeasures(1);
+            }
+        }
         const Measure* m1 = m->nextMeasure();
         if (m1 == 0) {
             break;
