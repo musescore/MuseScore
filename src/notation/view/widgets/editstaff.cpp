@@ -228,28 +228,28 @@ void EditStaff::updateInstrument()
 
 void EditStaff::updateInterval(const mu::engraving::Interval& iv)
 {
-    int diatonic  = iv.diatonic;
-    int chromatic = iv.chromatic;
+    bool upFlag = !(iv.chromatic < 0 || iv.diatonic < 0);
 
+    int chromatic = std::abs(iv.chromatic);
+    int diatonic = std::abs(iv.diatonic);
     int oct = chromatic / 12;
-    if (oct < 0) {
-        oct = -oct;
-    }
 
-    bool upFlag = true;
-    if (chromatic < 0 || diatonic < 0) {
-        upFlag    = false;
-        chromatic = -chromatic;
-        diatonic  = -diatonic;
-    }
     chromatic %= 12;
-    diatonic  %= 7;
+    diatonic %= 7;
+
+    if (diatonic == 0 && chromatic == 11) {
+        diatonic = 7;
+    } else if (chromatic == 0 && diatonic == 6) {
+        chromatic = 12;
+        --oct;
+    }
 
     int interval = mu::engraving::searchInterval(diatonic, chromatic);
-    if (interval == -1) {
+    IF_ASSERT_FAILED(interval != -1) {
         LOGD("EditStaff: unknown interval %d %d", diatonic, chromatic);
         interval = 0;
     }
+
     iList->setCurrentIndex(interval);
     up->setChecked(upFlag);
     down->setChecked(!upFlag);
