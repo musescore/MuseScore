@@ -5182,7 +5182,7 @@ Ret NotationInteraction::repeatSelection()
     if (score()->noteEntryMode() && selection.isSingle()) {
         EngravingItem* el = selection.element();
 
-        if (el && !score()->inputState().endOfScore()) {
+        if (el) {
             Chord* c = nullptr;
             if (el->type() == ElementType::NOTE) {
                 c = toNote(el)->chord();
@@ -5190,8 +5190,7 @@ Ret NotationInteraction::repeatSelection()
                 Segment* prevSegment = toRest(el)->segment()->prev1WithElemsOnTrack(el->track());
 
                 // Looking for the previous Chord
-                while (prevSegment)
-                {
+                while (prevSegment) {
                     if (prevSegment->elementAt(el->track())->isChord()) {
                         c = toChord(prevSegment->elementAt(el->track()));
                         break;
@@ -5229,14 +5228,17 @@ Ret NotationInteraction::repeatSelection()
     staff_idx_t dStaff = selection.staffStart();
     mu::engraving::Segment* endSegment = selection.endSegment();
 
+    startEdit(TranslatableString("undoableAction", "Repeat selection"));
     if (endSegment && endSegment->segmentType() != SegmentType::ChordRest) {
+        if (!endSegment->next1(SegmentType::ChordRest)) {
+            score()->appendMeasures(1);
+        }
         endSegment = endSegment->next1(SegmentType::ChordRest);
     }
     if (endSegment) {
         for (track_idx_t track = dStaff * VOICES; track < (dStaff + 1) * VOICES; ++track) {
             EngravingItem* e = endSegment->element(track);
             if (e) {
-                startEdit(TranslatableString("undoableAction", "Repeat selection"));
                 ChordRest* cr = toChordRest(e);
                 score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
                 apply();
