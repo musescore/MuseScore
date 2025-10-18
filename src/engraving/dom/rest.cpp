@@ -160,62 +160,29 @@ RectF Rest::drag(EditData& ed)
 bool Rest::acceptDrop(EditData& data) const
 {
     EngravingItem* e = data.dropElement;
-    ElementType type = e->type();
-    if ((type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_AUTO)
-        || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_NONE)
-        || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BREAK_LEFT)
-        || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BREAK_INNER_8TH)
-        || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BREAK_INNER_16TH)
-        || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_JOIN)
-        || (type == ElementType::FERMATA)
-        || (type == ElementType::CLEF)
-        || (type == ElementType::KEYSIG)
-        || (type == ElementType::TIMESIG)
-        || (type == ElementType::SYSTEM_TEXT)
-        || (type == ElementType::TRIPLET_FEEL)
-        || (type == ElementType::STAFF_TEXT)
-        || (type == ElementType::PLAYTECH_ANNOTATION)
-        || (type == ElementType::CAPO)
-        || (type == ElementType::BAR_LINE)
-        || (type == ElementType::BREATH)
-        || (type == ElementType::CHORD)
-        || (type == ElementType::NOTE)
-        || (type == ElementType::STAFF_STATE)
-        || (type == ElementType::INSTRUMENT_CHANGE)
-        || (type == ElementType::DYNAMIC)
-        || (type == ElementType::EXPRESSION)
-        || (type == ElementType::HARMONY)
-        || (type == ElementType::TEMPO_TEXT)
-        || (type == ElementType::REHEARSAL_MARK)
-        || (type == ElementType::FRET_DIAGRAM)
-        || (type == ElementType::TREMOLOBAR)
-        || (type == ElementType::IMAGE)
-        || (type == ElementType::SYMBOL)
-        || (type == ElementType::HARP_DIAGRAM)
-        || (type == ElementType::MEASURE_REPEAT && durationType().type() == DurationType::V_MEASURE)
-        ) {
+
+    switch (e->type()) {
+    case ElementType::CHORD:
+    case ElementType::NOTE:
+    case ElementType::IMAGE:
+    case ElementType::SYMBOL:
         return true;
-    }
-
-    if (type == ElementType::STRING_TUNINGS) {
-        staff_idx_t staffIdx = 0;
-        Segment* seg = nullptr;
-        if (!score()->pos2measure(data.pos, &staffIdx, 0, &seg, 0)) {
-            return false;
+    case ElementType::MEASURE_REPEAT:
+        return durationType().type() == DurationType::V_MEASURE;
+    default:
+        // prevent 'hanging' slurs, avoid crash on tie
+        if (e->isSpanner()) {
+            static const std::set<ElementType> ignoredTypes {
+                ElementType::SLUR,
+                ElementType::HAMMER_ON_PULL_OFF,
+                ElementType::TIE,
+                ElementType::GLISSANDO
+            };
+            return !muse::contains(ignoredTypes, e->type());
         }
-
-        return measure()->canAddStringTunings(staffIdx);
+        break;
     }
-
-    // prevent 'hanging' slurs, avoid crash on tie
-    static const std::set<ElementType> ignoredTypes {
-        ElementType::SLUR,
-        ElementType::HAMMER_ON_PULL_OFF,
-        ElementType::TIE,
-        ElementType::GLISSANDO
-    };
-
-    return e->isSpanner() && !muse::contains(ignoredTypes, type);
+    return ChordRest::acceptDrop(data);
 }
 
 //---------------------------------------------------------
@@ -231,7 +198,7 @@ EngravingItem* Rest::drop(EditData& data)
         Articulation* a = toArticulation(e);
         if (!a->isFermata() || !score()->toggleArticulation(this, a)) {
             delete e;
-            e = 0;
+            e = nullptr;
         }
     }
         return e;
@@ -264,8 +231,6 @@ EngravingItem* Rest::drop(EditData& data)
         }
         break;
     }
-    case ElementType::STRING_TUNINGS:
-        return measure()->drop(data);
 
     default:
         return ChordRest::drop(data);
