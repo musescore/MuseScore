@@ -3537,7 +3537,7 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
     if (e->isMeasure()) {
         Measure* m = toMeasure(e)->coveringMMRestOrThis();
         Segment* startSegment = m->first(SegmentType::ChordRest);
-        Segment* endSegment = m == lastMeasureMM() ? nullptr : m->last();
+        Segment* endSegment = m->last();
         Fraction tick = m->tick();
         Fraction etick = tick + m->ticks();
 
