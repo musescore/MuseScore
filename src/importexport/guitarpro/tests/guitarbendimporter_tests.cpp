@@ -204,5 +204,8 @@ TEST_F(GuitarBendImporter_Tests, gpTiedBendsReleaseOrHold) {
 TEST_F(GuitarBendImporter_Tests, gpBendReleaseGraceAfter) {
     gpReadTest(u"bends_release_grace_after", u"gp");
 }
+TEST_F(GuitarBendImporter_Tests, gpPrebendReleaseBend) {
+    gpReadTest(u"prebend_release_bend", u"gp");
+}
 #endif
 }
