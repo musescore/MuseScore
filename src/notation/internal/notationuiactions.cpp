@@ -585,8 +585,8 @@ const UiActionList NotationUiActions::s_actions = {
     UiAction("measures-per-system",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Measures per s&ystemâ€¦"),
-             TranslatableString("action", "Measures per systemâ€¦")
+             TranslatableString("action", "Measures per s&ystems…"),
+             TranslatableString("action", "Measures per systems…")
              ),
     UiAction("voice-x12",
              mu::context::UiCtxProjectOpened,

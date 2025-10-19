@@ -136,6 +136,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/editing/editstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/editing/editsystemlocks.cpp
     ${CMAKE_CURRENT_LIST_DIR}/editing/editsystemlocks.h
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editpagebreaks.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editing/editpagebreaks.h
     ${CMAKE_CURRENT_LIST_DIR}/editing/edittie.cpp
     ${CMAKE_CURRENT_LIST_DIR}/editing/edittie.h
     ${CMAKE_CURRENT_LIST_DIR}/editing/edittremolo.cpp

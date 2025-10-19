@@ -91,6 +91,7 @@
 #include "engraving/editing/editchord.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editsystemlocks.h"
+#include "engraving/editing/editpagebreaks.h"
 #include "engraving/editing/splitjoinmeasure.h"
 #include "engraving/editing/textedit.h"
 #include "engraving/rw/rwregister.h"
@@ -5863,7 +5864,7 @@ void NotationInteraction::addRemovePageBreaks(AddRemovePageBreaksType intervalTy
     bool afterEachPage = intervalType == AddRemovePageBreaksType::AfterEachPage;
 
     startEdit(TranslatableString("undoableAction", "Add / remove page breaks"));
-    score()->addRemovePageBreaks(interval, afterEachPage);
+    EditPageBreaks::addRemovePageBreaks(score(), interval, afterEachPage);
     apply();
 }
 

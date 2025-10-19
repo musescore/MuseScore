@@ -31,7 +31,7 @@
        <item>
         <widget class="QSpinBox" name="intervalBox">
          <property name="accessibleName">
-          <string>Number of pages</string>
+          <string>Number of systems</string>
          </property>
          <property name="minimum">
           <number>1</number>
