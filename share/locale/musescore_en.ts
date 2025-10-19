@@ -6310,8 +6310,8 @@ followed by dashes</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="252"/>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="253"/>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="281"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="112"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="113"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2618"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2619"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="76"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="159"/>
         <source>Undo</source>
@@ -6321,8 +6321,8 @@ followed by dashes</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="259"/>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="260"/>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="287"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="120"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="121"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2626"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2627"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="84"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="165"/>
         <source>Redo</source>
@@ -6330,13 +6330,13 @@ followed by dashes</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="266"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="128"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="112"/>
         <source>De&amp;lete</source>
         <translation type="unfinished">De&amp;lete</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="267"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="129"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="113"/>
         <source>Delete</source>
         <translation type="unfinished">Delete</translation>
     </message>
@@ -6595,3244 +6595,3244 @@ followed by dashes</translation>
         <translation type="unfinished">%1 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="141"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="125"/>
         <source>Put note</source>
         <translation type="unfinished">Put note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="146"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="130"/>
         <source>Remove note</source>
         <translation type="unfinished">Remove note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="151"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="135"/>
         <source>Next element</source>
         <translation type="unfinished">Next element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="152"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="136"/>
         <source>Select next element in score</source>
         <translation type="unfinished">Select next element in score</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="157"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="141"/>
         <source>Previous element</source>
         <translation type="unfinished">Previous element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="158"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="142"/>
         <source>Select previous element in score</source>
         <translation type="unfinished">Select previous element in score</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="163"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="147"/>
         <source>Next chord / Shift text right</source>
         <translation type="unfinished">Next chord / Shift text right</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="164"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="148"/>
         <source>Select next chord / move text right</source>
         <translation type="unfinished">Select next chord / move text right</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="169"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="153"/>
         <source>Previous chord / Shift text left</source>
         <translation type="unfinished">Previous chord / Shift text left</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="170"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="154"/>
         <source>Select previous chord / move text left</source>
         <translation type="unfinished">Select previous chord / move text left</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="175"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="159"/>
         <source>Next measure / Shift text right quickly</source>
         <translation type="unfinished">Next measure / Shift text right quickly</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="176"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="160"/>
         <source>Go to next measure / move text right quickly</source>
         <translation type="unfinished">Go to next measure / move text right quickly</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="181"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="165"/>
         <source>Previous measure / Shift text left quickly</source>
         <translation type="unfinished">Previous measure / Shift text left quickly</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="182"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="166"/>
         <source>Go to previous measure / move text left quickly</source>
         <translation type="unfinished">Go to previous measure / move text left quickly</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="187"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="171"/>
         <source>Up note in chord</source>
         <translation type="unfinished">Up note in chord</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="188"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="172"/>
         <source>Select note/rest above</source>
         <translation type="unfinished">Select note/rest above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="193"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="177"/>
         <source>Down note in chord</source>
         <translation type="unfinished">Down note in chord</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="194"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="178"/>
         <source>Select note/rest below</source>
         <translation type="unfinished">Select note/rest below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="199"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="183"/>
         <source>Top note in chord</source>
         <translation type="unfinished">Top note in chord</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="200"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="184"/>
         <source>Select top note in chord</source>
         <translation type="unfinished">Select top note in chord</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="205"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="189"/>
         <source>Bottom note in chord</source>
         <translation type="unfinished">Bottom note in chord</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="206"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="190"/>
         <source>Select bottom note in chord</source>
         <translation type="unfinished">Select bottom note in chord</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="211"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="195"/>
         <source>First element</source>
         <translation type="unfinished">First element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="212"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="196"/>
         <source>Go to first element in score</source>
         <translation type="unfinished">Go to first element in score</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="217"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="201"/>
         <source>Last element</source>
         <translation type="unfinished">Last element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="218"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="202"/>
         <source>Go to last element in score</source>
         <translation type="unfinished">Go to last element in score</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="223"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="207"/>
         <source>Move to staff above</source>
         <translation type="unfinished">Move to staff above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="224"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="208"/>
         <source>Move selected note/rest to staff above</source>
         <translation type="unfinished">Move selected note/rest to staff above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="229"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="213"/>
         <source>Move to staff below</source>
         <translation type="unfinished">Move to staff below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="230"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="214"/>
         <source>Move selected note/rest to staff below</source>
         <translation type="unfinished">Move selected note/rest to staff below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="235"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="219"/>
         <source>Next staff or voice</source>
         <translation type="unfinished">Next staff or voice</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="236"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="220"/>
         <source>Go to next staff or voice</source>
         <translation type="unfinished">Go to next staff or voice</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="241"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="225"/>
         <source>Previous staff or voice</source>
         <translation type="unfinished">Previous staff or voice</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="242"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="226"/>
         <source>Go to previous staff or voice</source>
         <translation type="unfinished">Go to previous staff or voice</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="247"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="231"/>
         <source>Next frame</source>
         <translation type="unfinished">Next frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="248"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="232"/>
         <source>Go to next frame</source>
         <translation type="unfinished">Go to next frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="253"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="237"/>
         <source>Previous frame</source>
         <translation type="unfinished">Previous frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="254"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="238"/>
         <source>Go to previous frame</source>
         <translation type="unfinished">Go to previous frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="259"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="243"/>
         <source>Next system</source>
         <translation type="unfinished">Next system</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="260"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="244"/>
         <source>Go to next system</source>
         <translation type="unfinished">Go to next system</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="265"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="249"/>
         <source>Previous system</source>
         <translation type="unfinished">Previous system</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="266"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="250"/>
         <source>Go to previous system</source>
         <translation type="unfinished">Go to previous system</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="271"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="255"/>
         <source>Add next chord to selection</source>
         <translation type="unfinished">Add next chord to selection</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="272"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="256"/>
         <source>Add to selection: next note/rest</source>
         <translation type="unfinished">Add to selection: next note/rest</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="277"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="261"/>
         <source>Add previous chord to selection</source>
         <translation type="unfinished">Add previous chord to selection</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="278"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="262"/>
         <source>Add to selection: previous note/rest</source>
         <translation type="unfinished">Add to selection: previous note/rest</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="283"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="284"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="267"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="268"/>
         <source>Move chord/rest left</source>
         <translation type="unfinished">Move chord/rest left</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="289"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="290"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="273"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="274"/>
         <source>Move chord/rest right</source>
         <translation type="unfinished">Move chord/rest right</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="295"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="279"/>
         <source>Snap to &amp;previous</source>
         <translation type="unfinished">Snap to &amp;previous</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="296"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="280"/>
         <source>Snap to previous</source>
         <translation type="unfinished">Snap to previous</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="302"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="286"/>
         <source>Snap to &amp;next</source>
         <translation type="unfinished">Snap to &amp;next</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="303"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="287"/>
         <source>Snap to next</source>
         <translation type="unfinished">Snap to next</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="309"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="293"/>
         <source>Up</source>
         <translation type="unfinished">Up</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="310"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="294"/>
         <source>Move pitch/selection up</source>
         <translation type="unfinished">Move pitch/selection up</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="315"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="299"/>
         <source>Down</source>
         <translation type="unfinished">Down</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="316"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="300"/>
         <source>Move pitch/selection down</source>
         <translation type="unfinished">Move pitch/selection down</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="321"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="305"/>
         <source>Down octave</source>
         <translation type="unfinished">Down octave</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="322"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="306"/>
         <source>Move pitch down an octave</source>
         <translation type="unfinished">Move pitch down an octave</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="327"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="311"/>
         <source>Up octave</source>
         <translation type="unfinished">Up octave</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="328"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="312"/>
         <source>Move pitch up an octave</source>
         <translation type="unfinished">Move pitch up an octave</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="333"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="317"/>
         <source>Double duration</source>
         <translation type="unfinished">Double duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="334"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="318"/>
         <source>Double selected duration</source>
         <translation type="unfinished">Double selected duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="339"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="323"/>
         <source>Halve duration</source>
         <translation type="unfinished">Halve duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="340"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="324"/>
         <source>Halve selected duration</source>
         <translation type="unfinished">Halve selected duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="345"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="329"/>
         <source>Double selected duration (dotted)</source>
         <translation type="unfinished">Double selected duration (dotted)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="346"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="330"/>
         <source>Double selected duration (includes dotted values)</source>
         <translation type="unfinished">Double selected duration (includes dotted values)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="351"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="335"/>
         <source>Halve selected duration (dotted)</source>
         <translation type="unfinished">Halve selected duration (dotted)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="352"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="336"/>
         <source>Halve selected duration (includes dotted values)</source>
         <translation type="unfinished">Halve selected duration (includes dotted values)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="357"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="341"/>
         <source>Paste &amp;half duration</source>
         <translation type="unfinished">Paste &amp;half duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="358"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="342"/>
         <source>Paste half duration</source>
         <translation type="unfinished">Paste half duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="363"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="347"/>
         <source>Paste &amp;double duration</source>
         <translation type="unfinished">Paste &amp;double duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="364"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="348"/>
         <source>Paste double duration</source>
         <translation type="unfinished">Paste double duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="369"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="370"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="353"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="354"/>
         <source>Paste special</source>
         <translation type="unfinished">Paste special</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="375"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="359"/>
         <source>&amp;Swap with clipboard</source>
         <translation type="unfinished">&amp;Swap with clipboard</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="376"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="360"/>
         <source>Copy/paste: swap with clipboard</source>
         <translation type="unfinished">Copy/paste: swap with clipboard</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="381"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="382"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="365"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="366"/>
         <source>Toggle visibility of elements</source>
         <translation type="unfinished">Toggle visibility of elements</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="387"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="371"/>
         <source>Select &amp;all</source>
         <translation type="unfinished">Select &amp;all</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="388"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="372"/>
         <source>Select all</source>
         <translation type="unfinished">Select all</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="393"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="377"/>
         <source>Select sectio&amp;n</source>
         <translation type="unfinished">Select sectio&amp;n</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="394"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="378"/>
         <source>Select section</source>
         <translation type="unfinished">Select section</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="399"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="383"/>
         <source>Similar</source>
         <translation type="unfinished">Similar</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="400"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="384"/>
         <source>Select similar elements</source>
         <translation type="unfinished">Select similar elements</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="405"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="389"/>
         <source>Similar on this staff</source>
         <translation type="unfinished">Similar on this staff</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="406"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="390"/>
         <source>Select similar elements on the same staff</source>
         <translation type="unfinished">Select similar elements on the same staff</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="411"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="395"/>
         <source>Similar in this range</source>
         <translation type="unfinished">Similar in this range</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="412"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="396"/>
         <source>Select similar elements in the selected range</source>
         <translation type="unfinished">Select similar elements in the selected range</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="417"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="401"/>
         <source>More…</source>
         <translation type="unfinished">More…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="418"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="402"/>
         <source>Select similar elements with more options…</source>
         <translation type="unfinished">Select similar elements with more options…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="423"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="407"/>
         <source>&amp;Style…</source>
         <translation type="unfinished">&amp;Style…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="424"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="408"/>
         <source>Format style…</source>
         <translation type="unfinished">Format style…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="429"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="413"/>
         <source>&amp;Page settings…</source>
         <translation type="unfinished">&amp;Page settings…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="430"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="414"/>
         <source>Page settings…</source>
         <translation type="unfinished">Page settings…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="435"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="419"/>
         <source>&amp;Load style…</source>
         <translation type="unfinished">&amp;Load style…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="436"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="420"/>
         <source>Load style…</source>
         <translation type="unfinished">Load style…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="441"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="425"/>
         <source>S&amp;ave style…</source>
         <translation type="unfinished">S&amp;ave style…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="442"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="426"/>
         <source>Save style…</source>
         <translation type="unfinished">Save style…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="447"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="431"/>
         <source>&amp;Transpose…</source>
         <translation type="unfinished">&amp;Transpose…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="448"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="432"/>
         <source>Transpose…</source>
         <translation type="unfinished">Transpose…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="453"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="437"/>
         <source>&amp;Explode</source>
         <translation type="unfinished">&amp;Explode</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="454"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="438"/>
         <source>Explode</source>
         <translation type="unfinished">Explode</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="459"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="443"/>
         <source>&amp;Implode</source>
         <translation type="unfinished">&amp;Implode</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="460"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="444"/>
         <source>Implode</source>
         <translation type="unfinished">Implode</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="465"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="449"/>
         <source>Add &amp;fretboard diagram</source>
         <translation type="unfinished">Add &amp;fretboard diagram</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="466"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="450"/>
         <source>Add fretboard diagram</source>
         <translation type="unfinished">Add fretboard diagram</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="472"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="456"/>
         <source>Realize &amp;chord symbols</source>
         <translation type="unfinished">Realize &amp;chord symbols</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="473"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="457"/>
         <source>Realize chord symbols</source>
         <translation type="unfinished">Realize chord symbols</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="478"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="462"/>
         <source>Remove selected ran&amp;ge</source>
         <translation type="unfinished">Remove selected ran&amp;ge</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="479"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="463"/>
         <source>Delete selected measures</source>
         <translation type="unfinished">Delete selected measures</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="485"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="486"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="469"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="470"/>
         <source>Fill with slashes</source>
         <translation type="unfinished">Fill with slashes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="491"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="475"/>
         <source>Toggle rhythmic sl&amp;ash notation</source>
         <translation type="unfinished">Toggle rhythmic sl&amp;ash notation</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="492"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="476"/>
         <source>Toggle rhythmic slash notation</source>
         <translation type="unfinished">Toggle rhythmic slash notation</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="497"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="481"/>
         <source>&amp;Optimize enharmonic spelling</source>
         <translation type="unfinished">&amp;Optimize enharmonic spelling</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="498"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="482"/>
         <source>Optimize enharmonic spelling</source>
         <translation type="unfinished">Optimize enharmonic spelling</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="503"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="487"/>
         <source>Regroup &amp;rhythms</source>
         <translation type="unfinished">Regroup &amp;rhythms</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="504"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="488"/>
         <source>Regroup rhythms</source>
         <translation type="unfinished">Regroup rhythms</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="509"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="493"/>
         <source>Resequence re&amp;hearsal marks</source>
         <translation type="unfinished">Resequence re&amp;hearsal marks</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="510"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="494"/>
         <source>Resequence rehearsal marks</source>
         <translation type="unfinished">Resequence rehearsal marks</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="515"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="516"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="499"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="500"/>
         <source>Unroll repeats</source>
         <translation type="unfinished">Unroll repeats</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="521"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="505"/>
         <source>Copy &amp;lyrics to clipboard</source>
         <translation type="unfinished">Copy &amp;lyrics to clipboard</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="522"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="506"/>
         <source>Copy lyrics</source>
         <translation type="unfinished">Copy lyrics</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="527"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="511"/>
         <source>Remove empty trailing meas&amp;ures</source>
         <translation type="unfinished">Remove empty trailing meas&amp;ures</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="528"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="512"/>
         <source>Remove empty trailing measures</source>
         <translation type="unfinished">Remove empty trailing measures</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="533"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="517"/>
         <source>Parts</source>
         <translation type="unfinished">Parts</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="534"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="518"/>
         <source>Manage parts</source>
         <translation type="unfinished">Manage parts</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="540"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="524"/>
         <source>Page view</source>
         <translation type="unfinished">Page view</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="541"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="525"/>
         <source>Display page view</source>
         <translation type="unfinished">Display page view</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="547"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="548"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="531"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="532"/>
         <source>Floating</source>
         <translation type="unfinished">Floating</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="554"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="538"/>
         <source>Continuous view (horizontal)</source>
         <translation type="unfinished">Continuous view (horizontal)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="555"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="539"/>
         <source>Display continuous view (horizontal)</source>
         <translation type="unfinished">Display continuous view (horizontal)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="561"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="545"/>
         <source>Continuous view (vertical)</source>
         <translation type="unfinished">Continuous view (vertical)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="562"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="546"/>
         <source>Display continuous view (vertical)</source>
         <translation type="unfinished">Display continuous view (vertical)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="568"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="552"/>
         <source>&amp;Find / Go to</source>
         <translation type="unfinished">&amp;Find / Go to</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="569"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="553"/>
         <source>Find / Go to</source>
         <translation type="unfinished">Find / Go to</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="574"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="575"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="558"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="559"/>
         <source>Staff/Part properties…</source>
         <translation type="unfinished">Staff/Part properties…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="580"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="581"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="564"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="565"/>
         <source>Staff text properties…</source>
         <translation type="unfinished">Staff text properties…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="586"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="587"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="570"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="571"/>
         <source>System text properties…</source>
         <translation type="unfinished">System text properties…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="592"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="593"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="576"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="577"/>
         <source>Measure properties…</source>
         <translation type="unfinished">Measure properties…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="598"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="582"/>
         <source>Measures per s&amp;ystem…</source>
         <translation type="unfinished">Measures per s&amp;ystem…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="599"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="583"/>
         <source>Measures per system…</source>
         <translation type="unfinished">Measures per system…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="604"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="588"/>
         <source>Exchange voice &amp;1-2</source>
         <translation type="unfinished">Exchange voice &amp;1-2</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="605"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="589"/>
         <source>Exchange voice 1-2</source>
         <translation type="unfinished">Exchange voice 1-2</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="610"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="611"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="594"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="595"/>
         <source>Exchange voice 1-3</source>
         <translation type="unfinished">Exchange voice 1-3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="616"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="600"/>
         <source>Exchange voice 1-&amp;4</source>
         <translation type="unfinished">Exchange voice 1-&amp;4</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="617"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="601"/>
         <source>Exchange voice 1-4</source>
         <translation type="unfinished">Exchange voice 1-4</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="622"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="606"/>
         <source>Exchange voice &amp;2-3</source>
         <translation type="unfinished">Exchange voice &amp;2-3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="623"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="607"/>
         <source>Exchange voice 2-3</source>
         <translation type="unfinished">Exchange voice 2-3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="628"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="629"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="612"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="613"/>
         <source>Exchange voice 2-4</source>
         <translation type="unfinished">Exchange voice 2-4</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="634"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="618"/>
         <source>Exchange voice &amp;3-4</source>
         <translation type="unfinished">Exchange voice &amp;3-4</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="635"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="619"/>
         <source>Exchange voice 3-4</source>
         <translation type="unfinished">Exchange voice 3-4</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="640"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="641"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="624"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="625"/>
         <source>Add/remove system break</source>
         <translation type="unfinished">Add/remove system break</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="646"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="647"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="630"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="631"/>
         <source>Add/remove page break</source>
         <translation type="unfinished">Add/remove page break</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="652"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="653"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="636"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="637"/>
         <source>Add/remove system lock</source>
         <translation type="unfinished">Add/remove system lock</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="658"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="659"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="642"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="643"/>
         <source>Move measure to previous system</source>
         <translation type="unfinished">Move measure to previous system</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="665"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="666"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="649"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="650"/>
         <source>Move measure to next system</source>
         <translation type="unfinished">Move measure to next system</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="672"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="673"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="656"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="657"/>
         <source>Create system from selection</source>
         <translation type="unfinished">Create system from selection</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="678"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="679"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="662"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="663"/>
         <source>Add/remove section break</source>
         <translation type="unfinished">Add/remove section break</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="684"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="668"/>
         <source>&amp;Split measure before selected note/rest</source>
         <translation type="unfinished">&amp;Split measure before selected note/rest</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="685"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="669"/>
         <source>Split measure before selected note/rest</source>
         <translation type="unfinished">Split measure before selected note/rest</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="690"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="674"/>
         <source>&amp;Join selected measures</source>
         <translation type="unfinished">&amp;Join selected measures</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="691"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="675"/>
         <source>Join selected measures</source>
         <translation type="unfinished">Join selected measures</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="696"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="697"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="680"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="681"/>
         <source>Insert one measure before selection</source>
         <translation type="unfinished">Insert one measure before selection</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="703"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="704"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="687"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="688"/>
         <source>Insert measures before selection…</source>
         <translation type="unfinished">Insert measures before selection…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="709"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="710"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="693"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="694"/>
         <source>Insert measures after selection…</source>
         <translation type="unfinished">Insert measures after selection…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="715"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="716"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="699"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="700"/>
         <source>Insert measures at start of score…</source>
         <translation type="unfinished">Insert measures at start of score…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="721"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="722"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="705"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="706"/>
         <source>Insert one measure at end of score</source>
         <translation type="unfinished">Insert one measure at end of score</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="727"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="728"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="711"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="712"/>
         <source>Insert measures at end of score…</source>
         <translation type="unfinished">Insert measures at end of score…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="733"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="717"/>
         <source>Insert &amp;horizontal frame</source>
         <translation type="unfinished">Insert &amp;horizontal frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="734"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="718"/>
         <source>Insert horizontal frame</source>
         <translation type="unfinished">Insert horizontal frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="740"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="724"/>
         <source>Insert &amp;vertical frame</source>
         <translation type="unfinished">Insert &amp;vertical frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="741"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="725"/>
         <source>Insert vertical frame</source>
         <translation type="unfinished">Insert vertical frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="747"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="731"/>
         <source>Insert &amp;text frame</source>
         <translation type="unfinished">Insert &amp;text frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="748"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="732"/>
         <source>Insert text frame</source>
         <translation type="unfinished">Insert text frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="754"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="738"/>
         <source>Insert &amp;fretboard diagram legend</source>
         <translation type="unfinished">Insert &amp;fretboard diagram legend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="755"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="739"/>
         <source>Insert fretboard diagram legend</source>
         <translation type="unfinished">Insert fretboard diagram legend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="761"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="745"/>
         <source>&amp;Horizontal frame</source>
         <translation type="unfinished">&amp;Horizontal frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="762"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="746"/>
         <source>Insert horizontal frame at end of score</source>
         <translation type="unfinished">Insert horizontal frame at end of score</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="768"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="752"/>
         <source>&amp;Vertical frame</source>
         <translation type="unfinished">&amp;Vertical frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="769"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="753"/>
         <source>Insert vertical frame at end of score</source>
         <translation type="unfinished">Insert vertical frame at end of score</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="775"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="759"/>
         <source>&amp;Text frame</source>
         <translation type="unfinished">&amp;Text frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="776"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="760"/>
         <source>Insert text frame at end of score</source>
         <translation type="unfinished">Insert text frame at end of score</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="782"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="766"/>
         <source>&amp;Fretboard diagram legend</source>
         <translation type="unfinished">&amp;Fretboard diagram legend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="783"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="767"/>
         <source>Insert fretboard diagram legend at end of score</source>
         <translation type="unfinished">Insert fretboard diagram legend at end of score</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="789"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="773"/>
         <source>Acciaccatura</source>
         <translation type="unfinished">Acciaccatura</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="790"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="774"/>
         <source>Add grace note: acciaccatura</source>
         <translation type="unfinished">Add grace note: acciaccatura</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="796"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="780"/>
         <source>Appoggiatura</source>
         <translation type="unfinished">Appoggiatura</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="797"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="781"/>
         <source>Add grace note: appoggiatura</source>
         <translation type="unfinished">Add grace note: appoggiatura</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="803"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="787"/>
         <source>Grace: quarter</source>
         <translation type="unfinished">Grace: quarter</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="804"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="788"/>
         <source>Add grace note: quarter</source>
         <translation type="unfinished">Add grace note: quarter</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="810"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="794"/>
         <source>Grace: 16th</source>
         <translation type="unfinished">Grace: 16th</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="811"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="795"/>
         <source>Add grace note: 16th</source>
         <translation type="unfinished">Add grace note: 16th</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="817"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="801"/>
         <source>Grace: 32nd</source>
         <translation type="unfinished">Grace: 32nd</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="818"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="802"/>
         <source>Add grace note: 32nd</source>
         <translation type="unfinished">Add grace note: 32nd</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="824"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="808"/>
         <source>Grace: 8th after</source>
         <translation type="unfinished">Grace: 8th after</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="825"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="809"/>
         <source>Add grace note: eighth after</source>
         <translation type="unfinished">Add grace note: eighth after</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="831"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="815"/>
         <source>Grace: 16th after</source>
         <translation type="unfinished">Grace: 16th after</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="832"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="816"/>
         <source>Add grace note: 16th after</source>
         <translation type="unfinished">Add grace note: 16th after</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="838"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="822"/>
         <source>Grace: 32nd after</source>
         <translation type="unfinished">Grace: 32nd after</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="839"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="823"/>
         <source>Add grace note: 32nd after</source>
         <translation type="unfinished">Add grace note: 32nd after</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="845"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="846"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="829"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="830"/>
         <source>Auto beam</source>
         <translation type="unfinished">Auto beam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="852"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="853"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="836"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="837"/>
         <source>No beam</source>
         <translation type="unfinished">No beam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="859"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="860"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="843"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="844"/>
         <source>Break beam left</source>
         <translation type="unfinished">Break beam left</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="866"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="850"/>
         <source>Break inner beams (8th)</source>
         <translation type="unfinished">Break inner beams (8th)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="867"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="851"/>
         <source>Break inner beams (eighth)</source>
         <translation type="unfinished">Break inner beams (eighth)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="873"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="874"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="857"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="858"/>
         <source>Break inner beams (16th)</source>
         <translation type="unfinished">Break inner beams (16th)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="880"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="881"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="864"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="865"/>
         <source>Join beams</source>
         <translation type="unfinished">Join beams</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="887"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="871"/>
         <source>Feathered beam, decelerate</source>
         <translation type="unfinished">Feathered beam, decelerate</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="888"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="872"/>
         <source>Add feathered beam: decelerate</source>
         <translation type="unfinished">Add feathered beam: decelerate</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="894"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="878"/>
         <source>Feathered beam, accelerate</source>
         <translation type="unfinished">Feathered beam, accelerate</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="895"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="879"/>
         <source>Add feathered beam: accelerate</source>
         <translation type="unfinished">Add feathered beam: accelerate</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="901"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="902"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="885"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="886"/>
         <source>Add brackets to accidental</source>
         <translation type="unfinished">Add brackets to accidental</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="908"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="909"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="892"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="893"/>
         <source>Add braces to element</source>
         <translation type="unfinished">Add braces to element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="915"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="916"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="899"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="900"/>
         <source>Add parentheses to element</source>
         <translation type="unfinished">Add parentheses to element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="922"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="906"/>
         <source>&amp;Unison</source>
         <translation type="unfinished">&amp;Unison</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="923"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="907"/>
         <source>Enter interval: unison</source>
         <translation type="unfinished">Enter interval: unison</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="928"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="912"/>
         <source>Se&amp;cond above</source>
         <translation type="unfinished">Se&amp;cond above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="929"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="913"/>
         <source>Enter interval: second above</source>
         <translation type="unfinished">Enter interval: second above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="934"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="918"/>
         <source>Thir&amp;d above</source>
         <translation type="unfinished">Thir&amp;d above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="935"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="919"/>
         <source>Enter interval: third above</source>
         <translation type="unfinished">Enter interval: third above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="940"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="924"/>
         <source>Fou&amp;rth above</source>
         <translation type="unfinished">Fou&amp;rth above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="941"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="925"/>
         <source>Enter interval: fourth above</source>
         <translation type="unfinished">Enter interval: fourth above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="946"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="930"/>
         <source>Fift&amp;h above</source>
         <translation type="unfinished">Fift&amp;h above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="947"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="931"/>
         <source>Enter interval: fifth above</source>
         <translation type="unfinished">Enter interval: fifth above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="952"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="936"/>
         <source>Si&amp;xth above</source>
         <translation type="unfinished">Si&amp;xth above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="953"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="937"/>
         <source>Enter interval: sixth above</source>
         <translation type="unfinished">Enter interval: sixth above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="958"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="942"/>
         <source>Seve&amp;nth above</source>
         <translation type="unfinished">Seve&amp;nth above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="959"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="943"/>
         <source>Enter interval: seventh above</source>
         <translation type="unfinished">Enter interval: seventh above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="964"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="948"/>
         <source>Octave &amp;above</source>
         <translation type="unfinished">Octave &amp;above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="965"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="949"/>
         <source>Enter interval: octave above</source>
         <translation type="unfinished">Enter interval: octave above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="970"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="954"/>
         <source>Ninth abov&amp;e</source>
         <translation type="unfinished">Ninth abov&amp;e</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="971"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="955"/>
         <source>Enter interval: ninth above</source>
         <translation type="unfinished">Enter interval: ninth above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="976"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="960"/>
         <source>Tenth above</source>
         <translation type="unfinished">Tenth above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="977"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="961"/>
         <source>Enter interval: tenth above</source>
         <translation type="unfinished">Enter interval: tenth above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="982"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="966"/>
         <source>&amp;Second below</source>
         <translation type="unfinished">&amp;Second below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="983"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="967"/>
         <source>Enter interval: second below</source>
         <translation type="unfinished">Enter interval: second below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="988"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="972"/>
         <source>&amp;Third below</source>
         <translation type="unfinished">&amp;Third below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="989"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="973"/>
         <source>Enter interval: third below</source>
         <translation type="unfinished">Enter interval: third below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="994"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="978"/>
         <source>F&amp;ourth below</source>
         <translation type="unfinished">F&amp;ourth below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="995"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="979"/>
         <source>Enter interval: fourth below</source>
         <translation type="unfinished">Enter interval: fourth below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1000"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="984"/>
         <source>&amp;Fifth below</source>
         <translation type="unfinished">&amp;Fifth below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1001"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="985"/>
         <source>Enter interval: fifth below</source>
         <translation type="unfinished">Enter interval: fifth below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1006"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="990"/>
         <source>S&amp;ixth below</source>
         <translation type="unfinished">S&amp;ixth below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1007"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="991"/>
         <source>Enter interval: sixth below</source>
         <translation type="unfinished">Enter interval: sixth below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1012"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="996"/>
         <source>Se&amp;venth below</source>
         <translation type="unfinished">Se&amp;venth below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1013"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="997"/>
         <source>Enter interval: seventh below</source>
         <translation type="unfinished">Enter interval: seventh below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1018"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1002"/>
         <source>Octave &amp;below</source>
         <translation type="unfinished">Octave &amp;below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1019"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1003"/>
         <source>Enter interval: octave below</source>
         <translation type="unfinished">Enter interval: octave below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1024"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1008"/>
         <source>Ninth belo&amp;w</source>
         <translation type="unfinished">Ninth belo&amp;w</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1025"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1009"/>
         <source>Enter interval: ninth below</source>
         <translation type="unfinished">Enter interval: ninth below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1030"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1014"/>
         <source>Tenth below</source>
         <translation type="unfinished">Tenth below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1031"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1015"/>
         <source>Enter interval: tenth below</source>
         <translation type="unfinished">Enter interval: tenth below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1155"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1162"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2381"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1139"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1146"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2365"/>
         <source>Rest</source>
         <translation type="unfinished">Rest</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1156"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1163"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1140"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1147"/>
         <source>Enter rest</source>
         <translation type="unfinished">Enter rest</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1258"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1242"/>
         <source>Ottava 8va &amp;alta</source>
         <translation type="unfinished">Ottava 8va &amp;alta</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1259"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1243"/>
         <source>Add ottava 8va alta</source>
         <translation type="unfinished">Add ottava 8va alta</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1264"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1248"/>
         <source>Ottava 8va &amp;bassa</source>
         <translation type="unfinished">Ottava 8va &amp;bassa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1265"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1249"/>
         <source>Add ottava 8va bassa</source>
         <translation type="unfinished">Add ottava 8va bassa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1270"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1254"/>
         <source>&amp;Dynamic</source>
         <translation type="unfinished">&amp;Dynamic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1271"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1255"/>
         <source>Add dynamic</source>
         <translation type="unfinished">Add dynamic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1276"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1260"/>
         <source>&amp;Crescendo</source>
         <translation type="unfinished">&amp;Crescendo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1277"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1261"/>
         <source>Add hairpin: crescendo</source>
         <translation type="unfinished">Add hairpin: crescendo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1282"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1266"/>
         <source>&amp;Diminuendo</source>
         <translation type="unfinished">&amp;Diminuendo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1283"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1267"/>
         <source>Add hairpin: diminuendo</source>
         <translation type="unfinished">Add hairpin: diminuendo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1288"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1272"/>
         <source>&amp;Note-anchored line</source>
         <translation type="unfinished">&amp;Note-anchored line</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1289"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1273"/>
         <source>Add note-anchored line</source>
         <translation type="unfinished">Add note-anchored line</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1295"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1279"/>
         <source>Add tied note to chord</source>
         <translation type="unfinished">Add tied note to chord</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1300"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1284"/>
         <source>Image</source>
         <translation type="unfinished">Image</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1305"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1289"/>
         <source>&amp;Title</source>
         <translation type="unfinished">&amp;Title</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1306"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1290"/>
         <source>Add text: title</source>
         <translation type="unfinished">Add text: title</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1311"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1295"/>
         <source>&amp;Subtitle</source>
         <translation type="unfinished">&amp;Subtitle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1312"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1296"/>
         <source>Add text: subtitle</source>
         <translation type="unfinished">Add text: subtitle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1317"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1301"/>
         <source>&amp;Composer</source>
         <translation type="unfinished">&amp;Composer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1318"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1302"/>
         <source>Add text: composer</source>
         <translation type="unfinished">Add text: composer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1323"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1307"/>
         <source>&amp;Lyricist</source>
         <translation type="unfinished">&amp;Lyricist</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1324"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1308"/>
         <source>Add text: lyricist</source>
         <translation type="unfinished">Add text: lyricist</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1329"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1313"/>
         <source>&amp;Part name</source>
         <translation type="unfinished">&amp;Part name</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1330"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1314"/>
         <source>Add text: part name</source>
         <translation type="unfinished">Add text: part name</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1335"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1319"/>
         <source>Text</source>
         <translation type="unfinished">Text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1336"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1320"/>
         <source>Add frame text</source>
         <translation type="unfinished">Add frame text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1341"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1325"/>
         <source>Syst&amp;em text</source>
         <translation type="unfinished">Syst&amp;em text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1342"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1326"/>
         <source>Add text: system text</source>
         <translation type="unfinished">Add text: system text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1347"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1331"/>
         <source>St&amp;aff text</source>
         <translation type="unfinished">St&amp;aff text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1348"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1332"/>
         <source>Add text: staff text</source>
         <translation type="unfinished">Add text: staff text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1353"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1337"/>
         <source>E&amp;xpression text</source>
         <translation type="unfinished">E&amp;xpression text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1354"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1338"/>
         <source>Add text: expression text</source>
         <translation type="unfinished">Add text: expression text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1359"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1343"/>
         <source>&amp;Rehearsal mark</source>
         <translation type="unfinished">&amp;Rehearsal mark</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1360"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1344"/>
         <source>Add text: rehearsal mark</source>
         <translation type="unfinished">Add text: rehearsal mark</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1365"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1349"/>
         <source>&amp;Instrument change</source>
         <translation type="unfinished">&amp;Instrument change</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1366"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1350"/>
         <source>Add text: instrument change</source>
         <translation type="unfinished">Add text: instrument change</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1371"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1355"/>
         <source>&amp;Fingering</source>
         <translation type="unfinished">&amp;Fingering</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1372"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1356"/>
         <source>Add text: fingering</source>
         <translation type="unfinished">Add text: fingering</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1377"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1361"/>
         <source>Stic&amp;king</source>
         <translation type="unfinished">Stic&amp;king</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1378"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1362"/>
         <source>Add text: sticking</source>
         <translation type="unfinished">Add text: sticking</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1383"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1367"/>
         <source>C&amp;hord symbol</source>
         <translation type="unfinished">C&amp;hord symbol</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1384"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1368"/>
         <source>Add text: chord symbol</source>
         <translation type="unfinished">Add text: chord symbol</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1389"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1373"/>
         <source>R&amp;oman numeral analysis</source>
         <translation type="unfinished">R&amp;oman numeral analysis</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1390"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1374"/>
         <source>Add text: Roman numeral analysis</source>
         <translation type="unfinished">Add text: Roman numeral analysis</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1395"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1379"/>
         <source>&amp;Nashville number</source>
         <translation type="unfinished">&amp;Nashville number</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1396"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1380"/>
         <source>Add text: Nashville number</source>
         <translation type="unfinished">Add text: Nashville number</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1401"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1385"/>
         <source>L&amp;yrics</source>
         <translation type="unfinished">L&amp;yrics</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1402"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1386"/>
         <source>Add text: lyrics</source>
         <translation type="unfinished">Add text: lyrics</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1407"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1391"/>
         <source>Figured &amp;bass</source>
         <translation type="unfinished">Figured &amp;bass</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1408"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1392"/>
         <source>Add text: figured bass</source>
         <translation type="unfinished">Add text: figured bass</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1413"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1397"/>
         <source>Tempo &amp;marking</source>
         <translation type="unfinished">Tempo &amp;marking</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1414"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1398"/>
         <source>Add text: tempo marking</source>
         <translation type="unfinished">Add text: tempo marking</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1419"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1403"/>
         <source>&amp;Duplet</source>
         <translation type="unfinished">&amp;Duplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1420"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1404"/>
         <source>Enter tuplet: duplet</source>
         <translation type="unfinished">Enter tuplet: duplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1425"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1409"/>
         <source>&amp;Triplet</source>
         <translation type="unfinished">&amp;Triplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1426"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1410"/>
         <source>Enter tuplet: triplet</source>
         <translation type="unfinished">Enter tuplet: triplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1431"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1415"/>
         <source>&amp;Quadruplet</source>
         <translation type="unfinished">&amp;Quadruplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1432"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1416"/>
         <source>Enter tuplet: quadruplet</source>
         <translation type="unfinished">Enter tuplet: quadruplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1437"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1421"/>
         <source>Q&amp;uintuplet</source>
         <translation type="unfinished">Q&amp;uintuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1438"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1422"/>
         <source>Enter tuplet: quintuplet</source>
         <translation type="unfinished">Enter tuplet: quintuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1443"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1427"/>
         <source>Se&amp;xtuplet</source>
         <translation type="unfinished">Se&amp;xtuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1444"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1428"/>
         <source>Enter tuplet: sextuplet</source>
         <translation type="unfinished">Enter tuplet: sextuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1449"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1433"/>
         <source>Se&amp;ptuplet</source>
         <translation type="unfinished">Se&amp;ptuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1450"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1434"/>
         <source>Enter tuplet: septuplet</source>
         <translation type="unfinished">Enter tuplet: septuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1455"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1439"/>
         <source>&amp;Octuplet</source>
         <translation type="unfinished">&amp;Octuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1456"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1440"/>
         <source>Enter tuplet: octuplet</source>
         <translation type="unfinished">Enter tuplet: octuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1461"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1445"/>
         <source>&amp;Nonuplet</source>
         <translation type="unfinished">&amp;Nonuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1462"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1446"/>
         <source>Enter tuplet: nonuplet</source>
         <translation type="unfinished">Enter tuplet: nonuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1467"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1451"/>
         <source>Othe&amp;r…</source>
         <translation type="unfinished">Othe&amp;r…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1468"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1452"/>
         <source>Enter tuplet: other…</source>
         <translation type="unfinished">Enter tuplet: other…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1473"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1457"/>
         <source>&amp;Decrease layout stretch</source>
         <translation type="unfinished">&amp;Decrease layout stretch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1474"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1458"/>
         <source>Decrease layout stretch</source>
         <translation type="unfinished">Decrease layout stretch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1479"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1463"/>
         <source>&amp;Increase layout stretch</source>
         <translation type="unfinished">&amp;Increase layout stretch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1480"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1464"/>
         <source>Increase layout stretch</source>
         <translation type="unfinished">Increase layout stretch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1485"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1469"/>
         <source>&amp;Reset layout stretch</source>
         <translation type="unfinished">&amp;Reset layout stretch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1486"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1470"/>
         <source>Reset layout stretch</source>
         <translation type="unfinished">Reset layout stretch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1491"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1475"/>
         <source>Reset &amp;text style overrides</source>
         <translation type="unfinished">Reset &amp;text style overrides</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1492"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1476"/>
         <source>Reset all text style overrides to default</source>
         <translation type="unfinished">Reset all text style overrides to default</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1497"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1481"/>
         <source>Reset &amp;beams</source>
         <translation type="unfinished">Reset &amp;beams</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1498"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1482"/>
         <source>Reset beams to default grouping</source>
         <translation type="unfinished">Reset beams to default grouping</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1503"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1487"/>
         <source>Reset s&amp;hapes and positions</source>
         <translation type="unfinished">Reset s&amp;hapes and positions</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1504"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1488"/>
         <source>Reset shapes and positions</source>
         <translation type="unfinished">Reset shapes and positions</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1509"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1493"/>
         <source>Reset entire score to &amp;default layout</source>
         <translation type="unfinished">Reset entire score to &amp;default layout</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1510"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1494"/>
         <source>Reset entire score to default layout</source>
         <translation type="unfinished">Reset entire score to default layout</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1515"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1516"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1499"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1500"/>
         <source>Zoom in</source>
         <translation type="unfinished">Zoom in</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1522"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1523"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1506"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1507"/>
         <source>Zoom out</source>
         <translation type="unfinished">Zoom out</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1529"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1530"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1513"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1514"/>
         <source>Zoom to 100%</source>
         <translation type="unfinished">Zoom to 100%</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1535"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1536"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1519"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1520"/>
         <source>Zoom to page width</source>
         <translation type="unfinished">Zoom to page width</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1541"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1542"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1525"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1526"/>
         <source>Zoom to whole page</source>
         <translation type="unfinished">Zoom to whole page</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1547"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1548"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1531"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1532"/>
         <source>Zoom to two pages</source>
         <translation type="unfinished">Zoom to two pages</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1553"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1537"/>
         <source>Accessibility: Get location</source>
         <translation type="unfinished">Accessibility: Get location</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1554"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1538"/>
         <source>Accessibility: get location</source>
         <translation type="unfinished">Accessibility: get location</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1559"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1560"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1543"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1544"/>
         <source>Edit element</source>
         <translation type="unfinished">Edit element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1565"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1566"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1549"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1550"/>
         <source>Select to beginning of measure</source>
         <translation type="unfinished">Select to beginning of measure</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1571"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1572"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1555"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1556"/>
         <source>Select to end of measure</source>
         <translation type="unfinished">Select to end of measure</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1577"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1578"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1561"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1562"/>
         <source>Select to beginning of line</source>
         <translation type="unfinished">Select to beginning of line</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1583"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1584"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1567"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1568"/>
         <source>Select to end of line</source>
         <translation type="unfinished">Select to end of line</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1589"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1590"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1573"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1574"/>
         <source>Select to beginning of score</source>
         <translation type="unfinished">Select to beginning of score</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1595"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1596"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1579"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1580"/>
         <source>Select to end of score</source>
         <translation type="unfinished">Select to end of score</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1601"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1585"/>
         <source>Add staff above to selection</source>
         <translation type="unfinished">Add staff above to selection</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1602"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1586"/>
         <source>Add to selection: staff above</source>
         <translation type="unfinished">Add to selection: staff above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1607"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1591"/>
         <source>Add staff below to selection</source>
         <translation type="unfinished">Add staff below to selection</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1608"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1592"/>
         <source>Add to selection: staff below</source>
         <translation type="unfinished">Add to selection: staff below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1613"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1597"/>
         <source>Screen: Previous</source>
         <translation type="unfinished">Screen: Previous</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1614"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1598"/>
         <source>Jump to previous screen</source>
         <translation type="unfinished">Jump to previous screen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1619"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1603"/>
         <source>Screen: Next</source>
         <translation type="unfinished">Screen: Next</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1620"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1604"/>
         <source>Jump to next screen</source>
         <translation type="unfinished">Jump to next screen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1625"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1609"/>
         <source>Page: Previous</source>
         <translation type="unfinished">Page: Previous</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1626"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1610"/>
         <source>Jump to previous page</source>
         <translation type="unfinished">Jump to previous page</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1631"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1615"/>
         <source>Page: Next</source>
         <translation type="unfinished">Page: Next</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1632"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1616"/>
         <source>Jump to next page</source>
         <translation type="unfinished">Jump to next page</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1637"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1621"/>
         <source>Page: Top of first</source>
         <translation type="unfinished">Page: Top of first</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1638"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1622"/>
         <source>Jump to top of first page</source>
         <translation type="unfinished">Jump to top of first page</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1643"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1627"/>
         <source>Page: Bottom of last</source>
         <translation type="unfinished">Page: Bottom of last</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1644"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1628"/>
         <source>Jump to bottom of last page</source>
         <translation type="unfinished">Jump to bottom of last page</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1649"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1633"/>
         <source>Context sensitive help</source>
         <translation type="unfinished">Context sensitive help</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1654"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1655"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1638"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1639"/>
         <source>Repeat selection</source>
         <translation type="unfinished">Repeat selection</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1660"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1661"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1644"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1645"/>
         <source>Lock/unlock all systems</source>
         <translation type="unfinished">Lock/unlock all systems</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1666"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1667"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1650"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1651"/>
         <source>Lock/unlock selected system(s)</source>
         <translation type="unfinished">Lock/unlock selected system(s)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1673"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1657"/>
         <source>Change enharmonic spelling (concert and transposed &amp;pitch)</source>
         <translation type="unfinished">Change enharmonic spelling (concert and transposed &amp;pitch)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1674"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1658"/>
         <source>Change enharmonic spelling (concert and transposed pitch)</source>
         <translation type="unfinished">Change enharmonic spelling (concert and transposed pitch)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1680"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1664"/>
         <source>Change enharmonic spelling (&amp;current pitch mode only)</source>
         <translation type="unfinished">Change enharmonic spelling (&amp;current pitch mode only)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1681"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1665"/>
         <source>Change enharmonic spelling (current pitch mode only)</source>
         <translation type="unfinished">Change enharmonic spelling (current pitch mode only)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1687"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1688"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1671"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1672"/>
         <source>Flip direction</source>
         <translation type="unfinished">Flip direction</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1694"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1695"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1678"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1679"/>
         <source>Flip horizontally</source>
         <translation type="unfinished">Flip horizontally</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1699"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1683"/>
         <source>Concert pitch</source>
         <translation type="unfinished">Concert pitch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1700"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1684"/>
         <source>Toggle concert pitch</source>
         <translation type="unfinished">Toggle concert pitch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1707"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1691"/>
         <source>Next word</source>
         <translation type="unfinished">Next word</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1708"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1692"/>
         <source>Go to next word</source>
         <translation type="unfinished">Go to next word</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1713"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1697"/>
         <source>Next text element</source>
         <translation type="unfinished">Next text element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1714"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1698"/>
         <source>Go to next text element</source>
         <translation type="unfinished">Go to next text element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1719"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1703"/>
         <source>Previous text element</source>
         <translation type="unfinished">Previous text element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1720"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1704"/>
         <source>Go to previous text element</source>
         <translation type="unfinished">Go to previous text element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1725"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1726"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1709"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1710"/>
         <source>Advance cursor: next beat (chord symbols)</source>
         <translation type="unfinished">Advance cursor: next beat (chord symbols)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1731"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1732"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1715"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1716"/>
         <source>Advance cursor: previous beat (chord symbols)</source>
         <translation type="unfinished">Advance cursor: previous beat (chord symbols)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1737"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1738"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1721"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1722"/>
         <source>Advance cursor: longa (chord symbols/figured bass)</source>
         <translation type="unfinished">Advance cursor: longa (chord symbols/figured bass)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1743"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1744"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1727"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1728"/>
         <source>Advance cursor: breve (chord symbols/figured bass)</source>
         <translation type="unfinished">Advance cursor: breve (chord symbols/figured bass)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1749"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1750"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1733"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1734"/>
         <source>Advance cursor: whole note (chord symbols/figured bass)</source>
         <translation type="unfinished">Advance cursor: whole note (chord symbols/figured bass)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1755"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1756"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1739"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1740"/>
         <source>Advance cursor: half note (chord symbols/figured bass)</source>
         <translation type="unfinished">Advance cursor: half note (chord symbols/figured bass)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1761"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1762"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1745"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1746"/>
         <source>Advance cursor: quarter note (chord symbols/figured bass)</source>
         <translation type="unfinished">Advance cursor: quarter note (chord symbols/figured bass)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1767"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1768"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1751"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1752"/>
         <source>Advance cursor: eighth note (chord symbols/figured bass)</source>
         <translation type="unfinished">Advance cursor: eighth note (chord symbols/figured bass)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1773"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1774"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1757"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1758"/>
         <source>Advance cursor: 16th note (chord symbols/figured bass)</source>
         <translation type="unfinished">Advance cursor: 16th note (chord symbols/figured bass)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1779"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1780"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1763"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1764"/>
         <source>Advance cursor: 32nd note (chord symbols/figured bass)</source>
         <translation type="unfinished">Advance cursor: 32nd note (chord symbols/figured bass)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1785"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1786"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1769"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1770"/>
         <source>Advance cursor: 64th note (chord symbols/figured bass)</source>
         <translation type="unfinished">Advance cursor: 64th note (chord symbols/figured bass)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1791"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1775"/>
         <source>Next lyric verse</source>
         <translation type="unfinished">Next lyric verse</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1792"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1776"/>
         <source>Move text/go to next lyric verse</source>
         <translation type="unfinished">Move text/go to next lyric verse</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1797"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1781"/>
         <source>Previous lyric verse</source>
         <translation type="unfinished">Previous lyric verse</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1798"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1782"/>
         <source>Move text/go to previous lyric verse</source>
         <translation type="unfinished">Move text/go to previous lyric verse</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1803"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1787"/>
         <source>Next syllable</source>
         <translation type="unfinished">Next syllable</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1788"/>
         <source>Lyrics: enter hyphen</source>
         <translation type="unfinished">Lyrics: enter hyphen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1809"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1793"/>
         <source>Add extension line</source>
         <translation type="unfinished">Add extension line</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1810"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1794"/>
         <source>Lyrics: enter extension line</source>
         <translation type="unfinished">Lyrics: enter extension line</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1815"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1816"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1799"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1800"/>
         <source>Add lyrics verse</source>
         <translation type="unfinished">Add lyrics verse</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1821"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1805"/>
         <source>Bold face</source>
         <translation type="unfinished">Bold face</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1822"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1806"/>
         <source>Format text: bold</source>
         <translation type="unfinished">Format text: bold</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1828"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1812"/>
         <source>Italic</source>
         <translation type="unfinished">Italic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1829"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1813"/>
         <source>Format text: italic</source>
         <translation type="unfinished">Format text: italic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1835"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1819"/>
         <source>Underline</source>
         <translation type="unfinished">Underline</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1836"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1820"/>
         <source>Format text: underline</source>
         <translation type="unfinished">Format text: underline</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1842"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1826"/>
         <source>Strikethrough</source>
         <translation type="unfinished">Strikethrough</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1843"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1827"/>
         <source>Format text: strikethrough</source>
         <translation type="unfinished">Format text: strikethrough</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1849"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1833"/>
         <source>Subscript</source>
         <translation type="unfinished">Subscript</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1850"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1834"/>
         <source>Format text: subscript</source>
         <translation type="unfinished">Format text: subscript</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1856"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1840"/>
         <source>Superscript</source>
         <translation type="unfinished">Superscript</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1857"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1841"/>
         <source>Format text: superscript</source>
         <translation type="unfinished">Format text: superscript</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1863"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1847"/>
         <source>Diatonic pitch up</source>
         <translation type="unfinished">Diatonic pitch up</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1864"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1848"/>
         <source>Move pitch up diatonically</source>
         <translation type="unfinished">Move pitch up diatonically</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1869"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1853"/>
         <source>Diatonic pitch down</source>
         <translation type="unfinished">Diatonic pitch down</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1854"/>
         <source>Move pitch down diatonically</source>
         <translation type="unfinished">Move pitch down diatonically</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1875"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1876"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1859"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1860"/>
         <source>Go to top staff</source>
         <translation type="unfinished">Go to top staff</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1881"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1882"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1865"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1866"/>
         <source>Go to first empty trailing measure</source>
         <translation type="unfinished">Go to first empty trailing measure</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1887"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1888"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1871"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1872"/>
         <source>Mirror notehead</source>
         <translation type="unfinished">Mirror notehead</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1893"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1877"/>
         <source>Toggle turn</source>
         <translation type="unfinished">Toggle turn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1894"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1878"/>
         <source>Add ornament: turn</source>
         <translation type="unfinished">Add ornament: turn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1899"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1883"/>
         <source>Toggle inverted turn</source>
         <translation type="unfinished">Toggle inverted turn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1900"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1884"/>
         <source>Add ornament: inverted turn</source>
         <translation type="unfinished">Add ornament: inverted turn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1905"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1889"/>
         <source>Toggle turn with slash</source>
         <translation type="unfinished">Toggle turn with slash</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1906"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1890"/>
         <source>Add ornament: turn with slash</source>
         <translation type="unfinished">Add ornament: turn with slash</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1911"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1895"/>
         <source>Toggle vertical turn</source>
         <translation type="unfinished">Toggle vertical turn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1912"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1896"/>
         <source>Add ornament: vertical turn</source>
         <translation type="unfinished">Add ornament: vertical turn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1917"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1901"/>
         <source>Toggle vertical inverted turn</source>
         <translation type="unfinished">Toggle vertical inverted turn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1918"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1902"/>
         <source>Add ornament: vertical inverted turn</source>
         <translation type="unfinished">Add ornament: vertical inverted turn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1923"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1907"/>
         <source>Toggle trill</source>
         <translation type="unfinished">Toggle trill</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1924"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1908"/>
         <source>Add ornament: trill</source>
         <translation type="unfinished">Add ornament: trill</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1929"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1913"/>
         <source>Toggle short trill</source>
         <translation type="unfinished">Toggle short trill</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1930"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1914"/>
         <source>Add ornament: short trill</source>
         <translation type="unfinished">Add ornament: short trill</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1935"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1919"/>
         <source>Toggle mordent</source>
         <translation type="unfinished">Toggle mordent</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1936"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1920"/>
         <source>Add ornament: mordent</source>
         <translation type="unfinished">Add ornament: mordent</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1941"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1925"/>
         <source>Toggle Haydn ornament</source>
         <translation type="unfinished">Toggle Haydn ornament</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1942"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1926"/>
         <source>Add ornament: Haydn ornament</source>
         <translation type="unfinished">Add ornament: Haydn ornament</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1947"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1931"/>
         <source>Toggle tremblement</source>
         <translation type="unfinished">Toggle tremblement</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1948"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1932"/>
         <source>Add ornament: tremblement</source>
         <translation type="unfinished">Add ornament: tremblement</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1953"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1937"/>
         <source>Toggle prall mordent</source>
         <translation type="unfinished">Toggle prall mordent</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1954"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1938"/>
         <source>Add ornament: prall mordent</source>
         <translation type="unfinished">Add ornament: prall mordent</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1959"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1943"/>
         <source>Toggle shake</source>
         <translation type="unfinished">Toggle shake</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1960"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1944"/>
         <source>Add ornament: shake</source>
         <translation type="unfinished">Add ornament: shake</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1965"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1949"/>
         <source>Toggle shake (Muffat)</source>
         <translation type="unfinished">Toggle shake (Muffat)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1966"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1950"/>
         <source>Add ornament: shake (Muffat)</source>
         <translation type="unfinished">Add ornament: shake (Muffat)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1971"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1955"/>
         <source>Toggle tremblement appuyé (Couperin)</source>
         <translation type="unfinished">Toggle tremblement appuyé (Couperin)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1972"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1956"/>
         <source>Add ornament: tremblement appuyé (Couperin)</source>
         <translation type="unfinished">Add ornament: tremblement appuyé (Couperin)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1977"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1961"/>
         <source>Toggle up bow</source>
         <translation type="unfinished">Toggle up bow</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1978"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1962"/>
         <source>Add bowing: up bow</source>
         <translation type="unfinished">Add bowing: up bow</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1983"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1967"/>
         <source>Toggle down bow</source>
         <translation type="unfinished">Toggle down bow</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1984"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1968"/>
         <source>Add bowing: down bow</source>
         <translation type="unfinished">Add bowing: down bow</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1989"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1973"/>
         <source>Reset style</source>
         <translation type="unfinished">Reset style</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1990"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1974"/>
         <source>Reset all style values to default</source>
         <translation type="unfinished">Reset all style values to default</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1995"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1979"/>
         <source>Add treble clef</source>
         <translation type="unfinished">Add treble clef</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1996"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1980"/>
         <source>Add clef: treble</source>
         <translation type="unfinished">Add clef: treble</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2001"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1985"/>
         <source>Add bass clef</source>
         <translation type="unfinished">Add bass clef</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2002"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1986"/>
         <source>Add clef: bass</source>
         <translation type="unfinished">Add clef: bass</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2007"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1991"/>
         <source>Add double-sharp</source>
         <translation type="unfinished">Add double-sharp</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2008"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1992"/>
         <source>Add accidental: double-sharp</source>
         <translation type="unfinished">Add accidental: double-sharp</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2013"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1997"/>
         <source>Add sharp</source>
         <translation type="unfinished">Add sharp</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2014"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1998"/>
         <source>Add accidental: sharp</source>
         <translation type="unfinished">Add accidental: sharp</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2019"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2003"/>
         <source>Add natural</source>
         <translation type="unfinished">Add natural</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2020"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2004"/>
         <source>Add accidental: natural</source>
         <translation type="unfinished">Add accidental: natural</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2025"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2009"/>
         <source>Add flat</source>
         <translation type="unfinished">Add flat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2026"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2010"/>
         <source>Add accidental: flat</source>
         <translation type="unfinished">Add accidental: flat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2031"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2015"/>
         <source>Add double-flat</source>
         <translation type="unfinished">Add double-flat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2032"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2016"/>
         <source>Add accidental: double-flat</source>
         <translation type="unfinished">Add accidental: double-flat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2037"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2021"/>
         <source>Transpose up</source>
         <translation type="unfinished">Transpose up</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2038"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2022"/>
         <source>Transpose up a semitone</source>
         <translation type="unfinished">Transpose up a semitone</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2043"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2027"/>
         <source>Transpose down</source>
         <translation type="unfinished">Transpose down</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2044"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2028"/>
         <source>Transpose down a semitone</source>
         <translation type="unfinished">Transpose down a semitone</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2049"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2033"/>
         <source>Diatonic pitch up (keep degree alterations)</source>
         <translation type="unfinished">Diatonic pitch up (keep degree alterations)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2050"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2034"/>
         <source>Move pitch up diatonically (keep degree alterations)</source>
         <translation type="unfinished">Move pitch up diatonically (keep degree alterations)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2055"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2039"/>
         <source>Diatonic pitch down (keep degree alterations)</source>
         <translation type="unfinished">Diatonic pitch down (keep degree alterations)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2056"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2040"/>
         <source>Move pitch down diatonically (keep degree alterations)</source>
         <translation type="unfinished">Move pitch down diatonically (keep degree alterations)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2061"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2045"/>
         <source>Full measure rest</source>
         <translation type="unfinished">Full measure rest</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2062"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2046"/>
         <source>Insert full measure rest</source>
         <translation type="unfinished">Insert full measure rest</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2067"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2068"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2051"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2052"/>
         <source>Toggle multimeasure rests</source>
         <translation type="unfinished">Toggle multimeasure rests</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2073"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2057"/>
         <source>Toggle empty staves</source>
         <translation type="unfinished">Toggle empty staves</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2074"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2058"/>
         <source>Show/hide empty staves</source>
         <translation type="unfinished">Show/hide empty staves</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2079"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2063"/>
         <source>Set visible</source>
         <translation type="unfinished">Set visible</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2080"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2064"/>
         <source>Make selected element(s) visible</source>
         <translation type="unfinished">Make selected element(s) visible</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2085"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2069"/>
         <source>Set invisible</source>
         <translation type="unfinished">Set invisible</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2086"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2070"/>
         <source>Make selected element(s) invisible</source>
         <translation type="unfinished">Make selected element(s) invisible</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2091"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2092"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2075"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2076"/>
         <source>Toggle automatic placement for selected elements</source>
         <translation type="unfinished">Toggle automatic placement for selected elements</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2097"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2098"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2081"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2082"/>
         <source>Toggle automatic placement for entire score</source>
         <translation type="unfinished">Toggle automatic placement for entire score</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2103"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2087"/>
         <source>String above (TAB)</source>
         <translation type="unfinished">String above (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2104"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2088"/>
         <source>Go to string above (TAB)</source>
         <translation type="unfinished">Go to string above (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2109"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2093"/>
         <source>String below (TAB)</source>
         <translation type="unfinished">String below (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2110"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2094"/>
         <source>Go to string below (TAB)</source>
         <translation type="unfinished">Go to string below (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2115"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2099"/>
         <source>Note input</source>
         <translation type="unfinished">Note input</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2116"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2100"/>
         <source>Toggle note input mode</source>
         <translation type="unfinished">Toggle note input mode</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2123"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2107"/>
         <source>Insert/overwrite</source>
         <translation type="unfinished">Insert/overwrite</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2124"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2108"/>
         <source>Toggle note input mode: insert/overwrite</source>
         <translation type="unfinished">Toggle note input mode: insert/overwrite</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2129"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2113"/>
         <source>Input by note name</source>
         <translation type="unfinished">Input by note name</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2130"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2114"/>
         <source>Toggle note input mode: input by note name</source>
         <translation type="unfinished">Toggle note input mode: input by note name</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2136"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2120"/>
         <source>Input by duration</source>
         <translation type="unfinished">Input by duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2137"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2121"/>
         <source>Toggle note input mode: input by duration</source>
         <translation type="unfinished">Toggle note input mode: input by duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2143"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2127"/>
         <source>Rhythm only (not pitch)</source>
         <translation type="unfinished">Rhythm only (not pitch)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2144"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2128"/>
         <source>Toggle note input mode: rhythm only (not pitch)</source>
         <translation type="unfinished">Toggle note input mode: rhythm only (not pitch)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2150"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2134"/>
         <source>Re-pitch existing notes</source>
         <translation type="unfinished">Re-pitch existing notes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2151"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2135"/>
         <source>Toggle note input mode: re-pitch existing notes</source>
         <translation type="unfinished">Toggle note input mode: re-pitch existing notes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2157"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2141"/>
         <source>Real-time (metronome)</source>
         <translation type="unfinished">Real-time (metronome)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2158"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2142"/>
         <source>Toggle note input mode: real-time (metronome)</source>
         <translation type="unfinished">Toggle note input mode: real-time (metronome)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2164"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2148"/>
         <source>Real-time (foot pedal)</source>
         <translation type="unfinished">Real-time (foot pedal)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2165"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2149"/>
         <source>Toggle note input mode: real-time (foot pedal)</source>
         <translation type="unfinished">Toggle note input mode: real-time (foot pedal)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2171"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2155"/>
         <source>Insert</source>
         <translation type="unfinished">Insert</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2172"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2156"/>
         <source>Toggle note input mode: insert (increases measure duration)</source>
         <translation type="unfinished">Toggle note input mode: insert (increases measure duration)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2178"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2179"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2162"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2163"/>
         <source>Real-time advance</source>
         <translation type="unfinished">Real-time advance</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2185"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2169"/>
         <source>Longa</source>
         <translation type="unfinished">Longa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2186"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2170"/>
         <source>Set duration: longa</source>
         <translation type="unfinished">Set duration: longa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2192"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2176"/>
         <source>Double whole note</source>
         <translation type="unfinished">Double whole note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2193"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2177"/>
         <source>Set duration: double whole note</source>
         <translation type="unfinished">Set duration: double whole note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2199"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2276"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2183"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2260"/>
         <source>Whole note</source>
         <translation type="unfinished">Whole note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2200"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2277"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2184"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2261"/>
         <source>Set duration: whole note</source>
         <translation type="unfinished">Set duration: whole note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2206"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2283"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2190"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2267"/>
         <source>Half note</source>
         <translation type="unfinished">Half note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2207"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2284"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2191"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2268"/>
         <source>Set duration: half note</source>
         <translation type="unfinished">Set duration: half note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2213"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2290"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2197"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2274"/>
         <source>Quarter note</source>
         <translation type="unfinished">Quarter note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2214"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2291"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2198"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2275"/>
         <source>Set duration: quarter note</source>
         <translation type="unfinished">Set duration: quarter note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2220"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2297"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2204"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2281"/>
         <source>Eighth note</source>
         <translation type="unfinished">Eighth note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2221"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2298"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2205"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2282"/>
         <source>Set duration: eighth note</source>
         <translation type="unfinished">Set duration: eighth note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2227"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2304"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2211"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2288"/>
         <source>16th note</source>
         <translation type="unfinished">16th note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2228"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2305"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2212"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2289"/>
         <source>Set duration: 16th note</source>
         <translation type="unfinished">Set duration: 16th note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2234"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2311"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2218"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2295"/>
         <source>32nd note</source>
         <translation type="unfinished">32nd note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2235"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2312"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2219"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2296"/>
         <source>Set duration: 32nd note</source>
         <translation type="unfinished">Set duration: 32nd note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2241"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2318"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2225"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2302"/>
         <source>64th note</source>
         <translation type="unfinished">64th note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2242"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2319"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2226"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2303"/>
         <source>Set duration: 64th note</source>
         <translation type="unfinished">Set duration: 64th note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2248"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2325"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2232"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2309"/>
         <source>128th note</source>
         <translation type="unfinished">128th note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2249"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2326"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2233"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2310"/>
         <source>Set duration: 128th note</source>
         <translation type="unfinished">Set duration: 128th note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2255"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2332"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2239"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2316"/>
         <source>256th note</source>
         <translation type="unfinished">256th note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2256"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2333"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2240"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2317"/>
         <source>Set duration: 256th note</source>
         <translation type="unfinished">Set duration: 256th note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2262"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2339"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2246"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2323"/>
         <source>512th note</source>
         <translation type="unfinished">512th note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2263"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2340"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2247"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2324"/>
         <source>Set duration: 512th note</source>
         <translation type="unfinished">Set duration: 512th note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2269"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2346"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2253"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2330"/>
         <source>1024th note</source>
         <translation type="unfinished">1024th note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2270"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2347"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2254"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2331"/>
         <source>Set duration: 1024th note</source>
         <translation type="unfinished">Set duration: 1024th note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2353"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2337"/>
         <source>Augmentation dot</source>
         <translation type="unfinished">Augmentation dot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2354"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2338"/>
         <source>Toggle duration dot</source>
         <translation type="unfinished">Toggle duration dot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2360"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2344"/>
         <source>Double augmentation dot</source>
         <translation type="unfinished">Double augmentation dot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2361"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2345"/>
         <source>Toggle duration dot: double</source>
         <translation type="unfinished">Toggle duration dot: double</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2367"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2351"/>
         <source>Triple augmentation dot</source>
         <translation type="unfinished">Triple augmentation dot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2368"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2352"/>
         <source>Toggle duration dot: triple</source>
         <translation type="unfinished">Toggle duration dot: triple</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2374"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2358"/>
         <source>Quadruple augmentation dot</source>
         <translation type="unfinished">Quadruple augmentation dot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2375"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2359"/>
         <source>Toggle duration dot: quadruple</source>
         <translation type="unfinished">Toggle duration dot: quadruple</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2382"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2366"/>
         <source>Toggle rest</source>
         <translation type="unfinished">Toggle rest</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2388"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2372"/>
         <source>Accessibility: Next segment element</source>
         <translation type="unfinished">Accessibility: Next segment element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2389"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2373"/>
         <source>Select next in-staff element</source>
         <translation type="unfinished">Select next in-staff element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2394"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2378"/>
         <source>Accessibility: Previous segment element</source>
         <translation type="unfinished">Accessibility: Previous segment element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2395"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2379"/>
         <source>Select previous in-staff element</source>
         <translation type="unfinished">Select previous in-staff element</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2400"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2384"/>
         <source>Toggle flat</source>
         <translation type="unfinished">Toggle flat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2401"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2385"/>
         <source>Toggle accidental: flat</source>
         <translation type="unfinished">Toggle accidental: flat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2407"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2391"/>
         <source>Toggle double-flat</source>
         <translation type="unfinished">Toggle double-flat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2408"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2392"/>
         <source>Toggle accidental: double-flat</source>
         <translation type="unfinished">Toggle accidental: double-flat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2414"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2398"/>
         <source>Toggle natural</source>
         <translation type="unfinished">Toggle natural</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2415"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2399"/>
         <source>Toggle accidental: natural</source>
         <translation type="unfinished">Toggle accidental: natural</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2421"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2405"/>
         <source>Toggle sharp</source>
         <translation type="unfinished">Toggle sharp</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2422"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2406"/>
         <source>Toggle accidental: sharp</source>
         <translation type="unfinished">Toggle accidental: sharp</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2428"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2412"/>
         <source>Toggle double-sharp</source>
         <translation type="unfinished">Toggle double-sharp</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2429"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2413"/>
         <source>Toggle accidental: double-sharp</source>
         <translation type="unfinished">Toggle accidental: double-sharp</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2435"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2419"/>
         <source>Tie</source>
         <translation type="unfinished">Tie</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2436"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2420"/>
         <source>Add tied note</source>
         <translation type="unfinished">Add tied note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2442"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2426"/>
         <source>Laissez vibrer</source>
         <translation type="unfinished">Laissez vibrer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2443"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2427"/>
         <source>Add laissez vibrer</source>
         <translation type="unfinished">Add laissez vibrer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2449"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2433"/>
         <source>Slur</source>
         <translation type="unfinished">Slur</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2450"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2434"/>
         <source>Add slur</source>
         <translation type="unfinished">Add slur</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2456"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2440"/>
         <source>Marcato</source>
         <translation type="unfinished">Marcato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2457"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2441"/>
         <source>Add articulation: marcato</source>
         <translation type="unfinished">Add articulation: marcato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2463"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2447"/>
         <source>Accent</source>
         <translation type="unfinished">Accent</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2464"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2448"/>
         <source>Add articulation: accent</source>
         <translation type="unfinished">Add articulation: accent</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2470"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2454"/>
         <source>Tenuto</source>
         <translation type="unfinished">Tenuto</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2471"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2455"/>
         <source>Add articulation: tenuto</source>
         <translation type="unfinished">Add articulation: tenuto</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2477"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2461"/>
         <source>Staccato</source>
         <translation type="unfinished">Staccato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2478"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2462"/>
         <source>Add articulation: staccato</source>
         <translation type="unfinished">Add articulation: staccato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2484"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2468"/>
         <source>Cross-staff beaming</source>
         <translation type="unfinished">Cross-staff beaming</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2490"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2474"/>
         <source>Tuplet</source>
         <translation type="unfinished">Tuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2496"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2480"/>
         <source>Voice 1</source>
         <translation type="unfinished">Voice 1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2497"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2481"/>
         <source>Use voice 1</source>
         <translation type="unfinished">Use voice 1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2503"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2487"/>
         <source>Voice 2</source>
         <translation type="unfinished">Voice 2</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2504"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2488"/>
         <source>Use voice 2</source>
         <translation type="unfinished">Use voice 2</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2510"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2494"/>
         <source>Voice 3</source>
         <translation type="unfinished">Voice 3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2511"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2495"/>
         <source>Use voice 3</source>
         <translation type="unfinished">Use voice 3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2517"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2501"/>
         <source>Voice 4</source>
         <translation type="unfinished">Voice 4</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2518"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2502"/>
         <source>Use voice 4</source>
         <translation type="unfinished">Use voice 4</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2524"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2508"/>
         <source>All voices on instrument</source>
         <translation type="unfinished">All voices on instrument</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2525"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2509"/>
         <source>Use all voices on instrument</source>
         <translation type="unfinished">Use all voices on instrument</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2530"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2514"/>
         <source>All voices on staff</source>
         <translation type="unfinished">All voices on staff</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2531"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2515"/>
         <source>Use all voices on staff</source>
         <translation type="unfinished">Use all voices on staff</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2540"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2524"/>
         <source>Staff type change</source>
         <translation type="unfinished">Staff type change</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2541"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2525"/>
         <source>Insert staff type change</source>
         <translation type="unfinished">Insert staff type change</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2551"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2552"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2535"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2536"/>
         <source>Standard bend</source>
         <translation type="unfinished">Standard bend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2558"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2559"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2542"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2543"/>
         <source>Pre-bend</source>
         <translation type="unfinished">Pre-bend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2565"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2566"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2549"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2550"/>
         <source>Grace note bend</source>
         <translation type="unfinished">Grace note bend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2572"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2573"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2556"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2557"/>
         <source>Slight bend</source>
         <translation type="unfinished">Slight bend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2579"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2563"/>
         <source>Hammer-on/pull-off</source>
         <translation type="unfinished">Hammer-on/pull-off</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2580"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2564"/>
         <source>Add hammer-on/pull-off</source>
         <translation type="unfinished">Add hammer-on/pull-off</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2588"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2572"/>
         <source>Show &amp;invisible</source>
         <translation type="unfinished">Show &amp;invisible</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2589"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2573"/>
         <source>Show/hide invisible elements</source>
         <translation type="unfinished">Show/hide invisible elements</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2595"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2579"/>
         <source>Show f&amp;ormatting</source>
         <translation type="unfinished">Show f&amp;ormatting</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2596"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2580"/>
         <source>Show/hide formatting</source>
         <translation type="unfinished">Show/hide formatting</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2602"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2586"/>
         <source>Show &amp;frames</source>
         <translation type="unfinished">Show &amp;frames</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2603"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2587"/>
         <source>Show/hide frames</source>
         <translation type="unfinished">Show/hide frames</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2609"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2593"/>
         <source>Show page &amp;margins</source>
         <translation type="unfinished">Show page &amp;margins</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2610"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2594"/>
         <source>Show/hide page margins</source>
         <translation type="unfinished">Show/hide page margins</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2616"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2600"/>
         <source>Show sound flags</source>
         <translation type="unfinished">Show sound flags</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2617"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2601"/>
         <source>Show/hide sound flags</source>
         <translation type="unfinished">Show/hide sound flags</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2623"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2607"/>
         <source>Mark i&amp;rregular measures</source>
         <translation type="unfinished">Mark i&amp;rregular measures</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2624"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2608"/>
         <source>Mark irregular measures</source>
         <translation type="unfinished">Mark irregular measures</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2633"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2636"/>
         <source>Show element bounding rectangles</source>
         <translation type="unfinished">Show element bounding rectangles</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2634"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2637"/>
         <source>Show/hide element bounding rectangles</source>
         <translation type="unfinished">Show/hide element bounding rectangles</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2640"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2643"/>
         <source>Color element shapes</source>
         <translation type="unfinished">Color element shapes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2646"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2649"/>
         <source>Show segment shapes</source>
         <translation type="unfinished">Show segment shapes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2647"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2650"/>
         <source>Show/hide segment shapes</source>
         <translation type="unfinished">Show/hide segment shapes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2653"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2656"/>
         <source>Color segment shapes</source>
         <translation type="unfinished">Color segment shapes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2659"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2662"/>
         <source>Show skylines</source>
         <translation type="unfinished">Show skylines</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2660"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2663"/>
         <source>Show/hide skylines</source>
         <translation type="unfinished">Show/hide skylines</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2666"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2669"/>
         <source>Show system bounding rectangles</source>
         <translation type="unfinished">Show system bounding rectangles</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2667"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2670"/>
         <source>Show/hide system bounding rectangles</source>
         <translation type="unfinished">Show/hide system bounding rectangles</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2673"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2676"/>
         <source>Show element masks</source>
         <translation type="unfinished">Show element masks</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2674"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2677"/>
         <source>Show/hide element masks</source>
         <translation type="unfinished">Show/hide element masks</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2680"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2683"/>
         <source>Show line-attach points</source>
         <translation type="unfinished">Show line-attach points</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2681"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2684"/>
         <source>Show/hide line-attach points</source>
         <translation type="unfinished">Show/hide line-attach points</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2687"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2688"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2690"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2691"/>
         <source>Mark empty staff visibility overrides</source>
         <translation type="unfinished">Mark empty staff visibility overrides</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2694"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2695"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2697"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2698"/>
         <source>Mark corrupted measures</source>
         <translation type="unfinished">Mark corrupted measures</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2701"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2704"/>
         <source>Check for score corruptions</source>
         <translation type="unfinished">Check for score corruptions</translation>
     </message>
@@ -11160,27 +11160,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">MIDI devices</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="72"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="49"/>
         <source>Enable MIDI input</source>
         <translation type="unfinished">Enable MIDI input</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="81"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="65"/>
         <source>When pressing a key, begin note input at the selected measure, note, or rest</source>
         <translation type="unfinished">When pressing a key, begin note input at the selected measure, note, or rest</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="96"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="80"/>
         <source>Real-time input modes</source>
         <translation type="unfinished">Real-time input modes</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="109"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="93"/>
         <source>Advance to next note on key release</source>
         <translation type="unfinished">Advance to next note on key release</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="126"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="110"/>
         <source>Delay between notes</source>
         <translation type="unfinished">Delay between notes</translation>
     </message>
@@ -11246,42 +11246,42 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Note preview</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="82"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="59"/>
         <source>Hear playback when adding, editing, and selecting notes</source>
         <translation type="unfinished">Hear playback when adding, editing, and selecting notes</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="89"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="73"/>
         <source>Playback duration</source>
         <translation type="unfinished">Playback duration</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="112"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="96"/>
         <source>Play chord when editing</source>
         <translation type="unfinished">Play chord when editing</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="129"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="113"/>
         <source>Play chord symbols and Nashville numbers</source>
         <translation type="unfinished">Play chord symbols and Nashville numbers</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="146"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="130"/>
         <source>Play when setting pitch (input by duration mode only)</source>
         <translation type="unfinished">Play when setting pitch (input by duration mode only)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="163"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="147"/>
         <source>Play preview notes with score dynamics</source>
         <translation type="unfinished">Play preview notes with score dynamics</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="180"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="164"/>
         <source>Play MIDI input</source>
         <translation type="unfinished">Play MIDI input</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="195"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="179"/>
         <source>Play MIDI notes with velocity and duration during note input</source>
         <translation type="unfinished">Play MIDI notes with velocity and duration during note input</translation>
     </message>
@@ -11859,11 +11859,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="84"/>
+        <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="94"/>
         <source>SoundFont installed</source>
         <translation type="unfinished">SoundFont installed</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="85"/>
+        <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="95"/>
         <source>You can assign soundfonts to instruments using the mixer panel.</source>
         <translation type="unfinished">You can assign soundfonts to instruments using the mixer panel.</translation>
     </message>
@@ -12041,8 +12043,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1013"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1091"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1102"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3346"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3358"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3342"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3354"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2560"/>
         <source>Start of %1</source>
         <translation type="unfinished">Start of %1</translation>
@@ -12051,8 +12053,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1016"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1094"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1104"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3350"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3366"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3346"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3362"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2575"/>
         <source>End of %1</source>
         <translation type="unfinished">End of %1</translation>
@@ -12322,107 +12324,107 @@ Fret %1 on strings %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="875"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="876"/>
         <source>%1 (sounding as %2%3)</source>
         <translation type="unfinished">%1 (sounding as %2%3)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2225"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2226"/>
         <source>Acciaccatura</source>
         <translation type="unfinished">Acciaccatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2228"/>
         <source>Appoggiatura</source>
         <translation type="unfinished">Appoggiatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2231"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2232"/>
         <source>Grace note after</source>
         <translation type="unfinished">Grace note after</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2235"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2236"/>
         <source>Grace note before</source>
         <translation type="unfinished">Grace note before</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2237"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2238"/>
         <source>Note</source>
         <translation type="unfinished">Note</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3253"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3291"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3287"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="534"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="546"/>
         <source>Voice: %1</source>
         <translation type="unfinished">Voice: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3261"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3257"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation type="unfinished">(on %1‰ off %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3267"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3296"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3263"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3292"/>
         <source>Beat slash</source>
         <translation type="unfinished">Beat slash</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3267"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3296"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3263"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3292"/>
         <source>Rhythm slash</source>
         <translation type="unfinished">Rhythm slash</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3271"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3300"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3267"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3296"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation type="unfinished">%1; String: %2; Fret: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3277"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3273"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation type="unfinished">%1; Pitch: %2; Duration: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3306"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3302"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation type="unfinished">%1 head %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3308"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3304"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="549"/>
         <source>Cross-staff above</source>
         <translation type="unfinished">Cross-staff above</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3310"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3306"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="551"/>
         <source>Cross-staff below</source>
         <translation type="unfinished">Cross-staff below</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3314"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3310"/>
         <source>too low</source>
         <translation type="unfinished">too low</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3316"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3312"/>
         <source>too high</source>
         <translation type="unfinished">too high</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3318"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3314"/>
         <source>too low for amateurs</source>
         <translation type="unfinished">too low for amateurs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3320"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3316"/>
         <source>too high for amateurs</source>
         <translation type="unfinished">too high for amateurs</translation>
     </message>
@@ -12457,37 +12459,37 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Annotations:</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1642"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1630"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="155"/>
         <source>Start measure: %1</source>
         <translation type="unfinished">Start measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1645"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1633"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="157"/>
         <source>Start displayed measure: %1</source>
         <translation type="unfinished">Start displayed measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1648"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1636"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="159"/>
         <source>Start beat: %1</source>
         <translation type="unfinished">Start beat: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1655"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1643"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="162"/>
         <source>End measure: %1</source>
         <translation type="unfinished">End measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1658"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1646"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="164"/>
         <source>End displayed measure: %1</source>
         <translation type="unfinished">End displayed measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1661"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1649"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="166"/>
         <source>End beat: %1</source>
         <translation type="unfinished">End beat: %1</translation>
@@ -12741,18 +12743,18 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Cannot create tuplet with ratio %1 for duration %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="7853"/>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8001"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="7832"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="7980"/>
         <source>Remove stale partial tie</source>
         <translation type="unfinished">Remove stale partial tie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="7911"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="7890"/>
         <source>Reset incoming partial slur</source>
         <translation type="unfinished">Reset incoming partial slur</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="7921"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="7900"/>
         <source>Reset outgoing partial slur</source>
         <translation type="unfinished">Reset outgoing partial slur</translation>
     </message>
@@ -15204,9 +15206,9 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1214"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3042"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3066"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3319"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3062"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3086"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3339"/>
         <source>Custom</source>
         <translation type="unfinished">Custom</translation>
     </message>
@@ -15720,292 +15722,292 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Left</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2517"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2537"/>
         <source>Arpeggio</source>
         <translation type="unfinished">Arpeggio</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2518"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2538"/>
         <source>Up arpeggio</source>
         <translation type="unfinished">Up arpeggio</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2519"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2539"/>
         <source>Down arpeggio</source>
         <translation type="unfinished">Down arpeggio</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2520"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2540"/>
         <source>Bracket arpeggio</source>
         <translation type="unfinished">Bracket arpeggio</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2521"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2541"/>
         <source>Up arpeggio straight</source>
         <translation type="unfinished">Up arpeggio straight</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2522"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2542"/>
         <source>Down arpeggio straight</source>
         <translation type="unfinished">Down arpeggio straight</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2878"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2898"/>
         <source>Fall</source>
         <translation type="unfinished">Fall</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2879"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2899"/>
         <source>Doit</source>
         <translation type="unfinished">Doit</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2880"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2900"/>
         <source>Plop</source>
         <translation type="unfinished">Plop</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2881"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2901"/>
         <source>Scoop</source>
         <translation type="unfinished">Scoop</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2883"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2903"/>
         <source>Slide out down</source>
         <translation type="unfinished">Slide out down</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2884"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2904"/>
         <source>Slide out up</source>
         <translation type="unfinished">Slide out up</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2885"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2905"/>
         <source>Slide in above</source>
         <translation type="unfinished">Slide in above</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2886"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2906"/>
         <source>Slide in below</source>
         <translation type="unfinished">Slide in below</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2888"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2908"/>
         <source>Slide out down (rough)</source>
         <translation type="unfinished">Slide out down (rough)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2889"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2909"/>
         <source>Slide out up (rough)</source>
         <translation type="unfinished">Slide out up (rough)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2890"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2910"/>
         <source>Slide in above (rough)</source>
         <translation type="unfinished">Slide in above (rough)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2891"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2911"/>
         <source>Slide in below (rough)</source>
         <translation type="unfinished">Slide in below (rough)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3008"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3028"/>
         <source>Straight glissando</source>
         <translation type="unfinished">Straight glissando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3009"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3029"/>
         <source>Wavy glissando</source>
         <translation type="unfinished">Wavy glissando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3028"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3048"/>
         <source>Da Capo</source>
         <translation type="unfinished">Da Capo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3029"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3049"/>
         <source>Da Capo al Fine</source>
         <translation type="unfinished">Da Capo al Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3030"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3050"/>
         <source>Da Capo al Coda</source>
         <translation type="unfinished">Da Capo al Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3031"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3051"/>
         <source>D.S. al Coda</source>
         <translation type="unfinished">D.S. al Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3032"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3052"/>
         <source>D.S. al Fine</source>
         <translation type="unfinished">D.S. al Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3033"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3053"/>
         <source>D.S.</source>
         <translation type="unfinished">D.S.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3035"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3055"/>
         <source>Da Capo al Doppia Coda</source>
         <translation type="unfinished">Da Capo al Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3036"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3056"/>
         <source>Dal Segno al Doppia Coda</source>
         <translation type="unfinished">Dal Segno al Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3037"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3057"/>
         <source>Dal Doppio Segno</source>
         <translation type="unfinished">Dal Doppio Segno</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3038"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3058"/>
         <source>Dal Doppio Segno al Coda</source>
         <translation type="unfinished">Dal Doppio Segno al Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3039"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3059"/>
         <source>Dal Doppio Segno al Doppia Coda</source>
         <translation type="unfinished">Dal Doppio Segno al Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3040"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3060"/>
         <source>Dal Doppio Segno al Fine</source>
         <translation type="unfinished">Dal Doppio Segno al Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3056"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3076"/>
         <source>Segno</source>
         <translation type="unfinished">Segno</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3057"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3077"/>
         <source>Segno variation</source>
         <translation type="unfinished">Segno variation</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3058"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3078"/>
         <source>Coda</source>
         <translation type="unfinished">Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3059"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3079"/>
         <source>Varied coda</source>
         <translation type="unfinished">Varied coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3060"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3080"/>
         <source>Doppia Coda</source>
         <translation type="unfinished">Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3061"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3081"/>
         <source>Fine</source>
         <translation type="unfinished">Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3062"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3082"/>
         <source>To coda</source>
         <translation type="unfinished">To coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3063"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3083"/>
         <source>To coda (symbol)</source>
         <translation type="unfinished">To coda (symbol)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3064"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3084"/>
         <source>Da Coda</source>
         <translation type="unfinished">Da Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3065"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3085"/>
         <source>Da Doppia Coda</source>
         <translation type="unfinished">Da Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3303"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3323"/>
         <source>C♭ major / A♭ minor</source>
         <translation type="unfinished">C♭ major / A♭ minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3304"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3324"/>
         <source>G♭ major / E♭ minor</source>
         <translation type="unfinished">G♭ major / E♭ minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3305"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3325"/>
         <source>D♭ major / B♭ minor</source>
         <translation type="unfinished">D♭ major / B♭ minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3306"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3326"/>
         <source>A♭ major / F minor</source>
         <translation type="unfinished">A♭ major / F minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3307"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3327"/>
         <source>E♭ major / C minor</source>
         <translation type="unfinished">E♭ major / C minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3308"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3328"/>
         <source>B♭ major / G minor</source>
         <translation type="unfinished">B♭ major / G minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3309"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3329"/>
         <source>F major / D minor</source>
         <translation type="unfinished">F major / D minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3310"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3330"/>
         <source>C major / A minor</source>
         <translation type="unfinished">C major / A minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3311"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3331"/>
         <source>G major / E minor</source>
         <translation type="unfinished">G major / E minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3312"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3332"/>
         <source>D major / B minor</source>
         <translation type="unfinished">D major / B minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3313"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3333"/>
         <source>A major / F♯ minor</source>
         <translation type="unfinished">A major / F♯ minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3314"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3334"/>
         <source>E major / C♯ minor</source>
         <translation type="unfinished">E major / C♯ minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3315"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3335"/>
         <source>B major / G♯ minor</source>
         <translation type="unfinished">B major / G♯ minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3316"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3336"/>
         <source>F♯ major / D♯ minor</source>
         <translation type="unfinished">F♯ major / D♯ minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3317"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3337"/>
         <source>C♯ major / A♯ minor</source>
         <translation type="unfinished">C♯ major / A♯ minor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3318"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3338"/>
         <source>Open / Atonal</source>
         <translation type="unfinished">Open / Atonal</translation>
     </message>
@@ -16023,856 +16025,856 @@ Fret %1 on strings %2</translation>
 <context>
     <name>engraving/bagpipeembellishment</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2549"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2569"/>
         <source>Single grace low G</source>
         <translation type="unfinished">Single grace low G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2550"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2570"/>
         <source>Single grace low A</source>
         <translation type="unfinished">Single grace low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2551"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2571"/>
         <source>Single grace B</source>
         <translation type="unfinished">Single grace B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2552"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2572"/>
         <source>Single grace C</source>
         <translation type="unfinished">Single grace C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2553"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2573"/>
         <source>Single grace D</source>
         <translation type="unfinished">Single grace D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2554"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2574"/>
         <source>Single grace E</source>
         <translation type="unfinished">Single grace E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2555"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2575"/>
         <source>Single grace F</source>
         <translation type="unfinished">Single grace F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2556"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2576"/>
         <source>Single grace high G</source>
         <translation type="unfinished">Single grace high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2557"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2577"/>
         <source>Single grace high A</source>
         <translation type="unfinished">Single grace high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2560"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2561"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2562"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2563"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2564"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2565"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2566"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2567"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2568"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2570"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2571"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2572"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2573"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2574"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2575"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2577"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2578"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2579"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2580"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2581"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2582"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2583"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2584"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2585"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2586"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2587"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2588"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2589"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2590"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2591"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2592"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2593"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2594"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2595"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2597"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2598"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2599"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2600"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2601"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2602"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2603"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2605"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2606"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2607"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2608"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2609"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2610"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2611"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2612"/>
         <source>Double grace</source>
         <translation type="unfinished">Double grace</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2595"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2615"/>
         <source>Half doubling on low G</source>
         <translation type="unfinished">Half doubling on low G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2596"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2616"/>
         <source>Half doubling on low A</source>
         <translation type="unfinished">Half doubling on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2597"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2617"/>
         <source>Half doubling on B</source>
         <translation type="unfinished">Half doubling on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2598"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2618"/>
         <source>Half doubling on C</source>
         <translation type="unfinished">Half doubling on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2599"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2619"/>
         <source>Half doubling on D</source>
         <translation type="unfinished">Half doubling on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2600"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2620"/>
         <source>Half doubling on E</source>
         <translation type="unfinished">Half doubling on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2601"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2621"/>
         <source>Half doubling on F</source>
         <translation type="unfinished">Half doubling on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2606"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2626"/>
         <source>Doubling on high G</source>
         <translation type="unfinished">Doubling on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2607"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2627"/>
         <source>Doubling on high A</source>
         <translation type="unfinished">Doubling on high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2610"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2630"/>
         <source>Half strike on low A</source>
         <translation type="unfinished">Half strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2611"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2631"/>
         <source>Half strike on B</source>
         <translation type="unfinished">Half strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2612"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2632"/>
         <source>Half strike on C</source>
         <translation type="unfinished">Half strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2613"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2614"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2633"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2634"/>
         <source>Half strike on D</source>
         <translation type="unfinished">Half strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2615"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2635"/>
         <source>Half strike on E</source>
         <translation type="unfinished">Half strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2616"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2636"/>
         <source>Half strike on F</source>
         <translation type="unfinished">Half strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2617"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2637"/>
         <source>Half strike on high G</source>
         <translation type="unfinished">Half strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2620"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2675"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2676"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2640"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2695"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2696"/>
         <source>Grip</source>
         <translation type="unfinished">Grip</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2623"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2643"/>
         <source>Half D throw</source>
         <translation type="unfinished">Half D throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2626"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2646"/>
         <source>Doubling on low G</source>
         <translation type="unfinished">Doubling on low G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2627"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2647"/>
         <source>Doubling on low A</source>
         <translation type="unfinished">Doubling on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2628"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2648"/>
         <source>Doubling on B</source>
         <translation type="unfinished">Doubling on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2629"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2649"/>
         <source>Doubling on C</source>
         <translation type="unfinished">Doubling on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2630"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2650"/>
         <source>Doubling on D</source>
         <translation type="unfinished">Doubling on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2631"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2651"/>
         <source>Doubling on E</source>
         <translation type="unfinished">Doubling on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2632"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2652"/>
         <source>Doubling on F</source>
         <translation type="unfinished">Doubling on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2635"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2655"/>
         <source>Thumb doubling on low G</source>
         <translation type="unfinished">Thumb doubling on low G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2636"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2656"/>
         <source>Thumb doubling on low A</source>
         <translation type="unfinished">Thumb doubling on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2637"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2657"/>
         <source>Thumb doubling on B</source>
         <translation type="unfinished">Thumb doubling on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2638"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2658"/>
         <source>Thumb doubling on C</source>
         <translation type="unfinished">Thumb doubling on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2639"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2659"/>
         <source>Thumb doubling on D</source>
         <translation type="unfinished">Thumb doubling on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2640"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2660"/>
         <source>Thumb doubling on E</source>
         <translation type="unfinished">Thumb doubling on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2641"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2661"/>
         <source>Thumb doubling on F</source>
         <translation type="unfinished">Thumb doubling on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2645"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2665"/>
         <source>G grace note on low A</source>
         <translation type="unfinished">G grace note on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2646"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2666"/>
         <source>G grace note on B</source>
         <translation type="unfinished">G grace note on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2647"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2667"/>
         <source>G grace note on C</source>
         <translation type="unfinished">G grace note on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2648"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2649"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2668"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2669"/>
         <source>G grace note on D</source>
         <translation type="unfinished">G grace note on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2650"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2670"/>
         <source>G grace note on E</source>
         <translation type="unfinished">G grace note on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2651"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2671"/>
         <source>G grace note on F</source>
         <translation type="unfinished">G grace note on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2654"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2674"/>
         <source>Double strike on low A</source>
         <translation type="unfinished">Double strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2655"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2675"/>
         <source>Double strike on B</source>
         <translation type="unfinished">Double strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2656"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2676"/>
         <source>Double strike on C</source>
         <translation type="unfinished">Double strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2657"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2658"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2677"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2678"/>
         <source>Double strike on D</source>
         <translation type="unfinished">Double strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2659"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2679"/>
         <source>Double strike on E</source>
         <translation type="unfinished">Double strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2660"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2680"/>
         <source>Double strike on F</source>
         <translation type="unfinished">Double strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2661"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2681"/>
         <source>Double strike on high G</source>
         <translation type="unfinished">Double strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2662"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2682"/>
         <source>Double strike on high A</source>
         <translation type="unfinished">Double strike on high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2665"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2685"/>
         <source>Thumb strike on low A</source>
         <translation type="unfinished">Thumb strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2666"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2686"/>
         <source>Thumb strike on B</source>
         <translation type="unfinished">Thumb strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2667"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2687"/>
         <source>Thumb strike on C</source>
         <translation type="unfinished">Thumb strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2668"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2669"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2688"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2689"/>
         <source>Thumb strike on D</source>
         <translation type="unfinished">Thumb strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2670"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2690"/>
         <source>Thumb strike on E</source>
         <translation type="unfinished">Thumb strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2671"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2691"/>
         <source>Thumb strike on F</source>
         <translation type="unfinished">Thumb strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2672"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2692"/>
         <source>Thumb strike on high G</source>
         <translation type="unfinished">Thumb strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2679"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2685"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2746"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2747"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2699"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2705"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2766"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2767"/>
         <source>Birl</source>
         <translation type="unfinished">Birl</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2680"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2700"/>
         <source>D throw</source>
         <translation type="unfinished">D throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2681"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2701"/>
         <source>Half heavy D throw</source>
         <translation type="unfinished">Half heavy D throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2682"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2688"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2689"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2702"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2708"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2709"/>
         <source>Taorluath</source>
         <translation type="unfinished">Taorluath</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2686"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2743"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2706"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2763"/>
         <source>Bubbly</source>
         <translation type="unfinished">Bubbly</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2687"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2707"/>
         <source>Heavy D throw</source>
         <translation type="unfinished">Heavy D throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2692"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2712"/>
         <source>Half double strike on low A</source>
         <translation type="unfinished">Half double strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2693"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2713"/>
         <source>Half double strike on B</source>
         <translation type="unfinished">Half double strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2694"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2714"/>
         <source>Half double strike on C</source>
         <translation type="unfinished">Half double strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2695"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2696"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2715"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2716"/>
         <source>Half double strike on D</source>
         <translation type="unfinished">Half double strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2697"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2717"/>
         <source>Half double strike on E</source>
         <translation type="unfinished">Half double strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2698"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2718"/>
         <source>Half double strike on F</source>
         <translation type="unfinished">Half double strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2699"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2719"/>
         <source>Half double strike on high G</source>
         <translation type="unfinished">Half double strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2700"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2720"/>
         <source>Half double strike on high A</source>
         <translation type="unfinished">Half double strike on high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2703"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2723"/>
         <source>Half grip on low A</source>
         <translation type="unfinished">Half grip on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2704"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2724"/>
         <source>Half grip on B</source>
         <translation type="unfinished">Half grip on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2705"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2725"/>
         <source>Half grip on C</source>
         <translation type="unfinished">Half grip on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2706"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2707"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2726"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2727"/>
         <source>Half grip on D</source>
         <translation type="unfinished">Half grip on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2708"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2728"/>
         <source>Half grip on E</source>
         <translation type="unfinished">Half grip on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2709"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2729"/>
         <source>Half grip on F</source>
         <translation type="unfinished">Half grip on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2710"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2730"/>
         <source>Half grip on high G</source>
         <translation type="unfinished">Half grip on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2711"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2731"/>
         <source>Half grip on high A</source>
         <translation type="unfinished">Half grip on high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2714"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2734"/>
         <source>Half pele on low A</source>
         <translation type="unfinished">Half pele on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2715"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2735"/>
         <source>Half pele on B</source>
         <translation type="unfinished">Half pele on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2716"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2736"/>
         <source>Half pele on C</source>
         <translation type="unfinished">Half pele on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2717"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2718"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2737"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2738"/>
         <source>Half pele on D</source>
         <translation type="unfinished">Half pele on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2719"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2739"/>
         <source>Half pele on E</source>
         <translation type="unfinished">Half pele on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2720"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2740"/>
         <source>Half pele on F</source>
         <translation type="unfinished">Half pele on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2721"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2741"/>
         <source>Half pele on high G</source>
         <translation type="unfinished">Half pele on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2724"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2744"/>
         <source>G grace note grip on low A</source>
         <translation type="unfinished">G grace note grip on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2725"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2745"/>
         <source>G grace note grip on B</source>
         <translation type="unfinished">G grace note grip on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2726"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2746"/>
         <source>G grace note grip on C</source>
         <translation type="unfinished">G grace note grip on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2727"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2728"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2747"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2748"/>
         <source>G grace note grip on D</source>
         <translation type="unfinished">G grace note grip on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2729"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2749"/>
         <source>G grace note grip on E</source>
         <translation type="unfinished">G grace note grip on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2730"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2750"/>
         <source>G grace note grip on F</source>
         <translation type="unfinished">G grace note grip on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2733"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2753"/>
         <source>Thumb grip on low A</source>
         <translation type="unfinished">Thumb grip on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2734"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2754"/>
         <source>Thumb grip on B</source>
         <translation type="unfinished">Thumb grip on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2735"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2755"/>
         <source>Thumb grip on C</source>
         <translation type="unfinished">Thumb grip on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2736"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2737"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2756"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2757"/>
         <source>Thumb grip on D</source>
         <translation type="unfinished">Thumb grip on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2738"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2758"/>
         <source>Thumb grip on E</source>
         <translation type="unfinished">Thumb grip on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2739"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2759"/>
         <source>Thumb grip on F</source>
         <translation type="unfinished">Thumb grip on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2740"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2760"/>
         <source>Thumb grip on high G</source>
         <translation type="unfinished">Thumb grip on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2750"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2770"/>
         <source>Pele on low A</source>
         <translation type="unfinished">Pele on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2751"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2771"/>
         <source>Pele on B</source>
         <translation type="unfinished">Pele on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2752"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2772"/>
         <source>Pele on C</source>
         <translation type="unfinished">Pele on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2753"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2754"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2773"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2774"/>
         <source>Pele on D</source>
         <translation type="unfinished">Pele on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2755"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2775"/>
         <source>Pele on E</source>
         <translation type="unfinished">Pele on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2756"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2776"/>
         <source>Pele on F</source>
         <translation type="unfinished">Pele on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2759"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2779"/>
         <source>Thumb grace note pele on low A</source>
         <translation type="unfinished">Thumb grace note pele on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2760"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2780"/>
         <source>Thumb grace note pele on B</source>
         <translation type="unfinished">Thumb grace note pele on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2761"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2781"/>
         <source>Thumb grace note pele on C</source>
         <translation type="unfinished">Thumb grace note pele on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2762"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2763"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2782"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2783"/>
         <source>Thumb grace note pele on D</source>
         <translation type="unfinished">Thumb grace note pele on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2764"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2784"/>
         <source>Thumb grace note pele on E</source>
         <translation type="unfinished">Thumb grace note pele on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2765"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2785"/>
         <source>Thumb grace note pele on F</source>
         <translation type="unfinished">Thumb grace note pele on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2766"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2786"/>
         <source>Thumb grace note pele on high G</source>
         <translation type="unfinished">Thumb grace note pele on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2769"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2789"/>
         <source>G grace note double strike on low A</source>
         <translation type="unfinished">G grace note double strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2770"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2790"/>
         <source>G grace note double strike on B</source>
         <translation type="unfinished">G grace note double strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2771"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2791"/>
         <source>G grace note double strike on C</source>
         <translation type="unfinished">G grace note double strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2772"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2773"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2792"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2793"/>
         <source>G grace note double strike on D</source>
         <translation type="unfinished">G grace note double strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2774"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2794"/>
         <source>G grace note double strike on E</source>
         <translation type="unfinished">G grace note double strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2775"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2795"/>
         <source>G grace note double strike on F</source>
         <translation type="unfinished">G grace note double strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2778"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2798"/>
         <source>Thumb double strike on low A</source>
         <translation type="unfinished">Thumb double strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2779"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2799"/>
         <source>Thumb double strike on B</source>
         <translation type="unfinished">Thumb double strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2780"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2800"/>
         <source>Thumb double strike on C</source>
         <translation type="unfinished">Thumb double strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2781"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2782"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2801"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2802"/>
         <source>Thumb double strike on D</source>
         <translation type="unfinished">Thumb double strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2783"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2803"/>
         <source>Thumb double strike on E</source>
         <translation type="unfinished">Thumb double strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2784"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2804"/>
         <source>Thumb double strike on F</source>
         <translation type="unfinished">Thumb double strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2785"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2805"/>
         <source>Thumb double strike on high G</source>
         <translation type="unfinished">Thumb double strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2788"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2808"/>
         <source>Triple strike on low A</source>
         <translation type="unfinished">Triple strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2789"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2809"/>
         <source>Triple strike on B</source>
         <translation type="unfinished">Triple strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2790"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2810"/>
         <source>Triple strike on C</source>
         <translation type="unfinished">Triple strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2791"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2792"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2811"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2812"/>
         <source>Triple strike on D</source>
         <translation type="unfinished">Triple strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2793"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2813"/>
         <source>Triple strike on E</source>
         <translation type="unfinished">Triple strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2794"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2814"/>
         <source>Triple strike on F</source>
         <translation type="unfinished">Triple strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2795"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2815"/>
         <source>Triple strike on high G</source>
         <translation type="unfinished">Triple strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2796"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2816"/>
         <source>Triple strike on high A</source>
         <translation type="unfinished">Triple strike on high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2799"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2819"/>
         <source>Half triple strike on low A</source>
         <translation type="unfinished">Half triple strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2800"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2820"/>
         <source>Half triple strike on B</source>
         <translation type="unfinished">Half triple strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2801"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2821"/>
         <source>Half triple strike on C</source>
         <translation type="unfinished">Half triple strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2802"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2803"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2822"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2823"/>
         <source>Half triple strike on D</source>
         <translation type="unfinished">Half triple strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2804"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2824"/>
         <source>Half triple strike on E</source>
         <translation type="unfinished">Half triple strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2805"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2825"/>
         <source>Half triple strike on F</source>
         <translation type="unfinished">Half triple strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2806"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2826"/>
         <source>Half triple strike on high G</source>
         <translation type="unfinished">Half triple strike on high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2807"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2827"/>
         <source>Half triple strike on high A</source>
         <translation type="unfinished">Half triple strike on high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2810"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2830"/>
         <source>G grace note triple strike on low A</source>
         <translation type="unfinished">G grace note triple strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2811"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2831"/>
         <source>G grace note triple strike on B</source>
         <translation type="unfinished">G grace note triple strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2812"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2832"/>
         <source>G grace note triple strike on C</source>
         <translation type="unfinished">G grace note triple strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2813"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2814"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2833"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2834"/>
         <source>G grace note triple strike on D</source>
         <translation type="unfinished">G grace note triple strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2815"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2835"/>
         <source>G grace note triple strike on E</source>
         <translation type="unfinished">G grace note triple strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2816"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2836"/>
         <source>G grace note triple strike on F</source>
         <translation type="unfinished">G grace note triple strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2819"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2839"/>
         <source>Thumb triple strike on low A</source>
         <translation type="unfinished">Thumb triple strike on low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2820"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2840"/>
         <source>Thumb triple strike on B</source>
         <translation type="unfinished">Thumb triple strike on B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2821"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2841"/>
         <source>Thumb triple strike on C</source>
         <translation type="unfinished">Thumb triple strike on C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2822"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2823"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2842"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2843"/>
         <source>Thumb triple strike on D</source>
         <translation type="unfinished">Thumb triple strike on D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2824"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2844"/>
         <source>Thumb triple strike on E</source>
         <translation type="unfinished">Thumb triple strike on E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2825"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2845"/>
         <source>Thumb triple strike on F</source>
         <translation type="unfinished">Thumb triple strike on F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2826"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2846"/>
         <source>Thumb triple strike on high G</source>
         <translation type="unfinished">Thumb triple strike on high G</translation>
     </message>
@@ -16880,27 +16882,27 @@ Fret %1 on strings %2</translation>
 <context>
     <name>engraving/brackettype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2475"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2495"/>
         <source>Normal</source>
         <translation type="unfinished">Normal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2476"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2496"/>
         <source>Brace</source>
         <translation type="unfinished">Brace</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2477"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2497"/>
         <source>Square</source>
         <translation type="unfinished">Square</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2478"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2498"/>
         <source>Line</source>
         <translation type="unfinished">Line</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2479"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2499"/>
         <source>No bracket</source>
         <translation type="unfinished">No bracket</translation>
     </message>
@@ -17096,327 +17098,327 @@ Fret %1 on strings %2</translation>
 <context>
     <name>engraving/drumset</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2916"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2936"/>
         <source>High Q</source>
         <translation type="unfinished">High Q</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2917"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2937"/>
         <source>Slap</source>
         <translation type="unfinished">Slap</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2918"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2938"/>
         <source>Scratch Push</source>
         <translation type="unfinished">Scratch Push</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2920"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2940"/>
         <source>Scratch Pull</source>
         <translation type="unfinished">Scratch Pull</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2921"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2941"/>
         <source>Sticks</source>
         <translation type="unfinished">Sticks</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2922"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2942"/>
         <source>Square Click</source>
         <translation type="unfinished">Square Click</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2923"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2943"/>
         <source>Metronome Click</source>
         <translation type="unfinished">Metronome Click</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2924"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2944"/>
         <source>Metronome Bell</source>
         <translation type="unfinished">Metronome Bell</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2925"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2945"/>
         <source>Acoustic Bass Drum</source>
         <translation type="unfinished">Acoustic Bass Drum</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2926"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2946"/>
         <source>Bass Drum 1</source>
         <translation type="unfinished">Bass Drum 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2927"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2947"/>
         <source>Side Stick</source>
         <translation type="unfinished">Side Stick</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2928"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2948"/>
         <source>Acoustic Snare</source>
         <translation type="unfinished">Acoustic Snare</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2929"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2949"/>
         <source>Hand Clap</source>
         <translation type="unfinished">Hand Clap</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2931"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2951"/>
         <source>Electric Snare</source>
         <translation type="unfinished">Electric Snare</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2932"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2952"/>
         <source>Low Floor Tom</source>
         <translation type="unfinished">Low Floor Tom</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2933"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2953"/>
         <source>Closed Hi-Hat</source>
         <translation type="unfinished">Closed Hi-Hat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2934"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2954"/>
         <source>High Floor Tom</source>
         <translation type="unfinished">High Floor Tom</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2935"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2955"/>
         <source>Pedal Hi-Hat</source>
         <translation type="unfinished">Pedal Hi-Hat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2936"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2956"/>
         <source>Low Tom</source>
         <translation type="unfinished">Low Tom</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2937"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2957"/>
         <source>Open Hi-Hat</source>
         <translation type="unfinished">Open Hi-Hat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2938"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2958"/>
         <source>Low-Mid Tom</source>
         <translation type="unfinished">Low-Mid Tom</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2939"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2959"/>
         <source>Hi-Mid Tom</source>
         <translation type="unfinished">Hi-Mid Tom</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2940"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2960"/>
         <source>Crash Cymbal 1</source>
         <translation type="unfinished">Crash Cymbal 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2942"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2962"/>
         <source>High Tom</source>
         <translation type="unfinished">High Tom</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2943"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2963"/>
         <source>Ride Cymbal 1</source>
         <translation type="unfinished">Ride Cymbal 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2944"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2964"/>
         <source>Chinese Cymbal</source>
         <translation type="unfinished">Chinese Cymbal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2945"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2965"/>
         <source>Ride Bell</source>
         <translation type="unfinished">Ride Bell</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2946"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2966"/>
         <source>Tambourine</source>
         <translation type="unfinished">Tambourine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2947"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2967"/>
         <source>Splash Cymbal</source>
         <translation type="unfinished">Splash Cymbal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2948"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2968"/>
         <source>Cowbell</source>
         <translation type="unfinished">Cowbell</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2949"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2969"/>
         <source>Crash Cymbal 2</source>
         <translation type="unfinished">Crash Cymbal 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2950"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2970"/>
         <source>Vibraslap</source>
         <translation type="unfinished">Vibraslap</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2951"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2971"/>
         <source>Ride Cymbal 2</source>
         <translation type="unfinished">Ride Cymbal 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2953"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2973"/>
         <source>Hi Bongo</source>
         <translation type="unfinished">Hi Bongo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2954"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2974"/>
         <source>Low Bongo</source>
         <translation type="unfinished">Low Bongo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2955"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2975"/>
         <source>Mute Hi Conga</source>
         <translation type="unfinished">Mute Hi Conga</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2956"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2976"/>
         <source>Open Hi Conga</source>
         <translation type="unfinished">Open Hi Conga</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2957"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2977"/>
         <source>Low Conga</source>
         <translation type="unfinished">Low Conga</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2958"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2978"/>
         <source>High Timbale</source>
         <translation type="unfinished">High Timbale</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2959"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2979"/>
         <source>Low Timbale</source>
         <translation type="unfinished">Low Timbale</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2960"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2980"/>
         <source>High Agogo</source>
         <translation type="unfinished">High Agogo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2961"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2981"/>
         <source>Low Agogo</source>
         <translation type="unfinished">Low Agogo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2962"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2982"/>
         <source>Cabasa</source>
         <translation type="unfinished">Cabasa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2964"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2984"/>
         <source>Maracas</source>
         <translation type="unfinished">Maracas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2965"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2985"/>
         <source>Short Whistle</source>
         <translation type="unfinished">Short Whistle</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2966"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2986"/>
         <source>Long Whistle</source>
         <translation type="unfinished">Long Whistle</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2967"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2987"/>
         <source>Short Güiro</source>
         <translation type="unfinished">Short Güiro</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2968"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2988"/>
         <source>Long Güiro</source>
         <translation type="unfinished">Long Güiro</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2969"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2989"/>
         <source>Claves</source>
         <translation type="unfinished">Claves</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2970"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2990"/>
         <source>Hi Wood Block</source>
         <translation type="unfinished">Hi Wood Block</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2971"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2991"/>
         <source>Low Wood Block</source>
         <translation type="unfinished">Low Wood Block</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2972"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2992"/>
         <source>Mute Cuica</source>
         <translation type="unfinished">Mute Cuica</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2973"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2993"/>
         <source>Open Cuica</source>
         <translation type="unfinished">Open Cuica</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2975"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2995"/>
         <source>Mute Triangle</source>
         <translation type="unfinished">Mute Triangle</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2976"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2996"/>
         <source>Open Triangle</source>
         <translation type="unfinished">Open Triangle</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2977"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2997"/>
         <source>Shaker</source>
         <translation type="unfinished">Shaker</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2978"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2998"/>
         <source>Sleigh Bell</source>
         <translation type="unfinished">Sleigh Bell</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2979"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2999"/>
         <source>Mark Tree</source>
         <translation type="unfinished">Mark Tree</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2980"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3000"/>
         <source>Castanets</source>
         <translation type="unfinished">Castanets</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2981"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3001"/>
         <source>Mute Surdo</source>
         <translation type="unfinished">Mute Surdo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2982"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3002"/>
         <source>Open Surdo</source>
         <translation type="unfinished">Open Surdo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2984"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3004"/>
         <source>Snare (Rim shot)</source>
         <translation type="unfinished">Snare (Rim shot)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2986"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3006"/>
         <source>Ride (Edge)</source>
         <translation type="unfinished">Ride (Edge)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2988"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3008"/>
         <source>Cowbell Low</source>
         <translation type="unfinished">Cowbell Low</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2990"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3010"/>
         <source>Cowbell High</source>
         <translation type="unfinished">Cowbell High</translation>
     </message>
@@ -17650,27 +17652,27 @@ Fret %1 on strings %2</translation>
 <context>
     <name>engraving/hairpintype</name>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="812"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="818"/>
         <source>Crescendo hairpin</source>
         <translation type="unfinished">Crescendo hairpin</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="814"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="820"/>
         <source>Diminuendo hairpin</source>
         <translation type="unfinished">Diminuendo hairpin</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="816"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="822"/>
         <source>Crescendo line</source>
         <translation type="unfinished">Crescendo line</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="818"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="824"/>
         <source>Diminuendo line</source>
         <translation type="unfinished">Diminuendo line</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="820"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="826"/>
         <source>Custom</source>
         <translation type="unfinished">Custom</translation>
     </message>
@@ -20100,17 +20102,17 @@ Fret %1 on strings %2</translation>
 <context>
     <name>engraving/staffgroup</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3104"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3124"/>
         <source>Standard</source>
         <translation type="unfinished">Standard</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3105"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3125"/>
         <source>Percussion</source>
         <translation type="unfinished">Percussion</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3106"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3126"/>
         <source>Tablature</source>
         <translation type="unfinished">Tablature</translation>
     </message>
@@ -22223,42 +22225,42 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Space</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3205"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3225"/>
         <source>Slap</source>
         <translation type="unfinished">Slap</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3206"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3226"/>
         <source>Pop</source>
         <translation type="unfinished">Pop</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3208"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3228"/>
         <source>Thumb damp</source>
         <translation type="unfinished">Thumb damp</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3209"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3229"/>
         <source>Brush damp</source>
         <translation type="unfinished">Brush damp</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3210"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3230"/>
         <source>Ring touch</source>
         <translation type="unfinished">Ring touch</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3211"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3231"/>
         <source>Pluck</source>
         <translation type="unfinished">Pluck</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3212"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3232"/>
         <source>Singing bell</source>
         <translation type="unfinished">Singing bell</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3213"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3233"/>
         <source>Vibrato</source>
         <translation type="unfinished">Vibrato</translation>
     </message>
@@ -22360,22 +22362,22 @@ Fret %1 on strings %2</translation>
 <context>
     <name>engraving/trilltype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3125"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3145"/>
         <source>Trill line</source>
         <translation type="unfinished">Trill line</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3126"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3146"/>
         <source>Upprall line</source>
         <translation type="unfinished">Upprall line</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3127"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3147"/>
         <source>Downprall line</source>
         <translation type="unfinished">Downprall line</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3128"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3148"/>
         <source>Prallprall line</source>
         <translation type="unfinished">Prallprall line</translation>
     </message>
@@ -22421,22 +22423,22 @@ Fret %1 on strings %2</translation>
 <context>
     <name>engraving/vibratotype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3168"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3188"/>
         <source>Guitar vibrato</source>
         <translation type="unfinished">Guitar vibrato</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3169"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3189"/>
         <source>Guitar vibrato wide</source>
         <translation type="unfinished">Guitar vibrato wide</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3170"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3190"/>
         <source>Vibrato sawtooth</source>
         <translation type="unfinished">Vibrato sawtooth</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3172"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3192"/>
         <source>Tremolo sawtooth wide</source>
         <translation type="unfinished">Tremolo sawtooth wide</translation>
     </message>
@@ -22634,8 +22636,8 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">px</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="133"/>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="97"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="117"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="81"/>
         <source>ms</source>
         <extracomment>Abbreviation of &quot;milliseconds&quot;</extracomment>
         <translation type="unfinished">ms</translation>
@@ -22691,7 +22693,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="69"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="79"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="282"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="178"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="179"/>
         <source>Clear</source>
         <translation type="unfinished">Clear</translation>
     </message>
@@ -22840,14 +22842,11 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="47"/>
-        <location filename="../../src/framework/global/utils.cpp" line="29"/>
-        <location filename="../../src/framework/global/utils.cpp" line="44"/>
         <source>C</source>
         <translation type="unfinished">C</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="48"/>
-        <location filename="../../src/framework/global/utils.cpp" line="30"/>
         <source>C♯</source>
         <translation type="unfinished">C♯</translation>
     </message>
@@ -22863,20 +22862,16 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="51"/>
-        <location filename="../../src/framework/global/utils.cpp" line="45"/>
         <source>D♭</source>
         <translation type="unfinished">D♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="52"/>
-        <location filename="../../src/framework/global/utils.cpp" line="31"/>
-        <location filename="../../src/framework/global/utils.cpp" line="46"/>
         <source>D</source>
         <translation type="unfinished">D</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="53"/>
-        <location filename="../../src/framework/global/utils.cpp" line="32"/>
         <source>D♯</source>
         <translation type="unfinished">D♯</translation>
     </message>
@@ -22892,14 +22887,11 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="56"/>
-        <location filename="../../src/framework/global/utils.cpp" line="47"/>
         <source>E♭</source>
         <translation type="unfinished">E♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="57"/>
-        <location filename="../../src/framework/global/utils.cpp" line="33"/>
-        <location filename="../../src/framework/global/utils.cpp" line="48"/>
         <source>E</source>
         <translation type="unfinished">E</translation>
     </message>
@@ -22925,14 +22917,11 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="62"/>
-        <location filename="../../src/framework/global/utils.cpp" line="34"/>
-        <location filename="../../src/framework/global/utils.cpp" line="49"/>
         <source>F</source>
         <translation type="unfinished">F</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="63"/>
-        <location filename="../../src/framework/global/utils.cpp" line="35"/>
         <source>F♯</source>
         <translation type="unfinished">F♯</translation>
     </message>
@@ -22948,20 +22937,16 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="66"/>
-        <location filename="../../src/framework/global/utils.cpp" line="50"/>
         <source>G♭</source>
         <translation type="unfinished">G♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="67"/>
-        <location filename="../../src/framework/global/utils.cpp" line="36"/>
-        <location filename="../../src/framework/global/utils.cpp" line="51"/>
         <source>G</source>
         <translation type="unfinished">G</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="68"/>
-        <location filename="../../src/framework/global/utils.cpp" line="37"/>
         <source>G♯</source>
         <translation type="unfinished">G♯</translation>
     </message>
@@ -22977,20 +22962,16 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="71"/>
-        <location filename="../../src/framework/global/utils.cpp" line="52"/>
         <source>A♭</source>
         <translation type="unfinished">A♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="72"/>
-        <location filename="../../src/framework/global/utils.cpp" line="38"/>
-        <location filename="../../src/framework/global/utils.cpp" line="53"/>
         <source>A</source>
         <translation type="unfinished">A</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="73"/>
-        <location filename="../../src/framework/global/utils.cpp" line="39"/>
         <source>A♯</source>
         <translation type="unfinished">A♯</translation>
     </message>
@@ -23006,14 +22987,11 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="76"/>
-        <location filename="../../src/framework/global/utils.cpp" line="54"/>
         <source>B♭</source>
         <translation type="unfinished">B♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="77"/>
-        <location filename="../../src/framework/global/utils.cpp" line="40"/>
-        <location filename="../../src/framework/global/utils.cpp" line="55"/>
         <source>B</source>
         <translation type="unfinished">B</translation>
     </message>
@@ -23075,7 +23053,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="105"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="121"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="131"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2746"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2742"/>
         <source>sp</source>
         <extracomment>Abbreviation of &quot;spatium&quot;</extracomment>
         <translation type="unfinished">sp</translation>
@@ -23087,7 +23065,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="69"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="61"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="101"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2746"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2742"/>
         <location filename="../../src/notation/view/widgets/pagesettings.cpp" line="166"/>
         <source>mm</source>
         <translation type="unfinished">mm</translation>
@@ -23364,6 +23342,1219 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.cpp" line="91"/>
         <source>Show more…</source>
         <translation type="unfinished">Show more…</translation>
+    </message>
+</context>
+<context>
+    <name>global/noteName</name>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="266"/>
+        <location filename="../../src/framework/global/utils.cpp" line="281"/>
+        <source>C</source>
+        <translation type="unfinished">C</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="267"/>
+        <source>C♯</source>
+        <translation type="unfinished">C♯</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="268"/>
+        <location filename="../../src/framework/global/utils.cpp" line="283"/>
+        <source>D</source>
+        <translation type="unfinished">D</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="269"/>
+        <source>D♯</source>
+        <translation type="unfinished">D♯</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="270"/>
+        <location filename="../../src/framework/global/utils.cpp" line="285"/>
+        <source>E</source>
+        <translation type="unfinished">E</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="271"/>
+        <location filename="../../src/framework/global/utils.cpp" line="286"/>
+        <source>F</source>
+        <translation type="unfinished">F</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="272"/>
+        <source>F♯</source>
+        <translation type="unfinished">F♯</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="273"/>
+        <location filename="../../src/framework/global/utils.cpp" line="288"/>
+        <source>G</source>
+        <translation type="unfinished">G</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="274"/>
+        <source>G♯</source>
+        <translation type="unfinished">G♯</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="275"/>
+        <location filename="../../src/framework/global/utils.cpp" line="290"/>
+        <source>A</source>
+        <translation type="unfinished">A</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="276"/>
+        <source>A♯</source>
+        <translation type="unfinished">A♯</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="277"/>
+        <location filename="../../src/framework/global/utils.cpp" line="292"/>
+        <source>B</source>
+        <translation type="unfinished">B</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="282"/>
+        <source>D♭</source>
+        <translation type="unfinished">D♭</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="284"/>
+        <source>E♭</source>
+        <translation type="unfinished">E♭</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="287"/>
+        <source>G♭</source>
+        <translation type="unfinished">G♭</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="289"/>
+        <source>A♭</source>
+        <translation type="unfinished">A♭</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="291"/>
+        <source>B♭</source>
+        <translation type="unfinished">B♭</translation>
+    </message>
+</context>
+<context>
+    <name>global/pitchName</name>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="30"/>
+        <source>C-1</source>
+        <translation type="unfinished">C-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="31"/>
+        <source>C♯-1</source>
+        <translation type="unfinished">C♯-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="32"/>
+        <source>D♭-1</source>
+        <translation type="unfinished">D♭-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="33"/>
+        <source>D-1</source>
+        <translation type="unfinished">D-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="34"/>
+        <source>D♯-1</source>
+        <translation type="unfinished">D♯-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="35"/>
+        <source>E♭-1</source>
+        <translation type="unfinished">E♭-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="36"/>
+        <source>E-1</source>
+        <translation type="unfinished">E-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="37"/>
+        <source>E♯-1</source>
+        <translation type="unfinished">E♯-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="38"/>
+        <source>F♭-1</source>
+        <translation type="unfinished">F♭-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="39"/>
+        <source>F-1</source>
+        <translation type="unfinished">F-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="40"/>
+        <source>F♯-1</source>
+        <translation type="unfinished">F♯-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="41"/>
+        <source>G♭-1</source>
+        <translation type="unfinished">G♭-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="42"/>
+        <source>G-1</source>
+        <translation type="unfinished">G-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="43"/>
+        <source>G♯-1</source>
+        <translation type="unfinished">G♯-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="44"/>
+        <source>A♭-1</source>
+        <translation type="unfinished">A♭-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="45"/>
+        <source>A-1</source>
+        <translation type="unfinished">A-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="46"/>
+        <source>A♯-1</source>
+        <translation type="unfinished">A♯-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="47"/>
+        <source>B♭-1</source>
+        <translation type="unfinished">B♭-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="48"/>
+        <source>B-1</source>
+        <translation type="unfinished">B-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="49"/>
+        <source>B♯-1</source>
+        <translation type="unfinished">B♯-1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="51"/>
+        <source>C♭0</source>
+        <translation type="unfinished">C♭0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="52"/>
+        <source>C0</source>
+        <translation type="unfinished">C0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="53"/>
+        <source>C♯0</source>
+        <translation type="unfinished">C♯0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="54"/>
+        <source>D♭0</source>
+        <translation type="unfinished">D♭0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="55"/>
+        <source>D0</source>
+        <translation type="unfinished">D0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="56"/>
+        <source>D♯0</source>
+        <translation type="unfinished">D♯0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="57"/>
+        <source>E♭0</source>
+        <translation type="unfinished">E♭0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="58"/>
+        <source>E0</source>
+        <translation type="unfinished">E0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="59"/>
+        <source>E♯0</source>
+        <translation type="unfinished">E♯0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="60"/>
+        <source>F♭0</source>
+        <translation type="unfinished">F♭0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="61"/>
+        <source>F0</source>
+        <translation type="unfinished">F0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="62"/>
+        <source>F♯0</source>
+        <translation type="unfinished">F♯0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="63"/>
+        <source>G♭0</source>
+        <translation type="unfinished">G♭0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="64"/>
+        <source>G0</source>
+        <translation type="unfinished">G0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="65"/>
+        <source>G♯0</source>
+        <translation type="unfinished">G♯0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="66"/>
+        <source>A♭0</source>
+        <translation type="unfinished">A♭0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="67"/>
+        <source>A0</source>
+        <translation type="unfinished">A0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="68"/>
+        <source>A♯0</source>
+        <translation type="unfinished">A♯0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="69"/>
+        <source>B♭0</source>
+        <translation type="unfinished">B♭0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="70"/>
+        <source>B0</source>
+        <translation type="unfinished">B0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="71"/>
+        <source>B♯0</source>
+        <translation type="unfinished">B♯0</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="73"/>
+        <source>C♭1</source>
+        <translation type="unfinished">C♭1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="74"/>
+        <source>C1</source>
+        <translation type="unfinished">C1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="75"/>
+        <source>C♯1</source>
+        <translation type="unfinished">C♯1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="76"/>
+        <source>D♭1</source>
+        <translation type="unfinished">D♭1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="77"/>
+        <source>D1</source>
+        <translation type="unfinished">D1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="78"/>
+        <source>D♯1</source>
+        <translation type="unfinished">D♯1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="79"/>
+        <source>E♭1</source>
+        <translation type="unfinished">E♭1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="80"/>
+        <source>E1</source>
+        <translation type="unfinished">E1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="81"/>
+        <source>E♯1</source>
+        <translation type="unfinished">E♯1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="82"/>
+        <source>F♭1</source>
+        <translation type="unfinished">F♭1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="83"/>
+        <source>F1</source>
+        <translation type="unfinished">F1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="84"/>
+        <source>F♯1</source>
+        <translation type="unfinished">F♯1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="85"/>
+        <source>G♭1</source>
+        <translation type="unfinished">G♭1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="86"/>
+        <source>G1</source>
+        <translation type="unfinished">G1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="87"/>
+        <source>G♯1</source>
+        <translation type="unfinished">G♯1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="88"/>
+        <source>A♭1</source>
+        <translation type="unfinished">A♭1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="89"/>
+        <source>A1</source>
+        <translation type="unfinished">A1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="90"/>
+        <source>A♯1</source>
+        <translation type="unfinished">A♯1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="91"/>
+        <source>B♭1</source>
+        <translation type="unfinished">B♭1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="92"/>
+        <source>B1</source>
+        <translation type="unfinished">B1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="93"/>
+        <source>B♯1</source>
+        <translation type="unfinished">B♯1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="95"/>
+        <source>C♭2</source>
+        <translation type="unfinished">C♭2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="96"/>
+        <source>C2</source>
+        <translation type="unfinished">C2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="97"/>
+        <source>C♯2</source>
+        <translation type="unfinished">C♯2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="98"/>
+        <source>D♭2</source>
+        <translation type="unfinished">D♭2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="99"/>
+        <source>D2</source>
+        <translation type="unfinished">D2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="100"/>
+        <source>D♯2</source>
+        <translation type="unfinished">D♯2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="101"/>
+        <source>E♭2</source>
+        <translation type="unfinished">E♭2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="102"/>
+        <source>E2</source>
+        <translation type="unfinished">E2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="103"/>
+        <source>E♯2</source>
+        <translation type="unfinished">E♯2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="104"/>
+        <source>F♭2</source>
+        <translation type="unfinished">F♭2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="105"/>
+        <source>F2</source>
+        <translation type="unfinished">F2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="106"/>
+        <source>F♯2</source>
+        <translation type="unfinished">F♯2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="107"/>
+        <source>G♭2</source>
+        <translation type="unfinished">G♭2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="108"/>
+        <source>G2</source>
+        <translation type="unfinished">G2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="109"/>
+        <source>G♯2</source>
+        <translation type="unfinished">G♯2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="110"/>
+        <source>A♭2</source>
+        <translation type="unfinished">A♭2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="111"/>
+        <source>A2</source>
+        <translation type="unfinished">A2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="112"/>
+        <source>A♯2</source>
+        <translation type="unfinished">A♯2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="113"/>
+        <source>B♭2</source>
+        <translation type="unfinished">B♭2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="114"/>
+        <source>B2</source>
+        <translation type="unfinished">B2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="115"/>
+        <source>B♯2</source>
+        <translation type="unfinished">B♯2</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="117"/>
+        <source>C♭3</source>
+        <translation type="unfinished">C♭3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="118"/>
+        <source>C3</source>
+        <translation type="unfinished">C3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="119"/>
+        <source>C♯3</source>
+        <translation type="unfinished">C♯3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="120"/>
+        <source>D♭3</source>
+        <translation type="unfinished">D♭3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="121"/>
+        <source>D3</source>
+        <translation type="unfinished">D3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="122"/>
+        <source>D♯3</source>
+        <translation type="unfinished">D♯3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="123"/>
+        <source>E♭3</source>
+        <translation type="unfinished">E♭3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="124"/>
+        <source>E3</source>
+        <translation type="unfinished">E3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="125"/>
+        <source>E♯3</source>
+        <translation type="unfinished">E♯3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="126"/>
+        <source>F♭3</source>
+        <translation type="unfinished">F♭3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="127"/>
+        <source>F3</source>
+        <translation type="unfinished">F3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="128"/>
+        <source>F♯3</source>
+        <translation type="unfinished">F♯3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="129"/>
+        <source>G♭3</source>
+        <translation type="unfinished">G♭3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="130"/>
+        <source>G3</source>
+        <translation type="unfinished">G3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="131"/>
+        <source>G♯3</source>
+        <translation type="unfinished">G♯3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="132"/>
+        <source>A♭3</source>
+        <translation type="unfinished">A♭3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="133"/>
+        <source>A3</source>
+        <translation type="unfinished">A3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="134"/>
+        <source>A♯3</source>
+        <translation type="unfinished">A♯3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="135"/>
+        <source>B♭3</source>
+        <translation type="unfinished">B♭3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="136"/>
+        <source>B3</source>
+        <translation type="unfinished">B3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="137"/>
+        <source>B♯3</source>
+        <translation type="unfinished">B♯3</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="139"/>
+        <source>C♭4</source>
+        <translation type="unfinished">C♭4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="140"/>
+        <source>C4</source>
+        <translation type="unfinished">C4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="141"/>
+        <source>C♯4</source>
+        <translation type="unfinished">C♯4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="142"/>
+        <source>D♭4</source>
+        <translation type="unfinished">D♭4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="143"/>
+        <source>D4</source>
+        <translation type="unfinished">D4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="144"/>
+        <source>D♯4</source>
+        <translation type="unfinished">D♯4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="145"/>
+        <source>E♭4</source>
+        <translation type="unfinished">E♭4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="146"/>
+        <source>E4</source>
+        <translation type="unfinished">E4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="147"/>
+        <source>E♯4</source>
+        <translation type="unfinished">E♯4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="148"/>
+        <source>F♭4</source>
+        <translation type="unfinished">F♭4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="149"/>
+        <source>F4</source>
+        <translation type="unfinished">F4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="150"/>
+        <source>F♯4</source>
+        <translation type="unfinished">F♯4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="151"/>
+        <source>G♭4</source>
+        <translation type="unfinished">G♭4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="152"/>
+        <source>G4</source>
+        <translation type="unfinished">G4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="153"/>
+        <source>G♯4</source>
+        <translation type="unfinished">G♯4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="154"/>
+        <source>A♭4</source>
+        <translation type="unfinished">A♭4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="155"/>
+        <source>A4</source>
+        <translation type="unfinished">A4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="156"/>
+        <source>A♯4</source>
+        <translation type="unfinished">A♯4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="157"/>
+        <source>B♭4</source>
+        <translation type="unfinished">B♭4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="158"/>
+        <source>B4</source>
+        <translation type="unfinished">B4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="159"/>
+        <source>B♯4</source>
+        <translation type="unfinished">B♯4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="161"/>
+        <source>C♭5</source>
+        <translation type="unfinished">C♭5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="162"/>
+        <source>C5</source>
+        <translation type="unfinished">C5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="163"/>
+        <source>C♯5</source>
+        <translation type="unfinished">C♯5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="164"/>
+        <source>D♭5</source>
+        <translation type="unfinished">D♭5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="165"/>
+        <source>D5</source>
+        <translation type="unfinished">D5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="166"/>
+        <source>D♯5</source>
+        <translation type="unfinished">D♯5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="167"/>
+        <source>E♭5</source>
+        <translation type="unfinished">E♭5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="168"/>
+        <source>E5</source>
+        <translation type="unfinished">E5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="169"/>
+        <source>E♯5</source>
+        <translation type="unfinished">E♯5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="170"/>
+        <source>F♭5</source>
+        <translation type="unfinished">F♭5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="171"/>
+        <source>F5</source>
+        <translation type="unfinished">F5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="172"/>
+        <source>F♯5</source>
+        <translation type="unfinished">F♯5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="173"/>
+        <source>G♭5</source>
+        <translation type="unfinished">G♭5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="174"/>
+        <source>G5</source>
+        <translation type="unfinished">G5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="175"/>
+        <source>G♯5</source>
+        <translation type="unfinished">G♯5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="176"/>
+        <source>A♭5</source>
+        <translation type="unfinished">A♭5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="177"/>
+        <source>A5</source>
+        <translation type="unfinished">A5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="178"/>
+        <source>A♯5</source>
+        <translation type="unfinished">A♯5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="179"/>
+        <source>B♭5</source>
+        <translation type="unfinished">B♭5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="180"/>
+        <source>B5</source>
+        <translation type="unfinished">B5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="181"/>
+        <source>B♯5</source>
+        <translation type="unfinished">B♯5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="183"/>
+        <source>C♭6</source>
+        <translation type="unfinished">C♭6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="184"/>
+        <source>C6</source>
+        <translation type="unfinished">C6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="185"/>
+        <source>C♯6</source>
+        <translation type="unfinished">C♯6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="186"/>
+        <source>D♭6</source>
+        <translation type="unfinished">D♭6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="187"/>
+        <source>D6</source>
+        <translation type="unfinished">D6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="188"/>
+        <source>D♯6</source>
+        <translation type="unfinished">D♯6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="189"/>
+        <source>E♭6</source>
+        <translation type="unfinished">E♭6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="190"/>
+        <source>E6</source>
+        <translation type="unfinished">E6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="191"/>
+        <source>E♯6</source>
+        <translation type="unfinished">E♯6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="192"/>
+        <source>F♭6</source>
+        <translation type="unfinished">F♭6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="193"/>
+        <source>F6</source>
+        <translation type="unfinished">F6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="194"/>
+        <source>F♯6</source>
+        <translation type="unfinished">F♯6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="195"/>
+        <source>G♭6</source>
+        <translation type="unfinished">G♭6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="196"/>
+        <source>G6</source>
+        <translation type="unfinished">G6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="197"/>
+        <source>G♯6</source>
+        <translation type="unfinished">G♯6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="198"/>
+        <source>A♭6</source>
+        <translation type="unfinished">A♭6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="199"/>
+        <source>A6</source>
+        <translation type="unfinished">A6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="200"/>
+        <source>A♯6</source>
+        <translation type="unfinished">A♯6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="201"/>
+        <source>B♭6</source>
+        <translation type="unfinished">B♭6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="202"/>
+        <source>B6</source>
+        <translation type="unfinished">B6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="203"/>
+        <source>B♯6</source>
+        <translation type="unfinished">B♯6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="205"/>
+        <source>C♭7</source>
+        <translation type="unfinished">C♭7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="206"/>
+        <source>C7</source>
+        <translation type="unfinished">C7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="207"/>
+        <source>C♯7</source>
+        <translation type="unfinished">C♯7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="208"/>
+        <source>D♭7</source>
+        <translation type="unfinished">D♭7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="209"/>
+        <source>D7</source>
+        <translation type="unfinished">D7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="210"/>
+        <source>D♯7</source>
+        <translation type="unfinished">D♯7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="211"/>
+        <source>E♭7</source>
+        <translation type="unfinished">E♭7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="212"/>
+        <source>E7</source>
+        <translation type="unfinished">E7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="213"/>
+        <source>E♯7</source>
+        <translation type="unfinished">E♯7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="214"/>
+        <source>F♭7</source>
+        <translation type="unfinished">F♭7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="215"/>
+        <source>F7</source>
+        <translation type="unfinished">F7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="216"/>
+        <source>F♯7</source>
+        <translation type="unfinished">F♯7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="217"/>
+        <source>G♭7</source>
+        <translation type="unfinished">G♭7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="218"/>
+        <source>G7</source>
+        <translation type="unfinished">G7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="219"/>
+        <source>G♯7</source>
+        <translation type="unfinished">G♯7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="220"/>
+        <source>A♭7</source>
+        <translation type="unfinished">A♭7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="221"/>
+        <source>A7</source>
+        <translation type="unfinished">A7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="222"/>
+        <source>A♯7</source>
+        <translation type="unfinished">A♯7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="223"/>
+        <source>B♭7</source>
+        <translation type="unfinished">B♭7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="224"/>
+        <source>B7</source>
+        <translation type="unfinished">B7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="225"/>
+        <source>B♯7</source>
+        <translation type="unfinished">B♯7</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="227"/>
+        <source>C♭8</source>
+        <translation type="unfinished">C♭8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="228"/>
+        <source>C8</source>
+        <translation type="unfinished">C8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="229"/>
+        <source>C♯8</source>
+        <translation type="unfinished">C♯8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="230"/>
+        <source>D♭8</source>
+        <translation type="unfinished">D♭8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="231"/>
+        <source>D8</source>
+        <translation type="unfinished">D8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="232"/>
+        <source>D♯8</source>
+        <translation type="unfinished">D♯8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="233"/>
+        <source>E♭8</source>
+        <translation type="unfinished">E♭8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="234"/>
+        <source>E8</source>
+        <translation type="unfinished">E8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="235"/>
+        <source>E♯8</source>
+        <translation type="unfinished">E♯8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="236"/>
+        <source>F♭8</source>
+        <translation type="unfinished">F♭8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="237"/>
+        <source>F8</source>
+        <translation type="unfinished">F8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="238"/>
+        <source>F♯8</source>
+        <translation type="unfinished">F♯8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="239"/>
+        <source>G♭8</source>
+        <translation type="unfinished">G♭8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="240"/>
+        <source>G8</source>
+        <translation type="unfinished">G8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="241"/>
+        <source>G♯8</source>
+        <translation type="unfinished">G♯8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="242"/>
+        <source>A♭8</source>
+        <translation type="unfinished">A♭8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="243"/>
+        <source>A8</source>
+        <translation type="unfinished">A8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="244"/>
+        <source>A♯8</source>
+        <translation type="unfinished">A♯8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="245"/>
+        <source>B♭8</source>
+        <translation type="unfinished">B♭8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="246"/>
+        <source>B8</source>
+        <translation type="unfinished">B8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="247"/>
+        <source>B♯8</source>
+        <translation type="unfinished">B♯8</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="249"/>
+        <source>C♭9</source>
+        <translation type="unfinished">C♭9</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="250"/>
+        <source>C9</source>
+        <translation type="unfinished">C9</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="251"/>
+        <source>C♯9</source>
+        <translation type="unfinished">C♯9</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="252"/>
+        <source>D♭9</source>
+        <translation type="unfinished">D♭9</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="253"/>
+        <source>D9</source>
+        <translation type="unfinished">D9</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="254"/>
+        <source>D♯9</source>
+        <translation type="unfinished">D♯9</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="255"/>
+        <source>E♭9</source>
+        <translation type="unfinished">E♭9</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="256"/>
+        <source>E9</source>
+        <translation type="unfinished">E9</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="257"/>
+        <source>E♯9</source>
+        <translation type="unfinished">E♯9</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="258"/>
+        <source>F♭9</source>
+        <translation type="unfinished">F♭9</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="259"/>
+        <source>F9</source>
+        <translation type="unfinished">F9</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="260"/>
+        <source>F♯9</source>
+        <translation type="unfinished">F♯9</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="261"/>
+        <source>G♭9</source>
+        <translation type="unfinished">G♭9</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/global/utils.cpp" line="262"/>
+        <source>G9</source>
+        <translation type="unfinished">G9</translation>
     </message>
 </context>
 <context>
@@ -23733,32 +24924,47 @@ pickup measure</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="231"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/playcounttext/PlayCountSettings.qml" line="67"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="190"/>
-        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="191"/>
-        <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="80"/>
         <source>Auto</source>
         <translation type="unfinished">Auto</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/DirectionSection.qml" line="46"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/DirectionSection.qml" line="60"/>
+        <source>Auto</source>
+        <comment>direction</comment>
+        <translation type="unfinished">Auto</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/DirectionSection.qml" line="47"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="109"/>
         <source>Down</source>
+        <comment>direction</comment>
         <translation type="unfinished">Down</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/DirectionSection.qml" line="48"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="110"/>
         <source>Up</source>
+        <comment>direction</comment>
         <translation type="unfinished">Up</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/DirectionSection.qml" line="61"/>
+        <source>Left</source>
+        <comment>direction</comment>
+        <translation type="unfinished">Left</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/DirectionSection.qml" line="62"/>
+        <source>Right</source>
+        <comment>direction</comment>
+        <translation type="unfinished">Right</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="211"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="280"/>
         <source>Left</source>
         <translation type="unfinished">Left</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/DirectionSection.qml" line="62"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="212"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="324"/>
         <source>Right</source>
@@ -23773,22 +24979,20 @@ pickup measure</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="57"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="56"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="67"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="96"/>
-        <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="69"/>
-        <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="82"/>
         <source>None</source>
+        <comment>text frame type</comment>
         <translation type="unfinished">None</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="58"/>
         <source>Rectangle</source>
+        <comment>text frame type</comment>
         <translation type="unfinished">Rectangle</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="59"/>
         <source>Circle</source>
+        <comment>text frame type</comment>
         <translation type="unfinished">Circle</translation>
     </message>
     <message>
@@ -23879,7 +25083,7 @@ pickup measure</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="167"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GradualTempoChangeSettings.qml" line="53"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/HairpinLineSettings.qml" line="53"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="68"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="69"/>
         <source>Position</source>
         <translation type="unfinished">Position</translation>
     </message>
@@ -24161,13 +25365,11 @@ pickup measure</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="79"/>
-        <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="53"/>
         <source>Ease in</source>
         <translation type="unfinished">Ease in</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="80"/>
-        <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="54"/>
         <source>Ease out</source>
         <translation type="unfinished">Ease out</translation>
     </message>
@@ -24280,13 +25482,21 @@ pickup measure</translation>
         <translation type="unfinished">Bracket type</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="56"/>
+        <source>None</source>
+        <comment>bracket type</comment>
+        <translation type="unfinished">None</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="57"/>
         <source>Parentheses</source>
+        <comment>bracket type</comment>
         <translation type="unfinished">Parentheses</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="58"/>
         <source>Brackets</source>
+        <comment>bracket type</comment>
         <translation type="unfinished">Brackets</translation>
     </message>
     <message>
@@ -24885,12 +26095,12 @@ pickup measure</translation>
         <translation type="unfinished">Height</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="88"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="89"/>
         <source>Show fingerings</source>
         <translation type="unfinished">Show fingerings</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="161"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="162"/>
         <source>Finger for string %1</source>
         <translation type="unfinished">Finger for string %1</translation>
     </message>
@@ -24947,16 +26157,7 @@ pickup measure</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="114"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="82"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="191"/>
-        <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="52"/>
-        <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="43"/>
-        <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="43"/>
-        <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="114"/>
-        <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="44"/>
-        <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="53"/>
-        <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="43"/>
-        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="192"/>
         <source>Normal</source>
         <translation type="unfinished">Normal</translation>
     </message>
@@ -25051,7 +26252,56 @@ pickup measure</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="66"/>
         <source>Unknown</source>
+        <comment>key signature mode</comment>
         <translation type="unfinished">Unknown</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="67"/>
+        <source>None</source>
+        <comment>key signature mode</comment>
+        <translation type="unfinished">None</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="72"/>
+        <source>Dorian</source>
+        <comment>key signature mode</comment>
+        <translation type="unfinished">Dorian</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="73"/>
+        <source>Phrygian</source>
+        <comment>key signature mode</comment>
+        <translation type="unfinished">Phrygian</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="74"/>
+        <source>Lydian</source>
+        <comment>key signature mode</comment>
+        <translation type="unfinished">Lydian</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="75"/>
+        <source>Mixolydian</source>
+        <comment>key signature mode</comment>
+        <translation type="unfinished">Mixolydian</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="76"/>
+        <source>Aeolian</source>
+        <comment>key signature mode</comment>
+        <translation type="unfinished">Aeolian</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="77"/>
+        <source>Ionian</source>
+        <comment>key signature mode</comment>
+        <translation type="unfinished">Ionian</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="78"/>
+        <source>Locrian</source>
+        <comment>key signature mode</comment>
+        <translation type="unfinished">Locrian</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="69"/>
@@ -25068,41 +26318,6 @@ pickup measure</translation>
         <translation type="unfinished">Minor</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="72"/>
-        <source>Dorian</source>
-        <translation type="unfinished">Dorian</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="73"/>
-        <source>Phrygian</source>
-        <translation type="unfinished">Phrygian</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="74"/>
-        <source>Lydian</source>
-        <translation type="unfinished">Lydian</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="75"/>
-        <source>Mixolydian</source>
-        <translation type="unfinished">Mixolydian</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="76"/>
-        <source>Aeolian</source>
-        <translation type="unfinished">Aeolian</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="77"/>
-        <source>Ionian</source>
-        <translation type="unfinished">Ionian</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="78"/>
-        <source>Locrian</source>
-        <translation type="unfinished">Locrian</translation>
-    </message>
-    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="50"/>
         <source>Line type</source>
         <translation type="unfinished">Line type</translation>
@@ -25117,7 +26332,7 @@ pickup measure</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GradualTempoChangeSettings.qml" line="69"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/HairpinLineSettings.qml" line="69"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/LineSettings.qml" line="61"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="92"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="95"/>
         <location filename="../../src/inspector/models/text/textsettingsmodel.cpp" line="44"/>
         <source>Text</source>
         <translation type="unfinished">Text</translation>
@@ -25194,15 +26409,21 @@ pickup measure</translation>
         <translation type="unfinished">Line style</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="82"/>
+        <source>Normal</source>
+        <comment>line type</comment>
+        <translation type="unfinished">Normal</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="83"/>
-        <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="116"/>
         <source>Dashed</source>
+        <comment>line type</comment>
         <translation type="unfinished">Dashed</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="84"/>
-        <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="117"/>
         <source>Dotted</source>
+        <comment>line type</comment>
         <translation type="unfinished">Dotted</translation>
     </message>
     <message>
@@ -25331,13 +26552,21 @@ pickup measure</translation>
         <translation type="unfinished">Feathered beams</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="96"/>
+        <source>None</source>
+        <comment>beam feathering type</comment>
+        <translation type="unfinished">None</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="97"/>
         <source>Decelerate</source>
+        <comment>beam feathering type</comment>
         <translation type="unfinished">Decelerate</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="98"/>
         <source>Accelerate</source>
+        <comment>beam feathering type</comment>
         <translation type="unfinished">Accelerate</translation>
     </message>
     <message>
@@ -25399,6 +26628,24 @@ pickup measure</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="100"/>
         <source>Duration dot position</source>
         <translation type="unfinished">Duration dot position</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="108"/>
+        <source>Auto</source>
+        <comment>augmentation dot position</comment>
+        <translation type="unfinished">Auto</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="109"/>
+        <source>Down</source>
+        <comment>augmentation dot position</comment>
+        <translation type="unfinished">Down</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="110"/>
+        <source>Up</source>
+        <comment>augmentation dot position</comment>
+        <translation type="unfinished">Up</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="136"/>
@@ -25711,13 +26958,11 @@ pickup measure</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="192"/>
-        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="193"/>
         <source>Pitch names</source>
         <translation type="unfinished">Pitch names</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="193"/>
-        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="194"/>
         <source>German pitch names</source>
         <translation type="unfinished">German pitch names</translation>
     </message>
@@ -25733,25 +26978,21 @@ pickup measure</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="196"/>
-        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="197"/>
         <source>4-shape (Walker)</source>
         <translation type="unfinished">4-shape (Walker)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="197"/>
-        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="198"/>
         <source>7-shape (Aikin)</source>
         <translation type="unfinished">7-shape (Aikin)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="198"/>
-        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="199"/>
         <source>7-shape (Funk)</source>
         <translation type="unfinished">7-shape (Funk)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="199"/>
-        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="200"/>
         <source>7-shape (Walker)</source>
         <translation type="unfinished">7-shape (Walker)</translation>
     </message>
@@ -25905,17 +27146,17 @@ pickup measure</translation>
         <translation type="unfinished">Synchronize with main score</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="79"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="81"/>
         <source>Style/appearance</source>
         <translation type="unfinished">Style/appearance</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="110"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="113"/>
         <source>Exclude from parts</source>
         <translation type="unfinished">Exclude from parts</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="111"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="114"/>
         <source>Exclude from score</source>
         <translation type="unfinished">Exclude from score</translation>
     </message>
@@ -26198,6 +27439,24 @@ pickup measure</translation>
         <translation type="unfinished">Tempo change</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="52"/>
+        <source>Normal</source>
+        <comment>gradual tempo change method</comment>
+        <translation type="unfinished">Normal</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="53"/>
+        <source>Ease in</source>
+        <comment>gradual tempo change method</comment>
+        <translation type="unfinished">Ease in</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="54"/>
+        <source>Ease out</source>
+        <comment>gradual tempo change method</comment>
+        <translation type="unfinished">Ease out</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/noteplaybackmodel.cpp" line="32"/>
         <source>Notes</source>
         <translation type="unfinished">Notes</translation>
@@ -26249,7 +27508,6 @@ pickup measure</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/brackets/bracketsettingsmodel.cpp" line="37"/>
-        <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="81"/>
         <source>Bracket</source>
         <translation type="unfinished">Bracket</translation>
     </message>
@@ -26354,20 +27612,30 @@ pickup measure</translation>
         <translation type="unfinished">Ottava</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="43"/>
+        <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="43"/>
+        <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="44"/>
+        <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="54"/>
+        <source>Normal</source>
+        <comment>hook type</comment>
+        <translation type="unfinished">Normal</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="44"/>
         <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="44"/>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="45"/>
-        <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="54"/>
-        <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="44"/>
+        <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="55"/>
         <source>Hooked 90°</source>
+        <comment>hook type</comment>
         <translation type="unfinished">Hooked 90°</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="45"/>
         <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="45"/>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="46"/>
-        <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="55"/>
+        <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="56"/>
         <source>Hooked 45°</source>
+        <comment>hook type</comment>
         <translation type="unfinished">Hooked 45°</translation>
     </message>
     <message>
@@ -26411,15 +27679,17 @@ pickup measure</translation>
         <translation type="unfinished">Pedal</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="46"/>
-        <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="47"/>
-        <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="56"/>
+        <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="47"/>
+        <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="48"/>
+        <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="58"/>
         <source>Hooked 90° T-style</source>
+        <comment>hook type</comment>
         <translation type="unfinished">Hooked 90° T-style</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="47"/>
+        <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="48"/>
         <source>Asterisk</source>
+        <comment>hook type</comment>
         <translation type="unfinished">Asterisk</translation>
     </message>
     <message>
@@ -26448,9 +27718,28 @@ pickup measure</translation>
         <translation type="unfinished">Hammer-on/pull-off</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="114"/>
+        <source>Normal</source>
+        <comment>slur style</comment>
+        <translation type="unfinished">Normal</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="115"/>
         <source>Wide dashed</source>
+        <comment>slur style</comment>
         <translation type="unfinished">Wide dashed</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="116"/>
+        <source>Dashed</source>
+        <comment>slur style</comment>
+        <translation type="unfinished">Dashed</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="117"/>
+        <source>Dotted</source>
+        <comment>slur style</comment>
+        <translation type="unfinished">Dotted</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="40"/>
@@ -26482,6 +27771,18 @@ pickup measure</translation>
         <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="37"/>
         <source>Volta</source>
         <translation type="unfinished">Volta</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="43"/>
+        <source>Normal</source>
+        <comment>volta hook type</comment>
+        <translation type="unfinished">Normal</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="45"/>
+        <source>Hooked 90°</source>
+        <comment>volta hook type</comment>
+        <translation type="unfinished">Hooked 90°</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lyrics/lyricssettingsmodel.cpp" line="32"/>
@@ -26530,14 +27831,64 @@ pickup measure</translation>
         <translation type="unfinished">Head</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="191"/>
+        <source>Auto</source>
+        <comment>notehead scheme</comment>
+        <translation type="unfinished">Auto</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="192"/>
+        <source>Normal</source>
+        <comment>notehead scheme</comment>
+        <translation type="unfinished">Normal</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="193"/>
+        <source>Pitch names</source>
+        <comment>notehead scheme</comment>
+        <translation type="unfinished">Pitch names</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="194"/>
+        <source>German pitch names</source>
+        <comment>notehead scheme</comment>
+        <translation type="unfinished">German pitch names</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="195"/>
         <source>Solfège movable do</source>
+        <comment>notehead scheme</comment>
         <translation type="unfinished">Solfège movable do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="196"/>
         <source>Solfège fixed do</source>
+        <comment>notehead scheme</comment>
         <translation type="unfinished">Solfège fixed do</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="197"/>
+        <source>4-shape (Walker)</source>
+        <comment>notehead scheme</comment>
+        <translation type="unfinished">4-shape (Walker)</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="198"/>
+        <source>7-shape (Aikin)</source>
+        <comment>notehead scheme</comment>
+        <translation type="unfinished">7-shape (Aikin)</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="199"/>
+        <source>7-shape (Funk)</source>
+        <comment>notehead scheme</comment>
+        <translation type="unfinished">7-shape (Funk)</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="200"/>
+        <source>7-shape (Walker)</source>
+        <comment>notehead scheme</comment>
+        <translation type="unfinished">7-shape (Walker)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/notesettingsproxymodel.cpp" line="45"/>
@@ -26617,12 +27968,38 @@ pickup measure</translation>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="67"/>
         <source>Number</source>
+        <comment>tuplet number type</comment>
         <translation type="unfinished">Number</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="68"/>
         <source>Ratio</source>
+        <comment>tuplet number type</comment>
         <translation type="unfinished">Ratio</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="69"/>
+        <source>None</source>
+        <comment>tuplet number type</comment>
+        <translation type="unfinished">None</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="80"/>
+        <source>Auto</source>
+        <comment>tuplet bracket type</comment>
+        <translation type="unfinished">Auto</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="81"/>
+        <source>Bracket</source>
+        <comment>tuplet bracket type</comment>
+        <translation type="unfinished">Bracket</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="82"/>
+        <source>None</source>
+        <comment>tuplet bracket type</comment>
+        <translation type="unfinished">None</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/parts/partssettingsmodel.cpp" line="33"/>
@@ -26746,17 +28123,17 @@ pickup measure</translation>
 <context>
     <name>languages</name>
     <message>
-        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="363"/>
+        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="358"/>
         <source>Checking for updates…</source>
         <translation type="unfinished">Checking for updates…</translation>
     </message>
     <message>
-        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="417"/>
+        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="412"/>
         <source>Downloading…</source>
         <translation type="unfinished">Downloading…</translation>
     </message>
     <message>
-        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="434"/>
+        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="429"/>
         <source>Unpacking…</source>
         <translation type="unfinished">Unpacking…</translation>
     </message>
@@ -27344,23 +28721,23 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Apply to</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="197"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="176"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="184"/>
         <source>String %1</source>
         <translation type="unfinished">String %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="211"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="194"/>
         <source>Manually specify instruction text</source>
         <translation type="unfinished">Manually specify instruction text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="239"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="222"/>
         <source>Position</source>
         <translation type="unfinished">Position</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="250"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="233"/>
         <source>Capo position</source>
         <translation type="unfinished">Capo position</translation>
     </message>
@@ -27545,7 +28922,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Capo fret position:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="701"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="690"/>
         <source>Small parentheses</source>
         <translation type="unfinished">Small parentheses</translation>
     </message>
@@ -27770,7 +29147,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="96"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="334"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="199"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="193"/>
         <source>Edit text style</source>
         <translation type="unfinished">Edit text style</translation>
     </message>
@@ -27830,7 +29207,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Repeat play count text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="180"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="174"/>
         <source>Preset</source>
         <translation type="unfinished">Preset</translation>
     </message>
@@ -28181,22 +29558,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Chords</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="188"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="160"/>
         <source>Include single notes</source>
         <translation type="unfinished">Include single notes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="200"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="179"/>
         <source>Notation elements</source>
         <translation type="unfinished">Notation elements</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="272"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="251"/>
         <source>Clear all</source>
         <translation type="unfinished">Clear all</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="291"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="270"/>
         <source>Select all</source>
         <translation type="unfinished">Select all</translation>
     </message>
@@ -28491,47 +29868,47 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Staff %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="978"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="976"/>
         <source>Cannot create tuplet</source>
         <translation type="unfinished">Cannot create tuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="978"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="976"/>
         <source>Note value is too short</source>
         <translation type="unfinished">Note value is too short</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1501"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1499"/>
         <source>All Supported Files</source>
         <translation type="unfinished">All Supported Files</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1502"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1500"/>
         <source>Scalable Vector Graphics</source>
         <translation type="unfinished">Scalable Vector Graphics</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1503"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1501"/>
         <source>JPEG</source>
         <translation type="unfinished">JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1504"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1502"/>
         <source>PNG Bitmap Graphic</source>
         <translation type="unfinished">PNG Bitmap Graphic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1505"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1503"/>
         <source>Bitmap</source>
         <translation type="unfinished">Bitmap</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1506"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1504"/>
         <source>TIFF</source>
         <translation type="unfinished">TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1507"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1505"/>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="51"/>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="147"/>
         <location filename="../../src/notation/view/selectionfilter/voicesselectionfiltermodel.cpp" line="49"/>
@@ -28539,53 +29916,53 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">All</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1509"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1507"/>
         <source>Insert Image</source>
         <translation type="unfinished">Insert Image</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1870"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1868"/>
         <source>MuseScore style files</source>
         <translation type="unfinished">MuseScore style files</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1871"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1869"/>
         <source>MuseScore style file</source>
         <translation type="unfinished">MuseScore style file</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1874"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1872"/>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="121"/>
         <source>Load style</source>
         <translation type="unfinished">Load style</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1875"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1873"/>
         <source>Save style</source>
         <translation type="unfinished">Save style</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1885"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1883"/>
         <source>The style file could not be loaded.</source>
         <translation type="unfinished">The style file could not be loaded.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1891"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1889"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
         <translation type="unfinished">Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1893"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1891"/>
         <source>Click OK to load anyway.</source>
         <translation type="unfinished">Click OK to load anyway.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1911"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1909"/>
         <source>The style file could not be saved.</source>
         <translation type="unfinished">The style file could not be saved.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1912"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1910"/>
         <source>An error occurred.</source>
         <translation type="unfinished">An error occurred.</translation>
     </message>
@@ -29180,57 +30557,57 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="220"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="730"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1288"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1284"/>
         <source>Above</source>
         <translation type="unfinished">Above</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="221"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="731"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1289"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1285"/>
         <source>Below</source>
         <translation type="unfinished">Below</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="242"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1277"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1273"/>
         <source>Apply to all parts</source>
         <translation type="unfinished">Apply to all parts</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="735"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1292"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1288"/>
         <source>Number</source>
         <translation type="unfinished">Number</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="736"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1293"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1289"/>
         <source>Ratio</source>
         <translation type="unfinished">Ratio</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="737"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1294"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1290"/>
         <source>None</source>
         <comment>no tuplet number type</comment>
         <translation type="unfinished">None</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="740"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1296"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1292"/>
         <source>Automatic</source>
         <translation type="unfinished">Automatic</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="741"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1297"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1293"/>
         <source>Bracket</source>
         <translation type="unfinished">Bracket</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="742"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1298"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1294"/>
         <source>None</source>
         <comment>no tuplet bracket type</comment>
         <translation type="unfinished">None</translation>
@@ -29251,126 +30628,126 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Under the first note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1063"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1325"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1059"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1321"/>
         <source>None</source>
         <comment>no frame for text</comment>
         <translation type="unfinished">None</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1064"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1326"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1060"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1322"/>
         <source>Rectangle</source>
         <translation type="unfinished">Rectangle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1065"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1327"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1061"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1323"/>
         <source>Circle</source>
         <translation type="unfinished">Circle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1342"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1338"/>
         <source>Using variables in the header/footer</source>
         <translation type="unfinished">Using variables in the header/footer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1344"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1340"/>
         <source>Type these special character combinations in the fields above to reference document data in the header/footer.</source>
         <translation type="unfinished">Type these special character combinations in the fields above to reference document data in the header/footer.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1347"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1343"/>
         <source>Page number, except on first page</source>
         <translation type="unfinished">Page number, except on first page</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1349"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1345"/>
         <source>Page number, if there is more than one page</source>
         <translation type="unfinished">Page number, if there is more than one page</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1351"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1347"/>
         <source>Page number, on all pages</source>
         <translation type="unfinished">Page number, on all pages</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1353"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1349"/>
         <source>Number of pages</source>
         <translation type="unfinished">Number of pages</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1355"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1351"/>
         <source>File name</source>
         <translation type="unfinished">File name</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1357"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1353"/>
         <source>File path+name</source>
         <translation type="unfinished">File path+name</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1359"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1355"/>
         <source>Part name, except on first page</source>
         <translation type="unfinished">Part name, except on first page</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1361"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1357"/>
         <source>Part name, on all pages</source>
         <translation type="unfinished">Part name, on all pages</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1363"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1359"/>
         <source>Current date</source>
         <translation type="unfinished">Current date</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1365"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1361"/>
         <source>Creation date</source>
         <translation type="unfinished">Creation date</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1363"/>
         <source>Last modification time</source>
         <translation type="unfinished">Last modification time</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1369"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1365"/>
         <source>Last modification date</source>
         <translation type="unfinished">Last modification date</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1371"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1367"/>
         <source>Copyright, on first page only</source>
         <translation type="unfinished">Copyright, on first page only</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1373"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1369"/>
         <source>Copyright, on all pages</source>
         <translation type="unfinished">Copyright, on all pages</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1375"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1371"/>
         <source>MuseScore Studio version this score was last saved with</source>
         <translation type="unfinished">MuseScore Studio version this score was last saved with</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1377"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1373"/>
         <source>MuseScore Studio revision this score was last saved with</source>
         <translation type="unfinished">MuseScore Studio revision this score was last saved with</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1379"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1375"/>
         <source>The $ sign itself</source>
         <translation type="unfinished">The $ sign itself</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1381"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1377"/>
         <source>&lt;b&gt;Metadata tags and current values&lt;/b&gt; (configured in &lt;b&gt;File &gt; Project properties…&lt;/b&gt;)</source>
         <translation type="unfinished">&lt;b&gt;Metadata tags and current values&lt;/b&gt; (configured in &lt;b&gt;File &gt; Project properties…&lt;/b&gt;)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1383"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1379"/>
         <source>Type $:tag: into a field above, replacing the word ‘tag’ with one of the labels below. Its associated metadata will be shown on your score.</source>
         <translation type="unfinished">Type $:tag: into a field above, replacing the word ‘tag’ with one of the labels below. Its associated metadata will be shown on your score.</translation>
     </message>
@@ -29416,17 +30793,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
 <context>
     <name>notation/editstyle/barlines</name>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml" line="58"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml" line="46"/>
         <source>Show barline before key and time signature changes</source>
         <translation type="unfinished">Show barline before key and time signature changes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml" line="66"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml" line="55"/>
         <source>Use double barline before key signatures</source>
         <translation type="unfinished">Use double barline before key signatures</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml" line="74"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml" line="63"/>
         <source>Use double barline before time signatures</source>
         <translation type="unfinished">Use double barline before time signatures</translation>
     </message>
@@ -29624,119 +31001,119 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Visibility</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="56"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="57"/>
         <source>Show ‘H’ and ‘P’ symbols on</source>
         <translation type="unfinished">Show ‘H’ and ‘P’ symbols on</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="72"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="148"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="63"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="134"/>
         <source>Standard staves</source>
         <translation type="unfinished">Standard staves</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="89"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="154"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="72"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="140"/>
         <source>Tablature staves</source>
         <translation type="unfinished">Tablature staves</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="98"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="84"/>
         <source>Case</source>
         <translation type="unfinished">Case</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="108"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="94"/>
         <source>Upper case</source>
         <translation type="unfinished">Upper case</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="109"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="95"/>
         <source>Lower case</source>
         <translation type="unfinished">Lower case</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="125"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="111"/>
         <source>Edit text style</source>
         <translation type="unfinished">Edit text style</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="137"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="123"/>
         <source>Alignment</source>
         <translation type="unfinished">Alignment</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="144"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="130"/>
         <source>Align ‘H’, ‘P’ and ‘T’ symbols in the same slur on</source>
         <translation type="unfinished">Align ‘H’, ‘P’ and ‘T’ symbols in the same slur on</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="164"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="150"/>
         <source>Consecutive hammer-ons/pull-offs</source>
         <translation type="unfinished">Consecutive hammer-ons/pull-offs</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="175"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="161"/>
         <source>Show ‘H’ or ‘P’ between each pair of notes</source>
         <translation type="unfinished">Show ‘H’ or ‘P’ between each pair of notes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="176"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="162"/>
         <source>Show ‘H’ or ‘P’ once per group of ascending/descending notes</source>
         <translation type="unfinished">Show ‘H’ or ‘P’ once per group of ascending/descending notes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="196"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="182"/>
         <source>Left-hand tapping</source>
         <translation type="unfinished">Left-hand tapping</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="209"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="195"/>
         <source>Show on standard staves</source>
         <translation type="unfinished">Show on standard staves</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="216"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="272"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="202"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="258"/>
         <source>Half slur</source>
         <translation type="unfinished">Half slur</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="217"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="236"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="273"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="292"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="203"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="222"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="259"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="278"/>
         <source>Symbol</source>
         <translation type="unfinished">Symbol</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="218"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="274"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="204"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="260"/>
         <source>Both</source>
         <translation type="unfinished">Both</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="265"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="251"/>
         <source>Show on tablature staves</source>
         <translation type="unfinished">Show on tablature staves</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="316"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="302"/>
         <source>Slur top and bottom notes in chords</source>
         <translation type="unfinished">Slur top and bottom notes in chords</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="326"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="312"/>
         <source>Right-hand tapping</source>
         <translation type="unfinished">Right-hand tapping</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="336"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="322"/>
         <source>Symbol (standard staff)</source>
         <translation type="unfinished">Symbol (standard staff)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="361"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="347"/>
         <source>Symbol (tablature staff)</source>
         <translation type="unfinished">Symbol (tablature staff)</translation>
     </message>
@@ -29744,12 +31121,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
 <context>
     <name>notation/editstyle/repeatplaycount</name>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="164"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="155"/>
         <source>Automatically show text at repeat barlines</source>
         <translation type="unfinished">Automatically show text at repeat barlines</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="169"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="163"/>
         <source>Show for single repeats (e.g. “x2”)</source>
         <translation type="unfinished">Show for single repeats (e.g. “x2”)</translation>
     </message>
@@ -30015,67 +31392,67 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Clefs, key &amp; time signatures at repeats and jumps</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="527"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="516"/>
         <source>Use parentheses</source>
         <translation type="unfinished">Use parentheses</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="557"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="546"/>
         <source>Changes that apply to both the repeat/jump and the subsequent measure</source>
         <translation type="unfinished">Changes that apply to both the repeat/jump and the subsequent measure</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="564"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="553"/>
         <source>At repeats, only show changes before the barline</source>
         <translation type="unfinished">At repeats, only show changes before the barline</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="570"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="559"/>
         <source>At all other jumps, only show changes before the barline</source>
         <translation type="unfinished">At all other jumps, only show changes before the barline</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="580"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="569"/>
         <source>Changes that apply only after repeats and jumps</source>
         <translation type="unfinished">Changes that apply only after repeats and jumps</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="590"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="579"/>
         <source>Place clefs before repeats</source>
         <translation type="unfinished">Place clefs before repeats</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="599"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="588"/>
         <source>Place clefs after repeats</source>
         <translation type="unfinished">Place clefs after repeats</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="621"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="610"/>
         <source>Allow changes between end-start repeats</source>
         <translation type="unfinished">Allow changes between end-start repeats</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="647"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="636"/>
         <source>Courtesies</source>
         <translation type="unfinished">Courtesies</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="662"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="651"/>
         <source>Show at repeats</source>
         <translation type="unfinished">Show at repeats</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="673"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="662"/>
         <source>Show at all other jumps</source>
         <translation type="unfinished">Show at all other jumps</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="684"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="673"/>
         <source>Show when cancelling a courtesy before repeats</source>
         <translation type="unfinished">Show when cancelling a courtesy before repeats</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="695"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="684"/>
         <source>Show when cancelling a courtesy before all other jumps</source>
         <translation type="unfinished">Show when cancelling a courtesy before all other jumps</translation>
     </message>
@@ -30349,7 +31726,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Close the panel automatically</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="174"/>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="147"/>
         <source>Use legacy percussion panel</source>
         <translation type="unfinished">Use legacy percussion panel</translation>
     </message>
@@ -30986,39 +32363,39 @@ failed.</source>
 failed.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="261"/>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="263"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="266"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="268"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1795"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1796"/>
         <source>Capo</source>
         <translation type="unfinished">Capo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="271"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="276"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1801"/>
         <source>String tunings</source>
         <translation type="unfinished">String tunings</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="287"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="292"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1833"/>
         <source>Left-hand tapping</source>
         <translation type="unfinished">Left-hand tapping</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="291"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="296"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1837"/>
         <source>Right-hand tapping</source>
         <translation type="unfinished">Right-hand tapping</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="297"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="302"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1840"/>
         <source>Hammer-on / pull-off</source>
         <translation type="unfinished">Hammer-on / pull-off</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="344"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="349"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1701"/>
         <source>Blank</source>
         <translation type="unfinished">Blank</translation>
@@ -33865,7 +35242,7 @@ failed: %2</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="70"/>
-        <location filename="../../src/project/internal/notationproject.cpp" line="82"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="83"/>
         <source>Untitled score</source>
         <translation type="unfinished">Untitled score</translation>
     </message>
@@ -34055,23 +35432,23 @@ failed: %2</translation>
         <translation type="unfinished">Saving online…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2390"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2388"/>
         <source>File “%1” seems not corrupted</source>
         <translation type="unfinished">File “%1” seems not corrupted</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2391"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2389"/>
         <source>This file does not seem to contain errors.</source>
         <translation type="unfinished">This file does not seem to contain errors.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2394"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2392"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1796"/>
         <source>File “%1” is corrupted</source>
         <translation type="unfinished">File “%1” is corrupted</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2396"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2394"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</source>
         <translation type="unfinished">This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</translation>
     </message>
@@ -35451,12 +36828,12 @@ failed: %2</translation>
         <translation type="unfinished">Share</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/notationproject.cpp" line="935"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="936"/>
         <source>File “%1” could not be opened for validation. %2</source>
         <translation type="unfinished">File “%1” could not be opened for validation. %2</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/notationproject.cpp" line="946"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="947"/>
         <source>“%1” is corrupted or damaged.</source>
         <translation type="unfinished">“%1” is corrupted or damaged.</translation>
     </message>
@@ -36370,7 +37747,7 @@ failed: %2</translation>
         <translation type="unfinished">Paste text</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="413"/>
+        <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="431"/>
         <location filename="../../src/inspector/models/notation/frames/verticalframesettingsmodel.cpp" line="65"/>
         <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="208"/>
         <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="220"/>
@@ -36378,14 +37755,14 @@ failed: %2</translation>
         <translation type="unfinished">Edit %1</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="446"/>
+        <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="464"/>
         <location filename="../../src/inspector/models/notation/frames/verticalframesettingsmodel.cpp" line="97"/>
         <source>Reset %1</source>
         <translation type="unfinished">Reset %1</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="529"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1239"/>
+        <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1235"/>
         <source>Edit style</source>
         <translation type="unfinished">Edit style</translation>
     </message>
@@ -36505,18 +37882,18 @@ failed: %2</translation>
         <translation type="unfinished">Make system marking(s) invisible</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/excerptnotation.cpp" line="110"/>
+        <location filename="../../src/notation/internal/excerptnotation.cpp" line="111"/>
         <source>Rename part</source>
         <extracomment>Means: &quot;edit the name of a part score&quot;</extracomment>
         <translation type="unfinished">Rename part</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="477"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="478"/>
         <source>Add/remove parts</source>
         <translation type="unfinished">Add/remove parts</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="520"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="521"/>
         <source>Reset part</source>
         <translation type="unfinished">Reset part</translation>
     </message>
@@ -36614,12 +37991,12 @@ failed: %2</translation>
         <translation type="unfinished">Enter full-measure rest</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2214"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2212"/>
         <source>Display concert pitch</source>
         <translation type="unfinished">Display concert pitch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2215"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2213"/>
         <source>Display transposed</source>
         <translation type="unfinished">Display transposed</translation>
     </message>
@@ -37391,7 +38768,7 @@ failed: %2</translation>
         <translation type="unfinished">Toggle ‘Apply sound flag to all staves’</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/notationproject.cpp" line="1209"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="1210"/>
         <source>Edit project properties</source>
         <translation type="unfinished">Edit project properties</translation>
     </message>
