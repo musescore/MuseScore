@@ -174,16 +174,18 @@ EngravingItem* ChordRest::drop(EditData& data)
         return e;
 
     case ElementType::BAR_LINE:
+    {
+        BarLine* bl = toBarLine(e);
+        Fraction barLineTick = bl->barLineType() == BarLineType::START_REPEAT ? tick() : endTick();
+
         if (data.control()) {
-            SplitJoinMeasure::splitMeasure(masterScore(), tick());
+            SplitJoinMeasure::splitMeasure(masterScore(), barLineTick);
         } else {
-            BarLine* bl = toBarLine(e);
             bl->setPos(PointF());
             bl->setTrack(staffIdx() * VOICES);
             bl->setGenerated(false);
-            Fraction blt = bl->barLineType() == BarLineType::START_REPEAT ? tick() : endTick();
 
-            if (blt == m->tick() || blt == m->endTick()) {
+            if (barLineTick == m->tick() || barLineTick == m->endTick()) {
                 return m->drop(data);
             }
 
@@ -191,7 +193,7 @@ EngravingItem* ChordRest::drop(EditData& data)
             for (Staff* st  : staff()->staffList()) {
                 Score* score = st->score();
                 Measure* measure = score->tick2measure(m->tick());
-                Segment* seg = measure->undoGetSegment(SegmentType::BarLine, blt);
+                Segment* seg = measure->undoGetSegment(SegmentType::BarLine, barLineTick);
                 BarLine* l;
                 if (obl == 0) {
                     obl = l = bl->clone();
@@ -205,6 +207,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         }
         delete e;
         return 0;
+    }
 
     case ElementType::CLEF:
         score()->cmdInsertClef(toClef(e), this);
