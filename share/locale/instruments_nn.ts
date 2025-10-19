@@ -10842,14 +10842,14 @@
         <source>Handbells</source>
         <comment>hand-bells trackName</comment>
         <extracomment>trackName for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Handklokker</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3642"/>
         <source>Handbells</source>
         <comment>hand-bells longName</comment>
         <extracomment>longName for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Handklokker</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3644"/>
@@ -16232,14 +16232,14 @@
         <source>Harp</source>
         <comment>harp trackName</comment>
         <extracomment>trackName for Harp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Harpe</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5389"/>
         <source>Harp</source>
         <comment>harp longName</comment>
         <extracomment>longName for Harp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Harpe</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5391"/>

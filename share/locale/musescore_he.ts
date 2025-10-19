@@ -36463,7 +36463,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="168"/>
         <source>You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; for news on what’s coming next.</source>
-        <translation type="unfinished"/>
+        <translation>כבר יש לכם את הגרסה האחרונה של MuseScore Studio. אנא בקרו ב &lt;a href=&quot;%1&quot;&gt;MuseScore.org/he&lt;/a&gt; כדי לקבל עדכונים על מה שמגיע בהמשך.</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="175"/>
@@ -36483,7 +36483,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="225"/>
         <source>MuseScore Studio needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.</source>
-        <translation>MuseScore Studio צריכה להיסגר בשביל להמשיך את תהליך ההתקנה. אם יש לכם שינויים שאינם נשמרו, אנו ממליצים לשמור אותם לפני ש־MuseScore Studio נסגרת.</translation>
+        <translation>MuseScore Studio צריכה להיסגר בשביל להשלים את ההתקנה. אם יש לכם שינויים שאינם נשמרו, אנא שמרו אותם אותם לפני ש־MuseScore Studio נסגרת.</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="230"/>
@@ -36553,12 +36553,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="225"/>
         <source>This action will reset your workspace to its factory default layout and cannot be undone. Do you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>פעולה זו תאפס את סביבת העבודה שלכם לפריסת ברירת המחדל שלה ואינה ניתנת לביטול. האם ברצונכם להמשיך?</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="228"/>
         <source>Resetting workspaces</source>
-        <translation type="unfinished"/>
+        <translation>מאפס סביבת עבודה</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="229"/>
@@ -36568,7 +36568,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="262"/>
         <source>Name cannot be empty</source>
-        <translation type="unfinished"/>
+        <translation>שם אינו יכול להיות ריק</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="273"/>

@@ -18209,7 +18209,7 @@ Frette %1 sur les cordes %2</translation>
         <location filename="../../src/engraving/dom/property.cpp" line="240"/>
         <location filename="../../src/engraving/dom/property.cpp" line="294"/>
         <source>tick</source>
-        <translation> tick</translation>
+        <translation>tick</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="241"/>
@@ -18471,7 +18471,7 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="303"/>
         <source>lines</source>
-        <translation> lignes</translation>
+        <translation>lignes</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="304"/>
@@ -18896,7 +18896,7 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="406"/>
         <source>autoplace minimum distance</source>
-        <translation>distance min. du placement automatique :</translation>
+        <translation>distance min. du placement automatique</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="408"/>
@@ -19021,7 +19021,7 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="440"/>
         <source>tempo change factor</source>
-        <translation> facteur de changement de tempo</translation>
+        <translation>facteur de changement de tempo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="442"/>
@@ -27698,7 +27698,7 @@ Remarque : Maitriser MuseScore est disponible principalement en anglais (Certain
     <message>
         <location filename="../../src/notation/notationerrors.h" line="70"/>
         <source>Please select a note or rest or chord symbol and retry</source>
-        <translation>Veuillez sélectionner une note, un silence, ou un symbole d&apos;accord et réessayer </translation>
+        <translation>Veuillez sélectionner une note, un silence, ou un symbole d&apos;accord et réessayer</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="73"/>

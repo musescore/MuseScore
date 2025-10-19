@@ -3553,7 +3553,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6472"/>
         <source>Distance after head of last note:</source>
-        <translation>Etäisyys edellisen nuotinpään jälkeen:</translation>
+        <translation>Etäisyys viimeisen nuotinpään jälkeen:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6491"/>

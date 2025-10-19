@@ -1821,7 +1821,7 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="161"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8473"/>
         <source>Bends</source>
-        <translation type="unfinished"/>
+        <translation>Bend</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="166"/>
@@ -1838,7 +1838,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="176"/>
         <source>Articulations &amp; ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Artikulasi &amp; hiasan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="181"/>
@@ -2326,7 +2326,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="652"/>
         <source>On first system of sections:</source>
-        <translation type="unfinished"/>
+        <translation>Pada sistem pertama bab:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="659"/>
@@ -2526,12 +2526,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1818"/>
         <source>Staff distance:</source>
-        <translation>Jarak Paranada:</translation>
+        <translation>Jarak paranada:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1834"/>
         <source>Grand staff distance:</source>
-        <translation>Jarak Paranada Besar:</translation>
+        <translation>Jarak paranada besar:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1904"/>
@@ -2651,17 +2651,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2380"/>
         <source>Barline to note:</source>
-        <translation type="unfinished"/>
+        <translation>Not ke garis birama:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2397"/>
         <source>Clef to note:</source>
-        <translation type="unfinished"/>
+        <translation>Klef ke not:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2410"/>
         <source>Barline to clef:</source>
-        <translation type="unfinished"/>
+        <translation>Garis birama ke klef:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2420"/>
@@ -2691,12 +2691,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2570"/>
         <source>Clef to key signature:</source>
-        <translation type="unfinished"/>
+        <translation>Klef ke tanda kunci:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2593"/>
         <source>Clef to time signature:</source>
-        <translation type="unfinished"/>
+        <translation>Klef ke tanda birama:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2613"/>
@@ -2711,7 +2711,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2636"/>
         <source>Note to note:</source>
-        <translation type="unfinished"/>
+        <translation>Not ke not:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2662"/>
@@ -2736,12 +2736,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2750"/>
         <source>Reset &apos;Spacing&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &apos;Pemberian jarak&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2760"/>
         <source>System header</source>
-        <translation type="unfinished"/>
+        <translation>Bagian kepala sistem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2769"/>
@@ -2771,7 +2771,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2917"/>
         <source>Spacing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Rasio pemberian jarak:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2927"/>
@@ -2811,7 +2811,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3071"/>
         <source>Small note size:</source>
-        <translation type="unfinished"/>
+        <translation>Ukuran not kecil:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3097"/>
@@ -2821,12 +2821,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3163"/>
         <source>Small clef size:</source>
-        <translation type="unfinished"/>
+        <translation>Ukuran klef kecil:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3179"/>
         <source>Grace note size:</source>
-        <translation type="unfinished"/>
+        <translation>Ukuran not singkat:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3217"/>
@@ -2836,29 +2836,29 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3277"/>
         <source>Header</source>
-        <translation type="unfinished"/>
+        <translation>Bagian kepala</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3288"/>
         <source>Show header also on first page</source>
-        <translation type="unfinished"/>
+        <translation>Tampilkan juga bagian kepala pada halaman pertama</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3291"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3558"/>
         <source>Show on first page</source>
-        <translation type="unfinished"/>
+        <translation>Tampilkan pada halaman pertama</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3311"/>
         <source>Use odd/even page header</source>
-        <translation type="unfinished"/>
+        <translation>Gunakan bagian kepala halaman ganjil/genap</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3314"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3581"/>
         <source>Different odd/even pages</source>
-        <translation type="unfinished"/>
+        <translation>Halaman ganjil/genap yang berbeda</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3382"/>
@@ -2903,7 +2903,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3544"/>
         <source>Footer</source>
-        <translation type="unfinished"/>
+        <translation>Bagian kaki</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3555"/>
@@ -2983,7 +2983,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4160"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4266"/>
         <source>Horizontal offset:</source>
-        <translation type="unfinished"/>
+        <translation>Offset horizontal:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4170"/>
@@ -2994,37 +2994,37 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4389"/>
         <source>Double barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Jarak garis birama ganda:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4415"/>
         <source>Reset &apos;Double barline distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &apos;Jarak garis birama ganda&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4428"/>
         <source>Reset &apos;Thin barline thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &apos;Ketebalan garis birama tipis&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4464"/>
         <source>Barline at start of single staff</source>
-        <translation>Garis Birama diawal paranada tunggal</translation>
+        <translation>Garis birama di awal paranada tunggal</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4474"/>
         <source>Reset &apos;Show repeat barline tips (“winged” repeats)&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &apos;Tampilkan tips garis birama pengulangan (pengulangan &quot;bersayap&quot;)&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4487"/>
         <source>Reset &apos;Double barline thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &apos;Ketebalan garis birama ganda&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4500"/>
         <source>Reset &apos;Thick barline thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &apos;Ketebalan garis birama tebal&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4510"/>
@@ -3275,7 +3275,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5364"/>
         <source>measure(s)</source>
-        <translation>birama()</translation>
+        <translation>birama</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5374"/>
@@ -3456,17 +3456,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6125"/>
         <source>Reset &apos;Direction&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &apos;Arah&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6135"/>
         <source>Number type:</source>
-        <translation type="unfinished"/>
+        <translation>Jenis nomor:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6146"/>
         <source>Number</source>
-        <translation type="unfinished"/>
+        <translation>Nomor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6151"/>
@@ -3487,7 +3487,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6201"/>
         <source>Brackets</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kurung kurawal</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6242"/>
@@ -3527,7 +3527,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6370"/>
         <source>Bracket</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kurung kurawal</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6375"/>
@@ -3671,7 +3671,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10445"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11409"/>
         <source>Reset &apos;Position&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &apos;Posisi&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6860"/>
@@ -3761,7 +3761,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7023"/>
         <source>Scale:</source>
-        <translation>Tangga nada:</translation>
+        <translation>Skala:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7033"/>
@@ -3774,7 +3774,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11674"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12673"/>
         <source>Font:</source>
-        <translation>Huruf.</translation>
+        <translation>Font:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7081"/>
@@ -3799,7 +3799,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7184"/>
         <source>Height:</source>
-        <translation>Tinggi</translation>
+        <translation>Tinggi:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7275"/>
@@ -3835,7 +3835,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8875"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9211"/>
         <source>Line style:</source>
-        <translation>Gaya Garis:</translation>
+        <translation>Gaya garis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7499"/>
@@ -3849,7 +3849,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8896"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9232"/>
         <source>Continuous</source>
-        <translation>Lanjutkan</translation>
+        <translation>Berkelanjutan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7515"/>
@@ -3963,7 +3963,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8546"/>
         <source>Arrow width:</source>
-        <translation type="unfinished"/>
+        <translation>Lebar panah:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8559"/>
@@ -3973,7 +3973,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8576"/>
         <source>Arrow height:</source>
-        <translation type="unfinished"/>
+        <translation>Tinggi panah:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8611"/>
@@ -4003,7 +4003,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9393"/>
         <source>Articulations &amp;&amp; ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Artikulasi &amp;&amp; hiasan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9399"/>
@@ -4081,7 +4081,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9630"/>
         <source>Combined articulation</source>
-        <translation type="unfinished"/>
+        <translation>Artikulasi yang dikombinasikan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9636"/>
@@ -4424,7 +4424,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12100"/>
         <source>Harmonic marks</source>
-        <translation type="unfinished"/>
+        <translation>Marka harmonik</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12131"/>
@@ -4454,7 +4454,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12320"/>
         <source>Tied fret marks</source>
-        <translation type="unfinished"/>
+        <translation>Penanda fret yang terikat</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12326"/>
@@ -4464,7 +4464,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12333"/>
         <source>Show ties only</source>
-        <translation type="unfinished"/>
+        <translation>Hanya tampilkan ikatan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12340"/>
@@ -4474,7 +4474,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12350"/>
         <source>Parentheses indicating ties</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kurung yang mengindikasikan ikatan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12356"/>
@@ -5898,7 +5898,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="152"/>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="170"/>
         <source>Number</source>
-        <translation type="unfinished"/>
+        <translation>Nomor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="180"/>
@@ -5915,7 +5915,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="197"/>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="225"/>
         <source>Bracket</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kurung kurawal</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="215"/>
@@ -6218,7 +6218,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="186"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="126"/>
         <source>Mixer</source>
-        <translation type="unfinished"/>
+        <translation>Mixer</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="187"/>
@@ -7945,7 +7945,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1287"/>
         <source>Add tied note to chord</source>
-        <translation type="unfinished"/>
+        <translation>Tambahkan not yang terhubung ke akor</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1292"/>
@@ -9384,7 +9384,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2345"/>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Titik augmentasi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2346"/>
@@ -9394,7 +9394,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2352"/>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Titik augmentasi ganda</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2353"/>
@@ -9404,7 +9404,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2359"/>
         <source>Triple augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Titik augmentasi 3x lipat</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2360"/>
@@ -9414,7 +9414,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2366"/>
         <source>Quadruple augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Titik augmentasi 4x lipat</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2367"/>
@@ -9499,12 +9499,12 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2427"/>
         <source>Tie</source>
-        <translation type="unfinished"/>
+        <translation>Ikatan</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2428"/>
         <source>Add tied note</source>
-        <translation>Tambahkan not yang terhubung</translation>
+        <translation>Tambahkan not yang terikat</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2434"/>
@@ -10278,7 +10278,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="397"/>
         <source>Mixer</source>
-        <translation type="unfinished"/>
+        <translation>Mixer</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="450"/>
@@ -10331,7 +10331,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/AccountPage.qml" line="75"/>
         <source>Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Akun</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="318"/>
@@ -10350,7 +10350,7 @@ Tindakan ini tidak akan menghapus skor Anda apapun.</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="329"/>
         <source>Revert</source>
-        <translation type="unfinished"/>
+        <translation>Kembalikan</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="331"/>
@@ -10365,7 +10365,7 @@ Tindakan ini tidak akan menghapus skor Anda apapun.</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="344"/>
         <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio butuh dimulai ulang untuk perubahan-perubahan ini agar bekerja.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="349"/>
@@ -10510,7 +10510,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/view/aboutmodel.cpp" line="41"/>
         <source>Unstable prerelease for %1</source>
-        <translation type="unfinished"/>
+        <translation>Prarilis yang belum stabil untuk %1:</translation>
     </message>
 </context>
 <context>
@@ -10551,7 +10551,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="32"/>
         <source>Discover new sound libraries in MuseHub and enjoy realistic score playback</source>
-        <translation type="unfinished"/>
+        <translation>Jelajahi pustaka suara baru di MuseHub dan nikmati pemutaran skor yang realistis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="36"/>
@@ -10561,7 +10561,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="34"/>
         <source>Welcome to MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Selamat datang di MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="35"/>
@@ -10581,18 +10581,19 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="123"/>
         <source>Enable high contrast</source>
-        <translation type="unfinished"/>
+        <translation>Hidupkan kontras tinggi</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
         <source>Video tutorials</source>
-        <translation type="unfinished"/>
+        <translation>Tutorial video</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="33"/>
         <source>Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started
 (Video tutorials require an internet connection)</source>
-        <translation type="unfinished"/>
+        <translation>Belakang dialog ini adalah bab &apos;Pelajari&apos;, di mana Anda akan mencari tutorial agar Anda dapat memulai
+(Tutorial video membutuhkan koneksi internet)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="76"/>
@@ -10607,12 +10608,12 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="104"/>
         <source>If you choose to cancel, then be sure to check out our free MuseSounds playback libraries on &lt;a href=&quot;%1&quot;&gt;MuseHub.com&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Jika Anda memutuskan untuk membatalkan, kemudian pastikan untuk mengecek pustaka pemutaran MuseSounds gratis di &lt;a href=&quot;%1&quot;&gt;MuseHub.com&lt;/a&gt;..</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="114"/>
         <source>Visit MuseHub</source>
-        <translation type="unfinished"/>
+        <translation>Kunjungi MuseHub</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="126"/>
@@ -10667,7 +10668,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="341"/>
         <source>&amp;Chords and fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Akor dan diagram papan fret</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="345"/>
@@ -10681,7 +10682,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="177"/>
         <source>Fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Legenda diagram papan fret</translation>
     </message>
 </context>
 <context>
@@ -10689,48 +10690,48 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="489"/>
         <source>&amp;System</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Sistem</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="501"/>
         <source>&amp;MuseSampler</source>
-        <translation type="unfinished"/>
+        <translation>&amp;MuseSampler</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="547"/>
         <source>A&amp;ctions</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Tindakan</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="548"/>
         <source>&amp;Accessibility</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Aksesibilitas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="549"/>
         <source>&amp;Engraving</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Pengukiran</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="550"/>
         <source>E&amp;xtensions</source>
-        <translation type="unfinished"/>
+        <translation>E&amp;kstensi</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="551"/>
         <source>Auto&amp;bot</source>
-        <translation type="unfinished"/>
+        <translation>Auto&amp;bot</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="552"/>
         <source>&amp;VST</source>
-        <translation type="unfinished"/>
+        <translation>&amp;VST</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="556"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="291"/>
         <source>&amp;Diagnostics</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Diagnostik</translation>
     </message>
 </context>
 <context>
@@ -10739,7 +10740,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="265"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="143"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Edit</translation>
     </message>
 </context>
 <context>
@@ -10763,7 +10764,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="222"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="120"/>
         <source>&amp;File</source>
-        <translation type="unfinished"/>
+        <translation>Be&amp;rkas</translation>
     </message>
 </context>
 <context>
@@ -10772,13 +10773,13 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="361"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="231"/>
         <source>Str&amp;etch</source>
-        <translation type="unfinished"/>
+        <translation>R&amp;enggangkan</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="372"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="239"/>
         <source>F&amp;ormat</source>
-        <translation type="unfinished"/>
+        <translation>F&amp;ormat</translation>
     </message>
 </context>
 <context>
@@ -10824,19 +10825,19 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="315"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="187"/>
         <source>&amp;Toolbars</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Bilah alat</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="319"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="191"/>
         <source>W&amp;orkspaces</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ruang kerja</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="323"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="195"/>
         <source>&amp;Show</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Tampilkan</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="327"/>
@@ -10865,7 +10866,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="145"/>
         <source>Choose background wallpaper</source>
-        <translation type="unfinished"/>
+        <translation>Pilih wallpaper latar belakang</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="184"/>
@@ -10898,22 +10899,22 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioApiSection.qml" line="29"/>
         <source>Audio</source>
-        <translation type="unfinished"/>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioApiSection.qml" line="44"/>
         <source>Audio API:</source>
-        <translation type="unfinished"/>
+        <translation>API audio:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioEngineSection.qml" line="31"/>
         <source>Audio engine</source>
-        <translation type="unfinished"/>
+        <translation>Mesin audio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioEngineSection.qml" line="34"/>
         <source>Restart audio and MIDI devices</source>
-        <translation type="unfinished"/>
+        <translation>Mulai ulang perangkat audio dan MIDI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="30"/>
@@ -10933,27 +10934,27 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
         <source>Auto save</source>
-        <translation type="unfinished"/>
+        <translation>Simpan otomatis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="49"/>
         <source>Auto save every:</source>
-        <translation type="unfinished"/>
+        <translation>Simpan otomatis setiap:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleAdvancedSection.qml" line="29"/>
         <source>Advanced options</source>
-        <translation type="unfinished"/>
+        <translation>Pengaturan lanjutan</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleAdvancedSection.qml" line="41"/>
         <source>Braille table for lyrics:</source>
-        <translation type="unfinished"/>
+        <translation>Tabel braille untuk lirik:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleAdvancedSection.qml" line="57"/>
         <source>Interval direction:</source>
-        <translation type="unfinished"/>
+        <translation>Arah interval:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleSection.qml" line="31"/>
@@ -10963,7 +10964,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleSection.qml" line="40"/>
         <source>Show braille panel</source>
-        <translation type="unfinished"/>
+        <translation>Tampilkan panel braille</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CharsetsSection.qml" line="29"/>
@@ -10983,22 +10984,22 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ColorAndWallpaperSection.qml" line="95"/>
         <source>Wallpaper:</source>
-        <translation type="unfinished"/>
+        <translation>Wallpaper:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CommonAudioApiConfiguration.qml" line="53"/>
         <source>Audio device:</source>
-        <translation type="unfinished"/>
+        <translation>Perangkat audio:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CommonAudioApiConfiguration.qml" line="71"/>
         <source>Buffer size:</source>
-        <translation type="unfinished"/>
+        <translation>Ukuran penyangga:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CommonAudioApiConfiguration.qml" line="89"/>
         <source>Sample rate:</source>
-        <translation type="unfinished"/>
+        <translation>Laju sampel:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/DefaultFilesSection.qml" line="31"/>
@@ -11014,7 +11015,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/FoldersSection.qml" line="63"/>
         <source>Choose %1 folder</source>
-        <translation type="unfinished"/>
+        <translation>Pilih folder %1</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ImportStyleSection.qml" line="30"/>
@@ -11056,7 +11057,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
         <location filename="../../src/appshell/qml/Preferences/internal/MeiSection.qml" line="30"/>
         <source>MEI</source>
         <extracomment>MEI refers to a file format that can be imported and exported in MuseScore. It stands for Music Encoding Initiative.</extracomment>
-        <translation type="unfinished"/>
+        <translation>MEI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MeiSection.qml" line="40"/>
@@ -11077,7 +11078,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="63"/>
         <source>MIDI output:</source>
-        <translation type="unfinished"/>
+        <translation>Keluaran MIDI:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiSection.qml" line="39"/>
@@ -11087,7 +11088,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MiscellaneousSection.qml" line="30"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"/>
+        <translation>Serba-serbi</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MiscellaneousSection.qml" line="39"/>
@@ -11097,7 +11098,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MixerSection.qml" line="30"/>
         <source>Mixer</source>
-        <translation type="unfinished"/>
+        <translation>Mixer</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MixerSection.qml" line="41"/>
@@ -11107,7 +11108,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="29"/>
         <source>MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="45"/>
@@ -11137,12 +11138,12 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/FretboardDiagramsSection.qml" line="41"/>
         <source>Never autofill fretboard diagrams when changing chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Jangan pernah isi otomatis diagram papan fret ketika mengganti simbol akor</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="33"/>
         <source>MIDI devices</source>
-        <translation type="unfinished"/>
+        <translation>Perangkat MIDI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="72"/>
@@ -11162,17 +11163,17 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="109"/>
         <source>Advance to next note on key release</source>
-        <translation type="unfinished"/>
+        <translation>Lanjutkan ke not selanjutnya pada pelepasan kunci</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="126"/>
         <source>Delay between notes:</source>
-        <translation type="unfinished"/>
+        <translation>Tunda di antara not-not:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="37"/>
         <source>Note colors</source>
-        <translation type="unfinished"/>
+        <translation>Warna-warna not</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="43"/>
@@ -11193,22 +11194,24 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="48"/>
         <source>Default input mode:</source>
-        <translation>Mode input default:</translation>
+        <translation>Mode masukan bawaan:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="62"/>
         <source>Apply accidentals, augmentation dots, and articulations:</source>
-        <translation type="unfinished"/>
+        <translation>Terapkan tanda kromatis, titik penambahan, dan artikulasi:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="69"/>
         <source>To next note entered</source>
-        <translation>Ke not selanjutnya yang dimasukkan</translation>
+        <translation>Ke not selanjutnya
+yang dimasukkan</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="70"/>
         <source>To previous note entered</source>
-        <translation>Ke not sebelumnya yang dimasukkan</translation>
+        <translation>Ke not sebelumnya
+yang dimasukkan</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="81"/>
@@ -11218,7 +11221,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="88"/>
         <source>Above staff</source>
-        <translation type="unfinished"/>
+        <translation>Di atas paranada</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="89"/>
@@ -11263,12 +11266,12 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="180"/>
         <source>Play MIDI input</source>
-        <translation type="unfinished"/>
+        <translation>Mainkan masukan MIDI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="195"/>
         <source>Play MIDI notes with velocity and duration during note input</source>
-        <translation type="unfinished"/>
+        <translation>Mainkan masukan MIDI dengan kecepatan dan durasi selama masukan not</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="35"/>
@@ -11313,7 +11316,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="115"/>
         <source>Show processing visualization:</source>
-        <translation type="unfinished"/>
+        <translation>Tampilkan visualisasi pemrosesan:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="125"/>
@@ -11323,7 +11326,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="128"/>
         <source>Only if processing is unfinished during playback</source>
-        <translation type="unfinished"/>
+        <translation>Hanya jika pemrosesan tidak selesai selama pemutatan</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="131"/>
@@ -11338,7 +11341,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="31"/>
         <source>Program start</source>
-        <translation type="unfinished"/>
+        <translation>Pemulaian program</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="88"/>
@@ -11353,7 +11356,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="41"/>
         <source>Always prompt to share on Audio.com after publishing to MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Selalu perintahkan untuk membagikan di Audio.com setelah memublikasikan ke MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/RemoteControlSection.qml" line="31"/>
@@ -11583,7 +11586,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="200"/>
         <source>Start with score:</source>
-        <translation type="unfinished"/>
+        <translation>Mulai dengan skor:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="244"/>
@@ -11669,7 +11672,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="175"/>
         <source>Audio &amp; MIDI</source>
-        <translation type="unfinished"/>
+        <translation>Audio &amp; MIDI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="178"/>
@@ -11699,7 +11702,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="196"/>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>Lanjutan</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="199"/>
@@ -11870,7 +11873,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
         <location filename="../../src/braille/internal/notationbraille.cpp" line="880"/>
         <source>Six-key input mode</source>
         <extracomment>Braille input with 6 keyboard keys (F,D,S &amp; J,K,L) to represent the 6 dots in a braille cell.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mode masukan enam tuts</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="882"/>
@@ -11889,7 +11892,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
         <location filename="../../src/braille/qml/MuseScore/Braille/BrailleView.qml" line="171"/>
         <source>Six-key input mode</source>
         <extracomment>Braille input with 6 keyboard keys (F,D,S &amp; J,K,L) to represent the 6 dots in a braille cell.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mode masukan enam tuts</translation>
     </message>
     <message>
         <location filename="../../src/braille/qml/MuseScore/Braille/BrailleView.qml" line="173"/>
@@ -11978,12 +11981,12 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/engraving/accessibility/accessibleitem.cpp" line="204"/>
         <source>invisible</source>
-        <translation type="unfinished"/>
+        <translation>tidak terlihat</translation>
     </message>
     <message>
         <location filename="../../src/engraving/accessibility/accessibleitem.cpp" line="206"/>
         <source>selected</source>
-        <translation>Terpilih</translation>
+        <translation>terpilih</translation>
     </message>
     <message>
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="109"/>
@@ -11999,7 +12002,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="201"/>
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="204"/>
         <source>Staff %1 (%2)</source>
-        <translation type="unfinished"/>
+        <translation>Paranada %1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="210"/>
@@ -12014,7 +12017,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
     <message>
         <location filename="../../src/engraving/dom/articulation.cpp" line="174"/>
         <source>Articulation text</source>
-        <translation type="unfinished"/>
+        <translation>Teks artikulasi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/articulation.cpp" line="177"/>
@@ -12030,7 +12033,7 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
         <location filename="../../src/engraving/dom/note.cpp" line="3356"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2561"/>
         <source>Start of %1</source>
-        <translation type="unfinished"/>
+        <translation>Awal %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/barline.cpp" line="1034"/>
@@ -12040,35 +12043,36 @@ Diterbitkan di bawah lisensi &lt;a href=&quot;%1&quot;&gt;GNU General Public Lic
         <location filename="../../src/engraving/dom/note.cpp" line="3364"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2576"/>
         <source>End of %1</source>
-        <translation type="unfinished"/>
+        <translation>Akhir %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="141"/>
         <location filename="../../src/engraving/dom/capo.cpp" line="159"/>
         <source>No capo</source>
-        <translation type="unfinished"/>
+        <translation>Tidak ada capo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="145"/>
         <source>Capo %1</source>
-        <translation type="unfinished"/>
+        <translation>Capo %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="162"/>
         <source>Partial capo:
 Fret %1 on strings %2</source>
-        <translation type="unfinished"/>
+        <translation>Capo parsial:
+Fret %1 pada senar %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="145"/>
         <source>Full score</source>
-        <translation type="unfinished"/>
+        <translation>Skor penuh</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="149"/>
         <source>Part score: %1</source>
         <extracomment>%1 is the name of a part score.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bagian skor: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="191"/>
@@ -12079,13 +12083,13 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/check.cpp" line="199"/>
         <source>&lt;b&gt;Incomplete measure&lt;/b&gt;: %1, measure %2, staff %3. Found: %4. Expected: %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Ruas birama tidak lengkap&lt;/b&gt;: %1, ruas birama %2, paranada %3. Ditemukan: %4. Diduga: %5.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="213"/>
         <source>&lt;b&gt;Voice too long&lt;/b&gt;: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Suara terlalu lama&lt;/b&gt;: %1, ruas birama %2, paranada %3, suara %4. Ditemukan: %5. Diduga: %6.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="490"/>
@@ -12137,30 +12141,30 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="525"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
         <source>Dotted %1</source>
-        <translation type="unfinished"/>
+        <translation>Bertitik %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="528"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
         <source>Double dotted %1</source>
-        <translation type="unfinished"/>
+        <translation>Bertitik ganda %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="531"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
         <source>Triple dotted %1</source>
-        <translation type="unfinished"/>
+        <translation>Bertitik 3x lipat %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="534"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="423"/>
         <source>Quadruple dotted %1</source>
-        <translation type="unfinished"/>
+        <translation>Bertitik 4x lipat %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1101"/>
         <source>Start and end of %1</source>
-        <translation type="unfinished"/>
+        <translation>Awal dan akhir %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/cmd.cpp" line="3594"/>
@@ -12181,7 +12185,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/edit.cpp" line="8031"/>
         <location filename="../../src/engraving/dom/edit.cpp" line="8179"/>
         <source>Remove stale partial tie</source>
-        <translation type="unfinished"/>
+        <translation>Hapus ikatan parsial yang kedaluwarsa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="8089"/>
@@ -12671,7 +12675,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="73"/>
         <source>Tie to %1 (m. %2)</source>
         <extracomment>%1 represents the preceding jump item eg. coda. %2 represents the measure number</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ikat ke %1 (r. b. %2)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="84"/>
@@ -12726,7 +12730,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="209"/>
         <source>Toggle partial tie</source>
-        <translation type="unfinished"/>
+        <translation>Alihkan ikatan parsial</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="66"/>
@@ -14376,12 +14380,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1689"/>
         <source>Header</source>
-        <translation type="unfinished"/>
+        <translation>Bagian kepala</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1690"/>
         <source>Footer</source>
-        <translation type="unfinished"/>
+        <translation>Bagian kaki</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1691"/>
@@ -18493,7 +18497,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="309"/>
         <source>invisible</source>
-        <translation type="unfinished"/>
+        <translation>tidak terlihat</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="312"/>
@@ -20833,7 +20837,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4851"/>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Titik augmentasi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4853"/>
@@ -23370,7 +23374,7 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="58"/>
         <source>Brackets</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kurung kurawal</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="66"/>
@@ -25295,7 +25299,7 @@ Ruas birama jemputan</translation>
         <location filename="../../src/inspector/models/notation/brackets/bracketsettingsmodel.cpp" line="37"/>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="81"/>
         <source>Bracket</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kurung kurawal</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/chordsymbols/chordsymbolsettingsmodel.cpp" line="32"/>
@@ -25315,7 +25319,7 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/models/notation/frames/fretframesettingsproxymodel.cpp" line="34"/>
         <source>Fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Legenda diagram papan fret</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/horizontalframesettingsmodel.cpp" line="34"/>
@@ -25474,7 +25478,7 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="48"/>
         <source>Tie</source>
-        <translation type="unfinished"/>
+        <translation>Penghubung</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="53"/>
@@ -25661,7 +25665,7 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="67"/>
         <source>Number</source>
-        <translation type="unfinished"/>
+        <translation>Nomor</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="68"/>
@@ -27923,7 +27927,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="719"/>
         <source>Fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Legenda diagram papan fret</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="129"/>
@@ -28249,7 +28253,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="741"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1302"/>
         <source>Number</source>
-        <translation type="unfinished"/>
+        <translation>Nomor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="742"/>
@@ -28274,7 +28278,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="747"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1307"/>
         <source>Bracket</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kurung kurawal</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="748"/>
@@ -29283,7 +29287,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="359"/>
         <source>Brackets</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kurung kurawal</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="360"/>
@@ -30202,12 +30206,12 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="937"/>
         <source>Brackets</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kurung kurawal</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="944"/>
         <source>Bracket</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kurung kurawal</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="945"/>
@@ -33553,7 +33557,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="38"/>
         <source>Sample rate:</source>
-        <translation type="unfinished"/>
+        <translation>Laju sampel:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="49"/>
@@ -33807,7 +33811,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="95"/>
         <source>MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="100"/>
@@ -33823,7 +33827,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="103"/>
         <source>MEI</source>
-        <translation type="unfinished"/>
+        <translation>MEI</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="104"/>
@@ -35848,7 +35852,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5573"/>
         <source>Toggle augmentation dots</source>
-        <translation type="unfinished"/>
+        <translation>Alihkan titik augmentasi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5607"/>
