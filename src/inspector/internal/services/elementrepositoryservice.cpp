@@ -410,15 +410,19 @@ std::vector<EngravingItem*> ElementRepositoryService::findTextDelegates(Engravin
         return textItems;
     }
 
-    switch (element->type()) {
-    case ElementType::BAR_LINE: {
+    if (element->isBarLine()) {
         Segment* seg = toBarLine(element)->segment();
-        PlayCountText* playCountText = toPlayCountText(seg->findAnnotation(ElementType::PLAY_COUNT_TEXT, 0, 0));
-        return { playCountText };
+        if (PlayCountText* playCountText = toPlayCountText(seg->findAnnotation(ElementType::PLAY_COUNT_TEXT, 0, 0))) {
+            return { playCountText };
+        }
+        return {};
     }
-    default:
+
+    if (TEXT_ELEMENT_TYPES.contains(element->type())) {
         return { element };
     }
+
+    return {};
 }
 
 QList<mu::engraving::EngravingItem*> ElementRepositoryService::findTexts() const
@@ -428,9 +432,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findTexts() const
     for (mu::engraving::EngravingItem* element : m_exposedElementList) {
         std::vector<EngravingItem*> delegateItems = findTextDelegates(element);
         for (mu::engraving::EngravingItem* el : delegateItems) {
-            if (TEXT_ELEMENT_TYPES.contains(el->type())) {
-                resultList << el;
-            }
+            resultList << el;
         }
     }
 
