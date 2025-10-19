@@ -243,7 +243,8 @@ void BendDataCollector::fillBendDataContext(BendDataContext& bendDataCtx)
                         size_t noteIndex = std::min(muse::indexOf(mainNote->chord()->notes(), mainNote),
                                                     lastChordData.chord->notes().size() - 1);
                         lastChordData.dataByNote[lastChordData.chord->notes()[noteIndex]].connectionType
-                            = ConnectionToNextNoteType::LAST_GRACE_CONNECTS;
+                            = (dataForFirstNote.segments.size()
+                               > 1 ? ConnectionToNextNoteType::LAST_GRACE_CONNECTS : ConnectionToNextNoteType::MAIN_NOTE_CONNECTS);
                     }
                 }
             }
