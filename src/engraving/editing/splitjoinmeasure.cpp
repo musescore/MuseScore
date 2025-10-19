@@ -98,7 +98,6 @@ void SplitJoinMeasure::splitMeasure(MasterScore* score, const Fraction& tick)
     options.createEmptyMeasures = true;
     options.moveSignaturesClef = false;
     options.moveStaffTypeChanges = false;
-    options.ignoreBarLines = true;
 
     score->insertMeasure(nm, options);
     Measure* m2 = toMeasure(nm ? nm->prev() : score->lastMeasure());
@@ -258,7 +257,6 @@ void SplitJoinMeasure::joinMeasures(MasterScore* score, const Fraction& tick1, c
     options.createEmptyMeasures = true;
     options.moveSignaturesClef = false;
     options.moveStaffTypeChanges = false;
-    options.ignoreBarLines = true;
     Measure* joinedMeasure = toMeasure(score->insertMeasure(next, options));
 
     for (auto spannerToFixup : spannersEndingInRange) {
