@@ -396,39 +396,47 @@ EngravingItem* BarLine::drop(EditData& data)
         BarLine* bl    = toBarLine(e);
         BarLineType st = bl->barLineType();
 
-        // check if the new property can apply to this single bar line
-        BarLineType bt = BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT;
-        bool oldRepeat = barLineType() & bt;
-        bool newRepeat = bl->barLineType() & bt;
-
-        Measure* m = measure();
-        if (bl->playCount() != -1) {
-            m->undoChangeProperty(Pid::REPEAT_COUNT, bl->playCount());
-        }
-
-        // if ctrl was used and repeats are not involved,
-        // or if drop refers to span rather than subtype =>
-        // single bar line drop
-
-        if ((data.control() && !oldRepeat && !newRepeat) || (bl->spanFrom() || bl->spanTo())) {
-            // if drop refers to span, update this bar line span
-            if (bl->spanFrom() || bl->spanTo()) {
-                // if dropped spanFrom or spanTo are below the middle of standard staff (5 lines)
-                // adjust to the number of staff lines
-                int spanFrom   = bl->spanFrom();
-                int spanTo     = bl->spanTo();
-                undoChangeProperty(Pid::BARLINE_SPAN, false);
-                undoChangeProperty(Pid::BARLINE_SPAN_FROM, spanFrom);
-                undoChangeProperty(Pid::BARLINE_SPAN_TO, spanTo);
-            }
-            // if drop refers to subtype, update this bar line subtype
-            else {
-                score()->undoChangeBarLineType(this, st, false);
-            }
+        if (segment()->segmentType() == SegmentType::BarLine) {
+            // barline exists mid measure
+            undoChangeProperty(Pid::BARLINE_TYPE, st);
+            undoChangeProperty(Pid::BARLINE_SPAN, false);
+            undoChangeProperty(Pid::BARLINE_SPAN_FROM, bl->spanFrom());
+            undoChangeProperty(Pid::BARLINE_SPAN_TO, bl->spanTo());
         } else {
-            score()->undoChangeBarLineType(this, st, true);
+            // check if the new property can apply to this single bar line
+            BarLineType bt = BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT;
+            bool oldRepeat = barLineType() & bt;
+            bool newRepeat = bl->barLineType() & bt;
+
+            Measure* m = measure();
+            if (bl->playCount() != -1) {
+                m->undoChangeProperty(Pid::REPEAT_COUNT, bl->playCount());
+            }
+
+            // if ctrl was used and repeats are not involved,
+            // or if drop refers to span rather than subtype =>
+            // single bar line drop
+
+            if ((data.control() && !oldRepeat && !newRepeat) || (bl->spanFrom() || bl->spanTo())) {
+                // if drop refers to span, update this bar line span
+                if (bl->spanFrom() || bl->spanTo()) {
+                    // if dropped spanFrom or spanTo are below the middle of standard staff (5 lines)
+                    // adjust to the number of staff lines
+                    int spanFrom   = bl->spanFrom();
+                    int spanTo     = bl->spanTo();
+                    undoChangeProperty(Pid::BARLINE_SPAN, false);
+                    undoChangeProperty(Pid::BARLINE_SPAN_FROM, spanFrom);
+                    undoChangeProperty(Pid::BARLINE_SPAN_TO, spanTo);
+                }
+                // if drop refers to subtype, update this bar line subtype
+                else {
+                    score()->undoChangeBarLineType(this, st, false);
+                }
+            } else {
+                score()->undoChangeBarLineType(this, st, true);
+            }
+            score()->undoUpdatePlayCountText(m);
         }
-        score()->undoUpdatePlayCountText(m);
         delete e;
     } else if (e->isArticulationFamily()) {
         Articulation* atr = toArticulation(e);
@@ -835,7 +843,7 @@ void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
         return;
     }
 
-    if (id == Pid::BARLINE_TYPE && segment()) {
+    if (id == Pid::BARLINE_TYPE && segment() && segment()->segmentType() != SegmentType::BarLine) {
         score()->undoChangeBarLineType(this, v.value<BarLineType>(), true, true);
     } else {
         EngravingObject::undoChangeProperty(id, v, ps);
