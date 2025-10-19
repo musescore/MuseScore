@@ -4490,6 +4490,15 @@ void Score::cmdPadNoteIncreaseTAB()
     case DurationType::V_128TH:
         padToggle(Pad::NOTE64);
         break;
+    case DurationType::V_256TH:
+        padToggle(Pad::NOTE128);
+        break;
+    case DurationType::V_512TH:
+        padToggle(Pad::NOTE256);
+        break;
+    case DurationType::V_1024TH:
+        padToggle(Pad::NOTE512);
+        break;
     default:
         break;
     }
