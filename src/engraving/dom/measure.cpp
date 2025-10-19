@@ -1719,16 +1719,20 @@ EngravingItem* Measure::drop(EditData& data)
                     }
                 }
             }
-        } else if (Segment* seg = findSegmentR(SegmentType::EndBarLine, ticks())) {
-            // drop to first end barline
-            for (EngravingItem* ee : seg->elist()) {
-                if (ee) {
-                    ee->drop(data);
-                    break;
+        } else {
+            Segment* seg = undoGetSegmentR(SegmentType::EndBarLine, ticks());
+            // if any staff lacks a barline, create one
+            for (size_t stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
+                BarLine* bl = toBarLine(seg->element(stIdx * VOICES));
+                if (!bl) {
+                    bl = Factory::createBarLine(seg);
+                    bl->setParent(seg);
+                    bl->setTrack(stIdx * VOICES);
+                    undoAddElement(bl);
                 }
             }
-        } else {
-            delete e;
+            // drop to barline
+            seg->element(trackZeroVoice(data.track))->drop(data);
         }
         break;
     }

@@ -5615,7 +5615,7 @@ void Score::undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
             return;
         }
     } else if (bl->barLineType() == BarLineType::START_REPEAT) {
-        if (m->isFirstInSystem()) {
+        if (m->system() && m->isFirstInSystem()) {
             if (barType != BarLineType::END_REPEAT) {
                 for (Score* lscore : m->score()->scoreList()) {
                     Measure* lmeasure = lscore->tick2measure(m->tick());
@@ -5655,7 +5655,7 @@ void Score::undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     case BarLineType::REVERSE_END:
     case BarLineType::HEAVY:
     case BarLineType::DOUBLE_HEAVY: {
-        if (m->nextMeasureMM() && m->nextMeasureMM()->isFirstInSystem()) {
+        if (m->nextMeasureMM() && m->nextMeasureMM()->system() && m->nextMeasureMM()->isFirstInSystem()) {
             keepStartRepeat = true;
         }
 
