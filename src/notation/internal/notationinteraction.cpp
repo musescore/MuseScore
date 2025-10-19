@@ -2743,7 +2743,6 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, boo
         }
         default: break;
         }
-        return;
     }
 
     const track_idx_t track1 = sel.staffStart() * mu::engraving::VOICES;
