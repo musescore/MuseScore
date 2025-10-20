@@ -35,6 +35,7 @@
 #include "internal/cryptographichash.h"
 #include "internal/process.h"
 #include "internal/systeminfo.h"
+#include "internal/tickerprovider.h"
 
 #include "runtime.h"
 #include "async/processevents.h"
@@ -108,12 +109,14 @@ void GlobalModule::registerExports()
     m_configuration = std::make_shared<GlobalConfiguration>(iocContext());
     s_asyncInvoker = std::make_shared<Invoker>();
     m_systemInfo = std::make_shared<SystemInfo>();
+    m_tickerProvider = std::make_shared<TickerProvider>();
 
     ioc()->registerExport<IApplication>(moduleName(), m_application);
     ioc()->registerExport<IGlobalConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<ISystemInfo>(moduleName(), m_systemInfo);
     ioc()->registerExport<ICryptographicHash>(moduleName(), new CryptographicHash());
     ioc()->registerExport<IProcess>(moduleName(), new Process());
+    ioc()->registerExport<ITickerProvider>(moduleName(), m_tickerProvider);
     ioc()->registerExport<api::IApiRegister>(moduleName(), new api::ApiRegister());
 
 #ifdef Q_OS_WASM
@@ -240,6 +243,8 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
         s_asyncInvoker->invoke(f, isAlwaysQueued);
     });
 
+    m_tickerProvider->start();
+
     //! --- Diagnostics ---
 #ifdef MUSE_MODULE_DIAGNOSTICS
     auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
@@ -281,6 +286,8 @@ void GlobalModule::onInit(const IApplication::RunMode&)
 void GlobalModule::onDeinit()
 {
     invokeQueuedCalls();
+
+    m_tickerProvider->stop();
 
 #ifdef Q_OS_WIN
     if (m_endTimePeriod) {

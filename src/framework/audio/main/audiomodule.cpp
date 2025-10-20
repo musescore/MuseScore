@@ -119,11 +119,9 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
     // rpc
     m_rpcChannel->setupOnMain();
 #ifndef Q_OS_WASM
-    m_rpcTimer.setInterval(16); // corresponding to 60 fps
-    QObject::connect(&m_rpcTimer, &QTimer::timeout, [this]() {
+    m_rpcTicker.start(1, [this]() {
         m_rpcChannel->process();
-    });
-    m_rpcTimer.start();
+    }, Ticker::Mode::Repeat);
 #endif
 
     m_audioOutputController->init();
@@ -149,7 +147,7 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 void AudioModule::onDeinit()
 {
     m_mainPlayback->deinit();
-    m_rpcTimer.stop();
+    m_rpcTicker.stop();
 
     m_startAudioController->stopAudioProcessing();
 }
