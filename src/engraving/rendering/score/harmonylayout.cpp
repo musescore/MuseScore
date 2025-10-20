@@ -203,6 +203,7 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
     double lastTextSegHeight = 0.0;
     double lastTextSegTop = 0.0;
     double rootRefHeight = 0.0;
+    double rootCapHeight = 0.0;
     double parenExtension = 0.1 * spatium * (item->size() / 10.0);
     for (HarmonyRenderItem* renderItem : itemList) {
         if (ChordSymbolParen* curParen = dynamic_cast<ChordSymbolParen*>(renderItem)) {
@@ -228,19 +229,28 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                 if (muse::RealIsEqual(DBL_MAX, startY)) {
                     startY = lastTextSegTop;
                 }
-                double midPointThickness = height / 30 * openingParen->parenItem->ldata()->mag();
-                double endPointThickness = 0.05;
+
+                const double mag = openingParen->parenItem->ldata()->mag();
+                const double scale = (height - 2 * parenExtension) / rootCapHeight;
+                static constexpr double HEIGHT_TO_WIDTH_RATIO = 20;
+                const double midPointThickness = height / HEIGHT_TO_WIDTH_RATIO * mag * 1 / std::sqrt(scale);
+                const double endPointThickness = 0.03;
+                const double shoulder = 0.2 * height * std::pow(mag, 0.1) * 1 / std::sqrt(scale);
+
                 openingParen->parenItem->mutldata()->startY = startY;
                 openingParen->sety(startY);
                 openingParen->parenItem->mutldata()->height = height;
                 openingParen->parenItem->mutldata()->midPointThickness.set_value(midPointThickness);
                 openingParen->parenItem->mutldata()->endPointThickness.set_value(endPointThickness);
+                openingParen->parenItem->mutldata()->shoulderWidth = shoulder;
 
                 curParen->parenItem->mutldata()->startY = startY;
                 curParen->sety(startY);
                 curParen->parenItem->mutldata()->height = height;
                 curParen->parenItem->mutldata()->midPointThickness.set_value(midPointThickness);
                 curParen->parenItem->mutldata()->endPointThickness.set_value(endPointThickness);
+                curParen->parenItem->mutldata()->shoulderWidth = shoulder;
+
                 double closingPos = openingParen->closingParenPos;
                 if (muse::RealIsEqual(-DBL_MAX, closingPos)) {
                     closingPos = openingParen->x() + openingParen->boundingRect().width();
@@ -263,15 +273,16 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
             if (muse::RealIsNull(rootRefHeight)) {
                 rootRefHeight = textSeg->height();
                 double top = textSeg->tightBoundingRect().translated(textSeg->pos()).y();
-                double bottom = textSeg->bboxBaseLine() + textSeg->pos().y();
+                double bottom =  textSeg->pos().y();
                 double height = (bottom - top) + 2 * parenExtension;
 
                 rootRefHeight = height;
+                rootCapHeight = textSeg->capHeight();
             }
             if (!openingParenStack.empty() && textSeg->font().type() != Font::Type::MusicSymbolText) {
                 ChordSymbolParen* topParen = openingParenStack.back();
                 topParen->top = std::min(topParen->top, textSeg->tightBoundingRect().translated(textSeg->pos()).y());
-                topParen->bottom = std::max(topParen->bottom, textSeg->bboxBaseLine() + textSeg->pos().y());
+                topParen->bottom = std::max(topParen->bottom, textSeg->pos().y());
                 topParen->closingParenPos = std::max(topParen->closingParenPos, textSeg->x() + textSeg->width());
                 continue;
             }

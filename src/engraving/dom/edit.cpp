@@ -922,7 +922,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         Lyrics* lyrics = Factory::createLyrics(chordRest);
         lyrics->setTrack(chordRest->track());
         lyrics->setParent(chordRest);
-        lyrics->setNo(no);
+        lyrics->setProperty(Pid::VERSE, no);
 
         textBox = lyrics;
         undoAddElement(textBox);
