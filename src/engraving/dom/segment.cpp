@@ -2736,21 +2736,25 @@ void Segment::addArticulationsToShape(const Chord* chord, Shape& shape)
     };
 
     for (Articulation* art : chord->articulations()) {
-        if (art->isOrnament()) {
-            Chord* cueNoteChord = toOrnament(art)->cueNoteChord();
-            if (cueNoteChord && cueNoteChord->upNote()->visible()) {
-                shape.add(cueNoteChord->shape().translate(cueNoteChord->pos() + cueNoteChord->staffOffset()));
+        if (art->isOrnament() || !art->addToSkyline()) {
+            continue;
+        }
+        shape.add(art->shape().translated(art->pos() + chord->pos()));
+        if (art->isTapping()) {
+            if (TappingHalfSlur* halfSlur = toTapping(art)->halfSlurAbove()) {
+                addTappingHalfSlurToShape(halfSlur);
             }
-        } else if (art->addToSkyline()) {
-            shape.add(art->shape().translated(art->pos() + chord->pos()));
-            if (art->isTapping()) {
-                if (TappingHalfSlur* halfSlur = toTapping(art)->halfSlurAbove()) {
-                    addTappingHalfSlurToShape(halfSlur);
-                }
-                if (TappingHalfSlur* halfSlur = toTapping(art)->halfSlurBelow()) {
-                    addTappingHalfSlurToShape(halfSlur);
-                }
+            if (TappingHalfSlur* halfSlur = toTapping(art)->halfSlurBelow()) {
+                addTappingHalfSlurToShape(halfSlur);
             }
+        }
+    }
+
+    Ornament* ornament = chord->findOrnament();
+    if (ornament) {
+        Chord* cueNoteChord = ornament->cueNoteChord();
+        if (cueNoteChord && cueNoteChord->upNote()->addToSkyline()) {
+            shape.add(cueNoteChord->shape().translate(cueNoteChord->pos() + cueNoteChord->staffOffset()));
         }
     }
 }
