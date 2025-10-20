@@ -29,13 +29,13 @@
       </font>
      </property>
      <property name="editTriggers">
-      <set>QAbstractItemView::DoubleClicked</set>
+      <set>QAbstractItemView::EditTrigger::DoubleClicked</set>
      </property>
      <property name="dragDropOverwriteMode">
       <bool>false</bool>
      </property>
      <property name="selectionMode">
-      <enum>QAbstractItemView::SingleSelection</enum>
+      <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
      </property>
      <property name="rowCount">
       <number>11</number>
@@ -43,11 +43,11 @@
      <property name="columnCount">
       <number>13</number>
      </property>
-     <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>50</number>
-     </attribute>
      <attribute name="horizontalHeaderMinimumSectionSize">
       <number>20</number>
+     </attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>50</number>
      </attribute>
      <attribute name="verticalHeaderDefaultSectionSize">
       <number>32</number>
@@ -174,78 +174,111 @@
      </column>
      <item row="0" column="0">
       <property name="text">
-       <string>C9</string>
+       <string/>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
      <item row="0" column="1">
       <property name="text">
-       <string>C♯9</string>
+       <string/>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
      <item row="0" column="2">
       <property name="text">
-       <string>D9</string>
+       <string/>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
      <item row="0" column="3">
       <property name="text">
-       <string>D♯9</string>
+       <string/>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
      <item row="0" column="4">
       <property name="text">
-       <string>E9</string>
+       <string/>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
      <item row="0" column="5">
       <property name="text">
-       <string>F9</string>
+       <string/>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
      <item row="0" column="6">
       <property name="text">
-       <string>F♯9</string>
+       <string/>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
      <item row="0" column="7">
       <property name="text">
-       <string>G9</string>
+       <string/>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
      <item row="0" column="8">
+      <property name="text">
+       <string/>
+      </property>
       <property name="flags">
        <set>NoItemFlags</set>
       </property>
      </item>
      <item row="0" column="9">
+      <property name="text">
+       <string/>
+      </property>
       <property name="flags">
        <set>NoItemFlags</set>
       </property>
      </item>
      <item row="0" column="10">
+      <property name="text">
+       <string/>
+      </property>
       <property name="flags">
        <set>NoItemFlags</set>
       </property>
      </item>
      <item row="0" column="11">
+      <property name="text">
+       <string/>
+      </property>
       <property name="flags">
        <set>NoItemFlags</set>
       </property>
      </item>
      <item row="0" column="12">
+      <property name="text">
+       <string/>
+      </property>
       <property name="flags">
        <set>NoItemFlags</set>
       </property>
      </item>
      <item row="1" column="0">
       <property name="text">
-       <string>C8</string>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -253,7 +286,7 @@
      </item>
      <item row="1" column="1">
       <property name="text">
-       <string>C♯8</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -261,7 +294,7 @@
      </item>
      <item row="1" column="2">
       <property name="text">
-       <string>D8</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -269,7 +302,7 @@
      </item>
      <item row="1" column="3">
       <property name="text">
-       <string>D♯8</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -277,7 +310,7 @@
      </item>
      <item row="1" column="4">
       <property name="text">
-       <string>E8</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -285,7 +318,7 @@
      </item>
      <item row="1" column="5">
       <property name="text">
-       <string>F8</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -293,7 +326,7 @@
      </item>
      <item row="1" column="6">
       <property name="text">
-       <string>F♯8</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -301,7 +334,7 @@
      </item>
      <item row="1" column="7">
       <property name="text">
-       <string>G8</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -309,7 +342,7 @@
      </item>
      <item row="1" column="8">
       <property name="text">
-       <string>G♯8</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -317,7 +350,7 @@
      </item>
      <item row="1" column="9">
       <property name="text">
-       <string>A8</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -325,7 +358,7 @@
      </item>
      <item row="1" column="10">
       <property name="text">
-       <string>A♯8</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -333,7 +366,7 @@
      </item>
      <item row="1" column="11">
       <property name="text">
-       <string>B8</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -341,7 +374,7 @@
      </item>
      <item row="1" column="12">
       <property name="text">
-       <string>C9</string>
+       <string/>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -349,13 +382,7 @@
      </item>
      <item row="2" column="0">
       <property name="text">
-       <string>C7</string>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -363,7 +390,7 @@
      </item>
      <item row="2" column="1">
       <property name="text">
-       <string>C♯7</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -371,7 +398,7 @@
      </item>
      <item row="2" column="2">
       <property name="text">
-       <string>D7</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -379,7 +406,7 @@
      </item>
      <item row="2" column="3">
       <property name="text">
-       <string>D♯7</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -387,7 +414,7 @@
      </item>
      <item row="2" column="4">
       <property name="text">
-       <string>E7</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -395,7 +422,7 @@
      </item>
      <item row="2" column="5">
       <property name="text">
-       <string>F7</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -403,7 +430,7 @@
      </item>
      <item row="2" column="6">
       <property name="text">
-       <string>F♯7</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -411,7 +438,7 @@
      </item>
      <item row="2" column="7">
       <property name="text">
-       <string>G7</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -419,7 +446,7 @@
      </item>
      <item row="2" column="8">
       <property name="text">
-       <string>G♯7</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -427,7 +454,7 @@
      </item>
      <item row="2" column="9">
       <property name="text">
-       <string>A7</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -435,7 +462,7 @@
      </item>
      <item row="2" column="10">
       <property name="text">
-       <string>A♯7</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -443,7 +470,7 @@
      </item>
      <item row="2" column="11">
       <property name="text">
-       <string>B7</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -451,7 +478,7 @@
      </item>
      <item row="2" column="12">
       <property name="text">
-       <string>C8</string>
+       <string/>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -459,13 +486,7 @@
      </item>
      <item row="3" column="0">
       <property name="text">
-       <string>C6</string>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -473,7 +494,7 @@
      </item>
      <item row="3" column="1">
       <property name="text">
-       <string>C♯6</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -481,7 +502,7 @@
      </item>
      <item row="3" column="2">
       <property name="text">
-       <string>D6</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -489,7 +510,7 @@
      </item>
      <item row="3" column="3">
       <property name="text">
-       <string>D♯6</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -497,7 +518,7 @@
      </item>
      <item row="3" column="4">
       <property name="text">
-       <string>E6</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -505,7 +526,7 @@
      </item>
      <item row="3" column="5">
       <property name="text">
-       <string>F6</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -513,7 +534,7 @@
      </item>
      <item row="3" column="6">
       <property name="text">
-       <string>F♯6</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -521,7 +542,7 @@
      </item>
      <item row="3" column="7">
       <property name="text">
-       <string>G6</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -529,7 +550,7 @@
      </item>
      <item row="3" column="8">
       <property name="text">
-       <string>G♯6</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -537,7 +558,7 @@
      </item>
      <item row="3" column="9">
       <property name="text">
-       <string>A6</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -545,7 +566,7 @@
      </item>
      <item row="3" column="10">
       <property name="text">
-       <string>A♯6</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -553,7 +574,7 @@
      </item>
      <item row="3" column="11">
       <property name="text">
-       <string>B6</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -561,7 +582,7 @@
      </item>
      <item row="3" column="12">
       <property name="text">
-       <string>C7</string>
+       <string/>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -569,13 +590,7 @@
      </item>
      <item row="4" column="0">
       <property name="text">
-       <string>C5</string>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -583,7 +598,7 @@
      </item>
      <item row="4" column="1">
       <property name="text">
-       <string>C♯5</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -591,7 +606,7 @@
      </item>
      <item row="4" column="2">
       <property name="text">
-       <string>D5</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -599,7 +614,7 @@
      </item>
      <item row="4" column="3">
       <property name="text">
-       <string>D♯5</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -607,7 +622,7 @@
      </item>
      <item row="4" column="4">
       <property name="text">
-       <string>E5</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -615,7 +630,7 @@
      </item>
      <item row="4" column="5">
       <property name="text">
-       <string>F5</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -623,7 +638,7 @@
      </item>
      <item row="4" column="6">
       <property name="text">
-       <string>F♯5</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -631,7 +646,7 @@
      </item>
      <item row="4" column="7">
       <property name="text">
-       <string>G5</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -639,7 +654,7 @@
      </item>
      <item row="4" column="8">
       <property name="text">
-       <string>G♯5</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -647,7 +662,7 @@
      </item>
      <item row="4" column="9">
       <property name="text">
-       <string>A5</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -655,7 +670,7 @@
      </item>
      <item row="4" column="10">
       <property name="text">
-       <string>A♯5</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -663,7 +678,7 @@
      </item>
      <item row="4" column="11">
       <property name="text">
-       <string>B5</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -671,7 +686,7 @@
      </item>
      <item row="4" column="12">
       <property name="text">
-       <string>C6</string>
+       <string/>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -679,13 +694,7 @@
      </item>
      <item row="5" column="0">
       <property name="text">
-       <string>C4</string>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -693,7 +702,7 @@
      </item>
      <item row="5" column="1">
       <property name="text">
-       <string>C♯4</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -701,7 +710,7 @@
      </item>
      <item row="5" column="2">
       <property name="text">
-       <string>D4</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -709,7 +718,7 @@
      </item>
      <item row="5" column="3">
       <property name="text">
-       <string>D♯4</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -717,7 +726,7 @@
      </item>
      <item row="5" column="4">
       <property name="text">
-       <string>E4</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -725,7 +734,7 @@
      </item>
      <item row="5" column="5">
       <property name="text">
-       <string>F4</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -733,7 +742,7 @@
      </item>
      <item row="5" column="6">
       <property name="text">
-       <string>F♯4</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -741,7 +750,7 @@
      </item>
      <item row="5" column="7">
       <property name="text">
-       <string>G4</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -749,7 +758,7 @@
      </item>
      <item row="5" column="8">
       <property name="text">
-       <string>G♯4</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -757,7 +766,7 @@
      </item>
      <item row="5" column="9">
       <property name="text">
-       <string>A4</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -765,7 +774,7 @@
      </item>
      <item row="5" column="10">
       <property name="text">
-       <string>A♯4</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -773,7 +782,7 @@
      </item>
      <item row="5" column="11">
       <property name="text">
-       <string>B4</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -781,7 +790,7 @@
      </item>
      <item row="5" column="12">
       <property name="text">
-       <string>C5</string>
+       <string/>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -789,13 +798,7 @@
      </item>
      <item row="6" column="0">
       <property name="text">
-       <string>C3</string>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -803,7 +806,7 @@
      </item>
      <item row="6" column="1">
       <property name="text">
-       <string>C♯3</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -811,7 +814,7 @@
      </item>
      <item row="6" column="2">
       <property name="text">
-       <string>D3</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -819,7 +822,7 @@
      </item>
      <item row="6" column="3">
       <property name="text">
-       <string>D♯3</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -827,7 +830,7 @@
      </item>
      <item row="6" column="4">
       <property name="text">
-       <string>E3</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -835,7 +838,7 @@
      </item>
      <item row="6" column="5">
       <property name="text">
-       <string>F3</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -843,7 +846,7 @@
      </item>
      <item row="6" column="6">
       <property name="text">
-       <string>F♯3</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -851,7 +854,7 @@
      </item>
      <item row="6" column="7">
       <property name="text">
-       <string>G3</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -859,7 +862,7 @@
      </item>
      <item row="6" column="8">
       <property name="text">
-       <string>G♯3</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -867,7 +870,7 @@
      </item>
      <item row="6" column="9">
       <property name="text">
-       <string>A3</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -875,7 +878,7 @@
      </item>
      <item row="6" column="10">
       <property name="text">
-       <string>A♯3</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -883,7 +886,7 @@
      </item>
      <item row="6" column="11">
       <property name="text">
-       <string>B3</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -891,7 +894,7 @@
      </item>
      <item row="6" column="12">
       <property name="text">
-       <string>C4</string>
+       <string/>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -899,13 +902,7 @@
      </item>
      <item row="7" column="0">
       <property name="text">
-       <string>C2</string>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -913,7 +910,7 @@
      </item>
      <item row="7" column="1">
       <property name="text">
-       <string>C♯2</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -921,7 +918,7 @@
      </item>
      <item row="7" column="2">
       <property name="text">
-       <string>D2</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -929,7 +926,7 @@
      </item>
      <item row="7" column="3">
       <property name="text">
-       <string>D♯2</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -937,7 +934,7 @@
      </item>
      <item row="7" column="4">
       <property name="text">
-       <string>E2</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -945,7 +942,7 @@
      </item>
      <item row="7" column="5">
       <property name="text">
-       <string>F2</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -953,7 +950,7 @@
      </item>
      <item row="7" column="6">
       <property name="text">
-       <string>F♯2</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -961,7 +958,7 @@
      </item>
      <item row="7" column="7">
       <property name="text">
-       <string>G2</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -969,7 +966,7 @@
      </item>
      <item row="7" column="8">
       <property name="text">
-       <string>G♯2</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -977,7 +974,7 @@
      </item>
      <item row="7" column="9">
       <property name="text">
-       <string>A2</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -985,7 +982,7 @@
      </item>
      <item row="7" column="10">
       <property name="text">
-       <string>A♯2</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -993,7 +990,7 @@
      </item>
      <item row="7" column="11">
       <property name="text">
-       <string>B2</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1001,7 +998,7 @@
      </item>
      <item row="7" column="12">
       <property name="text">
-       <string>C3</string>
+       <string/>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -1009,13 +1006,7 @@
      </item>
      <item row="8" column="0">
       <property name="text">
-       <string>C1</string>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1023,7 +1014,7 @@
      </item>
      <item row="8" column="1">
       <property name="text">
-       <string>C♯1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1031,7 +1022,7 @@
      </item>
      <item row="8" column="2">
       <property name="text">
-       <string>D1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1039,7 +1030,7 @@
      </item>
      <item row="8" column="3">
       <property name="text">
-       <string>D♯1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1047,7 +1038,7 @@
      </item>
      <item row="8" column="4">
       <property name="text">
-       <string>E1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1055,7 +1046,7 @@
      </item>
      <item row="8" column="5">
       <property name="text">
-       <string>F1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1063,7 +1054,7 @@
      </item>
      <item row="8" column="6">
       <property name="text">
-       <string>F♯1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1071,7 +1062,7 @@
      </item>
      <item row="8" column="7">
       <property name="text">
-       <string>G1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1079,7 +1070,7 @@
      </item>
      <item row="8" column="8">
       <property name="text">
-       <string>G♯1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1087,7 +1078,7 @@
      </item>
      <item row="8" column="9">
       <property name="text">
-       <string>A1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1095,7 +1086,7 @@
      </item>
      <item row="8" column="10">
       <property name="text">
-       <string>A♯1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1103,7 +1094,7 @@
      </item>
      <item row="8" column="11">
       <property name="text">
-       <string>B1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1111,7 +1102,7 @@
      </item>
      <item row="8" column="12">
       <property name="text">
-       <string>C2</string>
+       <string/>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -1119,13 +1110,7 @@
      </item>
      <item row="9" column="0">
       <property name="text">
-       <string>C0</string>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1133,7 +1118,7 @@
      </item>
      <item row="9" column="1">
       <property name="text">
-       <string>C♯0</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1141,7 +1126,7 @@
      </item>
      <item row="9" column="2">
       <property name="text">
-       <string>D0</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1149,7 +1134,7 @@
      </item>
      <item row="9" column="3">
       <property name="text">
-       <string>D♯0</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1157,7 +1142,7 @@
      </item>
      <item row="9" column="4">
       <property name="text">
-       <string>E0</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1165,7 +1150,7 @@
      </item>
      <item row="9" column="5">
       <property name="text">
-       <string>F0</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1173,7 +1158,7 @@
      </item>
      <item row="9" column="6">
       <property name="text">
-       <string>F♯0</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1181,7 +1166,7 @@
      </item>
      <item row="9" column="7">
       <property name="text">
-       <string>G0</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1189,7 +1174,7 @@
      </item>
      <item row="9" column="8">
       <property name="text">
-       <string>G♯0</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1197,7 +1182,7 @@
      </item>
      <item row="9" column="9">
       <property name="text">
-       <string>A0</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1205,7 +1190,7 @@
      </item>
      <item row="9" column="10">
       <property name="text">
-       <string>A♯0</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1213,7 +1198,7 @@
      </item>
      <item row="9" column="11">
       <property name="text">
-       <string>B0</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1221,7 +1206,7 @@
      </item>
      <item row="9" column="12">
       <property name="text">
-       <string>C1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -1229,13 +1214,7 @@
      </item>
      <item row="10" column="0">
       <property name="text">
-       <string>C-1</string>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1243,7 +1222,7 @@
      </item>
      <item row="10" column="1">
       <property name="text">
-       <string>C♯-1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1251,7 +1230,7 @@
      </item>
      <item row="10" column="2">
       <property name="text">
-       <string>D-1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1259,7 +1238,7 @@
      </item>
      <item row="10" column="3">
       <property name="text">
-       <string>D♯-1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1267,7 +1246,7 @@
      </item>
      <item row="10" column="4">
       <property name="text">
-       <string>E-1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1275,7 +1254,7 @@
      </item>
      <item row="10" column="5">
       <property name="text">
-       <string>F-1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1283,7 +1262,7 @@
      </item>
      <item row="10" column="6">
       <property name="text">
-       <string>F♯-1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1291,7 +1270,7 @@
      </item>
      <item row="10" column="7">
       <property name="text">
-       <string>G-1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1299,7 +1278,7 @@
      </item>
      <item row="10" column="8">
       <property name="text">
-       <string>G♯-1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1307,7 +1286,7 @@
      </item>
      <item row="10" column="9">
       <property name="text">
-       <string>A-1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1315,7 +1294,7 @@
      </item>
      <item row="10" column="10">
       <property name="text">
-       <string>A♯-1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1323,7 +1302,7 @@
      </item>
      <item row="10" column="11">
       <property name="text">
-       <string>B-1</string>
+       <string/>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1331,7 +1310,7 @@
      </item>
      <item row="10" column="12">
       <property name="text">
-       <string>C0</string>
+       <string/>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -1342,15 +1321,16 @@
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
