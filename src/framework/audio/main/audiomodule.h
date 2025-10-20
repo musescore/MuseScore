@@ -23,10 +23,10 @@
 #define MUSE_AUDIO_AUDIOMODULE_H
 
 #include <memory>
-#include <QTimer>
 
 #include "modularity/imodulesetup.h"
 #include "global/async/asyncable.h"
+#include "global/ticker.h"
 
 namespace muse::audio::rpc  {
 class IRpcChannel;
@@ -60,7 +60,7 @@ private:
     std::shared_ptr<Playback> m_mainPlayback;
     std::shared_ptr<ISoundFontController> m_soundFontController;
 
-    QTimer m_rpcTimer;
+    Ticker m_rpcTicker;
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
 
     std::shared_ptr<AudioDriverController> m_audioDriverController;

@@ -71,6 +71,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/configreader.h
     ${CMAKE_CURRENT_LIST_DIR}/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uuid.h
+    ${CMAKE_CURRENT_LIST_DIR}/itickerprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/ticker.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/ticker.h
 
     ${KORS_MODULARITY_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/modularity/ioccontext.cpp
@@ -205,6 +208,8 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/process.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/systeminfo.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/systeminfo.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/tickerprovider.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/tickerprovider.h
 
         ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlreader.cpp
         ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlreader.h
