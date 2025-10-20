@@ -458,7 +458,6 @@ void FinaleParser::importSmartShapes()
                 toGlissando(newSpanner)->setGlissandoType(glissandoTypeFromShapeType(smartShape->shapeType));
                 toGlissando(newSpanner)->setShowText(false); /// @todo Is this the correct default?
             } else if (type == ElementType::TRILL) {
-                // Selecting trills and opening properties causes a crash
                 toTrill(newSpanner)->setTrillType(TrillType::TRILL_LINE);
             } else if (type == ElementType::TEXTLINE) {
                 TextLineBase* textLine = toTextLineBase(newSpanner);
@@ -693,12 +692,11 @@ void FinaleParser::importSmartShapes()
         } else if (type == ElementType::OTTAVA && !customLine) {
             // Account for odd text offset
             muse::draw::Font f(score()->engravingFont()->family(), muse::draw::Font::Type::MusicSymbol);
-            f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * MScore::pixelRatio * newSpanner->magS());
+            f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * MScore::pixelRatio * newSpanner->magS() / SPATIUM20);
             muse::draw::FontMetrics fm(f);
-            RectF r = fm.boundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))); // Assume 8va symbol for now
-            PointF textoffset(0.0, r.bottom() - fm.descent());
+            PointF textoffset(0.0, fm.descent());
             if (newSpanner->placeAbove()) {
-                textoffset.ry() += r.height();
+                textoffset.ry() -= fm.boundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))).height();  // Assume 8va symbol for now
             }
             toOttava(newSpanner)->setBeginTextOffset(textoffset);
             toOttava(newSpanner)->setContinueTextOffset(textoffset);
