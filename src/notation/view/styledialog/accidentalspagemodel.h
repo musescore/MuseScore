@@ -31,8 +31,6 @@ class AccidentalsPageModel : public AbstractStyleDialogModel
 
     Q_PROPERTY(StyleItem * bracketedAccidentalPadding READ bracketedAccidentalPadding CONSTANT)
 
-    Q_PROPERTY(StyleItem * keySigNaturals READ keySigNaturals CONSTANT)
-
     Q_PROPERTY(StyleItem * accidFollowNoteOffset READ accidFollowNoteOffset CONSTANT)
     Q_PROPERTY(StyleItem * alignAccidentalOctavesAcrossSubChords READ alignAccidentalOctavesAcrossSubChords CONSTANT)
     Q_PROPERTY(StyleItem * keepAccidentalSecondsTogether READ keepAccidentalSecondsTogether CONSTANT)
@@ -42,9 +40,6 @@ public:
     explicit AccidentalsPageModel(QObject* parent = nullptr);
 
     StyleItem* bracketedAccidentalPadding() const;
-
-    StyleItem* keySigNaturals() const;
-
     StyleItem* accidFollowNoteOffset() const;
     StyleItem* alignAccidentalOctavesAcrossSubChords() const;
     StyleItem* keepAccidentalSecondsTogether() const;
