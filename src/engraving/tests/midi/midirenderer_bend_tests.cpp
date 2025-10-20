@@ -554,7 +554,7 @@ TEST_F(MidiRendererBend_Tests, bendGraceAfter)
     EventsHolder events = renderMidiEvents(u"bend-grace-after.mscx");
 
     EXPECT_EQ(events.size(), 1);
-    EXPECT_EQ(events[0].size(), 122);
+    EXPECT_EQ(events[0].size(), 123);
 
     checkEventInterval(events, 0, 479, 60, defVol);
 
@@ -593,6 +593,7 @@ TEST_F(MidiRendererBend_Tests, bendGraceAfter)
     checkPitchBend(events, 2248, 8721);
     checkPitchBend(events, 2258, 8521);
     checkPitchBend(events, 2268, 8299);
+    checkPitchBend(events, 2278, 8192);
 
     checkPitchBend(events, 3830, pwReset);
     checkEventInterval(events, 3840, 4319, 64, defVol);
@@ -927,4 +928,96 @@ TEST_F(MidiRendererBend_Tests, bendAndVibrato)
     checkPitchBend(events, 950, 10022);
 
     EXPECT_TRUE(events[0].empty());
+}
+
+TEST_F(MidiRendererBend_Tests, bendReleaseTwice)
+{
+    constexpr int defVol = 80; // mf
+
+    EventsHolder events = renderMidiEvents(u"bend_release_twice.mscx");
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].size(), 81);
+
+    checkEventInterval(events, 0, 959, 60, defVol);
+
+    /// ---- first bend ----
+    checkPitchBend(events, 0, 8192);
+    checkPitchBend(events, 10, 8194);
+    checkPitchBend(events, 20, 8201);
+    checkPitchBend(events, 30, 8213);
+    checkPitchBend(events, 40, 8229);
+    checkPitchBend(events, 50, 8251);
+    checkPitchBend(events, 60, 8277);
+    checkPitchBend(events, 70, 8308);
+    checkPitchBend(events, 80, 8343);
+    checkPitchBend(events, 90, 8384);
+    checkPitchBend(events, 100, 8429);
+    checkPitchBend(events, 110, 8478);
+    checkPitchBend(events, 120, 8533);
+    checkPitchBend(events, 130, 8592);
+    checkPitchBend(events, 140, 8656);
+    checkPitchBend(events, 150, 8725);
+    checkPitchBend(events, 160, 8798);
+    checkPitchBend(events, 170, 8877);
+    checkPitchBend(events, 180, 8960);
+    checkPitchBend(events, 190, 9047);
+    checkPitchBend(events, 200, 9140);
+    checkPitchBend(events, 210, 9237);
+    checkPitchBend(events, 220, 9339);
+    checkPitchBend(events, 230, 9445);
+    checkPitchBend(events, 240, 9557);
+    checkPitchBend(events, 250, 9554);
+    checkPitchBend(events, 260, 9547);
+    checkPitchBend(events, 270, 9536);
+    checkPitchBend(events, 280, 9519);
+    checkPitchBend(events, 290, 9498);
+    checkPitchBend(events, 300, 9472);
+    checkPitchBend(events, 310, 9441);
+    checkPitchBend(events, 320, 9405);
+    checkPitchBend(events, 330, 9365);
+    checkPitchBend(events, 340, 9320);
+    checkPitchBend(events, 350, 9270);
+    checkPitchBend(events, 360, 9216);
+    checkPitchBend(events, 370, 9156);
+    checkPitchBend(events, 380, 9092);
+    checkPitchBend(events, 390, 9024);
+    checkPitchBend(events, 400, 8950);
+    checkPitchBend(events, 410, 8872);
+    checkPitchBend(events, 420, 8789);
+    checkPitchBend(events, 430, 8701);
+    checkPitchBend(events, 440, 8609);
+    checkPitchBend(events, 450, 8512);
+    checkPitchBend(events, 460, 8410);
+    checkPitchBend(events, 470, 8303);
+
+    /// ---- second bend (startFactor=0.25, endFactor=0.75) ----
+    checkPitchBend(events, 540, 8192);
+    checkPitchBend(events, 550, 8201);
+    checkPitchBend(events, 560, 8229);
+    checkPitchBend(events, 570, 8277);
+    checkPitchBend(events, 580, 8343);
+    checkPitchBend(events, 590, 8429);
+    checkPitchBend(events, 600, 8533);
+    checkPitchBend(events, 610, 8656);
+    checkPitchBend(events, 620, 8798);
+    checkPitchBend(events, 630, 8960);
+    checkPitchBend(events, 640, 9140);
+    checkPitchBend(events, 650, 9339);
+    checkPitchBend(events, 660, 9557);
+    checkPitchBendInterval(events, 670, 720, 10, 9557);
+    checkPitchBend(events, 730, 9547);
+    checkPitchBend(events, 740, 9519);
+    checkPitchBend(events, 750, 9472);
+    checkPitchBend(events, 760, 9405);
+    checkPitchBend(events, 770, 9320);
+    checkPitchBend(events, 780, 9216);
+    checkPitchBend(events, 790, 9092);
+    checkPitchBend(events, 800, 8950);
+    checkPitchBend(events, 810, 8789);
+    checkPitchBend(events, 820, 8609);
+    checkPitchBend(events, 830, 8410);
+    checkPitchBend(events, 840, 8192);
+
+    EXPECT_EQ(events[0].size(), 0);
 }

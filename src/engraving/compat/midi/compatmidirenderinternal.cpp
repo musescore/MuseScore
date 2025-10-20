@@ -363,14 +363,13 @@ static BendPlaybackInfo getBendPlaybackInfo(const GuitarBend* bend, int bendStar
 }
 
 static void fillBendDurations(const Note* bendStartNote, const std::unordered_set<const Note*>& currentNotes,
-                              std::unordered_map<const Note*, int>& durations, bool tiedToNext)
+                              std::unordered_map<const Note*, int>& durations)
 {
     if (!bendStartNote || currentNotes.empty()) {
         return;
     }
 
-    size_t bendsAmount = tiedToNext ? currentNotes.size() + 1 : currentNotes.size();
-    int eachBendDuration = bendStartNote->chord()->actualTicks().ticks() / static_cast<int>(bendsAmount);
+    int eachBendDuration = bendStartNote->chord()->actualTicks().ticks() / static_cast<int>(currentNotes.size());
 
     for (const Note* note : currentNotes) {
         durations.insert({ note, eachBendDuration });
@@ -418,7 +417,7 @@ static std::unordered_map<const Note*, int> getGraceNoteBendDurations(const Note
                 currentNotes.insert(endNote);
             }
         } else {
-            fillBendDurations(bendStartNote, currentNotes, durations, true);
+            fillBendDurations(bendStartNote, currentNotes, durations);
             bendStartNote = nullptr;
             currentNotes.clear();
         }
@@ -426,7 +425,7 @@ static std::unordered_map<const Note*, int> getGraceNoteBendDurations(const Note
         note = bendFor->endNote();
     }
 
-    fillBendDurations(bendStartNote, currentNotes, durations, false);
+    fillBendDurations(bendStartNote, currentNotes, durations);
 
     return durations;
 }
@@ -511,9 +510,11 @@ static void collectGuitarBend(const Note* note,
             pitchWheelRenderer.addPitchWheelFunction(pitchWheelSquareFunc, channel, note->staffIdx(), effect);
             quarterOffsetFromStartNote += currentQuarterTones;
 
-            if (bendPlaybackInfo.endTick < curPitchBendSegmentStart + duration) {
-                int constPitchWheelduration = (quarterOffsetFromStartNote == 0 ? wheelSpec.mStep : duration);
-                addConstPitchWheel(bendPlaybackInfo.endTick, curPitchBendSegmentStart + constPitchWheelduration,
+            const int curPitchBendSegmentEnd = curPitchBendSegmentStart + duration;
+            if (bendPlaybackInfo.endTick < curPitchBendSegmentEnd) {
+                int constPitchWheelduration
+                    = (quarterOffsetFromStartNote == 0 ? wheelSpec.mStep : curPitchBendSegmentEnd - bendPlaybackInfo.endTick);
+                addConstPitchWheel(bendPlaybackInfo.endTick, bendPlaybackInfo.endTick + constPitchWheelduration,
                                    quarterOffsetFromStartNote / 2.0, pitchWheelRenderer, channel,
                                    note->staffIdx(),
                                    effect);
@@ -736,9 +737,6 @@ static int calculateTieLength(const Note* note)
             n = tieFor->endNote();
         } else if (bendFor && bendFor->endNote() != n) {
             n = bendFor->endNote();
-            if (n->chord()->isGrace()) {
-                return tieLen;
-            }
         } else {
             break;
         }
@@ -749,7 +747,7 @@ static int calculateTieLength(const Note* note)
 
         const NoteEventList& nel = n->playEvents();
 
-        if (!nel.empty()) {
+        if (!nel.empty() && (!n->chord()->isGrace())) {
             tieLen += nel[0].len() * n->chord()->actualTicks().ticks() / NoteEvent::NOTE_LENGTH;
         }
     }
