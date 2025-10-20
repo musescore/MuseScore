@@ -208,16 +208,38 @@ StyledFlickable {
             id: textInputModel
         }
 
+        Keys.onShortcutOverride: function(event) {
+
+            if (keyMap.get(event.key) === "") {
+                // Not interested in this key. Allow it to undergo normal
+                // shortcut processing (i.e. trigger an action, if it's been
+                // assigned one in Preferences that's valid in this context).
+                return;
+            }
+
+            // Intercept key for use in Keys.onPressed (below). This prevents
+            // it from triggering actions it's assigned to in Preferences.
+            // Note: users can reassign shortcuts to use keys that aren't
+            // blocked. Conclusion: we can block keys here but not actions.
+            event.accepted = true;
+            return;
+        }
+
         Keys.onPressed: function(event) {
-            if (event.key === Qt.Key_Tab) {
+            if (event.key === Qt.Key_Tab
+                    || event.key === Qt.Key_Backtab
+                    || event.key === Qt.Key_F6
+                    || event.key === Qt.Key_QuoteLeft) {
                 //! NOTE: We need to handle Tab key here because https://doc.qt.io/qt-5/qml-qtquick-controls2-textarea.html#tab-focus
                 //!       and we don't use qt navigation system
-                if (textInputModel.handleShortcut(Qt.Key_Tab, Qt.NoModifier)) {
+                if (textInputModel.handleShortcut(event.key, event.modifiers)) {
                     brailleTextArea.focus = false;
                     event.accepted = true;
                     return;
                 }
             }
+
+            // Note: Subsequent keys must be accepted in Keys.onShortcutOverride (above).
 
             if (event.key !== Qt.Key_Shift
                 && event.key !== Qt.Key_Alt
