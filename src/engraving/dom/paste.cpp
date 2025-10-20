@@ -587,7 +587,6 @@ void Score::cmdPasteStaffList(muse::ByteArray& data, Fraction scale)
             MScore::setError(MsError::DEST_NO_CR);
             return;
         }
-        deselect(e);
     }
 
     if (!cr) {
@@ -628,7 +627,6 @@ void Score::cmdPasteSymbolList(muse::ByteArray& data)
             MScore::setError(MsError::DEST_NO_CR);
             return;
         }
-        deselect(e);
     }
 
     if (!cr) {
