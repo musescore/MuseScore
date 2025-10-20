@@ -101,9 +101,9 @@
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>2.2</tempo>
+            <tempo>2.19233</tempo>
             <eid>G_G</eid>
-            <text><sym>metNoteQuarterUp</sym> = 132</text>
+            <text><sym>metNoteQuarterUp</sym> = 131.539816</text>
             </Tempo>
           <Rest>
             <eid>H_H</eid>
