@@ -331,6 +331,7 @@ void FinaleParser::importParts()
             // Compensate here.
             options.scaleFontSizeBy = 1.0;
             // userMag is not set yet, so use musx data
+            /// @todo is this scaled correctly? MS scales relative to largest staff spatium used
             const MusxInstanceList<others::StaffUsed> systemOneStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, 1);
             if (std::optional<size_t> index = systemOneStaves.getIndexForStaff(staff->getCmper())) {
                 const musx::util::Fraction staffMag = systemOneStaves[index.value()]->calcEffectiveScaling() / musxOptions().combinedDefaultStaffScaling;
@@ -360,8 +361,9 @@ void FinaleParser::importBrackets()
         std::vector<StaffGroupLayer> result;
         result.reserve(n);
 
-        for (auto& g : groups)
+        for (auto& g : groups) {
             result.push_back({ std::move(g), 0 });
+        }
 
         for (size_t i = 0; i < n; ++i) {
             const auto& gi = result[i].info;
@@ -423,19 +425,38 @@ void FinaleParser::importBrackets()
             logger()->logWarning(String(u"Create brackets: Musx inst value not found for staff cmper %1").arg(String::fromStdString(std::to_string(musxStartStaff->getCmper()))));
             continue;
         }
+
+        // Bracket type
         BracketItem* bi = Factory::createBracketItem(m_score->dummy());
         bi->setBracketType(toMuseScoreBracketType(groupInfo.info.group->bracket->style));
         int groupSpan = int(groupInfo.info.endSlot.value() - groupInfo.info.startSlot.value() + 1);
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(groupInfo.layer));
         m_score->staff(startStaffIdx)->addBracket(bi);
-        if (groupInfo.info.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::ThroughStaves) {
+
+        // Barline defaults (these will be overridden later, but good to have nice defaults)
+        if (groupInfo.info.group->ownBarline && groupInfo.info.group->barlineType == others::Measure::BarlineType::Tick) {
+            for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan; idx++) {
+                Staff* s = m_score->staff(idx);
+                s->setBarLineSpan(false);
+                int lines = s->lines(Fraction(0, 1)) - 1;
+                s->setBarLineFrom(BARLINE_SPAN_TICK1_FROM + (lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : 0));
+                s->setBarLineTo((lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : (2 * -lines)) + 1);
+            }
+        } else if (groupInfo.info.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::ThroughStaves) {
             for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
                 m_score->staff(idx)->setBarLineSpan(true);
                 m_score->staff(idx)->setBarLineTo(0);
             }
+        } else if (groupInfo.info.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::Mensurstriche) {
+            for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
+                Staff* s = m_score->staff(idx);
+                s->setBarLineSpan(true);
+                int lines = s->lines(Fraction(0, 1)) - 1;
+                s->setBarLineFrom(lines == 0 ? BARLINE_SPAN_1LINESTAFF_TO : 2 * lines);
+                s->setBarLineTo(0);
+            }
         }
-        /// @todo : Mensurstriche, staff group barline types
     }
 }
 
@@ -951,22 +972,20 @@ void FinaleParser::importStaffItems()
                     keySigEvent = KeySigEvent();
                     // Note that isLinear and isNonLinear can in theory both return false, although if it happens it is evidence of musx file corruption.
                     KeySigEvent& ksEvent = keySigEvent.value();
-                    if (musxKeySig->isLinear() || keyless) {
-                        Key concertKey = keyless ? Key::C : keyFromAlteration(musxKeySig->getAlteration(KeySignature::KeyContext::Concert));
-                        Key key = keyless ? Key::C : keyFromAlteration(musxKeySig->getAlteration(KeySignature::KeyContext::Written));
-                        ksEvent.setConcertKey(concertKey);
-                        ksEvent.setKey(key);
-                        KeyMode km = KeyMode::UNKNOWN;
-                        if (keyless) {
-                            km = KeyMode::NONE;
-                        } else if (musxKeySig->isMajor()) {
-                            km = KeyMode::MAJOR;
+                    if (keyless) {
+                        ksEvent.setConcertKey(Key::C);
+                        ksEvent.setKey(Key::C);
+                        ksEvent.setMode(KeyMode::NONE);
+                    } else if (musxKeySig->isLinear()) {
+                        ksEvent.setConcertKey(keyFromAlteration(musxKeySig->getAlteration(KeySignature::KeyContext::Concert)));
+                        ksEvent.setKey(keyFromAlteration(musxKeySig->getAlteration(KeySignature::KeyContext::Written)));
+                        if (musxKeySig->isMajor()) {
+                            ksEvent.setMode(KeyMode::MAJOR);
                         } else if (musxKeySig->isMinor()) {
-                            km = KeyMode::MINOR;
+                            ksEvent.setMode(KeyMode::MINOR);
                         } else if (std::optional<music_theory::DiatonicMode> mode = musxKeySig->calcDiatonicMode()) {
-                            km = keyModeFromDiatonicMode(mode.value());
+                            ksEvent.setMode(keyModeFromDiatonicMode(mode.value()));
                         }
-                        ksEvent.setMode(km);
                     } else if (musxKeySig->isNonLinear()) {
                         MusxInstance<others::AcciOrderSharps> musxAccis = m_doc->getOthers()->get<others::AcciOrderSharps>(m_currentMusxPartId, musxKeySig->getKeyMode());
                         MusxInstance<others::AcciAmountSharps> musxAmounts = m_doc->getOthers()->get<others::AcciAmountSharps>(m_currentMusxPartId, musxKeySig->getKeyMode());
@@ -1029,98 +1048,14 @@ void FinaleParser::importStaffItems()
     }
 }
 
-void FinaleParser::createLeftBarline(Measure* measure, others::Measure::BarlineType musxBarlineType)
-{
-    engraving::BarLineType blt = toMuseScoreBarLineType(musxBarlineType);
-    if (musxBarlineType == others::Measure::BarlineType::OptionsDefault
-        && musxOptions().barlineOptions->leftBarlineUsePrevStyle) {
-        Measure* prevM = measure->prevMeasureMM();
-        if (prevM && prevM->endBarLine() && !prevM->repeatEnd()) {
-            blt = prevM->endBarLine()->barLineType();
-        }
-    }
-    /// @todo others::Measure::BarlineType::Custom
-
-    // observed: unaffected by musxOptions/drawBarlines, same as MuseScore
-    const bool blVisible = musxBarlineType != others::Measure::BarlineType::None;
-    const bool blSpan = true; // Can this even be false for left barlines in Finale?
-    const bool blGenerated = musxBarlineType == others::Measure::BarlineType::Normal;
-    const bool blTicked = musxBarlineType == others::Measure::BarlineType::Tick;
-
-    Segment* bls = measure->getSegmentR(SegmentType::BeginBarLine, Fraction(0, 1));
-
-    // Finale adds distance between 'segments' even if barlines are invisible,
-    // but (like MuseScore) not their width. So we add the distance as leading space.
-    if (!blVisible) {
-        if (Segment* nextSeg = bls->next()) {
-            if (nextSeg->isKeySigType()) {
-                nextSeg->setExtraLeadingSpace(m_score->style().styleS(Sid::keysigLeftMargin));
-            } else if (nextSeg->isTimeSigType()) {
-                nextSeg->setExtraLeadingSpace(m_score->style().styleS(Sid::timesigLeftMargin));
-            } else /* if (nextSeg->isClefType()) */ {
-                // default to clef distance
-                nextSeg->setExtraLeadingSpace(m_score->style().styleS(Sid::clefLeftMargin));
-            }
-        }
-    }
-
-    for (track_idx_t track = 0; track < m_score->ntracks(); track += VOICES) {
-        BarLine* bl = Factory::createBarLine(bls);
-        bl->setParent(bls);
-        bl->setTrack(track);
-        bl->setVisible(blVisible);
-        bl->setGenerated(blGenerated);
-        bl->setSpanStaff(blSpan || bl->staff()->barLineSpan());
-        bl->setBarLineType(blt);
-        bl->setSpanFrom(blTicked ? BARLINE_SPAN_TICK1_FROM : bl->staff()->barLineFrom());
-        bl->setSpanTo(blTicked ? BARLINE_SPAN_TICK1_TO : bl->staff()->barLineFrom());
-        bls->add(bl);
-    }
-}
-
-void FinaleParser::createRightBarline(Measure* measure, others::Measure::BarlineType musxBarlineType, bool endsStaffSystem)
-{
-    const MusxInstance<options::BarlineOptions>& config = musxOptions().barlineOptions;
-
-    engraving::BarLineType blt = toMuseScoreBarLineType(musxBarlineType);
-    if (musxBarlineType == others::Measure::BarlineType::Normal && !measure->nextMeasure() && config->drawFinalBarlineOnLastMeas) {
-        blt = engraving::BarLineType::FINAL;
-    }
-
-    // musxOptions/drawBarlines is already set at staff level.
-    const bool blVisible = musxBarlineType != others::Measure::BarlineType::None;
-
-    const bool blSpan = (endsStaffSystem && config->drawCloseSystemBarline)
-                        || (!measure->nextMeasure() && config->drawCloseFinalBarline);
-
-    // Setting generated allows correct inheriting of other score behavior
-    // (Double barlines before key signatures, final barline....)
-    const bool blGenerated = (musxBarlineType == others::Measure::BarlineType::Normal)
-                             && (measure->nextMeasure() || blt == engraving::BarLineType::FINAL);
-
-    const bool blTicked = musxBarlineType == others::Measure::BarlineType::Tick;
-
-    Segment* bls = measure->getSegmentR(SegmentType::EndBarLine, measure->ticks());
-    for (track_idx_t track = 0; track < m_score->ntracks(); track += VOICES) {
-        BarLine* bl = Factory::createBarLine(bls);
-        bl->setParent(bls);
-        bl->setTrack(track);
-        bl->setVisible(blVisible);
-        bl->setGenerated(blGenerated);
-        bl->setSpanStaff(blSpan || bl->staff()->barLineSpan());
-        bl->setBarLineType(blt);
-        bl->setSpanFrom(blTicked ? BARLINE_SPAN_TICK1_FROM : bl->staff()->barLineFrom());
-        bl->setSpanTo(blTicked ? BARLINE_SPAN_TICK1_TO : bl->staff()->barLineFrom());
-        bls->add(bl);
-    }
-}
-
 void FinaleParser::importBarlines()
 {
     // Requires clef/keysig/timesig segments to have been created (layout call needed for non-change keysigs)
+    // And number of staff lines at ticks to have been set (no layout necessary)
     m_score->doLayout();
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
+    const MusxInstance<options::BarlineOptions>& config = musxOptions().barlineOptions;
     for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
         Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
         Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
@@ -1131,20 +1066,149 @@ void FinaleParser::importBarlines()
 
         bool startsStaffSystem = false;
         bool endsStaffSystem = false;
+        std::vector<details::StaffGroupInfo> staffGroups;
         for (MusxInstance<others::StaffSystem> staffSystem : staffSystems) {
             startsStaffSystem = staffSystem->startMeas == musxMeasure->getCmper();
             endsStaffSystem = staffSystem->getLastMeasure() == musxMeasure->getCmper();
-            if (startsStaffSystem || endsStaffSystem) {
+            if (currTick > muse::value(m_meas2Tick, staffSystem->startMeas, Fraction(-1, 1))) {
+                const MusxInstanceList<others::StaffUsed> scrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, staffSystem->getCmper());
+                staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(musxMeasure->getCmper(), m_currentMusxPartId, scrollView);
                 break;
             }
         }
 
-        // Left & right barline
+        // Left barline
         if (startsStaffSystem) {
-            createLeftBarline(measure, musxMeasure->leftBarlineType);
+            others::Measure::BarlineType musxBarlineType = musxMeasure->leftBarlineType;
+            if (musxBarlineType == others::Measure::BarlineType::OptionsDefault
+                && config->leftBarlineUsePrevStyle && measure->prevMeasure()) {
+                if (MeasCmper prevMeasureId = muse::value(m_tick2Meas, measure->prevMeasure()->tick(), 0)) {
+                    musxBarlineType = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, prevMeasureId)->barlineType;
+                }
+            }
+            engraving::BarLineType lblt = toMuseScoreBarLineType(musxBarlineType);
+            /// @todo others::Measure::BarlineType::Custom
+
+            // observed: unaffected by musxOptions/drawBarlines, same as MuseScore
+            const bool lblVisible = musxBarlineType != others::Measure::BarlineType::None;
+            const bool lblSpan = true; // Can this even be false for left barlines in Finale?
+            const bool lblGenerated = musxBarlineType == others::Measure::BarlineType::Normal;
+            const bool lblTicked = musxBarlineType == others::Measure::BarlineType::Tick;
+
+            Segment* lbls = measure->getSegmentR(SegmentType::BeginBarLine, Fraction(0, 1));
+
+            // Finale adds distance between 'segments' even if barlines are invisible,
+            // but (like MuseScore) not their width. So we add the distance as leading space.
+            if (!lblVisible) {
+                if (Segment* nextSeg = lbls->nextActive()) {
+                    if (nextSeg->isKeySigType()) {
+                        nextSeg->setExtraLeadingSpace(m_score->style().styleS(Sid::keysigLeftMargin));
+                    } else if (nextSeg->isTimeSigType()) {
+                        nextSeg->setExtraLeadingSpace(m_score->style().styleS(Sid::timesigLeftMargin));
+                    } else /* if (nextSeg->isClefType()) */ {
+                        // default to clef distance
+                        nextSeg->setExtraLeadingSpace(m_score->style().styleS(Sid::clefLeftMargin));
+                    }
+                }
+            }
+
+            for (track_idx_t track = 0; track < m_score->ntracks(); track += VOICES) {
+                BarLine* bl = Factory::createBarLine(lbls);
+                bl->setParent(lbls);
+                bl->setTrack(track);
+                bl->setVisible(lblVisible);
+                bl->setGenerated(lblGenerated);
+                bl->setSpanStaff(lblSpan || bl->staff()->barLineSpan());
+                bl->setBarLineType(lblt);
+                if (lblTicked) {
+                    int lines = bl->staff()->lines(lbls->tick()) - 1;
+                    bl->setSpanFrom(BARLINE_SPAN_TICK1_FROM + (lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : 0));
+                    bl->setSpanTo((lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : (2 * -lines)) + 1);
+                } else {
+                    bl->setSpanFrom(0);
+                    bl->setSpanTo(0);
+                }
+                lbls->add(bl);
+            }
         }
-        // musxOptions/drawBarlines hides barlines on a layout level, so we still want to read their settings
-        createRightBarline(measure, musxMeasure->barlineType, endsStaffSystem);
+
+        // Right barline
+        engraving::BarLineType blt = toMuseScoreBarLineType(musxMeasure->barlineType);
+        if (musxMeasure->barlineType == others::Measure::BarlineType::Normal && !measure->nextMeasure() && config->drawFinalBarlineOnLastMeas) {
+            blt = engraving::BarLineType::FINAL;
+        }
+
+        // musxOptions/drawBarlines hides barlines on a layout level, so we still want to read their settings correctly
+        const bool blVisible = musxMeasure->barlineType != others::Measure::BarlineType::None;
+
+        const bool blSpan = (endsStaffSystem && config->drawCloseSystemBarline)
+                            || (!measure->nextMeasure() && config->drawCloseFinalBarline);
+
+        // Setting generated allows correct inheriting of other score behavior
+        // (Double barlines before key signatures, final barline....)
+        const bool blGenerated = (musxMeasure->barlineType == others::Measure::BarlineType::Normal)
+                                 && (measure->nextMeasure() || blt == engraving::BarLineType::FINAL);
+
+        const bool blTicked = musxMeasure->barlineType == others::Measure::BarlineType::Tick;
+
+        Segment* bls = measure->getSegmentR(SegmentType::EndBarLine, measure->ticks());
+        for (staff_idx_t staffIdx = 0; staffIdx < m_score->nstaves(); ++staffIdx) {
+            engraving::BarLineType localType = blt;
+            bool localVisible = blVisible;
+            bool localGenerated = blGenerated;
+            bool localSpan = blSpan;
+            bool localTick = blTicked;
+            bool mensurStriche = false;
+            bool mensurLast = false;
+            size_t priority = m_score->nstaves() + 1;
+
+            StaffCmper musxStaffId = muse::value(m_staff2Inst, staffIdx, 0);
+            for (details::StaffGroupInfo groupInfo : staffGroups) {
+                if (muse::contains(groupInfo.group->staves, musxStaffId)) {
+                    bool canUseStaffBarline = !musxMeasure->groupBarlineOverride && groupInfo.group->ownBarline;
+                    localGenerated = localGenerated || canUseStaffBarline;
+                    localSpan = localSpan || groupInfo.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::ThroughStaves;
+
+                    // Deal with overlapping groups by prioritise the smallest group.
+                    // Except for span and generated, which can be set by any group
+                    if (priority > groupInfo.group->staves.size()) {
+                        if (canUseStaffBarline) {
+                            localType = toMuseScoreBarLineType(groupInfo.group->barlineType);
+                            localVisible = groupInfo.group->barlineType != others::Measure::BarlineType::None;
+                            localTick = groupInfo.group->barlineType == others::Measure::BarlineType::Tick;
+                            priority = groupInfo.group->staves.size();
+                        }
+                        // Draw Mensurstriche if determined by smallest group
+                        mensurStriche = groupInfo.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::Mensurstriche;
+                        mensurLast = mensurStriche ? musxStaffId == groupInfo.group->endInst : false;
+                    }
+                }
+            }
+            // Only actually draw Mensurstriche if we don't span over them and don't use tick barline
+            mensurStriche = mensurStriche && !localSpan && !localTick;
+
+            BarLine* bl = Factory::createBarLine(bls);
+            bl->setParent(bls);
+            bl->setTrack(staff2track(staffIdx));
+            bl->setVisible(localVisible);
+            bl->setGenerated(localGenerated);
+            bl->setSpanStaff(!localTick && (localSpan || mensurStriche));
+            bl->setBarLineType(localType);
+            if (localTick) {
+                int lines = bl->staff()->lines(bls->tick() - Fraction::eps()) - 1;
+                bl->setSpanFrom(BARLINE_SPAN_TICK1_FROM + (lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : 0));
+                bl->setSpanTo((lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : (2 * -lines)) + 1);
+            } else if (mensurStriche) {
+                bl->setVisible(!mensurLast);
+                int lines = bl->staff()->lines(bls->tick() - Fraction::eps()) - 1;
+                bl->setSpanFrom(lines == 0 ? BARLINE_SPAN_1LINESTAFF_TO : 2 * lines);
+                bl->setSpanFrom(0);
+            } else {
+                bl->setSpanFrom(0);
+                bl->setSpanTo(0);
+            }
+            bls->add(bl);
+        }
 
         // Set repeats and other measure properties
         measure->setRepeatStart(musxMeasure->forwardRepeatBar);
