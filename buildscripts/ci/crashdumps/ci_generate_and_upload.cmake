@@ -15,7 +15,12 @@ set(CONFIG
 
 execute_process(
     COMMAND cmake ${CONFIG} -P ${HERE}/ci_generate_dumpsyms.cmake
+    RESULT_VARIABLE result
 )
+
+if(result)
+    message(FATAL_ERROR "Failed to generate dump symbols, exit code: ${result}")
+endif()
 
 # Options for upload
 set(SENTRY_URL "" CACHE STRING "Sentry URL")
@@ -32,4 +37,9 @@ set(CONFIG
 
 execute_process(
     COMMAND cmake ${CONFIG} -P ${HERE}/ci_sentry_dumpsyms_upload.cmake
+    RESULT_VARIABLE result
 )
+
+if(result)
+    message(FATAL_ERROR "Failed to generate and upload symbols, exit code: ${result}")
+endif()

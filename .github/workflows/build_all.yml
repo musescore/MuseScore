@@ -67,8 +67,25 @@ defaults:
 
 jobs:
 
+  generate_build_number:
+    name: Generate Build Number
+    runs-on: ubuntu-22.04
+    outputs:
+      build_number: ${{ steps.make_build_number.outputs.build_number }}
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v5
+      - name: Generate build number
+        id: make_build_number
+        run: |
+          bash ./buildscripts/ci/tools/make_build_number.sh
+          BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
+          echo "build_number=${BUILD_NUMBER}" >> $GITHUB_OUTPUT
+          echo "Generated BUILD_NUMBER: ${BUILD_NUMBER}"
+
   backend:
     name: Backend
+    needs: generate_build_number
     if: ${{ contains(inputs.platforms, 'backend') }}
     uses: ./.github/workflows/build_backend.yml
     secrets: inherit
@@ -77,9 +94,11 @@ jobs:
       publish: ${{ inputs.publish }}
       deploy: ${{ inputs.deploy_backend }}
       use_qt69: ${{ inputs.use_qt69 }}
+      build_number: ${{ needs.generate_build_number.outputs.build_number }}
 
   linux_arm32:
     name: Linux ARM32
+    needs: generate_build_number
     if: ${{ contains(inputs.platforms, 'linux_arm32') }}
     uses: ./.github/workflows/build_linux_arm32.yml
     secrets: inherit
@@ -88,9 +107,11 @@ jobs:
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
       use_qt69: ${{ inputs.use_qt69 }}
+      build_number: ${{ needs.generate_build_number.outputs.build_number }}
 
   linux:
     name: Linux
+    needs: generate_build_number
     uses: ./.github/workflows/build_linux.yml
     secrets: inherit
     with:
@@ -99,9 +120,11 @@ jobs:
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
       use_qt69: ${{ inputs.use_qt69 }}
+      build_number: ${{ needs.generate_build_number.outputs.build_number }}
 
   macos:
     name: macOS
+    needs: generate_build_number
     if: ${{ contains(inputs.platforms, 'macos') }}
     uses: ./.github/workflows/build_macos.yml
     secrets: inherit
@@ -110,9 +133,11 @@ jobs:
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
       use_qt69: ${{ inputs.use_qt69 }}
+      build_number: ${{ needs.generate_build_number.outputs.build_number }}
 
   windows:
     name: Windows
+    needs: generate_build_number
     uses: ./.github/workflows/build_windows.yml
     secrets: inherit
     with:
@@ -121,6 +146,7 @@ jobs:
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
       use_qt69: ${{ inputs.use_qt69 }}
+      build_number: ${{ needs.generate_build_number.outputs.build_number }}
 
   # Dummy build for testing purposes.
   dummy:
