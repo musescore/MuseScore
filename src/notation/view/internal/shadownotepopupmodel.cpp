@@ -50,7 +50,7 @@ void ShadowNotePopupModel::init()
 
     m_item = interaction()->shadowNote();
 
-    interaction()->shadowNoteChanged().onNotify(this, [this]() {
+    interaction()->shadowNoteChanged().onReceive(this, [this](bool) {
         updateItemRect();
     });
 

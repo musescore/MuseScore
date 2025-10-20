@@ -44,10 +44,10 @@ public:
 
     // Shadow note
     virtual mu::engraving::ShadowNote* shadowNote() const = 0;
-    virtual bool showShadowNote(const muse::PointF& pos) = 0;
+    virtual void showShadowNote(const muse::PointF& pos) = 0;
     virtual void hideShadowNote() = 0;
     virtual muse::RectF shadowNoteRect() const = 0;
-    virtual muse::async::Notification shadowNoteChanged() const = 0;
+    virtual muse::async::Channel</*visible*/ bool> shadowNoteChanged() const = 0;
 
     // Visibility
     virtual void toggleVisible() = 0;

@@ -405,7 +405,7 @@ mu::engraving::ShadowNote* NotationInteraction::shadowNote() const
     return score()->shadowNote();
 }
 
-bool NotationInteraction::showShadowNote(const PointF& pos)
+void NotationInteraction::showShadowNote(const PointF& pos)
 {
     const mu::engraving::InputState& inputState = score()->inputState();
     mu::engraving::ShadowNote& shadowNote = *score()->shadowNote();
@@ -413,21 +413,19 @@ bool NotationInteraction::showShadowNote(const PointF& pos)
     ShadowNoteParams params;
     if (!score()->getPosition(&params.position, pos, inputState.voice())) {
         shadowNote.setVisible(false);
-        m_shadowNoteChanged.notify();
-        return false;
+        m_shadowNoteChanged.send(/*visible*/ false);
+        return;
     }
 
     params.duration = inputState.duration();
     params.accidentalType = inputState.accidentalType();
     params.articulationIds = inputState.articulationIds();
 
-    const bool show = showShadowNote(shadowNote, params);
-    m_shadowNoteChanged.notify();
-
-    return show;
+    const bool show = doShowShadowNote(shadowNote, params);
+    m_shadowNoteChanged.send(show);
 }
 
-bool NotationInteraction::showShadowNote(ShadowNote& shadowNote, ShadowNoteParams& params)
+bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNoteParams& params)
 {
     Position& position = params.position;
 
@@ -554,7 +552,7 @@ RectF NotationInteraction::shadowNoteRect() const
     return rect;
 }
 
-muse::async::Notification NotationInteraction::shadowNoteChanged() const
+muse::async::Channel<bool> NotationInteraction::shadowNoteChanged() const
 {
     return m_shadowNoteChanged;
 }
@@ -3512,7 +3510,7 @@ void NotationInteraction::drawInputPreview(Painter* painter, const engraving::re
 
     for (ShadowNoteParams& params : paramsList) {
         ShadowNote* preview = new ShadowNote(score());
-        showShadowNote(*preview, params);
+        doShowShadowNote(*preview, params);
         previewList.push_back(preview);
     }
 

@@ -34,7 +34,7 @@ PercussionNotePopupContentModel::PercussionNotePopupContentModel(QObject* parent
 
 void PercussionNotePopupContentModel::init()
 {
-    interaction()->shadowNoteChanged().onNotify(this, [this]() {
+    interaction()->shadowNoteChanged().onReceive(this, [this](bool) {
         emit shouldShowButtonsChanged();
         emit percussionNoteNameChanged();
         emit keyboardShortcutChanged();

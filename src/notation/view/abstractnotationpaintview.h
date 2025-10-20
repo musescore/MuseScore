@@ -118,7 +118,6 @@ public:
     Q_INVOKABLE void pinchToZoom(qreal scaleFactor, const QPointF& pos);
 
     bool isNoteEnterMode() const override;
-    void showShadowNote(const muse::PointF& pos) override;
 
     void showContextMenu(const ElementType& elementType, const QPointF& pos) override;
     void hideContextMenu() override;
