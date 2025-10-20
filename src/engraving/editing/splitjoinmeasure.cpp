@@ -98,6 +98,7 @@ void SplitJoinMeasure::splitMeasure(MasterScore* score, const Fraction& tick)
     options.createEmptyMeasures = true;
     options.moveSignaturesClef = false;
     options.moveStaffTypeChanges = false;
+    options.ignoreBarLines = true;
 
     score->insertMeasure(nm, options);
     Measure* m2 = toMeasure(nm ? nm->prev() : score->lastMeasure());
@@ -257,6 +258,7 @@ void SplitJoinMeasure::joinMeasures(MasterScore* score, const Fraction& tick1, c
     options.createEmptyMeasures = true;
     options.moveSignaturesClef = false;
     options.moveStaffTypeChanges = false;
+    options.ignoreBarLines = true;
     Measure* joinedMeasure = toMeasure(score->insertMeasure(next, options));
 
     for (auto spannerToFixup : spannersEndingInRange) {
@@ -313,29 +315,29 @@ void SplitJoinMeasure::joinMeasures(MasterScore* score, const Fraction& tick1, c
                 if (TimeSig* insTimeSig = toTimeSig(insMSeg->element(staffIdx * VOICES))) {
                     TimeSig* lts = nullptr;
                     for (EngravingObject* l : insTimeSig->linkList()) {
-                        Score* score = l->score();
+                        Score* lscore = l->score();
                         TimeSig* timeSig = toTimeSig(l);
                         Segment* tSeg = timeSig->segment();
                         track_idx_t track = timeSig->track();
-                        Measure* sNext = next ? score->tick2measure(next->tick()) : nullptr;
+                        Measure* sNext = next ? lscore->tick2measure(next->tick()) : nullptr;
                         Segment* nextTSeg = sNext ? sNext->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1)) : nullptr;
                         if (sNext && !nextTSeg->element(track)) {
                             TimeSig* nsig = Factory::copyTimeSig(*timeSig);
-                            nsig->setScore(score);
+                            nsig->setScore(lscore);
                             nsig->setTrack(track);
                             nsig->setParent(nextTSeg);
 
-                            score->doUndoAddElement(nsig);
+                            lscore->doUndoAddElement(nsig);
 
                             if (!lts) {
                                 lts = nsig;
                             } else {
-                                score->undo(new Link(lts, nsig));
+                                lscore->undo(new Link(lts, nsig));
                             }
                         }
-                        score->doUndoRemoveElement(timeSig);
+                        lscore->doUndoRemoveElement(timeSig);
                         if (tSeg->empty()) {
-                            score->doUndoRemoveElement(tSeg);
+                            lscore->doUndoRemoveElement(tSeg);
                         }
                     }
                 }
