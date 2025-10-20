@@ -1453,10 +1453,10 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
                 }
             }
         } else if (tag == "leftParen") {
-            h->setParenthesesMode(ParenthesesMode::LEFT, true, true);
+            h->setParenthesesMode(h->rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT, true, false);
             e.readNext();
         } else if (tag == "rightParen") {
-            h->setParenthesesMode(ParenthesesMode::RIGHT, true, true);
+            h->setParenthesesMode(h->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT, true, false);
             e.readNext();
         } else if (!readTextProperties(e, ctx, h, h)) {
             e.unknown();
