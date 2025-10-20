@@ -1552,7 +1552,7 @@ bool MeiExporter::writeVerse(const Lyrics* lyrics)
     }
 
     libmei::Verse meiVerse;
-    meiVerse.SetN(String::number(lyrics->no() + 1).toStdString());
+    meiVerse.SetN(String::number(lyrics->verse() + 1).toStdString());
     if (lyrics->propertyFlags(engraving::Pid::PLACEMENT) == engraving::PropertyFlags::UNSTYLED) {
         meiVerse.SetPlace(Convert::placeToMEI(lyrics->placement()));
     }

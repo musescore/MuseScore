@@ -6000,7 +6000,7 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
     for (const Lyrics* l : ll) {
         if (l && !l->xmlText().isEmpty()) {
             if ((l)->track() == trk) {
-                String lyricXml = String(u"lyric number=\"%1\"").arg((l)->no() + 1);
+                String lyricXml = String(u"lyric number=\"%1\"").arg((l)->verse() + 1);
                 lyricXml += color2xml(l);
                 lyricXml += positioningAttributes(l);
                 if (!l->visible()) {

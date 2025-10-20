@@ -1856,7 +1856,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
                 if (t == "no") {
-                    l->setNo(e.readInt());
+                    l->setVerse(e.readInt());
                     if (l->isEven()) {
                         l->initTextStyleType(TextStyleType::LYRICS_EVEN);
                     }

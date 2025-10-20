@@ -2948,7 +2948,7 @@ bool TRead::readProperties(Lyrics* l, XmlReader& e, ReadContext& ctx)
     const AsciiStringView tag(e.name());
 
     if (tag == "no") {
-        l->setNo(e.readInt());
+        l->setVerse(e.readInt());
         if (l->isEven()) {
             l->initTextStyleType(TextStyleType::LYRICS_EVEN);
         }

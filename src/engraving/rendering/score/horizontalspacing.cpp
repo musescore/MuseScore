@@ -1773,7 +1773,7 @@ KerningType HorizontalSpacing::computeLyricsKerningType(const Lyrics* lyrics1, c
 {
     if (item2->isLyrics()) {
         const Lyrics* lyrics2 = toLyrics(item2);
-        if (lyrics1->no() == lyrics2->no()) {
+        if (lyrics1->verse() == lyrics2->verse()) {
             return KerningType::NON_KERNING;
         }
     }

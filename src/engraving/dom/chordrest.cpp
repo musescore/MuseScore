@@ -1136,20 +1136,20 @@ void ChordRest::setMelismaEnd(bool v)
 //   lyrics
 //---------------------------------------------------------
 
-Lyrics* ChordRest::lyrics(int no) const
+Lyrics* ChordRest::lyrics(int verse) const
 {
     for (Lyrics* l : m_lyrics) {
-        if (l->no() == no) {
+        if (l->verse() == verse) {
             return l;
         }
     }
     return 0;
 }
 
-Lyrics* ChordRest::lyrics(int no, PlacementV p) const
+Lyrics* ChordRest::lyrics(int verse, PlacementV p) const
 {
     for (Lyrics* l : m_lyrics) {
-        if (l->placement() == p && l->no() == no) {
+        if (l->placement() == p && l->verse() == verse) {
             return l;
         }
     }
@@ -1167,8 +1167,8 @@ int ChordRest::lastVerse(PlacementV p) const
     int lastVerse = -1;
 
     for (Lyrics* l : m_lyrics) {
-        if (l->placement() == p && l->no() > lastVerse) {
-            lastVerse = l->no();
+        if (l->placement() == p && l->verse() > lastVerse) {
+            lastVerse = l->verse();
         }
     }
 

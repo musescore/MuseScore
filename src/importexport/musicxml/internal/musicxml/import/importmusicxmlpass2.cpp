@@ -208,7 +208,8 @@ static Fraction lastChordTicks(const Segment* s, const Fraction& tick, const tra
 // called when lyric (with or without "extend") or note with "extend type=stop" is found
 // // note that no == -1 means all lyrics in this *track*
 
-void MusicXmlLyricsExtend::setExtend(const int no, const track_idx_t track, const Fraction& tick, const Lyrics* prevAddedLyrics = nullptr)
+void MusicXmlLyricsExtend::setExtend(const int verse, const track_idx_t track, const Fraction& tick,
+                                     const Lyrics* prevAddedLyrics = nullptr)
 {
     std::vector<Lyrics*> list;
     for (Lyrics* l : m_lyrics) {
@@ -217,8 +218,8 @@ void MusicXmlLyricsExtend::setExtend(const int no, const track_idx_t track, cons
             const ChordRest* par = static_cast<const ChordRest*>(el);
             // no = -1: stop all extends on this track
             // otherwise, stop all extends in the stave with the same no and placement
-            if ((no == -1 && par->track() == track)
-                || (l->no() == no && track2staff(par->track()) == track2staff(track) && prevAddedLyrics
+            if ((verse == -1 && par->track() == track)
+                || (l->verse() == verse && track2staff(par->track()) == track2staff(track) && prevAddedLyrics
                     && prevAddedLyrics->placement() == l->placement())) {
                 Fraction lct = lastChordTicks(l->segment(), tick, track);
                 if (lct > Fraction(0, 1)) {
@@ -919,7 +920,7 @@ static void addLyric(MusicXmlLogger* logger, const XmlStreamReader* const xmlrea
                          .arg(MAX_LYRICS), xmlreader);
         delete l;
     } else {
-        l->setNo(lyricNo);
+        l->setVerse(lyricNo);
         l->initTextStyleType(l->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD, /*preserveDifferent*/ true);
         cr->add(l);
         extendedLyrics.setExtend(lyricNo, cr->track(), cr->tick(), l);

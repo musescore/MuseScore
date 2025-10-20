@@ -60,11 +60,11 @@ public:
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    int subtype() const override { return m_no; }
+    int subtype() const override { return m_verse; }
     TranslatableString subtypeUserName() const override;
-    void setNo(int n) { m_no = n; }
-    int no() const { return m_no; }
-    bool isEven() const { return m_no % 2; }
+    void setVerse(int n) { m_verse = n; }
+    int verse() const { return m_verse; }
+    bool isEven() const { return m_verse % 2; }
     void setSyllabic(LyricsSyllabic s) { m_syllabic = s; }
     LyricsSyllabic syllabic() const { return m_syllabic; }
     void add(EngravingItem*) override;
@@ -105,7 +105,6 @@ public:
     void setAvoidBarlines(bool v) { m_avoidBarlines = v; }
 
 protected:
-    int m_no = 0;  // row index
 
 private:
 
@@ -115,6 +114,7 @@ private:
 
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
+    int m_verse = 0;              // row index
     Fraction m_ticks;          // if > 0 then draw an underline to tick() + _ticks (melisma)
     LyricsSyllabic m_syllabic = LyricsSyllabic::SINGLE;
     LyricsLine* m_separator = nullptr;
@@ -177,7 +177,7 @@ public:
 
     virtual double baseLineShift() const;
 
-    virtual int no() const { return lyrics()->no(); }
+    virtual int no() const { return lyrics()->verse(); }
     virtual bool lyricsPlaceAbove() const { return lyrics()->placeAbove(); }
     virtual bool lyricsAddToSkyline() const { return lyrics()->addToSkyline(); }
     virtual double lineSpacing() const { return lyrics()->lineSpacing(); }

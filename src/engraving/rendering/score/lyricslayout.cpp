@@ -206,7 +206,7 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
     } else { // dash(es)
         item->setNextLyrics(searchNextLyrics(item->lyrics()->segment(),
                                              item->staffIdx(),
-                                             item->lyrics()->no(),
+                                             item->lyrics()->verse(),
                                              item->lyrics()->placement()
                                              ));
         item->setTrack2(item->nextLyrics() ? item->nextLyrics()->track() : item->track());
@@ -306,7 +306,7 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
     Lyrics* endLyrics = nullptr;
     if (endCR) {
         for (Lyrics* lyr : endCR->lyrics()) {
-            if (lyr->no() == item->no()) {
+            if (lyr->verse() == item->no()) {
                 endLyrics = lyr;
                 break;
             }
@@ -409,7 +409,7 @@ Lyrics* LyricsLayout::findNextLyrics(const ChordRest* endChordRest, int verseNum
         }
         ChordRest* nextCR = toChordRest(segment->elementAt(endChordRest->track()));
         for (Lyrics* lyr : nextCR->lyrics()) {
-            if (lyr->no() == verseNumber) {
+            if (lyr->verse() == verseNumber) {
                 return lyr;
             }
         }
@@ -588,7 +588,7 @@ void LyricsLayout::collectLyricsVerses(staff_idx_t staffIdx, System* system, Lyr
                     continue;
                 }
                 for (Lyrics* lyrics : toChordRest(element)->lyrics()) {
-                    int verse = lyrics->no();
+                    int verse = lyrics->verse();
                     if (lyrics->placeAbove()) {
                         lyricsVersesAbove[verse].addLyrics(lyrics);
                     } else {

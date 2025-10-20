@@ -5529,7 +5529,7 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
 
             // Move lyrics
             for (Lyrics* lyric : chord->lyrics()) {
-                if (!lyric || dstChord->lyrics(lyric->no(), lyric->placement())) {
+                if (!lyric || dstChord->lyrics(lyric->verse(), lyric->placement())) {
                     continue;
                 }
 
