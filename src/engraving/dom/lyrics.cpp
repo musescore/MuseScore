@@ -378,7 +378,7 @@ void Lyrics::removeFromScore()
                 continue;
             }
             PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
-            if (partialLine->isEndMelisma() || partialLine->no() != verse() || partialLine->placement() != placement()) {
+            if (partialLine->isEndMelisma() || partialLine->verse() != verse() || partialLine->placement() != placement()) {
                 continue;
             }
             score()->undoRemoveElement(partialLine);

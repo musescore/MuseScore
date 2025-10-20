@@ -306,7 +306,7 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
     Lyrics* endLyrics = nullptr;
     if (endCR) {
         for (Lyrics* lyr : endCR->lyrics()) {
-            if (lyr->verse() == item->no()) {
+            if (lyr->verse() == item->verse()) {
                 endLyrics = lyr;
                 break;
             }
@@ -605,7 +605,7 @@ void LyricsLayout::collectLyricsVerses(staff_idx_t staffIdx, System* system, Lyr
                 continue;
             }
             LyricsLineSegment* lyricsLineSegment = toLyricsLineSegment(spannerSegment);
-            int verse = lyricsLineSegment->no();
+            int verse = lyricsLineSegment->verse();
             if (lyricsLineSegment->lyricsPlaceAbove()) {
                 lyricsVersesAbove[verse].addLine(lyricsLineSegment);
             } else {
@@ -876,7 +876,7 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
 
     // Partial melisma or dashes
     if (lyricsLine->isPartialLyricsLine()) {
-        Lyrics* nextLyrics = findNextLyrics(endChordRest, item->no());
+        Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
         item->ryoffset() = nextLyrics ? nextLyrics->offset().y() : item->offset().y();
         return;
     }
@@ -887,7 +887,7 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
     }
 
     if (melisma || !endLyrics) {
-        Lyrics* nextLyrics = findNextLyrics(endChordRest, item->no());
+        Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
         item->ryoffset() = nextLyrics ? nextLyrics->offset().y() : startLyrics->offset().y();
         return;
     }

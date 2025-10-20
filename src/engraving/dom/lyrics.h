@@ -177,7 +177,7 @@ public:
 
     virtual double baseLineShift() const;
 
-    virtual int no() const { return lyrics()->verse(); }
+    virtual int verse() const { return lyrics()->verse(); }
     virtual bool lyricsPlaceAbove() const { return lyrics()->placeAbove(); }
     virtual bool lyricsAddToSkyline() const { return lyrics()->addToSkyline(); }
     virtual double lineSpacing() const { return lyrics()->lineSpacing(); }
@@ -206,7 +206,6 @@ class PartialLyricsLine final : public LyricsLine
     OBJECT_ALLOCATOR(engraving, PartialLyricsLine)
     DECLARE_CLASSOF(ElementType::PARTIAL_LYRICSLINE)
 
-    M_PROPERTY2(int, no, setNo, 0)
 public:
     PartialLyricsLine(EngravingItem* parent);
     PartialLyricsLine(const PartialLyricsLine&);
@@ -217,6 +216,9 @@ public:
 
     void setIsEndMelisma(bool val) { m_isEndMelisma = val; }
     bool isEndMelisma() const override { return m_isEndMelisma; }
+
+    void setVerse(int val) { m_verse = val; }
+    int verse() const { return m_verse; }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -231,6 +233,7 @@ protected:
 
 private:
     bool m_isEndMelisma = false;
+    int m_verse = 0;
 };
 
 class PartialLyricsLineSegment final : public LyricsLineSegment
@@ -246,7 +249,7 @@ public:
     PartialLyricsLine* lyricsLine() const { return toPartialLyricsLine(spanner()); }
     Lyrics* lyrics() const override { return nullptr; }
 
-    int no() const override { return lyricsLine()->no(); }
+    int verse() const override { return lyricsLine()->verse(); }
     double lineSpacing() const override;
     bool lyricsPlaceAbove() const override { return lyricsLine()->placeAbove(); }// Delegate?
     bool lyricsAddToSkyline() const override { return lyricsLine()->addToSkyline(); }

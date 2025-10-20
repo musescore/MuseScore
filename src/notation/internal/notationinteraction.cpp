@@ -6721,7 +6721,7 @@ void NotationInteraction::navigateToNextSyllable()
             // No from lyrics - create incoming partial dash
             PartialLyricsLine* dash = Factory::createPartialLyricsLine(score()->dummy());
             dash->setIsEndMelisma(false);
-            dash->setNo(verse);
+            dash->setVerse(verse);
             dash->setPlacement(placement);
             dash->setTick(initialCR->tick());
             dash->setTicks(Fraction(0, 1));
@@ -6810,7 +6810,7 @@ void NotationInteraction::navigateToNextSyllable()
             continue;
         }
         PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
-        if (partialLine->isEndMelisma() || partialLine->no() != lyrics->verse() || partialLine->placement() != lyrics->placement()) {
+        if (partialLine->isEndMelisma() || partialLine->verse() != lyrics->verse() || partialLine->placement() != lyrics->placement()) {
             continue;
         }
         prevPartialLyricsLine = partialLine;
@@ -6863,7 +6863,7 @@ void NotationInteraction::navigateToNextSyllable()
         // No from lyrics - create incoming partial dash
         PartialLyricsLine* dash = Factory::createPartialLyricsLine(score()->dummy());
         dash->setIsEndMelisma(false);
-        dash->setNo(verse);
+        dash->setVerse(verse);
         dash->setPlacement(lyrics->placement());
         dash->setTick(initialCR->tick());
         dash->setTicks(hasPrecedingRepeat ? Fraction(0, 1) : initialCR->ticks());
@@ -7550,7 +7550,7 @@ void NotationInteraction::addMelisma()
                     continue;
                 }
                 PartialLyricsLine* lyricsLine = toPartialLyricsLine(spanner.value);
-                if (lyricsLine->no() != verse || lyricsLine->placement() != placement || !lyricsLine->isEndMelisma()) {
+                if (lyricsLine->verse() != verse || lyricsLine->placement() != placement || !lyricsLine->isEndMelisma()) {
                     continue;
                 }
 
@@ -7602,7 +7602,7 @@ void NotationInteraction::addMelisma()
             // No from lyrics - create incoming partial melisma
             PartialLyricsLine* melisma = Factory::createPartialLyricsLine(score()->dummy());
             melisma->setIsEndMelisma(true);
-            melisma->setNo(verse);
+            melisma->setVerse(verse);
             melisma->setPlacement(lyrics->placement());
             melisma->setTick(initialCR->tick());
             melisma->setTicks(initialCR->ticks());
@@ -7685,7 +7685,7 @@ void NotationInteraction::addMelisma()
         // No from lyrics - create incoming partial melisma
         PartialLyricsLine* melisma = Factory::createPartialLyricsLine(score()->dummy());
         melisma->setIsEndMelisma(true);
-        melisma->setNo(verse);
+        melisma->setVerse(verse);
         melisma->setPlacement(lyrics->placement());
         melisma->setTick(initialCR->tick());
         melisma->setTicks(initialCR->ticks());

@@ -195,7 +195,7 @@ PropertyValue PartialLyricsLine::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::VERSE:
-        return _no;
+        return m_verse;
     default:
         return LyricsLine::getProperty(propertyId);
     }
@@ -205,7 +205,7 @@ bool PartialLyricsLine::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::VERSE:
-        setNo(val.toInt());
+        setVerse(val.toInt());
         break;
     default:
         return LyricsLine::setProperty(propertyId, val);
@@ -302,7 +302,7 @@ Lyrics* PartialLyricsLine::findLyricsInPreviousRepeatSeg() const
     const std::vector<Measure*> measures = findPreviousRepeatMeasures(findStartMeasure());
 
     for (const Measure* measure : measures) {
-        Lyrics* prev = lastLyricsInMeasure(measure->last(SegmentType::ChordRest), staffIdx(), no(), placement());
+        Lyrics* prev = lastLyricsInMeasure(measure->last(SegmentType::ChordRest), staffIdx(), verse(), placement());
 
         if (!prev) {
             continue;
