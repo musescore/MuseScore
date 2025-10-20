@@ -693,6 +693,10 @@ void MuseSamplerSequencer::parseArticulations(const ArticulationMap& articulatio
             continue;
         }
 
+        if (notehead == ms_NoteHead_Ghost) {
+            continue;
+        }
+
         auto headIt = NOTEHEAD_TYPES.find(pair.first);
         if (headIt != NOTEHEAD_TYPES.cend()) {
             notehead = headIt->second;
