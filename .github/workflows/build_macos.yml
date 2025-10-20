@@ -33,6 +33,11 @@ on:
         default: ''
         type: string
         required: false
+      build_number:
+        description: "Build number (if not provided, will be generated)"
+        default: ""
+        type: string
+        required: false
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_26.0.app/Contents/Developer
@@ -58,7 +63,12 @@ jobs:
         bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
-        bash ./buildscripts/ci/tools/make_build_number.sh
+        if [ -n "${{ inputs.build_number }}" ]; then
+          BUILD_NUMBER="${{ inputs.build_number }}"
+          bash ./buildscripts/ci/tools/make_build_number.sh "$BUILD_NUMBER"
+        else
+          bash ./buildscripts/ci/tools/make_build_number.sh
+        fi
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_NOTARIZE='false'
