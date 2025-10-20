@@ -52,7 +52,6 @@ Ret PrintProvider::printNotation(INotationPtr notation)
         LOGD() << "unable to clear printer margins";
     }
 
-    printerDev.setColorMode(QPrinter::Color);
     printerDev.setDocName(notation->projectWorkTitleAndPartName());
     printerDev.setOutputFormat(QPrinter::NativeFormat);
     printerDev.setFromTo(1, painting->pageCount());
