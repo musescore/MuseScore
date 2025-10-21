@@ -256,7 +256,6 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             if (barLine) {
                 segment = measure->getSegmentR(st, t);
                 segment->add(barLine);
-                barLine->renderer()->layoutItem(barLine);
             }
             if (fermata) {
                 segment->add(fermata);

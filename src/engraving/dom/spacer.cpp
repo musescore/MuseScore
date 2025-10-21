@@ -59,7 +59,6 @@ Spacer::Spacer(const Spacer& s)
 void Spacer::setGap(Spatium sp)
 {
     m_gap = sp;
-    renderer()->layoutItem(this);
 }
 
 //---------------------------------------------------------
@@ -90,7 +89,6 @@ void Spacer::dragGrip(EditData& ed)
         break;
     }
     m_gap = std::max(m_gap, Spatium(2.0));
-    renderer()->layoutItem(this);
     triggerLayout();
 }
 
@@ -144,7 +142,6 @@ bool Spacer::setProperty(Pid propertyId, const PropertyValue& v)
         }
         break;
     }
-    renderer()->layoutItem(this);
     triggerLayout();
     setGenerated(false);
     return true;

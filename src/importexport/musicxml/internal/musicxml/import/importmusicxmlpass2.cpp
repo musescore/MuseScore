@@ -2062,7 +2062,6 @@ static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::uniq
         st = SegmentType::BeginBarLine;
     }
     Segment* const segment = measure->getSegment(st, tick);
-    barline->renderer()->layoutItem(barline.get());
     segment->add(barline.release());
 }
 
