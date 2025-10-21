@@ -192,7 +192,7 @@ public:
     MusicXmlLyricsExtend() {}
     void init();
     void addLyric(engraving::Lyrics* const lyric);
-    void setExtend(const int no, const engraving::track_idx_t track, const engraving::Fraction& tick,
+    void setExtend(const int verse, const engraving::track_idx_t track, const engraving::Fraction& tick,
                    const engraving::Lyrics* prevAddedLyrics);
 
 private:

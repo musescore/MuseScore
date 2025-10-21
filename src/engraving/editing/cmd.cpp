@@ -3419,7 +3419,7 @@ void Score::cmdMoveRest(Rest* rest, DirectionV dir)
 
 void Score::cmdMoveLyrics(Lyrics* lyrics, DirectionV dir)
 {
-    int verse = lyrics->no() + (dir == DirectionV::UP ? -1 : 1);
+    int verse = lyrics->verse() + (dir == DirectionV::UP ? -1 : 1);
     if (verse < 0) {
         return;
     }

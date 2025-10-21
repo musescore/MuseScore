@@ -1232,7 +1232,7 @@ Lyrics* prevLyrics(const Lyrics* lyrics)
         const track_idx_t etrack = strack + VOICES;
         for (track_idx_t track = strack; track < etrack; ++track) {
             EngravingItem* el = seg->element(track);
-            Lyrics* prevLyrics = el && el->isChord() ? toChordRest(el)->lyrics(lyrics->no(), lyrics->placement()) : nullptr;
+            Lyrics* prevLyrics = el && el->isChord() ? toChordRest(el)->lyrics(lyrics->verse(), lyrics->placement()) : nullptr;
             if (prevLyrics) {
                 return prevLyrics;
             }
@@ -1253,7 +1253,7 @@ Lyrics* nextLyrics(const Lyrics* lyrics)
         const track_idx_t etrack = strack + VOICES;
         for (track_idx_t track = strack; track < etrack; ++track) {
             EngravingItem* el = nextSegment->element(track);
-            Lyrics* nextLyrics = el && el->isChord() ? toChordRest(el)->lyrics(lyrics->no(), lyrics->placement()) : nullptr;
+            Lyrics* nextLyrics = el && el->isChord() ? toChordRest(el)->lyrics(lyrics->verse(), lyrics->placement()) : nullptr;
             if (nextLyrics) {
                 return nextLyrics;
             }

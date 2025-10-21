@@ -438,7 +438,7 @@ void MuseData::readNote(Part* part, QStringView s)
         for (const QStringView w : sl) {
             Lyrics* l = Factory::createLyrics(chord);
             l->setPlainText(diacritical(w));
-            l->setNo(no++);
+            l->setVerse(no++);
             l->setTrack(gstaff * VOICES);
             chord->add(l);
         }

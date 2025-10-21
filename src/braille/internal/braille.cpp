@@ -1448,8 +1448,8 @@ void Braille::brailleMeasureLyrics(BrailleEngravingItemList* beiz, Measure* meas
                 ChordRest* cr = seg->cr(staffCount * VOICES + voice);
                 if (cr && !cr->lyrics().empty()) {
                     for (Lyrics* l : cr->lyrics()) {
-                        int no = l->no();
-                        lyrics[no].addLyricsItem(l);
+                        int verse = l->verse();
+                        lyrics[verse].addLyricsItem(l);
                     }
                 }
             }

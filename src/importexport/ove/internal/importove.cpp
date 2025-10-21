@@ -2074,7 +2074,7 @@ void OveToMScore::convertLyrics(Measure* measure, int part, int staff, int track
         int tick = m_mtt->getTick(measure->no(), oveLyric->getTick());
 
         Lyrics* lyric = Factory::createLyrics(m_score->dummy()->chord());
-        lyric->setNo(oveLyric->getVerse());
+        lyric->setVerse(oveLyric->getVerse());
         lyric->setPlainText(oveLyric->getLyric());
         lyric->setTrack(track);
         Segment* segment = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(tick));

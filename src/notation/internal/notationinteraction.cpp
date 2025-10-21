@@ -6481,7 +6481,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
     mu::engraving::Lyrics* lyrics = toLyrics(m_editData.element);
     track_idx_t track = lyrics->track();
     mu::engraving::Segment* segment = lyrics->segment();
-    int verse = lyrics->no();
+    int verse = lyrics->verse();
     mu::engraving::PlacementV placement = lyrics->placement();
     mu::engraving::PropertyFlags pFlags = lyrics->propertyFlags(mu::engraving::Pid::PLACEMENT);
     mu::engraving::FontStyle fStyle = lyrics->fontStyle();
@@ -6557,7 +6557,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         nextLyrics->setTrack(track);
         cr = toChordRest(nextSegment->element(track));
         nextLyrics->setParent(cr);
-        nextLyrics->setNo(verse);
+        nextLyrics->setVerse(verse);
         nextLyrics->setTextStyleType(styleType);
         nextLyrics->setPlacement(placement);
         nextLyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, pFlags);
@@ -6640,7 +6640,7 @@ void NotationInteraction::navigateToNextSyllable()
     track_idx_t track = lyrics->track();
     track_idx_t toLyricTrack = track;
     Segment* segment = lyrics->segment();
-    int verse = lyrics->no();
+    int verse = lyrics->verse();
     PlacementV placement = lyrics->placement();
     PropertyFlags pFlags = lyrics->propertyFlags(Pid::PLACEMENT);
     FontStyle fStyle = lyrics->fontStyle();
@@ -6721,7 +6721,7 @@ void NotationInteraction::navigateToNextSyllable()
             // No from lyrics - create incoming partial dash
             PartialLyricsLine* dash = Factory::createPartialLyricsLine(score()->dummy());
             dash->setIsEndMelisma(false);
-            dash->setNo(verse);
+            dash->setVerse(verse);
             dash->setPlacement(placement);
             dash->setTick(initialCR->tick());
             dash->setTicks(Fraction(0, 1));
@@ -6735,7 +6735,7 @@ void NotationInteraction::navigateToNextSyllable()
             Lyrics* toLyrics = Factory::createLyrics(initialCR);
             toLyrics->setTrack(track);
             toLyrics->setParent(initialCR);
-            toLyrics->setNo(verse);
+            toLyrics->setVerse(verse);
             toLyrics->setTextStyleType(styleType);
             toLyrics->setPlacement(placement);
             toLyrics->setPropertyFlags(Pid::PLACEMENT, pFlags);
@@ -6810,7 +6810,7 @@ void NotationInteraction::navigateToNextSyllable()
             continue;
         }
         PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
-        if (partialLine->isEndMelisma() || partialLine->no() != lyrics->no() || partialLine->placement() != lyrics->placement()) {
+        if (partialLine->isEndMelisma() || partialLine->verse() != lyrics->verse() || partialLine->placement() != lyrics->placement()) {
             continue;
         }
         prevPartialLyricsLine = partialLine;
@@ -6826,7 +6826,7 @@ void NotationInteraction::navigateToNextSyllable()
         toLyrics->setTrack(track);
         toLyrics->setParent(toLyricsChord);
 
-        toLyrics->setNo(verse);
+        toLyrics->setVerse(verse);
         toLyrics->setTextStyleType(styleType);
 
         toLyrics->setPlacement(placement);
@@ -6863,7 +6863,7 @@ void NotationInteraction::navigateToNextSyllable()
         // No from lyrics - create incoming partial dash
         PartialLyricsLine* dash = Factory::createPartialLyricsLine(score()->dummy());
         dash->setIsEndMelisma(false);
-        dash->setNo(verse);
+        dash->setVerse(verse);
         dash->setPlacement(lyrics->placement());
         dash->setTick(initialCR->tick());
         dash->setTicks(hasPrecedingRepeat ? Fraction(0, 1) : initialCR->ticks());
@@ -6901,7 +6901,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
     mu::engraving::Lyrics* lyrics = toLyrics(m_editData.element);
     engraving::track_idx_t track = lyrics->track();
     ChordRest* cr = lyrics->chordRest();
-    int verse = lyrics->no();
+    int verse = lyrics->verse();
     mu::engraving::PlacementV placement = lyrics->placement();
     mu::engraving::PropertyFlags pFlags = lyrics->propertyFlags(mu::engraving::Pid::PLACEMENT);
     mu::engraving::FontStyle fStyle = lyrics->fontStyle();
@@ -6927,7 +6927,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
         lyrics = Factory::createLyrics(cr);
         lyrics->setTrack(track);
         lyrics->setParent(cr);
-        lyrics->setNo(verse);
+        lyrics->setVerse(verse);
         lyrics->setTextStyleType(styleType);
         lyrics->setPlacement(placement);
         lyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, pFlags);
@@ -7510,7 +7510,7 @@ void NotationInteraction::addMelisma()
     const bool hasPrecedingRepeat = initialCR->hasPrecedingJumpItem();
     track_idx_t track = lyrics->track();
     Segment* segment = lyrics->segment();
-    int verse = lyrics->no();
+    int verse = lyrics->verse();
     PlacementV placement = lyrics->placement();
     PropertyFlags pFlags = lyrics->propertyFlags(Pid::PLACEMENT);
     FontStyle fStyle = lyrics->fontStyle();
@@ -7550,7 +7550,7 @@ void NotationInteraction::addMelisma()
                     continue;
                 }
                 PartialLyricsLine* lyricsLine = toPartialLyricsLine(spanner.value);
-                if (lyricsLine->no() != verse || lyricsLine->placement() != placement || !lyricsLine->isEndMelisma()) {
+                if (lyricsLine->verse() != verse || lyricsLine->placement() != placement || !lyricsLine->isEndMelisma()) {
                     continue;
                 }
 
@@ -7602,7 +7602,7 @@ void NotationInteraction::addMelisma()
             // No from lyrics - create incoming partial melisma
             PartialLyricsLine* melisma = Factory::createPartialLyricsLine(score()->dummy());
             melisma->setIsEndMelisma(true);
-            melisma->setNo(verse);
+            melisma->setVerse(verse);
             melisma->setPlacement(lyrics->placement());
             melisma->setTick(initialCR->tick());
             melisma->setTicks(initialCR->ticks());
@@ -7649,7 +7649,7 @@ void NotationInteraction::addMelisma()
         toLyrics->setTrack(track);
         toLyrics->setParent(nextCR);
 
-        toLyrics->setNo(verse);
+        toLyrics->setVerse(verse);
         const TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
         toLyrics->setTextStyleType(styleType);
 
@@ -7685,7 +7685,7 @@ void NotationInteraction::addMelisma()
         // No from lyrics - create incoming partial melisma
         PartialLyricsLine* melisma = Factory::createPartialLyricsLine(score()->dummy());
         melisma->setIsEndMelisma(true);
-        melisma->setNo(verse);
+        melisma->setVerse(verse);
         melisma->setPlacement(lyrics->placement());
         melisma->setTick(initialCR->tick());
         melisma->setTicks(initialCR->ticks());
@@ -7727,7 +7727,7 @@ void NotationInteraction::addLyricsVerse()
     endEditText();
 
     score()->startCmd(TranslatableString("undoableAction", "Add lyrics verse"));
-    int newVerse = oldLyrics->no() + 1;
+    int newVerse = oldLyrics->verse() + 1;
 
     mu::engraving::Lyrics* lyrics = Factory::createLyrics(oldLyrics->chordRest());
     lyrics->setTrack(oldLyrics->track());
@@ -7735,7 +7735,7 @@ void NotationInteraction::addLyricsVerse()
     lyrics->setPlacement(oldLyrics->placement());
     lyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, oldLyrics->propertyFlags(mu::engraving::Pid::PLACEMENT));
 
-    lyrics->setNo(newVerse);
+    lyrics->setVerse(newVerse);
     const mu::engraving::TextStyleType styleType(lyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
     lyrics->setTextStyleType(styleType);
 

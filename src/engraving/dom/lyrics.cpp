@@ -59,7 +59,7 @@ Lyrics::Lyrics(ChordRest* parent)
 {
     m_separator  = 0;
     initElementStyle(&lyricsElementStyle);
-    m_no         = 0;
+    m_verse         = 0;
     m_ticks      = Fraction(0, 1);
     m_syllabic   = LyricsSyllabic::SINGLE;
 }
@@ -67,7 +67,7 @@ Lyrics::Lyrics(ChordRest* parent)
 Lyrics::Lyrics(const Lyrics& l)
     : TextBase(l)
 {
-    m_no        = l.m_no;
+    m_verse        = l.m_verse;
     m_ticks     = l.m_ticks;
     m_syllabic  = l.m_syllabic;
     m_separator = 0;
@@ -82,7 +82,7 @@ Lyrics::~Lyrics()
 
 TranslatableString Lyrics::subtypeUserName() const
 {
-    return TranslatableString("engraving", "Verse %1").arg(m_no + 1);
+    return TranslatableString("engraving", "Verse %1").arg(m_verse + 1);
 }
 
 //---------------------------------------------------------
@@ -141,11 +141,11 @@ bool Lyrics::isMelisma() const
                 const ChordRest* trackNextCR = s ? s->nextChordRest(track) : nullptr;
                 if (trackNextCR) {
                     if (lyrTrack != track && lyrVoiceNextCR
-                        && !lyrVoiceNextCR->lyrics(m_no, placement()) && lyrVoiceNextCR->tick() < trackNextCR->tick()) {
+                        && !lyrVoiceNextCR->lyrics(m_verse, placement()) && lyrVoiceNextCR->tick() < trackNextCR->tick()) {
                         // There is an intermediary note in a different voice, this is a melisma
                         return true;
                     }
-                    if (trackNextCR->lyrics(m_no, placement())) {
+                    if (trackNextCR->lyrics(m_verse, placement())) {
                         // Next note has lyrics, not a melisma just a dash
                         return false;
                     }
@@ -378,7 +378,7 @@ void Lyrics::removeFromScore()
                 continue;
             }
             PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
-            if (partialLine->isEndMelisma() || partialLine->no() != no() || partialLine->placement() != placement()) {
+            if (partialLine->isEndMelisma() || partialLine->verse() != verse() || partialLine->placement() != placement()) {
                 continue;
             }
             score()->undoRemoveElement(partialLine);
@@ -409,7 +409,7 @@ PropertyValue Lyrics::getProperty(Pid propertyId) const
     case Pid::LYRIC_TICKS:
         return m_ticks;
     case Pid::VERSE:
-        return m_no;
+        return m_verse;
     case Pid::AVOID_BARLINES:
         return m_avoidBarlines;
     default:
@@ -470,7 +470,7 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
             l->setNeedRemoveInvalidSegments();
         }
         bool followTextStyle = getProperty(Pid::TEXT_STYLE) == propertyDefault(Pid::TEXT_STYLE);
-        m_no = v.toInt();
+        m_verse = v.toInt();
         if (followTextStyle) {
             setProperty(Pid::TEXT_STYLE, propertyDefault(Pid::TEXT_STYLE));
         }
@@ -564,11 +564,11 @@ void Score::forAllLyrics(std::function<void(Lyrics*)> f)
 
 void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
-    if (id == Pid::VERSE && no() != v.toInt()) {
+    if (id == Pid::VERSE && verse() != v.toInt()) {
         for (Lyrics* l : chordRest()->lyrics()) {
-            if (l->no() == v.toInt()) {
+            if (l->verse() == v.toInt()) {
                 // verse already exists, swap
-                l->TextBase::undoChangeProperty(id, no(), ps);
+                l->TextBase::undoChangeProperty(id, verse(), ps);
                 PlacementV p = l->placement();
                 l->TextBase::undoChangeProperty(Pid::PLACEMENT, int(placement()), ps);
                 TextBase::undoChangeProperty(Pid::PLACEMENT, int(p), ps);

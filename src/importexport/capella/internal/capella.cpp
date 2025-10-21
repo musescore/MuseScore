@@ -813,7 +813,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 if (v.hyphen) {
                     l->setSyllabic(LyricsSyllabic::BEGIN);
                 }
-                l->setNo(v.num);
+                l->setVerse(v.num);
                 l->initTextStyleType(l->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD, /*preserveDifferent*/ true);
                 chord->add(l);
             }

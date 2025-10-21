@@ -935,7 +935,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
             }
             const PartialLyricsLine* line = toPartialLyricsLine(spanner.value);
 
-            no = std::max(no, line->no() + 1);
+            no = std::max(no, line->verse() + 1);
         }
 
         // Also check how many partial lines there are
