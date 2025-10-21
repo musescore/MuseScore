@@ -49,7 +49,7 @@ EventAudioSource::EventAudioSource(const TrackId trackId,
 
 EventAudioSource::~EventAudioSource()
 {
-    m_playbackData.offStream.resetOnReceive(this);
+    m_playbackData.offStream.disconnect(this);
 }
 
 bool EventAudioSource::isActive() const

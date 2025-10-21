@@ -236,7 +236,7 @@ void SequencePlayer::prepareAllTracksToPlay(AllTracksReadyCallback allTracksRead
 
             const TrackPtr ptr = m_getTracks->track(trackId);
             if (ptr && ptr->inputHandler) {
-                ptr->inputHandler->readyToPlayChanged().resetOnNotify(this);
+                ptr->inputHandler->readyToPlayChanged().disconnect(this);
             }
         });
     }

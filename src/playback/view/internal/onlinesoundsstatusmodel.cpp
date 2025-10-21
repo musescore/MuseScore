@@ -130,14 +130,14 @@ void OnlineSoundsStatusModel::onOnlineSoundsChanged()
 void OnlineSoundsStatusModel::updateManualProcessingAllowed(bool enableByDefault)
 {
     if (m_onlineTrackIdSet.empty() || audioConfiguration()->autoProcessOnlineSoundsInBackground()) {
-        m_tracksDataChanged.resetOnReceive(this);
+        m_tracksDataChanged.disconnect(this);
         setManualProcessingAllowed(false);
         return;
     }
 
     IMasterNotationPtr master = globalContext()->currentMasterNotation();
     if (!master) {
-        m_tracksDataChanged.resetOnReceive(this);
+        m_tracksDataChanged.disconnect(this);
         setManualProcessingAllowed(false);
         return;
     }

@@ -65,6 +65,7 @@ static std::shared_ptr<IAudioDriver> makeLinuxAudioDriver(const std::string& dri
         }
     }
 #endif // MUSE_PIPEWIRE_AUDIO_DRIVER
+    UNUSED(driverName);
     LOGI() << "Using audio driver: ALSA";
     return std::make_shared<AlsaAudioDriver>();
 }

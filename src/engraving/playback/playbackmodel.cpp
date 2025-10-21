@@ -22,6 +22,8 @@
 
 #include "playbackmodel.h"
 
+#include <limits>
+
 #include "dom/fret.h"
 #include "dom/harmony.h"
 #include "dom/instrument.h"
@@ -37,8 +39,6 @@
 
 #include "defer.h"
 #include "log.h"
-
-#include <limits>
 
 using namespace mu;
 using namespace mu::engraving;
@@ -72,7 +72,7 @@ void PlaybackModel::load(Score* score)
     m_score = score;
 
     auto changesChannel = score->changesChannel();
-    changesChannel.resetOnReceive(this);
+    changesChannel.disconnect(this);
 
     changesChannel.onReceive(this, [this](const ScoreChanges& changes) {
         if (shouldSkipChanges(changes)) {

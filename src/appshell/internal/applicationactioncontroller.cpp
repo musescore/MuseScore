@@ -302,7 +302,7 @@ void ApplicationActionController::openPreferencesDialog()
         async::Channel<audio::PlaybackStatus> statusChanged = state->playbackStatusChanged();
         statusChanged.onReceive(this, [statusChanged, this](audio::PlaybackStatus) {
             auto statusChangedMut = statusChanged;
-            statusChangedMut.resetOnReceive(this);
+            statusChangedMut.disconnect(this);
             doOpenPreferencesDialog();
         });
 

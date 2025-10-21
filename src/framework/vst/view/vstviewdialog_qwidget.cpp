@@ -70,7 +70,7 @@ void VstViewDialog::deinit()
     }
 
     if (m_instance) {
-        m_instance->loadingCompleted().resetOnNotify(this);
+        m_instance->loadingCompleted().disconnect(this);
         m_instance->refreshConfig();
         m_instance = nullptr;
     }

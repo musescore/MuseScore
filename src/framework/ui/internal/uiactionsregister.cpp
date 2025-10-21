@@ -64,7 +64,7 @@ void UiActionsRegister::reg(const IUiActionsModulePtr& module)
 
     module->actionsChanged().onReceive(this, [this](const UiActionList& actions) {
         updateActions(actions);
-    });
+    }, async::Asyncable::Mode::SetReplace); // see IUiActionsModule::actionsChanged()
 
     module->actionEnabledChanged().onReceive(this, [this](const ActionCodeList& codes) {
         updateEnabled(codes);

@@ -166,8 +166,8 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
 
         if (writerProgress) {
             m_exportProgress.finish(muse::make_ok());
-            writerProgress->progressChanged().resetOnReceive(this);
-            m_exportProgress.finished().resetOnReceive(this);
+            writerProgress->progressChanged().disconnect(this);
+            m_exportProgress.finished().disconnect(this);
         }
     };
 

@@ -88,7 +88,7 @@ void LayoutPanelTreeModel::onMasterNotationChanged()
 
 void LayoutPanelTreeModel::onNotationChanged()
 {
-    m_partsNotifyReceiver->disconnectAll();
+    m_partsNotifyReceiver->async_disconnectAll();
 
     if (m_isLoadingBlocked) {
         m_notationChangedWhileLoadingWasBlocked = true;

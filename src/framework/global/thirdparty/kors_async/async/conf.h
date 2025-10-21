@@ -23,22 +23,28 @@ SOFTWARE.
 */
 #pragma once
 
-#include "internal/queuepool.h"
-#include "conf.h"
+#include <cstddef>
+#include <atomic>
 
 namespace kors::async {
-inline void processMessages()
-{
-    QueuePool::instance()->processMessages();
-}
+struct conf {
+    //! Total number of threads in the application
+    //! that can interact through this infrastructure
+    static size_t MAX_THREADS;
 
-inline void processMessages(const std::thread::id& th)
-{
-    QueuePool::instance()->processMessages(th);
-}
+    //! NOTE The default value for the maximum number of threads
+    //! a single channel instance can communicate in.
+    //! A different value can be specified for a specific channel,
+    //! but no more than MAX_THREADS.
+    static size_t MAX_THREADS_PER_CHANNEL;
 
-inline void terminate()
-{
-    conf::terminated = true;
-}
+    //! NOTE The queue capacity, if there are more unprocessed messages,
+    //! they will not be lost, but will be sent to the next process
+    static size_t QUEUE_CAPACITY;
+
+    //! NOTE When closing an application, we need to terminate.
+    //! During the shutdown, various objects are destroyed, from different threads,
+    //! especially if they are static objects—they may access a destroyed or non-functioning queue.
+    static std::atomic<bool> terminated;
+};
 }

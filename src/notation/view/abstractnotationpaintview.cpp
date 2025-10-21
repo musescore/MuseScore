@@ -353,10 +353,10 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 
 void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
 {
-    m_notation->notationChanged().resetOnNotify(this);
+    m_notation->notationChanged().disconnect(this);
     INotationInteractionPtr interaction = m_notation->interaction();
-    interaction->noteInput()->stateChanged().resetOnNotify(this);
-    interaction->selectionChanged().resetOnNotify(this);
+    interaction->noteInput()->stateChanged().disconnect(this);
+    interaction->selectionChanged().disconnect(this);
 
     if (isMainView()) {
         m_notation->accessibility()->setMapToScreenFunc(nullptr);

@@ -30,6 +30,10 @@ using namespace muse::actions;
 
 void NotationToolBarModel::load()
 {
+    if (m_loaded) {
+        return;
+    }
+
     muse::actions::ActionCodeList itemsCodes = {
         "parts",
         "toggle-mixer"
@@ -51,4 +55,6 @@ void NotationToolBarModel::load()
     });
 
     AbstractToolBarModel::load();
+
+    m_loaded = true;
 }

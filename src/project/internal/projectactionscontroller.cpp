@@ -426,7 +426,7 @@ Ret ProjectActionsController::doFinishOpenProject()
         opened.onReceive(this, [=](const Uri&) {
             async::Async::call(this, [=]() {
                 async::Channel<Uri> mut = opened;
-                mut.resetOnReceive(this);
+                mut.disconnect(this);
 
                 showUpdateNotification();
             });

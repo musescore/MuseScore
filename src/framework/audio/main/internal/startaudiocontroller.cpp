@@ -143,7 +143,9 @@ void StartAudioController::init()
             once = true;
         }
 
-        async::processEvents();
+        static const std::thread::id thisThId = std::this_thread::get_id();
+
+        async::processMessages(thisThId);
         m_rpcChannel->process();
     });
 #endif

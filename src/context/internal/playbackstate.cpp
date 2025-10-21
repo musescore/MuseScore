@@ -27,8 +27,8 @@ using namespace mu::context;
 void PlaybackState::setPlayer(audio::IPlayerPtr player)
 {
     if (m_player) {
-        m_player->playbackStatusChanged().resetOnReceive(this);
-        m_player->playbackPositionChanged().resetOnReceive(this);
+        m_player->playbackStatusChanged().disconnect(this);
+        m_player->playbackPositionChanged().disconnect(this);
     }
 
     m_player = player;
