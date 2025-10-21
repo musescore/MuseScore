@@ -104,6 +104,7 @@ void PlaybackModel::load(Score* score)
     }
 
     m_tracksDataChanged.send(trackIdSet);
+    m_changedTrackIdSet.clear();
 }
 
 void PlaybackModel::reload()
@@ -140,6 +141,28 @@ void PlaybackModel::reload()
     }
 
     m_tracksDataChanged.send(trackIdSet);
+    m_changedTrackIdSet.clear();
+}
+
+void PlaybackModel::setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send)
+{
+    m_sendEventsOnScoreChangeMap[trackId] = send;
+}
+
+void PlaybackModel::sendEventsForChangedTracks()
+{
+    if (m_changedTrackIdSet.empty()) {
+        return;
+    }
+
+    TRACEFUNC;
+
+    for (const InstrumentTrackId& trackId : m_changedTrackIdSet) {
+        PlaybackData& data = m_playbackDataMap[trackId];
+        data.mainStream.send(data.originEvents, data.dynamics);
+    }
+
+    m_changedTrackIdSet.clear();
 }
 
 muse::async::Channel<InstrumentTrackIdSet> PlaybackModel::tracksDataChanged() const
@@ -662,6 +685,7 @@ void PlaybackModel::reloadMetronomeEvents()
     }
 
     metronomeData.mainStream.send(metronomeData.originEvents, metronomeData.dynamics);
+    muse::remove(m_changedTrackIdSet, METRONOME_TRACK_ID);
 }
 
 bool PlaybackModel::hasToReloadTracks(const ScoreChanges& changes) const
@@ -879,12 +903,15 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
 {
     for (const InstrumentTrackId& trackId : changedTracks) {
         auto search = m_playbackDataMap.find(trackId);
-
         if (search == m_playbackDataMap.cend()) {
             continue;
         }
 
-        search->second.mainStream.send(search->second.originEvents, search->second.dynamics);
+        if (muse::value(m_sendEventsOnScoreChangeMap, trackId, false)) {
+            search->second.mainStream.send(search->second.originEvents, search->second.dynamics);
+        } else {
+            m_changedTrackIdSet.insert(trackId);
+        }
     }
 
     for (auto it = m_playbackDataMap.cbegin(); it != m_playbackDataMap.cend(); ++it) {
