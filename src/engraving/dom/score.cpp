@@ -3200,6 +3200,10 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
                         }
                     }
 
+                    if (m_is.beyondScore()) {
+                        appendMeasures(1);
+                        m_is.moveToNextInputPos();
+                    }
                     ChordRest* cr = m_is.cr();
                     Chord* chord = nullptr;
 
