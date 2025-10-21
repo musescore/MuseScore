@@ -405,7 +405,7 @@ mu::engraving::ShadowNote* NotationInteraction::shadowNote() const
     return score()->shadowNote();
 }
 
-void NotationInteraction::showShadowNote(const PointF& pos)
+void NotationInteraction::showShadowNoteForPosition(const PointF& pos)
 {
     const mu::engraving::InputState& inputState = score()->inputState();
     mu::engraving::ShadowNote& shadowNote = *score()->shadowNote();
@@ -420,6 +420,41 @@ void NotationInteraction::showShadowNote(const PointF& pos)
     params.duration = inputState.duration();
     params.accidentalType = inputState.accidentalType();
     params.articulationIds = inputState.articulationIds();
+
+    const bool show = doShowShadowNote(shadowNote, params);
+    m_shadowNoteChanged.send(show);
+}
+
+void NotationInteraction::showShadowNoteForMidiPitch(const uint8_t pitch)
+{
+    const mu::engraving::InputState& inputState = score()->inputState();
+    mu::engraving::ShadowNote& shadowNote = *score()->shadowNote();
+
+    Segment* inputSegment = inputState.segment();
+    const Staff* inputStaff = inputState.staff();
+    const Fraction tick = inputSegment->tick();
+    if (!inputSegment || !inputStaff || !tick.isValid() || inputStaff->isDrumStaff(tick) || inputStaff->isTabStaff(tick)) {
+        //! NOTE: Not yet compatible with drum or tab staves...
+        hideShadowNote();
+        return;
+    }
+
+    const double mag = inputStaff->staffMag(tick);
+    const double lineDist = inputStaff->staffType(tick)->lineDistance().val()
+                            * 0.5 * mag * score()->style().spatium();
+
+    const int octave = pitch / 12;
+    const int line = octave * 7 + mu::engraving::pitch2step(pitch);
+    const ClefType clef = inputStaff->clef(tick);
+    const int rLine = mu::engraving::relStep(line, clef);
+
+    const double xPos = inputSegment->canvasPos().x();
+    const double yPos = inputSegment->system()->staffCanvasYpage(inputStaff->idx()) + rLine * lineDist;
+
+    const PointF point = { xPos, yPos };
+
+    const Position position { inputSegment, inputStaff->idx(), rLine, INVALID_FRET_INDEX, point };
+    ShadowNoteParams params { inputState.duration(), inputState.accidentalType(), inputState.articulationIds(), position };
 
     const bool show = doShowShadowNote(shadowNote, params);
     m_shadowNoteChanged.send(show);

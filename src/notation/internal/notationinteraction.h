@@ -71,7 +71,8 @@ public:
 
     // Shadow note
     mu::engraving::ShadowNote* shadowNote() const override;
-    void showShadowNote(const muse::PointF& pos) override;
+    void showShadowNoteForPosition(const muse::PointF& pos) override;
+    void showShadowNoteForMidiPitch(const uint8_t pitch) override;
     void hideShadowNote() override;
     muse::RectF shadowNoteRect() const override;
     muse::async::Channel</*visible*/ bool> shadowNoteChanged() const override;

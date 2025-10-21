@@ -464,7 +464,7 @@ void AbstractNotationPaintView::updateShadowNoteVisibility()
         //! NOTE: The following may actually hide the shadow note
         //! if cursorPos is no longer valid...
         const QPointF cursorPos = mapFromGlobal(QCursor::pos());
-        interaction->showShadowNote(toLogical(cursorPos));
+        interaction->showShadowNoteForPosition(toLogical(cursorPos));
     } else {
         interaction->hideShadowNote();
         m_shadowNoteRect = RectF();
@@ -1221,6 +1221,13 @@ void AbstractNotationPaintView::hoverMoveEvent(QHoverEvent* event)
 {
     if (isInited()) {
         m_inputController->hoverMoveEvent(event);
+    }
+}
+
+void AbstractNotationPaintView::hoverLeaveEvent(QHoverEvent* event)
+{
+    if (isInited()) {
+        m_inputController->hoverLeaveEvent(event);
     }
 }
 

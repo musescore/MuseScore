@@ -44,7 +44,8 @@ public:
 
     // Shadow note
     virtual mu::engraving::ShadowNote* shadowNote() const = 0;
-    virtual void showShadowNote(const muse::PointF& pos) = 0;
+    virtual void showShadowNoteForPosition(const muse::PointF& pos) = 0;
+    virtual void showShadowNoteForMidiPitch(const uint8_t pitch) = 0;
     virtual void hideShadowNote() = 0;
     virtual muse::RectF shadowNoteRect() const = 0;
     virtual muse::async::Channel</*visible*/ bool> shadowNoteChanged() const = 0;

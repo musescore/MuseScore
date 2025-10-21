@@ -226,6 +226,7 @@ private:
     void mouseDoubleClickEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     void hoverMoveEvent(QHoverEvent* event) override;
+    void hoverLeaveEvent(QHoverEvent* event) override;
     bool event(QEvent* event) override;
     bool shortcutOverride(QKeyEvent* event);
     void keyPressEvent(QKeyEvent* event) override;
