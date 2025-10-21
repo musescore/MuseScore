@@ -30,10 +30,10 @@
 #include "modularity/imodulesetup.h"
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
+#include "ticker.h"
 
 namespace muse {
 class SystemInfo;
-class Invoker;
 class GlobalConfiguration;
 class BaseApplication;
 class ITickerProvider;
@@ -52,18 +52,15 @@ public:
     void onInit(const IApplication::RunMode& mode) override;
     void onDeinit() override;
 
-    static void invokeQueuedCalls();
-
     void setLoggerLevel(const muse::logger::Level& level);
 
 private:
     std::shared_ptr<GlobalConfiguration> m_configuration;
     std::shared_ptr<SystemInfo> m_systemInfo;
     std::shared_ptr<ITickerProvider> m_tickerProvider;
+    Ticker m_asyncTicker;
 
     std::optional<muse::logger::Level> m_loggerLevel;
-
-    static std::shared_ptr<Invoker> s_asyncInvoker;
 
     bool m_endTimePeriod = false;
 };
