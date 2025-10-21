@@ -107,14 +107,12 @@ RectF FontProvider::tightBoundingRect(const muse::draw::Font& f, const muse::Str
 }
 
 // Score symbols
-RectF FontProvider::symBBox(const muse::draw::Font& f, char32_t ucs4, double dpi_f) const
+RectF FontProvider::symBBox(const muse::draw::Font& f, char32_t ucs4) const
 {
-    UNUSED(dpi_f);
     return fontsEngine()->symBBox(f, ucs4);
 }
 
-double FontProvider::symAdvance(const muse::draw::Font& f, char32_t ucs4, double dpi_f) const
+double FontProvider::symAdvance(const muse::draw::Font& f, char32_t ucs4) const
 {
-    UNUSED(dpi_f);
     return fontsEngine()->symAdvance(f, ucs4);
 }
