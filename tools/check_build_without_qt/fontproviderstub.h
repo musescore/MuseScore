@@ -28,10 +28,6 @@ public:
     RectF boundingRect(const Font& f, const Char& ch) const override;
     RectF boundingRect(const Font& f, const RectF& r, int flags, const String& string) const override;
     RectF tightBoundingRect(const Font& f, const String& string) const override;
-
-    // Score symbols
-    RectF symBBox(const Font& f, char32_t ucs4, double DPI_F) const override;
-    double symAdvance(const Font& f, char32_t ucs4, double DPI_F) const override;
 };
 }
 

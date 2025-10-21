@@ -331,30 +331,6 @@ RectF FontsEngine::tightBoundingRect(const Font& f, const std::u32string& text) 
     return fromFBBox(rect, rf->pixelScale());
 }
 
-RectF FontsEngine::symBBox(const Font& f, char32_t ucs4) const
-{
-    RequireFace* rf = fontFace(f, true);
-    IF_ASSERT_FAILED(rf && rf->face) {
-        return RectF();
-    }
-
-    glyph_idx_t glyphIdx = rf->face->glyphIndex(ucs4);
-    FBBox bb = rf->face->glyphBbox(glyphIdx);
-    return fromFBBox(bb, rf->pixelScale());
-}
-
-double FontsEngine::symAdvance(const Font& f, char32_t ucs4) const
-{
-    RequireFace* rf = fontFace(f, true);
-    IF_ASSERT_FAILED(rf && rf->face) {
-        return 0.0;
-    }
-
-    glyph_idx_t glyphIdx = rf->face->glyphIndex(ucs4);
-    f26dot6_t advance = rf->face->glyphAdvance(glyphIdx);
-    return from_f26d6(advance) * rf->pixelScale();
-}
-
 #ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
 static void generateSdf(GlyphImage& out, glyph_idx_t glyphIdx, const IFontFace* face)
 {
