@@ -787,6 +787,12 @@ muse::RectF NotationNoteInput::cursorRect() const
     double w = segmentContentRect.width() > 0 ? segmentContentRect.width() : defaultWidth;
     double h = 0.0;
 
+    if (inputState.beyondScore()) {
+        const Measure* lastMeasure = score()->lastMeasure();
+        x = lastMeasure->pageBoundingRect().right() + globalSpatium;
+        w = defaultWidth;
+    }
+
     if (isTabStaff) {
         const double minWidth = 2.0 * globalSpatium;
         const double sideMargin = std::max(0.3 * globalSpatium, 0.5 * (minWidth - w));
