@@ -22,7 +22,7 @@
 #ifndef MUSE_ASYNC_ASYNC_H
 #define MUSE_ASYNC_ASYNC_H
 
-#include "../thirdparty/kors_async/async/async.h"
+#include "../thirdparty/kors_async/v1.3/async/async.h"
 namespace muse::async {
 using Async = kors::async::Async;
 }

@@ -22,7 +22,7 @@
 #ifndef MUSE_ASYNC_CHANNEL_H
 #define MUSE_ASYNC_CHANNEL_H
 
-#include "../thirdparty/kors_async/async/channel.h"
+#include "../thirdparty/kors_async/v1.3/async/channel.h"
 namespace muse::async {
 template<typename ... T>
 using Channel = kors::async::Channel<T...>;

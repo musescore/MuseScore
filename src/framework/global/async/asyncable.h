@@ -22,7 +22,7 @@
 #ifndef MUSE_ASYNC_ASYNCABLE_H
 #define MUSE_ASYNC_ASYNCABLE_H
 
-#include "../thirdparty/kors_async/async/asyncable.h"
+#include "../thirdparty/kors_async/v1.3/async/asyncable.h"
 namespace muse::async {
 using Asyncable = kors::async::Asyncable;
 }

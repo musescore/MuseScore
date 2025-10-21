@@ -22,7 +22,7 @@
 #ifndef MUSE_ASYNC_PROCESSEVENTS_H
 #define MUSE_ASYNC_PROCESSEVENTS_H
 
-#include "../thirdparty/kors_async/async/processevents.h"
+#include "../thirdparty/kors_async/v1.3/async/processevents.h"
 
 namespace muse::async {
 inline void processEvents()

@@ -22,7 +22,7 @@
 #ifndef MUSE_ASYNC_NOTIFY_H
 #define MUSE_ASYNC_NOTIFY_H
 
-#include "../thirdparty/kors_async/async/notification.h"
+#include "../thirdparty/kors_async/v1.3/async/notification.h"
 namespace muse::async {
 using Notification = kors::async::Notification;
 }

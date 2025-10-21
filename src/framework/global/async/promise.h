@@ -22,7 +22,7 @@
 #ifndef MUSE_ASYNC_PROMISE_H
 #define MUSE_ASYNC_PROMISE_H
 
-#include "../thirdparty/kors_async/async/promise.h"
+#include "../thirdparty/kors_async/v1.3/async/promise.h"
 
 namespace muse::async {
 template<typename ... T>
