@@ -25,7 +25,7 @@
 using namespace muse;
 
 // heuristic value
-static const int ONE_TICK_INTERVAL_MS = 8;
+static const int ONE_TICK_INTERVAL_MS = 16;
 
 static uint32_t newTaskId()
 {

@@ -31,7 +31,6 @@
 #include "profiler.h"
 
 #include "internal/baseapplication.h"
-#include "internal/invoker.h"
 #include "internal/cryptographichash.h"
 #include "internal/process.h"
 #include "internal/systeminfo.h"
@@ -78,8 +77,6 @@ using namespace muse;
 using namespace muse::modularity;
 using namespace muse::io;
 
-std::shared_ptr<Invoker> GlobalModule::s_asyncInvoker = {};
-
 class ApplicationStub : public BaseApplication
 {
 public:
@@ -107,7 +104,6 @@ void GlobalModule::registerExports()
     }
 
     m_configuration = std::make_shared<GlobalConfiguration>(iocContext());
-    s_asyncInvoker = std::make_shared<Invoker>();
     m_systemInfo = std::make_shared<SystemInfo>();
     m_tickerProvider = std::make_shared<TickerProvider>();
 
@@ -235,15 +231,13 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     Profiler* profiler = Profiler::instance();
     profiler->setup(profOpt, new MyPrinter());
 
-    //! --- Setup Invoker ---
-
-    Invoker::setup();
-
-    async::onMainThreadInvoke([](const std::function<void()>& f, bool isAlwaysQueued) {
-        s_asyncInvoker->invoke(f, isAlwaysQueued);
-    });
-
+    //! --- Setup Ticker ---
     m_tickerProvider->start();
+
+    //! --- Setup Async ---
+    m_asyncTicker.start(1, []() {
+        async::processEvents();
+    }, Ticker::Mode::Repeat);
 
     //! --- Diagnostics ---
 #ifdef MUSE_MODULE_DIAGNOSTICS
@@ -285,8 +279,6 @@ void GlobalModule::onInit(const IApplication::RunMode&)
 
 void GlobalModule::onDeinit()
 {
-    invokeQueuedCalls();
-
     m_tickerProvider->stop();
 
 #ifdef Q_OS_WIN
@@ -294,11 +286,6 @@ void GlobalModule::onDeinit()
         timeEndPeriod(1);
     }
 #endif
-}
-
-void GlobalModule::invokeQueuedCalls()
-{
-    s_asyncInvoker->invokeQueuedCalls();
 }
 
 void GlobalModule::setLoggerLevel(const muse::logger::Level& level)

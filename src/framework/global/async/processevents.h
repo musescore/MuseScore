@@ -29,11 +29,6 @@ inline void processEvents()
 {
     kors::async::processEvents();
 }
-
-inline void onMainThreadInvoke(const std::function<void(const std::function<void()>&, bool)>& f)
-{
-    kors::async::onMainThreadInvoke(f);
-}
 }
 
 #endif // MUSE_ASYNC_PROCESSEVENTS_H

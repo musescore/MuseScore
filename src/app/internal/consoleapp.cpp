@@ -202,8 +202,6 @@ void ConsoleApp::finish()
 
     // Deinit
 
-    m_globalModule.invokeQueuedCalls();
-
     for (modularity::IModuleSetup* m : m_modules) {
         m->onDeinit();
     }

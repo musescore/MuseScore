@@ -202,8 +202,6 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/cryptographichash.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/cryptographichash.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/invoker.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/invoker.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/process.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/process.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/systeminfo.cpp
