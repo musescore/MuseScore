@@ -60,10 +60,6 @@ public:
     RectF boundingRect(const Font& f, const std::u32string& text) const override;
     RectF tightBoundingRect(const Font& f, const std::u32string& text) const override;
 
-    // Score symbols
-    RectF symBBox(const Font& f, char32_t ucs4) const override;
-    double symAdvance(const Font& f, char32_t ucs4) const override;
-
     // For draw
     std::vector<GlyphImage> render(const Font& f, const std::u32string& text) const override;
 
