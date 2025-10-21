@@ -3474,7 +3474,12 @@ std::vector<NotationInteraction::ShadowNoteParams> NotationInteraction::previewN
 
         params.accidentalType = accidentalType(is, nval, line);
         params.position.line = line;
-        params.position.pos = PointF(segment->x(), y) + measurePos;
+
+        if (is.beyondScore()) {
+            params.position.pos = PointF(measure->ldata()->bbox().width() + score()->style().spatium(), y) + measurePos;
+        } else {
+            params.position.pos = PointF(segment->x(), y) + measurePos;
+        }
 
         result.push_back(params);
     }
