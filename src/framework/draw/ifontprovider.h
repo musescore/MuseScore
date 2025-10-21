@@ -60,8 +60,8 @@ public:
     virtual RectF tightBoundingRect(const Font& f, const String& string) const = 0;
 
     // Score symbols
-    virtual RectF symBBox(const Font& f, char32_t ucs4, double DPI_F) const = 0;
-    virtual double symAdvance(const Font& f, char32_t ucs4, double DPI_F) const = 0;
+    virtual RectF symBBox(const Font& f, char32_t ucs4) const = 0;
+    virtual double symAdvance(const Font& f, char32_t ucs4) const = 0;
 };
 }
 

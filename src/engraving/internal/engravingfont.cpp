@@ -849,8 +849,8 @@ void EngravingFont::computeMetrics(EngravingFont::Sym& sym, const Smufl::Code& c
     }
 
     if (sym.code > 0) {
-        sym.bbox = fontProvider()->symBBox(m_font, sym.code, DPI_F);
-        sym.advance = fontProvider()->symAdvance(m_font, sym.code, DPI_F);
+        sym.bbox = fontProvider()->symBBox(m_font, sym.code);
+        sym.advance = fontProvider()->symAdvance(m_font, sym.code);
     }
 }
 

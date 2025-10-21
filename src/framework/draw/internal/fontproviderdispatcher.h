@@ -55,8 +55,8 @@ public:
     RectF tightBoundingRect(const Font& f, const String& string) const override;
 
     // Score symbols
-    RectF symBBox(const Font& f, char32_t ucs4, double DPI_F) const override;
-    double symAdvance(const Font& f, char32_t ucs4, double DPI_F) const override;
+    RectF symBBox(const Font& f, char32_t ucs4) const override;
+    double symAdvance(const Font& f, char32_t ucs4) const override;
 
 private:
     std::shared_ptr<FontProvider> m_mainFProvider;
