@@ -26,12 +26,6 @@
 #include <QFontDatabase>
 #include <QFontMetricsF>
 
-#define DISABLED_MUSICSYMBOLS_METRICS
-
-#ifndef DISABLED_MUSICSYMBOLS_METRICS
-#include "fontengineft.h"
-#endif
-
 #include "log.h"
 
 using namespace muse;
@@ -151,95 +145,18 @@ RectF QFontProvider::tightBoundingRect(const Font& f, const String& string) cons
 
 RectF QFontProvider::symBBox(const Font& f, char32_t ucs4, double dpi_f) const
 {
-#ifndef DISABLED_MUSICSYMBOLS_METRICS
-    FontEngineFT* engine = symEngine(f);
-    if (!engine) {
-        return RectF();
-    }
-
-    RectF rect = RectF::fromQRectF(engine->bbox(ucs4, dpi_f));
-    if (!rect.isValid()) {
-        for (const auto& fontName : QFont::substitutes(f.family())) {
-            Font subFont(f);
-            subFont.setFamily(fontName, f.type());
-            engine = symEngine(subFont);
-            if (!engine) {
-                continue;
-            }
-
-            rect = RectF::fromQRectF(engine->bbox(ucs4, dpi_f));
-            if (rect.isValid()) {
-                break;
-            }
-        }
-    }
-
-    return rect;
-#else
     UNUSED(f);
     UNUSED(ucs4);
     UNUSED(dpi_f);
     UNREACHABLE;
     return RectF();
-#endif
 }
 
 double QFontProvider::symAdvance(const Font& f, char32_t ucs4, double dpi_f) const
 {
-#ifndef DISABLED_MUSICSYMBOLS_METRICS
-    FontEngineFT* engine = symEngine(f);
-    if (!engine) {
-        return 0.0;
-    }
-
-    double symAdvance = engine->advance(ucs4, dpi_f);
-    if (RealIsNull(symAdvance)) {
-        for (const auto& fontName : QFont::substitutes(f.family())) {
-            Font subFont(f);
-            subFont.setFamily(fontName, f.type());
-            engine = symEngine(subFont);
-            if (!engine) {
-                continue;
-            }
-
-            symAdvance = engine->advance(ucs4, dpi_f);
-            if (!RealIsNull(symAdvance)) {
-                break;
-            }
-        }
-    }
-
-    return symAdvance;
-#else
     UNUSED(f);
     UNUSED(ucs4);
     UNUSED(dpi_f);
     UNREACHABLE;
     return 0.0;
-#endif
-}
-
-FontEngineFT* QFontProvider::symEngine(const Font& f) const
-{
-#ifndef DISABLED_MUSICSYMBOLS_METRICS
-    QString path = m_symbolsFonts.value(f.family()).toQString();
-    if (path.isEmpty()) {
-        return nullptr;
-    }
-
-    FontEngineFT* engine = m_symEngines.value(path, nullptr);
-    if (!engine) {
-        engine = new FontEngineFT();
-        if (!engine->load(path)) {
-            delete engine;
-            return nullptr;
-        }
-        m_symEngines[path] = engine;
-    }
-    return engine;
-#else
-    UNUSED(f);
-    UNREACHABLE;
-    return nullptr;
-#endif
 }
