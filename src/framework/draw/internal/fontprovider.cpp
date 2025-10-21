@@ -105,14 +105,3 @@ RectF FontProvider::tightBoundingRect(const muse::draw::Font& f, const muse::Str
 {
     return fontsEngine()->tightBoundingRect(f, string.toStdU32String());
 }
-
-// Score symbols
-RectF FontProvider::symBBox(const muse::draw::Font& f, char32_t ucs4) const
-{
-    return fontsEngine()->symBBox(f, ucs4);
-}
-
-double FontProvider::symAdvance(const muse::draw::Font& f, char32_t ucs4) const
-{
-    return fontsEngine()->symAdvance(f, ucs4);
-}

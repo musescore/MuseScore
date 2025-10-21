@@ -53,10 +53,6 @@ public:
     RectF boundingRect(const Font& f, const RectF& r, int flags, const String& string) const override;
     RectF tightBoundingRect(const Font& f, const String& string) const override;
 
-    // Score symbols
-    RectF symBBox(const Font& f, char32_t ucs4) const override;
-    double symAdvance(const Font& f, char32_t ucs4) const override;
-
 private:
 
     QHash<QString /*family*/, io::path_t> m_symbolsFonts;

@@ -78,14 +78,3 @@ RectF FontProviderStub::tightBoundingRect(const Font&, const String&) const
 {
     return RectF();
 }
-
-// Score symbols
-RectF FontProviderStub::symBBox(const Font&, char32_t, double) const
-{
-    return RectF();
-}
-
-double FontProviderStub::symAdvance(const Font&, char32_t, double) const
-{
-    return 0.0;
-}

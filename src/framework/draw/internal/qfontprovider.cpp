@@ -103,7 +103,7 @@ bool QFontProvider::inFontUcs4(const Font& f, char32_t ucs4) const
     //! @NOTE some symbols in fonts dont have glyph. For example U+ee80
     //! exists in Bravura.otf but doesn't have glyph
     //! so QFontMetricsF returns true in that case
-    return symBBox(f, ucs4).isValid();
+    return boundingRect(f, ucs4).isValid();
 }
 
 double QFontProvider::horizontalAdvance(const Font& f, const String& string) const
@@ -139,16 +139,4 @@ RectF QFontProvider::tightBoundingRect(const Font& f, const String& string) cons
         return RectF();
     }
     return RectF::fromQRectF(boundingRect);
-}
-
-// Score symbols
-
-RectF QFontProvider::symBBox(const Font& f, char32_t ucs4) const
-{
-    return boundingRect(f, Char(ucs4));
-}
-
-double QFontProvider::symAdvance(const Font& f, char32_t ucs4) const
-{
-    return horizontalAdvance(f, Char(ucs4));
 }
