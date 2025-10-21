@@ -156,7 +156,30 @@ void BoxLayout::layoutVBox(const VBox* item, VBox::LayoutData* ldata, const Layo
 
 void BoxLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx)
 {
+    Score* score = item->score();
+
     if (item->needsRebuild()) {
+        /// FBox::init requires all chord symbols in the score have valid ldata
+        /// Perform layout
+        for (mu::engraving::Segment* segment = score->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
+             segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
+            for (EngravingItem* segItem : segment->annotations()) {
+                if (!segItem || !segItem->part()) {
+                    continue;
+                }
+                if (!(segItem->isHarmony() || segItem->isFretDiagram())) {
+                    continue;
+                }
+
+                Harmony* harmony = segItem->isHarmony() ? toHarmony(segItem) : toFretDiagram(segItem)->harmony();
+                if (!harmony || harmony->harmonyType() != HarmonyType::STANDARD || harmony->ldata()->isValid()) {
+                    continue;
+                }
+
+                TLayout::layoutHarmony(harmony, harmony->mutldata(), ctx);
+            }
+        }
+
         const_cast<FBox*>(item)->init();
         const_cast<FBox*>(item)->setNeedsRebuild(false);
     }
