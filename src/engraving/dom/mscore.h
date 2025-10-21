@@ -67,7 +67,7 @@ static constexpr int MAX_FOOTERS = 3;
 static constexpr double INCH      = 25.4; // millimitres per inch
 static constexpr double PPI       = 72.0; // typographical points per inch
 
-static constexpr double DPI       = 360;
+static constexpr double DPI       = 1200;
 static constexpr double SPATIUM20 = 5.0 * (DPI / 72.0);
 static constexpr double DPMM      = DPI / INCH;
 
