@@ -1176,11 +1176,11 @@ void FinaleParser::importBarlines()
                             localType = toMuseScoreBarLineType(groupInfo.group->barlineType);
                             localVisible = groupInfo.group->barlineType != others::Measure::BarlineType::None;
                             localTick = groupInfo.group->barlineType == others::Measure::BarlineType::Tick;
-                            priority = groupInfo.group->staves.size();
                         }
                         // Draw Mensurstriche if determined by smallest group
                         mensurStriche = groupInfo.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::Mensurstriche;
                         mensurLast = mensurStriche ? musxStaffId == groupInfo.group->endInst : false;
+                        priority = groupInfo.group->staves.size();
                     }
                 }
             }
