@@ -39,6 +39,8 @@ using namespace muse::io;
 using namespace muse::draw;
 using namespace mu::engraving;
 
+static constexpr double SMUFL_DEFAULT_SIZE = 20.0;
+
 // =============================================
 // ScoreFont
 // =============================================
@@ -109,6 +111,7 @@ void EngravingFont::ensureLoad()
     m_font.setFamily(String::fromStdString(m_family), Font::Type::MusicSymbol);
     m_font.setNoFontMerging(true);
     m_font.setHinting(Font::Hinting::PreferVerticalHinting);
+    m_font.setPointSizeF(SMUFL_DEFAULT_SIZE);
 
     for (size_t id = 0; id < m_symbols.size(); ++id) {
         Smufl::Code code = Smufl::code(static_cast<SymId>(id));
@@ -1107,7 +1110,7 @@ void EngravingFont::draw(SymId id, Painter* painter, const SizeF& mag, const Poi
     }
 
     painter->save();
-    double size = 20.0 * MScore::pixelRatio;
+    double size = SMUFL_DEFAULT_SIZE * MScore::pixelRatio;
     m_font.setPointSizeF(size);
     painter->scale(mag.width(), mag.height());
     painter->setFont(m_font);

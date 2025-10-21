@@ -145,16 +145,10 @@ RectF QFontProvider::tightBoundingRect(const Font& f, const String& string) cons
 
 RectF QFontProvider::symBBox(const Font& f, char32_t ucs4) const
 {
-    UNUSED(f);
-    UNUSED(ucs4);
-    UNREACHABLE;
-    return RectF();
+    return boundingRect(f, Char(ucs4));
 }
 
 double QFontProvider::symAdvance(const Font& f, char32_t ucs4) const
 {
-    UNUSED(f);
-    UNUSED(ucs4);
-    UNREACHABLE;
-    return 0.0;
+    return horizontalAdvance(f, Char(ucs4));
 }
