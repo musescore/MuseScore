@@ -59,9 +59,6 @@ public:
 
 private:
 
-    FontEngineFT* symEngine(const Font& f) const;
-
     QHash<QString /*family*/, io::path_t> m_symbolsFonts;
-    mutable QHash<QString /*path*/, FontEngineFT*> m_symEngines;
 };
 }
