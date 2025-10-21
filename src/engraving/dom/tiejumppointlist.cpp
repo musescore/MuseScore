@@ -64,13 +64,13 @@ void TieJumpPoint::undoSetActive(bool v)
     score->undo(new ChangeTieJumpPointActive(m_jumpPointList, m_id, v));
 }
 
-const String TieJumpPoint::menuTitle() const
+TranslatableString TieJumpPoint::menuTitle() const
 {
     const Measure* measure = m_note->findMeasure();
     const int measureNo = measure ? measure->no() + 1 : 0;
 
     //: %1 represents the preceding jump item eg. coda. %2 represents the measure number
-    return muse::mtrc("engraving", "Tie to %1 (m. %2)").arg(precedingJumpItemName(), String::number(measureNo));
+    return TranslatableString("engraving", "Tie to %1 (m. %2)").arg(precedingJumpItemName(), String::number(measureNo));
 }
 
 String TieJumpPoint::precedingJumpItemName() const

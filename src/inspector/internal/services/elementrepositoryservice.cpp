@@ -397,8 +397,10 @@ EngravingItem* ElementRepositoryService::findTextDelegate(EngravingItem* element
     switch (element->type()) {
     case ElementType::BAR_LINE: {
         Segment* seg = toBarLine(element)->segment();
-        PlayCountText* playCountText = toPlayCountText(seg->findAnnotation(ElementType::PLAY_COUNT_TEXT, 0, 0));
-        return playCountText;
+        if (PlayCountText* playCountText = toPlayCountText(seg->findAnnotation(ElementType::PLAY_COUNT_TEXT, 0, 0))) {
+            return playCountText;
+        }
+        return element;
     }
     default:
         return element;
