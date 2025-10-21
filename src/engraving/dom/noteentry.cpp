@@ -182,6 +182,11 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         return addPitchToChord(nval, toChord(c), externalInputState);
     }
 
+    if (is.beyondScore()) {
+        appendMeasures(1);
+        is.moveToNextInputPos();
+    }
+
     expandVoice(is.segment(), is.track());
 
     // insert note
