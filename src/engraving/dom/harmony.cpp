@@ -172,6 +172,24 @@ bool HarmonyInfo::hasModifiers() const
     return m_parsedChord ? m_parsedChord->modifiers().size() > 0 : false;
 }
 
+String Harmony::displayText() const
+{
+    // String representation of what the user sees on the score
+    // Used in fretbox
+    String name;
+    for (const HarmonyRenderItem* segment : ldata()->renderItemList()) {
+        if (const TextSegment* textSeg = dynamic_cast<const TextSegment*>(segment)) {
+            String t = textSeg->text();
+            t.replace(u"\uE87C", u"/");
+            name += t;
+        } else if (const ChordSymbolParen* parenSeg = dynamic_cast<const ChordSymbolParen*>(segment)) {
+            name += parenSeg->parenItem->direction() == DirectionH::LEFT ? u"(" : u")";
+        }
+    }
+
+    return name;
+}
+
 //---------------------------------------------------------
 //   harmonyName
 //---------------------------------------------------------
