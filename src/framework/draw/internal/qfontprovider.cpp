@@ -44,7 +44,7 @@ protected:
     {
         switch (m) {
         case QPaintDevice::PdmDpiY:
-            return 360; // same as mu::engraving::DPI
+            return 1200; // Must be equal to mu::engraving::DPI
         default:
             return 1;
         }

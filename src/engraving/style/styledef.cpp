@@ -741,8 +741,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(minVerticalDistance,                        Spatium(0.5)),
     styleDef(skylineMinHorizontalClearance,              Spatium(0.25)),
     styleDef(ornamentStyle,                              int(OrnamentStyle::DEFAULT)),
-    styleDef(spatium,                                    24.8), // Expressed in logical pixels implicitely assuming a DPI of 360.
-                                                                // spatium == 1.75mm * DPI / INCH = 1.75 * 360 / 25.4 = 24.8
+    styleDef(spatium,                                    1.75 /*mm*/ * DPMM),
 
     styleDef(autoplaceHairpinDynamicsDistance,           Spatium(0.5)),
 
