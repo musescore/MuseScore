@@ -42,6 +42,7 @@
 #include "noteinputcursor.h"
 #include "notationruler.h"
 #include "playbackcursor.h"
+#include "previewmeasure.h"
 #include "loopmarker.h"
 #include "continuouspanel.h"
 #include "abstractelementpopupmodel.h"
@@ -275,6 +276,7 @@ private:
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;
     std::unique_ptr<NotationRuler> m_ruler;
+    std::unique_ptr<PreviewMeasure> m_previewMeasure;
     std::unique_ptr<LoopMarker> m_loopInMarker;
     std::unique_ptr<LoopMarker> m_loopOutMarker;
     std::unique_ptr<ContinuousPanel> m_continuousPanel;
