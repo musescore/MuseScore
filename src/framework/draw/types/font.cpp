@@ -176,6 +176,7 @@ QFont Font::toQFont() const
     if (noFontMerging()) {
         qf.setStyleStrategy(QFont::NoFontMerging);
     }
+    qf.setStyleStrategy(QFont::PreferTypoLineMetrics);
     qf.setHintingPreference(static_cast<QFont::HintingPreference>(hinting()));
 
     return qf;

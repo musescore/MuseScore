@@ -54,7 +54,7 @@ void DrawModule::registerExports()
     auto fdispatcher = std::make_shared<FontProviderDispatcher>(mainFProvider, qtFProvider);
 
     m_fontsEngine = std::make_shared<FontsEngine>(iocContext());
-    ioc()->registerExport<draw::IFontProvider>(moduleName(), fdispatcher);
+    ioc()->registerExport<draw::IFontProvider>(moduleName(), qtFProvider);
     ioc()->registerExport<draw::IFontsEngine>(moduleName(), m_fontsEngine);
     ioc()->registerExport<draw::IFontsDatabase>(moduleName(), new FontsDatabase());
 
