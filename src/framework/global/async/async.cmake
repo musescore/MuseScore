@@ -8,5 +8,6 @@ set(ASYNC_SRC
     ${CMAKE_CURRENT_LIST_DIR}/async.h
     ${CMAKE_CURRENT_LIST_DIR}/promise.h
     ${CMAKE_CURRENT_LIST_DIR}/processevents.h
+    ${CMAKE_CURRENT_LIST_DIR}/changednotify.h
     ${CMAKE_CURRENT_LIST_DIR}/notifylist.h
     )
