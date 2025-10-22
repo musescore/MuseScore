@@ -313,8 +313,6 @@ public:
     AlignH position() const { return m_position; }
     void setPosition(AlignH val) { m_position = val; }
 
-    static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const PointF& pos, const String& text);
-
     static String plainToXmlText(const String& s) { return s.toXmlEscaped(); }
     void setPlainText(const String& t) { setXmlText(plainToXmlText(t)); }
     virtual void setXmlText(const String&);

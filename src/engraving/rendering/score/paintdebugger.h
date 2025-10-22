@@ -68,7 +68,6 @@ public:
 
     void drawText(const muse::PointF& point, const muse::String& text) override;
     void drawText(const muse::RectF& rect, int flags, const muse::String& text) override;
-    void drawTextWorkaround(const muse::draw::Font& f, const muse::PointF& pos, const muse::String& text) override;
 
     void drawSymbol(const muse::PointF& point, char32_t ucs4Code) override;
 
