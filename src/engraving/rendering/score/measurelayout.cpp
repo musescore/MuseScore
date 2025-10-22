@@ -2435,13 +2435,25 @@ void MeasureLayout::addRepeatCourtesies(Measure* m, LayoutContext& ctx)
         return;
     }
 
+    bool hasCourtesies = false;
     for (Measure* repeatStartMeasure : measures) {
-        if (repeatStartMeasure == m->nextMeasure()) {
+        // Follow section break courtesy property
+        const Measure* prevMeasure = repeatStartMeasure->prevMeasure();
+        const LayoutBreak* sectionBreak = prevMeasure ? prevMeasure->sectionBreakElement() : nullptr;
+        const bool sectionBreakHideCourtesies = sectionBreak && !sectionBreak->showCourtesy();
+
+        if (repeatStartMeasure == m->nextMeasure() || sectionBreakHideCourtesies) {
             continue;
         }
         setCourtesyClef(m, repeatStartMeasure->tick(), m->endTick(), SegmentType::ClefRepeatAnnounce, ctx);
         setCourtesyKeySig(m, repeatStartMeasure->tick(), m->endTick(), SegmentType::KeySigRepeatAnnounce, ctx);
         setCourtesyTimeSig(m, repeatStartMeasure->tick(), m->endTick(), SegmentType::TimeSigRepeatAnnounce, ctx);
+
+        hasCourtesies = true;
+    }
+
+    if (!hasCourtesies) {
+        removeRepeatCourtesies(m);
     }
 }
 
