@@ -24,7 +24,6 @@
 #include <stack>
 
 #include "draw/fontmetrics.h"
-#include "draw/painter.h"
 
 #include "iengravingfont.h"
 
@@ -856,18 +855,6 @@ bool TextFragment::operator ==(const TextFragment& f) const
 }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void TextFragment::draw(Painter* p, const TextBase* t) const
-{
-    Font f(font(t));
-    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-    p->setFont(f);
-    p->drawText(pos, text);
-}
-
-//---------------------------------------------------------
 //   font
 //---------------------------------------------------------
 
@@ -986,19 +973,6 @@ Font TextFragment::font(const TextBase* t) const
 
     font.setPointSizeF(m * t->mag());
     return font;
-}
-
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void TextBlock::draw(Painter* p, const TextBase* t) const
-{
-    p->translate(0.0, m_y);
-    for (const TextFragment& f : m_fragments) {
-        f.draw(p, t);
-    }
-    p->translate(0.0, -m_y);
 }
 
 //---------------------------------------------------------
