@@ -517,6 +517,10 @@ void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
         writeLinePrefs(style, prefix, prefs.smartShapeOptions->smartLineWidth,
                        prefs.smartShapeOptions->smartDashOn, prefs.smartShapeOptions->smartDashOff);
     }
+
+    writeEfixSpace(style, Sid::guitarBendLineWidth,    prefs.smartShapeOptions->smartLineWidth);
+    writeEfixSpace(style, Sid::bendLineWidth,          prefs.smartShapeOptions->smartLineWidth); // shape-dependent
+    writeEfixSpace(style, Sid::guitarBendLineWidthTab, prefs.smartShapeOptions->smartLineWidth); // shape-dependent
 }
 
 void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
