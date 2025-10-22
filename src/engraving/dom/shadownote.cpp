@@ -54,6 +54,7 @@ bool ShadowNote::isValid() const
 }
 
 void ShadowNote::setState(SymId noteSymbol, TDuration duration, bool rest, double segmentSkylineTopY, double segmentSkylineBottomY,
+                          bool beyondScore,
                           AccidentalType accidentalType, const std::set<SymId>& articulationIds)
 {
     m_noteheadSymbol = noteSymbol;
@@ -61,6 +62,7 @@ void ShadowNote::setState(SymId noteSymbol, TDuration duration, bool rest, doubl
     m_isRest = rest;
     m_segmentSkylineTopY = segmentSkylineTopY;
     m_segmentSkylineBottomY = segmentSkylineBottomY;
+    m_beyondScore = beyondScore;
     m_accidentalType = accidentalType;
     m_articulationIds = articulationIds;
 }
