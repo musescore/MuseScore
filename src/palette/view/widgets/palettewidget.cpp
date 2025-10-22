@@ -937,7 +937,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
     qreal _spatium = gpaletteScore->style().spatium();
     qreal magS     = configuration()->paletteSpatium() * mag() * paletteScaling();
     qreal mag      = magS / _spatium;
-    gpaletteScore->style().setSpatium(SPATIUM20);
+    gpaletteScore->style().setSpatium(gpaletteScore->style().defaultSpatium());
 
     muse::draw::Painter painter(this, "palette");
     painter.setAntialiasing(true);

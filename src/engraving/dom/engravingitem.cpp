@@ -264,6 +264,11 @@ double EngravingItem::spatium() const
     return s ? s->spatium(this) : style().spatium();
 }
 
+double EngravingItem::defaultSpatium() const
+{
+    return style().defaultSpatium();
+}
+
 bool EngravingItem::isInteractionAvailable() const
 {
     if (!getProperty(Pid::VISIBLE).toBool() && (score()->printing() || !score()->isShowInvisible())) {
@@ -293,7 +298,7 @@ PlacementV EngravingItem::placement() const
 
 double EngravingItem::magS() const
 {
-    return mag() * (style().spatium() / SPATIUM20);
+    return mag() * (style().spatium() / defaultSpatium());
 }
 
 //---------------------------------------------------------

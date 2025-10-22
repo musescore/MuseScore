@@ -1987,7 +1987,7 @@ void TLayout::layoutFiguredBassItem(const FiguredBassItem* item, FiguredBassItem
 
     // font size in pixels, scaled according to spatium()
     // (use the same font selection as used in draw() below)
-    double m = ctx.conf().styleD(Sid::figuredBassFontSize) * item->spatium() / SPATIUM20;
+    double m = ctx.conf().styleD(Sid::figuredBassFontSize) * item->spatium() / item->defaultSpatium();
     f.setPointSizeF(m);
     FontMetrics fm(f);
 
@@ -5804,8 +5804,8 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
 
     if (!item->textLineBase()->textSizeSpatiumDependent()) {
-        item->text()->setSize(item->text()->size() * SPATIUM20 / item->spatium());
-        item->endText()->setSize(item->endText()->size() * SPATIUM20 / item->spatium());
+        item->text()->setSize(item->text()->size() * item->defaultSpatium() / item->spatium());
+        item->endText()->setSize(item->endText()->size() * item->defaultSpatium() / item->spatium());
     }
 
     PointF pp1;

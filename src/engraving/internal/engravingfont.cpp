@@ -28,6 +28,7 @@
 #include "types/symnames.h"
 
 #include "dom/mscore.h"
+#include "../style/styledef.h"
 
 #include "smufl.h"
 
@@ -747,8 +748,8 @@ void EngravingFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
             const JsonArray arr = anchors.value(anchorId).toArray();
             const double x = arr.at(0).toDouble();
             const double y = arr.at(1).toDouble();
-
-            sym.smuflAnchors[search->second] = PointF(x, -y) * SPATIUM20;
+            const double defaultSpatium = StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue().toDouble();
+            sym.smuflAnchors[search->second] = PointF(x, -y) * defaultSpatium;
         }
     }
 }

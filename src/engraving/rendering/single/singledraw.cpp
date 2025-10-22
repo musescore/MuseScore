@@ -1112,7 +1112,7 @@ void SingleDraw::draw(const FiguredBassItem* item, Painter* painter, const Paint
     Font f(FiguredBass::FBFonts().at(font).family, Font::Type::Tablature);
 
     // (use the same font selection as used in layout() above)
-    double m = item->style().styleD(Sid::figuredBassFontSize) * item->spatium() / SPATIUM20;
+    double m = item->style().styleD(Sid::figuredBassFontSize) * item->spatium() / item->defaultSpatium();
     f.setPointSizeF(m * MScore::pixelRatio);
 
     painter->setFont(f);
@@ -1304,7 +1304,7 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter, const PaintOpti
     // Draw fret offset number
     if (item->fretOffset() > 0) {
         Font scaledFont(item->fretNumFont());
-        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / SPATIUM20) * MScore::pixelRatio);
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / item->defaultSpatium()) * MScore::pixelRatio);
         painter->setFont(scaledFont);
         String text = String::number(item->fretOffset() + 1);
 
@@ -1382,7 +1382,7 @@ void SingleDraw::draw(const GlissandoSegment* item, Painter* painter, const Pain
 
     if (glissando->showText()) {
         Font f(glissando->fontFace(), Font::Type::Unknown);
-        f.setPointSizeF(glissando->fontSize() * _spatium / SPATIUM20);
+        f.setPointSizeF(glissando->fontSize() * _spatium / item->defaultSpatium());
         f.setBold(glissando->fontStyle() & FontStyle::Bold);
         f.setItalic(glissando->fontStyle() & FontStyle::Italic);
         f.setUnderline(glissando->fontStyle() & FontStyle::Underline);
