@@ -118,7 +118,6 @@ public:
     Q_INVOKABLE void pinchToZoom(qreal scaleFactor, const QPointF& pos);
 
     bool isNoteEnterMode() const override;
-    void showShadowNote(const muse::PointF& pos) override;
 
     void showContextMenu(const ElementType& elementType, const QPointF& pos) override;
     void hideContextMenu() override;
@@ -227,6 +226,7 @@ private:
     void mouseDoubleClickEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     void hoverMoveEvent(QHoverEvent* event) override;
+    void hoverLeaveEvent(QHoverEvent* event) override;
     bool event(QEvent* event) override;
     bool shortcutOverride(QKeyEvent* event);
     void keyPressEvent(QKeyEvent* event) override;

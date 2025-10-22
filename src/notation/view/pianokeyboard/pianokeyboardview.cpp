@@ -56,6 +56,7 @@ PianoKeyboardView::PianoKeyboardView(QQuickItem* parent)
     : muse::uicomponents::QuickPaintedView(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
     setAcceptedMouseButtons(Qt::LeftButton);
+    setAcceptHoverEvents(true);
 }
 
 PianoKeyboardView::~PianoKeyboardView()
@@ -552,4 +553,21 @@ void PianoKeyboardView::mouseMoveEvent(QMouseEvent* event)
 void PianoKeyboardView::mouseReleaseEvent(QMouseEvent*)
 {
     m_controller->setPressedKey(std::nullopt);
+}
+
+void PianoKeyboardView::hoverMoveEvent(QHoverEvent* event)
+{
+    QPointF oldPos = event->oldPosF();
+    QPointF pos = event->position();
+
+    if (oldPos == pos) {
+        return;
+    }
+
+    m_controller->setHoveredKey(keyAt(event->position()));
+}
+
+void PianoKeyboardView::hoverLeaveEvent(QHoverEvent*)
+{
+    m_controller->setHoveredKey(std::nullopt);
 }

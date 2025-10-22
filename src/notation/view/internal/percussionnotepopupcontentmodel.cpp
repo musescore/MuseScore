@@ -34,7 +34,7 @@ PercussionNotePopupContentModel::PercussionNotePopupContentModel(QObject* parent
 
 void PercussionNotePopupContentModel::init()
 {
-    interaction()->shadowNoteChanged().onNotify(this, [this]() {
+    interaction()->shadowNoteChanged().onReceive(this, [this](bool) {
         emit shouldShowButtonsChanged();
         emit percussionNoteNameChanged();
         emit keyboardShortcutChanged();
@@ -60,7 +60,7 @@ void PercussionNotePopupContentModel::prevDrumNote()
         }
         if (ds->isValid(pitch) && ds->line(pitch) == currLine) {
             noteInput()->setDrumNote(pitch);
-            interaction()->showShadowNote(shadowNote->pos());
+            interaction()->showShadowNoteForPosition(shadowNote->pos());
             emit percussionNoteNameChanged();
             emit keyboardShortcutChanged();
             return;
@@ -90,7 +90,7 @@ void PercussionNotePopupContentModel::nextDrumNote()
         }
         if (ds->isValid(pitch) && ds->line(pitch) == currLine) {
             noteInput()->setDrumNote(pitch);
-            interaction()->showShadowNote(shadowNote->pos());
+            interaction()->showShadowNoteForPosition(shadowNote->pos());
             emit percussionNoteNameChanged();
             emit keyboardShortcutChanged();
             return;
