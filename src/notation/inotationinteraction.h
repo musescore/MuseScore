@@ -48,6 +48,7 @@ public:
     virtual void showShadowNoteForMidiPitch(const uint8_t pitch) = 0;
     virtual void hideShadowNote() = 0;
     virtual muse::RectF shadowNoteRect() const = 0;
+    virtual muse::RectF previewMeasureRect() const = 0;
     virtual muse::async::Channel</*visible*/ bool> shadowNoteChanged() const = 0;
 
     // Visibility

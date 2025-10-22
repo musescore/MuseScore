@@ -61,7 +61,7 @@ public:
     const TDuration& duration() const { return m_duration; }
 
     void setState(SymId noteSymbol, TDuration duration, bool isRest, double segmentSkylineTopY, double segmentSkylineBottomY,
-                  AccidentalType accidentalType = AccidentalType::NONE, const std::set<SymId>& articulationIds = {});
+                  bool beyondScore, AccidentalType accidentalType = AccidentalType::NONE, const std::set<SymId>& articulationIds = {});
 
     void drawArticulations(muse::draw::Painter* painter) const;
     void drawMarcato(muse::draw::Painter* painter, const SymId& articulation, RectF& boundRect) const;
@@ -80,6 +80,8 @@ public:
 
     bool ledgerLinesVisible() const;
 
+    bool isBeyondScore() const { return m_beyondScore; }
+
 private:
 
     Fraction m_tick;
@@ -89,6 +91,7 @@ private:
     bool m_isRest = false;
     AccidentalType m_accidentalType = AccidentalType::NONE;
     std::set<SymId> m_articulationIds;
+    bool m_beyondScore = false;
 
     double m_segmentSkylineTopY = 0.0;
     double m_segmentSkylineBottomY = 0.0;
