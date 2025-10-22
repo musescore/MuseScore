@@ -4910,15 +4910,11 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
         }
     }
 
-    if (inputState().beyondScore()) {
-        appendMeasures(1);
-        inputState().moveToNextInputPos();
-    }
-
     pos.segment   = inputState().segment();
     pos.staffIdx  = inputState().track() / VOICES;
     ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
     pos.line      = relStep(step, clef);
+    pos.beyondScore = inputState().beyondScore();
 
     if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
         repitchNote(pos, !addFlag);
