@@ -95,7 +95,7 @@ void EditPitch::setup()
 
     // Populate table with localized pitch names and center them in cells
     static constexpr const char* noteName[] =
-        { "C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B", "C" };
+    { "C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B", "C" };
 
     for (int row = 0; row < tableWidget->rowCount(); ++row) {
         for (int col = 0; col < tableWidget->columnCount(); ++col) {
