@@ -1844,12 +1844,8 @@ void TDraw::draw(const Harmony* item, Painter* painter, const PaintOptions& opt)
         if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
             Font f(ts->font());
             f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-#ifndef Q_OS_MACOS
-            TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text());
-#else
             painter->setFont(f);
             painter->drawText(ts->pos(), ts->text());
-#endif
         } else if (const ChordSymbolParen* parenItem = dynamic_cast<const ChordSymbolParen*>(renderItem)) {
             Parenthesis* p = parenItem->parenItem;
             painter->translate(parenItem->pos());
