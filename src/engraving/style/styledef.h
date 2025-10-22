@@ -2043,11 +2043,7 @@ typedef std::vector<StyledProperty> ElementStyle;
 //---------------------------------------------------------
 struct StyleDef
 {
-private:
-
-    friend class MStyle;
-    friend class EngravingStyleModel;
-
+public:
     struct StyleValue {
         Sid _idx;
         muse::AsciiStringView _name;         // xml name for read()/write()

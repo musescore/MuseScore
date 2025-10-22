@@ -898,9 +898,9 @@ Font TextFragment::font(const TextBase* t) const
     double spatiumScaling = 0.0;
 
     if (t->isInstrumentName()) {
-        spatiumScaling = toInstrumentName(t)->largestStaffSpatium() / SPATIUM20;
+        spatiumScaling = toInstrumentName(t)->largestStaffSpatium() / t->defaultSpatium();
     } else {
-        spatiumScaling = t->spatium() / SPATIUM20;
+        spatiumScaling = t->spatium() / t->defaultSpatium();
     }
 
     if (t->sizeIsSpatiumDependent()) {
@@ -2757,7 +2757,7 @@ Font TextBase::font() const
 {
     double m = size();
     if (sizeIsSpatiumDependent()) {
-        m *= spatium() / SPATIUM20;
+        m *= spatium() / defaultSpatium();
     }
     Font f(family(), Font::Type::Unknown);
     f.setPointSizeF(m);
