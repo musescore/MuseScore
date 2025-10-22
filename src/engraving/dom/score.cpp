@@ -1382,7 +1382,7 @@ void Score::spatiumChanged(double oldValue, double newValue)
     for (Staff* staff : m_staves) {
         staff->spatiumChanged(oldValue, newValue);
     }
-    m_layoutOptions.noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, newValue / SPATIUM20);
+    m_layoutOptions.noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, newValue / style().defaultSpatium());
     createPaddingTable();
 }
 
@@ -6008,7 +6008,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     }
 
     m_engravingFont = engravingFonts()->fontByName(style().value(Sid::musicalSymbolFont).value<String>().toStdString());
-    m_layoutOptions.noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, style().spatium() / SPATIUM20);
+    m_layoutOptions.noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, style().spatium() / style().defaultSpatium());
 
     if (this->cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
         if (this->isMaster()) {
