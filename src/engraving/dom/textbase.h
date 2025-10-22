@@ -235,7 +235,6 @@ public:
     bool operator ==(const TextFragment& f) const;
 
     TextFragment split(int column);
-    void draw(muse::draw::Painter*, const TextBase*) const;
     muse::draw::Font font(const TextBase*) const;
     int columns() const;
     void changeFormat(FormatId id, const FormatValue& data);
@@ -253,7 +252,7 @@ public:
 
     bool operator ==(const TextBlock& x) const { return m_fragments == x.m_fragments; }
     bool operator !=(const TextBlock& x) const { return m_fragments != x.m_fragments; }
-    void draw(muse::draw::Painter*, const TextBase*) const;
+
     const std::list<TextFragment>& fragments() const { return m_fragments; }
     std::list<TextFragment>& fragments() { return m_fragments; }
     std::list<TextFragment> fragmentsWithoutEmpty();
