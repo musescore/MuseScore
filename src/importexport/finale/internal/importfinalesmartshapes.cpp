@@ -209,12 +209,19 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     centerShortTextOffset = evpuToPointF(customLine->centerAbbrX, customLine->lineStartY - customLine->centerAbbrY);
 }
 
-static bool elementsValidForSpannerType(const ElementType type, const EngravingItem* startElement, const EngravingItem* endElement)
+static bool elementsValidForSpannerType(const ElementType type, EngravingItem*& startElement, EngravingItem*& endElement)
 {
     switch (type) {
     case ElementType::GLISSANDO:
     case ElementType::GUITAR_BEND:
     case ElementType::NOTELINE:
+        // bendHat guitar bend is chord-anchored, re-anchor here
+        if (startElement && startElement->isChord()) {
+            startElement = toChord(startElement)->upNote();
+        }
+        if (endElement && endElement->isChord()) {
+            endElement = toChord(endElement)->upNote();
+        }
         return startElement && startElement->isNote() && endElement && endElement->isNote();
     case ElementType::SLUR:
         return startElement && startElement->isChordRest() && endElement && endElement->isChordRest();
@@ -375,7 +382,6 @@ void FinaleParser::importSmartShapes()
         newSpanner->setTick2(endTick);
 
         // Set properties
-        /// @todo guitar bends and their type
         newSpanner->setVisible(!smartShape->hidden);
 
         if (customLine) {
@@ -437,6 +443,9 @@ void FinaleParser::importSmartShapes()
                 glissando->setShowText(!glissando->text().empty());
             } else if (newSpanner->isOttava()) {
                 newSpanner->setPlaySpanner(false); // Can custom ottavas have playback?
+            } else if (newSpanner->isGuitarBend()) {
+                // Assume custom line is for tab bends (with arrow)
+                m_score->style().set(Sid::guitarBendLineWidthTab, customLine->lineWidth);
             }
         } else {
             /// @todo line width not inheriting from style?
@@ -484,7 +493,20 @@ void FinaleParser::importSmartShapes()
             }
         }
 
+        // Some guitar bends are both pre-built and have a custom line component
+        if (type == ElementType::GUITAR_BEND) {
+            if (newSpanner->startElement() == newSpanner->endElement()) {
+                toGuitarBend(newSpanner)->setType(GuitarBendType::SLIGHT_BEND);
+            } else if (toNote(newSpanner->startElement())->chord()->isGrace()) {
+                toGuitarBend(newSpanner)->setType(GuitarBendType::GRACE_NOTE_BEND);
+                toGuitarBend(newSpanner)->setEndTimeFactor(GuitarBend::GRACE_NOTE_BEND_DEFAULT_END_TIME_FACTOR);
+            } else {
+                toGuitarBend(newSpanner)->setType(GuitarBendType::BEND);
+            }
+        }
+
         if (newSpanner->anchor() == Spanner::Anchor::NOTE) {
+            newSpanner->setParent(startElement);
             toNote(startElement)->add(newSpanner);
             logger()->logInfo(String(u"Added spanner of %1 type to note at tick %2, end: %3").arg(TConv::userName(type).translated(), startTick.toString(), endTick.toString()));
         } else {
@@ -492,7 +514,8 @@ void FinaleParser::importSmartShapes()
             logger()->logInfo(String(u"Added spanner of %1 type at tick %2, end: %3").arg(TConv::userName(type).translated(), startTick.toString(), endTick.toString()));
         }
 
-        if (!newSpanner->isSLine()) {
+        // Layout is currently only supported for segment-based lines
+        if (!newSpanner->isSLine() || newSpanner->anchor() == Spanner::Anchor::NOTE) {
             continue;
         }
 
