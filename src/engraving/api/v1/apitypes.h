@@ -831,6 +831,7 @@ enum class Tid {
     HARP_PEDAL_TEXT_DIAGRAM  = int(mu::engraving::TextStyleType::HARP_PEDAL_TEXT_DIAGRAM),
 
     /// Line-oriented styles
+    SYSTEM_TEXTLINE  = int(mu::engraving::TextStyleType::SYSTEM_TEXTLINE),
     TEXTLINE  = int(mu::engraving::TextStyleType::TEXTLINE),
     NOTELINE  = int(mu::engraving::TextStyleType::NOTELINE),
     VOLTA     = int(mu::engraving::TextStyleType::VOLTA),
