@@ -369,6 +369,11 @@ Ret Score::putNote(const Position& p, bool replace)
     m_is.setTrack(p.staffIdx * VOICES + m_is.voice());
     m_is.setSegment(s);
 
+    if (p.beyondScore) {
+        appendMeasures(1);
+        m_is.moveToNextInputPos();
+    }
+
     if (mu::engraving::Excerpt* excerpt = score()->excerpt()) {
         const TracksMap& tracks = excerpt->tracksMapping();
 
