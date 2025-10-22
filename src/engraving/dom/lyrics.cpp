@@ -508,9 +508,9 @@ PropertyValue Lyrics::propertyDefault(Pid id) const
         return 0;
     case Pid::AVOID_BARLINES:
         return style().styleB(Sid::lyricsAvoidBarlines);
-    case Pid::ALIGN:
+    case Pid::POSITION:
         if (isMelisma()) {
-            return style().styleV(Sid::lyricsMelismaAlign);
+            return style().styleV(Sid::lyricsMelismaAlign).value<Align>().horizontal;
         }
     // fall through
     default:
@@ -596,7 +596,7 @@ void Lyrics::removeInvalidSegments()
         m_separator->setTicks(Fraction(0, 1));
         m_separator->removeUnmanaged();
         m_separator = nullptr;
-        setAlign(propertyDefault(Pid::ALIGN).value<Align>());
+        setPosition(propertyDefault(Pid::POSITION).value<AlignH>());
         if (m_syllabic == LyricsSyllabic::BEGIN || m_syllabic == LyricsSyllabic::SINGLE) {
             undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::SINGLE));
         } else {
