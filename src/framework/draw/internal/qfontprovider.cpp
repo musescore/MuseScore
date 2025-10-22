@@ -25,6 +25,7 @@
 #include <QPaintDevice>
 #include <QFontDatabase>
 #include <QFontMetricsF>
+#include <qrawfont.h>
 
 #include "log.h"
 
@@ -96,14 +97,21 @@ bool QFontProvider::inFont(const Font& f, Char ch) const
 
 bool QFontProvider::inFontUcs4(const Font& f, char32_t ucs4) const
 {
-    if (!QFontMetricsF(f.toQFont(), &device).inFontUcs4(ucs4)) {
+    // NOTE: QFontMetricsF::inFontUcs4 is unreliable for our use case because it uses Qt's fallback
+    // system even if the flag noFontMerging is set, and returns true if the character
+    // is found in any of the fallbacks. We need to use instead QRawFont, which represents the
+    // *actual* font, not Qt's interpretation of the query. From QRawFont we can query the glyph index
+    // of a character (zero if not in font) and the bounding rectangle of the actual glyph at that index.
+    QRawFont qRawFont = QRawFont::fromFont(f.toQFont());
+    int glyphIndex = qRawFont.glyphIndexesForString(QString(QChar::fromUcs4(ucs4)))[0];
+    if (glyphIndex == 0) {
         return false;
     }
 
     //! @NOTE some symbols in fonts dont have glyph. For example U+ee80
     //! exists in Bravura.otf but doesn't have glyph
     //! so QFontMetricsF returns true in that case
-    return boundingRect(f, ucs4).isValid();
+    return qRawFont.boundingRect(glyphIndex).isValid();
 }
 
 double QFontProvider::horizontalAdvance(const Font& f, const String& string) const
