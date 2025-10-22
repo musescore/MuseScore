@@ -5665,6 +5665,74 @@ void TLayout::layoutBaseTextBase(TextBase* item, LayoutContext&)
     layoutBaseTextBase(item, item->mutldata());
 }
 
+static void textHorizontalLayout(const TextBase* item, Shape& shape, double maxBlockWidth, TextBase::LayoutData* ldata)
+{
+    double leftMargin = 0.0;
+    double layoutWidth = 0;
+    EngravingItem* parent = item->parentItem();
+    if (parent && item->layoutToParentWidth()) {
+        layoutWidth = parent->width();
+        switch (parent->type()) {
+        case ElementType::HBOX:
+        case ElementType::VBOX:
+        case ElementType::TBOX: {
+            Box* b = toBox(parent);
+            layoutWidth -= ((b->leftMargin() + b->rightMargin()) * DPMM);
+            leftMargin = b->leftMargin() * DPMM;
+        }
+        break;
+        case ElementType::PAGE: {
+            Page* p = toPage(parent);
+            layoutWidth -= (p->lm() + p->rm());
+            leftMargin = p->lm();
+        }
+        break;
+            break;
+        default:
+            ASSERT_X("Lay out to parent width only valid for items with page or frame as parent");
+        }
+    }
+
+    // Position and alignment
+    bool dynamicAlwaysCentered = item->isDynamic() && item->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();//TODO move to dynamic layout like marker
+    for (size_t i = 0; i < ldata->blocks.size(); ++i) {
+        TextBlock& textBlock = ldata->blocks[i];
+        double xAdj = leftMargin - textBlock.boundingRect().left();
+
+        // Set position relative to reference point
+        AlignH position = item->position();
+        if (position == AlignH::HCENTER || dynamicAlwaysCentered) {
+            xAdj += (layoutWidth - maxBlockWidth) * .5;
+        } else if (position == AlignH::RIGHT) {
+            xAdj += layoutWidth - maxBlockWidth;
+        }
+
+        double diff = maxBlockWidth - textBlock.boundingRect().width();
+        if (muse::RealIsNull(diff)) {
+            // This is the longest line, don't align
+            for (TextFragment& f : textBlock.fragments()) {
+                f.pos.rx() += xAdj;
+            }
+            textBlock.shape().translate(PointF(xAdj, 0.0));
+            shape.add(textBlock.shape().translated(PointF(0.0, textBlock.y())));
+            continue;
+        }
+        // Align relative to the longest line
+        AlignH alignH = item->align().horizontal;
+        if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
+            xAdj += diff * 0.5;
+        } else if (alignH == AlignH::RIGHT) {
+            xAdj += diff;
+        }
+
+        for (TextFragment& fragment : textBlock.fragments()) {
+            fragment.pos.rx() += xAdj;
+        }
+        textBlock.shape().translate(PointF(xAdj, 0.0));
+        shape.add(textBlock.shape().translated(PointF(0.0, textBlock.y())));
+    }
+}
+
 void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ldata)
 {
     if (item->explicitParent() && item->layoutToParentWidth()) {
@@ -5675,7 +5743,6 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
         item->createBlocks(ldata);
     }
 
-    Shape shape;
     double y = 0.0;
 
     double maxBlockWidth = -DBL_MAX;
@@ -5685,38 +5752,11 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
         t.layout(item);
         y += t.lineSpacing();
         t.setY(y);
-        if (!item->positionSeparateFromAlignment()) {
-            shape.add(t.shape().translated(PointF(0.0, y)));
-        }
         maxBlockWidth = std::max(maxBlockWidth, t.boundingRect().width());
     }
 
-    // ALIGN TEXT
-    // TODO - implement for all text items
-    if (item->positionSeparateFromAlignment()) {
-        for (size_t i = 0; i < ldata->blocks.size(); ++i) {
-            TextBlock& t = ldata->blocks[i];
-            double diff = maxBlockWidth - t.boundingRect().width();
-            if (muse::RealIsNull(diff)) {
-                shape.add(t.shape().translated(PointF(0.0, t.y())));
-                continue;
-            }
-            double rx = 0.0;
-            AlignH alignH = item->align().horizontal;
-            bool dynamicAlwaysCentered = item->isDynamic() && item->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();
-            if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
-                rx = diff * 0.5;
-            } else if (alignH == AlignH::RIGHT) {
-                rx = diff;
-            }
-
-            for (TextFragment& f : t.fragments()) {
-                f.pos.rx() += rx;
-            }
-            t.shape().translate(PointF(rx, 0.0));
-            shape.add(t.shape().translated(PointF(0.0, t.y())));
-        }
-    }
+    Shape shape;
+    textHorizontalLayout(item, shape, maxBlockWidth, ldata);
 
     RectF bb = shape.bbox();
 

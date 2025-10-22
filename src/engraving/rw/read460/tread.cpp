@@ -4382,6 +4382,14 @@ bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
     const AsciiStringView tag(e.name());
     for (Pid i : TextBasePropertyId) {
         if (TRead::readProperty(t, tag, e, ctx, i)) {
+            if (ctx.mscVersion() < 470 || tag != "align" || t->isMarker()) {
+                return true;
+            }
+
+            t->setPosition(t->align().horizontal);
+            if (t->position() != t->propertyDefault(Pid::POSITION).value<AlignH>()) {
+                t->setPropertyFlags(Pid::POSITION, PropertyFlags::UNSTYLED);
+            }
             return true;
         }
     }
