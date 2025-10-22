@@ -1208,6 +1208,7 @@ bool Score::getPosition(Position* pos, const PointF& p, voice_idx_t voice) const
     double x         = pppp.x();
     Segment* segment = 0;
     pos->segment     = 0;
+    pos->beyondScore = false;
 
     // int track = pos->staffIdx * VOICES + voice;
     track_idx_t track = pos->staffIdx * VOICES;
@@ -1223,6 +1224,7 @@ bool Score::getPosition(Position* pos, const PointF& p, voice_idx_t voice) const
         if (!ns) {
             if (measure == score()->lastMeasure() && x > measure->ldata()->bbox().width()) {
                 x = measure->ldata()->bbox().width() + score()->style().spatium();
+                pos->beyondScore = true;
             } else {
                 x = x1;
             }

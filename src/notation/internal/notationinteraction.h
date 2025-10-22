@@ -75,6 +75,7 @@ public:
     void showShadowNoteForMidiPitch(const uint8_t pitch) override;
     void hideShadowNote() override;
     muse::RectF shadowNoteRect() const override;
+    muse::RectF previewMeasureRect() const override;
     muse::async::Channel</*visible*/ bool> shadowNoteChanged() const override;
 
     // Visibility
