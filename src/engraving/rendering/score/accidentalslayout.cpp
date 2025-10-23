@@ -1058,10 +1058,14 @@ void AccidentalsLayout::collectVerticalSets(
 
 void AccidentalsLayout::alignVerticalSets(AccidentalGroups& vertSets, AccidentalsLayoutContext& ctx)
 {
-    std::map<int, std::vector<Accidental*> > columns;
+    AccidentalGroups accidentalColumns;
     for (std::vector<Accidental*>& group : ctx.accidentalSubChords) {
         for (Accidental* acc : group) {
-            columns[acc->ldata()->column].push_back(acc);
+            size_t column = acc->ldata()->column;
+            while (accidentalColumns.size() <= column) {
+                accidentalColumns.push_back(std::vector<Accidental*>());
+            }
+            accidentalColumns[column].push_back(acc);
         }
     }
 
@@ -1078,13 +1082,13 @@ void AccidentalsLayout::alignVerticalSets(AccidentalGroups& vertSets, Accidental
         }
 
         // Re-check the outer ones for collisions
-        int curColumn = vertSet.front()->ldata()->column.value();
+        size_t curColumn = vertSet.front()->ldata()->column.value();
         Shape accidentalGroupShape;
-        for (auto& column : columns) {
-            if (column.first < curColumn) {
+        for (size_t column = 0; column < accidentalColumns.size(); ++column) {
+            if (column < curColumn) {
                 continue;
             }
-            for (Accidental* acc : column.second) {
+            for (Accidental* acc : accidentalColumns[column]) {
                 double curXPos = xPosRelativeToSegment(acc);
                 Shape accShape = acc->shape().translate(PointF(curXPos, acc->note()->y()));
                 if (!muse::contains(vertSet, acc)) {

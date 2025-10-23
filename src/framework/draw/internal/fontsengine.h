@@ -51,7 +51,7 @@ public:
     double ascent(const Font& f) const override;
     double descent(const Font& f) const override;
 
-    bool inFontUcs4(const Font& f, char32_t ucs4) const override;
+    bool inFont(const Font& f, char32_t ucs4) const override;
 
     double horizontalAdvance(const Font& f, const char32_t& ch) const override;
     double horizontalAdvance(const Font& f, const std::u32string& text) const override;

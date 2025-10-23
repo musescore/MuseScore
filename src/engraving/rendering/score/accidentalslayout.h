@@ -76,9 +76,6 @@ private:
         size_t largeGroupLimit() const { return m_largeGroupLimit; }
         size_t smallGroupLimit() const { return m_smallGroupLimit; }
 
-        bool updateColumns() const { return m_updateColumns; }
-        void setUpdateColumns(bool v) { m_updateColumns = v; }
-
     private:
         void initConstants();
 
@@ -101,8 +98,6 @@ private:
 
         static constexpr size_t m_smallGroupLimit = 3;
         static constexpr size_t m_largeGroupLimit = 6;
-
-        bool m_updateColumns = true;
     };
 
     using AccidentalsVectorView = muse::VectorView<Accidental*>;
