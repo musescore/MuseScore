@@ -65,7 +65,7 @@ double FontProvider::descent(const muse::draw::Font& f) const
 
 bool FontProvider::inFont(const muse::draw::Font& f, char32_t ucs4) const
 {
-    return fontsEngine()->inFontUcs4(f, ucs4);
+    return fontsEngine()->inFont(f, ucs4);
 }
 
 // Text

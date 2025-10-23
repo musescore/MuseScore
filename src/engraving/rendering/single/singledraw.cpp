@@ -961,11 +961,12 @@ void SingleDraw::draw(const Bracket* item, Painter* painter, const PaintOptions&
     switch (item->bracketType()) {
     case BracketType::BRACE: {
         double h = ldata->bracketHeight;
-        double mag = h / (100 * item->magS());
+        double glyphHeight = item->symHeight(ldata->braceSymbol);
+        double mag = h / glyphHeight;
         painter->setPen(item->curColor(opt));
         painter->save();
         painter->scale(item->magx(), mag);
-        item->drawSymbol(ldata->braceSymbol, painter, PointF(0, 100 * item->magS()));
+        item->drawSymbol(ldata->braceSymbol, painter, PointF(0, glyphHeight));
         painter->restore();
     }
     break;

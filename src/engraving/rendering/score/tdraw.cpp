@@ -1052,7 +1052,7 @@ void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
             painter->drawPath(ldata->path);
         } else {
             double h = ldata->bracketHeight;
-            double glyphHeight = item->symBbox(ldata->braceSymbol).height();
+            double glyphHeight = item->symHeight(ldata->braceSymbol);
             double mag = h / glyphHeight;
             painter->setPen(item->curColor(opt));
             painter->save();

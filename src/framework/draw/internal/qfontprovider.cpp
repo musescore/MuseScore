@@ -25,7 +25,7 @@
 #include <QPaintDevice>
 #include <QFontDatabase>
 #include <QFontMetricsF>
-#include <qrawfont.h>
+#include <QRawFont>
 
 #include "log.h"
 

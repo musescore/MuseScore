@@ -149,7 +149,7 @@ double FontsEngine::descent(const Font& f) const
     return from_f26d6(rf->face->descent()) * rf->pixelScale();
 }
 
-bool FontsEngine::inFontUcs4(const Font& f, char32_t ucs4) const
+bool FontsEngine::inFont(const Font& f, char32_t ucs4) const
 {
     RequireFace* rf = fontFace(f);
     IF_ASSERT_FAILED(rf && rf->face) {
