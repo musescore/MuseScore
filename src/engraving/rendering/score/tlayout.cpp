@@ -5695,14 +5695,13 @@ static void textHorizontalLayout(const TextBase* item, Shape& shape, double maxB
     }
 
     // Position and alignment
-    bool dynamicAlwaysCentered = item->isDynamic() && item->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();//TODO move to dynamic layout like marker
     for (size_t i = 0; i < ldata->blocks.size(); ++i) {
         TextBlock& textBlock = ldata->blocks[i];
         double xAdj = leftMargin - textBlock.boundingRect().left();
 
         // Set position relative to reference point
         AlignH position = item->position();
-        if (position == AlignH::HCENTER || dynamicAlwaysCentered) {
+        if (position == AlignH::HCENTER) {
             xAdj += (layoutWidth - maxBlockWidth) * .5;
         } else if (position == AlignH::RIGHT) {
             xAdj += layoutWidth - maxBlockWidth;
@@ -5720,7 +5719,7 @@ static void textHorizontalLayout(const TextBase* item, Shape& shape, double maxB
         }
         // Align relative to the longest line
         AlignH alignH = item->align().horizontal;
-        if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
+        if (alignH == AlignH::HCENTER) {
             xAdj += diff * 0.5;
         } else if (alignH == AlignH::RIGHT) {
             xAdj += diff;
