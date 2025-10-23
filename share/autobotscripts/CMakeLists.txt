@@ -30,6 +30,7 @@ install(FILES
       TC7_UsingExport.js
       TC8_EngravingText.js
       "TC9_BigScore(perfomance).js"
+      "TC10_PlayToggle.js"
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts
       )
 

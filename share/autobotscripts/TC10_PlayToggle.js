@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2021 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
 
-StyledDialogView {
-    id: root
+var Navigation = require("steps/Navigation.js")
+var Score = require("steps/Score.js")
+var Palette = require("steps/Palette.js")
 
-    title: "Autobot"
+var testCase = {
+    name: "TC10: PlayToggle",
+    description: "Let's check play toggle",
+    steps: [
+        {name: "PlayToggle", func: function() {
+            for (let i = 0; i < 1000; i++) {
+                api.dispatcher.dispatch("play")
+                api.autobot.sleep(100)
+            }
+        }},
+    ]
+};
 
-    //! NOTE It is necessary that it can be determined that this is an object for diagnostics
-    contentItem.objectName: panel.objectName
-
-    contentHeight: 600
-    contentWidth: 400
-    resizable: true
-
-    //x: 850
-
-    ScriptsPanel {
-        id: panel
-        anchors.fill: parent
-    }
+function main()
+{
+    api.autobot.setInterval(500)
+    api.autobot.runTestCase(testCase)
 }
