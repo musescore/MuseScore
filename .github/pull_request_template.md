@@ -8,7 +8,7 @@ Resolves: #NNNNN <!-- Replace `NNNNN` with a GitHub issue number, or a direct li
 - [ ] The title of the PR describes the problem it addresses
 - [ ] Each commit's message describes its purpose and effects, and references the issue it resolves
 - [ ] If changes are extensive, there is a sequence of easily reviewable commits
-- [ ] The code in the PR follows [the coding rules](https://github.com/musescore/MuseScore/wiki/CodeGuidelines)
+- [ ] The code in the PR follows [the coding rules](https://github.com/musescore/muse_framework/wiki/CodeGuidelines)
 - [ ] There are no unnecessary changes
 - [ ] The code compiles and runs on my machine, preferably after each commit individually
 - [ ] I created a unit test or vtest to verify the changes I made (if applicable)
