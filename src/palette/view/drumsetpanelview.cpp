@@ -146,14 +146,15 @@ void DrumsetPanelView::updateColors()
     options.backgroundColor = notationConfiguration()->foregroundColor();
     options.selectionColor = engravingConfiguration()->selectionColor();
 
-    if (engravingConfiguration()->scoreInversionEnabled()) {
+    const bool inversionEnabled = engravingConfiguration()->scoreInversionEnabled();
+    if (inversionEnabled) {
         options.linesColor = engravingConfiguration()->scoreInversionColor();
     } else {
         options.linesColor = engravingConfiguration()->defaultColor();
     }
 
     options.useElementColors = true;
-    options.colorsInversionEnabled = true;
+    options.colorsInversionEnabled = inversionEnabled;
 
     widget->setPaintOptions(options);
 
