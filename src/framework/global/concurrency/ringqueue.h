@@ -25,5 +25,5 @@
 namespace muse {
 //! NOTE Single Producer/Single Consumer
 template<typename T>
-using RingQueue = kors::async::RingQueue<T>;
+using RingQueue = kors::queue::RingQueue<T>;
 }

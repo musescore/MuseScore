@@ -25,5 +25,5 @@
 namespace muse {
 //! NOTE Single Producer/Single Consumer
 template<typename T>
-using RpcQueue = kors::async::RpcQueue<T>;
+using RpcQueue = kors::queue::RpcQueue<T>;
 }
