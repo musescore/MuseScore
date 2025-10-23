@@ -4501,7 +4501,7 @@ void TLayout::layoutRehearsalMark(const RehearsalMark* item, RehearsalMark::Layo
 
     // special case for right aligned rehearsal marks at start of system
     // left align with start of measure if that is further left
-    if (item->align() == AlignH::RIGHT) {
+    if (item->position() == AlignH::RIGHT) {
         ldata->setPosX(std::min(ldata->pos().x(), measureX + ldata->bbox().width()));
     }
 
