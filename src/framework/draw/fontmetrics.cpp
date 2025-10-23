@@ -74,9 +74,9 @@ double FontMetrics::horizontalAdvance(const String& string) const
     return fontProvider()->horizontalAdvance(m_font, string);
 }
 
-double FontMetrics::horizontalAdvance(const Char& ch) const
+double FontMetrics::horizontalAdvance(char32_t ucs4) const
 {
-    return fontProvider()->horizontalAdvance(m_font, ch);
+    return fontProvider()->horizontalAdvance(m_font, ucs4);
 }
 
 RectF FontMetrics::boundingRect(const String& string) const
@@ -84,14 +84,9 @@ RectF FontMetrics::boundingRect(const String& string) const
     return fontProvider()->boundingRect(m_font, string);
 }
 
-RectF FontMetrics::boundingRect(const Char& ch) const
+RectF FontMetrics::boundingRect(char32_t ucs4) const
 {
-    return fontProvider()->boundingRect(m_font, ch);
-}
-
-RectF FontMetrics::boundingRect(const RectF& r, int flags, const String& string) const
-{
-    return fontProvider()->boundingRect(m_font, r, flags, string);
+    return fontProvider()->boundingRect(m_font, ucs4);
 }
 
 RectF FontMetrics::tightBoundingRect(const String& string) const
@@ -104,14 +99,9 @@ RectF FontMetrics::tightBoundingRect(const Char& ch) const
     return fontProvider()->tightBoundingRect(m_font, ch);
 }
 
-bool FontMetrics::inFont(Char ch) const
+bool FontMetrics::inFont(char32_t ucs4) const
 {
-    return fontProvider()->inFont(m_font, ch);
-}
-
-bool FontMetrics::inFontUcs4(char32_t ucs4) const
-{
-    return fontProvider()->inFontUcs4(m_font, ucs4);
+    return fontProvider()->inFont(m_font, ucs4);
 }
 
 // Static

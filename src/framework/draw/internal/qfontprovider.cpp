@@ -90,12 +90,7 @@ double QFontProvider::descent(const Font& f) const
     return QFontMetricsF(f.toQFont(), &device).descent();
 }
 
-bool QFontProvider::inFont(const Font& f, Char ch) const
-{
-    return QFontMetricsF(f.toQFont(), &device).inFont(ch);
-}
-
-bool QFontProvider::inFontUcs4(const Font& f, char32_t ucs4) const
+bool QFontProvider::inFont(const Font& f, char32_t ucs4) const
 {
     // NOTE: QFontMetricsF::inFontUcs4 is unreliable for our use case because it uses Qt's fallback
     // system even if the flag noFontMerging is set, and returns true if the character
@@ -119,9 +114,13 @@ double QFontProvider::horizontalAdvance(const Font& f, const String& string) con
     return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(string);
 }
 
-double QFontProvider::horizontalAdvance(const Font& f, const Char& ch) const
+double QFontProvider::horizontalAdvance(const Font& f, char32_t ucs4) const
 {
-    return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(ch);
+    if (Char::requiresSurrogates(ucs4)) {
+        return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(String::fromUcs4(ucs4));
+    }
+
+    return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(static_cast<char16_t>(ucs4));
 }
 
 RectF QFontProvider::boundingRect(const Font& f, const String& string) const
@@ -129,14 +128,13 @@ RectF QFontProvider::boundingRect(const Font& f, const String& string) const
     return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(string));
 }
 
-RectF QFontProvider::boundingRect(const Font& f, const Char& ch) const
+RectF QFontProvider::boundingRect(const Font& f, char32_t ucs4) const
 {
-    return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(ch));
-}
+    if (Char::requiresSurrogates(ucs4)) {
+        return RectF::fromQRectF(QFontMetrics(f.toQFont(), &device).boundingRect(String::fromUcs4(ucs4)));
+    }
 
-RectF QFontProvider::boundingRect(const Font& f, const RectF& r, int flags, const String& string) const
-{
-    return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(r.toQRectF(), flags, string));
+    return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(static_cast<char16_t>(ucs4)));
 }
 
 RectF QFontProvider::tightBoundingRect(const Font& f, const String& string) const

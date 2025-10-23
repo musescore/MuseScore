@@ -846,9 +846,9 @@ void EngravingFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObj
 
 void EngravingFont::computeMetrics(EngravingFont::Sym& sym, const Smufl::Code& code)
 {
-    if (fontProvider()->inFontUcs4(m_font, code.smuflCode)) {
+    if (fontProvider()->inFont(m_font, code.smuflCode)) {
         sym.code = code.smuflCode;
-    } else if (fontProvider()->inFontUcs4(m_font, code.musicSymBlockCode)) {
+    } else if (fontProvider()->inFont(m_font, code.musicSymBlockCode)) {
         sym.code = code.musicSymBlockCode;
     }
 
