@@ -5309,8 +5309,8 @@ void TLayout::layoutSticking(const Sticking* item, Sticking::LayoutData* ldata)
     LAYOUT_CALL_ITEM(item);
     layoutBaseTextBase(item, ldata);
 
-    AlignH itemAlign =  item->align().horizontal;
-    if (itemAlign != AlignH::LEFT) {
+    AlignH itemPosition =  item->position();
+    if (itemPosition != AlignH::LEFT) {
         const Segment* seg = item->segment();
         const Chord* chord = nullptr;
         track_idx_t sTrack = trackZeroVoice(item->track());
@@ -5326,7 +5326,7 @@ void TLayout::layoutSticking(const Sticking* item, Sticking::LayoutData* ldata)
         if (chord) {
             const Note* refNote = item->placeAbove() ? chord->upNote() : chord->downNote();
             double noteWidth = refNote->ldata()->bbox().width();
-            ldata->moveX(itemAlign == AlignH::HCENTER ? 0.5 * noteWidth : noteWidth);
+            ldata->moveX(itemPosition == AlignH::HCENTER ? 0.5 * noteWidth : noteWidth);
         }
     }
 
