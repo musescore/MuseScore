@@ -209,21 +209,34 @@ void EngineRpcController::init()
             else {
                 LOGI() << "Waiting for SF to load, trackName: " << trackName;
                 m_pendingTracks[sfname].emplace_back(PendingTrack { msg, seqId, trackName, playbackData, params });
-                soundFontRepository()->soundFontsChanged().onNotify(this,
-                                                                    [this, sfname, addTrackAndSendResponce]() {
-                    LOGD() << "isSoundFont: " << sfname << ", loaded: " << soundFontRepository()->isSoundFontLoaded(sfname);
-                    if (soundFontRepository()->isSoundFontLoaded(sfname)) {
-                        auto it = m_pendingTracks.find(sfname);
-                        if (it != m_pendingTracks.end()) {
-                            for (const PendingTrack& t : it->second) {
-                                addTrackAndSendResponce(t.msg, t.seqId, t.trackName, t.playbackData, t.params);
+
+                //! NOTE We subscribe for the first track for which a soundfont is not found.
+                //! When the notification is triggered, processing will be called for all tracks.
+                if (!m_soundFontsChangedSubscribed) {
+                    m_soundFontsChangedSubscribed = true;
+                    soundFontRepository()->soundFontsChanged().onNotify(this,
+                                                                        [this, addTrackAndSendResponce]() {
+                        std::vector<std::string> toRemove;
+                        for (auto& p : m_pendingTracks) {
+                            const std::string& sfname = p.first;
+                            if (soundFontRepository()->isSoundFontLoaded(sfname)) {
+                                for (const PendingTrack& t : p.second) {
+                                    addTrackAndSendResponce(t.msg, t.seqId, t.trackName, t.playbackData, t.params);
+                                }
+                                toRemove.push_back(sfname);
                             }
-                            it->second.clear();
                         }
 
-                        soundFontRepository()->soundFontsChanged().resetOnNotify(this);
-                    }
-                });
+                        for (const std::string& sf : toRemove) {
+                            m_pendingTracks.erase(sf);
+                        }
+
+                        if (m_pendingTracks.empty()) {
+                            soundFontRepository()->soundFontsChanged().disconnect(this);
+                            m_soundFontsChangedSubscribed = false;
+                        }
+                    });
+                }
             }
         }
     });
@@ -611,6 +624,7 @@ void EngineRpcController::onMethod(OperationType type, rpc::Method method, const
 
     channel()->onMethod(method, [this, type, method, handler](const Msg& msg) {
         IAudioEngine::Operation func = [method, handler, msg]() {
+            UNUSED(method);
             BEGIN_METHOD_DURATION
             handler(msg);
             END_METHOD_DURATION(method)
@@ -623,10 +637,10 @@ void EngineRpcController::deinit()
 {
     ONLY_AUDIO_RPC_THREAD;
 
-    playback()->trackAdded().resetOnReceive(this);
-    playback()->trackRemoved().resetOnReceive(this);
-    playback()->inputParamsChanged().resetOnReceive(this);
-    playback()->outputParamsChanged().resetOnReceive(this);
+    playback()->trackAdded().disconnect(this);
+    playback()->trackRemoved().disconnect(this);
+    playback()->inputParamsChanged().disconnect(this);
+    playback()->outputParamsChanged().disconnect(this);
 
     for (const Method& m : m_usedMethods) {
         channel()->onMethod(m, nullptr);

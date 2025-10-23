@@ -42,6 +42,14 @@ MixerPanelModel::MixerPanelModel(QObject* parent)
     controller()->currentTrackSequenceIdChanged().onNotify(this, [this]() {
         load();
     });
+
+    controller()->trackAdded().onReceive(this, [this](const TrackId trackId) {
+        onTrackAdded(trackId);
+    });
+
+    controller()->trackRemoved().onReceive(this, [this](const TrackId trackId) {
+        removeItem(trackId);
+    });
 }
 
 void MixerPanelModel::load()
@@ -55,14 +63,6 @@ void MixerPanelModel::load()
     }
 
     m_currentTrackSequenceId = sequenceId;
-
-    controller()->trackAdded().onReceive(this, [this](const TrackId trackId) {
-        onTrackAdded(trackId);
-    });
-
-    controller()->trackRemoved().onReceive(this, [this](const TrackId trackId) {
-        removeItem(trackId);
-    });
 
     loadItems();
 }
@@ -291,7 +291,7 @@ void MixerPanelModel::setupConnections()
         if (m_masterChannelItem) {
             loadOutputParams(m_masterChannelItem, std::move(params));
         }
-    }, AsyncMode::AsyncSetRepeat);
+    }, Asyncable::Mode::SetReplace);
 
     controller()->auxChannelNameChanged().onReceive(this, [this](aux_channel_idx_t index, const std::string& name) {
         for (MixerChannelItem* item : m_mixerChannelList) {

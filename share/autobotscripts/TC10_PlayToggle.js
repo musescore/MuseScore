@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited and others
+ * Copyright (C) 2021 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,11 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
 
-#include "../thirdparty/kors_rpcqueue/rpcqueue/ringqueue.h"
-namespace muse {
-//! NOTE Single Producer/Single Consumer
-template<typename T>
-using RingQueue = kors::queue::RingQueue<T>;
+var Navigation = require("steps/Navigation.js")
+var Score = require("steps/Score.js")
+var Palette = require("steps/Palette.js")
+
+var testCase = {
+    name: "TC10: PlayToggle",
+    description: "Let's check play toggle",
+    steps: [
+        {name: "PlayToggle", func: function() {
+            for (let i = 0; i < 1000; i++) {
+                api.dispatcher.dispatch("play")
+                api.autobot.sleep(100)
+            }
+        }},
+    ]
+};
+
+function main()
+{
+    api.autobot.setInterval(500)
+    api.autobot.runTestCase(testCase)
 }

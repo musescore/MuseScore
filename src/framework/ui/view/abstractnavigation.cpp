@@ -59,7 +59,7 @@ void AbstractNavigation::componentComplete()
 
     navigationController()->highlightChanged().onNotify(this, [this](){
         emit highlightChanged();
-    });
+    }, async::Asyncable::Mode::SetReplace);
 
     m_isComponentCompleted = true;
 }

@@ -34,5 +34,8 @@ class NotationToolBarModel : public muse::uicomponents::AbstractToolBarModel
 
 public:
     Q_INVOKABLE void load() override;
+
+private:
+    bool m_loaded = false;
 };
 }

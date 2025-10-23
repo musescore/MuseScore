@@ -101,11 +101,6 @@ void ExtensionsModule::resolveImports()
         ir->registerQmlUri(Uri("muse://extensions/apidump"), "Muse/Extensions/ExtensionsApiDumpDialog.qml");
     }
 
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<ExtensionsUiActions>(iocContext()));
-    }
-
     m_execPointsRegister->reg(moduleName(), { EXEC_DISABLED, TranslatableString("extensions", "Disabled") });
     m_execPointsRegister->reg(moduleName(), { EXEC_MANUALLY, TranslatableString("extensions", "Manually") });
 }

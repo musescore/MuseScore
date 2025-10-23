@@ -30,7 +30,7 @@ SOFTWARE.
 
 #include "ringqueue.h"
 
-namespace kors::queue {
+namespace kors::async {
 //! NOTE Single Producer/Single Consumer
 
 template<typename T>

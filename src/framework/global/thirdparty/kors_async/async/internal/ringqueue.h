@@ -30,7 +30,7 @@ SOFTWARE.
 #include <vector>
 #include <atomic>
 
-namespace kors::queue {
+namespace kors::async {
 //! NOTE Single Producer/Single Consumer
 template<typename T>
 class RingQueue

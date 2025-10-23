@@ -54,7 +54,7 @@ void EnginePlayback::deinit()
 
     m_sequences.clear();
 
-    disconnectAll();
+    async_disconnectAll();
 }
 
 void EnginePlayback::ensureMixerSubscriptions()

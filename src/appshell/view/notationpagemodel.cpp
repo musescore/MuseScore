@@ -51,6 +51,10 @@ void NotationPageModel::init()
 {
     TRACEFUNC;
 
+    if (m_inited) {
+        return;
+    }
+
     for (const ActionCode& actionCode : ApplicationUiActions::toggleDockActions().keys()) {
         DockName dockName = ApplicationUiActions::toggleDockActions()[actionCode];
         dispatcher()->reg(this, actionCode, [=]() { toggleDock(dockName); });
@@ -86,6 +90,8 @@ void NotationPageModel::init()
     notationConfiguration()->percussionPanelAutoShowModeChanged().onNotify(this, [this]() {
         scheduleUpdatePercussionPanelVisibility();
     });
+
+    m_inited = true;
 }
 
 QString NotationPageModel::notationToolBarName() const

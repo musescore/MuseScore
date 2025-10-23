@@ -71,7 +71,7 @@ MixerChannelItem::MixerChannelItem(QObject* parent, Type type, bool outputOnly, 
 
 MixerChannelItem::~MixerChannelItem()
 {
-    m_audioSignalChanges.resetOnReceive(this);
+    m_audioSignalChanges.disconnect(this);
 }
 
 MixerChannelItem::Type MixerChannelItem::type() const
@@ -323,7 +323,7 @@ void MixerChannelItem::loadAuxSendItems(const AuxSendsParams& auxSends)
         }
 
         emit auxSendItemListChanged();
-    }, AsyncMode::AsyncSetOnce);
+    });
 
     if (m_auxSendItems.size() == static_cast<int>(auxSends.size())) {
         return;

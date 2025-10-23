@@ -433,7 +433,7 @@ void RpcStream<Types...>::deinit()
 
     switch (m_type) {
     case StreamType::Send: {
-        m_ch.resetOnReceive(this);
+        m_ch.disconnect(this);
     } break;
     case StreamType::Receive: {
         m_rpc->onStream(m_streamId, nullptr);

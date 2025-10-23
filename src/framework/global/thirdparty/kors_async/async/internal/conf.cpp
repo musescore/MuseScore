@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2020 Igor Korsukov
+Copyright (c) Igor Korsukov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,40 +21,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef KORS_ASYNC_QUEUEDINVOKER_H
-#define KORS_ASYNC_QUEUEDINVOKER_H
 
-#include <functional>
-#include <queue>
-#include <map>
-#include <mutex>
-#include <thread>
+#include "../conf.h"
 
 namespace kors::async {
-class QueuedInvoker
-{
-public:
-
-    static QueuedInvoker* instance();
-
-    using Functor = std::function<void ()>;
-
-    void invoke(const std::thread::id& th, const Functor& f, bool isAlwaysQueued = false);
-    void processEvents();
-    void onMainThreadInvoke(const std::function<void(const std::function<void()>&, bool)>& f);
-
-private:
-
-    QueuedInvoker() = default;
-
-    using Queue = std::queue<Functor>;
-
-    std::recursive_mutex m_mutex;
-    std::map<std::thread::id, Queue > m_queues;
-
-    std::function<void(const std::function<void()>&, bool)> m_onMainThreadInvoke;
-    std::thread::id m_mainThreadID;
-};
+size_t conf::MAX_THREADS = 100;
+size_t conf::MAX_THREADS_PER_CHANNEL = 10;
+size_t conf::QUEUE_CAPACITY = 16;
+std::atomic<bool> conf::terminated = false;
 }
-
-#endif // KORS_ASYNC_QUEUEDINVOKER_H

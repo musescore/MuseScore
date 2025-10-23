@@ -235,8 +235,9 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     m_tickerProvider->start();
 
     //! --- Setup Async ---
-    m_asyncTicker.start(1, []() {
-        async::processEvents();
+    const std::thread::id thisThId = std::this_thread::get_id();
+    m_asyncTicker.start(1, [thisThId]() {
+        async::processMessages(thisThId);
     }, Ticker::Mode::Repeat);
 
     //! --- Diagnostics ---
@@ -280,6 +281,7 @@ void GlobalModule::onInit(const IApplication::RunMode&)
 void GlobalModule::onDeinit()
 {
     m_tickerProvider->stop();
+    muse::async::terminate();
 
 #ifdef Q_OS_WIN
     if (m_endTimePeriod) {

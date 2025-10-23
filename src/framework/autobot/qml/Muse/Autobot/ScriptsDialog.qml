@@ -35,7 +35,7 @@ StyledDialogView {
     contentWidth: 400
     resizable: true
 
-    x: 850
+    //x: 850
 
     ScriptsPanel {
         id: panel

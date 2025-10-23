@@ -51,8 +51,8 @@ public:
 
     virtual ~AbstractEventSequencer()
     {
-        m_playbackData.mainStream.resetOnReceive(this);
-        m_playbackData.offStream.resetOnReceive(this);
+        m_playbackData.mainStream.disconnect(this);
+        m_playbackData.offStream.disconnect(this);
     }
 
     void load(const mpe::PlaybackData& data)

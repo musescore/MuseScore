@@ -43,91 +43,53 @@ public:
     ~ChangedNotify() = default;
 
     template<typename Call>
-    void onChanged(Asyncable* receiver, Call f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
+    void onChanged(Asyncable* receiver, Call f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
-        m_data->ch.onReceive(receiver, [f](CallType type, const T&, const T&) {
-            if (type == CallType::Changed) {
-                f();
-            }
-        }, mode);
+        m_data->changed.onReceive(receiver, f, mode);
     }
 
     template<typename Call>
-    void onItemChanged(Asyncable* receiver, Call f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
+    void onItemChanged(Asyncable* receiver, Call f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
-        m_data->ch.onReceive(receiver, [f](CallType type, const T& item, const T&) {
-            if (type == CallType::ItemChanged) {
-                f(item);
-            }
-        }, mode);
+        m_data->itemChanged.onReceive(receiver, f, mode);
     }
 
     template<typename Call>
-    void onItemAdded(Asyncable* receiver, Call f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
+    void onItemAdded(Asyncable* receiver, Call f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
-        m_data->ch.onReceive(receiver, [f](CallType type, const T& item, const T&) {
-            if (type == CallType::ItemAdded) {
-                f(item);
-            }
-        }, mode);
+        m_data->itemAdded.onReceive(receiver, f, mode);
     }
 
     template<typename Call>
-    void onItemRemoved(Asyncable* receiver, Call f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
+    void onItemRemoved(Asyncable* receiver, Call f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
-        m_data->ch.onReceive(receiver, [f](CallType type, const T& item, const T&) {
-            if (type == CallType::ItemRemoved) {
-                f(item);
-            }
-        }, mode);
+        m_data->itemRemoved.onReceive(receiver, f, mode);
     }
 
     template<typename Call>
-    void onItemReplaced(Asyncable* receiver, Call f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
+    void onItemReplaced(Asyncable* receiver, Call f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
-        m_data->ch.onReceive(receiver, [f](CallType type, const T& oldItem, const T& newItem) {
-            if (type == CallType::ItemRemoved) {
-                f(oldItem, newItem);
-            }
-        }, mode);
+        m_data->itemReplaced.onReceive(receiver, f, mode);
     }
 
     void disconnect(Asyncable* receiver)
     {
-        m_data->ch.resetOnReceive(receiver);
+        m_data->changed.disconnect(receiver);
+        m_data->itemChanged.disconnect(receiver);
+        m_data->itemAdded.disconnect(receiver);
+        m_data->itemRemoved.disconnect(receiver);
+        m_data->itemReplaced.disconnect(receiver);
     }
 
 private:
     friend class ChangedNotifier<T>;
 
-    enum class CallType {
-        Undefined = 0,
-        Changed,
-        ItemChanged,
-        ItemAdded,
-        ItemRemoved,
-        ItemReplaced
-    };
-
-    void send(CallType type, const T& a1, const T& a2)
-    {
-        m_data->ch.send(type, a1, a2);
-    }
-
-    void send(CallType type, const T& a1)
-    {
-        static T dummy;
-        m_data->ch.send(type, a1, dummy);
-    }
-
-    void send(CallType type)
-    {
-        static T dummy;
-        m_data->ch.send(type, dummy, dummy);
-    }
-
     struct Data {
-        Channel<CallType, const T&, const T&> ch;
+        Channel<> changed;
+        Channel<const T&> itemChanged;
+        Channel<const T&> itemAdded;
+        Channel<const T&> itemRemoved;
+        Channel<const T&, const T&> itemReplaced;
     };
 
     std::shared_ptr<Data> m_data;
@@ -136,8 +98,6 @@ private:
 template<typename T>
 class ChangedNotifier
 {
-    using CallType = typename ChangedNotify<T>::CallType;
-
 public:
     ChangedNotifier()
         : m_notify(std::make_shared<ChangedNotify<T> >()) {}
@@ -150,27 +110,27 @@ public:
 
     void changed()
     {
-        m_notify->send(CallType::Changed);
+        m_notify->m_data->changed.send();
     }
 
     void itemChanged(const T& item)
     {
-        m_notify->send(CallType::ItemChanged, item);
+        m_notify->m_data->itemChanged.send(item);
     }
 
     void itemAdded(const T& item)
     {
-        m_notify->send(CallType::ItemAdded, item);
+        m_notify->m_data->itemAdded.send(item);
     }
 
     void itemRemoved(const T& item)
     {
-        m_notify->send(CallType::ItemRemoved, item);
+        m_notify->m_data->itemRemoved.send(item);
     }
 
     void itemReplaced(const T& oldItem, const T& newItem)
     {
-        m_notify->send(CallType::ItemReplaced, oldItem, newItem);
+        m_notify->m_data->itemReplaced.send(oldItem, newItem);
     }
 
 private:

@@ -51,7 +51,7 @@ void NotationPaintView::onUnloadNotation(INotationPtr notation)
 {
     AbstractNotationPaintView::onUnloadNotation(notation);
 
-    notation->viewState()->matrixChanged().resetOnReceive(this);
+    notation->viewState()->matrixChanged().disconnect(this);
 }
 
 void NotationPaintView::initZoomAndPosition()

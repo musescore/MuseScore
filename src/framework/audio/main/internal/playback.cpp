@@ -152,7 +152,7 @@ Promise<TrackSequenceId> Playback::addSequence()
                 } else {
                     LOGE() << "audio not started";
                 }
-                startAudioController()->isAudioStartedChanged().resetOnReceive(this);
+                startAudioController()->isAudioStartedChanged().disconnect(this);
             });
         }
 

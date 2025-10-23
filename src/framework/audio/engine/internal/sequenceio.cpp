@@ -56,8 +56,8 @@ SequenceIO::SequenceIO(engine::IGetTracks* getTracks)
             return;
         }
 
-        trackPtr->inputParamsChanged().resetOnReceive(this);
-        trackPtr->outputParamsChanged().resetOnReceive(this);
+        trackPtr->inputParamsChanged().disconnect(this);
+        trackPtr->outputParamsChanged().disconnect(this);
     });
 }
 

@@ -53,6 +53,7 @@ private:
     void openUri(const UriQuery& uri, bool isSingle = true);
 
     std::shared_ptr<ExtensionsUiActions> m_uiActions;
+    bool m_uiActionsRegistred = false;
 };
 }
 

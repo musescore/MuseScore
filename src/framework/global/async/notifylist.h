@@ -25,17 +25,11 @@
 #include <vector>
 #include <cassert>
 
-#include "../thirdparty/kors_async/async/changednotify.h"
+#include "changednotify.h"
 
 #include "asyncable.h"
 
 namespace muse::async {
-template<typename T>
-using ChangedNotifier = kors::async::ChangedNotifier<T>;
-
-template<typename T>
-using ChangedNotify = kors::async::ChangedNotify<T>;
-
 template<typename T>
 class NotifyList : public std::vector<T>
 {
@@ -60,7 +54,7 @@ public:
     }
 
     template<typename Call>
-    void onChanged(Asyncable* caller, Call f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
+    void onChanged(Asyncable* caller, Call f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
         assert(m_notify);
         if (!m_notify) {
@@ -79,7 +73,7 @@ public:
     }
 
     template<typename Call>
-    void onItemChanged(Asyncable* caller, Call f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
+    void onItemChanged(Asyncable* caller, Call f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
         assert(m_notify);
         if (!m_notify) {
@@ -98,7 +92,7 @@ public:
     }
 
     template<typename Call>
-    void onItemAdded(Asyncable* caller, Call f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
+    void onItemAdded(Asyncable* caller, Call f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
         assert(m_notify);
         if (!m_notify) {
@@ -117,7 +111,7 @@ public:
     }
 
     template<typename Call>
-    void onItemRemoved(Asyncable* caller, Call f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
+    void onItemRemoved(Asyncable* caller, Call f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
         assert(m_notify);
         if (!m_notify) {
@@ -132,7 +126,7 @@ public:
     }
 
     template<typename Call>
-    void onItemReplaced(Asyncable* caller, Call f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
+    void onItemReplaced(Asyncable* caller, Call f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
         assert(m_notify);
         if (!m_notify) {

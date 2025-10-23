@@ -97,6 +97,7 @@ private:
     void scheduleUpdateExtensionsToolBarVisibility();
     void doUpdateExtensionsToolBarVisibility();
 
+    bool m_inited = false;
     bool m_updateDrumsetPanelVisibilityScheduled = false;
     bool m_updatePercussionPanelVisibilityScheduled = false;
     bool m_updateExtensionsToolBarVisibilityScheduled = false;

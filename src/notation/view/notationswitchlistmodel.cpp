@@ -50,7 +50,7 @@ void NotationSwitchListModel::load()
 
 void NotationSwitchListModel::onCurrentProjectChanged()
 {
-    disconnectAll();
+    async_disconnectAll();
 
     loadNotations();
 

@@ -978,16 +978,16 @@ mu::project::IProjectAudioSettingsPtr PlaybackController::audioSettings() const
 void PlaybackController::resetCurrentSequence()
 {
     if (currentPlayer()) {
-        currentPlayer()->playbackPositionChanged().resetOnReceive(this);
-        currentPlayer()->playbackStatusChanged().resetOnReceive(this);
+        currentPlayer()->playbackPositionChanged().disconnect(this);
+        currentPlayer()->playbackStatusChanged().disconnect(this);
     }
 
     playback()->clearSources();
-    playback()->inputParamsChanged().resetOnReceive(this);
+    playback()->inputParamsChanged().disconnect(this);
 
     playback()->clearAllFx();
-    playback()->outputParamsChanged().resetOnReceive(this);
-    playback()->masterOutputParamsChanged().resetOnReceive(this);
+    playback()->outputParamsChanged().disconnect(this);
+    playback()->masterOutputParamsChanged().disconnect(this);
     playback()->clearMasterOutputParams();
 
     m_currentTick = 0;
@@ -1555,7 +1555,7 @@ void PlaybackController::setupSequenceTracks()
         }
 
         updateSoloMuteStates();
-    });
+    }, async::Asyncable::Mode::SetReplace);
 
     audioSettings()->auxSoloMuteStateChanged().onReceive(
         this, [this](aux_channel_idx_t, const notation::INotationSoloMuteState::SoloMuteState&) {

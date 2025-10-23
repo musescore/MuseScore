@@ -5,9 +5,9 @@ Requires C++17 and higher.
 
 Features:
 * Channel - channel for asynchronous interaction or communication between threads, inspired by channel from GoLang.
-* Promise - promise to return a result from asynchronous operations or other threads, inspired by channel from JS.
-* Notify - for notification of something
-* Async - call function on next event loop 
+* Promise - promise to return a result from asynchronous operations or other threads, inspired by promise from JS.
+* Notification - for notification of something
+* Async - call function on next event loop or in another thread
 
 These primitives are intended to:
 * To separate dependencies between sender and subscriber (like Qt signals/slots approach, just more convenient and safer)
@@ -17,7 +17,8 @@ These primitives are intended to:
 
 [Example](example/main.cpp)
 
-Used in at least two private commercial projects and one [open source](https://github.com/musescore/MuseScore).
+Used in at least two private commercial projects and two open source
+[MuseScore](https://github.com/musescore/MuseScore) and [Audacity](https://github.com/audacity/audacity)
 
 ## Integration 
 
@@ -34,20 +35,10 @@ To use channels in one main thread, nothing is required, just direct calls will 
 For communication between threads or for using `Async` - calling a function on the next event loop, integration with the main event loop and the event loop of other threads is required.   
    
 There are two options for integration with the main eventloop:   
-1. If it is not possible to directly modify the body of the event loop, add your own call there, for example, if you are using some kind of UI framework, like Qt, then you need to install a callback with your implementation of the function call on the main thread, for example like this
-```
-std::thread::id mainThreadId = std::this_thread::get_id();
-app::async::onMainThreadInvoke([mainThreadId](const std::function<void()>& func, bool isAlwaysQueued) {
-    if (!isAlwaysQueued && std::this_thread::get_id() == mainThreadId) {
-        func();
-    } else {
-        //! NOTE It is required to implement a function call on the next event loop
-        //! For example, for Qt we can use QMetaObject::invokeMethod with Qt::QueuedConnection
-    }
-});
-```
+1. If it is not possible to directly modify the body of the event loop, 
+then you can, for example, use a timer to call `processMessages`
 
-2. If you can directly add your call to the body of the event loop, then it’s easier to just add the call `processEvents`, like:
+2. If you can directly add your call to the body of the event loop, then it’s easier to just add the call `processMessages`, like:
 ```
 // event loop 
 while (running) {
@@ -57,6 +48,9 @@ while (running) {
 ```
 
 ## ChangeLog
+
+### v1.4
+* New non-blocking implementation (a lot of thanks for the review [Casper Jeukendrup](https://github.com/cbjeukendrup))
 
 ### v1.3
 * Fixes related to communication between threads
