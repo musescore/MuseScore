@@ -25,6 +25,9 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/measure.h"
 #include "draw/painter.h"
+#include "draw/internal/qpainterprovider.h"
+#include <QPainter>
+#include <QLinearGradient>
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -72,13 +75,22 @@ void PreviewMeasure::paintStaffLines(Painter* painter, const PointF& pos,
         return;
     }
 
-    Color lineColor = configuration()->noteInputPreviewColor();
+    QPainterProvider* qpainterProvider = dynamic_cast<QPainterProvider*>(painter->provider().get());
+    QPainter* qpainter = qpainterProvider->qpainter();
 
-    Pen pen(lineColor, lineWidth);
-    painter->setPen(pen);
+    QColor lineColor = configuration()->noteInputPreviewColor().toQColor();
+
+    QLinearGradient gradient(pos.x(), pos.y(), pos.x() + width, pos.y());
+    gradient.setColorAt(0, lineColor);
+    lineColor.setAlpha(0);
+    gradient.setColorAt(1, lineColor);
+
+    QBrush brush(gradient);
+    qpainter->setBrush(brush);
+    qpainter->setPen(Qt::NoPen);
 
     for (int i = 0; i < lines; ++i) {
         double y = pos.y() + i * lineDist;
-        painter->drawLine(PointF(pos.x(), y), PointF(pos.x() + width, y));
+        qpainter->drawRect(QRectF(pos.x(), y - lineWidth / 2, width, lineWidth));
     }
 }
