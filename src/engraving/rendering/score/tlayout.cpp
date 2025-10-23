@@ -1307,9 +1307,7 @@ void TLayout::layoutBend(const Bend* item, Bend::LayoutData* ldata)
 
             int idx = (pitch + 12) / 25;
             const char* l = Bend::label[idx];
-            bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
-                                     muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
-                                     String::fromAscii(l)));
+            bb.unite(fm.boundingRect(String::fromAscii(l)));
             y = y2;
         }
         if (pitch == item->points().at(pt + 1).pitch) {
@@ -1334,9 +1332,7 @@ void TLayout::layoutBend(const Bend* item, Bend::LayoutData* ldata)
 
             int idx = (item->points().at(pt + 1).pitch + 12) / 25;
             const char* l = Bend::label[idx];
-            bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
-                                     muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
-                                     String::fromAscii(l)));
+            bb.unite(fm.boundingRect(String::fromAscii(l)));
         } else {
             // down
             x2 = x + spatium * .5;
