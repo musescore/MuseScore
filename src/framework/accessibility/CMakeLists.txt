@@ -48,7 +48,8 @@ set(MODULE_SRC
 
 if (OS_IS_LIN)
     # it needed to send a spontaneous event by activating navigation
-    set(MODULE_INCLUDE_PRIVATE ${Qt6Core_PRIVATE_INCLUDE_DIRS})
+    find_package(Qt6 REQUIRED COMPONENTS CorePrivate)
+    set(MODULE_LINK ${MODULE_LINK} Qt6::CorePrivate)
 endif()
 
 
