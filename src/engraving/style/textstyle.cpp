@@ -495,6 +495,7 @@ const TextStyle tempoTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::tempoFrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::tempoFrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::Position,             Sid::tempoPosition,                          Pid::POSITION },
 } };
 
 const TextStyle tempoChangeTextStyle { {
@@ -513,7 +514,7 @@ const TextStyle tempoChangeTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::tempoChangeFrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::tempoChangeFrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                     Pid::MUSICAL_SYMBOLS_SCALE },
-    { TextStylePropertyType::Position,             Sid::tempoChangePosition,                      Pid::POSITION },
+    { TextStylePropertyType::Position,             Sid::tempoChangePosition,                          Pid::POSITION },
 } };
 
 const TextStyle metronomeTextStyle { {
@@ -587,6 +588,7 @@ const TextStyle mmRestRangeTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::mmRestRangeFrameFgColor,                Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::mmRestRangeFrameBgColor,                Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::Position,             Sid::mmRestRangePosition,                    Pid::POSITION },
 } };
 
 const TextStyle translatorTextStyle { {
@@ -1156,6 +1158,7 @@ const TextStyle stickingTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::stickingFrameFgColor,                   Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::stickingFrameBgColor,                   Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::Position,             Sid::stickingPosition,                       Pid::POSITION },
 } };
 
 const TextStyle user1TextStyle { {
