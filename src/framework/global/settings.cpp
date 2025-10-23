@@ -70,6 +70,22 @@ io::path_t Settings::filePath() const
     return m_settings->fileName();
 }
 
+void Settings::remove(const Key& key)
+{
+#ifdef MUSE_MODULE_MULTIINSTANCES
+    muse::mi::WriteResourceLockGuard resource_lock(multiInstancesProvider.get(), SETTINGS_RESOURCE_NAME);
+#endif
+    m_settings->remove(QString::fromStdString(key.key));
+}
+
+bool Settings::contains(const Key& key) const
+{
+#ifdef MUSE_MODULE_MULTIINSTANCES
+    muse::mi::ReadResourceLockGuard resource_lock(multiInstancesProvider.get(), SETTINGS_RESOURCE_NAME);
+#endif
+    return m_settings->contains(QString::fromStdString(key.key));
+}
+
 const Settings::Items& Settings::items() const
 {
     return m_isTransactionStarted ? m_localSettings : m_items;
