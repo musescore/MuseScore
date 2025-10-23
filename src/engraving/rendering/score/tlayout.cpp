@@ -3116,6 +3116,7 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
         Align align;
         align.vertical = AlignV::BASELINE;
         align.horizontal = AlignH::HCENTER;
+        hopoText->setPosition(AlignH::HCENTER);
         hopoText->setAlign(align);
         layoutItem(hopoText, ctx);
 
