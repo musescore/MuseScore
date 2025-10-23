@@ -61,38 +61,42 @@
         <height>14</height>
         <eid>E_E</eid>
         </VBox>
-      <Measure>
+      <Measure len="3/4">
         <eid>F_F</eid>
         <LayoutBreak>
           <eid>G_G</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <TimeSig>
+          <KeySig>
             <eid>H_H</eid>
-            <sigN>3</sigN>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>I_I</eid>
+            <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>measure</durationType>
-            <duration>3/4</duration>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>J_J</eid>
+        <eid>K_K</eid>
         <LayoutBreak>
-          <eid>K_K</eid>
+          <eid>L_L</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -101,19 +105,23 @@
         </Measure>
       </Staff>
     <Staff id="2">
-      <Measure>
+      <Measure len="3/4">
         <voice>
+          <KeySig>
+            <eid>O_O</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
-            <eid>N_N</eid>
+            <eid>P_P</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>O_O</eid>
+            <eid>Q_Q</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>R_R</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -123,11 +131,11 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>S_S</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>T_T</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>

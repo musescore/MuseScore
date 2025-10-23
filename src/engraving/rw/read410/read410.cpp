@@ -326,7 +326,7 @@ bool Read410::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
 
 void Read410::preparePasteDurationElement(Score* score, const Fraction& tick, const Fraction& ticks, const track_idx_t track)
 {
-    Measure* destinationMeasure = score->getCreateMeasure(tick); // TODO: This isn't an undoGetMeasure, so doesn't work with undo/redo
+    Measure* destinationMeasure = score->undoGetMeasure(tick);
     IF_ASSERT_FAILED(destinationMeasure) {
         return;
     }
