@@ -1335,26 +1335,6 @@ void TRead::read(FiguredBassItem* i, XmlReader& e, ReadContext& ctx)
     }
 }
 
-void TRead::read(Excerpt* item, XmlReader& e, ReadContext&)
-{
-    const std::vector<Part*>& pl = item->masterScore()->parts();
-    std::vector<Part*> parts;
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag = e.name();
-        if (tag == "name" || tag == "title") {
-            item->setName(e.readText().trimmed());
-        } else if (tag == "part") {
-            size_t partIdx = static_cast<size_t>(e.readInt());
-            if (partIdx >= pl.size()) {
-                LOGD("Excerpt::read: bad part index");
-            } else {
-                parts.push_back(pl.at(partIdx));
-            }
-        }
-    }
-    item->setParts(parts);
-}
-
 void TRead::read(Fermata* f, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
