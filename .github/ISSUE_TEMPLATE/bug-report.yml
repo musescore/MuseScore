@@ -80,7 +80,7 @@ body:
     id: os
     attributes:
       label: Operating system
-      description: What OS does this bug occur on?
+      description: What OS version does this bug occur on? For **Windows**, see [Microsoft Support documentation](https://support.microsoft.com/windows/find-information-about-your-windows-device-a66d52c8-3323-44fd-8f34-a9497bb935e1) and the [Microsoft Learn documentation](https://learn.microsoft.com/windows/client-management/client-tools/windows-version-search). For **macOS**, see [Apple Support documentation](https://support.apple.com/zh-cn/109033#aboutthismac). For **Linux**, see [Linux Man Pages](https://www.linux.org/docs/man5/os-release.html).
       placeholder: Windows 11, macOS 13, Ubuntu 22.04, etc.
     validations:
       required: true
