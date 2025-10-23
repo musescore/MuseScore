@@ -3478,6 +3478,7 @@ bool Read206::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
             ctx.setLastMeasure(nullptr);
             ReadContext exCtx(s);
 
+            s->setIsOpen(true);
             readScoreTag(s, e, exCtx);
 
             ex->setTracksMapping(ctx.tracks());
