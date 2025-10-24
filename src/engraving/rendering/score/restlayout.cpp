@@ -36,6 +36,13 @@ namespace mu::engraving::rendering::score {
 void RestLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const LayoutContext& ctx)
 {
     if (item->isGap()) {
+        if (item->debugDrawGap()) {
+            ldata->sym = item->getSymbol(item->durationType().type(), 16, 5);
+            fillShape(item, ldata, ctx.conf());
+            ldata->setPos(PointF(0.0, 10 * item->spatium()));
+        } else {
+            ldata->reset();
+        }
         return;
     }
 
@@ -641,7 +648,7 @@ void RestLayout::fillShape(const Rest* item, Rest::LayoutData* ldata)
 {
     Shape shape(Shape::Type::Composite);
 
-    if (!item->isGap() && !item->shouldNotBeDrawn()) {
+    if ((!item->isGap() || item->debugDrawGap()) && !item->shouldNotBeDrawn()) {
         shape.add(ChordLayout::chordRestShape(item));
         shape.add(item->symBbox(ldata->sym), item);
         for (const NoteDot* dot : item->dotList()) {

@@ -75,7 +75,8 @@ const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> Notation
     { "show-element-masks", &EngravingDebuggingOptions::showElementMasks },
     { "show-line-attach-points", &EngravingDebuggingOptions::showLineAttachPoints },
     { "mark-empty-staff-visibility-overrides", &EngravingDebuggingOptions::markEmptyStaffVisibilityOverrides },
-    { "mark-corrupted-measures", &EngravingDebuggingOptions::markCorruptedMeasures }
+    { "mark-corrupted-measures", &EngravingDebuggingOptions::markCorruptedMeasures },
+    { "show-gap-rests", &EngravingDebuggingOptions::showGapRests }
 };
 
 //! NOTE Just for more readable
@@ -558,8 +559,12 @@ void NotationActionController::init()
     for (auto& [code, member] : engravingDebuggingActions) {
         dispatcher()->reg(this, code, [this, member = member]() {
             EngravingDebuggingOptions options = engravingConfiguration()->debuggingOptions();
+            bool showGapRests = options.showGapRests;
             options.*member = !(options.*member);
             engravingConfiguration()->setDebuggingOptions(options);
+            if (options.showGapRests != showGapRests) {
+                currentNotation()->interaction()->toggleDebugShowGapRests();
+            }
         });
     }
     dispatcher()->reg(this, "check-for-score-corruptions", [this] { checkForScoreCorruptions(); });

@@ -440,7 +440,7 @@ void Rest::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
     for (NoteDot* dot : m_dots) {
         dot->scanElements(data, func, all);
     }
-    if (!isGap()) {
+    if (!isGap() || debugDrawGap()) {
         func(data, this);
     }
 }
@@ -746,6 +746,11 @@ bool Rest::shouldNotBeDrawn() const
     }
 
     return false;
+}
+
+bool Rest::debugDrawGap() const
+{
+    return configuration()->debuggingOptions().showGapRests;
 }
 
 //---------------------------------------------------------

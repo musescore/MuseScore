@@ -334,6 +334,8 @@ public:
     virtual muse::async::Channel<ShowItemRequest> showItemRequested() const = 0;
 
     virtual void setGetViewRectFunc(const std::function<muse::RectF()>& func) = 0;
+
+    virtual void toggleDebugShowGapRests() = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

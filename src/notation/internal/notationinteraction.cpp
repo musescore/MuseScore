@@ -8264,6 +8264,14 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
     m_showItemRequested.send(request);
 }
 
+void NotationInteraction::toggleDebugShowGapRests()
+{
+    // Doesn't perform any action on the score, just triggers the necessary relayout
+    startEdit(TranslatableString("debugOption", "Toggle show gap rests"));
+    score()->setLayoutAll();
+    apply();
+}
+
 muse::async::Channel<NotationInteraction::ShowItemRequest> NotationInteraction::showItemRequested() const
 {
     return m_showItemRequested;

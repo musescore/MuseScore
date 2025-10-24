@@ -128,6 +128,7 @@ public:
     String screenReaderInfo() const override;
 
     bool shouldNotBeDrawn() const;
+    bool debugDrawGap() const;
 
     RestVerticalClearance& verticalClearance() { return m_verticalClearance; }
 

@@ -338,6 +338,8 @@ public:
 
     void setGetViewRectFunc(const std::function<muse::RectF()>& func) override;
 
+    void toggleDebugShowGapRests() override;
+
 private:
     mu::engraving::Score* score() const;
     void onScoreInited();
