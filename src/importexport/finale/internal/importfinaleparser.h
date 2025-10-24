@@ -158,6 +158,22 @@ struct ReadableExpression
 };
 using ReadableExpressionMap = std::map<musx::dom::Cmper, ReadableExpression*>;
 
+struct ReadableRepeatText
+{
+    ReadableRepeatText() = default;
+    ReadableRepeatText(const FinaleParser&, const musx::dom::MusxInstance<musx::dom::others::TextRepeatDef>&);
+
+    String xmlText = String();
+    FrameSettings frameSettings;
+    ElementType elementType = ElementType::INVALID;
+    AlignH repeatAlignment;
+
+    // Element-specific
+    MarkerType markerType = MarkerType::USER;
+    JumpType jumpType = JumpType::USER;
+};
+using ReadableRepeatTextMap = std::map<musx::dom::Cmper, ReadableRepeatText*>;
+
 struct ReadableCustomLine
 {
     ReadableCustomLine() = default;
@@ -333,6 +349,7 @@ private:
     std::unordered_map<musx::dom::EntryNumber, engraving::ChordRest*> m_entryNumber2CR;
     ReadableCustomLineMap m_customLines;
     ReadableExpressionMap m_expressions;
+    ReadableRepeatTextMap m_repeatTexts;
 };
 
 extern void setAndStyleProperty(mu::engraving::EngravingObject* e, mu::engraving::Pid id,
