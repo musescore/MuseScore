@@ -239,7 +239,7 @@
         </note>
       </measure>
     <measure number="18">
-      <print new-page="yes"/>
+      <print new-page="yes" page-number="2"/>
       <note>
         <pitch>
           <step>C</step>

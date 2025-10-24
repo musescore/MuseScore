@@ -1051,6 +1051,21 @@ TEST_F(MusicXml_Tests, ornaments) {
 TEST_F(MusicXml_Tests, overlappingSpanners) {
     musicXmlIoTest("testOverlappingSpanners");
 }
+TEST_F(MusicXml_Tests, pageNumbers1) {
+    musicXmlMscxExportTestRefBreaks("testPageNumbers1");
+}
+TEST_F(MusicXml_Tests, pageNumbers2) {
+    musicXmlMscxExportTestRefBreaks("testPageNumbers2");
+}
+TEST_F(MusicXml_Tests, pageNumbers3) {
+    musicXmlMscxExportTestRefBreaks("testPageNumbers3");
+}
+TEST_F(MusicXml_Tests, pageNumbers4) {
+    musicXmlMscxExportTestRefBreaks("testPageNumbers4");
+}
+TEST_F(MusicXml_Tests, pageNumbers5) {
+    musicXmlMscxExportTestRefBreaks("testPageNumbers5");
+}
 TEST_F(MusicXml_Tests, partNames) {
     musicXmlImportTestRef("testPartNames");
 }

@@ -240,7 +240,7 @@
         </note>
       </measure>
     <measure number="18">
-      <print new-page="yes"/>
+      <print new-page="yes" page-number="2"/>
       <note>
         <pitch>
           <step>C</step>
@@ -1151,7 +1151,7 @@
         </note>
       </measure>
     <measure number="128">
-      <print new-page="yes"/>
+      <print new-page="yes" page-number="3"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
