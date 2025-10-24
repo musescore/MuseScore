@@ -33,6 +33,7 @@ Column {
     property int panelMode: -1
     property bool useNotationPreview: false
     property alias notationPreviewNumStaffLines: notationPreview.numStaffLines
+    property color notationPreviewBackgroundColor: Qt.transparent
 
     property alias footerHeight: footerArea.height
 
@@ -50,6 +51,16 @@ Column {
         }
 
         menuLoader.show(pos, root.padModel.contextMenuItems)
+    }
+
+    QtObject {
+        id: prv
+
+        readonly property var currentColor: root.useNotationPreview ? root.notationPreviewBackgroundColor : ui.theme.accentColor
+
+        readonly property var currentOpacityNormal: root.useNotationPreview ? 0.9 : ui.theme.buttonOpacityNormal
+        readonly property var currentOpacityHover: root.useNotationPreview ? 0.7 : ui.theme.buttonOpacityHover
+        readonly property var currentOpacityHit: root.useNotationPreview ? 1.0 : ui.theme.buttonOpacityHit
     }
 
     Item {
@@ -98,15 +109,13 @@ Column {
         }
 
         RoundedRectangle {
-            id: padNameBackground
+            id: padBackground
 
-            visible: !root.useNotationPreview
+            color: Utils.colorWithAlpha(prv.currentColor, prv.currentOpacityNormal)
 
             anchors.fill: parent
             topLeftRadius: root.cornerRadius
             topRightRadius: root.cornerRadius
-
-            color: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.buttonOpacityNormal)
         }
 
         StyledTextLabel {
@@ -142,24 +151,16 @@ Column {
                 name: "MOUSE_HOVERED"
                 when: mouseArea.containsMouse && !mouseArea.pressed && !root.padSwapActive
                 PropertyChanges {
-                    target: padNameBackground
-                    color: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.buttonOpacityHover)
-                }
-                PropertyChanges {
-                    target: notationPreview
-                    opacity: 0.7
+                    target: padBackground
+                    color: Utils.colorWithAlpha(prv.currentColor, prv.currentOpacityHover)
                 }
             },
             State {
                 name: "MOUSE_HIT"
                 when: mouseArea.pressed || root.padSwapActive
                 PropertyChanges {
-                    target: padNameBackground
-                    color: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.buttonOpacityHit)
-                }
-                PropertyChanges {
-                    target: notationPreview
-                    opacity: 1.0
+                    target: padBackground
+                    color: Utils.colorWithAlpha(prv.currentColor, prv.currentOpacityHit)
                 }
             }
         ]

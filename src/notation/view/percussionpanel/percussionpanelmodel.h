@@ -57,7 +57,9 @@ class PercussionPanelModel : public QObject, public muse::Injectable, public mus
     muse::Inject<mu::playback::IPlaybackController> playbackController = { this };
     muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
     muse::Inject<IInstrumentsRepository> instrumentsRepository = { this };
-    muse::Inject<INotationConfiguration> configuration = { this };
+
+    muse::Inject<INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
     Q_OBJECT
 
@@ -68,6 +70,7 @@ class PercussionPanelModel : public QObject, public muse::Injectable, public mus
     Q_PROPERTY(PanelMode::Mode currentPanelMode READ currentPanelMode WRITE setCurrentPanelMode NOTIFY currentPanelModeChanged)
     Q_PROPERTY(bool useNotationPreview READ useNotationPreview WRITE setUseNotationPreview NOTIFY useNotationPreviewChanged)
     Q_PROPERTY(int notationPreviewNumStaffLines READ notationPreviewNumStaffLines NOTIFY notationPreviewNumStaffLinesChanged)
+    Q_PROPERTY(QColor notationPreviewBackgroundColor READ notationPreviewBackgroundColor CONSTANT)
 
     Q_PROPERTY(PercussionPanelPadListModel * padListModel READ padListModel NOTIFY padListModelChanged)
 
@@ -86,6 +89,7 @@ public:
     void setUseNotationPreview(bool useNotationPreview);
 
     int notationPreviewNumStaffLines() const;
+    QColor notationPreviewBackgroundColor() const;
 
     PercussionPanelPadListModel* padListModel() const;
 
