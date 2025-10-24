@@ -2822,6 +2822,9 @@ void TRead::read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx)
             xml.unknown();
         }
     }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(c);
+    }
 }
 
 void TRead::read(Groups* g, XmlReader& e, ReadContext&)
@@ -2917,7 +2920,9 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(h);
+    }
     h->styleChanged();
 }
 
@@ -3097,6 +3102,9 @@ void TRead::read(LetRing* r, XmlReader& e, ReadContext& ctx)
         } else if (!readProperties(static_cast<TextLineBase*>(r), e, ctx)) {
             e.unknown();
         }
+    }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(r);
     }
 }
 
@@ -3418,6 +3426,9 @@ void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         readProperties(o, e, ctx);
     }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(o);
+    }
     if (o->ottavaType() != OttavaType::OTTAVA_8VA || o->numbersOnly() != o->propertyDefault(Pid::NUMBERS_ONLY).toBool()) {
         o->styleChanged();
     }
@@ -3471,6 +3482,9 @@ void TRead::read(PalmMute* p, XmlReader& e, ReadContext& ctx)
         } else if (!readProperties(static_cast<TextLineBase*>(p), e, ctx)) {
             e.unknown();
         }
+    }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(p);
     }
 }
 
@@ -3594,6 +3608,9 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
         } else if (!readProperties(static_cast<TextLineBase*>(p), e, ctx)) {
             e.unknown();
         }
+    }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(p);
     }
 }
 
@@ -4129,6 +4146,9 @@ void TRead::read(TextLineBase* b, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(b);
+    }
 }
 
 void TRead::read(Tie* t, XmlReader& xml, ReadContext& ctx)
@@ -4514,6 +4534,9 @@ void TRead::read(Volta* v, XmlReader& e, ReadContext& ctx)
         } else if (!readProperties(v, e, ctx)) {
             e.unknown();
         }
+    }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(v);
     }
 }
 

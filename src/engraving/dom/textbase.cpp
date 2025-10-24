@@ -3226,6 +3226,7 @@ void TextBase::initTextStyleType(TextStyleType tid)
             { Pid::FONT_SIZE, Pid::BEGIN_FONT_SIZE },
             { Pid::FONT_STYLE, Pid::BEGIN_FONT_STYLE },
             { Pid::ALIGN, Pid::BEGIN_TEXT_ALIGN },
+            { Pid::POSITION, Pid::BEGIN_TEXT_POSITION },
         };
 
         const bool isTextLine = parent()->isTextLineBaseSegment();
