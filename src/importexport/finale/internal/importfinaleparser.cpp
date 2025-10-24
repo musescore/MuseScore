@@ -31,6 +31,7 @@
 #include "global/stringutils.h"
 #include "types/string.h"
 
+#include "engraving/dom/linkedobjects.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/mscore.h"
 
@@ -89,6 +90,36 @@ void FinaleParser::parse()
     // text
     importTextExpressions(); //WIP
     // importPageTexts(); //WIP
+
+    // Setup system object staves
+    logger()->logInfo(String(u"Initialising system object staves"));
+    for (staff_idx_t staffIdx : m_systemObjectStaves) {
+        m_score->addSystemObjectStaff(m_score->staff(staffIdx));
+    }
+    std::vector<EngravingItem*> systemObjects = collectSystemObjects(m_score, m_score->staves());
+    for (EngravingItem* e : systemObjects) {
+        // cross-reference links with sys obj staves and add invisible linked clones as needed
+        std::set<staff_idx_t> unusedStaves = m_systemObjectStaves;
+        if (e->links()) {
+            for (EngravingObject* scoreElement : *e->links()) {
+                muse::remove(systemObjects, toEngravingItem(scoreElement));
+                muse::remove(unusedStaves, toEngravingItem(scoreElement)->staffIdx());
+            }
+        } else {
+            muse::remove(unusedStaves, e->staffIdx());
+        }
+        for (staff_idx_t staffIdx : unusedStaves) {
+            EngravingItem* copy = e->clone();
+            copy->setStaffIdx(staffIdx);
+            copy->setVisible(false);
+            copy->linkTo(e);
+            if (!e->isSpanner()) {
+                copy->setParent(e->parentItem());
+            }
+            m_score->addElement(copy);
+        }
+    }
+    logger()->logInfo(String(u"Import complete. Opening file..."));
 }
 
 void setAndStyleProperty(EngravingObject* e, Pid id, PropertyValue v, bool leaveStyled)
