@@ -135,6 +135,8 @@ struct EnigmaParsingOptions
     double scaleFontSizeBy = 1.0;
     std::optional<FontTracker> initialFont;         ///< This is the default text font for the text we are parsing
     std::optional<FontTracker> musicSymbolFont;     ///< This is the default font for musical `<sym>` tags
+    bool plainText = false;
+    bool convertSymbols = true;
 };
 
 struct MusxEmbeddedGraphic {
