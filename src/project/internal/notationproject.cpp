@@ -345,10 +345,6 @@ Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     // Load template if present
     if (!projectOptions.templatePath.empty()) {
         Ret ret = loadTemplate(projectOptions);
-        if (ret) {
-            listenIfNeedSaveChanges();
-        }
-
         return ret;
     }
 
