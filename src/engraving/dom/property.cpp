@@ -468,7 +468,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::IS_COURTESY,             false, "isCourtesy",            P_TYPE::BOOL,               PropertyGroup::NONE,            QT_TRANSLATE_NOOP("engraving/propertyName", "is courtesy") },
     { Pid::EXCLUDE_VERTICAL_ALIGN,  false, "excludeVerticalAlign",  P_TYPE::BOOL,               PropertyGroup::POSITION,        QT_TRANSLATE_NOOP("engraving/propertyName", "exclude vertical align") },
 
-    { Pid::SHOW_MEASURE_NUMBERS,    false, "showMeasureNumbers",    P_TYPE::AUTO_ON_OFF,        PropertyGroup::NONE,            QT_TRANSLATE_NOOP("engraving/propertyName", "show bar numbers")},
+    { Pid::SHOW_MEASURE_NUMBERS,    false, "showMeasureNumbers",    P_TYPE::AUTO_ON_OFF,        PropertyGroup::NONE,            QT_TRANSLATE_NOOP("engraving/propertyName", "show measure numbers")},
     { Pid::PLAY_COUNT_TEXT_SETTING, false, "playCountTextSetting",  P_TYPE::AUTO_CUSTOM_HIDE,   PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "play count text setting") },
     { Pid::PLAY_COUNT_TEXT,         false, "playCountCustomText",   P_TYPE::STRING,             PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "play count text") },
 
