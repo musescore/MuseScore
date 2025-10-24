@@ -121,28 +121,29 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     FontStyle flagsThatAreStillOpen = FontStyle::Normal; // any flags we've opened that need to be closed.
 
     auto updateFontStyles = [&](const std::optional<FontTracker>& current, const std::optional<FontTracker>& previous) {
-        FontStyle newStyles = current ? current->fontStyle : FontStyle::Normal;
-        FontStyle oldStyles = previous ? previous->fontStyle : FontStyle::Normal;
-
         // Close styles that are no longer active — in fixed reverse order
-        for (auto it = FinaleTextConv::fontStyleTags.rbegin(); it != FinaleTextConv::fontStyleTags.rend(); ++it) {
-            if (oldStyles & it->first) {
-                if (!muse::contains(emittedOpenTags, it->first)) {
-                    // Patch in opening tag at start
-                    endString.append(String(u"<") + it->second + u">");
-                    emittedOpenTags.insert(it->first);
+        if (previous) {
+            for (auto it = fontStyleTags.rbegin(); it != fontStyleTags.rend(); ++it) {
+                if (previous->fontStyle & it->first) {
+                    if (!muse::contains(emittedOpenTags, it->first)) {
+                        // Patch in opening tag at start
+                        endString.append(String(u"<") + it->second + u">");
+                        emittedOpenTags.insert(it->first);
+                    }
+                    endString.append(String(u"</") + it->second + u">");
+                    flagsThatAreStillOpen = flagsThatAreStillOpen - it->first;
                 }
-                endString.append(String(u"</") + it->second + u">");
-                flagsThatAreStillOpen = flagsThatAreStillOpen - it->first;
             }
         }
 
         // Open newly active styles — in fixed forward order
-        for (const auto& [bit, tag] : FinaleTextConv::fontStyleTags) {
-            if (newStyles & bit) {
-                emittedOpenTags.insert(bit);
-                endString.append(String(u"<") + tag + u">");
-                flagsThatAreStillOpen = flagsThatAreStillOpen + bit;
+        if (current) {
+            for (const auto& [bit, tag] : fontStyleTags) {
+                if (current->fontStyle & bit) {
+                    emittedOpenTags.insert(bit);
+                    endString.append(String(u"<") + tag + u">");
+                    flagsThatAreStillOpen = flagsThatAreStillOpen + bit;
+                }
             }
         }
     };
@@ -150,12 +151,13 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     // The processTextChunk function process each chunk of processed text with font information. It is only
     // called when the font information changes.
     auto processTextChunk = [&](const std::string& nextChunk, const musx::util::EnigmaStyles& styles) -> bool {
-        std::optional<String> symIds = FinaleTextConv::symIdInsertsFromStdString(nextChunk, styles.font);
+        std::optional<String> symIds = options.convertSymbols ? FinaleTextConv::symIdInsertsFromStdString(nextChunk, styles.font) : std::nullopt;
+
         const FontTracker font(styles.font, options.scaleFontSizeBy);
-        const bool isSymFont = symFont && font == symFont.value();
+        const bool isSymFont = options.convertSymbols && symFont && font == symFont.value();
         if (firstFontInfo && !prevFont) {
             *firstFontInfo = font;
-        } else if (!symIds || !isSymFont) {
+        } else if (!options.plainText && (!symIds || !isSymFont)) {
             if (!prevFont || prevFont->fontName != font.fontName) {
                 if (!symIds) { // if this chunk is not all mapped sym tags
                     endString.append(String(u"<font face=\"" + font.fontName + u"\"/>"));
@@ -231,7 +233,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
             /// XM: It's common to only show a footer on the first page. This is only attainable with $C.
             switch (options.hfType) {
                 default:
-                case HeaderFooterType::None: return "$:copyright:"; /// @todo does this actually work? maybe not for non-headers?
+                case HeaderFooterType::None: return m_score->metaTag(u"copyright").toStdString();
                 case HeaderFooterType::FirstPage: return "$C";
                 case HeaderFooterType::SecondPageToEnd: return "$c";
             }
@@ -245,10 +247,12 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
             // since we could not map the character to a symbol, let it fall thru and parse as glyphs
         }
         // Find and insert metaTags when appropriate
-        if (isHeaderOrFooter) {
-            String metaTag = metaTagFromTextComponent(parsedCommand[0]);
-            if (!metaTag.isEmpty()) {
+        String metaTag = metaTagFromTextComponent(parsedCommand[0]);
+        if (!metaTag.isEmpty()) {
+            if (isHeaderOrFooter) {
                 return "$:" + metaTag.toStdString() + ":";
+            } else {
+                return m_score->metaTag(metaTag).toStdString();
             }
         }
         // Returning std::nullopt allows the musx library to fill in any we have not handled.
@@ -256,7 +260,8 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     };
 
     parsingContext.parseEnigmaText(processTextChunk, processCommand);
-    updateFontStyles(FontTracker(u"Dummy", 12, FontStyle::Normal), FontTracker(u"Dummy", 12, flagsThatAreStillOpen));
+    // Close any open font style tags
+    updateFontStyles(std::nullopt, FontTracker(u"Dummy", 12, flagsThatAreStillOpen));
 
     return endString;
 };
@@ -398,7 +403,7 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
 static String textFromRepeatDef(const MusxInstance<musx::dom::others::TextRepeatDef>& repeatDef, const FontTracker font)
 {
     String text;
-    for (const auto& [bit, tag] : FinaleTextConv::fontStyleTags) {
+    for (const auto& [bit, tag] : fontStyleTags) {
         if (font.fontStyle & bit) {
             text.append(String(u"<") + tag + u">");
         }
