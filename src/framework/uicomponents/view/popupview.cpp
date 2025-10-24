@@ -28,6 +28,20 @@
 #include "internal/platform/win/winpopupviewclosecontroller.h"
 #endif
 
+static bool isWayland()
+{
+#if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
+    return false;
+#else
+    static const QString WAYLAND = "wayland";
+
+    QString sessionType = qEnvironmentVariable("XDG_SESSION_TYPE");
+    QString platformName = qGuiApp->platformName();
+
+    return sessionType.contains(WAYLAND) || platformName.contains(WAYLAND);
+#endif
+}
+
 using namespace muse::uicomponents;
 
 PopupView::PopupView(QQuickItem* parent)
@@ -53,15 +67,18 @@ void PopupView::initView()
     WindowView::initView();
 
     Qt::WindowFlags flags;
-    if (qGuiApp->platformName().contains("wayland")) {
+    if (isWayland()) {
         flags = Qt::Popup;
     } else {
-        flags = Qt::Tool;
+        flags = Qt::Tool
+                // needed for accessibility in spinboxes
+                // see https://github.com/musescore/MuseScore/pull/29888#issuecomment-3302731855
+                | Qt::BypassWindowManagerHint;
     }
 
     flags |= Qt::FramelessWindowHint        // Without border
              | Qt::NoDropShadowWindowHint   // Without system shadow
-             | Qt::BypassWindowManagerHint; // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
+    ;
 
     m_view->setFlags(flags);
     m_view->setColor(Qt::transparent);
