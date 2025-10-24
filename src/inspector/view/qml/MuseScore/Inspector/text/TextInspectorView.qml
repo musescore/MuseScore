@@ -305,13 +305,69 @@ InspectorSectionView {
             }
         }
 
+        RadioButtonGroup {
+            enabled: root.model ? root.model.isHorizontalAlignmentAvailable : false
+            id: positionButtonList
+
+            property int navigationRowStart: alignmentSection.navigationRowEnd + 1
+            property int navigationRowEnd: navigationRowStart + count
+
+            anchors.left: parent.left
+            anchors.right: parent.horizontalCenter
+            anchors.rightMargin: 2
+
+            height: 30
+
+            model: [
+                {
+                    iconRole: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_LEFT : IconCode.NOTE_ALIGN_LEFT,
+                    typeRole: CommonTypes.LEFT,
+                    title: qsTrc("inspector", "Align left"),
+                    description: qsTrc("inspector", "Align left edge of text to reference point")
+                },
+                {
+                    iconRole: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_HORIZONTAL_CENTER : IconCode.NOTE_ALIGN_CENTER,
+                    typeRole:
+                    CommonTypes.HCENTER,
+                    title: qsTrc("inspector", "Align center"),
+                    description: qsTrc("inspector", "Align horizontal center of text to reference point")
+                },
+                {
+                    iconRole: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_RIGHT : IconCode.NOTE_ALIGN_RIGHT,
+                    typeRole: CommonTypes.RIGHT,
+                    title: qsTrc("inspector", "Align right"),
+                    description: qsTrc("inspector", "Align right edge of text to reference point")
+                }
+            ]
+
+            delegate: FlatRadioButton {
+                navigation.panel: root.navigationPanel
+                navigation.name: "HAlign" + model.index
+                navigation.row: positionButtonList.navigationRowStart + model.index
+                navigation.accessible.name: modelData.title
+                navigation.accessible.description: modelData.description
+
+                toolTipTitle: modelData.title
+                toolTipDescription: modelData.description
+
+                width: 30
+                transparent: true
+
+                iconCode: modelData.iconRole
+                checked: root.model && !root.model.horizontalPosition.isUndefined && (root.model.horizontalPosition.value === modelData.typeRole)
+                onToggled: {
+                    root.model.horizontalPosition.value = modelData.typeRole
+                }
+            }
+        }
+
         FlatButton {
             id: insertSpecCharactersButton
             width: parent.width
 
             navigation.panel: root.navigationPanel
             navigation.name: "Insert special characters"
-            navigation.row: alignmentSection.navigationRowEnd + 1
+            navigation.row: positionButtonList.navigationRowEnd + 1
 
             text: qsTrc("inspector", "Insert special characters")
 

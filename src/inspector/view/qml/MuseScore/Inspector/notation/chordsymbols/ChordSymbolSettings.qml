@@ -154,45 +154,6 @@ Column {
                 }
             }
         }
-
-        FlatRadioButtonGroupPropertyView {
-            id: alignmentButtonList
-
-            anchors.left: parent.horizontalCenter
-            anchors.leftMargin: 4
-            anchors.right: parent.right
-
-            transparent: true
-
-            visible: root.model ? !root.model.insideFretBox : true
-
-            titleText: qsTrc("inspector", "Alignment")
-            propertyItem: root.model ? root.model.position : null
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: bassNoteScale.navigationRowEnd + 1
-
-            requestIconFontSize: 16
-            requestWidth: 98
-
-            model: [
-                { iconCode: IconCode.NOTE_ALIGN_LEFT,
-                    value: 0,
-                    title: qsTrc("inspector", "Align left"),
-                    description: qsTrc("inspector", "Align left edge of text to notehead")
-                },
-                { iconCode: IconCode.NOTE_ALIGN_CENTER,
-                    value: 2,
-                    title: qsTrc("inspector", "Align center"),
-                    description: qsTrc("inspector", "Align horizontal center of text to notehead")
-                },
-                { iconCode: IconCode.NOTE_ALIGN_RIGHT,
-                    value: 1 ,
-                    title: qsTrc("inspector", "Align right"),
-                    description: qsTrc("inspector", "Align right edge of text to notehead")
-                }
-            ]
-        }
     }
 
     FlatButton {
@@ -201,7 +162,7 @@ Column {
 
         navigation.name: "AddFretboardDiagram"
         navigation.panel: root.navigationPanel
-        navigation.row: (alignmentButtonList.visible ? alignmentButtonList.navigationRowEnd : bassNoteScale.navigationRowEnd) + 1
+        navigation.row: bassNoteScale.navigationRowEnd + 1
 
         text: qsTrc("inspector", "Add fretboard diagram")
         icon: IconCode.FRETBOARD_DIAGRAM

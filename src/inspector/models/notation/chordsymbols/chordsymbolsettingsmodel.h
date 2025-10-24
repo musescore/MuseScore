@@ -33,7 +33,6 @@ class ChordSymbolSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * voicingType READ voicingType CONSTANT)
     Q_PROPERTY(PropertyItem * durationType READ durationType CONSTANT)
     Q_PROPERTY(PropertyItem * verticalAlign READ verticalAlign CONSTANT)
-    Q_PROPERTY(PropertyItem * position READ position CONSTANT)
     Q_PROPERTY(PropertyItem * bassScale READ bassScale CONSTANT)
     Q_PROPERTY(PropertyItem * doNotStackModifiers READ doNotStackModifiers CONSTANT)
 
@@ -53,7 +52,6 @@ public:
     PropertyItem* voicingType() const;
     PropertyItem* durationType() const;
     PropertyItem* verticalAlign() const;
-    PropertyItem* position() const;
     PropertyItem* bassScale() const;
     PropertyItem* doNotStackModifiers() const;
 
@@ -85,7 +83,6 @@ private:
     bool m_insideFretBox = false;
     bool m_showStackModifiers = false;
     PropertyItem* m_verticalAlign = nullptr;
-    PropertyItem* m_position = nullptr;
     PropertyItem* m_bassScale = nullptr;
     PropertyItem* m_doNotStackModifiers = nullptr;
 };
