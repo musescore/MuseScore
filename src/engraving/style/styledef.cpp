@@ -433,6 +433,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(nashvilleNumberFrameFgColor,                PropertyValue::fromValue(Color::BLACK)),
     styleDef(nashvilleNumberFrameBgColor,                PropertyValue::fromValue(Color::transparent)),
 
+    styleDef(displayCapoChords,                          int(DisplayCapoChordType::CONCERT)),
     styleDef(capoPosition,                               PropertyValue(0)),
     styleDef(fretNumMag,                                 PropertyValue(2.0)), // DEPRECATED
     styleDef(fretNumPos,                                 PropertyValue(0)),

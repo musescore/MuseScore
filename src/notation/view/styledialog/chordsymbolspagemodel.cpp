@@ -54,6 +54,7 @@ ChordSymbolsPageModel::ChordSymbolsPageModel(QObject* parent)
     StyleId::harmonyVoiceLiteral,
     StyleId::harmonyVoicing,
     StyleId::harmonyDuration,
+    StyleId::displayCapoChords,
     StyleId::capoPosition,
 })
 {
@@ -240,4 +241,24 @@ QVariantList ChordSymbolsPageModel::possibleHarmonyDurationOptions() const
 StyleItem* ChordSymbolsPageModel::harmonyVoiceLiteral() const { return styleItem(StyleId::harmonyVoiceLiteral); }
 StyleItem* ChordSymbolsPageModel::harmonyVoicing() const { return styleItem(StyleId::harmonyVoicing); }
 StyleItem* ChordSymbolsPageModel::harmonyDuration() const { return styleItem(StyleId::harmonyDuration); }
+
+StyleItem* ChordSymbolsPageModel::displayCapoChords() const { return styleItem(StyleId::displayCapoChords); }
+
+QVariantList ChordSymbolsPageModel::possibleCapoDisplayOptions() const
+{
+    QVariantList options {
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Don’t show chord symbols transposed by capo") },
+            { "value", static_cast<int>(mu::engraving::DisplayCapoChordType::CONCERT) } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Show chord symbols & transposed symbols") },
+            { "value", static_cast<int>(mu::engraving::DisplayCapoChordType::BOTH) } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Show transposed symbols only") },
+            { "value", static_cast<int>(mu::engraving::DisplayCapoChordType::TRANSPOSED) } },
+    };
+
+    return options;
+}
+
 StyleItem* ChordSymbolsPageModel::capoPosition() const { return styleItem(StyleId::capoPosition); }
