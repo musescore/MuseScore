@@ -109,15 +109,15 @@ void PercussionPanelModel::setCurrentPanelMode(const PanelMode::Mode& panelMode)
 
 bool PercussionPanelModel::useNotationPreview() const
 {
-    return configuration()->percussionPanelUseNotationPreview();
+    return notationConfiguration()->percussionPanelUseNotationPreview();
 }
 
 void PercussionPanelModel::setUseNotationPreview(bool useNotationPreview)
 {
-    if (configuration()->percussionPanelUseNotationPreview() == useNotationPreview) {
+    if (notationConfiguration()->percussionPanelUseNotationPreview() == useNotationPreview) {
         return;
     }
-    configuration()->setPercussionPanelUseNotationPreview(useNotationPreview);
+    notationConfiguration()->setPercussionPanelUseNotationPreview(useNotationPreview);
 }
 
 int PercussionPanelModel::notationPreviewNumStaffLines() const
@@ -130,6 +130,12 @@ int PercussionPanelModel::notationPreviewNumStaffLines() const
     const Staff* staff = inputState.staff();
 
     return staff ? staff->lines(inputState.tick()) : 0;
+}
+
+QColor PercussionPanelModel::notationPreviewBackgroundColor() const
+{
+    const muse::Color color = engravingConfiguration()->noteBackgroundColor();
+    return color.toQColor();
 }
 
 PercussionPanelPadListModel* PercussionPanelModel::padListModel() const
@@ -351,8 +357,8 @@ void PercussionPanelModel::setUpConnections()
         });
     }
 
-    configuration()->percussionPanelUseNotationPreviewChanged().onNotify(this, [this]() {
-        const bool useNotationPreview = configuration()->percussionPanelUseNotationPreview();
+    notationConfiguration()->percussionPanelUseNotationPreviewChanged().onNotify(this, [this]() {
+        const bool useNotationPreview = notationConfiguration()->percussionPanelUseNotationPreview();
         emit useNotationPreviewChanged(useNotationPreview);
     });
 }
@@ -508,7 +514,7 @@ void PercussionPanelModel::writePitch(int pitch, const NoteAddingMode& addingMod
         return;
     }
 
-    interaction()->noteInput()->startNoteInput(configuration()->defaultNoteInputMethod(), /*focusNotation*/ false);
+    interaction()->noteInput()->startNoteInput(notationConfiguration()->defaultNoteInputMethod(), /*focusNotation*/ false);
 
     NoteInputParams params;
     params.drumPitch = pitch;

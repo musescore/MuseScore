@@ -109,7 +109,5 @@ void PaintedEngravingItem::paintNotationPreview(muse::draw::Painter& painter, qr
 
     params.numStaffLines = m_numStaffLines;
 
-    painter.fillRect(params.rect, configuration()->noteBackgroundColor());
-
     EngravingItemPreviewPainter::paintPreview(m_item.get(), params);
 }

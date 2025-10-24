@@ -35,6 +35,7 @@ DropArea {
     property int panelMode: -1
     property bool useNotationPreview: false
     property int notationPreviewNumStaffLines: 0
+    property color notationPreviewBackgroundColor: Qt.transparent
     property bool showEditOutline: false
 
     property alias totalBorderWidth: padLoader.anchors.margins
@@ -203,6 +204,7 @@ DropArea {
                     panelMode: root.panelMode
                     useNotationPreview: root.useNotationPreview
                     notationPreviewNumStaffLines: root.notationPreviewNumStaffLines
+                    notationPreviewBackgroundColor: root.notationPreviewBackgroundColor
 
                     footerHeight: prv.footerHeight
 
