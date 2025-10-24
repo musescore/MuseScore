@@ -101,11 +101,11 @@ void AbstractToolBarModel::load()
 {
     uiActionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
         onActionsStateChanges(codes);
-    });
+    }, async::Asyncable::Mode::SetReplace);
 
     shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
         updateShortcutsAll();
-    });
+    }, async::Asyncable::Mode::SetReplace);
 }
 
 QVariantList AbstractToolBarModel::itemsProperty() const

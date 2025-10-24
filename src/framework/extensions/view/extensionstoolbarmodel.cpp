@@ -32,11 +32,11 @@ void ExtensionsToolBarModel::load()
 {
     extensionsProvider()->manifestListChanged().onNotify(this, [this]() {
         load();
-    });
+    }, async::Asyncable::Mode::SetReplace);
 
     extensionsProvider()->manifestChanged().onReceive(this, [this](const Manifest&) {
         load();
-    });
+    }, async::Asyncable::Mode::SetReplace);
 
     ToolBarItemList items;
     ManifestList enabledExtensions = extensionsProvider()->manifestList(Filter::Enabled);
