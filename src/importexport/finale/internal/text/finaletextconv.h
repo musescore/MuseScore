@@ -30,6 +30,13 @@
 
 namespace mu::iex::finale {
 
+static const std::vector<std::pair<engraving::FontStyle, engraving::String>> fontStyleTags {
+    { engraving::FontStyle::Bold,      u"b" },
+    { engraving::FontStyle::Italic,    u"i" },
+    { engraving::FontStyle::Underline, u"u" },
+    { engraving::FontStyle::Strike,    u"s" },
+};
+
 class FinaleTextConv
 {
 public:

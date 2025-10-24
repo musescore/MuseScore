@@ -80,11 +80,35 @@ static const std::map<std::wstring, ElementType> elementByRegexTable = {
 
 ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxInstance<musx::dom::others::SmartShapeCustomLine>& customLine)
 {
-    beginText       = context.stringFromEnigmaText(customLine->getLeftStartRawTextCtx(context.currentMusxPartId()));
-    continueText    = context.stringFromEnigmaText(customLine->getLeftContRawTextCtx(context.currentMusxPartId()));
-    endText         = context.stringFromEnigmaText(customLine->getRightEndRawTextCtx(context.currentMusxPartId()));
-    centerLongText  = context.stringFromEnigmaText(customLine->getCenterFullRawTextCtx(context.currentMusxPartId()));
-    centerShortText = context.stringFromEnigmaText(customLine->getCenterAbbrRawTextCtx(context.currentMusxPartId()));
+    // The following properties will be saved directly to the text String later
+    // and are usually read from there. This will eventually be changed.
+    EnigmaParsingOptions options;
+    options.plainText = true; // Easier regex detection
+    FontTracker firstFontInfo;
+    beginText       = context.stringFromEnigmaText(customLine->getLeftStartRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
+    beginFontFamily = firstFontInfo.fontName;
+    beginFontSize   = firstFontInfo.fontSize;
+    beginFontStyle  = firstFontInfo.fontStyle;
+
+    continueText       = context.stringFromEnigmaText(customLine->getLeftContRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
+    continueFontFamily = firstFontInfo.fontName;
+    continueFontSize   = firstFontInfo.fontSize;
+    continueFontStyle  = firstFontInfo.fontStyle;
+
+    endText       = context.stringFromEnigmaText(customLine->getRightEndRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
+    endFontFamily = firstFontInfo.fontName;
+    endFontSize   = firstFontInfo.fontSize;
+    endFontStyle  = firstFontInfo.fontStyle;
+
+    centerLongText       = context.stringFromEnigmaText(customLine->getCenterFullRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
+    centerLongFontFamily = firstFontInfo.fontName;
+    centerLongFontSize   = firstFontInfo.fontSize;
+    centerLongFontStyle  = firstFontInfo.fontStyle;
+
+    centerShortText       = context.stringFromEnigmaText(customLine->getCenterAbbrRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
+    centerShortFontFamily = firstFontInfo.fontName;
+    centerShortFontSize   = firstFontInfo.fontSize;
+    centerShortFontStyle  = firstFontInfo.fontStyle;
 
     SymId lineSym = SymId::noSym;
 
@@ -177,28 +201,17 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     // Horizontal alignment affects the (visible) offset, so use left placement and set the offset later.
     beginTextAlign    = Align(AlignH::LEFT, AlignV::BASELINE);
     continueTextAlign = Align(AlignH::LEFT, AlignV::BASELINE);
-    endTextAlign      = Align(AlignH::LEFT, AlignV::BASELINE);
+    endTextAlign      = Align(AlignH::RIGHT, AlignV::BASELINE);
     // As the name suggests, this text needs to be centered.
     centerLongTextAlign  = AlignH::HCENTER;
     centerShortTextAlign = AlignH::HCENTER;
 
-    // The following are currently saved directly to the
-    // text String and not treated as properties. This will eventually be changed.
-    // beginFontFamily;
-    // continueFontFamily;
-    // endFontFamily;
-    // centerLongFontFamily;
-    // centerShortFontFamily;
-    // beginFontSize;
-    // continueFontSize;
-    // endFontSize;
-    // centerLongFontSize;
-    // centerShortFontSize;
-    // beginFontStyle;
-    // continueFontStyle;
-    // endFontStyle;
-    // centerLongFontStyle;
-    // centerShortFontStyle;
+    beginText = context.stringFromEnigmaText(customLine->getLeftStartRawTextCtx(context.currentMusxPartId()));
+    continueText = context.stringFromEnigmaText(customLine->getLeftContRawTextCtx(context.currentMusxPartId()));
+    endText = context.stringFromEnigmaText(customLine->getRightEndRawTextCtx(context.currentMusxPartId()));
+    // These are currently only used by glissandos, as plain text.
+    // centerLongText = context.stringFromEnigmaText(customLine->getCenterFullRawTextCtx(context.currentMusxPartId()));
+    // centerShortText = context.stringFromEnigmaText(customLine->getCenterAbbrRawTextCtx(context.currentMusxPartId()));
 
     /// @todo I'm not yet sure how text offset affects the default offset/alignment of lines when added to the score.
     /// This may need to be accounted for in spanner segment positioning.
@@ -438,9 +451,19 @@ void FinaleParser::importSmartShapes()
             } else if (newSpanner->isGlissando()) {
                 Glissando* glissando = toGlissando(newSpanner);
                 glissando->setGlissandoType(customLine->glissandoType);
-                /// @todo we must remove HTML formatting here, it's laid out as plain text.
-                glissando->setText(customLine->centerShortText.empty() ? (customLine->centerLongText.empty() ? String() : customLine->centerLongText) : customLine->centerShortText);
-                glissando->setShowText(!glissando->text().empty());
+                if (!customLine->centerShortText.empty()) {
+                    glissando->setText(customLine->centerShortText);
+                    glissando->setFontStyle(customLine->centerShortFontStyle);
+                    glissando->setFontFace(customLine->centerShortFontFamily);
+                    glissando->setFontSize(customLine->centerShortFontSize);
+                } else if (!customLine->centerLongText.empty()) {
+                    glissando->setText(customLine->centerShortText);
+                    glissando->setFontStyle(customLine->centerLongFontStyle);
+                    glissando->setFontFace(customLine->centerLongFontFamily);
+                    glissando->setFontSize(customLine->centerLongFontSize);
+                } else {
+                    glissando->setShowText(false);
+                }
             } else if (newSpanner->isOttava()) {
                 newSpanner->setPlaySpanner(false); // Can custom ottavas have playback?
             } else if (newSpanner->isGuitarBend()) {
