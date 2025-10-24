@@ -2698,6 +2698,13 @@ const UiActionList NotationUiActions::s_engravingDebuggingActions = {
              TranslatableString("action", "Mark corrupted measures"),
              Checkable::Yes
              ),
+    UiAction("show-gap-rests",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Show gap rests"),
+             TranslatableString("action", "Show gap rests"),
+             Checkable::Yes
+             ),
     UiAction("check-for-score-corruptions",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

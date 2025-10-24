@@ -276,6 +276,7 @@ private:
     static void draw(const RasgueadoSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const RehearsalMark* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Rest* item, muse::draw::Painter* painter, const PaintOptions& opt);
+    static void drawDebugGapRest(const Rest* item, muse::draw::Painter* painter);
 
     static void draw(const ShadowNote* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const SlurSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);

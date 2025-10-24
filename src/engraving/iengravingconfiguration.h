@@ -109,6 +109,7 @@ public:
         bool showLineAttachPoints = false;
         bool markEmptyStaffVisibilityOverrides = false;
         bool markCorruptedMeasures = true;
+        bool showGapRests = false;
 
         bool anyEnabled() const
         {
@@ -122,6 +123,7 @@ public:
                    || showLineAttachPoints
                    || markEmptyStaffVisibilityOverrides
                    || markCorruptedMeasures
+                   || showGapRests
             ;
         }
     };
