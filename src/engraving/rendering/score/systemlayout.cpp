@@ -350,7 +350,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         }
     }
 
-    if (system->staves().empty()) {
+    if (ctx.dom().allStavesInvisible()) {
         // Edge case. Can only happen if all instruments have been deleted.
         return system;
     }
