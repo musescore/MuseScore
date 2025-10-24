@@ -1050,9 +1050,6 @@ void FinaleParser::importStaffItems()
 
 void FinaleParser::importBarlines()
 {
-    // Requires clef/keysig/timesig segments to have been created (layout call needed for non-change keysigs)
-    // And number of staff lines at ticks to have been set (no layout necessary)
-    m_score->doLayout();
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     const MusxInstance<options::BarlineOptions>& config = musxOptions().barlineOptions;
@@ -1222,6 +1219,7 @@ void FinaleParser::importPageLayout()
     /// @todo Match staff separation in Finale better.
     /// @todo Take into account per-staff scaling. This affects the vertical spacing of staves. I need to add a helper func for this in musx. It requires some
     /// reverse engineering of Finale behavior.
+    /// @todo When instrument names are visible, MuseScore aligns the leftmost point of the instrument names to the page margin. Finale aligns the left barline.
 
     // Handle blank pages
     MusxInstanceList<others::Page> pages = m_doc->getOthers()->getArray<others::Page>(m_currentMusxPartId);
