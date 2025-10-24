@@ -65,7 +65,7 @@ void DynamicsLayout::doLayoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, 
     TLayout::layoutBaseTextBase(item, ldata);
 
     const Segment* s = item->segment();
-    if (!s || (!item->centerOnNotehead() && item->align().horizontal == AlignH::LEFT)) {
+    if (!s || (!item->centerOnNotehead() && item->position() == AlignH::LEFT)) {
         return;
     }
 
@@ -74,7 +74,7 @@ void DynamicsLayout::doLayoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, 
         return;
     }
 
-    bool centerOnNote = item->centerOnNotehead() || (!item->centerOnNotehead() && item->align().horizontal == AlignH::HCENTER);
+    bool centerOnNote = item->centerOnNotehead() || (!item->centerOnNotehead() && item->position() == AlignH::HCENTER);
     double mag = item->staff()->staffMag(item);
     double noteHeadWidth = item->score()->noteHeadWidth() * mag;
 

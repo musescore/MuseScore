@@ -48,6 +48,7 @@ public:
     static const std::set<SymId> ORNAMENT_IDS;
     static const std::map<Sid, Sid> ALIGN_VALS_TO_CONVERT;
     static Sid positionStyleFromAlign(Sid align);
+    static void setTextLineTextPositionFromAlign(TextLineBase* tl);
 
 private:
     static void replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score);

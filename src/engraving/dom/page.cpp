@@ -133,6 +133,7 @@ Text* Page::layoutHeaderFooter(int area, const String& s) const
         break;
     }
     text->setAlign(align);
+    text->setPosition(align.horizontal);
 
     // Hack: we can't use toXmlEscaped on the entire string because this would erase any manual XML
     // formatting, but we do want to be able to use a plain '&' in favour of XML character entities ...

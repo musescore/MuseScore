@@ -121,7 +121,7 @@ void TextLineBaseSegment::spatiumChanged(double ov, double nv)
     m_endText->spatiumChanged(ov, nv);
 }
 
-static constexpr std::array<Pid, 27> TextLineBasePropertyId = { {
+static constexpr std::array<Pid, 30> TextLineBasePropertyId = { {
     Pid::LINE_VISIBLE,
     Pid::BEGIN_HOOK_TYPE,
     Pid::BEGIN_HOOK_HEIGHT,
@@ -130,6 +130,7 @@ static constexpr std::array<Pid, 27> TextLineBasePropertyId = { {
     Pid::GAP_BETWEEN_TEXT_AND_LINE,
     Pid::BEGIN_TEXT,
     Pid::BEGIN_TEXT_ALIGN,
+    Pid::BEGIN_TEXT_POSITION,
     Pid::BEGIN_TEXT_PLACE,
     Pid::BEGIN_FONT_FACE,
     Pid::BEGIN_FONT_SIZE,
@@ -137,6 +138,7 @@ static constexpr std::array<Pid, 27> TextLineBasePropertyId = { {
     Pid::BEGIN_TEXT_OFFSET,
     Pid::CONTINUE_TEXT,
     Pid::CONTINUE_TEXT_ALIGN,
+    Pid::CONTINUE_TEXT_POSITION,
     Pid::CONTINUE_TEXT_PLACE,
     Pid::CONTINUE_FONT_FACE,
     Pid::CONTINUE_FONT_SIZE,
@@ -144,6 +146,7 @@ static constexpr std::array<Pid, 27> TextLineBasePropertyId = { {
     Pid::CONTINUE_TEXT_OFFSET,
     Pid::END_TEXT,
     Pid::END_TEXT_ALIGN,
+    Pid::END_TEXT_POSITION,
     Pid::END_TEXT_PLACE,
     Pid::END_FONT_FACE,
     Pid::END_FONT_SIZE,
@@ -151,7 +154,7 @@ static constexpr std::array<Pid, 27> TextLineBasePropertyId = { {
     Pid::END_TEXT_OFFSET,
 } };
 
-const std::array<Pid, 27>& TextLineBase::textLineBasePropertyIds()
+const std::array<Pid, 30>& TextLineBase::textLineBasePropertyIds()
 {
     return TextLineBasePropertyId;
 }
@@ -230,6 +233,12 @@ PropertyValue TextLineBase::getProperty(Pid id) const
         return PropertyValue::fromValue(continueTextAlign());
     case Pid::END_TEXT_ALIGN:
         return PropertyValue::fromValue(endTextAlign());
+    case Pid::BEGIN_TEXT_POSITION:
+        return PropertyValue::fromValue(beginTextPosition());
+    case Pid::CONTINUE_TEXT_POSITION:
+        return PropertyValue::fromValue(continueTextPosition());
+    case Pid::END_TEXT_POSITION:
+        return PropertyValue::fromValue(endTextPosition());
     case Pid::BEGIN_TEXT_PLACE:
         return _beginTextPlace;
     case Pid::BEGIN_HOOK_TYPE:
@@ -296,6 +305,9 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
     case Pid::BEGIN_TEXT_ALIGN:
         _beginTextAlign = v.value<Align>();
         break;
+    case Pid::BEGIN_TEXT_POSITION:
+        _beginTextPosition = v.value<AlignH>();
+        break;
     case Pid::BEGIN_FONT_FACE:
         setBeginFontFamily(v.value<String>());
         break;
@@ -314,6 +326,12 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::END_TEXT_ALIGN:
         _endTextAlign = v.value<Align>();
+        break;
+    case Pid::CONTINUE_TEXT_POSITION:
+        _continueTextPosition = v.value<AlignH>();
+        break;
+    case Pid::END_TEXT_POSITION:
+        _endTextPosition = v.value<AlignH>();
         break;
     case Pid::CONTINUE_TEXT_PLACE:
         _continueTextPlace = v.value<TextPlace>();

@@ -305,13 +305,33 @@ InspectorSectionView {
             }
         }
 
+        FlatRadioButtonGroupPropertyView {
+            id: positionButtonList
+            titleText: qsTrc("inspector", "Alignment to parent")
+            propertyItem: root.model ? root.model.horizontalPosition : null
+
+            enabled: root.model ? !root.model.centerOnSymbol.value : false
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: alignmentSection.navigationRowEnd + 1
+
+            requestIconFontSize: 16
+            requestWidth: 98
+
+            model: [
+                { iconCode: IconCode.ALIGN_LEFT, value: 0},
+                { iconCode: IconCode.ALIGN_HORIZONTAL_CENTER, value: 2},
+                { iconCode: IconCode.ALIGN_RIGHT, value: 1 }
+            ]
+        }
+
         FlatButton {
             id: insertSpecCharactersButton
             width: parent.width
 
             navigation.panel: root.navigationPanel
             navigation.name: "Insert special characters"
-            navigation.row: alignmentSection.navigationRowEnd + 1
+            navigation.row: positionButtonList.navigationRowEnd + 1
 
             text: qsTrc("inspector", "Insert special characters")
 

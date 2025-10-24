@@ -179,6 +179,7 @@ void TupletLayout::createNumber(Tuplet* item, LayoutContext& ctx)
     item->number()->setPropertyFlags(Pid::FONT_SIZE, item->propertyFlags(Pid::FONT_SIZE));
     item->number()->setPropertyFlags(Pid::FONT_STYLE, item->propertyFlags(Pid::FONT_STYLE));
     item->number()->setPropertyFlags(Pid::ALIGN, item->propertyFlags(Pid::ALIGN));
+    item->number()->setPropertyFlags(Pid::POSITION, item->propertyFlags(Pid::POSITION));
 
     const MStyle& style = ctx.conf().style();
 

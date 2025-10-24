@@ -343,6 +343,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::BEGIN_TEXT,              true,  "beginText",             P_TYPE::STRING,             PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "begin text") },
     { Pid::BEGIN_TEXT_ALIGN,        false, "beginTextAlign",        P_TYPE::ALIGN,              PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "begin text align") },
+    { Pid::BEGIN_TEXT_POSITION,     false, "beginTextPosition",     P_TYPE::ALIGN_H,            PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "begin text position") },
     { Pid::BEGIN_TEXT_PLACE,        false, "beginTextPlace",        P_TYPE::TEXT_PLACE,         PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "begin text place") },
     { Pid::BEGIN_HOOK_TYPE,         true,  "beginHookType",         P_TYPE::HOOK_TYPE,          PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "begin hook type") },
     { Pid::BEGIN_HOOK_HEIGHT,       false, "beginHookHeight",       P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "begin hook height") },
@@ -354,6 +355,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::CONTINUE_TEXT,           true,  "continueText",          P_TYPE::STRING,             PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "continue text") },
     { Pid::CONTINUE_TEXT_ALIGN,     false, "continueTextAlign",     P_TYPE::ALIGN,              PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "continue text align") },
+    { Pid::CONTINUE_TEXT_POSITION,  false, "continueTextPosition",  P_TYPE::ALIGN_H,            PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "continue text position") },
     { Pid::CONTINUE_TEXT_PLACE,     false, "continueTextPlace",     P_TYPE::TEXT_PLACE,         PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "continue text place") },
     { Pid::CONTINUE_FONT_FACE,      false, "continueFontFace",      P_TYPE::STRING,             PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "continue font face") },
     { Pid::CONTINUE_FONT_SIZE,      false, "continueFontSize",      P_TYPE::REAL,               PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "continue font size") },
@@ -362,6 +364,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::END_TEXT,                true,  "endText",               P_TYPE::STRING,             PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "end text") },
     { Pid::END_TEXT_ALIGN,          false, "endTextAlign",          P_TYPE::ALIGN,              PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "end text align") },
+    { Pid::END_TEXT_POSITION,       false, "endTextPosition",       P_TYPE::ALIGN_H,            PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "end text position") },
     { Pid::END_TEXT_PLACE,          false, "endTextPlace",          P_TYPE::TEXT_PLACE,         PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "end text place") },
     { Pid::END_HOOK_TYPE,           true,  "endHookType",           P_TYPE::HOOK_TYPE,          PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "end hook type") },
     { Pid::END_HOOK_HEIGHT,         false, "endHookHeight",         P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "end hook height") },

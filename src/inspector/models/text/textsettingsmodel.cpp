@@ -64,6 +64,7 @@ void TextSettingsModel::createProperties()
     const Pid fontStyleId = textLine ? mu::engraving::Pid::BEGIN_FONT_STYLE : mu::engraving::Pid::FONT_STYLE;
     const Pid fontSizeId = textLine ? mu::engraving::Pid::BEGIN_FONT_SIZE : mu::engraving::Pid::FONT_SIZE;
     const Pid fontAlignId = textLine ? mu::engraving::Pid::BEGIN_TEXT_ALIGN : mu::engraving::Pid::ALIGN;
+    const Pid textPositionId = textLine ? mu::engraving::Pid::BEGIN_TEXT_POSITION : mu::engraving::Pid::POSITION;
 
     auto onPropertyChanged = [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         this->propertyChangedCallback(pid, newValue);
@@ -93,6 +94,7 @@ void TextSettingsModel::createProperties()
         emit requestReloadPropertyItems();
     }, onPropertyReset);
 
+    m_horizontalPosition = buildPropertyItem(textPositionId, onPropertyChanged, nullptr, onPropertyReset);
     m_symbolSize = buildPropertyItem(mu::engraving::Pid::MUSIC_SYMBOL_SIZE);
     m_isSizeSpatiumDependent = buildPropertyItem(mu::engraving::Pid::SIZE_SPATIUM_DEPENDENT);
 
@@ -132,6 +134,7 @@ void TextSettingsModel::loadProperties()
         Pid::FONT_SIZE,
         Pid::TEXT_LINE_SPACING,
         Pid::ALIGN,
+        Pid::POSITION,
         Pid::MUSIC_SYMBOL_SIZE,
         Pid::TEXT_SIZE_SPATIUM_DEPENDENT,
         Pid::FRAME_TYPE,
@@ -151,6 +154,7 @@ void TextSettingsModel::loadProperties()
         Pid::BEGIN_FONT_SIZE,
         Pid::TEXT_LINE_SPACING,
         Pid::BEGIN_TEXT_ALIGN,
+        Pid::BEGIN_TEXT_POSITION,
         Pid::MUSIC_SYMBOL_SIZE,
         Pid::TEXT_SIZE_SPATIUM_DEPENDENT,
         Pid::FRAME_TYPE,
@@ -210,6 +214,10 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
             QVariantList list = elementPropertyValue.toList();
             return list.size() >= 2 ? list[1] : QVariant();
         });
+    }
+
+    if (muse::contains(propertyIdSet, Pid::POSITION) || muse::contains(propertyIdSet, Pid::BEGIN_TEXT_POSITION)) {
+        loadPropertyItem(m_horizontalPosition);
     }
 
     if (muse::contains(propertyIdSet, Pid::MUSIC_SYMBOL_SIZE)) {
@@ -355,6 +363,11 @@ PropertyItem* TextSettingsModel::horizontalAlignment() const
 PropertyItem* TextSettingsModel::verticalAlignment() const
 {
     return m_verticalAlignment;
+}
+
+PropertyItem* TextSettingsModel::horizontalPosition() const
+{
+    return m_horizontalPosition;
 }
 
 PropertyItem* TextSettingsModel::symbolSize() const

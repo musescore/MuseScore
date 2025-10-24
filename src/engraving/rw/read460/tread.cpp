@@ -1589,7 +1589,7 @@ void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
             number->setColor(t->color());
             number->setTrack(t->track());
             // move property flags from _number back to tuplet
-            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN }) {
+            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN, Pid::POSITION }) {
                 t->setPropertyFlags(p, number->propertyFlags(p));
             }
         } else if (!readItemProperties(t, e, ctx)) {
@@ -2822,6 +2822,9 @@ void TRead::read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx)
             xml.unknown();
         }
     }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(c);
+    }
 }
 
 void TRead::read(Groups* g, XmlReader& e, ReadContext&)
@@ -2917,7 +2920,9 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(h);
+    }
     h->styleChanged();
 }
 
@@ -3097,6 +3102,9 @@ void TRead::read(LetRing* r, XmlReader& e, ReadContext& ctx)
         } else if (!readProperties(static_cast<TextLineBase*>(r), e, ctx)) {
             e.unknown();
         }
+    }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(r);
     }
 }
 
@@ -3418,6 +3426,9 @@ void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         readProperties(o, e, ctx);
     }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(o);
+    }
     if (o->ottavaType() != OttavaType::OTTAVA_8VA || o->numbersOnly() != o->propertyDefault(Pid::NUMBERS_ONLY).toBool()) {
         o->styleChanged();
     }
@@ -3471,6 +3482,9 @@ void TRead::read(PalmMute* p, XmlReader& e, ReadContext& ctx)
         } else if (!readProperties(static_cast<TextLineBase*>(p), e, ctx)) {
             e.unknown();
         }
+    }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(p);
     }
 }
 
@@ -3594,6 +3608,9 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
         } else if (!readProperties(static_cast<TextLineBase*>(p), e, ctx)) {
             e.unknown();
         }
+    }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(p);
     }
 }
 
@@ -4129,6 +4146,9 @@ void TRead::read(TextLineBase* b, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(b);
+    }
 }
 
 void TRead::read(Tie* t, XmlReader& xml, ReadContext& ctx)
@@ -4376,6 +4396,14 @@ bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
     const AsciiStringView tag(e.name());
     for (Pid i : TextBasePropertyId) {
         if (TRead::readProperty(t, tag, e, ctx, i)) {
+            if (ctx.mscVersion() < 470 || tag != "align" || t->isMarker()) {
+                return true;
+            }
+
+            t->setPosition(t->align().horizontal);
+            if (t->position() != t->propertyDefault(Pid::POSITION).value<AlignH>()) {
+                t->setPropertyFlags(Pid::POSITION, PropertyFlags::UNSTYLED);
+            }
             return true;
         }
     }
@@ -4506,6 +4534,9 @@ void TRead::read(Volta* v, XmlReader& e, ReadContext& ctx)
         } else if (!readProperties(v, e, ctx)) {
             e.unknown();
         }
+    }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(v);
     }
 }
 

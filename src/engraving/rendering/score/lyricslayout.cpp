@@ -130,17 +130,17 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 
     if (item->isMelisma() || hasNumber) {
         // use the melisma style alignment setting
-        if (item->isStyled(Pid::ALIGN)) {
+        if (item->isStyled(Pid::POSITION)) {
             if (ctx.conf().styleB(Sid::lyricsCenterDashedSyllables) && !(item->separator() && item->separator()->isEndMelisma())) {
-                item->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
+                item->setPosition(AlignH::HCENTER);
             } else {
-                item->setAlign(ctx.conf().styleV(Sid::lyricsMelismaAlign).value<Align>());
+                item->setPosition(ctx.conf().styleV(Sid::lyricsMelismaAlign).value<Align>().horizontal);
             }
         }
     } else {
         // use the text style alignment setting
-        if (item->isStyled(Pid::ALIGN)) {
-            item->setAlign(item->propertyDefault(Pid::ALIGN).value<Align>());
+        if (item->isStyled(Pid::POSITION)) {
+            item->setPosition(item->propertyDefault(Pid::POSITION).value<AlignH>());
         }
     }
 
@@ -174,17 +174,17 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     }
 
     double nominalWidth = item->symWidth(SymId::noteheadBlack);
-    if (item->align() == AlignH::HCENTER) {
+    if (item->position() == AlignH::HCENTER) {
         //
         // center under notehead, not origin
         // however, lyrics that are melismas or have verse numbers will be forced to left alignment
         //
         // center under note head
         x += nominalWidth * .5 - centerAdjust * 0.5;
-    } else if (item->align() == AlignH::LEFT) {
+    } else if (item->position() == AlignH::LEFT) {
         // even for left aligned syllables, ignore leading verse numbers and/or punctuation
         x -= leftAdjust;
-    } else if (item->align() == AlignH::RIGHT) {
+    } else if (item->position() == AlignH::RIGHT) {
         x += nominalWidth;
     }
 
