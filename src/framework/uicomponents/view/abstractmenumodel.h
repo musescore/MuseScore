@@ -107,6 +107,7 @@ private:
     void updateShortcutsAll();
     void updateShortcuts(MenuItem* item);
 
+    bool m_subscribedOnChanges = false;
     MenuItemList m_items;
 };
 }
