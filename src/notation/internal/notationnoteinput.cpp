@@ -774,6 +774,8 @@ muse::RectF NotationNoteInput::cursorRect() const
         h = lineDist;
         y += staffType->physStringToYOffset(inputStateStringsCount) * spatium;
         y -= (staffType->onLines() ? lineDist * 0.5 : lineDist);
+        x -= 2 * sideMargin;
+        w += 4 * sideMargin;
     } else {
         h = (lines - 1) * lineDist + 2 * skylineMargin;
         y -= skylineMargin;
