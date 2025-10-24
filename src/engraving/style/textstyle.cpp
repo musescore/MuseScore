@@ -855,6 +855,25 @@ const TextStyle textLineTextStyle { {
     { TextStylePropertyType::Position,             Sid::textLinePosition,                       Pid::POSITION },
 } };
 
+const TextStyle systemTextLineTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::systemTextLineFontFace,                 Pid::BEGIN_FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::systemTextLineFontSize,                 Pid::BEGIN_FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::systemTextLineLineSpacing,              Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::systemTextLineFontSpatiumDependent,     Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::systemTextLineFontStyle,                Pid::BEGIN_FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::systemTextLineColor,                    Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::systemTextLineTextAlign,                Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::systemTextLinePosAbove,                 Pid::BEGIN_TEXT_OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::systemTextLineFrameType,                Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::systemTextLineFramePadding,             Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::systemTextLineFrameWidth,               Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::systemTextLineFrameRound,               Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::systemTextLineFrameFgColor,             Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::systemTextLineFrameBgColor,             Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::Position,             Sid::systemTextLinePosition,                 Pid::POSITION },
+} };
+
 const TextStyle noteLineTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::noteLineFontFace,                      Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::noteLineFontSize,                      Pid::FONT_SIZE },
@@ -1427,6 +1446,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM: return &harpPedalTextDiagramTextStyle;
 
     case TextStyleType::TEXTLINE: return &textLineTextStyle;
+    case TextStyleType::SYSTEM_TEXTLINE: return &systemTextLineTextStyle;
     case TextStyleType::NOTELINE: return &noteLineTextStyle;
     case TextStyleType::VOLTA: return &voltaTextStyle;
     case TextStyleType::OTTAVA: return &ottavaTextStyle;
