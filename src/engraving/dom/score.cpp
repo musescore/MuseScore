@@ -5874,6 +5874,17 @@ size_t Score::visibleStavesCount() const
     return count;
 }
 
+bool Score::allStavesInvisible() const
+{
+    for (const Staff* staff : m_staves) {
+        if (staff->show()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 ShadowNote* Score::shadowNote() const
 {
     return m_shadowNote;

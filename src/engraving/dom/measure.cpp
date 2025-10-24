@@ -600,7 +600,7 @@ bool Measure::showMeasureNumberOnStaff(staff_idx_t staffIdx) const
         return false;
     }
 
-    return showMeasureNumber() && score()->staff(staffIdx)->shouldShowMeasureNumbers();
+    return showMeasureNumber() && score()->staff(staffIdx)->shouldShowMeasureNumbers() && !score()->allStavesInvisible();
 }
 
 //---------------------------------------------------------
