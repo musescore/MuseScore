@@ -38,6 +38,13 @@ namespace mu::iex::finale {
 /// @todo
 // MaestroTimes: import 194 as 2, 205 as 3, 202/203/193 as 2, 216 as 217 (no suitable smufl equivalent)"
 
+static const std::vector<std::pair<FontStyle, String>> fontStyleTags {
+    { FontStyle::Bold,      u"b" },
+    { FontStyle::Italic,    u"i" },
+    { FontStyle::Underline, u"u" },
+    { FontStyle::Strike,    u"s" },
+};
+
 FontStyle FinaleTextConv::museFontEfx(const MusxInstance<FontInfo>& fontInfo)
 {
     FontStyle retval = FontStyle::Normal;
