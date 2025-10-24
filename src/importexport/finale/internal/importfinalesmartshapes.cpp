@@ -725,6 +725,10 @@ void FinaleParser::importSmartShapes()
             toOttava(newSpanner)->setContinueTextOffset(textoffset);
             toOttava(newSpanner)->setEndTextOffset(textoffset);
         }
+
+        if (newSpanner->systemFlag()) {
+            m_systemObjectStaves.insert(newSpanner->staffIdx());
+        }
     }
     logger()->logInfo(String(u"Import smart shapes: Finished importing smart shapes"));
 }
