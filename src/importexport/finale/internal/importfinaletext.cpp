@@ -37,6 +37,8 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/harppedaldiagram.h"
+#include "engraving/dom/jump.h"
+#include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/measurenumber.h"
@@ -117,19 +119,12 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     std::unordered_set<FontStyle> emittedOpenTags; // tracks whose open tags we actually emitted here
     FontStyle flagsThatAreStillOpen = FontStyle::Normal; // any flags we've opened that need to be closed.
 
-    static const std::vector<std::pair<FontStyle, String>> fontStyleTags = {
-        { FontStyle::Bold,      u"b" },
-        { FontStyle::Italic,    u"i" },
-        { FontStyle::Underline, u"u" },
-        { FontStyle::Strike,    u"s" },
-    };
-
     auto updateFontStyles = [&](const std::optional<FontTracker>& current, const std::optional<FontTracker>& previous) {
         FontStyle newStyles = current ? current->fontStyle : FontStyle::Normal;
         FontStyle oldStyles = previous ? previous->fontStyle : FontStyle::Normal;
 
         // Close styles that are no longer active — in fixed reverse order
-        for (auto it = fontStyleTags.rbegin(); it != fontStyleTags.rend(); ++it) {
+        for (auto it = FinaleTextConv::fontStyleTags.rbegin(); it != FinaleTextConv::fontStyleTags.rend(); ++it) {
             if (oldStyles & it->first) {
                 if (!muse::contains(emittedOpenTags, it->first)) {
                     // Patch in opening tag at start
@@ -142,7 +137,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
         }
 
         // Open newly active styles — in fixed forward order
-        for (const auto& [bit, tag] : fontStyleTags) {
+        for (const auto& [bit, tag] : FinaleTextConv::fontStyleTags) {
             if (newStyles & bit) {
                 emittedOpenTags.insert(bit);
                 endString.append(String(u"<") + tag + u">");
@@ -397,6 +392,98 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
     }
 
     context.logger()->logInfo(String(u"Converted expression of %1 type").arg(TConv::userName(elementType).translated()));
+}
+
+static String textFromRepeatDef(const MusxInstance<musx::dom::others::TextRepeatDef>& repeatDef, const FontTracker font)
+{
+    String text;
+    for (const auto& [bit, tag] : FinaleTextConv::fontStyleTags) {
+        if (font.fontStyle & bit) {
+            text.append(String(u"<") + tag + u">");
+        }
+    }
+    text.append(String(u"<font face=\"" + font.fontName + u"\"/>"));
+    text.append(String(u"<font size=\""));
+    text.append(String::number(font.fontSize, 2) + String(u"\"/>"));
+
+    // Text
+    const MusxInstance<others::TextRepeatText> repeatText = repeatDef->getDocument()->getOthers()->get<others::TextRepeatText>(repeatDef->getSourcePartId(), repeatDef->getCmper());
+    text.append(String::fromStdString(repeatText->text));
+    return text;
+}
+
+ReadableRepeatText::ReadableRepeatText(const FinaleParser& context, const MusxInstance<musx::dom::others::TextRepeatDef>& repeatDef)
+{
+    xmlText = textFromRepeatDef(repeatDef, FontTracker(repeatDef->font));
+
+    // Text frame/border (Finale: Enclosure)
+    frameSettings = FrameSettings(repeatDef->hasEnclosure ? context.musxDocument()->getOthers()->get<others::TextRepeatEnclosure>(context.currentMusxPartId(), repeatDef->getCmper()).get() : nullptr);
+
+    // Text justification and alignment
+    repeatAlignment = toAlignH(repeatDef->justification);
+
+    // Element type and element-based options
+    // Replace symbols with text
+    String tempText = xmlText;
+    tempText.replace(u"<sym>segno</sym>", u"Segno");
+    tempText.replace(u"<sym>segnoSerpent1</sym>", u"Segno");
+    tempText.replace(u"<sym>segnoSerpent2</sym>", u"Segno");
+    tempText.replace(u"<sym>coda</sym>", u"Coda");
+    tempText.replace(u"<sym>codaSquare</sym>", u"Coda");
+
+    auto match = [tempText](const String& s) {
+        return tempText.contains(s, CaseSensitivity::CaseInsensitive);
+    };
+
+    if (match(u"al Fine")) {
+        if (match(u"D.D.S.") || match(u"Doppio Segno")) {
+            jumpType = JumpType::DSS_AL_FINE;
+        } else if (match(u"D.S.") || match(u"Segno")) {
+            jumpType = JumpType::DS_AL_FINE;
+        } else {
+            jumpType = JumpType::DC_AL_FINE;
+        }
+    } else if (match(u"al Coda")) {
+        if (match(u"D.D.S.") || match(u"Doppio Segno")) {
+            jumpType = JumpType::DSS_AL_CODA;
+        } else if (match(u"D.S.") || match(u"Segno")) {
+            jumpType = JumpType::DS_AL_CODA;
+        } else {
+            jumpType = JumpType::DC_AL_CODA;
+        }
+    } else if (match(u"al Doppia Coda")) {
+        if (match(u"D.D.S.") || match(u"Doppio Segno")) {
+            jumpType = JumpType::DSS_AL_DBLCODA;
+        } else if (match(u"D.S.") || match(u"Segno")) {
+            jumpType = JumpType::DS_AL_DBLCODA;
+        } else {
+            jumpType = JumpType::DC_AL_DBLCODA;
+        }
+    } else if (match(u"D.D.S.") || match(u"Dal Doppio Segno")) {
+        jumpType = JumpType::DSS;
+    } else if (match(u"D.S.") || match(u"Dal Segno")) {
+        jumpType = JumpType::DS;
+    } else if (match(u"D.C.") || match(u"Da Capo")) {
+        jumpType = JumpType::DC;
+    } else if (match(u"Da Coda")) {
+        markerType = MarkerType::DA_CODA;
+    } else if (match(u"Da Doppia Coda")) {
+        markerType = MarkerType::DA_DBLCODA;
+    } else if (match(u"To Coda")) {
+        bool codaSymbols = xmlText.contains(u"<sym>coda</sym>") || xmlText.contains(u"<sym>codaSquare</sym>");
+        markerType = codaSymbols ? MarkerType::TOCODASYM : MarkerType::TOCODA;
+    } else if (match(u"Fine")) {
+        markerType = MarkerType::FINE;
+    } else if (match(u"Coda")) {
+        markerType = xmlText.contains(u"<sym>codaSquare</sym>") ? MarkerType::VARCODA : MarkerType::CODA;
+    } else if (match(u"Segno")) {
+        markerType = xmlText.contains(u"<sym>segnoSerpent1</sym>") ? MarkerType::VARSEGNO : MarkerType::SEGNO;
+    } else {
+        elementType = (repeatAlignment == AlignH::LEFT) ? ElementType::MARKER : ElementType::JUMP;
+    }
+    if (elementType == ElementType::INVALID) {
+        elementType = (jumpType == JumpType::USER) ? ElementType::MARKER : ElementType::JUMP;
+    }
 }
 
 void FinaleParser::importTextExpressions()
@@ -842,6 +929,94 @@ void FinaleParser::importTextExpressions()
                 s->add(text);
             }
         }
+    }
+
+    // Repeat markings (markers and jumps)
+    const MusxInstanceList<others::TextRepeatAssign> textRepeatAssignment = m_doc->getOthers()->getArray<others::TextRepeatAssign>(m_currentMusxPartId);
+    logger()->logInfo(String(u"Import repeat texts: Found %1 texts.").arg(textRepeatAssignment.size()));
+    for (const auto& repeatAssignment : textRepeatAssignment) {
+        // Search our converted repeat text library, or if not found add to it
+        ReadableRepeatText* repeatText = muse::value(m_repeatTexts, repeatAssignment->textRepeatId, nullptr); /// @todo does this code work for part scores?
+        const MusxInstance<others::TextRepeatDef> repeatDefinition = m_doc->getOthers()->get<others::TextRepeatDef>(m_currentMusxPartId, repeatAssignment->textRepeatId);
+        if (!repeatText) {
+            repeatText = new ReadableRepeatText(*this, repeatDefinition);
+            m_repeatTexts.emplace(repeatAssignment->textRepeatId, repeatText);
+        }
+
+        if (repeatText->xmlText.empty()) {
+            continue;
+        }
+
+        // Find staff
+        /// @todo use system object staves and linked clones to avoid duplicate elements
+        staff_idx_t curStaffIdx = [&]() -> staff_idx_t {
+            if (textRepeatAssignment->topStaffOnly) {
+                return 0;
+            }
+            /// @todo StaffLists
+            return 0;
+        }();
+        if (curStaffIdx == muse::nidx) {
+            /// @todo system object staves
+            logger()->logWarning(String(u"Add repeat text: Musx inst value not found."));
+            continue;
+        }
+
+        // Find location in measure
+        Fraction mTick = muse::value(m_meas2Tick, repeatAssignment->getCmper(), Fraction(-1, 1));
+        Measure* measure = !mTick.negative() ? m_score->tick2measure(mTick) : nullptr;
+        if (!measure) {
+            continue;
+        }
+
+        track_idx_t curTrackIdx = staff2track(curStaffIdx);
+        logger()->logInfo(String(u"Creating a %1 at tick %2 on track %3.").arg(TConv::userName(repeatText->elementType).translated(), measure->tick().toString(), String::number(curTrackIdx)));
+        TextBase* item = toTextBase(Factory::createItem(repeatText->elementType, measure));
+        item->setParent(measure);
+        // item->setVisible(!repeatAssignment->hidden);
+        item->setTrack(curTrackIdx);
+        if (item->isJump()) {
+            toJump(item)->setJumpType(repeatText->jumpType);
+        } else if (item->isMarker()) {
+            toMarker(item)->setMarkerType(repeatText->markerType);
+        }
+        String replaceText = String();
+        switch (repeatDefinition->poundReplace) {
+        case others::TextRepeatDef::PoundReplaceOption::RepeatID: {
+            /// @todo support correct font styling
+            if (const auto& targetRepeat = m_doc->getOthers()->get<others::TextRepeatDef>(m_currentMusxPartId, repeatAssignment->targetValue)) {
+                FontTracker font = FontTracker(repeatDefinition->useThisFont ? repeatDefinition->font : targetRepeat->font);
+                replaceText = textFromRepeatDef(targetRepeat, font);
+            }
+            break;
+        }
+        case others::TextRepeatDef::PoundReplaceOption::MeasureNumber:
+            replaceText = String::number(repeatAssignment->targetValue);
+            break;
+        default:
+            replaceText = String::number(repeatAssignment->passNumber);
+            break;
+        }
+        item->setXmlText(repeatText->xmlText.replace(u"#", replaceText));
+        item->setAlign(Align(repeatText->repeatAlignment, AlignV::BASELINE));
+        item->setFrameType(repeatText->frameSettings.frameType);
+        if (item->frameType() != FrameType::NO_FRAME) {
+            item->setFrameWidth(absoluteSpatium(repeatText->frameSettings.frameWidth, item)); // is this the correct scaling?
+            item->setPaddingWidth(absoluteSpatium(repeatText->frameSettings.paddingWidth, item)); // is this the correct scaling?
+            item->setFrameRound(repeatText->frameSettings.frameRound);
+        }
+        item->setAutoplace(false);
+        setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
+        item->setOffset(evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * SPATIUM20);
+        measure->add(item);
+
+        /// @todo assign this to the appropriate location(s), taking into account if this is a single-staff or stafflist assignment.
+        /// @note Finale provides a per-staff assignment *in addition* to top-staff (-1) or bot-staff (-2) assignments. Whether it is visible is
+        /// determined by the stafflist (if any) or by whether it is assigned to score or part or both. I don't know enough about MuseScore
+        /// features to suggest an exact import strategy. (I may need to add staff lists to musx. I don't remember adding them yet. But since
+        /// Finale adds an assignment on every staff dictated by the staff list, we may not need to reference it.)
+        /// @todo use expressionAssignment->showStaffList to control sharing between score/parts. some elements can be hidden entirely, others will be made invisible
+        /// @todo fine-tune playback
     }
 }
 
