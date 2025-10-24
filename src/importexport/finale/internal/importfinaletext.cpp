@@ -261,9 +261,9 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     return endString;
 };
 
-static const std::regex dynamicRegex(R"((?:<sym>dynamic.*?</sym>)+|(?:\b)[fmnprsz]+(?:\b(?=[^>]|$)))");
-static const std::regex hpdDetectRegex(R"(^ *?(?:<sym>harpPedal[^>]*?<\/sym> *?)+$)");
-static const std::regex hpdFragmentRegex(R"(<sym>harpPedal[^>]*?<\/sym>)");
+static const std::regex dynamicRegex(R"((?:<sym>dynamic[^>]*?</sym>)+|(?:\b)[fmnprsz]+(?:\b(?=[^>]|$)))");
+static const std::regex hpdDetectRegex(R"(^ *?(?:<sym>harpPedal[^>]*?</sym> *?)+$)");
+static const std::regex hpdFragmentRegex(R"(<sym>harpPedal[^>]*?</sym>)");
 
 static std::optional<std::array<PedalPosition, HARP_STRING_NO> > parseHarpPedalDiagram(const std::string& utf8Tag)
 {
