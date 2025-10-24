@@ -715,11 +715,13 @@ void FinaleParser::importSmartShapes()
         } else if (type == ElementType::OTTAVA && !customLine) {
             // Account for odd text offset
             muse::draw::Font f(score()->engravingFont()->family(), muse::draw::Font::Type::MusicSymbol);
-            f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * MScore::pixelRatio * newSpanner->magS() / SPATIUM20);
+            f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * newSpanner->spatium() / SPATIUM20);
             muse::draw::FontMetrics fm(f);
-            PointF textoffset(0.0, fm.descent());
+            PointF textoffset(0.0, 0.0); //.75 * SPATIUM20);
             if (newSpanner->placeAbove()) {
-                textoffset.ry() -= fm.boundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))).height();  // Assume 8va symbol for now
+                textoffset.ry() += fm.tightBoundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))).top() - fm.ascent();
+            } else {
+                textoffset.ry() += fm.descent() - fm.tightBoundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))).bottom();
             }
             toOttava(newSpanner)->setBeginTextOffset(textoffset);
             toOttava(newSpanner)->setContinueTextOffset(textoffset);
