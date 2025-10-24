@@ -254,6 +254,10 @@ MenuItem* AbstractMenuModel::makeSeparator()
 
 void AbstractMenuModel::subscribeOnChanges()
 {
+    if (m_subscribedOnChanges) {
+        return;
+    }
+
     uiActionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
         onActionsStateChanges(codes);
     });
@@ -261,6 +265,8 @@ void AbstractMenuModel::subscribeOnChanges()
     shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
         updateShortcutsAll();
     });
+
+    m_subscribedOnChanges = true;
 }
 
 void AbstractMenuModel::onActionsStateChanges(const muse::actions::ActionCodeList& codes)
