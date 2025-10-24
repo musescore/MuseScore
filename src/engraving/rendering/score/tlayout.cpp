@@ -5979,7 +5979,7 @@ static void textHorizontalLayout(const TextBase* item, Shape& shape, double maxB
     bool dynamicAlwaysCentered = item->isDynamic() && item->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();//TODO move to dynamic layout like marker
     for (size_t i = 0; i < ldata->blocks.size(); ++i) {
         TextBlock& textBlock = ldata->blocks[i];
-        double xAdj = leftMargin;
+        double xAdj = leftMargin + textBlock.shape().left();
 
         // Set position relative to reference point
         AlignH position = item->position();
