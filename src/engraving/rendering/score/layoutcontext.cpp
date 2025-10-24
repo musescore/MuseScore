@@ -229,6 +229,14 @@ const Staff* DomAccessor::staff(staff_idx_t idx) const
     return score()->staff(idx);
 }
 
+bool DomAccessor::allStavesInvisible() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return false;
+    }
+    return score()->allStavesInvisible();
+}
+
 size_t DomAccessor::ntracks() const
 {
     IF_ASSERT_FAILED(score()) {

@@ -156,6 +156,7 @@ public:
     size_t nstaves() const;
     const std::vector<Staff*>& staves() const;
     const Staff* staff(staff_idx_t idx) const;
+    bool allStavesInvisible() const;
 
     size_t ntracks() const;
 

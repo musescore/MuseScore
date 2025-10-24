@@ -956,6 +956,10 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
         return;
     }
 
+    if (ctx.dom().allStavesInvisible()) {
+        return;
+    }
+
     // Check if requested cross-staff is possible
     // This must happen before cmdUpdateNotes
     checkStaffMoveValidity(measure, ctx);

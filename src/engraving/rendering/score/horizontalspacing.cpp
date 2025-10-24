@@ -48,6 +48,10 @@ double HorizontalSpacing::computeSpacingForFullSystem(System* system, double str
 {
     TRACEFUNC;
 
+    if (system->score()->allStavesInvisible()) {
+        return 0.0;
+    }
+
     HorizontalSpacingContext ctx;
     ctx.system = system;
     ctx.spatium = system->spatium();
@@ -85,6 +89,10 @@ double HorizontalSpacing::computeSpacingForFullSystem(System* system, double str
 double HorizontalSpacing::updateSpacingForLastAddedMeasure(System* system, bool startOfContinuousLayoutRegion)
 {
     TRACEFUNC;
+
+    if (system->score()->allStavesInvisible()) {
+        return 0.0;
+    }
 
     HorizontalSpacingContext ctx;
     ctx.system = system;
