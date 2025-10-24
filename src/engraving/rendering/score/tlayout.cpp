@@ -2893,6 +2893,8 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
 
         item->hairpin()->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
         item->hairpin()->setEndTextAlign({ AlignH::RIGHT, AlignV::VCENTER });
+        item->hairpin()->setBeginTextPosition(AlignH::LEFT);
+        item->hairpin()->setEndTextPosition(AlignH::RIGHT);
 
         double x1 = 0.0;
         layoutTextLineBaseSegment(item, ctx);
@@ -5976,6 +5978,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->text()->setSize(tl->beginFontSize());
         item->text()->setOffset(tl->beginTextOffset() * item->mag());
         item->text()->setAlign(tl->beginTextAlign());
+        item->text()->setPosition(tl->beginTextPosition());
         item->text()->setFontStyle(tl->beginFontStyle());
     } else {
         item->text()->setXmlText(tl->continueText());
@@ -5983,6 +5986,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->text()->setSize(tl->continueFontSize());
         item->text()->setOffset(tl->continueTextOffset() * item->mag());
         item->text()->setAlign(tl->continueTextAlign());
+        item->text()->setPosition(tl->continueTextPosition());
         item->text()->setFontStyle(tl->continueFontStyle());
     }
     item->text()->setPlacement(PlacementV::ABOVE);
@@ -5996,6 +6000,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->endText()->setSize(tl->endFontSize());
         item->endText()->setOffset(tl->endTextOffset());
         item->endText()->setAlign(tl->endTextAlign());
+        item->endText()->setPosition(tl->endTextPosition());
         item->endText()->setFontStyle(tl->endFontStyle());
         item->endText()->setPlacement(PlacementV::ABOVE);
         item->endText()->setTrack(item->track());
@@ -6049,7 +6054,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     if (!item->text()->empty()) {
         if ((isSingleOrBegin && alignBeginText) || (!isSingleOrBegin && alignContinueText)) {
             l1 = gapBetweenTextAndLine;
-            switch (item->text()->align().horizontal) {
+            switch (item->text()->position()) {
             case AlignH::LEFT:
                 l1 += item->text()->ldata()->bbox().width();
                 break;
@@ -6100,7 +6105,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     if (!item->endText()->empty()) {
         if (alignEndText) {
             l2 = gapBetweenTextAndLine;
-            switch (item->endText()->align().horizontal) {
+            switch (item->endText()->position()) {
             case AlignH::RIGHT:
                 l2 += item->endText()->ldata()->bbox().width();
                 break;

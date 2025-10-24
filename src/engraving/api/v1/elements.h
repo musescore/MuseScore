@@ -727,6 +727,8 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(beginText,               BEGIN_TEXT)
     /// For text-line-based elements, the alignment of the beginning text.
     API_PROPERTY(beginTextAlign,          BEGIN_TEXT_ALIGN)
+    /// For text-line-based elements, the position of the beginning text.
+    API_PROPERTY(beginTextPosition,       BEGIN_TEXT_POSITION)
     /// For text-line-based elements, the placement of the beginning text,
     /// one of PluginAPI::PluginAPI::TextPlacement values.
     API_PROPERTY(beginTextPlace,          BEGIN_TEXT_PLACE)
@@ -751,6 +753,8 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(continueText,            CONTINUE_TEXT)
     /// For text-line-based elements, the alignment of the continuation text.
     API_PROPERTY(continueTextAlign,       CONTINUE_TEXT_ALIGN)
+    /// For text-line-based elements, the position of the continuation text.
+    API_PROPERTY(continueTextPosition,    CONTINUE_TEXT_POSITION)
     /// For text-line-based elements, the placement of the continuation text,
     /// one of PluginAPI::PluginAPI::TextPlacement values.
     API_PROPERTY(continueTextPlace,       CONTINUE_TEXT_PLACE)
@@ -767,6 +771,8 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(endText,                 END_TEXT)
     /// For text-line-based elements, the alignment of the ending text.
     API_PROPERTY(endTextAlign,            END_TEXT_ALIGN)
+    /// For text-line-based elements, the position of the ending text.
+    API_PROPERTY(endTextPosition,         END_TEXT_POSITION)
     /// For text-line-based elements, the placement of the ending text,
     /// one of PluginAPI::PluginAPI::TextPlacement values.
     API_PROPERTY(endTextPlace,            END_TEXT_PLACE)

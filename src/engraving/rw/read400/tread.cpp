@@ -2669,6 +2669,7 @@ void TRead::read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx)
             xml.unknown();
         }
     }
+    compat::CompatUtils::setTextLineTextPositionFromAlign(c);
 }
 
 void TRead::read(Groups* g, XmlReader& e, ReadContext&)
@@ -2717,6 +2718,7 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    compat::CompatUtils::setTextLineTextPositionFromAlign(h);
 
     h->styleChanged();
 }
@@ -2885,6 +2887,7 @@ void TRead::read(LetRing* r, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    compat::CompatUtils::setTextLineTextPositionFromAlign(r);
 }
 
 void TRead::read(Location* l, XmlReader& e, ReadContext&)
@@ -3222,6 +3225,7 @@ void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         readProperties(o, e, ctx);
     }
+    compat::CompatUtils::setTextLineTextPositionFromAlign(o);
     if (o->ottavaType() != OttavaType::OTTAVA_8VA || o->numbersOnly() != o->propertyDefault(Pid::NUMBERS_ONLY).toBool()) {
         o->styleChanged();
     }
@@ -3287,6 +3291,7 @@ void TRead::read(PalmMute* p, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    compat::CompatUtils::setTextLineTextPositionFromAlign(p);
 }
 
 void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
@@ -3463,6 +3468,8 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
     } else if (p->endText() == p->propertyDefault(Pid::END_TEXT).value<String>()) {
         p->setPropertyFlags(Pid::END_TEXT, PropertyFlags::STYLED);
     }
+
+    compat::CompatUtils::setTextLineTextPositionFromAlign(p);
 }
 
 void TRead::read(Rasgueado* r, XmlReader& xml, ReadContext& ctx)
@@ -4011,6 +4018,7 @@ void TRead::read(TextLineBase* b, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    compat::CompatUtils::setTextLineTextPositionFromAlign(b);
 }
 
 void TRead::read(Tie* t, XmlReader& xml, ReadContext& ctx)
@@ -4413,6 +4421,8 @@ void TRead::read(Volta* v, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+
+    compat::CompatUtils::setTextLineTextPositionFromAlign(v);
 }
 
 bool TRead::readProperties(Volta* v, XmlReader& e, ReadContext& ctx)
