@@ -28,6 +28,8 @@
 
 #include "engraving/dom/pitchspelling.h"
 
+#define SPN_PITCH_DISPLAY(wantSPN, pitch) (wantSPN ? muse::String(pitch) : muse::mtrc("global/pitchName", pitch))
+
 using namespace mu::notation;
 using namespace muse::ui;
 
@@ -93,11 +95,29 @@ void EditPitch::setup()
 
     qApp->installEventFilter(this);
 
-    // Center cell contents
+    // Display pitch names according to user preference
+    bool wantSPN = engravingConfiguration()->pitchNotationSPN();
+
+    // Populate table with localized pitch names and center them in cells
+    static constexpr const char* noteName[] =
+    { "C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B", "C" };
+
     for (int row = 0; row < tableWidget->rowCount(); ++row) {
         for (int col = 0; col < tableWidget->columnCount(); ++col) {
+            if (row == 0 && col > 7) {
+                // Skip MIDI notes above G9
+                break;
+            }
             QTableWidgetItem* item = tableWidget->item(row, col);
             if (item) {
+                int octave;
+                if (col == tableWidget->columnCount() - 1) {
+                    octave = 10 - row;
+                } else {
+                    octave = 9 - row;
+                }
+                std::string pitch = std::string(noteName[col]) + std::to_string(octave);
+                item->setText(SPN_PITCH_DISPLAY(wantSPN, pitch.c_str()));
                 item->setTextAlignment(Qt::AlignCenter);
             }
         }

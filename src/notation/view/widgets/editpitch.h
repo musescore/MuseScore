@@ -22,15 +22,19 @@
 #pragma once
 
 #include "ui_editpitch.h"
+#include "engraving/iengravingconfiguration.h"
+#include "modularity/ioc.h"
 
 namespace mu::notation {
 //---------------------------------------------------------
 //   EditPitch
 //---------------------------------------------------------
 
-class EditPitch : public QDialog, private Ui::EditPitchBase
+class EditPitch : public QDialog, private Ui::EditPitchBase, public muse::Injectable
 {
     Q_OBJECT
+
+    muse::Inject<mu::engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
     EditPitch(QWidget* parent);
