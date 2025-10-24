@@ -77,6 +77,21 @@ void UiActionsRegister::reg(const IUiActionsModulePtr& module)
     });
 }
 
+void UiActionsRegister::unreg(const IUiActionsModulePtr& module)
+{
+    for (auto it = m_actions.begin(); it != m_actions.end();) {
+        if (it->second.module == module) {
+            it = m_actions.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    module->actionsChanged().disconnect(this);
+    module->actionEnabledChanged().disconnect(this);
+    module->actionCheckedChanged().disconnect(this);
+}
+
 UiActionsRegister::Info& UiActionsRegister::info(const ActionCode& code)
 {
     auto it = m_actions.find(code);

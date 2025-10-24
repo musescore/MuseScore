@@ -41,7 +41,8 @@ public:
 
     void init();
 
-    void reg(const IUiActionsModulePtr& actions) override;
+    void reg(const IUiActionsModulePtr& module) override;
+    void unreg(const IUiActionsModulePtr& module) override;
 
     std::vector<UiAction> actionList() const override;
 

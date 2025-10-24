@@ -36,7 +36,8 @@ class IUiActionsRegister : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUiActionsRegister() = default;
 
-    virtual void reg(const IUiActionsModulePtr& actions) = 0;
+    virtual void reg(const IUiActionsModulePtr& module) = 0;
+    virtual void unreg(const IUiActionsModulePtr& module) = 0;
 
     virtual std::vector<UiAction> actionList() const = 0;
 
