@@ -139,11 +139,7 @@ static ArticulationAnchor calculateAnchor(const MusxInstance<details::Articulati
 
 void FinaleParser::importArticulations()
 {
-    // Layout score (needed for offset calculations)
     /// @todo offset calculations
-    m_score->setLayoutAll();
-    m_score->doLayout();
-
     for (auto [entryNumber, cr] : m_entryNumber2CR) {
         MusxInstanceList<details::ArticulationAssign> articAssignList = m_doc->getDetails()->getArray<details::ArticulationAssign>(m_currentMusxPartId, entryNumber);
         for (const MusxInstance<details::ArticulationAssign>& articAssign : articAssignList) {

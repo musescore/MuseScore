@@ -77,19 +77,27 @@ void FinaleParser::parse()
     importMeasures();
     importStaffItems();
     importPageLayout();
+    // Requires clef/keysig/timesig segments to have been created (layout call needed for non-change keysigs)
+    // And number of staff lines at ticks to have been set (no layout necessary)
+    m_score->doLayout();
     importBarlines();
 
     // entries (notes, rests & tuplets)
     mapLayers();
     importEntries();
+    // Layout score (needed for offset calculations)
+    m_score->doLayout();
     importArticulations();
 
-    // smart shapes (lines)
-    importSmartShapes(); //WIP
+    // Smart shapes (spanners)
+    importSmartShapes();
 
-    // text
-    importTextExpressions(); //WIP
-    // importPageTexts(); //WIP
+    // Text
+    // Layout score (needed for offset calculations)
+    logger()->logInfo(String(u"Laying out score before importing text..."));
+    m_score->doLayout();
+    importTextExpressions();
+    importPageTexts(); //WIP
 
     // Setup system object staves
     logger()->logInfo(String(u"Initialising system object staves"));
