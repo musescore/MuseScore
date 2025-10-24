@@ -458,6 +458,7 @@ public:
     const std::vector<Staff*>& staves() const { return m_staves; }
     size_t nstaves() const { return m_staves.size(); }
     size_t visibleStavesCount() const;
+    bool allStavesInvisible() const;
     size_t ntracks() const { return m_staves.size() * VOICES; }
 
     staff_idx_t staffIdx(const Staff*) const;
