@@ -488,16 +488,7 @@ ReadableRepeatText::ReadableRepeatText(const FinaleParser& context, const MusxIn
 
 void FinaleParser::importTextExpressions()
 {
-    // Layout score (needed for offset calculations)
-    logger()->logInfo(String(u"Laying out score before importing text..."));
-    /// @todo see which are needed
-    m_score->connectTies();
-    m_score->setUpTempoMap();
-    m_score->setPlaylistDirty();
-    m_score->setLayoutAll();
-    m_score->doLayout();
-
-    auto staffIdxFromAssignment[&](StaffCmper assign) -> staff_idx_t {
+    auto staffIdxFromAssignment = [this](StaffCmper assign) -> staff_idx_t {
         switch (assign) {
         case -1: return 0;
         case -2: return m_score->nstaves() - 1;
@@ -1085,11 +1076,6 @@ void FinaleParser::importPageTexts()
 {
     MusxInstanceList<others::PageTextAssign> pageTextAssignList = m_doc->getOthers()->getArray<others::PageTextAssign>(m_currentMusxPartId);
     logger()->logInfo(String(u"Importing %1 page text assignments").arg(pageTextAssignList.size()));
-
-    // we need to work with real-time positions and pages, so we layout the score.
-    m_score->setLayoutAll();
-    m_score->doLayout();
-
 
     // code idea:
     // first, read score metadata
