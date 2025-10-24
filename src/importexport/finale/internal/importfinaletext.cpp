@@ -497,12 +497,27 @@ void FinaleParser::importTextExpressions()
     m_score->setLayoutAll();
     m_score->doLayout();
 
+    auto staffIdxFromAssignment[&](StaffCmper assign) -> staff_idx_t {
+        switch (assign) {
+        case -1: return 0;
+        case -2: return m_score->nstaves() - 1;
+        default: return muse::value(m_inst2Staff, assign, muse::nidx);
+        }
+    };
+
     // Iterate through assigned expressions
     const MusxInstanceList<others::MeasureExprAssign> expressionAssignments = m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId);
+    std::vector<Cmper> parsedAssignments;
+    parsedAssignments.reserve(expressionAssignments.size());
     logger()->logInfo(String(u"Import text expressions: Found %1 expressions.").arg(expressionAssignments.size()));
     for (const auto& expressionAssignment : expressionAssignments) {
         if (!expressionAssignment->textExprId) {
             // Shapes are currently unsupported
+            continue;
+        }
+
+        // Already added as system clone
+        if (muse::contains(parsedAssignments, expressionAssignment->getCmper())) {
             continue;
         }
 
@@ -519,14 +534,7 @@ void FinaleParser::importTextExpressions()
 
         // Find staff
         /// @todo use system object staves and linked clones to avoid duplicate elements
-        staff_idx_t curStaffIdx = [&]() -> staff_idx_t {
-            switch(expressionAssignment->staffAssign) {
-            case -1: return 0;
-            case -2: return m_score->nstaves() - 1;
-            default: return muse::value(m_inst2Staff, StaffCmper(expressionAssignment->staffAssign), muse::nidx);
-            }
-        }();
-        StaffCmper effectiveMusxStaffId = expressionAssignment->staffAssign >= 0 ? expressionAssignment->staffAssign : muse::value(m_staff2Inst, curStaffIdx, 1);
+        staff_idx_t curStaffIdx = staffIdxFromAssignment(expressionAssignment->staffAssign);
         if (curStaffIdx == muse::nidx) {
             /// @todo system object staves
             logger()->logWarning(String(u"Add text: Musx inst value not found."), m_doc, expressionAssignment->staffAssign);
@@ -548,12 +556,11 @@ void FinaleParser::importTextExpressions()
         // Create item
         logger()->logInfo(String(u"Creating a %1 at tick %2 on track %3.").arg(TConv::userName(elementType).translated(), s->tick().toString(), String::number(curTrackIdx)));
         TextBase* item = toTextBase(Factory::createItem(elementType, s));
-        const MusxInstance<others::TextExpressionDef> expressionDef = expressionAssignment->getTextExpression();
+        const MusxInstance<others::TextExpressionDef>& expressionDef = expressionAssignment->getTextExpression();
         item->setParent(s);
         item->setTrack(curTrackIdx);
         item->setVisible(!expressionAssignment->hidden);
         item->setXmlText(expression->xmlText);
-        AlignH hAlign = toAlignH(expressionDef->horzExprJustification);
         item->setFrameType(expression->frameSettings.frameType);
         if (item->frameType() != FrameType::NO_FRAME) {
             item->setFrameWidth(absoluteSpatium(expression->frameSettings.frameWidth, item)); // is this the correct scaling?
@@ -561,7 +568,7 @@ void FinaleParser::importTextExpressions()
             item->setFrameRound(expression->frameSettings.frameRound);
         }
 
-        item->setAlign(Align(hAlign, AlignV::BASELINE));
+        item->setAlign(Align(toAlignH(expressionDef->horzExprJustification), AlignV::BASELINE));
         s->add(item);
 
         // Set element-specific properties
@@ -612,276 +619,303 @@ void FinaleParser::importTextExpressions()
         }
 
         // Calculate position in score
-        item->setAutoplace(false);
-        setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
-        m_score->renderer()->layoutItem(item);
-        // if (measure->system()) {
-            // m_score->doLayoutRange(measure->system()->first()->tick(), measure->system()->last()->endTick());
-        // }
-        PointF p;
-        switch (expressionDef->horzMeasExprAlign) {
-            case others::HorizontalMeasExprAlign::LeftBarline: {
-                if (measure == measure->system()->first()) {
-                    if (const BarLine* bl = measure->startBarLine()) {
-                        p.rx() = bl->pageX();
+        auto positionExpression = [&](TextBase* expr, const MusxInstance<others::MeasureExprAssign> exprAssign,
+                                      const MusxInstance<others::TextExpressionDef>& exprDef) {
+            expr->setAutoplace(false);
+            setAndStyleProperty(expr, Pid::PLACEMENT, PlacementV::ABOVE);
+            m_score->renderer()->layoutItem(expr);
+            PointF p;
+            switch (exprDef->horzMeasExprAlign) {
+                case others::HorizontalMeasExprAlign::LeftBarline: {
+                    if (measure == measure->system()->first()) {
+                        if (const BarLine* bl = measure->startBarLine()) {
+                            p.rx() = bl->pageX();
+                        }
+                    } else if (measure->prevMeasureMM()) {
+                        if (const BarLine* bl = measure->prevMeasureMM()->endBarLine()) {
+                            p.rx() = bl->pageX();
+                        }
                     }
-                } else if (measure->prevMeasureMM()) {
-                    if (const BarLine* bl = measure->prevMeasureMM()->endBarLine()) {
-                        p.rx() = bl->pageX();
-                    }
+                    break;
                 }
-                break;
-            }
-            case others::HorizontalMeasExprAlign::CenterPrimaryNotehead:
-            case others::HorizontalMeasExprAlign::LeftOfPrimaryNotehead: {
-                Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
-                if (seg && seg->element(item->track())) {
-                    if (seg->element(item->track())->isChord()) {
-                        Chord* c = toChord(seg->element(item->track()));
-                        if (expressionAssignment->graceNoteIndex) {
-                            if (Chord* gc = c->graceNoteAt(static_cast<size_t>(expressionAssignment->graceNoteIndex - 1))) {
-                                c = gc;
+                case others::HorizontalMeasExprAlign::CenterPrimaryNotehead:
+                case others::HorizontalMeasExprAlign::LeftOfPrimaryNotehead: {
+                    Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
+                    if (seg && seg->element(expr->track())) {
+                        if (seg->element(expr->track())->isChord()) {
+                            Chord* c = toChord(seg->element(expr->track()));
+                            if (exprAssign->graceNoteIndex) {
+                                if (Chord* gc = c->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
+                                    c = gc;
+                                }
                             }
-                        }
-                        engraving::Note* n = c->up() ? c->downNote() : c->upNote();
-                        p.rx() = n->pageX();
-                        if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterPrimaryNotehead) {
-                            p.rx() += n->noteheadCenterX();
-                        }
-                    } else {
-                        Rest* rest = toRest(seg->element(item->track()));
-                        if (rest->isFullMeasureRest()) {
-                            p.rx() = seg->pageX();
+                            engraving::Note* n = c->up() ? c->downNote() : c->upNote();
+                            p.rx() = n->pageX();
+                            if (exprDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterPrimaryNotehead) {
+                                p.rx() += n->noteheadCenterX();
+                            }
                         } else {
-                            p.rx() = rest->pageX();
-                            if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterPrimaryNotehead) {
-                                p.rx() += rest->centerX();
+                            Rest* rest = toRest(seg->element(expr->track()));
+                            if (rest->isFullMeasureRest()) {
+                                p.rx() = seg->pageX();
+                            } else {
+                                p.rx() = rest->pageX();
+                                if (exprDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterPrimaryNotehead) {
+                                    p.rx() += rest->centerX();
+                                }
                             }
-                        }
-                    }
-                } else {
-                    p.rx() = s->pageX();
-                }
-                break;
-            }
-            case others::HorizontalMeasExprAlign::Manual:
-            case others::HorizontalMeasExprAlign::StartOfMusic:
-            case others::HorizontalMeasExprAlign::Stem:
-            case others::HorizontalMeasExprAlign::LeftOfAllNoteheads: {
-                Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
-                if (seg && seg->element(item->track())) {
-                    if (seg->element(item->track())->isChord()) {
-                        Chord* c = toChord(seg->element(item->track()));
-                        if (expressionAssignment->graceNoteIndex) {
-                            if (Chord* gc = c->graceNoteAt(static_cast<size_t>(expressionAssignment->graceNoteIndex - 1))) {
-                                c = gc;
-                            }
-                        }
-                        p.rx() = c->pageX();
-                        if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::Stem) {
-                            p.rx() += rendering::score::StemLayout::stemPosX(c);
                         }
                     } else {
-                        Rest* rest = toRest(seg->element(item->track()));
-                        p.rx() = rest->isFullMeasureRest() ? seg->pageX() : rest->pageX();
+                        p.rx() = s->pageX();
                     }
-                } else {
-                    p.rx() = s->pageX();
+                    break;
                 }
-                break;
-            }
-            case others::HorizontalMeasExprAlign::CenterAllNoteheads: {
-                Shape staffShape = s->staffShape(curStaffIdx);
-                staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
-                p.rx() = staffShape.right() / 2 + s->x() + s->measure()->x();
-                break;
-            }
-            case others::HorizontalMeasExprAlign::RightOfAllNoteheads: {
-                Shape staffShape = s->staffShape(curStaffIdx);
-                staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
-                p.rx() = staffShape.right() + s->x() + s->measure()->x();
-                break;
-            }
-            case others::HorizontalMeasExprAlign::StartTimeSig: {
-                // Observed: Elements placed .45sp too far left when there is a custom offset
-                Segment* seg = measure->findSegmentR(SegmentType::TimeSig, rTick);
-                p.rx() = seg ? seg->pageX() : s->pageX();
-                break;
-            }
-            case others::HorizontalMeasExprAlign::AfterClefKeyTime: {
-                Segment* seg = s->prev(SegmentType::TimeSig | SegmentType::KeySig | SegmentType::HeaderClef
-                                       | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine);
-                p.rx() = seg ? seg->pageX() : s->pageX();
-                break;
-            }
-            case others::HorizontalMeasExprAlign::CenterOverMusic: {
-                p.rx() = measure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1))->x() / 2;
-                [[fallthrough]];
-            }
-            case others::HorizontalMeasExprAlign::CenterOverBarlines: {
-                const BarLine* bl = measure->endBarLine();
-                p.rx() += measure->pageX() + (bl ? bl->segment()->x() + bl->ldata()->bbox().width() : measure->width()) / 2;
-                break;
-            }
-            case others::HorizontalMeasExprAlign::RightBarline: {
-                if (const BarLine* bl = measure->endBarLine()) {
-                    p.rx() = bl->pageX() + bl->ldata()->bbox().width();
-                } else {
-                    p.rx() = measure->pageX() + measure->width();
-                }
-                break;
-            }
-        }
-        p.rx() += doubleFromEvpu(expressionDef->measXAdjust) * SPATIUM20;
-        // We will need this when justify differs from text alignment (currently we set alignment to justify)
-        /* switch (hAlign) {
-            case AlignH::LEFT:
-                break;
-            case AlignH::HCENTER:
-                p.rx() -= item->ldata()->bbox().center().y() / 2;
-                break;
-            case AlignH::RIGHT:
-                p.rx() -= item->ldata()->bbox().center().y();
-                break;
-        } */
-
-        const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, effectiveMusxStaffId, expressionAssignment->getCmper(), 0);
-        const Staff* staff = m_score->staff(curStaffIdx);
-        const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick()) * staff->staffType(s->tick())->lineDistance().val();
-
-        switch (expressionDef->vertMeasExprAlign) {
-            case others::VerticalMeasExprAlign::AboveStaff: {
-                item->setPlacement(PlacementV::ABOVE);
-                p.ry() = item->pagePos().y() - doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
-
-                SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, expressionAssignment->getCmper())->getCmper();
-                double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
-                p.ry() -= (baselinepos - staffReferenceOffset);
-                break;
-            }
-            case others::VerticalMeasExprAlign::Manual: {
-                item->setPlacement(PlacementV::ABOVE); // Finale default
-                p.ry() = item->pagePos().y();
-                // Add staffreferenceoffset?
-                break;
-            }
-            case others::VerticalMeasExprAlign::RefLine: {
-                item->setPlacement(PlacementV::ABOVE);
-                p.ry() = item->pagePos().y() - staffReferenceOffset - doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
-                break;
-            }
-            case others::VerticalMeasExprAlign::BelowStaff: {
-                item->setPlacement(PlacementV::BELOW);
-                p.ry() = item->pagePos().y() - doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
-
-                SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, expressionAssignment->getCmper())->getCmper();
-                double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
-                p.ry() -= (baselinepos - staffReferenceOffset);
-                break;
-            }
-            case others::VerticalMeasExprAlign::TopNote: {
-                item->setPlacement(PlacementV::ABOVE);
-                Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
-                if (seg && seg->element(item->track())) {
-                    if (seg->element(item->track())->isChord()) {
-                        Chord* c = toChord(seg->element(item->track()));
-                        if (expressionAssignment->graceNoteIndex) {
-                            if (Chord* gc = c->graceNoteAt(static_cast<size_t>(expressionAssignment->graceNoteIndex - 1))) {
-                                c = gc;
+                case others::HorizontalMeasExprAlign::Manual:
+                case others::HorizontalMeasExprAlign::StartOfMusic:
+                case others::HorizontalMeasExprAlign::Stem:
+                case others::HorizontalMeasExprAlign::LeftOfAllNoteheads: {
+                    Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
+                    if (seg && seg->element(expr->track())) {
+                        if (seg->element(expr->track())->isChord()) {
+                            Chord* c = toChord(seg->element(expr->track()));
+                            if (exprAssign->graceNoteIndex) {
+                                if (Chord* gc = c->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
+                                    c = gc;
+                                }
                             }
-                        }
-                        const engraving::Note* n = c->upNote();
-                        p.ry() = n->pagePos().y() - n->headHeight() / 2;
-                    } else {
-                        Rest* rest = toRest(seg->element(item->track()));
-                        p.ry() = rest->pagePos().y() - rest->ldata()->bbox().center().y();
-                    }
-                }
-                p.ry() -= doubleFromEvpu(expressionDef->yAdjustEntry) * SPATIUM20;
-                break;
-            }
-            case others::VerticalMeasExprAlign::BottomNote: {
-                item->setPlacement(PlacementV::BELOW);
-                Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
-                if (seg && seg->element(item->track())) {
-                    if (seg->element(item->track())->isChord()) {
-                        Chord* c = toChord(seg->element(item->track()));
-                        if (expressionAssignment->graceNoteIndex) {
-                            if (Chord* gc = c->graceNoteAt(static_cast<size_t>(expressionAssignment->graceNoteIndex - 1))) {
-                                c = gc;
+                            p.rx() = c->pageX();
+                            if (exprDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::Stem) {
+                                p.rx() += rendering::score::StemLayout::stemPosX(c);
                             }
+                        } else {
+                            Rest* rest = toRest(seg->element(expr->track()));
+                            p.rx() = rest->isFullMeasureRest() ? seg->pageX() : rest->pageX();
                         }
-                        const engraving::Note* n = c->downNote();
-                        p.ry() = n->pagePos().y() - n->headHeight() / 2;
                     } else {
-                        Rest* rest = toRest(seg->element(item->track()));
-                        p.ry() = rest->pagePos().y() - rest->ldata()->bbox().center().y();
+                        p.rx() = s->pageX();
                     }
+                    break;
                 }
-                p.ry() -= doubleFromEvpu(expressionDef->yAdjustEntry) * SPATIUM20;
-                break;
+                case others::HorizontalMeasExprAlign::CenterAllNoteheads: {
+                    Shape staffShape = s->staffShape(expr->staffIdx());
+                    staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
+                    p.rx() = staffShape.right() / 2 + s->x() + s->measure()->x();
+                    break;
+                }
+                case others::HorizontalMeasExprAlign::RightOfAllNoteheads: {
+                    Shape staffShape = s->staffShape(expr->staffIdx());
+                    staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
+                    p.rx() = staffShape.right() + s->x() + s->measure()->x();
+                    break;
+                }
+                case others::HorizontalMeasExprAlign::StartTimeSig: {
+                    // Observed: Elements placed .45sp too far left when there is a custom offset
+                    Segment* seg = measure->findSegmentR(SegmentType::TimeSig, rTick);
+                    p.rx() = seg ? seg->pageX() : s->pageX();
+                    break;
+                }
+                case others::HorizontalMeasExprAlign::AfterClefKeyTime: {
+                    Segment* seg = s->prev(SegmentType::TimeSig | SegmentType::KeySig | SegmentType::HeaderClef
+                                           | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine);
+                    p.rx() = seg ? seg->pageX() : s->pageX();
+                    break;
+                }
+                case others::HorizontalMeasExprAlign::CenterOverMusic: {
+                    p.rx() = measure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1))->x() / 2;
+                    [[fallthrough]];
+                }
+                case others::HorizontalMeasExprAlign::CenterOverBarlines: {
+                    const BarLine* bl = measure->endBarLine();
+                    p.rx() += measure->pageX() + (bl ? bl->segment()->x() + bl->ldata()->bbox().width() : measure->width()) / 2;
+                    break;
+                }
+                case others::HorizontalMeasExprAlign::RightBarline: {
+                    if (const BarLine* bl = measure->endBarLine()) {
+                        p.rx() = bl->pageX() + bl->ldata()->bbox().width();
+                    } else {
+                        p.rx() = measure->pageX() + measure->width();
+                    }
+                    break;
+                }
             }
-            case others::VerticalMeasExprAlign::AboveEntry:
-            case others::VerticalMeasExprAlign::AboveStaffOrEntry: {
-                item->setPlacement(PlacementV::ABOVE);
-                Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick); // why is this needed
+            p.rx() += doubleFromEvpu(exprDef->measXAdjust) * SPATIUM20;
+            // We will need this when justify differs from text alignment (currently we set alignment to justify)
+            /* switch (item->hAlign()) {
+                case AlignH::LEFT:
+                    break;
+                case AlignH::HCENTER:
+                    p.rx() -= expr->ldata()->bbox().center().y() / 2;
+                    break;
+                case AlignH::RIGHT:
+                    p.rx() -= expr->ldata()->bbox().center().y();
+                    break;
+            } */
 
-                // should this really be all tracks?
-                Shape staffShape = seg->staffShape(curStaffIdx);
-                // staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
-                double entryY = staffShape.translated(seg->pagePos()).top() - doubleFromEvpu(expressionDef->yAdjustEntry) * SPATIUM20;
+            StaffCmper effectiveMusxStaffId = expressionAssignment->staffAssign >= 0 ? expressionAssignment->staffAssign : muse::value(m_staff2Inst, expr->staffIdx(), 1);
+            const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, effectiveMusxStaffId, exprAssign->getCmper(), 0);
+            const Staff* staff = m_score->staff(expr->staffIdx());
+            const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick()) * staff->staffType(s->tick())->lineDistance().val();
 
-                SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, expressionAssignment->getCmper())->getCmper();
-                double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
-                baselinepos = item->pagePos().y() - (baselinepos - staffReferenceOffset) - doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
-                p.ry() = std::min(baselinepos, entryY);
-                break;
+            switch (exprDef->vertMeasExprAlign) {
+                case others::VerticalMeasExprAlign::AboveStaff: {
+                    expr->setPlacement(PlacementV::ABOVE);
+                    p.ry() = expr->pagePos().y() - doubleFromEvpu(exprDef->yAdjustBaseline) * SPATIUM20;
+
+                    SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
+                    double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
+                    p.ry() -= (baselinepos - staffReferenceOffset);
+                    break;
+                }
+                case others::VerticalMeasExprAlign::Manual: {
+                    expr->setPlacement(PlacementV::ABOVE); // Finale default
+                    p.ry() = expr->pagePos().y();
+                    // Add staffreferenceoffset?
+                    break;
+                }
+                case others::VerticalMeasExprAlign::RefLine: {
+                    expr->setPlacement(PlacementV::ABOVE);
+                    p.ry() = expr->pagePos().y() - staffReferenceOffset - doubleFromEvpu(exprDef->yAdjustBaseline) * SPATIUM20;
+                    break;
+                }
+                case others::VerticalMeasExprAlign::BelowStaff: {
+                    expr->setPlacement(PlacementV::BELOW);
+                    p.ry() = expr->pagePos().y() - doubleFromEvpu(exprDef->yAdjustBaseline) * SPATIUM20;
+
+                    SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
+                    double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
+                    p.ry() -= (baselinepos - staffReferenceOffset);
+                    break;
+                }
+                case others::VerticalMeasExprAlign::TopNote: {
+                    expr->setPlacement(PlacementV::ABOVE);
+                    Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
+                    if (seg && seg->element(expr->track())) {
+                        if (seg->element(expr->track())->isChord()) {
+                            Chord* c = toChord(seg->element(expr->track()));
+                            if (exprAssign->graceNoteIndex) {
+                                if (Chord* gc = c->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
+                                    c = gc;
+                                }
+                            }
+                            const engraving::Note* n = c->upNote();
+                            p.ry() = n->pagePos().y() - n->headHeight() / 2;
+                        } else {
+                            Rest* rest = toRest(seg->element(expr->track()));
+                            p.ry() = rest->pagePos().y() - rest->ldata()->bbox().center().y();
+                        }
+                    }
+                    p.ry() -= doubleFromEvpu(exprDef->yAdjustEntry) * SPATIUM20;
+                    break;
+                }
+                case others::VerticalMeasExprAlign::BottomNote: {
+                    expr->setPlacement(PlacementV::BELOW);
+                    Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
+                    if (seg && seg->element(expr->track())) {
+                        if (seg->element(expr->track())->isChord()) {
+                            Chord* c = toChord(seg->element(expr->track()));
+                            if (exprAssign->graceNoteIndex) {
+                                if (Chord* gc = c->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
+                                    c = gc;
+                                }
+                            }
+                            const engraving::Note* n = c->downNote();
+                            p.ry() = n->pagePos().y() - n->headHeight() / 2;
+                        } else {
+                            Rest* rest = toRest(seg->element(expr->track()));
+                            p.ry() = rest->pagePos().y() - rest->ldata()->bbox().center().y();
+                        }
+                    }
+                    p.ry() -= doubleFromEvpu(exprDef->yAdjustEntry) * SPATIUM20;
+                    break;
+                }
+                case others::VerticalMeasExprAlign::AboveEntry:
+                case others::VerticalMeasExprAlign::AboveStaffOrEntry: {
+                    expr->setPlacement(PlacementV::ABOVE);
+                    Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick); // why is this needed
+
+                    // should this really be all tracks?
+                    Shape staffShape = seg->staffShape(expr->staffIdx());
+                    // staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
+                    double entryY = staffShape.translated(seg->pagePos()).top() - doubleFromEvpu(exprDef->yAdjustEntry) * SPATIUM20;
+
+                    SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
+                    double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
+                    baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset) - doubleFromEvpu(exprDef->yAdjustBaseline) * SPATIUM20;
+                    p.ry() = std::min(baselinepos, entryY);
+                    break;
+                }
+                case others::VerticalMeasExprAlign::BelowEntry:
+                case others::VerticalMeasExprAlign::BelowStaffOrEntry: {
+                    expr->setPlacement(PlacementV::BELOW);
+
+                    // should this really be all tracks?
+                    Shape staffShape = s->staffShape(expr->staffIdx());
+                    // staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
+                    double entryY = staffShape.translated(s->pagePos()).bottom() - doubleFromEvpu(exprDef->yAdjustEntry) * SPATIUM20;
+
+                    SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
+                    double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
+                    baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset) - doubleFromEvpu(exprDef->yAdjustBaseline) * SPATIUM20;
+                    p.ry() = std::max(baselinepos, entryY);
+                    break;
+                }
+                default: {
+                    expr->setPlacement(PlacementV::ABOVE); // Finale default
+                    p.ry() = expr->pagePos().y() - doubleFromEvpu(exprDef->yAdjustEntry) * SPATIUM20;
+                    break;
+                }
             }
-            case others::VerticalMeasExprAlign::BelowEntry:
-            case others::VerticalMeasExprAlign::BelowStaffOrEntry: {
-                item->setPlacement(PlacementV::BELOW);
-
-                // should this really be all tracks?
-                Shape staffShape = s->staffShape(curStaffIdx);
-                // staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
-                double entryY = staffShape.translated(s->pagePos()).bottom() - doubleFromEvpu(expressionDef->yAdjustEntry) * SPATIUM20;
-
-                SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, expressionAssignment->getCmper())->getCmper();
-                double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
-                baselinepos = item->pagePos().y() - (baselinepos - staffReferenceOffset) - doubleFromEvpu(expressionDef->yAdjustBaseline) * SPATIUM20;
-                p.ry() = std::max(baselinepos, entryY);
-                break;
-            }
-            default: {
-                item->setPlacement(PlacementV::ABOVE); // Finale default
-                p.ry() = item->pagePos().y() - doubleFromEvpu(expressionDef->yAdjustEntry) * SPATIUM20;
-                break;
-            }
-        }
-        p -= item->pagePos();
-        if (item->placeBelow()) {
-            if (p.y() < staff->staffHeight(s->tick()) / 2) {
-                setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE, true);
+            p -= expr->pagePos();
+            if (expr->placeBelow()) {
+                if (p.y() < staff->staffHeight(s->tick()) / 2) {
+                    setAndStyleProperty(expr, Pid::PLACEMENT, PlacementV::ABOVE, true);
+                } else {
+                    p.ry() -= staff->staffHeight(s->tick());
+                }
             } else {
-                p.ry() -= staff->staffHeight(s->tick());
+                if (p.y() > staff->staffHeight(s->tick()) / 2) {
+                    setAndStyleProperty(expr, Pid::PLACEMENT, PlacementV::BELOW, true);
+                    p.ry() -= staff->staffHeight(s->tick());
+                }
             }
-        } else {
-            if (p.y() > staff->staffHeight(s->tick()) / 2) {
-                setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::BELOW, true);
-                p.ry() -= staff->staffHeight(s->tick());
+            if (expr->hasVoiceAssignmentProperties()) {
+                setAndStyleProperty(expr, Pid::DIRECTION, expr->placeAbove() ? DirectionV::UP : DirectionV::DOWN);
             }
-        }
-        if (item->hasVoiceAssignmentProperties()) {
-            setAndStyleProperty(item, Pid::DIRECTION, item->placeAbove() ? DirectionV::UP : DirectionV::DOWN);
-        }
-        p += evpuToPointF(expressionAssignment->horzEvpuOff, -expressionAssignment->vertEvpuOff) * SPATIUM20; // assignment offset
-        item->setOffset(p);
+            p += evpuToPointF(exprAssign->horzEvpuOff, -exprAssign->vertEvpuOff) * SPATIUM20; // assignment offset
+            expr->setOffset(p);
+        };
+        positionExpression(item, expressionAssignment, expressionDef);
 
-        /// @todo assign this to the appropriate location(s), taking into account if this is a single-staff or stafflist assignment.
-        /// @note Finale provides a per-staff assignment *in addition* to top-staff (-1) or bot-staff (-2) assignments. Whether it is visible is
-        /// determined by the stafflist (if any) or by whether it is assigned to score or part or both. I don't know enough about MuseScore
-        /// features to suggest an exact import strategy. (I may need to add staff lists to musx. I don't remember adding them yet. But since
-        /// Finale adds an assignment on every staff dictated by the staff list, we may not need to reference it.)
+        if (item->systemFlag()) {
+            m_systemObjectStaves.insert(item->staffIdx());
+            parsedAssignments.push_back(expressionAssignment->getCmper());
+            if (!expressionAssignment->staffList) {
+                continue;
+            }
+            /// @todo improved handling for bottom system objects
+            for (const auto& linkedAssignment : expressionAssignments) {
+                if (linkedAssignment->getCmper() != expressionAssignment->getCmper()
+                    || linkedAssignment->getInci() == expressionAssignment->getInci()) {
+                    continue;
+                }
+                staff_idx_t linkedStaffIdx = staffIdxFromAssignment(linkedAssignment->staffAssign);
+                std::pair<Cmper, Inci> linkedExpressionId = std::make_pair(expressionAssignment->getCmper(), expressionAssignment->getInci().value_or(0));
+                if (muse::contains(parsedAssignments, linkedExpressionId) || linkedStaffIdx == muse::nidx) {
+                    continue;
+                }
+
+                TextBase* copy = toTextBase(item->clone());
+                copy->setVisible(!linkedAssignment->hidden);
+                copy->setStaffIdx(linkedStaffIdx);
+                const MusxInstance<others::TextExpressionDef>& linkedDef = linkedAssignment->getTextExpression();
+                copy->setAlign(Align(toAlignH(linkedDef->horzExprJustification), AlignV::BASELINE));
+                copy->linkTo(item);
+                s->add(copy);
+                positionExpression(copy, linkedAssignment, linkedDef);
+                m_systemObjectStaves.insert(linkedStaffIdx);
+                parsedAssignments.push_back(linkedExpressionId);
+            }
+        }
         /// @todo use expressionAssignment->showStaffList to control sharing between score/parts. some elements can be hidden entirely, others will be made invisible
     }
 
@@ -932,9 +966,9 @@ void FinaleParser::importTextExpressions()
     }
 
     // Repeat markings (markers and jumps)
-    const MusxInstanceList<others::TextRepeatAssign> textRepeatAssignment = m_doc->getOthers()->getArray<others::TextRepeatAssign>(m_currentMusxPartId);
-    logger()->logInfo(String(u"Import repeat texts: Found %1 texts.").arg(textRepeatAssignment.size()));
-    for (const auto& repeatAssignment : textRepeatAssignment) {
+    const MusxInstanceList<others::TextRepeatAssign> textRepeatAssignments = m_doc->getOthers()->getArray<others::TextRepeatAssign>(m_currentMusxPartId);
+    logger()->logInfo(String(u"Import repeat texts: Found %1 texts.").arg(textRepeatAssignments.size()));
+    for (const auto& repeatAssignment : textRepeatAssignments) {
         // Search our converted repeat text library, or if not found add to it
         ReadableRepeatText* repeatText = muse::value(m_repeatTexts, repeatAssignment->textRepeatId, nullptr); /// @todo does this code work for part scores?
         const MusxInstance<others::TextRepeatDef> repeatDefinition = m_doc->getOthers()->get<others::TextRepeatDef>(m_currentMusxPartId, repeatAssignment->textRepeatId);
@@ -949,13 +983,24 @@ void FinaleParser::importTextExpressions()
 
         // Find staff
         /// @todo use system object staves and linked clones to avoid duplicate elements
+        std::vector<staff_idx_t> links;
         staff_idx_t curStaffIdx = [&]() -> staff_idx_t {
-            if (textRepeatAssignment->topStaffOnly) {
+            if (repeatAssignment->topStaffOnly) {
                 return 0;
             }
-            /// @todo StaffLists
-            return 0;
+            /// @todo forced staff list
+            for (StaffCmper musxStaffId : currentMusxPartId()
+                ? m_doc->getOthers()->get<others::StaffListRepeatParts>(m_currentMusxPartId, repeatAssignment->staffList)->values
+                : m_doc->getOthers()->get<others::StaffListRepeatScore>(m_currentMusxPartId, repeatAssignment->staffList)->values) {
+                staff_idx_t idx = staffIdxFromAssignment(musxStaffId);
+                if (idx == muse::nidx || muse::contains(links, idx)) {
+                    continue;
+                }
+                links.emplace_back(idx);
+            }
+            return !links.empty() ? muse::takeFirst(links) : 0;
         }();
+
         if (curStaffIdx == muse::nidx) {
             /// @todo system object staves
             logger()->logWarning(String(u"Add repeat text: Musx inst value not found."));
@@ -1009,13 +1054,18 @@ void FinaleParser::importTextExpressions()
         setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
         item->setOffset(evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * SPATIUM20);
         measure->add(item);
+        m_systemObjectStaves.insert(curStaffIdx);
 
-        /// @todo assign this to the appropriate location(s), taking into account if this is a single-staff or stafflist assignment.
-        /// @note Finale provides a per-staff assignment *in addition* to top-staff (-1) or bot-staff (-2) assignments. Whether it is visible is
-        /// determined by the stafflist (if any) or by whether it is assigned to score or part or both. I don't know enough about MuseScore
-        /// features to suggest an exact import strategy. (I may need to add staff lists to musx. I don't remember adding them yet. But since
-        /// Finale adds an assignment on every staff dictated by the staff list, we may not need to reference it.)
-        /// @todo use expressionAssignment->showStaffList to control sharing between score/parts. some elements can be hidden entirely, others will be made invisible
+        for (staff_idx_t linkedStaffIdx : links) {
+            /// @todo improved handling for bottom system objects
+            TextBase* copy = toTextBase(item->clone());
+            copy->setStaffIdx(linkedStaffIdx);
+            // copy->setVisible(!repeatAssignment->hidden);
+            copy->setOffset(evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * SPATIUM20);
+            copy->linkTo(item);
+            measure->add(copy);
+            m_systemObjectStaves.insert(linkedStaffIdx);
+        }
         /// @todo fine-tune playback
     }
 }
@@ -1034,6 +1084,7 @@ bool FinaleParser::isOnlyPage(const MusxInstance<others::PageTextAssign>& pageTe
 void FinaleParser::importPageTexts()
 {
     MusxInstanceList<others::PageTextAssign> pageTextAssignList = m_doc->getOthers()->getArray<others::PageTextAssign>(m_currentMusxPartId);
+    logger()->logInfo(String(u"Importing %1 page text assignments").arg(pageTextAssignList.size()));
 
     // we need to work with real-time positions and pages, so we layout the score.
     m_score->setLayoutAll();
