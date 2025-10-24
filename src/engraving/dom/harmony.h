@@ -267,6 +267,7 @@ public:
 
     bool hasModifiers() const;
 
+    String displayText() const;
     String harmonyName() const;
 
     double baseLine() const override;

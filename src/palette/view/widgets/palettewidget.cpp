@@ -908,7 +908,7 @@ void PaletteWidget::dropEvent(QDropEvent* event)
     }
 
     if (element->isFretDiagram()) {
-        name = toFretDiagram(element.get())->harmonyText();
+        name = toFretDiagram(element.get())->harmonyPlainText();
     }
 
     element->setSelected(false);

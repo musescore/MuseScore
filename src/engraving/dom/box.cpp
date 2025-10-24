@@ -724,7 +724,7 @@ void FBox::init()
     for (EngravingItem* element : el()) {
         FretDiagram* diagram = toFretDiagram(element);
         oldDiagrams.push_back(diagram);
-        oldDiagramsNames.push_back(diagram->harmonyText().toLower());
+        oldDiagramsNames.push_back(diagram->harmonyDisplayText());
     }
 
     StringList diagramsNamesInScore;
@@ -744,8 +744,8 @@ void FBox::init()
                 continue;
             }
 
-            String harmonyName = item->isHarmony() ? toHarmony(item)->plainText().toLower()
-                                 : item->isFretDiagram() ? toFretDiagram(item)->harmonyText().toLower()
+            String harmonyName = item->isHarmony() ? toHarmony(item)->displayText()
+                                 : item->isFretDiagram() ? toFretDiagram(item)->harmonyDisplayText()
                                  : String();
             if (harmonyName.empty() || muse::contains(diagramsNamesInScore, harmonyName)) {
                 continue;
@@ -816,7 +816,7 @@ size_t FBox::computeInsertionIdx(const String& nameOfDiagramBeforeThis)
 
     for (size_t i = 0; i < m_el.size(); ++i) {
         FretDiagram* fretDiagram = toFretDiagram(m_el[i]);
-        if (fretDiagram->harmonyText().toLower() == nameOfDiagramBeforeThis.toLower()) {
+        if (fretDiagram->harmonyPlainText().toLower() == nameOfDiagramBeforeThis.toLower()) {
             return i + 1;
         }
     }
@@ -943,8 +943,8 @@ void FBox::undoReorderElements(const StringList& newOrder)
 void FBox::reorderElements(const StringList& newOrder)
 {
     std::sort(m_el.begin(), m_el.end(), [&](EngravingItem* a, EngravingItem* b) {
-        String nameA = toFretDiagram(a)->harmonyText().toLower();
-        String nameB = toFretDiagram(b)->harmonyText().toLower();
+        String nameA = toFretDiagram(a)->harmonyPlainText().toLower();
+        String nameB = toFretDiagram(b)->harmonyPlainText().toLower();
         auto iterA = std::find(newOrder.begin(), newOrder.end(), nameA);
         auto iterB = std::find(newOrder.begin(), newOrder.end(), nameB);
         return iterA < iterB;
@@ -955,7 +955,7 @@ StringList FBox::diagramsOrder() const
 {
     StringList result;
     for (EngravingItem* item : m_el) {
-        result.push_back(toFretDiagram(item)->harmonyText().toLower());
+        result.push_back(toFretDiagram(item)->harmonyPlainText().toLower());
     }
 
     return result;

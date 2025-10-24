@@ -44,26 +44,11 @@ void FretFrameChordListModel::load()
 
     QList<Item*> items;
 
-    auto harmonyName = [](const Harmony* harmony) {
-        QString name;
-        for (const HarmonyRenderItem* segment : harmony->ldata()->renderItemList()) {
-            if (const TextSegment* textSeg = dynamic_cast<const TextSegment*>(segment)) {
-                QString t = textSeg->text().toQString();
-                t.replace("\uE87C", "/");
-                name += t;
-            } else if (const ChordSymbolParen* parenSeg = dynamic_cast<const ChordSymbolParen*>(segment)) {
-                name += parenSeg->parenItem->direction() == DirectionH::LEFT ? u"(" : u")";
-            }
-        }
-
-        return name;
-    };
-
     for (EngravingItem* element : m_fretBox->el()) {
         FretDiagram* diagram = toFretDiagram(element);
         auto chordItem = new FretFrameChordItem(this);
-        chordItem->setTitle(harmonyName(diagram->harmony()));
-        chordItem->setPlainText(diagram->harmonyText());
+        chordItem->setTitle(diagram->harmonyDisplayText());
+        chordItem->setPlainText(diagram->harmonyPlainText());
 
         chordItem->setIsVisible(diagram->visible());
 

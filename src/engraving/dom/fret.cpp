@@ -958,9 +958,14 @@ Font FretDiagram::fingeringFont() const
     return f;
 }
 
-String FretDiagram::harmonyText() const
+String FretDiagram::harmonyPlainText() const
 {
     return m_harmony ? m_harmony->plainText() : String();
+}
+
+String FretDiagram::harmonyDisplayText() const
+{
+    return m_harmony ? m_harmony->displayText() : String();
 }
 
 //---------------------------------------------------------

@@ -3431,7 +3431,7 @@ void NotationInteraction::doFinishAddFretboardDiagram()
     }
 
     FretDiagram* fretDiagram = toFretDiagram(selectedElement);
-    if (!fretDiagram->harmonyText().empty()) {
+    if (!fretDiagram->harmonyPlainText().empty()) {
         return;
     }
 

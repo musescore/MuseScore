@@ -182,7 +182,8 @@ public:
 
     Orientation orientation() const { return m_orientation; }
 
-    String harmonyText() const;
+    String harmonyPlainText() const;
+    String harmonyDisplayText() const;
     Harmony* harmony() const { return m_harmony; }
     void setHarmony(String harmonyText);
 
