@@ -711,8 +711,10 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
                                                 && toChord(firstChordRest)->upNote()->tieFor()->endNote()->parent() == secondChordRest;
 
             // Follow chain of tied notes and slur until the last
-            while (toChord(secondChordRest)->allNotesTiedToNext()) {
-                secondChordRest = toChord(secondChordRest)->upNote()->tieFor()->endNote()->chord();
+            if (firstChordRestIsTiedToSecond || !firstChordRest->isGrace()) {
+                while (toChord(secondChordRest)->allNotesTiedToNext()) {
+                    secondChordRest = toChord(secondChordRest)->upNote()->tieFor()->endNote()->chord();
+                }
             }
 
             // If the first chord rest is also tied to this chain, slur to the next non-tied note
