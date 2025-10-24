@@ -3331,12 +3331,14 @@ void TLayout::layoutJump(const Jump* item, Jump::LayoutData* ldata)
 
     layoutBaseTextBase(item, ldata);
 
-    AlignH align = item->align().horizontal;
+    AlignH position = item->position();
 
-    const Measure* measure = toMeasure(item->parentItem());
+    // ignore courtesy keysig, timesig, but fall back if needed
+    Measure* measure = toMeasure(item->parent());
+    const BarLine* bl = measure->endBarLine();
+    double xAdj = bl ? bl->segment()->x() + bl->ldata()->bbox().width() : measure->width();
 
-    bool avoidBarline = item->staffIdx() != 0 && align != AlignH::HCENTER;
-
+    bool avoidBarline = item->staffIdx() != 0 && position != AlignH::HCENTER;
     if (avoidBarline) {
         bool startRepeat = measure->repeatStart();
         bool endRepeat = measure->repeatEnd();
@@ -3344,20 +3346,18 @@ void TLayout::layoutJump(const Jump* item, Jump::LayoutData* ldata)
 
         const double fontSizeScaleFactor = item->size() / 10.0;
         double padding = (startRepeat || endRepeat) ? 0.0 : 0.5 * item->spatium() * fontSizeScaleFactor;
-        double xAdj = 0.0;
 
-        if (align == AlignH::LEFT) {
+        if (position == AlignH::LEFT) {
             const BarLine* bl = startRepeat || !measure->prevMeasure()
                                 ? measure->startBarLine(blIdx) : measure->prevMeasure()->endBarLine(blIdx);
             double blWidth = startRepeat ? bl->width() : 0.0;
             xAdj += padding + blWidth;
-        } else if (align == AlignH::RIGHT) {
+        } else if (position == AlignH::RIGHT) {
             const BarLine* bl = measure->endBarLine(blIdx);
             xAdj -= bl->width() + padding;
         }
-
-        ldata->moveX(xAdj);
     }
+    ldata->moveX(xAdj);
 
     if (item->autoplace()) {
         LD_CONDITION(ldata->isSetPos());

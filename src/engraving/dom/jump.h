@@ -79,8 +79,6 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
 
-    void setLayoutToParentWidth(bool v) { m_layoutToParentWidth = v; }
-
 private:
     String m_jumpTo;
     String m_playUntil;

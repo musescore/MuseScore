@@ -70,7 +70,6 @@ Jump::Jump(Measure* parent)
     : TextBase(ElementType::JUMP, parent, TextStyleType::REPEAT_RIGHT, ElementFlag::MOVABLE | ElementFlag::SYSTEM | ElementFlag::ON_STAFF)
 {
     initElementStyle(&jumpStyle);
-    setLayoutToParentWidth(true);
     m_playRepeats = false;
 }
 
