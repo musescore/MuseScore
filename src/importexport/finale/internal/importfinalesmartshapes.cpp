@@ -63,19 +63,19 @@ using namespace musx::dom;
 
 namespace mu::iex::finale {
 
-static const std::map<std::string, ElementType> elementByRegexTable = {
-    { R"(\bped(ale?)?\b)",                               ElementType::PEDAL },
-    { R"(<sym>keyboardPedal)",                           ElementType::PEDAL },
-    { R"(\b(((de)?cresc)|(dim))\.?\b)",                  ElementType::HAIRPIN },
-    { R"(\b((rit(\.|ardando)?)|(rall(\.|entando)?))\b)", ElementType::GRADUAL_TEMPO_CHANGE },
-    { R"(\blet ring\b)",                                 ElementType::LET_RING },
-    { R"(\b(?:(?:8v)|(?:(?:15|22)m))(a|b)\b)",           ElementType::OTTAVA },
-    { R"(<sym>((ottava|quindicesima)|ventiduesima))",    ElementType::OTTAVA },
-    { R"(\bw(?:\/|(?:hammy ))bar\b)",                    ElementType::WHAMMY_BAR },
-    { R"(\brasg(?:ueado)?\b)",                           ElementType::RASGUEADO },
-    { R"(\bp(?:\.|ick) ?s(?:\.\B|crape\b))",             ElementType::PICK_SCRAPE },
-    { R"(\bp(?:\.|alm) ?m(?:\.\B|ute\b))",               ElementType::PALM_MUTE },
-    { R"(<sym>ornamentTrill)",                           ElementType::TRILL },
+static const std::map<std::wstring, ElementType> elementByRegexTable = {
+    { LR"(\bped(ale?)?\b)",                                         ElementType::PEDAL },
+    { LR"(<sym>keyboardPedal[^>]*?</sym>)",                         ElementType::PEDAL },
+    { LR"(\b(((de)?cresc)|(dim))\.?\b)",                            ElementType::HAIRPIN },
+    { LR"(\b((rit(\.|ardando)?)|(rall(\.|entando)?))\b)",           ElementType::GRADUAL_TEMPO_CHANGE },
+    { LR"(\blet ring\b)",                                           ElementType::LET_RING },
+    { LR"(\b(?:(?:8v)|(?:(?:15|22)m))(a|b)\b)",                     ElementType::OTTAVA },
+    { LR"(<sym>((ottava|quindicesima)|ventiduesima)[^>]*?<sym>)",   ElementType::OTTAVA },
+    { LR"(\bw(?:\/|(?:hammy ))bar\b)",                              ElementType::WHAMMY_BAR },
+    { LR"(\brasg(?:ueado)?\b)",                                     ElementType::RASGUEADO },
+    { LR"(\bp(?:\.|ick) ?s(?:\.\B|crape\b))",                       ElementType::PICK_SCRAPE },
+    { LR"(\bp(?:\.|alm) ?m(?:\.\B|ute\b))",                         ElementType::PALM_MUTE },
+    { LR"(<sym>ornamentTrill[^>]*?</sym>)",                         ElementType::TRILL },
 };
 
 ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxInstance<musx::dom::others::SmartShapeCustomLine>& customLine)
@@ -136,10 +136,10 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
             /// @todo TremoloBar?
         }
 
-        for (auto [regexStr, elementType] : elementByRegexTable) {
-            static const std::regex regex(regexStr, std::regex_constants::icase);
-            if (std::regex_search(beginText.toStdString(), regex) || std::regex_search(continueText.toStdString(), regex)) {
-                return elementType;
+        for (auto [regexStr, type] : elementByRegexTable) {
+            static const std::wregex regex(regexStr, std::regex_constants::icase);
+            if (beginText.contains(regex) || continueText.contains(regex)) {
+                return type;
             }
         }
         if (endText == u"*" /*maestro symbol for pedal star*/) {
