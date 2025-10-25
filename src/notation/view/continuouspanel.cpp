@@ -32,7 +32,6 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
-#include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
@@ -52,12 +51,39 @@ using namespace mu::engraving::rendering::score;
 
 static constexpr bool ACCESSIBILITY_DISABLED = false;
 
+ContinuousPanel::~ContinuousPanel()
+{
+    clearCache();
+}
+
+void ContinuousPanel::clearCache()
+{
+    delete m_cachedText;
+    delete m_cachedName;
+    delete m_cachedClef;
+    delete m_cachedKeySig;
+    delete m_cachedTimeSig;
+    delete m_cachedBarLine;
+
+    m_cachedText = nullptr;
+    m_cachedName = nullptr;
+    m_cachedClef = nullptr;
+    m_cachedKeySig = nullptr;
+    m_cachedTimeSig = nullptr;
+    m_cachedBarLine = nullptr;
+}
+
 void ContinuousPanel::setNotation(INotationPtr notation)
 {
+    if (notation == m_notation) {
+        return;
+    }
+
+    clearCache();
+    m_width = 0;
     m_notation = notation;
 }
 
-//! NOTE: Copied from MU3
 void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, const engraving::rendering::PaintOptions& opt)
 {
     TRACEFUNC;
@@ -67,32 +93,27 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
         return;
     }
 
-    qreal offsetPanel = -ctx.xOffset / ctx.scaling;
-    qreal y = 0;
-    qreal oldWidth = 0;          // The last final panel width
-    qreal newWidth = 0;          // New panel width
-    qreal height = 0;
-    qreal leftMarginTotal = 0;   // Sum of all elements left margin
-    qreal panelRightPadding = 5;    // Extra space for the panel after last element
+    double offsetPanel = -ctx.xOffset / ctx.scaling;
+    double y = 0;
+    double oldWidth = 0;          // The last final panel width
+    double newWidth = 0;          // New panel width
+    double height = 0;
+    double leftMarginTotal = 0;   // Sum of all elements left margin
+    double panelRightPadding = 5;    // Extra space for the panel after last element
 
-    mu::engraving::Measure* measure = score->firstMeasure();
+    const mu::engraving::Measure* measure = score->firstMeasure()->coveringMMRestOrThis();
     if (!measure) {
         return;
     }
 
-    if (measure->mmRest()) {
-        measure = measure->mmRest();
-    }
-
-    mu::engraving::System* system = measure->system();
+    const mu::engraving::System* system = measure->system();
     if (!system) {
         return;
     }
 
-    mu::engraving::Segment* s = measure->first();
-    double spatium = score->style().spatium();
+    const double spatium = score->style().spatium();
     if (m_width <= 0) {
-        m_width = s->x();
+        m_width = measure->first()->x();
     }
 
     //
@@ -101,7 +122,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
     height = 6 * spatium;
     y = system->staffYpage(0) + system->page()->pos().y();
     double y2 = 0.0;
-    size_t staffCount = score->nstaves();
+    const size_t staffCount = score->nstaves();
     for (mu::engraving::staff_idx_t i = 0; i < staffCount; ++i) {
         mu::engraving::SysStaff* ss = system->staff(i);
         if (!ss->show() || !score->staff(i)->show()) {
@@ -127,7 +148,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
     std::stable_sort(el.begin(), el.end(), mu::engraving::elementLessThan);
 
     const mu::engraving::Measure* currentMeasure = nullptr;
-    bool showInvisible = score->isShowInvisible();
+    const bool showInvisible = score->isShowInvisible();
     for (const mu::engraving::EngravingItem* e : el) {
         e->itemDiscovered = false;
         if (!e->visible() && !showInvisible) {
@@ -149,15 +170,15 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
         return;
     }
 
-    qreal canvasPosX = ctx.fromLogical(currentMeasure->canvasPos()).x();
+    const double canvasPosX = ctx.fromLogical(currentMeasure->canvasPos()).x();
     if (currentMeasure == score->firstMeasure() && canvasPosX > 0) {
         return;
     }
 
-    qreal xPosMeasure = currentMeasure->canvasX();
-    qreal _measureWidth = currentMeasure->width();
-    int tick = currentMeasure->tick().ticks();
-    mu::engraving::Fraction currentTimeSigFraction = currentMeasure->timesig();
+    double xPosMeasure = currentMeasure->canvasX();
+    const double _measureWidth = currentMeasure->width();
+    const engraving::Fraction tick = currentMeasure->tick();
+    const engraving::Fraction currentTimeSigFraction = currentMeasure->timesig();
 
     //---------------------------------------------------------
     //   findElementWidths
@@ -166,109 +187,130 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
 
     // The first pass serves to get the maximum width for each elements
 
-    qreal lineWidthName = 0;
-    qreal widthClef    = 0;
-    qreal widthKeySig  = 0;
-    qreal widthTimeSig = 0;
-    qreal xPosTimeSig  = 0;
+    double lineWidthName = 0;
+    double widthClef    = 0;
+    double widthKeySig  = 0;
+    double widthTimeSig = 0;
+    double xPosTimeSig  = 0;
 
-    for (const mu::engraving::EngravingItem* e : std::as_const(el)) {
+    // Ensure we have a cached segment to use as parent for temporary objects
+    Segment* seg = score->tick2segmentMM(tick);
+
+    // Initialize cached objects if needed
+    if (!m_cachedText) {
+        m_cachedText = engraving::Factory::createText(seg, mu::engraving::TextStyleType::DEFAULT,
+                                                      ACCESSIBILITY_DISABLED);
+        m_cachedText->setFlag(engraving::ElementFlag::MOVABLE, false);
+        m_cachedText->setFamily(u"FreeSans");
+        m_cachedText->setSizeIsSpatiumDependent(true);
+    }
+
+    if (!m_cachedName) {
+        m_cachedName = engraving::Factory::createText(seg, mu::engraving::TextStyleType::DEFAULT,
+                                                      ACCESSIBILITY_DISABLED);
+        m_cachedName->setFlag(engraving::ElementFlag::MOVABLE, false);
+        m_cachedName->setFamily(u"FreeSans");
+        m_cachedName->setSizeIsSpatiumDependent(true);
+    }
+
+    if (!m_cachedClef) {
+        m_cachedClef = engraving::Factory::createClef(seg, ACCESSIBILITY_DISABLED);
+    }
+
+    if (!m_cachedKeySig) {
+        m_cachedKeySig = engraving::Factory::createKeySig(seg, ACCESSIBILITY_DISABLED);
+        m_cachedKeySig->setHideNaturals(true);
+    }
+
+    if (!m_cachedTimeSig) {
+        m_cachedTimeSig = engraving::Factory::createTimeSig(seg, ACCESSIBILITY_DISABLED);
+    }
+
+    if (!m_cachedBarLine) {
+        m_cachedBarLine = engraving::Factory::createBarLine(seg, ACCESSIBILITY_DISABLED);
+    }
+
+    for (const engraving::EngravingItem* e : std::as_const(el)) {
         e->itemDiscovered = false;
         if (!e->visible() && !showInvisible) {
             continue;
         }
 
-        if (e->isRest() && toRest(e)->isGap()) {
-            continue;
-        }
-
         if (e->isStaffLines()) {
-            mu::engraving::Staff* currentStaff = score->staff(e->staffIdx());
-            mu::engraving::Segment* parent = score->tick2segment(Fraction::fromTicks(tick));
+            const engraving::Staff* currentStaff = score->staff(e->staffIdx());
+            const engraving::Instrument* instrument = currentStaff->part()->instrument(tick);
 
             // Find maximum width for the staff name
-            const StaffNameList& staffNamesLong
-                = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->longNames();
-            QString staffName = staffNamesLong.empty() ? u" " : staffNamesLong.front().name();
-            if (staffName == "") {
-                const StaffNameList& staffNamesShort
-                    = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->shortNames();
-                staffName = staffNamesShort.empty() ? u"" : staffNamesShort.front().name();
+            const StaffNameList& staffNamesLong = instrument->longNames();
+            String staffName = staffNamesLong.empty() ? String() : staffNamesLong.front().name();
+            if (staffName.empty()) {
+                const StaffNameList& staffNamesShort = instrument->shortNames();
+                staffName = staffNamesShort.empty() ? String() : staffNamesShort.front().name();
             }
 
-            mu::engraving::Text* newName = engraving::Factory::createText(parent, mu::engraving::TextStyleType::DEFAULT,
-                                                                          ACCESSIBILITY_DISABLED);
-            newName->setParent(parent);
-            newName->setXmlText(staffName);
-            newName->setTrack(e->track());
-            newName->setFamily(u"FreeSans");
-            newName->setSizeIsSpatiumDependent(true);
-            scoreRender()->layoutItem(newName);
-            newName->setPlainText(newName->plainText());
-            scoreRender()->layoutItem(newName);
+            m_cachedName->setParent(seg);
+            m_cachedName->setXmlText(staffName);
+            m_cachedName->setTrack(e->track());
+            m_cachedName->mutldata()->reset();
+            scoreRender()->layoutItem(m_cachedName);
+            m_cachedName->setPlainText(m_cachedName->plainText());
+            m_cachedName->mutldata()->reset();
+            scoreRender()->layoutItem(m_cachedName);
 
-            // Find maximum width for the current Clef
-            mu::engraving::Clef* newClef = engraving::Factory::createClef(parent, ACCESSIBILITY_DISABLED);
-            newClef->setParent(parent);
-            mu::engraving::ClefType currentClef = currentStaff->clef(mu::engraving::Fraction::fromTicks(tick));
-            newClef->setClefType(currentClef);
-            newClef->setTrack(e->track());
-            scoreRender()->layoutItem(newClef);
-            if (newClef->width() > widthClef) {
-                widthClef = newClef->width();
+            if (m_cachedName->width() > lineWidthName && !m_cachedName->xmlText().empty()) {
+                lineWidthName = m_cachedName->width();
             }
 
-            // Find maximum width for the current KeySignature
-            mu::engraving::KeySig* newKs = engraving::Factory::createKeySig(parent, ACCESSIBILITY_DISABLED);
-            newKs->setParent(parent);
-            mu::engraving::KeySigEvent currentKeySigEvent = currentStaff->keySigEvent(mu::engraving::Fraction::fromTicks(tick));
-            newKs->setKeySigEvent(currentKeySigEvent);
-            // The Parent and the Track must be set to have the key signature layout adjusted to different clefs
-            // This also adds naturals to the key signature (if set in the score style)
-            newKs->setTrack(e->track());
-            newKs->setHideNaturals(true);
-            scoreRender()->layoutItem(newKs);
-            if (newKs->width() > widthKeySig) {
-                widthKeySig = newKs->width();
+            // Clef
+            m_cachedClef->setParent(seg);
+            engraving::ClefType currentClef = currentStaff->clef(tick);
+            m_cachedClef->setClefType(currentClef);
+            m_cachedClef->setTrack(e->track());
+            m_cachedClef->mutldata()->reset();
+            scoreRender()->layoutItem(m_cachedClef);
+            if (m_cachedClef->width() > widthClef) {
+                widthClef = m_cachedClef->width();
             }
 
-            // Find maximum width for the current TimeSignature
-            mu::engraving::TimeSig* newTs = engraving::Factory::createTimeSig(parent, ACCESSIBILITY_DISABLED);
-            newTs->setParent(parent);
+            // Key Signature
+            m_cachedKeySig->setParent(seg);
+            engraving::KeySigEvent currentKeySigEvent = currentStaff->keySigEvent(tick);
+            m_cachedKeySig->setKeySigEvent(currentKeySigEvent);
+            m_cachedKeySig->setTrack(e->track());
+            m_cachedKeySig->mutldata()->reset();
+            scoreRender()->layoutItem(m_cachedKeySig);
+            if (m_cachedKeySig->width() > widthKeySig) {
+                widthKeySig = m_cachedKeySig->width();
+            }
+
+            // Time Signature
+            m_cachedTimeSig->setParent(seg);
 
             // Try to get local time signature, if not, get the current measure one
-            mu::engraving::TimeSig* currentTimeSig = currentStaff->timeSig(mu::engraving::Fraction::fromTicks(tick));
+            engraving::TimeSig* currentTimeSig = currentStaff->timeSig(tick);
             if (currentTimeSig) {
-                newTs->setFrom(currentTimeSig);
+                m_cachedTimeSig->setFrom(currentTimeSig);
             } else {
-                newTs->setSig(Fraction(currentTimeSigFraction.numerator(), currentTimeSigFraction.denominator()), TimeSigType::NORMAL);
+                m_cachedTimeSig->setSig(currentTimeSigFraction, TimeSigType::NORMAL);
             }
-            newTs->setTrack(e->track());
-            scoreRender()->layoutItem(newTs);
+            m_cachedTimeSig->setTrack(e->track());
+            m_cachedTimeSig->mutldata()->reset();
+            scoreRender()->layoutItem(m_cachedTimeSig);
 
-            if ((newName->width() > lineWidthName) && (newName->xmlText() != "")) {
-                lineWidthName = newName->width();
+            if (m_cachedTimeSig->width() > widthTimeSig) {
+                widthTimeSig = m_cachedTimeSig->width();
             }
-
-            if (newTs->width() > widthTimeSig) {
-                widthTimeSig = newTs->width();
-            }
-
-            delete newClef;
-            delete newName;
-            delete newKs;
-            delete newTs;
         }
     }
 
-    leftMarginTotal = styleMM(mu::engraving::Sid::clefLeftMargin);
-    leftMarginTotal += styleMM(mu::engraving::Sid::keysigLeftMargin);
-    leftMarginTotal += styleMM(mu::engraving::Sid::timesigLeftMargin);
+    leftMarginTotal = styleMM(engraving::Sid::clefLeftMargin);
+    leftMarginTotal += styleMM(engraving::Sid::keysigLeftMargin);
+    leftMarginTotal += styleMM(engraving::Sid::timesigLeftMargin);
 
     newWidth = widthClef + widthKeySig + widthTimeSig + leftMarginTotal + panelRightPadding;
     xPosMeasure -= offsetPanel;
 
-    lineWidthName += score->style().spatium() + styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef;
+    lineWidthName += spatium + styleMM(engraving::Sid::clefLeftMargin) + widthClef;
     if (newWidth < lineWidthName) {
         newWidth = lineWidthName;
         oldWidth = 0;
@@ -298,7 +340,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
 
     painter.save();
 
-    // Draw colored rectangle
+    // Draw background rectangle
     PointF pos(offsetPanel, 0);
 
     painter.translate(pos);
@@ -319,48 +361,38 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
         painter.drawTiledPixmap(bg, wallpaper, bg.topLeft() - PointF(lrint(ctx.xOffset), lrint(ctx.yOffset)));
     }
 
-    Color color = engravingConfiguration()->invisibleColor();
+    const Color color = engravingConfiguration()->invisibleColor();
 
-    // Draw measure text number
-    // TODO: simplify (no Text element)
-    QString text = QString("#%1").arg(currentMeasure->no() + 1);
-    mu::engraving::Text* newElement = engraving::Factory::createText(
-        score->dummy(), mu::engraving::TextStyleType::DEFAULT, ACCESSIBILITY_DISABLED);
-    newElement->setFlag(mu::engraving::ElementFlag::MOVABLE, false);
-    newElement->setXmlText(text);
-    newElement->setFamily(u"FreeSans");
-    newElement->setSizeIsSpatiumDependent(true);
-    newElement->setColor(color);
-    newElement->renderer()->layoutText1(newElement);
-    pos = PointF(styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef, y + newElement->height());
+    // Draw measure text number using cached text object
+    const String text = String(u"#%1").arg(currentMeasure->no() + 1);
+    m_cachedText->setXmlText(text);
+    m_cachedText->setColor(color);
+    m_cachedText->mutldata()->reset();
+    m_cachedText->renderer()->layoutText1(m_cachedText);
+    pos = PointF(styleMM(engraving::Sid::clefLeftMargin) + widthClef, y + m_cachedText->height());
     painter.translate(pos);
-    newElement->renderer()->drawItem(newElement, &painter, opt);
+    m_cachedText->renderer()->drawItem(m_cachedText, &painter, opt);
 
     pos += PointF(offsetPanel, 0);
     painter.translate(-pos);
-    delete newElement;
 
     // This second pass draws the elements spaced evenly using the width of the largest element
-    for (const mu::engraving::EngravingItem* e : std::as_const(el)) {
+    for (const engraving::EngravingItem* e : std::as_const(el)) {
         if (!e->visible() && !showInvisible) {
-            continue;
-        }
-
-        if (e->isRest() && toRest(e)->isGap()) {
             continue;
         }
 
         if (e->isStaffLines()) {
             painter.save();
-            mu::engraving::Staff* currentStaff = score->staff(e->staffIdx());
-            mu::engraving::Segment* parent = score->tick2segmentMM(Fraction::fromTicks(tick));
+            const engraving::Staff* currentStaff = score->staff(e->staffIdx());
+            const engraving::Instrument* instrument = currentStaff->part()->instrument(tick);
 
             pos = PointF(offsetPanel, e->pagePos().y());
             painter.translate(pos);
 
             // Draw staff lines
-            mu::engraving::StaffLines newStaffLines(*toStaffLines(e));
-            newStaffLines.setParent(parent->measure());
+            engraving::StaffLines newStaffLines(*toStaffLines(e));
+            newStaffLines.setParent(seg->measure());
             newStaffLines.setTrack(e->track());
             {
                 LayoutContext cntx(newStaffLines.score());
@@ -369,107 +401,93 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
             newStaffLines.setColor(color);
             scoreRender()->drawItem(&newStaffLines, &painter, opt);
 
-            // Draw barline
-            mu::engraving::BarLine* barLine = engraving::Factory::createBarLine(parent, ACCESSIBILITY_DISABLED);
-            barLine->setParent(parent);
-            barLine->setBarLineType(mu::engraving::BarLineType::NORMAL);
-            barLine->setTrack(e->track());
-            barLine->setSpanStaff(currentStaff->barLineSpan());
-            barLine->setSpanFrom(currentStaff->barLineFrom());
-            barLine->setSpanTo(currentStaff->barLineTo());
-            scoreRender()->layoutItem(barLine);
-            barLine->setColor(color);
-            barLine->renderer()->drawItem(barLine, &painter, opt);
+            // Draw barline using cached object
+            m_cachedBarLine->setParent(seg);
+            m_cachedBarLine->setBarLineType(engraving::BarLineType::NORMAL);
+            m_cachedBarLine->setTrack(e->track());
+            m_cachedBarLine->setSpanStaff(currentStaff->barLineSpan());
+            m_cachedBarLine->setSpanFrom(currentStaff->barLineFrom());
+            m_cachedBarLine->setSpanTo(currentStaff->barLineTo());
+            m_cachedBarLine->mutldata()->reset();
+            scoreRender()->layoutItem(m_cachedBarLine);
+            m_cachedBarLine->setColor(color);
+            m_cachedBarLine->renderer()->drawItem(m_cachedBarLine, &painter, opt);
 
-            // Draw the current staff name
-            const StaffNameList& staffNamesLong
-                = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->longNames();
-            QString staffName = staffNamesLong.empty() ? u" " : staffNamesLong.front().name();
-            if (staffName == "") {
-                const StaffNameList& staffNamesShort
-                    = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->shortNames();
-                staffName = staffNamesShort.empty() ? u"" : staffNamesShort.front().name();
+            // Draw the current staff name using cached object
+            const StaffNameList& staffNamesLong = instrument->longNames();
+            String staffName = staffNamesLong.empty() ? String() : staffNamesLong.front().name();
+            if (staffName.empty()) {
+                const StaffNameList& staffNamesShort = instrument->shortNames();
+                staffName = staffNamesShort.empty() ? String() : staffNamesShort.front().name();
             }
 
-            mu::engraving::Text* newName = engraving::Factory::createText(parent, mu::engraving::TextStyleType::DEFAULT,
-                                                                          ACCESSIBILITY_DISABLED);
-            newName->setParent(parent);
-            newName->setXmlText(staffName);
-            newName->setTrack(e->track());
-            newName->setColor(color);
-            newName->setFamily(u"FreeSans");
-            newName->setSizeIsSpatiumDependent(true);
-            scoreRender()->layoutItem(newName);
-            newName->setPlainText(newName->plainText());
-            scoreRender()->layoutItem(newName);
+            m_cachedName->setParent(seg);
+            m_cachedName->setXmlText(staffName);
+            m_cachedName->setTrack(e->track());
+            m_cachedName->setColor(color);
+            m_cachedName->mutldata()->reset();
+            scoreRender()->layoutItem(m_cachedName);
+            m_cachedName->setPlainText(m_cachedName->plainText());
+            m_cachedName->mutldata()->reset();
+            scoreRender()->layoutItem(m_cachedName);
 
             if (currentStaff->part()->staff(0) == currentStaff) {
                 const double spatium2 = score->style().spatium();
-                pos = PointF(styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef, -spatium2 * 2);
+                pos = PointF(styleMM(engraving::Sid::clefLeftMargin) + widthClef, -spatium2 * 2);
                 painter.translate(pos);
-                newName->renderer()->drawItem(newName, &painter, opt);
+                m_cachedName->renderer()->drawItem(m_cachedName, &painter, opt);
 
                 painter.translate(-pos);
             }
-            delete newName;
 
-            qreal posX = 0.0;
+            double posX = 0.0;
 
-            // Draw the current Clef
-            mu::engraving::Clef* clef = engraving::Factory::createClef(parent, ACCESSIBILITY_DISABLED);
-            clef->setParent(parent);
-            clef->setClefType(currentStaff->clef(mu::engraving::Fraction::fromTicks(tick)));
-            clef->setTrack(e->track());
-            clef->setColor(color);
-            scoreRender()->layoutItem(clef);
-            posX += styleMM(mu::engraving::Sid::clefLeftMargin);
-            const PointF clefPos = PointF(posX, clef->pos().y());
+            // Draw the current Clef using cached object
+            m_cachedClef->setParent(seg);
+            m_cachedClef->setClefType(currentStaff->clef(tick));
+            m_cachedClef->setTrack(e->track());
+            m_cachedClef->setColor(color);
+            m_cachedClef->mutldata()->reset();
+            scoreRender()->layoutItem(m_cachedClef);
+            posX += styleMM(engraving::Sid::clefLeftMargin);
+            const PointF clefPos = PointF(posX, m_cachedClef->pos().y());
             painter.translate(clefPos);
-            scoreRender()->drawItem(clef, &painter, opt);
+            scoreRender()->drawItem(m_cachedClef, &painter, opt);
             painter.translate(-clefPos);
             posX += widthClef;
 
-            // Draw the current KeySignature
-            mu::engraving::KeySig* newKs = engraving::Factory::createKeySig(parent, ACCESSIBILITY_DISABLED);
-            newKs->setParent(parent);
-            newKs->setKeySigEvent(currentStaff->keySigEvent(mu::engraving::Fraction::fromTicks(tick)));
-
-            // The Parent and the track must be set to have the key signature layout adjusted to different clefs
-            // This also adds naturals to the key signature (if set in the score style)
-            newKs->setTrack(e->track());
-            newKs->setColor(color);
-            newKs->setHideNaturals(true);
-            scoreRender()->layoutItem(newKs);
-            posX += styleMM(mu::engraving::Sid::keysigLeftMargin);
+            // Draw the current KeySignature using cached object
+            m_cachedKeySig->setParent(seg);
+            m_cachedKeySig->setKeySigEvent(currentStaff->keySigEvent(tick));
+            m_cachedKeySig->setTrack(e->track());
+            m_cachedKeySig->setColor(color);
+            m_cachedKeySig->mutldata()->reset();
+            scoreRender()->layoutItem(m_cachedKeySig);
+            posX += styleMM(engraving::Sid::keysigLeftMargin);
             const PointF ksPos = PointF(posX, 0.0);
             painter.translate(ksPos);
-            scoreRender()->drawItem(newKs, &painter, opt);
+            scoreRender()->drawItem(m_cachedKeySig, &painter, opt);
             painter.translate(-ksPos);
 
             posX += widthKeySig + xPosTimeSig;
 
-            // Draw the current TimeSignature
-            mu::engraving::TimeSig* newTs = engraving::Factory::createTimeSig(parent, ACCESSIBILITY_DISABLED);
-            newTs->setParent(parent);
+            // Draw the current TimeSignature using cached object
+            m_cachedTimeSig->setParent(seg);
 
             // Try to get local time signature, if not, get the current measure one
-            mu::engraving::TimeSig* currentTimeSig = currentStaff->timeSig(mu::engraving::Fraction::fromTicks(tick));
+            const engraving::TimeSig* currentTimeSig = currentStaff->timeSig(tick);
             if (currentTimeSig) {
-                newTs->setFrom(currentTimeSig);
-                newTs->setTrack(e->track());
-                newTs->setColor(color);
-                scoreRender()->layoutItem(newTs);
-                posX += styleMM(mu::engraving::Sid::timesigLeftMargin);
+                m_cachedTimeSig->setFrom(currentTimeSig);
+                m_cachedTimeSig->setTrack(e->track());
+                m_cachedTimeSig->setColor(color);
+                m_cachedTimeSig->mutldata()->reset();
+                scoreRender()->layoutItem(m_cachedTimeSig);
+                posX += styleMM(engraving::Sid::timesigLeftMargin);
                 const PointF tsPos = PointF(posX, 0.0);
                 painter.translate(tsPos);
-                scoreRender()->drawItem(newTs, &painter, opt);
+                scoreRender()->drawItem(m_cachedTimeSig, &painter, opt);
                 painter.translate(-tsPos);
             }
-
-            delete newKs;
-            delete newTs;
-            delete clef;
-            delete barLine;
 
             painter.restore();
         }
@@ -478,7 +496,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
     painter.restore();
 }
 
-qreal ContinuousPanel::styleMM(const mu::engraving::Sid styleId) const
+double ContinuousPanel::styleMM(const mu::engraving::Sid styleId) const
 {
     return score()->style().styleMM(styleId).val();
 }
