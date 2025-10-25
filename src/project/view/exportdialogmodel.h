@@ -36,9 +36,9 @@
 #include "importexport/audioexport/iaudioexportconfiguration.h"
 #include "importexport/mei/imeiconfiguration.h"
 
+#include "iexportprojectscenario.h"
 #include "inotationwritersregister.h"
 #include "iprojectconfiguration.h"
-#include "internal/iexportprojectscenario.h"
 #include "types/projecttypes.h"
 
 class QItemSelectionModel;
