@@ -43,9 +43,9 @@ using namespace mu::engraving;
 //   splitMeasure
 //---------------------------------------------------------
 
-void SplitJoinMeasure::splitMeasure(MasterScore* score, const Fraction& tick)
+void SplitJoinMeasure::splitMeasure(MasterScore* masterScore, const Fraction& tick)
 {
-    Segment* segment = score->tick2segment(tick, false, SegmentType::ChordRest);
+    Segment* segment = masterScore->tick2segment(tick, false, SegmentType::ChordRest);
 
     if (segment->rtick().isZero()) {
         MScore::setError(MsError::CANNOT_SPLIT_MEASURE_FIRST_BEAT);
@@ -56,9 +56,9 @@ void SplitJoinMeasure::splitMeasure(MasterScore* score, const Fraction& tick)
         return;
     }
 
-    Measure* measure = score->tick2measure(tick);
+    Measure* measure = masterScore->tick2measure(tick);
 
-    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
         if (measure->isMeasureRepeatGroup(static_cast<int>(staffIdx))) {
             MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
             return;
@@ -71,8 +71,8 @@ void SplitJoinMeasure::splitMeasure(MasterScore* score, const Fraction& tick)
     Fraction stick = measure->tick();
     Fraction etick = measure->endTick();
 
-    std::list<std::tuple<Spanner*, Fraction, Fraction> > sl;
-    for (auto i : score->spanner()) {
+    std::vector<std::tuple<Spanner*, Fraction, Fraction> > spanners;
+    for (auto i : masterScore->spanner()) {
         Spanner* s = i.second;
         EngravingItem* start = s->startElement();
         EngravingItem* end = s->endElement();
@@ -83,11 +83,11 @@ void SplitJoinMeasure::splitMeasure(MasterScore* score, const Fraction& tick)
             end = nullptr;
         }
         if (start != s->startElement() || end != s->endElement()) {
-            sl.push_back(std::make_tuple(s, s->tick(), s->ticks()));
-            score->undo(new ChangeStartEndSpanner(s, start, end));
+            spanners.push_back(std::make_tuple(s, s->tick(), s->ticks()));
+            masterScore->undo(new ChangeStartEndSpanner(s, start, end));
         }
         if (s->tick() < stick && s->tick2() > stick) {
-            sl.push_back(std::make_tuple(s, s->tick(), s->ticks()));
+            spanners.push_back(std::make_tuple(s, s->tick(), s->ticks()));
         }
     }
 
@@ -100,16 +100,16 @@ void SplitJoinMeasure::splitMeasure(MasterScore* score, const Fraction& tick)
     options.moveStaffTypeChanges = false;
     options.ignoreBarLines = true;
 
-    score->insertMeasure(nm, options);
-    Measure* m2 = toMeasure(nm ? nm->prev() : score->lastMeasure());
-    score->insertMeasure(m2, options);
+    masterScore->insertMeasure(nm, options);
+    Measure* m2 = toMeasure(nm ? nm->prev() : masterScore->lastMeasure());
+    masterScore->insertMeasure(m2, options);
     Measure* m1 = toMeasure(m2->prev());
 
-    for (Score* s : score->scoreList()) {
+    for (Score* s : masterScore->scoreList()) {
         Measure* m = s->tick2measure(tick);
         s->undoRemoveMeasures(m, m, true, false);
     }
-    score->undoInsertTime(measure->tick(), -measure->ticks());
+    masterScore->undoInsertTime(measure->tick(), -measure->ticks());
 
     m1->setTick(measure->tick());
     m2->setTick(tick);
@@ -148,9 +148,9 @@ void SplitJoinMeasure::splitMeasure(MasterScore* score, const Fraction& tick)
     m2->adjustToLen(ticks2, false);
 
     // set correct barline types if needed
-    for (Score* s : score->scoreList()) {
-        Measure* sM1 = s->tick2measure(m1->tick());
-        Measure* sM2 = s->tick2measure(m2->tick());
+    for (Score* linkedScore : masterScore->scoreList()) {
+        Measure* sM1 = linkedScore->tick2measure(m1->tick());
+        Measure* sM2 = linkedScore->tick2measure(m2->tick());
         // TODO: handle other end barline types; they may differ per staff
         if (measure->endBarLineType() == BarLineType::END_REPEAT) {
             sM2->undoChangeProperty(Pid::REPEAT_END, true);
@@ -160,12 +160,9 @@ void SplitJoinMeasure::splitMeasure(MasterScore* score, const Fraction& tick)
         }
     }
 
-    range.write(score, m1->tick());
+    range.write(masterScore, m1->tick());
 
-    for (auto i : sl) {
-        Spanner* s      = std::get<0>(i);
-        Fraction t      = std::get<1>(i);
-        Fraction ticks  = std::get<2>(i);
+    for (const auto& [s, t, ticks] : spanners) {
         if (s->tick() != t) {
             s->undoChangeProperty(Pid::SPANNER_TICK, t);
         }
@@ -174,13 +171,13 @@ void SplitJoinMeasure::splitMeasure(MasterScore* score, const Fraction& tick)
         }
     }
 
-    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-        Staff* staff = score->staves().at(staffIdx);
+    for (size_t staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
+        Staff* staff = masterScore->staves().at(staffIdx);
         if (staff->isStaffTypeStartFrom(stick)) {
             StaffTypeChange* stc = Factory::createStaffTypeChange(m1);
             stc->setParent(m1);
             stc->setTrack(staffIdx * VOICES);
-            score->addElement(stc);
+            masterScore->addElement(stc);
         }
     }
 }
@@ -289,8 +286,8 @@ void SplitJoinMeasure::joinMeasures(MasterScore* masterScore, const Fraction& ti
 
     // The loop since measures are not currently linked in MuseScore
     // change nominal time sig, as inserted measure took it from next measure
-    for (Score* s : masterScore->scoreList()) {
-        Measure* ins = s->tick2measure(startTick);
+    for (Score* linkedScore : masterScore->scoreList()) {
+        Measure* ins = linkedScore->tick2measure(startTick);
         ins->undoChangeProperty(Pid::TIMESIG_NOMINAL, newTimesig);
         // set correct barline types if needed
         // TODO: handle other end barline types; they may differ per staff
@@ -315,29 +312,29 @@ void SplitJoinMeasure::joinMeasures(MasterScore* masterScore, const Fraction& ti
                 if (TimeSig* insTimeSig = toTimeSig(insMSeg->element(staffIdx * VOICES))) {
                     TimeSig* lts = nullptr;
                     for (EngravingObject* l : insTimeSig->linkList()) {
-                        Score* score = l->score();
+                        Score* linkedScore = l->score();
                         TimeSig* timeSig = toTimeSig(l);
                         Segment* tSeg = timeSig->segment();
                         track_idx_t track = timeSig->track();
-                        Measure* sNext = next ? score->tick2measure(next->tick()) : nullptr;
+                        Measure* sNext = next ? linkedScore->tick2measure(next->tick()) : nullptr;
                         Segment* nextTSeg = sNext ? sNext->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1)) : nullptr;
                         if (sNext && !nextTSeg->element(track)) {
                             TimeSig* nsig = Factory::copyTimeSig(*timeSig);
-                            nsig->setScore(score);
+                            nsig->setScore(linkedScore);
                             nsig->setTrack(track);
                             nsig->setParent(nextTSeg);
 
-                            score->doUndoAddElement(nsig);
+                            linkedScore->doUndoAddElement(nsig);
 
                             if (!lts) {
                                 lts = nsig;
                             } else {
-                                score->undo(new Link(lts, nsig));
+                                linkedScore->undo(new Link(lts, nsig));
                             }
                         }
-                        score->doUndoRemoveElement(timeSig);
+                        linkedScore->doUndoRemoveElement(timeSig);
                         if (tSeg->empty()) {
-                            score->doUndoRemoveElement(tSeg);
+                            linkedScore->doUndoRemoveElement(tSeg);
                         }
                     }
                 }
