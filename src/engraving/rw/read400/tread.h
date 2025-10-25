@@ -65,8 +65,6 @@ class ChordRest;
 class ChordLine;
 class Clef;
 
-class Excerpt;
-
 class FiguredBass;
 class FiguredBassItem;
 class Fingering;
@@ -208,7 +206,6 @@ public:
     static void read(ChordLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(Clef* c, XmlReader& xml, ReadContext& ctx);
 
-    static void read(Excerpt* item, XmlReader& xml, ReadContext& ctx);
     static void read(Expression* item, XmlReader& xml, ReadContext& ctx);
 
     static void read(Fermata* f, XmlReader& xml, ReadContext& ctx);

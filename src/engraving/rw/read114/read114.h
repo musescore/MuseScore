@@ -24,6 +24,10 @@
 
 #include "../ireader.h"
 
+namespace mu::engraving {
+class Excerpt;
+}
+
 namespace mu::engraving::read400  {
 class ReadContext;
 }
@@ -47,5 +51,7 @@ public:
 
 private:
     void doReadItem(EngravingItem* item, XmlReader& xml) override;
+
+    void readExcerpt(Excerpt* ex, XmlReader& e, read400::ReadContext& ctx);
 };
 }
