@@ -2393,6 +2393,49 @@ void Score::cmdSetBeamMode(BeamMode mode)
 }
 
 //---------------------------------------------------------
+//   cmdSetBeamSelected
+//---------------------------------------------------------
+
+void Score::cmdBeamSelected()
+{
+    if (!selection().isRange()) {
+        return;
+    }
+
+    cmdResetBeamMode();
+
+    for (staff_idx_t staffIdx = selection().staffStart(); staffIdx < selection().staffEnd(); ++staffIdx) {
+        ChordRest* firstChordRest = selection().firstChordRest(staffIdx * VOICES);
+        ChordRest* lastChordRest = selection().lastChordRest(staffIdx * VOICES);
+
+        ChordRest* prev = prevChordRest(firstChordRest);
+        ChordRest* cr = firstChordRest;
+        BeamMode actualBeamMode = Groups::actualBeamMode(cr, prev);
+        if (actualBeamMode != BeamMode::BEGIN) {
+            cr->undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN);
+        }
+
+        while (cr != lastChordRest) {
+            prev = cr;
+            cr = nextChordRest(cr);
+            actualBeamMode = Groups::actualBeamMode(cr, prev);
+            if (actualBeamMode == BeamMode::BEGIN || actualBeamMode == BeamMode::NONE) {
+                cr->undoChangeProperty(Pid::BEAM_MODE, BeamMode::MID);
+            }
+        }
+
+        prev = cr;
+        cr = nextChordRest(cr);
+        if (cr) {
+            actualBeamMode = Groups::actualBeamMode(cr, prev);
+            if (actualBeamMode != BeamMode::BEGIN && actualBeamMode != BeamMode::NONE) {
+                cr->undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   cmdFlip
 //---------------------------------------------------------
 
