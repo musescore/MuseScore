@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
@@ -68,19 +70,18 @@ public:
     void paint(muse::draw::Painter& painter, const NotationViewContext& ctx, const engraving::rendering::PaintOptions& opt);
 
 private:
-    qreal styleMM(const mu::engraving::Sid styleId) const;
-    const mu::engraving::Score* score() const;
     void clearCache();
+    void ensureCacheSize(size_t staffCount);
 
     INotationPtr m_notation;
     qreal m_width = 0;
     muse::RectF m_rect;
 
-    mu::engraving::Text* m_cachedText = nullptr;
-    mu::engraving::Text* m_cachedName = nullptr;
-    mu::engraving::Clef* m_cachedClef = nullptr;
-    mu::engraving::KeySig* m_cachedKeySig = nullptr;
-    mu::engraving::TimeSig* m_cachedTimeSig = nullptr;
-    mu::engraving::BarLine* m_cachedBarLine = nullptr;
+    mu::engraving::Text* m_cachedMeasureNumberText = nullptr;
+    std::vector<mu::engraving::Text*> m_cachedStaffNameTexts;
+    std::vector<mu::engraving::Clef*> m_cachedClefs;
+    std::vector<mu::engraving::KeySig*> m_cachedKeySigs;
+    std::vector<mu::engraving::TimeSig*> m_cachedTimeSigs;
+    std::vector<mu::engraving::BarLine*> m_cachedBarLines;
 };
 }
