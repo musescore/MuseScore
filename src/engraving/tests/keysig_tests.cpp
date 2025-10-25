@@ -168,7 +168,7 @@ TEST_F(Engraving_KeySigTests, keysigMode)
     EXPECT_TRUE(score);
     Measure* m1 = score->firstMeasure();
     KeySig* ke = toKeySig(m1->findSegment(SegmentType::KeySig, m1->tick())->element(0));
-    ke->setProperty(Pid::KEYSIG_MODE, int(KeyMode::DORIAN));
+    ke->setProperty(Pid::KEYSIG_MODE, KeyMode::DORIAN);
     score->update();
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"keysig03.mscx", KEYSIG_DATA_DIR + u"keysig03-ref.mscx"));

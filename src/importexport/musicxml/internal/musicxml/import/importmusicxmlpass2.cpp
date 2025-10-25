@@ -3176,7 +3176,7 @@ void MusicXmlParserPass2::staffDetails(const String& partId, Measure* measure)
             staffTuning(&stringData);
         } else if (m_e.name() == "staff-size") {
             const double scale = m_e.doubleAttribute("scale", 1.0);
-            const double val = m_e.readDouble() / 100;
+            const Spatium val(m_e.readDouble() / 100);
             m_score->staff(staffIdx)->setProperty(Pid::MAG, scale);
             m_score->staff(staffIdx)->setProperty(Pid::LINE_DISTANCE, val);
         } else {

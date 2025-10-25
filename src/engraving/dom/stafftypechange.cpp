@@ -101,7 +101,7 @@ PropertyValue StaffTypeChange::getProperty(Pid propertyId) const
     case Pid::STAFF_STEMLESS:
         return m_staffType->stemless();
     case Pid::HEAD_SCHEME:
-        return int(m_staffType->noteHeadScheme());
+        return m_staffType->noteHeadScheme();
     case Pid::STAFF_GEN_CLEF:
         return m_staffType->genClef();
     case Pid::STAFF_GEN_TIMESIG:

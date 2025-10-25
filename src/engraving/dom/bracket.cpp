@@ -291,7 +291,7 @@ bool Bracket::setProperty(Pid id, const PropertyValue& v)
 PropertyValue Bracket::propertyDefault(Pid id) const
 {
     if (id == Pid::BRACKET_COLUMN) {
-        return 0;
+        return size_t(0);
     }
     PropertyValue v = EngravingItem::propertyDefault(id);
     if (!v.isValid()) {

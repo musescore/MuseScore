@@ -3002,7 +3002,7 @@ void TRead::read(MMRest* r, XmlReader& e, ReadContext& ctx)
             r->add(dot);
         } else if (tag == "mmRestNumberPos") {
             // Old property, deprecated in 4.5
-            r->setNumberOffset(e.readDouble() - ctx.style().styleS(Sid::mmRestNumberPos).val());
+            r->setNumberOffset(Spatium(e.readDouble()) - ctx.style().styleS(Sid::mmRestNumberPos));
         } else if (TRead::readStyledProperty(r, tag, e, ctx)) {
         } else if (readProperties(r, e, ctx)) {
         } else {

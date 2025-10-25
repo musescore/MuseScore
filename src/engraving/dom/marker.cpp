@@ -170,9 +170,9 @@ void Marker::undoSetLabel(const String& s)
 //   undoSetMarkerType
 //---------------------------------------------------------
 
-void Marker::undoSetMarkerType(MarkerType t)
+void Marker::undoSetMarkerType(const MarkerType t)
 {
-    undoChangeProperty(Pid::MARKER_TYPE, int(t));
+    undoChangeProperty(Pid::MARKER_TYPE, t);
 }
 
 //---------------------------------------------------------
@@ -185,7 +185,7 @@ PropertyValue Marker::getProperty(Pid propertyId) const
     case Pid::LABEL:
         return label();
     case Pid::MARKER_TYPE:
-        return int(markerType());
+        return markerType();
     case Pid::MARKER_CENTER_ON_SYMBOL:
         return centerOnSymbol();
     default:
@@ -205,7 +205,7 @@ bool Marker::setProperty(Pid propertyId, const PropertyValue& v)
         setLabel(v.value<String>());
         break;
     case Pid::MARKER_TYPE:
-        setMarkerType(MarkerType(v.toInt()));
+        setMarkerType(v.value<MarkerType>());
         break;
     case Pid::MARKER_CENTER_ON_SYMBOL:
         setCenterOnSymbol(v.toBool());
@@ -230,7 +230,7 @@ PropertyValue Marker::propertyDefault(Pid propertyId) const
     case Pid::LABEL:
         return String();
     case Pid::MARKER_TYPE:
-        return int(MarkerType::FINE);
+        return MarkerType::FINE;
     case Pid::PLACEMENT:
         return PlacementV::ABOVE;
     case Pid::MARKER_CENTER_ON_SYMBOL:

@@ -687,7 +687,7 @@ bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
         setStartElement(0);               // invalidate
         break;
     case Pid::SPANNER_TRACK2:
-        setTrack2(v.toInt());
+        setTrack2(v.value<track_idx_t>());
         setEndElement(0);                 // invalidate
         break;
     case Pid::ANCHOR:

@@ -451,8 +451,6 @@ PropertyValue Dynamic::getProperty(Pid propertyId) const
         return m_dynamicType;
     case Pid::VELOCITY:
         return velocity();
-    case Pid::SUBTYPE:
-        return int(m_dynamicType);
     case Pid::VELO_CHANGE:
         if (isVelocityChangeAvailable()) {
             return changeInVelocity();
@@ -492,9 +490,6 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::VELOCITY:
         m_velocity = v.toInt();
-        break;
-    case Pid::SUBTYPE:
-        m_dynamicType = v.value<DynamicType>();
         break;
     case Pid::VELO_CHANGE:
         if (isVelocityChangeAvailable()) {

@@ -239,7 +239,6 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutCon
     item->setEndAnchor(BeamTremoloLayout::chordBeamAnchor(item->ldata(), item->chord2(), ChordBeamAnchorType::End));
 
     // deal with manual adjustments here and return
-    PropertyValue val = item->getProperty(Pid::PLACEMENT);
     if (item->userModified()) {
         int idx = item->directionIdx();
         double startY = item->beamFragment().py1[idx];

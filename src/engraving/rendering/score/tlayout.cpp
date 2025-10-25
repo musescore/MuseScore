@@ -4632,7 +4632,7 @@ void TLayout::layoutPedalSegment(PedalSegment* item, LayoutContext& ctx)
         }
         endText->mutldata()->setPosX(xEndText);
 
-        double lineTextGap = item->getProperty(Pid::GAP_BETWEEN_TEXT_AND_LINE).toDouble() * item->spatium();
+        double lineTextGap = item->getProperty(Pid::GAP_BETWEEN_TEXT_AND_LINE).value<Spatium>().toMM(item->spatium());
         PointF& endOfLine = item->pointsRef()[1];
         endOfLine.setX(xEndText - lineTextGap);
     }

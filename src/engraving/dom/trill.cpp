@@ -415,7 +415,7 @@ PropertyValue Trill::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TRILL_TYPE:
-        return 0;
+        return static_cast<int>(TrillType::TRILL_LINE);
     case Pid::ORNAMENT_STYLE:
         return OrnamentStyle::DEFAULT;
     case Pid::PLACEMENT:

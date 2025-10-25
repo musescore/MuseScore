@@ -284,7 +284,7 @@ PropertyValue Clef::getProperty(Pid propertyId) const
     case Pid::CLEF_TYPE_TRANSPOSING: return m_clefTypes.transposingClef;
     case Pid::SHOW_COURTESY: return showCourtesy();
     case Pid::SMALL:         return isSmall();
-    case Pid::CLEF_TO_BARLINE_POS: return m_clefToBarlinePosition;
+    case Pid::CLEF_TO_BARLINE_POS: return static_cast<int>(m_clefToBarlinePosition);
     case Pid::IS_HEADER: return m_isHeader;
     case Pid::IS_COURTESY: return m_isCourtesy;
     default:
@@ -318,11 +318,14 @@ bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::SMALL:
         setSmall(v.toBool());
         break;
-    case Pid::CLEF_TO_BARLINE_POS:
-        if (v.value<ClefToBarlinePosition>() != m_clefToBarlinePosition && !m_isHeader) {
-            changeClefToBarlinePos(v.value<ClefToBarlinePosition>());
+    case Pid::CLEF_TO_BARLINE_POS: {
+        const auto newClefToBlPos = ClefToBarlinePosition(v.value<int>());
+
+        if (newClefToBlPos != m_clefToBarlinePosition && !m_isHeader) {
+            changeClefToBarlinePos(newClefToBlPos);
         }
         break;
+    }
     case Pid::IS_HEADER:
         m_isHeader = v.toBool();
         break;
@@ -403,7 +406,7 @@ PropertyValue Clef::propertyDefault(Pid id) const
     case Pid::CLEF_TYPE_TRANSPOSING: return ClefType::INVALID;
     case Pid::SHOW_COURTESY: return true;
     case Pid::SMALL:         return false;
-    case Pid::CLEF_TO_BARLINE_POS: return ClefToBarlinePosition::AUTO;
+    case Pid::CLEF_TO_BARLINE_POS: return static_cast<int>(ClefToBarlinePosition::AUTO);
     case Pid::IS_HEADER: return false;
     case Pid::IS_COURTESY: return false;
     default:              return EngravingItem::propertyDefault(id);
