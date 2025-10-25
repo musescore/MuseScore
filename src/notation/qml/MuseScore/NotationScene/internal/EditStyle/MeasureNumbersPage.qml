@@ -84,7 +84,7 @@ StyledFlickable {
 
                         ComboBoxDropdown {
                             id: barNumTextStyleDropdown
-                            Layout.preferredWidth: 190
+                            Layout.minimumWidth: 192
                             model: barNumbersModel.textStyles
                             styleItem: barNumbersModel.measureNumberTextStyle
                             onHandleItem: function(value) {
@@ -269,10 +269,13 @@ StyledFlickable {
                     spacing: 8
 
                     RowLayout {
+                        spacing: 6
+
                         StyledTextLabel {
-                            Layout.preferredWidth: 145
+                            Layout.preferredWidth: 156
                             text: qsTrc("notation/editstyle/voltas", "Offset when above staff:")
                             horizontalAlignment: Text.AlignLeft
+                            wrapMode: Text.Wrap
                         }
 
                         StyledXYControllerWithReset {
@@ -281,10 +284,13 @@ StyledFlickable {
                     }
 
                     RowLayout {
+                        spacing: 6
+
                         StyledTextLabel {
-                            Layout.preferredWidth: 145
+                            Layout.preferredWidth: 156
                             text: qsTrc("notation/editstyle/voltas", "Offset when below staff:")
                             horizontalAlignment: Text.AlignLeft
+                            wrapMode: Text.Wrap
                         }
 
                         StyledXYControllerWithReset {
@@ -319,10 +325,12 @@ StyledFlickable {
                         horizontalAlignment: Text.AlignLeft
                     }
 
-                    RowLayout {                       
+                    RowLayout {       
+                        spacing: 4
+
                         ComboBoxDropdown {
                             id: mmRestBarRangeTextStyleDropdown
-                            Layout.preferredWidth: 190
+                            Layout.minimumWidth: 192
                             model: barNumbersModel.textStyles
                             styleItem: barNumbersModel.mmRestRangeTextStyle
                             onHandleItem: function(value) {
@@ -355,14 +363,14 @@ StyledFlickable {
                     }
 
                     RadioButtonGroup {
+                        width: 362
                         model: [
                             { text: qsTrc("notation/editstyle/voltas", "Brackets"), value: 0},
-                            { text: qsTrc("notation/editstyle/voltas", "Parenthesis"), value: 1},
+                            { text: qsTrc("notation/editstyle/voltas", "Parentheses"), value: 1},
                             { text: qsTrc("notation/editstyle/voltas", "None"), value: 2},
                         ]
 
                         delegate: FlatRadioButton {
-                            width: 116
                             height: ui.theme.defaultButtonSize
                             text: modelData.text
                             checked: barNumbersModel.mmRestRangeBracketType.value === modelData.value
@@ -411,13 +419,13 @@ StyledFlickable {
                     }
 
                     RadioButtonGroup {
+                        width: 362
                         model: [
                             { text: qsTrc("notation/editstyle/voltas", "Above"), value: 0},
                             { text: qsTrc("notation/editstyle/voltas", "Below"), value: 1},
                         ]
 
                         delegate: FlatRadioButton {
-                            width: 176
                             height: ui.theme.defaultButtonSize
                             text: modelData.text
                             checked: barNumbersModel.mmRestRangeVPlacement.value === modelData.value

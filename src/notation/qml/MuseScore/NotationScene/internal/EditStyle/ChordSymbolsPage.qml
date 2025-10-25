@@ -121,7 +121,7 @@ StyledFlickable {
                 // TODO - replace with StyledDropdown once this whole dialog is written in QML
                 ComboBoxDropdown {
                     id: presetDropdown
-                    Layout.preferredWidth: 191
+                    Layout.minimumWidth: 192
                     model: chordSymbolsModel.possiblePresetOptions()
 
                     styleItem: chordSymbolsModel.chordStylePreset
@@ -138,7 +138,7 @@ StyledFlickable {
 
                     TextInputField {
                         id: customXMLField
-                        Layout.preferredWidth: 191
+                        Layout.preferredWidth: presetDropdown.width
                         readOnly: true
                         currentText: chordSymbolsModel.chordDescriptionFile ? chordSymbolsModel.chordDescriptionFile.value : ""
                     }
@@ -207,14 +207,12 @@ StyledFlickable {
 
                     ColumnLayout {
                         spacing: 12
-                        Layout.fillWidth: true
 
                         RowLayout {
                             spacing: 8
-                            Layout.fillWidth: true
 
                             StyleToggle {
-                                Layout.preferredWidth: 460
+                                Layout.fillWidth: true
                                 styleItem: chordSymbolsModel.automaticCapitalization
                                 text: qsTrc("notation/editstyle/chordsymbols", "Automatically capitalize note names")
                             }
@@ -229,7 +227,6 @@ StyledFlickable {
 
                         ColumnLayout {
                             spacing: 8
-                            Layout.fillWidth: true
 
                             CheckBox {
                                 text: qsTrc("notation/editstyle/chordsymbols", "Lowercase minor chords")
@@ -267,7 +264,6 @@ StyledFlickable {
 
                         RowLayout {
                             spacing: 6
-                            Layout.fillWidth: true
 
                             StyledTextLabel {
                                 Layout.preferredWidth: 120
@@ -277,7 +273,7 @@ StyledFlickable {
                             }
 
                             Item {
-                                Layout.preferredWidth: 326
+                                Layout.fillWidth: true
                                 implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
                                 IncrementalPropertyControl {
                                     width: 80
@@ -306,7 +302,6 @@ StyledFlickable {
 
                         RowLayout {
                             spacing: 6
-                            Layout.fillWidth: true
 
                             StyledTextLabel {
                                 Layout.preferredWidth: 120
@@ -344,7 +339,6 @@ StyledFlickable {
 
                         RowLayout {
                             spacing: 6
-                            Layout.fillWidth: true
 
                             StyledTextLabel {
                                 Layout.preferredWidth: 120
@@ -354,8 +348,9 @@ StyledFlickable {
                             }
 
                             Item {
-                                Layout.preferredWidth: 326
+                                Layout.fillWidth: true
                                 implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
+
                                 IncrementalPropertyControl {
                                     width: 80
 
@@ -383,7 +378,6 @@ StyledFlickable {
 
                         RowLayout {
                             spacing: 6
-                            Layout.fillWidth: true
 
                             StyledTextLabel {
                                 Layout.preferredWidth: 120
@@ -410,6 +404,7 @@ StyledFlickable {
                         }
 
                         CheckBox {
+                            Layout.fillWidth: true
                             text: qsTrc("notation/editstyle/chordsymbols", "Vertically stack modifiers")
                             checked: chordSymbolsModel.verticallyStackModifiers.value === true
                             onClicked: chordSymbolsModel.verticallyStackModifiers.value = !chordSymbolsModel.verticallyStackModifiers.value
@@ -427,7 +422,6 @@ StyledFlickable {
 
                         RowLayout {
                             spacing: 6
-                            Layout.fillWidth: true
 
                             StyledTextLabel {
                                 Layout.preferredWidth: 120
@@ -437,7 +431,7 @@ StyledFlickable {
                             }
 
                             Item {
-                                Layout.preferredWidth: 326
+                                Layout.fillWidth: true
                                 implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
 
                                 RadioButtonGroup {
@@ -455,7 +449,7 @@ StyledFlickable {
                                     delegate: FlatRadioButton {
                                         height: 48
 
-                                        navigation.accessible.name: modelData.title ? modelData.title : (modelData.text ? modelData.text : "")
+                                        navigation.accessible.name: modelData.title || modelData.text || ""
 
                                         checked: chordSymbolsModel.chordBassNoteStagger.value === modelData.value
                                         onToggled: chordSymbolsModel.chordBassNoteStagger.value = modelData.value
@@ -466,13 +460,13 @@ StyledFlickable {
 
                                             StyledIconLabel {
                                                 anchors.horizontalCenter: parent.horizontalCenter
-                                                iconCode: modelData.iconCode ? modelData.iconCode : IconCode.NONE
-                                                font.pixelSize: modelData.iconSize ? modelData.iconSize : 28
+                                                iconCode: modelData.iconCode || IconCode.NONE
+                                                font.pixelSize: modelData.iconSize || 28
                                             }
 
                                             StyledTextLabel {
                                                 anchors.horizontalCenter: parent.horizontalCenter
-                                                text: modelData.text ? modelData.text : ""
+                                                text: modelData.text || ""
                                             }
                                         }
                                     }
@@ -527,7 +521,6 @@ StyledFlickable {
 
                         RowLayout {
                             spacing: 6
-                            Layout.fillWidth: true
 
                             StyledTextLabel {
                                 Layout.preferredWidth: 120
@@ -537,8 +530,9 @@ StyledFlickable {
                             }
 
                             Item {
-                                Layout.preferredWidth: 326
+                                Layout.fillWidth: true
                                 implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
+
                                 IncrementalPropertyControl {
                                     width: 80
 
@@ -566,7 +560,6 @@ StyledFlickable {
 
                         RowLayout {
                             spacing: 6
-                            Layout.fillWidth: true
 
                             StyledTextLabel {
                                 Layout.preferredWidth: 120
@@ -607,17 +600,12 @@ StyledFlickable {
 
                 RowLayout {
                     spacing: 6
-                    Layout.fillWidth: true
 
-                    Item {
-                        Layout.preferredWidth: 480
-                        implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
-
-                        CheckBox {
-                            text: qsTrc("notation/editstyle/chordsymbols", "Vertically align chord symbols and fretboard diagrams on the same system")
-                            checked: chordSymbolsModel.verticallyAlignChordSymbols.value === true
-                            onClicked: chordSymbolsModel.verticallyAlignChordSymbols.value = !chordSymbolsModel.verticallyAlignChordSymbols.value
-                        }
+                    CheckBox {
+                        Layout.fillWidth: true
+                        text: qsTrc("notation/editstyle/chordsymbols", "Vertically align chord symbols and fretboard diagrams on the same system")
+                        checked: chordSymbolsModel.verticallyAlignChordSymbols.value === true
+                        onClicked: chordSymbolsModel.verticallyAlignChordSymbols.value = !chordSymbolsModel.verticallyAlignChordSymbols.value
                     }
 
                     FlatButton {
@@ -627,7 +615,6 @@ StyledFlickable {
                         onClicked: resetStyles(root.alignmentStyles)
                     }
                 }
-
 
                 IconAndTextButtonSelector {
                     styleItem: chordSymbolsModel.chordAlignmentToNotehead
@@ -676,7 +663,6 @@ StyledFlickable {
 
                 RowLayout {
                     spacing: 6
-                    Layout.fillWidth: true
 
                     StyledTextLabel {
                         Layout.preferredWidth: 120
@@ -686,8 +672,9 @@ StyledFlickable {
                     }
 
                     Item {
-                        Layout.preferredWidth: 326
+                        Layout.fillWidth: true
                         implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
+
                         IncrementalPropertyControl {
                             width: 80
 
@@ -715,7 +702,6 @@ StyledFlickable {
 
                 RowLayout {
                     spacing: 6
-                    Layout.fillWidth: true
 
                     StyledTextLabel {
                         Layout.preferredWidth: 120
@@ -743,7 +729,6 @@ StyledFlickable {
 
                 RowLayout {
                     spacing: 6
-                    Layout.fillWidth: true
 
                     StyledTextLabel {
                         Layout.preferredWidth: 120
@@ -782,7 +767,6 @@ StyledFlickable {
 
                 RowLayout {
                     spacing: 6
-                    Layout.fillWidth: true
 
                     StyledTextLabel {
                         Layout.preferredWidth: 120
@@ -792,13 +776,12 @@ StyledFlickable {
                     }
 
                     Item {
-                        Layout.preferredWidth: 326
+                        Layout.fillWidth: true
                         Layout.preferredHeight: interpretationDropdown.height
 
                         // TODO - replace with StyledDropdown once this whole dialog is written in QML
                         ComboBoxDropdown {
                             id: interpretationDropdown
-                            Layout.preferredWidth: 172
                             model: chordSymbolsModel.possibleHarmonyVoiceLiteralOptions()
 
                             styleItem: chordSymbolsModel.harmonyVoiceLiteral
@@ -815,7 +798,6 @@ StyledFlickable {
 
                 RowLayout {
                     spacing: 6
-                    Layout.fillWidth: true
 
                     StyledTextLabel {
                         Layout.preferredWidth: 120
@@ -825,13 +807,12 @@ StyledFlickable {
                     }
 
                     Item {
-                        Layout.preferredWidth: 326
+                        Layout.fillWidth: true
                         Layout.preferredHeight: voicingDropdown.height
 
                         // TODO - replace with StyledDropdown once this whole dialog is written in QML
                         ComboBoxDropdown {
                             id: voicingDropdown
-                            Layout.preferredWidth: 172
                             model: chordSymbolsModel.possibleHarmonyVoicingOptions()
 
                             styleItem: chordSymbolsModel.harmonyVoicing
@@ -841,7 +822,6 @@ StyledFlickable {
 
                 RowLayout {
                     spacing: 6
-                    Layout.fillWidth: true
 
                     StyledTextLabel {
                         Layout.preferredWidth: 120
@@ -851,12 +831,12 @@ StyledFlickable {
                     }
 
                     Item {
-                        Layout.preferredWidth: 326
+                        Layout.fillWidth: true
                         Layout.preferredHeight: durationDropdown.height
+
                         // TODO - replace with StyledDropdown once this whole dialog is written in QML
                         ComboBoxDropdown {
                             id: durationDropdown
-                            Layout.preferredWidth: 172
                             model: chordSymbolsModel.possibleHarmonyDurationOptions()
 
                             styleItem: chordSymbolsModel.harmonyDuration
@@ -877,7 +857,6 @@ StyledFlickable {
 
                 RowLayout {
                     spacing: 6
-                    Layout.fillWidth: true
 
                     RadioButtonGroup {
                         id: capoRadioButtonGroup
