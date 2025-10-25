@@ -63,11 +63,6 @@ extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interv
 extern int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
 extern int transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepAlteredDegrees, bool useDoubleSharpsFlats);
 
-constexpr int intervalListSize = 26;
-extern Interval intervalList[intervalListSize];
-extern int searchInterval(int steps, int semitones);
-extern int chromatic2diatonic(int val);
-
 extern Note* nextChordNote(Note* note);
 extern Note* prevChordNote(Note* note);
 extern Segment* nextSeg1(Segment* s);

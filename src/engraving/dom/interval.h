@@ -20,24 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_INTERVAL_H
-#define MU_ENGRAVING_INTERVAL_H
+#pragma once
 
+#include <array>
 #include <cstdint>
 
 namespace mu::engraving {
 struct OrnamentInterval;
-//---------------------------------------------------------
-//   Interval
-//---------------------------------------------------------
 
 struct Interval {
-    int8_t diatonic;
-    int8_t chromatic;
+    int8_t diatonic = 0;
+    int8_t chromatic = 0;
 
-    Interval();
-    Interval(int a, int b);
-    Interval(int _chromatic);
+    Interval() = default;
+    Interval(int diatonic, int chromatic);
+    Interval(int chromatic);
 
     void flip();
     bool isZero() const;
@@ -45,6 +42,19 @@ struct Interval {
     bool operator==(const Interval& a) const { return diatonic == a.diatonic && chromatic == a.chromatic; }
 
     static Interval fromOrnamentInterval(OrnamentInterval ornInt);
+
+    /// An array of all supported interval sorted by size.
+    ///
+    /// Because intervals can be spelled differently, this array
+    /// tracks all the different valid intervals. They are arranged
+    /// in diatonic then chromatic order.
+    static const std::array<Interval, 26> allIntervals;
+
+    /// Finds the most likely diatonic interval for a semitone distance. Uses
+    /// the most common diatonic intervals.
+    /// @param semitones The number of semitones in the chromatic interval.
+    /// Negative semitones will simply be made positive.
+    /// @return The number of diatonic steps in the interval.
+    static int chromatic2diatonic(int semitones);
 };
-} // namespace mu::engraving
-#endif
+}

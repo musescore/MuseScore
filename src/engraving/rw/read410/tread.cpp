@@ -65,6 +65,7 @@
 #include "../../dom/image.h"
 #include "../../dom/instrchange.h"
 #include "../../dom/instrument.h"
+#include "../../dom/interval.h"
 #include "../../dom/jump.h"
 #include "../../dom/keysig.h"
 #include "../../dom/laissezvib.h"
@@ -1020,7 +1021,7 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
     } else if (tag == "transposition") {    // obsolete
         Interval transpose;
         transpose.chromatic = e.readInt();
-        transpose.diatonic = chromatic2diatonic(transpose.chromatic);
+        transpose.diatonic = Interval::chromatic2diatonic(transpose.chromatic);
         item->setTranspose(transpose);
     } else if (tag == "transposeChromatic") {
         Interval transpose = item->transpose();

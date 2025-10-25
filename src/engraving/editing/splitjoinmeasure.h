@@ -31,9 +31,9 @@ class SplitJoinMeasure
 {
 public:
     /// Splits the measure at the given tick, at the given tick.
-    static void splitMeasure(MasterScore* score, const Fraction& tick);
+    static void splitMeasure(MasterScore* masterScore, const Fraction& tick);
 
     /// Joins the measures from tick1 up to (including) tick2.
-    static void joinMeasures(MasterScore* score, const Fraction& tick1, const Fraction& tick2);
+    static void joinMeasures(MasterScore* masterScore, const Fraction& tick1, const Fraction& tick2);
 };
 }

@@ -68,7 +68,7 @@
 #include "log.h"
 
 namespace mu::engraving {
-static PitchWheelSpecs wheelSpec;
+static PitchWheelSpecs g_wheelSpec;
 static constexpr int LET_RING_MAX_TICKS = Constants::DIVISION * 16;
 // TODO this should be a (configurable?) constant somewhere
 static constexpr Fraction ARTICULATION_CHANGE_TIME_MAX = Fraction(1, 16);
@@ -177,7 +177,7 @@ static void collectGlissando(int channel, MidiInstrumentEffect effect,
                              int pitchDelta,
                              PitchWheelRenderer& pitchWheelRenderer, staff_idx_t staffIdx)
 {
-    const float scale = (float)wheelSpec.mLimit / wheelSpec.mAmplitude;
+    const float scale = (float)g_wheelSpec.mLimit / g_wheelSpec.mAmplitude;
 
     PitchWheelRenderer::PitchWheelFunction func;
     func.mStartTick = onTime;
@@ -249,7 +249,7 @@ static void playNote(EventsHolder& events, const Note* note, PlayNoteParams para
         AccidentalType type = acc->accidentalType();
         double cents = Accidental::subtype2centOffset(type);
         if (!muse::RealIsNull(cents)) {
-            double pwValue = cents / 100.0 * (double)wheelSpec.mLimit / (double)wheelSpec.mAmplitude;
+            double pwValue = cents / 100.0 * (double)g_wheelSpec.mLimit / (double)g_wheelSpec.mAmplitude;
             PitchWheelRenderer::PitchWheelFunction func;
             func.mStartTick = params.onTime - params.offset;
             func.mEndTick = params.offTime - params.offset;
@@ -290,7 +290,7 @@ static void collectVibrato(int channel,
 {
     const uint16_t vibratoPeriod = vibratoParams.period;
     const uint32_t duration = offTime - onTime;
-    const float scale = 2 * (float)wheelSpec.mLimit / wheelSpec.mAmplitude / 100;
+    const float scale = 2 * (float)g_wheelSpec.mLimit / g_wheelSpec.mAmplitude / 100;
 
     if (duration < vibratoPeriod) {
         return;
@@ -316,7 +316,7 @@ static void addConstPitchWheel(int startTick, int endTick, float value, PitchWhe
                                staff_idx_t staffIdx,
                                MidiInstrumentEffect effect)
 {
-    const float scale = (float)wheelSpec.mLimit / wheelSpec.mAmplitude;
+    const float scale = (float)g_wheelSpec.mLimit / g_wheelSpec.mAmplitude;
 
     PitchWheelRenderer::PitchWheelFunction pitchWheelConstFunc;
     auto constFunc = [value, scale] (uint32_t tick) {
@@ -459,7 +459,7 @@ static void collectGuitarBend(const Note* note,
         curPitchBendSegmentStart -= graceOffset;
     }
 
-    const float scale = (float)wheelSpec.mLimit / wheelSpec.mAmplitude;
+    const float scale = (float)g_wheelSpec.mLimit / g_wheelSpec.mAmplitude;
 
     while (note->bendFor() || note->tieFor()) {
         GuitarBend* bendFor = note->bendFor();
@@ -513,7 +513,7 @@ static void collectGuitarBend(const Note* note,
             const int curPitchBendSegmentEnd = curPitchBendSegmentStart + duration;
             if (bendPlaybackInfo.endTick < curPitchBendSegmentEnd) {
                 int constPitchWheelduration
-                    = (quarterOffsetFromStartNote == 0 ? wheelSpec.mStep : curPitchBendSegmentEnd - bendPlaybackInfo.endTick);
+                    = (quarterOffsetFromStartNote == 0 ? g_wheelSpec.mStep : curPitchBendSegmentEnd - bendPlaybackInfo.endTick);
                 addConstPitchWheel(bendPlaybackInfo.endTick, bendPlaybackInfo.endTick + constPitchWheelduration,
                                    quarterOffsetFromStartNote / 2.0, pitchWheelRenderer, channel,
                                    note->staffIdx(),
@@ -531,7 +531,7 @@ static void collectGuitarBend(const Note* note,
                 int noteTick = note->tick().ticks();
                 if (quarterOffsetFromStartNote == 0) {
                     // reset pitchwheel once, no need to keep in for each tick
-                    constPitchWheelduration = wheelSpec.mStep;
+                    constPitchWheelduration = g_wheelSpec.mStep;
                 } else {
                     Note* lastTied = note->lastTiedNote(false);
                     IF_ASSERT_FAILED(lastTied) {
@@ -563,7 +563,7 @@ static void collectGuitarBend(const Note* note,
 
     // adding pitch wheel to last note of bend/tie chain, if it's end of bend
     if (!note->isGrace() && note->bendBack()) {
-        int constPitchWheelduration = (quarterOffsetFromStartNote == 0) ? wheelSpec.mStep : note->chord()->actualTicks().ticks();
+        int constPitchWheelduration = (quarterOffsetFromStartNote == 0) ? g_wheelSpec.mStep : note->chord()->actualTicks().ticks();
         addConstPitchWheel(note->tick().ticks(),
                            note->tick().ticks() + constPitchWheelduration, quarterOffsetFromStartNote / 2.0, pitchWheelRenderer, channel,
                            note->staffIdx(), effect);
@@ -577,7 +577,7 @@ static void collectBend(const PitchValues& playData, staff_idx_t staffIdx,
 {
     size_t pitchSize = playData.size();
 
-    const float scale = 2 * (float)wheelSpec.mLimit / wheelSpec.mAmplitude / PitchValue::PITCH_FOR_SEMITONE;
+    const float scale = 2 * (float)g_wheelSpec.mLimit / g_wheelSpec.mAmplitude / PitchValue::PITCH_FOR_SEMITONE;
     uint32_t duration = offTime - onTime;
 
     for (size_t i = 0; i < pitchSize - 1; i++) {
@@ -1547,7 +1547,7 @@ void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context
     UNUSED(expandRepeats);
 
     m_context = context;
-    PitchWheelRenderer pitchWheelRender(wheelSpec);
+    PitchWheelRenderer pitchWheelRender(g_wheelSpec);
 
     score->updateSwing();
     score->updateCapo();

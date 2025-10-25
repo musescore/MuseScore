@@ -496,7 +496,7 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "transposition") {      // obsolete
             int i = e.readInt();
             transpose.chromatic = i;
-            transpose.diatonic = chromatic2diatonic(i);
+            transpose.diatonic = Interval::chromatic2diatonic(i);
         } else if (tag == "transposeChromatic") {
             transpose.chromatic = e.readInt();
         } else if (tag == "transposeDiatonic") {
