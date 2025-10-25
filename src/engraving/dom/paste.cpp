@@ -580,15 +580,13 @@ void Score::cmdPasteStaffList(muse::ByteArray& data, Fraction scale)
         cr = m_selection.firstChordRest();
     } else if (m_selection.isSingle()) {
         EngravingItem* e = m_selection.element();
-        if (!e->isNote() && !e->isChordRest()) {
+        Measure* measure = e->findMeasure();
+        cr = measure ? measure->findChordRest(e->tick(), e->track()) : nullptr;
+        if (!cr) {
             LOGE() << "Cannot paste staff list onto " << e->typeName();
             MScore::setError(MsError::DEST_NO_CR);
             return;
         }
-        if (e->isNote()) {
-            e = toNote(e)->chord();
-        }
-        cr  = toChordRest(e);
     }
 
     if (!cr) {
@@ -605,8 +603,8 @@ void Score::cmdPasteStaffList(muse::ByteArray& data, Fraction scale)
         return;
     }
 
-    XmlReader e(data);
-    IF_ASSERT_FAILED(pasteStaff(e, cr->segment(), cr->staffIdx(), scale)) {
+    XmlReader xmlReader(data);
+    IF_ASSERT_FAILED(pasteStaff(xmlReader, cr->segment(), cr->staffIdx(), scale)) {
         LOGE() << "Failed to paste staff";
     }
 }
@@ -622,15 +620,13 @@ void Score::cmdPasteSymbolList(muse::ByteArray& data)
         cr = m_selection.firstChordRest();
     } else if (m_selection.isSingle()) {
         EngravingItem* e = m_selection.element();
-        if (!e->isNote() && !e->isRest() && !e->isChord()) {
+        Measure* measure = e->findMeasure();
+        cr = measure ? measure->findChordRest(e->tick(), e->track()) : nullptr;
+        if (!cr) {
             LOGE() << "Cannot paste element list onto " << e->typeName();
             MScore::setError(MsError::DEST_NO_CR);
             return;
         }
-        if (e->isNote()) {
-            e = toNote(e)->chord();
-        }
-        cr = toChordRest(e);
     }
 
     if (!cr) {
@@ -638,6 +634,6 @@ void Score::cmdPasteSymbolList(muse::ByteArray& data)
         return;
     }
 
-    XmlReader e(data);
-    pasteSymbols(e, cr);
+    XmlReader xmlReader(data);
+    pasteSymbols(xmlReader, cr);
 }
