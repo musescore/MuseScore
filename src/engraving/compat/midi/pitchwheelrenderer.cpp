@@ -4,8 +4,8 @@
 
 using namespace mu::engraving;
 
-PitchWheelRenderer::PitchWheelRenderer(PitchWheelSpecs pitchWheelSpec)
-    : _wheelSpec(pitchWheelSpec)
+PitchWheelRenderer::PitchWheelRenderer(PitchWheelSpecs wheelSpec)
+    : _wheelSpec(wheelSpec)
 {}
 
 void PitchWheelRenderer::addPitchWheelFunction(const PitchWheelFunction& function, uint32_t channel, staff_idx_t staffIdx,
