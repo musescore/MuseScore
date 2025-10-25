@@ -32,6 +32,12 @@
 
 namespace mu::engraving {
 class Score;
+class Text;
+class Clef;
+class KeySig;
+class TimeSig;
+class BarLine;
+class Segment;
 }
 
 namespace muse::draw {
@@ -48,6 +54,7 @@ class ContinuousPanel : public muse::Injectable
 public:
     ContinuousPanel(const muse::modularity::ContextPtr& iocCtx)
         : muse::Injectable(iocCtx) {}
+    ~ContinuousPanel();
 
     void setNotation(INotationPtr notation);
 
@@ -63,9 +70,17 @@ public:
 private:
     qreal styleMM(const mu::engraving::Sid styleId) const;
     const mu::engraving::Score* score() const;
+    void clearCache();
 
     INotationPtr m_notation;
     qreal m_width = 0;
     muse::RectF m_rect;
+
+    mu::engraving::Text* m_cachedText = nullptr;
+    mu::engraving::Text* m_cachedName = nullptr;
+    mu::engraving::Clef* m_cachedClef = nullptr;
+    mu::engraving::KeySig* m_cachedKeySig = nullptr;
+    mu::engraving::TimeSig* m_cachedTimeSig = nullptr;
+    mu::engraving::BarLine* m_cachedBarLine = nullptr;
 };
 }
