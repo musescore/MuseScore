@@ -361,7 +361,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         }
         switch (i.pid) {
         case Pid::TEXT_STYLE:
-            value = int(ss);
+            value = ss;
             break;
         case Pid::BEGIN_FONT_FACE:
         case Pid::CONTINUE_FONT_FACE:
@@ -417,7 +417,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
             break;
         case Pid::PLACEMENT:
             if (placementValid) {
-                value = int(placement);
+                value = placement;
             }
             break;
         case Pid::LINE_WIDTH:
@@ -1018,7 +1018,7 @@ static void adjustPlacement(EngravingItem* e)
     }
 
     // set placement
-    e->setProperty(Pid::PLACEMENT, int(newPlacement));
+    e->setProperty(Pid::PLACEMENT, newPlacement);
     if (newPlacement != defaultPlacement) {
         e->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
     }

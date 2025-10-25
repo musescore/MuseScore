@@ -571,7 +571,7 @@ TEST_F(Engraving_SpannersTests, spanners15)
         SLine* sl = static_cast<SLine*>(spanner);
         sl->setProperty(Pid::COLOR, Color(255, 0, 0, 255));
         for (auto ss : sl->spannerSegments()) {
-            ss->setProperty(Pid::MIN_DISTANCE, 0.0);
+            ss->setProperty(Pid::MIN_DISTANCE, Spatium(0.0));
             ss->setPropertyFlags(Pid::MIN_DISTANCE, PropertyFlags::UNSTYLED);
         }
     }

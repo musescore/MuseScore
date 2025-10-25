@@ -436,7 +436,7 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
     }
 
     CharFormat defaultFormat;
-    defaultFormat.setStyle(m_text->propertyDefault(Pid::FONT_STYLE).value<FontStyle>());
+    defaultFormat.setStyle(FontStyle(m_text->propertyDefault(Pid::FONT_STYLE).value<int>()));
     defaultFormat.setFontFamily(m_text->propertyDefault(Pid::FONT_FACE).value<String>());
     defaultFormat.setFontSize(m_text->propertyDefault(Pid::FONT_SIZE).toDouble());
     defaultFormat.setValign(VerticalAlignment(m_text->propertyDefault(Pid::TEXT_SCRIPT_ALIGN).toInt()));

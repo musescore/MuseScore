@@ -209,7 +209,9 @@ Sid Ottava::getPropertyStyle(Pid pid) const
         return ss[idx + 2];               // CONTINUE_TEXT
     case Pid::END_HOOK_HEIGHT:
         if (isStyled(Pid::PLACEMENT)) {
-            return style().styleI(ss[idx]) == int(PlacementV::ABOVE) ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
+            return style().styleV(ss[idx]).value<PlacementV>() == PlacementV::ABOVE
+                   ? Sid::ottavaHookAbove
+                   : Sid::ottavaHookBelow;
         } else {
             return placeAbove() ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
         }

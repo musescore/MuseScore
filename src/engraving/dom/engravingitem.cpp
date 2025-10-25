@@ -1145,7 +1145,7 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
         setTrack(v.value<track_idx_t>());
         break;
     case Pid::VOICE:
-        setVoice(v.toInt());
+        setVoice(v.value<voice_idx_t>());
         break;
     case Pid::GENERATED:
         setGenerated(v.toBool());
@@ -1531,7 +1531,7 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
         if (v.isValid()) {
             return v;
         }
-        return 0.0;
+        return Spatium(0.0);
     }
     case Pid::AUTOPLACE:
         return true;

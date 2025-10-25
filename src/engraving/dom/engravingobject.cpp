@@ -487,7 +487,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
         }
     } else if (id == Pid::VOICE_ASSIGNMENT) {
         if (v.value<VoiceAssignment>() != VoiceAssignment::CURRENT_VOICE_ONLY) {
-            changeProperties(this, Pid::VOICE, 0, ps);
+            changeProperties(this, Pid::VOICE, voice_idx_t(0), ps);
         }
     }
     changeProperties(this, id, v, ps);

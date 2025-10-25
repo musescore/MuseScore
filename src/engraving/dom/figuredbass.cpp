@@ -540,7 +540,7 @@ PropertyValue FiguredBassItem::propertyDefault(Pid id) const
     case Pid::FBDIGIT:
         return FBIDigitNone;
     case Pid::FBCONTINUATIONLINE:
-        return false;
+        return static_cast<int>(ContLine::NONE);
     default:
         return EngravingItem::propertyDefault(id);
     }

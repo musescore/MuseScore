@@ -569,9 +569,9 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
             if (l->verse() == v.toInt()) {
                 // verse already exists, swap
                 l->TextBase::undoChangeProperty(id, verse(), ps);
-                PlacementV p = l->placement();
-                l->TextBase::undoChangeProperty(Pid::PLACEMENT, int(placement()), ps);
-                TextBase::undoChangeProperty(Pid::PLACEMENT, int(p), ps);
+                const PlacementV p = l->placement();
+                l->TextBase::undoChangeProperty(Pid::PLACEMENT, placement(), ps);
+                TextBase::undoChangeProperty(Pid::PLACEMENT, p, ps);
                 break;
             }
         }

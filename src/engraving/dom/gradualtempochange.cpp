@@ -162,10 +162,10 @@ bool GradualTempoChange::setProperty(Pid id, const PropertyValue& val)
 {
     switch (id) {
     case Pid::TEMPO_CHANGE_TYPE:
-        m_tempoChangeType = GradualTempoChangeType(val.toInt());
+        m_tempoChangeType = val.value<GradualTempoChangeType>();
         break;
     case Pid::TEMPO_EASING_METHOD:
-        m_tempoEasingMethod = ChangeMethod(val.toInt());
+        m_tempoEasingMethod = val.value<ChangeMethod>();
         break;
     case Pid::TEMPO_CHANGE_FACTOR:
         m_tempoChangeFactor = val.toReal();

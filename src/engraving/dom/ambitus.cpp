@@ -359,9 +359,9 @@ PropertyValue Ambitus::getProperty(Pid propertyId) const
     case Pid::HEAD_GROUP:
         return noteHeadGroup();
     case Pid::HEAD_TYPE:
-        return int(noteHeadType());
+        return noteHeadType();
     case Pid::MIRROR_HEAD:
-        return int(direction());
+        return direction();
     case Pid::GHOST:                         // recycled property = _hasLine
         return hasLine();
     case Pid::LINE_WIDTH:
@@ -440,9 +440,9 @@ PropertyValue Ambitus::propertyDefault(Pid id) const
     case Pid::HEAD_GROUP:
         return NOTEHEADGROUP_DEFAULT;
     case Pid::HEAD_TYPE:
-        return int(NOTEHEADTYPE_DEFAULT);
+        return NOTEHEADTYPE_DEFAULT;
     case Pid::MIRROR_HEAD:
-        return int(DIRECTION_DEFAULT);
+        return DIRECTION_DEFAULT;
     case Pid::GHOST:
         return HASLINE_DEFAULT;
     case Pid::LINE_WIDTH:

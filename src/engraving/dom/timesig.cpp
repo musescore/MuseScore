@@ -200,7 +200,7 @@ PropertyValue TimeSig::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SHOW_COURTESY:
-        return int(showCourtesySig());
+        return showCourtesySig();
     case Pid::NUMERATOR_STRING:
         return numeratorString();
     case Pid::DENOMINATOR_STRING:
@@ -279,7 +279,7 @@ PropertyValue TimeSig::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SHOW_COURTESY:
-        return 1;
+        return true;
     case Pid::NUMERATOR_STRING:
         return String();
     case Pid::DENOMINATOR_STRING:

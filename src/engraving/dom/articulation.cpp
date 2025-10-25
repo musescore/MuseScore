@@ -293,7 +293,7 @@ PropertyValue Articulation::getProperty(Pid propertyId) const
     case Pid::DIRECTION:           return PropertyValue::fromValue<DirectionV>(direction());
     case Pid::ARTICULATION_ANCHOR: return int(anchor());
     case Pid::ORNAMENT_STYLE:      return ornamentStyle();
-    case Pid::PLAY:                return bool(playArticulation());
+    case Pid::PLAY:                return playArticulation();
     default:
         return EngravingItem::getProperty(propertyId);
     }

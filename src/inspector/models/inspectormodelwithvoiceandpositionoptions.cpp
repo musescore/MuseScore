@@ -168,7 +168,7 @@ void InspectorModelWithVoiceAndPositionOptions::changeVoice(int voice)
         }
 
         item->undoChangeProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::CURRENT_VOICE_ONLY);
-        item->undoChangeProperty(Pid::VOICE, voice);
+        item->undoChangeProperty(Pid::VOICE, static_cast<voice_idx_t>(voice));
     }
 
     loadPropertyItem(m_voiceAssignment);

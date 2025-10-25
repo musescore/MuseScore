@@ -188,7 +188,7 @@ PropertyValue Stem::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::USER_LEN:
-        return 0.0;
+        return Spatium(0.0);
     case Pid::STEM_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     default:

@@ -310,8 +310,8 @@ double Autoplace::rebaseOffset(const EngravingItem* item, EngravingItem::LayoutD
             if (pf == PropertyFlags::STYLED) {
                 pf = PropertyFlags::UNSTYLED;
             }
-            PlacementV place = above ? PlacementV::BELOW : PlacementV::ABOVE;
-            const_cast<EngravingItem*>(e)->undoChangeProperty(Pid::PLACEMENT, int(place), pf);
+            const PlacementV place = above ? PlacementV::BELOW : PlacementV::ABOVE;
+            const_cast<EngravingItem*>(e)->undoChangeProperty(Pid::PLACEMENT, place, pf);
             const_cast<EngravingItem*>(item)->undoResetProperty(Pid::MIN_DISTANCE);
             return 0.0;
         }
@@ -349,11 +349,11 @@ bool Autoplace::rebaseMinDistance(const EngravingItem* item, EngravingItem::Layo
     double adjustedY = item->pos().y() + yd;
     double diff = ldata->autoplace.changedPos.y() - adjustedY;
     if (fix) {
-        const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::MIN_DISTANCE, -999.0, pf);
+        const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::MIN_DISTANCE, Spatium(-999.0), pf);
         yd = 0.0;
     } else if (!item->isStyled(Pid::MIN_DISTANCE)) {
         md = (above ? md + yd : md - yd) / sp;
-        const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::MIN_DISTANCE, md, pf);
+        const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::MIN_DISTANCE, Spatium(md), pf);
         yd += diff;
     } else {
         // min distance still styled
@@ -367,14 +367,14 @@ bool Autoplace::rebaseMinDistance(const EngravingItem* item, EngravingItem::Layo
                 p.ry() += rebase;
                 const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::OFFSET, p);
                 md = (above ? md - diff : md + diff) / sp;
-                const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::MIN_DISTANCE, md, pf);
+                const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::MIN_DISTANCE, Spatium(md), pf);
                 rc = true;
                 yd = 0.0;
             }
         } else {
             // absolute movement (drag): fix unconditionally
             md = (above ? md + yd : md - yd) / sp;
-            const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::MIN_DISTANCE, md, pf);
+            const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::MIN_DISTANCE, Spatium(md), pf);
             yd = 0.0;
         }
     }

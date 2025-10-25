@@ -1548,7 +1548,6 @@ PropertyValue Chord::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::NO_STEM:         return noStem();
     case Pid::SHOW_STEM_SLASH: return showStemSlash();
-    case Pid::SMALL:           return isSmall();
     case Pid::STEM_DIRECTION:  return PropertyValue::fromValue<DirectionV>(stemDirection());
     case Pid::PLAY: return isChordPlayable();
     case Pid::COMBINE_VOICE: return PropertyValue::fromValue<AutoOnOff>(combineVoice());
@@ -1567,7 +1566,6 @@ PropertyValue Chord::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::NO_STEM:         return false;
     case Pid::SHOW_STEM_SLASH: return noteType() == NoteType::ACCIACCATURA;
-    case Pid::SMALL:           return false;
     case Pid::STEM_DIRECTION:  return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     case Pid::PLAY: return true;
     case Pid::COMBINE_VOICE: return AutoOnOff::AUTO;
@@ -1597,9 +1595,6 @@ bool Chord::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::SHOW_STEM_SLASH:
         requestShowStemSlash(v.toBool());
-        break;
-    case Pid::SMALL:
-        setSmall(v.toBool());
         break;
     case Pid::STEM_DIRECTION:
         setStemDirection(v.value<DirectionV>());

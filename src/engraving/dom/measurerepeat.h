@@ -48,8 +48,8 @@ public:
     void setNumMeasures(int n);
     int numMeasures() const { return m_numMeasures; }
 
-    void setNumberPos(double d) { m_numberPos = d; }
-    double numberPos() const { return m_numberPos; }
+    void setNumberPos(const Spatium d) { m_numberPos = d; }
+    Spatium numberPos() const { return m_numberPos; }
 
     Measure* firstMeasureOfGroup() const;
     const Measure* referringMeasure(const Measure* measure) const;
@@ -92,7 +92,7 @@ private:
     Sid getPropertyStyle(Pid) const override;
 
     int m_numMeasures = 0;
-    double m_numberPos = 0.0;
+    Spatium m_numberPos = Spatium(0.0);
 };
 } // namespace mu::engraving
 #endif
