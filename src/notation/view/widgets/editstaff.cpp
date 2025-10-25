@@ -22,6 +22,7 @@
 
 #include "editstaff.h"
 
+#include "containers.h"
 #include "translation.h"
 #include "global/utils.h"
 
@@ -34,6 +35,7 @@
 
 #include "engraving/dom/factory.h"
 #include "engraving/dom/instrumentname.h"
+#include "engraving/dom/interval.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
@@ -244,13 +246,13 @@ void EditStaff::updateInterval(const mu::engraving::Interval& iv)
         --oct;
     }
 
-    int interval = mu::engraving::searchInterval(diatonic, chromatic);
-    IF_ASSERT_FAILED(interval != -1) {
+    size_t intervalIndex = muse::indexOf(Interval::allIntervals, Interval { diatonic, chromatic });
+    IF_ASSERT_FAILED(intervalIndex != muse::nidx) {
         LOGD("EditStaff: unknown interval %d %d", diatonic, chromatic);
-        interval = 0;
+        intervalIndex = 0;
     }
 
-    iList->setCurrentIndex(interval);
+    iList->setCurrentIndex(static_cast<int>(intervalIndex));
     up->setChecked(upFlag);
     down->setChecked(!upFlag);
     octave->setValue(oct);
@@ -523,7 +525,7 @@ void EditStaff::applyPartProperties()
     int intervalIdx = iList->currentIndex();
     bool upFlag     = up->isChecked();
 
-    mu::engraving::Interval interval  = mu::engraving::intervalList[intervalIdx];
+    mu::engraving::Interval interval = Interval::allIntervals[intervalIdx];
     interval.diatonic  += static_cast<int8_t>(octave->value() * 7);
     interval.chromatic += static_cast<int8_t>(octave->value() * 12);
 

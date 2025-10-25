@@ -22,27 +22,16 @@
 
 #include "interval.h"
 #include "../types/types.h"
-#include "utils.h"
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   Interval
-//---------------------------------------------------------
-
-Interval::Interval()
-    : diatonic(0), chromatic(0)
+Interval::Interval(int diatonic, int chromatic)
+    : diatonic(diatonic), chromatic(chromatic)
 {
 }
 
-Interval::Interval(int a, int b)
-    : diatonic(a), chromatic(b)
+Interval::Interval(int chromatic)
+    : diatonic(chromatic2diatonic(chromatic)), chromatic(chromatic)
 {
-}
-
-Interval::Interval(int c)
-{
-    chromatic = c;
-    diatonic = chromatic2diatonic(c);
 }
 
 //---------------------------------------------------------
@@ -130,5 +119,71 @@ Interval Interval::fromOrnamentInterval(OrnamentInterval ornInt)
     resultingInterval.chromatic = cromaticSteps;
 
     return resultingInterval;
+}
+
+const std::array<Interval, 26> Interval::allIntervals {
+    // diatonic - chromatic
+    Interval(0, 0),           //  0 Perfect Unison
+    Interval(0, 1),           //  1 Augmented Unison
+
+    Interval(1, 0),           //  2 Diminished Second
+    Interval(1, 1),           //  3 Minor Second
+    Interval(1, 2),           //  4 Major Second
+    Interval(1, 3),           //  5 Augmented Second
+
+    Interval(2, 2),           //  6 Diminished Third
+    Interval(2, 3),           //  7 Minor Third
+    Interval(2, 4),           //  8 Major Third
+    Interval(2, 5),           //  9 Augmented Third
+
+    Interval(3, 4),           // 10 Diminished Fourth
+    Interval(3, 5),           // 11 Perfect Fourth
+    Interval(3, 6),           // 12 Augmented Fourth
+
+    Interval(4, 6),           // 13 Diminished Fifth
+    Interval(4, 7),           // 14 Perfect Fifth
+    Interval(4, 8),           // 15 Augmented Fifth
+
+    Interval(5, 7),           // 16 Diminished Sixth
+    Interval(5, 8),           // 17 Minor Sixth
+    Interval(5, 9),           // 18 Major Sixth
+    Interval(5, 10),          // 19 Augmented Sixth
+
+    Interval(6, 9),           // 20 Diminished Seventh
+    Interval(6, 10),          // 21 Minor Seventh
+    Interval(6, 11),          // 22 Major Seventh
+    Interval(6, 12),          // 23 Augmented Seventh
+
+    Interval(7, 11),          // 24 Diminished Octave
+    Interval(7, 12)           // 25 Perfect Octave
+};
+
+int Interval::chromatic2diatonic(int semitones)
+{
+    static constexpr int il[12] = {
+        0,        // Perfect Unison
+        3,        // Minor Second
+        4,        // Major Second
+        7,        // Minor Third
+        8,        // Major Third
+        11,       // Perfect Fourth
+        12,       // Augmented Fourth
+        14,       // Perfect Fifth
+        17,       // Minor Sixth
+        18,       // Major Sixth
+        21,       // Minor Seventh
+        22,       // Major Seventh
+        // 25    Perfect Octave
+    };
+    bool down = semitones < 0;
+    if (down) {
+        semitones = -semitones;
+    }
+    int val = semitones % 12;
+    int octave = semitones / 12;
+    int intervalIndex = il[val];
+    int steps = allIntervals[intervalIndex].diatonic;
+    steps = steps + octave * 7;
+    return down ? -steps : steps;
 }
 }

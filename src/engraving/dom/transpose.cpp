@@ -25,6 +25,7 @@
 #include "chord.h"
 #include "factory.h"
 #include "harmony.h"
+#include "interval.h"
 #include "key.h"
 #include "keysig.h"
 #include "linkedobjects.h"
@@ -234,7 +235,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 }
             }
         } else {
-            interval = intervalList[transposeInterval];
+            interval = Interval::allIntervals[transposeInterval];
             if (direction == TransposeDirection::DOWN) {
                 interval.flip();
             }
