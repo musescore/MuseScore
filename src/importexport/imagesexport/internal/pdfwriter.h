@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_IMPORTEXPORT_PDFWRITER_H
-#define MU_IMPORTEXPORT_PDFWRITER_H
+#pragma once
 
 #include "abstractimagewriter.h"
 
 #include "../iimagesexportconfiguration.h"
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
+#include "project/types/projectmeta.h"
 
 class QPdfWriter;
 
@@ -47,8 +47,8 @@ public:
                         const Options& options = Options()) override;
 
 private:
-    void preparePdfWriter(QPdfWriter& pdfWriter, const QString& title, const QSizeF& size) const;
+    void preparePdfWriter(QPdfWriter& pdfWriter, notation::INotationPtr notation, const QSizeF& size) const;
+
+    QByteArray generateXmpMetadata(const QString& title, const QString& creator, const project::ProjectMeta& meta) const;
 };
 }
-
-#endif // MU_IMPORTEXPORT_PDFWRITER_H
