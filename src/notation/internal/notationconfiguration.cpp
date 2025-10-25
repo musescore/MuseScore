@@ -405,8 +405,9 @@ void NotationConfiguration::init()
     mu::engraving::MScore::warnPitchRange = colorNotesOutsideOfUsablePitchRange();
     mu::engraving::MScore::warnGuitarBends = warnGuitarBends();
 
-    mu::engraving::MScore::setHRaster(DEFAULT_GRID_SIZE_SPATIUM);
-    mu::engraving::MScore::setVRaster(DEFAULT_GRID_SIZE_SPATIUM);
+    // Restore stored grid size values
+    mu::engraving::MScore::setHRaster(settings()->value(HORIZONTAL_GRID_SIZE_KEY).toInt());
+    mu::engraving::MScore::setVRaster(settings()->value(VERTICAL_GRID_SIZE_KEY).toInt());
 
     context()->currentProjectChanged().onNotify(this, [this]() {
         resetStyleDialogPageIndices();
