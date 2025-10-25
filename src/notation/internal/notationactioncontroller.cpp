@@ -2278,9 +2278,11 @@ bool NotationActionController::startNoteInputAllowed() const
 
 void NotationActionController::startNoteInput()
 {
-    INotationNoteInputPtr noteInput = currentNotationNoteInput();
-    if (noteInput) {
-        noteInput->startNoteInput(configuration()->defaultNoteInputMethod());
+    if (!configuration()->enterNoteInputModeOnKeyboardEntry()) {
+        INotationNoteInputPtr noteInput = currentNotationNoteInput();
+        if (noteInput) {
+            noteInput->startNoteInput(configuration()->defaultNoteInputMethod());
+        }
     }
 }
 

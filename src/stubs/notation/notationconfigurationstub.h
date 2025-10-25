@@ -84,6 +84,10 @@ public:
     void setUseNoteInputCursorInInputByDuration(bool use) override;
     muse::async::Notification useNoteInputCursorInInputByDurationChanged() const override;
 
+    bool enterNoteInputModeOnKeyboardEntry() const override;
+    void setEnterNoteInputModeOnKeyboardEntry(bool use) override;
+    muse::async::Notification enterNoteInputModeOnKeyboardEntryChanged() const override;
+
     int selectionProximity() const override;
     void setSelectionProximity(int proximity)  override;
     muse::async::Channel<int> selectionProximityChanged() const override;
