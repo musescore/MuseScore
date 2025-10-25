@@ -2191,7 +2191,7 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
     double x = 0.0;
     double y = item->placeAbove() ? 0.0 : item->staff()->staffHeight(item->tick());
     const Segment* s = item->segment();
-    const EngravingItem* e = s->element(item->track());
+    const EngravingItem* e = s ? s->element(item->track()) : nullptr;
 
     if (e) {
         LD_CONDITION(e->ldata()->isSetBbox()); // e->shape()
@@ -2226,6 +2226,9 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
 
     if (item->isStyled(Pid::OFFSET)) {
         y += item->offset().y();
+    }
+    if (!item->segment()) {
+        return;
     }
     Shape staffShape = item->segment()->staffShape(item->staffIdx());
     staffShape.removeTypes({ ElementType::FERMATA });
