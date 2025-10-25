@@ -27,6 +27,7 @@
 
 #include "containers.h"
 
+#include "actionicon.h"
 #include "accidental.h"
 #include "arpeggio.h"
 #include "chord.h"
@@ -42,6 +43,7 @@
 #include "keysig.h"
 #include "measure.h"
 #include "measurenumber.h"
+#include "measurerepeat.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"
@@ -51,6 +53,7 @@
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
+#include "select.h"
 #include "sig.h"
 #include "staff.h"
 #include "system.h"
@@ -1730,5 +1733,112 @@ bool isElementInFretBox(const EngravingItem* item)
         return toFretDiagram(item)->isInFretBox();
     }
     return false;
+}
+
+std::vector<EngravingItem*> filterTargetElements(const Selection& sel, EngravingItem* dropElement, bool& unique)
+{
+    bool uniqueMeasures =  false;
+    bool uniqueStaves = false;
+
+    switch (dropElement->type()) {
+    // Brackets have a special logic for range selections.
+    // For other selections add only one to each staff:
+    case ElementType::BRACKET:
+        if (sel.isRange()) {
+            unique = true;
+            return { sel.startSegment()->firstElementForNavigation(sel.staffStart()) };
+        }
+        uniqueStaves = true;
+        break;
+
+    // Barlines are only added to measures in range selections:
+    case ElementType::BAR_LINE:
+        uniqueMeasures = sel.isRange();
+        break;
+
+    // For multi-measure measure repeats, avoid overlap by adding only one per staff:
+    case ElementType::MEASURE_REPEAT:
+        uniqueStaves = true;
+        uniqueMeasures = toMeasureRepeat(dropElement)->numMeasures() == 1;
+        break;
+
+    // Add these elements only once per staff in range selections, else once per staff per measure:
+    case ElementType::SPACER:
+    case ElementType::STAFFTYPE_CHANGE:
+        uniqueStaves = true;
+        [[fallthrough]];
+
+    // Add these elements once per measure in range selections, else once total:
+    case ElementType::MARKER:
+    case ElementType::JUMP:
+    case ElementType::VBOX:
+    case ElementType::HBOX:
+    case ElementType::TBOX:
+    case ElementType::FBOX:
+    case ElementType::MEASURE:
+        uniqueMeasures = !sel.isRange();
+        break;
+
+    // Add these elements once per measure, always:
+    case ElementType::MEASURE_NUMBER:
+        uniqueMeasures = true;
+        break;
+
+    case ElementType::ACTION_ICON: {
+        const ActionIconType actionType = toActionIcon(dropElement)->actionType();
+        switch (actionType) {
+        case ActionIconType::STAFF_TYPE_CHANGE:
+            uniqueStaves = true;
+            [[fallthrough]];
+        case ActionIconType::VFRAME:
+        case ActionIconType::HFRAME:
+        case ActionIconType::TFRAME:
+        case ActionIconType::FFRAME:
+        case ActionIconType::MEASURE:
+            uniqueMeasures = !sel.isRange();
+            break;
+        default: break;
+        }
+        break;
+    }
+    default: break;
+    }
+
+    unique = uniqueStaves || uniqueMeasures;
+    if (!unique) {
+        return sel.elements();
+    }
+
+    std::vector<EngravingItem*> result;
+    if (uniqueStaves && uniqueMeasures) {
+        std::vector<MStaff*> foundMStaves;
+        for (EngravingItem* e : sel.elements()) {
+            if (Measure* m = e->findMeasure()) {
+                if (!muse::contains(foundMStaves, m->mstaves().at(e->staffIdx()))) {
+                    result.emplace_back(e);
+                    foundMStaves.emplace_back(m->mstaves().at(e->staffIdx()));
+                }
+            }
+        }
+    } else if (uniqueStaves) {
+        std::vector<staff_idx_t> foundStaves;
+        for (EngravingItem* e : sel.elements()) {
+            if (!muse::contains(foundStaves, e->staffIdx())) {
+                result.emplace_back(e);
+                foundStaves.emplace_back(e->staffIdx());
+            }
+        }
+    } else {
+        std::vector<MeasureBase*> foundMeasures;
+        for (EngravingItem* e : sel.elements()) {
+            if (MeasureBase* mb = e->findMeasureBase()) {
+                if (!muse::contains(foundMeasures, mb)) {
+                    result.emplace_back(e);
+                    foundMeasures.emplace_back(mb);
+                }
+            }
+        }
+    }
+    return result;
 }
 }
