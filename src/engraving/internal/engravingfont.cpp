@@ -28,6 +28,7 @@
 #include "types/symnames.h"
 
 #include "dom/mscore.h"
+#include "../style/styledef.h"
 
 #include "smufl.h"
 
@@ -38,6 +39,8 @@ using namespace muse;
 using namespace muse::io;
 using namespace muse::draw;
 using namespace mu::engraving;
+
+static constexpr double SMUFL_DEFAULT_SIZE = 20.0;
 
 // =============================================
 // ScoreFont
@@ -109,6 +112,7 @@ void EngravingFont::ensureLoad()
     m_font.setFamily(String::fromStdString(m_family), Font::Type::MusicSymbol);
     m_font.setNoFontMerging(true);
     m_font.setHinting(Font::Hinting::PreferVerticalHinting);
+    m_font.setPointSizeF(SMUFL_DEFAULT_SIZE);
 
     for (size_t id = 0; id < m_symbols.size(); ++id) {
         Smufl::Code code = Smufl::code(static_cast<SymId>(id));
@@ -744,8 +748,8 @@ void EngravingFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
             const JsonArray arr = anchors.value(anchorId).toArray();
             const double x = arr.at(0).toDouble();
             const double y = arr.at(1).toDouble();
-
-            sym.smuflAnchors[search->second] = PointF(x, -y) * SPATIUM20;
+            const double defaultSpatium = StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue().toDouble();
+            sym.smuflAnchors[search->second] = PointF(x, -y) * defaultSpatium;
         }
     }
 }
@@ -842,15 +846,15 @@ void EngravingFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObj
 
 void EngravingFont::computeMetrics(EngravingFont::Sym& sym, const Smufl::Code& code)
 {
-    if (fontProvider()->inFontUcs4(m_font, code.smuflCode)) {
+    if (fontProvider()->inFont(m_font, code.smuflCode)) {
         sym.code = code.smuflCode;
-    } else if (fontProvider()->inFontUcs4(m_font, code.musicSymBlockCode)) {
+    } else if (fontProvider()->inFont(m_font, code.musicSymBlockCode)) {
         sym.code = code.musicSymBlockCode;
     }
 
     if (sym.code > 0) {
-        sym.bbox = fontProvider()->symBBox(m_font, sym.code, DPI_F);
-        sym.advance = fontProvider()->symAdvance(m_font, sym.code, DPI_F);
+        sym.bbox = fontProvider()->boundingRect(m_font, sym.code);
+        sym.advance = fontProvider()->horizontalAdvance(m_font, sym.code);
     }
 }
 
@@ -1107,7 +1111,7 @@ void EngravingFont::draw(SymId id, Painter* painter, const SizeF& mag, const Poi
     }
 
     painter->save();
-    double size = 20.0 * MScore::pixelRatio;
+    double size = SMUFL_DEFAULT_SIZE * MScore::pixelRatio;
     m_font.setPointSizeF(size);
     painter->scale(mag.width(), mag.height());
     painter->setFont(m_font);

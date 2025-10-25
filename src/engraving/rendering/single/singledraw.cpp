@@ -1112,7 +1112,7 @@ void SingleDraw::draw(const FiguredBassItem* item, Painter* painter, const Paint
     Font f(FiguredBass::FBFonts().at(font).family, Font::Type::Tablature);
 
     // (use the same font selection as used in layout() above)
-    double m = item->style().styleD(Sid::figuredBassFontSize) * item->spatium() / SPATIUM20;
+    double m = item->style().styleD(Sid::figuredBassFontSize) * item->spatium() / item->defaultSpatium();
     f.setPointSizeF(m * MScore::pixelRatio);
 
     painter->setFont(f);
@@ -1304,7 +1304,7 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter, const PaintOpti
     // Draw fret offset number
     if (item->fretOffset() > 0) {
         Font scaledFont(item->fretNumFont());
-        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / SPATIUM20) * MScore::pixelRatio);
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / item->defaultSpatium()) * MScore::pixelRatio);
         painter->setFont(scaledFont);
         String text = String::number(item->fretOffset() + 1);
 
@@ -1382,7 +1382,7 @@ void SingleDraw::draw(const GlissandoSegment* item, Painter* painter, const Pain
 
     if (glissando->showText()) {
         Font f(glissando->fontFace(), Font::Type::Unknown);
-        f.setPointSizeF(glissando->fontSize() * _spatium / SPATIUM20);
+        f.setPointSizeF(glissando->fontSize() * _spatium / item->defaultSpatium());
         f.setBold(glissando->fontStyle() & FontStyle::Bold);
         f.setItalic(glissando->fontStyle() & FontStyle::Italic);
         f.setUnderline(glissando->fontStyle() & FontStyle::Underline);
@@ -1535,8 +1535,25 @@ void SingleDraw::drawTextBase(const TextBase* item, Painter* painter, const Pain
     painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(item->textColor(opt));
     for (const TextBlock& t : ldata->blocks) {
-        t.draw(painter, item);
+        draw(t, item, painter);
     }
+}
+
+void SingleDraw::draw(const TextBlock& textBlock, const TextBase* item, muse::draw::Painter* painter)
+{
+    painter->translate(0.0, textBlock.y());
+    for (const TextFragment& f : textBlock.fragments()) {
+        draw(f, item, painter);
+    }
+    painter->translate(0.0, -textBlock.y());
+}
+
+void SingleDraw::draw(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter)
+{
+    Font f(textFragment.font(item));
+    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    painter->setFont(f);
+    painter->drawText(textFragment.pos, textFragment.text);
 }
 
 void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* painter, const PaintOptions& opt)
@@ -1753,12 +1770,8 @@ void SingleDraw::draw(const Harmony* item, Painter* painter, const PaintOptions&
         if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
             Font f(ts->font());
             f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-#ifndef Q_OS_MACOS
-            TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text());
-#else
             painter->setFont(f);
             painter->drawText(ts->pos(), ts->text());
-#endif
         }
     }
 }

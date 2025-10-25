@@ -583,9 +583,10 @@ double CompatUtils::convertChordExtModUnits(double val)
     // After 4.6 this is in % of root cap height
     // The best we can do for conversion of old files is to assume a default spatium of 1.75mm and a default font size of 10pt
     // The height value is calculated from Edwin at 10pt using FontMetrics::capHeight
-    constexpr double DEFAULT_STAVE_SPACE_MM = 1.75;
-    constexpr double DEFAULT_SPATIUM = DEFAULT_STAVE_SPACE_MM * DPMM;
-    constexpr double DEFAULT_FONT_CAP_HEIGHT = 35.3795;
+    const double DEFAULT_SPATIUM = StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue().toDouble();
+    muse::draw::Font f(u"Edwin", muse::draw::Font::Type::Text);
+    f.setPointSizeF(10);
+    const double DEFAULT_FONT_CAP_HEIGHT = muse::draw::FontMetrics::capHeight(f);   // 121
 
     return ((val / 5) * DEFAULT_SPATIUM) / DEFAULT_FONT_CAP_HEIGHT;
 }

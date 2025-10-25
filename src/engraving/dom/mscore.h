@@ -63,11 +63,11 @@ inline constexpr bool isDownVoice(voice_idx_t voiceIdx)
 static constexpr int MAX_HEADERS = 3;
 static constexpr int MAX_FOOTERS = 3;
 
-static constexpr double INCH      = 25.4;
-static constexpr double PPI       = 72.0; // printer points per inch
-static constexpr double DPI_F     = 5;
-static constexpr double DPI       = 72.0 * DPI_F;
-static constexpr double SPATIUM20 = 5.0 * (DPI / 72.0);
+// UNIVERSAL UNITS
+static constexpr double INCH      = 25.4; // millimitres per inch
+static constexpr double PPI       = 72.0; // typographical points per inch
+
+static constexpr double DPI       = 1200;
 static constexpr double DPMM      = DPI / INCH;
 
 // NOTE: the SMuFL default is actually 20pt. We use 10 for historical reasons

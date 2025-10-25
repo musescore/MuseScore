@@ -1903,7 +1903,7 @@ static double scaleText(const String& str, const Sid fontFaceSid, const double f
 
     double longestLine = 0.0;
     for (const String& line : str.split(u"\n")) {
-        const double textWidth = fm.boundingRect(RectF(0, 0, pageWidth, pageHeight), TextShowMnemonic, line).width();
+        const double textWidth = fm.boundingRect(line).width();
         longestLine = std::max(longestLine, textWidth);
     }
 

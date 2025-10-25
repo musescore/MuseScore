@@ -1055,6 +1055,13 @@ void AccidentalsLayout::collectVerticalSets(
 
 void AccidentalsLayout::alignVerticalSets(AccidentalGroups& vertSets, AccidentalsLayoutContext& ctx)
 {
+    std::map<int, std::vector<Accidental*> > columns;
+    for (std::vector<Accidental*>& group : ctx.accidentalSubChords) {
+        for (Accidental* acc : group) {
+            columns[acc->ldata()->column].push_back(acc);
+        }
+    }
+
     for (std::vector<Accidental*>& vertSet : vertSets) {
         // Align the set
         double x = DBL_MAX;
@@ -1070,12 +1077,14 @@ void AccidentalsLayout::alignVerticalSets(AccidentalGroups& vertSets, Accidental
         // Re-check the outer ones for collisions
         int curColumn = vertSet.front()->ldata()->column.value();
         Shape accidentalGroupShape;
-        for (std::vector<Accidental*>& group : ctx.accidentalSubChords) {
-            for (Accidental* acc : group) {
+        for (auto& column : columns) {
+            if (column.first < curColumn) {
+                continue;
+            }
+            for (Accidental* acc : column.second) {
                 double curXPos = xPosRelativeToSegment(acc);
                 Shape accShape = acc->shape().translate(PointF(curXPos, acc->note()->y()));
-                int accColumn = acc->ldata()->column;
-                if (accColumn >= curColumn && !muse::contains(vertSet, acc)) {
+                if (!muse::contains(vertSet, acc)) {
                     double minDistToAccidGroup = minAccidentalToAccidentalGroupDistance(acc, accShape, accidentalGroupShape, ctx);
                     accShape.translateX(-minDistToAccidGroup);
                     setXposRelativeToSegment(acc, curXPos - minDistToAccidGroup);

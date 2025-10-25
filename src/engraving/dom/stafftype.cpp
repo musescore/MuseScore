@@ -441,7 +441,7 @@ void StaffType::setDurationMetrics()
     RectF bb(fm.tightBoundingRect(txt));
     // raise symbols by a default margin and, if marks are above lines, by half the line distance
     // (converted from spatium units to raster units)
-    m_durationGridYOffset = (TAB_DEFAULT_DUR_YOFFS - (m_onLines ? 0.0 : lineDistance().val() * 0.5)) * SPATIUM20;
+    m_durationGridYOffset = (TAB_DEFAULT_DUR_YOFFS - (m_onLines ? 0.0 : lineDistance().val() * 0.5)) * defaultSpatium();
     // this is the bottomest point of any duration sign
     m_durationYOffset = m_durationGridYOffset;
     // move symbols so that the lowest margin 'sits' on the base line:
@@ -480,12 +480,12 @@ void StaffType::setFretMetrics()
 
     // Calculate position for dead fret marks - these must be centred separately based on their glyph
     RectF deadBb = fm.tightBoundingRect(m_fretFontInfo.xChar);
-    double lineThickness = style().styleS(Sid::staffLineWidth).val() * SPATIUM20 * 0.5;
+    double lineThickness = style().styleS(Sid::staffLineWidth).val() * defaultSpatium() * 0.5;
     m_deadFretYOffset = -deadBb.y() / 2.0 + lineThickness;
 
     // if on string, we are done; if between strings, raise by half line distance
     if (!m_onLines) {
-        double lineAdj = lineDistance().val() * SPATIUM20 * 0.5;
+        double lineAdj = lineDistance().val() * defaultSpatium() * 0.5;
         m_fretYOffset -= lineAdj;
         m_deadFretYOffset -= lineAdj;
     }
@@ -522,6 +522,11 @@ void StaffType::setDurationFontName(const String& name)
 //   durationBoxH / durationBoxY
 //---------------------------------------------------------
 
+double StaffType::defaultSpatium() const
+{
+    return StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue().toDouble();
+}
+
 double StaffType::durationBoxH() const
 {
     if (!m_genDurations && !m_stemless) {
@@ -535,7 +540,37 @@ double StaffType::durationBoxY() const
     if (!m_genDurations && !m_stemless) {
         return 0.0;
     }
-    return m_durationBoxY + m_durationFontUserY * SPATIUM20;
+    return m_durationBoxY + m_durationFontUserY * defaultSpatium();
+}
+
+double StaffType::durationFontYOffset() const
+{
+    return m_durationYOffset + m_durationFontUserY * defaultSpatium();
+}
+
+double StaffType::fretBoxY() const
+{
+    return m_fretBoxY + m_fretFontUserY * defaultSpatium();
+}
+
+double StaffType::deadFretBoxY() const
+{
+    return m_deadFretBoxY + m_fretFontUserY * defaultSpatium();
+}
+
+double StaffType::fretMaskH() const
+{
+    return m_lineDistance.val() * defaultSpatium();
+}
+
+double StaffType::fretMaskY() const
+{
+    return (m_onLines ? -0.5 : -1.0) * m_lineDistance.val() * defaultSpatium();
+}
+
+double StaffType::fretFontYOffset() const
+{
+    return m_fretYOffset + m_fretFontUserY * defaultSpatium();
 }
 
 //---------------------------------------------------------
@@ -669,7 +704,7 @@ void StaffType::drawInputStringMarks(Painter* p, int string, const Color& select
     static constexpr double LEDGER_LINE_LEFTX = 0.25; // in % of cursor rectangle width
     static constexpr double LEDGER_LINE_RIGHTX = 0.75; // in % of cursor rectangle width
 
-    double spatium = SPATIUM20;
+    double spatium = defaultSpatium();
     double lineDist = m_lineDistance.val() * spatium;
     bool hasFret = false;
     String text = tabBassStringPrefix(string, &hasFret);
