@@ -35,7 +35,7 @@ ComboBox {
 
         signal handleItem(var value)
 
-        width: 172
+        implicitWidth: 12 + implicitContentWidth + 6 + implicitIndicatorWidth + 8
 
         textRole: "text"
         valueRole: "value"
