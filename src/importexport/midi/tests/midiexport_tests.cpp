@@ -76,7 +76,7 @@ protected:
         testMidiExport(score, writeFile.arg(3), reference);
     }
 
-    /// see the issue #290997
+    /// see the issue https://musescore.org/node/290997
     static void testTimeStretchFermataTempoEdit(MasterScore* score, const String& file, const String& testName)
     {
         const String writeFile = String(u"%1-%2-test-%3.mid").arg(file).arg(testName);
@@ -308,7 +308,7 @@ TEST_F(MidiExportTests, DISABLED_midiTimeStretchFermata) {
     testTimeStretchFermata(score.get(), file, u"page");
 }
 
-/// Checks continuous view tempo issues like #289922.
+/// Checks continuous view tempo issues like https://musescore.org/node/289922.
 //! FIXME: update ref
 TEST_F(MidiExportTests, DISABLED_midiTimeStretchFermataContinuousView) {
     const String file(u"testTimeStretchFermata");
@@ -364,6 +364,7 @@ TEST_F(MidiExportTests, DISABLED_midiSingleNoteDynamics)
     testMidiExport(score.get(), writeFile, reference);
 }
 
+// TODO: move to midirenderer_tests.cpp
 class MidiExportEventsTests : public MidiExportTests, public ::testing::WithParamInterface<std::string_view>
 {
 };
