@@ -12,7 +12,7 @@ class Injectable
 public:
     virtual ~Injectable() = default;
 
-    using GetContext = std::function<modularity::ContextPtr()>;
+    using GetContext = std::function<modularity::ContextPtr ()>;
 
     Injectable(const modularity::ContextPtr& ctx = nullptr)
         : m_ctx(ctx) {}

@@ -69,6 +69,8 @@ template<class I>
 using Inject = kors::modularity::Inject<I>;
 template<class I>
 using GlobalInject = kors::modularity::GlobalInject<I>;
+template<class I>
+using ThreadSafeInject = kors::modularity::ThreadSafeInject<I>;
 
 #define INJECT(Interface, getter) muse::Inject<Interface> getter;
 #define INJECT_STATIC(Interface, getter) static inline muse::Inject<Interface> getter;
