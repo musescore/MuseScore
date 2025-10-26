@@ -203,6 +203,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue::fromValue(TConv::fromXml(e.readAsciiText(), OrnamentStyle::DEFAULT));
     case P_TYPE::ORNAMENT_INTERVAL:
         return PropertyValue(TConv::fromXml(e.readText(), DEFAULT_ORNAMENT_INTERVAL));
+    case P_TYPE::ORNAMENT_SHOW_ACCIDENTAL:
+        return OrnamentShowAccidental(e.readInt());
     case P_TYPE::POINT:
         return PropertyValue::fromValue(e.readPoint());
     case P_TYPE::SCALE:
@@ -245,6 +247,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
 
     case P_TYPE::CLEF_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), ClefType::G));
+    case P_TYPE::CLEF_TO_BARLINE_POS:
+        return ClefToBarlinePosition(e.readInt());
 
     case P_TYPE::DYNAMIC_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), DynamicType::OTHER));
@@ -259,6 +263,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
 
     case P_TYPE::TEXT_STYLE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), TextStyleType::DEFAULT));
+    case P_TYPE::SLUR_STYLE_TYPE:
+        return SlurStyleType(e.readInt());
 
     case P_TYPE::CHANGE_METHOD:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), ChangeMethod::NORMAL));
@@ -3002,7 +3008,7 @@ void TRead::read(MMRest* r, XmlReader& e, ReadContext& ctx)
             r->add(dot);
         } else if (tag == "mmRestNumberPos") {
             // Old property, deprecated in 4.5
-            r->setNumberOffset(e.readDouble() - ctx.style().styleS(Sid::mmRestNumberPos).val());
+            r->setNumberOffset(Spatium(e.readDouble()) - ctx.style().styleS(Sid::mmRestNumberPos));
         } else if (TRead::readStyledProperty(r, tag, e, ctx)) {
         } else if (readProperties(r, e, ctx)) {
         } else {

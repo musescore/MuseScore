@@ -110,7 +110,7 @@ PointF MeasureRepeat::numberPosition(const RectF& numberBbox) const
     if (staffType() && staffType()->lines() == 1) {
         staffTop -= 2.0 * spatium();
     }
-    double y = std::min(staffTop, -symBbox(ldata()->symId).height() / 2) + m_numberPos * spatium() - 0.5 * numberBbox.height();
+    double y = std::min(staffTop, -symBbox(ldata()->symId).height() / 2) + m_numberPos.toMM(spatium()) - 0.5 * numberBbox.height();
 
     return PointF(x, y);
 }
@@ -163,7 +163,7 @@ bool MeasureRepeat::setProperty(Pid propertyId, const PropertyValue& v)
         setNumMeasures(v.toInt());
         break;
     case Pid::MEASURE_REPEAT_NUMBER_POS:
-        setNumberPos(v.toDouble());
+        setNumberPos(v.value<Spatium>());
         triggerLayout();
         break;
     default:

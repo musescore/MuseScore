@@ -2592,14 +2592,14 @@ void Score::cmdFlip()
 
             flipOnce(ee, [ee]() {
                 // getProperty() delegates call from spannerSegment to Spanner
-                PlacementV p = PlacementV(ee->getProperty(Pid::PLACEMENT).toInt());
+                PlacementV p = ee->getProperty(Pid::PLACEMENT).value<PlacementV>();
                 p = (p == PlacementV::ABOVE) ? PlacementV::BELOW : PlacementV::ABOVE;
                 PropertyFlags pf = ee->propertyFlags(Pid::PLACEMENT);
                 if (pf == PropertyFlags::STYLED) {
                     pf = PropertyFlags::UNSTYLED;
                 }
                 double oldDefaultY = ee->propertyDefault(Pid::OFFSET).value<PointF>().y();
-                ee->undoChangeProperty(Pid::PLACEMENT, int(p), pf);
+                ee->undoChangeProperty(Pid::PLACEMENT, p, pf);
                 // flip and rebase user offset to new default now that placement has changed
                 double newDefaultY = ee->propertyDefault(Pid::OFFSET).value<PointF>().y();
                 if (ee->isSpanner()) {
@@ -7512,7 +7512,7 @@ void Score::undoChangeTuning(Note* n, double v)
 
 void Score::undoChangeUserMirror(Note* n, DirectionH d)
 {
-    n->undoChangeProperty(Pid::MIRROR_HEAD, int(d));
+    n->undoChangeProperty(Pid::MIRROR_HEAD, d);
 }
 
 //---------------------------------------------------------

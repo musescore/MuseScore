@@ -787,9 +787,9 @@ PropertyValue BarLine::getProperty(Pid id) const
     case Pid::BARLINE_SPAN:
         return spanStaff();
     case Pid::BARLINE_SPAN_FROM:
-        return int(spanFrom());
+        return spanFrom();
     case Pid::BARLINE_SPAN_TO:
-        return int(spanTo());
+        return spanTo();
     case Pid::BARLINE_SHOW_TIPS:
         return showTips();
     default:

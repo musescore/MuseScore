@@ -2952,7 +2952,7 @@ PropertyValue Note::getProperty(Pid propertyId) const
     case Pid::DOT_POSITION:
         return PropertyValue::fromValue<DirectionV>(userDotPosition());
     case Pid::HEAD_SCHEME:
-        return int(headScheme());
+        return headScheme();
     case Pid::HEAD_GROUP:
         return headGroup();
     case Pid::USER_VELOCITY:

@@ -201,6 +201,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::ORNAMENT_STYLE: {
         element(name, TConv::toXml(data.value<OrnamentStyle>()));
     } break;
+    case P_TYPE::ORNAMENT_SHOW_ACCIDENTAL:
+        element(name, static_cast<int>(data.value<OrnamentShowAccidental>()));
+        break;
     case P_TYPE::GLISS_STYLE: {
         element(name, TConv::toXml(data.value<GlissandoStyle>()));
     } break;
@@ -262,6 +265,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::CLEF_TYPE: {
         element(name, TConv::toXml(data.value<ClefType>()));
     } break;
+    case P_TYPE::CLEF_TO_BARLINE_POS:
+        element(name, static_cast<int>(data.value<ClefToBarlinePosition>()));
+        break;
     case P_TYPE::DYNAMIC_TYPE: {
         element(name, TConv::toXml(data.value<DynamicType>()));
     } break;
@@ -280,6 +286,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::TEXT_STYLE: {
         element(name, TConv::toXml(data.value<TextStyleType>()));
     } break;
+    case P_TYPE::SLUR_STYLE_TYPE:
+        element(name, static_cast<int>(data.value<SlurStyleType>()));
+        break;
     case P_TYPE::CHANGE_METHOD: {
         element(name, TConv::toXml(data.value<ChangeMethod>()));
     } break;

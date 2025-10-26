@@ -575,8 +575,8 @@ void TWrite::write(const Ambitus* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
     xml.tagProperty(Pid::HEAD_GROUP, item->noteHeadGroup(), Ambitus::NOTEHEADGROUP_DEFAULT);
-    xml.tagProperty(Pid::HEAD_TYPE,  int(item->noteHeadType()),  int(Ambitus::NOTEHEADTYPE_DEFAULT));
-    xml.tagProperty(Pid::MIRROR_HEAD, int(item->direction()),    int(Ambitus::DIRECTION_DEFAULT));
+    xml.tagProperty(Pid::HEAD_TYPE, item->noteHeadType(), Ambitus::NOTEHEADTYPE_DEFAULT);
+    xml.tagProperty(Pid::MIRROR_HEAD, item->direction(), Ambitus::DIRECTION_DEFAULT);
     xml.tag("hasLine",    item->hasLine(), true);
     xml.tagProperty(Pid::LINE_WIDTH, item->lineWidth(), Ambitus::LINEWIDTH_DEFAULT);
     xml.tag("topPitch",   item->topPitch());

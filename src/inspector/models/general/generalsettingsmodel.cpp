@@ -51,7 +51,7 @@ void GeneralSettingsModel::createProperties()
     });
 
     m_isSmall = buildPropertyItem(Pid::SMALL, [this](const mu::engraving::Pid, const QVariant& newValue) {
-        setPropertyValue(m_elementsForIsSmallProperty, Pid::SMALL, newValue.toBool());
+        setPropertyValue(m_elementsForIsSmallProperty, Pid::SMALL, newValue);
     });
 
     m_isAutoPlaceAllowed = buildPropertyItem(Pid::AUTOPLACE);

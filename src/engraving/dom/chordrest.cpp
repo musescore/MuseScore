@@ -701,7 +701,7 @@ PropertyValue ChordRest::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SMALL:      return PropertyValue::fromValue(isSmall());
-    case Pid::BEAM_MODE:  return int(beamMode());
+    case Pid::BEAM_MODE:  return beamMode();
     case Pid::STAFF_MOVE: return staffMove();
     case Pid::DURATION_TYPE_WITH_DOTS: return actualDurationType().typeWithDots();
     default:              return DurationElement::getProperty(propertyId);

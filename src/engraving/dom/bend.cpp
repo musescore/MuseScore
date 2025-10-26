@@ -155,7 +155,7 @@ PropertyValue Bend::getProperty(Pid id) const
     case Pid::FONT_STYLE:
         return int(m_fontStyle);
     case Pid::PLAY:
-        return bool(playBend());
+        return playBend();
     case Pid::LINE_WIDTH:
         return m_lineWidth;
     case Pid::BEND_TYPE:

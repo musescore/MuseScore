@@ -318,11 +318,14 @@ bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::SMALL:
         setSmall(v.toBool());
         break;
-    case Pid::CLEF_TO_BARLINE_POS:
-        if (v.value<ClefToBarlinePosition>() != m_clefToBarlinePosition && !m_isHeader) {
-            changeClefToBarlinePos(v.value<ClefToBarlinePosition>());
+    case Pid::CLEF_TO_BARLINE_POS: {
+        const auto newClefToBlPos = v.value<ClefToBarlinePosition>();
+
+        if (newClefToBlPos != m_clefToBarlinePosition && !m_isHeader) {
+            changeClefToBarlinePos(newClefToBlPos);
         }
         break;
+    }
     case Pid::IS_HEADER:
         m_isHeader = v.toBool();
         break;

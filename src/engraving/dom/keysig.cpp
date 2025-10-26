@@ -183,7 +183,7 @@ void KeySig::undoSetShowCourtesy(bool v)
 
 void KeySig::undoSetMode(KeyMode v)
 {
-    undoChangeProperty(Pid::KEYSIG_MODE, int(v));
+    undoChangeProperty(Pid::KEYSIG_MODE, v);
 }
 
 PointF KeySig::staffOffset() const
@@ -238,9 +238,9 @@ PropertyValue KeySig::getProperty(Pid propertyId) const
     case Pid::KEY_CONCERT:
         return int(concertKey());
     case Pid::SHOW_COURTESY:
-        return int(showCourtesy());
+        return showCourtesy();
     case Pid::KEYSIG_MODE:
-        return int(mode());
+        return mode();
     case Pid::IS_COURTESY:
         return _isCourtesy;
     default:
@@ -280,7 +280,7 @@ bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
         if (generated()) {
             return false;
         }
-        setMode(KeyMode(v.toInt()));
+        setMode(v.value<KeyMode>());
         staff()->setKey(tick(), keySigEvent());
         break;
     case Pid::IS_COURTESY:
@@ -311,7 +311,7 @@ PropertyValue KeySig::propertyDefault(Pid id) const
     case Pid::SHOW_COURTESY:
         return true;
     case Pid::KEYSIG_MODE:
-        return int(KeyMode::UNKNOWN);
+        return KeyMode::UNKNOWN;
     case Pid::IS_COURTESY:
         return false;
     default:

@@ -49,8 +49,8 @@ public:
     RectF numberRect() const override;
     PointF numberPos() const;
 
-    void setNumberOffset(double y) { m_numberOffset = y; }
-    double numberOffset() const { return m_numberOffset; }
+    void setNumberOffset(const Spatium y) { m_numberOffset = y; }
+    Spatium numberOffset() const { return m_numberOffset; }
 
     double yNumberPos() const;
 
@@ -70,8 +70,7 @@ public:
     DECLARE_LAYOUTDATA_METHODS(MMRest)
 
 private:
-
-    double m_numberOffset = 0.0;   // vertical position of number relative to staff
+    Spatium m_numberOffset = Spatium(0.0);    // vertical position of number relative to staff
     bool m_numberVisible = false;   // show or hide number
 };
 } // namespace mu::engraving
