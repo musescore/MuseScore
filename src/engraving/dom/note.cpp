@@ -2823,7 +2823,7 @@ void Note::horizontalDrag(EditData& ed)
 
     const Spatium deltaSp = Spatium(ned->delta.x() / spatium());
 
-    if (seg->extraLeadingSpace() + deltaSp < Spatium(0)) {
+    if (seg->extraLeadingSpace() + deltaSp < 0_sp) {
         return;
     }
 

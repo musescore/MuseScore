@@ -1187,8 +1187,8 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     score->style().set(Sid::measureSpacing, 1.0);
     score->style().setSpatium(cap->normalLineDist * DPMM);
     score->style().set(Sid::smallStaffMag, cap->smallLineDist / cap->normalLineDist);
-    score->style().set(Sid::minSystemDistance, Spatium(8));
-    score->style().set(Sid::maxSystemDistance, Spatium(12));
+    score->style().set(Sid::minSystemDistance, 8_sp);
+    score->style().set(Sid::maxSystemDistance, 12_sp);
 
     for (CapSystem* csys : cap->systems) {
         CAPELLA_TRACE("System:");

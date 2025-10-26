@@ -655,7 +655,7 @@ void CompatUtils::resetStemLengthsForTwoNoteTrems(MasterScore* masterScore)
                     Stem* stem = chord->stem();
                     if (stem && trem) {
                         if (!stem->userLength().isZero()) {
-                            stem->setUserLength(Spatium(0));
+                            stem->setUserLength(0_sp);
                         }
                     }
                 }

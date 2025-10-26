@@ -151,9 +151,9 @@ TextLine::TextLine(EngravingItem* parent, bool system)
 
     setBeginHookType(HookType::NONE);
     setEndHookType(HookType::NONE);
-    setBeginHookHeight(Spatium(1.5));
-    setEndHookHeight(Spatium(1.5));
-    setGapBetweenTextAndLine(Spatium(0.5));
+    setBeginHookHeight(1.5_sp);
+    setEndHookHeight(1.5_sp);
+    setGapBetweenTextAndLine(0.5_sp);
 
     resetProperty(Pid::BEGIN_TEXT_PLACE);
     resetProperty(Pid::CONTINUE_TEXT_PLACE);

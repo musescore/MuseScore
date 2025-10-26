@@ -88,9 +88,9 @@ private:
     friend class Factory;
     Stem(Chord* parent = 0);
 
-    Spatium m_baseLength = Spatium(0.0);
+    Spatium m_baseLength = 0.0_sp;
 
-    Spatium m_userLength = Spatium(0.0);
-    Spatium m_lineWidth = Spatium(0.0);
+    Spatium m_userLength = 0.0_sp;
+    Spatium m_lineWidth = 0.0_sp;
 };
 }

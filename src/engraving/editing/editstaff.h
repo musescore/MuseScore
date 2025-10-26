@@ -200,7 +200,7 @@ class ChangeStaff : public UndoCommand
 
     bool visible = false;
     ClefTypeList clefType;
-    Spatium userDist = Spatium(0.0);
+    Spatium userDist = 0.0_sp;
     bool cutaway = false;
     bool hideSystemBarLine = false;
     AutoOnOff mergeMatchingRests = AutoOnOff::AUTO;

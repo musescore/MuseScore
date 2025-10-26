@@ -354,7 +354,7 @@ private:
 
     int m_lines = 5;
     int m_stepOffset = 0;
-    Spatium m_lineDistance = Spatium(1);
+    Spatium m_lineDistance = 1_sp;
 
     bool m_showBarlines = true;
     bool m_showLedgerLines = true;

@@ -109,7 +109,7 @@ void Stem::dragGrip(EditData& ed)
 
 void Stem::reset()
 {
-    undoChangeProperty(Pid::USER_LEN, Spatium(0.0));
+    undoChangeProperty(Pid::USER_LEN, 0.0_sp);
     EngravingItem::reset();
 }
 
@@ -188,7 +188,7 @@ PropertyValue Stem::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::USER_LEN:
-        return Spatium(0.0);
+        return 0.0_sp;
     case Pid::STEM_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     default:

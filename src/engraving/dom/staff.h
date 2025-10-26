@@ -304,7 +304,7 @@ private:
     AutoOnOff m_hideWhenEmpty = AutoOnOff::AUTO;      // hide empty staves
 
     Color m_color;
-    Spatium m_userDist     { Spatium(0.0) };           ///< user edited extra distance
+    Spatium m_userDist { 0.0_sp };           ///< user edited extra distance
 
     StaffTypeList m_staffTypeList;
 

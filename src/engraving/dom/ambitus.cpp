@@ -40,7 +40,6 @@
 using namespace mu;
 using namespace mu::engraving;
 
-const Spatium Ambitus::LINEWIDTH_DEFAULT = Spatium(0.12);
 //---------------------------------------------------------
 //   Ambitus
 //---------------------------------------------------------
@@ -446,7 +445,7 @@ PropertyValue Ambitus::propertyDefault(Pid id) const
     case Pid::GHOST:
         return HASLINE_DEFAULT;
     case Pid::LINE_WIDTH:
-        return Spatium(LINEWIDTH_DEFAULT);
+        return LINEWIDTH_DEFAULT;
     case Pid::TPC1:
         return estimateRanges().topTpc;
     case Pid::FBPARENTHESIS1:
