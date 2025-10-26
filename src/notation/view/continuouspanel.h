@@ -67,6 +67,7 @@ public:
         std::function<muse::PointF(const muse::PointF&)> fromLogical;
     };
 
+    qreal width() const;
     void paint(muse::draw::Painter& painter, const NotationViewContext& ctx, const engraving::rendering::PaintOptions& opt);
 
 private:
