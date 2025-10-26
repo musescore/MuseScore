@@ -69,7 +69,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY, false, "showIfEntireSystemEmpty", P_TYPE::BOOL,          PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "show if entire system empty") },
     { Pid::SHOW_COURTESY,           false, "showCourtesySig",       P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "show courtesy") },
     { Pid::KEYSIG_MODE,             false, "keysig_mode",           P_TYPE::KEY_MODE,           PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "key signature mode") },
-    { Pid::SLUR_STYLE_TYPE,         false, "lineType",              P_TYPE::INT,                PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "line type") },
+    { Pid::SLUR_STYLE_TYPE,         false, "lineType",              P_TYPE::SLUR_STYLE_TYPE,    PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "line type") },
     { Pid::PITCH,                   true,  "pitch",                 P_TYPE::INT,                PropertyGroup::NONE,            QT_TRANSLATE_NOOP("engraving/propertyName", "pitch") },
 
     { Pid::TPC1,                    true,  "tpc",                   P_TYPE::INT,                PropertyGroup::NONE,            QT_TRANSLATE_NOOP("engraving/propertyName", "tonal pitch class") },
@@ -230,7 +230,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::ORNAMENT_STYLE,          true,  "ornamentStyle",         P_TYPE::ORNAMENT_STYLE,     PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "ornament style") },
     { Pid::INTERVAL_ABOVE,          true,  "intervalAbove",         P_TYPE::ORNAMENT_INTERVAL,  PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "interval above") },
     { Pid::INTERVAL_BELOW,          true,  "intervalBelow",         P_TYPE::ORNAMENT_INTERVAL,  PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "interval below") },
-    { Pid::ORNAMENT_SHOW_ACCIDENTAL,true,  "ornamentShowAccidental",P_TYPE::INT,                PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "ornament show accidental") },
+    { Pid::ORNAMENT_SHOW_ACCIDENTAL,true,  "ornamentShowAccidental",P_TYPE::ORNAMENT_SHOW_ACCIDENTAL, PropertyGroup::APPEARANCE, QT_TRANSLATE_NOOP("engraving/propertyName", "ornament show accidental") },
     { Pid::ORNAMENT_SHOW_CUE_NOTE,  true,  "ornamentShowCueNote",   P_TYPE::AUTO_ON_OFF,        PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "ornament show cue note") },
     { Pid::START_ON_UPPER_NOTE,     true,  "startOnUpperNote",      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "start on upper note") },
 
@@ -398,7 +398,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::CLEF_TYPE_CONCERT,       true,  "concertClefType",       P_TYPE::CLEF_TYPE,          PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "concert clef type") },
     { Pid::CLEF_TYPE_TRANSPOSING,   true,  "transposingClefType",   P_TYPE::CLEF_TYPE,          PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "transposing clef type") },
-    { Pid::CLEF_TO_BARLINE_POS,     true,  "clefToBarlinePos",      P_TYPE::INT,                PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "clef to barline position") },
+    { Pid::CLEF_TO_BARLINE_POS,     true,  "clefToBarlinePos",      P_TYPE::CLEF_TO_BARLINE_POS, PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "clef to barline position") },
     { Pid::IS_HEADER,               true,  "isHeader",              P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "is header")},
     { Pid::KEY_CONCERT,             true,  "concertKey",            P_TYPE::INT,                PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "concert key") },
     { Pid::KEY,                     true,  "actualKey",             P_TYPE::INT,                PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "key") },

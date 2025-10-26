@@ -366,7 +366,7 @@ PropertyValue SlurTie::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SLUR_STYLE_TYPE:
-        return static_cast<int>(styleType());
+        return styleType();
     case Pid::SLUR_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(slurDirection());
     default:
@@ -382,7 +382,7 @@ bool SlurTie::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SLUR_STYLE_TYPE:
-        setStyleType(SlurStyleType(v.value<int>()));
+        setStyleType(v.value<SlurStyleType>());
         break;
     case Pid::SLUR_DIRECTION:
         setSlurDirection(v.value<DirectionV>());
@@ -402,7 +402,7 @@ PropertyValue SlurTie::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SLUR_STYLE_TYPE:
-        return static_cast<int>(SlurStyleType::Solid);
+        return SlurStyleType::Solid;
     case Pid::SLUR_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     default:

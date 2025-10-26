@@ -135,7 +135,7 @@ PropertyValue Ornament::getProperty(Pid propertyId) const
     case Pid::INTERVAL_BELOW:
         return _intervalBelow;
     case Pid::ORNAMENT_SHOW_ACCIDENTAL:
-        return static_cast<int>(_showAccidental);
+        return _showAccidental;
     case Pid::ORNAMENT_SHOW_CUE_NOTE:
         return m_showCueNote;
     case Pid::START_ON_UPPER_NOTE:
@@ -162,7 +162,7 @@ PropertyValue Ornament::propertyDefault(Pid id) const
     case Pid::INTERVAL_BELOW:
         return DEFAULT_ORNAMENT_INTERVAL;
     case Pid::ORNAMENT_SHOW_ACCIDENTAL:
-        return static_cast<int>(OrnamentShowAccidental::DEFAULT);
+        return OrnamentShowAccidental::DEFAULT;
     case Pid::ORNAMENT_SHOW_CUE_NOTE:
         return AutoOnOff::AUTO;
     case Pid::START_ON_UPPER_NOTE:
@@ -184,7 +184,7 @@ bool Ornament::setProperty(Pid propertyId, const PropertyValue& v)
         setIntervalBelow(v.value<OrnamentInterval>());
         break;
     case Pid::ORNAMENT_SHOW_ACCIDENTAL:
-        setShowAccidental(OrnamentShowAccidental(v.value<int>()));
+        setShowAccidental(v.value<OrnamentShowAccidental>());
         break;
     case Pid::ORNAMENT_SHOW_CUE_NOTE:
         setShowCueNote(v.value<AutoOnOff>());
