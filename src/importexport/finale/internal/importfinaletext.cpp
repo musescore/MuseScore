@@ -573,6 +573,7 @@ void FinaleParser::importTextExpressions()
             case ElementType::DYNAMIC: {
                 Dynamic* dynamic = toDynamic(item);
                 dynamic->setDynamicType(expression->dynamicType);
+                setAndStyleProperty(dynamic, Pid::CENTER_BETWEEN_STAVES, false);
                 if (expressionAssignment->layer != 0) {
                     dynamic->setVoiceAssignment(VoiceAssignment::CURRENT_VOICE_ONLY);
                 }
@@ -593,7 +594,9 @@ void FinaleParser::importTextExpressions()
                 TempoText* tt = toTempoText(item);
                 if (expressionDef->playbackType == others::PlaybackType::Tempo) {
                     tt->setFollowText(false); /// @todo detect this
-                    tt->setTempo(expressionDef->value / 60.0); // Assume quarter for now
+                    tt->setTempo(expressionDef->value * eduToFraction(Edu(expressionDef->auxData1)).toDouble() / 15.0);
+                } else {
+                    tt->setPlayTempoText(false);
                 }
                 break;
             }
@@ -602,9 +605,9 @@ void FinaleParser::importTextExpressions()
                 StaffTextBase* stb = toStaffTextBase(item);
                 if (expressionDef->playbackType == others::PlaybackType::Swing) {
                     int swingValue = expressionDef->value;
-                    int swingUnit = Fraction(1, measure->timesig().denominator() > 8 ? 16 : 8).ticks();
+                    Fraction swingUnit = measure->timesig().denominator() >= 8 ? Fraction(1, 16) : Fraction(1, 8);
                     stb->setSwing(swingValue != 0);
-                    stb->setSwingParameters(swingUnit, 50 + (swingValue / 6));
+                    stb->setSwingParameters(swingUnit.ticks(), 50 + (swingValue / 6));
                 }
                 break;
             }
@@ -832,8 +835,9 @@ void FinaleParser::importTextExpressions()
 
                     // should this really be all tracks?
                     Shape staffShape = seg->staffShape(expr->staffIdx());
+                    staffShape.translate(PointF(seg->pageX(), seg->system()->pagePos().y() + seg->system()->staff(expr->staffIdx())->y()));
                     // staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
-                    double entryY = staffShape.translated(seg->pagePos()).top() - doubleFromEvpu(exprDef->yAdjustEntry) * SPATIUM20;
+                    double entryY = staffShape.top() - doubleFromEvpu(exprDef->yAdjustEntry) * SPATIUM20;
 
                     SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
                     double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
@@ -848,7 +852,8 @@ void FinaleParser::importTextExpressions()
                     // should this really be all tracks?
                     Shape staffShape = s->staffShape(expr->staffIdx());
                     // staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
-                    double entryY = staffShape.translated(s->pagePos()).bottom() - doubleFromEvpu(exprDef->yAdjustEntry) * SPATIUM20;
+                    staffShape.translate(PointF(s->pageX(), s->system()->pagePos().y() + s->system()->staff(expr->staffIdx())->y()));
+                    double entryY = staffShape.bottom() - doubleFromEvpu(exprDef->yAdjustEntry) * SPATIUM20;
 
                     SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
                     double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
@@ -939,22 +944,18 @@ void FinaleParser::importTextExpressions()
             }
 
             for (const auto& measureTextAssign : m_doc->getDetails()->getArray<details::MeasureTextAssign>(m_currentMusxPartId, rawStaff->getCmper(), musxMeasure->getCmper())) {
-                EnigmaParsingOptions options;
-                musx::util::EnigmaParsingContext parsingContext = measureTextAssign->getRawTextCtx(m_currentMusxPartId);
-                FontTracker firstFontInfo;
-                String measureText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
-
                 Fraction rTick = eduToFraction(measureTextAssign->xDispEdu);
                 Segment* s = measure->getChordRestOrTimeTickSegment(measure->tick() + rTick);
 
                 StaffText* text = Factory::createStaffText(s);
                 text->setTrack(curTrackIdx);
-                text->setXmlText(measureText);
+                text->setXmlText(stringFromEnigmaText(measureTextAssign->getRawTextCtx(m_currentMusxPartId)));
                 if (text->plainText().empty()) {
                     delete text;
                     continue;
                 }
                 text->setVisible(!measureTextAssign->hidden);
+                text->setSizeIsSpatiumDependent(false);
                 text->setAutoplace(false);
                 setAndStyleProperty(text, Pid::OFFSET, (evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp) * SPATIUM20), true);
                 s->add(text);
