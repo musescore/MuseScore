@@ -160,18 +160,7 @@ inline QPointF operator+(const QPointF& p1, const PointF& p2) { return QPointF(p
 // ====================================
 // PairF
 // ====================================
-class PairF : public std::pair<double, double>
-{
-public:
-    PairF() = default;
-    PairF(double f, double s)
-        : std::pair<double, double>(f, s) {}
-
-#ifndef NO_QT_SUPPORT
-    static PairF fromQPairF(const QPair<double, double>& v) { return PairF(v.first, v.second); }
-    QPair<double, double> toQPairF() const { return QPair<double, double>(first, second); }
-#endif
-};
+using PairF = std::pair<double, double>;
 
 // ====================================
 // Line

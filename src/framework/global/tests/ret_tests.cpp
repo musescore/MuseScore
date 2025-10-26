@@ -64,6 +64,7 @@ TEST(Global_RetTests, Data_KeyNotFound_ReturnsDefaultInReleaseANDTriggersAsserti
     const Ret ret;
     EXPECT_DEATH({
         const auto result = ret.data<std::string>("missing", std::string("fallback"));
+        UNUSED(result);
     }, ".*Assertion.*failed");
 #endif
 }
@@ -81,6 +82,7 @@ TEST(Global_RetTests, Data_KeyExistsButTypeMismatch_ReturnsDefaultInReleaseANDTr
     // In debug builds, expect the assertion to trigger
     EXPECT_DEATH({
         const auto result = ret.data<std::string>("answer", std::string("0"));
+        UNUSED(result);
     }, ".*Assertion.*failed");
 #endif
 }

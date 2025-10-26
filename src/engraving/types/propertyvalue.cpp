@@ -108,7 +108,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::SCALE:       return value<ScaleF>().toQSizeF();
     case P_TYPE::SPATIUM:     return value<Spatium>().val();
     case P_TYPE::MILLIMETRE:  return value<Millimetre>().val();
-    case P_TYPE::PAIR_REAL:   return QVariant::fromValue(value<PairF>().toQPairF());
+    case P_TYPE::PAIR_REAL:   return QVariant::fromValue(value<PairF>());
 
     // Draw
     case P_TYPE::SYMID:       return static_cast<int>(value<SymId>());
@@ -223,7 +223,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::SCALE:         return PropertyValue(ScaleF::fromQSizeF(v.value<QSizeF>()));
     case P_TYPE::SPATIUM:       return PropertyValue(Spatium(v.toReal()));
     case P_TYPE::MILLIMETRE:    return PropertyValue(Millimetre(v.toReal()));
-    case P_TYPE::PAIR_REAL:     return PropertyValue(PairF::fromQPairF(v.value<QPair<double, double> >()));
+    case P_TYPE::PAIR_REAL:     return PropertyValue(v.value<std::pair<double, double> >());
 
     // Draw
     case P_TYPE::SYMID:         return PropertyValue(SymId(v.toInt()));

@@ -25,6 +25,7 @@
 
 using namespace muse;
 
+[[maybe_unused]]
 static constexpr const char* noteNamesWithOctaves[] = {
     // octave -1
     QT_TRANSLATE_NOOP("global/pitchName", "C-1"),
