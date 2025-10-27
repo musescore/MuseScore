@@ -93,7 +93,7 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& requiredParams)
         fx->paramsChanged().onReceive(this, [this](const AudioFxParams& fxParams) {
             m_params.fxChain.insert_or_assign(fxParams.chainOrder, fxParams);
             m_paramsChanges.send(m_params);
-        });
+        }, async::Asyncable::Mode::SetReplace);
     }
 
     AudioOutputParams resultParams = requiredParams;
