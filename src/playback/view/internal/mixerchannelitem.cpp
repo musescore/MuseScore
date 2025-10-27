@@ -323,7 +323,7 @@ void MixerChannelItem::loadAuxSendItems(const AuxSendsParams& auxSends)
         }
 
         emit auxSendItemListChanged();
-    });
+    }, async::Asyncable::Mode::SetReplace);
 
     if (m_auxSendItems.size() == static_cast<int>(auxSends.size())) {
         return;
