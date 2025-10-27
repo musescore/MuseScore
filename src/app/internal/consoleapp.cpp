@@ -254,7 +254,7 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
     imagesExportConfiguration()->setExportPngDpiResolutionOverride(options.exportImage.pngDpiResolution);
 #endif
 
-#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     videoExportConfiguration()->setResolution(options.exportVideo.resolution);
     videoExportConfiguration()->setFps(options.exportVideo.fps);
     videoExportConfiguration()->setLeadingSec(options.exportVideo.leadingSec);
