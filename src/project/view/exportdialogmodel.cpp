@@ -388,9 +388,24 @@ bool ExportDialogModel::exportScores()
 
     m_exportPath = exportPath.val;
 
-    async::Async::call(this, [this, notations]() {
-        exportProjectScenario()->exportScores(notations, m_exportPath, m_selectedUnitType,
-                                              shouldDestinationFolderBeOpenedOnExport());
+    struct Params {
+        INotationPtrList notations;
+        muse::io::path_t exportPath;
+        project::INotationWriter::UnitType selectedUnitType;
+        bool openFolderOnExport = false;
+    };
+
+    //! NOTE We want to call the scenario method on the next event loop.
+    //! But by that point, the dialog may already be destroyed.
+    //! Therefore, we save everything we need in variables
+    //! and pass them to the lambda.
+    //! We can't access the dialog class member in the lambda body.
+    Params params{ notations, m_exportPath, m_selectedUnitType,
+                   shouldDestinationFolderBeOpenedOnExport() };
+
+    std::shared_ptr<IExportProjectScenario> scenario = exportProjectScenario();
+    async::Async::call(nullptr, [scenario, params]() {
+        scenario->exportScores(params.notations, params.exportPath, params.selectedUnitType, params.openFolderOnExport);
     });
 
     return true;
