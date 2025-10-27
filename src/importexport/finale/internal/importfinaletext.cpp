@@ -562,6 +562,7 @@ void FinaleParser::importTextExpressions()
         item->setTrack(curTrackIdx);
         item->setVisible(!expressionAssignment->hidden);
         item->setXmlText(expression->xmlText);
+        item->checkCustomFormatting(expression->xmlText);
         item->setFrameType(expression->frameSettings.frameType);
         if (item->frameType() != FrameType::NO_FRAME) {
             item->setFrameWidth(absoluteSpatium(expression->frameSettings.frameWidth, item)); // is this the correct scaling?
@@ -954,6 +955,7 @@ void FinaleParser::importTextExpressions()
                 StaffText* text = Factory::createStaffText(s);
                 text->setTrack(curTrackIdx);
                 text->setXmlText(stringFromEnigmaText(measureTextAssign->getRawTextCtx(m_currentMusxPartId)));
+                text->checkCustomFormatting(text->xmlText());
                 if (text->plainText().empty()) {
                     delete text;
                     continue;
@@ -1045,6 +1047,7 @@ void FinaleParser::importTextExpressions()
             break;
         }
         item->setXmlText(repeatText->xmlText.replace(u"#", replaceText));
+        item->checkCustomFormatting(item->xmlText());
         item->setAlign(Align(repeatText->repeatAlignment, AlignV::BASELINE));
         if (item->isMarker()) {
             item->setPosition(repeatText->repeatAlignment); /// @todo 'center' position centers over barline in musescore, over measure in finale
@@ -1322,6 +1325,7 @@ void FinaleParser::importPageTexts()
                 delete text;
                 return;
             }
+            text->checkCustomFormatting(pageText);
             text->setVisible(!pageTextAssign->hidden);
             text->setSizeIsSpatiumDependent(false);
             text->setAutoplace(false);
@@ -1336,6 +1340,7 @@ void FinaleParser::importPageTexts()
                 delete text;
                 return;
             }
+            text->checkCustomFormatting(pageText);
             text->setVisible(!pageTextAssign->hidden);
             text->setSizeIsSpatiumDependent(false);
             setAndStyleProperty(text, Pid::OFFSET, (p - mb->pagePos()), true); // is this accurate enough?
