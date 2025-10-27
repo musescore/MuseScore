@@ -579,6 +579,7 @@ void FinaleParser::importTextExpressions()
                 Dynamic* dynamic = toDynamic(item);
                 dynamic->setDynamicType(expression->dynamicType);
                 setAndStyleProperty(dynamic, Pid::CENTER_BETWEEN_STAVES, false);
+                setAndStyleProperty(dynamic, Pid::CENTER_ON_NOTEHEAD, false);
                 if (expressionAssignment->layer != 0) {
                     dynamic->setVoiceAssignment(VoiceAssignment::CURRENT_VOICE_ONLY);
                 }
@@ -1089,7 +1090,7 @@ bool FinaleParser::isOnlyPage(const MusxInstance<others::PageTextAssign>& pageTe
 static PointF pagePosOfPageTextAssign(Page* page, const MusxInstance<others::PageTextAssign>& pageTextAssign, RectF bbox)
 {
     /// @todo once position and alignment are decoupled, don't use font bbox
-    RectF pageContentRect = page->ldata()->bbox();
+    RectF pageContentRect = page->ldata()->bbox().translated(PointF());
     if (!pageTextAssign->hPosPageEdge) {
         pageContentRect.adjust(page->lm(), 0.0, -page->rm(), 0.0);
     }
