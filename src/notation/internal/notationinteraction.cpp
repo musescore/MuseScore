@@ -4846,6 +4846,10 @@ void NotationInteraction::editElement(QKeyEvent* event)
         }
 
         apply();
+
+        if (isGripEditStarted()) {
+            updateGripAnchorLines();
+        }
     } else {
         rollback();
     }
