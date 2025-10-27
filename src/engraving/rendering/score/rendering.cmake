@@ -79,6 +79,8 @@ set(RENDERING_SCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/parenthesislayout.h
     ${CMAKE_CURRENT_LIST_DIR}/restlayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/restlayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/boxlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/boxlayout.h
 
     ${CMAKE_CURRENT_LIST_DIR}/passbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/passbase.h
