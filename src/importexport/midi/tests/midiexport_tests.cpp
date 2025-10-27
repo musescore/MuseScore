@@ -82,7 +82,7 @@ protected:
         const String writeFile = String(u"%1-%2-test-%3.mid").arg(file).arg(testName);
         const QString reference(MIDI_EXPORT_DATA_DIR + file + u"-%1-ref.mid");
 
-        EngravingItem* tempo = score->firstSegment(SegmentType::ChordRest)->findAnnotation(ElementType::TEMPO_TEXT, -1, 3);
+        EngravingItem* tempo = score->firstSegment(SegmentType::ChordRest)->findAnnotation(ElementType::TEMPO_TEXT, 0, 3);
         ASSERT_TRUE(tempo && tempo->isTempoText());
 
         const int scoreTempo = 200;
