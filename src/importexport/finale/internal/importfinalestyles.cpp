@@ -60,6 +60,7 @@ static const std::unordered_map<std::string, std::string_view> finaleToSMuFLFont
     { "AshMusic",         "Finale Ash" },
     { "Broadway Copyist", "Finale Broadway" },
     { "Engraver",         "Finale Engraver" },
+    { "EngraverFontSet",  "Finale Engraver" },
     { "Jazz",             "Finale Jazz" },
     { "Maestro",          "Finale Maestro" },
     { "Petrucci",         "Finale Legacy" },
@@ -140,10 +141,10 @@ void FinaleOptions::init(const FinaleParser& context)
     combinedDefaultStaffScaling = pageFormat->calcCombinedSystemScaling();
 
     // Musical symbols font
-    std::string defaultMusicFont = context.musxOptions().defaultMusicFont->getName();
-    defaultMusicFont = muse::value(finaleToSMuFLFontMap, defaultMusicFont, defaultMusicFont);
-    if (context.fontIsEngravingFont(defaultMusicFont)) {
-        calculatedEngravingFontName = String::fromStdString(defaultMusicFont);
+    std::string defaultMusicalSymbolsFont = context.musxOptions().defaultMusicFont->getName();
+    defaultMusicalSymbolsFont = muse::value(finaleToSMuFLFontMap, defaultMusicalSymbolsFont, defaultMusicalSymbolsFont);
+    if (context.fontIsEngravingFont(defaultMusicalSymbolsFont)) {
+        calculatedEngravingFontName = String::fromStdString(defaultMusicalSymbolsFont);
     } else {
         calculatedEngravingFontName = engraving::DefaultStyle::defaultStyle().styleSt(Sid::musicalSymbolFont);
     }
@@ -392,10 +393,22 @@ void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
 
     style.set(Sid::keySigCourtesyBarlineMode,
               int(boolToCourtesyBarlineMode(prefs.barlineOptions->drawDoubleBarlineBeforeKeyChanges)));
+    style.set(Sid::timeSigCourtesyBarlineMode, int(CourtesyBarlineMode::ALWAYS_SINGLE));  // Hard-coded as 0 in Finale
+    style.set(Sid::barlineBeforeSigChange, true);
+    style.set(Sid::doubleBarlineBeforeKeySig, prefs.barlineOptions->drawDoubleBarlineBeforeKeyChanges);
+    style.set(Sid::doubleBarlineBeforeTimeSig, false);
+
     style.set(Sid::keySigNaturals, prefs.keyOptions->doKeyCancel ? int(KeySigNatural::BEFORE) : int(KeySigNatural::NONE));
     style.set(Sid::keySigShowNaturalsChangingSharpsFlats, prefs.keyOptions->doKeyCancelBetweenSharpsFlats);
-    style.set(Sid::timeSigCourtesyBarlineMode, int(CourtesyBarlineMode::ALWAYS_SINGLE));  // Hard-coded as 0 in Finale
+
     style.set(Sid::hideEmptyStaves, context.musxDocument()->calcHasVaryingSystemStaves(context.currentMusxPartId()));
+
+    style.set(Sid::placeClefsBeforeRepeats, true);
+    style.set(Sid::showCourtesiesRepeats,false);
+    style.set(Sid::showCourtesiesOtherJumps, false);
+    style.set(Sid::showCourtesiesAfterCancellingRepeats, false);
+    style.set(Sid::showCourtesiesAfterCancellingOtherJumps, false);
+    style.set(Sid::repeatPlayCountShow, false);
 }
 
 void writeStemPrefs(MStyle& style, const FinaleParser& context)
@@ -464,6 +477,7 @@ void writeNoteRelatedPrefs(MStyle& style, FinaleParser& context)
     style.set(Sid::concertPitch, !prefs.partGlobals->showTransposed);
     style.set(Sid::multiVoiceRestTwoSpaceOffset, std::labs(prefs.layerOneAttributes->restOffset) >= 4);
     style.set(Sid::mergeMatchingRests, prefs.miscOptions->consolidateRestsAcrossLayers);
+    style.set(Sid::tremoloStyle, int(TremoloStyle::TRADITIONAL));
 }
 
 void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
