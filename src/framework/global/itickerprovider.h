@@ -40,6 +40,7 @@ public:
 
     virtual void start() = 0;
     virtual void stop() = 0;
+    virtual void forceSchedule() = 0;
 
     virtual uint32_t /*id*/ addTask(const Task& task) = 0;
     virtual void removeTask(const uint32_t& taskId) = 0;

@@ -66,6 +66,8 @@ public:
     virtual const modularity::ContextPtr iocContext() const = 0;
     virtual modularity::ModulesIoC* ioc() const = 0;
 
+    virtual void processEvents() = 0;
+
 #ifndef NO_QT_SUPPORT
     virtual QWindow* focusWindow() const = 0;
     virtual bool notify(QObject* object, QEvent* event) = 0;

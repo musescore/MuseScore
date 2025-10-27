@@ -56,6 +56,15 @@ void TickerProvider::stop()
     }
 }
 
+void TickerProvider::forceSchedule()
+{
+    if (!m_timer) {
+        start();
+    } else if (!m_timer->isActive()) {
+        m_timer->start();
+    }
+}
+
 void TickerProvider::addPending()
 {
     for (const auto& p : m_pendingToAdd) {

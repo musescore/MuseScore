@@ -24,9 +24,13 @@
 
 #include "../iapplication.h"
 
+#include "modularity/ioc.h"
+#include "global/itickerprovider.h"
+
 namespace muse {
 class BaseApplication : public IApplication
 {
+    Inject<ITickerProvider> tickerProvider;
 public:
 
     BaseApplication(const modularity::ContextPtr& ctx);
@@ -55,6 +59,8 @@ public:
 
     const modularity::ContextPtr iocContext() const override;
     modularity::ModulesIoC* ioc() const override;
+
+    void processEvents() override;
 
 #ifndef NO_QT_SUPPORT
     QWindow* focusWindow() const override;

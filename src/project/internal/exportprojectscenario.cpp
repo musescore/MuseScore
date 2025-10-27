@@ -153,7 +153,7 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
         writerProgress->progressChanged().onReceive(this, [this, &currentFileNum, fileCount](int64_t current, int64_t total,
                                                                                              const std::string& status) {
             m_exportProgress.progress(currentFileNum * total + current, fileCount * total, status);
-        });
+        }, async::Asyncable::Mode::SetReplace);
 
         m_exportProgress.canceled().onNotify(this, [writer]() {
             writer->abort();

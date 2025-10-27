@@ -35,6 +35,7 @@ public:
 
     void start() override;
     void stop() override;
+    void forceSchedule() override;
 
     uint32_t /*id*/ addTask(const Task& task) override;
     void removeTask(const uint32_t& taskId) override;
