@@ -509,7 +509,7 @@ InterruptionPoints RestLayout::computeInterruptionPoints(const Measure* measure,
             if (gapRest || hasMergedRest || invisible) {
                 for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                     interruptionPointSets[voice].insert(segment->rtick());
-                    interruptionPointSets[voice].insert(segment->rtick() + segment->ticks());
+                    interruptionPointSets[voice].insert(segment->rtick() + toChordRest(item)->actualTicks());
                 }
                 break;
             }
