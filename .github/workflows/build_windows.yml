@@ -218,7 +218,7 @@ jobs:
         bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 4
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
@@ -351,7 +351,7 @@ jobs:
       run: |
         bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 4 --arch x86_64
     - name: Upload artifacts on GitHub
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
