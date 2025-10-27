@@ -338,7 +338,8 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
         }
         /// @todo introduce more sophisticated (regex-based) checks
 
-        std::string utf8Tag = xmlText.toStdString();
+        options.plainText = true;
+        std::string utf8Tag = context.stringFromEnigmaText(parsingContext, options).toStdString();
 
         // Dynamics (adapted from engraving/dom/dynamic.cpp)
         /// @todo This regex fails for `dynamicMF` and `dynamicMP`, among several others.
@@ -380,6 +381,7 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
 
     FontTracker defaultFontForElement(context.score()->style(), fontStylePrefixFromElementType(elementType));
     if (firstFontInfo != defaultFontForElement) {
+        options.plainText = false;
         options.initialFont = defaultFontForElement;
         // Whichever font we choose here will be stripped out in favor of the default for the kind of marking it is.
         options.musicSymbolFont = [&]() -> std::optional<FontTracker> {
@@ -436,6 +438,8 @@ ReadableRepeatText::ReadableRepeatText(const FinaleParser& context, const MusxIn
     tempText.replace(u"<sym>segnoSerpent2</sym>", u"Segno");
     tempText.replace(u"<sym>coda</sym>", u"Coda");
     tempText.replace(u"<sym>codaSquare</sym>", u"Coda");
+    tempText.replace(u"<sym>dalSegno</sym>", u"D.S.");
+    tempText.replace(u"<sym>daCapo</sym>", u"D.C.");
 
     auto match = [tempText](const String& s) {
         return tempText.contains(s, CaseSensitivity::CaseInsensitive);
@@ -1042,6 +1046,9 @@ void FinaleParser::importTextExpressions()
         }
         item->setXmlText(repeatText->xmlText.replace(u"#", replaceText));
         item->setAlign(Align(repeatText->repeatAlignment, AlignV::BASELINE));
+        if (item->isMarker()) {
+            item->setPosition(repeatText->repeatAlignment); /// @todo 'center' position centers over barline in musescore, over measure in finale
+        }
         item->setFrameType(repeatText->frameSettings.frameType);
         if (item->frameType() != FrameType::NO_FRAME) {
             item->setFrameWidth(absoluteSpatium(repeatText->frameSettings.frameWidth, item)); // is this the correct scaling?
@@ -1054,6 +1061,7 @@ void FinaleParser::importTextExpressions()
         measure->add(item);
         m_systemObjectStaves.insert(curStaffIdx);
 
+        /// @todo account for individual adjustments per staff
         for (staff_idx_t linkedStaffIdx : links) {
             /// @todo improved handling for bottom system objects
             TextBase* copy = toTextBase(item->clone());
@@ -1341,6 +1349,7 @@ void FinaleParser::importPageTexts()
     for (MusxInstance<others::PageTextAssign> pageTextAssign : notHF) {
         // Get text
         EnigmaParsingOptions options;
+        options.plainText = true;
         musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId);
         FontTracker firstFontInfo;
         String pageText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
@@ -1354,6 +1363,8 @@ void FinaleParser::importPageTexts()
         f.setStrike(firstFontInfo.fontStyle & FontStyle::Strike);
         muse::draw::FontMetrics fm(f);
         RectF r = fm.boundingRect(pageText);
+
+        pageText = stringFromEnigmaText(parsingContext);
 
         for (page_idx_t i : getPages(pageTextAssign)) {
             Page* page = m_score->pages().at(i);
