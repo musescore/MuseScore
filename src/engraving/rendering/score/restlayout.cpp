@@ -505,7 +505,7 @@ InterruptionPoints RestLayout::computeInterruptionPoints(const Measure* measure,
             // doing it and way too fragile, because it means that any logic that may move one rest can break the "merging".
             // A more solid way of merging rests would be to *delete* the second voice rests, i.e. turn them into gap rests [M.S.].
             const bool hasMergedRest = item->isRest() && !toRest(item)->ldata()->mergedRests.empty();
-            const bool invisible = item->isRest() ? !item->visible() : toChord(item)->allElementsInvisible();
+            const bool invisible = item->isChord() ? toChord(item)->allElementsInvisible() : !item->visible();
             if (gapRest || hasMergedRest || invisible) {
                 for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                     interruptionPointSets[voice].insert(segment->rtick());
