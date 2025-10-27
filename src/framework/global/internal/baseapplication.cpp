@@ -186,3 +186,9 @@ void BaseApplication::removeIoC()
     modularity::_ioc(m_iocContext)->reset();
     modularity::removeIoC(m_iocContext);
 }
+
+void BaseApplication::processEvents()
+{
+    qApp->processEvents();
+    tickerProvider()->forceSchedule();
+}

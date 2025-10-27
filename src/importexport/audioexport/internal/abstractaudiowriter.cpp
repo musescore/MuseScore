@@ -80,6 +80,7 @@ Ret AbstractAudioWriter::writeList(const INotationPtrList&, io::IODevice&, const
 void AbstractAudioWriter::abort()
 {
     playback()->abortSavingAllSoundTracks();
+    m_isCompleted = true;
 }
 
 muse::Progress* AbstractAudioWriter::progress()
@@ -130,7 +131,7 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     });
 
     while (!m_isCompleted) {
-        qApp->processEvents();
+        application()->processEvents();
         QThread::yieldCurrentThread();
     }
 
@@ -165,8 +166,9 @@ void AbstractAudioWriter::doWrite(const QString& path, const SoundTrackFormat& f
             });
         }
     })
-    .onReject(this, [](int errorCode, const std::string& msg) {
+    .onReject(this, [this](int errorCode, const std::string& msg) {
         LOGE() << "errorCode: " << errorCode << ", " << msg;
+        m_isCompleted = true;
     });
 }
 

@@ -28,6 +28,7 @@
 #include "iaudioexportconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "playback/iplaybackcontroller.h"
+#include "global/iapplication.h"
 
 #include "project/inotationwriter.h"
 
@@ -39,6 +40,7 @@ public:
     muse::Inject<IAudioExportConfiguration> configuration = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<playback::IPlaybackController> playbackController  = { this };
+    muse::Inject<muse::IApplication> application  = { this };
 
 public:
     AbstractAudioWriter(const muse::modularity::ContextPtr& iocCtx)

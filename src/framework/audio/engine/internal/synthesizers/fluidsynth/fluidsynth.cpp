@@ -336,7 +336,9 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
         fluid_synth_activate_tuning(m_fluid->synth, channelIdx, 0, 0, 0);
     };
 
-    m_sequencer.channelAdded().onReceive(this, setupChannel);
+    m_sequencer.channelAdded().onReceive(this, setupChannel,
+                                         async::Asyncable::Mode::SetReplace);
+
     m_sequencer.init(setupData, m_preset, setupData.supportsSingleNoteDynamics);
 
     for (const auto& voice : m_sequencer.channels().data()) {
