@@ -39,6 +39,7 @@ DockWindow {
 
     onPageLoaded: {
         interactiveProvider.onPageOpened()
+        window.opacity = 1.0
     }
 
     InteractiveProvider {

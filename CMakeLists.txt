@@ -104,6 +104,7 @@ option(MUE_DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of 
 # === Pack ===
 option(MUE_RUN_LRELEASE "Generate .qm files" ON)
 option(MUE_INSTALL_SOUNDFONT "Install sound font" ON)
+option(MUE_RUN_WINDEPLOYQT "Run windeployqt" ON)
 
 # === Tests ===
 set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/build.debug/install/${INSTALL_SUBDIR}/mscore" CACHE PATH "Path to mscore ref bin")
