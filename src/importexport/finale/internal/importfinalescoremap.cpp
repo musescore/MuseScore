@@ -1215,7 +1215,7 @@ void FinaleParser::importBarlines()
 
 void FinaleParser::importPageLayout()
 {
-    /// @todo Scan each system's staves and make certain that every staff on each system is included even if it is empty or excluded even if it is not.
+    /// @todo scaling issues - MuseScore seems too large by a small factor (10-20%) in most tested cases
     /// @todo Match staff separation in Finale better.
     /// @todo Take into account per-staff scaling. This affects the vertical spacing of staves. I need to add a helper func for this in musx. It requires some
     /// reverse engineering of Finale behavior.
