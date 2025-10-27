@@ -564,6 +564,7 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
 void NotationInteraction::hideShadowNote()
 {
     score()->shadowNote()->setVisible(false);
+    m_shadowNoteChanged.send(/*visible*/ false);
 }
 
 RectF NotationInteraction::shadowNoteRect() const
