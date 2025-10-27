@@ -74,6 +74,10 @@ TEST_F(TablEdit_Tests, tef_gaps_1) {
     tefReadTest("gaps_1");
 }
 
+TEST_F(TablEdit_Tests, tef_gaps_2) {
+    tefReadTest("gaps_2");
+}
+
 TEST_F(TablEdit_Tests, tef_grace_1) {
     tefReadTest("grace_1");
 }

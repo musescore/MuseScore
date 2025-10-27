@@ -266,7 +266,7 @@ static void addGraceNotesToChord(mu::engraving::Chord* chord, int pitch, int fre
     chord->add(cr);
 }
 
-static void addRest(Segment* segment, track_idx_t track, TDuration tDuration, Fraction length, muse::draw::Color color)
+static void addRest(Segment* segment, track_idx_t track, TDuration tDuration, Fraction length, muse::draw::Color color, bool visible = true)
 {
     mu::engraving::Rest* rest = Factory::createRest(segment);
     if (rest) {
@@ -274,6 +274,7 @@ static void addRest(Segment* segment, track_idx_t track, TDuration tDuration, Fr
         rest->setDurationType(tDuration);
         rest->setTicks(length);
         rest->setColor(color);
+        rest->setVisible(visible);
         segment->add(rest);
     }
 }
@@ -593,6 +594,70 @@ static void setInstrumentIDs(const std::vector<Part*>& parts)
     }
 }
 
+//---------------------------------------------------------
+//   fillGap
+//---------------------------------------------------------
+
+// Fill one gap (tstart - tend) in this track in this measure with rest(s).
+
+static void fillGap(Measure* measure, track_idx_t track, const Fraction& tstart, const Fraction& tend)
+{
+    Fraction ctick = tstart;
+    Fraction restLen = tend - tstart;
+    LOGN("measure %p track %zu tstart %d tend %d restLen %d len",
+         measure, track, tstart.ticks(), tend.ticks(), restLen.ticks());
+    auto durList = toDurationList(restLen, true);
+    LOGN("durList.size %zu", durList.size());
+    for (const auto& dur : durList) {
+        LOGN("type %d dots %d fraction %d/%d", dur.type(), dur.dots(), dur.fraction().numerator(), dur.fraction().denominator());
+        Segment* s = measure->getSegment(SegmentType::ChordRest, ctick);
+        addRest(s, track, dur, dur.fraction(), muse::draw::Color::BLACK, false);
+        ctick += dur.fraction();
+    }
+}
+
+//---------------------------------------------------------
+//   fillGapsInFirstVoices
+//---------------------------------------------------------
+
+// Fill gaps in first voice of every staff in this measure for this part with rest(s).
+
+static void fillGapsInFirstVoices(MasterScore* score)
+{
+    IF_ASSERT_FAILED(score) {
+        return;
+    }
+
+    for (staff_idx_t idx = 0; idx < score->nstaves(); ++idx) {
+        for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+            Fraction measTick     = measure->tick();
+            Fraction measLen      = measure->ticks();
+            Fraction nextMeasTick = measTick + measLen;
+            LOGN("measure %p idx %zu tick %d - %d (len %d)",
+                 measure, idx, measTick.ticks(), nextMeasTick.ticks(), measLen.ticks());
+            track_idx_t track = idx * VOICES;
+            Fraction endOfLastCR = measTick;
+            for (Segment* s = measure->first(); s; s = s->next()) {
+                EngravingItem* el = s->element(track);
+                if (el) {
+                    if (s->isChordRestType()) {
+                        ChordRest* cr  = static_cast<ChordRest*>(el);
+                        Fraction crTick     = cr->tick();
+                        Fraction crLen      = cr->globalTicks();
+                        if (crTick > endOfLastCR) {
+                            fillGap(measure, track, endOfLastCR, crTick);
+                        }
+                        endOfLastCR = crTick + crLen;
+                    }
+                }
+            }
+            if (nextMeasTick > endOfLastCR) {
+                fillGap(measure, track, endOfLastCR, nextMeasTick);
+            }
+        }
+    }
+}
+
 void TablEdit::createScore()
 {
     MeasureHandler measureHandler;
@@ -603,6 +668,7 @@ void TablEdit::createScore()
     createMeasures(measureHandler);
     createNotesFrame();
     createContents(measureHandler);
+    fillGapsInFirstVoices(score);
     createRepeats();
     createTexts();
     createLinkedTabs();
