@@ -1756,8 +1756,8 @@ TextBase::TextBase(const ElementType& type, EngravingItem* parent, TextStyleType
     m_frameColor             = Color::BLACK;
     m_align                  = { AlignH::LEFT, AlignV::TOP };
     m_frameType              = FrameType::NO_FRAME;
-    m_frameWidth             = Spatium(0.1);
-    m_paddingWidth           = Spatium(0.2);
+    m_frameWidth             = 0.1_sp;
+    m_paddingWidth           = 0.2_sp;
     m_frameRound             = 0;
 
     m_cursor                 = new TextCursor(this);

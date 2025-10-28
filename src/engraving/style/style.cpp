@@ -626,10 +626,10 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
     }
 
     if (mscVersion < 460) {
-        bool verticalChordAlign = value(Sid::maxChordShiftAbove).value<Spatium>() != Spatium(0.0)
-                                  || value(Sid::maxChordShiftBelow).value<Spatium>() != Spatium(0.0)
-                                  || value(Sid::maxFretShiftAbove).value<Spatium>() != Spatium(0.0)
-                                  || value(Sid::maxFretShiftBelow).value<Spatium>() != Spatium(0.0);
+        bool verticalChordAlign = value(Sid::maxChordShiftAbove).value<Spatium>() != 0.0_sp
+                                  || value(Sid::maxChordShiftBelow).value<Spatium>() != 0.0_sp
+                                  || value(Sid::maxFretShiftAbove).value<Spatium>() != 0.0_sp
+                                  || value(Sid::maxFretShiftBelow).value<Spatium>() != 0.0_sp;
         set(Sid::verticallyAlignChordSymbols, verticalChordAlign);
         // Make sure new position styles are initially the same as align values
         for (const StyleDef::StyleValue& st : StyleDef::styleValues) {

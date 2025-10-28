@@ -99,7 +99,7 @@ std::shared_ptr<Chord> PercussionUtilities::getDrumNoteForPreview(const Drumset*
 
     Stem* stem = Factory::createStem(chord.get());
     stem->setParent(chord.get());
-    stem->setBaseLength(Spatium(up ? -3.0 : 3.0));
+    stem->setBaseLength(up ? -3.0_sp : 3.0_sp);
     engravingRender()->layoutItem(stem);
     chord->add(stem);
 

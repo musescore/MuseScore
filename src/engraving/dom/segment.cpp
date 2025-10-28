@@ -1159,7 +1159,7 @@ PropertyValue Segment::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LEADING_SPACE:
-        return Spatium(0.0);
+        return 0.0_sp;
     default:
         return EngravingItem::propertyDefault(propertyId);
     }

@@ -4735,7 +4735,7 @@ void MusicXmlParserDirection::handleRepeats(Measure* measure, const Fraction tic
             bool hbox = prevMeasureBase && prevMeasureBase->isHBox();
             if (tb->isMarker() && toMarker(tb)->markerType() == MarkerType::CODA && !hbox) {
                 MeasureBase* gap = m_score->insertBox(ElementType::HBOX, measure);
-                toHBox(gap)->setBoxWidth(Spatium(10));
+                toHBox(gap)->setBoxWidth(10_sp);
             }
             tb->setVisible(m_visible);
             measure->add(tb);

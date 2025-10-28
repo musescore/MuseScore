@@ -5294,6 +5294,8 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
         score()->cmdPaste(&ma, nullptr, scale);
     }
 
+    m_editData.element = nullptr;
+
     apply();
 
     if (EngravingItem* pastedElement = selection()->element()) {

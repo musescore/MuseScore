@@ -92,7 +92,7 @@ private:
     Sid getPropertyStyle(Pid) const override;
 
     int m_numMeasures = 0;
-    Spatium m_numberPos = Spatium(0.0);
+    Spatium m_numberPos = 0.0_sp;
 };
 } // namespace mu::engraving
 #endif

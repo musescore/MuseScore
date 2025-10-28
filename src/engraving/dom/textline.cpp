@@ -52,7 +52,6 @@ static const ElementStyle systemTextLineSegmentStyle {
 //---------------------------------------------------------
 
 static const ElementStyle textLineStyle {
-//       { Sid::textLineSystemFlag,                 Pid::SYSTEM_FLAG             },
     { Sid::textLineFontFace,                   Pid::BEGIN_FONT_FACE },
     { Sid::textLineFontFace,                   Pid::CONTINUE_FONT_FACE },
     { Sid::textLineFontFace,                   Pid::END_FONT_FACE },
@@ -81,7 +80,6 @@ static const ElementStyle textLineStyle {
 //---------------------------------------------------------
 
 static const ElementStyle systemTextLineStyle {
-//       { Sid::systemTextLineSystemFlag,           Pid::SYSTEM_FLAG             },
     { Sid::systemTextLineFontFace,             Pid::BEGIN_FONT_FACE },
     { Sid::systemTextLineFontFace,             Pid::CONTINUE_FONT_FACE },
     { Sid::systemTextLineFontFace,             Pid::END_FONT_FACE },
@@ -151,9 +149,9 @@ TextLine::TextLine(EngravingItem* parent, bool system)
 
     setBeginHookType(HookType::NONE);
     setEndHookType(HookType::NONE);
-    setBeginHookHeight(Spatium(1.5));
-    setEndHookHeight(Spatium(1.5));
-    setGapBetweenTextAndLine(Spatium(0.5));
+    setBeginHookHeight(1.5_sp);
+    setEndHookHeight(1.5_sp);
+    setGapBetweenTextAndLine(0.5_sp);
 
     resetProperty(Pid::BEGIN_TEXT_PLACE);
     resetProperty(Pid::CONTINUE_TEXT_PLACE);
@@ -275,7 +273,7 @@ PropertyValue TextLine::propertyDefault(Pid propertyId) const
     case Pid::END_TEXT_PLACE:
         return TextPlace::LEFT;
     case Pid::TEXT_STYLE:
-        return TextStyleType::TEXTLINE;
+        return systemFlag() ? TextStyleType::SYSTEM_TEXTLINE : TextStyleType::TEXTLINE;
     default:
         return TextLineBase::propertyDefault(propertyId);
     }

@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
@@ -32,6 +34,12 @@
 
 namespace mu::engraving {
 class Score;
+class Text;
+class Clef;
+class KeySig;
+class TimeSig;
+class BarLine;
+class Segment;
 }
 
 namespace muse::draw {
@@ -48,6 +56,7 @@ class ContinuousPanel : public muse::Injectable
 public:
     ContinuousPanel(const muse::modularity::ContextPtr& iocCtx)
         : muse::Injectable(iocCtx) {}
+    ~ContinuousPanel();
 
     void setNotation(INotationPtr notation);
 
@@ -58,14 +67,22 @@ public:
         std::function<muse::PointF(const muse::PointF&)> fromLogical;
     };
 
+    qreal width() const;
     void paint(muse::draw::Painter& painter, const NotationViewContext& ctx, const engraving::rendering::PaintOptions& opt);
 
 private:
-    qreal styleMM(const mu::engraving::Sid styleId) const;
-    const mu::engraving::Score* score() const;
+    void clearCache();
+    void ensureCacheSize(size_t staffCount);
 
     INotationPtr m_notation;
     qreal m_width = 0;
     muse::RectF m_rect;
+
+    mu::engraving::Text* m_cachedMeasureNumberText = nullptr;
+    std::vector<mu::engraving::Text*> m_cachedStaffNameTexts;
+    std::vector<mu::engraving::Clef*> m_cachedClefs;
+    std::vector<mu::engraving::KeySig*> m_cachedKeySigs;
+    std::vector<mu::engraving::TimeSig*> m_cachedTimeSigs;
+    std::vector<mu::engraving::BarLine*> m_cachedBarLines;
 };
 }

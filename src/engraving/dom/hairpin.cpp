@@ -730,7 +730,7 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
 
     case Pid::BEGIN_HOOK_HEIGHT:
     case Pid::END_HOOK_HEIGHT:
-        return Spatium(1.9);
+        return 1.9_sp;
 
     case Pid::LINE_VISIBLE:
         return true;

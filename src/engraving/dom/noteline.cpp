@@ -144,7 +144,7 @@ PropertyValue NoteLine::propertyDefault(Pid propertyId) const
         return TextPlace::LEFT;
     case Pid::BEGIN_HOOK_HEIGHT:
     case Pid::END_HOOK_HEIGHT:
-        return Spatium(1.5);
+        return 1.5_sp;
     case Pid::PLACEMENT:
         return PlacementV::ABOVE;
     case Pid::DIAGONAL:
@@ -154,7 +154,7 @@ PropertyValue NoteLine::propertyDefault(Pid propertyId) const
     case Pid::OFFSET:
         return PointF();
     case Pid::GAP_BETWEEN_TEXT_AND_LINE:
-        return Spatium(0.5);
+        return 0.5_sp;
     case Pid::SYSTEM_FLAG:
         return false;
     case Pid::ANCHOR:

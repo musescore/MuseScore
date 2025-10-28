@@ -1257,7 +1257,7 @@ static void readTextLine114(XmlReader& e, ReadContext& ctx, TextLine* textLine)
             textLine->setEndHookHeight(Spatium(e.readDouble()));
             textLine->setPropertyFlags(Pid::END_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
         } else if (tag == "hookUp") { // obsolete
-            textLine->setEndHookHeight(Spatium(double(-1.0)));
+            textLine->setEndHookHeight(-1.0_sp);
         } else if (tag == "beginSymbol" || tag == "symbol") {   // "symbol" is obsolete
             String text(e.readText());
             textLine->setBeginText(String(u"<sym>%1</sym>").arg(
@@ -2246,11 +2246,11 @@ static bool readBoxProperties(XmlReader& e, ReadContext& ctx, Box* b)
 
 static void readBox(XmlReader& e, ReadContext& ctx, Box* b)
 {
-    b->setAutoSizeEnabled(false);      // didn't exist in Mu1
+    b->setAutoSizeEnabled(false); // didn't exist in Mu1
 
-    b->setBoxHeight(Spatium(0));       // override default set in constructor
-    b->setBoxWidth(Spatium(0));
-    bool keepMargins = false;          // whether original margins have to be kept when reading old file
+    b->setBoxHeight(0_sp); // override default set in constructor
+    b->setBoxWidth(0_sp);
+    bool keepMargins = false; // whether original margins have to be kept when reading old file
     System* bSystem = b->system() ? b->system() : ctx.dummy()->system();
 
     while (e.readNextStartElement()) {
@@ -2594,7 +2594,7 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
             // this allows 2/3-line percussion staves to keep the double spacing they had in 1.3
 
             if (lines == 2 || lines == 3) {
-                ((StaffType*)(staff->staffType(Fraction(0, 1))))->setLineDistance(Spatium(2.0));
+                ((StaffType*)(staff->staffType(Fraction(0, 1))))->setLineDistance(2.0_sp);
             }
 
             staff->setLines(Fraction(0, 1), lines);             // this also sets stepOffset
@@ -3097,7 +3097,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
     if (masterScore->style().styleI(Sid::minEmptyMeasures) == 0) {
         masterScore->style().set(Sid::minEmptyMeasures, 1);
     }
-    masterScore->style().set(Sid::frameSystemDistance, masterScore->style().styleS(Sid::frameSystemDistance) + Spatium(6.0));
+    masterScore->style().set(Sid::frameSystemDistance, masterScore->style().styleS(Sid::frameSystemDistance) + 6.0_sp);
     masterScore->resetStyleValue(Sid::measureSpacing);
 
     // add invisible tempo text if necessary

@@ -1701,7 +1701,7 @@ PropertyValue Staff::propertyDefault(Pid id) const
     case Pid::STAFF_BARLINE_SPAN_TO:
         return 0;
     case Pid::STAFF_USERDIST:
-        return Spatium(0.0);
+        return 0.0_sp;
     case Pid::SHOW_MEASURE_NUMBERS:
         return AutoOnOff::AUTO;
     case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
