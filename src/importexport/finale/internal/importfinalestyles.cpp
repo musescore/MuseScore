@@ -127,7 +127,7 @@ void FinaleOptions::init(const FinaleParser& context)
     }
     auto measNumRegions = context.musxDocument()->getOthers()->getArray<others::MeasureNumberRegion>(context.currentMusxPartId());
     if (measNumRegions.size() > 0) {
-        measNumScorePart = (context.currentMusxPartId() && measNumRegions[0]->useScoreInfoForPart && measNumRegions[0]->partData)
+        measNumScorePart = (context.partScore() && measNumRegions[0]->useScoreInfoForPart && measNumRegions[0]->partData)
         ? measNumRegions[0]->partData
         : measNumRegions[0]->scoreData;
         if (!measNumScorePart) {
@@ -354,10 +354,10 @@ void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     writeEvpuSpace(style, Sid::clefLeftMargin, prefs.clefOptions->clefFrontSepar);
     writeEvpuSpace(style, Sid::keysigLeftMargin, prefs.keyOptions->keyFront);
 
-    const double timeSigSpaceBefore = context.currentMusxPartId()
+    const double timeSigSpaceBefore = context.partScore()
                                           ? prefs.timeOptions->timeFrontParts
                                           : prefs.timeOptions->timeFront;
-    const double timeSigSpaceAfter = context.currentMusxPartId()
+    const double timeSigSpaceAfter = context.partScore()
                                           ? prefs.timeOptions->timeBackParts
                                           : prefs.timeOptions->timeBack;
     writeEvpuSpace(style, Sid::timesigLeftMargin, timeSigSpaceBefore);
@@ -590,7 +590,7 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
                        scorePart->mmRestJustify, scorePart->mmRestAlign, scorePart->mmRestYdisp, "mmRestRange");
     }
 
-    style.set(Sid::createMultiMeasureRests, context.currentMusxPartId() != 0);
+    style.set(Sid::createMultiMeasureRests, context.partScore());
     style.set(Sid::minEmptyMeasures, prefs.mmRestOptions->numStart);
     writeEvpuSpace(style, Sid::minMMRestWidth, prefs.mmRestOptions->measWidth);
     style.set(Sid::mmRestNumberPos, doubleFromEvpu(prefs.mmRestOptions->numAdjY) + 1);
