@@ -594,7 +594,7 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
 
     // don't change anchors on keyboard adjustment or if Ctrl is pressed
     // (Ctrl+Left/Right is handled elsewhere!)
-    if (ed.key == Key_Left || ed.key == Key_Right || ed.modifiers & ControlModifier) {
+    if (ed.key == Key_Left || ed.key == Key_Right || ed.key == Key_Up || ed.key == Key_Down || ed.modifiers & ControlModifier) {
         return;
     }
 
