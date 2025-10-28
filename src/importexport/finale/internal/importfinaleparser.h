@@ -276,6 +276,7 @@ public:
 
     // Utility
     musx::dom::EvpuFloat evpuAugmentationDotWidth() const;
+    bool partScore() const { return m_currentMusxPartId != musx::dom::SCORE_PARTID; }
 
     FinaleLoggerPtr logger() const { return m_logger; }
 

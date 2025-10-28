@@ -578,6 +578,7 @@ void FinaleParser::importTextExpressions()
             case ElementType::DYNAMIC: {
                 Dynamic* dynamic = toDynamic(item);
                 dynamic->setDynamicType(expression->dynamicType);
+                // Don't set these as styles, so new dynamics have nicer behaviour
                 setAndStyleProperty(dynamic, Pid::CENTER_BETWEEN_STAVES, false);
                 setAndStyleProperty(dynamic, Pid::CENTER_ON_NOTEHEAD, false);
                 if (expressionAssignment->layer != 0) {
@@ -995,7 +996,7 @@ void FinaleParser::importTextExpressions()
                 return 0;
             }
             /// @todo forced staff list
-            for (StaffCmper musxStaffId : currentMusxPartId()
+            for (StaffCmper musxStaffId : partScore()
                 ? m_doc->getOthers()->get<others::StaffListRepeatParts>(m_currentMusxPartId, repeatAssignment->staffList)->values
                 : m_doc->getOthers()->get<others::StaffListRepeatScore>(m_currentMusxPartId, repeatAssignment->staffList)->values) {
                 staff_idx_t idx = staffIdxFromAssignment(musxStaffId);

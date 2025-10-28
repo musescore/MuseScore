@@ -640,7 +640,7 @@ void FinaleParser::importSmartShapes()
                     } else if (s->isKeySigType()) {
                         ss->rxoffset() -= doubleFromEvpu(musxOptions().keyOptions->keyBack) * SPATIUM20;
                     } else if (s->isTimeSigType()) {
-                        ss->rxoffset() -= doubleFromEvpu(currentMusxPartId() ? musxOptions().timeOptions->timeBackParts
+                        ss->rxoffset() -= doubleFromEvpu(partScore() ? musxOptions().timeOptions->timeBackParts
                                                  : musxOptions().timeOptions->timeBack) * SPATIUM20;
                     }
                     break;
