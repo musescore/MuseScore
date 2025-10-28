@@ -927,6 +927,14 @@ bool AbstractNotationPaintView::adjustCanvasPosition(const RectF& logicRect, boo
     TRACEFUNC;
 
     RectF viewRect = viewport();
+    PointF pos = viewRect.topLeft();
+
+    // Account for continuous panel if panning in continuous view
+    qreal continuousPanelWidth = 0;
+    if (notation()->viewMode() == engraving::LayoutMode::LINE) {
+        continuousPanelWidth = m_continuousPanel->width();
+    }
+    viewRect.adjust(continuousPanelWidth, 0, 0, 0);
 
     double viewArea = viewRect.width() * viewRect.height();
     double logicRectArea = logicRect.width() * logicRect.height();
@@ -948,17 +956,16 @@ bool AbstractNotationPaintView::adjustCanvasPosition(const RectF& logicRect, boo
         _scale = 1;
     }
 
-    PointF pos = viewRect.topLeft();
     PointF oldPos = pos;
 
     RectF showRect = logicRect;
 
     if (showRect.left() < viewRect.left()) {
-        pos.setX(showRect.left() - border);
+        pos.setX(showRect.left() - border - continuousPanelWidth);
     } else if (showRect.left() > viewRect.right()) {
         pos.setX(showRect.right() - width() / _scale + border);
     } else if (viewRect.width() >= showRect.width() && showRect.right() > viewRect.right()) {
-        pos.setX(showRect.left() - border);
+        pos.setX(showRect.left() - border - continuousPanelWidth);
     }
 
     if (adjustVertically) {

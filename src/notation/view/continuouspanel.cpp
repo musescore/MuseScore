@@ -109,6 +109,11 @@ void ContinuousPanel::setNotation(INotationPtr notation)
     m_notation = notation;
 }
 
+qreal ContinuousPanel::width() const
+{
+    return m_width;
+}
+
 void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, const engraving::rendering::PaintOptions& opt)
 {
     TRACEFUNC;
