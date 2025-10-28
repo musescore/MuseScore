@@ -741,10 +741,9 @@ void FinaleParser::importSmartShapes()
             f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) / SPATIUM20);
             muse::draw::FontMetrics fm(f);
             PointF textoffset(0.0, .75 * SPATIUM20);
+            textoffset.ry() += fm.descent() - fm.tightBoundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))).bottom();
             if (newSpanner->placeAbove()) {
-                textoffset.ry() += fm.ascent() - fm.tightBoundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))).top();
-            } else {
-                textoffset.ry() += fm.descent() - fm.tightBoundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))).bottom();
+                textoffset.ry() -= fm.tightBoundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))).height();
             }
             toOttava(newSpanner)->setBeginTextOffset(textoffset);
             toOttava(newSpanner)->setContinueTextOffset(textoffset);
