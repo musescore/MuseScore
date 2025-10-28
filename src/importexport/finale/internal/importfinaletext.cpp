@@ -37,6 +37,8 @@
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/marker.h"
@@ -855,6 +857,7 @@ void FinaleParser::importTextExpressions()
                 }
                 case others::VerticalMeasExprAlign::BelowEntry:
                 case others::VerticalMeasExprAlign::BelowStaffOrEntry: {
+                    // doesn't seem to be working reliably yet in all cases
                     expr->setPlacement(PlacementV::BELOW);
 
                     // should this really be all tracks?
@@ -1498,6 +1501,89 @@ void FinaleParser::rebasePageTextOffsets()
                 setAndStyleProperty(e, Pid::OFFSET, e->offset() - b->pagePos(), true);
             }
         }
+    }
+}
+
+void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musxScrollViewItem, const MusxInstance<others::Measure>& musxMeasure,
+                                     Staff* staff, Measure* measure)
+{
+    MusxInstanceList<details::ChordAssign> chordAssignments = m_doc->getDetails()->getArray<details::ChordAssign>(m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
+    const MusxInstance<FontInfo>& harmonyFont = options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Chord);
+    FontStyle f = FinaleTextConv::museFontEfx(harmonyFont);
+    String fontFamily = String::fromStdString(harmonyFont->getName());
+
+    for (const MusxInstance<details::ChordAssign>& chordAssignment : chordAssignments) {
+        Segment* s = measure->getSegmentR(SegmentType::ChordRest, eduToFraction(chordAssignment->horzEdu));
+        KeySigEvent se = staff->keySigEvent(s->tick());
+        int minorOffset = se.mode() == KeyMode::MINOR ? 2 : 0; // add ionian?
+        int rootTpc = clampEnharmonic(step2tpcByKey(se.degInKey(chordAssignment->rootScaleNum - minorOffset), se.key())
+                                      + chordAssignment->rootAlter * TPC_DELTA_SEMITONE);
+        int bassTpc = clampEnharmonic(step2tpcByKey(se.degInKey(chordAssignment->bassScaleNum - minorOffset), se.key())
+                                      + chordAssignment->bassAlter * TPC_DELTA_SEMITONE);
+        /// @todo capo options
+
+        // HarmonyInfo* info = new HarmonyInfo(m_score);
+        // info->setBassTpc(bassTpc);
+        // info->setRootTpc(rootTpc);
+        // h->addChord(info);
+
+        // Instead of writing the properties ourselves, convert to text and parse that.
+        /// @todo this approach accounts for none of the custom formatting stored within the suffixes
+        String harmonyText = tpc2name(rootTpc, NoteSpellingType::STANDARD, NoteCaseType::CAPITAL);
+        static const std::unordered_map<others::ChordSuffixElement::Prefix, Char> prefixMap = {
+            { musx::dom::others::ChordSuffixElement::Prefix::Minus, '-' },
+            { musx::dom::others::ChordSuffixElement::Prefix::Plus,  '+' },
+            { musx::dom::others::ChordSuffixElement::Prefix::Sharp, '#' }, // good enough (even preferred) for MuseScore's parsing
+            { musx::dom::others::ChordSuffixElement::Prefix::Flat,  'b' },
+        };
+        for (const MusxInstance<others::ChordSuffixElement>& suffixElement : chordAssignment->getChordSuffix()) {
+            if (suffixElement->prefix != musx::dom::others::ChordSuffixElement::Prefix::None) {
+                harmonyText.append(muse::value(prefixMap, suffixElement->prefix));
+            }
+            if (suffixElement->isNumber) {
+                harmonyText += String::number(static_cast<int>(suffixElement->symbol));
+            } else {
+                /// @todo MuseScore doesn't allow multiple fonts within chord symbols, but some conversion might still be needed
+                harmonyText += String::fromUcs4(suffixElement->symbol);
+            }
+        }
+        if (chordAssignment->showAltBass) {
+            harmonyText += u"/" + tpc2name(bassTpc, NoteSpellingType::STANDARD, NoteCaseType::CAPITAL);
+            m_score->style().set(Sid::chordBassNoteStagger, chordAssignment->bassPosition != details::ChordAssign::BassPosition::AfterRoot);
+        }
+
+        FretDiagram* fret;
+        Harmony* h;
+        if (chordAssignment->showFretboard) {
+            fret = Factory::createFretDiagram(s);
+            fret->setTrack(staff2track(staff->idx()));
+            fret->setHarmony(harmonyText);
+            fret->updateDiagram(harmonyText);
+            h = fret->harmony();
+        } else {
+            h = Factory::createHarmony(s);
+            h->setTrack(staff2track(staff->idx()));
+            h->setHarmony(harmonyText);
+            h->afterRead(); // needed?
+        }
+        h->setBassCase(chordAssignment->bassLowerCase ? NoteCaseType::LOWER : NoteCaseType::UPPER);
+        h->setRootCase(chordAssignment->rootLowerCase ? NoteCaseType::LOWER : NoteCaseType::UPPER);
+        setAndStyleProperty(h, Pid::FONT_STYLE, int(f), true);
+        setAndStyleProperty(h, Pid::FONT_SIZE, harmonyFont->fontSize * doubleFromPercent(chordAssignment->chPercent), true);
+        setAndStyleProperty(h, Pid::FONT_FACE, fontFamily, true);
+
+        const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), chordAssignment->horzEdu);
+        const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick()) * staff->staffType(s->tick())->lineDistance().val();
+        const double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineChords>(0)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
+        PointF offset = evpuToPointF(chordAssignment->horzOff, -chordAssignment->vertOff) * SPATIUM20;
+        offset.ry() -= (baselinepos - staffReferenceOffset); /// @todo set this as style?
+        setAndStyleProperty(h, Pid::OFFSET, offset, true);
+        if (chordAssignment->showFretboard) {
+            s->add(fret);
+        } else {
+            s->add(h);
+        }
+        /// @todo Pid::PLAY, Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION, Pid::HARMONY_DO_NOT_STACK_MODIFIERS
     }
 }
 
