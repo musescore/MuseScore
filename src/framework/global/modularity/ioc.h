@@ -65,17 +65,19 @@ inline void removeIoC(const ContextPtr& ctx = nullptr)
 }
 
 namespace muse {
+using kors::modularity::Inject;
+using kors::modularity::GlobalInject;
+using kors::modularity::LazyInject;
+using kors::modularity::ThreadSafeLazyInject;
+
 template<class I>
-using Inject = kors::modularity::Inject<I>;
-template<class I>
-using GlobalInject = kors::modularity::GlobalInject<I>;
-template<class I>
-using ThreadSafeInject = kors::modularity::ThreadSafeInject<I>;
+using QmlInject = LazyInject<I>;
 
 #define INJECT(Interface, getter) muse::Inject<Interface> getter;
 #define INJECT_STATIC(Interface, getter) static inline muse::Inject<Interface> getter;
 
-using Injectable = kors::modularity::Injectable;
+using kors::modularity::Injectable;
+using kors::modularity::LazyInjectable;
 
 #ifndef NO_QT_SUPPORT
 struct QmlIoCContext : public QObject
@@ -88,7 +90,7 @@ public:
     modularity::ContextPtr ctx;
 };
 
-Injectable::GetContext iocCtxForQmlObject(const QObject* o);
+LazyInjectable::GetContext iocCtxForQmlObject(const QObject* o);
 modularity::ContextPtr iocCtxForQmlEngine(const QQmlEngine* e);
 modularity::ContextPtr iocCtxForQWidget(const QWidget* o);
 #endif

@@ -44,39 +44,24 @@ public:
 
 #ifdef MUSE_MODULE_GLOBAL_MULTI_IOC
     Inject(const ContextPtr& ctx)
-        : m_ctx(ctx) {}
 #else
     Inject(const ContextPtr& ctx = nullptr)
-        : m_ctx(ctx) {}
-#endif
-
-    Inject(const Injectable* o)
-        : m_inj(o) {}
-
-    const ContextPtr& iocContext() const
+    #endif
+        : m_ctx(ctx)
     {
-        if (m_ctx) {
-            return m_ctx;
-        }
-
-        //assert(m_inj);
-        if (m_inj) {
-            return m_inj->iocContext();
-        }
-
-        // null
-        return m_ctx;
+        static std::string_view module = "";
+        m_i = _ioc(m_ctx)->template resolve<I>(module);
     }
+
+    Inject(const Injectable* inj)
+        : Inject(inj->iocContext()) {}
 
     const std::shared_ptr<I>& get() const
     {
-        if (!m_i) {
-            static std::string_view module = "";
-            m_i = _ioc(iocContext())->template resolve<I>(module);
-        }
         return m_i;
     }
 
+    /// For testing purposes only. Not thread-safe.
     void set(std::shared_ptr<I> impl)
     {
         m_i = impl;
@@ -89,7 +74,6 @@ public:
 
 protected:
     const ContextPtr m_ctx;
-    const Injectable* m_inj = nullptr;
     mutable std::shared_ptr<I> m_i = nullptr;
 };
 
@@ -101,29 +85,59 @@ public:
         : Inject<I>(ContextPtr()) {}
 };
 
+/// Variant of Inject that resolves the dependency lazily on first use. Useful
+/// when the context of the Injectable is not yet known at construction time.
+/// Not thread-safe.
 template<class I>
-class ThreadSafeInject : public Inject<I>
+class LazyInject
 {
 public:
-    using Inject<I>::Inject;
+    LazyInject(const LazyInjectable* inj)
+        : m_inj(inj) {}
+
+    const std::shared_ptr<I>& get() const
+    {
+        if (!m_i) {
+            static std::string_view module = "";
+            m_i = _ioc(m_inj->iocContext())->template resolve<I>(module);
+        }
+        return m_i;
+    }
+
+    /// For testing purposes only. Not thread-safe.
+    void set(std::shared_ptr<I> impl) { m_i = impl; }
+
+    const std::shared_ptr<I>& operator()() const { return get(); }
+
+private:
+    const LazyInjectable* m_inj = nullptr;
+    mutable std::shared_ptr<I> m_i = nullptr;
+};
+
+/// Thread-safe (locking) variant of LazyInject.
+template<class I>
+class ThreadSafeLazyInject : public LazyInject<I>
+{
+public:
+    using LazyInject<I>::LazyInject;
 
     const std::shared_ptr<I>& get() const
     {
         {
             std::shared_lock lock(m_mutex);
-            if (Inject<I>::m_i) {
-                return Inject<I>::m_i;
+            if (LazyInject<I>::m_i) {
+                return LazyInject<I>::m_i;
             }
         }
 
         std::unique_lock lock(m_mutex);
-        return Inject<I>::get();
+        return LazyInject<I>::get();
     }
 
     void set(std::shared_ptr<I> impl)
     {
         std::unique_lock lock(m_mutex);
-        Inject<I>::set(impl);
+        LazyInject<I>::set(impl);
     }
 
     const std::shared_ptr<I>& operator()() const
