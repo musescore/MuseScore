@@ -400,6 +400,11 @@ INotationNoteInputPtr NotationInteraction::noteInput() const
     return m_noteInput;
 }
 
+INotationMidiInputPtr NotationInteraction::midiInput() const
+{
+    return m_notation->midiInput();
+}
+
 mu::engraving::ShadowNote* NotationInteraction::shadowNote() const
 {
     return score()->shadowNote();

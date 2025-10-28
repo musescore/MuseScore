@@ -374,6 +374,12 @@ void NotationNoteInput::endNoteInput(bool resetState)
 {
     TRACEFUNC;
 
+    const INotationMidiInputPtr midiInput = m_interaction->midiInput();
+    const bool blocked = midiInput && midiInput->isProcessingEvents();
+    if (blocked) {
+        return;
+    }
+
     if (!isNoteInputMode()) {
         return;
     }
