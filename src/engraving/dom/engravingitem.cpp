@@ -751,11 +751,15 @@ PointF EngravingItem::pagePos() const
 
     if (measure) {
         system = measure->system();
-        p.ry() += measure->staffLines(idx)->y();
+        if (const StaffLines* lines = measure->staffLines(idx)) {
+            p.ry() += lines->y();
+        } else {
+            LOGE() << "no StaffLines for measure: " << String(measure->index());
+        }
     }
     if (system) {
         if (system->staves().size() <= idx) {
-            LOGD("staffIdx out of bounds: %s", typeName());
+            LOGE("staffIdx out of bounds: %s", typeName());
         }
         p.ry() += system->staffYpage(idx);
     }
