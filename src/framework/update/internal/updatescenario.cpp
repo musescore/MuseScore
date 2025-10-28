@@ -216,30 +216,27 @@ void UpdateScenario::downloadRelease()
         processUpdateResult(rv.ret.code());
         return;
     }
-
-    closeAppAndStartInstallation(rv.val.toString());
+    askToCloseAndCompleteInstall(rv.val.toString());
 }
 
-void UpdateScenario::closeAppAndStartInstallation(const muse::io::path_t& installerPath)
+void UpdateScenario::askToCloseAndCompleteInstall(const muse::io::path_t& installerPath)
 {
-    std::string info = muse::trc("update", "MuseScore Studio needs to close to complete the installation. "
-                                           "If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.");
-    int closeBtn = int(IInteractive::Button::CustomButton) + 1;
-    auto promise = interactive()->info("", info,
-                                       { interactive()->buttonData(IInteractive::Button::Cancel),
-                                         IInteractive::ButtonData(closeBtn, muse::trc("update", "Close"), true) },
-                                       closeBtn);
-    promise.onResolve(this, [this, installerPath](const IInteractive::Result& res) {
-        if (res.isButton(IInteractive::Button::Cancel)) {
-            return;
-        }
+    const std::string info = muse::trc("update", "MuseScore Studio needs to close to complete the installation. "
+                                                 "If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.");
+    const int closeBtn = int(IInteractive::Button::CustomButton) + 1;
+    const IInteractive::Result res = interactive()->infoSync("", info,
+                                                             { interactive()->buttonData(IInteractive::Button::Cancel),
+                                                               IInteractive::ButtonData(closeBtn, muse::trc("update", "Close"), true) },
+                                                             closeBtn);
+    if (res.isButton(IInteractive::Button::Cancel)) {
+        return;
+    }
 
-        if (multiInstancesProvider()->instances().size() != 1) {
-            multiInstancesProvider()->quitAllAndRunInstallation(installerPath);
-        }
+    if (multiInstancesProvider()->instances().size() != 1) {
+        multiInstancesProvider()->quitAllAndRunInstallation(installerPath);
+    }
 
-        dispatcher()->dispatch("quit", ActionData::make_arg2<bool, std::string>(false, installerPath.toStdString()));
-    });
+    dispatcher()->dispatch("quit", ActionData::make_arg2<bool, std::string>(false, installerPath.toStdString()));
 }
 
 bool UpdateScenario::shouldIgnoreUpdate(const ReleaseInfo& info) const

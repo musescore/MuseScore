@@ -67,7 +67,7 @@ private:
     void showServerErrorMsg();
 
     void downloadRelease();
-    void closeAppAndStartInstallation(const io::path_t& installerPath);
+    void askToCloseAndCompleteInstall(const io::path_t& installerPath);
 
     bool shouldIgnoreUpdate(const ReleaseInfo& info) const;
 
