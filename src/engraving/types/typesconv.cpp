@@ -1735,6 +1735,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::ARTICULATION, "articulation", muse::TranslatableString("engraving", "Articulation") },
 
     { TextStyleType::TEXTLINE,          "textline",             muse::TranslatableString("engraving", "Text line") },
+    { TextStyleType::SYSTEM_TEXTLINE,   "system_textline",      muse::TranslatableString("engraving", "System text line") },
     { TextStyleType::NOTELINE,          "noteline",             muse::TranslatableString("engraving", "Note-anchored line") },
     { TextStyleType::VOLTA,             "volta",                muse::TranslatableString("engraving", "Volta") },
     { TextStyleType::OTTAVA,            "ottava",               muse::TranslatableString("engraving", "Ottava") },

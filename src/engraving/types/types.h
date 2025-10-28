@@ -870,6 +870,7 @@ enum class TextStyleType : unsigned char {
 
     // Line-oriented styles
     TEXTLINE,
+    SYSTEM_TEXTLINE,
     NOTELINE,
     VOLTA,
     OTTAVA,

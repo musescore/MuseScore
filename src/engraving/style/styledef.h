@@ -1467,6 +1467,7 @@ enum class Sid {
 
     systemTextLineFontFace,
     systemTextLineFontSize,
+    systemTextLineLineSpacing,
     systemTextLineFontSpatiumDependent,
     systemTextLineFontStyle,
     systemTextLineColor,
