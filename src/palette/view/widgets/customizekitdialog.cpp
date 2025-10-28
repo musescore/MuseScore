@@ -585,7 +585,7 @@ void CustomizeKitDialog::updateExample()
     chord->add(note);
     Stem* stem = Factory::createStem(chord.get());
     stem->setParent(chord.get());
-    stem->setBaseLength(Spatium(up ? -3.0 : 3.0));
+    stem->setBaseLength(up ? -3.0_sp : 3.0_sp);
     engravingRenderer()->layoutItem(stem);
     chord->add(stem);
     drumNote->appendElement(chord, m_editedDrumset.translatedName(pitch));

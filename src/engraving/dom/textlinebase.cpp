@@ -202,9 +202,9 @@ EngravingObject* TextLineBaseSegment::propertyDelegate(Pid pid) const
 TextLineBase::TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags f)
     : SLine(type, parent, f)
 {
-    setBeginHookHeight(Spatium(1.9));
-    setEndHookHeight(Spatium(1.9));
-    setGapBetweenTextAndLine(Spatium(0.5));
+    setBeginHookHeight(1.9_sp);
+    setEndHookHeight(1.9_sp);
+    setGapBetweenTextAndLine(0.5_sp);
 }
 
 //---------------------------------------------------------
@@ -390,7 +390,7 @@ mu::engraving::PropertyValue TextLineBase::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::GAP_BETWEEN_TEXT_AND_LINE:
-        return Spatium(0.5);
+        return 0.5_sp;
     default:
         return SLine::propertyDefault(propertyId);
     }

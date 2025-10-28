@@ -41,7 +41,7 @@ Spacer::Spacer(Measure* parent)
     : EngravingItem(ElementType::SPACER, parent)
 {
     m_spacerType = SpacerType::UP;
-    m_gap = Spatium(0.0);
+    m_gap = 0.0_sp;
     m_z = -10; // Ensure behind notation
 }
 
@@ -88,7 +88,7 @@ void Spacer::dragGrip(EditData& ed)
         m_gap -= Spatium::fromMM(s, spatium());
         break;
     }
-    m_gap = std::max(m_gap, Spatium(2.0));
+    m_gap = std::max(m_gap, 2.0_sp);
     triggerLayout();
 }
 
@@ -155,7 +155,7 @@ PropertyValue Spacer::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SPACE:
-        return Spatium(0.0);
+        return 0.0_sp;
     default:
         return EngravingItem::propertyDefault(id);
     }

@@ -828,7 +828,7 @@ RectF LineSegment::drag(EditData& ed)
 Spatium LineSegment::lineWidth() const
 {
     if (!line()) {
-        return Spatium(0.0);
+        return 0.0_sp;
     }
 
     return line()->lineWidth();
@@ -883,7 +883,7 @@ SLine::SLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
 {
     setTrack(0);
     m_lineColor = configuration()->defaultColor();
-    m_lineWidth = Spatium(0.15);
+    m_lineWidth = 0.15_sp;
 }
 
 SLine::SLine(const SLine& s)
@@ -1046,7 +1046,7 @@ PropertyValue SLine::propertyDefault(Pid pid) const
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {
             return Spanner::propertyDefault(pid);
         }
-        return Spatium(0.15);
+        return 0.15_sp;
     case Pid::LINE_STYLE:
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {
             return Spanner::propertyDefault(pid);

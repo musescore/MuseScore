@@ -211,7 +211,7 @@ PropertyValue StaffTypeChange::propertyDefault(Pid id) const
     case Pid::STAFF_LINES:
         return 5;
     case Pid::LINE_DISTANCE:
-        return Spatium(1.0);
+        return 1.0_sp;
     case Pid::STAFF_SHOW_BARLINES:
         return true;
     case Pid::STAFF_SHOW_LEDGERLINES:
@@ -235,7 +235,7 @@ PropertyValue StaffTypeChange::propertyDefault(Pid id) const
     case Pid::STAFF_COLOR:
         return PropertyValue::fromValue(configuration()->defaultColor());
     case Pid::STAFF_YOFFSET:
-        return Spatium(0.0);
+        return 0.0_sp;
     default:
         return EngravingItem::propertyDefault(id);
     }

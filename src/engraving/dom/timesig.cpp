@@ -58,7 +58,7 @@ TimeSig::TimeSig(Segment* parent)
     m_sig.set(0, 1);                 // initialize to invalid
     m_timeSigType      = TimeSigType::NORMAL;
     m_largeParentheses = false;
-    setMinDistance(Spatium(0.5)); // TODO: style
+    setMinDistance(0.5_sp); // TODO: style
 }
 
 void TimeSig::setParent(Segment* parent)

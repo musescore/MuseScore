@@ -48,7 +48,7 @@ public:
     static constexpr NoteHeadType NOTEHEADTYPE_DEFAULT = NoteHeadType::HEAD_AUTO;
     static constexpr DirectionH DIRECTION_DEFAULT = DirectionH::AUTO;
     static constexpr bool HASLINE_DEFAULT = true;
-    static const Spatium LINEWIDTH_DEFAULT;
+    static constexpr Spatium LINEWIDTH_DEFAULT = 0.12_sp;
     static constexpr double LINEOFFSET_DEFAULT = 0.8;               // the distance between notehead and line
 
     Ambitus* clone() const override { return new Ambitus(*this); }

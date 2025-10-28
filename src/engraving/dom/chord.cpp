@@ -981,7 +981,7 @@ void Chord::setBeamExtension(double extension)
 {
     if (m_stem) {
         double baseLength = m_stem->absoluteFromSpatium(m_stem->baseLength());
-        m_stem->setBaseLength(std::max(Spatium::fromMM(baseLength + extension, spatium()), Spatium(0.0)));
+        m_stem->setBaseLength(std::max(Spatium::fromMM(baseLength + extension, spatium()), 0.0_sp));
         m_defaultStemLength = std::max(m_defaultStemLength + extension, m_stem->absoluteFromSpatium(m_stem->baseLength()));
     }
 }

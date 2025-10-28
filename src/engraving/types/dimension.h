@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_DIMENSION_H
-#define MU_ENGRAVING_DIMENSION_H
+#pragma once
 
 #include "realfn.h"
 
@@ -33,112 +32,115 @@ namespace mu::engraving {
 class Millimetre
 {
 public:
-    Millimetre() = default;
-    explicit Millimetre(double v)
+    constexpr Millimetre() = default;
+    explicit constexpr Millimetre(double v)
         : m_val(v) {}
 
-    double val() const { return m_val; }
-    operator double() const {
+    constexpr double val() const { return m_val; }
+    constexpr operator double() const {
         return m_val;
     }
 
-    bool operator>(const Millimetre& a) const { return m_val > a.m_val; }
-    bool operator<(const Millimetre& a) const { return m_val < a.m_val; }
+    constexpr bool operator>(const Millimetre& a) const { return m_val > a.m_val; }
+    constexpr bool operator<(const Millimetre& a) const { return m_val < a.m_val; }
     bool operator==(const Millimetre& a) const { return muse::RealIsEqual(m_val, a.m_val); }
     bool operator!=(const Millimetre& a) const { return m_val != a.m_val; }
     bool isZero() const { return muse::RealIsNull(m_val); }
 
-    Millimetre& operator=(double v)
+    constexpr Millimetre& operator=(double v)
     {
         m_val = v;
         return *this;
     }
 
-    Millimetre& operator+=(const Millimetre& a)
+    constexpr Millimetre& operator+=(const Millimetre& a)
     {
         m_val += a.m_val;
         return *this;
     }
 
-    Millimetre& operator+=(const double& a)
+    constexpr Millimetre& operator+=(const double& a)
     {
         m_val += a;
         return *this;
     }
 
-    Millimetre operator+(const Millimetre& a) const
+    constexpr Millimetre operator+(const Millimetre& a) const
     {
         Millimetre r(*this);
         r += a;
         return r;
     }
 
-    Millimetre& operator-=(const Millimetre& a)
+    constexpr Millimetre& operator-=(const Millimetre& a)
     {
         m_val -= a.m_val;
         return *this;
     }
 
-    Millimetre& operator-=(const double& a)
+    constexpr Millimetre& operator-=(const double& a)
     {
         m_val -= a;
         return *this;
     }
 
-    Millimetre operator-(const Millimetre& a) const
+    constexpr Millimetre operator-(const Millimetre& a) const
     {
         Millimetre r(*this);
         r -= a;
         return r;
     }
 
-    Millimetre& operator/=(double d)
+    constexpr Millimetre& operator/=(double d)
     {
         m_val /= d;
         return *this;
     }
 
-    Millimetre operator/(const Millimetre& b) const
+    constexpr Millimetre operator/(const Millimetre& b) const
     {
         return Millimetre(m_val / b.m_val);
     }
 
-    Millimetre operator/(double b) const
+    constexpr Millimetre operator/(double b) const
     {
         return Millimetre(m_val / b);
     }
 
-    Millimetre operator/(int b) const
+    constexpr Millimetre operator/(int b) const
     {
         return Millimetre(m_val / b);
     }
 
-    Millimetre& operator*=(int d)
+    constexpr Millimetre& operator*=(int d)
     {
         m_val *= d;
         return *this;
     }
 
-    Millimetre& operator*=(double d)
+    constexpr Millimetre& operator*=(double d)
     {
         m_val *= d;
         return *this;
     }
 
-    Millimetre operator*(double b) const
+    constexpr Millimetre operator*(double b) const
     {
         Millimetre r(*this);
         r *= b;
         return r;
     }
 
-    Millimetre operator-() const { return Millimetre(-m_val); }
+    constexpr Millimetre operator-() const { return Millimetre(-m_val); }
 
 private:
     double m_val = 0.0;
 };
 
-inline Millimetre operator*(double a, const Millimetre& b)
+constexpr Millimetre operator""_mm(long double v) { return Millimetre(static_cast<double>(v)); }
+constexpr Millimetre operator""_mm(unsigned long long v) { return Millimetre(static_cast<double>(v)); }
+
+constexpr Millimetre operator*(double a, const Millimetre& b)
 {
     Millimetre r(b);
     r *= a;
@@ -154,111 +156,112 @@ inline Millimetre operator*(double a, const Millimetre& b)
 class Spatium
 {
 public:
-    Spatium() = default;
-    explicit Spatium(double v)
+    constexpr Spatium() = default;
+    explicit constexpr Spatium(double v)
         : m_val(v) {}
 
-    double val() const { return m_val; }
+    constexpr double val() const { return m_val; }
 
-    Millimetre toMM(double spval) const { return Millimetre(m_val * spval); }
-    static Spatium fromMM(double mm, double spval) { return Spatium(mm / spval); }
-    static Spatium fromMM(Millimetre mm, double spval) { return Spatium(mm.val() / spval); }
+    constexpr Millimetre toMM(double spval) const { return Millimetre(m_val * spval); }
+    static constexpr Spatium fromMM(double mm, double spval) { return Spatium(mm / spval); }
+    static constexpr Spatium fromMM(Millimetre mm, double spval) { return Spatium(mm.val() / spval); }
 
-    bool operator>(const Spatium& a) const { return m_val > a.m_val; }
-    bool operator<(const Spatium& a) const { return m_val < a.m_val; }
+    constexpr bool operator>(const Spatium& a) const { return m_val > a.m_val; }
+    constexpr bool operator<(const Spatium& a) const { return m_val < a.m_val; }
     bool operator==(const Spatium& a) const { return muse::RealIsEqual(m_val, a.m_val); }
     bool operator!=(const Spatium& a) const { return m_val != a.m_val; }
     bool isZero() const { return muse::RealIsNull(m_val); }
 
-    Spatium& operator+=(const Spatium& a)
+    constexpr Spatium& operator+=(const Spatium& a)
     {
         m_val += a.m_val;
         return *this;
     }
 
-    Spatium operator+(const Spatium& a) const
+    constexpr Spatium operator+(const Spatium& a) const
     {
         Spatium r(*this);
         r += a;
         return r;
     }
 
-    Spatium& operator-=(const Spatium& a)
+    constexpr Spatium& operator-=(const Spatium& a)
     {
         m_val -= a.m_val;
         return *this;
     }
 
-    Spatium operator-(const Spatium& a) const
+    constexpr Spatium operator-(const Spatium& a) const
     {
         Spatium r(*this);
         r -= a;
         return r;
     }
 
-    Spatium& operator/=(double d)
+    constexpr Spatium& operator/=(double d)
     {
         m_val /= d;
         return *this;
     }
 
-    double operator/(const Spatium& b) const
+    constexpr double operator/(const Spatium& b) const
     {
         return m_val / b.m_val;
     }
 
-    Spatium operator/(double b) const
+    constexpr Spatium operator/(double b) const
     {
         Spatium r(*this);
         r /= b;
         return r;
     }
 
-    Spatium& operator*=(int d)
+    constexpr Spatium& operator*=(int d)
     {
         m_val *= d;
         return *this;
     }
 
-    Spatium& operator*=(double d)
+    constexpr Spatium& operator*=(double d)
     {
         m_val *= d;
         return *this;
     }
 
-    Spatium operator*(int b) const
+    constexpr Spatium operator*(int b) const
     {
         Spatium r(*this);
         r *= b;
         return r;
     }
 
-    Spatium operator*(double b) const
+    constexpr Spatium operator*(double b) const
     {
         Spatium r(*this);
         r *= b;
         return r;
     }
 
-    Spatium operator-() const { return Spatium(-m_val); }
+    constexpr Spatium operator-() const { return Spatium(-m_val); }
 
 private:
     double m_val = 0.0;
 };
 
-inline Spatium operator*(int a, const Spatium& b)
+constexpr Spatium operator""_sp(long double v) { return Spatium(static_cast<double>(v)); }
+constexpr Spatium operator""_sp(unsigned long long v) { return Spatium(static_cast<double>(v)); }
+
+constexpr Spatium operator*(int a, const Spatium& b)
 {
     Spatium r(b);
     r *= a;
     return r;
 }
 
-inline Spatium operator*(double a, const Spatium& b)
+constexpr Spatium operator*(double a, const Spatium& b)
 {
     Spatium r(b);
     r *= a;
     return r;
 }
 }
-
-#endif //MU_ENGRAVING_DIMENSION_H

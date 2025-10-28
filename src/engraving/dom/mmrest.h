@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_MMREST_H
-#define MU_ENGRAVING_MMREST_H
+#pragma once
 
 #include "rest.h"
 
@@ -70,8 +69,7 @@ public:
     DECLARE_LAYOUTDATA_METHODS(MMRest)
 
 private:
-    Spatium m_numberOffset = Spatium(0.0);    // vertical position of number relative to staff
-    bool m_numberVisible = false;   // show or hide number
+    Spatium m_numberOffset = 0.0_sp; // vertical position of number relative to staff
+    bool m_numberVisible = false; // show or hide number
 };
-} // namespace mu::engraving
-#endif
+}

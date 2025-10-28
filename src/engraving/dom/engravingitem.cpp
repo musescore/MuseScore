@@ -89,7 +89,7 @@ EngravingItem::EngravingItem(const ElementType& type, EngravingObject* parent, E
     m_flags         = f;
     m_color         = configuration()->defaultColor();
     m_z             = -1;
-    m_minDistance   = Spatium(0.0);
+    m_minDistance   = 0.0_sp;
 }
 
 EngravingItem::EngravingItem(const EngravingItem& e, bool link)
@@ -1531,7 +1531,7 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
         if (v.isValid()) {
             return v;
         }
-        return Spatium(0.0);
+        return 0.0_sp;
     }
     case Pid::AUTOPLACE:
         return true;

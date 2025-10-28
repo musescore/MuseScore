@@ -102,7 +102,7 @@ PropertyValue MMRest::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::MMREST_NUMBER_OFFSET:
-        return Spatium(0.0);
+        return 0.0_sp;
     case Pid::MMREST_NUMBER_VISIBLE:
         return true;
     default:
