@@ -710,43 +710,58 @@ PointF EngravingItem::pagePos() const
     }
 
     staff_idx_t idx = effectiveStaffIdx();
-
     if (idx == muse::nidx) {
         idx = vStaffIdx();
     }
 
-    if (m_flags & ElementFlag::ON_STAFF) {
-        System* system = nullptr;
-        Measure* measure = nullptr;
-        if (explicitParent()->isSegment()) {
-            measure = toSegment(explicitParent())->measure();
-        } else if (explicitParent()->isMeasure()) {           // used in measure number
-            measure = toMeasure(explicitParent());
-        } else if (explicitParent()->isSystem()) {
-            system = toSystem(explicitParent());
-        } else if (explicitParent()->isFretDiagram()) {
-            return p + parentItem()->pagePos();
-        } else if (explicitParent()->isFBox()) {
-            return p + parentItem()->pagePos();
-        } else {
-            ASSERT_X(String(u"this %1 parent %2\n").arg(String::fromAscii(typeName()), String::fromAscii(explicitParent()->typeName())));
-        }
-        if (measure) {
-            system = measure->system();
-            p.ry() += measure->staffLines(idx)->y();
-        }
-        if (system) {
-            if (system->staves().size() <= idx) {
-                LOGD("staffIdx out of bounds: %s", typeName());
-            }
-            p.ry() += system->staffYpage(idx);
-        }
-        p.rx() = pageX();
-    } else {
+    const bool onStaff = m_flags & ElementFlag::ON_STAFF;
+    if (!onStaff) {
         if (explicitParent()->explicitParent()) {
             p += parentItem()->pagePos();
         }
+        return p;
     }
+
+    Measure* measure = nullptr;
+    System* system = nullptr;
+    switch (explicitParent()->type()) {
+    case ElementType::SEGMENT: {
+        const Segment* seg = toSegment(explicitParent());
+        measure = seg->measure();
+        break;
+    }
+    case ElementType::MEASURE: { // used in measure number
+        measure = toMeasure(explicitParent());
+        break;
+    }
+    case ElementType::SYSTEM: {
+        system = toSystem(explicitParent());
+        break;
+    }
+    case ElementType::FBOX:
+    case ElementType::FRET_DIAGRAM: {
+        return p + parentItem()->pagePos();
+    }
+    default: {
+        const String type = String::fromAscii(typeName());
+        const String parentType = String::fromAscii(explicitParent()->typeName());
+        ASSERT_X(String(u"this %1 parent %2\n").arg(type, parentType));
+    }
+    }
+
+    if (measure) {
+        system = measure->system();
+        p.ry() += measure->staffLines(idx)->y();
+    }
+    if (system) {
+        if (system->staves().size() <= idx) {
+            LOGD("staffIdx out of bounds: %s", typeName());
+        }
+        p.ry() += system->staffYpage(idx);
+    }
+
+    p.rx() = pageX();
+
     return p;
 }
 
