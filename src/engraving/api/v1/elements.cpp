@@ -676,6 +676,8 @@ EngravingItem* mu::engraving::apiv1::wrap(mu::engraving::EngravingItem* e, Owner
         return wrap<Chord>(toChord(e), own);
     case ElementType::TUPLET:
         return wrap<Tuplet>(toTuplet(e), own);
+    case ElementType::BEAM:
+        return wrap<Beam>(toBeam(e), own);
     case ElementType::SEGMENT:
         return wrap<Segment>(toSegment(e), own);
     case ElementType::MEASURE:
