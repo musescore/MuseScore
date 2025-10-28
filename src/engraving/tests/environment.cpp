@@ -34,6 +34,8 @@
 
 #include "log.h"
 
+static const mu::engraving::IEngravingConfiguration::DebuggingOptions debugOpt {};
+
 static muse::testing::SuiteEnvironment engraving_se(
 {
     new muse::draw::DrawModule(),
@@ -55,8 +57,6 @@ static muse::testing::SuiteEnvironment engraving_se(
     std::shared_ptr<ECMock> configurator(new ECMock(), [](ECMock*) {}); // no delete
     ON_CALL(*configurator, isAccessibleEnabled()).WillByDefault(::testing::Return(false));
     ON_CALL(*configurator, defaultColor()).WillByDefault(::testing::Return(muse::draw::Color::BLACK));
-
-    mu::engraving::IEngravingConfiguration::DebuggingOptions debugOpt {};
     ON_CALL(*configurator, debuggingOptions()).WillByDefault(::testing::ReturnRef(debugOpt));
 
     muse::modularity::globalIoc()->unregister<mu::engraving::IEngravingConfiguration>("utests");
