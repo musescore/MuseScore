@@ -508,7 +508,7 @@ void FinaleParser::importTextExpressions()
 
     // Iterate through assigned expressions
     const MusxInstanceList<others::MeasureExprAssign> expressionAssignments = m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId);
-    std::vector<Cmper> parsedAssignments;
+    std::vector<std::pair<Cmper, Inci>> parsedAssignments;
     parsedAssignments.reserve(expressionAssignments.size());
     logger()->logInfo(String(u"Import text expressions: Found %1 expressions.").arg(expressionAssignments.size()));
     for (const auto& expressionAssignment : expressionAssignments) {
@@ -518,7 +518,8 @@ void FinaleParser::importTextExpressions()
         }
 
         // Already added as system clone
-        if (muse::contains(parsedAssignments, expressionAssignment->getCmper())) {
+        std::pair<Cmper, Inci> expressionId = std::make_pair(expressionAssignment->getCmper(), expressionAssignment->getInci().value_or(0));
+        if (muse::contains(parsedAssignments, expressionId)) {
             continue;
         }
 
@@ -579,7 +580,7 @@ void FinaleParser::importTextExpressions()
                 Dynamic* dynamic = toDynamic(item);
                 dynamic->setDynamicType(expression->dynamicType);
                 // Don't set these as styles, so new dynamics have nicer behaviour
-                setAndStyleProperty(dynamic, Pid::CENTER_BETWEEN_STAVES, false);
+                setAndStyleProperty(dynamic, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
                 setAndStyleProperty(dynamic, Pid::CENTER_ON_NOTEHEAD, false);
                 if (expressionAssignment->layer != 0) {
                     dynamic->setVoiceAssignment(VoiceAssignment::CURRENT_VOICE_ONLY);
@@ -897,7 +898,7 @@ void FinaleParser::importTextExpressions()
 
         if (item->systemFlag()) {
             m_systemObjectStaves.insert(item->staffIdx());
-            parsedAssignments.push_back(expressionAssignment->getCmper());
+            parsedAssignments.push_back(expressionId);
             if (!expressionAssignment->staffList) {
                 continue;
             }
@@ -1494,7 +1495,7 @@ void FinaleParser::rebasePageTextOffsets()
         Box* b = toBox(s->first());
         for (EngravingItem* e : b->el()) {
             if (e->isTextBase()) {
-                setAndStyleProperty(e, Pid::OFFSET, e->offset() - b->offset(), true);
+                setAndStyleProperty(e, Pid::OFFSET, e->offset() - b->pagePos(), true);
             }
         }
     }
