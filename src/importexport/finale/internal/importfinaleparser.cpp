@@ -93,12 +93,11 @@ void FinaleParser::parse()
     importSmartShapes();
 
     // Text
+    importPageTexts();
     // Layout score (needed for offset calculations)
     logger()->logInfo(String(u"Laying out score before importing text..."));
     m_score->doLayout();
     importTextExpressions();
-    importPageTexts();
-    m_score->doLayout();
     rebasePageTextOffsets();
 
     // Setup system object staves
