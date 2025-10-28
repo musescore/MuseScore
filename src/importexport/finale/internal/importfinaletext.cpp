@@ -1125,8 +1125,8 @@ static PointF pagePosOfPageTextAssign(Page* page, const MusxInstance<others::Pag
             p.rx() += pageContentRect.width() - bbox.width();
             break;
         }
-        p.rx() += doubleFromEvpu(pageTextAssign->rightPgXDisp);
-        p.ry() += doubleFromEvpu(pageTextAssign->rightPgYDisp);
+        p.rx() += doubleFromEvpu(pageTextAssign->rightPgXDisp) * SPATIUM20;
+        p.ry() -= doubleFromEvpu(pageTextAssign->rightPgYDisp) * SPATIUM20;
     } else {
         switch(pageTextAssign->hPosLp) {
         case others::PageTextAssign::HorizontalAlignment::Left:
@@ -1138,8 +1138,8 @@ static PointF pagePosOfPageTextAssign(Page* page, const MusxInstance<others::Pag
             p.rx() += pageContentRect.width() - bbox.width();
             break;
         }
-        p.rx() += doubleFromEvpu(pageTextAssign->xDisp);
-        p.ry() += doubleFromEvpu(pageTextAssign->yDisp);
+        p.rx() += doubleFromEvpu(pageTextAssign->xDisp) * SPATIUM20;
+        p.ry() -= doubleFromEvpu(pageTextAssign->yDisp) * SPATIUM20;
     }
     return p;
 }
@@ -1318,7 +1318,7 @@ void FinaleParser::importPageTexts()
         return pagesWithText;
     };
 
-    auto addPageTextToMeasure = [&](const MusxInstance<others::PageTextAssign>& pageTextAssign, PointF p, MeasureBase* mb, Page* page, const String& pageText) {
+    auto addPageTextToMeasure = [&](const MusxInstance<others::PageTextAssign>& pageTextAssign, MeasureBase* mb, Page* page, const String& pageText) {
         /// @todo set text alignment / position
         if (mb->isMeasure()) {
             // Add as staff text
@@ -1336,20 +1336,27 @@ void FinaleParser::importPageTexts()
             text->setSizeIsSpatiumDependent(false);
             text->setAutoplace(false);
             setAndStyleProperty(text, Pid::PLACEMENT, PlacementV::ABOVE);
+            PointF p = pagePosOfPageTextAssign(page, pageTextAssign, RectF()); //
+            AlignH hAlignment = toAlignH(pageTextAssign->indRpPos && !(page->no() & 1) ? pageTextAssign->hPosRp : pageTextAssign->hPosLp);
+            setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
             setAndStyleProperty(text, Pid::OFFSET, (p - mb->pagePos()), true); // is this accurate enough?
             s->add(text);
         } else if (mb->isBox()) {
             Text* text = Factory::createText(toBox(mb));
-            text->setTrack(0); // needed?
             text->setXmlText(pageText);
             if (text->plainText().empty()) {
                 delete text;
                 return;
             }
+            text->setParent(mb);
             text->checkCustomFormatting(pageText);
             text->setVisible(!pageTextAssign->hidden);
             text->setSizeIsSpatiumDependent(false);
-            setAndStyleProperty(text, Pid::OFFSET, p); // is this accurate enough?
+            text->score()->renderer()->layoutItem(text);
+            PointF p = pagePosOfPageTextAssign(page, pageTextAssign, text->ldata()->bbox());
+            AlignH hAlignment = toAlignH(pageTextAssign->indRpPos && !(page->no() & 1) ? pageTextAssign->hPosRp : pageTextAssign->hPosLp);
+            setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
+            setAndStyleProperty(text, Pid::OFFSET, p);
             toBox(mb)->add(text);
         }
     };
@@ -1358,31 +1365,31 @@ void FinaleParser::importPageTexts()
     std::unordered_map<page_idx_t, MeasureBase*> bottomBoxes;
 
     for (MusxInstance<others::PageTextAssign> pageTextAssign : notHF) {
-        // Get text
-        EnigmaParsingOptions options;
-        options.plainText = true;
         musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId);
-        FontTracker firstFontInfo;
-        String pageText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
-
-        // Use font metrics to precompute bbox
-        muse::draw::Font f(firstFontInfo.fontName, muse::draw::Font::Type::Unknown);
-        f.setPointSizeF(firstFontInfo.fontSize);
-        f.setBold(firstFontInfo.fontStyle & FontStyle::Bold);
-        f.setItalic(firstFontInfo.fontStyle & FontStyle::Italic);
-        f.setUnderline(firstFontInfo.fontStyle & FontStyle::Underline);
-        f.setStrike(firstFontInfo.fontStyle & FontStyle::Strike);
-        muse::draw::FontMetrics fm(f);
-        RectF r = fm.boundingRect(pageText);
-
-        pageText = stringFromEnigmaText(parsingContext);
-
+        String pageText = stringFromEnigmaText(parsingContext);
         for (page_idx_t i : getPages(pageTextAssign)) {
             Page* page = m_score->pages().at(i);
-            PointF pagePosOfPageText = pagePosOfPageTextAssign(page, pageTextAssign, r);
             MeasureBase* mb = [&]() {
                 // Don't add frames for text vertically aligned to the center.
                 if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Center) {
+                    // Get text
+                    /// @todo move this out of the for loop??
+                    EnigmaParsingOptions options;
+                    options.plainText = true;
+                    musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId);
+                    FontTracker firstFontInfo;
+                    String pagePlainText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
+
+                    // Use font metrics to precompute bbox (inaccurate for multiline/multiformat)
+                    muse::draw::Font f(firstFontInfo.fontName, muse::draw::Font::Type::Unknown);
+                    f.setPointSizeF(firstFontInfo.fontSize);
+                    f.setBold(firstFontInfo.fontStyle & FontStyle::Bold);
+                    f.setItalic(firstFontInfo.fontStyle & FontStyle::Italic);
+                    f.setUnderline(firstFontInfo.fontStyle & FontStyle::Underline);
+                    f.setStrike(firstFontInfo.fontStyle & FontStyle::Strike);
+                    muse::draw::FontMetrics fm(f);
+                    RectF r = fm.boundingRect(pagePlainText);
+                    PointF pagePosOfPageText = pagePosOfPageTextAssign(page, pageTextAssign, r);
                     double prevDist = DBL_MAX;
                     for (System* s : page->systems()) {
                         for (MeasureBase* m : s->measures()) {
@@ -1479,7 +1486,7 @@ void FinaleParser::importPageTexts()
                 }
                 /// @todo use sophisticated check for whether to import as frame or not. (i.e. distance to measure is too large, frame would get in the way of music)
             }();
-            addPageTextToMeasure(pageTextAssign, pagePosOfPageText, mb, page, pageText);
+            addPageTextToMeasure(pageTextAssign, mb, page, pageText);
         }
     }
     // if top or bottom, we should hopefully be able to check for distance to surrounding music and work from that
@@ -1496,7 +1503,9 @@ void FinaleParser::rebasePageTextOffsets()
         Box* b = toBox(s->first());
         for (EngravingItem* e : b->el()) {
             if (e->isTextBase()) {
-                setAndStyleProperty(e, Pid::OFFSET, e->offset() - b->pagePos(), true);
+                // Use current pagePos to counteract layout oddities for small/negative height frames when text is not top aligned
+                // Using the bbox position accounts for text alignment
+                setAndStyleProperty(e, Pid::OFFSET, e->offset() - (b->pagePos() + e->ldata()->bbox().topLeft()), true);
             }
         }
     }
