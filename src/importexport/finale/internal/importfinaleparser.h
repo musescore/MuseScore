@@ -327,8 +327,9 @@ private:
     void importSmartShapes();
 
     // texts
-    void importPageTexts();
     void importTextExpressions();
+    void importPageTexts();
+    void rebasePageTextOffsets();
 
     bool isOnlyPage(const musx::dom::MusxInstance<musx::dom::others::PageTextAssign>& pageTextAssign, musx::dom::PageCmper page);
 

@@ -97,7 +97,9 @@ void FinaleParser::parse()
     logger()->logInfo(String(u"Laying out score before importing text..."));
     m_score->doLayout();
     importTextExpressions();
-    importPageTexts(); //WIP
+    importPageTexts();
+    m_score->doLayout();
+    rebasePageTextOffsets();
 
     // Setup system object staves
     logger()->logInfo(String(u"Initialising system object staves"));
