@@ -890,7 +890,7 @@ void FinaleParser::importTextExpressions()
                 setAndStyleProperty(expr, Pid::DIRECTION, expr->placeAbove() ? DirectionV::UP : DirectionV::DOWN);
             }
             p += evpuToPointF(exprAssign->horzEvpuOff, -exprAssign->vertEvpuOff) * SPATIUM20; // assignment offset
-            expr->setOffset(p);
+            setAndStyleProperty(expr, Pid::OFFSET, p);
         };
         positionExpression(item, expressionAssignment, expressionDef);
 
@@ -902,8 +902,9 @@ void FinaleParser::importTextExpressions()
             }
             /// @todo improved handling for bottom system objects
             for (const auto& linkedAssignment : expressionAssignments) {
-                if (linkedAssignment->getCmper() != expressionAssignment->getCmper()
-                    || linkedAssignment->getInci() == expressionAssignment->getInci()) {
+                if (linkedAssignment->getCmper() != expressionAssignment->getCmper() // same measure
+                    || linkedAssignment->eduPosition != expressionAssignment->eduPosition
+                    || linkedAssignment->textExprId != expressionAssignment->textExprId) {
                     continue;
                 }
                 staff_idx_t linkedStaffIdx = staffIdxFromAssignment(linkedAssignment->staffAssign);
@@ -1061,7 +1062,7 @@ void FinaleParser::importTextExpressions()
         }
         item->setAutoplace(false);
         setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
-        item->setOffset(evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * SPATIUM20);
+        setAndStyleProperty(item, Pid::OFFSET, evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * SPATIUM20);
         measure->add(item);
         m_systemObjectStaves.insert(curStaffIdx);
 
@@ -1071,7 +1072,7 @@ void FinaleParser::importTextExpressions()
             TextBase* copy = toTextBase(item->clone());
             copy->setStaffIdx(linkedStaffIdx);
             // copy->setVisible(!repeatAssignment->hidden);
-            copy->setOffset(evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * SPATIUM20);
+            setAndStyleProperty(copy, Pid::OFFSET, evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * SPATIUM20);
             copy->linkTo(item);
             measure->add(copy);
             m_systemObjectStaves.insert(linkedStaffIdx);
