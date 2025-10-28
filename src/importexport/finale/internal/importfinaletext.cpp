@@ -537,10 +537,8 @@ void FinaleParser::importTextExpressions()
         }
 
         // Find staff
-        /// @todo use system object staves and linked clones to avoid duplicate elements
         staff_idx_t curStaffIdx = staffIdxFromAssignment(expressionAssignment->staffAssign);
         if (curStaffIdx == muse::nidx) {
-            /// @todo system object staves
             logger()->logWarning(String(u"Add text: Musx inst value not found."), m_doc, expressionAssignment->staffAssign);
             continue;
         }
@@ -906,9 +904,9 @@ void FinaleParser::importTextExpressions()
                 continue;
             }
             /// @todo improved handling for bottom system objects
-            for (const auto& linkedAssignment : expressionAssignments) {
-                if (linkedAssignment->getCmper() != expressionAssignment->getCmper() // same measure
-                    || linkedAssignment->eduPosition != expressionAssignment->eduPosition
+            const MusxInstanceList<others::MeasureExprAssign> possibleLinks = m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId, expressionAssignment->getCmper());
+            for (const auto& linkedAssignment : possibleLinks) {
+                if (linkedAssignment->eduPosition != expressionAssignment->eduPosition
                     || linkedAssignment->textExprId != expressionAssignment->textExprId) {
                     continue;
                 }
