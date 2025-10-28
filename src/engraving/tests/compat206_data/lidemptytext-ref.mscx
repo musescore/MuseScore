@@ -263,6 +263,7 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
+      <open>1</open>
       <metaTag name="partName">Bass</metaTag>
       <Part id="2">
         <Staff>

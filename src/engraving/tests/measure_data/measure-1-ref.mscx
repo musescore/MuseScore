@@ -358,6 +358,7 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
+      <open>1</open>
       <metaTag name="copyright"></metaTag>
       <metaTag name="movementNumber"></metaTag>
       <metaTag name="movementTitle"></metaTag>
@@ -635,6 +636,7 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
+      <open>1</open>
       <metaTag name="copyright"></metaTag>
       <metaTag name="movementNumber"></metaTag>
       <metaTag name="movementTitle"></metaTag>
@@ -731,8 +733,8 @@
               </Rest>
             </voice>
           </Measure>
-        <Measure len="8/4">
-          <multiMeasureRest>4</multiMeasureRest>
+        <Measure len="10/4">
+          <multiMeasureRest>5</multiMeasureRest>
           <eid>bB_bB</eid>
           <voice>
             <TimeSig>
