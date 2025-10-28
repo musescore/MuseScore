@@ -331,6 +331,9 @@ private:
     void importTextExpressions();
     void importPageTexts();
     void rebasePageTextOffsets();
+    void importChordsFrets(const musx::dom::MusxInstance<musx::dom::others::StaffUsed>& musxScrollViewItem,
+                           const musx::dom::MusxInstance<musx::dom::others::Measure>& musxMeasure,
+                           engraving::Staff* staff, engraving::Measure* measure);
 
     bool isOnlyPage(const musx::dom::MusxInstance<musx::dom::others::PageTextAssign>& pageTextAssign, musx::dom::PageCmper page);
 

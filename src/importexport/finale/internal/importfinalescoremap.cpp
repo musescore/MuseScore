@@ -1044,6 +1044,8 @@ void FinaleParser::importStaffItems()
             }
             currMusxKeySig = musxKeySig;
             prevMusxMeasure = musxMeasure;
+
+            importChordsFrets(musxScrollViewItem, musxMeasure, staff, measure);
         }
     }
 }
