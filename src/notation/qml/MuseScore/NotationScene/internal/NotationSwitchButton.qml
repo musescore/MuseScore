@@ -38,8 +38,10 @@ FlatRadioButton {
 
     signal closeRequested()
 
+    readonly property real actualHeight: 34
+
     implicitWidth: Math.min(200, implicitContentWidth)
-    implicitHeight: ListView.view.height
+    implicitHeight: actualHeight + 1 // For separator
 
     padding: 0
 
