@@ -1529,6 +1529,7 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
                                      Staff* staff, Measure* measure)
 {
     MusxInstanceList<details::ChordAssign> chordAssignments = m_doc->getDetails()->getArray<details::ChordAssign>(m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
+    const MusxInstance<options::ChordOptions> config = musxOptions().chordOptions;
     const MusxInstance<FontInfo>& harmonyFont = options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Chord);
     FontStyle f = FinaleTextConv::museFontEfx(harmonyFont);
     String fontFamily = String::fromStdString(harmonyFont->getName());
@@ -1573,13 +1574,37 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
             m_score->style().set(Sid::chordBassNoteStagger, chordAssignment->bassPosition != details::ChordAssign::BassPosition::AfterRoot);
         }
 
+        // From Harmony::endEdit
+        if (true /*h->harmonyType() != HarmonyType::ROMAN*/) {
+            harmonyText.replace(u"\u1d12b", u"bb");     // double-flat
+            harmonyText.replace(u"\u266d",  u"b");      // flat
+            harmonyText.replace(u"\ue260",  u"b");      // flat
+            // do not replace natural sign
+            // (right now adding the symbol explicitly is the only way to force a natural sign to appear at all)
+            //harmonyText.replace("\u266e",  "n");  // natural, if one day we support that too
+            //harmonyText.replace("\ue261",  "n");  // natural, if one day we support that too
+            harmonyText.replace(u"\u266f",  u"#");      // sharp
+            harmonyText.replace(u"\ue262",  u"#");      // sharp
+            harmonyText.replace(u"\u1d12a", u"x");      // double-sharp
+            harmonyText.replace(u"\u0394",  u"^");      // &Delta;
+            harmonyText.replace(u"\u00d0",  u"o");      // &deg;
+            harmonyText.replace(u"\u00f8",  u"0");      // &oslash;
+            harmonyText.replace(u"\u00d8",  u"0");      // &Oslash;
+        } else {
+            harmonyText.replace(u"\ue260",  u"\u266d");         // flat
+            harmonyText.replace(u"\ue261",  u"\u266e");         // natural
+            harmonyText.replace(u"\ue262",  u"\u266f");         // sharp
+        }
+
         FretDiagram* fret;
         Harmony* h;
-        if (chordAssignment->showFretboard) {
+        const bool fretVisible = config->showFretboards && chordAssignment->showFretboard;
+        if (fretVisible) {
             fret = Factory::createFretDiagram(s);
             fret->setTrack(staff2track(staff->idx()));
             fret->setHarmony(harmonyText);
             fret->updateDiagram(harmonyText);
+            setAndStyleProperty(fret, Pid::MAG, doubleFromPercent(chordAssignment->fbPercent), true);
             h = fret->harmony();
         } else {
             h = Factory::createHarmony(s);
@@ -1589,6 +1614,7 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         }
         h->setBassCase(chordAssignment->bassLowerCase ? NoteCaseType::LOWER : NoteCaseType::UPPER);
         h->setRootCase(chordAssignment->rootLowerCase ? NoteCaseType::LOWER : NoteCaseType::UPPER);
+        setAndStyleProperty(h, Pid::PLAY, config->chordPlayback, true);
         setAndStyleProperty(h, Pid::FONT_STYLE, int(f), true);
         setAndStyleProperty(h, Pid::FONT_SIZE, harmonyFont->fontSize * doubleFromPercent(chordAssignment->chPercent), true);
         setAndStyleProperty(h, Pid::FONT_FACE, fontFamily, true);
@@ -1598,13 +1624,20 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         const double baselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineChords>(0)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
         PointF offset = evpuToPointF(chordAssignment->horzOff, -chordAssignment->vertOff) * SPATIUM20;
         offset.ry() -= (baselinepos - staffReferenceOffset); /// @todo set this as style?
+        if (fretVisible) {
+            const double fbBaselinepos = doubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineFretboards>(0)) * SPATIUM20; // Needs to be scaled correctly (offset topline/reference pos)?
+            PointF fbOffset = evpuToPointF(chordAssignment->fbHorzOff, -chordAssignment->fbVertOff) * SPATIUM20;
+            fbOffset.ry() -= (fbBaselinepos - staffReferenceOffset); /// @todo set this as style?
+            offset.ry() -= fbOffset.y(); /// @todo also diagram height?
+            setAndStyleProperty(fret, Pid::OFFSET, fbOffset, true);
+        }
         setAndStyleProperty(h, Pid::OFFSET, offset, true);
-        if (chordAssignment->showFretboard) {
+        if (fretVisible) {
             s->add(fret);
         } else {
             s->add(h);
         }
-        /// @todo Pid::PLAY, Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION, Pid::HARMONY_DO_NOT_STACK_MODIFIERS
+        /// @todo Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION, Pid::HARMONY_DO_NOT_STACK_MODIFIERS
     }
 }
 
