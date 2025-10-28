@@ -101,6 +101,7 @@ void FinaleOptions::init(const FinaleParser& context)
     augDotOptions = getDocOptions<options::AugmentationDotOptions>(context, "augmentation dot");
     barlineOptions = getDocOptions<options::BarlineOptions>(context, "barline");
     beamOptions = getDocOptions<options::BeamOptions>(context, "beam");
+    chordOptions = getDocOptions<options::ChordOptions>(context, "chord");
     clefOptions = getDocOptions<options::ClefOptions>(context, "clef");
     flagOptions = getDocOptions<options::FlagOptions>(context, "flag");
     graceOptions = getDocOptions<options::GraceNoteOptions>(context, "grace note");
@@ -762,6 +763,8 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     for (int i = 1; i <= 12; ++i) {
         writeFontPref(style, "user" + std::to_string(i), textBlockFont);
     }
+
+    style.set(Sid::fretMag, doubleFromPercent(prefs.chordOptions->fretPercent));
 }
 
 void FinaleParser::importStyles()

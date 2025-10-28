@@ -57,6 +57,7 @@ struct FinaleOptions
     musx::dom::MusxInstance<musx::dom::options::AugmentationDotOptions> augDotOptions;
     musx::dom::MusxInstance<musx::dom::options::BarlineOptions> barlineOptions;
     musx::dom::MusxInstance<musx::dom::options::BeamOptions> beamOptions;
+    musx::dom::MusxInstance<musx::dom::options::ChordOptions> chordOptions;
     musx::dom::MusxInstance<musx::dom::options::ClefOptions> clefOptions;
     musx::dom::MusxInstance<musx::dom::options::FlagOptions> flagOptions;
     musx::dom::MusxInstance<musx::dom::options::GraceNoteOptions> graceOptions;
