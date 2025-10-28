@@ -23,6 +23,7 @@
 #include "measurenumberlayout.h"
 #include "measurelayout.h"
 #include "tlayout.h"
+#include "textlayout.h"
 
 #include "dom/measure.h"
 #include "dom/score.h"
@@ -119,7 +120,7 @@ void MeasureNumberLayout::layoutMeasureNumberBase(MeasureNumberBase* item, Measu
 {
     ldata->setPos(PointF());
 
-    TLayout::layoutBaseTextBase1(item, ldata);
+    TextLayout::layoutBaseTextBase1(item, ldata);
 
     if (item->placeBelow()) {
         double yoff = ldata->bbox().height();

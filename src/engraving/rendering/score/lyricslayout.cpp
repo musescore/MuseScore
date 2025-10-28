@@ -34,6 +34,7 @@
 #include "dom/system.h"
 
 #include "tlayout.h"
+#include "textlayout.h"
 #include "autoplace.h"
 
 using namespace mu;
@@ -73,7 +74,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 {
     if (!item->explicitParent()) {   // palette & clone trick
         item->setPos(PointF());
-        TLayout::layoutBaseTextBase1(item, ctx);
+        TextLayout::layoutBaseTextBase1(item, ctx);
         return;
     }
 
@@ -150,8 +151,8 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     ChordRest* cr = item->chordRest();
     double x = o.x() - cr->x();
 
-    TLayout::layoutBaseTextBase1(item, ctx);
-    TLayout::computeTextHighResShape(item, ldata);
+    TextLayout::layoutBaseTextBase1(item, ctx);
+    TextLayout::computeTextHighResShape(item, ldata);
 
     double centerAdjust = 0.0;
     double leftAdjust   = 0.0;

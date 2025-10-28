@@ -29,6 +29,7 @@
 
 #include "tdraw.h"
 #include "tlayout.h"
+#include "textlayout.h"
 #include "chordlayout.h"
 #include "layoutcontext.h"
 #include "scorelayout.h"
@@ -83,11 +84,11 @@ void ScoreRenderer::layoutText1(TextBase* item, bool base)
 {
     LayoutContext ctx(item->score());
     if (base) {
-        TLayout::layoutBaseTextBase1(item, ctx);
+        TextLayout::layoutBaseTextBase1(item, ctx);
     } else if (Harmony::classof(item)) {
         TLayout::layoutHarmony(static_cast<Harmony*>(item), static_cast<Harmony*>(item)->mutldata(), ctx);
     } else {
-        TLayout::layoutBaseTextBase1(item, ctx);
+        TextLayout::layoutBaseTextBase1(item, ctx);
     }
 }
 

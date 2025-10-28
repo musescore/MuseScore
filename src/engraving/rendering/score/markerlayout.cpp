@@ -23,6 +23,7 @@
 #include "markerlayout.h"
 #include "layoutcontext.h"
 #include "tlayout.h"
+#include "textlayout.h"
 #include "autoplace.h"
 
 #include "../dom/marker.h"
@@ -60,7 +61,7 @@ void MarkerLayout::doLayoutMarker(Marker* item, TextBase::LayoutData* ldata, Lay
                   && !item->symbolString().empty() ? AlignH::HCENTER : item->getProperty(Pid::POSITION).value<AlignH>();
     item->setPosition(hPos);
 
-    TLayout::layoutBaseTextBase(item, ldata);
+    TextLayout::layoutBaseTextBase(item, ldata);
 
     // Adjust for barline
     bool rightMarker = item->isRightMarker();
