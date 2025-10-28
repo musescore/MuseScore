@@ -1316,6 +1316,7 @@ void FinaleParser::importPageTexts()
     };
 
     auto addPageTextToMeasure = [&](const MusxInstance<others::PageTextAssign>& pageTextAssign, PointF p, MeasureBase* mb, Page* page, const String& pageText) {
+        /// @todo set text alignment / position
         if (mb->isMeasure()) {
             // Add as staff text
             Measure* measure = toMeasure(mb);
@@ -1345,7 +1346,7 @@ void FinaleParser::importPageTexts()
             text->checkCustomFormatting(pageText);
             text->setVisible(!pageTextAssign->hidden);
             text->setSizeIsSpatiumDependent(false);
-            setAndStyleProperty(text, Pid::OFFSET, (p - mb->pagePos()), true); // is this accurate enough?
+            setAndStyleProperty(text, Pid::OFFSET, p); // is this accurate enough?
             toBox(mb)->add(text);
         }
     };
@@ -1481,6 +1482,21 @@ void FinaleParser::importPageTexts()
     // if top or bottom, we should hopefully be able to check for distance to surrounding music and work from that
     // if not enough space, attempt to position based on closest measure
     //note: text is placed slightly lower than indicated position (line space? Or ascent instead of bbox)
+}
+
+void FinaleParser::rebasePageTextOffsets()
+{
+    for (System* s : m_score->systems()) {
+        if (!s->vbox()) {
+            continue;
+        }
+        Box* b = toBox(s->first());
+        for (EngravingItem* e : b->el()) {
+            if (e->isTextBase()) {
+                setAndStyleProperty(e, Pid::OFFSET, e->offset() - b->offset(), true);
+            }
+        }
+    }
 }
 
 }
