@@ -68,6 +68,7 @@ public:
 
     // Put notes
     INotationNoteInputPtr noteInput() const override;
+    INotationMidiInputPtr midiInput() const override;
 
     // Shadow note
     mu::engraving::ShadowNote* shadowNote() const override;

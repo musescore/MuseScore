@@ -27,6 +27,7 @@
 
 #include "notationtypes.h"
 #include "inotationnoteinput.h"
+#include "inotationmidiinput.h"
 #include "inotationselection.h"
 #include "inotationselectionfilter.h"
 
@@ -41,6 +42,7 @@ public:
 
     // Put notes
     virtual INotationNoteInputPtr noteInput() const = 0;
+    virtual INotationMidiInputPtr midiInput() const = 0;
 
     // Shadow note
     virtual mu::engraving::ShadowNote* shadowNote() const = 0;

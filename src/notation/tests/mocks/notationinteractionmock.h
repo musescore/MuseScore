@@ -30,6 +30,7 @@ class NotationInteractionMock : public INotationInteraction
 {
 public:
     MOCK_METHOD(INotationNoteInputPtr, noteInput, (), (const, override));
+    MOCK_METHOD(INotationMidiInputPtr, midiInput, (), (const, override));
 
     MOCK_METHOD(mu::engraving::ShadowNote*, shadowNote, (), (const, override));
     MOCK_METHOD(void, showShadowNoteForPosition, (const muse::PointF&), (override));

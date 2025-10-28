@@ -53,6 +53,7 @@ public:
     muse::async::Channel<std::vector<const Note*> > notesReceived() const override;
 
     void onRealtimeAdvance() override;
+    bool isProcessingEvents() const override { return m_processTimer.isActive(); }
 
 private:
     mu::engraving::Score* score() const;
