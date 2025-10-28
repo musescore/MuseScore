@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_IMPORTPREFERENCESMODEL_H
-#define MU_APPSHELL_IMPORTPREFERENCESMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -35,7 +34,7 @@
 #include "notation/inotationconfiguration.h"
 
 namespace mu::appshell {
-class ImportPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class ImportPreferencesModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -56,12 +55,12 @@ class ImportPreferencesModel : public QObject, public muse::Injectable, public m
     Q_PROPERTY(
         bool needAskAboutApplyingNewStyle READ needAskAboutApplyingNewStyle WRITE setNeedAskAboutApplyingNewStyle NOTIFY needAskAboutApplyingNewStyleChanged)
 
-    muse::Inject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration = { this };
-    muse::Inject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration = { this };
-    muse::Inject<iex::ove::IOveConfiguration> oveConfiguration = { this };
-    muse::Inject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration = { this };
-    muse::Inject<iex::mei::IMeiConfiguration> meiConfiguration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::LazyInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration = { this };
+    muse::LazyInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration = { this };
+    muse::LazyInject<iex::ove::IOveConfiguration> oveConfiguration = { this };
+    muse::LazyInject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration = { this };
+    muse::LazyInject<iex::mei::IMeiConfiguration> meiConfiguration = { this };
+    muse::LazyInject<notation::INotationConfiguration> notationConfiguration = { this };
 
 public:
     explicit ImportPreferencesModel(QObject* parent = nullptr);
@@ -115,5 +114,3 @@ signals:
     void meiImportLayoutChanged(bool importLayout);
 };
 }
-
-#endif // MU_APPSHELL_IMPORTPREFERENCESMODEL_H

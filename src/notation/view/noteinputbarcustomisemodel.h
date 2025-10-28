@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTEINPUTBARCUSOMISEMODEL_H
-#define MU_NOTATION_NOTEINPUTBARCUSOMISEMODEL_H
+#pragma once
 
 #include "uicomponents/view/selectableitemlistmodel.h"
 #include "async/asyncable.h"
@@ -38,7 +37,7 @@ class QItemSelectionModel;
 
 namespace mu::notation {
 class NoteInputBarCustomiseItem;
-class NoteInputBarCustomiseModel : public muse::uicomponents::SelectableItemListModel, public muse::Injectable,
+class NoteInputBarCustomiseModel : public muse::uicomponents::SelectableItemListModel, public muse::LazyInjectable,
     public muse::async::Asyncable
 {
     Q_OBJECT
@@ -46,8 +45,8 @@ class NoteInputBarCustomiseModel : public muse::uicomponents::SelectableItemList
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
     Q_PROPERTY(bool isAddSeparatorAvailable READ isAddSeparatorAvailable NOTIFY isAddSeparatorAvailableChanged)
 
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::LazyInject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::LazyInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     explicit NoteInputBarCustomiseModel(QObject* parent = nullptr);
@@ -87,5 +86,3 @@ private:
     bool m_isAddSeparatorAvailable = false;
 };
 }
-
-#endif // MU_NOTATION_NOTEINPUTBARCUSOMISEMODEL_H

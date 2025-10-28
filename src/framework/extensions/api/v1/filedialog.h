@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_APIV1_FILEDIALOG_H
-#define MUSE_EXTENSIONS_APIV1_FILEDIALOG_H
+#pragma once
 
 #include <QObject>
 #include <QString>
@@ -29,7 +28,7 @@
 #include "global/iinteractive.h"
 
 namespace muse::extensions::apiv1 {
-class FileDialog : public QObject, public Injectable
+class FileDialog : public QObject, public LazyInjectable
 {
     Q_OBJECT
     Q_PROPERTY(Type type READ type WRITE setType NOTIFY typeChanged FINAL)
@@ -38,7 +37,7 @@ class FileDialog : public QObject, public Injectable
     Q_PROPERTY(QString folder READ folder WRITE setFolder NOTIFY folderChanged FINAL)
     Q_PROPERTY(QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged FINAL)
 
-    Inject<IInteractive> interactive = { this };
+    LazyInject<IInteractive> interactive = { this };
 
 public:
     FileDialog(QObject* parent = nullptr);
@@ -84,5 +83,3 @@ private:
     Type m_type = Type::Load;
 };
 }
-
-#endif // MUSE_EXTENSIONS_APIV1_FILEDIALOG_H

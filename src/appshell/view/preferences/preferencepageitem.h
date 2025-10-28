@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_PREFERENCEPAGEITEM_H
-#define MU_APPSHELL_PREFERENCEPAGEITEM_H
+#pragma once
 
 #include <QObject>
 #include <QVariantMap>
@@ -86,5 +85,3 @@ private:
     bool m_expanded = false;
 };
 }
-
-#endif // MU_APPSHELL_PREFERENCEPAGEITEM_H

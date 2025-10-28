@@ -48,7 +48,7 @@ public:
     Q_ENUM(Type)
 };
 
-class AbstractToolBarModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class AbstractToolBarModel : public QAbstractListModel, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -56,9 +56,9 @@ class AbstractToolBarModel : public QAbstractListModel, public Injectable, publi
     Q_PROPERTY(QVariantList items READ itemsProperty NOTIFY itemsChanged)
 
 public:
-    Inject<ui::IUiActionsRegister> uiActionsRegister = { this };
-    Inject<actions::IActionsDispatcher> dispatcher = { this };
-    Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    LazyInject<ui::IUiActionsRegister> uiActionsRegister = { this };
+    LazyInject<actions::IActionsDispatcher> dispatcher = { this };
+    LazyInject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     explicit AbstractToolBarModel(QObject* parent = nullptr);

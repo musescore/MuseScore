@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_SHORTCUTS_SHORTCUTSMODEL_H
-#define MUSE_SHORTCUTS_SHORTCUTSMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QItemSelection>
@@ -37,18 +36,18 @@
 class QItemSelection;
 
 namespace muse::shortcuts {
-class ShortcutsModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class ShortcutsModel : public QAbstractListModel, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QItemSelection selection READ selection WRITE setSelection NOTIFY selectionChanged)
     Q_PROPERTY(QVariant currentShortcut READ currentShortcut NOTIFY selectionChanged)
 
-    Inject<IShortcutsRegister> shortcutsRegister = { this };
-    Inject<ui::IUiActionsRegister> uiactionsRegister = { this };
-    Inject<IInteractive> interactive = { this };
-    Inject<IShortcutsConfiguration> configuration = { this };
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
+    LazyInject<IShortcutsRegister> shortcutsRegister = { this };
+    LazyInject<ui::IUiActionsRegister> uiactionsRegister = { this };
+    LazyInject<IInteractive> interactive = { this };
+    LazyInject<IShortcutsConfiguration> configuration = { this };
+    LazyInject<IGlobalConfiguration> globalConfiguration = { this };
 
 public:
     explicit ShortcutsModel(QObject* parent = nullptr);
@@ -100,5 +99,3 @@ private:
     QItemSelection m_selection;
 };
 }
-
-#endif // MUSE_SHORTCUTS_SHORTCUTSMODEL_H

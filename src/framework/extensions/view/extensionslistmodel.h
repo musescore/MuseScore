@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_EXTENSIONSLISTMODEL_H
-#define MUSE_EXTENSIONS_EXTENSIONSLISTMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QList>
@@ -35,15 +34,15 @@
 #include "shortcuts/ishortcutsregister.h"
 
 namespace muse::extensions {
-class ExtensionsListModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class ExtensionsListModel : public QAbstractListModel, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
-    Inject<IInteractive> interactive = { this };
-    Inject<IExtensionsProvider> provider = { this };
-    Inject<IExtensionInstaller> installer = { this };
-    Inject<IExtensionsConfiguration> configuration = { this };
-    Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    LazyInject<IInteractive> interactive = { this };
+    LazyInject<IExtensionsProvider> provider = { this };
+    LazyInject<IExtensionInstaller> installer = { this };
+    LazyInject<IExtensionsConfiguration> configuration = { this };
+    LazyInject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     explicit ExtensionsListModel(QObject* parent = nullptr);
@@ -95,5 +94,3 @@ private:
     mutable ExecPoints m_execPointsCache;
 };
 }
-
-#endif // MUSE_EXTENSIONS_EXTENSIONSLISTMODEL_H

@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_MPE_ARTICULATIONSPROFILEEDITORMODEL_H
-#define MUSE_MPE_ARTICULATIONSPROFILEEDITORMODEL_H
+#pragma once
 
 #include <QObject>
 #include <QList>
@@ -34,7 +33,7 @@
 #include "articulationpatternitem.h"
 
 namespace muse::mpe {
-class ArticulationsProfileEditorModel : public QObject, public Injectable
+class ArticulationsProfileEditorModel : public QObject, public LazyInjectable
 {
     Q_OBJECT
 
@@ -48,8 +47,8 @@ class ArticulationsProfileEditorModel : public QObject, public Injectable
     Q_PROPERTY(QList<ArticulationPatternItem*> singleNoteItems READ singleNoteItems CONSTANT)
     Q_PROPERTY(QList<ArticulationPatternItem*> multiNoteItems READ multiNoteItems CONSTANT)
 
-    Inject<IInteractive> interactive = { this };
-    Inject<IArticulationProfilesRepository> profilesRepository = { this };
+    LazyInject<IInteractive> interactive = { this };
+    LazyInject<IArticulationProfilesRepository> profilesRepository = { this };
 
 public:
     enum RoleNames {
@@ -111,5 +110,3 @@ private:
     bool m_isExpressionVisible = true;
 };
 }
-
-#endif // MUSE_MPE_ARTICULATIONSPROFILEEDITORMODEL_H

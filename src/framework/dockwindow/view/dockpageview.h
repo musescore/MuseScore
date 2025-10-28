@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_DOCK_DOCKPAGEVIEW_H
-#define MUSE_DOCK_DOCKPAGEVIEW_H
+#pragma once
 
 #include "framework/uicomponents/view/qmllistproperty.h"
 
@@ -46,7 +45,7 @@ class DockPanelView;
 class DockCentralView;
 class DockStatusBarView;
 class DockingHolderView;
-class DockPageView : public QQuickItem, public muse::Injectable
+class DockPageView : public QQuickItem, public muse::LazyInjectable
 {
     Q_OBJECT
 
@@ -61,8 +60,8 @@ class DockPageView : public QQuickItem, public muse::Injectable
 
     Q_PROPERTY(QVariant tours READ tours WRITE setTours NOTIFY toursChanged)
 
-    Inject<ui::INavigationController> navigationController = { this };
-    Inject<tours::IToursService> toursService = { this };
+    LazyInject<ui::INavigationController> navigationController = { this };
+    LazyInject<tours::IToursService> toursService = { this };
 
 public:
     explicit DockPageView(QQuickItem* parent = nullptr);
@@ -144,5 +143,3 @@ private:
     QVariant m_tours;
 };
 }
-
-#endif // MUSE_DOCK_DOCKPAGEVIEW_H

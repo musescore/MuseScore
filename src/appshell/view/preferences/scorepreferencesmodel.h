@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_SCOREPREFERENCESMODEL_H
-#define MU_APPSHELL_SCOREPREFERENCESMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 
@@ -31,12 +30,12 @@
 #include "audio/main/iaudioconfiguration.h"
 
 namespace mu::appshell {
-class ScorePreferencesModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
+class ScorePreferencesModel : public QAbstractListModel, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    muse::LazyInject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::LazyInject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
 
 public:
     explicit ScorePreferencesModel(QObject* parent = nullptr);
@@ -99,5 +98,3 @@ private:
     QList<DefaultFileInfo> m_defaultFiles;
 };
 }
-
-#endif // MU_APPSHELL_SCOREPREFERENCESMODEL_H

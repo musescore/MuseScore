@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_THEMESPAGEMODEL_H
-#define MU_APPSHELL_THEMESPAGEMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -30,7 +29,7 @@
 #include "ui/iuiconfiguration.h"
 
 namespace mu::appshell {
-class ThemesPageModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class ThemesPageModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -45,7 +44,7 @@ class ThemesPageModel : public QObject, public muse::Injectable, public muse::as
     Q_PROPERTY(QString currentThemeCode READ currentThemeCode WRITE setCurrentThemeCode NOTIFY themesChanged)
     Q_PROPERTY(int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
 
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::LazyInject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
     explicit ThemesPageModel(QObject* parent = nullptr);
@@ -79,5 +78,3 @@ private:
     muse::ui::ThemeList allThemes() const;
 };
 }
-
-#endif // MU_APPSHELL_THEMESPAGEMODEL_H

@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_DEVEXTENSIONSLISTMODEL_H
-#define MUSE_EXTENSIONS_DEVEXTENSIONSLISTMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -29,12 +28,12 @@
 #include "global/iinteractive.h"
 
 namespace muse::extensions {
-class DevExtensionsListModel : public QObject, public Injectable
+class DevExtensionsListModel : public QObject, public LazyInjectable
 {
     Q_OBJECT
 
-    Inject<IExtensionsProvider> provider = { this };
-    Inject<IInteractive> interactive = { this };
+    LazyInject<IExtensionsProvider> provider = { this };
+    LazyInject<IInteractive> interactive = { this };
 
 public:
     DevExtensionsListModel(QObject* parent = nullptr);
@@ -43,5 +42,3 @@ public:
     Q_INVOKABLE void clicked(const QString& uri);
 };
 }
-
-#endif // MUSE_EXTENSIONS_DEVEXTENSIONSLISTMODEL_H

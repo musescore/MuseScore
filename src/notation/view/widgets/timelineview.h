@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_TIMELINEVIEW_H
-#define MU_NOTATION_TIMELINEVIEW_H
+#pragma once
 
 #include <QImage>
 #include <QTimer>
@@ -33,11 +32,11 @@
 #include "async/asyncable.h"
 
 namespace mu::notation {
-class TimelineView : public muse::uicomponents::WidgetView, public muse::Injectable, public muse::async::Asyncable
+class TimelineView : public muse::uicomponents::WidgetView, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::LazyInject<context::IGlobalContext> globalContext = { this };
 
 public:
     explicit TimelineView(QQuickItem* parent = nullptr);
@@ -55,5 +54,3 @@ private:
     QTimer m_drawTimer;
 };
 }
-
-#endif // MU_NOTATION_TIMELINEVIEW_H

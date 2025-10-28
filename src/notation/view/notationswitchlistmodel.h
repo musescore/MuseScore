@@ -28,15 +28,14 @@
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"
-#include "project/inotationproject.h"
 
 namespace mu::notation {
-class NotationSwitchListModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
+class NotationSwitchListModel : public QAbstractListModel, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::LazyInject<context::IGlobalContext> context = { this };
+    muse::LazyInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit NotationSwitchListModel(QObject* parent = nullptr);

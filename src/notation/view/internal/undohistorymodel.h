@@ -29,14 +29,14 @@
 #include "modularity/ioc.h"
 
 namespace mu::notation {
-class UndoHistoryModel : public QAbstractListModel, public QQmlParserStatus, public muse::Injectable, public muse::async::Asyncable
+class UndoHistoryModel : public QAbstractListModel, public QQmlParserStatus, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(int currentIndex READ currentIndex NOTIFY currentIndexChanged)
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::LazyInject<context::IGlobalContext> context = { this };
 
 public:
     explicit UndoHistoryModel(QObject* parent = nullptr);

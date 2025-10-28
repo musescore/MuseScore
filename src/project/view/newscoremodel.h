@@ -33,14 +33,14 @@
 #include "notation/iinstrumentsrepository.h"
 
 namespace mu::project {
-class NewScoreModel : public QObject, public muse::Injectable
+class NewScoreModel : public QObject, public muse::LazyInjectable
 {
     Q_OBJECT
 
-    muse::Inject<IProjectConfiguration> configuration = { this };
-    muse::Inject<IProjectCreator> notationCreator = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<notation::IInstrumentsRepository> instrumentsRepository = { this };
+    muse::LazyInject<IProjectConfiguration> configuration = { this };
+    muse::LazyInject<IProjectCreator> notationCreator = { this };
+    muse::LazyInject<context::IGlobalContext> globalContext = { this };
+    muse::LazyInject<notation::IInstrumentsRepository> instrumentsRepository = { this };
 
 public:
     explicit NewScoreModel(QObject* parent = nullptr);

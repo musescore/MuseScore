@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUTOBOT_ABFILESMODEL_H
-#define MUSE_AUTOBOT_ABFILESMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 
@@ -29,11 +28,11 @@
 #include "async/asyncable.h"
 
 namespace muse::autobot {
-class AbFilesModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class AbFilesModel : public QAbstractListModel, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
-    Inject<IAutobot> autobot = { this };
+    LazyInject<IAutobot> autobot = { this };
 
 public:
     explicit AbFilesModel(QObject* parent = nullptr);
@@ -61,5 +60,3 @@ private:
     ValCh<int> m_fileIndex;
 };
 }
-
-#endif // MUSE_AUTOBOT_ABFILESMODEL_H

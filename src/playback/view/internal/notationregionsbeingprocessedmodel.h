@@ -34,15 +34,15 @@
 #include "notation/inotationconfiguration.h"
 
 namespace mu::playback {
-class NotationRegionsBeingProcessedModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Injectable
+class NotationRegionsBeingProcessedModel : public QAbstractListModel, public muse::async::Asyncable, public muse::LazyInjectable
 {
     Q_OBJECT
 
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::audio::IPlayback> playback = { this };
-    muse::Inject<IPlaybackController> playbackController = { this };
-    muse::Inject<IPlaybackConfiguration> configuration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::LazyInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::LazyInject<muse::audio::IPlayback> playback = { this };
+    muse::LazyInject<IPlaybackController> playbackController = { this };
+    muse::LazyInject<IPlaybackConfiguration> configuration = { this };
+    muse::LazyInject<notation::INotationConfiguration> notationConfiguration = { this };
 
     Q_PROPERTY(QVariant notationViewMatrix READ notationViewMatrix WRITE setNotationViewMatrix NOTIFY notationViewMatrixChanged)
 

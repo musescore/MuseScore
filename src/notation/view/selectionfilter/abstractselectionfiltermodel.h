@@ -30,7 +30,7 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class AbstractSelectionFilterModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
+class AbstractSelectionFilterModel : public QAbstractListModel, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -38,7 +38,7 @@ class AbstractSelectionFilterModel : public QAbstractListModel, public muse::Inj
     Q_PROPERTY(bool isAllSelected READ isAllSelected NOTIFY maskStatesChanged)
     Q_PROPERTY(bool isNoneSelected READ isNoneSelected NOTIFY maskStatesChanged)
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::LazyInject<context::IGlobalContext> globalContext = { this };
 
 public:
     explicit AbstractSelectionFilterModel(QObject* parent = nullptr);

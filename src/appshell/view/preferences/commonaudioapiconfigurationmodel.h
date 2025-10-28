@@ -31,7 +31,7 @@
 #include "audio/iaudiodrivercontroller.h"
 
 namespace mu::appshell {
-class CommonAudioApiConfigurationModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class CommonAudioApiConfigurationModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -44,8 +44,8 @@ class CommonAudioApiConfigurationModel : public QObject, public muse::Injectable
     Q_PROPERTY(unsigned int sampleRate READ sampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(QList<unsigned int> sampleRateList READ sampleRateList NOTIFY sampleRateListChanged)
 
-    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
-    muse::Inject<muse::audio::IAudioDriverController> audioDriverController = { this };
+    muse::LazyInject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    muse::LazyInject<muse::audio::IAudioDriverController> audioDriverController = { this };
 
 public:
     explicit CommonAudioApiConfigurationModel(QObject* parent = nullptr);

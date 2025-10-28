@@ -21,12 +21,14 @@
  */
 #include "testcaserunmodel.h"
 
+#include "internal/scriptengine.h"
+
 #include "log.h"
 
 using namespace muse::autobot;
 
 TestCaseRunModel::TestCaseRunModel(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

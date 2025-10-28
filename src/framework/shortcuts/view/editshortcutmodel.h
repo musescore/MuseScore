@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_EDITSHORTCUTMODEL_H
-#define MUSE_SHORTCUTS_EDITSHORTCUTMODEL_H
+#pragma once
 
 #include <QObject>
 #include <QKeySequence>
@@ -33,7 +32,7 @@
 class QKeySequence;
 
 namespace muse::shortcuts {
-class EditShortcutModel : public QObject, public Injectable, public async::Asyncable
+class EditShortcutModel : public QObject, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -43,7 +42,7 @@ class EditShortcutModel : public QObject, public Injectable, public async::Async
 
     Q_PROPERTY(bool cleared READ cleared NOTIFY clearedChanged)
 
-    Inject<IInteractive> interactive = { this };
+    LazyInject<IInteractive> interactive = { this };
 
 public:
     explicit EditShortcutModel(QObject* parent = nullptr);
@@ -85,5 +84,3 @@ private:
     bool m_cleared = false;
 };
 }
-
-#endif // MUSE_SHORTCUTS_EDITSHORTCUTMODEL_H

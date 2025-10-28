@@ -23,13 +23,12 @@
 #include "soundprofilesmodel.h"
 
 #include "project/inotationproject.h"
-#include "project/iprojectaudiosettings.h"
 
 using namespace mu::playback;
 using namespace mu::project;
 
 SoundProfilesModel::SoundProfilesModel(QObject* parent)
-    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), muse::LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

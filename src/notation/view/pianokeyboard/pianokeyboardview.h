@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_PIANOKEYBOARDVIEW_H
-#define MU_NOTATION_PIANOKEYBOARDVIEW_H
+#pragma once
 
 #include "async/asyncable.h"
 
@@ -33,7 +32,7 @@
 
 namespace mu::notation {
 class PianoKeyboardController;
-class PianoKeyboardView : public muse::uicomponents::QuickPaintedView, public muse::Injectable, public muse::async::Asyncable
+class PianoKeyboardView : public muse::uicomponents::QuickPaintedView, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -43,8 +42,8 @@ class PianoKeyboardView : public muse::uicomponents::QuickPaintedView, public mu
     Q_PROPERTY(qreal scrollBarPosition READ scrollBarPosition WRITE setScrollBarPosition NOTIFY scrollBarChanged)
     Q_PROPERTY(qreal scrollBarSize READ scrollBarSize NOTIFY scrollBarChanged)
 
-    muse::Inject<INotationConfiguration> configuration = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::LazyInject<INotationConfiguration> configuration = { this };
+    muse::LazyInject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
     explicit PianoKeyboardView(QQuickItem* parent = nullptr);
@@ -126,5 +125,3 @@ private:
     qreal m_scrollBarSize = 0.0;
 };
 }
-
-#endif // MU_NOTATION_PIANOKEYBOARDVIEW_H

@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_STAFFSETTINGSMODEL_H
-#define MU_INSTRUMENTSSCENE_STAFFSETTINGSMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -29,7 +28,7 @@
 #include "notation/notationtypes.h"
 
 namespace mu::instrumentsscene {
-class StaffSettingsModel : public QObject, public muse::Injectable
+class StaffSettingsModel : public QObject, public muse::LazyInjectable
 {
     Q_OBJECT
 
@@ -45,7 +44,7 @@ class StaffSettingsModel : public QObject, public muse::Injectable
 
     Q_PROPERTY(bool isMainScore READ isMainScore NOTIFY isMainScoreChanged)
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::LazyInject<context::IGlobalContext> context = { this };
 
 public:
     explicit StaffSettingsModel(QObject* parent = nullptr);
@@ -96,5 +95,3 @@ private:
     notation::StaffConfig m_config;
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_STAFFSETTINGSMODEL_H

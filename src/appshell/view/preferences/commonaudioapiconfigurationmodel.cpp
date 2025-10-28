@@ -30,7 +30,7 @@ using namespace mu::appshell;
 using namespace muse::audio;
 
 CommonAudioApiConfigurationModel::CommonAudioApiConfigurationModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

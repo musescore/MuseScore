@@ -22,8 +22,6 @@
 
 #include "musesoundslistmodel.h"
 
-#include "log.h"
-
 using namespace mu::musesounds;
 
 static const QVariantMap soundLibraryInfoToMap(const SoundLibraryInfo& soundLibraryInfo)
@@ -50,7 +48,7 @@ static const QVariantList soundInfoListToVariantList(const SoundLibraryInfoList&
 }
 
 MuseSoundsListModel::MuseSoundsListModel(QObject* parent)
-    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

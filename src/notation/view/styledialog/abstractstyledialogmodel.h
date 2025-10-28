@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_ABSTRACTSTYLEDIALOGMODEL_H
-#define MU_NOTATION_ABSTRACTSTYLEDIALOGMODEL_H
+#pragma once
 
 #include <unordered_map>
 
@@ -35,11 +34,11 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class AbstractStyleDialogModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class AbstractStyleDialogModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::LazyInject<context::IGlobalContext> context = { this };
 
 protected:
     explicit AbstractStyleDialogModel(QObject* parent, std::set<StyleId> ids);
@@ -60,5 +59,3 @@ private:
     mutable std::unordered_map<StyleId, StyleItem*> m_items;
 };
 }
-
-#endif // MU_NOTATION_ABSTRACTSTYLEDIALOGMODEL_H

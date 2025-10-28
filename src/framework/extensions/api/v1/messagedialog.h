@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_APIV1_MESSAGEDIALOG_H
-#define MUSE_EXTENSIONS_APIV1_MESSAGEDIALOG_H
+#pragma once
 
 #include <QObject>
 #include <QString>
@@ -41,7 +40,7 @@ public:
     Q_ENUM(Button)
 };
 
-class MessageDialog : public QObject, public Injectable, public muse::async::Asyncable
+class MessageDialog : public QObject, public LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
@@ -50,7 +49,7 @@ class MessageDialog : public QObject, public Injectable, public muse::async::Asy
     Q_PROPERTY(QVariantList standardButtons READ standardButtons WRITE setStandardButtons NOTIFY standardButtonsChanged FINAL)
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged FINAL)
 
-    Inject<IInteractive> interactive = { this };
+    LazyInject<IInteractive> interactive = { this };
 
 public:
 
@@ -95,5 +94,3 @@ private:
     QVariantList m_standardButtons;
 };
 }
-
-#endif // MUSE_EXTENSIONS_APIV1_MESSAGEDIALOG_H

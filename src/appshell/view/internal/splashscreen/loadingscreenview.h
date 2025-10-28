@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_LOADINGSCREENVIEW_H
-#define MU_APPSHELL_LOADINGSCREENVIEW_H
+#pragma once
 
 #include <QWidget>
 
@@ -37,9 +36,9 @@ class LoadingScreenView : public QWidget, public muse::Injectable
 {
     Q_OBJECT
 
-    Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
-    Inject<muse::languages::ILanguagesService> languagesService = { this };
-    Inject<muse::IApplication> application = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<muse::languages::ILanguagesService> languagesService = { this };
+    muse::Inject<muse::IApplication> application = { this };
 
 public:
     explicit LoadingScreenView(QWidget* parent = nullptr);
@@ -52,5 +51,3 @@ private:
     QSvgRenderer* m_backgroundRenderer = nullptr;
 };
 }
-
-#endif // MU_APPSHELL_LOADINGSCREENVIEW_H

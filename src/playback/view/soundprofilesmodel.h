@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_SOUNDPROFILESMODEL_H
-#define MU_PLAYBACK_SOUNDPROFILESMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 
@@ -35,7 +34,7 @@
 #include "playbacktypes.h"
 
 namespace mu::playback {
-class SoundProfilesModel : public QAbstractListModel, public muse::Injectable
+class SoundProfilesModel : public QAbstractListModel, public muse::LazyInjectable
 {
     Q_OBJECT
 
@@ -45,11 +44,11 @@ class SoundProfilesModel : public QAbstractListModel, public muse::Injectable
     Q_PROPERTY(
         QString currentlySelectedProfile READ currentlySelectedProfile WRITE setCurrentlySelectedProfile NOTIFY currentlySelectedProfileChanged)
 
-    muse::Inject<ISoundProfilesRepository> profilesRepo = { this };
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<IPlaybackConfiguration> config = { this };
-    muse::Inject<IPlaybackController> controller = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::LazyInject<ISoundProfilesRepository> profilesRepo = { this };
+    muse::LazyInject<context::IGlobalContext> context = { this };
+    muse::LazyInject<IPlaybackConfiguration> config = { this };
+    muse::LazyInject<IPlaybackController> controller = { this };
+    muse::LazyInject<muse::IInteractive> interactive = { this };
 public:
     explicit SoundProfilesModel(QObject* parent = nullptr);
 
@@ -90,5 +89,3 @@ private:
     QString m_currentlySelectedProfile;
 };
 }
-
-#endif // MU_PLAYBACK_SOUNDPROFILESMODEL_H

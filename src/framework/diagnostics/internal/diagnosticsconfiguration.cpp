@@ -24,7 +24,6 @@
 #include "global/settings.h"
 
 using namespace muse;
-using namespace mu;
 using namespace muse::diagnostics;
 
 static const Settings::Key IS_DUMP_UPLOAD_ALLOWED("diagnostics", "diagnostics/is_dump_upload_allowed");

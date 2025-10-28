@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_PREFERENCESMODEL_H
-#define MU_APPSHELL_PREFERENCESMODEL_H
+#pragma once
 
 #include <QAbstractItemModel>
 
@@ -34,16 +33,16 @@
 #include "iinteractive.h"
 
 namespace mu::appshell {
-class PreferencesModel : public QAbstractItemModel, public muse::Injectable
+class PreferencesModel : public QAbstractItemModel, public muse::LazyInjectable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString currentPageId READ currentPageId WRITE setCurrentPageId NOTIFY currentPageIdChanged)
 
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<IAppShellConfiguration> configuration = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::LazyInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::LazyInject<IAppShellConfiguration> configuration = { this };
+    muse::LazyInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::LazyInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit PreferencesModel(QObject* parent = nullptr);
@@ -88,5 +87,3 @@ private:
     QString m_currentPageId;
 };
 }
-
-#endif // MU_APPSHELL_PREFERENCESMODEL_H

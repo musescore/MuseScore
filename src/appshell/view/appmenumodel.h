@@ -51,23 +51,23 @@ class AppMenuModel : public muse::uicomponents::AbstractMenuModel
     Q_OBJECT
 
 public:
-    muse::Inject<IAppMenuModelHook> appMenuModelHook = { this };
-    muse::Inject<IAppShellConfiguration> configuration = { this };
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
-    muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+    muse::LazyInject<IAppMenuModelHook> appMenuModelHook = { this };
+    muse::LazyInject<IAppShellConfiguration> configuration = { this };
+    muse::LazyInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::LazyInject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::LazyInject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
+    muse::LazyInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
 #ifdef MUSE_MODULE_MUSESAMPLER
-    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSamplerInfo = { this };
+    muse::LazyInject<muse::musesampler::IMuseSamplerInfo> museSamplerInfo = { this };
 #endif
-    muse::Inject<muse::ui::IMainWindow> mainWindow = { this };
-    muse::Inject<muse::ui::INavigationController> navigationController = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
-    muse::Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
-    muse::Inject<muse::workspace::IWorkspaceManager> workspacesManager = { this };
-    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
-    muse::Inject<project::IRecentFilesController> recentFilesController = { this };
+    muse::LazyInject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::LazyInject<muse::ui::INavigationController> navigationController = { this };
+    muse::LazyInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
+    muse::LazyInject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::LazyInject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
+    muse::LazyInject<muse::workspace::IWorkspaceManager> workspacesManager = { this };
+    muse::LazyInject<project::IProjectConfiguration> projectConfiguration = { this };
+    muse::LazyInject<project::IRecentFilesController> recentFilesController = { this };
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);

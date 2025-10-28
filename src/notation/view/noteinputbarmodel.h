@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTEINPUTBARMODEL_H
-#define MU_NOTATION_NOTEINPUTBARMODEL_H
+#pragma once
 
 #include "uicomponents/view/abstractmenumodel.h"
 
@@ -36,9 +35,9 @@ class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel
 
     Q_PROPERTY(bool isInputAllowed READ isInputAllowed NOTIFY isInputAllowedChanged)
 
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<playback::IPlaybackController> playbackController = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::LazyInject<context::IGlobalContext> context = { this };
+    muse::LazyInject<playback::IPlaybackController> playbackController = { this };
+    muse::LazyInject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
     explicit NoteInputBarModel(QObject* parent = nullptr);
@@ -112,5 +111,3 @@ private:
     const ChordRest* elementToChordRest(const EngravingItem* element) const;
 };
 }
-
-#endif // MU_NOTATION_NOTEINPUTBARMODEL_H

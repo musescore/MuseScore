@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_MI_MULTIINSTANCESDEVMODEL_H
-#define MUSE_MI_MULTIINSTANCESDEVMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -30,14 +29,14 @@
 #include "async/asyncable.h"
 
 namespace muse::mi {
-class MultiInstancesDevModel : public QObject, public Injectable, public async::Asyncable
+class MultiInstancesDevModel : public QObject, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString selfID READ selfID CONSTANT)
     Q_PROPERTY(QVariantList instances READ instances NOTIFY instancesChanged)
 
-    Inject<IMultiInstancesProvider> multiInstancesProvider = { this };
+    LazyInject<IMultiInstancesProvider> multiInstancesProvider = { this };
 
 public:
     explicit MultiInstancesDevModel(QObject* parent = nullptr);
@@ -57,5 +56,3 @@ private:
     QVariantList m_instances;
 };
 }
-
-#endif // MUSE_MI_MULTIINSTANCESDEVMODEL_H

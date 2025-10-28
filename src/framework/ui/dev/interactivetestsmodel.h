@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_INTERACTIVETESTSMODEL_H
-#define MUSE_UI_INTERACTIVETESTSMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -29,13 +28,13 @@
 #include "async/asyncable.h"
 
 namespace muse::ui {
-class InteractiveTestsModel : public QObject, public Injectable, public async::Asyncable
+class InteractiveTestsModel : public QObject, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString currentUri READ currentUri NOTIFY currentUriChanged)
 
-    Inject<IInteractive> interactive = { this };
+    LazyInject<IInteractive> interactive = { this };
 
 public:
     explicit InteractiveTestsModel(QObject* parent = nullptr);
@@ -79,5 +78,3 @@ private:
     QString m_currentUri;
 };
 }
-
-#endif // MUSE_UI_INTERACTIVETESTSMODEL_H

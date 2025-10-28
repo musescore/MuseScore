@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_SOUNDFLAGSETTINGSMODEL_H
-#define MU_PLAYBACK_SOUNDFLAGSETTINGSMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -52,8 +51,8 @@ class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
 
     Q_PROPERTY(QVariantList contextMenuModel READ contextMenuModel NOTIFY contextMenuModelChanged FINAL)
 
-    muse::Inject<IPlaybackController> playbackController = { this };
-    muse::Inject<IPlaybackConfiguration> playbackConfiguration = { this };
+    muse::LazyInject<IPlaybackController> playbackController = { this };
+    muse::LazyInject<IPlaybackConfiguration> playbackConfiguration = { this };
 
 public:
     explicit SoundFlagSettingsModel(QObject* parent = nullptr);
@@ -123,5 +122,3 @@ private:
     bool m_availablePresetsInited = false;
 };
 }
-
-#endif // MU_PLAYBACK_SOUNDFLAGSETTINGSMODEL_H

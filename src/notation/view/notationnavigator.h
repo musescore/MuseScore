@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONNAVIGATOR_H
-#define MU_NOTATION_NOTATIONNAVIGATOR_H
+#pragma once
 
 #include <QObject>
 #include <QMouseEvent>
@@ -36,11 +35,11 @@
 #include "abstractnotationpaintview.h"
 
 namespace mu::notation {
-class NotationNavigatorCursorView : public QQuickPaintedItem, public muse::Injectable
+class NotationNavigatorCursorView : public QQuickPaintedItem, public muse::LazyInjectable
 {
     Q_OBJECT
 
-    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::LazyInject<INotationConfiguration> configuration = { this };
 
 public:
     NotationNavigatorCursorView(QQuickItem* parent = nullptr);
@@ -57,10 +56,10 @@ class NotationNavigator : public AbstractNotationPaintView
 {
     Q_OBJECT
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<INotationConfiguration> configuration = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
+    muse::LazyInject<context::IGlobalContext> globalContext = { this };
+    muse::LazyInject<INotationConfiguration> configuration = { this };
+    muse::LazyInject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::LazyInject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
     Q_PROPERTY(int orientation READ orientation NOTIFY orientationChanged)
 
@@ -104,5 +103,3 @@ private:
     muse::PointF m_startMove;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONNAVIGATOR_H

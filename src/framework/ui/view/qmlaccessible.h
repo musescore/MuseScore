@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UI_QMLACCESSIBLE_H
-#define MUSE_UI_QMLACCESSIBLE_H
+#pragma once
 
 #include <QObject>
 #include <QQmlParserStatus>
@@ -69,7 +68,7 @@ public:
     Q_ENUM(Role)
 };
 
-class AccessibleItem : public QObject, public QQmlParserStatus, public accessibility::IAccessible, public Injectable
+class AccessibleItem : public QObject, public QQmlParserStatus, public accessibility::IAccessible, public LazyInjectable
 {
     Q_OBJECT
 
@@ -98,7 +97,7 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
 
     Q_INTERFACES(QQmlParserStatus)
 
-    Inject<accessibility::IAccessibilityController> accessibilityController;
+    LazyInject<accessibility::IAccessibilityController> accessibilityController { this };
 
 public:
     STATE_PROPERTY(enabled, State::Enabled)
@@ -248,5 +247,3 @@ private:
     async::Channel<State, bool> m_accessibleStateChanged;
 };
 }
-
-#endif // MUSE_UI_QMLACCESSIBLE_H

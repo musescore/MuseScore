@@ -23,8 +23,6 @@
 
 #include "uicomponents/view/toolbaritem.h"
 
-#include "log.h"
-
 using namespace muse::extensions;
 using namespace muse::uicomponents;
 

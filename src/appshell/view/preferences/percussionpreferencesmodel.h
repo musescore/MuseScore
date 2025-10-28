@@ -29,7 +29,7 @@
 
 #include "async/asyncable.h"
 
-class PercussionPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class PercussionPreferencesModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -48,7 +48,7 @@ class PercussionPreferencesModel : public QObject, public muse::Injectable, publ
     Q_PROPERTY(bool percussionPanelMoveMidiNotesAndShortcuts READ percussionPanelMoveMidiNotesAndShortcuts
                WRITE setPercussionPanelMoveMidiNotesAndShortcuts NOTIFY percussionPanelMoveMidiNotesAndShortcutsChanged)
 
-    muse::Inject<mu::notation::INotationConfiguration> configuration = { this };
+    muse::LazyInject<mu::notation::INotationConfiguration> configuration = { this };
 
 public:
     explicit PercussionPreferencesModel(QObject* parent = nullptr);

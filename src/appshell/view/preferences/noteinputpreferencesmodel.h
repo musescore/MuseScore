@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_NOTEINPUTPREFERENCESMODEL_H
-#define MU_APPSHELL_NOTEINPUTPREFERENCESMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -34,7 +33,7 @@
 #include "ui/iuiactionsregister.h"
 
 namespace mu::appshell {
-class NoteInputPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class NoteInputPreferencesModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -77,11 +76,11 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
     Q_PROPERTY(
         bool autoUpdateFretboardDiagrams READ autoUpdateFretboardDiagrams WRITE setAutoUpdateFretboardDiagrams NOTIFY autoUpdateFretboardDiagramsChanged FINAL)
 
-    muse::Inject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration = { this };
-    muse::Inject<mu::engraving::IEngravingConfiguration> engravingConfiguration = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
+    muse::LazyInject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration = { this };
+    muse::LazyInject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::LazyInject<playback::IPlaybackConfiguration> playbackConfiguration = { this };
+    muse::LazyInject<mu::engraving::IEngravingConfiguration> engravingConfiguration = { this };
+    muse::LazyInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
 
 public:
     explicit NoteInputPreferencesModel(QObject* parent = nullptr);
@@ -168,5 +167,3 @@ signals:
     void autoUpdateFretboardDiagramsChanged(bool value);
 };
 }
-
-#endif // MU_APPSHELL_NOTEINPUTPREFERENCESMODEL_H

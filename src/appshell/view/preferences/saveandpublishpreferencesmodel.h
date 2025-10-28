@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_SAVEANDPUBLISHPREFERENCESMODEL_H
-#define MU_APPSHELL_SAVEANDPUBLISHPREFERENCESMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -30,7 +29,7 @@
 #include "project/iprojectconfiguration.h"
 
 namespace mu::appshell {
-class SaveAndPublishPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class SaveAndPublishPreferencesModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -38,7 +37,7 @@ class SaveAndPublishPreferencesModel : public QObject, public muse::Injectable, 
     Q_PROPERTY(int autoSaveInterval READ autoSaveInterval WRITE setAutoSaveInterval NOTIFY autoSaveIntervalChanged)
     Q_PROPERTY(int alsoShareAudioCom READ alsoShareAudioCom WRITE setAlsoShareAudioCom NOTIFY alsoShareAudioComChanged)
 
-    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
+    muse::LazyInject<project::IProjectConfiguration> projectConfiguration = { this };
 
 public:
     explicit SaveAndPublishPreferencesModel(QObject* parent = nullptr);
@@ -60,5 +59,3 @@ signals:
     void alsoShareAudioComChanged(int prompt);
 };
 }
-
-#endif // MU_APPSHELL_SAVEANDPUBLISHPREFERENCESMODEL_H

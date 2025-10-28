@@ -21,6 +21,7 @@
  */
 
 #pragma once
+
 #include "abstractstyledialogmodel.h"
 #include "iinteractive.h"
 #include "inotationconfiguration.h"
@@ -67,8 +68,8 @@ class ChordSymbolsPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(bool isCustomXml READ isCustomXml NOTIFY changePreset)
     Q_PROPERTY(bool isLegacyXml READ isLegacyXml NOTIFY changePreset)
 
-    muse::Inject<mu::notation::INotationConfiguration> configuration = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::LazyInject<mu::notation::INotationConfiguration> configuration = { this };
+    muse::LazyInject<muse::IInteractive> interactive = { this };
 
 public:
 

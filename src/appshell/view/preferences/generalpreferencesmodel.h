@@ -35,7 +35,7 @@
 #include "shortcuts/ishortcutsconfiguration.h"
 
 namespace mu::appshell {
-class GeneralPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class GeneralPreferencesModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -57,11 +57,11 @@ class GeneralPreferencesModel : public QObject, public muse::Injectable, public 
 
     Q_PROPERTY(bool showWelcomeDialog READ showWelcomeDialog WRITE setShowWelcomeDialog NOTIFY showWelcomeDialogChanged)
 
-    muse::Inject<IAppShellConfiguration> configuration = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration = { this };
-    muse::Inject<muse::languages::ILanguagesService> languagesService = { this };
-    muse::Inject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration = { this };
+    muse::LazyInject<IAppShellConfiguration> configuration = { this };
+    muse::LazyInject<muse::IInteractive> interactive = { this };
+    muse::LazyInject<muse::languages::ILanguagesConfiguration> languagesConfiguration = { this };
+    muse::LazyInject<muse::languages::ILanguagesService> languagesService = { this };
+    muse::LazyInject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration = { this };
 
 public:
     explicit GeneralPreferencesModel(QObject* parent = nullptr);

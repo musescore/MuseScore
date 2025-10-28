@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_NAVIGATIONSECTION_H
-#define MUSE_UI_NAVIGATIONSECTION_H
+#pragma once
 
 #include <QObject>
 #include <QList>
@@ -40,8 +39,8 @@ class NavigationSection : public AbstractNavigation, public INavigationSection
     Q_PROPERTY(QmlType type READ type_property WRITE setType NOTIFY typeChanged)
 
 public:
-    Inject<IApplication> application = { this };
-    Inject<INavigationController> navigationController = { this };
+    LazyInject<IApplication> application = { this };
+    LazyInject<INavigationController> navigationController = { this };
 
 public:
     explicit NavigationSection(QObject* parent = nullptr);
@@ -102,5 +101,3 @@ private:
     OnActiveRequested m_onActiveRequested;
 };
 }
-
-#endif // MUSE_UI_NAVIGATIONSECTION_H

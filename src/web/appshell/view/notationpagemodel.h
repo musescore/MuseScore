@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_NOTATIONPAGEMODEL_H
-#define MU_APPSHELL_NOTATIONPAGEMODEL_H
+#pragma once
 
 #include <QQuickItem>
 
@@ -35,19 +34,19 @@
 #include "dockwindow/idockwindowprovider.h"
 
 namespace mu::appshell {
-class NotationPageModel : public QObject, public muse::Injectable, public muse::async::Asyncable, public muse::actions::Actionable
+class NotationPageModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
     Q_PROPERTY(bool isNavigatorVisible READ isNavigatorVisible NOTIFY isNavigatorVisibleChanged)
     Q_PROPERTY(bool isBraillePanelVisible READ isBraillePanelVisible NOTIFY isBraillePanelVisibleChanged)
 
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<IAppShellConfiguration> configuration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
-    muse::Inject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
+    muse::LazyInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::LazyInject<context::IGlobalContext> globalContext = { this };
+    muse::LazyInject<IAppShellConfiguration> configuration = { this };
+    muse::LazyInject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::LazyInject<braille::IBrailleConfiguration> brailleConfiguration = { this };
+    muse::LazyInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
 
 public:
     explicit NotationPageModel(QObject* parent = nullptr);
@@ -89,5 +88,3 @@ private:
     void updatePercussionPanelVisibility();
 };
 }
-
-#endif // MU_APPSHELL_NOTATIONPAGEMODEL_H

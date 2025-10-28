@@ -26,16 +26,15 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "notation/inotation.h"
 
 #include "layoutpanelutils.h"
 
 namespace mu::instrumentsscene {
-class SystemObjectsLayerSettingsModel : public QAbstractListModel, public muse::Injectable
+class SystemObjectsLayerSettingsModel : public QAbstractListModel, public muse::LazyInjectable
 {
     Q_OBJECT
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::LazyInject<context::IGlobalContext> context = { this };
 
 public:
     explicit SystemObjectsLayerSettingsModel(QObject* parent = nullptr);

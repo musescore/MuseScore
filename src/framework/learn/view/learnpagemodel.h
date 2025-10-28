@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_LEARN_LEARNPAGEMODEL_H
-#define MUSE_LEARN_LEARNPAGEMODEL_H
+#pragma once
 
 #include <QObject>
 #include <QVariant>
@@ -32,15 +31,15 @@
 #include "ilearnconfiguration.h"
 
 namespace muse::learn {
-class LearnPageModel : public QObject, public Injectable, public async::Asyncable
+class LearnPageModel : public QObject, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QVariantList startedPlaylist READ startedPlaylist NOTIFY startedPlaylistChanged)
     Q_PROPERTY(QVariantList advancedPlaylist READ advancedPlaylist NOTIFY advancedPlaylistChanged)
 
-    Inject<ILearnService> learnService = { this };
-    Inject<ILearnConfiguration> learnConfiguration = { this };
+    LazyInject<ILearnService> learnService = { this };
+    LazyInject<ILearnConfiguration> learnConfiguration = { this };
 
 public:
     explicit LearnPageModel(QObject* parent = nullptr);
@@ -72,5 +71,3 @@ private:
     QString m_searchText;
 };
 }
-
-#endif // MUSE_LEARN_LEARNPAGEMODEL_H

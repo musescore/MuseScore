@@ -30,7 +30,7 @@ using namespace mu::playback;
 using namespace muse::audio;
 
 OnlineSoundsStatusModel::OnlineSoundsStatusModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

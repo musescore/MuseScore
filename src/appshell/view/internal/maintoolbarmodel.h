@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_MAINTOOLBARMODEL_H
-#define MU_NOTATION_MAINTOOLBARMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 
@@ -32,12 +31,12 @@
 #include "iglobalconfiguration.h"
 
 namespace mu::appshell {
-class MainToolBarModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
+class MainToolBarModel : public QAbstractListModel, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::LazyInject<context::IGlobalContext> context = { this };
+    muse::LazyInject<muse::IGlobalConfiguration> globalConfiguration = { this };
 
 public:
     explicit MainToolBarModel(QObject* parent = nullptr);
@@ -60,5 +59,3 @@ private:
     QList<QVariantMap> m_items;
 };
 }
-
-#endif // MU_NOTATION_MAINTOOLBARMODEL_H

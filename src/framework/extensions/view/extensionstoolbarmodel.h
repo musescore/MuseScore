@@ -31,7 +31,7 @@ class ExtensionsToolBarModel : public uicomponents::AbstractToolBarModel
 {
     Q_OBJECT
 
-    Inject<IExtensionsProvider> extensionsProvider = { this };
+    LazyInject<IExtensionsProvider> extensionsProvider = { this };
 
 public:
     Q_INVOKABLE void load() override;
