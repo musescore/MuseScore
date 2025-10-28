@@ -180,6 +180,7 @@ MUSX_IMPORT_TEST(onePartOneMeasureWithNestedTuplets)
 MUSX_IMPORT_TEST(oneMeasureWithTies)
 MUSX_IMPORT_TEST(v1v2Ties)
 MUSX_IMPORT_TEST(v1v2Ties2)
+MUSX_IMPORT_TEST(chordsymbols)
 
 #undef MUSX_IMPORT_TEST
 #undef MUSX_IMPORT_TEST_EDIT
