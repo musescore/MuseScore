@@ -1163,15 +1163,15 @@ void FinaleParser::importPageTexts()
         MusxInstance<others::PageTextAssign> evenLeftText;
         MusxInstance<others::PageTextAssign> evenMiddleText;
         MusxInstance<others::PageTextAssign> evenRightText;
+        std::vector<MusxInstance<others::PageTextAssign>> firstPageTexts;
     };
 
     HeaderFooter header;
     HeaderFooter footer;
     std::vector<MusxInstance<others::PageTextAssign>> notHF;
-    std::vector<MusxInstance<others::PageTextAssign>> remainder;
 
     // gather texts by position
-    for (MusxInstance<others::PageTextAssign> pageTextAssign : pageTextAssignList) {
+    for (const MusxInstance<others::PageTextAssign>& pageTextAssign : pageTextAssignList) {
         if (pageTextAssign->hidden) {
             // there may be something we can do with hidden assignments created for Patterson's Copyist Helper plugin,
             // but generally it means the header is not applicable to this part.
@@ -1190,25 +1190,19 @@ void FinaleParser::importPageTexts()
         // if text is not at top or bottom, invisible, or not recurring don't import as hf
         // For 2-page scores, we can import text only assigned to page 2 as a regular even hf.
         if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Center
-                                 || pageTextAssign->hidden
-                                 || startPage.value() >= 3 /// @todo must be changed to be first non-blank page + 2
-                                 || endPage.value() < PageCmper(m_score->npages()) /// @todo allow copyright on just page 1?
-                                 || !muse::RealIsEqual(pageTextAssign->yDisp, 0.0)
-                                 || !muse::RealIsEqual(pageTextAssign->xDisp, 0.0)
-                                 || pageTextAssign->hPosPageEdge
-                                 || pageTextAssign->vPosPageEdge) {
+            || pageTextAssign->hidden
+            || startPage.value() >= 3 /// @todo must be changed to be first non-blank page + 2
+            || endPage.value() < PageCmper(m_score->npages()) /// @todo allow copyright on just page 1?
+            || !muse::RealIsEqual(pageTextAssign->yDisp, 0.0)
+            || !muse::RealIsEqual(pageTextAssign->xDisp, 0.0)
+            || (pageTextAssign->indRpPos && (!muse::RealIsEqual(pageTextAssign->rightPgXDisp, 0.0)
+                                             || !muse::RealIsEqual(pageTextAssign->rightPgYDisp, 0.0)))
+            || pageTextAssign->hPosPageEdge
+            || pageTextAssign->vPosPageEdge) {
             notHF.emplace_back(pageTextAssign);
             continue;
         }
-        remainder.emplace_back(pageTextAssign);
-    }
 
-    for (MusxInstance<others::PageTextAssign> pageTextAssign : remainder) {
-        HeaderFooter& hf = pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Top ? header : footer;
-        hf.show = true;
-        hf.oddEven = true; // default to true, make import easier
-    }
-    for (MusxInstance<others::PageTextAssign> pageTextAssign : remainder) {
         HeaderFooter& hf = pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Top ? header : footer;
         /// @todo Finale bases right/left on the actual page numbers, not the visual page numbers. But MuseScore's
         /// left/right headers display based on visual page numbers. So the whole calculation must be reversed if
@@ -1251,22 +1245,38 @@ void FinaleParser::importPageTexts()
             || (evenLocation && (*evenLocation))) {
             notHF.emplace_back(pageTextAssign);
         }
-        if (oddLocation) {
-            *oddLocation = pageTextAssign;
-        }
-        if (evenLocation) {
-            *evenLocation = pageTextAssign;
+
+        if (oddLocation || evenLocation) {
+            hf.show = true;
+            if (oddLocation) {
+                *oddLocation = pageTextAssign;
+            }
+            if (evenLocation) {
+                *evenLocation = pageTextAssign;
+            }
+
+            // Handle visibility on page 1
+            if (startPage.value() > 1) {
+                hf.showFirstPage = false;
+            } else {
+                hf.firstPageTexts.emplace_back(pageTextAssign);
+            }
         }
     }
 
-    header.oddEven = (header.evenLeftText != header.oddLeftText)
-                     || (header.evenMiddleText != header.oddMiddleText)
-                     || (header.evenRightText != header.oddRightText);
-    footer.oddEven = (footer.evenLeftText != footer.oddLeftText)
-                     || (footer.evenMiddleText != footer.oddMiddleText)
-                     || (footer.evenRightText != footer.oddRightText);
+    std::vector<MusxInstance<others::PageTextAssign>> textsForFirstPage;
+    for (HeaderFooter* hf : { &header, &footer }) {
+        hf->oddEven = (hf->evenLeftText != hf->oddLeftText)
+                      || (hf->evenMiddleText != hf->oddMiddleText)
+                      || (hf->evenRightText != hf->oddRightText);
+        if (hf->showFirstPage) {
+            continue;
+        }
+        muse::join(textsForFirstPage, hf->firstPageTexts);
+        muse::join(notHF, hf->firstPageTexts);
+    }
 
-    auto stringFromPageText = [&](const MusxInstance<others::PageTextAssign>& pageText, bool isForHeaderFooter = true) {
+    auto stringFromPageText = [this](const MusxInstance<others::PageTextAssign>& pageText, bool isForHeaderFooter = true) {
         std::optional<PageCmper> startPage = pageText->calcStartPageNumber(m_currentMusxPartId);
         std::optional<PageCmper> endPage = pageText->calcEndPageNumber(m_currentMusxPartId);
         HeaderFooterType hfType = isForHeaderFooter ? HeaderFooterType::FirstPage : HeaderFooterType::None;
@@ -1308,9 +1318,13 @@ void FinaleParser::importPageTexts()
         m_score->style().set(Sid::showFooter,      false);
     }
 
-    auto getPages = [this](const MusxInstance<others::PageTextAssign>& pageTextAssign) -> std::vector<page_idx_t> {
+    auto getPages = [&](const MusxInstance<others::PageTextAssign>& pageTextAssign) -> std::vector<page_idx_t> {
         std::vector<page_idx_t> pagesWithText;
         page_idx_t startP = page_idx_t(pageTextAssign->calcStartPageNumber(m_currentMusxPartId).value_or(1) - 1);
+        // This text is part of a HF for pages 2+ and only needs to be added on page 1
+        if (muse::contains(textsForFirstPage, pageTextAssign)) {
+            return { startP };
+        }
         page_idx_t endP = page_idx_t(pageTextAssign->calcEndPageNumber(m_currentMusxPartId).value_or(PageCmper(m_score->npages())) - 1);
         for (page_idx_t i = startP; i <= endP; ++i) {
             pagesWithText.emplace_back(i);
@@ -1439,7 +1453,7 @@ void FinaleParser::importPageTexts()
                     pageFrame->setAutoSizeEnabled(false);
                     pageFrame->setBoxHeight(Spatium(maxBoxHeight / m_score->style().defaultSpatium()));
                     setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_BELOW, Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
-                    pageFrame->setBottomGap(Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
+                    setAndStyleProperty(pageFrame, Pid::BOTTOM_GAP, Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
                     pageFrame->ryoffset() -= headerDistance;
                     topBoxes.emplace(page->no(), toMeasureBase(pageFrame));
                     return toMeasureBase(pageFrame);
@@ -1471,7 +1485,7 @@ void FinaleParser::importPageTexts()
                     pageFrame->setSizeIsSpatiumDependent(false);
                     pageFrame->setBoxHeight(Spatium(maxBoxHeight / m_score->style().defaultSpatium()));
                     setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_ABOVE, Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
-                    pageFrame->setTopGap(Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
+                    setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
 
                     // Move page break, if it exists
                     for (EngravingItem* e : system->last()->el()) {
