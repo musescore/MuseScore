@@ -346,6 +346,8 @@ struct MeasurePrintContext final
     bool scoreStart = true;
     bool pageStart = true;
     bool systemStart = true;
+    size_t pageNumber = 0;
+    bool writePageNo = false;
     const Measure* prevMeasure = nullptr;
     const System* prevSystem = nullptr;
     const System* lastSystemPrevPage = nullptr;
@@ -442,6 +444,7 @@ private:
     void repeatAtMeasureStart(Attributes& attr, const Measure* const m, track_idx_t strack, track_idx_t etrack, track_idx_t track);
     void repeatAtMeasureStop(const Measure* const m, track_idx_t strack, track_idx_t etrack, track_idx_t track);
     void writeParts();
+    bool shouldWritePageNo(const Page* page);
 
     static String elementPosition(const ExportMusicXml* const expMxml, const EngravingItem* const elm);
     static String positioningAttributesForTboxText(const PointF position, float spatium);
@@ -7340,112 +7343,119 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
     const bool prevMeasSectionBreak = prevSysMB ? prevSysMB->sectionBreak() : false;
     const bool prevPageBreak = hasPageBreak(mpc.lastSystemPrevPage);
 
-    String newSystemOrPage;               // new-[system|page]="yes" or empty
-    if (!mpc.scoreStart) {
-        IMusicXmlConfiguration::MusicXmlExportBreaksType exportBreaksType = configuration()->exportBreaksType();
+    XmlWriter::Attributes attributes;
 
+    IMusicXmlConfiguration::MusicXmlExportBreaksType exportBreaksType = configuration()->exportBreaksType();
+    if (!mpc.scoreStart) {
         if (exportBreaksType == IMusicXmlConfiguration::MusicXmlExportBreaksType::All) {
             if (mpc.pageStart) {
-                newSystemOrPage = u" new-page=\"yes\"";
+                attributes.push_back({ "new-page", "yes" });
             } else if (mpc.systemStart) {
-                newSystemOrPage = u" new-system=\"yes\"";
+                attributes.push_back({ "new-system", "yes" });
             }
         } else if (exportBreaksType == IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual) {
             if (mpc.pageStart && prevPageBreak) {
-                newSystemOrPage = u" new-page=\"yes\"";
+                attributes.push_back({ "new-page", "yes" });
             } else if (mpc.systemStart && (prevMeasLineBreak || prevMeasSectionBreak)) {
-                newSystemOrPage = u" new-system=\"yes\"";
+                attributes.push_back({ "new-system", "yes" });
             }
         }
     }
 
-    bool doBreak = mpc.scoreStart || (!newSystemOrPage.empty());
+    bool doBreak = mpc.scoreStart || !attributes.empty();
     bool doLayout = configuration()->exportLayout();
 
-    if (doBreak) {
-        if (doLayout) {
-            m_xml.startElementRaw(String(u"print%1").arg(newSystemOrPage));
-            const MStyle& style = score()->style();
-            const double pageWidth  = getTenthsFromInches(style.styleD(Sid::pageWidth));
-            const double lm = getTenthsFromInches(style.styleD(Sid::pageOddLeftMargin));
-            const double rm = getTenthsFromInches(style.styleD(Sid::pageWidth)
-                                                  - style.styleD(Sid::pagePrintableWidth)
-                                                  - style.styleD(Sid::pageOddLeftMargin));
-            const double tm = getTenthsFromInches(style.styleD(Sid::pageOddTopMargin));
+    if (mpc.pageStart) {
+        bool exportPageNo = exportBreaksType == IMusicXmlConfiguration::MusicXmlExportBreaksType::All
+                            || (exportBreaksType == IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual && mpc.pageStart
+                                && prevPageBreak);
+        if (exportPageNo && mpc.writePageNo) {
+            attributes.push_back({ "page-number", mpc.pageNumber });
+        }
+    }
 
-            // System Layout
+    if (doBreak && doLayout) {
+        m_xml.startElement("print", attributes);
+        const MStyle& style = score()->style();
+        const double pageWidth = getTenthsFromInches(style.styleD(Sid::pageWidth));
+        const double lm = getTenthsFromInches(style.styleD(Sid::pageOddLeftMargin));
+        const double rm = getTenthsFromInches(style.styleD(Sid::pageWidth)
+                                              - style.styleD(Sid::pagePrintableWidth)
+                                              - style.styleD(Sid::pageOddLeftMargin));
+        const double tm = getTenthsFromInches(style.styleD(Sid::pageOddTopMargin));
 
-            // For a multi-measure rest positioning is valid only
-            // in the replacing measure
-            // note: for a normal measure, mmRest1 is the measure itself,
-            // for a multi-measure rest, it is the replacing measure
-            const Measure* mmR1 = m->coveringMMRestOrThis();
-            const System* system = mmR1->system();
+        // System Layout
 
-            // Put the system print suggestions only for the first part in a score...
-            if (partNr == 0) {
-                // Find the right margin of the system.
-                double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
-                double systemRM = pageWidth - rm - (getTenthsFromDots(system->ldata()->bbox().width()) + lm);
+        // For a multi-measure rest positioning is valid only
+        // in the replacing measure
+        // note: for a normal measure, mmRest1 is the measure itself,
+        // for a multi-measure rest, it is the replacing measure
+        const Measure* mmR1 = m->coveringMMRestOrThis();
+        const System* system = mmR1->system();
 
-                m_xml.startElement("system-layout");
-                m_xml.startElement("system-margins");
-                m_xml.tag("left-margin", String::number(systemLM, 2));
-                m_xml.tag("right-margin", String::number(systemRM, 2));
-                m_xml.endElement();
+        // Put the system print suggestions only for the first part in a score...
+        if (partNr == 0) {
+            // Find the right margin of the system.
+            double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
+            double systemRM = pageWidth - rm - (getTenthsFromDots(system->ldata()->bbox().width()) + lm);
 
-                if (mpc.systemStart && !mpc.pageStart) {
-                    // see System::layout2() for the factor 2 * score()->spatium()
-                    const Measure* prevSystemMeasure = mpc.prevMeasure->coveringMMRestOrThis();
-                    const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
-                                                             - prevSystemMeasure->pagePos().y()
-                                                             - prevSystemMeasure->ldata()->bbox().height()
-                                                             + 2 * score()->style().spatium()
-                                                             );
-                    m_xml.tag("system-distance", String::number(sysDist, 2));
-                }
+            m_xml.startElement("system-layout");
+            m_xml.startElement("system-margins");
+            m_xml.tag("left-margin", String::number(systemLM, 2));
+            m_xml.tag("right-margin", String::number(systemRM, 2));
+            m_xml.endElement();
 
-                if (mpc.pageStart || mpc.scoreStart) {
-                    const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
-                    m_xml.tag("top-system-distance", String::number(topSysDist, 2));
-                }
-
-                m_xml.endElement();
+            if (mpc.systemStart && !mpc.pageStart) {
+                // see System::layout2() for the factor 2 * score()->spatium()
+                const Measure* prevSystemMeasure = mpc.prevMeasure->coveringMMRestOrThis();
+                const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
+                                                         - prevSystemMeasure->pagePos().y()
+                                                         - prevSystemMeasure->ldata()->bbox().height()
+                                                         + 2 * score()->style().spatium()
+                                                         );
+                m_xml.tag("system-distance", String::number(sysDist, 2));
             }
 
-            // Staff layout elements.
-            for (staff_idx_t staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; staffIdx++) {
-                // calculate distance between this and previous staff using the bounding boxes
-                const staff_idx_t staffNr = firstStaffOfPart + staffIdx;
-                const staff_idx_t prevStaffNr = system->prevVisibleStaff(staffNr);
-                if (prevStaffNr == muse::nidx) {
-                    continue;
-                }
-                if (!system->staff(staffNr)->show()) {
-                    m_hiddenStaves.push_back(staffIdx);
-                    continue;
-                }
-                const RectF& prevBbox = system->staff(prevStaffNr)->bbox();
-                const double staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
-
-                if (staffDist > 0) {
-                    m_xml.startElement("staff-layout", { { "number", staffIdx + 1 } });
-                    m_xml.tag("staff-distance", String::number(getTenthsFromDots(staffDist), 2));
-                    m_xml.endElement();
-                } else {
-                    m_hiddenStaves.push_back(staffIdx);
-                }
-            }
-
-            // Measure layout elements.
-            if (m->prev() && m->prev()->isHBox()) {
-                measureLayout(m->prev()->width());
+            if (mpc.pageStart || mpc.scoreStart) {
+                const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
+                m_xml.tag("top-system-distance", String::number(topSysDist, 2));
             }
 
             m_xml.endElement();
-        } else if (!newSystemOrPage.empty()) {
-            m_xml.tagRaw(String(u"print%1").arg(newSystemOrPage));
         }
+
+        // Staff layout elements.
+        for (size_t staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; ++staffIdx) {
+            // calculate distance between this and previous staff using the bounding boxes
+            const staff_idx_t staffNr = firstStaffOfPart + staffIdx;
+            const staff_idx_t prevStaffNr = system->prevVisibleStaff(staffNr);
+            if (prevStaffNr == muse::nidx) {
+                continue;
+            }
+            if (!system->staff(staffNr)->show()) {
+                m_hiddenStaves.push_back(staffIdx);
+                continue;
+            }
+            const RectF& prevBbox = system->staff(prevStaffNr)->bbox();
+            const double staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
+
+            if (staffDist > 0) {
+                m_xml.startElement("staff-layout", { { "number", staffIdx + 1 } });
+                m_xml.tag("staff-distance", String::number(getTenthsFromDots(staffDist), 2));
+                m_xml.endElement();
+            } else {
+                m_hiddenStaves.push_back(staffIdx);
+            }
+        }
+
+        // Measure layout elements.
+        if (m->prev() && m->prev()->isHBox()) {
+            measureLayout(m->prev()->width());
+        }
+
+        m_xml.endElement();
+    } else if (!attributes.empty()) {
+        m_xml.tag("print", attributes);
     } else if (m->prev() && m->prev()->isHBox()) {
         m_xml.startElement("print");
         measureLayout(m->prev()->width());
@@ -8580,6 +8590,50 @@ void MeasurePrintContext::measureWritten(const Measure* m)
     prevMeasure = m;
 }
 
+bool ExportMusicXml::shouldWritePageNo(const Page* page)
+{
+    const MStyle& style = m_score->style();
+    if (!style.styleB(Sid::showHeader) || !(page->no() || style.styleB(Sid::headerFirstPage))) {
+        return false;
+    }
+
+    auto macroPrintPageNo = [&](const Text* text) -> bool {
+        String xmlText = text->xmlText();
+        std::wregex pageNo = std::wregex(L"\\$([p|N|P])");
+        StringList results = xmlText.search(pageNo, { 1 }, SplitBehavior::SkipEmptyParts);
+
+        for (const String& s : results) {
+            Char c = s.at(0);
+            if ((c == 'P')
+                || (c == 'p' && page->no() > 0)
+                || (c == 'N' && (page->no() + m_score->pageNumberOffset() > 0 || m_score->npages() > 1))) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    bool printPageNo = false;
+    for (int i = 0; i < MAX_HEADERS; i++) {
+        Text* text = m_score->headerText(i);
+        if (!text) {
+            continue;
+        }
+
+        printPageNo |= macroPrintPageNo(text);
+    }
+
+    for (int i = 0; i < MAX_FOOTERS; i++) {
+        Text* text = m_score->footerText(i);
+        if (!text) {
+            continue;
+        }
+
+        printPageNo |= macroPrintPageNo(text);
+    }
+    return printPageNo;
+}
+
 //---------------------------------------------------------
 //  writeParts
 //---------------------------------------------------------
@@ -8615,6 +8669,8 @@ void ExportMusicXml::writeParts()
         for (size_t pageIndex = 0; pageIndex < pages.size(); ++pageIndex) {
             const Page* page = pages.at(pageIndex);
             mpc.pageStart = true;
+            mpc.pageNumber = page->no() + 1 + m_score->pageNumberOffset();
+            mpc.writePageNo = shouldWritePageNo(page);
             const auto& systems = page->systems();
 
             for (int systemIndex = 0; systemIndex < static_cast<int>(systems.size()); ++systemIndex) {
