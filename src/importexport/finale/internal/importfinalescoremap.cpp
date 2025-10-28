@@ -1305,7 +1305,7 @@ void FinaleParser::importPageLayout()
         for (size_t j = i + 1; j < staffSystems.size(); ++j) {
             // compare system one in advance to previous system
             if (muse::RealIsEqual(double(staffSystems[j]->top), double(staffSystems[j-1]->top))
-                && muse::RealIsEqualOrMore(0.0, double(staffSystems[j]->distanceToPrev + (-staffSystems[j]->top) - staffSystems[j-1]->bottom))) {
+                && muse::RealIsEqualOrMore(0.0, double(staffSystems[j]->distanceToPrev + (-staffSystems[j]->top) - staffSystems[j-1]->bottom - 96))) {
                 double dist = staffSystems[j]->left
                               - (pages[currentPageIndex]->width- pages[currentPageIndex]->margLeft - (-pages[currentPageIndex]->margRight) - (-staffSystems[j-1]->right));
                 // check if horizontal distance between systems is larger than 0 and smaller than content width of the page
