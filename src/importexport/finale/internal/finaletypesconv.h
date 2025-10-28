@@ -51,6 +51,8 @@ extern engraving::TupletNumberType toMuseScoreTupletNumberType(musx::dom::option
 extern engraving::Align justifyToAlignment(musx::dom::others::NamePositioning::AlignJustify alignJustify);
 extern engraving::AlignH toAlignH(musx::dom::others::HorizontalTextJustification hTextJustify);
 extern engraving::AlignH toAlignH(musx::dom::others::MeasureNumberRegion::AlignJustify align);
+extern engraving::AlignH toAlignH(musx::dom::others::PageTextAssign::HorizontalAlignment align);
+extern engraving::AlignV toAlignV(musx::dom::others::PageTextAssign::VerticalAlignment align);
 extern engraving::CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines);
 extern engraving::NoteVal notePropertiesToNoteVal(const musx::dom::Note::NoteProperties& noteProperties, engraving::Key key = engraving::Key::C);
 extern engraving::Fraction musxFractionToFraction(const musx::util::Fraction& fraction);

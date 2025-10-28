@@ -987,6 +987,26 @@ AlignH toAlignH(others::MeasureNumberRegion::AlignJustify align)
     return muse::value(hAlignTable, align, AlignH::LEFT);
 }
 
+AlignH toAlignH(others::PageTextAssign::HorizontalAlignment align)
+{
+    static const std::unordered_map<others::PageTextAssign::HorizontalAlignment, AlignH> hAlignTable = {
+        { others::PageTextAssign::HorizontalAlignment::Left,   AlignH::LEFT },
+        { others::PageTextAssign::HorizontalAlignment::Center, AlignH::HCENTER },
+        { others::PageTextAssign::HorizontalAlignment::Right,  AlignH::RIGHT },
+    };
+    return muse::value(hAlignTable, align);
+}
+
+AlignV toAlignV(others::PageTextAssign::VerticalAlignment align)
+{
+    static const std::unordered_map<others::PageTextAssign::VerticalAlignment, AlignV> vAlignTable = {
+        { others::PageTextAssign::VerticalAlignment::Top,    AlignV::TOP },
+        { others::PageTextAssign::VerticalAlignment::Center, AlignV::VCENTER },
+        { others::PageTextAssign::VerticalAlignment::Bottom, AlignV::BOTTOM }, // observed: BASELINE produces erratic results
+    };
+    return muse::value(vAlignTable, align);
+}
+
 CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines)
 {
     static const std::unordered_map<bool, CourtesyBarlineMode> courtesyBarlineModeTable = {
