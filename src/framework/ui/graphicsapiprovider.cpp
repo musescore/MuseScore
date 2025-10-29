@@ -236,7 +236,10 @@ void GraphicsApiProvider::writeData(const Data& d)
     QString str = vals.join('|');
 
     QFile file(dataFilePath());
-    file.open(QIODevice::WriteOnly);
+    if (!file.open(QIODevice::WriteOnly)) {
+        LOGE() << "Failed to write Graphics GraphicsApi data to file: " << file.fileName();
+        return;
+    }
     file.write(str.toUtf8());
 }
 
