@@ -607,7 +607,7 @@ void writeRepeatEndingPrefs(MStyle& style, const FinaleParser& context)
     const auto& prefs = context.musxOptions();
 
     writeEfixSpace(style, Sid::voltaLineWidth, prefs.repeatOptions->bracketLineWidth);
-    writeEvpuPointF(style, Sid::voltaPosAbove, 0, prefs.repeatOptions->bracketHeight);
+    writeEvpuPointF(style, Sid::voltaPosAbove, 0, -prefs.repeatOptions->bracketHeight);
     writeEvpuSpace(style, Sid::voltaHook, prefs.repeatOptions->bracketHookLen);
     style.set(Sid::voltaLineStyle, LineType::SOLID);
     writeDefaultFontPref(style, context, "volta", options::FontOptions::FontType::Ending);

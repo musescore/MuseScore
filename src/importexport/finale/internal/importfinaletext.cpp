@@ -500,14 +500,6 @@ ReadableRepeatText::ReadableRepeatText(const FinaleParser& context, const MusxIn
 
 void FinaleParser::importTextExpressions()
 {
-    auto staffIdxFromAssignment = [this](StaffCmper assign) -> staff_idx_t {
-        switch (assign) {
-        case -1: return 0;
-        case -2: return m_score->nstaves() - 1;
-        default: return muse::value(m_inst2Staff, assign, muse::nidx);
-        }
-    };
-
     // Iterate through assigned expressions
     const MusxInstanceList<others::MeasureExprAssign> expressionAssignments = m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId);
     std::vector<std::pair<Cmper, Inci>> parsedAssignments;
@@ -991,28 +983,10 @@ void FinaleParser::importTextExpressions()
         }
 
         // Find staff
-        /// @todo use system object staves and linked clones to avoid duplicate elements
         std::vector<std::pair<staff_idx_t, StaffCmper>> links;
-        staff_idx_t curStaffIdx = [&]() -> staff_idx_t {
-            if (repeatAssignment->topStaffOnly) {
-                return 0;
-            }
-            /// @todo forced staff list
-            for (StaffCmper musxStaffId : partScore()
-                ? m_doc->getOthers()->get<others::StaffListRepeatParts>(m_currentMusxPartId, repeatAssignment->staffList)->values
-                : m_doc->getOthers()->get<others::StaffListRepeatScore>(m_currentMusxPartId, repeatAssignment->staffList)->values) {
-                staff_idx_t idx = staffIdxFromAssignment(musxStaffId);
-                std::pair<staff_idx_t, StaffCmper> pair = std::make_pair(idx, musxStaffId);
-                if (idx == muse::nidx || muse::contains(links, pair)) {
-                    continue;
-                }
-                links.emplace_back(pair);
-            }
-            return !links.empty() ? muse::takeFirst(links).first : 0;
-        }();
+        staff_idx_t curStaffIdx = staffIdxForRepeats(repeatAssignment->topStaffOnly, repeatAssignment->staffList, links);
 
         if (curStaffIdx == muse::nidx) {
-            /// @todo system object staves
             logger()->logWarning(String(u"Add repeat text: Musx inst value not found."));
             continue;
         }
@@ -1074,7 +1048,6 @@ void FinaleParser::importTextExpressions()
         measure->add(item);
         m_systemObjectStaves.insert(curStaffIdx);
 
-        /// @todo account for individual adjustments per staff
         for (auto [linkedStaffIdx, linkedMusxStaffId] : links) {
             /// @todo improved handling for bottom system objects
             TextBase* copy = toTextBase(item->clone());

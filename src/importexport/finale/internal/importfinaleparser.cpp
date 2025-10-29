@@ -131,6 +131,44 @@ void FinaleParser::parse()
     logger()->logInfo(String(u"Import complete. Opening file..."));
 }
 
+staff_idx_t FinaleParser::staffIdxFromAssignment(StaffCmper assign)
+{
+    switch (assign) {
+    case -1: return 0;
+    case -2: return m_score->nstaves() - 1;
+    default: return muse::value(m_inst2Staff, assign, muse::nidx);
+    }
+}
+
+staff_idx_t FinaleParser::staffIdxForRepeats(bool onlyTop, Cmper staffList,
+                                             std::vector<std::pair<staff_idx_t, StaffCmper>>& links)
+{
+    if (onlyTop) {
+        return 0;
+    }
+    /// @todo forced staff list
+    std::vector<StaffCmper> list;
+    if (partScore()) {
+        if (const auto& l = m_doc->getOthers()->get<others::StaffListRepeatParts>(m_currentMusxPartId, staffList)) {
+            list = l->values;
+        }
+    } else {
+        if (const auto& l = m_doc->getOthers()->get<others::StaffListRepeatScore>(m_currentMusxPartId, staffList)) {
+            list = l->values;
+        }
+    }
+
+    for (StaffCmper musxStaffId : list) {
+        staff_idx_t idx = staffIdxFromAssignment(musxStaffId);
+        std::pair<staff_idx_t, StaffCmper> pair = std::make_pair(idx, musxStaffId);
+        if (idx == muse::nidx || muse::contains(links, pair)) {
+            continue;
+        }
+        links.emplace_back(pair);
+    }
+    return !links.empty() ? muse::takeFirst(links).first : muse::nidx;
+}
+
 void setAndStyleProperty(EngravingObject* e, Pid id, PropertyValue v, bool leaveStyled)
 {
     if (v.isValid()) {
