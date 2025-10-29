@@ -82,10 +82,6 @@ Item {
         }
     }
 
-    Component.onCompleted: {
-        noteInputModel.load()
-    }
-
     GridViewSectional {
         id: gridView
 
