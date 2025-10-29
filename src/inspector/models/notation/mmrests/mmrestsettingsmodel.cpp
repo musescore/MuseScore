@@ -35,6 +35,12 @@ MMRestSettingsModel::MMRestSettingsModel(QObject* parent, IElementRepositoryServ
     setTitle(muse::qtrc("inspector", "Multimeasure rest"));
     setIcon(muse::ui::IconCode::Code::MULTIMEASURE_REST);
     createProperties();
+
+    if (notation::INotationStylePtr notationStyle = style()) {
+        notationStyle->styleChanged().onNotify(this, [this]() {
+            updateNumberOptionsEnabled();
+        });
+    }
 }
 
 void MMRestSettingsModel::createProperties()
