@@ -992,7 +992,7 @@ void FinaleParser::importTextExpressions()
 
         // Find staff
         /// @todo use system object staves and linked clones to avoid duplicate elements
-        std::vector<staff_idx_t> links;
+        std::vector<std::pair<staff_idx_t, StaffCmper>> links;
         staff_idx_t curStaffIdx = [&]() -> staff_idx_t {
             if (repeatAssignment->topStaffOnly) {
                 return 0;
@@ -1002,12 +1002,13 @@ void FinaleParser::importTextExpressions()
                 ? m_doc->getOthers()->get<others::StaffListRepeatParts>(m_currentMusxPartId, repeatAssignment->staffList)->values
                 : m_doc->getOthers()->get<others::StaffListRepeatScore>(m_currentMusxPartId, repeatAssignment->staffList)->values) {
                 staff_idx_t idx = staffIdxFromAssignment(musxStaffId);
-                if (idx == muse::nidx || muse::contains(links, idx)) {
+                std::pair<staff_idx_t, StaffCmper> pair = std::make_pair(idx, musxStaffId);
+                if (idx == muse::nidx || muse::contains(links, pair)) {
                     continue;
                 }
-                links.emplace_back(idx);
+                links.emplace_back(pair);
             }
-            return !links.empty() ? muse::takeFirst(links) : 0;
+            return !links.empty() ? muse::takeFirst(links).first : 0;
         }();
 
         if (curStaffIdx == muse::nidx) {
@@ -1027,7 +1028,7 @@ void FinaleParser::importTextExpressions()
         logger()->logInfo(String(u"Creating a %1 at tick %2 on track %3.").arg(TConv::userName(repeatText->elementType).translated(), measure->tick().toString(), String::number(curTrackIdx)));
         TextBase* item = toTextBase(Factory::createItem(repeatText->elementType, measure));
         item->setParent(measure);
-        // item->setVisible(!repeatAssignment->hidden);
+        item->setVisible(!repeatAssignment->hidden);
         item->setTrack(curTrackIdx);
         if (item->isJump()) {
             toJump(item)->setJumpType(repeatText->jumpType);
@@ -1065,7 +1066,7 @@ void FinaleParser::importTextExpressions()
         }
         item->setAutoplace(false);
         setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
-        PointF p = evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * SPATIUM20;
+        PointF p = evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * SPATIUM20; /// @todo adjust for staff reference line?
         double blAdjust = item->align() == AlignH::RIGHT && measure->endBarLine()
                             ? measure->endBarLine()->ldata()->bbox().width() : 0.0;
         p.rx() -= blAdjust;
@@ -1074,12 +1075,20 @@ void FinaleParser::importTextExpressions()
         m_systemObjectStaves.insert(curStaffIdx);
 
         /// @todo account for individual adjustments per staff
-        for (staff_idx_t linkedStaffIdx : links) {
+        for (auto [linkedStaffIdx, linkedMusxStaffId] : links) {
             /// @todo improved handling for bottom system objects
             TextBase* copy = toTextBase(item->clone());
             copy->setStaffIdx(linkedStaffIdx);
-            // copy->setVisible(!repeatAssignment->hidden);
-            setAndStyleProperty(copy, Pid::OFFSET, p);
+            const MusxInstance<others::RepeatIndividualPositioning>& indiv = repeatAssignment->getIndividualPositioning(linkedMusxStaffId);
+            if (repeatAssignment->individualPlacement && indiv) {
+                copy->setVisible(!indiv->hidden);
+                PointF p1 = evpuToPointF(indiv->x1add, -indiv->y1add) * SPATIUM20; /// @todo adjust for staff reference line?
+                p1.rx() -= blAdjust;
+                setAndStyleProperty(item, Pid::OFFSET, p1);
+            } else {
+                copy->setVisible(!repeatAssignment->hidden);
+                setAndStyleProperty(copy, Pid::OFFSET, p);
+            }
             copy->linkTo(item);
             measure->add(copy);
             m_systemObjectStaves.insert(linkedStaffIdx);
