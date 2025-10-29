@@ -765,6 +765,7 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     }
 
     style.set(Sid::fretMag, doubleFromPercent(prefs.chordOptions->fretPercent));
+    style.set(Sid::chordSymPosition, prefs.chordOptions->chordAlignment == options::ChordOptions::ChordAlignment::Left ? AlignH::LEFT : AlignH::HCENTER);
 }
 
 void FinaleParser::importStyles()
