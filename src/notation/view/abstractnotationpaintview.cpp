@@ -133,7 +133,7 @@ void AbstractNotationPaintView::initNavigatorOrientation()
 {
     configuration()->canvasOrientation().ch.onReceive(this, [this](muse::Orientation) {
         moveCanvasToPosition(PointF(0, 0));
-    });
+    }, async::Asyncable::Mode::SetReplace);
 }
 
 void AbstractNotationPaintView::moveCanvasToCenter()
@@ -708,7 +708,7 @@ void AbstractNotationPaintView::onNotationSetup()
 
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         scheduleRedraw();
-    });
+    }, async::Asyncable::Mode::SetReplace);
 
     engravingConfiguration()->debuggingOptionsChanged().onNotify(this, [this]() {
         scheduleRedraw();
