@@ -31,7 +31,7 @@ class MMRestSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * isNumberVisible READ isNumberVisible CONSTANT)
     Q_PROPERTY(PropertyItem * numberPosition READ numberPosition CONSTANT)
-    Q_PROPERTY(bool areNumberOptionsEnabled READ areNumberOptionsEnabled NOTIFY isNumberVisibleEnabledChanged)
+    Q_PROPERTY(bool areNumberOptionsEnabled READ areNumberOptionsEnabled NOTIFY areNumberOptionsEnabledChanged)
 
 public:
     explicit MMRestSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -46,7 +46,7 @@ public:
     bool areNumberOptionsEnabled() const;
 
 signals:
-    void isNumberVisibleEnabledChanged(bool enabled);
+    void areNumberOptionsEnabledChanged(bool enabled);
 
 private:
     void updateNumberOptionsEnabled();
@@ -54,7 +54,7 @@ private:
 private:
     PropertyItem* m_isNumberVisible = nullptr;
     PropertyItem* m_numberPosition = nullptr;
-    bool m_isNumberVisibleEnabled = true;
+    bool m_areNumberOptionsEnabled = true;
 };
 }
 

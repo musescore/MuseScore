@@ -74,7 +74,7 @@ PropertyItem* MMRestSettingsModel::numberPosition() const
 
 bool MMRestSettingsModel::areNumberOptionsEnabled() const
 {
-    return m_isNumberVisibleEnabled;
+    return m_areNumberOptionsEnabled;
 }
 
 void MMRestSettingsModel::updateNumberOptionsEnabled()
@@ -92,8 +92,8 @@ void MMRestSettingsModel::updateNumberOptionsEnabled()
         }
     }
 
-    if (enabled != m_isNumberVisibleEnabled) {
-        m_isNumberVisibleEnabled = enabled;
-        emit isNumberVisibleEnabledChanged(m_isNumberVisibleEnabled);
+    if (enabled != m_areNumberOptionsEnabled) {
+        m_areNumberOptionsEnabled = enabled;
+        emit areNumberOptionsEnabledChanged(m_areNumberOptionsEnabled);
     }
 }
