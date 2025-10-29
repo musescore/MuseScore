@@ -52,6 +52,7 @@
 #include "engraving/dom/trill.h"
 #include "engraving/dom/utils.h"
 #include "engraving/dom/vibrato.h"
+#include "engraving/dom/volta.h"
 
 #include "engraving/types/typesconv.h"
 
@@ -754,6 +755,278 @@ void FinaleParser::importSmartShapes()
             m_systemObjectStaves.insert(newSpanner->staffIdx());
         }
     }
+
+    // Voltas
+    MusxInstanceList<others::RepeatEndingStart> endingBegins = m_doc->getOthers()->getArray<others::RepeatEndingStart>(m_currentMusxPartId);
+    MusxInstanceList<others::RepeatBack> endingEnds = m_doc->getOthers()->getArray<others::RepeatBack>(m_currentMusxPartId);
+    const Evpu leftInset = musxOptions().repeatOptions->bracketStartInset;
+    const Evpu rightInset = musxOptions().repeatOptions->bracketEndInset;
+    const Evpu beginHookLen = musxOptions().repeatOptions->bracketHookLen;
+    const Evpu endHookLen = musxOptions().repeatOptions->bracketEndHookLen;
+    const Evpu startY = -musxOptions().repeatOptions->bracketHeight;
+    const Evpu textPosX = musxOptions().repeatOptions->bracketTextHPos;
+    const Evpu textPosY = -musxOptions().repeatOptions->bracketTextVPos;
+    std::vector<Volta*> openings;
+    openings.reserve(endingBegins.size());
+
+    // Read the start endings
+    for (const MusxInstance<others::RepeatEndingStart>& endingBegin : endingBegins) {
+        // Find staff
+        std::vector<std::pair<staff_idx_t, StaffCmper>> links;
+        staff_idx_t curStaffIdx = staffIdxForRepeats(endingBegin->topStaffOnly, endingBegin->staffList, links);
+        if (curStaffIdx == muse::nidx) {
+            logger()->logWarning(String(u"Add voltas: Musx inst value not found."));
+            continue;
+        }
+
+        // Find location in measure
+        Fraction mTick = muse::value(m_meas2Tick, endingBegin->getCmper(), Fraction(-1, 1));
+        Measure* measure = !mTick.negative() ? m_score->tick2measure(mTick) : nullptr;
+        if (!measure) {
+            continue;
+        }
+
+        track_idx_t curTrackIdx = staff2track(curStaffIdx);
+        logger()->logInfo(String(u"Creating a volta at tick %1 on track %2.").arg(measure->tick().toString(), String::number(curTrackIdx)));
+
+        Volta* volta = Factory::createVolta(m_score->dummy());
+        volta->setTrack(curTrackIdx);
+        volta->setTick(measure->tick());
+        volta->setTick2(measure->endTick());
+        volta->setVisible(!endingBegin->hidden);
+        volta->setText(String::fromStdString(endingBegin->createEndingText()));
+        if (const auto& passList = m_doc->getOthers()->get<others::RepeatPassList>(m_currentMusxPartId, endingBegin->getCmper())) {
+            volta->setEndings(passList->values);
+        }
+        m_score->addElement(volta);
+        m_systemObjectStaves.insert(curStaffIdx);
+
+        volta->fixupSegments(1, [volta](System* parent) { return volta->createLineSegment(parent); });
+        VoltaSegment* vs = toVoltaSegment(volta->frontSegment());
+        vs->setSystem(measure->system());
+
+        double startHook = doubleFromEvpu(beginHookLen - endingBegin->leftVPos + endingBegin->rightVPos);
+        double endHook = doubleFromEvpu(endHookLen - endingBegin->endLineVPos + endingBegin->rightVPos);
+        PointF startP = evpuToPointF(leftInset + endingBegin->leftHPos, startY - endingBegin->rightVPos) * SPATIUM20;
+        PointF endP = evpuToPointF(-rightInset + endingBegin->rightHPos - startP.x(), 0.0) * SPATIUM20;
+        PointF textP = evpuToPointF(textPosX - 24 + endingBegin->textHPos, -endingBegin->textVPos) * SPATIUM20;
+        textP.ry() += startHook * SPATIUM20;
+
+        volta->setBeginHookHeight(Spatium(startHook));
+        // For open voltas, inherit the starting height (but don't display it)
+        if (muse::RealIsEqual(endHook, 0.0)) {
+            volta->setVoltaType(Volta::Type::OPEN);
+            volta->setEndHookHeight(Spatium(startHook));
+        } else {
+            volta->setVoltaType(Volta::Type::CLOSED);
+            volta->setEndHookHeight(Spatium(endHook));
+        }
+        volta->setAutoplace(false);
+        setAndStyleProperty(volta, Pid::BEGIN_TEXT_OFFSET, textP, true);
+        setAndStyleProperty(volta, Pid::CONTINUE_TEXT_OFFSET, textP, true);
+        setAndStyleProperty(vs, Pid::OFFSET, startP, true);
+        vs->setUserOff2(endP);
+
+        for (auto [linkedStaffIdx, linkedMusxStaffId] : links) {
+            /// @todo improved handling for bottom system objects
+            Volta* copy = toVolta(volta->clone());
+            copy->setStaffIdx(linkedStaffIdx);
+
+            copy->fixupSegments(1, [copy](System* parent) { return copy->createLineSegment(parent); });
+            VoltaSegment* linkedVs = toVoltaSegment(volta->frontSegment());
+            linkedVs->setSystem(measure->system());
+
+            const MusxInstance<others::RepeatIndividualPositioning> indiv = endingBegin->getIndividualPositioning(linkedMusxStaffId);
+            const MusxInstance<others::RepeatIndividualPositioning> textindiv = endingBegin->getTextIndividualPositioning(linkedMusxStaffId);
+            if (endingBegin->individualPlacement && indiv && textindiv) {
+                copy->setVisible(!indiv->hidden);
+                double linkedStartHook = doubleFromEvpu(beginHookLen - indiv->y1add + indiv->y2add);
+                // MuseScore doesn't (yet?) allow for independent staff hook heights
+                // double linkedEndHook = doubleFromEvpu(endHookLen - textindiv->y2add + indiv->y2add);
+                PointF linkedStartP = evpuToPointF(leftInset + indiv->x1add, startY - indiv->y2add) * SPATIUM20;
+                PointF linkedEndP = evpuToPointF(-rightInset + indiv->x2add - linkedStartP.x(), 0.0) * SPATIUM20;
+                PointF linkedTextP = evpuToPointF(textPosX - 24 + textindiv->x1add, -textindiv->y1add) * SPATIUM20;
+                linkedTextP.ry() += linkedStartHook * SPATIUM20;
+
+                // copy->setEndHookHeight(Spatium(linkedEndHook));
+                setAndStyleProperty(linkedVs, Pid::OFFSET, linkedStartP, true);
+                setAndStyleProperty(copy, Pid::BEGIN_TEXT_OFFSET, linkedTextP, true);
+                setAndStyleProperty(copy, Pid::CONTINUE_TEXT_OFFSET, linkedTextP, true);
+                linkedVs->setUserOff2(linkedEndP);
+            } else {
+                copy->setVisible(!endingBegin->hidden);
+                setAndStyleProperty(linkedVs, Pid::OFFSET, startP, true);
+                linkedVs->setUserOff2(endP);
+            }
+            copy->linkTo(volta);
+            measure->add(copy);
+            m_systemObjectStaves.insert(linkedStaffIdx);
+        }
+        openings.push_back(volta);
+    }
+
+    // Read the back endings and inherit existing volta if possible
+    for (const MusxInstance<others::RepeatBack>& endingEnd : endingEnds) {
+        // Find staff
+        std::vector<std::pair<staff_idx_t, StaffCmper>> links;
+        staff_idx_t curStaffIdx = staffIdxForRepeats(endingEnd->topStaffOnly, endingEnd->staffList, links);
+
+        if (curStaffIdx == muse::nidx) {
+            logger()->logWarning(String(u"Add voltas: Musx inst value not found."));
+            continue;
+        }
+
+        // Find location in measure
+        Fraction mTick = muse::value(m_meas2Tick, endingEnd->getCmper(), Fraction(-1, 1));
+        Measure* measure = !mTick.negative() ? m_score->tick2measure(mTick) : nullptr;
+        if (!measure) {
+            continue;
+        }
+
+        Volta* prev = nullptr;
+        Volta* cur = nullptr;
+        while (!openings.empty() && openings.front()->tick() <= measure->tick()) {
+            prev = muse::takeFirst(openings);
+        }
+        // Don't use inheriting behaviour if voltas cross repeats
+        if (prev) {
+            for (Measure* m = m_score->tick2measure(prev->tick()); m->tick() < mTick; m = m->nextMeasure()) {
+                if ((m->repeatStart() && m->tick() != prev->tick()) || m->repeatEnd()) {
+                    prev = nullptr;
+                    break;
+                }
+            }
+        }
+        if (prev && prev->tick() == measure->tick()) {
+            // Borrow existing volta
+            if (prev->staffIdx() == curStaffIdx) {
+                cur = prev;
+            } else if ((cur = toVolta(prev->findLinkedInStaff(m_score->staff(curStaffIdx))))) {
+            } else {
+                cur = toVolta(prev->clone());
+                cur->setStaffIdx(curStaffIdx);
+                cur->linkTo(prev);
+                measure->add(cur);
+                m_systemObjectStaves.insert(curStaffIdx);
+            }
+            if (cur->voltaType() == Volta::Type::OPEN) {
+                cur->setEndHookHeight(Spatium(0.0));
+            }
+        } else {
+            /// @todo merge adjacent where possible
+            track_idx_t curTrackIdx = staff2track(curStaffIdx);
+            logger()->logInfo(String(u"Creating a volta at tick %1 on track %2.").arg(measure->tick().toString(), String::number(curTrackIdx)));
+
+            cur = Factory::createVolta(m_score->dummy());
+            cur->setTrack(curTrackIdx);
+            cur->setTick(measure->tick());
+            cur->setTick2(measure->endTick());
+            cur->setVisible(!endingEnd->hidden);
+            cur->setBeginHookHeight(Spatium(0.0));
+            cur->setEndHookHeight(Spatium(0.0));
+            cur->setAutoplace(false);
+            cur->setText(String());
+            m_score->addElement(cur);
+            m_systemObjectStaves.insert(curStaffIdx);
+        }
+
+        cur->fixupSegments(1, [cur](System* parent) { return cur->createLineSegment(parent); });
+        VoltaSegment* vs = toVoltaSegment(cur->frontSegment());
+        vs->setSystem(measure->system());
+
+        // There is no start hook or text for repeat back
+        /// @todo verify these calculations
+        double endHook = doubleFromEvpu(beginHookLen - endingEnd->leftVPos + endingEnd->rightVPos);
+        PointF startP = evpuToPointF(leftInset + endingEnd->leftHPos, startY - endingEnd->rightVPos) * SPATIUM20;
+        PointF endP = evpuToPointF(-rightInset + endingEnd->rightHPos - startP.x(), 0.0) * SPATIUM20;
+
+        auto voltaCompare = [endingEnd](double current, double possible) {
+            // Inherit hook/position values if they are more extreme than
+            // existing ones, and only if this ending is visible
+            return !endingEnd->hidden && (std::abs(possible) > std::abs(current));
+        };
+        if (voltaCompare(cur->endHookHeight().val(), endHook * SPATIUM20)) {
+            cur->setEndHookHeight(Spatium(endHook));
+        }
+        /// @todo rebase text offset
+        if (!voltaCompare(vs->offset().x(), startP.x())) {
+            endP.rx() += startP.x() - vs->offset().x();
+            startP.rx() = vs->offset().x();
+        }
+        if (!voltaCompare(vs->offset().y(), startP.y())) {
+            startP.ry() = vs->offset().y();
+        }
+        if (!voltaCompare(vs->userOff2().x(), endP.x())) {
+            endP.rx() = vs->userOff2().x();
+        }
+        if (muse::RealIsEqual(cur->endHookHeight().val(), 0.0)) {
+            cur->setEndHookHeight(cur->beginHookHeight());
+            cur->setVoltaType(Volta::Type::OPEN);
+        } else {
+            cur->setVoltaType(Volta::Type::CLOSED);
+        }
+
+        setAndStyleProperty(vs, Pid::OFFSET, startP, true);
+        vs->setUserOff2(endP);
+
+        // Simulate playback (for most regular use cases)
+        if (prev) {
+            cur->setEndings(prev->endings());
+            if (prev->tick2() < cur->tick()) {
+                Volta* span = toVolta(prev->clone());
+                span->setTick(prev->tick2());
+                span->setTick2(cur->tick());
+                span->setVisible(false);
+                m_score->addElement(span);
+            }
+        }
+
+        for (auto [linkedStaffIdx, linkedMusxStaffId] : links) {
+            /// @todo improved handling for bottom system objects
+            Volta* copy = toVolta(cur->findLinkedInStaff(m_score->staff(linkedStaffIdx)));
+            if (!copy) {
+                copy = toVolta(cur->clone());
+                copy->setStaffIdx(linkedStaffIdx);
+                copy->linkTo(cur);
+                measure->add(copy);
+                m_systemObjectStaves.insert(linkedStaffIdx);
+            }
+
+            copy->fixupSegments(1, [copy](System* parent) { return copy->createLineSegment(parent); });
+            VoltaSegment* linkedVs = toVoltaSegment(cur->frontSegment());
+            linkedVs->setSystem(measure->system());
+
+            const MusxInstance<others::RepeatIndividualPositioning> indiv = endingEnd->getIndividualPositioning(linkedMusxStaffId);
+            if (endingEnd->individualPlacement && indiv) {
+                copy->setVisible(!indiv->hidden);
+                // MuseScore doesn't (yet?) allow for independent staff hook heights
+                // double linkedEndHook = doubleFromEvpu(endHookLen - indiv->y1add + indiv->y2add);
+                PointF linkedStartP = evpuToPointF(leftInset + indiv->x1add, startY - indiv->y2add) * SPATIUM20;
+                PointF linkedEndP = evpuToPointF(-rightInset + indiv->x2add - linkedStartP.x(), 0.0) * SPATIUM20;
+
+                // if (voltaCompare(copy->endHookHeight(), linkedEndHook * SPATIUM20)) {
+                    // copy->setEndHookHeight(Spatium(linkedEndHook));
+                // }
+                if (!voltaCompare(linkedVs->offset().x(), linkedStartP.x())) {
+                    linkedEndP.rx() += linkedStartP.x() - linkedVs->offset().x();
+                    linkedStartP.rx() = linkedVs->offset().x();
+                }
+                if (!voltaCompare(linkedVs->offset().y(), linkedStartP.y())) {
+                    linkedStartP.ry() = linkedVs->offset().y();
+                }
+                if (!voltaCompare(linkedVs->userOff2().x(), linkedEndP.x())) {
+                    linkedEndP.rx() = linkedVs->userOff2().x();
+                }
+                setAndStyleProperty(linkedVs, Pid::OFFSET, linkedStartP, true);
+                linkedVs->setUserOff2(linkedEndP);
+            } else {
+                copy->setVisible(!endingEnd->hidden);
+                setAndStyleProperty(linkedVs, Pid::OFFSET, startP, true);
+                linkedVs->setUserOff2(endP);
+            }
+        }
+    }
+
     logger()->logInfo(String(u"Import smart shapes: Finished importing smart shapes"));
 }
 
