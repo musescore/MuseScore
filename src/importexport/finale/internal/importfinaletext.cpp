@@ -1159,11 +1159,6 @@ void FinaleParser::importPageTexts()
 
     // gather texts by position
     for (const MusxInstance<others::PageTextAssign>& pageTextAssign : pageTextAssignList) {
-        if (pageTextAssign->hidden) {
-            // there may be something we can do with hidden assignments created for Patterson's Copyist Helper plugin,
-            // but generally it means the header is not applicable to this part.
-            continue;
-        }
         const std::optional<PageCmper> startPage = pageTextAssign->calcStartPageNumber(m_currentMusxPartId);
         const std::optional<PageCmper> endPage = pageTextAssign->calcEndPageNumber(m_currentMusxPartId);
         if (!startPage || !endPage) {
@@ -1177,6 +1172,8 @@ void FinaleParser::importPageTexts()
         // if text is not at top or bottom, invisible, or not recurring don't import as hf
         // For 2-page scores, we can import text only assigned to page 2 as a regular even hf.
         if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Center
+            // there may be something we can do with hidden assignments created for Patterson's Copyist Helper plugin,
+            // but generally it means the header is not applicable to this part.
             || pageTextAssign->hidden
             || startPage.value() >= 3 /// @todo must be changed to be first non-blank page + 2
             || endPage.value() < PageCmper(m_score->npages()) /// @todo allow copyright on just page 1?
