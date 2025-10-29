@@ -870,14 +870,16 @@ void FinaleParser::importStaffItems()
             // Instrument changes
             if (isValidUuid(currStaff->instUuid)) {
                 if (currStaff->instUuid != prevUuid && tick.isNotZero()) {
-                    Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-                    InstrumentChange* c = Factory::createInstrumentChange(segment, Instrument::fromTemplate(searchTemplate(instrTemplateIdfromUuid(currStaff->instUuid))));
-                    loadInstrument(currStaff, c->instrument());
-                    c->setTrack(staff2track(staffIdx));
-                    const String newInstrChangeText = muse::mtrc("engraving", "To %1").arg(c->instrument()->trackName());
-                    c->setXmlText(TextBase::plainToXmlText(newInstrChangeText));
-                    c->setVisible(false);
-                    segment->add(c);
+                    if (const InstrumentTemplate* it = searchTemplate(instrTemplateIdfromUuid(currStaff->instUuid))) {
+                        Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+                        InstrumentChange* c = Factory::createInstrumentChange(segment, Instrument::fromTemplate(it));
+                        loadInstrument(currStaff, c->instrument());
+                        c->setTrack(staff2track(staffIdx));
+                        const String newInstrChangeText = muse::mtrc("engraving", "To %1").arg(c->instrument()->trackName());
+                        c->setXmlText(TextBase::plainToXmlText(newInstrChangeText));
+                        c->setVisible(false);
+                        segment->add(c);
+                    }
                 }
                 prevUuid = currStaff->instUuid;
             }
