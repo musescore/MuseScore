@@ -43,4 +43,6 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/timeline.h
     ${CMAKE_CURRENT_LIST_DIR}/realizeharmonydialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/realizeharmonydialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/textpositionselect.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/textpositionselect.h
     )
