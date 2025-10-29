@@ -123,7 +123,9 @@ void ProjectConfiguration::init()
     });
     settings()->setDefaultValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(true));
 
+    settings()->setDescription(DISABLE_VERSION_CHECKING, muse::trc("project", "Disable version checking of score files"));
     settings()->setDefaultValue(DISABLE_VERSION_CHECKING, Val(false));
+    settings()->setCanBeManuallyEdited(DISABLE_VERSION_CHECKING, true);
 
     settings()->setDefaultValue(CREATE_BACKUP_BEFORE_SAVING, Val(true));
     settings()->setDescription(CREATE_BACKUP_BEFORE_SAVING, muse::trc("project",
