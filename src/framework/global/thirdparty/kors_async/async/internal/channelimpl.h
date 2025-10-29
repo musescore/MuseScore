@@ -112,7 +112,7 @@ private:
                 }
 
                 if (r) {
-                    assert(mode != Asyncable::Mode::SetOnce && "callback is already setted");
+                    assert(mode != Asyncable::Mode::SetOnce && "callback is already set");
                     if (mode == Asyncable::Mode::SetOnce) {
                         return needIncrement;
                     }
