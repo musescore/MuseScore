@@ -1065,7 +1065,11 @@ void FinaleParser::importTextExpressions()
         }
         item->setAutoplace(false);
         setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
-        setAndStyleProperty(item, Pid::OFFSET, evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * SPATIUM20);
+        PointF p = evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * SPATIUM20;
+        double blAdjust = item->align() == AlignH::RIGHT && measure->endBarLine()
+                            ? measure->endBarLine()->ldata()->bbox().width() : 0.0;
+        p.rx() -= blAdjust;
+        setAndStyleProperty(item, Pid::OFFSET, p);
         measure->add(item);
         m_systemObjectStaves.insert(curStaffIdx);
 
@@ -1075,7 +1079,7 @@ void FinaleParser::importTextExpressions()
             TextBase* copy = toTextBase(item->clone());
             copy->setStaffIdx(linkedStaffIdx);
             // copy->setVisible(!repeatAssignment->hidden);
-            setAndStyleProperty(copy, Pid::OFFSET, evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * SPATIUM20);
+            setAndStyleProperty(copy, Pid::OFFSET, p);
             copy->linkTo(item);
             measure->add(copy);
             m_systemObjectStaves.insert(linkedStaffIdx);
