@@ -246,7 +246,12 @@ void GuiApp::perform()
 
             // The main window must be shown at this point so KDDockWidgets can read its size correctly
             // and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
+            // but before that, let's make the window transparent,
+            // otherwise the empty window frame will be visible
+            // https://github.com/musescore/MuseScore/issues/29630
+            // Transparency will be removed after the page loads.
             QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
+            w->setOpacity(0.01);
             w->setVisible(true);
 
             startupScenario()->runAfterSplashScreen();
