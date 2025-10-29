@@ -81,12 +81,13 @@ void MMRestSettingsModel::updateNumberOptionsEnabled()
 {
     bool enabled = true;
     for (EngravingItem* item : m_elementList) {
-        if (!item->isMMRest()) {
-            enabled = false;
-            break;
+        IF_ASSERT_FAILED(item->isMMRest()) {
+            continue;
         }
-        MMRest* mmRest = toMMRest(item);
-        if (!mmRest->shouldShowNumber()) {
+        const MMRest* mmRest = toMMRest(item);
+        if (mmRest->getProperty(Pid::MMREST_NUMBER_VISIBLE).toBool() && !mmRest->shouldShowNumber()) {
+            // This means the mmrest number was not hidden by the user, but instead hidden
+            // through style. In this case we won't allow edits to number options...
             enabled = false;
             break;
         }
