@@ -28,12 +28,17 @@
 #include "iexcerptnotation.h"
 #include "inotationplayback.h"
 
+namespace mu::project {
+class INotationProject;
+}
+
 namespace mu::notation {
 using ExcerptNotationList = std::vector<IExcerptNotationPtr>;
 
 class IMasterNotation
 {
 public:
+    virtual project::INotationProject* project() const = 0;
 
     virtual muse::Ret setupNewScore(engraving::MasterScore* score, const ScoreCreateOptions& options) = 0;
     virtual void applyOptions(engraving::MasterScore* score, const ScoreCreateOptions& options, bool createdFromTemplate = false) = 0;
