@@ -460,10 +460,10 @@ Ret FileSystem::isWritable(const io::path_t& filePath) const
         file.remove();
     } else if (!fileInfo.isWritable()) {
         QFile file(filePath.toQString());
-        file.open(QFile::WriteOnly);
-
-        ret = make_ret(Err::FSWriteError);
-        ret.setText(file.errorString().toStdString());
+        if (!file.open(QFile::WriteOnly)) {
+            ret = make_ret(Err::FSWriteError);
+            ret.setText(file.errorString().toStdString());
+        }
 
         file.close();
     }
