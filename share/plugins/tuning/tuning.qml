@@ -19,6 +19,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import MuseScore 3.0
+import Muse.UiComponents 1.0
 import FileIO 3.0
 
 MuseScore {
@@ -1213,8 +1214,9 @@ MuseScore {
                                 }
                             }
                         }
+
                         RowLayout {
-                            Button {
+                            FlatButton {
                                 id: saveButton
                                 text: qsTranslate("PrefsDialogBase", "Save")
                                 onClicked: {
@@ -1222,7 +1224,7 @@ MuseScore {
                                     saveDialog.visible = true
                                 }
                             }
-                            Button {
+                            FlatButton {
                                 id: loadButton
                                 text: qsTranslate("PrefsDialogBase", "Load")
                                 onClicked: {
@@ -1230,14 +1232,14 @@ MuseScore {
                                     loadDialog.visible = true
                                 }
                             }
-                            Button {
+                            FlatButton {
                                 id: undoButton
                                 text: qsTranslate("PrefsDialogBase", "Undo")
                                 onClicked: {
                                     getHistory().undo()
                                 }
                             }
-                            Button {
+                            FlatButton {
                                 id: redoButton
                                 text: qsTranslate("PrefsDialogBase", "Redo")
                                 onClicked: {
@@ -1249,7 +1251,7 @@ MuseScore {
                 }
 
                 RowLayout {
-                    Button {
+                    FlatButton {
                         id: applyButton
                         text: qsTranslate("PrefsDialogBase", "Apply")
                         onClicked: {
@@ -1262,7 +1264,7 @@ MuseScore {
                             }
                         }
                     }
-                    Button {
+                    FlatButton {
                         id: cancelButton
                         text: qsTranslate("PrefsDialogBase", "Cancel")
                         onClicked: {
