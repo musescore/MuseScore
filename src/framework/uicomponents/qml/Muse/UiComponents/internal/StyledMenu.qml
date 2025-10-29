@@ -55,10 +55,16 @@ MenuView {
         return focused
     }
 
+    property Component menuMetricsComponent: Component {
+        MenuMetrics{}
+    }
+
     function calculateSize() {
-        var menuMetricsComponent = Qt.createComponent("MenuMetrics.qml");
         root.menuMetrics = menuMetricsComponent.createObject(root)
         root.menuMetrics.calculate(model)
+
+        // for debuging
+        //ui.sleep(1000)
 
         //! NOTE: Due to the fact that the view has a dynamic delegate,
         //  the height calculation occurs with an error
@@ -84,6 +90,9 @@ MenuView {
         root.contentWidth = root.menuMetrics.itemWidth
         root.contentHeight = Math.min(itemHeight * itemsCount + sepCount * prv.separatorHeight +
                                       prv.viewVerticalMargin * 2, anchorItemHeight - padding * 2)
+
+        // for debuging
+        // ui.sleep(1000)
 
         x = 0
         y = parent.height
