@@ -2955,7 +2955,7 @@ void SystemLayout::removeElementFromSkyline(EngravingItem* element, const System
     SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
 
     skylineLine.remove_if([element](ShapeElement& shapeEl) {
-        return element == shapeEl.item();
+        return element == shapeEl.item() || element == shapeEl.item()->parentItem();
     });
 }
 
