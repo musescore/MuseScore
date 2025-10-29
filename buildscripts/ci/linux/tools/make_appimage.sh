@@ -105,7 +105,7 @@ mkdir -p "$qt_sql_drivers_tmp"
 
 # Semicolon-separated list of platforms to deploy in addition to `libqxcb.so`.
 # Used by linuxdeploy-plugin-qt.
-export EXTRA_PLATFORM_PLUGINS="libqoffscreen.so;libqwayland-egl.so;libqwayland-generic.so"
+export EXTRA_PLATFORM_PLUGINS="libqoffscreen.so;libqwayland.so"
 
 # Colon-separated list of root directories containing QML files.
 # Needed for linuxdeploy-plugin-qt to scan for QML imports.
