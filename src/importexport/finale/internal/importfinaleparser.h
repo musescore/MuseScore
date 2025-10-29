@@ -268,6 +268,7 @@ public:
     std::shared_ptr<musx::dom::Document> musxDocument() const { return m_doc; }
     const FinaleOptions& musxOptions() const { return m_finaleOptions; }
     musx::dom::Cmper currentMusxPartId() const { return m_currentMusxPartId; }
+    bool partScore() const { return m_currentMusxPartId != musx::dom::SCORE_PARTID; }
 
     // Text
     engraving::String stringFromEnigmaText(const musx::util::EnigmaParsingContext& parsingContext, const EnigmaParsingOptions& options = {}, FontTracker* firstFontInfo = nullptr) const;
@@ -277,7 +278,9 @@ public:
 
     // Utility
     musx::dom::EvpuFloat evpuAugmentationDotWidth() const;
-    bool partScore() const { return m_currentMusxPartId != musx::dom::SCORE_PARTID; }
+    engraving::staff_idx_t staffIdxFromAssignment(musx::dom::StaffCmper assign);
+    engraving::staff_idx_t staffIdxForRepeats(bool onlyTop, musx::dom::Cmper staffList,
+                                              std::vector<std::pair<engraving::staff_idx_t, musx::dom::StaffCmper>>& links);
 
     FinaleLoggerPtr logger() const { return m_logger; }
 
