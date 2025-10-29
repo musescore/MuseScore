@@ -1840,7 +1840,7 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
 
     notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
         updateLoop();
-    });
+    }, async::Asyncable::Mode::SetReplace);
 
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
         onSelectionChanged();

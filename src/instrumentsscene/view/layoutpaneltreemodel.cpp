@@ -296,7 +296,7 @@ void LayoutPanelTreeModel::setupNotationConnections()
         }
 
         onScoreChanged(changes);
-    });
+    }, Mode::SetReplace /*because this channel is from MasterScore*/);
 }
 
 void LayoutPanelTreeModel::updateSelectedRows()

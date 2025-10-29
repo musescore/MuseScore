@@ -314,7 +314,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     updateLoopMarkers();
     notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
         updateLoopMarkers();
-    });
+    }, Mode::SetReplace /*because this channel is from MasterNotation*/);
 
     m_notation->viewModeChanged().onNotify(this, [this]() {
         ensureViewportInsideScrollableArea();

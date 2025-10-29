@@ -134,7 +134,7 @@ void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)
             m_notations.removeAt(notationIndex);
             endRemoveRows();
         }
-    });
+    }, Asyncable::Mode::SetReplace);
 }
 
 void NotationSwitchListModel::listenExcerptNotationTitleChanged(IExcerptNotationPtr excerptNotation)

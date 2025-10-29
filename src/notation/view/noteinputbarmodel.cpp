@@ -159,7 +159,7 @@ void NoteInputBarModel::setNotation(const INotationPtr& notation)
 
         notation->masterNotation()->hasPartsChanged().onNotify(this, [this]() {
             emit isInputAllowedChanged();
-        });
+        }, Mode::SetReplace /*because it's from MasterNotation*/);
     }
 
     updateState();
