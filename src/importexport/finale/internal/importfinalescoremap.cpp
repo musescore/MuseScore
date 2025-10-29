@@ -901,6 +901,7 @@ void FinaleParser::importStaffItems()
 
         // Clefs, key signatures, and time signatures
         MusxInstance<TimeSignature> currMusxTimeSig;
+        MusxInstance<TimeSignature> currVisualTimeSig;
         MusxInstance<KeySignature> currMusxKeySig;
         std::optional<KeySigEvent> currKeySigEvent;
         MusxInstance<others::Measure> prevMusxMeasure;
@@ -922,14 +923,18 @@ void FinaleParser::importStaffItems()
 
             // Time signatures
             const MusxInstance<TimeSignature> localTimeSig = musxMeasure->createTimeSignature(musxStaffId);
-            if (!currMusxTimeSig || !currMusxTimeSig->isSame(*localTimeSig) || musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always) {
+            const MusxInstance<TimeSignature> visualTimeSig = musxMeasure->createDisplayTimeSignature(musxStaffId);
+            const bool visualTimeSigChanged = !currVisualTimeSig || !currVisualTimeSig->isSame(*visualTimeSig);
+            const bool actualTimeSigChanged = !currMusxTimeSig || !currMusxTimeSig->isSame(*localTimeSig);
+            const bool forceDisplayTimeSig = musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always;
+            const bool forceHideTimeSig = musxMeasure->showTime == others::Measure::ShowTimeSigMode::Never;
+            if (actualTimeSigChanged || visualTimeSigChanged || forceDisplayTimeSig) {
                 const MusxInstance<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
                 Segment* seg = measure->getSegmentR(SegmentType::TimeSig, Fraction(0, 1));
                 TimeSig* ts = Factory::createTimeSig(seg);
                 Fraction timeSig = simpleMusxTimeSigToFraction(localTimeSig->calcSimplified(), logger());
 
                 // Display text: Attempt to inherit it, where possible
-                const MusxInstance<TimeSignature> visualTimeSig = musxMeasure->createDisplayTimeSignature(musxStaffId);
                 if (visualTimeSig->getAbbreviatedSymbol().has_value()) {
                     ts->setSig(timeSig, visualTimeSig->isCutTime() ? TimeSigType::ALLA_BREVE : TimeSigType::FOUR_FOUR);
                 } else {
@@ -944,7 +949,7 @@ void FinaleParser::importStaffItems()
                 }
 
                 ts->setTrack(curTrackIdx);
-                ts->setVisible(musxMeasure->showTime != others::Measure::ShowTimeSigMode::Never);
+                ts->setVisible(forceDisplayTimeSig || (visualTimeSigChanged && !forceHideTimeSig));
                 ts->setShowCourtesySig(!prevMusxMeasure || !prevMusxMeasure->hideCaution);
                 ts->setGroups(computeTimeSignatureGroups(localTimeSig, logger()));
                 Fraction stretch { localTimeSig->calcTotalDuration().calcEduDuration(), globalTimeSig->calcTotalDuration().calcEduDuration() };
@@ -952,6 +957,7 @@ void FinaleParser::importStaffItems()
                 seg->add(ts);
             }
             currMusxTimeSig = localTimeSig;
+            currVisualTimeSig = visualTimeSig;
 
             // clefs
             importClefs(musxScrollViewItem, musxMeasure, measure, staffIdx, musxCurrClef, prevMusxMeasure);
