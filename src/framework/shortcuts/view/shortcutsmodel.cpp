@@ -120,7 +120,7 @@ void ShortcutsModel::load()
 
     shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
         load();
-    });
+    }, async::Asyncable::Mode::SetReplace);
 
     std::sort(m_shortcuts.begin(), m_shortcuts.end(), [this](const Shortcut& s1, const Shortcut& s2) {
         return actionText(s1.action) < actionText(s2.action);

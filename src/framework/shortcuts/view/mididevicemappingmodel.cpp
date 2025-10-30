@@ -127,7 +127,7 @@ void MidiDeviceMappingModel::load()
 {
     midiConfiguration()->useRemoteControlChanged().onReceive(this, [this](bool val) {
         emit useRemoteControlChanged(val);
-    });
+    }, muse::async::Asyncable::Mode::SetReplace);
 
     beginResetModel();
     m_midiMappings.clear();
@@ -156,7 +156,7 @@ void MidiDeviceMappingModel::load()
 
     midiRemote()->midiMappingsChanged().onNotify(this, [this](){
         load();
-    });
+    }, muse::async::Asyncable::Mode::SetReplace);
 
     endResetModel();
 }
@@ -164,7 +164,7 @@ void MidiDeviceMappingModel::load()
 bool MidiDeviceMappingModel::apply()
 {
     MidiMappingList midiMappings;
-    for (const MidiControlsMapping& midiMapping : m_midiMappings) {
+    for (const MidiControlsMapping& midiMapping : std::as_const(m_midiMappings)) {
         midiMappings.push_back(midiMapping);
     }
 
