@@ -100,6 +100,7 @@
 #include "dom/utils.h"
 
 #include "rendering/score/tlayout.h"
+#include "rendering/score/textlayout.h"
 #include "rendering/score/tremololayout.h"
 #include "rendering/score/chordlayout.h"
 #include "rendering/score/slurtielayout.h"
@@ -1990,7 +1991,7 @@ void SingleLayout::layout1TextBase(const TextBase* item, const Context&, TextBas
     // adjust the bounding box for the text item
     for (size_t i = 0; i < ldata->rows(); ++i) {
         TextBlock& t = ldata->blocks[i];
-        t.layout(item);
+        TextLayout::layoutTextBlock(&t, item);
         const RectF* r = &t.boundingRect();
 
         if (r->height() == 0) {

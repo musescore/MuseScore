@@ -21,6 +21,7 @@
  */
 
 #include "tlayout.h"
+#include "textlayout.h"
 #include "guitarbendlayout.h"
 
 #include "../../dom/chord.h"
@@ -484,7 +485,7 @@ void GuitarBendLayout::layoutTabStaff(GuitarBendSegment* item, LayoutContext& ct
     GuitarBendText* guitarBendText = item->bendText();
     guitarBendText->setParent(item);
     guitarBendText->setXmlText(bend->ldata()->bendDigit());
-    TLayout::layoutBaseTextBase(toTextBase(guitarBendText), ctx);
+    TextLayout::layoutBaseTextBase(toTextBase(guitarBendText), ctx);
     double verticalTextPad = 0.2 * spatium;
     PointF centering(-0.5 * guitarBendText->width(),
                      (bend->isReleaseBend() ? verticalTextPad : -(guitarBendText->height() + verticalTextPad)));

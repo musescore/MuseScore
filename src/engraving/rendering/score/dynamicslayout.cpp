@@ -23,6 +23,7 @@
 #include "dynamicslayout.h"
 #include "layoutcontext.h"
 #include "tlayout.h"
+#include "textlayout.h"
 
 #include "../dom/hairpin.h"
 #include "../dom/staff.h"
@@ -66,7 +67,7 @@ void DynamicsLayout::doLayoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, 
     AlignH userPosition = item->getProperty(Pid::POSITION).value<AlignH>();
     AlignH hPos = item->centerOnNotehead() ? AlignH::HCENTER : item->position();
     item->setPosition(hPos);
-    TLayout::layoutBaseTextBase(item, ldata);
+    TextLayout::layoutBaseTextBase(item, ldata);
     item->setPosition(userPosition);
 
     const Segment* s = item->segment();

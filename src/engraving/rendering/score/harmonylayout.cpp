@@ -23,6 +23,7 @@
 #include "harmonylayout.h"
 #include "rendering/score/parenthesislayout.h"
 #include "tlayout.h"
+#include "textlayout.h"
 
 #include "dom/fret.h"
 #include "dom/harmony.h"
@@ -87,7 +88,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
     double newPosY = 0.0;
 
     if (item->ldata()->renderItemList().empty()) {
-        TLayout::layoutBaseTextBase1(item, ldata);
+        TextLayout::layoutBaseTextBase1(item, ldata);
 
         if (alignToFretDiagram) {
             newPosY = ldata->pos().y();

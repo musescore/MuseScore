@@ -60,10 +60,6 @@ using namespace muse::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static constexpr double subScriptSize     = 0.6;
-static constexpr double subScriptOffset   = 0.5; // of x-height
-static constexpr double superScriptOffset = -0.9; // of x-height
-
 static const char* FALLBACK_SYMBOL_FONT = "Bravura";
 static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
 
@@ -907,7 +903,7 @@ Font TextFragment::font(const TextBase* t) const
         m *= spatiumScaling;
     }
     if (format.valign() != VerticalAlignment::AlignNormal) {
-        m *= subScriptSize;
+        m *= SUBSCRIPT_SIZE;
     }
 
     String family;
@@ -1018,98 +1014,6 @@ void TextBlock::draw(Painter* p, const TextBase* t) const
         f.draw(p, t);
     }
     p->translate(0.0, -m_y);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void TextBlock::layout(const TextBase* t)
-{
-    m_shape.clear();
-    double x      = 0.0;
-    m_lineSpacing = 0.0;
-
-    if (m_fragments.empty()) {
-        FontMetrics fm = t->fontMetrics();
-        m_shape.add(RectF(0.0, -fm.ascent(), 1.0, fm.descent()), t);
-        m_lineSpacing = fm.lineSpacing();
-    } else if (m_fragments.size() == 1 && m_fragments.front().text.isEmpty()) {
-        auto fi = m_fragments.begin();
-        TextFragment& f = *fi;
-        f.pos.setX(x);
-        FontMetrics fm(f.font(t));
-        if (f.format.valign() != VerticalAlignment::AlignNormal) {
-            double voffset = fm.xHeight() / subScriptSize;   // use original height
-            if (f.format.valign() == VerticalAlignment::AlignSubScript) {
-                voffset *= subScriptOffset;
-            } else {
-                voffset *= superScriptOffset;
-            }
-
-            f.pos.setY(voffset);
-        } else {
-            f.pos.setY(0.0);
-        }
-
-        RectF temp(0.0, -fm.ascent(), 1.0, fm.descent());
-        m_shape.add(temp, t);
-        m_lineSpacing = std::max(m_lineSpacing, fm.lineSpacing());
-    } else {
-        const auto fiLast = --m_fragments.end();
-        for (auto fi = m_fragments.begin(); fi != m_fragments.end(); ++fi) {
-            TextFragment& f = *fi;
-            f.pos.setX(x);
-            Font fragmentFont = f.font(t);
-            FontMetrics fm(fragmentFont);
-            if (f.format.valign() != VerticalAlignment::AlignNormal) {
-                double voffset = fm.xHeight() / subScriptSize;           // use original height
-                if (f.format.valign() == VerticalAlignment::AlignSubScript) {
-                    voffset *= subScriptOffset;
-                } else {
-                    voffset *= superScriptOffset;
-                }
-                f.pos.setY(voffset);
-            } else {
-                f.pos.setY(0.0);
-            }
-
-            // Optimization: don't calculate character position
-            // for the next fragment if there is no next fragment
-            if (fi != fiLast) {
-                const double w  = fm.width(f.text);
-                x += w;
-            }
-
-            double yOffset = musicSymbolBaseLineAdjust(t, f, fi);
-            f.pos.ry() -= yOffset;
-
-            RectF textBRect = fm.tightBoundingRect(f.text).translated(f.pos);
-            bool useDynamicSymShape = fragmentFont.type() == Font::Type::MusicSymbol && t->isDynamic();
-            if (useDynamicSymShape) {
-                const Dynamic* dyn = toDynamic(t);
-                SymId symId = TConv::symId(dyn->dynamicType());
-                if (symId != SymId::noSym) {
-                    m_shape.add(dyn->symShapeWithCutouts(symId).translated(f.pos));
-                } else {
-                    m_shape.add(textBRect, t);
-                }
-            } else {
-                m_shape.add(textBRect, t);
-            }
-            if (fragmentFont.type() == Font::Type::MusicSymbol || fragmentFont.type() == Font::Type::MusicSymbolText) {
-                // SEMI-HACK: Music fonts can have huge linespacing because of tall symbols, so instead of using the
-                // font linespacing value we just use the height of the individual fragment with some added margin
-
-                m_lineSpacing = std::max(m_lineSpacing, 1.25 * (m_shape.bbox().height() - m_shape.bbox().bottom()) + yOffset);
-            } else {
-                m_lineSpacing = std::max(m_lineSpacing, fm.lineSpacing());
-            }
-        }
-    }
-
-    // Apply style/custom line spacing
-    m_lineSpacing *= t->textLineSpacing();
 }
 
 //---------------------------------------------------------
@@ -1405,30 +1309,6 @@ void TextBlock::simplify()
         }
         f = &*i;
     }
-}
-
-double TextBlock::musicSymbolBaseLineAdjust(const TextBase* t, const TextFragment& f, const std::list<TextFragment>::iterator fi)
-{
-    Font fragmentFont = f.font(t);
-    FontMetrics fm(fragmentFont);
-    const bool adjustSymbol = fragmentFont.type() == Font::Type::MusicSymbolText && t->isMarker();
-    if (!adjustSymbol) {
-        return 0.0;
-    }
-
-    // Align the x-height of the coda symbol to half the x-height of the surrounding text
-    Font refFont;
-    if (m_fragments.size() == 1) {
-        refFont = t->font();
-    } else {
-        TextFragment& refFragment = fi != m_fragments.begin() ? *(std::prev(fi)) : *(std::next(fi));
-        refFont = refFragment.font(t);
-    }
-    FontMetrics refFm(refFont);
-
-    const double middle = (fm.tightBoundingRect(f.text).height() / 2) - fm.tightBoundingRect(f.text).bottom();
-    const double refXHeight = refFm.capHeight() / 2;
-    return refXHeight - middle;
 }
 
 //---------------------------------------------------------
