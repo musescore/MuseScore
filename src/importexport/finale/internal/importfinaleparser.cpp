@@ -100,6 +100,13 @@ void FinaleParser::parse()
     importTextExpressions();
     rebasePageTextOffsets();
 
+    // Apply collected element styles
+    for (auto [sid, value] : m_elementStyles) {
+        if (value.isValid()) {
+            m_score->style().set(sid, value);
+        }
+    }
+
     // Setup system object staves
     logger()->logInfo(String(u"Initialising system object staves"));
     for (staff_idx_t staffIdx : m_systemObjectStaves) {
@@ -169,7 +176,7 @@ staff_idx_t FinaleParser::staffIdxForRepeats(bool onlyTop, Cmper staffList,
     return !links.empty() ? muse::takeFirst(links).first : muse::nidx;
 }
 
-void setAndStyleProperty(EngravingObject* e, Pid id, PropertyValue v, bool leaveStyled)
+void setAndStyleProperty(EngravingObject* e, Pid id, PropertyValue v, bool inheritStyle)
 {
     if (v.isValid()) {
         e->setProperty(id, v);
@@ -177,7 +184,7 @@ void setAndStyleProperty(EngravingObject* e, Pid id, PropertyValue v, bool leave
     if (e->propertyFlags(id) == PropertyFlags::NOSTYLE) {
         return;
     }
-    const bool canLeaveStyled = leaveStyled && (e->getProperty(id) == e->propertyDefault(id));
+    const bool canLeaveStyled = inheritStyle && (e->getProperty(id) == e->propertyDefault(id));
     e->setPropertyFlags(id, canLeaveStyled ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED);
 }
 

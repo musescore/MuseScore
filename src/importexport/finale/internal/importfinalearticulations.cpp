@@ -185,6 +185,7 @@ void FinaleParser::importArticulations()
                 // fermata->setPlay(articDef->playArtic);
                 fermata->setVisible(!articAssign->hide);
                 cr->segment()->add(fermata);
+                collectElementStyle(fermata);
                 continue;
             }
 
@@ -200,6 +201,7 @@ void FinaleParser::importArticulations()
                     // breath->setPause(breathType.pause); until there is a toggleable play property, leave unset
                     breath->setVisible(!articAssign->hide);
                     breathSegment->add(breath);
+                    collectElementStyle(breath);
                     breathCreated = true;
                     break;
                 }
@@ -224,6 +226,7 @@ void FinaleParser::importArticulations()
                     p->setVisible(!articAssign->hide);
                     p->setDirection(DirectionH::LEFT);
                     n->add(p);
+                    collectElementStyle(p);
                     continue;
                 }
             }
@@ -236,6 +239,7 @@ void FinaleParser::importArticulations()
                     p->setVisible(!articAssign->hide);
                     p->setDirection(DirectionH::RIGHT);
                     n->add(p);
+                    collectElementStyle(p);
                     continue;
                 }
             }
@@ -251,6 +255,7 @@ void FinaleParser::importArticulations()
                 tremolo->setPlayTremolo(articDef->playArtic);
                 tremolo->setVisible(!articAssign->hide);
                 c->setTremoloSingleChord(tremolo);
+                collectElementStyle(tremolo);
                 continue;
             }
 
@@ -284,12 +289,10 @@ void FinaleParser::importArticulations()
             a->setTrack(c->track());
             a->setSymId(mainSym);
             a->setVisible(!articAssign->hide);
-            a->setAnchor(calculateAnchor(articAssign, articDef->autoVertMode, cr));
-            if (a->anchor() != ArticulationAnchor::AUTO) {
-                a->setPropertyFlags(engraving::Pid::ARTICULATION_ANCHOR, engraving::PropertyFlags::UNSTYLED);
-            }
+            setAndStyleProperty(a, Pid::ARTICULATION_ANCHOR, int(calculateAnchor(articAssign, articDef->autoVertMode, cr)), true);
             a->setPlayArticulation(articDef->playArtic);
             c->add(a);
+            collectElementStyle(a);
         }
     }
 }

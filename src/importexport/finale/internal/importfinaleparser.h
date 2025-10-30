@@ -316,6 +316,7 @@ private:
 
     std::unordered_map<int, engraving::track_idx_t> mapFinaleVoices(const std::map<musx::dom::LayerIndex, bool>& finaleVoiceMap,
                                                          musx::dom::StaffCmper curStaff, musx::dom::MeasCmper curMeas) const;
+    void createTupletsFromMap(engraving::Measure* measure, engraving::track_idx_t curTrackIdx, std::vector<ReadableTuplet>& tupletMap);
     bool processEntryInfo(musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx, engraving::Measure* measure, bool graceNotes,
                           std::vector<engraving::Note*>& notesWithUnmanagedTies,
                           std::vector<ReadableTuplet>& tupletMap, std::unordered_map<engraving::Rest*, musx::dom::NoteInfoPtr>& fixedRests);
@@ -327,6 +328,8 @@ private:
 
     // styles
     void importStyles();
+    void collectElementStyle(const mu::engraving::EngravingObject* e);
+    std::unordered_map<Sid, PropertyValue> m_elementStyles;
 
     // smart shapes
     void importSmartShapes();
@@ -365,6 +368,6 @@ private:
 };
 
 extern void setAndStyleProperty(mu::engraving::EngravingObject* e, mu::engraving::Pid id,
-                                mu::engraving::PropertyValue v, bool leaveStyled = false);
+                                mu::engraving::PropertyValue v, bool inheritStyle = false);
 
 }
