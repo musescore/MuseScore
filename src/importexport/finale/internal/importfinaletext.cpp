@@ -889,6 +889,7 @@ void FinaleParser::importTextExpressions()
             setAndStyleProperty(expr, Pid::OFFSET, p);
         };
         positionExpression(item, expressionAssignment, expressionDef);
+        collectElementStyle(item);
 
         if (item->systemFlag()) {
             m_systemObjectStaves.insert(item->staffIdx());
@@ -917,6 +918,7 @@ void FinaleParser::importTextExpressions()
                 copy->linkTo(item);
                 s->add(copy);
                 positionExpression(copy, linkedAssignment, linkedDef);
+                collectElementStyle(copy);
                 m_systemObjectStaves.insert(linkedStaffIdx);
                 parsedAssignments.push_back(linkedExpressionId);
             }
@@ -963,6 +965,7 @@ void FinaleParser::importTextExpressions()
                 text->setAutoplace(false);
                 setAndStyleProperty(text, Pid::OFFSET, (evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp) * SPATIUM20), true);
                 s->add(text);
+                collectElementStyle(text);
             }
         }
     }
@@ -1047,6 +1050,7 @@ void FinaleParser::importTextExpressions()
         p.rx() -= blAdjust;
         setAndStyleProperty(item, Pid::OFFSET, p);
         measure->add(item);
+        collectElementStyle(item);
         m_systemObjectStaves.insert(curStaffIdx);
 
         for (auto [linkedStaffIdx, linkedMusxStaffId] : links) {
@@ -1065,6 +1069,7 @@ void FinaleParser::importTextExpressions()
             }
             copy->linkTo(item);
             measure->add(copy);
+            collectElementStyle(copy);
             m_systemObjectStaves.insert(linkedStaffIdx);
         }
         /// @todo fine-tune playback
@@ -1339,6 +1344,7 @@ void FinaleParser::importPageTexts()
             setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
             setAndStyleProperty(text, Pid::OFFSET, (p - mb->pagePos()), true); // is this accurate enough?
             s->add(text);
+            collectElementStyle(text);
         } else if (mb->isBox()) {
             Text* text = Factory::createText(toBox(mb));
             text->setXmlText(pageText);
@@ -1356,6 +1362,7 @@ void FinaleParser::importPageTexts()
             setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
             setAndStyleProperty(text, Pid::OFFSET, p);
             toBox(mb)->add(text);
+            collectElementStyle(text);
         }
     };
 
@@ -1704,8 +1711,10 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         setAndStyleProperty(h, Pid::OFFSET, offset, true);
         if (fret) {
             s->add(fret);
+            collectElementStyle(fret); // also h?
         } else {
             s->add(h);
+            collectElementStyle(h);
         }
         /// @todo Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION, Pid::HARMONY_DO_NOT_STACK_MODIFIERS
     }

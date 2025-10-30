@@ -33,6 +33,7 @@
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/mmrestrange.h"
 #include "engraving/dom/score.h"
+#include "engraving/dom/spanner.h"
 #include "engraving/dom/textbase.h"
 
 #include "engraving/style/defaultstyle.h"
@@ -791,6 +792,79 @@ void FinaleParser::importStyles()
     writeRepeatEndingPrefs(style, *this);
     writeTupletPrefs(style, *this);
     writeMarkingPrefs(style, *this);
+}
+
+static PropertyValue compareStyledProperty(const PropertyValue& oldP, const PropertyValue& newP)
+{
+    assert(oldP.isValid() && newP.isValid() && (oldP.type() == newP.type()));
+    /// @todo add more sensible exceptions on a case-by-case basis (perhaps using Pid).
+    /// Styles are default values and in most cases don't override existing behaviour,
+    /// what's important is sensible results.
+    switch (newP.type()) {
+    case P_TYPE::POINT:
+        /// @todo base offset off placement?
+        return (std::abs(oldP.value<PointF>().y()) > std::abs(newP.value<PointF>().y())) ? newP : oldP;
+    default:
+        break;
+    }
+    return (oldP == newP) ? oldP : PropertyValue();
+}
+
+static PropertyValue getFormattedValue(const EngravingObject* e, const Pid id)
+{
+    PropertyValue v = e->getProperty(id);
+    if (e->isSpannerSegment()) {
+        // We only want the y-offset for spanners, as x-offset affects ending pos as well.
+        if (id == Pid::OFFSET) {
+            PointF p = v.value<PointF>();
+            return PointF(0.0, p.ry());
+        }
+    }
+    return v;
+}
+
+static PropertyValue styledValueByElement(const EngravingObject* e, const Pid id)
+{
+    if (e->isSpanner()) {
+        const Spanner* s = toSpanner(e);
+        assert(!s->spannerSegments().empty());
+        const EngravingObject* fs = s->frontSegment();
+
+        // Shortcut
+        if (fs->propertyDelegate(id) == s) {
+            return getFormattedValue(s, id);
+        }
+        PropertyValue v = getFormattedValue(fs, id);
+        for (SpannerSegment* ss : s->spannerSegments()) {
+            if (!v.isValid()) {
+                break;
+            }
+            v = compareStyledProperty(v, getFormattedValue(ss, id));
+        }
+        return v;
+    }
+    return getFormattedValue(e, id);
+}
+
+void FinaleParser::collectElementStyle(const EngravingObject* e)
+{
+    for (int i = 0; i < static_cast<int>(Pid::END); ++i) {
+        const Pid propertyId = static_cast<Pid>(i);
+        Sid styleId = e->getPropertyStyle(propertyId);
+        if (styleId == Sid::NOSTYLE) {
+            continue;
+        }
+        if (muse::contains(m_elementStyles, styleId)) {
+            // Replace currently found value with new match, assuming there has been no bad match
+            PropertyValue v = muse::value(m_elementStyles, styleId);
+            if (v.isValid()) {
+                muse::remove(m_elementStyles, styleId);
+                m_elementStyles.emplace(styleId, compareStyledProperty(v, styledValueByElement(e, propertyId)));
+            }
+        } else {
+            m_elementStyles.emplace(styleId, styledValueByElement(e, propertyId));
+        }
+    }
 }
 
 }
