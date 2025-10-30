@@ -396,68 +396,70 @@ void FinaleParser::importSmartShapes()
 
             SLine* line = (SLine*)newSpanner; /// @todo add to engraving/dom
 
-            line->setDiagonal(customLine->diagonal);
-            line->setLineStyle(customLine->lineStyle);
-            line->setLineWidth(customLine->lineWidth);
-            line->setDashLineLen(customLine->dashLineLen);
-            line->setDashGapLen(customLine->dashGapLen);
+            setAndStyleProperty(line, Pid::DIAGONAL, customLine->diagonal);
+            setAndStyleProperty(line, Pid::LINE_STYLE, customLine->lineStyle);
+            setAndStyleProperty(line, Pid::LINE_WIDTH, customLine->lineWidth);
+            setAndStyleProperty(line, Pid::DASH_LINE_LEN, customLine->dashLineLen);
+            setAndStyleProperty(line, Pid::DASH_GAP_LEN, customLine->dashGapLen);
 
             if (newSpanner->isTextLineBase()) {
                 TextLineBase* textLineBase = toTextLineBase(newSpanner);
 
-                textLineBase->setLineVisible(customLine->lineVisible);
-                textLineBase->setBeginHookType(customLine->beginHookType);
-                textLineBase->setEndHookType(customLine->endHookType);
-                textLineBase->setBeginHookHeight(customLine->beginHookHeight);
-                textLineBase->setEndHookHeight(customLine->endHookHeight);
-                textLineBase->setGapBetweenTextAndLine(customLine->gapBetweenTextAndLine);
-                textLineBase->setTextSizeSpatiumDependent(customLine->textSizeSpatiumDependent);
+                setAndStyleProperty(textLineBase, Pid::LINE_VISIBLE, customLine->lineVisible);
+                setAndStyleProperty(textLineBase, Pid::BEGIN_HOOK_TYPE, customLine->beginHookType);
+                setAndStyleProperty(textLineBase, Pid::END_HOOK_TYPE, customLine->endHookType);
+                setAndStyleProperty(textLineBase, Pid::BEGIN_HOOK_HEIGHT, customLine->beginHookHeight);
+                setAndStyleProperty(textLineBase, Pid::END_HOOK_HEIGHT, customLine->endHookHeight);
+                setAndStyleProperty(textLineBase, Pid::GAP_BETWEEN_TEXT_AND_LINE, customLine->gapBetweenTextAndLine);
+                setAndStyleProperty(textLineBase, Pid::TEXT_SIZE_SPATIUM_DEPENDENT, customLine->textSizeSpatiumDependent);
 
-                textLineBase->setBeginTextPlace(customLine->beginTextPlace);
-                textLineBase->setBeginText(customLine->beginText);
-                textLineBase->setBeginTextAlign(customLine->beginTextAlign);
-                // textLineBase->setBeginFontFamily(customLine->beginFontFamily);
-                // textLineBase->setBeginFontSize(customLine->beginFontSize);
-                // textLineBase->setBeginFontStyle(customLine->beginFontStyle);
-                textLineBase->setBeginTextOffset(customLine->beginTextOffset);
+                setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT_PLACE, customLine->continueTextPlace);
+                setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT, customLine->continueText);
+                setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT_ALIGN, customLine->continueTextAlign);
+                // setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_FACE, customLine->continueFontFamily);
+                // setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_SIZE, customLine->continueFontSize);
+                // setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_STYLE, int(customLine->continueFontStyle));
+                setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT_OFFSET, customLine->continueTextOffset);
 
-                textLineBase->setContinueTextPlace(customLine->continueTextPlace);
-                textLineBase->setContinueText(customLine->continueText);
-                textLineBase->setContinueTextAlign(customLine->continueTextAlign);
-                // textLineBase->setContinueFontFamily(customLine->continueFontFamily);
-                // textLineBase->setContinueFontSize(customLine->continueFontSize);
-                // textLineBase->setContinueFontStyle(customLine->continueFontStyle);
-                textLineBase->setContinueTextOffset(customLine->continueTextOffset);
+                setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT_PLACE, customLine->continueTextPlace);
+                setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT, customLine->continueText);
+                setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT_ALIGN, customLine->continueTextAlign);
+                // setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_FACE, customLine->continueFontFamily);
+                // setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_SIZE, customLine->continueFontSize);
+                // setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_STYLE, int(customLine->continueFontStyle));
+                setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT_OFFSET, customLine->continueTextOffset);
 
-                textLineBase->setEndTextPlace(customLine->endTextPlace);
-                textLineBase->setEndText(customLine->endText);
-                textLineBase->setEndTextAlign(customLine->endTextAlign);
-                // textLineBase->setEndFontFamily(customLine->endFontFamily);
-                // textLineBase->setEndFontSize(customLine->endFontSize);
-                // textLineBase->setEndFontStyle(customLine->endFontStyle);
-                textLineBase->setEndTextOffset(customLine->endTextOffset);
+                setAndStyleProperty(textLineBase, Pid::END_TEXT_PLACE, customLine->endTextPlace);
+                setAndStyleProperty(textLineBase, Pid::END_TEXT, customLine->endText);
+                setAndStyleProperty(textLineBase, Pid::END_TEXT_ALIGN, customLine->endTextAlign);
+                // setAndStyleProperty(textLineBase, Pid::END_FONT_FACE, customLine->endFontFamily);
+                // setAndStyleProperty(textLineBase, Pid::END_FONT_SIZE, customLine->endFontSize);
+                // setAndStyleProperty(textLineBase, Pid::END_FONT_STYLE, int(customLine->endFontStyle));
+                setAndStyleProperty(textLineBase, Pid::END_TEXT_OFFSET, customLine->endTextOffset);
             } else if (newSpanner->isTrill()) {
                 toTrill(newSpanner)->setTrillType(customLine->trillType);
             } else if (newSpanner->isVibrato()) {
                 toVibrato(newSpanner)->setVibratoType(customLine->vibratoType);
             } else if (newSpanner->isGlissando()) {
                 Glissando* glissando = toGlissando(newSpanner);
-                glissando->setGlissandoType(customLine->glissandoType);
+                setAndStyleProperty(glissando, Pid::GLISS_TYPE, int(customLine->glissandoType));
                 if (!customLine->centerShortText.empty()) {
-                    glissando->setText(customLine->centerShortText);
-                    glissando->setFontStyle(customLine->centerShortFontStyle);
-                    glissando->setFontFace(customLine->centerShortFontFamily);
-                    glissando->setFontSize(customLine->centerShortFontSize);
+                    setAndStyleProperty(glissando, Pid::GLISS_SHOW_TEXT, true);
+                    setAndStyleProperty(glissando, Pid::GLISS_TEXT, customLine->centerShortText);
+                    setAndStyleProperty(glissando, Pid::FONT_STYLE, int(customLine->centerShortFontStyle));
+                    setAndStyleProperty(glissando, Pid::FONT_FACE, customLine->centerShortFontFamily);
+                    setAndStyleProperty(glissando, Pid::FONT_SIZE, customLine->centerShortFontSize);
                 } else if (!customLine->centerLongText.empty()) {
-                    glissando->setText(customLine->centerShortText);
-                    glissando->setFontStyle(customLine->centerLongFontStyle);
-                    glissando->setFontFace(customLine->centerLongFontFamily);
-                    glissando->setFontSize(customLine->centerLongFontSize);
+                    setAndStyleProperty(glissando, Pid::GLISS_SHOW_TEXT, true);
+                    setAndStyleProperty(glissando, Pid::GLISS_TEXT, customLine->centerShortText);
+                    setAndStyleProperty(glissando, Pid::FONT_STYLE, int(customLine->centerLongFontStyle));
+                    setAndStyleProperty(glissando, Pid::FONT_FACE, customLine->centerLongFontFamily);
+                    setAndStyleProperty(glissando, Pid::FONT_SIZE, customLine->centerLongFontSize);
                 } else {
-                    glissando->setShowText(false);
+                    setAndStyleProperty(glissando, Pid::GLISS_SHOW_TEXT, false);
                 }
             } else if (newSpanner->isOttava()) {
-                newSpanner->setPlaySpanner(false); // Can custom ottavas have playback?
+                setAndStyleProperty(newSpanner, Pid::PLAY, false); // Can custom ottavas have playback?
             } else if (newSpanner->isGuitarBend()) {
                 // Assume custom line is for tab bends (with arrow)
                 m_score->style().set(Sid::guitarBendLineWidthTab, customLine->lineWidth);
@@ -482,8 +484,8 @@ void FinaleParser::importSmartShapes()
                 /// @todo is there a way to read the calculated direction
                 toSlur(newSpanner)->setSlurDirection(directionVFromShapeType(smartShape->shapeType));
             } else if (type == ElementType::GLISSANDO) {
-                toGlissando(newSpanner)->setGlissandoType(glissandoTypeFromShapeType(smartShape->shapeType));
-                toGlissando(newSpanner)->setShowText(false); /// @todo Is this the correct default?
+                setAndStyleProperty(newSpanner, Pid::GLISS_TYPE, int(glissandoTypeFromShapeType(smartShape->shapeType)));
+                setAndStyleProperty(newSpanner, Pid::GLISS_SHOW_TEXT, false); /// @todo Is this the correct default?
             } else if (type == ElementType::TRILL) {
                 toTrill(newSpanner)->setTrillType(TrillType::TRILL_LINE);
             } else if (type == ElementType::TEXTLINE) {
@@ -760,7 +762,7 @@ void FinaleParser::importSmartShapes()
     const Evpu endHookLen = musxOptions().repeatOptions->bracketEndHookLen;
     const Evpu startY = -musxOptions().repeatOptions->bracketHeight;
     const Evpu textPosX = musxOptions().repeatOptions->bracketTextHPos;
-    const Evpu textPosY = -musxOptions().repeatOptions->bracketTextVPos;
+    // const Evpu textPosY = -musxOptions().repeatOptions->bracketTextVPos;
     std::vector<Volta*> openings;
     openings.reserve(endingBegins.size());
 
@@ -820,7 +822,7 @@ void FinaleParser::importSmartShapes()
         setAndStyleProperty(volta, Pid::BEGIN_TEXT_OFFSET, textP, true);
         setAndStyleProperty(volta, Pid::CONTINUE_TEXT_OFFSET, textP, true);
         setAndStyleProperty(vs, Pid::OFFSET, startP, true);
-        vs->setUserOff2(endP);
+        setAndStyleProperty(vs, Pid::OFFSET2, endP, true);
 
         for (auto [linkedStaffIdx, linkedMusxStaffId] : links) {
             /// @todo improved handling for bottom system objects
@@ -847,11 +849,7 @@ void FinaleParser::importSmartShapes()
                 setAndStyleProperty(linkedVs, Pid::OFFSET, linkedStartP, true);
                 setAndStyleProperty(copy, Pid::BEGIN_TEXT_OFFSET, linkedTextP, true);
                 setAndStyleProperty(copy, Pid::CONTINUE_TEXT_OFFSET, linkedTextP, true);
-                linkedVs->setUserOff2(linkedEndP);
-            } else {
-                copy->setVisible(!endingBegin->hidden);
-                setAndStyleProperty(linkedVs, Pid::OFFSET, startP, true);
-                linkedVs->setUserOff2(endP);
+                setAndStyleProperty(linkedVs, Pid::OFFSET2, linkedEndP, true);
             }
             copy->linkTo(volta);
             measure->add(copy);
@@ -962,7 +960,7 @@ void FinaleParser::importSmartShapes()
         }
 
         setAndStyleProperty(vs, Pid::OFFSET, startP, true);
-        vs->setUserOff2(endP);
+        setAndStyleProperty(vs, Pid::OFFSET2, endP, true);
 
         // Simulate playback (for most regular use cases)
         if (prev) {
@@ -1013,11 +1011,7 @@ void FinaleParser::importSmartShapes()
                     linkedEndP.rx() = linkedVs->userOff2().x();
                 }
                 setAndStyleProperty(linkedVs, Pid::OFFSET, linkedStartP, true);
-                linkedVs->setUserOff2(linkedEndP);
-            } else {
-                copy->setVisible(!endingEnd->hidden);
-                setAndStyleProperty(linkedVs, Pid::OFFSET, startP, true);
-                linkedVs->setUserOff2(endP);
+                setAndStyleProperty(linkedVs, Pid::OFFSET2, linkedEndP, true);
             }
         }
     }
