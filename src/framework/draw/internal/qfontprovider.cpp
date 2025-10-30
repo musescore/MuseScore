@@ -27,7 +27,7 @@
 #include <QFontMetricsF>
 #include <QRawFont>
 
-#include "log.h"
+#include "engraving/dom/mscore.h"
 
 using namespace muse;
 using namespace muse::draw;
@@ -45,7 +45,7 @@ protected:
     {
         switch (m) {
         case QPaintDevice::PdmDpiY:
-            return 1200; // Must be equal to mu::engraving::DPI
+            return mu::engraving::DPI;
         default:
             return 1;
         }
