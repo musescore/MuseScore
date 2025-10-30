@@ -182,7 +182,6 @@ Rectangle {
                         enabled: repeatPlayCountTextModel.repeatPlayCountShow.value === true
 
                         ComboBoxDropdown {
-                            Layout.preferredWidth: 290 - editTextStyleButton.width - 6
                             model: repeatPlayCountTextModel.textPresetOptions()
 
                             styleItem: repeatPlayCountTextModel.repeatTextPreset

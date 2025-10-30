@@ -761,87 +761,84 @@ StyledFlickable {
             Layout.minimumWidth: 500
             title: qsTrc("notation/editstyle/chordsymbols", "Playback")
 
-            ColumnLayout {
-                spacing: 12
-                width: parent.width
+            GridLayout {
+                anchors.fill: parent
+                rowSpacing: 12
+                columnSpacing: 6
+                columns: 3
 
-                RowLayout {
-                    spacing: 6
+                StyledTextLabel {
+                    Layout.preferredWidth: 120
+                    Layout.row: 0
+                    Layout.column: 0
+                    horizontalAlignment: Text.AlignLeft
+                    wrapMode: Text.WordWrap
+                    text: qsTrc("notation", "Interpretation:")
+                }
 
-                    StyledTextLabel {
-                        Layout.preferredWidth: 120
-                        horizontalAlignment: Text.AlignLeft
-                        wrapMode: Text.WordWrap
-                        text: qsTrc("notation", "Interpretation:")
-                    }
+                // TODO - replace with StyledDropdown once this whole dialog is written in QML
+                ComboBoxDropdown {
+                    id: interpretationDropdown
+                    Layout.fillWidth: true
+                    Layout.row: 0
+                    Layout.column: 1
+                    model: chordSymbolsModel.possibleHarmonyVoiceLiteralOptions()
+                    styleItem: chordSymbolsModel.harmonyVoiceLiteral
+                }
 
-                    Item {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: interpretationDropdown.height
-
-                        // TODO - replace with StyledDropdown once this whole dialog is written in QML
-                        ComboBoxDropdown {
-                            id: interpretationDropdown
-                            model: chordSymbolsModel.possibleHarmonyVoiceLiteralOptions()
-
-                            styleItem: chordSymbolsModel.harmonyVoiceLiteral
-                        }
-                    }
+                Item {
+                    Layout.fillWidth: true
+                    Layout.horizontalStretchFactor: 1
+                    Layout.row: 0
+                    Layout.column: 2
+                    implicitWidth: resetPlaybackStylesButton.implicitWidth
+                    implicitHeight: resetPlaybackStylesButton.implicitHeight
 
                     FlatButton {
-                        Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                        id: resetPlaybackStylesButton
+                        anchors.right: parent.right
                         icon: IconCode.UNDO
                         enabled: isResetEnabled(root.playbackStyles)
                         onClicked: resetStyles(root.playbackStyles)
                     }
                 }
 
-                RowLayout {
-                    spacing: 6
-
-                    StyledTextLabel {
-                        Layout.preferredWidth: 120
-                        horizontalAlignment: Text.AlignLeft
-                        wrapMode: Text.WordWrap
-                        text: qsTrc("notation", "Voicing:")
-                    }
-
-                    Item {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: voicingDropdown.height
-
-                        // TODO - replace with StyledDropdown once this whole dialog is written in QML
-                        ComboBoxDropdown {
-                            id: voicingDropdown
-                            model: chordSymbolsModel.possibleHarmonyVoicingOptions()
-
-                            styleItem: chordSymbolsModel.harmonyVoicing
-                        }
-                    }
+                StyledTextLabel {
+                    Layout.preferredWidth: 120
+                    Layout.row: 1
+                    Layout.column: 0
+                    horizontalAlignment: Text.AlignLeft
+                    wrapMode: Text.WordWrap
+                    text: qsTrc("notation", "Voicing:")
                 }
 
-                RowLayout {
-                    spacing: 6
+                // TODO - replace with StyledDropdown once this whole dialog is written in QML
+                ComboBoxDropdown {
+                    id: voicingDropdown
+                    Layout.fillWidth: true
+                    Layout.row: 1
+                    Layout.column: 1
+                    model: chordSymbolsModel.possibleHarmonyVoicingOptions()
+                    styleItem: chordSymbolsModel.harmonyVoicing
+                }
 
-                    StyledTextLabel {
-                        Layout.preferredWidth: 120
-                        horizontalAlignment: Text.AlignLeft
-                        wrapMode: Text.WordWrap
-                        text: qsTrc("notation", "Duration:")
-                    }
+                StyledTextLabel {
+                    Layout.preferredWidth: 120
+                    Layout.row: 2
+                    Layout.column: 0
+                    horizontalAlignment: Text.AlignLeft
+                    wrapMode: Text.WordWrap
+                    text: qsTrc("notation", "Duration:")
+                }
 
-                    Item {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: durationDropdown.height
-
-                        // TODO - replace with StyledDropdown once this whole dialog is written in QML
-                        ComboBoxDropdown {
-                            id: durationDropdown
-                            model: chordSymbolsModel.possibleHarmonyDurationOptions()
-
-                            styleItem: chordSymbolsModel.harmonyDuration
-                        }
-                    }
+                // TODO - replace with StyledDropdown once this whole dialog is written in QML
+                ComboBoxDropdown {
+                    id: durationDropdown
+                    Layout.fillWidth: true
+                    Layout.row: 2
+                    Layout.column: 1
+                    model: chordSymbolsModel.possibleHarmonyDurationOptions()
+                    styleItem: chordSymbolsModel.harmonyDuration
                 }
             }
         }
