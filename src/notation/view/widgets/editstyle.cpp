@@ -1788,6 +1788,9 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
         case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM:
             return "harp-pedal-text-diagram";
 
+        case TextStyleType::SYSTEM_TEXTLINE:
+            return "system-text-line";
+
         case TextStyleType::TEXTLINE:
             return "text-line";
 
