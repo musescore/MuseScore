@@ -564,7 +564,7 @@ void FinaleParser::importTextExpressions()
             setAndStyleProperty(item, Pid::FRAME_ROUND, expression->frameSettings.frameRound);
         }
 
-        setAndStyleProperty(item, Pid::ALIGN, Align(toAlignH(expressionDef->horzExprJustification), AlignV::BASELINE));
+        setAndStyleProperty(item, Pid::POSITION, toAlignH(expressionDef->horzExprJustification));
         s->add(item);
 
         // Set element-specific properties
@@ -740,17 +740,6 @@ void FinaleParser::importTextExpressions()
                 }
             }
             p.rx() += doubleFromEvpu(exprDef->measXAdjust) * SPATIUM20;
-            // We will need this when justify differs from text alignment (currently we set alignment to justify)
-            /* switch (item->hAlign()) {
-                case AlignH::LEFT:
-                    break;
-                case AlignH::HCENTER:
-                    p.rx() -= expr->ldata()->bbox().center().y() / 2;
-                    break;
-                case AlignH::RIGHT:
-                    p.rx() -= expr->ldata()->bbox().center().y();
-                    break;
-            } */
 
             StaffCmper effectiveMusxStaffId = expressionAssignment->staffAssign >= 0 ? expressionAssignment->staffAssign : muse::value(m_staff2Inst, expr->staffIdx(), 1);
             const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, effectiveMusxStaffId, exprAssign->getCmper(), 0);
@@ -914,7 +903,7 @@ void FinaleParser::importTextExpressions()
                 copy->setVisible(!linkedAssignment->hidden);
                 copy->setStaffIdx(linkedStaffIdx);
                 const MusxInstance<others::TextExpressionDef>& linkedDef = linkedAssignment->getTextExpression();
-                setAndStyleProperty(copy, Pid::ALIGN, (Align(toAlignH(linkedDef->horzExprJustification), AlignV::BASELINE)));
+                setAndStyleProperty(copy, Pid::POSITION, toAlignH(linkedDef->horzExprJustification));
                 copy->linkTo(item);
                 s->add(copy);
                 positionExpression(copy, linkedAssignment, linkedDef);
@@ -1032,10 +1021,7 @@ void FinaleParser::importTextExpressions()
         }
         item->setXmlText(repeatText->xmlText.replace(u"#", replaceText));
         item->checkCustomFormatting(item->xmlText());
-        setAndStyleProperty(item, Pid::ALIGN, Align(repeatText->repeatAlignment, AlignV::BASELINE));
-        if (item->isMarker()) {
-            setAndStyleProperty(item, Pid::POSITION, repeatText->repeatAlignment); /// @todo 'center' position centers over barline in musescore, over measure in finale
-        }
+        setAndStyleProperty(item, Pid::POSITION, repeatText->repeatAlignment); /// @todo 'center' position centers over barline in musescore, over measure in finale
         setAndStyleProperty(item, Pid::FRAME_TYPE, int(repeatText->frameSettings.frameType));
         if (item->frameType() != FrameType::NO_FRAME) {
             setAndStyleProperty(item, Pid::FRAME_WIDTH, absoluteSpatium(repeatText->frameSettings.frameWidth, item)); // is this the correct scaling?
@@ -1344,6 +1330,7 @@ void FinaleParser::importPageTexts()
             PointF p = pagePosOfPageTextAssign(page, pageTextAssign, RectF()); //
             AlignH hAlignment = toAlignH(pageTextAssign->indRpPos && !(page->no() & 1) ? pageTextAssign->hPosRp : pageTextAssign->hPosLp);
             setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
+            setAndStyleProperty(text, Pid::POSITION, hAlignment, true);
             setAndStyleProperty(text, Pid::OFFSET, (p - mb->pagePos()), true); // is this accurate enough?
             s->add(text);
             collectElementStyle(text);
@@ -1362,6 +1349,7 @@ void FinaleParser::importPageTexts()
             PointF p = pagePosOfPageTextAssign(page, pageTextAssign, text->ldata()->bbox());
             AlignH hAlignment = toAlignH(pageTextAssign->indRpPos && !(page->no() & 1) ? pageTextAssign->hPosRp : pageTextAssign->hPosLp);
             setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
+            setAndStyleProperty(text, Pid::POSITION, hAlignment, true);
             setAndStyleProperty(text, Pid::OFFSET, p);
             toBox(mb)->add(text);
             collectElementStyle(text);
