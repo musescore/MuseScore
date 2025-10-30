@@ -1296,13 +1296,16 @@ void FinaleParser::importPageTexts()
     }
 
     auto getPages = [&](const MusxInstance<others::PageTextAssign>& pageTextAssign) -> std::vector<page_idx_t> {
-        std::vector<page_idx_t> pagesWithText;
         page_idx_t startP = page_idx_t(pageTextAssign->calcStartPageNumber(m_currentMusxPartId).value_or(1) - 1);
+        if (startP + 1 > m_score->npages()) {
+            return {};
+        }
         // This text is part of a HF for pages 2+ and only needs to be added on page 1
         if (muse::contains(textsForFirstPage, pageTextAssign)) {
             return { startP };
         }
         page_idx_t endP = page_idx_t(pageTextAssign->calcEndPageNumber(m_currentMusxPartId).value_or(PageCmper(m_score->npages())) - 1);
+        std::vector<page_idx_t> pagesWithText;
         for (page_idx_t i = startP; i <= endP; ++i) {
             pagesWithText.emplace_back(i);
         }
