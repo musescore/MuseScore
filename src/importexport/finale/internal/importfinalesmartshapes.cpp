@@ -860,6 +860,10 @@ void FinaleParser::importSmartShapes()
 
     // Read the back endings and inherit existing volta if possible
     for (const MusxInstance<others::RepeatBack>& endingEnd : endingEnds) {
+        const MusxInstance<others::Measure>& musxMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, endingEnd->getCmper());
+        if (!musxMeasure->hasEnding) {
+            continue;
+        }
         // Find staff
         std::vector<std::pair<staff_idx_t, StaffCmper>> links;
         staff_idx_t curStaffIdx = staffIdxForRepeats(endingEnd->topStaffOnly, endingEnd->staffList, endingEnd->getCmper(), links);
