@@ -792,13 +792,13 @@ static void createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo,
     });
 }
 
-static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std::vector<ReadableTuplet>& tupletMap, FinaleLoggerPtr& logger)
+void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std::vector<ReadableTuplet>& tupletMap)
 {
     // create Tuplets as needed, starting with the outermost
     for (size_t i = 1; i < tupletMap.size(); ++i) {
         TDuration baseLen = noteInfoToDuration(calcNoteInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration));
         if (!baseLen.isValid()) {
-            logger->logWarning(String(u"Given Tuplet duration not supported in MuseScore"));
+            logger()->logWarning(String(u"Given Tuplet duration not supported in MuseScore"));
             continue;
         }
         tupletMap[i].scoreTuplet = Factory::createTuplet(measure);
@@ -812,18 +812,19 @@ static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std:
         tupletMap[i].scoreTuplet->setBaseLen(baseLen);
         Fraction f = baseLen.fraction() * tupletRatio.denominator();
         tupletMap[i].scoreTuplet->setTicks(f.reduced());
-        logger->logInfo(String(u"Detected Tuplet: Starting at %1, duration: %2, ratio: %3").arg(
+        logger()->logInfo(String(u"Detected Tuplet: Starting at %1, duration: %2, ratio: %3").arg(
                         tupletMap[i].startTick.toString(), f.reduced().toString(), tupletRatio.toString()));
         for (size_t ratioIndex = indexOfParentTuplet(tupletMap, i); tupletMap[ratioIndex].layer >= 0; ratioIndex = indexOfParentTuplet(tupletMap, ratioIndex)) {
             // finale value doesn't include parent tuplet ratio, but is global. Our setup should be correct though, so hack the assert
             f /= tupletMap[ratioIndex].scoreTuplet->ratio();
         }
         if (f != tupletMap[i].endTick - tupletMap[i].startTick) { // implement with IF_ASSERT_FAILED after the @todo below is addressed. Otherwise, we can't test with real files.
-            logger->logWarning(String(u"Tuplet duration is corrupted"));
+            logger()->logWarning(String(u"Tuplet duration is corrupted"));
             continue;
             /// @todo account for tuplets with invalid durations, i.e. durations not attainable in MuseScore
         }
-        transferTupletProperties(tupletMap[i].musxTuplet, tupletMap[i].scoreTuplet, logger);
+        transferTupletProperties(tupletMap[i].musxTuplet, tupletMap[i].scoreTuplet, logger());
+        collectElementStyle(tupletMap[i].scoreTuplet);
         // reparent tuplet if needed
         size_t parentIndex = indexOfParentTuplet(tupletMap, i);
         if (tupletMap[parentIndex].layer >= 0) {
@@ -903,7 +904,7 @@ void FinaleParser::importEntries()
                         std::vector<ReadableTuplet> tupletMap = { rTuplet };
                         std::vector<ReadableTuplet> tremoloMap;
                         createTupletMap(entryFrame->tupletInfo, tupletMap, tremoloMap, voice);
-                        createTupletsFromMap(measure, curTrackIdx, tupletMap, logger());
+                        createTupletsFromMap(measure, curTrackIdx, tupletMap);
 
                         // add chords and rests
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
