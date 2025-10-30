@@ -4269,7 +4269,7 @@
         <source>Saxophone in B♭ (an octave above the soprano).</source>
         <comment>sopranissimo-saxophone description</comment>
         <extracomment>description for Sopranissimo Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone en Si♭ (une octave plus grave que le soprano).</translation>
+        <translation>Saxophone en Si♭ (une octave plus aigüe que le soprano).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1566"/>
