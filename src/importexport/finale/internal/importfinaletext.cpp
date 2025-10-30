@@ -557,14 +557,14 @@ void FinaleParser::importTextExpressions()
         item->setVisible(!expressionAssignment->hidden);
         item->setXmlText(expression->xmlText);
         item->checkCustomFormatting(expression->xmlText);
-        item->setFrameType(expression->frameSettings.frameType);
+        setAndStyleProperty(item, Pid::FRAME_TYPE, int(expression->frameSettings.frameType));
         if (item->frameType() != FrameType::NO_FRAME) {
-            item->setFrameWidth(absoluteSpatium(expression->frameSettings.frameWidth, item)); // is this the correct scaling?
-            item->setPaddingWidth(absoluteSpatium(expression->frameSettings.paddingWidth, item)); // is this the correct scaling?
-            item->setFrameRound(expression->frameSettings.frameRound);
+            setAndStyleProperty(item, Pid::FRAME_WIDTH, absoluteSpatium(expression->frameSettings.frameWidth, item)); // is this the correct scaling?
+            setAndStyleProperty(item, Pid::FRAME_PADDING, absoluteSpatium(expression->frameSettings.paddingWidth, item)); // is this the correct scaling?
+            setAndStyleProperty(item, Pid::FRAME_ROUND, expression->frameSettings.frameRound);
         }
 
-        item->setAlign(Align(toAlignH(expressionDef->horzExprJustification), AlignV::BASELINE));
+        setAndStyleProperty(item, Pid::ALIGN, Align(toAlignH(expressionDef->horzExprJustification), AlignV::BASELINE));
         s->add(item);
 
         // Set element-specific properties
@@ -914,7 +914,7 @@ void FinaleParser::importTextExpressions()
                 copy->setVisible(!linkedAssignment->hidden);
                 copy->setStaffIdx(linkedStaffIdx);
                 const MusxInstance<others::TextExpressionDef>& linkedDef = linkedAssignment->getTextExpression();
-                copy->setAlign(Align(toAlignH(linkedDef->horzExprJustification), AlignV::BASELINE));
+                setAndStyleProperty(copy, Pid::ALIGN, (Align(toAlignH(linkedDef->horzExprJustification), AlignV::BASELINE)));
                 copy->linkTo(item);
                 s->add(copy);
                 positionExpression(copy, linkedAssignment, linkedDef);
@@ -1032,16 +1032,17 @@ void FinaleParser::importTextExpressions()
         }
         item->setXmlText(repeatText->xmlText.replace(u"#", replaceText));
         item->checkCustomFormatting(item->xmlText());
-        item->setAlign(Align(repeatText->repeatAlignment, AlignV::BASELINE));
+        setAndStyleProperty(item, Pid::ALIGN, Align(repeatText->repeatAlignment, AlignV::BASELINE));
         if (item->isMarker()) {
-            item->setPosition(repeatText->repeatAlignment); /// @todo 'center' position centers over barline in musescore, over measure in finale
+            setAndStyleProperty(item, Pid::POSITION, repeatText->repeatAlignment); /// @todo 'center' position centers over barline in musescore, over measure in finale
         }
-        item->setFrameType(repeatText->frameSettings.frameType);
+        setAndStyleProperty(item, Pid::FRAME_TYPE, int(repeatText->frameSettings.frameType));
         if (item->frameType() != FrameType::NO_FRAME) {
-            item->setFrameWidth(absoluteSpatium(repeatText->frameSettings.frameWidth, item)); // is this the correct scaling?
-            item->setPaddingWidth(absoluteSpatium(repeatText->frameSettings.paddingWidth, item)); // is this the correct scaling?
-            item->setFrameRound(repeatText->frameSettings.frameRound);
+            setAndStyleProperty(item, Pid::FRAME_WIDTH, absoluteSpatium(repeatText->frameSettings.frameWidth, item)); // is this the correct scaling?
+            setAndStyleProperty(item, Pid::FRAME_PADDING, absoluteSpatium(repeatText->frameSettings.paddingWidth, item)); // is this the correct scaling?
+            setAndStyleProperty(item, Pid::FRAME_ROUND, repeatText->frameSettings.frameRound);
         }
+
         item->setAutoplace(false);
         setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
         PointF p = evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * SPATIUM20; /// @todo adjust for staff reference line?
@@ -1063,9 +1064,6 @@ void FinaleParser::importTextExpressions()
                 PointF p1 = evpuToPointF(indiv->x1add, -indiv->y1add) * SPATIUM20; /// @todo adjust for staff reference line?
                 p1.rx() -= blAdjust;
                 setAndStyleProperty(item, Pid::OFFSET, p1);
-            } else {
-                copy->setVisible(!repeatAssignment->hidden);
-                setAndStyleProperty(copy, Pid::OFFSET, p);
             }
             copy->linkTo(item);
             measure->add(copy);
@@ -1279,32 +1277,36 @@ void FinaleParser::importPageTexts()
         return stringFromEnigmaText(parsingContext, hfType);
     };
 
+    auto assignPageTextToHF = [&](Sid styleId, const MusxInstance<others::PageTextAssign>& pageText) {
+        m_score->style().set(styleId, pageText ? stringFromPageText(pageText) : String());
+    };
+
     if (header.show) {
         m_score->style().set(Sid::showHeader,      true);
         m_score->style().set(Sid::headerFirstPage, header.showFirstPage);
         m_score->style().set(Sid::headerOddEven,   header.oddEven);
-        m_score->style().set(Sid::evenHeaderL,     header.evenLeftText ? stringFromPageText(header.evenLeftText) : String());
-        m_score->style().set(Sid::evenHeaderC,     header.evenMiddleText ? stringFromPageText(header.evenMiddleText) : String());
-        m_score->style().set(Sid::evenHeaderR,     header.evenRightText ? stringFromPageText(header.evenRightText) : String());
-        m_score->style().set(Sid::oddHeaderL,      header.oddLeftText ? stringFromPageText(header.oddLeftText) : String());
-        m_score->style().set(Sid::oddHeaderC,      header.oddMiddleText ? stringFromPageText(header.oddMiddleText) : String());
-        m_score->style().set(Sid::oddHeaderR,      header.oddRightText ? stringFromPageText(header.oddRightText) : String());
+        assignPageTextToHF(Sid::evenHeaderL, header.evenLeftText);
+        assignPageTextToHF(Sid::evenHeaderC, header.evenMiddleText);
+        assignPageTextToHF(Sid::evenHeaderR, header.evenRightText);
+        assignPageTextToHF(Sid::oddHeaderL,  header.oddLeftText);
+        assignPageTextToHF(Sid::oddHeaderC,  header.oddMiddleText);
+        assignPageTextToHF(Sid::oddHeaderR,  header.oddRightText);
     } else {
-        m_score->style().set(Sid::showHeader,      false);
+        m_score->style().set(Sid::showHeader, false);
     }
 
     if (footer.show) {
         m_score->style().set(Sid::showFooter,      true);
         m_score->style().set(Sid::footerFirstPage, footer.showFirstPage);
         m_score->style().set(Sid::footerOddEven,   footer.oddEven);
-        m_score->style().set(Sid::evenFooterL,     footer.evenLeftText ? stringFromPageText(footer.evenLeftText) : String());
-        m_score->style().set(Sid::evenFooterC,     footer.evenMiddleText ? stringFromPageText(footer.evenMiddleText) : String());
-        m_score->style().set(Sid::evenFooterR,     footer.evenRightText ? stringFromPageText(footer.evenRightText) : String());
-        m_score->style().set(Sid::oddFooterL,      footer.oddLeftText ? stringFromPageText(footer.oddLeftText) : String());
-        m_score->style().set(Sid::oddFooterC,      footer.oddMiddleText ? stringFromPageText(footer.oddMiddleText) : String());
-        m_score->style().set(Sid::oddFooterR,      footer.oddRightText ? stringFromPageText(footer.oddRightText) : String());
+        assignPageTextToHF(Sid::evenFooterL, footer.evenLeftText);
+        assignPageTextToHF(Sid::evenFooterC, footer.evenMiddleText);
+        assignPageTextToHF(Sid::evenFooterR, footer.evenRightText);
+        assignPageTextToHF(Sid::oddFooterL,  footer.oddLeftText);
+        assignPageTextToHF(Sid::oddFooterC,  footer.oddMiddleText);
+        assignPageTextToHF(Sid::oddFooterR,  footer.oddRightText);
     } else {
-        m_score->style().set(Sid::showFooter,      false);
+        m_score->style().set(Sid::showFooter, false);
     }
 
     auto getPages = [&](const MusxInstance<others::PageTextAssign>& pageTextAssign) -> std::vector<page_idx_t> {
