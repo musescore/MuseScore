@@ -330,6 +330,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     ChordRest* cr = nullptr;
     int crossStaffMove = 0;
     staff_idx_t staffIdx = track2staff(curTrackIdx);
+    const bool unbeamed = entryInfo.calcUnbeamed();
 
     // because we need the real staff to calculate when to show accidentals,
     // we have to calculate cross-staffing before pitches
@@ -485,49 +486,24 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             }
             m_entryNoteNumber2Note.emplace(std::make_pair(currentEntryNumber, noteInfoPtr->getNoteId()), note);
         }
-        if (currentEntry->freezeStem || currentEntry->voice2 || currentEntry->v2Launch
-            || muse::contains(m_layerForceStems, entryInfo.getLayerIndex())) {
-            // Additionally, beams have their own vertical direction, which is set in processBeams.
-            DirectionV dir = currentEntry->upStem ? DirectionV::UP : DirectionV::DOWN;
-            chord->setStemDirection(dir);
-        }
-        // Only create explicitly if properties need changing
-        if (chord->shouldHaveStem() || d.hasStem()) {
-            Stem* stem = Factory::createStem(chord);
-            stem->setVisible(!currentEntry->isHidden);
-            chord->add(stem);
-            /// @todo We can't use CustomStem directly, we need to use CustomUpStem or CustomDownStem, which depends on (beam) layout
-            /// @todo StemAlterations and StemAlterationsUnderBeam
-            /// @todo is this where stemSlash is determined?
-            /* if (currentEntry->stemDetail) {
-                // Stem visibility and offset
-                MusxInstanceList<details::CustomStem> customStems = m_doc->getDetails()->getArray<details::CustomStem>(m_currentMusxPartId); // RGP: pass in the entry number as 2nd param here
-                for (const MusxInstance<details::CustomStem>& customStem : customStems) {
-                    chord->stem()->setVisible(customStem->calcIsHiddenStem());
-                    if (customStem->hOffset != 0 || customStem->vOffset != 0) {
-                        chord->stem()->setOffset(evpuToPointF(customStem->hOffset, -customStem->vOffset) * SPATIUM20); // correctly scaled?
-                        chord->stem()->setAutoPlace(false); // make more nuanced?
-                    }
-                }
-            } */
-        }
-        if (d.hooks() > 0 && entryInfo.calcUnbeamed()) {
-            // Notes with flags are not accounted for in beaming code,
-            // and rests are unbeamed by default
-            chord->setBeamMode(BeamMode::NONE);
-            if (currentEntry->isHidden) {
-                Hook* hook = new Hook(chord);
-                hook->setVisible(false);
-                chord->setHook(hook);
-                chord->add(hook);
-            }
-        }
-        if (!chord->notes().empty()) {
-            cr = toChordRest(chord);
-        } else {
+
+        if (chord->notes().empty()) {
             delete chord;
             cr = toChordRest(Factory::createRest(segment, d));
             toRest(cr)->setVisible(false);
+        } else {
+            // Stem and stem direction
+            if (currentEntry->freezeStem || currentEntry->voice2 || currentEntry->v2Launch
+                || muse::contains(m_layerForceStems, entryInfo.getLayerIndex())) {
+                // Additionally, beams have their own vertical direction, which is set in processBeams.
+                chord->setStemDirection(currentEntry->upStem ? DirectionV::UP : DirectionV::DOWN);
+            }
+            if (chord->shouldHaveStem() || d.hasStem()) {
+                Stem* stem = Factory::createStem(chord);
+                stem->setVisible(!currentEntry->isHidden);
+                chord->add(stem);
+            }
+            cr = toChordRest(chord);
         }
     } else {
         const MusxInstance<others::Staff> musxStaff = entryInfo.createCurrentStaff();
@@ -568,7 +544,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     if (isGrace) {
         engraving::Chord* gc = toChord(cr);
         /// @todo Account for stem slash plugin instead of just document options
-        gc->setNoteType((!graceAfterType /* && gc->beams() > 0 */ && entryInfo.calcUnbeamed() && (currentEntry->slashGrace || musxOptions().graceOptions->slashFlaggedGraceNotes))
+        gc->setNoteType((!graceAfterType /* && gc->beams() > 0 */ && unbeamed && (currentEntry->slashGrace || musxOptions().graceOptions->slashFlaggedGraceNotes))
                          ? engraving::NoteType::ACCIACCATURA : durationTypeToNoteType(d.type(), graceAfterType));
         engraving::Chord* graceParentChord = toChord(segment->element(curTrackIdx));
         gc->setGraceIndex(static_cast<int>(graceAfterType ? graceParentChord->graceNotesAfter().size() : graceParentChord->graceNotesBefore().size()));
@@ -579,6 +555,61 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             parentTuplet->add(cr);
         }
         logger()->logInfo(String(u"Adding entry of duration %2 at tick %1").arg(entryStartTick.toString(), cr->durationTypeTicks().toString()));
+    }
+
+    if (cr->isChord() && unbeamed) {
+        Chord* chord = toChord(cr);
+
+        // Stem direction
+        bool up = chord->stemDirection() == DirectionV::UP;
+        if (chord->stemDirection() == DirectionV::AUTO) {
+            if (crossStaffMove == 0) {
+                int middleLine = chord->staffType()->lines() - 1;
+                if (targetStaff->isTabStaff(segment->tick())) {
+                    up = chord->downNote()->string() + chord->upNote()->string() > middleLine;
+                } else {
+                    up = chord->downNote()->line() + chord->upNote()->line() > middleLine * 2;
+                }
+            } else {
+                up = crossStaffMove > 0;
+            }
+            chord->setStemDirection(up ? DirectionV::UP : DirectionV::DOWN);
+        }
+
+        // Stem details and flag
+        if (d.hooks() > 0) {
+            // Notes with flags are not accounted for in beaming code,
+            // and rests are unbeamed by default
+            chord->setBeamMode(BeamMode::NONE);
+            if (currentEntry->isHidden) {
+                Hook* hook = new Hook(chord);
+                hook->setVisible(false);
+                chord->setHook(hook);
+                chord->add(hook);
+            }
+        }
+        if (currentEntry->stemDetail && chord->stem()) {
+            if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterations>(m_currentMusxPartId, currentEntryNumber)) {
+                if (up) {
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET, evpuToPointF(stemAlt->upHorzAdjust, -stemAlt->upVertAdjust) * SPATIUM20);
+                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
+                } else {
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET, evpuToPointF(stemAlt->downHorzAdjust, 0.0) * SPATIUM20);
+                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
+                }
+                chord->stem()->setAutoplace(false);
+            }
+            // No support for custom stem shapes
+            if (up) {
+                if (const auto& customStem = m_doc->getDetails()->get<details::CustomUpStem>(m_currentMusxPartId, currentEntryNumber)) {
+                    chord->stem()->setVisible(customStem->calcIsHiddenStem());
+                }
+            } else {
+                if (const auto& customStem = m_doc->getDetails()->get<details::CustomDownStem>(m_currentMusxPartId, currentEntryNumber)) {
+                    chord->stem()->setVisible(customStem->calcIsHiddenStem());
+                }
+            }
+        }
     }
 
     // Dot offset
@@ -680,7 +711,7 @@ bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom:
             return false;
         }
         if (noteInfoPtr->getNoteId() == musx::dom::Note::RESTID) {
-            /// @todo correctly calculate default rest position in multi-voice situation. rest->setAutoPlace is problematic because it also affects spacing
+            /// @todo correctly calculate default rest position in multi-voice situation. rest->setAutoplace is problematic because it also affects spacing
             /// (and does not cover all vertical placement situations either).
             MusxInstance<others::StaffComposite> currMusxStaff = noteInfoPtr.getEntryInfo().createCurrentStaff(targetMusxStaffId);
             IF_ASSERT_FAILED(currMusxStaff) {
@@ -988,7 +1019,7 @@ static bool computeUpCase(Beam* beam, double middleLinePos)
             topPos = std::min(topPos, systemPosByLine(cr, true));
             bottomPos = std::max(bottomPos, systemPosByLine(cr, false));
         }
-        return topPos + bottomPos < middleLinePos;
+        return bottomPos - middleLinePos > middleLinePos - topPos;
     }
     return beam->direction() == DirectionV::UP;
 }
