@@ -959,3 +959,19 @@ Sid CompatUtils::positionStyleFromAlign(Sid align)
 {
     return muse::value(ALIGN_VALS_TO_CONVERT, align, Sid::NOSTYLE);
 }
+
+void CompatUtils::setTextLineTextPositionFromAlign(TextLineBase* tl)
+{
+    tl->setBeginTextPosition(tl->beginTextAlign().horizontal);
+    if (tl->beginTextPosition() != tl->propertyDefault(Pid::BEGIN_TEXT_POSITION).value<AlignH>()) {
+        tl->setPropertyFlags(Pid::BEGIN_TEXT_POSITION, PropertyFlags::UNSTYLED);
+    }
+    tl->setContinueTextPosition(tl->continueTextAlign().horizontal);
+    if (tl->continueTextPosition() != tl->propertyDefault(Pid::CONTINUE_TEXT_POSITION).value<AlignH>()) {
+        tl->setPropertyFlags(Pid::CONTINUE_TEXT_POSITION, PropertyFlags::UNSTYLED);
+    }
+    tl->setEndTextPosition(tl->endTextAlign().horizontal);
+    if (tl->endTextPosition() != tl->propertyDefault(Pid::END_TEXT_POSITION).value<AlignH>()) {
+        tl->setPropertyFlags(Pid::END_TEXT_POSITION, PropertyFlags::UNSTYLED);
+    }
+}

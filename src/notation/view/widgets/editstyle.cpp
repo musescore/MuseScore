@@ -1122,9 +1122,14 @@ EditStyle::EditStyle(QWidget* parent)
     WidgetUtils::setWidgetIcon(resetTextStyleAlign, IconCode::Code::UNDO);
     connect(resetTextStyleAlign, &QToolButton::clicked, this, [=]() {
         resetTextStyle(TextStylePropertyType::TextAlign);
+        resetTextStyle(TextStylePropertyType::Position);
     });
     connect(textStyleAlign, &AlignSelect::alignChanged, this, [=]() {
         textStyleValueChanged(TextStylePropertyType::TextAlign, textStyleAlign->align());
+    });
+
+    connect(textPositionSelect, &TextPositionSelect::positionChanged, this, [=]() {
+        textStyleValueChanged(TextStylePropertyType::Position, textPositionSelect->position());
     });
 
     // offset
@@ -2727,6 +2732,11 @@ void EditStyle::textStyleChanged(int row)
 
         case TextStylePropertyType::TextAlign:
             textStyleAlign->setAlign(styleValue(a.sid).value<Align>());
+            resetTextStyleAlign->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+            break;
+
+        case TextStylePropertyType::Position:
+            textPositionSelect->setPosition(styleValue(a.sid).value<AlignH>());
             resetTextStyleAlign->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 

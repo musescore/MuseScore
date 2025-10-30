@@ -42,6 +42,8 @@ class TextSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * horizontalAlignment READ horizontalAlignment CONSTANT)
     Q_PROPERTY(PropertyItem * verticalAlignment READ verticalAlignment CONSTANT)
 
+    Q_PROPERTY(PropertyItem * horizontalPosition READ horizontalPosition CONSTANT)
+
     Q_PROPERTY(PropertyItem * symbolSize READ symbolSize CONSTANT)
     Q_PROPERTY(PropertyItem * isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
     Q_PROPERTY(PropertyItem * frameType READ frameType CONSTANT)
@@ -68,6 +70,8 @@ class TextSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool isLineSpacingAvailable READ isLineSpacingAvailable NOTIFY isLineSpacingAvailableChanged)
     Q_PROPERTY(bool isPositionAvailable READ isPositionAvailable NOTIFY isPositionAvailableChanged)
 
+    Q_PROPERTY(bool usePositionRelativeToLine READ usePositionRelativeToLine NOTIFY usePositionRelativeToLineChanged)
+
 public:
     explicit TextSettingsModel(QObject* parent, IElementRepositoryService* repository, bool isTextLineText);
 
@@ -88,6 +92,8 @@ public:
     PropertyItem* textLineSpacing() const;
     PropertyItem* horizontalAlignment() const;
     PropertyItem* verticalAlignment() const;
+
+    PropertyItem* horizontalPosition() const;
 
     PropertyItem* symbolSize() const;
     PropertyItem* isSizeSpatiumDependent() const;
@@ -113,6 +119,7 @@ public:
     bool isScriptSizeAvailable() const;
     bool isLineSpacingAvailable() const;
     bool isPositionAvailable() const;
+    bool usePositionRelativeToLine() const;
 
 public slots:
     void setAreTextPropertiesAvailable(bool areTextPropertiesAvailable);
@@ -124,6 +131,7 @@ public slots:
     void setIsScriptSizeAvailable(bool isScriptSizeAvailable);
     void setIsLineSpacingAvailable(bool isLineSpacingAvailable);
     void setIsPositionAvailableChanged(bool isPositionAvailable);
+    void setUsePositionRelativeToLineChanged(bool usePositionRelativeToLine);
 
 signals:
     void textStylesChanged();
@@ -137,6 +145,7 @@ signals:
     void isScriptSizeAvailableChanged(bool isScriptSizeAvailable);
     void isLineSpacingAvailableChanged(bool isLineSpacingAvailable);
     void isPositionAvailableChanged(bool isPositionAvailable);
+    void usePositionRelativeToLineChanged(bool positionRelativeToLine);
 
 private:
     bool isTextEditingStarted() const;
@@ -151,6 +160,7 @@ private:
     void updateIsScriptSizeAvailable();
     void updateIsLineSpacingAvailable();
     void updateIsPositionAvailable();
+    void updateUsePositionRelativeToLine();
 
     void propertyChangedCallback(const mu::engraving::Pid propertyId, const QVariant& newValue);
     void propertyResetCallback(const mu::engraving::Pid propertyId);
@@ -165,6 +175,8 @@ private:
     PropertyItem* m_textLineSpacing = nullptr;
     PropertyItem* m_horizontalAlignment = nullptr;
     PropertyItem* m_verticalAlignment = nullptr;
+
+    PropertyItem* m_horizontalPosition = nullptr;
 
     PropertyItem* m_symbolSize = nullptr;
     PropertyItem* m_isSizeSpatiumDependent = nullptr;
@@ -190,6 +202,8 @@ private:
     bool m_isScriptSizeAvailable = false;
     bool m_isLineSpacingAvailable = false;
     bool m_isPositionAvailable = false;
+
+    bool m_usePositionRelativeToLine = false;
 };
 }
 

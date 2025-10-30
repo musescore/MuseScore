@@ -67,24 +67,4 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: symbolSize.navigationRowEnd + 1
     }
-
-    FlatRadioButtonGroupPropertyView {
-        id: alignmentButtonList
-        titleText: qsTrc("inspector", "Alignment to barline")
-        propertyItem: root.model ? root.model.position : null
-
-        enabled: root.model ? !root.model.centerOnSymbol.value : false
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: alignSymbolCheckbox.navigationRowEnd + 1
-
-        requestIconFontSize: 16
-        requestWidth: 98
-
-        model: [
-            { iconCode: IconCode.ALIGN_LEFT, value: 0},
-            { iconCode: IconCode.ALIGN_HORIZONTAL_CENTER, value: 2},
-            { iconCode: IconCode.ALIGN_RIGHT, value: 1 }
-        ]
-    }
 }

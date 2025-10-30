@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,22 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "../dom/marker.h"
-#include "rendering/score/layoutcontext.h"
+#include "modularity/ioc.h"
+#include "ui_text_position_select.h"
+#include "engraving/types/types.h"
 
-namespace mu::engraving::rendering::score {
-class LayoutConfiguration;
-
-class MarkerLayout
+namespace mu::notation {
+class TextPositionSelect : public QWidget, public Ui::PositionSelect, public muse::Injectable
 {
+    Q_OBJECT
+
 public:
-    static void layoutMarker(Marker* item, Marker::LayoutData* ldata, LayoutContext& ctx);
+    TextPositionSelect(QWidget* parent);
+    mu::engraving::AlignH position() const;
+    void setPosition(mu::engraving::AlignH);
+
+signals:
+    void positionChanged(mu::engraving::AlignH);
 
 private:
-    static void doLayoutMarker(Marker* item, Marker::LayoutData* ldata, LayoutContext& ctx);
-    static double computeCustomTextOffset(const Marker* item, Marker::LayoutData* ldata, LayoutContext& ctx);
+    QButtonGroup* positionButtons;
+
+    void blockPosition(bool val);
+
+private slots:
+    void _positionChanged();
 };
-} // namespace mu::engraving::rendering::score
+}

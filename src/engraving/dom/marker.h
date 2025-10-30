@@ -81,8 +81,6 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
 
-    bool positionSeparateFromAlignment() const override { return true; }
-
     bool centerOnSymbol() const { return m_centerOnSymbol; }
     void setCenterOnSymbol(bool val) { m_centerOnSymbol = val; }
 

@@ -336,7 +336,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::PARTIAL_LYRICSLINE_SEGMENT: layoutLyricsLineSegment(item_cast<LyricsLineSegment*>(item), ctx);
         break;
     case ElementType::MARKER:
-        layoutMarker(item_cast<const Marker*>(item), static_cast<Marker::LayoutData*>(ldata), ctx);
+        layoutMarker(item_cast<Marker*>(item), static_cast<Marker::LayoutData*>(ldata), ctx);
         break;
     case ElementType::MEASURE_NUMBER:
         layoutMeasureNumber(item_cast<MeasureNumber*>(item), static_cast<MeasureNumber::LayoutData*>(ldata), ctx);
@@ -2893,6 +2893,8 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
 
         item->hairpin()->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
         item->hairpin()->setEndTextAlign({ AlignH::RIGHT, AlignV::VCENTER });
+        item->hairpin()->setBeginTextPosition(AlignH::LEFT);
+        item->hairpin()->setEndTextPosition(AlignH::RIGHT);
 
         double x1 = 0.0;
         layoutTextLineBaseSegment(item, ctx);
@@ -3116,6 +3118,7 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
         Align align;
         align.vertical = AlignV::BASELINE;
         align.horizontal = AlignH::HCENTER;
+        hopoText->setPosition(AlignH::HCENTER);
         hopoText->setAlign(align);
         layoutItem(hopoText, ctx);
 
@@ -3328,12 +3331,14 @@ void TLayout::layoutJump(const Jump* item, Jump::LayoutData* ldata)
 
     layoutBaseTextBase(item, ldata);
 
-    AlignH align = item->align().horizontal;
+    AlignH position = item->position();
 
-    const Measure* measure = toMeasure(item->parentItem());
+    // ignore courtesy keysig, timesig, but fall back if needed
+    Measure* measure = toMeasure(item->parent());
+    const BarLine* bl = measure->endBarLine();
+    double xAdj = bl ? bl->segment()->x() + bl->ldata()->bbox().width() : measure->width();
 
-    bool avoidBarline = item->staffIdx() != 0 && align != AlignH::HCENTER;
-
+    bool avoidBarline = item->staffIdx() != 0 && position != AlignH::HCENTER;
     if (avoidBarline) {
         bool startRepeat = measure->repeatStart();
         bool endRepeat = measure->repeatEnd();
@@ -3341,20 +3346,18 @@ void TLayout::layoutJump(const Jump* item, Jump::LayoutData* ldata)
 
         const double fontSizeScaleFactor = item->size() / 10.0;
         double padding = (startRepeat || endRepeat) ? 0.0 : 0.5 * item->spatium() * fontSizeScaleFactor;
-        double xAdj = 0.0;
 
-        if (align == AlignH::LEFT) {
+        if (position == AlignH::LEFT) {
             const BarLine* bl = startRepeat || !measure->prevMeasure()
                                 ? measure->startBarLine(blIdx) : measure->prevMeasure()->endBarLine(blIdx);
             double blWidth = startRepeat ? bl->width() : 0.0;
             xAdj += padding + blWidth;
-        } else if (align == AlignH::RIGHT) {
+        } else if (position == AlignH::RIGHT) {
             const BarLine* bl = measure->endBarLine(blIdx);
             xAdj -= bl->width() + padding;
         }
-
-        ldata->moveX(xAdj);
     }
+    ldata->moveX(xAdj);
 
     if (item->autoplace()) {
         LD_CONDITION(ldata->isSetPos());
@@ -3760,7 +3763,7 @@ void TLayout::layoutLyricsLineSegment(LyricsLineSegment* item, LayoutContext& ct
     LyricsLayout::layout(item, ctx);
 }
 
-void TLayout::layoutMarker(const Marker* item, Marker::LayoutData* ldata, LayoutContext& ctx)
+void TLayout::layoutMarker(Marker* item, Marker::LayoutData* ldata, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
 
@@ -4500,7 +4503,7 @@ void TLayout::layoutRehearsalMark(const RehearsalMark* item, RehearsalMark::Layo
 
     // special case for right aligned rehearsal marks at start of system
     // left align with start of measure if that is further left
-    if (item->align() == AlignH::RIGHT) {
+    if (item->position() == AlignH::RIGHT) {
         ldata->setPosX(std::min(ldata->pos().x(), measureX + ldata->bbox().width()));
     }
 
@@ -5308,8 +5311,8 @@ void TLayout::layoutSticking(const Sticking* item, Sticking::LayoutData* ldata)
     LAYOUT_CALL_ITEM(item);
     layoutBaseTextBase(item, ldata);
 
-    AlignH itemAlign =  item->align().horizontal;
-    if (itemAlign != AlignH::LEFT) {
+    AlignH itemPosition =  item->position();
+    if (itemPosition != AlignH::LEFT) {
         const Segment* seg = item->segment();
         const Chord* chord = nullptr;
         track_idx_t sTrack = trackZeroVoice(item->track());
@@ -5325,7 +5328,7 @@ void TLayout::layoutSticking(const Sticking* item, Sticking::LayoutData* ldata)
         if (chord) {
             const Note* refNote = item->placeAbove() ? chord->upNote() : chord->downNote();
             double noteWidth = refNote->ldata()->bbox().width();
-            ldata->moveX(itemAlign == AlignH::HCENTER ? 0.5 * noteWidth : noteWidth);
+            ldata->moveX(itemPosition == AlignH::HCENTER ? 0.5 * noteWidth : noteWidth);
         }
     }
 
@@ -5665,6 +5668,73 @@ void TLayout::layoutBaseTextBase(TextBase* item, LayoutContext&)
     layoutBaseTextBase(item, item->mutldata());
 }
 
+static void textHorizontalLayout(const TextBase* item, Shape& shape, double maxBlockWidth, TextBase::LayoutData* ldata)
+{
+    double leftMargin = 0.0;
+    double layoutWidth = 0;
+    EngravingItem* parent = item->parentItem();
+    if (parent && item->layoutToParentWidth()) {
+        layoutWidth = parent->width();
+        switch (parent->type()) {
+        case ElementType::HBOX:
+        case ElementType::VBOX:
+        case ElementType::TBOX: {
+            Box* b = toBox(parent);
+            layoutWidth -= ((b->leftMargin() + b->rightMargin()) * DPMM);
+            leftMargin = b->leftMargin() * DPMM;
+        }
+        break;
+        case ElementType::PAGE: {
+            Page* p = toPage(parent);
+            layoutWidth -= (p->lm() + p->rm());
+            leftMargin = p->lm();
+        }
+        break;
+            break;
+        default:
+            ASSERT_X("Lay out to parent width only valid for items with page or frame as parent");
+        }
+    }
+
+    // Position and alignment
+    for (size_t i = 0; i < ldata->blocks.size(); ++i) {
+        TextBlock& textBlock = ldata->blocks[i];
+        double xAdj = leftMargin - textBlock.boundingRect().left();
+
+        // Set position relative to reference point
+        AlignH position = item->position();
+        if (position == AlignH::HCENTER) {
+            xAdj += (layoutWidth - maxBlockWidth) * .5;
+        } else if (position == AlignH::RIGHT) {
+            xAdj += layoutWidth - maxBlockWidth;
+        }
+
+        double diff = maxBlockWidth - textBlock.boundingRect().width();
+        if (muse::RealIsNull(diff)) {
+            // This is the longest line, don't align
+            for (TextFragment& f : textBlock.fragments()) {
+                f.pos.rx() += xAdj;
+            }
+            textBlock.shape().translate(PointF(xAdj, 0.0));
+            shape.add(textBlock.shape().translated(PointF(0.0, textBlock.y())));
+            continue;
+        }
+        // Align relative to the longest line
+        AlignH alignH = item->align().horizontal;
+        if (alignH == AlignH::HCENTER) {
+            xAdj += diff * 0.5;
+        } else if (alignH == AlignH::RIGHT) {
+            xAdj += diff;
+        }
+
+        for (TextFragment& fragment : textBlock.fragments()) {
+            fragment.pos.rx() += xAdj;
+        }
+        textBlock.shape().translate(PointF(xAdj, 0.0));
+        shape.add(textBlock.shape().translated(PointF(0.0, textBlock.y())));
+    }
+}
+
 void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ldata)
 {
     if (item->explicitParent() && item->layoutToParentWidth()) {
@@ -5675,7 +5745,6 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
         item->createBlocks(ldata);
     }
 
-    Shape shape;
     double y = 0.0;
 
     double maxBlockWidth = -DBL_MAX;
@@ -5685,38 +5754,11 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
         t.layout(item);
         y += t.lineSpacing();
         t.setY(y);
-        if (!item->positionSeparateFromAlignment()) {
-            shape.add(t.shape().translated(PointF(0.0, y)));
-        }
         maxBlockWidth = std::max(maxBlockWidth, t.boundingRect().width());
     }
 
-    // ALIGN TEXT
-    // TODO - implement for all text items
-    if (item->positionSeparateFromAlignment()) {
-        for (size_t i = 0; i < ldata->blocks.size(); ++i) {
-            TextBlock& t = ldata->blocks[i];
-            double diff = maxBlockWidth - t.boundingRect().width();
-            if (muse::RealIsNull(diff)) {
-                shape.add(t.shape().translated(PointF(0.0, t.y())));
-                continue;
-            }
-            double rx = 0.0;
-            AlignH alignH = item->align().horizontal;
-            bool dynamicAlwaysCentered = item->isDynamic() && item->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();
-            if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
-                rx = diff * 0.5;
-            } else if (alignH == AlignH::RIGHT) {
-                rx = diff;
-            }
-
-            for (TextFragment& f : t.fragments()) {
-                f.pos.rx() += rx;
-            }
-            t.shape().translate(PointF(rx, 0.0));
-            shape.add(t.shape().translated(PointF(0.0, t.y())));
-        }
-    }
+    Shape shape;
+    textHorizontalLayout(item, shape, maxBlockWidth, ldata);
 
     RectF bb = shape.bbox();
 
@@ -5936,6 +5978,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->text()->setSize(tl->beginFontSize());
         item->text()->setOffset(tl->beginTextOffset() * item->mag());
         item->text()->setAlign(tl->beginTextAlign());
+        item->text()->setPosition(tl->beginTextPosition());
         item->text()->setFontStyle(tl->beginFontStyle());
     } else {
         item->text()->setXmlText(tl->continueText());
@@ -5943,6 +5986,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->text()->setSize(tl->continueFontSize());
         item->text()->setOffset(tl->continueTextOffset() * item->mag());
         item->text()->setAlign(tl->continueTextAlign());
+        item->text()->setPosition(tl->continueTextPosition());
         item->text()->setFontStyle(tl->continueFontStyle());
     }
     item->text()->setPlacement(PlacementV::ABOVE);
@@ -5956,6 +6000,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->endText()->setSize(tl->endFontSize());
         item->endText()->setOffset(tl->endTextOffset());
         item->endText()->setAlign(tl->endTextAlign());
+        item->endText()->setPosition(tl->endTextPosition());
         item->endText()->setFontStyle(tl->endFontStyle());
         item->endText()->setPlacement(PlacementV::ABOVE);
         item->endText()->setTrack(item->track());
@@ -6009,7 +6054,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     if (!item->text()->empty()) {
         if ((isSingleOrBegin && alignBeginText) || (!isSingleOrBegin && alignContinueText)) {
             l1 = gapBetweenTextAndLine;
-            switch (item->text()->align().horizontal) {
+            switch (item->text()->position()) {
             case AlignH::LEFT:
                 l1 += item->text()->ldata()->bbox().width();
                 break;
@@ -6060,7 +6105,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     if (!item->endText()->empty()) {
         if (alignEndText) {
             l2 = gapBetweenTextAndLine;
-            switch (item->endText()->align().horizontal) {
+            switch (item->endText()->position()) {
             case AlignH::RIGHT:
                 l2 += item->endText()->ldata()->bbox().width();
                 break;

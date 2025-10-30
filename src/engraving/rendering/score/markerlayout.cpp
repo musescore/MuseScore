@@ -29,7 +29,7 @@
 
 using namespace mu::engraving::rendering::score;
 
-void MarkerLayout::layoutMarker(const Marker* item, TextBase::LayoutData* ldata, LayoutContext& ctx)
+void MarkerLayout::layoutMarker(Marker* item, TextBase::LayoutData* ldata, LayoutContext& ctx)
 {
     doLayoutMarker(item, ldata, ctx);
 
@@ -46,7 +46,7 @@ void MarkerLayout::layoutMarker(const Marker* item, TextBase::LayoutData* ldata,
     Autoplace::autoplaceMeasureElement(item, ldata);
 }
 
-void MarkerLayout::doLayoutMarker(const Marker* item, TextBase::LayoutData* ldata, LayoutContext& ctx)
+void MarkerLayout::doLayoutMarker(Marker* item, TextBase::LayoutData* ldata, LayoutContext& ctx)
 {
     Measure* measure = toMeasure(item->parentItem());
     IF_ASSERT_FAILED(measure) {
@@ -54,9 +54,15 @@ void MarkerLayout::doLayoutMarker(const Marker* item, TextBase::LayoutData* ldat
     }
     LD_CONDITION(measure->ldata()->isSetBbox());
 
+    // If "Center on symbol" is on, override user position. Restore later
+    AlignH userPosition = item->getProperty(Pid::POSITION).value<AlignH>();
+    AlignH hPos = item->centerOnSymbol()
+                  && !item->symbolString().empty() ? AlignH::HCENTER : item->getProperty(Pid::POSITION).value<AlignH>();
+    item->setPosition(hPos);
+
     TLayout::layoutBaseTextBase(item, ldata);
 
-    // POSITION
+    // Adjust for barline
     bool rightMarker = item->isRightMarker();
     double xAdj = 0.0;
     double blWidth = 0.0;
@@ -67,8 +73,6 @@ void MarkerLayout::doLayoutMarker(const Marker* item, TextBase::LayoutData* ldat
     bool startRepeat = rightMarker ? measure->nextMeasure() && measure->nextMeasure()->repeatStart() : measure->repeatStart();
     bool endRepeat = rightMarker ? measure->repeatEnd() : measure->prevMeasure() && measure->prevMeasure()->repeatEnd();
 
-    AlignH hPos = item->centerOnSymbol()
-                  && !item->symbolString().empty() ? AlignH::HCENTER : item->getProperty(Pid::POSITION).value<AlignH>();
     bool avoidBarline = item->staffIdx() != 0 && hPos != AlignH::HCENTER;
 
     if (!avoidBarline) {
@@ -88,10 +92,10 @@ void MarkerLayout::doLayoutMarker(const Marker* item, TextBase::LayoutData* ldat
 
         switch (hPos) {
         case AlignH::HCENTER:
-            xAdj -= (ldata->bbox().width() + blWidth) / 2;
+            xAdj -=  +blWidth / 2;
             break;
         case AlignH::RIGHT:
-            xAdj -= ldata->bbox().width() + (startRepeat ? blWidth : 0.0);
+            xAdj -=  (startRepeat ? blWidth : 0.0);
             break;
         case AlignH::LEFT:
             xAdj -= startRepeat ? 0.0 : blWidth;
@@ -120,10 +124,11 @@ void MarkerLayout::doLayoutMarker(const Marker* item, TextBase::LayoutData* ldat
             xAdj += blPadding + blWidth;
         } else if (hPos == AlignH::RIGHT) {
             blWidth = startRepeat ? 0.0 : bl->width();
-            xAdj -= ldata->bbox().width() + blWidth + blPadding;
+            xAdj -= blWidth + blPadding;
         }
     }
 
+    item->setPosition(userPosition);
     ldata->moveX(xAdj);
 }
 
@@ -155,7 +160,7 @@ double MarkerLayout::computeCustomTextOffset(const Marker* item, TextBase::Layou
     for (const TextBlock& block : ldata->blocks) {
         for (const TextFragment& fragment : block.fragments()) {
             if (fragment.text == referenceFragment.text) {
-                return ldata->pos().x() + fragment.pos.x() - referenceMarker.ldata()->pos().x() + referenceFragment.pos.x();
+                return ldata->pos().x() + fragment.pos.x() - referenceMarker.ldata()->pos().x() - referenceFragment.pos.x();
             }
         }
     }

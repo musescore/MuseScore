@@ -62,6 +62,10 @@ static const ElementStyle tempoStyle {
     { Sid::tempoChangeAlign, Pid::CONTINUE_TEXT_ALIGN },
     { Sid::tempoChangeAlign, Pid::END_TEXT_ALIGN },
 
+    { Sid::tempoChangePosition, Pid::BEGIN_TEXT_POSITION },
+    { Sid::tempoChangePosition, Pid::CONTINUE_TEXT_POSITION },
+    { Sid::tempoChangePosition, Pid::END_TEXT_POSITION },
+
     { Sid::tempoChangeFontSpatiumDependent, Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::tempoChangeLineWidth, Pid::LINE_WIDTH },
     { Sid::tempoChangeLineStyle, Pid::LINE_STYLE },

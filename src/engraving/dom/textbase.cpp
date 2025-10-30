@@ -1029,39 +1029,6 @@ void TextBlock::layout(const TextBase* t)
     m_shape.clear();
     double x      = 0.0;
     m_lineSpacing = 0.0;
-    double lm     = 0.0;
-
-    double layoutWidth = 0;
-    EngravingItem* e = t->parentItem();
-    // TODO - remove when position is implemented for all text items
-    if (e && t->layoutToParentWidth()) {
-        layoutWidth = e->width();
-        switch (e->type()) {
-        case ElementType::HBOX:
-        case ElementType::VBOX:
-        case ElementType::TBOX: {
-            Box* b = toBox(e);
-            layoutWidth -= ((b->leftMargin() + b->rightMargin()) * DPMM);
-            lm = b->leftMargin() * DPMM;
-        }
-        break;
-        case ElementType::PAGE: {
-            Page* p = toPage(e);
-            layoutWidth -= (p->lm() + p->rm());
-            lm = p->lm();
-        }
-        break;
-        case ElementType::MEASURE: {
-            // ignore courtesy keysig, timesig, but fall back if needed
-            Measure* m = toMeasure(e);
-            const BarLine* bl = m->endBarLine();
-            layoutWidth = bl ? bl->segment()->x() + bl->ldata()->bbox().width() : m->width();
-        }
-        break;
-        default:
-            break;
-        }
-    }
 
     if (m_fragments.empty()) {
         FontMetrics fm = t->fontMetrics();
@@ -1143,30 +1110,6 @@ void TextBlock::layout(const TextBase* t)
 
     // Apply style/custom line spacing
     m_lineSpacing *= t->textLineSpacing();
-
-    // OLD ALIGN TEXT
-    // TODO - remove when position is implemented for all text items
-    if (!t->positionSeparateFromAlignment()) {
-        double rx = 0;
-        AlignH alignH = t->align().horizontal;
-        bool dynamicAlwaysCentered = t->isDynamic() && t->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();
-
-        RectF bbox = m_shape.bbox();
-        if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
-            rx = (layoutWidth - (bbox.left() + bbox.right())) * .5;
-        } else if (alignH == AlignH::LEFT) {
-            rx = -bbox.left();
-        } else if (alignH == AlignH::RIGHT) {
-            rx = layoutWidth - bbox.right();
-        }
-
-        rx += lm;
-
-        for (TextFragment& f : m_fragments) {
-            f.pos.rx() += rx;
-        }
-        m_shape.translate(PointF(rx, 0.0));
-    }
 }
 
 //---------------------------------------------------------
@@ -3283,6 +3226,7 @@ void TextBase::initTextStyleType(TextStyleType tid)
             { Pid::FONT_SIZE, Pid::BEGIN_FONT_SIZE },
             { Pid::FONT_STYLE, Pid::BEGIN_FONT_STYLE },
             { Pid::ALIGN, Pid::BEGIN_TEXT_ALIGN },
+            { Pid::POSITION, Pid::BEGIN_TEXT_POSITION },
         };
 
         const bool isTextLine = parent()->isTextLineBaseSegment();
