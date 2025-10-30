@@ -114,7 +114,7 @@ void AbstractNotationPaintView::load()
         emit horizontalScrollChanged();
         emit verticalScrollChanged();
         emit viewportChanged();
-    });
+    }, async::Asyncable::Mode::SetReplace);
 
     scheduleRedraw();
 }
@@ -126,7 +126,7 @@ void AbstractNotationPaintView::initBackground()
     configuration()->backgroundChanged().onNotify(this, [this]() {
         emit backgroundColorChanged(configuration()->backgroundColor());
         scheduleRedraw();
-    });
+    }, async::Asyncable::Mode::SetReplace);
 }
 
 void AbstractNotationPaintView::initNavigatorOrientation()
