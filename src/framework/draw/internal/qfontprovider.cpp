@@ -27,8 +27,6 @@
 #include <QFontMetricsF>
 #include <QRawFont>
 
-#include "engraving/dom/mscore.h"
-
 using namespace muse;
 using namespace muse::draw;
 
@@ -41,11 +39,12 @@ public:
     }
 
 protected:
+    static constexpr double MU_ENGRAVING_DPI = 2540; // Same as mu::engraving::DPI. TODO: pass as parameter
     int metric(PaintDeviceMetric m) const override
     {
         switch (m) {
         case QPaintDevice::PdmDpiY:
-            return mu::engraving::DPI;
+            return MU_ENGRAVING_DPI;
         default:
             return 1;
         }

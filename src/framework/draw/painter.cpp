@@ -24,8 +24,6 @@
 #include "types/brush.h"
 #include "types/painterpath.h"
 
-#include "engraving/dom/mscore.h"
-
 #ifndef NO_QT_SUPPORT
 #include "internal/qpainterprovider.h"
 #endif
@@ -429,8 +427,9 @@ void Painter::drawRoundedRect(const RectF& rect, double xRadius, double yRadius)
 
 void Painter::applyFontSizeScaling()
 {
+    static constexpr double MU_ENGRAVING_DPI = 2540; // Same as mu::engraving::DPI. TODO: pass as parameter.
     Font f = font();
-    double scaledPointSize = f.pointSizeF() * mu::engraving::DPI / deviceLogicalDpi();
+    double scaledPointSize = f.pointSizeF() * MU_ENGRAVING_DPI / deviceLogicalDpi();
     f.setPointSizeF(scaledPointSize);
     setFont(f);
 }
