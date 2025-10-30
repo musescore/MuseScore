@@ -378,13 +378,13 @@ void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
                (prefs.clefOptions->clefBackSepar + prefs.clefOptions->clefTimeSepar + timeSigSpaceBefore));
     writeEvpuSpace(style, Sid::keyTimesigDistance,
                (prefs.keyOptions->keyBack + prefs.keyOptions->keyTimeSepar + timeSigSpaceBefore));
-    writeEvpuSpace(style, Sid::keyBarlineDistance, prefs.repeatOptions->afterKeySpace);
+    writeEvpuSpace(style, Sid::keyBarlineDistance, prefs.repeatOptions->afterKeySpace - 1.5 * EVPU_PER_SPACE); // observed fudge factor
 
     // Skipped: systemHeaderDistance, systemHeaderTimeSigDistance: these do not translate well from Finale
     // writeEvpuSpace(style, Sid::headerToLineStartDistance, (prefs.keyOptions->keyBack + timeSigSpaceAfter) / 2);
 
     writeEvpuSpace(style, Sid::clefBarlineDistance, -prefs.clefOptions->clefChangeOffset);
-    writeEvpuSpace(style, Sid::timesigBarlineDistance, prefs.repeatOptions->afterClefSpace);
+    writeEvpuSpace(style, Sid::timesigBarlineDistance, prefs.repeatOptions->afterTimeSpace - 1.5 * EVPU_PER_SPACE);
 
     writeEvpuSpace(style, Sid::measureRepeatNumberPos, -(prefs.alternateNotationOptions->twoMeasNumLift + 0.5));
     writeEfixSpace(style, Sid::staffLineWidth, prefs.lineCurveOptions->staffLineWidth);
