@@ -1898,8 +1898,6 @@ static double scaleText(const String& str, const Sid fontFaceSid, const double f
     const FontMetrics fm(font);
 
     const double pagePrintableWidth = style.styleV(Sid::pagePrintableWidth).value<double>() * DPI;
-    const double pageWidth = style.styleV(Sid::pageWidth).value<double>() * DPI;
-    const double pageHeight = style.styleV(Sid::pageHeight).value<double>() * DPI;
 
     double longestLine = 0.0;
     for (const String& line : str.split(u"\n")) {
