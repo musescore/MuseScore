@@ -134,8 +134,9 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     m_staff = engraving::Factory::createStaff(part);
     mu::engraving::StaffType* stt = m_staff->setStaffType(Fraction(0, 1), *m_orgStaff->staffType(Fraction(0, 1)));
 
-    m_staff->setUserDist(m_orgStaff->userDist());
     m_staff->setPart(part);
+    m_staff->setDefaultClefType(m_orgStaff->defaultClefType());
+    m_staff->setUserDist(m_orgStaff->userDist());
     m_staff->setCutaway(m_orgStaff->cutaway());
     m_staff->setHideWhenEmpty(m_orgStaff->hideWhenEmpty());
     m_staff->setShowIfEntireSystemEmpty(m_orgStaff->showIfEntireSystemEmpty());
@@ -499,7 +500,7 @@ void EditStaff::applyStaffProperties()
     config.userDistance = Spatium(spinExtraDistance->value());
     config.hideSystemBarline = hideSystemBarLine->isChecked();
     config.mergeMatchingRests = static_cast<AutoOnOff>(mergeMatchingRests->currentIndex());
-    config.clefTypeList = m_instrument.clefType(m_orgStaff->rstaff());
+    config.clefTypeList = m_staff->defaultClefType();
     config.staffType = *m_staff->staffType(mu::engraving::Fraction(0, 1));
     config.reflectTranspositionInLinkedTab = !noReflectTranspositionInLinkedTab->isChecked();
 
@@ -553,7 +554,7 @@ void EditStaff::applyPartProperties()
 
     if (m_instrument.id() != m_orgInstrument.id()) {
         masterNotationParts()->replaceInstrument(m_instrumentKey, m_instrument);
-    } else {
+    } else if (m_instrument != m_orgInstrument) {
         notationParts()->replaceInstrument(m_instrumentKey, m_instrument);
     }
 
