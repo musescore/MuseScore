@@ -147,13 +147,12 @@ staff_idx_t FinaleParser::staffIdxFromAssignment(StaffCmper assign)
     }
 }
 
-staff_idx_t FinaleParser::staffIdxForRepeats(bool onlyTop, Cmper staffList,
+staff_idx_t FinaleParser::staffIdxForRepeats(bool onlyTop, Cmper staffList, Cmper measureId,
                                              std::vector<std::pair<staff_idx_t, StaffCmper>>& links)
 {
     if (onlyTop) {
         return 0;
     }
-    /// @todo forced staff list
     std::vector<StaffCmper> list;
     if (partScore()) {
         if (const auto& l = m_doc->getOthers()->get<others::StaffListRepeatParts>(m_currentMusxPartId, staffList)) {
@@ -162,6 +161,22 @@ staff_idx_t FinaleParser::staffIdxForRepeats(bool onlyTop, Cmper staffList,
     } else {
         if (const auto& l = m_doc->getOthers()->get<others::StaffListRepeatScore>(m_currentMusxPartId, staffList)) {
             list = l->values;
+        }
+    }
+    for (StaffCmper musxStaffId : list) {
+        if (const auto& musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measureId, 0)) {
+            if (musxStaff->hideRepeats) {
+                muse::remove(list, musxStaffId);
+            }
+        }
+    }
+    if (partScore()) {
+        if (const auto& l = m_doc->getOthers()->get<others::StaffListRepeatPartsForced>(m_currentMusxPartId, staffList)) {
+            muse::join(list, l->values);
+        }
+    } else {
+        if (const auto& l = m_doc->getOthers()->get<others::StaffListRepeatScoreForced>(m_currentMusxPartId, staffList)) {
+            muse::join(list, l->values);
         }
     }
 
