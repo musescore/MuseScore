@@ -220,7 +220,6 @@ public:
 
     static bool pdfPrinting;
     static bool svgPrinting;
-    static double pixelRatio;
 
     static double verticalPageGap;
     static double horizontalPageGapEven;

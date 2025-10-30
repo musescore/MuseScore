@@ -1111,7 +1111,7 @@ void EngravingFont::draw(SymId id, Painter* painter, const SizeF& mag, const Poi
     }
 
     painter->save();
-    double size = SMUFL_DEFAULT_SIZE * MScore::pixelRatio;
+    double size = SMUFL_DEFAULT_SIZE;
     m_font.setPointSizeF(size);
     painter->scale(mag.width(), mag.height());
     painter->setFont(m_font);

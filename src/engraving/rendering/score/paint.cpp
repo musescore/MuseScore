@@ -67,7 +67,6 @@ void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::Sco
     }
 
     // Setup score draw system
-    mu::engraving::MScore::pixelRatio = mu::engraving::DPI / DEVICE_DPI;
     mu::engraving::MScore::pdfPrinting = opt.isPrinting;
 
     const bool wasPrinting = score->printing();

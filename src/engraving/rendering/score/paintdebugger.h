@@ -60,6 +60,8 @@ public:
     void save() override;
     void restore() override;
 
+    double deviceLogicalDpi() const override;
+
     void setTransform(const muse::draw::Transform& transform) override;
     const muse::draw::Transform& transform() const override;
 

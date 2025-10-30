@@ -61,6 +61,8 @@ public:
     void save() override;
     void restore() override;
 
+    double deviceLogicalDpi() const override;
+
     void setTransform(const Transform& transform) override;
     const Transform& transform() const override;
 

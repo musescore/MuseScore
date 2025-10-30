@@ -24,6 +24,8 @@
 #include "types/brush.h"
 #include "types/painterpath.h"
 
+#include "engraving/dom/mscore.h"
+
 #ifndef NO_QT_SUPPORT
 #include "internal/qpainterprovider.h"
 #endif
@@ -214,6 +216,11 @@ void Painter::restore()
     if (extended) {
         extended->restore();
     }
+}
+
+double Painter::deviceLogicalDpi() const
+{
+    return m_provider->deviceLogicalDpi();
 }
 
 void Painter::setWorldTransform(const Transform& matrix, bool combine)
@@ -420,8 +427,18 @@ void Painter::drawRoundedRect(const RectF& rect, double xRadius, double yRadius)
     drawPath(path);
 }
 
+void Painter::applyFontSizeScaling()
+{
+    Font f = font();
+    double scaledPointSize = f.pointSizeF() * mu::engraving::DPI / deviceLogicalDpi();
+    f.setPointSizeF(scaledPointSize);
+    setFont(f);
+}
+
 void Painter::drawText(const PointF& point, const String& text)
 {
+    applyFontSizeScaling();
+
     m_provider->drawText(point, text);
     if (extended) {
         extended->drawText(point, text);
@@ -430,6 +447,8 @@ void Painter::drawText(const PointF& point, const String& text)
 
 void Painter::drawText(const RectF& rect, int flags, const String& text)
 {
+    applyFontSizeScaling();
+
     m_provider->drawText(rect, flags, text);
     if (extended) {
         extended->drawText(rect, flags, text);
@@ -438,6 +457,8 @@ void Painter::drawText(const RectF& rect, int flags, const String& text)
 
 void Painter::drawSymbol(const PointF& point, char32_t ucs4Code)
 {
+    applyFontSizeScaling();
+
     m_provider->drawSymbol(point, ucs4Code);
     if (extended) {
         extended->drawSymbol(point, ucs4Code);

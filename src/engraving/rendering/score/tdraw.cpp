@@ -847,7 +847,7 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
             RectF r = FontMetrics(f).boundingRect(ch);
 
             Font scaledFont(f);
-            scaledFont.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            scaledFont.setPointSizeF(f.pointSizeF());
             painter->setFont(scaledFont);
 
             painter->drawText(-r.width(), 0.0, ch);
@@ -904,7 +904,7 @@ void TDraw::draw(const Bend* item, Painter* painter, const PaintOptions& opt)
     painter->setPen(pen);
     painter->setBrush(Brush(item->curColor(opt)));
 
-    Font f = item->font(spatium * MScore::pixelRatio);
+    Font f = item->font(spatium);
     painter->setFont(f);
 
     double x  = data->noteWidth + spatium * .2;
@@ -1218,7 +1218,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptio
 
     // (use the same font selection as used in layout() above)
     double m = item->style().styleD(Sid::figuredBassFontSize) * item->spatium() / item->defaultSpatium();
-    f.setPointSizeF(m * MScore::pixelRatio);
+    f.setPointSizeF(m);
 
     painter->setFont(f);
     painter->setBrush(BrushStyle::NoBrush);
@@ -1422,7 +1422,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter, const PaintOptions& 
     // Draw fret offset number
     if (item->fretOffset() > 0) {
         Font scaledFont(item->fretNumFont());
-        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / item->defaultSpatium()) * MScore::pixelRatio);
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / item->defaultSpatium()));
         painter->setFont(scaledFont);
         String text = ldata->fretText;
 
@@ -1455,7 +1455,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter, const PaintOptions& 
         painter->save();
 
         Font scaledFont(item->fingeringFont());
-        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / item->defaultSpatium()) * MScore::pixelRatio);
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / item->defaultSpatium()));
         painter->setFont(scaledFont);
         if (item->orientation() == Orientation::HORIZONTAL) {
             painter->translate(-translation);
@@ -1563,7 +1563,7 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter, const PaintOpti
             yOffset += _spatium * (glissando->glissandoType() == GlissandoType::WAVY ? 0.4 : 0.1);
 
             Font scaledFont(f);
-            scaledFont.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            scaledFont.setPointSizeF(f.pointSizeF());
             painter->setFont(scaledFont);
 
             double x = (l - r.width()) * 0.5;
@@ -1662,7 +1662,7 @@ void TDraw::draw(const TextBlock& textBlock, const TextBase* item, Painter* pain
 void TDraw::draw(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter)
 {
     Font f(textFragment.font(item));
-    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    f.setPointSizeF(f.pointSizeF());
     painter->setFont(f);
     painter->drawText(textFragment.pos, textFragment.text);
 }
@@ -1860,7 +1860,7 @@ void TDraw::draw(const Harmony* item, Painter* painter, const PaintOptions& opt)
     for (const HarmonyRenderItem* renderItem : ldata->renderItemList()) {
         if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
             Font f(ts->font());
-            f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            f.setPointSizeF(f.pointSizeF());
             painter->setFont(f);
             painter->drawText(ts->pos(), ts->text());
         } else if (const ChordSymbolParen* parenItem = dynamic_cast<const ChordSymbolParen*>(renderItem)) {
@@ -2036,7 +2036,7 @@ void TDraw::draw(const LayoutBreak* item, Painter* painter, const PaintOptions& 
     painter->setPen(pen);
 
     Font f(item->font());
-    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    f.setPointSizeF(f.pointSizeF());
     painter->setFont(f);
 
     painter->drawSymbol(PointF(), item->iconCode());
@@ -2229,7 +2229,7 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         }
 
         Font f(tab->fretFont());
-        f.setPointSizeF(f.pointSizeF() * item->magS() * MScore::pixelRatio);
+        f.setPointSizeF(f.pointSizeF() * item->magS());
         painter->setFont(f);
         painter->setPen(c);
         double startPosX = ldata->bbox().x();
@@ -2881,7 +2881,7 @@ void TDraw::draw(const FSymbol* item, Painter* painter, const PaintOptions& opt)
     TRACE_DRAW_ITEM;
 
     Font f(item->font());
-    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    f.setPointSizeF(f.pointSizeF());
     painter->setFont(f);
     painter->setPen(item->curColor(opt));
     painter->drawText(PointF(0, 0), item->toString());
@@ -2909,7 +2909,7 @@ void TDraw::draw(const IndicatorIcon* item, muse::draw::Painter* painter, const 
     painter->setPen(pen);
 
     Font f(item->font());
-    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    f.setPointSizeF(f.pointSizeF());
     painter->setFont(f);
 
     painter->drawSymbol(PointF(), item->iconCode());
@@ -2975,7 +2975,7 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const PaintOpt
     if (ldata->beamGrid == TabBeamGrid::NONE) {
         // if no beam grid, draw symbol
         Font f(item->tab()->durationFont());
-        f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+        f.setPointSizeF(f.pointSizeF());
         painter->setFont(f);
         painter->drawText(PointF(0.0, 0.0), item->text());
     } else {
