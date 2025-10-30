@@ -229,18 +229,19 @@ static bool elementsValidForSpannerType(const ElementType type, EngravingItem*& 
     case ElementType::GLISSANDO:
     case ElementType::GUITAR_BEND:
     case ElementType::NOTELINE:
+        if (!startElement || !endElement) {
+            return false;
+        }
         // bendHat guitar bend is chord-anchored, re-anchor here
-        if (startElement && startElement->isChord()) {
+        if (startElement->isChord()) {
             startElement = toChord(startElement)->upNote();
         }
-        if (endElement && endElement->isChord()) {
+        if (endElement->isChord()) {
             endElement = toChord(endElement)->upNote();
         }
-        return startElement && startElement->isNote() && endElement && endElement->isNote();
+        return startElement->isNote() && endElement->isNote();
     case ElementType::SLUR:
         return startElement && startElement->isChordRest() && endElement && endElement->isChordRest();
-    case ElementType::OTTAVA:
-        return startElement && startElement->isChordRest() && (!endElement || endElement->isChordRest()); // the end may be the end of the piece.
     default:
         break;
     }
@@ -277,20 +278,15 @@ void FinaleParser::importSmartShapes()
         bool startsOnBarline = false;
         auto tickFromTerminationSeg = [&](ElementType type, const MusxInstance<others::SmartShape>& smartShape, EngravingItem*& e, bool start) -> Fraction {
             logger()->logInfo(String(u"Finding spanner element..."));
-            bool findExactEntry = type != ElementType::OTTAVA && type != ElementType::SLUR;
-            bool useNextCr = !start && type == ElementType::OTTAVA;
             const MusxInstance<others::SmartShape::TerminationSeg>& termSeg = start ? smartShape->startTermSeg : smartShape->endTermSeg;
-            EntryInfoPtr entryInfoPtr = termSeg->endPoint->calcAssociatedEntry(m_currentMusxPartId, findExactEntry);
+            // Slurs must anchor to a specific entry in MuseScore
+            EntryInfoPtr entryInfoPtr = termSeg->endPoint->calcAssociatedEntry(m_currentMusxPartId, type != ElementType::SLUR);
             if (entryInfoPtr) {
                 NoteNumber nn = start ? smartShape->startNoteId : smartShape->endNoteId;
                 if (nn) {
                     e = toEngravingItem(noteFromEntryInfoAndNumber(entryInfoPtr, nn));
                 } else {
-                    ChordRest* cr = chordRestFromEntryInfoPtr(entryInfoPtr);
-                    e = toEngravingItem(cr);
-                    if (cr && useNextCr) {
-                        return cr->endTick();
-                    }
+                    e = toEngravingItem(chordRestFromEntryInfoPtr(entryInfoPtr));
                 }
                 if (e) {
                     logger()->logInfo(String(u"Found %1 to anchor to").arg(TConv::userName(e->type()).translated()));
@@ -308,9 +304,6 @@ void FinaleParser::importSmartShapes()
                 return Fraction(-1, 1);
             }
             Fraction rTick = musxFractionToFraction(termSeg->endPoint->calcGlobalPosition());
-            if (useNextCr && entryInfoPtr) {
-                rTick += musxFractionToFraction(entryInfoPtr.calcGlobalActualDuration());
-            }
             if (start) {
                 startsOnBarline = rTick >= measure->ticks();
             } else {
@@ -470,9 +463,12 @@ void FinaleParser::importSmartShapes()
                 m_score->style().set(Sid::guitarBendLineWidthTab, customLine->lineWidth);
             }
         } else {
-            /// @todo line width not inheriting from style?
             if (type == ElementType::OTTAVA) {
                 toOttava(newSpanner)->setOttavaType(ottavaTypeFromShapeType(smartShape->shapeType));
+                if (endElement && !endsOnBarline) {
+                    newSpanner->setEndElement(endElement);
+                    newSpanner->setTick2(toChordRest(endElement)->endTick());
+                }
             } else if (type == ElementType::HAIRPIN) {
                 HairpinType ht = hairpinTypeFromShapeType(smartShape->shapeType);
                 toHairpin(newSpanner)->setHairpinType(ht);
@@ -563,6 +559,7 @@ void FinaleParser::importSmartShapes()
         const bool diagonal = newSpanner->isSLine() && ((SLine*)newSpanner)->diagonal();
         bool canPlaceBelow = !diagonal;
         bool isEntirelyInStaff = !diagonal;
+        const bool isStandardOttava = !customLine && type == ElementType::OTTAVA;
         // Current layout code only uses staff height at start tick
         const double staffHeight = newSpanner->staff()->staffHeight(newSpanner->tick());
 
@@ -675,7 +672,7 @@ void FinaleParser::importSmartShapes()
             }
 
             // Adjust ottava positioning
-            if (!customLine && type == ElementType::OTTAVA) {
+            if (isStandardOttava) {
                 ss->ryoffset() -= .75 * SPATIUM20;
             }
 
@@ -734,7 +731,7 @@ void FinaleParser::importSmartShapes()
                                         absoluteSpatiumFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth, newSpanner), true);
                 }
             }
-        } else if (type == ElementType::OTTAVA && !customLine) {
+        } else if (isStandardOttava) {
             // Account for odd text offset
             muse::draw::Font f(score()->engravingFont()->family(), muse::draw::Font::Type::MusicSymbol);
             f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * newSpanner->magS()); // This has been tested and is scaled correctly
