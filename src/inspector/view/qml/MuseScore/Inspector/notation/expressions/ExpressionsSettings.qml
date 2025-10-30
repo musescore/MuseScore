@@ -43,53 +43,22 @@ Column {
         snapExpression.navigation.requestActive()
     }
 
-    InspectorPropertyView {
-        id: layoutSection
-        titleText: ""
-        propertyItem: root.model ? root.model.snapExpression : null
+    CheckBoxPropertyView {
+        id: snapExpression
 
-        navigationName: "LayoutMenu"
+        navigationName: "Snap expression"
         navigationPanel: root.navigationPanel
-        navigationRowStart: size.navigationRowEnd + 1
-        navigationRowEnd: verticalAlignmentButtonList.navigationRowEnd
+        navigationRowStart: root.navigationRowStart
 
-        isModified: root.model ? root.model.snapExpression.isModified : false
-
-        onRequestResetToDefault: {
-            if (root.model) {
-                root.model.snapExpression.resetToDefault()
-            }
-        }
-
-        onRequestApplyToStyle: {
-            if (root.model) {
-                root.model.snapExpression.applyToStyle()
-            }
-        }
-
-        Item {
-            anchors.right: root.right
-            anchors.left: root.left
-            height: childrenRect.height
-
-            PropertyCheckBox {
-                id: snapExpression
-
-                navigation.name: "SnapExpressionCheckBox"
-                navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowStart
-
-                text: qsTrc("inspector", "Align with preceding dynamic")
-                propertyItem: root.model ? root.model.snapExpression : null
-            }
-        }
+        titleText: qsTrc("inspector", "Align with preceding dynamic")
+        propertyItem: root.model?.snapExpression ?? null
     }
 
     VoicesAndPositionSection {
         id: voicesAndPositionSection
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: layoutSection.navigationRowEnd + 1
+        navigationRowStart: snapExpression.navigationRowEnd + 1
 
         model: root.model
     }
