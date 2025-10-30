@@ -550,7 +550,7 @@ void NotationActionController::init()
         if (notation) {
             notation->interaction()->noteInput()->stateChanged().onNotify(this, [this]() {
                 m_currentNotationNoteInputChanged.notify();
-            });
+            }, Asyncable::Mode::SetReplace);
         }
         m_currentNotationNoteInputChanged.notify();
     });
