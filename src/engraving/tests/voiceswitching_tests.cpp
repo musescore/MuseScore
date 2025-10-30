@@ -24,6 +24,7 @@
 
 #include "engraving/dom/chord.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/rest.h"
 
 #include "utils/scorerw.h"
 
@@ -96,6 +97,34 @@ TEST_F(Engraving_VoiceSwitchingTests, voiceSwitching)
         //! [THEN] The input state should hold the same segment as the destination ChordRest...
         EXPECT_EQ(inputState.segment(), destinationCR->segment());
     }
+
+    delete score;
+}
+
+TEST_F(Engraving_VoiceSwitchingTests, voicesSwitchingGapRests)
+{
+    Score* score = ScoreRW::readScore(VOICESWITCHING_DATA_DIR + "voiceswitching-2.mscx");
+    EXPECT_TRUE(score);
+
+    Segment* segment = score->tick2segment(Fraction(3, 4), true, SegmentType::ChordRest);
+    EXPECT_TRUE(segment);
+
+    //! [GIVEN] A measure with some notes in voice zero
+    Chord* chord = toChord(segment->element(0));
+    EXPECT_TRUE(chord);
+
+    //! [WHEN] The last note of the measure is selected and moved to voice one
+    score->select(chord->upNote());
+    score->startCmd(TranslatableString("undoableAction", "Change voice"));
+    score->changeSelectedElementsVoice(1);
+    score->endCmd();
+
+    //! [THEN] Voice 1 should be filled with gap rests from the start of the measure
+    Segment* firstSeg = score->firstSegment(SegmentType::ChordRest);
+    EXPECT_TRUE(firstSeg);
+
+    EngravingItem* item = firstSeg->element(1);
+    EXPECT_TRUE(item && item->isRest() && toRest(item)->isGap());
 
     delete score;
 }
