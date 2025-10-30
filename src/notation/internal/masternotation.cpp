@@ -153,7 +153,6 @@ void MasterNotation::setMasterScore(mu::engraving::MasterScore* score)
     setScore(score);
 
     score->updateSwing();
-    score->updateCapo();
 
     initAfterSettingScore(score);
 }

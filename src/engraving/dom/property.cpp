@@ -446,9 +446,10 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::ACTIVE,                  true,  "active",                P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "active") },
 
-    { Pid::CAPO_FRET_POSITION,      true,  "fretPosition",          P_TYPE::INT,                PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "fret position") },
-    { Pid::CAPO_IGNORED_STRINGS,    true,  "ignoredStrings",        P_TYPE::INT_VEC,            PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "ignored strings") },
-    { Pid::CAPO_GENERATE_TEXT,      true,  "generateText",          P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "automatically generate text") },
+    { Pid::CAPO_FRET_POSITION,      true,  "fretPosition",          P_TYPE::INT,                PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("propertyName", "fret position") },
+    { Pid::CAPO_IGNORED_STRINGS,    true,  "ignoredStrings",        P_TYPE::INT_VEC,            PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("propertyName", "ignored strings") },
+    { Pid::CAPO_GENERATE_TEXT,      true,  "generateText",          P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("propertyName", "automatically generate text") },
+    { Pid::CAPO_TRANSPOSE_MODE,     true,  "transposeMode",         P_TYPE::INT,                PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("propertyName", "transpose behaviour") },
 
     { Pid::TIE_PLACEMENT,           true,  "tiePlacement",          P_TYPE::TIE_PLACEMENT,      PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "tie placement") },
     { Pid::MIN_LENGTH,              true,  "minLength",             P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      QT_TRANSLATE_NOOP("engraving/propertyName", "minimum length") },

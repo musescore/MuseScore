@@ -185,6 +185,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::AUTO_ON_OFF:       return static_cast<int>(value<AutoOnOff>());
     case P_TYPE::AUTO_CUSTOM_HIDE:  return static_cast<int>(value<AutoCustomHide>());
     case P_TYPE::MEASURE_NUMBER_PLACEMENT: return static_cast<int>(value<MeasureNumberPlacement>());
+    case P_TYPE::CAPO_TRANSPOSE_MODE:  return static_cast<int>(value<CapoParams::TransposeMode>());
 
     // Other
     case P_TYPE::GROUPS: {

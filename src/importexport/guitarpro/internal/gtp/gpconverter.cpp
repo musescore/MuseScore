@@ -48,6 +48,7 @@
 #include "engraving/dom/tripletfeel.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
+#include "engraving/dom/capo.h"
 #include "engraving/types/symid.h"
 
 #include "../utils.h"
@@ -260,6 +261,7 @@ void GPConverter::convertGP()
 
     clearDefectedSpanner();
     fixPercussion();
+    addCapos();
 }
 
 void GPConverter::fixPercussion()
@@ -748,22 +750,6 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
             }
             Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
             s->add(t);
-
-            /// adding "Capo fret" text
-            // TODO-gp: settings if we need to show capo
-            if (m_showCapo && !m_hasCapo[curTrack]) {
-                Fraction fr = { 0, 1 };
-                int capo = staff->capo(fr).fretPosition;
-
-                if (capo != 0 && !engravingConfiguration()->guitarProImportExperimental()) {
-                    StaffText* st = Factory::createStaffText(s);
-                    st->setTrack(curTrack);
-                    String capoText = String(u"Capo fret %1").arg(capo);
-                    st->setPlainText(muse::mtrc("iex_guitarpro", capoText));
-                    s->add(st);
-                    m_hasCapo[curTrack] = true;
-                }
-            }
         }
     }
 }
@@ -1154,12 +1140,8 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 
         int capoFret = staffProperty[0].capoFret;
 
-        CapoParams params;
-        params.active = true;
-        params.fretPosition = capoFret;
-
-        part->staff(0)->insertCapoParams({ 0, 1 }, params);
         part->setCapoFret(capoFret);
+        m_capoParams.insert_or_assign(part->id().toUint64(), capoFret);
         auto tunning = staffProperty[0].tunning;
         bool usePresetTable = staffProperty[0].ignoreFlats;
 
@@ -2997,5 +2979,33 @@ void GPConverter::setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measur
 
     cr->setBeamMode(m_previousBeamMode);
     m_previousBeamMode = beamMode;
+}
+
+void GPConverter::addCapos()
+{
+    const Measure* firstMeasure = _score->firstMeasure();
+    const size_t stavesCount = _score->staves().size();
+
+    Segment* segment = firstMeasure->first(SegmentType::ChordRest);
+    for (size_t i = 0; i < stavesCount; ++i) {
+        Staff* staff = _score->staff(i);
+        const auto& it = m_capoParams.find(staff->part()->id().toUint64());
+
+        if (it != m_capoParams.end() && it->second > 0) {
+            size_t track = i * VOICES;
+
+            CapoParams params;
+            params.active = true;
+            params.transposeMode = CapoParams::TransposeMode::TAB_ONLY;
+            params.fretPosition = it->second;
+
+            Capo* capo = Factory::createCapo(_score->dummy()->segment());
+            capo->setTrack(track);
+            capo->setParams(params);
+            segment->add(capo);
+
+            staff->insertCapoParams({ 0, 1 }, params, true);
+        }
+    }
 }
 } // namespace mu::iex::guitarpro

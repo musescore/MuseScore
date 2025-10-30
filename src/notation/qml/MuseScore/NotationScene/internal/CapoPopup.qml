@@ -92,14 +92,39 @@ AbstractElementPopup {
 
             model: [
                 //: as opposed to Off
-                { text: qsTrc("global", "On"), value: true },
+                { text: qsTrc("notation", "On"), value: true },
                 //: as opposed to On
-                { text: qsTrc("global", "Off"), value: false }
+                { text: qsTrc("notation", "Off"), value: false }
             ]
 
             onToggled: function(newValue) {
                 capoModel.capoIsOn = newValue
             }
+        }
+
+        StyledDropdown {
+            id: transposeOptions
+
+            Layout.fillWidth: true
+
+            navigation.name: "TransposeOptions"
+            navigation.panel: capoSettingsNavPanel
+            navigation.row: 1
+            navigation.accessible.name: titleLabel.text + " " + currentText
+
+            model: [
+                { text: qsTrc("notation", "Affects playback only") },
+                { text: qsTrc("notation", "Affects stave notation only") },
+                { text: qsTrc("notation", "Affects tablature fingering only") },
+            ]
+
+            currentIndex: capoModel.transposeMode
+
+            onActivated: function(index, value) {
+                capoModel.transposeMode = index
+            }
+
+            visible: capoModel.capoIsOn
         }
 
         StyledTextLabel {
