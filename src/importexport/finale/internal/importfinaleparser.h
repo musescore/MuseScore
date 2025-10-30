@@ -279,7 +279,7 @@ public:
     // Utility
     musx::dom::EvpuFloat evpuAugmentationDotWidth() const;
     engraving::staff_idx_t staffIdxFromAssignment(musx::dom::StaffCmper assign);
-    engraving::staff_idx_t staffIdxForRepeats(bool onlyTop, musx::dom::Cmper staffList,
+    engraving::staff_idx_t staffIdxForRepeats(bool onlyTop, musx::dom::Cmper staffList, musx::dom::Cmper measureId,
                                               std::vector<std::pair<engraving::staff_idx_t, musx::dom::StaffCmper>>& links);
 
     FinaleLoggerPtr logger() const { return m_logger; }
