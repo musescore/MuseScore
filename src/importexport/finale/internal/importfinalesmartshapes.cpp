@@ -287,12 +287,10 @@ void FinaleParser::importSmartShapes()
                     e = toEngravingItem(noteFromEntryInfoAndNumber(entryInfoPtr, nn));
                 } else {
                     ChordRest* cr = chordRestFromEntryInfoPtr(entryInfoPtr);
-                    if (useNextCr) {
-                        if (Segment* nextSeg = cr->nextSegmentAfterCR(SegmentType::ChordRest)) {
-                            cr = nextSeg->nextChordRest(cr->track());
-                        }
-                    }
                     e = toEngravingItem(cr);
+                    if (cr && useNextCr) {
+                        return cr->endTick();
+                    }
                 }
                 if (e) {
                     logger()->logInfo(String(u"Found %1 to anchor to").arg(TConv::userName(e->type()).translated()));
