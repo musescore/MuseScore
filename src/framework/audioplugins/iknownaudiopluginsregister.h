@@ -41,14 +41,15 @@ public:
 
     using PluginInfoAccepted = std::function<bool (const AudioPluginInfo& info)>;
 
-    virtual std::vector<AudioPluginInfo> pluginInfoList(PluginInfoAccepted accepted = PluginInfoAccepted()) const = 0;
+    virtual AudioPluginInfoList pluginInfoList(PluginInfoAccepted accepted = PluginInfoAccepted()) const = 0;
     virtual muse::async::Notification pluginInfoListChanged() const = 0;
+
     virtual const io::path_t& pluginPath(const audio::AudioResourceId& resourceId) const = 0;
 
     virtual bool exists(const io::path_t& pluginPath) const = 0;
     virtual bool exists(const audio::AudioResourceId& resourceId) const = 0;
 
-    virtual Ret registerPlugin(const AudioPluginInfo& info) = 0;
-    virtual Ret unregisterPlugin(const audio::AudioResourceId& resourceId) = 0;
+    virtual Ret registerPlugins(const AudioPluginInfoList& list) = 0;
+    virtual Ret unregisterPlugins(const audio::AudioResourceIdList& resourceIds) = 0;
 };
 }
