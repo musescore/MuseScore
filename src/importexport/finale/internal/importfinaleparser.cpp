@@ -83,7 +83,7 @@ void FinaleParser::parse()
     m_score->doLayout();
     importBarlines();
     // Requires system layout
-    rebaseSystemLeftMargins();
+    // rebaseSystemLeftMargins(); will require instrument names to be repositioned
     repositionMeasureNumbersBelow();
 
     // entries (notes, rests & tuplets)
