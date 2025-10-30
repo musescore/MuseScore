@@ -53,7 +53,7 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 BEGIN_QT_REGISTERED_ENUM(Sid)
-enum class Sid {
+enum class Sid : short {
     ///.\{
     NOSTYLE = -1,
 

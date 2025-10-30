@@ -164,7 +164,7 @@ class Tuplet;
 class Vibrato;
 class Volta;
 
-enum class Pid;
+enum class Pid : short;
 }
 
 namespace mu::engraving::compat {

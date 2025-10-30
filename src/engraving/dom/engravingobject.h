@@ -200,7 +200,7 @@ class ShadowNote;
 
 class LinkedObjects;
 
-enum class Pid : int;
+enum class Pid : short;
 enum class PropertyFlags : char;
 
 using EngravingObjectList = std::vector<EngravingObject*>;
