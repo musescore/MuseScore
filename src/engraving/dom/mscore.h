@@ -67,8 +67,11 @@ static constexpr int MAX_FOOTERS = 3;
 static constexpr double INCH      = 25.4; // millimitres per inch
 static constexpr double PPI       = 72.0; // typographical points per inch
 
-static constexpr double DPI       = 1200;
-static constexpr double DPMM      = DPI / INCH;
+// INTERNAL DRAWING UNITS
+// Given that it's ultimately arbitrary, we may as well set our internal units to
+// something that makes them easier to read when debugging, e.g. 1/100 of millimitre.
+static constexpr double DPMM = 100;
+static constexpr double DPI = INCH * DPMM;
 
 // NOTE: the SMuFL default is actually 20pt. We use 10 for historical reasons
 // and back-compatibility, but this will be multiplied x2 during layout.
