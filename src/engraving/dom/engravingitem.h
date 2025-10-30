@@ -71,7 +71,7 @@ class AccessibleItem;
 typedef std::shared_ptr<AccessibleItem> AccessibleItemPtr;
 #endif
 
-enum class Pid;
+enum class Pid : short;
 class StaffType;
 
 //---------------------------------------------------------

@@ -29,7 +29,7 @@
 namespace mu::engraving {
 class EngravingItem;
 
-enum class Pid;
+enum class Pid : short;
 
 //---------------------------------------------------------
 //   Location

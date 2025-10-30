@@ -25,7 +25,7 @@
 #include "../dom/engravingitem.h"
 
 namespace mu::engraving {
-enum class Pid : int;
+enum class Pid : short;
 
 class RootItem;
 }

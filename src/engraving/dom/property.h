@@ -68,7 +68,7 @@ enum class PropertyFlags : char {
 //   EngravingItem Properties
 //------------------------------------------------------------------------
 
-enum class Pid {
+enum class Pid : short {
     SUBTYPE,
     SELECTED,
     GENERATED,
