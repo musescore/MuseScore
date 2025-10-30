@@ -770,7 +770,7 @@ void FinaleParser::importSmartShapes()
     for (const MusxInstance<others::RepeatEndingStart>& endingBegin : endingBegins) {
         // Find staff
         std::vector<std::pair<staff_idx_t, StaffCmper>> links;
-        staff_idx_t curStaffIdx = staffIdxForRepeats(endingBegin->topStaffOnly, endingBegin->staffList, links);
+        staff_idx_t curStaffIdx = staffIdxForRepeats(endingBegin->topStaffOnly, endingBegin->staffList, endingBegin->getCmper(), links);
         if (curStaffIdx == muse::nidx) {
             logger()->logWarning(String(u"Add voltas: Musx inst value not found."));
             continue;
@@ -862,7 +862,7 @@ void FinaleParser::importSmartShapes()
     for (const MusxInstance<others::RepeatBack>& endingEnd : endingEnds) {
         // Find staff
         std::vector<std::pair<staff_idx_t, StaffCmper>> links;
-        staff_idx_t curStaffIdx = staffIdxForRepeats(endingEnd->topStaffOnly, endingEnd->staffList, links);
+        staff_idx_t curStaffIdx = staffIdxForRepeats(endingEnd->topStaffOnly, endingEnd->staffList, endingEnd->getCmper(), links);
 
         if (curStaffIdx == muse::nidx) {
             logger()->logWarning(String(u"Add voltas: Musx inst value not found."));

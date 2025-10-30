@@ -988,7 +988,7 @@ void FinaleParser::importTextExpressions()
 
         // Find staff
         std::vector<std::pair<staff_idx_t, StaffCmper>> links;
-        staff_idx_t curStaffIdx = staffIdxForRepeats(repeatAssignment->topStaffOnly, repeatAssignment->staffList, links);
+        staff_idx_t curStaffIdx = staffIdxForRepeats(repeatAssignment->topStaffOnly, repeatAssignment->staffList, repeatAssignment->getCmper(), links);
 
         if (curStaffIdx == muse::nidx) {
             logger()->logWarning(String(u"Add repeat text: Musx inst value not found."));
