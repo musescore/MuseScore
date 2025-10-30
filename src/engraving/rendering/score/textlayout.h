@@ -38,6 +38,7 @@ public:
     static void layoutTextBlock(TextBlock* item, const TextBase* t);
 private:
     static void textHorizontalLayout(const TextBase* item, Shape& shape, double maxBlockWidth, TextBase::LayoutData* ldata);
+    static void justifyLine(const TextBase* item, TextBlock* textBlock, double maxBlockWidth);
     static double musicSymbolBaseLineAdjust(const TextBlock* block, const TextBase* t, const TextFragment& f,
                                             const std::list<TextFragment>::iterator fi);
 };

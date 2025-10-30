@@ -107,6 +107,7 @@ public:
         TEXT_ALIGN_LEFT = 0xEF3D,
         TEXT_ALIGN_CENTER = 0xEF3E,
         TEXT_ALIGN_RIGHT = 0xEF3F,
+        TEXT_ALIGN_JUSTIFY = 0xF4B2,
         TEXT_ITALIC = 0xEF40,
         TEXT_UNDERLINE = 0xEF41,
         TEXT_BOLD = 0xEF42,

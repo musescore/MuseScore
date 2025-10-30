@@ -38,6 +38,7 @@ AlignSelect::AlignSelect(QWidget* parent)
     g1->addButton(alignLeft);
     g1->addButton(alignHCenter);
     g1->addButton(alignRight);
+    g1->addButton(alignJustify);
 
     g2 = new QButtonGroup(this);
     g2->addButton(alignTop);
@@ -48,6 +49,7 @@ AlignSelect::AlignSelect(QWidget* parent)
     WidgetUtils::setWidgetIcon(alignLeft, IconCode::Code::TEXT_ALIGN_LEFT);
     WidgetUtils::setWidgetIcon(alignRight, IconCode::Code::TEXT_ALIGN_RIGHT);
     WidgetUtils::setWidgetIcon(alignHCenter, IconCode::Code::TEXT_ALIGN_CENTER);
+    WidgetUtils::setWidgetIcon(alignJustify, IconCode::Code::TEXT_ALIGN_JUSTIFY);
     WidgetUtils::setWidgetIcon(alignVCenter, IconCode::Code::TEXT_ALIGN_MIDDLE);
     WidgetUtils::setWidgetIcon(alignTop, IconCode::Code::TEXT_ALIGN_TOP);
     WidgetUtils::setWidgetIcon(alignBaseline, IconCode::Code::TEXT_ALIGN_BASELINE);
@@ -69,6 +71,8 @@ mu::engraving::Align AlignSelect::align() const
         a = mu::engraving::AlignH::HCENTER;
     } else if (alignRight->isChecked()) {
         a = mu::engraving::AlignH::RIGHT;
+    } else if (alignJustify->isChecked()) {
+        a = mu::engraving::AlignH::JUSTIFY;
     }
     if (alignVCenter->isChecked()) {
         a = mu::engraving::AlignV::VCENTER;
@@ -87,6 +91,8 @@ void AlignSelect::setAlign(mu::engraving::Align a)
         alignHCenter->setChecked(true);
     } else if (a == mu::engraving::AlignH::RIGHT) {
         alignRight->setChecked(true);
+    } else if (a == mu::engraving::AlignH::JUSTIFY) {
+        alignJustify->setChecked(true);
     } else {
         alignLeft->setChecked(true);
     }
