@@ -134,6 +134,9 @@ Loader {
 
         menu.closeSubMenu()
 
+        menu.model = model
+        menu.calculateSize()
+
         if (x !== -1) {
             menu.x = x
         }
@@ -141,10 +144,6 @@ Loader {
         if (y !== -1) {
             menu.y = y
         }
-
-        menu.model = model
-
-        Qt.callLater(menu.calculateSize)
     }
 
     Timer {
