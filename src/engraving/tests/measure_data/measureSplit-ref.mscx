@@ -4,7 +4,7 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <spatium>1.74978</spatium>
+      <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -1330,7 +1330,7 @@
       <name>Flute</name>
       <Division>480</Division>
       <Style>
-        <spatium>1.74978</spatium>
+        <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -2068,7 +2068,7 @@
       <name>Oboe</name>
       <Division>480</Division>
       <Style>
-        <spatium>1.74978</spatium>
+        <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

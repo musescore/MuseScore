@@ -1091,7 +1091,7 @@
       <Tracklist sTrack="7" dstTrack="7"/>
       <Division>480</Division>
       <Style>
-        <spatium>1.74978</spatium>
+        <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -1759,7 +1759,7 @@
       <Tracklist sTrack="11" dstTrack="0"/>
       <Division>480</Division>
       <Style>
-        <spatium>1.74978</spatium>
+        <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -2172,7 +2172,7 @@
       <Tracklist sTrack="8" dstTrack="0"/>
       <Division>480</Division>
       <Style>
-        <spatium>1.74978</spatium>
+        <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
