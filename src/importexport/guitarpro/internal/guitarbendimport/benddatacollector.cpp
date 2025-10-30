@@ -31,7 +31,8 @@
 using namespace mu::engraving;
 
 namespace mu::iex::guitarpro {
-static void fillBendDataForNote(BendDataContext& bendDataCtx, const ImportedBendInfo& importedInfo, int noteIndexInChord);
+static void fillBendDataForNote(BendDataContext& bendDataCtx, const ImportedBendInfo& importedInfo, int noteIndexInChord,
+                                bool isBendSingle);
 
 static void fillSlightBendData(BendDataContext& bendDataCtx, const ImportedBendInfo& importedInfo, int noteIndexInChord);
 static void fillPrebendData(BendDataContext& bendDataCtx, const ImportedBendInfo& importedInfo, int noteIndexInChord);
@@ -73,14 +74,15 @@ BendDataContext BendDataCollector::collectBendDataContext()
     return bendDataCtx;
 }
 
-static void fillBendDataForNote(BendDataContext& bendDataCtx, const ImportedBendInfo& importedInfo, int noteIndexInChord)
+static void fillBendDataForNote(BendDataContext& bendDataCtx, const ImportedBendInfo& importedInfo, int noteIndexInChord, bool isBendSingle)
 {
     const Note* note = importedInfo.note;
     if (!note) {
         return;
     }
 
-    if (importedInfo.type == BendType::SLIGHT_BEND) {
+    if (importedInfo.type == BendType::SLIGHT_BEND && isBendSingle) {
+        // even though it's slight bend (1/4), we import it as normal bend, if it's followed by other bend (or hold)
         fillSlightBendData(bendDataCtx, importedInfo, noteIndexInChord);
         return;
     }
@@ -249,13 +251,14 @@ void BendDataCollector::fillBendDataContext(BendDataContext& bendDataCtx)
                 }
             }
 
-            for (auto& [tack, chordInfo] : chunk) {
+            size_t chunkSize = chunk.size();
+            for (auto& [chunkTick, chordInfo] : chunk) {
                 const auto& notesVec  = chordInfo.chord->notes();
                 const auto& notesData = chordInfo.dataByNote;
                 for (size_t i = 0; i < notesVec.size(); ++i) {
                     Note* n = notesVec[i];
                     if (auto it = notesData.find(n); it != notesData.end()) {
-                        fillBendDataForNote(bendDataCtx, it->second, static_cast<int>(i));
+                        fillBendDataForNote(bendDataCtx, it->second, static_cast<int>(i), chunkSize == 1);
                     }
                 }
             }
