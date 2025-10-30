@@ -562,7 +562,7 @@ void FinaleParser::importClefs(const MusxInstance<others::StaffUsed>& musxScroll
     if (musxStaffAtMeasureStart && musxStaffAtMeasureStart->transposition && musxStaffAtMeasureStart->transposition->setToClef) {
         if (musxStaffAtMeasureStart->transposedClef != musxCurrClef) {
             if (Clef* clef = createClef(m_score, musxStaffAtMeasureStart, curStaffIdx, musxStaffAtMeasureStart->transposedClef, measure, /*xEduPos*/ 0, false, true)) {
-                clef->setShowCourtesy(!prevMusxMeasure || !prevMusxMeasure->hideCaution);
+                clef->setShowCourtesy(clef->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
                 musxCurrClef = musxStaffAtMeasureStart->transposedClef;
             }
         }
@@ -952,7 +952,7 @@ void FinaleParser::importStaffItems()
 
                 ts->setTrack(curTrackIdx);
                 ts->setVisible(forceDisplayTimeSig || (visualTimeSigChanged && !forceHideTimeSig));
-                ts->setShowCourtesySig(!prevMusxMeasure || !prevMusxMeasure->hideCaution);
+                ts->setShowCourtesySig(ts->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
                 ts->setGroups(computeTimeSignatureGroups(localTimeSig, logger()));
                 Fraction stretch { localTimeSig->calcTotalDuration().calcEduDuration(), globalTimeSig->calcTotalDuration().calcEduDuration() };
                 ts->setStretch(stretch.reduced());
@@ -1043,7 +1043,7 @@ void FinaleParser::importStaffItems()
                         ks->setKeySigEvent(keySigEvent.value());
                         ks->setTrack(curTrackIdx);
                         ks->setVisible(musxMeasure->showKey != others::Measure::ShowKeySigMode::Never);
-                        ks->setShowCourtesy(!prevMusxMeasure || !prevMusxMeasure->hideCaution);
+                        ks->setShowCourtesy(ks->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
                         seg->add(ks);
                         staff->setKey(currTick, ks->keySigEvent());
                     }
