@@ -28,6 +28,7 @@
 #include "audio/common/audiosanitizer.h"
 #include "audio/common/rpc/rpcpacker.h"
 #include "audio/common/workmode.h"
+#include "audio/common/alignmentbuffer.h"
 
 #include "audio/engine/platform/general/generalaudioworker.h"
 
@@ -168,21 +169,72 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
     requiredSpec.output.audioChannelCount = configuration()->audioChannelsCount();
     requiredSpec.output.samplesPerChannel = configuration()->driverBufferSize();
 
-    //! NOTE In the web, callback works via messages and is configured in the worker
 #ifndef Q_OS_WASM
 
+    m_requiredSamplesTotal = requiredSpec.output.samplesPerChannel * requiredSpec.output.audioChannelCount;
+    audioDriver()->activeSpecChanged().onReceive(this, [this](const IAudioDriver::Spec& spec) {
+        m_requiredSamplesTotal = spec.output.samplesPerChannel * spec.output.audioChannelCount;
+    });
+
     bool shouldMeasureInputLag = configuration()->shouldMeasureInputLag();
-    requiredSpec.callback = [this, shouldMeasureInputLag](void* /*userdata*/, uint8_t* stream, int byteCount) {
+    requiredSpec.callback = [this, shouldMeasureInputLag]
+                            (void* /*userdata*/, uint8_t* stream, int byteCount) {
         std::memset(stream, 0, byteCount);
-        auto samplesPerChannel = byteCount / (2 * sizeof(float));
-        float* dest = reinterpret_cast<float*>(stream);
+        // driver metrics
+        const size_t driverSamplesTotal = byteCount / sizeof(float);
+        const size_t driverSamplesPerChannel = driverSamplesTotal / 2;
+        float* driverDest = reinterpret_cast<float*>(stream);
 
-        LOGDA() << "samplesPerChannel: " << samplesPerChannel;
-
+        //! NOTE In this mode, an alignment buffer is not needed.
         if (workmode::mode() == workmode::WorkerMode) {
-            m_engineController->popAudioData(dest, samplesPerChannel);
-        } else if (workmode::mode() == workmode::WorkerRpcMode) {
-            m_engineController->process(dest, samplesPerChannel);
+            m_engineController->popAudioData(driverDest, (unsigned)driverSamplesPerChannel);
+            return;
+        }
+
+        const size_t requiredSamplesTotal = m_requiredSamplesTotal;
+        const bool useAlignBuffer = driverSamplesTotal < requiredSamplesTotal;
+
+        // process metrics
+        size_t procSamplesTotal = 0;
+        size_t procSamplesPerChannel = 0;
+        float* procDest = 0;
+
+        AlignmentBuffer* alignbuf = nullptr;
+        if (useAlignBuffer) {
+            // setup align buffer if need
+            const size_t blocks = 2;
+            const size_t capacity = requiredSamplesTotal * blocks;
+            if (!m_alignmentBuffer || m_alignmentBuffer->capacity() != capacity) {
+                m_alignmentBuffer = std::make_shared<AlignmentBuffer>(capacity);
+            }
+            alignbuf = m_alignmentBuffer.get(); // minor optimization and easier debugging
+            static thread_local std::vector<float> proc_buf; // temp buffer
+            if (proc_buf.size() != requiredSamplesTotal) {
+                proc_buf.resize(requiredSamplesTotal);
+            }
+
+            // set proc metrics
+            procSamplesTotal = requiredSamplesTotal;
+            procSamplesPerChannel = procSamplesTotal / 2;
+            procDest = &proc_buf[0];
+        } else {
+            procSamplesTotal = driverSamplesTotal;
+            procSamplesPerChannel = procSamplesTotal / 2;
+            procDest = driverDest;
+        }
+
+        // try fill data
+        if (useAlignBuffer) {
+            assert(alignbuf);
+            if (alignbuf->availableRead() >= driverSamplesTotal) {
+                alignbuf->read(driverDest, driverSamplesTotal);
+                return;
+            }
+        }
+
+        // process
+        if (workmode::mode() == workmode::WorkerRpcMode) {
+            m_engineController->process(procDest, (unsigned)procSamplesPerChannel);
         } else if (workmode::mode() == workmode::DriverMode) {
             static bool once = false;
             if (!once) {
@@ -191,11 +243,18 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
             }
 
             m_rpcChannel->process();
-            m_engineController->process(dest, samplesPerChannel);
+            m_engineController->process(procDest, (unsigned)procSamplesPerChannel);
+        }
+
+        // write temp and fill driver dest
+        if (useAlignBuffer) {
+            assert(alignbuf);
+            alignbuf->write(procDest, procSamplesTotal);
+            alignbuf->read(driverDest, driverSamplesTotal);
         }
 
         if (shouldMeasureInputLag) {
-            measureInputLag(dest, samplesPerChannel * 2);
+            measureInputLag(procDest, procSamplesTotal);
         }
     };
 

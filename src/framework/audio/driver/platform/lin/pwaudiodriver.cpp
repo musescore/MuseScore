@@ -634,6 +634,8 @@ bool PwAudioDriver::open(const Spec& spec, Spec* activeSpec)
         *activeSpec = m_stream->spec();
     }
 
+    m_activeSpecChanged.send(m_formatSpec);
+
     LOGD() << "Connected to " << outputDevice();
     return true;
 }
@@ -648,6 +650,8 @@ void PwAudioDriver::close()
 bool PwAudioDriver::isOpened() const { return m_stream != nullptr; }
 
 const IAudioDriver::Spec& PwAudioDriver::activeSpec() const { return m_formatSpec; }
+
+async::Channel<IAudioDriver::Spec> PwAudioDriver::activeSpecChanged() const { return m_activeSpecChanged; }
 
 AudioDeviceID PwAudioDriver::outputDevice() const { return m_deviceId; }
 

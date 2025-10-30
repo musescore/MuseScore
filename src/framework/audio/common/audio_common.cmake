@@ -33,6 +33,7 @@ set(AUDIO_COMMON_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audiothreadsecurer.h
     ${CMAKE_CURRENT_LIST_DIR}/workmode.cpp
     ${CMAKE_CURRENT_LIST_DIR}/workmode.h
+    ${CMAKE_CURRENT_LIST_DIR}/alignmentbuffer.h
 
     # Rpc
     ${CMAKE_CURRENT_LIST_DIR}/rpc/irpcchannel.h

@@ -60,6 +60,8 @@ public:
     virtual bool isOpened() const = 0;
 
     virtual const Spec& activeSpec() const = 0;
+    virtual async::Channel<Spec> activeSpecChanged() const = 0;
+
     virtual bool setOutputDeviceBufferSize(unsigned int bufferSize) = 0;
     virtual async::Notification outputDeviceBufferSizeChanged() const = 0;
     virtual bool setOutputDeviceSampleRate(unsigned int sampleRate) = 0;

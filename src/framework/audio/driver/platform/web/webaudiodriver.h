@@ -40,6 +40,8 @@ public:
     bool isOpened() const override;
 
     const Spec& activeSpec() const override;
+    async::Channel<Spec> activeSpecChanged() const override;
+
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
     bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
@@ -62,5 +64,6 @@ private:
 
     bool m_opened = false;
     Spec m_activeSpec;
+    async::Channel<Spec> m_activeSpecChanged;
 };
 }
