@@ -233,3 +233,8 @@ void PaintDebugger::setClipping(bool enable)
 {
     m_real->setClipping(enable);
 }
+
+double mu::engraving::rendering::score::PaintDebugger::deviceLogicalDpi() const
+{
+    return m_real->deviceLogicalDpi();
+}

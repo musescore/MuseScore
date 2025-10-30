@@ -726,7 +726,7 @@ void StaffType::drawInputStringMarks(Painter* p, int string, const Color& select
     // draw the text, if any
     if (!text.isEmpty()) {
         Font f = fretFont();
-        f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+        f.setPointSizeF(f.pointSizeF());
         p->setFont(f);
         p->drawText(PointF(rect.left(), rect.top() + lineDist), text);
     }

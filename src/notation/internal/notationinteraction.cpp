@@ -1445,12 +1445,10 @@ void NotationInteraction::startOutgoingDragElement(const EngravingItem* element,
     pixmap.fill(Qt::transparent);
 
     QPainter qp(&pixmap);
-    const qreal dpi = qp.device()->logicalDpiX();
 
     Painter p(&qp, "prepareDragCopyElement");
     p.setAntialiasing(true);
 
-    mu::engraving::MScore::pixelRatio = mu::engraving::DPI / dpi;
     p.translate(qAbs(bbox.x() * adjustedRatio), qAbs(bbox.y() * adjustedRatio));
     p.scale(adjustedRatio, adjustedRatio);
 

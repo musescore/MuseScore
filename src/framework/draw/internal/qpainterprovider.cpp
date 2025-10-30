@@ -190,6 +190,11 @@ void QPainterProvider::restore()
     m_transform = Transform::fromQTransform(m_painter->transform());
 }
 
+double QPainterProvider::deviceLogicalDpi() const
+{
+    return m_painter->device()->logicalDpiX();
+}
+
 void QPainterProvider::setTransform(const Transform& transform)
 {
     m_transform = transform;

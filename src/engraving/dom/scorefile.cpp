@@ -88,9 +88,6 @@ std::shared_ptr<Pixmap> Score::createThumbnail()
 
     auto pixmap = imageProvider()->createPixmap(w, h, dpm, configuration()->thumbnailBackgroundColor());
 
-    double pr = MScore::pixelRatio;
-    MScore::pixelRatio = 1.0;
-
     auto painterProvider = imageProvider()->painterForImage(pixmap);
     Painter p(painterProvider, "thumbnail");
 
@@ -98,8 +95,6 @@ std::shared_ptr<Pixmap> Score::createThumbnail()
     p.scale(mag, mag);
     print(&p, 0);
     p.endDraw();
-
-    MScore::pixelRatio = pr;
 
     if (layoutMode() != mode) {
         setLayoutMode(mode);

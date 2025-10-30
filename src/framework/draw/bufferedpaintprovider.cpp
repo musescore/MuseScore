@@ -256,6 +256,11 @@ void BufferedPaintProvider::restore()
 {
 }
 
+double BufferedPaintProvider::deviceLogicalDpi() const
+{
+    return 360;
+}
+
 void BufferedPaintProvider::setTransform(const Transform& transform)
 {
     DrawData::State& st = editableState();

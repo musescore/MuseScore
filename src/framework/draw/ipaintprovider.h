@@ -65,6 +65,8 @@ public:
     virtual void save() = 0;
     virtual void restore() = 0;
 
+    virtual double deviceLogicalDpi() const = 0;
+
     virtual void setTransform(const Transform& transform) = 0;
     virtual const Transform& transform() const = 0;
 

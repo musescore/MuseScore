@@ -172,8 +172,6 @@ void EngravingItemPreviewPainter::paintPreviewForItem(mu::engraving::EngravingIt
     Painter* painter = params.painter;
     painter->save();
 
-    mu::engraving::MScore::pixelRatio = mu::engraving::DPI / params.dpi;
-
     const double sizeRatio = params.spatium / gpaletteScore->style().spatium();
     painter->scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
 

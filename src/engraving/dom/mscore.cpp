@@ -60,8 +60,6 @@ bool MScore::noImages = false;
 bool MScore::pdfPrinting = false;
 bool MScore::svgPrinting = false;
 
-double MScore::pixelRatio  = 0.8;         // DPI / logicalDPI
-
 extern void initDrumset();
 
 MsError MScore::_error { MsError::MS_NO_ERROR };

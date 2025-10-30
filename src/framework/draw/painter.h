@@ -93,6 +93,8 @@ public:
     void save();
     void restore();
 
+    double deviceLogicalDpi() const;
+
     // drawing
     void fillPath(const PainterPath& path, const Brush& brush);
     void drawPath(const PainterPath& path);
@@ -170,6 +172,8 @@ private:
     const State& state() const;
     void updateViewTransform();
     void updateMatrix();
+
+    void applyFontSizeScaling();
 
     bool endTarget(bool endDraw);
 

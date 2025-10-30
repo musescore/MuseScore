@@ -524,7 +524,7 @@ void SingleDraw::draw(const Note* item, Painter* painter, const PaintOptions& op
             }
         }
         Font f(tab->fretFont());
-        f.setPointSizeF(f.pointSizeF() * item->magS() * MScore::pixelRatio);
+        f.setPointSizeF(f.pointSizeF() * item->magS());
         painter->setFont(f);
         painter->setPen(c);
         double startPosX = ldata->bbox().x();
@@ -870,7 +870,7 @@ void SingleDraw::draw(const Bend* item, Painter* painter, const PaintOptions& op
     painter->setPen(pen);
     painter->setBrush(Brush(item->curColor(opt)));
 
-    Font f = item->font(_spatium * MScore::pixelRatio);
+    Font f = item->font(_spatium);
     painter->setFont(f);
 
     double x  = ldata->noteWidth + _spatium * .2;
@@ -1114,7 +1114,7 @@ void SingleDraw::draw(const FiguredBassItem* item, Painter* painter, const Paint
 
     // (use the same font selection as used in layout() above)
     double m = item->style().styleD(Sid::figuredBassFontSize) * item->spatium() / item->defaultSpatium();
-    f.setPointSizeF(m * MScore::pixelRatio);
+    f.setPointSizeF(m);
 
     painter->setFont(f);
     painter->setBrush(BrushStyle::NoBrush);
@@ -1305,7 +1305,7 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter, const PaintOpti
     // Draw fret offset number
     if (item->fretOffset() > 0) {
         Font scaledFont(item->fretNumFont());
-        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / item->defaultSpatium()) * MScore::pixelRatio);
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / item->defaultSpatium()));
         painter->setFont(scaledFont);
         String text = String::number(item->fretOffset() + 1);
 
@@ -1398,7 +1398,7 @@ void SingleDraw::draw(const GlissandoSegment* item, Painter* painter, const Pain
             yOffset += _spatium * (glissando->glissandoType() == GlissandoType::WAVY ? 0.4 : 0.1);
 
             Font scaledFont(f);
-            scaledFont.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            scaledFont.setPointSizeF(f.pointSizeF());
             painter->setFont(scaledFont);
 
             double x = (l - r.width()) * 0.5;
@@ -1552,7 +1552,7 @@ void SingleDraw::draw(const TextBlock& textBlock, const TextBase* item, muse::dr
 void SingleDraw::draw(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter)
 {
     Font f(textFragment.font(item));
-    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    f.setPointSizeF(f.pointSizeF());
     painter->setFont(f);
     painter->drawText(textFragment.pos, textFragment.text);
 }
@@ -1770,7 +1770,7 @@ void SingleDraw::draw(const Harmony* item, Painter* painter, const PaintOptions&
     for (const HarmonyRenderItem* renderItem : ldata->renderItemList()) {
         if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
             Font f(ts->font());
-            f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            f.setPointSizeF(f.pointSizeF());
             painter->setFont(f);
             painter->drawText(ts->pos(), ts->text());
         }
@@ -1898,7 +1898,7 @@ void SingleDraw::draw(const LayoutBreak* item, Painter* painter, const PaintOpti
     painter->setPen(pen);
 
     Font f(item->font());
-    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    f.setPointSizeF(f.pointSizeF());
     painter->setFont(f);
 
     painter->drawSymbol(PointF(0.0, 0.0), item->iconCode());
@@ -2190,7 +2190,7 @@ void SingleDraw::draw(const StaffText* item, Painter* painter, const PaintOption
     drawTextBase(item, painter, opt);
 
     if (item->hasSoundFlag()) {
-        item->soundFlag()->setIconFontSize(item->font().pointSizeF() * MScore::pixelRatio);
+        item->soundFlag()->setIconFontSize(item->font().pointSizeF());
         draw(item->soundFlag(), painter, opt);
     }
 }
@@ -2251,7 +2251,7 @@ void SingleDraw::draw(const FSymbol* item, Painter* painter, const PaintOptions&
     TRACE_DRAW_ITEM;
 
     Font f(item->font());
-    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    f.setPointSizeF(f.pointSizeF());
     painter->setFont(f);
     painter->setPen(item->curColor(opt));
     painter->drawText(PointF(0, 0), item->toString());
