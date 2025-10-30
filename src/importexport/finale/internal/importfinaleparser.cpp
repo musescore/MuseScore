@@ -87,6 +87,7 @@ void FinaleParser::parse()
     importEntries();
     // Layout score (needed for offset calculations)
     m_score->doLayout();
+    setBeamPositions();
     importArticulations();
 
     // Smart shapes (spanners)

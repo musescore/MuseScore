@@ -312,6 +312,7 @@ private:
     // entries
     void mapLayers();
     void importEntries();
+    void setBeamPositions();
     void importArticulations();
 
     std::unordered_map<int, engraving::track_idx_t> mapFinaleVoices(const std::map<musx::dom::LayerIndex, bool>& finaleVoiceMap,

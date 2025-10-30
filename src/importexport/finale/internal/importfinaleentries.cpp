@@ -33,6 +33,7 @@
 
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/beam.h"
+#include "engraving/dom/beambase.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/factory.h"
@@ -49,12 +50,14 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stem.h"
+#include "engraving/dom/system.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 
 // #include "engraving/rendering/score/restlayout.h"
+#include "engraving/rendering/score/beamtremololayout.h"
 
 #include "log.h"
 
@@ -661,9 +664,7 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
         }
         beam->add(lastCr);
     }
-    if (lastCr) {
-        lastCr->setBeamMode(BeamMode::END);
-    }
+    lastCr->setBeamMode(BeamMode::END);
     return true;
 }
 
@@ -955,6 +956,194 @@ void FinaleParser::importEntries()
                 note->setTieFor(tie);
             }
             notesWithUnmanagedTies.clear();
+        }
+    }
+}
+
+static double systemPosByLine(ChordRest* cr, bool up)
+{
+    // sensible default for rests, redo once their position is set properly
+    double line = (cr->staffType()->lines() - 1) * 0.5;
+    if (cr->isChord()) {
+        engraving::Note* n = up ? toChord(cr)->upNote() : toChord(cr)->downNote();
+        line = cr->staffType()->isTabStaff() ? n->string() : n->line() * 0.5;
+    }
+    return cr->measure()->system()->staff(cr->vStaffIdx())->y() + cr->staffOffsetY()
+           + (line * cr->spatium() * cr->staffType()->lineDistance().val());
+}
+
+static bool computeUpCase(Beam* beam, double middleLinePos)
+{
+    if (beam->direction() == DirectionV::AUTO) {
+        // Account for presence of voices
+        ChordRest* startCr = beam->elements().front();
+        if (startCr->measure()->hasVoices(beam->staffIdx(), startCr->tick(), beam->elements().back()->endTick() - startCr->tick())) {
+            return !(beam->track() & 1);
+        }
+        // This ugly calculation is needed for cross-staff beams.
+        // But even for non-cross beams, Finale's auto direction can differ.
+        double topPos = DBL_MAX;
+        double bottomPos = -DBL_MAX;
+        for (ChordRest* cr : beam->elements()) {
+            topPos = std::min(topPos, systemPosByLine(cr, true));
+            bottomPos = std::max(bottomPos, systemPosByLine(cr, false));
+        }
+        return topPos + bottomPos < middleLinePos;
+    }
+    return beam->direction() == DirectionV::UP;
+}
+
+void FinaleParser::setBeamPositions()
+{
+    for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
+        if (!chordRest->beam() || chordRest->beamMode() != BeamMode::BEGIN) {
+            continue;
+        }
+
+        Beam* beam = chordRest->beam();
+        const double beamStaffY = beam->system()->staff(beam->staffIdx())->y() + beam->staffOffsetY();
+        const double middleLinePos = beamStaffY + (beam->staffType()->lines() - 1) * beam->spatium() * beam->staffType()->lineDistance().val() * 0.5;
+
+        // Set beam direction
+        bool up = computeUpCase(beam, middleLinePos);
+        beam->setDirection(up ? DirectionV::UP : DirectionV::DOWN);
+
+        // Calculate non-adjusted position, in system coordinates
+        ChordRest* startCr = beam->elements().front();
+        ChordRest* endCr = beam->elements().back();
+        double stemLengthAdjust =  (up ? -1.0 : 1.0) * doubleFromEvpu(musxOptions().stemOptions->stemLength);
+        double preferredStart = systemPosByLine(startCr, up) + stemLengthAdjust * startCr->spatium();
+        double preferredEnd = systemPosByLine(endCr, up) + stemLengthAdjust * endCr->spatium();
+        const double outermostDefault = up ? std::min(preferredStart, preferredEnd) : std::max(preferredStart, preferredEnd);
+
+        // Compute beam slope
+        double slope = 0.0;
+        double innermost = up ? std::max(preferredStart, preferredEnd) : std::min(preferredStart, preferredEnd);
+        if (!muse::RealIsEqual(preferredStart, preferredEnd)) {
+            double totalX = beam->endAnchor().x() - beam->startAnchor().x();
+            double maxSlope = doubleFromEvpu(musxOptions().beamOptions->maxSlope) * beam->spatium();
+            double heightDifference = preferredEnd - preferredStart;
+            double totalY = std::min(heightDifference, heightDifference > 0 ? maxSlope : -maxSlope);
+            slope = totalY / totalX;
+            if (muse::RealIsEqual(innermost, preferredStart)) {
+                preferredEnd = slope * totalX;
+            } else {
+                preferredStart = slope * -totalX;
+            }
+        }
+
+        // Ensure middle staff line distance is respected
+        innermost = up ? std::max(preferredStart, preferredEnd) : std::min(preferredStart, preferredEnd);
+        const double middleLineLimit = beamStaffY + beam->spatium() * beam->staffType()->lineDistance().val()
+                                       * std::max(beam->staffType()->middleLine() + (up ? -1.0 : 1.0) * doubleFromEvpu(musxOptions().beamOptions->maxFromMiddle), 1.0); /// @todo verify for 1-line staves
+        if (up ? (middleLineLimit < innermost) : (middleLineLimit > innermost)) {
+            const double middleLineAdjust = middleLineLimit - innermost;
+            preferredStart += middleLineAdjust;
+            preferredEnd += middleLineAdjust;
+        }
+
+        // Ensure minimum stem lengths
+        double outermostCurrent = up ? std::min(preferredStart, preferredEnd) : std::max(preferredStart, preferredEnd);
+        for (ChordRest* cr : beam->elements()) {
+            if (cr == startCr || cr == endCr) {
+                continue;
+            }
+            double beamPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
+            if (up ? muse::RealIsEqualOrMore(beamPos, outermostCurrent) : muse::RealIsEqualOrLess(beamPos, outermostCurrent)) {
+                // Yes, this means that stem lengths won't effectively always be respected.
+                // But this bug mimics Finale behaviour...
+                continue;
+            }
+            const double startX = rendering::score::BeamTremoloLayout::chordBeamAnchorX(beam->ldata(), cr, ChordBeamAnchorType::Start);
+            const double startY = slope * (startX - beam->startAnchor().x()) + preferredStart;
+            if (up ? beamPos < startY : beamPos > startY) {
+                double difference = beamPos - startY;
+                preferredStart += difference;
+                preferredEnd += difference;
+            }
+        }
+
+        // Flatten beams as needed
+        bool shouldFlatten = musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::AlwaysFlat;
+        setAndStyleProperty(beam, Pid::BEAM_NO_SLOPE, shouldFlatten, true);
+        if (!shouldFlatten) {
+            if (musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::OnExtremeNote) {
+                for (ChordRest* cr : beam->elements()) {
+                    if (cr == startCr || cr == endCr) {
+                        continue;
+                    }
+                    double beamPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
+                    if (up ? beamPos < outermostDefault : beamPos > outermostDefault) {
+                        shouldFlatten = true;
+                        break;
+                    }
+                }
+            } else if (musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::OnStandardNote) {
+                shouldFlatten = beam->elements().size() > 2;
+                for (ChordRest* cr : beam->elements()) {
+                    if (cr == startCr || cr == endCr) {
+                        continue;
+                    }
+                    double beamPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
+                    // Seems to be irrespective of direction
+                    if (muse::RealIsEqualOrMore(beamPos, outermostDefault)) {
+                        shouldFlatten = false;
+                        break;
+                    }
+                }
+            }
+        }
+        if (shouldFlatten) {
+            preferredStart = up ? std::min(preferredStart, preferredEnd) : std::max(preferredStart, preferredEnd);
+            preferredEnd = preferredStart;
+        }
+
+        // Beam alterations
+        PointF posAdjust;
+        PointF feathering(beam->beamDist(), beam->beamDist());
+        auto getAlterPosition = [beam](const MusxInstance<details::BeamAlterations>& beamAlter) {
+            if (!beamAlter || !beamAlter->isActive()) {
+                return PointF();
+            }
+            beam->setVisible(beamAlter->calcEffectiveBeamWidth() == 0);
+            return evpuToPointF(beamAlter->leftOffsetH * SPATIUM20, beamAlter->rightOffsetH * SPATIUM20);
+        };
+        if (up) {
+            posAdjust = getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsUpStem>(m_currentMusxPartId, entryNumber));
+            feathering -= getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsUpStem>(m_currentMusxPartId, entryNumber, 1));
+        } else {
+            posAdjust = getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsDownStem>(m_currentMusxPartId, entryNumber));
+            feathering += getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsDownStem>(m_currentMusxPartId, entryNumber, 1));
+        }
+        preferredStart -= posAdjust.x();
+        preferredEnd -= posAdjust.y();
+        setAndStyleProperty(beam, Pid::GROW_LEFT, feathering.x() / beam->beamDist());
+        setAndStyleProperty(beam, Pid::GROW_RIGHT, feathering.y() / beam->beamDist());
+
+        setAndStyleProperty(beam, Pid::USER_MODIFIED, true);
+        const double staffWidthAdjustment = beamStaffY + beam->beamWidth() * (up ? -0.5 : 0.5);
+        preferredStart -= staffWidthAdjustment;
+        preferredEnd -= staffWidthAdjustment;
+        setAndStyleProperty(beam, Pid::BEAM_POS, PairF(preferredStart / beam->spatium(), preferredEnd / beam->spatium()));
+    }
+
+    // Requires beam direction to have been set
+    for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
+        if (!chordRest->beam() || !chordRest->isChord()) {
+            continue;
+        }
+        if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
+            Chord* c = toChord(chordRest);
+            if (!c->stem()) {
+                continue;
+            }
+            if (c->beam()->direction() == DirectionV::UP) {
+                setAndStyleProperty(c->stem(), Pid::OFFSET, evpuToPointF(stemAlt->upHorzAdjust, -stemAlt->upVertAdjust) * SPATIUM20);
+                setAndStyleProperty(c->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, c->stem()));
+            } else {
+                setAndStyleProperty(c->stem(), Pid::OFFSET, evpuToPointF(stemAlt->downHorzAdjust, 0.0) * SPATIUM20);
+                setAndStyleProperty(c->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, c->stem()));
+            }
         }
     }
 }
