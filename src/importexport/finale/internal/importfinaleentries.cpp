@@ -1043,11 +1043,17 @@ void FinaleParser::setBeamPositions()
         double stemLengthAdjust =  (up ? -1.0 : 1.0) * doubleFromEvpu(musxOptions().stemOptions->stemLength);
         double preferredStart = systemPosByLine(startCr, up) + stemLengthAdjust * startCr->spatium();
         double preferredEnd = systemPosByLine(endCr, up) + stemLengthAdjust * endCr->spatium();
-        const double outermostDefault = up ? std::min(preferredStart, preferredEnd) : std::max(preferredStart, preferredEnd); // closest start/end note
+        auto getInnermost = [&]() {
+            return up ? std::max(preferredStart, preferredEnd) : std::min(preferredStart, preferredEnd); // farthest start/end note
+        };
+        auto getOutermost = [&]() {
+            return up ? std::min(preferredStart, preferredEnd) : std::max(preferredStart, preferredEnd); // closest start/end note
+        };
+        const double outermostDefault = getOutermost();
 
         // Compute beam slope
         double slope = 0.0;
-        double innermost = up ? std::max(preferredStart, preferredEnd) : std::min(preferredStart, preferredEnd); // farthest start/end note
+        double innermost = getInnermost();
         if (!muse::RealIsEqual(preferredStart, preferredEnd)) {
             double totalX = beam->endAnchor().x() - beam->startAnchor().x();
             double maxSlope = doubleFromEvpu(musxOptions().beamOptions->maxSlope) * beam->spatium();
@@ -1062,7 +1068,7 @@ void FinaleParser::setBeamPositions()
         }
 
         // Ensure middle staff line distance is respected
-        innermost = up ? std::max(preferredStart, preferredEnd) : std::min(preferredStart, preferredEnd);
+        innermost = getInnermost();
         const double middleLineLimit = beamStaffY + beam->spatium() * beam->staffType()->lineDistance().val()
                                        /// @todo Middle line (2.0) seems to be in a hard-coded location, but location may differ by staff type in musescore
                                        * std::max(2.0 + (up ? -1.0 : 1.0) * doubleFromEvpu(musxOptions().beamOptions->maxFromMiddle), 1.5);
@@ -1073,7 +1079,7 @@ void FinaleParser::setBeamPositions()
         }
 
         // Ensure minimum stem lengths
-        double outermostCurrent = up ? std::min(preferredStart, preferredEnd) : std::max(preferredStart, preferredEnd);
+        double outermostCurrent = getOutermost();
         for (ChordRest* cr : beam->elements()) {
             if (cr == startCr || cr == endCr) {
                 continue;
@@ -1137,8 +1143,8 @@ void FinaleParser::setBeamPositions()
             if (!beamAlter || !beamAlter->isActive()) {
                 return PointF();
             }
-            beam->setVisible(beamAlter->calcEffectiveBeamWidth() == 0);
-            return evpuToPointF(beamAlter->leftOffsetH * SPATIUM20, beamAlter->rightOffsetH * SPATIUM20);
+            beam->setVisible(beamAlter->calcEffectiveBeamWidth() != 0);
+            return evpuToPointF(beamAlter->leftOffsetY, beamAlter->rightOffsetY) * SPATIUM20;
         };
         /// @todo combine these two, one day
         auto getAlterFeatherU = [beam](const MusxInstanceList<details::SecondaryBeamAlterationsUpStem>& beamAlterList) {
@@ -1147,7 +1153,7 @@ void FinaleParser::setBeamPositions()
                     if (!beamAlter->isActive() || eduToFraction(beamAlter->dura) != Fraction(1, 16)) {
                         continue;
                     }
-                    return evpuToPointF(beamAlter->leftOffsetH, beamAlter->rightOffsetH) * SPATIUM20 / beam->beamDist();
+                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->rightOffsetY) * SPATIUM20 / beam->beamDist();
                 }
             }
             return PointF();
@@ -1158,7 +1164,7 @@ void FinaleParser::setBeamPositions()
                     if (!beamAlter->isActive() || eduToFraction(beamAlter->dura) != Fraction(1, 16)) {
                         continue;
                     }
-                    return evpuToPointF(beamAlter->leftOffsetH, beamAlter->rightOffsetH) * SPATIUM20 / beam->beamDist();
+                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->rightOffsetY) * SPATIUM20 / beam->beamDist();
                 }
             }
             return PointF();
