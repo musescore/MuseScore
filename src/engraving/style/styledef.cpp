@@ -994,7 +994,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(stringNumberFrameBgColor,                   PropertyValue::fromValue(Color::transparent)),
     styleDef(stringNumberOffset,                         PointF(0.0, 0.0)),
     styleDef(stringNumberPosition,                       AlignH::HCENTER),
-    styleDef(preferSameStringForTranspose,               false),
 
     styleDef(stringTuningsFontSize,                      9.0),
 

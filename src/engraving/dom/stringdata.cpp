@@ -498,7 +498,7 @@ void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset
 void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const
 {
     int capoFret = chord->staff()->part()->capoFret();
-    bool useSameString = chord->style().styleB(Sid::preferSameStringForTranspose);
+    bool useSameString = chord->configuration()->preferSameStringForTranspose();
 
     if (useSameString) {
         sortChordNotesUseSameString(chord, pitchOffset);

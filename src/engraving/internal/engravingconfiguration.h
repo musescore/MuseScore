@@ -126,6 +126,8 @@ public:
     bool guitarProMultivoiceEnabled() const override;
     bool minDistanceForPartialSkylineCalculated() const override;
     bool specificSlursLayoutWorkaround() const override;
+    bool preferSameStringForTranspose() const override;
+    void setPreferSameStringForTranspose(bool preferSameString) override;
 
 private:
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
