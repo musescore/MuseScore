@@ -1076,7 +1076,7 @@ public:
 
     void rebuildFretBox();
 
-    const std::map<size_t, std::array<SystemDivider*, 2>> systemDividers() const { return m_systemDividers; }
+    const std::map<size_t, std::array<SystemDivider*, 2> > systemDividers() const { return m_systemDividers; }
     SystemDivider* systemDivider(size_t systemIdx, SystemDividerType type) const;
     void addSystemDivider(size_t systemIdx, SystemDivider* divider);
 
@@ -1205,7 +1205,7 @@ private:
     std::vector<Page*> m_pages;            // pages are build from systems
     std::vector<System*> m_systems;        // measures are accumulated to systems
 
-    std::map<size_t, std::array<SystemDivider*, 2>> m_systemDividers; // list of system dividers (left and right) indexed by system
+    std::map<size_t, std::array<SystemDivider*, 2> > m_systemDividers; // list of system dividers (left and right) indexed by system
 
     InputState m_is;
     MStyle m_style;
