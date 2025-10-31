@@ -1053,6 +1053,7 @@ void FinaleParser::setBeamPositions()
             double maxSlope = doubleFromEvpu(musxOptions().beamOptions->maxSlope) * beam->spatium();
             double heightDifference = preferredEnd - preferredStart;
             double totalY = (heightDifference > 0) ? std::min(heightDifference, maxSlope) : std::max(heightDifference, -maxSlope);
+            slope = totalY / totalX;
             if (muse::RealIsEqual(innermost, preferredStart)) {
                 preferredEnd = preferredStart + slope * totalX;
             } else {
@@ -1076,16 +1077,16 @@ void FinaleParser::setBeamPositions()
             if (cr == startCr || cr == endCr) {
                 continue;
             }
-            double beamPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
-            if (up ? muse::RealIsEqualOrMore(beamPos, outermostCurrent) : muse::RealIsEqualOrLess(beamPos, outermostCurrent)) {
+            double minPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
+            if (up ? muse::RealIsEqualOrMore(minPos, outermostCurrent) : muse::RealIsEqualOrLess(minPos, outermostCurrent)) {
                 // Yes, this means that stem lengths won't effectively always be respected.
                 // But this bug mimics Finale behaviour...
                 continue;
             }
             const double startX = rendering::score::BeamTremoloLayout::chordBeamAnchorX(beam->ldata(), cr, ChordBeamAnchorType::Start);
-            const double startY = slope * (startX - beam->startAnchor().x()) + preferredStart;
-            if (up ? beamPos < startY : beamPos > startY) {
-                double difference = beamPos - startY;
+            const double curPos = slope * (startX - beam->startAnchor().x()) + preferredStart;
+            if (up ? minPos < curPos : minPos > curPos) {
+                double difference = minPos - curPos;
                 preferredStart += difference;
                 preferredEnd += difference;
             }
@@ -1101,13 +1102,12 @@ void FinaleParser::setBeamPositions()
                         continue;
                     }
                     double beamPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
-                    if (up ? beamPos < outermostDefault : beamPos > outermostDefault) {
+                    if (up ? muse::RealIsEqualOrLess(beamPos, outermostDefault) : muse::RealIsEqualOrMore(beamPos, outermostDefault)) {
                         shouldFlatten = true;
                         break;
                     }
                 }
             } else if (musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::OnStandardNote) {
-                shouldFlatten = beam->elements().size() > 2;
                 for (ChordRest* cr : beam->elements()) {
                     if (cr == startCr || cr == endCr) {
                         continue;
@@ -1115,7 +1115,7 @@ void FinaleParser::setBeamPositions()
                     double beamPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
                     // Seems to be irrespective of direction
                     if (muse::RealIsEqualOrMore(beamPos, outermostDefault)) {
-                        shouldFlatten = false;
+                        shouldFlatten = true;
                         break;
                     }
                 }
