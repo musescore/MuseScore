@@ -202,5 +202,8 @@ TEST_F(GuitarBendImporter_Tests, gpBendReleaseGraceAfter) {
 TEST_F(GuitarBendImporter_Tests, gpPrebendReleaseBend) {
     gpReadTest(u"prebend_release_bend", u"gp");
 }
+TEST_F(GuitarBendImporter_Tests, gpSlightBendTied) {
+    gpReadTest(u"slight_bend_tied", u"gp");
+}
 #endif
 }
