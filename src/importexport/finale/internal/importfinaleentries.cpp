@@ -1131,7 +1131,7 @@ void FinaleParser::setBeamPositions()
 
         // Beam alterations
         PointF posAdjust;
-        PointF feathering(beam->beamDist(), beam->beamDist());
+        PointF feathering(1.0, 1.0);
         auto getAlterPosition = [beam](const MusxInstance<details::BeamAlterations>& beamAlter) {
             if (!beamAlter || !beamAlter->isActive()) {
                 return PointF();
@@ -1139,15 +1139,38 @@ void FinaleParser::setBeamPositions()
             beam->setVisible(beamAlter->calcEffectiveBeamWidth() == 0);
             return evpuToPointF(beamAlter->leftOffsetH * SPATIUM20, beamAlter->rightOffsetH * SPATIUM20);
         };
+        /// @todo combine these two, one day
+        auto getAlterFeatherU = [beam](const MusxInstanceList<details::SecondaryBeamAlterationsUpStem>& beamAlterList) {
+            if (!beamAlterList.empty()) {
+                for (const auto& beamAlter : beamAlterList) {
+                    if (!beamAlter->isActive() || eduToFraction(beamAlter->dura) != Fraction(1, 16)) {
+                        continue;
+                    }
+                    return evpuToPointF(beamAlter->leftOffsetH, beamAlter->rightOffsetH) * SPATIUM20 / beam->beamDist();
+                }
+            }
+            return PointF();
+        };
+        auto getAlterFeatherD = [beam](const MusxInstanceList<details::SecondaryBeamAlterationsDownStem>& beamAlterList) {
+            if (!beamAlterList.empty()) {
+                for (const auto& beamAlter : beamAlterList) {
+                    if (!beamAlter->isActive() || eduToFraction(beamAlter->dura) != Fraction(1, 16)) {
+                        continue;
+                    }
+                    return evpuToPointF(beamAlter->leftOffsetH, beamAlter->rightOffsetH) * SPATIUM20 / beam->beamDist();
+                }
+            }
+            return PointF();
+        };
         if (up) {
             posAdjust = getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsUpStem>(m_currentMusxPartId, entryNumber));
-            feathering -= getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsUpStem>(m_currentMusxPartId, entryNumber, 1));
+            feathering -= getAlterFeatherU(m_doc->getDetails()->getArray<details::SecondaryBeamAlterationsUpStem>(m_currentMusxPartId, entryNumber));
         } else {
             posAdjust = getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsDownStem>(m_currentMusxPartId, entryNumber));
-            feathering += getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsDownStem>(m_currentMusxPartId, entryNumber, 1));
+            feathering += getAlterFeatherD(m_doc->getDetails()->getArray<details::SecondaryBeamAlterationsDownStem>(m_currentMusxPartId, entryNumber));
         }
-        setAndStyleProperty(beam, Pid::GROW_LEFT, feathering.x() / beam->beamDist());
-        setAndStyleProperty(beam, Pid::GROW_RIGHT, feathering.y() / beam->beamDist());
+        setAndStyleProperty(beam, Pid::GROW_LEFT, feathering.x());
+        setAndStyleProperty(beam, Pid::GROW_RIGHT, feathering.y());
         setAndStyleProperty(beam, Pid::USER_MODIFIED, true);
 
         // Smoothing
