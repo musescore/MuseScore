@@ -812,21 +812,22 @@ static PropertyValue compareStyledProperty(const PropertyValue& oldP, const Prop
 
 static PropertyValue getFormattedValue(const EngravingObject* e, const Pid id)
 {
-    PropertyValue v = e->getProperty(id);
+    const PropertyValue& v = e->getProperty(id);
+    // perhaps always e->style().spatium() ?
+    const double sp = e->isEngravingItem() ? toEngravingItem(e)->spatium() : e->style().spatium();
     if (e->isSpannerSegment()) {
         // We only want the y-offset for spanners, as x-offset affects ending pos as well.
         if (id == Pid::OFFSET) {
-            PointF p = v.value<PointF>() / e->spatium();
+            PointF p = v.value<PointF>() / sp;
             return PointF(0.0, p.ry());
         }
     }
     if (v.type() == P_TYPE::SPATIUM) {
-        // perhaps e->style().spatium() ?
-        return v.value<Spatium>().val() / e->spatium();
+        return v.value<Spatium>().val() / sp;
     }
     // or all point types?
     if (id == Pid::OFFSET) {
-        return v.value<PointF>() / e->spatium();
+        return v.value<PointF>() / sp;
     }
     return v;
 }
