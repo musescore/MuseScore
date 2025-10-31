@@ -1013,7 +1013,6 @@ enum class Sid : short {
     stringNumberFrameBgColor,
     stringNumberOffset,
     stringNumberPosition,
-    preferSameStringForTranspose,
 
     stringTuningsFontSize,
 
