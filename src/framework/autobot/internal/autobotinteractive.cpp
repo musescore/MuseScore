@@ -122,7 +122,7 @@ io::path_t AutobotInteractive::selectSavingFileSync(const std::string& title, co
     }
 
     LOGD() << title << " dir:" << dir << ", filter: " << filterList << ", confirmOverwrite: " << confirmOverwrite;
-    m_real->openSync("muse://autobot/selectfile?sync=true&filePath=" + dir.toStdString());
+    m_real->openSync("muse://autobot/selectfile?filePath=" + dir.toStdString());
     m_selectedFilePath = dir;
     return m_selectedFilePath;
 }
