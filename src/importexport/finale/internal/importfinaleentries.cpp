@@ -1054,7 +1054,7 @@ void FinaleParser::setBeamPositions()
             double heightDifference = preferredEnd - preferredStart;
             double totalY = (heightDifference > 0) ? std::min(heightDifference, maxSlope) : std::max(heightDifference, -maxSlope);
             slope = totalY / totalX;
-            if (muse::RealIsEqual(innermost, preferredStart)) {
+            if (muse::RealIsEqual(innermost, preferredEnd)) {
                 preferredEnd = preferredStart + slope * totalX;
             } else {
                 preferredStart = preferredEnd + slope * -totalX;
