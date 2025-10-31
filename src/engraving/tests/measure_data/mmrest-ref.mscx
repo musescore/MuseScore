@@ -14,6 +14,8 @@
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
       <maskBarlinesForText>0</maskBarlinesForText>
+      <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
+      <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <lastSystemFillLimit>0</lastSystemFillLimit>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
