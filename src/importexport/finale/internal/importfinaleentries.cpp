@@ -614,7 +614,6 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
 
     // Dot offset
     /// Only generate dots if they have modified properties, otherwise created automatically on layout
-    /// @todo MuseScore's dot placement is smarter than Finale's, ideally we should account for the difference in effective positioning.
     if (currentEntry->dotTieAlt) {
         MusxInstanceList<details::DotAlterations> dotAlterations = m_doc->getDetails()->getArray<details::DotAlterations>(m_currentMusxPartId, currentEntryNumber);
         for (const MusxInstance<details::DotAlterations>& da : dotAlterations) {
@@ -639,7 +638,6 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset) * SPATIUM20); // correctly scaled?
                     r->add(dot);
                 }
-            } else {
                 break;
             }
         }
@@ -1194,11 +1192,31 @@ void FinaleParser::setBeamPositions()
         setAndStyleProperty(beam, Pid::BEAM_POS, PairF(preferredStart / beam->spatium(), preferredEnd / beam->spatium()));
     }
 
-    // Requires beam direction to have been set
     for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
+        // Rebase dot offset
+        if (chordRest->dots() > 0) {
+            const double dotDistance = m_score->style().styleMM(Sid::dotNoteDistance) * chordRest->staff()->staffMag(chordRest);
+            if (chordRest->isChord()) {
+                for (engraving::Note* n : toChord(chordRest)->notes()) {
+                    double difference = n->dots().front()->pos().x() - (n->shape().right() + dotDistance - n->offset().x());
+                    for (NoteDot* nd : n->dots()) {
+                        nd->rxoffset() -= difference;
+                    }
+                }
+            } else if (chordRest->isRest()) {
+                Rest* r = toRest(chordRest);
+                double difference = r->dotList().front()->pos().x() - (r->shape().right() + dotDistance); // offset to cr means no subtracting rest offset
+                for (NoteDot* nd : r->dotList()) {
+                    nd->rxoffset() -= difference;
+                }
+            }
+        }
+
         if (!chordRest->beam() || !chordRest->isChord()) {
             continue;
         }
+
+        // Stems under beams (require beam direction)
         if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
             Chord* c = toChord(chordRest);
             if (!c->stem()) {
