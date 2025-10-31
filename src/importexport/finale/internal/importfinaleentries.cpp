@@ -1064,7 +1064,7 @@ void FinaleParser::setBeamPositions()
         // Ensure middle staff line distance is respected
         innermost = up ? std::max(preferredStart, preferredEnd) : std::min(preferredStart, preferredEnd);
         const double middleLineLimit = beamStaffY + beam->spatium() * beam->staffType()->lineDistance().val()
-                                       * std::max(beam->staffType()->middleLine() + (up ? -1.0 : 1.0) * doubleFromEvpu(musxOptions().beamOptions->maxFromMiddle), 1.0); /// @todo verify for 1-line staves
+                                       * std::max(beam->staffType()->middleLine() + (up ? -1.0 : 1.0) * musxOptions().beamOptions->maxFromMiddle, 1.0); /// @todo verify for 1-line staves
         if (up ? (middleLineLimit < innermost) : (middleLineLimit > innermost)) {
             const double middleLineAdjust = middleLineLimit - innermost;
             preferredStart += middleLineAdjust;
@@ -1077,14 +1077,17 @@ void FinaleParser::setBeamPositions()
             if (cr == startCr || cr == endCr) {
                 continue;
             }
-            double minPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
+            const double minPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
             if (up ? muse::RealIsEqualOrMore(minPos, outermostCurrent) : muse::RealIsEqualOrLess(minPos, outermostCurrent)) {
                 // Yes, this means that stem lengths won't effectively always be respected.
                 // But this bug mimics Finale behaviour...
                 continue;
             }
-            const double startX = rendering::score::BeamTremoloLayout::chordBeamAnchorX(beam->ldata(), cr, ChordBeamAnchorType::Start);
-            const double curPos = slope * (startX - beam->startAnchor().x()) + preferredStart;
+            double curPos = preferredStart;
+            if (!muse::RealIsEqual(slope, 0.0)) {
+                const double startX = rendering::score::BeamTremoloLayout::chordBeamAnchorX(beam->ldata(), cr, ChordBeamAnchorType::Start);
+                curPos += slope * (startX - beam->startAnchor().x());
+            }
             if (up ? minPos < curPos : minPos > curPos) {
                 double difference = minPos - curPos;
                 preferredStart += difference;
@@ -1232,6 +1235,12 @@ void FinaleParser::setBeamPositions()
             } else {
                 setAndStyleProperty(c->stem(), Pid::OFFSET, evpuToPointF(stemAlt->downHorzAdjust, 0.0) * SPATIUM20);
                 setAndStyleProperty(c->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, c->stem()));
+            }
+        }
+    }
+    for (auto [auto [entryNumber, noteNumber], note] : m_entryNoteNumber2Note) {
+        if (note->tieFor()) {
+            if (const auto& tieForAlt = m_doc->getDetails()->get<details::TieAlterStart>(m_currentMusxPartId, entryNumber)) {
             }
         }
     }
