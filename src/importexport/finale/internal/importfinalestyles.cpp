@@ -816,9 +816,17 @@ static PropertyValue getFormattedValue(const EngravingObject* e, const Pid id)
     if (e->isSpannerSegment()) {
         // We only want the y-offset for spanners, as x-offset affects ending pos as well.
         if (id == Pid::OFFSET) {
-            PointF p = v.value<PointF>();
+            PointF p = v.value<PointF>() / e->spatium();
             return PointF(0.0, p.ry());
         }
+    }
+    if (v.type() == P_TYPE::SPATIUM) {
+        // perhaps e->style().spatium() ?
+        return v.value<Spatium>().val() / e->spatium();
+    }
+    // or all point types?
+    if (id == Pid::OFFSET) {
+        return v.value<PointF>() / e->spatium();
     }
     return v;
 }
