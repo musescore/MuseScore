@@ -499,3 +499,12 @@ bool EngravingConfiguration::specificSlursLayoutWorkaround() const
 {
     return guitarProImportExperimental();
 }
+
+bool EngravingConfiguration::preferSameStringForTranspose() const
+{
+    return false;
+}
+
+void EngravingConfiguration::setPreferSameStringForTranspose(bool /*preferSameString*/)
+{
+}

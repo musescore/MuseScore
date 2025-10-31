@@ -1009,7 +1009,6 @@ enum class Sid {
     stringNumberFrameBgColor,
     stringNumberOffset,
     stringNumberPosition,
-    preferSameStringForTranspose,
 
     stringTuningsFontSize,
 
