@@ -1043,21 +1043,20 @@ void FinaleParser::setBeamPositions()
         double stemLengthAdjust =  (up ? -1.0 : 1.0) * doubleFromEvpu(musxOptions().stemOptions->stemLength);
         double preferredStart = systemPosByLine(startCr, up) + stemLengthAdjust * startCr->spatium();
         double preferredEnd = systemPosByLine(endCr, up) + stemLengthAdjust * endCr->spatium();
-        const double outermostDefault = up ? std::min(preferredStart, preferredEnd) : std::max(preferredStart, preferredEnd);
+        const double outermostDefault = up ? std::min(preferredStart, preferredEnd) : std::max(preferredStart, preferredEnd); // closest start/end note
 
         // Compute beam slope
         double slope = 0.0;
-        double innermost = up ? std::max(preferredStart, preferredEnd) : std::min(preferredStart, preferredEnd);
+        double innermost = up ? std::max(preferredStart, preferredEnd) : std::min(preferredStart, preferredEnd); // farthest start/end note
         if (!muse::RealIsEqual(preferredStart, preferredEnd)) {
             double totalX = beam->endAnchor().x() - beam->startAnchor().x();
             double maxSlope = doubleFromEvpu(musxOptions().beamOptions->maxSlope) * beam->spatium();
             double heightDifference = preferredEnd - preferredStart;
-            double totalY = std::min(heightDifference, heightDifference > 0 ? maxSlope : -maxSlope);
-            slope = totalY / totalX;
+            double totalY = (heightDifference > 0) ? std::min(heightDifference, maxSlope) : std::max(heightDifference, -maxSlope);
             if (muse::RealIsEqual(innermost, preferredStart)) {
-                preferredEnd = slope * totalX;
+                preferredEnd = preferredStart + slope * totalX;
             } else {
-                preferredStart = slope * -totalX;
+                preferredStart = preferredEnd + slope * -totalX;
             }
         }
 
@@ -1165,7 +1164,7 @@ void FinaleParser::setBeamPositions()
             feathering -= getAlterFeatherU(m_doc->getDetails()->getArray<details::SecondaryBeamAlterationsUpStem>(m_currentMusxPartId, entryNumber));
         } else {
             posAdjust = getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsDownStem>(m_currentMusxPartId, entryNumber));
-            feathering += getAlterFeatherD(m_doc->getDetails()->getArray<details::SecondaryBeamAlterationsDownStem>(m_currentMusxPartId, entryNumber));
+            feathering += getAlterFeatherD(m_doc->getDetails()->getArray<details::SecondaryBeamAlterationsDownStem>(m_currentMusxPartId, entryNumber)); // -=?
         }
         setAndStyleProperty(beam, Pid::GROW_LEFT, feathering.x());
         setAndStyleProperty(beam, Pid::GROW_RIGHT, feathering.y());
@@ -1177,6 +1176,11 @@ void FinaleParser::setBeamPositions()
             if (up ? muse::RealIsEqualOrMore(innermost, beamStaffY) : innermost < beamStaffY + beam->staff()->staffHeight(beam->tick())) {
                 /// @todo figure out these calculations - they seem more complex than the rest of the code
                 /// For now, set to default position and add offset
+                if (up) {
+                    setAndStyleProperty(beam, Pid::BEAM_CROSS_STAFF_MOVE, beam->minCRMove() - beam->defaultCrossStaffIdx());
+                } else {
+                    setAndStyleProperty(beam, Pid::BEAM_CROSS_STAFF_MOVE, beam->maxCRMove() + 1 - beam->defaultCrossStaffIdx());
+                }
                 setAndStyleProperty(beam, Pid::BEAM_POS, PairF(beam->beamPos().first - (posAdjust.x() / beam->spatium()),
                                                                beam->beamPos().second - (posAdjust.y() / beam->spatium())));
                 continue;
