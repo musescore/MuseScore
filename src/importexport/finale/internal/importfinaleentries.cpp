@@ -1064,7 +1064,8 @@ void FinaleParser::setBeamPositions()
         // Ensure middle staff line distance is respected
         innermost = up ? std::max(preferredStart, preferredEnd) : std::min(preferredStart, preferredEnd);
         const double middleLineLimit = beamStaffY + beam->spatium() * beam->staffType()->lineDistance().val()
-                                       * std::max(beam->staffType()->middleLine() + (up ? -1.0 : 1.0) * musxOptions().beamOptions->maxFromMiddle, 1.0); /// @todo verify for 1-line staves
+                                       /// @todo Middle line (2.0) seems to be in a hard-coded location, but location may differ by staff type in musescore
+                                       * std::max(2.0 + (up ? -1.0 : 1.0) * doubleFromEvpu(musxOptions().beamOptions->maxFromMiddle), 1.5);
         if (up ? (middleLineLimit < innermost) : (middleLineLimit > innermost)) {
             const double middleLineAdjust = middleLineLimit - innermost;
             preferredStart += middleLineAdjust;
@@ -1235,12 +1236,6 @@ void FinaleParser::setBeamPositions()
             } else {
                 setAndStyleProperty(c->stem(), Pid::OFFSET, evpuToPointF(stemAlt->downHorzAdjust, 0.0) * SPATIUM20);
                 setAndStyleProperty(c->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, c->stem()));
-            }
-        }
-    }
-    for (auto [auto [entryNumber, noteNumber], note] : m_entryNoteNumber2Note) {
-        if (note->tieFor()) {
-            if (const auto& tieForAlt = m_doc->getDetails()->get<details::TieAlterStart>(m_currentMusxPartId, entryNumber)) {
             }
         }
     }
