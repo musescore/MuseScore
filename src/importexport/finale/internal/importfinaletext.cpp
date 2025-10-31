@@ -554,7 +554,7 @@ void FinaleParser::importTextExpressions()
         const MusxInstance<others::TextExpressionDef>& expressionDef = expressionAssignment->getTextExpression();
         item->setParent(s);
         item->setTrack(curTrackIdx);
-        item->setVisible(!expressionAssignment->hidden);
+        item->setVisible(!expressionAssignment->hidden); /// @todo staff visibility, and save adding excessive links
         item->setXmlText(expression->xmlText);
         item->checkCustomFormatting(expression->xmlText);
         setAndStyleProperty(item, Pid::FRAME_TYPE, int(expression->frameSettings.frameType));
