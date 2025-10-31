@@ -847,7 +847,9 @@ String Note::tpcUserName(const bool explicitAccidental, bool full) const
 {
     String pitchName = tpcUserName(tpc(), epitch() + ottaveCapoFret(), explicitAccidental, full);
 
-    pitchName = muse::mtrc("global/pitchName", pitchName);
+    if (!configuration()->pitchNotationSPN()) {
+        pitchName = muse::mtrc("global/pitchName", pitchName);
+    }
 
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         // see Note::accessibleInfo(), but we return what we have
@@ -872,7 +874,9 @@ String Note::tpcUserName(const bool explicitAccidental, bool full) const
 
     if (!concertPitch() && transposition()) {
         String soundingPitch = tpcUserName(tpc1(), ppitch(), explicitAccidental);
-        soundingPitch = muse::mtrc("global/pitchName", soundingPitch);
+        if (!configuration()->pitchNotationSPN()) {
+            soundingPitch = muse::mtrc("global/pitchName", soundingPitch);
+        }
         return muse::mtrc("engraving", "%1 (sounding as %2%3)").arg(pitchName, soundingPitch, pitchOffset);
     }
     return pitchName + pitchOffset;

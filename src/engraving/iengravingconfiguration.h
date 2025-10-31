@@ -146,6 +146,10 @@ public:
     virtual bool guitarProMultivoiceEnabled() const = 0;
     virtual bool minDistanceForPartialSkylineCalculated() const = 0;
     virtual bool specificSlursLayoutWorkaround() const = 0;
+
+    virtual bool pitchNotationSPN() const = 0;
+    virtual void setPitchNotationSPN(bool use) = 0;
+    virtual muse::async::Notification pitchNotationSPNChanged() const = 0;
 };
 }
 

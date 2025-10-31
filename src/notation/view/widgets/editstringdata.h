@@ -39,6 +39,7 @@ class EditStringData : public QDialog, private Ui::EditStringDataBase, public mu
     Q_OBJECT
 
     muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<mu::engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
     EditStringData(QWidget* parent = nullptr, const std::vector<engraving::instrString>& strings = {}, int frets = 0);

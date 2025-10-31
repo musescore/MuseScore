@@ -26,7 +26,8 @@
 
 #include "uicomponents/view/quickpaintedview.h"
 #include "modularity/ioc.h"
-#include "inotationconfiguration.h"
+#include "notation/inotationconfiguration.h"
+#include "engraving/iengravingconfiguration.h"
 #include "ui/iuiconfiguration.h"
 
 #include "pianokeyboardtypes.h"
@@ -43,7 +44,8 @@ class PianoKeyboardView : public muse::uicomponents::QuickPaintedView, public mu
     Q_PROPERTY(qreal scrollBarPosition READ scrollBarPosition WRITE setScrollBarPosition NOTIFY scrollBarChanged)
     Q_PROPERTY(qreal scrollBarSize READ scrollBarSize NOTIFY scrollBarChanged)
 
-    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<mu::engraving::IEngravingConfiguration> engravingConfiguration = { this };
     muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:

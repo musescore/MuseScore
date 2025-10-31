@@ -648,7 +648,11 @@ void EditStaff::editStringDataClicked()
 
 QString EditStaff::midiCodeToStr(int midiCode)
 {
-    return QString::fromStdString(muse::pitchToString(midiCode));
+    if (engravingConfiguration()->pitchNotationSPN()) {
+        return QString::fromStdString(muse::pitchToString(midiCode, true));
+    } else {
+        return QString::fromStdString(muse::pitchToString(midiCode, false));
+    }
 }
 
 void EditStaff::showStaffTypeDialog()

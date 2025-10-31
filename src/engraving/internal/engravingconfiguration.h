@@ -127,6 +127,10 @@ public:
     bool minDistanceForPartialSkylineCalculated() const override;
     bool specificSlursLayoutWorkaround() const override;
 
+    bool pitchNotationSPN() const override;
+    void setPitchNotationSPN(bool use) override;
+    muse::async::Notification pitchNotationSPNChanged() const override;
+
 private:
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Notification m_scoreInversionChanged;
@@ -138,6 +142,7 @@ private:
     muse::async::Channel<Color> m_unlinkedColorChanged;
     muse::async::Channel<muse::io::path_t> m_defaultStyleFilePathChanged;
     muse::async::Channel<muse::io::path_t> m_partStyleFilePathChanged;
+    muse::async::Notification m_pitchNotationSPNChanged;
 
     muse::ValNt<DebuggingOptions> m_debuggingOptions;
 
