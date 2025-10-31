@@ -1208,18 +1208,20 @@ void FinaleParser::setBeamPositions()
 
     for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
         // Rebase dot offset
+        /// @todo dot direction
         if (chordRest->dots() > 0) {
             const double dotDistance = m_score->style().styleMM(Sid::dotNoteDistance) * chordRest->staff()->staffMag(chordRest);
             if (chordRest->isChord()) {
                 for (engraving::Note* n : toChord(chordRest)->notes()) {
-                    double difference = n->dots().front()->pos().x() - (n->shape().right() + dotDistance - n->offset().x());
+                    // Use bbox and not shape
+                    double difference = n->dots().front()->pos().x() - (n->ldata()->bbox().right() + dotDistance - n->offset().x());
                     for (NoteDot* nd : n->dots()) {
                         nd->rxoffset() -= difference;
                     }
                 }
             } else if (chordRest->isRest()) {
                 Rest* r = toRest(chordRest);
-                double difference = r->dotList().front()->pos().x() - (r->shape().right() + dotDistance); // offset to cr means no subtracting rest offset
+                double difference = r->dotList().front()->pos().x() - (r->ldata()->bbox().right() + dotDistance); // offset to cr means no subtracting rest offset
                 for (NoteDot* nd : r->dotList()) {
                     nd->rxoffset() -= difference;
                 }
