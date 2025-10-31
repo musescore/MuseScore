@@ -1146,12 +1146,25 @@ void FinaleParser::setBeamPositions()
             posAdjust = getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsDownStem>(m_currentMusxPartId, entryNumber));
             feathering += getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsDownStem>(m_currentMusxPartId, entryNumber, 1));
         }
-        preferredStart -= posAdjust.x();
-        preferredEnd -= posAdjust.y();
         setAndStyleProperty(beam, Pid::GROW_LEFT, feathering.x() / beam->beamDist());
         setAndStyleProperty(beam, Pid::GROW_RIGHT, feathering.y() / beam->beamDist());
-
         setAndStyleProperty(beam, Pid::USER_MODIFIED, true);
+
+        // Smoothing
+        if (!musxOptions().beamOptions->spanSpace && !muse::RealIsEqual(preferredStart, preferredEnd)) {
+            innermost = up ? std::max(preferredStart, preferredEnd) : std::min(preferredStart, preferredEnd);
+            if (up ? muse::RealIsEqualOrMore(innermost, beamStaffY) : innermost < beamStaffY + beam->staff()->staffHeight(beam->tick())) {
+                /// @todo figure out these calculations - they seem more complex than the rest of the code
+                /// For now, set to default position and add offset
+                setAndStyleProperty(beam, Pid::BEAM_POS, PairF(beam->beamPos().first - (posAdjust.x() / beam->spatium()),
+                                                               beam->beamPos().second - (posAdjust.y() / beam->spatium())));
+                continue;
+            }
+        }
+
+        preferredStart -= posAdjust.x();
+        preferredEnd -= posAdjust.y();
+
         const double staffWidthAdjustment = beamStaffY + beam->beamWidth() * (up ? -0.5 : 0.5);
         preferredStart -= staffWidthAdjustment;
         preferredEnd -= staffWidthAdjustment;
