@@ -236,6 +236,7 @@ public:
 
     TextFragment split(int column);
     void draw(muse::draw::Painter*, const TextBase*) const;
+
     muse::draw::Font font(const TextBase*) const;
     int columns() const;
     void changeFormat(FormatId id, const FormatValue& data);
