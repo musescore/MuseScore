@@ -3022,7 +3022,7 @@ void Score::deleteItem(EngravingItem* el)
             // propagate to original measure
             m = m->mmRestLast();
             for (EngravingItem* e : m->el()) {
-                if (e->isLayoutBreak()) {
+                if (e->isLayoutBreak() && toLayoutBreak(e)->layoutBreakType() == toLayoutBreak(el)->layoutBreakType()) {
                     undoRemoveElement(e);
                     break;
                 }
