@@ -23,6 +23,8 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/exampleview.h
     ${CMAKE_CURRENT_LIST_DIR}/breaksdialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/breaksdialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/pagebreaksdialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/pagebreaksdialog.h
     ${CMAKE_CURRENT_LIST_DIR}/pagesettings.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pagesettings.h
     ${CMAKE_CURRENT_LIST_DIR}/transposedialog.cpp

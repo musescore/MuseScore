@@ -313,6 +313,7 @@ void NotationActionController::init()
     registerAction("edit-style", &Controller::openEditStyleDialog);
     registerAction("page-settings", &Controller::openPageSettingsDialog);
     registerAction("staff-properties", &Controller::openStaffProperties);
+    registerAction("add-remove-page-breaks", &Controller::openPageBreaksDialog);
     registerAction("edit-strings", &Controller::openEditStringsDialog);
     registerAction("measures-per-system", &Controller::openBreaksDialog);
     registerAction("transpose", &Controller::openTransposeDialog);
@@ -1856,6 +1857,11 @@ void NotationActionController::openBreaksDialog()
     interactive()->open("musescore://notation/breaks");
 }
 
+void NotationActionController::openPageBreaksDialog()
+{
+    interactive()->open("musescore://notation/pagebreaks");
+}
+
 void NotationActionController::openTransposeDialog()
 {
     interactive()->open("musescore://notation/transpose");
@@ -2520,7 +2526,7 @@ void NotationActionController::registerAction(const ActionCode& code,
 }
 
 void NotationActionController::registerAction(const muse::actions::ActionCode& code,
-                                              void (NotationActionController::* handler)(), Ret (INotationInteraction::*enabler)() const)
+                                              void (NotationActionController::* handler)(), Ret (INotationInteraction::* enabler)() const)
 {
     auto _enabler = [this, enabler]() {
         INotationPtr notation = currentNotation();
@@ -2536,7 +2542,7 @@ void NotationActionController::registerAction(const muse::actions::ActionCode& c
 }
 
 void NotationActionController::registerAction(const muse::actions::ActionCode& code, std::function<void()> handler,
-                                              Ret (INotationInteraction::*enabler)() const)
+                                              Ret (INotationInteraction::* enabler)() const)
 {
     auto _enabler = [this, enabler]() {
         INotationPtr notation = currentNotation();
