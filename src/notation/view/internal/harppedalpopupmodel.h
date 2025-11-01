@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_HARPPEDALPOPUPMODEL_H
-#define MU_NOTATION_HARPPEDALPOPUPMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -41,7 +40,7 @@ class HarpPedalPopupModel : public AbstractElementPopupModel
         QVector<mu::notation::HarpPedalPopupModel::Position> pedalState READ pedalState WRITE setDiagramPedalState NOTIFY pedalStateChanged)
     Q_PROPERTY(QRectF staffPos READ staffPos CONSTANT)
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::LazyInject<context::IGlobalContext> globalContext = { this };
 
 public:
     enum class Position {
@@ -90,5 +89,3 @@ private:
 #ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::notation::HarpPedalPopupModel::Position)
 #endif
-
-#endif // MU_NOTATION_HARPPEDALPOPUPMODEL_H

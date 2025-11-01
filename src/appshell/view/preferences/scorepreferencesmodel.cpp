@@ -21,14 +21,13 @@
  */
 #include "scorepreferencesmodel.h"
 
-#include "log.h"
 #include "translation.h"
 
 using namespace muse;
 using namespace mu::appshell;
 
 ScorePreferencesModel::ScorePreferencesModel(QObject* parent)
-    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), muse::LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

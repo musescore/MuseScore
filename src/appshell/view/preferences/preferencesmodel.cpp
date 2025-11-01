@@ -26,13 +26,11 @@
 #include "translation.h"
 #include "ui/view/iconcodes.h"
 
-#include "log.h"
-
 using namespace mu::appshell;
 using namespace muse::ui;
 
 PreferencesModel::PreferencesModel(QObject* parent)
-    : QAbstractItemModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractItemModel(parent), muse::LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

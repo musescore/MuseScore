@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ENGRAVINGELEMENTSMODEL_H
-#define MU_ENGRAVING_ENGRAVINGELEMENTSMODEL_H
+#pragma once
 
 #include <QAbstractItemModel>
 #include <QHash>
@@ -30,14 +29,14 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::engraving {
-class EngravingElementsModel : public QAbstractItemModel, public muse::Injectable
+class EngravingElementsModel : public QAbstractItemModel, public muse::LazyInjectable
 {
     Q_OBJECT
     Q_PROPERTY(QString info READ info NOTIFY infoChanged)
     Q_PROPERTY(QString summary READ summary NOTIFY summaryChanged)
 
-    muse::Inject<IEngravingElementsProvider> elementsProvider = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::LazyInject<IEngravingElementsProvider> elementsProvider = { this };
+    muse::LazyInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     EngravingElementsModel(QObject* parent = 0);
@@ -111,5 +110,3 @@ private:
     QString m_summary;
 };
 }
-
-#endif // MU_ENGRAVING_ENGRAVINGELEMENTSMODEL_H

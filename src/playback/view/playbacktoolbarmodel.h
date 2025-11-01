@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLAYBACK_PLAYBACKTOOLBARMODEL_H
-#define MU_PLAYBACK_PLAYBACKTOOLBARMODEL_H
+#pragma once
 
 #include "uicomponents/view/abstractmenumodel.h"
 
@@ -51,7 +50,7 @@ class PlaybackToolBarModel : public muse::uicomponents::AbstractMenuModel
 
     muse::Inject<IPlaybackController> playbackController;
     muse::Inject<context::IGlobalContext> globalContext;
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::LazyInject<notation::INotationConfiguration> notationConfiguration = { this };
 
 public:
     explicit PlaybackToolBarModel(QObject* parent = nullptr);
@@ -112,5 +111,3 @@ private:
     QTime m_playTime;
 };
 }
-
-#endif // MU_PLAYBACK_PLAYBACKTOOLBARMODEL_H

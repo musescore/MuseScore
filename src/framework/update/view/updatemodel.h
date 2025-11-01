@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UPDATE_UPDATEMODEL_H
-#define MUSE_UPDATE_UPDATEMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -31,7 +30,7 @@
 #include "async/asyncable.h"
 
 namespace muse::update {
-class UpdateModel : public QObject, public Injectable, public async::Asyncable
+class UpdateModel : public QObject, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -39,7 +38,7 @@ class UpdateModel : public QObject, public Injectable, public async::Asyncable
     Q_PROPERTY(int totalProgress READ totalProgress NOTIFY totalProgressChanged)
     Q_PROPERTY(QString progressTitle READ progressTitle NOTIFY progressTitleChanged)
 
-    Inject<IAppUpdateService> service = { this };
+    LazyInject<IAppUpdateService> service = { this };
 
 public:
     explicit UpdateModel(QObject* parent = nullptr);
@@ -69,5 +68,3 @@ private:
     QString m_progressTitle;
 };
 }
-
-#endif // MUSE_UPDATE_UPDATEMODEL_H

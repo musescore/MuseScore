@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_SHORTCUTS_EDITMIDIMAPPINGMODEL_H
-#define MUSE_SHORTCUTS_EDITMIDIMAPPINGMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -31,14 +30,14 @@
 #include "imidiremote.h"
 
 namespace muse::shortcuts {
-class EditMidiMappingModel : public QObject, public Injectable, public async::Asyncable
+class EditMidiMappingModel : public QObject, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString mappingTitle READ mappingTitle NOTIFY mappingTitleChanged)
 
-    Inject<IMidiRemote> midiRemote = { this };
-    Inject<muse::midi::IMidiInPort> midiInPort = { this };
+    LazyInject<IMidiRemote> midiRemote = { this };
+    LazyInject<muse::midi::IMidiInPort> midiInPort = { this };
 
 public:
     explicit EditMidiMappingModel(QObject* parent = nullptr);
@@ -58,5 +57,3 @@ private:
     RemoteEvent m_event;
 };
 }
-
-#endif // MUSE_SHORTCUTS_EDITMIDIMAPPINGMODEL_H

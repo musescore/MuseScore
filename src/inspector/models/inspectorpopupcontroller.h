@@ -38,7 +38,7 @@ class PopupView;
 }
 
 namespace mu::inspector {
-class InspectorPopupController : public QObject, public muse::Injectable
+class InspectorPopupController : public QObject, public muse::LazyInjectable
 {
     Q_OBJECT
 
@@ -47,8 +47,8 @@ class InspectorPopupController : public QObject, public muse::Injectable
 
     Q_PROPERTY(QQuickItem * notationView READ notationView WRITE setNotationView NOTIFY notationViewChanged)
 
-    muse::Inject<muse::ui::IMainWindow> mainWindow  = { this };
-    muse::Inject<muse::IInteractive> interactive  = { this };
+    muse::LazyInject<muse::ui::IMainWindow> mainWindow  = { this };
+    muse::LazyInject<muse::IInteractive> interactive  = { this };
 
 public:
     explicit InspectorPopupController(QObject* parent = nullptr);

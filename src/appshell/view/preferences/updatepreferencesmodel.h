@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_UPDATEPREFERENCESMODEL_H
-#define MU_APPSHELL_UPDATEPREFERENCESMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -29,14 +28,14 @@
 #include "update/iupdateconfiguration.h"
 
 namespace mu::appshell {
-class UpdatePreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class UpdatePreferencesModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(
         bool needCheckForNewAppVersion READ needCheckForNewAppVersion WRITE setNeedCheckForNewAppVersion NOTIFY needCheckForNewAppVersionChanged)
 
-    muse::Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
+    muse::LazyInject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
 
 public:
     explicit UpdatePreferencesModel(QObject* parent = nullptr);
@@ -55,5 +54,3 @@ signals:
     void needCheckForNewAppVersionChanged(bool value);
 };
 }
-
-#endif // MU_APPSHELL_UPDATEPREFERENCESMODEL_H

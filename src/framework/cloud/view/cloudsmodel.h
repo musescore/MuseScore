@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_CLOUD_CLOUDSMODEL_H
-#define MUSE_CLOUD_CLOUDSMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QVariant>
@@ -32,16 +31,16 @@
 #include "cloud/audiocom/iaudiocomservice.h"
 
 namespace muse::cloud {
-class CloudsModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class CloudsModel : public QAbstractListModel, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(bool userAuthorized READ userAuthorized NOTIFY userAuthorizedChanged)
 
 #ifdef MUSE_MODULE_CLOUD_MUSESCORECOM
-    Inject<IMuseScoreComService> museScoreComService = { this };
+    LazyInject<IMuseScoreComService> museScoreComService = { this };
 #endif
-    Inject<IAudioComService> audioComService = { this };
+    LazyInject<IAudioComService> audioComService = { this };
 
 public:
     explicit CloudsModel(QObject* parent = nullptr);
@@ -82,5 +81,3 @@ private:
     std::vector<IAuthorizationServicePtr> m_clouds;
 };
 }
-
-#endif // MUSE_CLOUD_CLOUDSMODEL_H

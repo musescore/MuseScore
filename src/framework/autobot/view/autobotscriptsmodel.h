@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUTOBOT_AUTOBOTSCRIPTSMODEL_H
-#define MUSE_AUTOBOT_AUTOBOTSCRIPTSMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QList>
@@ -32,14 +31,14 @@
 #include "async/asyncable.h"
 
 namespace muse::autobot {
-class AutobotScriptsModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class AutobotScriptsModel : public QAbstractListModel, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(bool isRunAllTCMode READ isRunAllTCMode WRITE setIsRunAllTCMode NOTIFY isRunAllTCModeChanged)
     Q_PROPERTY(QString speedMode READ speedMode WRITE setSpeedMode NOTIFY speedModeChanged)
 
-    Inject<IAutobotScriptsRepository> scriptsRepository = { this };
-    Inject<IAutobot> autobot = { this };
+    LazyInject<IAutobotScriptsRepository> scriptsRepository = { this };
+    LazyInject<IAutobot> autobot = { this };
 
 public:
     explicit AutobotScriptsModel(QObject* parent = nullptr);
@@ -95,5 +94,3 @@ private:
     QMap<int, bool> m_selected;
 };
 }
-
-#endif // MUSE_AUTOBOT_AUTOBOTSCRIPTSMODEL_H

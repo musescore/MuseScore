@@ -32,7 +32,7 @@ using namespace muse::ui;
 using namespace muse::accessibility;
 
 AccessibleItem::AccessibleItem(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 
@@ -108,7 +108,7 @@ QWindow* AccessibleItem::accessibleWindow() const
 
 muse::modularity::ContextPtr AccessibleItem::iocContext() const
 {
-    return Injectable::iocContext();
+    return LazyInjectable::iocContext();
 }
 
 QRect AccessibleItem::accessibleRect() const

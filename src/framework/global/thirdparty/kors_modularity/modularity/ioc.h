@@ -21,11 +21,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef KORS_MODULARITY_IOC_H
-#define KORS_MODULARITY_IOC_H
+
+#pragma once
 
 #include <memory>
-#include <mutex>
+#include <shared_mutex>
 #include <string_view>
 
 #include "context.h"
@@ -36,57 +36,32 @@ namespace kors::modularity {
 ModulesIoC* _ioc(const ContextPtr& ctx = nullptr);
 void removeIoC(const ContextPtr& ctx = nullptr);
 
-struct StaticMutex
-{
-    static std::recursive_mutex mutex;
-};
-
 template<class I>
 class Inject
 {
 public:
+    virtual ~Inject() = default;
 
 #ifdef MUSE_MODULE_GLOBAL_MULTI_IOC
     Inject(const ContextPtr& ctx)
-        : m_ctx(ctx) {}
 #else
     Inject(const ContextPtr& ctx = nullptr)
-        : m_ctx(ctx) {}
-#endif
-
-    Inject(const Injectable* o)
-        : m_inj(o) {}
-
-    const ContextPtr& iocContext() const
+    #endif
+        : m_ctx(ctx)
     {
-        if (m_ctx) {
-            return m_ctx;
-        }
-
-        //assert(m_inj);
-        if (m_inj) {
-            return m_inj->iocContext();
-        }
-
-        // null
-        return m_ctx;
+        static std::string_view module = "";
+        m_i = _ioc(m_ctx)->template resolve<I>(module);
     }
+
+    Inject(const Injectable* inj)
+        : Inject(inj->iocContext()) {}
 
     const std::shared_ptr<I>& get() const
     {
-        if (!m_i) {
-            //! NOTE In resolve, a new object can be created using a creator,
-            //! in this object injects can be used in the constructor,
-            //! this will lead to a double mutex lock, so the mutex must be recursive.
-            const std::lock_guard<std::recursive_mutex> lock(StaticMutex::mutex);
-            if (!m_i) {
-                static std::string_view module = "";
-                m_i = _ioc(iocContext())->template resolve<I>(module);
-            }
-        }
         return m_i;
     }
 
+    /// For testing purposes only. Not thread-safe.
     void set(std::shared_ptr<I> impl)
     {
         m_i = impl;
@@ -97,10 +72,8 @@ public:
         return get();
     }
 
-private:
-
+protected:
     const ContextPtr m_ctx;
-    const Injectable* m_inj = nullptr;
     mutable std::shared_ptr<I> m_i = nullptr;
 };
 
@@ -111,6 +84,68 @@ public:
     GlobalInject()
         : Inject<I>(ContextPtr()) {}
 };
-}
 
-#endif // KORS_MODULARITY_IOC_H
+/// Variant of Inject that resolves the dependency lazily on first use. Useful
+/// when the context of the Injectable is not yet known at construction time.
+/// Not thread-safe.
+template<class I>
+class LazyInject
+{
+public:
+    LazyInject(const LazyInjectable* inj)
+        : m_inj(inj) {}
+
+    const std::shared_ptr<I>& get() const
+    {
+        if (!m_i) {
+            static std::string_view module = "";
+            m_i = _ioc(m_inj->iocContext())->template resolve<I>(module);
+        }
+        return m_i;
+    }
+
+    /// For testing purposes only. Not thread-safe.
+    void set(std::shared_ptr<I> impl) { m_i = impl; }
+
+    const std::shared_ptr<I>& operator()() const { return get(); }
+
+private:
+    const LazyInjectable* m_inj = nullptr;
+    mutable std::shared_ptr<I> m_i = nullptr;
+};
+
+/// Thread-safe (locking) variant of LazyInject.
+template<class I>
+class ThreadSafeLazyInject : public LazyInject<I>
+{
+public:
+    using LazyInject<I>::LazyInject;
+
+    const std::shared_ptr<I>& get() const
+    {
+        {
+            std::shared_lock lock(m_mutex);
+            if (LazyInject<I>::m_i) {
+                return LazyInject<I>::m_i;
+            }
+        }
+
+        std::unique_lock lock(m_mutex);
+        return LazyInject<I>::get();
+    }
+
+    void set(std::shared_ptr<I> impl)
+    {
+        std::unique_lock lock(m_mutex);
+        LazyInject<I>::set(impl);
+    }
+
+    const std::shared_ptr<I>& operator()() const
+    {
+        return get();
+    }
+
+private:
+    mutable std::shared_mutex m_mutex;
+};
+}

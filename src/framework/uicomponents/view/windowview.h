@@ -44,7 +44,7 @@ class INavigationControl;
 }
 
 namespace muse::uicomponents {
-class WindowView : public QObject, public QQmlParserStatus, public Injectable, public async::Asyncable
+class WindowView : public QObject, public QQmlParserStatus, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -69,10 +69,10 @@ class WindowView : public QObject, public QQmlParserStatus, public Injectable, p
     Q_PROPERTY(FocusPolicies focusPolicies READ focusPolicies WRITE setFocusPolicies NOTIFY focusPoliciesChanged)
 
 protected:
-    Inject<ui::IMainWindow> mainWindow = { this };
-    Inject<ui::IUiConfiguration> uiConfiguration = { this };
-    Inject<ui::INavigationController> navigationController = { this };
-    Inject<ui::IInteractiveProvider> interactiveProvider = { this };
+    LazyInject<ui::IMainWindow> mainWindow = { this };
+    LazyInject<ui::IUiConfiguration> uiConfiguration = { this };
+    LazyInject<ui::INavigationController> navigationController = { this };
+    LazyInject<ui::IInteractiveProvider> interactiveProvider = { this };
 
 public:
     explicit WindowView(QQuickItem* parent = nullptr);

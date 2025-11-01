@@ -29,7 +29,7 @@
 #include "iinteractive.h"
 
 namespace mu::notation {
-class EditPercussionShortcutModel : public QObject, public muse::Injectable
+class EditPercussionShortcutModel : public QObject, public muse::LazyInjectable
 {
     Q_OBJECT
 
@@ -39,7 +39,7 @@ class EditPercussionShortcutModel : public QObject, public muse::Injectable
 
     Q_PROPERTY(bool cleared READ cleared NOTIFY clearedChanged)
 
-    Inject<muse::IInteractive> interactive = { this };
+    muse::LazyInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit EditPercussionShortcutModel(QObject* parent = nullptr);

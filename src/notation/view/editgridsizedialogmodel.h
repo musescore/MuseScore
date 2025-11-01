@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_EDITGRIDSIZEDIALOGMODEL_H
-#define MU_NOTATION_EDITGRIDSIZEDIALOGMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -28,7 +27,7 @@
 #include "notation/inotationconfiguration.h"
 
 namespace mu::notation {
-class EditGridSizeDialogModel : public QObject, public muse::Injectable
+class EditGridSizeDialogModel : public QObject, public muse::LazyInjectable
 {
     Q_OBJECT
 
@@ -37,7 +36,7 @@ class EditGridSizeDialogModel : public QObject, public muse::Injectable
     Q_PROPERTY(
         int horizontalGridSizeSpatium READ horizontalGridSizeSpatium WRITE setHorizontalGridSizeSpatium NOTIFY horizontalGridSizeSpatiumChanged)
 
-    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::LazyInject<INotationConfiguration> configuration = { this };
 
 public:
     explicit EditGridSizeDialogModel(QObject* parent = nullptr);
@@ -61,5 +60,3 @@ private:
     int m_horizontalGridSizeSpatium = 0;
 };
 }
-
-#endif // MU_NOTATION_EDITGRIDSIZEDIALOGMODEL_H

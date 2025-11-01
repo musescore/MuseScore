@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_ABSTRACTNAVIGATION_H
-#define MUSE_UI_ABSTRACTNAVIGATION_H
+#pragma once
 
 #include <QObject>
 #include <QQmlParserStatus>
@@ -34,7 +33,7 @@
 #include "../inavigationcontroller.h"
 
 namespace muse::ui {
-class AbstractNavigation : public QObject, public QQmlParserStatus, public Injectable, public async::Asyncable
+class AbstractNavigation : public QObject, public QQmlParserStatus, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -54,7 +53,7 @@ class AbstractNavigation : public QObject, public QQmlParserStatus, public Injec
     Q_INTERFACES(QQmlParserStatus)
 
 public:
-    Inject<INavigationController> navigationController = { this };
+    LazyInject<INavigationController> navigationController = { this };
 
 public:
     explicit AbstractNavigation(QObject* parent = nullptr);
@@ -131,5 +130,3 @@ protected:
     bool m_isComponentCompleted = false;
 };
 }
-
-#endif // MUSE_UI_ABSTRACTNAVIGATION_H

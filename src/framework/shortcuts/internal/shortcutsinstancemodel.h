@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_SHORTCUTSINSTANCEMODEL_H
-#define MUSE_SHORTCUTS_SHORTCUTSINSTANCEMODEL_H
+#pragma once
 
 #include <QObject>
 #include <QString>
@@ -33,7 +32,7 @@
 #include "ishortcutscontroller.h"
 
 namespace muse::shortcuts {
-class ShortcutsInstanceModel : public QObject, public Injectable, public async::Asyncable
+class ShortcutsInstanceModel : public QObject, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -41,8 +40,8 @@ class ShortcutsInstanceModel : public QObject, public Injectable, public async::
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)
 
 public:
-    Inject<IShortcutsRegister> shortcutsRegister = { this };
-    Inject<IShortcutsController> controller = { this };
+    LazyInject<IShortcutsRegister> shortcutsRegister = { this };
+    LazyInject<IShortcutsController> controller = { this };
 
 public:
     explicit ShortcutsInstanceModel(QObject* parent = nullptr);
@@ -65,5 +64,3 @@ protected:
     QVariantMap m_shortcuts;
 };
 }
-
-#endif // MUSE_SHORTCUTS_SHORTCUTSINSTANCEMODEL_H

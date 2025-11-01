@@ -39,9 +39,9 @@ class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel, public Q
 
     Q_PROPERTY(bool isInputAllowed READ isInputAllowed NOTIFY isInputAllowedChanged)
 
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<playback::IPlaybackController> playbackController = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::LazyInject<context::IGlobalContext> context = { this };
+    muse::LazyInject<playback::IPlaybackController> playbackController = { this };
+    muse::LazyInject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
     explicit NoteInputBarModel(QObject* parent = nullptr);

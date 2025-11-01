@@ -25,14 +25,12 @@
 
 #include "qmlaccessible.h"
 
-#include "log.h"
-
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::accessibility;
 
 AbstractNavigation::AbstractNavigation(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

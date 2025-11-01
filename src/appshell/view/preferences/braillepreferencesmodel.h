@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_BRAILLEPREFERENCESMODEL_H
-#define MU_APPSHELL_BRAILLEPREFERENCESMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -30,7 +29,7 @@
 #include "braille/ibrailleconfiguration.h"
 
 namespace mu::appshell {
-class BraillePreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class BraillePreferencesModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -38,7 +37,7 @@ class BraillePreferencesModel : public QObject, public muse::Injectable, public 
     Q_PROPERTY(QString brailleTable READ brailleTable WRITE setBrailleTable NOTIFY brailleTableChanged)
     Q_PROPERTY(int intervalDirection READ intervalDirection WRITE setIntervalDirection NOTIFY intervalDirectionChanged)
 
-    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
+    muse::LazyInject<braille::IBrailleConfiguration> brailleConfiguration = { this };
 
 public:
     explicit BraillePreferencesModel(QObject* parent = nullptr);
@@ -63,5 +62,3 @@ signals:
     void intervalDirectionChanged(int value);
 };
 }
-
-#endif // MU_APPSHELL_BRAILLEPREFERENCESMODEL_H

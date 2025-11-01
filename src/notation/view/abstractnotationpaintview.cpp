@@ -44,7 +44,7 @@ static void compensateFloatPart(RectF& rect)
 }
 
 AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
-    : muse::uicomponents::QuickPaintedView(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : muse::uicomponents::QuickPaintedView(parent), muse::LazyInjectable(muse::iocCtxForQmlObject(this))
 {
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsDrops, true);

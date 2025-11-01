@@ -33,8 +33,8 @@ class WorkspacesMenuModel : public uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
-    Inject<ui::IUiActionsRegister> uiActionsRegister = { this };
-    Inject<IWorkspaceManager> workspacesManager = { this };
+    LazyInject<ui::IUiActionsRegister> uiActionsRegister = { this };
+    LazyInject<IWorkspaceManager> workspacesManager = { this };
 
 public:
     explicit WorkspacesMenuModel(QObject* parent = nullptr);

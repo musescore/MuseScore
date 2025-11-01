@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UICOMPONENTS_TEXTINPUTMODEL_H
-#define MUSE_UICOMPONENTS_TEXTINPUTMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -31,12 +30,12 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace muse::uicomponents {
-class TextInputModel : public QObject, public muse::Injectable, public async::Asyncable
+class TextInputModel : public QObject, public muse::LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
-    muse::Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
-    muse::Inject<actions::IActionsDispatcher> dispatcher = { this };
+    muse::LazyInject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    muse::LazyInject<actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit TextInputModel(QObject* parent = nullptr);
@@ -52,5 +51,3 @@ private:
     shortcuts::ShortcutList m_notAllowedForOverrideShortcuts;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_TEXTINPUTMODEL_H

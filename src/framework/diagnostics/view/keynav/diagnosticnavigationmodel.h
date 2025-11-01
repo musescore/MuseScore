@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DIAGNOSTICS_KEYNAVDEVMODEL_H
-#define MUSE_DIAGNOSTICS_KEYNAVDEVMODEL_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -31,13 +30,13 @@
 
 namespace muse::diagnostics {
 class AbstractKeyNavDevItem;
-class DiagnosticNavigationModel : public QObject, public Injectable, public async::Asyncable
+class DiagnosticNavigationModel : public QObject, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QVariantList sections READ sections NOTIFY sectionsChanged)
 
-    Inject<ui::INavigationController> navigationController = { this };
+    LazyInject<ui::INavigationController> navigationController = { this };
 public:
     explicit DiagnosticNavigationModel(QObject* parent = nullptr);
 
@@ -63,5 +62,3 @@ private:
     QTimer m_reloadDelayer;
 };
 }
-
-#endif // MUSE_DIAGNOSTICS_KEYNAVDEVMODEL_H

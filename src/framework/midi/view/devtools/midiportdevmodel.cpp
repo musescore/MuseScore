@@ -26,7 +26,7 @@
 using namespace muse::midi;
 
 MidiPortDevModel::MidiPortDevModel(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

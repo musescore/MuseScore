@@ -32,15 +32,15 @@
 #include "tours/itoursservice.h"
 
 namespace mu::playback {
-class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable, public muse::Injectable
+class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable, public muse::LazyInjectable
 {
     Q_OBJECT
 
-    Inject<IPlaybackController> playbackController = { this };
-    Inject<context::IGlobalContext> globalContext = { this };
-    Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
-    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    Inject<muse::tours::IToursService> tours = { this };
+    muse::LazyInject<IPlaybackController> playbackController = { this };
+    muse::LazyInject<context::IGlobalContext> globalContext = { this };
+    muse::LazyInject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    muse::LazyInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::LazyInject<muse::tours::IToursService> tours = { this };
 
     Q_PROPERTY(bool hasOnlineSounds READ hasOnlineSounds NOTIFY hasOnlineSoundsChanged)
     Q_PROPERTY(bool manualProcessingAllowed READ manualProcessingAllowed NOTIFY manualProcessingAllowedChanged)

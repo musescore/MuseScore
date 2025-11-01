@@ -88,7 +88,7 @@ struct EmptyStavesVisibilityModel::StaffItem : public EmptyStavesVisibilityModel
 };
 
 EmptyStavesVisibilityModel::EmptyStavesVisibilityModel(QObject* parent)
-    : QAbstractItemModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractItemModel(parent), muse::LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

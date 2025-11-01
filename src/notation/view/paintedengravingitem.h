@@ -29,8 +29,6 @@
 
 #include "engraving/dom/engravingitem.h"
 
-#include "notation/utilities/engravingitempreviewpainter.h"
-
 namespace mu::notation {
 class PaintedEngravingItem : public QQuickPaintedItem
 {

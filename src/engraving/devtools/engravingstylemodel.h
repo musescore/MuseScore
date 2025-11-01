@@ -30,11 +30,11 @@
 #include "modularity/ioc.h"
 
 namespace mu::engraving {
-class EngravingStyleModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Injectable
+class EngravingStyleModel : public QAbstractListModel, public muse::async::Asyncable, public muse::LazyInjectable
 {
     Q_OBJECT
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::LazyInject<context::IGlobalContext> context = { this };
 
 public:
     explicit EngravingStyleModel(QObject* parent = nullptr);

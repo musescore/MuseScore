@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UICOMPONENTS_FILEPICKERMODEL_H
-#define MUSE_UICOMPONENTS_FILEPICKERMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -28,7 +27,7 @@
 #include "iinteractive.h"
 
 namespace muse::uicomponents {
-class FilePickerModel : public QObject, public muse::Injectable
+class FilePickerModel : public QObject, public muse::LazyInjectable
 {
     Q_OBJECT
 
@@ -36,7 +35,7 @@ class FilePickerModel : public QObject, public muse::Injectable
     Q_PROPERTY(QString dir READ dir WRITE setDir NOTIFY dirChanged)
     Q_PROPERTY(QStringList filter READ filter WRITE setFilter NOTIFY filterChanged)
 
-    muse::Inject<IInteractive> interactive = { this };
+    muse::LazyInject<IInteractive> interactive = { this };
 
 public:
     explicit FilePickerModel(QObject* parent = nullptr);
@@ -66,5 +65,3 @@ private:
     QStringList m_filter;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_FILEPICKERMODEL_H

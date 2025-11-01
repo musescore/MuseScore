@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UICOMPONENTS_COLORPICKER_H
-#define MUSE_UICOMPONENTS_COLORPICKER_H
+#pragma once
 
 #include <QObject>
 
@@ -31,11 +30,11 @@
 #include "iinteractive.h"
 
 namespace muse::uicomponents {
-class ColorPickerModel : public QObject, public muse::Injectable, public async::Asyncable
+class ColorPickerModel : public QObject, public muse::LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
-    muse::Inject<IInteractive> interactive = { this };
+    muse::LazyInject<IInteractive> interactive = { this };
 
 public:
     explicit ColorPickerModel(QObject* parent = nullptr);
@@ -47,5 +46,3 @@ signals:
     void selectRejected();
 };
 }
-
-#endif // MUSE_UICOMPONENTS_COLORPICKER_H

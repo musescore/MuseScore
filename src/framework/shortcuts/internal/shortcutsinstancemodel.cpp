@@ -21,12 +21,10 @@
  */
 #include "shortcutsinstancemodel.h"
 
-#include "log.h"
-
 using namespace muse::shortcuts;
 
 ShortcutsInstanceModel::ShortcutsInstanceModel(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

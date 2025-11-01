@@ -29,12 +29,12 @@
 #include "notation/iselectinstrumentscenario.h"
 
 namespace mu::instrumentsscene {
-class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::Injectable, public muse::async::Asyncable
+class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    muse::Inject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario { this };
-    muse::Inject<muse::IInteractive> interactive { this };
+    muse::LazyInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario { this };
+    muse::LazyInject<muse::IInteractive> interactive { this };
 
 public:
     PartTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);

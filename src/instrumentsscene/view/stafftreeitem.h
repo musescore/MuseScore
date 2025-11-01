@@ -24,7 +24,7 @@
 
 #include "abstractlayoutpaneltreeitem.h"
 
-#include "notation/inotationparts.h"
+#include "notation/inotation.h"
 
 namespace mu::instrumentsscene {
 class StaffTreeItem : public AbstractLayoutPanelTreeItem

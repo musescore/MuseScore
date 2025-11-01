@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DIAGNOSTICS_DIAGNOSTICSPATHSMODEL_H
-#define MUSE_DIAGNOSTICS_DIAGNOSTICSPATHSMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 
@@ -29,12 +28,12 @@
 #include "iinteractive.h"
 
 namespace muse::diagnostics {
-class DiagnosticsPathsModel : public QAbstractListModel, public Injectable
+class DiagnosticsPathsModel : public QAbstractListModel, public LazyInjectable
 {
     Q_OBJECT
 
-    Inject<IDiagnosticsPathsRegister> pathsRegister = { this };
-    Inject<muse::IInteractive> interactive = { this };
+    LazyInject<IDiagnosticsPathsRegister> pathsRegister = { this };
+    LazyInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit DiagnosticsPathsModel(QObject* parent = nullptr);
@@ -55,5 +54,3 @@ private:
     QVariantList m_items;
 };
 }
-
-#endif // MUSE_DIAGNOSTICS_DIAGNOSTICSPATHSMODEL_H

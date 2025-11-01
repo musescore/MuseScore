@@ -33,7 +33,7 @@
 #include "playback/iplaybackconfiguration.h"
 
 namespace mu::appshell {
-class AudioMidiPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class AudioMidiPreferencesModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -57,12 +57,12 @@ class AudioMidiPreferencesModel : public QObject, public muse::Injectable, publi
     Q_PROPERTY(
         int onlineSoundsShowProgressBarMode READ onlineSoundsShowProgressBarMode WRITE setOnlineSoundsShowProgressBarMode NOTIFY onlineSoundsShowProgressBarModeChanged)
 
-    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
-    muse::Inject<muse::audio::IAudioDriverController> audioDriverController = { this };
-    muse::Inject<muse::midi::IMidiConfiguration> midiConfiguration = { this };
-    muse::Inject<muse::midi::IMidiOutPort> midiOutPort = { this };
-    muse::Inject<muse::midi::IMidiInPort> midiInPort = { this };
-    muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration = { this };
+    muse::LazyInject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    muse::LazyInject<muse::audio::IAudioDriverController> audioDriverController = { this };
+    muse::LazyInject<muse::midi::IMidiConfiguration> midiConfiguration = { this };
+    muse::LazyInject<muse::midi::IMidiOutPort> midiOutPort = { this };
+    muse::LazyInject<muse::midi::IMidiInPort> midiInPort = { this };
+    muse::LazyInject<playback::IPlaybackConfiguration> playbackConfiguration = { this };
 
 public:
     explicit AudioMidiPreferencesModel(QObject* parent = nullptr);

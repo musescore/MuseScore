@@ -43,7 +43,7 @@
 #include "global/iglobalconfiguration.h"
 
 namespace mu::appshell {
-class NotationStatusBarModel : public QObject, public QQmlParserStatus, public muse::Injectable, public muse::async::Asyncable,
+class NotationStatusBarModel : public QObject, public QQmlParserStatus, public muse::LazyInjectable, public muse::async::Asyncable,
     public muse::actions::Actionable
 {
     Q_OBJECT
@@ -58,12 +58,12 @@ class NotationStatusBarModel : public QObject, public QQmlParserStatus, public m
     Q_PROPERTY(QVariantList availableZoomList READ availableZoomList_property NOTIFY availableZoomListChanged)
     Q_PROPERTY(int currentZoomPercentage READ currentZoomPercentage WRITE setCurrentZoomPercentage NOTIFY currentZoomPercentageChanged)
 
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
-    muse::Inject<muse::workspace::IWorkspaceConfiguration> workspaceConfiguration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::LazyInject<context::IGlobalContext> context = { this };
+    muse::LazyInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::LazyInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::LazyInject<muse::workspace::IWorkspaceConfiguration> workspaceConfiguration = { this };
+    muse::LazyInject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::LazyInject<muse::IGlobalConfiguration> globalConfiguration = { this };
 
 public:
     explicit NotationStatusBarModel(QObject* parent = nullptr);

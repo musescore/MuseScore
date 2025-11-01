@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_EXTENSIONBUILDER_H
-#define MUSE_EXTENSIONS_EXTENSIONBUILDER_H
+#pragma once
 
 #include <QObject>
 #include <QQmlComponent>
@@ -33,15 +32,15 @@
 #include "global/async/asyncable.h"
 
 namespace muse::extensions {
-class ExtensionBuilder : public QObject, public Injectable, public async::Asyncable
+class ExtensionBuilder : public QObject, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged FINAL)
     Q_PROPERTY(QQuickItem * contentItem READ contentItem NOTIFY contentItemChanged FINAL)
 
-    Inject<IExtensionsProvider> provider = { this };
-    Inject<IExtensionsUiEngine> engine = { this };
+    LazyInject<IExtensionsProvider> provider = { this };
+    LazyInject<IExtensionsUiEngine> engine = { this };
 
 public:
     ExtensionBuilder(QObject* parent = nullptr);
@@ -65,5 +64,3 @@ private:
     QQuickItem* m_contentItem = nullptr;
 };
 }
-
-#endif // MUSE_EXTENSIONS_EXTENSIONBUILDER_H

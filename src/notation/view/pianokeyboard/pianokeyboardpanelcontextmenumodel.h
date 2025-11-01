@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_PIANOKEYBOARDPANELCONTEXTMENUMODEL_H
-#define MU_NOTATION_PIANOKEYBOARDPANELCONTEXTMENUMODEL_H
+#pragma once
 
 #include "uicomponents/view/abstractmenumodel.h"
 #include "actions/actionable.h"
@@ -41,8 +40,8 @@ class PianoKeyboardPanelContextMenuModel : public muse::uicomponents::AbstractMe
     Q_PROPERTY(int numberOfKeys READ numberOfKeys NOTIFY numberOfKeysChanged)
     Q_PROPERTY(qreal keyWidthScaling READ keyWidthScaling WRITE setKeyWidthScaling NOTIFY keyWidthScalingChanged)
 
-    muse::Inject<INotationConfiguration> configuration = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::LazyInject<INotationConfiguration> configuration = { this };
+    muse::LazyInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit PianoKeyboardPanelContextMenuModel(QObject* parent = nullptr);
@@ -72,5 +71,3 @@ private:
     qreal m_currentKeyWidthScaling = 0.0;
 };
 }
-
-#endif // MU_NOTATION_PIANOKEYBOARDPANELCONTEXTMENUMODEL_H

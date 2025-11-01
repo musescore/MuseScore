@@ -24,7 +24,7 @@
 using namespace mu::appshell;
 
 SaveAndPublishPreferencesModel::SaveAndPublishPreferencesModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

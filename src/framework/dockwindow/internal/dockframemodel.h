@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_DOCK_DOCKFRAMEMODEL_H
-#define MUSE_DOCK_DOCKFRAMEMODEL_H
+#pragma once
 
 #include <QQuickItem>
 
@@ -36,7 +35,7 @@ class DockWidgetBase;
 }
 
 namespace muse::dock {
-class DockFrameModel : public QObject, public muse::Injectable
+class DockFrameModel : public QObject, public muse::LazyInjectable
 {
     Q_OBJECT
 
@@ -52,7 +51,7 @@ class DockFrameModel : public QObject, public muse::Injectable
     Q_PROPERTY(bool highlightingVisible READ highlightingVisible NOTIFY highlightingVisibleChanged)
     Q_PROPERTY(QRect highlightingRect READ highlightingRect NOTIFY highlightingVisibleChanged)
 
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::LazyInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit DockFrameModel(QObject* parent = nullptr);
@@ -114,5 +113,3 @@ private:
     DockTabsModel* m_tabsModel = nullptr;
 };
 }
-
-#endif // MUSE_DOCK_DOCKFRAMEMODEL_H

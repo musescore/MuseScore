@@ -31,14 +31,14 @@
 #include "imusesoundsrepository.h"
 
 namespace mu::musesounds {
-class MuseSoundsListModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Injectable
+class MuseSoundsListModel : public QAbstractListModel, public muse::async::Asyncable, public muse::LazyInjectable
 {
     Q_OBJECT
 
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 
-    Inject<muse::IInteractive> interactive = { this };
-    Inject<IMuseSoundsRepository> repository = { this };
+    muse::LazyInject<muse::IInteractive> interactive = { this };
+    muse::LazyInject<IMuseSoundsRepository> repository = { this };
 
 public:
     explicit MuseSoundsListModel(QObject* parent = nullptr);

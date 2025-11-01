@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_FIRSTLAUNCHSETUPMODEL_H
-#define MU_APPSHELL_FIRSTLAUNCHSETUPMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -31,7 +30,7 @@
 #include "iinteractive.h"
 
 namespace mu::appshell {
-class FirstLaunchSetupModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class FirstLaunchSetupModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -43,8 +42,8 @@ class FirstLaunchSetupModel : public QObject, public muse::Injectable, public mu
     Q_PROPERTY(bool canGoForward READ canGoForward NOTIFY currentPageChanged)
     Q_PROPERTY(bool canFinish READ canFinish NOTIFY currentPageChanged)
 
-    muse::Inject<IAppShellConfiguration> configuration = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::LazyInject<IAppShellConfiguration> configuration = { this };
+    muse::LazyInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit FirstLaunchSetupModel(QObject* parent = nullptr);
@@ -81,5 +80,3 @@ private:
     int m_currentPageIndex = -1;
 };
 }
-
-#endif // MU_APPSHELL_FIRSTLAUNCHSETUPMODEL_H

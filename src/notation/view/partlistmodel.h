@@ -33,14 +33,14 @@ class ItemMultiSelectionModel;
 }
 
 namespace mu::notation {
-class PartListModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
+class PartListModel : public QAbstractListModel, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
 
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::LazyInject<context::IGlobalContext> context = { this };
+    muse::LazyInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit PartListModel(QObject* parent = nullptr);

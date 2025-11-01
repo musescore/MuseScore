@@ -43,8 +43,8 @@ class DialogView : public WindowView
     Q_PROPERTY(bool alwaysOnTop READ alwaysOnTop WRITE setAlwaysOnTop NOTIFY alwaysOnTopChanged)
     Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
 
-    Inject<IApplication> application = { this };
-    Inject<ui::IWindowsController> windowsController = { this };
+    LazyInject<IApplication> application = { this };
+    LazyInject<ui::IWindowsController> windowsController = { this };
 
 public:
     explicit DialogView(QQuickItem* parent = nullptr);

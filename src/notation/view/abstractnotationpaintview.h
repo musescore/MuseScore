@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_ABSTRACTNOTATIONPAINTVIEW_H
-#define MU_NOTATION_ABSTRACTNOTATIONPAINTVIEW_H
+#pragma once
 
 #include <QTimer>
 
@@ -37,7 +36,6 @@
 #include "ui/iuicontextresolver.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
-#include "uicomponents/view/abstractmenumodel.h"
 #include "uicomponents/view/quickpaintedview.h"
 
 #include "notationviewinputcontroller.h"
@@ -49,7 +47,7 @@
 #include "abstractelementpopupmodel.h"
 
 namespace mu::notation {
-class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, public IControlledView, public muse::Injectable,
+class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, public IControlledView, public muse::LazyInjectable,
     public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
@@ -66,15 +64,15 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
 
     Q_PROPERTY(bool isMainView READ isMainView WRITE setIsMainView NOTIFY isMainViewChanged)
 
-    muse::Inject<INotationConfiguration> configuration = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<playback::IPlaybackController> playbackController = { this };
-    muse::Inject<muse::ui::IUiContextResolver> uiContextResolver = { this };
-    muse::Inject<muse::ui::IMainWindow> mainWindow = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::LazyInject<INotationConfiguration> configuration = { this };
+    muse::LazyInject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
+    muse::LazyInject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::LazyInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::LazyInject<context::IGlobalContext> globalContext = { this };
+    muse::LazyInject<playback::IPlaybackController> playbackController = { this };
+    muse::LazyInject<muse::ui::IUiContextResolver> uiContextResolver = { this };
+    muse::LazyInject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::LazyInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     explicit AbstractNotationPaintView(QQuickItem* parent = nullptr);
@@ -300,5 +298,3 @@ private:
     QQuickItem* m_playbackCursorItem = nullptr;
 };
 }
-
-#endif // MU_NOTATION_ABSTRACTNOTATIONPAINTVIEW_H

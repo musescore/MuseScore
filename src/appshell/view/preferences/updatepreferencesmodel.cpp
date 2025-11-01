@@ -22,12 +22,10 @@
 
 #include "updatepreferencesmodel.h"
 
-#include "log.h"
-
 using namespace mu::appshell;
 
 UpdatePreferencesModel::UpdatePreferencesModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

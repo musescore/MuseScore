@@ -28,7 +28,7 @@
 #include <QQmlEngine>
 #include <QWidget>
 
-muse::Injectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
+muse::LazyInjectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
 {
     return [o]() {
         const QObject* p = o;

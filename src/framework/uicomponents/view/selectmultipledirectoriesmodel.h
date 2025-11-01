@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UICOMPONENTS_SELECTMULTIPLEDIRECTORIESMODEL_H
-#define MUSE_UICOMPONENTS_SELECTMULTIPLEDIRECTORIESMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QItemSelection>
@@ -30,13 +29,13 @@
 
 namespace muse::uicomponents {
 class ItemMultiSelectionModel;
-class SelectMultipleDirectoriesModel : public QAbstractListModel, public muse::Injectable
+class SelectMultipleDirectoriesModel : public QAbstractListModel, public muse::LazyInjectable
 {
     Q_OBJECT
 
     Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable NOTIFY selectionChanged)
 
-    muse::Inject<IInteractive> interactive = { this };
+    muse::LazyInject<IInteractive> interactive = { this };
 
 public:
     explicit SelectMultipleDirectoriesModel(QObject* parent = nullptr);
@@ -79,5 +78,3 @@ private:
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_SELECTMULTIPLEDIRECTORIESMODEL_H

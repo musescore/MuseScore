@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H
-#define MUSE_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -30,13 +29,13 @@
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace muse::cloud {
-class MuseScoreComAuthorizationModel : public QObject, public Injectable, public async::Asyncable
+class MuseScoreComAuthorizationModel : public QObject, public LazyInjectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(bool userAuthorized READ userAuthorized NOTIFY userAuthorizedChanged)
 
-    Inject<IMuseScoreComService> museScoreComService = { this };
+    LazyInject<IMuseScoreComService> museScoreComService = { this };
 
 public:
     explicit MuseScoreComAuthorizationModel(QObject* parent = nullptr);
@@ -53,5 +52,3 @@ signals:
     void userAuthorizedChanged();
 };
 }
-
-#endif // MUSE_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H

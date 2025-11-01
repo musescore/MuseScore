@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_APPEARANCEPREFERENCESMODEL_H
-#define MU_APPSHELL_APPEARANCEPREFERENCESMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -30,7 +29,7 @@
 #include "async/asyncable.h"
 
 namespace mu::appshell {
-class AppearancePreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class AppearancePreferencesModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -60,9 +59,9 @@ class AppearancePreferencesModel : public QObject, public muse::Injectable, publ
 
     Q_PROPERTY(bool scoreInversionEnabled READ scoreInversionEnabled WRITE setScoreInversionEnabled NOTIFY invertScoreColorChanged)
 
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
+    muse::LazyInject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::LazyInject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::LazyInject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
     explicit AppearancePreferencesModel(QObject* parent = nullptr);
@@ -141,5 +140,3 @@ private:
     muse::ui::ThemeList allThemes() const;
 };
 }
-
-#endif // MU_APPSHELL_APPEARANCEPREFERENCESMODEL_H

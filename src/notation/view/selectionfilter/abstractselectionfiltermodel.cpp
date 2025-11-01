@@ -23,12 +23,11 @@
 #include "abstractselectionfiltermodel.h"
 
 #include "log.h"
-#include "translation.h"
 
 using namespace mu::notation;
 
 AbstractSelectionFilterModel::AbstractSelectionFilterModel(QObject* parent)
-    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), muse::LazyInjectable(muse::iocCtxForQmlObject(this))
 {
 }
 

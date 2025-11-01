@@ -36,20 +36,20 @@
 #include "iappshellconfiguration.h"
 
 namespace mu::appshell {
-class NotationPageModel : public QObject, public muse::Injectable, public muse::async::Asyncable, public muse::actions::Actionable
+class NotationPageModel : public QObject, public muse::LazyInjectable, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
     Q_PROPERTY(bool isNavigatorVisible READ isNavigatorVisible NOTIFY isNavigatorVisibleChanged)
     Q_PROPERTY(bool isBraillePanelVisible READ isBraillePanelVisible NOTIFY isBraillePanelVisibleChanged)
 
-    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    Inject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
-    Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
-    Inject<context::IGlobalContext> globalContext = { this };
-    Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
-    Inject<IAppShellConfiguration> configuration = { this };
+    muse::LazyInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::LazyInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
+    muse::LazyInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+    muse::LazyInject<context::IGlobalContext> globalContext = { this };
+    muse::LazyInject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::LazyInject<braille::IBrailleConfiguration> brailleConfiguration = { this };
+    muse::LazyInject<IAppShellConfiguration> configuration = { this };
 
 public:
     explicit NotationPageModel(QObject* parent = nullptr);
