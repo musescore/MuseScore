@@ -152,6 +152,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "harp-pedal-diagram",
     "harp-pedal-text-diagram",
     "text-line",
+    "system-text-line",
     "note-line",
     "volta",
     "ottava",
@@ -1227,6 +1228,10 @@ EditStyle::EditStyle(QWidget* parent)
     });
 
     adjustPagesStackSize(0);
+
+    // Consistency checks
+    assert(ALL_PAGE_CODES.size() == pageList->count());
+    assert(ALL_TEXT_STYLE_SUBPAGE_CODES.size() == textStyles->count());
 }
 
 //---------------------------------------------------------
@@ -1790,6 +1795,9 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
 
         case TextStyleType::TEXTLINE:
             return "text-line";
+
+        case TextStyleType::SYSTEM_TEXTLINE:
+            return "system-text-line";
 
         case TextStyleType::NOTELINE:
             return "note-line";

@@ -237,9 +237,6 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
         m_cachedMeasureNumberText->setSizeIsSpatiumDependent(true);
     }
 
-    // Track which staff index we're processing
-    size_t staffIdx = 0;
-
     for (const engraving::EngravingItem* e : std::as_const(el)) {
         e->itemDiscovered = false;
         if (!e->visible() && !showInvisible) {
@@ -247,7 +244,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
         }
 
         if (e->isStaffLines()) {
-            staffIdx = e->staffIdx();
+            const engraving::staff_idx_t staffIdx = e->staffIdx();
             const engraving::Staff* currentStaff = score->staff(staffIdx);
             const engraving::Instrument* instrument = currentStaff->part()->instrument(tick);
 
@@ -436,7 +433,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
 
         if (e->isStaffLines()) {
             painter.save();
-            const size_t staffIdx = e->staffIdx();
+            const engraving::staff_idx_t staffIdx = e->staffIdx();
             const engraving::Staff* currentStaff = score->staff(staffIdx);
 
             pos = PointF(offsetPanel, e->pagePos().y());
@@ -460,11 +457,11 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
 
             // Staff name
             if (currentStaff->part()->staff(0) == currentStaff) {
-                const double spatium2 = score->style().spatium();
-                pos = PointF(clefLeftMargin + widthClef, -spatium2 * 2);
+                pos = PointF(clefLeftMargin + widthClef, -spatium * 2);
                 painter.translate(pos);
-                m_cachedStaffNameTexts[staffIdx]->setColor(color);
-                m_cachedStaffNameTexts[staffIdx]->renderer()->drawItem(m_cachedStaffNameTexts[staffIdx], &painter, opt);
+                engraving::Text*& staffNameText = m_cachedStaffNameTexts[staffIdx];
+                staffNameText->setColor(color);
+                scoreRender()->drawItem(staffNameText, &painter, opt);
 
                 painter.translate(-pos);
             }
