@@ -625,6 +625,11 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
         }
     }
 
+    if (mscVersion < 470) {
+        set(Sid::dividerLeftAlignToSystemBarline, false);
+        set(Sid::dividerRightAlignToSystemBarline, false);
+    }
+
     if (mscVersion < 460) {
         bool verticalChordAlign = value(Sid::maxChordShiftAbove).value<Spatium>() != 0.0_sp
                                   || value(Sid::maxChordShiftBelow).value<Spatium>() != 0.0_sp

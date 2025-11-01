@@ -4,6 +4,8 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
+      <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>

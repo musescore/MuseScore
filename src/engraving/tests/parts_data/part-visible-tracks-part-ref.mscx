@@ -25,6 +25,8 @@
       <lyricsMelismaPad>0.1</lyricsMelismaPad>
       <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
       <maskBarlinesForText>0</maskBarlinesForText>
+      <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
+      <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <clefKeyDistance>1</clefKeyDistance>
       <barNoteDistance>1.3</barNoteDistance>
       <accidentalDistance>0.22</accidentalDistance>
