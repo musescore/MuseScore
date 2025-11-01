@@ -48,6 +48,7 @@ FlatRadioButton {
         spacing: 4
 
         StyledTextLabel {
+            id: titleLabel
             Layout.alignment: Qt.AlignLeft
             Layout.fillWidth: root.implicitContentWidth > 200
             Layout.preferredWidth: implicitWidth
@@ -55,6 +56,7 @@ FlatRadioButton {
 
             horizontalAlignment: Text.AlignLeft
 
+            font: ui.theme.bodyFont
             text: (root.needSave ? "*" : "") + root.text
         }
 
@@ -94,15 +96,6 @@ FlatRadioButton {
         anchors.fill: parent
 
         color: ui.theme.backgroundSecondaryColor
-
-        Rectangle {
-            id: backgroundInner
-            anchors.fill: parent
-
-            visible: false
-            color: "white"
-            opacity: 0.05
-        }
 
         NavigationFocusBorder {
             navigationCtrl: root.navigation
@@ -145,12 +138,12 @@ FlatRadioButton {
 
                 PropertyChanges {
                     target: background
-                    color: ui.theme.popupBackgroundColor
+                    color: ui.theme.backgroundPrimaryColor
                 }
 
                 PropertyChanges {
-                    target: backgroundInner
-                    visible: true
+                    target: titleLabel
+                    font: ui.theme.bodyBoldFont
                 }
             },
 
@@ -160,17 +153,7 @@ FlatRadioButton {
 
                 PropertyChanges {
                     target: background
-                    color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHover)
-                }
-            },
-
-            State {
-                name: "PRESSED"
-                when: root.pressed
-
-                PropertyChanges {
-                    target: background
-                    color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHit)
+                    color: Utils.colorWithAlpha(ui.theme.backgroundPrimaryColor, ui.theme.buttonOpacityHover)
                 }
             }
         ]
