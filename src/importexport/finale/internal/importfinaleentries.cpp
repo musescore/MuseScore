@@ -658,48 +658,64 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
         return true;
     }
     /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
-    ChordRest* cr = chordRestFromEntryInfoPtr(entryInfoPtr);
-    IF_ASSERT_FAILED(cr) {
-        logger()->logWarning(String(u"Entry %1 was not mapped").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
+    const MusxInstance<Entry>& firstEntry = entryInfoPtr->getEntry();
+    ChordRest* firstCr = chordRestFromEntryInfoPtr(entryInfoPtr);
+    IF_ASSERT_FAILED(firstCr) {
+        logger()->logWarning(String(u"Entry %1 was not mapped").arg(firstEntry->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
         return false;
     }
+
     Beam* beam = Factory::createBeam(m_score->dummy()->system());
     beam->setTrack(curTrackIdx);
-    if (entryInfoPtr->getEntry()->isNote && cr->isChord()) {
-        beam->setDirection(toChord(cr)->stemDirection());
+    beam->add(firstCr);
+    firstCr->setBeamMode(BeamMode::BEGIN);
+
+    if (firstEntry->isNote && firstCr->isChord()) {
+        DirectionV stemDir = toChord(firstCr)->stemDirection();
+        if (stemDir != DirectionV::AUTO) {
+            beam->setDirection(stemDir);
+        }
     }
-    beam->add(cr);
-    cr->setBeamMode(BeamMode::BEGIN);
-    ChordRest* lastCr = nullptr;
+
     for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroup(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroup()) {
-        MusxInstance<Entry> currentEntry = nextInBeam->getEntry();
+        const MusxInstance<Entry>& currentEntry = nextInBeam->getEntry();
+        EntryNumber currentEntryNumber = currentEntry->getEntryNumber();
         if (entryInfoPtr->getEntry()->graceNote && !currentEntry->isNote) {
             // Grace rests are unmapped and not supported
             continue;
         }
-        lastCr = chordRestFromEntryInfoPtr(nextInBeam);
-        IF_ASSERT_FAILED(lastCr) {
-            logger()->logWarning(String(u"Entry %1 was not mapped").arg(currentEntry->getEntryNumber()), m_doc, nextInBeam.getStaff(), nextInBeam.getMeasure());
+        ChordRest* currentCr = chordRestFromEntryInfoPtr(nextInBeam);
+        IF_ASSERT_FAILED(currentCr) {
+            logger()->logWarning(String(u"Entry %1 was not mapped").arg(currentEntryNumber), m_doc, nextInBeam.getStaff(), nextInBeam.getMeasure());
             continue;
         }
+        beam->add(currentCr);
+
+        // Secondary beam breaks
         /// @todo fully test secondary beam breaks: can a smaller beam than 32nd be broken?
         /// XM: No, not currently in MuseScore.
         unsigned secBeamStart = 0;
         if (currentEntry->secBeam) {
-            if (auto secBeamBreak = m_doc->getDetails()->get<details::SecondaryBeamBreak>(nextInBeam.getFrame()->getRequestedPartId(), currentEntry->getEntryNumber())) {
+            if (const auto& secBeamBreak = m_doc->getDetails()->get<details::SecondaryBeamBreak>(nextInBeam.getFrame()->getRequestedPartId(), currentEntryNumber)) {
                 secBeamStart = secBeamBreak->calcLowestBreak();
             }
         }
         if (secBeamStart <= 1) {
-            lastCr->setBeamMode(BeamMode::MID);
+            currentCr->setBeamMode(BeamMode::MID);
         } else if (secBeamStart == 2) {
-            lastCr->setBeamMode(BeamMode::BEGIN16);
+            currentCr->setBeamMode(BeamMode::BEGIN16);
         } else {
-            lastCr->setBeamMode(BeamMode::BEGIN32);
+            currentCr->setBeamMode(BeamMode::BEGIN32);
         }
-        beam->add(lastCr);
+
+        // Stem direction
+        if (currentEntry->isNote && currentCr->isChord()) {
+            DirectionV stemDir = toChord(currentCr)->stemDirection();
+            if (stemDir != DirectionV::AUTO) {
+                beam->setDirection(stemDir);
+            }
+        }
     }
-    lastCr->setBeamMode(BeamMode::END);
     return true;
 }
 
