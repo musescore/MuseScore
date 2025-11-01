@@ -37,6 +37,7 @@ public:
     virtual muse::async::Channel<std::vector<const Note*> > notesReceived() const = 0;
 
     virtual void onRealtimeAdvance() = 0;
+    virtual bool isProcessingEvents() const = 0;
 };
 
 using INotationMidiInputPtr = std::shared_ptr<INotationMidiInput>;
