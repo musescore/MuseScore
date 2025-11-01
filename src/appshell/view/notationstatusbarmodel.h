@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_NOTATIONSTATUSBARMODEL_H
-#define MU_NOTATION_NOTATIONSTATUSBARMODEL_H
+#pragma once
 
 #include <QObject>
 #include <QQmlParserStatus>
@@ -105,6 +104,8 @@ private:
     void classBegin() override;
     void componentComplete() override {}
 
+    void setNotation(const notation::INotationPtr& notation);
+
     notation::INotationPtr notation() const;
     notation::INotationAccessibilityPtr accessibility() const;
 
@@ -118,8 +119,6 @@ private:
 
     void dispatch(const muse::actions::ActionCode& code, const muse::actions::ActionData& args = muse::actions::ActionData());
 
-    void onCurrentNotationChanged();
-
     notation::ZoomType currentZoomType() const;
 
     void listenChangesInAccessibility();
@@ -131,6 +130,8 @@ private:
 
     QVariantList menuItemListToVariantList(const muse::uicomponents::MenuItemList& list) const;
 
+    notation::INotationPtr m_notation = nullptr;
+
     muse::uicomponents::MenuItem* m_currentWorkspaceItem = nullptr;
     muse::uicomponents::MenuItem* m_concertPitchItem = nullptr;
     muse::uicomponents::MenuItemList m_availableViewModeList;
@@ -139,5 +140,3 @@ private:
     std::shared_ptr<muse::uicomponents::AbstractMenuModel> m_workspacesMenuModel;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONSTATUSBARMODEL_H

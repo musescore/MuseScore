@@ -42,6 +42,8 @@ class MasterNotation : public IMasterNotation, public Notation, public std::enab
 public:
     ~MasterNotation();
 
+    project::INotationProject* project() const override;
+
     muse::Ret setupNewScore(engraving::MasterScore* score, const ScoreCreateOptions& options) override;
     void applyOptions(engraving::MasterScore* score, const ScoreCreateOptions& options, bool createdFromTemplate = false) override;
     engraving::MasterScore* masterScore() const override;
@@ -90,6 +92,8 @@ private:
     void notifyAboutNeedSaveChanged();
 
     void markScoreAsNeedToSave();
+
+    project::INotationProject* m_project = nullptr;
 
     ExcerptNotationList m_excerpts;
     muse::async::Notification m_excerptsChanged;

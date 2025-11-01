@@ -1017,18 +1017,18 @@ void NotationProject::listenIfNeedSaveChanges()
         notation->openChanged().onNotify(this, [this]() {
             markAsUnsaved();
             m_hasNonUndoStackChanges = true;
-        });
+        }, Mode::SetReplace);
 
         notation->viewState()->stateChanged().onNotify(this, [this]() {
             markAsUnsaved();
             m_hasNonUndoStackChanges = true;
-        });
+        }, Mode::SetReplace);
 
         notation->soloMuteState()->trackSoloMuteStateChanged().onReceive(
             this, [this](const InstrumentTrackId&, const notation::INotationSoloMuteState::SoloMuteState&) {
             markAsUnsaved();
             m_hasNonUndoStackChanges = true;
-        });
+        }, Mode::SetReplace);
     };
 
     listenNonUndoStackChanges(m_masterNotation->notation());

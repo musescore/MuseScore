@@ -43,10 +43,11 @@ class Notation : virtual public INotation, public IGetScore, public muse::Inject
     muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
-    explicit Notation(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx, engraving::Score* score = nullptr);
+    explicit Notation(IMasterNotation* master, const muse::modularity::ContextPtr& iocCtx, engraving::Score* score = nullptr);
     ~Notation() override;
 
     project::INotationProject* project() const override;
+    IMasterNotation* masterNotation() const override;
 
     QString name() const override;
     QString projectName() const override;
@@ -96,7 +97,7 @@ private:
     friend class NotationInteraction;
     friend class NotationPainting;
 
-    project::INotationProject* m_project = nullptr;
+    IMasterNotation* m_masterNotation = nullptr;
 
     engraving::Score* m_score = nullptr;
     muse::async::Notification m_scoreInited;

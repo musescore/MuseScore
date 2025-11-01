@@ -88,9 +88,10 @@ void NotationStatusBarModel::classBegin()
     m_concertPitchItem = makeMenuItem(TOGGLE_CONCERT_PITCH_CODE);
     m_currentWorkspaceItem = makeMenuItem(SELECT_WORKSPACE_CODE);
 
-    onCurrentNotationChanged();
+    setNotation(context()->currentNotation());
+
     context()->currentNotationChanged().onNotify(this, [this]() {
-        onCurrentNotationChanged();
+        setNotation(context()->currentNotation());
     });
 
 #ifdef MUSE_MODULE_WORKSPACE
@@ -119,8 +120,8 @@ MenuItem* NotationStatusBarModel::concertPitchItem()
 void NotationStatusBarModel::updateConcertPitchItem()
 {
     UiActionState state;
-    state.enabled = notation() ? true : false;
-    state.checked = notation() ? notation()->style()->styleValue(StyleId::concertPitch).toBool() : false;
+    state.enabled = m_notation ? true : false;
+    state.checked = m_notation ? m_notation->style()->styleValue(StyleId::concertPitch).toBool() : false;
     m_concertPitchItem->setState(state);
 }
 
@@ -152,7 +153,7 @@ MenuItem* NotationStatusBarModel::makeMenuItem(const ActionCode& actionCode)
 
 MenuItem* NotationStatusBarModel::currentViewMode()
 {
-    ViewMode viewMode = notation() ? notation()->viewMode() : ViewMode::PAGE;
+    ViewMode viewMode = m_notation ? m_notation->viewMode() : ViewMode::PAGE;
 
     for (MenuItem* modeItem : m_availableViewModeList) {
         ViewMode mode = muse::key(ALL_VIEW_MODE_MAP, modeItem->id().toStdString());
@@ -182,11 +183,11 @@ void NotationStatusBarModel::initAvailableViewModeList()
         emit currentViewModeChanged();
     };
 
-    if (!notation()) {
+    if (!m_notation) {
         return;
     }
 
-    ViewMode currentViewMode = notation()->viewMode();
+    ViewMode currentViewMode = m_notation->viewMode();
 
     for (const auto& pair: ALL_VIEW_MODE_MAP) {
         if (pair.first == ViewMode::FLOAT && !globalConfiguration()->devModeEnabled()) {
@@ -210,16 +211,16 @@ void NotationStatusBarModel::initAvailableViewModeList()
 
 bool NotationStatusBarModel::zoomEnabled() const
 {
-    return notation() != nullptr;
+    return m_notation != nullptr;
 }
 
 int NotationStatusBarModel::currentZoomPercentage() const
 {
-    if (!notation()) {
+    if (!m_notation) {
         return 100;
     }
 
-    return notation()->viewState()->zoomPercentage().val;
+    return m_notation->viewState()->zoomPercentage().val;
 }
 
 void NotationStatusBarModel::setCurrentZoomPercentage(int zoomPercentage)
@@ -233,40 +234,46 @@ void NotationStatusBarModel::setCurrentZoomPercentage(int zoomPercentage)
 
 ZoomType NotationStatusBarModel::currentZoomType() const
 {
-    if (!notation()) {
+    if (!m_notation) {
         return ZoomType::Percentage;
     }
 
-    return notation()->viewState()->zoomType().val;
+    return m_notation->viewState()->zoomType().val;
 }
 
-void NotationStatusBarModel::onCurrentNotationChanged()
+void NotationStatusBarModel::setNotation(const INotationPtr& notation)
 {
+    if (m_notation == notation) {
+        return;
+    }
+
+    m_notation = notation;
+
     emit zoomEnabledChanged();
     updateConcertPitchItem();
 
     initAvailableViewModeList();
     initAvailableZoomList();
 
-    if (!notation()) {
+    if (!notation) {
         return;
     }
 
-    notation()->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChanges& changes) {
+    notation->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChanges& changes) {
         if (muse::contains(changes.changedStyleIdSet, mu::engraving::Sid::concertPitch)) {
             updateConcertPitchItem();
         }
-    });
+    }, async::Asyncable::Mode::SetReplace /* because this channel is from MasterScore*/);
 
-    notation()->viewModeChanged().onNotify(this, [this]() {
+    notation->viewModeChanged().onNotify(this, [this]() {
         initAvailableViewModeList();
     });
 
-    notation()->viewState()->zoomPercentage().ch.onReceive(this, [this](int) {
+    notation->viewState()->zoomPercentage().ch.onReceive(this, [this](int) {
         initAvailableZoomList();
     });
 
-    notation()->viewState()->zoomType().ch.onReceive(this, [this](ZoomType) {
+    notation->viewState()->zoomType().ch.onReceive(this, [this](ZoomType) {
         initAvailableZoomList();
     });
 
@@ -308,7 +315,7 @@ void NotationStatusBarModel::initAvailableZoomList()
         emit currentZoomPercentageChanged();
     };
 
-    if (!notation()) {
+    if (!m_notation) {
         return;
     }
 

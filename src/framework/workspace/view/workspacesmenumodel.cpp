@@ -74,11 +74,11 @@ void WorkspacesMenuModel::load()
 
     workspacesManager()->currentWorkspaceChanged().onNotify(this, [this]() {
         load();
-    });
+    }, Asyncable::Mode::SetReplace);
 
     workspacesManager()->workspacesListChanged().onNotify(this, [this]() {
         load();
-    });
+    }, Asyncable::Mode::SetReplace);
 
     setItems(items);
 }

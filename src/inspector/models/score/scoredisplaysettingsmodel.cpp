@@ -42,7 +42,7 @@ void ScoreSettingsModel::onCurrentNotationChanged()
     if (auto notation = currentNotation()) {
         notation->interaction()->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
             updateFromConfig(configType);
-        });
+        }, Asyncable::Mode::SetReplace);
     }
 }
 

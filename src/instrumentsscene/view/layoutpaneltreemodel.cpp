@@ -232,7 +232,7 @@ void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& partId)
         }
 
         staffItem->init(m_masterNotation->parts()->staff(staff->id()));
-    });
+    }, Mode::SetReplace);
 
     notationStaves.onItemRemoved(m_partsNotifyReceiver.get(), [this, partId](const Staff* staff) {
         auto partItem = m_rootItem->childAtId(partId, LayoutPanelItemType::PART);
@@ -251,7 +251,7 @@ void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& partId)
         beginRemoveRows(partIndex, staffRow, staffRow);
         partItem->removeChildren(staffRow, 1, false);
         endRemoveRows();
-    });
+    }, Mode::SetReplace);
 
     notationStaves.onItemAdded(m_partsNotifyReceiver.get(), [this, partId](const Staff* staff) {
         auto partItem = m_rootItem->childAtId(partId, LayoutPanelItemType::PART);
@@ -276,7 +276,7 @@ void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& partId)
         beginInsertRows(partIndex, dstRow, dstRow);
         partItem->insertChild(staffItem, dstRow);
         endInsertRows();
-    });
+    }, Mode::SetReplace);
 }
 
 void LayoutPanelTreeModel::setupNotationConnections()
@@ -296,7 +296,7 @@ void LayoutPanelTreeModel::setupNotationConnections()
         }
 
         onScoreChanged(changes);
-    });
+    }, Mode::SetReplace /*because this channel is from MasterScore*/);
 }
 
 void LayoutPanelTreeModel::updateSelectedRows()

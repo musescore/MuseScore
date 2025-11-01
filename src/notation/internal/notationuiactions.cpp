@@ -2740,27 +2740,27 @@ void NotationUiActions::init()
         if (interaction) {
             interaction->selectionChanged().onNotify(this, [this]() {
                 updateActionsEnabled(s_actions);
-            });
+            }, Asyncable::Mode::SetReplace);
 
             interaction->textEditingStarted().onNotify(this, [this]() {
                 updateActionsEnabled(s_actions);
-            });
+            }, Asyncable::Mode::SetReplace);
 
             interaction->textEditingEnded().onReceive(this, [this](TextBase*) {
                 updateActionsEnabled(s_actions);
-            });
+            }, Asyncable::Mode::SetReplace);
 
             interaction->noteInput()->noteInputStarted().onReceive(this, [this](bool) {
                 updateActionsEnabled(s_actions);
-            });
+            }, Asyncable::Mode::SetReplace);
 
             interaction->noteInput()->noteInputEnded().onNotify(this, [this]() {
                 updateActionsEnabled(s_actions);
-            });
+            }, Asyncable::Mode::SetReplace);
 
             m_controller->currentNotationUndoStack()->stackChanged().onNotify(this, [this]() {
                 updateActionsEnabled(s_undoRedoActions);
-            });
+            }, Asyncable::Mode::SetReplace);
 
             interaction->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
                 static const std::unordered_map<ScoreConfigType, std::string> configActions {
@@ -2773,13 +2773,13 @@ void NotationUiActions::init()
                 };
 
                 m_actionCheckedChanged.send({ configActions.at(configType) });
-            });
+            }, Asyncable::Mode::SetReplace);
         }
 
         m_actionCheckedChanged.send({ TOGGLE_CONCERT_PITCH_CODE });
         m_controller->currentNotationStyleChanged().onNotify(this, [this]() {
             m_actionCheckedChanged.send({ TOGGLE_CONCERT_PITCH_CODE });
-        });
+        }, Asyncable::Mode::SetReplace);
     });
 
     engravingConfiguration()->debuggingOptionsChanged().onNotify(this, [this]() {

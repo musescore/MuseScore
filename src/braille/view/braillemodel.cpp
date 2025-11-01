@@ -25,7 +25,6 @@
 using namespace mu::braille;
 using namespace mu::notation;
 
-namespace mu::engraving {
 BrailleModel::BrailleModel(QObject* parent)
     : QObject(parent)
 {
@@ -172,7 +171,7 @@ void BrailleModel::listenChangesInnotationBraille()
 
     notationBraille()->brailleInfo().ch.onReceive(this, [this](const std::string&) {
         emit brailleInfoChanged();
-    });
+    }, Mode::SetReplace);
 }
 
 void BrailleModel::listenKeys()
@@ -183,7 +182,7 @@ void BrailleModel::listenKeys()
 
     notationBraille()->keys().ch.onReceive(this, [this](const std::string&) {
         emit keysFired();
-    });
+    }, Mode::SetReplace);
 }
 
 void BrailleModel::listenCursorPositionChanges()
@@ -193,7 +192,7 @@ void BrailleModel::listenCursorPositionChanges()
     }
     notationBraille()->cursorPosition().ch.onReceive(this, [this](const int) {
         emit cursorPositionChanged();
-    });
+    }, Mode::SetReplace);
 }
 
 void BrailleModel::listenCurrentItemChanges()
@@ -203,11 +202,11 @@ void BrailleModel::listenCurrentItemChanges()
     }
     notationBraille()->currentItemPositionStart().ch.onReceive(this, [this](int) {
         emit currentItemChanged();
-    });
+    }, Mode::SetReplace);
 
     notationBraille()->currentItemPositionEnd().ch.onReceive(this, [this](int) {
         emit currentItemChanged();
-    });
+    }, Mode::SetReplace);
 }
 
 void BrailleModel::listenBraillePanelEnabledChanges()
@@ -217,7 +216,7 @@ void BrailleModel::listenBraillePanelEnabledChanges()
     }
     notationBraille()->enabled().ch.onReceive(this, [this](const int) {
         emit braillePanelEnabledChanged();
-    });
+    }, Mode::SetReplace);
 }
 
 void BrailleModel::listenBrailleModeChanges()
@@ -227,11 +226,10 @@ void BrailleModel::listenBrailleModeChanges()
     }
     notationBraille()->mode().ch.onReceive(this, [this](const int) {
         emit brailleModeChanged();
-    });
+    }, Mode::SetReplace);
 }
 
 INotationPtr BrailleModel::notation() const
 {
     return context()->currentNotation();
-}
 }

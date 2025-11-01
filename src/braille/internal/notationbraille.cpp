@@ -78,12 +78,12 @@ void NotationBraille::init()
         if (notation()) {
             notation()->interaction()->selectionChanged().onNotify(this, [this]() {
                 doBraille();
-            });
+            }, Mode::SetReplace);
 
             notation()->notationChanged().onNotify(this, [this]() {
                 setCurrentItemPosition(0, 0);
                 doBraille(true);
-            });
+            }, Mode::SetReplace);
 
             notation()->interaction()->noteInput()->stateChanged().onNotify(this, [this]() {
                 if (interaction()->noteInput()->isNoteInputMode()) {
@@ -95,7 +95,7 @@ void NotationBraille::init()
                         setMode(BrailleMode::Navigation);
                     }
                 }
-            });
+            }, Mode::SetReplace);
 
             notation()->interaction()->noteInput()->noteAdded().onNotify(this, [this]() {
                 if (currentEngravingItem() && currentEngravingItem()->isNote()) {
@@ -103,9 +103,9 @@ void NotationBraille::init()
                     Note* note = toNote(currentEngravingItem());
                     brailleInput()->setOctave(note->octave());
                 }
-            });
+            }, Mode::SetReplace);
         }
-    });
+    }, Mode::SetReplace);
 }
 
 void NotationBraille::updateTableForLyricsFromPreferences()

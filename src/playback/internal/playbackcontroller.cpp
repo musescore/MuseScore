@@ -540,25 +540,25 @@ uint64_t PlaybackController::notationPlaybackKey() const
 
 void PlaybackController::onNotationChanged()
 {
-    if (globalContext()->currentMasterNotation() != m_masterNotation) {
-        m_masterNotation = globalContext()->currentMasterNotation();
-        notifyActionCheckedChanged(LOOP_CODE);
-    }
-
-    setNotation(globalContext()->currentNotation());
-
     DEFER {
         m_isPlayAllowedChanged.notify();
         m_totalPlayTimeChanged.notify();
     };
 
-    if (!m_masterNotation) {
-        return;
+    if (globalContext()->currentMasterNotation() != m_masterNotation) {
+        m_masterNotation = globalContext()->currentMasterNotation();
+        notifyActionCheckedChanged(LOOP_CODE);
+
+        if (!m_masterNotation) {
+            return;
+        }
+
+        m_masterNotation->hasPartsChanged().onNotify(this, [this]() {
+            m_isPlayAllowedChanged.notify();
+        });
     }
 
-    m_masterNotation->hasPartsChanged().onNotify(this, [this]() {
-        m_isPlayAllowedChanged.notify();
-    });
+    setNotation(globalContext()->currentNotation());
 }
 
 void PlaybackController::onPartChanged(const Part* part)
@@ -1840,7 +1840,7 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
 
     notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
         updateLoop();
-    });
+    }, async::Asyncable::Mode::SetReplace);
 
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
         onSelectionChanged();

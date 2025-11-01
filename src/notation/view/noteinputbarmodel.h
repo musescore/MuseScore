@@ -19,9 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTEINPUTBARMODEL_H
-#define MU_NOTATION_NOTEINPUTBARMODEL_H
+#pragma once
 
+#include <QQmlParserStatus>
+
+#include "inotation.h"
 #include "uicomponents/view/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
@@ -30,9 +32,10 @@
 #include "ui/iuiconfiguration.h"
 
 namespace mu::notation {
-class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel
+class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel, public QQmlParserStatus
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(bool isInputAllowed READ isInputAllowed NOTIFY isInputAllowedChanged)
 
@@ -46,8 +49,6 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void load() override;
-
     bool isInputAllowed() const;
 
 signals:
@@ -59,10 +60,12 @@ private:
         SectionRole
     };
 
-    INotationPtr notation() const;
-    IMasterNotationPtr masterNotation() const;
+    void classBegin() override;
+    void componentComplete() override {}
 
-    void onNotationChanged();
+    void setNotation(const INotationPtr& notation);
+
+    void load() override;
 
     void updateItemStateChecked(muse::uicomponents::MenuItem& item, bool checked);
 
@@ -110,7 +113,7 @@ private:
     const NoteInputState& noteInputState() const;
 
     const ChordRest* elementToChordRest(const EngravingItem* element) const;
+
+    INotationPtr m_notation = nullptr;
 };
 }
-
-#endif // MU_NOTATION_NOTEINPUTBARMODEL_H

@@ -21,13 +21,10 @@
  */
 #include "noteinputbarmodel.h"
 
-#include "async/notifylist.h"
 #include "types/translatablestring.h"
 
 #include "context/shortcutcontext.h"
 #include "internal/notationuiactions.h"
-
-#include "log.h"
 
 using namespace mu;
 using namespace mu::notation;
@@ -82,20 +79,28 @@ QHash<int, QByteArray> NoteInputBarModel::roleNames() const
     return roles;
 }
 
-void NoteInputBarModel::load()
+void NoteInputBarModel::classBegin()
 {
+    subscribeOnChanges();
+
     uiConfiguration()->toolConfigChanged(TOOLBAR_NAME).onNotify(this, [this]() {
         load();
     });
 
     context()->currentNotationChanged().onNotify(this, [this]() {
-        onNotationChanged();
+        setNotation(context()->currentNotation());
     });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
         updateState();
     });
 
+    setNotation(context()->currentNotation());
+    load();
+}
+
+void NoteInputBarModel::load()
+{
     MenuItemList items;
 
     ToolConfig noteInputConfig = uiConfiguration()->toolConfig(TOOLBAR_NAME, NotationUiActions::defaultNoteInputBarConfig());
@@ -124,20 +129,22 @@ void NoteInputBarModel::load()
 
     items << makeAddItem(QString::number(++section));
     setItems(items);
-
-    onNotationChanged();
-    AbstractMenuModel::load();
 }
 
 bool NoteInputBarModel::isInputAllowed() const
 {
-    auto currentMasterNotation = masterNotation();
-    return currentMasterNotation != nullptr && currentMasterNotation->hasParts();
+    return m_notation && m_notation->masterNotation()->hasParts();
 }
 
-void NoteInputBarModel::onNotationChanged()
+void NoteInputBarModel::setNotation(const INotationPtr& notation)
 {
-    if (context()->currentNotation()) {
+    if (m_notation == notation) {
+        return;
+    }
+
+    m_notation = notation;
+
+    if (notation) {
         noteInput()->stateChanged().onNotify(this, [this]() {
             updateState();
         });
@@ -150,9 +157,9 @@ void NoteInputBarModel::onNotationChanged()
             updateState();
         });
 
-        masterNotation()->hasPartsChanged().onNotify(this, [this]() {
+        notation->masterNotation()->hasPartsChanged().onNotify(this, [this]() {
             emit isInputAllowedChanged();
-        });
+        }, Mode::SetReplace /*because it's from MasterNotation*/);
     }
 
     updateState();
@@ -312,7 +319,7 @@ void NoteInputBarModel::updateLvState()
 
 void NoteInputBarModel::updateSlurState()
 {
-    bool checked = notation() ? notation()->elements()->msScore()->inputState().slur() != nullptr : false;
+    bool checked = m_notation ? m_notation->elements()->msScore()->inputState().slur() != nullptr : false;
     updateItemStateChecked(findItem(codeFromQString("add-slur")), checked);
 }
 
@@ -722,39 +729,29 @@ MenuItemList NoteInputBarModel::makeChordAndFretboardDiagramsItems()
     return items;
 }
 
-INotationPtr NoteInputBarModel::notation() const
-{
-    return context()->currentNotation();
-}
-
-IMasterNotationPtr NoteInputBarModel::masterNotation() const
-{
-    return context()->currentMasterNotation();
-}
-
 INotationInteractionPtr NoteInputBarModel::interaction() const
 {
-    return notation() ? notation()->interaction() : nullptr;
+    return m_notation ? m_notation->interaction() : nullptr;
 }
 
 INotationSelectionPtr NoteInputBarModel::selection() const
 {
-    return interaction() ? interaction()->selection() : nullptr;
+    return m_notation ? m_notation->interaction()->selection() : nullptr;
 }
 
 INotationUndoStackPtr NoteInputBarModel::undoStack() const
 {
-    return notation() ? notation()->undoStack() : nullptr;
+    return m_notation ? m_notation->undoStack() : nullptr;
 }
 
 INotationNoteInputPtr NoteInputBarModel::noteInput() const
 {
-    return interaction() ? interaction()->noteInput() : nullptr;
+    return m_notation ? m_notation->interaction()->noteInput() : nullptr;
 }
 
 bool NoteInputBarModel::isNoteInputMode() const
 {
-    return noteInput() ? noteInput()->isNoteInputMode() : false;
+    return m_notation ? m_notation->interaction()->noteInput()->isNoteInputMode() : false;
 }
 
 const NoteInputState& NoteInputBarModel::noteInputState() const

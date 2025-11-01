@@ -47,12 +47,15 @@ using INotationPtr = std::shared_ptr<INotation>;
 using INotationWeakPtr = std::weak_ptr<INotation>;
 using INotationPtrList = std::vector<INotationPtr>;
 
+class IMasterNotation;
+
 class INotation
 {
 public:
     virtual ~INotation() = default;
 
     virtual project::INotationProject* project() const = 0;
+    virtual IMasterNotation* masterNotation() const = 0;
 
     /// For MasterScores: the filename without extension
     /// For Scores: the excerpt name

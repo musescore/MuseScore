@@ -26,6 +26,8 @@
 
 #include "engraving/dom/masterscore.h"
 
+#include "imasternotation.h"
+
 #include "notationpainting.h"
 #include "notationviewstate.h"
 #include "notationsolomutestate.h"
@@ -43,9 +45,9 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 
-Notation::Notation(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx, mu::engraving::Score* score)
+Notation::Notation(IMasterNotation* master, const muse::modularity::ContextPtr& iocCtx, mu::engraving::Score* score)
     : muse::Injectable(iocCtx)
-    , m_project(project)
+    , m_masterNotation(master)
 {
     m_painting = std::make_shared<NotationPainting>(this);
     m_viewState = std::make_shared<NotationViewState>(this);
@@ -119,7 +121,12 @@ Notation::~Notation()
 
 mu::project::INotationProject* Notation::project() const
 {
-    return m_project;
+    return m_masterNotation ? m_masterNotation->project() : nullptr;
+}
+
+IMasterNotation* Notation::masterNotation() const
+{
+    return m_masterNotation;
 }
 
 void Notation::setScore(Score* score)

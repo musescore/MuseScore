@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_BRAILLE_BRAILLEMODEL_H
-#define MU_BRAILLE_BRAILLEMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -34,7 +33,7 @@
 #include "ibrailleconfiguration.h"
 #include "inotationbraille.h"
 
-namespace mu::engraving {
+namespace mu::braille {
 class BrailleModel : public QObject, public muse::Injectable, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
@@ -52,6 +51,7 @@ class BrailleModel : public QObject, public muse::Injectable, public muse::async
     muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
     muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
     muse::Inject<braille::INotationBraille> notationBraille = { this };
+
 public:
     explicit BrailleModel(QObject* parent = nullptr);
 
@@ -101,5 +101,3 @@ private:
     void listenBrailleModeChanges();
 };
 }
-
-#endif // MU_BRAILLE_BRAILLEMODEL_H

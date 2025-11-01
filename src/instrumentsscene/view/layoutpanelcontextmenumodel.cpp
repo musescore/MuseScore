@@ -76,7 +76,7 @@ void LayoutPanelContextMenuModel::updateMenu()
 
     m_masterNotation->parts()->scoreOrderChanged().onNotify(this, [this] {
         updateOrderingMenu(m_masterNotation->parts()->scoreOrder().id);
-    });
+    }, Mode::SetReplace);
 }
 
 void LayoutPanelContextMenuModel::loadInstrumentOrders()

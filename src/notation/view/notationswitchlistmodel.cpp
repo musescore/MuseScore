@@ -134,7 +134,7 @@ void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)
             m_notations.removeAt(notationIndex);
             endRemoveRows();
         }
-    });
+    }, Asyncable::Mode::SetReplace);
 }
 
 void NotationSwitchListModel::listenExcerptNotationTitleChanged(IExcerptNotationPtr excerptNotation)
@@ -150,7 +150,7 @@ void NotationSwitchListModel::listenExcerptNotationTitleChanged(IExcerptNotation
         int index = m_notations.indexOf(notation);
         QModelIndex modelIndex = this->index(index);
         emit dataChanged(modelIndex, modelIndex, { RoleTitle });
-    });
+    }, Asyncable::Mode::SetReplace);
 }
 
 void NotationSwitchListModel::listenProjectSavingStatusChanged()

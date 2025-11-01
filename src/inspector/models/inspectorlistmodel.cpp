@@ -392,7 +392,7 @@ void InspectorListModel::listenScoreChanges()
         }
 
         onScoreChanged(changes.changedPropertyIdSet, changes.changedStyleIdSet);
-    });
+    }, Asyncable::Mode::SetReplace);
 }
 
 void InspectorListModel::onScoreChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
