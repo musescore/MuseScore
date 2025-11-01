@@ -47,6 +47,7 @@ public:
     bool isOpened() const override;
 
     const Spec& activeSpec() const override;
+    async::Channel<Spec> activeSpecChanged() const override;
 
     AudioDeviceID outputDevice() const override;
     bool selectOutputDevice(const AudioDeviceID& deviceId) override;
@@ -70,6 +71,9 @@ public:
     void suspend() override;
 
 private:
+
+    async::Channel<Spec> m_activeSpecChanged;
+
     async::Notification m_outputDeviceChanged;
 
     mutable std::mutex m_devicesMutex;

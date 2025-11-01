@@ -42,6 +42,7 @@ public:
     bool isOpened() const override;
 
     const Spec& activeSpec() const override;
+    async::Channel<Spec> activeSpecChanged() const override;
 
     AudioDeviceID outputDevice() const override;
     bool selectOutputDevice(const AudioDeviceID& id) override;
@@ -85,6 +86,7 @@ private:
 
     std::thread m_audioThread;
     IAudioDriver::Spec m_activeSpec;
+    async::Channel<Spec> m_activeSpecChanged;
     uint32_t m_bufferFrames = 0;
     samples_t m_defaultPeriod = 0;
     samples_t m_minimumPeriod = 0;

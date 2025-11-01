@@ -47,6 +47,7 @@ bool WebAudioDriver::open(const Spec& spec, Spec* activeSpec)
     m_activeSpec = spec;
     m_activeSpec.output.sampleRate = specVal["sampleRate"].as<double>();
     m_activeSpec.output.samplesPerChannel = specVal["samplesPerChannel"].as<int>();
+    m_activeSpecChanged.send(m_activeSpec);
 
     LOGI() << "activeSpec: "
            << "sampleRate: " << m_activeSpec.output.sampleRate
@@ -86,6 +87,11 @@ bool WebAudioDriver::isOpened() const
 const WebAudioDriver::Spec& WebAudioDriver::activeSpec() const
 {
     return m_activeSpec;
+}
+
+async::Channel<WebAudioDriver::Spec> WebAudioDriver::activeSpecChanged() const
+{
+    return m_activeSpecChanged;
 }
 
 bool WebAudioDriver::setOutputDeviceBufferSize(unsigned int)

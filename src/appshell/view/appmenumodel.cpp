@@ -547,12 +547,19 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             makeMenuItem("vst-use-newview"),
         };
 
+        MenuItemList audioItems {
+            makeMenuItem("action://audio/dev/use-workermode"),
+            makeMenuItem("action://audio/dev/use-drivermode"),
+            makeMenuItem("action://audio/dev/use-workerrpcmode"),
+        };
+
         items << makeMenu(TranslatableString("appshell/menu/diagnostics", "A&ctions"), actionsItems, "menu-actions")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Accessibility"), accessibilityItems, "menu-accessibility")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Engraving"), engravingItems, "menu-engraving")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "E&xtensions"), extensionsItems, "menu-extensions")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "Auto&bot"), autobotItems, "menu-autobot")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "&VST"), vstItems, "menu-vst")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Audio"), audioItems, "menu-audio")
               << makeMenuItem("multiinstances-dev-show-info");
     }
 

@@ -182,11 +182,13 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
     s_alsaData->buffer = new float[s_alsaData->samples * s_alsaData->channels];
     //_alsaData->sampleBuffer = new short[_alsaData->samples * _alsaData->channels];
 
+    s_format = spec;
+    s_format.format = Format::AudioF32;
+    s_format.output.sampleRate = aSamplerate;
+    m_activeSpecChanged.send(s_format);
+
     if (activeSpec) {
-        *activeSpec = spec;
-        activeSpec->format = Format::AudioF32;
-        activeSpec->output.sampleRate = aSamplerate;
-        s_format = *activeSpec;
+        *activeSpec = s_format;
     }
 
     s_alsaData->threadHandle = 0;
@@ -218,6 +220,11 @@ bool AlsaAudioDriver::isOpened() const
 const AlsaAudioDriver::Spec& AlsaAudioDriver::activeSpec() const
 {
     return s_format;
+}
+
+async::Channel<IAudioDriver::Spec> AlsaAudioDriver::activeSpecChanged() const
+{
+    return m_activeSpecChanged;
 }
 
 AudioDeviceID AlsaAudioDriver::outputDevice() const

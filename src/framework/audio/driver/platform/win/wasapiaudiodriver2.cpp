@@ -397,6 +397,7 @@ bool WasapiAudioDriver2::open(const Spec& spec, Spec* activeSpec)
 
     m_activeSpec = spec;
     m_activeSpec.output.sampleRate = m_data->mixFormat->nSamplesPerSec;
+    m_activeSpecChanged.send(m_activeSpec);
 
     if (activeSpec) {
         *activeSpec = m_activeSpec;
@@ -551,6 +552,11 @@ bool WasapiAudioDriver2::isOpened() const
 const IAudioDriver::Spec& WasapiAudioDriver2::activeSpec() const
 {
     return m_activeSpec;
+}
+
+async::Channel<IAudioDriver::Spec> WasapiAudioDriver2::activeSpecChanged() const
+{
+    return m_activeSpecChanged;
 }
 
 AudioDeviceID WasapiAudioDriver2::outputDevice() const

@@ -31,6 +31,10 @@ set(AUDIO_MAIN_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiouiactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiouiactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audioactionscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audioactionscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/startaudiocontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/startaudiocontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/playback.cpp

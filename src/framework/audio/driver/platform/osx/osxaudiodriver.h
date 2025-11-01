@@ -49,6 +49,7 @@ public:
     bool isOpened() const override;
 
     const Spec& activeSpec() const override;
+    async::Channel<Spec> activeSpecChanged() const override;
 
     void resume() override;
     void suspend() override;
@@ -85,6 +86,7 @@ private:
     struct Data;
 
     std::shared_ptr<Data> m_data = nullptr;
+    async::Channel<Spec> m_activeSpecChanged;
     std::map<unsigned int, std::string> m_outputDevices = {}, m_inputDevices = {};
     mutable std::mutex m_devicesMutex;
     async::Notification m_outputDeviceChanged;

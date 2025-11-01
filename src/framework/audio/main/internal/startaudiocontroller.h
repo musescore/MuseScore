@@ -38,6 +38,7 @@ class GeneralAudioWorker;
 }
 
 namespace muse::audio {
+class AlignmentBuffer;
 class StartAudioController : public IStartAudioController, public async::Asyncable
 {
     Inject<IAudioConfiguration> configuration;
@@ -64,6 +65,8 @@ private:
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
     std::shared_ptr<engine::EngineController> m_engineController;
     std::shared_ptr<engine::GeneralAudioWorker> m_worker;
+    std::shared_ptr<AlignmentBuffer> m_alignmentBuffer;
+    size_t m_requiredSamplesTotal = 0;
 
     ValCh<bool> m_isEngineRunning;
     ValCh<bool> m_isAudioStarted;

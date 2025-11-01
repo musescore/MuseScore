@@ -163,11 +163,13 @@ bool JackAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
     s_jackData->buffer = new float[s_jackData->samples * s_jackData->channels];
 
+    s_format2 = spec;
+    s_format2.format = Format::AudioF32;
+    s_format2.output.sampleRate = jackSamplerate;
+    m_activeSpecChanged.send(s_format2);
+
     if (activeSpec) {
-        *activeSpec = spec;
-        activeSpec->format = Format::AudioF32;
-        activeSpec->output.sampleRate = jackSamplerate;
-        s_format2 = *activeSpec;
+        *activeSpec = s_format2;
     }
 
     jack_on_shutdown(handle, jack_cleanup_callback, 0);
@@ -194,6 +196,11 @@ bool JackAudioDriver::isOpened() const
 const JackAudioDriver::Spec& JackAudioDriver::activeSpec() const
 {
     return s_format2;
+}
+
+muse::async::Channel<JackAudioDriver::Spec> JackAudioDriver::activeSpecChanged() const
+{
+    return m_activeSpecChanged;
 }
 
 AudioDeviceID JackAudioDriver::outputDevice() const
