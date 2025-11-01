@@ -563,9 +563,11 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         // Stem direction
         bool up = chord->stemDirection() == DirectionV::UP;
         if (chord->stemDirection() == DirectionV::AUTO) {
-            if (crossStaffMove == 0) {
+            if (chord->measure()->hasVoices(staffIdx, entryStartTick, chord->actualTicks())) {
+                up = !(curTrackIdx & 1);
+            } else if (crossStaffMove == 0) {
                 int middleLine = chord->staffType()->lines() - 1;
-                if (targetStaff->isTabStaff(segment->tick())) {
+                if (targetStaff->isTabStaff(entryStartTick)) {
                     up = chord->downNote()->string() + chord->upNote()->string() > middleLine;
                 } else {
                     up = chord->downNote()->line() + chord->upNote()->line() > middleLine * 2;
@@ -591,10 +593,10 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         if (currentEntry->stemDetail && chord->stem()) {
             if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterations>(m_currentMusxPartId, currentEntryNumber)) {
                 if (up) {
-                    setAndStyleProperty(chord->stem(), Pid::OFFSET, evpuToPointF(stemAlt->upHorzAdjust, -stemAlt->upVertAdjust) * SPATIUM20);
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * SPATIUM20, 0.0));
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
                 } else {
-                    setAndStyleProperty(chord->stem(), Pid::OFFSET, evpuToPointF(stemAlt->downHorzAdjust, 0.0) * SPATIUM20);
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * SPATIUM20, 0.0));
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
                 }
                 chord->stem()->setAutoplace(false);
@@ -1234,16 +1236,16 @@ void FinaleParser::setBeamPositions()
 
         // Stems under beams (require beam direction)
         if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
-            Chord* c = toChord(chordRest);
-            if (!c->stem()) {
+            Chord* chord = toChord(chordRest);
+            if (!chord->stem()) {
                 continue;
             }
-            if (c->beam()->direction() == DirectionV::UP) {
-                setAndStyleProperty(c->stem(), Pid::OFFSET, evpuToPointF(stemAlt->upHorzAdjust, -stemAlt->upVertAdjust) * SPATIUM20);
-                setAndStyleProperty(c->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, c->stem()));
+            if (chord->beam()->direction() == DirectionV::UP) {
+                setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * SPATIUM20, 0.0));
+                setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
             } else {
-                setAndStyleProperty(c->stem(), Pid::OFFSET, evpuToPointF(stemAlt->downHorzAdjust, 0.0) * SPATIUM20);
-                setAndStyleProperty(c->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, c->stem()));
+                setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * SPATIUM20, 0.0));
+                setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
             }
         }
     }
