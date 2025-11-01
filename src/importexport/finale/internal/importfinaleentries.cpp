@@ -41,6 +41,7 @@
 #include "engraving/dom/laissezvib.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
+#include "engraving/dom/navigate.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pitchspelling.h"
@@ -1027,6 +1028,159 @@ static bool computeUpCase(Beam* beam, double middleLinePos)
     return beam->direction() == DirectionV::UP;
 }
 
+static DirectionV calculateTieDirection(const Tie* tie, const MusxInstance<options::TieOptions>& config)
+{
+    // MuseScore requires all tie segments to have the same direction.
+    // As such, if the direction has already been set, don't recalculate.
+    if (tie->slurDirection() != DirectionV::AUTO) {
+        return tie->slurDirection();
+    }
+    // If MS ever does allow it, pass the note as a parameter instead.
+    // We should then only calculate tieEnds when there are more than one segment.
+    const engraving::Note* note = tie->startNote() ? tie->startNote() : tie->endNote();
+    assert(note);
+
+    const Chord* c = note->chord();
+    const DirectionV stemDir = c->beam() ? c->beam()->direction() : c->stemDirection();
+    assert(stemDir != DirectionV::AUTO);
+
+    const bool forTieEnd = note == tie->endNote();
+    const Fraction tick = c->segment()->tick();
+    const bool tabStaff = note->staff()->isTabStaff(tick);
+    const int line = tabStaff ? note->string() : note->line();
+
+    if (note->chord()->notes().size() > 1) {
+        // Notes are sorted from lowest to highest
+        const size_t noteIndex = muse::indexOf(c->notes(), note);
+        const size_t noteCount = c->notes().size();
+
+        // Outer notes ignore tie preferences
+        if (noteIndex == 0) {
+            return DirectionV::DOWN;
+        }
+        if (noteIndex == noteCount - 1) {
+            return DirectionV::UP;
+        }
+
+        DirectionV innerDefault = DirectionV::AUTO;
+
+        if (config->chordTieDirType != options::TieOptions::ChordTieDirType::StemReversal) {
+            if (noteIndex < noteCount / 2) {
+                innerDefault = DirectionV::DOWN;
+            }
+            if (noteIndex >= (noteCount + 1) / 2) {
+                innerDefault = DirectionV::UP;
+            }
+
+            if (config->chordTieDirType == options::TieOptions::ChordTieDirType::OutsideInside) {
+                innerDefault = (stemDir == DirectionV::UP) ? DirectionV::DOWN : DirectionV::UP;
+            }
+        }
+
+        if (innerDefault == DirectionV::AUTO) { //  || config->chordTieDirType == options::TieOptions::ChordTieDirType::StemReversal
+            const int middleLine = (c->staffType()->lines() - 1) * (!tabStaff ? 2 : 1);
+            innerDefault = (line > middleLine) ? DirectionV::DOWN : DirectionV::UP;
+        }
+
+        if (innerDefault != DirectionV::AUTO) { // should always happen?
+            if (!tabStaff && config->secondsPlacement == options::TieOptions::SecondsPlacement::ShiftForSeconds) {
+                bool isUpper2nd = false;
+                bool isLower2nd = false;
+                for (const engraving::Note* n : c->notes()) {
+                    isLower2nd = isLower2nd || (line == n->line() + 1);
+                    isUpper2nd = isUpper2nd || (line == n->line() - 1);
+                }
+
+                if (innerDefault == DirectionV::UP && !isUpper2nd && isLower2nd) {
+                    return DirectionV::DOWN;
+                }
+
+                if (innerDefault == DirectionV::DOWN && isUpper2nd && !isLower2nd) {
+                    return DirectionV::UP;
+                }
+            }
+            return innerDefault;
+        }
+    } else {
+        DirectionV adjacentStemDir = DirectionV::AUTO;
+        const engraving::Note* startNote = tie->startNote();
+        const engraving::Note* endNote = tie->endNote();
+
+        if (forTieEnd) {
+            if (endNote) { // should always happen
+                const ChordRest* startChordRest = prevChordRest(c); // use startNote->chord()?
+                if (startChordRest->isChord()) {
+                    DirectionV startDir = startChordRest->beam() ? startChordRest->beam()->direction() : startChordRest->stemDirection();
+                    assert(startDir != DirectionV::AUTO); // perhaps not necessary
+                    adjacentStemDir = startDir;
+                }
+            }
+        } else {
+            if (endNote) {
+                const Chord* endChord = endNote->chord();
+                DirectionV endDir = endChord->beam() ? endChord->beam()->direction() : endChord->stemDirection();
+            }
+
+            if (adjacentStemDir == DirectionV::AUTO && startNote) {
+                ChordRest* nextChordRest = nextChordRest(c); // endNote->chord() is likely preferred here
+                assert(endDir != DirectionV::AUTO); // perhaps not necessary
+                adjacentStemDir = endDir;
+                if (nextChordRest && !nextChordRest->isRest()) {
+                    DirectionV nextDir = nextChordRest->beam() ? nextChordRest->beam()->direction() : nextChordRest->stemDirection();
+                    assert(nextDir != DirectionV::AUTO); // perhaps not necessary
+                    adjacentStemDir = nextDir;
+
+                    /// @todo Finale tests for a stem freeze and a V2Launch here, but we already freeze (most) stems elsewhere in the code.
+                    /// We need to find a way around this extreme edge case.
+                    /// Using tracks to detect a V2Launch doesn't work, because those could be a layer change instead.
+                    // if (nextDir == DirectionV::AUTO && nextChordRest->v2Launch && adjacentStemDir == stemDir) {
+                        // nextChordRest = nextChordRest(nextChordRest);
+                        // if (nextChordRest) {
+                            // nextDir = nextChordRest->beam() ? nextChordRest->beam()->direction() : nextChordRest->stemDirection();
+                            // assert(nextDir != DirectionV::AUTO); // perhaps not necessary
+                            // adjacentStemDir = nextDir;
+                        // }
+                    // }
+                }
+            }
+        }
+
+        if (adjacentStemDir != DirectionV::AUTO && adjacentStemDir != stemDir) {
+            if (config->mixedStemDirection == options::TieOptions::MixedStemDirection::Over) {
+                return DirectionV::UP;
+            } else if (config->mixedStemDirection == options::TieOptions::MixedStemDirection::Under) {
+                return DirectionV::DOWN;
+            }
+        }
+    }
+
+    return (stemDir == DirectionV::UP) ? DirectionV::DOWN : DirectionV::UP;
+}
+
+static TiePlacement calculateTiePlacement(Tie* tie, bool useOuterPlacement)
+{
+    engraving::Note* startN = tie->startNote();
+    const Chord* startChord = startN ? startN->chord() : nullptr;
+    engraving::Note* endN = tie->endNote();
+    const Chord* endChord = endN ? endN->chord() : nullptr;
+
+    const bool styleIsOuter = tie->style().styleV(Sid::tiePlacementSingleNote).value<TiePlacement>() == TiePlacement::OUTSIDE;
+    const bool defaultPlacement = useOuterPlacement == styleIsOuter;
+    const TiePlacement outsideValue = (styleIsOuter && defaultPlacement) ? TiePlacement::AUTO   : TiePlacement::OUTSIDE;
+    const TiePlacement insideValue = (styleIsOuter && !defaultPlacement) ? TiePlacement::INSIDE : TiePlacement::AUTO;
+
+    // Single-note chords
+    if ((!startChord || startChord->notes().size() <= 1) && (!endChord || endChord->notes().size() <= 1)) {
+        return useOuterPlacement ? outsideValue : insideValue;
+    }
+
+    // Regardless of setting, Finale always sets ties within a chord (i.e. on not-outermost notes) to inner placement.
+    const bool isOutside = tie->up()
+                           ? (!startChord || startN == startChord->upNote()) && (!endChord || endN == endChord->upNote())
+                           : (!startChord || startN == startChord->downNote()) && (!endChord || endN == endChord->downNote());
+    return (useOuterPlacement && isOutside) ? outsideValue : insideValue;
+}
+
 void FinaleParser::setBeamPositions()
 {
     for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
@@ -1254,6 +1408,44 @@ void FinaleParser::setBeamPositions()
                 setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * SPATIUM20, 0.0));
                 setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
             }
+        }
+    }
+
+    // Ties
+    for (auto [numbers, note] : m_entryNoteNumber2Note) {
+        EntryNumber entryNumber = numbers.first;
+        // NoteNumber noteNumber = numbers.second;
+
+        /// @todo offsets and contour
+        auto positionTie = [this](Tie* tie, const MusxInstance<details::TieAlterBase>& tieAlt) {
+            // Collect alterations
+            bool outside = musxOptions().tieOptions->useOuterPlacement;
+            DirectionV direction = DirectionV::AUTO;
+            if (tieAlt) {
+                if (tieAlt->outerOn) {
+                    outside = tieAlt->outerLocal;
+                }
+                if (tieAlt->freezeDirection) {
+                    direction = tieAlt->down ? DirectionV::DOWN : DirectionV::UP;
+                }
+            }
+
+            // Tie direction (over/under)
+            if (direction == DirectionV::AUTO) {
+                direction = calculateTieDirection(tie, musxOptions().tieOptions);
+            }
+            setAndStyleProperty(tie, Pid::SLUR_DIRECTION, direction);
+
+            // Tie placement (inner/outer)
+            tie->setUp(direction == DirectionV::UP ? true : false);
+            TiePlacement placement = calculateTiePlacement(tie, outside);
+            setAndStyleProperty(tie, Pid::TIE_PLACEMENT, placement);
+        };
+        if (note->tieFor()) {
+            positionTie(note->tieFor(), m_doc->getDetails()->get<details::TieAlterStart>(m_currentMusxPartId, entryNumber));
+        }
+        if (note->tieBack()) {
+            positionTie(note->tieBack(), m_doc->getDetails()->get<details::TieAlterEnd>(m_currentMusxPartId, entryNumber));
         }
     }
 }
