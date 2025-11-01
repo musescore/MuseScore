@@ -1123,15 +1123,22 @@ void FinaleParser::setBeamPositions()
                     }
                 }
             } else if (musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::OnStandardNote) {
+                shouldFlatten = up && beam->elements().size() > 2;
                 for (ChordRest* cr : beam->elements()) {
                     if (cr == startCr || cr == endCr) {
                         continue;
                     }
                     double beamPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
-                    // Seems to be irrespective of direction
-                    if (muse::RealIsEqualOrMore(beamPos, outermostDefault)) {
-                        shouldFlatten = true;
-                        break;
+                    if (up) {
+                        if (muse::RealIsEqualOrMore(beamPos, outermostDefault)) {
+                            shouldFlatten = false;
+                            break;
+                        }
+                    } else {
+                        if (beamPos > outermostDefault) {
+                            shouldFlatten = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1142,8 +1149,6 @@ void FinaleParser::setBeamPositions()
         }
 
         // Beam alterations
-        PointF posAdjust;
-        PointF feathering(1.0, 1.0);
         auto getAlterPosition = [beam](const MusxInstance<details::BeamAlterations>& beamAlter) {
             if (!beamAlter || !beamAlter->isActive()) {
                 return PointF();
@@ -1174,6 +1179,8 @@ void FinaleParser::setBeamPositions()
             }
             return PointF();
         };
+        PointF posAdjust;
+        PointF feathering(1.0, 1.0);
         if (up) {
             posAdjust = getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsUpStem>(m_currentMusxPartId, entryNumber));
             feathering -= getAlterFeatherU(m_doc->getDetails()->getArray<details::SecondaryBeamAlterationsUpStem>(m_currentMusxPartId, entryNumber));
