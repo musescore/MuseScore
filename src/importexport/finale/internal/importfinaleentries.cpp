@@ -1149,7 +1149,7 @@ void FinaleParser::setBeamPositions()
                 return PointF();
             }
             beam->setVisible(beamAlter->calcEffectiveBeamWidth() != 0);
-            return evpuToPointF(beamAlter->leftOffsetY, beamAlter->rightOffsetY) * SPATIUM20;
+            return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * SPATIUM20;
         };
         /// @todo combine these two, one day
         auto getAlterFeatherU = [beam](const MusxInstanceList<details::SecondaryBeamAlterationsUpStem>& beamAlterList) {
@@ -1158,7 +1158,7 @@ void FinaleParser::setBeamPositions()
                     if (!beamAlter->isActive() || eduToFraction(beamAlter->dura) != Fraction(1, 16)) {
                         continue;
                     }
-                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->rightOffsetY) * SPATIUM20 / beam->beamDist();
+                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * SPATIUM20 / beam->beamDist();
                 }
             }
             return PointF();
@@ -1169,7 +1169,7 @@ void FinaleParser::setBeamPositions()
                     if (!beamAlter->isActive() || eduToFraction(beamAlter->dura) != Fraction(1, 16)) {
                         continue;
                     }
-                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->rightOffsetY) * SPATIUM20 / beam->beamDist();
+                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * SPATIUM20 / beam->beamDist();
                 }
             }
             return PointF();
