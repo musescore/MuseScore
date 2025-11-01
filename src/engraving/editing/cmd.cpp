@@ -753,7 +753,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
                 if (val < 0) {
                     interval.flip();
                 }
-                transposeInterval(on->pitch(), on->tpc(), &nval.pitch, &nval.tpc1, interval, false);
+                nval.pitch = on->pitch() + interval.chromatic;
                 nval.tpc1 = on->tpc1();
                 nval.tpc2 = on->tpc2();
             } else {
@@ -4689,21 +4689,6 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             break;
         }
     }
-}
-
-void Score::cmdAddStaffTypeChange(Measure* measure, staff_idx_t staffIdx, StaffTypeChange* stc)
-{
-    if (!measure) {
-        return;
-    }
-
-    if (measure->isMMRest()) {
-        measure = measure->mmRestFirst();
-    }
-
-    stc->setParent(measure);
-    stc->setTrack(staffIdx * VOICES);
-    score()->undoAddElement(stc);
 }
 
 //---------------------------------------------------------
