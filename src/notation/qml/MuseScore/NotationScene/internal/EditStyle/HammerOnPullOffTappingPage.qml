@@ -205,7 +205,7 @@ StyledFlickable {
                             ]
 
                             delegate: FlatRadioButton {
-                                width: Math.max(90, implicitContentWidth)
+                                width: Math.max(100, implicitContentWidth)
                                 height: 30
                                 text: modelData.text
                                 checked: hopoPage.lhTappingShowItemsNormalStave.value === modelData.value
@@ -261,7 +261,7 @@ StyledFlickable {
                             ]
 
                             delegate: FlatRadioButton {
-                                width: Math.max(90, implicitContentWidth)
+                                width: Math.max(100, implicitContentWidth)
                                 height: 30
                                 text: modelData.text
                                 checked: hopoPage.lhTappingShowItemsTab.value === modelData.value
