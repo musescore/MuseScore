@@ -156,6 +156,7 @@ bool Read302::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
             Score* curScore = ctx.score();
             ctx.setScore(s);
 
+            s->setIsOpen(true);
             readScoreTag(s, e, ctx);
 
             ctx.setScore(curScore);
