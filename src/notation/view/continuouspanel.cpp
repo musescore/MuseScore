@@ -237,9 +237,6 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
         m_cachedMeasureNumberText->setSizeIsSpatiumDependent(true);
     }
 
-    // Track which staff index we're processing
-    size_t staffIdx = 0;
-
     for (const engraving::EngravingItem* e : std::as_const(el)) {
         e->itemDiscovered = false;
         if (!e->visible() && !showInvisible) {
@@ -247,7 +244,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
         }
 
         if (e->isStaffLines()) {
-            staffIdx = e->staffIdx();
+            const engraving::staff_idx_t staffIdx = e->staffIdx();
             const engraving::Staff* currentStaff = score->staff(staffIdx);
             const engraving::Instrument* instrument = currentStaff->part()->instrument(tick);
 
@@ -436,8 +433,8 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
 
         if (e->isStaffLines()) {
             painter.save();
-            const size_t constStaffIdx = e->staffIdx();
-            const engraving::Staff* currentStaff = score->staff(constStaffIdx);
+            const engraving::staff_idx_t staffIdx = e->staffIdx();
+            const engraving::Staff* currentStaff = score->staff(staffIdx);
 
             pos = PointF(offsetPanel, e->pagePos().y());
             painter.translate(pos);
@@ -454,17 +451,17 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
             scoreRender()->drawItem(&newStaffLines, &painter, opt);
 
             // Barline
-            engraving::BarLine*& barLine = m_cachedBarLines[constStaffIdx];
+            engraving::BarLine*& barLine = m_cachedBarLines[staffIdx];
             barLine->setColor(color);
             barLine->renderer()->drawItem(barLine, &painter, opt);
 
             // Staff name
             if (currentStaff->part()->staff(0) == currentStaff) {
-                const double spatium2 = score->style().spatium();
-                pos = PointF(clefLeftMargin + widthClef, -spatium2 * 2);
+                pos = PointF(clefLeftMargin + widthClef, -spatium * 2);
                 painter.translate(pos);
-                m_cachedStaffNameTexts[constStaffIdx]->setColor(color);
-                m_cachedStaffNameTexts[constStaffIdx]->renderer()->drawItem(m_cachedStaffNameTexts[constStaffIdx], &painter, opt);
+                engraving::Text*& staffNameText = m_cachedStaffNameTexts[staffIdx];
+                staffNameText->setColor(color);
+                scoreRender()->drawItem(staffNameText, &painter, opt);
 
                 painter.translate(-pos);
             }
@@ -472,7 +469,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
             double posX = 0.0;
 
             // Clef
-            engraving::Clef*& clef = m_cachedClefs[constStaffIdx];
+            engraving::Clef*& clef = m_cachedClefs[staffIdx];
             clef->setColor(color);
             posX += clefLeftMargin;
             const PointF clefPos = PointF(posX, clef->pos().y());
@@ -482,7 +479,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
             posX += widthClef;
 
             // Key signature
-            engraving::KeySig*& keySig = m_cachedKeySigs[constStaffIdx];
+            engraving::KeySig*& keySig = m_cachedKeySigs[staffIdx];
             keySig->setColor(color);
             posX += keySigLeftMargin;
             const PointF ksPos = PointF(posX, 0.0);
@@ -493,7 +490,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
             posX += widthKeySig + xPosTimeSig;
 
             // Time signature
-            engraving::TimeSig*& timeSig = m_cachedTimeSigs[constStaffIdx];
+            engraving::TimeSig*& timeSig = m_cachedTimeSigs[staffIdx];
             timeSig->setColor(color);
             posX += timeSigLeftMargin;
             const PointF tsPos = PointF(posX, 0.0);
