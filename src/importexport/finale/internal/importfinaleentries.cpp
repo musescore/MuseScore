@@ -566,6 +566,9 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             if (chord->measure()->hasVoices(staffIdx, entryStartTick, chord->actualTicks())) {
                 up = !(curTrackIdx & 1);
             } else if (crossStaffMove == 0) {
+                for (engraving::Note* n : chord->notes()) {
+                    n->updateLine();
+                }
                 int middleLine = chord->staffType()->lines() - 1;
                 if (targetStaff->isTabStaff(entryStartTick)) {
                     up = chord->downNote()->string() + chord->upNote()->string() > middleLine;
