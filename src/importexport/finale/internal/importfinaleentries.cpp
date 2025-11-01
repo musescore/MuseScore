@@ -1077,56 +1077,51 @@ static DirectionV calculateTieDirection(const Tie* tie, const MusxInstance<optio
             }
         }
 
-        if (innerDefault == DirectionV::AUTO) { //  || config->chordTieDirType == options::TieOptions::ChordTieDirType::StemReversal
+        if (innerDefault == DirectionV::AUTO) {
             const int middleLine = (c->staffType()->lines() - 1) * (!tabStaff ? 2 : 1);
             innerDefault = (line > middleLine) ? DirectionV::DOWN : DirectionV::UP;
         }
 
-        if (innerDefault != DirectionV::AUTO) { // should always happen?
-            if (!tabStaff && config->secondsPlacement == options::TieOptions::SecondsPlacement::ShiftForSeconds) {
-                bool isUpper2nd = false;
-                bool isLower2nd = false;
-                for (const engraving::Note* n : c->notes()) {
-                    isLower2nd = isLower2nd || (line == n->line() + 1);
-                    isUpper2nd = isUpper2nd || (line == n->line() - 1);
-                }
-
-                if (innerDefault == DirectionV::UP && !isUpper2nd && isLower2nd) {
-                    return DirectionV::DOWN;
-                }
-
-                if (innerDefault == DirectionV::DOWN && isUpper2nd && !isLower2nd) {
-                    return DirectionV::UP;
-                }
+        if (!tabStaff && config->secondsPlacement == options::TieOptions::SecondsPlacement::ShiftForSeconds) {
+            bool isUpper2nd = false;
+            bool isLower2nd = false;
+            for (const engraving::Note* n : c->notes()) {
+                isLower2nd = isLower2nd || (line == n->line() + 1);
+                isUpper2nd = isUpper2nd || (line == n->line() - 1);
             }
-            return innerDefault;
+
+            if (innerDefault == DirectionV::UP && !isUpper2nd && isLower2nd) {
+                return DirectionV::DOWN;
+            }
+
+            if (innerDefault == DirectionV::DOWN && isUpper2nd && !isLower2nd) {
+                return DirectionV::UP;
+            }
         }
+        return innerDefault;
     } else {
         DirectionV adjacentStemDir = DirectionV::AUTO;
         const engraving::Note* startNote = tie->startNote();
         const engraving::Note* endNote = tie->endNote();
 
         if (forTieEnd) {
-            if (endNote) { // should always happen
-                const ChordRest* startChordRest = prevChordRest(c); // use startNote->chord()?
-                if (startChordRest->isChord()) {
-                    DirectionV startDir = startChordRest->beam() ? startChordRest->beam()->direction() : startChordRest->stemDirection();
-                    assert(startDir != DirectionV::AUTO); // perhaps not necessary
-                    adjacentStemDir = startDir;
-                }
+            if (startNote) {
+                const Chord* startChord = startNote->chord();
+                DirectionV startDir = startChord->beam() ? startChord->beam()->direction() : startChord->stemDirection();
+                assert(startDir != DirectionV::AUTO); // perhaps not necessary
+                adjacentStemDir = startDir;
             }
         } else {
             if (endNote) {
                 const Chord* endChord = endNote->chord();
                 DirectionV endDir = endChord->beam() ? endChord->beam()->direction() : endChord->stemDirection();
-            }
-
-            if (adjacentStemDir == DirectionV::AUTO && startNote) {
-                ChordRest* nextChordRest = nextChordRest(c); // endNote->chord() is likely preferred here
                 assert(endDir != DirectionV::AUTO); // perhaps not necessary
                 adjacentStemDir = endDir;
-                if (nextChordRest && !nextChordRest->isRest()) {
-                    DirectionV nextDir = nextChordRest->beam() ? nextChordRest->beam()->direction() : nextChordRest->stemDirection();
+            } else {
+                const ChordRest* nextCR = nextChordRest(c);
+                if (nextCR && nextCR->isChord()) {
+                    const Chord* nextChord = toChord(nextCR);
+                    DirectionV nextDir = nextChord->beam() ? nextChord->beam()->direction() : nextChord->stemDirection();
                     assert(nextDir != DirectionV::AUTO); // perhaps not necessary
                     adjacentStemDir = nextDir;
 
