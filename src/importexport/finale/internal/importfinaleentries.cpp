@@ -1176,8 +1176,9 @@ static TiePlacement calculateTiePlacement(Tie* tie, bool useOuterPlacement)
     return (useOuterPlacement && isOutside) ? outsideValue : insideValue;
 }
 
-void FinaleParser::setBeamPositions()
+void FinaleParser::importEntryAdjustments()
 {
+    // Beam positions
     for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
         if (!chordRest->beam() || chordRest->beamMode() != BeamMode::BEGIN) {
             continue;
