@@ -1194,15 +1194,12 @@ void FinaleParser::setBeamPositions()
 
         // Smoothing
         if (!musxOptions().beamOptions->spanSpace && !muse::RealIsEqual(preferredStart, preferredEnd)) {
-            innermost = up ? std::max(preferredStart, preferredEnd) : std::min(preferredStart, preferredEnd);
             if (up ? muse::RealIsEqualOrMore(innermost, beamStaffY) : innermost < beamStaffY + beam->staff()->staffHeight(beam->tick())) {
+            innermost = getInnermost();
                 /// @todo figure out these calculations - they seem more complex than the rest of the code
                 /// For now, set to default position and add offset
-                if (up) {
-                    setAndStyleProperty(beam, Pid::BEAM_CROSS_STAFF_MOVE, beam->minCRMove() - beam->defaultCrossStaffIdx());
-                } else {
-                    setAndStyleProperty(beam, Pid::BEAM_CROSS_STAFF_MOVE, beam->maxCRMove() + 1 - beam->defaultCrossStaffIdx());
-                }
+                int crossStaffMove = (up ? beam->minCRMove() : beam->maxCRMove() + 1) - beam->defaultCrossStaffIdx();
+                setAndStyleProperty(beam, Pid::BEAM_CROSS_STAFF_MOVE, crossStaffMove);
                 setAndStyleProperty(beam, Pid::BEAM_POS, PairF(beam->beamPos().first - (posAdjust.x() / beam->spatium()),
                                                                beam->beamPos().second - (posAdjust.y() / beam->spatium())));
                 continue;
