@@ -1060,6 +1060,11 @@ static DirectionV calculateTieDirection(const Tie* tie, const MusxInstance<optio
     const DirectionV stemDir = c->beam() ? c->beam()->direction() : c->stemDirection();
     assert(stemDir != DirectionV::AUTO);
 
+    // Finale uses voice placement if there are voices anywhere in the measure.
+    if (c->measure()->hasVoices(c->staffIdx())) {
+        return (c->track() & 1) ? DirectionV::DOWN : DirectionV::UP;
+    }
+
     if (note->chord()->notes().size() > 1) {
         // Notes are sorted from lowest to highest
         const size_t noteIndex = muse::indexOf(c->notes(), note);
@@ -1172,8 +1177,8 @@ static TiePlacement calculateTiePlacement(Tie* tie, bool useOuterPlacement)
 
     const bool styleIsOuter = tie->style().styleV(Sid::tiePlacementSingleNote).value<TiePlacement>() == TiePlacement::OUTSIDE;
     const bool defaultPlacement = useOuterPlacement == styleIsOuter;
-    const TiePlacement outsideValue = (styleIsOuter && defaultPlacement) ? TiePlacement::AUTO   : TiePlacement::OUTSIDE;
-    const TiePlacement insideValue = (styleIsOuter && !defaultPlacement) ? TiePlacement::INSIDE : TiePlacement::AUTO;
+    const TiePlacement outsideValue = (styleIsOuter && defaultPlacement) ? TiePlacement::AUTO : TiePlacement::OUTSIDE;
+    const TiePlacement insideValue = (!styleIsOuter && defaultPlacement) ? TiePlacement::AUTO : TiePlacement::INSIDE;
 
     // Single-note chords
     if ((!startChord || startChord->notes().size() <= 1) && (!endChord || endChord->notes().size() <= 1)) {
@@ -1421,7 +1426,7 @@ void FinaleParser::importEntryAdjustments()
     // Ties
     for (auto [numbers, note] : m_entryNoteNumber2Note) {
         EntryNumber entryNumber = numbers.first;
-        // NoteNumber noteNumber = numbers.second;
+        NoteNumber noteNumber = numbers.second;
 
         /// @todo offsets and contour
         auto positionTie = [this](Tie* tie, const MusxInstance<details::TieAlterBase>& tieAlt) {
@@ -1449,10 +1454,24 @@ void FinaleParser::importEntryAdjustments()
             setAndStyleProperty(tie, Pid::TIE_PLACEMENT, placement);
         };
         if (note->tieFor()) {
-            positionTie(note->tieFor(), m_doc->getDetails()->get<details::TieAlterStart>(m_currentMusxPartId, entryNumber));
+            MusxInstance<details::TieAlterBase> tieAlt = nullptr;
+            for (const auto& startAlt : m_doc->getDetails()->getArray<details::TieAlterStart>(m_currentMusxPartId, entryNumber)) {
+                if (startAlt->getNoteId() == noteNumber) {
+                    tieAlt = startAlt;
+                    break;
+                }
+            }
+            positionTie(note->tieFor(), tieAlt);
         }
         if (note->tieBack()) {
-            positionTie(note->tieBack(), m_doc->getDetails()->get<details::TieAlterEnd>(m_currentMusxPartId, entryNumber));
+            MusxInstance<details::TieAlterBase> tieAlt = nullptr;
+            for (const auto& endAlt : m_doc->getDetails()->getArray<details::TieAlterEnd>(m_currentMusxPartId, entryNumber)) {
+                if (endAlt->getNoteId() == noteNumber) {
+                    tieAlt = endAlt;
+                    break;
+                }
+            }
+            positionTie(note->tieBack(), tieAlt);
         }
     }
 }
