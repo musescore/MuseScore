@@ -1044,11 +1044,6 @@ static DirectionV calculateTieDirection(const Tie* tie, const MusxInstance<optio
     const DirectionV stemDir = c->beam() ? c->beam()->direction() : c->stemDirection();
     assert(stemDir != DirectionV::AUTO);
 
-    const bool forTieEnd = note == tie->endNote();
-    const Fraction tick = c->segment()->tick();
-    const bool tabStaff = note->staff()->isTabStaff(tick);
-    const int line = tabStaff ? note->string() : note->line();
-
     if (note->chord()->notes().size() > 1) {
         // Notes are sorted from lowest to highest
         const size_t noteIndex = muse::indexOf(c->notes(), note);
@@ -1062,24 +1057,26 @@ static DirectionV calculateTieDirection(const Tie* tie, const MusxInstance<optio
             return DirectionV::UP;
         }
 
-        DirectionV innerDefault = DirectionV::AUTO;
+        DirectionV tieDir = DirectionV::AUTO;
+        const bool tabStaff = note->staff()->isTabStaff(c->segment()->tick());
+        const int line = tabStaff ? note->string() : note->line();
 
         if (config->chordTieDirType != options::TieOptions::ChordTieDirType::StemReversal) {
             if (noteIndex < noteCount / 2) {
-                innerDefault = DirectionV::DOWN;
+                tieDir = DirectionV::DOWN;
             }
             if (noteIndex >= (noteCount + 1) / 2) {
-                innerDefault = DirectionV::UP;
+                tieDir = DirectionV::UP;
             }
 
             if (config->chordTieDirType == options::TieOptions::ChordTieDirType::OutsideInside) {
-                innerDefault = (stemDir == DirectionV::UP) ? DirectionV::DOWN : DirectionV::UP;
+                tieDir = (stemDir == DirectionV::UP) ? DirectionV::DOWN : DirectionV::UP;
             }
         }
 
-        if (innerDefault == DirectionV::AUTO) {
+        if (tieDir == DirectionV::AUTO) {
             const int middleLine = (c->staffType()->lines() - 1) * (!tabStaff ? 2 : 1);
-            innerDefault = (line > middleLine) ? DirectionV::DOWN : DirectionV::UP;
+            tieDir = (line > middleLine) ? DirectionV::DOWN : DirectionV::UP;
         }
 
         if (!tabStaff && config->secondsPlacement == options::TieOptions::SecondsPlacement::ShiftForSeconds) {
@@ -1090,28 +1087,24 @@ static DirectionV calculateTieDirection(const Tie* tie, const MusxInstance<optio
                 isUpper2nd = isUpper2nd || (line == n->line() - 1);
             }
 
-            if (innerDefault == DirectionV::UP && !isUpper2nd && isLower2nd) {
+            if (tieDir == DirectionV::UP && !isUpper2nd && isLower2nd) {
                 return DirectionV::DOWN;
             }
 
-            if (innerDefault == DirectionV::DOWN && isUpper2nd && !isLower2nd) {
+            if (tieDir == DirectionV::DOWN && isUpper2nd && !isLower2nd) {
                 return DirectionV::UP;
             }
         }
-        return innerDefault;
-    } else {
+        return tieDir;
+    }
+
+    // Single-note chords
+    if (config->mixedStemDirection != options::TieOptions::MixedStemDirection::OppositeFirst) {
         DirectionV adjacentStemDir = DirectionV::AUTO;
         const engraving::Note* startNote = tie->startNote();
         const engraving::Note* endNote = tie->endNote();
 
-        if (forTieEnd) {
-            if (startNote) {
-                const Chord* startChord = startNote->chord();
-                DirectionV startDir = startChord->beam() ? startChord->beam()->direction() : startChord->stemDirection();
-                assert(startDir != DirectionV::AUTO); // perhaps not necessary
-                adjacentStemDir = startDir;
-            }
-        } else {
+        if (note == startNote) {
             if (endNote) {
                 const Chord* endChord = endNote->chord();
                 DirectionV endDir = endChord->beam() ? endChord->beam()->direction() : endChord->stemDirection();
@@ -1138,12 +1131,19 @@ static DirectionV calculateTieDirection(const Tie* tie, const MusxInstance<optio
                     // }
                 }
             }
+        } else {
+            if (startNote) {
+                const Chord* startChord = startNote->chord();
+                DirectionV startDir = startChord->beam() ? startChord->beam()->direction() : startChord->stemDirection();
+                assert(startDir != DirectionV::AUTO); // perhaps not necessary
+                adjacentStemDir = startDir;
+            }
         }
 
         if (adjacentStemDir != DirectionV::AUTO && adjacentStemDir != stemDir) {
             if (config->mixedStemDirection == options::TieOptions::MixedStemDirection::Over) {
                 return DirectionV::UP;
-            } else if (config->mixedStemDirection == options::TieOptions::MixedStemDirection::Under) {
+            } else {
                 return DirectionV::DOWN;
             }
         }
