@@ -335,8 +335,8 @@
             </Chord>
           <Beam>
             <eid>J_J</eid>
-            <l1>40</l1>
-            <l2>40</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <eid>K_K</eid>
@@ -386,8 +386,8 @@
             </Chord>
           <Beam>
             <eid>R_R</eid>
-            <l1>40</l1>
-            <l2>40</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <eid>S_S</eid>
@@ -474,8 +474,8 @@
             </Chord>
           <Beam>
             <eid>e_e</eid>
-            <l1>40</l1>
-            <l2>40</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <eid>f_f</eid>
@@ -517,8 +517,8 @@
             </Chord>
           <Beam>
             <eid>k_k</eid>
-            <l1>40</l1>
-            <l2>40</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <eid>l_l</eid>
@@ -856,8 +856,8 @@
             </Chord>
           <Beam>
             <eid>RB_RB</eid>
-            <l1>40</l1>
-            <l2>40</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <eid>SB_SB</eid>
@@ -899,8 +899,8 @@
             </Chord>
           <Beam>
             <eid>XB_XB</eid>
-            <l1>40</l1>
-            <l2>40</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <eid>YB_YB</eid>
@@ -978,8 +978,8 @@
             </Chord>
           <Beam>
             <eid>hB_hB</eid>
-            <l1>40</l1>
-            <l2>40</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <eid>iB_iB</eid>
@@ -1021,8 +1021,8 @@
             </Chord>
           <Beam>
             <eid>nB_nB</eid>
-            <l1>40</l1>
-            <l2>40</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <eid>oB_oB</eid>

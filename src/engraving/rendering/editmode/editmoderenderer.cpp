@@ -240,7 +240,7 @@ void EditModeRenderer::drawTextBase(const TextBase* item, muse::draw::Painter* p
         TextBase::sort(r1, c1, r2, c2);
         size_t row = 0;
         for (const TextBlock& t : ldata->blocks) {
-            t.draw(painter, item);
+            draw(t, item, painter);
             if (row >= r1 && row <= r2) {
                 RectF br;
                 if (row == r1 && r1 == r2) {
@@ -277,4 +277,21 @@ void EditModeRenderer::drawTextBase(const TextBase* item, muse::draw::Painter* p
 
     painter->drawRect(r);
     pen = Pen(item->configuration()->defaultColor(), 0.0);
+}
+
+void EditModeRenderer::draw(const TextBlock& textBlock, const TextBase* item, muse::draw::Painter* painter)
+{
+    painter->translate(0.0, textBlock.y());
+    for (const TextFragment& f : textBlock.fragments()) {
+        draw(f, item, painter);
+    }
+    painter->translate(0.0, -textBlock.y());
+}
+
+void EditModeRenderer::draw(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter)
+{
+    Font f(textFragment.font(item));
+    f.setPointSizeF(f.pointSizeF());
+    painter->setFont(f);
+    painter->drawText(textFragment.pos, textFragment.text);
 }

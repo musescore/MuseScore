@@ -107,7 +107,7 @@ void EngravingItemPreviewPainter::paintPreviewForActionIcon(mu::engraving::Engra
     Painter* painter = params.painter;
     painter->save();
 
-    double DPIscaling = (mu::engraving::DPI / mu::engraving::DPI_F) / params.dpi;
+    double DPIscaling = mu::engraving::PPI / params.dpi;
 
     ActionIcon* action = toActionIcon(element);
     action->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * params.mag * DPIscaling);
@@ -171,8 +171,6 @@ void EngravingItemPreviewPainter::paintPreviewForItem(mu::engraving::EngravingIt
 
     Painter* painter = params.painter;
     painter->save();
-
-    mu::engraving::MScore::pixelRatio = mu::engraving::DPI / params.dpi;
 
     const double sizeRatio = params.spatium / gpaletteScore->style().spatium();
     painter->scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size

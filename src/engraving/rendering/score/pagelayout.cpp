@@ -641,12 +641,12 @@ void PageLayout::checkDivider(LayoutContext& ctx, bool left, System* s, double y
         TLayout::layoutSystemDivider(divider, divider->mutldata(), ctx);
         dividerLdata->setPosY(divider->height() * .5 + yOffset);
         if (left) {
-            dividerLdata->moveY(ctx.conf().styleD(Sid::dividerLeftY) * SPATIUM20);
-            dividerLdata->setPosX(ctx.conf().styleD(Sid::dividerLeftX) * SPATIUM20);
+            dividerLdata->moveY(ctx.conf().styleD(Sid::dividerLeftY) * ctx.conf().defaultSpatium());
+            dividerLdata->setPosX(ctx.conf().styleD(Sid::dividerLeftX) * ctx.conf().defaultSpatium());
         } else {
-            dividerLdata->moveY(ctx.conf().styleD(Sid::dividerRightY) * SPATIUM20);
+            dividerLdata->moveY(ctx.conf().styleD(Sid::dividerRightY) * ctx.conf().defaultSpatium());
             dividerLdata->setPosX(ctx.conf().styleD(Sid::pagePrintableWidth) * DPI - divider->width());
-            dividerLdata->moveX(ctx.conf().styleD(Sid::dividerRightX) * SPATIUM20);
+            dividerLdata->moveX(ctx.conf().styleD(Sid::dividerRightX) * ctx.conf().defaultSpatium());
         }
     } else if (divider) {
         if (divider->generated()) {

@@ -186,11 +186,6 @@ void PaintDebugger::drawText(const RectF& rect, int flags, const String& text)
     m_real->drawText(rect, flags, text);
 }
 
-void PaintDebugger::drawTextWorkaround(const Font& f, const PointF& pos, const String& text)
-{
-    m_real->drawTextWorkaround(f, pos, text);
-}
-
 void PaintDebugger::drawSymbol(const PointF& point, char32_t ucs4Code)
 {
     m_real->drawSymbol(point, ucs4Code);
@@ -237,4 +232,9 @@ void PaintDebugger::setMask(const RectF& background, const std::vector<RectF>& m
 void PaintDebugger::setClipping(bool enable)
 {
     m_real->setClipping(enable);
+}
+
+double mu::engraving::rendering::score::PaintDebugger::deviceLogicalDpi() const
+{
+    return m_real->deviceLogicalDpi();
 }

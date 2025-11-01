@@ -47,21 +47,16 @@ public:
     virtual double ascent(const Font& f) const = 0;
     virtual double descent(const Font& f) const = 0;
 
-    virtual bool inFont(const Font& f, Char ch) const = 0;
-    virtual bool inFontUcs4(const Font& f, char32_t ucs4) const = 0;
+    virtual bool inFont(const Font& f, char32_t ucs4) const = 0;
 
     // Text
     virtual double horizontalAdvance(const Font& f, const String& string) const = 0;
-    virtual double horizontalAdvance(const Font& f, const Char& ch) const = 0;
+    virtual double horizontalAdvance(const Font& f, char32_t ucs4) const = 0;
 
     virtual RectF boundingRect(const Font& f, const String& string) const = 0;
-    virtual RectF boundingRect(const Font& f, const Char& ch) const = 0;
-    virtual RectF boundingRect(const Font& f, const RectF& r, int flags, const String& string) const = 0;
-    virtual RectF tightBoundingRect(const Font& f, const String& string) const = 0;
+    virtual RectF boundingRect(const Font& f, char32_t ucs4) const = 0;
 
-    // Score symbols
-    virtual RectF symBBox(const Font& f, char32_t ucs4, double DPI_F) const = 0;
-    virtual double symAdvance(const Font& f, char32_t ucs4, double DPI_F) const = 0;
+    virtual RectF tightBoundingRect(const Font& f, const String& string) const = 0;
 };
 }
 

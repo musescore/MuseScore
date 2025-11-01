@@ -118,6 +118,10 @@ MasterScore* MusicXml_Tests::readScore(const String& fileName, bool isAbsolutePa
 bool MusicXml_Tests::saveCompareMusicXmlScore(MasterScore* score, const String& saveName, const String& compareWithLocalPath)
 {
     EXPECT_TRUE(saveXml(score, saveName));
+    bool val = ScoreComp::compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName);
+    if (!val) {
+        //saveXml(score, ScoreRW::rootPath() + u"/" + compareWithLocalPath);
+    }
     return ScoreComp::compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName);
 }
 

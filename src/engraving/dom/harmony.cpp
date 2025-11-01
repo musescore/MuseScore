@@ -1200,12 +1200,12 @@ void TextSegment::setFont(const muse::draw::Font& f)
             const Char& c2 = m_text.at(i + 1);
             ++i;
             char32_t v = Char::surrogateToUcs4(c, c2);
-            if (!fm.inFontUcs4(v)) {
+            if (!fm.inFont(v)) {
                 fail = true;
                 break;
             }
         } else {
-            if (!fm.inFont(c)) {
+            if (!fm.inFont(c.unicode())) {
                 fail = true;
                 break;
             }

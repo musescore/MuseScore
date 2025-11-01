@@ -235,7 +235,6 @@ public:
     bool operator ==(const TextFragment& f) const;
 
     TextFragment split(int column);
-    void draw(muse::draw::Painter*, const TextBase*) const;
     muse::draw::Font font(const TextBase*) const;
     int columns() const;
     void changeFormat(FormatId id, const FormatValue& data);
@@ -253,7 +252,7 @@ public:
 
     bool operator ==(const TextBlock& x) const { return m_fragments == x.m_fragments; }
     bool operator !=(const TextBlock& x) const { return m_fragments != x.m_fragments; }
-    void draw(muse::draw::Painter*, const TextBase*) const;
+
     const std::list<TextFragment>& fragments() const { return m_fragments; }
     std::list<TextFragment>& fragments() { return m_fragments; }
     std::list<TextFragment> fragmentsWithoutEmpty();
@@ -312,8 +311,6 @@ public:
     void setAlign(Align a) { m_align = a; }
     AlignH position() const { return m_position; }
     void setPosition(AlignH val) { m_position = val; }
-
-    static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const PointF& pos, const String& text);
 
     static String plainToXmlText(const String& s) { return s.toXmlEscaped(); }
     void setPlainText(const String& t) { setXmlText(plainToXmlText(t)); }

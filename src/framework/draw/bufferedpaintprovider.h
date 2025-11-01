@@ -61,6 +61,8 @@ public:
     void save() override;
     void restore() override;
 
+    double deviceLogicalDpi() const override;
+
     void setTransform(const Transform& transform) override;
     const Transform& transform() const override;
 
@@ -70,7 +72,6 @@ public:
 
     void drawText(const PointF& point, const String& text) override;
     void drawText(const RectF& rect, int flags, const String& text) override;
-    void drawTextWorkaround(const Font& f, const PointF& pos, const String& text) override;
 
     void drawSymbol(const PointF& point, char32_t ucs4Code) override;
 

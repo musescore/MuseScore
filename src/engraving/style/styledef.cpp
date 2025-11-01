@@ -742,7 +742,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(minVerticalDistance,                        0.5_sp),
     styleDef(skylineMinHorizontalClearance,              0.25_sp),
     styleDef(ornamentStyle,                              int(OrnamentStyle::DEFAULT)),
-    styleDef(spatium,                                    24.8),
+    styleDef(spatium,                                    1.75 /*mm*/ * DPMM),
 
     styleDef(autoplaceHairpinDynamicsDistance,           0.5_sp),
 

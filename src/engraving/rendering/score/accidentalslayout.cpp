@@ -837,7 +837,10 @@ double AccidentalsLayout::minAccidentalToAccidentalGroupDistance(Accidental* acc
 
             double vertPadding = verticalPadding(acc, acc2, ctx);
             double horPadding = horizontalPadding(acc, acc2, ctx);
-            if (accShape.intersects(groupElement.adjusted(-horPadding, -vertPadding, horPadding, vertPadding))) {
+            // If the tolerance for detecting intersections is the same as the padding,
+            // we may randomly detect wrong intersections just because of rounding errors
+            double horPaddingWithTolerance = 0.999 * horPadding;
+            if (accShape.intersects(groupElement.adjusted(-horPaddingWithTolerance, -vertPadding, horPaddingWithTolerance, vertPadding))) {
                 collisionFound = true;
             } else {
                 continue;
@@ -1055,6 +1058,17 @@ void AccidentalsLayout::collectVerticalSets(
 
 void AccidentalsLayout::alignVerticalSets(AccidentalGroups& vertSets, AccidentalsLayoutContext& ctx)
 {
+    AccidentalGroups accidentalColumns;
+    for (std::vector<Accidental*>& group : ctx.accidentalSubChords) {
+        for (Accidental* acc : group) {
+            size_t column = acc->ldata()->column;
+            while (accidentalColumns.size() <= column) {
+                accidentalColumns.push_back(std::vector<Accidental*>());
+            }
+            accidentalColumns[column].push_back(acc);
+        }
+    }
+
     for (std::vector<Accidental*>& vertSet : vertSets) {
         // Align the set
         double x = DBL_MAX;
@@ -1068,14 +1082,16 @@ void AccidentalsLayout::alignVerticalSets(AccidentalGroups& vertSets, Accidental
         }
 
         // Re-check the outer ones for collisions
-        int curColumn = vertSet.front()->ldata()->column.value();
+        size_t curColumn = vertSet.front()->ldata()->column.value();
         Shape accidentalGroupShape;
-        for (std::vector<Accidental*>& group : ctx.accidentalSubChords) {
-            for (Accidental* acc : group) {
+        for (size_t column = 0; column < accidentalColumns.size(); ++column) {
+            if (column < curColumn) {
+                continue;
+            }
+            for (Accidental* acc : accidentalColumns[column]) {
                 double curXPos = xPosRelativeToSegment(acc);
                 Shape accShape = acc->shape().translate(PointF(curXPos, acc->note()->y()));
-                int accColumn = acc->ldata()->column;
-                if (accColumn >= curColumn && !muse::contains(vertSet, acc)) {
+                if (!muse::contains(vertSet, acc)) {
                     double minDistToAccidGroup = minAccidentalToAccidentalGroupDistance(acc, accShape, accidentalGroupShape, ctx);
                     accShape.translateX(-minDistToAccidGroup);
                     setXposRelativeToSegment(acc, curXPos - minDistToAccidGroup);

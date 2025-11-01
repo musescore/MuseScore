@@ -258,22 +258,22 @@ public:
     const String& durationFontName() const { return m_durationFonts[m_durationFontIdx].displayName; }
     double durationFontSize() const { return m_durationFontSize; }
     double durationFontUserY() const { return m_durationFontUserY; }
-    double durationFontYOffset() const { return m_durationYOffset + m_durationFontUserY * SPATIUM20; }
+    double durationFontYOffset() const;
     double durationGridYOffset() const { return m_durationGridYOffset; }
     double fretBoxH() const { return m_fretBoxH; }
     double deadFretBoxH() const { return m_deadFretBoxH; }
-    double fretBoxY() const { return m_fretBoxY + m_fretFontUserY * SPATIUM20; }
-    double deadFretBoxY() const { return m_deadFretBoxY + m_fretFontUserY * SPATIUM20; }
+    double fretBoxY() const;
+    double deadFretBoxY() const;
 
     // 2 methods to return the size of a box masking lines under a fret mark
-    double fretMaskH() const { return m_lineDistance.val() * SPATIUM20; }
-    double fretMaskY() const { return (m_onLines ? -0.5 : -1.0) * m_lineDistance.val() * SPATIUM20; }
+    double fretMaskH() const;
+    double fretMaskY() const;
 
     const muse::draw::Font& fretFont() const { return m_fretFont; }
     const String fretFontName() const { return m_fretFontInfo.displayName; }
     double fretFontSize() const { return m_fretFontSize; }
     double fretFontUserY() const { return m_fretFontUserY; }
-    double fretFontYOffset() const { return m_fretYOffset + m_fretFontUserY * SPATIUM20; }
+    double fretFontYOffset() const;
     bool  genDurations() const { return m_genDurations; }
     bool  linesThrough() const { return m_linesThrough; }
     TablatureMinimStyle minimStyle() const { return m_minimStyle; }
@@ -336,6 +336,7 @@ private:
 
     Score* m_score = nullptr;
 
+    double defaultSpatium() const;
     void  setDurationMetrics();
     void  setFretMetrics();
 

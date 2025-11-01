@@ -568,7 +568,7 @@
             </Tuplet>
           <Beam>
             <eid>ZB_ZB</eid>
-            <l1>44</l1>
+            <l1>46</l1>
             <l2>42</l2>
             </Beam>
           <Chord>
@@ -663,7 +663,7 @@
             </Tuplet>
           <Beam>
             <eid>qB_qB</eid>
-            <l1>42</l1>
+            <l1>44</l1>
             <l2>40</l2>
             </Beam>
           <Chord>
@@ -790,7 +790,7 @@
             </Rest>
           <Beam>
             <eid>AC_AC</eid>
-            <l1>44</l1>
+            <l1>46</l1>
             <l2>42</l2>
             </Beam>
           <Chord>

@@ -65,6 +65,8 @@ public:
     virtual void save() = 0;
     virtual void restore() = 0;
 
+    virtual double deviceLogicalDpi() const = 0;
+
     virtual void setTransform(const Transform& transform) = 0;
     virtual const Transform& transform() const = 0;
 
@@ -74,7 +76,6 @@ public:
 
     virtual void drawText(const PointF& point, const String& text) = 0;
     virtual void drawText(const RectF& rect, int flags, const String& text) = 0;
-    virtual void drawTextWorkaround(const Font& f, const PointF& pos, const String& text) = 0; // see Painter::drawTextWorkaround .h file
 
     virtual void drawSymbol(const PointF& point, char32_t ucs4Code) = 0;
 
