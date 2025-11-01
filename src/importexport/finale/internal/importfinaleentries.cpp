@@ -1057,27 +1057,8 @@ static DirectionV calculateTieDirection(const Tie* tie, const MusxInstance<optio
             return DirectionV::UP;
         }
 
-        DirectionV tieDir = DirectionV::AUTO;
-        const bool tabStaff = note->staff()->isTabStaff(c->segment()->tick());
+        const bool tabStaff = c->staffType()->isTabStaff();
         const int line = tabStaff ? note->string() : note->line();
-
-        if (config->chordTieDirType != options::TieOptions::ChordTieDirType::StemReversal) {
-            if (noteIndex < noteCount / 2) {
-                tieDir = DirectionV::DOWN;
-            }
-            if (noteIndex >= (noteCount + 1) / 2) {
-                tieDir = DirectionV::UP;
-            }
-
-            if (config->chordTieDirType == options::TieOptions::ChordTieDirType::OutsideInside) {
-                tieDir = (stemDir == DirectionV::UP) ? DirectionV::DOWN : DirectionV::UP;
-            }
-        }
-
-        if (tieDir == DirectionV::AUTO) {
-            const int middleLine = (c->staffType()->lines() - 1) * (!tabStaff ? 2 : 1);
-            tieDir = (line > middleLine) ? DirectionV::DOWN : DirectionV::UP;
-        }
 
         if (!tabStaff && config->secondsPlacement == options::TieOptions::SecondsPlacement::ShiftForSeconds) {
             bool isUpper2nd = false;
@@ -1087,15 +1068,29 @@ static DirectionV calculateTieDirection(const Tie* tie, const MusxInstance<optio
                 isUpper2nd = isUpper2nd || (line == n->line() - 1);
             }
 
-            if (tieDir == DirectionV::UP && !isUpper2nd && isLower2nd) {
+            if (!isUpper2nd && isLower2nd) {
                 return DirectionV::DOWN;
             }
-
-            if (tieDir == DirectionV::DOWN && isUpper2nd && !isLower2nd) {
+            if (isUpper2nd && !isLower2nd) {
                 return DirectionV::UP;
             }
         }
-        return tieDir;
+
+        if (config->chordTieDirType != options::TieOptions::ChordTieDirType::StemReversal) {
+            if (noteIndex < noteCount / 2) {
+                return DirectionV::DOWN;
+            }
+            if (noteIndex >= (noteCount + 1) / 2) {
+                return DirectionV::UP;
+            }
+
+            if (config->chordTieDirType == options::TieOptions::ChordTieDirType::OutsideInside) {
+                return (stemDir == DirectionV::UP) ? DirectionV::DOWN : DirectionV::UP;
+            }
+        }
+
+        const int middleLine = (c->staffType()->lines() - 1) * (!tabStaff ? 2 : 1);
+        return (line > middleLine) ? DirectionV::DOWN : DirectionV::UP;
     }
 
     // Single-note chords
