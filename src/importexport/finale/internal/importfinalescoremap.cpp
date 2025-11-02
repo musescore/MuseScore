@@ -69,6 +69,60 @@ using namespace mu::iex::finale;
 
 namespace mu::iex::finale {
 
+static ClefType toMuseScoreClefType(const MusxInstance<musx::dom::options::ClefOptions::ClefDef>& clefDef,
+                                    const MusxInstance<musx::dom::others::Staff>& musxStaff)
+{
+    // Musx staff positions start with the reference line as 0. (The reference line on a standard 5-line staff is the top line.)
+    // We don't account for any potential difference here (Staff::calcTopLinePosition()) because we set the stepOffset in StaffType later.
+    // Positive values are above the reference line. Negative values are below the reference line.
+
+    using MusxClefType = music_theory::ClefType;
+    auto [clefType, octaveShift] = clefDef->calcInfo(musxStaff);
+
+    SymId clefSym = SymId::noSym;
+    if (!clefDef->isShape) {
+        if (clefDef->useOwnFont) {
+            clefSym = FinaleTextConv::symIdFromFinaleChar(clefDef->clefChar, clefDef->font);
+        } else {
+            const MusxInstance<FontInfo>& clefFont = options::FontOptions::getFontInfo(musxStaff->getDocument(), options::FontOptions::FontType::Clef);
+            clefSym = FinaleTextConv::symIdFromFinaleChar(clefDef->clefChar, clefFont);
+        }
+    }
+
+    // First pass: try to find a perfect match (symbol and pitch)
+    for (int i = 0; i < int(ClefType::MAX); ++i) {
+        ClefType ct = ClefType(i);
+        if (ClefInfo::symId(ct) == clefSym && ClefInfo::pitchOffset(ct) + clefDef->middleCPos == 35) {
+            return ct;
+        }
+    }
+
+    // Second attempt: Use sensible defaults for non-standard clef types
+    // We could skip this pass (and set middleCPos to -10), but this yields better results
+    switch (clefType) {
+        case MusxClefType::Percussion1: return ClefType::PERC;
+        case MusxClefType::Percussion2: return ClefType::PERC2;
+        case MusxClefType::Tab: return musxStaff->calcNumberOfStafflines() <= 4 ? ClefType::TAB4 : ClefType::TAB;
+        case MusxClefType::TabSerif: return musxStaff->calcNumberOfStafflines() <= 4 ? ClefType::TAB4_SERIF : ClefType::TAB_SERIF;
+        default: break;
+    }
+
+    // Final attempt: prioritise clef type (C/G/F/Tab/Perc)
+    for (int i = 0; i < int(ClefType::MAX); ++i) {
+        ClefType ct = ClefType(i);
+        if (ClefInfo::pitchOffset(ct) + clefDef->middleCPos == /*MuseScore line for middle C*/ 35) {
+            String clefSymName = String::fromAscii(SymNames::nameForSymId(ClefInfo::symId(ct)).ascii());
+            if ((clefType == MusxClefType::G && clefSymName.contains(u"gClef"))
+                || (clefType == MusxClefType::C && clefSymName.contains(u"cClef"))
+                || (clefType == MusxClefType::F && clefSymName.contains(u"fClef"))) {
+                return ct;
+            }
+        }
+    }
+
+    return ClefType::INVALID;
+}
+
 static NoteHeadGroup consolidateDrumNoteHeads(DrumInstrument di)
 {
     for (int direction = 1; direction >= 0; --direction) {
@@ -438,60 +492,6 @@ void FinaleParser::importBrackets()
             }
         }
     }
-}
-
-ClefType FinaleParser::toMuseScoreClefType(const MusxInstance<musx::dom::options::ClefOptions::ClefDef>& clefDef,
-                                           const MusxInstance<musx::dom::others::Staff>& musxStaff)
-{
-    // Musx staff positions start with the reference line as 0. (The reference line on a standard 5-line staff is the top line.)
-    // We don't account for any potential difference here (Staff::calcTopLinePosition()) because we set the stepOffset in StaffType later.
-    // Positive values are above the reference line. Negative values are below the reference line.
-
-    using MusxClefType = music_theory::ClefType;
-    auto [clefType, octaveShift] = clefDef->calcInfo(musxStaff);
-
-    SymId clefSym = SymId::noSym;
-    if (!clefDef->isShape) {
-        if (clefDef->useOwnFont) {
-            clefSym = FinaleTextConv::symIdFromFinaleChar(clefDef->clefChar, clefDef->font);
-        } else {
-            const MusxInstance<FontInfo>& clefFont = options::FontOptions::getFontInfo(musxStaff->getDocument(), options::FontOptions::FontType::Clef);
-            clefSym = FinaleTextConv::symIdFromFinaleChar(clefDef->clefChar, clefFont);
-        }
-    }
-
-    // First pass: try to find a perfect match (symbol and pitch)
-    for (int i = 0; i < int(ClefType::MAX); ++i) {
-        ClefType ct = ClefType(i);
-        if (ClefInfo::symId(ct) == clefSym && ClefInfo::pitchOffset(ct) + clefDef->middleCPos == 35) {
-            return ct;
-        }
-    }
-
-    // Second attempt: Use sensible defaults for non-standard clef types
-    // We could skip this pass (and set middleCPos to -10), but this yields better results
-    switch (clefType) {
-        case MusxClefType::Percussion1: return ClefType::PERC;
-        case MusxClefType::Percussion2: return ClefType::PERC2;
-        case MusxClefType::Tab: return musxStaff->calcNumberOfStafflines() <= 4 ? ClefType::TAB4 : ClefType::TAB;
-        case MusxClefType::TabSerif: return musxStaff->calcNumberOfStafflines() <= 4 ? ClefType::TAB4_SERIF : ClefType::TAB_SERIF;
-        default: break;
-    }
-
-    // Final attempt: prioritise clef type (C/G/F/Tab/Perc)
-    for (int i = 0; i < int(ClefType::MAX); ++i) {
-        ClefType ct = ClefType(i);
-        if (ClefInfo::pitchOffset(ct) + clefDef->middleCPos == /*MuseScore line for middle C*/ 35) {
-            String clefSymName = String::fromAscii(SymNames::nameForSymId(ClefInfo::symId(ct)).ascii());
-            if ((clefType == MusxClefType::G && clefSymName.contains(u"gClef"))
-                || (clefType == MusxClefType::C && clefSymName.contains(u"cClef"))
-                || (clefType == MusxClefType::F && clefSymName.contains(u"fClef"))) {
-                return ct;
-            }
-        }
-    }
-
-    return ClefType::INVALID;
 }
 
 Clef* FinaleParser::createClef(const MusxInstance<musx::dom::others::Staff>& musxStaff,
