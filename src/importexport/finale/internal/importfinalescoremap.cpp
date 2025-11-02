@@ -1277,6 +1277,8 @@ void FinaleParser::importPageLayout()
     MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     logger()->logDebugTrace(String(u"Document contains %1 staff systems and %2 pages.").arg(staffSystems.size(), pages.size()));
     size_t currentPageIndex = 0;
+    std::vector<Staff*> alwaysVisibleStaves = m_score->staves();
+    std::vector<Staff*> alwaysInvisibleStaves = m_score->staves();
     for (size_t i = 0; i < staffSystems.size(); ++i) {
         const MusxInstance<others::StaffSystem>& leftStaffSystem = staffSystems[i];
         MusxInstance<others::StaffSystem>& rightStaffSystem = staffSystems[i];
@@ -1451,7 +1453,15 @@ void FinaleParser::importPageLayout()
         for (const MusxInstance<others::StaffUsed>& musxStaff : instrumentsUsedInSystem) {
             visibleStaves.emplace_back(muse::value(m_inst2Staff, musxStaff->staffId, muse::nidx));
         }
-        for (Measure* m = startMeasure; m && m->tick() <= endMeasure->tick(); m = m->nextMeasureMM()) {
+        for (staff_idx_t j = 0; j < m_score->nstaves(); ++j) {
+            Staff* s = m_score->staff(j);
+            if (muse::contains(visibleStaves, j)) {
+                muse::remove(alwaysInvisibleStaves, s);
+            } else {
+                muse::remove(alwaysVisibleStaves, s);
+            }
+        }
+        for (Measure* m = startMeasure; m && m->tick() <= endMeasure->tick(); m = m->nextMeasure()) {
             for (staff_idx_t j = 0; j < m_score->nstaves(); ++j) {
                 m->setHideStaffIfEmpty(j, muse::contains(visibleStaves, j) ? AutoOnOff::OFF : AutoOnOff::ON);
             }
@@ -1475,6 +1485,28 @@ void FinaleParser::importPageLayout()
                            - Spatium::fromMM(m_score->staff(prevStaffIdx)->staffHeight(startMeasure->tick()), staffSpacer->spatium());
             staffSpacer->setGap(dist);
             startMeasure->add(staffSpacer);
+        }
+    }
+
+    // Apply global visibility settings
+    for (Part* p : m_score->parts()) {
+        bool alwaysVisible = true;
+        bool alwaysInvisible = true;
+        for (Staff* s : p->staves()) {
+            const bool staffIsVisible = muse::contains(alwaysVisibleStaves, s);
+            const bool staffIsInvisible = muse::contains(alwaysInvisibleStaves, s);
+            if (staffIsVisible || staffIsInvisible) {
+                for (Measure* m = m_score->firstMeasure(); m; m = m->nextMeasure()) {
+                    m->setHideStaffIfEmpty(s->idx(), AutoOnOff::AUTO);
+                }
+            }
+            alwaysVisible = alwaysVisible && staffIsVisible;
+            alwaysInvisible = alwaysInvisible && staffIsInvisible;
+            s->setVisible(staffIsVisible);
+        }
+        if (alwaysVisible || alwaysInvisible) {
+            p->setHideWhenEmpty(AutoOnOff::AUTO);
+            p->setShow(alwaysVisible);
         }
     }
 }
