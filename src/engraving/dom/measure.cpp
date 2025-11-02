@@ -2048,12 +2048,8 @@ LayoutBreak* Measure::sectionBreakElement(bool includeNextFrames) const
 bool Measure::isAnacrusis() const
 {
     const MeasureBase* pm = prev();
-    ElementType pt = pm ? pm->type() : ElementType::INVALID;
 
-    if (irregular() || !pm
-        || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()
-        || pt == ElementType::VBOX || pt == ElementType::HBOX
-        || pt == ElementType::FBOX || pt == ElementType::TBOX) {
+    if (irregular() || !pm || pm->isBox() || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()) {
         if (timesig() - ticks() > Fraction(0, 1)) {
             return true;
         }
