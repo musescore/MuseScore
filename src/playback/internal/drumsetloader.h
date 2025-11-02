@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_DRUMSETLOADER_H
-#define MU_PLAYBACK_DRUMSETLOADER_H
+#pragma once
 
 #include "async/asyncable.h"
 
@@ -37,8 +36,8 @@
 namespace mu::playback {
 class DrumsetLoader : public muse::async::Asyncable
 {
-    Inject<notation::IInstrumentsRepository> instrumentsRepository;
-    Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
+    muse::Inject<notation::IInstrumentsRepository> instrumentsRepository;
+    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
 
 public:
     void loadDrumset(notation::INotationPtr notation, const mu::engraving::InstrumentTrackId& trackId,
@@ -51,5 +50,3 @@ private:
     std::unordered_map<int /*instrumentId*/, std::optional<mu::engraving::Drumset> > m_drumsetCache;
 };
 }
-
-#endif // MU_PLAYBACK_DRUMSETLOADER_H

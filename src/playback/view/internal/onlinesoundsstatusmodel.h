@@ -36,11 +36,11 @@ class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable, p
 {
     Q_OBJECT
 
-    Inject<IPlaybackController> playbackController = { this };
-    Inject<context::IGlobalContext> globalContext = { this };
-    Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
-    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    Inject<muse::tours::IToursService> tours = { this };
+    muse::Inject<IPlaybackController> playbackController = { this };
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<muse::tours::IToursService> tours = { this };
 
     Q_PROPERTY(bool hasOnlineSounds READ hasOnlineSounds NOTIFY hasOnlineSoundsChanged)
     Q_PROPERTY(bool manualProcessingAllowed READ manualProcessingAllowed NOTIFY manualProcessingAllowedChanged)

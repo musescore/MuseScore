@@ -37,13 +37,13 @@
 namespace mu::musesounds {
 class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, public muse::Injectable, public muse::async::Asyncable
 {
-    Inject<muse::network::INetworkManagerCreator> networkManagerCreator = { this };
-    Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
-    Inject<muse::io::IFileSystem> fileSystem = { this };
-    Inject<muse::ISystemInfo> systemInfo = { this };
-    Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration = { this };
-    Inject<muse::IInteractive> interactive = { this };
-    Inject<IMuseSoundsConfiguration> configuration = { this };
+    muse::Inject<muse::network::INetworkManagerCreator> networkManagerCreator = { this };
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
+    muse::Inject<muse::ISystemInfo> systemInfo = { this };
+    muse::Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<IMuseSoundsConfiguration> configuration = { this };
 
 public:
 

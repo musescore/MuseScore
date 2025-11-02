@@ -39,7 +39,7 @@ class EditPercussionShortcutModel : public QObject, public muse::Injectable
 
     Q_PROPERTY(bool cleared READ cleared NOTIFY clearedChanged)
 
-    Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
 
 public:
     explicit EditPercussionShortcutModel(QObject* parent = nullptr);

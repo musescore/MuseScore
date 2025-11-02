@@ -43,13 +43,13 @@ class NotationPageModel : public QObject, public muse::Injectable, public muse::
     Q_PROPERTY(bool isNavigatorVisible READ isNavigatorVisible NOTIFY isNavigatorVisibleChanged)
     Q_PROPERTY(bool isBraillePanelVisible READ isBraillePanelVisible NOTIFY isBraillePanelVisibleChanged)
 
-    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    Inject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
-    Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
-    Inject<context::IGlobalContext> globalContext = { this };
-    Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
-    Inject<IAppShellConfiguration> configuration = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
+    muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
+    muse::Inject<IAppShellConfiguration> configuration = { this };
 
 public:
     explicit NotationPageModel(QObject* parent = nullptr);

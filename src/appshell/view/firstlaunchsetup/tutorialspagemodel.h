@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_TUTORIALSPAGEMODEL_H
-#define MU_APPSHELL_TUTORIALSPAGEMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -34,7 +33,7 @@ class TutorialsPageModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
 
-    Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
+    muse::Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
 
 public:
     explicit TutorialsPageModel(QObject* parent = nullptr);
@@ -42,5 +41,3 @@ public:
     Q_INVOKABLE QUrl museScorePrivacyPolicyUrl() const;
 };
 }
-
-#endif // MU_APPSHELL_TUTORIALSPAGEMODEL_H

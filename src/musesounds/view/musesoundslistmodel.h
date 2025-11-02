@@ -37,8 +37,8 @@ class MuseSoundsListModel : public QAbstractListModel, public muse::async::Async
 
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 
-    Inject<muse::IInteractive> interactive = { this };
-    Inject<IMuseSoundsRepository> repository = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<IMuseSoundsRepository> repository = { this };
 
 public:
     explicit MuseSoundsListModel(QObject* parent = nullptr);
