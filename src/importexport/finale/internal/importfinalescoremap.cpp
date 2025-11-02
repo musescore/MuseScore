@@ -156,11 +156,8 @@ static void loadInstrument(const MusxInstance<others::Staff> musxStaff, Instrume
     // Transposition
     // note that transposition in MuseScore is instrument-based,
     // so it can change throughout the score but not differ between staves of the same part
-    /// @todo convert diatonic transposition
-    if (musxStaff->transposition && musxStaff->transposition->chromatic) {
-        const auto& i = *musxStaff->transposition->chromatic;
-        instrument->setTranspose(Interval(i.diatonic, step2pitch(i.diatonic) + i.alteration));
-    }
+    auto [diatonic, alteration] = musxStaff->calcTranspositionInterval();
+    instrument->setTranspose(Interval(diatonic, step2pitch(diatonic) + alteration));
 
     // Fret and string data
     if (const MusxInstance<others::FretInstrument> fretInstrument = musxStaff->getDocument()->getOthers()->get<others::FretInstrument>(musxStaff->getSourcePartId(), musxStaff->fretInstId)) {
@@ -187,22 +184,27 @@ Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> m
 
     Staff* s = Factory::createStaff(part);
 
-    StaffType* staffType = s->staffType(Fraction(0, 1));
-
-    // initialise MuseScore's default values
+    // Initialise MuseScore's default values
     if (it) {
-        s->init(it, 0, 0);
-        // don't load bracket from template, we add it later (if it exists)
-        s->setBracketType(0, BracketType::NO_BRACKET);
-        s->setBracketSpan(0, 0);
-        s->setBarLineSpan(0);
+        const StaffType* pst = it->staffTypePreset ? it->staffTypePreset : StaffType::getDefaultPreset(it->staffGroup);
+        s->setStaffType(Fraction(0, 1), *pst);
+        s->setDefaultClefType(it->clefType(int(part->staves().size())));
     }
-    /// @todo Need to intialize the staff type from presets?
+
+    // Clefs
+    if (std::optional<ClefTypeList> defaultClefs = clefTypeListFromMusxStaff(musxStaff)) {
+        s->setDefaultClefType(defaultClefs.value());
+    } else {
+        // Finale has a "blank" clef type that is used for percussion staves. For now we emulate this
+        // at the beginning of the piece only.
+        /// @todo revisit how to handle blank clef types or changes to other clefs for things such as cues
+        s->staffType(Fraction(0, 1))->setGenClef(false);
+    }
 
     // Drumset and transposition
     loadInstrument(musxStaff, part->instrument());
 
-    // barline vertical offsets relative to staff
+    // Barline vertical offsets relative to staff
     auto calcBarlineOffsetHalfSpaces = [](Evpu offset) -> int {
         // Finale and MuseScore use opposite signs for up/down
         return int(std::lround(doubleFromEvpu(-offset) * 2.0));
@@ -210,20 +212,11 @@ Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> m
     s->setBarLineFrom(calcBarlineOffsetHalfSpaces(musxStaff->topBarlineOffset));
     s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset));
 
-    // hide when empty
+    // hide when empty override
     if (musxStaff->noOptimize) {
         s->setHideWhenEmpty(AutoOnOff::OFF);
     }
 
-    // clefs
-    if (std::optional<ClefTypeList> defaultClefs = clefTypeListFromMusxStaff(musxStaff)) {
-        s->setDefaultClefType(defaultClefs.value());
-    } else {
-        // Finale has a "blank" clef type that is used for percussion staves. For now we emulate this
-        // at the beginning of the piece only.
-        /// @todo revisit how to handle blank clef types or changes to other clefs for things such as cues
-        staffType->setGenClef(false);
-    }
     m_score->appendStaff(s);
     m_inst2Staff.emplace(StaffCmper(musxStaff->getCmper()), s->idx());
     m_staff2Inst.emplace(s->idx(), StaffCmper(musxStaff->getCmper()));
@@ -269,8 +262,8 @@ void FinaleParser::importParts()
 {
     MusxInstanceList<others::StaffUsed> scrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
 
-    std::unordered_map<StaffCmper, QString> inst2Part;
-    int partNumber = 0;
+    const bool hideEmptyStaves = m_score->style().styleB(Sid::hideEmptyStaves);
+    const AutoOnOff doNotHideVal = hideEmptyStaves ? AutoOnOff::OFF : AutoOnOff::AUTO;
     for (const MusxInstance<others::StaffUsed>& item : scrollView) {
         MusxInstance<others::Staff> staff = item->getStaffInstance();
         IF_ASSERT_FAILED(staff) {
@@ -288,44 +281,29 @@ void FinaleParser::importParts()
 
         Part* part = new Part(m_score);
 
-        // load default part settings
-        /// @todo overwrite most of these settings later
+        // load default part settings (most of which are overwritten later)
         const InstrumentTemplate* it = searchTemplate(instrTemplateIdfromUuid(compositeStaff->instUuid));
         if (it) {
             part->initFromInstrTemplate(it);
         }
 
-        QString partId = String("P%1").arg(++partNumber);
-        part->setId(partId);
-
         const auto& [topStaffId, instInfo] = *instIt;
         if (instInfo.staffGroupId != 0) {
             if (MusxInstance<details::StaffGroup> group = m_doc->getDetails()->get<details::StaffGroup>(m_currentMusxPartId, BASE_SYSTEM_ID, instInfo.staffGroupId)) {
-                switch (group->hideStaves) {
-                case details::StaffGroup::HideStaves::None:
-                    part->setHideWhenEmpty(AutoOnOff::OFF);
-                    break;
-                case details::StaffGroup::HideStaves::AsGroup:
-                    part->setHideWhenEmpty(AutoOnOff::ON);
-                    // [[fallthrough]]; incorrect, see lower line?
-                    part->setHideStavesWhenIndividuallyEmpty(false);
-                    break;
-                case details::StaffGroup::HideStaves::Normally:
+                if (group->hideStaves == details::StaffGroup::HideStaves::None) {
+                    part->setHideWhenEmpty(doNotHideVal);
+                } else if (group->hideStaves != details::StaffGroup::HideStaves::AsGroup) {
                     part->setHideStavesWhenIndividuallyEmpty(true);
-                    break;
-                default:
-                    break;
                 }
             }
         }
         for (const StaffCmper inst : instInfo.getSequentialStaves()) {
             if (auto instStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, inst, 1, 0)) {
                 createStaff(part, instStaff, it);
-                inst2Part.emplace(inst, partId);
             }
         }
 
-        // names of part
+        // Instrument names
         auto nameFromEnigmaText = [&](const musx::util::EnigmaParsingContext& parsingContext, const String& sidNamePrefix) {
             EnigmaParsingOptions options;
             options.initialFont = FontTracker(m_score->style(), sidNamePrefix);
