@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MODULARITY_IOC_H
-#define MU_MODULARITY_IOC_H
+
+#pragma once
 
 #ifndef NO_QT_SUPPORT
 #include <QObject>
@@ -30,12 +30,11 @@ class QQmlEngine;
 #include "../thirdparty/kors_modularity/modularity/ioc.h" // IWYU pragma: export
 
 namespace muse::modularity {
-using ModulesIoC = kors::modularity::ModulesIoC;
-using Context = kors::modularity::Context;
-using ContextPtr = kors::modularity::ContextPtr;
+using kors::modularity::ModulesIoC;
+using kors::modularity::Context;
+using kors::modularity::ContextPtr;
 
-template<class T>
-using Creator = kors::modularity::Creator<T>;
+using kors::modularity::Creator;
 
 inline ModulesIoC* _ioc(const ContextPtr& ctx = nullptr)
 {
@@ -65,17 +64,14 @@ inline void removeIoC(const ContextPtr& ctx = nullptr)
 }
 
 namespace muse {
-template<class I>
-using Inject = kors::modularity::Inject<I>;
-template<class I>
-using GlobalInject = kors::modularity::GlobalInject<I>;
-template<class I>
-using ThreadSafeInject = kors::modularity::ThreadSafeInject<I>;
+using kors::modularity::Inject;
+using kors::modularity::GlobalInject;
+using kors::modularity::ThreadSafeInject;
 
 #define INJECT(Interface, getter) muse::Inject<Interface> getter;
 #define INJECT_STATIC(Interface, getter) static inline muse::Inject<Interface> getter;
 
-using Injectable = kors::modularity::Injectable;
+using kors::modularity::Injectable;
 
 #ifndef NO_QT_SUPPORT
 struct QmlIoCContext : public QObject
@@ -93,10 +89,3 @@ modularity::ContextPtr iocCtxForQmlEngine(const QQmlEngine* e);
 modularity::ContextPtr iocCtxForQWidget(const QWidget* o);
 #endif
 }
-
-namespace mu {
-template<class I>
-using Inject = kors::modularity::Inject<I>;
-}
-
-#endif // MU_MODULARITY_IOC_H

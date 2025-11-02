@@ -37,10 +37,10 @@ class AboutModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
 
-    Inject<IAppShellConfiguration> configuration = { this };
-    Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
-    Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
-    Inject<muse::IApplication> application = { this };
+    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<muse::IApplication> application = { this };
 
 public:
     explicit AboutModel(QObject* parent = nullptr);

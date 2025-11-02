@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INSTRUMENTSREPOSITORY_H
-#define MU_NOTATION_INSTRUMENTSREPOSITORY_H
+#pragma once
 
 #include "modularity/ioc.h"
 
@@ -34,9 +33,9 @@
 namespace mu::notation {
 class InstrumentsRepository : public IInstrumentsRepository, public muse::async::Asyncable
 {
-    Inject<muse::io::IFileSystem> fileSystem;
-    Inject<INotationConfiguration> configuration;
-    Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
+    muse::Inject<muse::io::IFileSystem> fileSystem;
+    muse::Inject<INotationConfiguration> configuration;
+    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
 
 public:
     void init();
@@ -66,5 +65,3 @@ private:
     InstrumentStringTuningsMap m_stringTuningsPresets;
 };
 }
-
-#endif // MU_NOTATION_INSTRUMENTSREPOSITORY_H

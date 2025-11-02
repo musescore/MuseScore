@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_FOLDERSPREFERENCESMODEL_H
-#define MU_APPSHELL_FOLDERSPREFERENCESMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 
@@ -38,12 +37,12 @@ class FoldersPreferencesModel : public QAbstractListModel, public muse::Injectab
 {
     Q_OBJECT
 
-    Inject<project::IProjectConfiguration> projectConfiguration = { this };
-    Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    Inject<muse::extensions::IExtensionsConfiguration> extensionsConfiguration = { this };
-    Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
-    Inject<muse::vst::IVstConfiguration> vstConfiguration = { this };
-    Inject<IAppShellConfiguration> configuration = { this };
+    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<muse::extensions::IExtensionsConfiguration> extensionsConfiguration = { this };
+    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    muse::Inject<muse::vst::IVstConfiguration> vstConfiguration = { this };
+    muse::Inject<IAppShellConfiguration> configuration = { this };
 
 public:
     explicit FoldersPreferencesModel(QObject* parent = nullptr);
@@ -100,5 +99,3 @@ private:
     QList<FolderInfo> m_folders;
 };
 }
-
-#endif // MU_APPSHELL_FOLDERSPREFERENCESMODEL_H

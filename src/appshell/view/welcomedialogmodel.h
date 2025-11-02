@@ -40,8 +40,8 @@ class WelcomeDialogModel : public QObject, public muse::Injectable
 
     Q_PROPERTY(bool showOnStartup READ showOnStartup WRITE setShowOnStartup NOTIFY showOnStartupChanged)
 
-    Inject<IAppShellConfiguration> configuration = { this };
-    Inject<IStartupScenario> startupScenario = { this };
+    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::Inject<IStartupScenario> startupScenario = { this };
 
 public:
     WelcomeDialogModel();

@@ -23,22 +23,21 @@
 
 #include "imusesamplercheckupdateservice.h"
 
+#include "async/asyncable.h"
+#include "async/promise.h"
 #include "modularity/ioc.h"
 #include "musesampler/imusesamplerinfo.h"
 #include "musesampler/imusesamplerconfiguration.h"
 #include "network/inetworkmanagercreator.h"
 #include "imusesoundsconfiguration.h"
-#include "async/asyncable.h"
-
-#include "async/channel.h"
 
 namespace mu::musesounds {
 class MuseSamplerCheckUpdateService : public IMuseSamplerCheckUpdateService, public muse::Injectable, public muse::async::Asyncable
 {
-    Inject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
-    Inject<muse::musesampler::IMuseSamplerConfiguration> museSamplerConfiguration = { this };
-    Inject<muse::network::INetworkManagerCreator> networkManagerCreator = { this };
-    Inject<IMuseSoundsConfiguration> configuration = { this };
+    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
+    muse::Inject<muse::musesampler::IMuseSamplerConfiguration> museSamplerConfiguration = { this };
+    muse::Inject<muse::network::INetworkManagerCreator> networkManagerCreator = { this };
+    muse::Inject<IMuseSoundsConfiguration> configuration = { this };
 
 public:
     MuseSamplerCheckUpdateService(const muse::modularity::ContextPtr& iocCtx)
