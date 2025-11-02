@@ -389,7 +389,9 @@ TEST_P(MidiExportEventsTests, DISABLED_eventsTest) {
     CompatMidiRender::renderScore(score.get(), events, ctx, true);
 
     QFile filehandler(writeFile);
-    filehandler.open(QIODevice::WriteOnly | QIODevice::Text);
+    bool open = filehandler.open(QIODevice::WriteOnly | QIODevice::Text);
+    ASSERT_TRUE(open);
+
     QTextStream out(&filehandler);
 
     for (std::size_t i = 0; i < events.size(); i++) {

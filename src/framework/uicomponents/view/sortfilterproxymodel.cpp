@@ -103,10 +103,11 @@ void SortFilterProxyModel::setAlwaysIncludeIndices(const QList<int>& indices)
         return;
     }
 
+    beginFilterChange();
     m_alwaysIncludeIndices = indices;
-    emit alwaysIncludeIndicesChanged();
+    endFilterChange(QSortFilterProxyModel::Direction::Rows);
 
-    invalidateFilter();
+    emit alwaysIncludeIndicesChanged();
 }
 
 QList<int> SortFilterProxyModel::alwaysExcludeIndices() const
@@ -120,10 +121,11 @@ void SortFilterProxyModel::setAlwaysExcludeIndices(const QList<int>& indices)
         return;
     }
 
+    beginFilterChange();
     m_alwaysExcludeIndices = indices;
-    emit alwaysExcludeIndicesChanged();
+    endFilterChange(QSortFilterProxyModel::Direction::Rows);
 
-    invalidateFilter();
+    emit alwaysExcludeIndicesChanged();
 }
 
 QHash<int, QByteArray> SortFilterProxyModel::roleNames() const
@@ -226,11 +228,13 @@ void SortFilterProxyModel::reset()
 
 void SortFilterProxyModel::fillRoleIds()
 {
-    m_roleIdToFilterValueHash.clear();
+    beginFilterChange();
 
     DEFER {
-        invalidateFilter();
+        endFilterChange(QSortFilterProxyModel::Direction::Rows);
     };
+
+    m_roleIdToFilterValueHash.clear();
 
     if (!sourceModel()) {
         return;
