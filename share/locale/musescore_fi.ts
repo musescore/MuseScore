@@ -1414,7 +1414,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="268"/>
         <source>Notehead scheme:</source>
-        <translation>Nuotinpään rakenne:</translation>
+        <translation>Nuotinpään malli:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="292"/>
@@ -3993,7 +3993,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8701"/>
         <source>Tablature fret numbers</source>
-        <translation>Tabulatuurin otenauhanumerot</translation>
+        <translation>Tabulatuurin nauhanumerot</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8707"/>
@@ -5855,7 +5855,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="513"/>
         <source>Transpose chord symbols</source>
-        <translation>Transponoi sointumerkit</translation>
+        <translation>Transponoi sointumerkinnät</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="523"/>
@@ -9390,7 +9390,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2346"/>
         <source>Toggle duration dot</source>
-        <translation>Vaihda keston piste</translation>
+        <translation>Vaihda pidennyspiste</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2352"/>
@@ -9400,7 +9400,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2353"/>
         <source>Toggle duration dot: double</source>
-        <translation>Vaihda kestopiste: kaksinkertainen</translation>
+        <translation>Vaihda pidennyspiste: kaksinkertaiseksi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2359"/>
@@ -9410,7 +9410,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2360"/>
         <source>Toggle duration dot: triple</source>
-        <translation>Vaihda kestopiste: kolminkertainen</translation>
+        <translation>Vaihda pidennyspiste: kolminkertaiseksi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2366"/>
@@ -9420,7 +9420,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2367"/>
         <source>Toggle duration dot: quadruple</source>
-        <translation>Vaihda kestopiste: nelinkertainen</translation>
+        <translation>Vaihda pidennyspiste: nelinkertaiseksi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2374"/>
@@ -12990,7 +12990,7 @@ Otenauha %1 kielissä %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="228"/>
         <source>Staff lines</source>
-        <translation><numerusform>Viivastoviivat</numerusform><numerusform>viivastoviivat</numerusform></translation>
+        <translation><numerusform>Viivastoviivat</numerusform><numerusform>Viivastoviivat</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="230"/>
@@ -14515,7 +14515,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1722"/>
         <source>Tablature fret number</source>
-        <translation>Tabulatuurin otenauhanumero</translation>
+        <translation>Tabulatuurin nauhanumero</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1723"/>
@@ -17233,7 +17233,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1103"/>
         <source>4-shape (Walker)</source>
-        <translation>Nelikuvioinen (Walker)</translation>
+        <translation>4-kuvioinen (Walker)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1104"/>
@@ -17279,12 +17279,12 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/ottava.h" line="68"/>
         <source>8va alta</source>
-        <translation>8va alta</translation>
+        <translation>8va ylempää</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ottava.h" line="69"/>
         <source>8va bassa</source>
-        <translation>8va bassa</translation>
+        <translation>8va alempaa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ottava.h" line="70"/>
@@ -18502,7 +18502,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="312"/>
         <source>notehead scheme</source>
-        <translation>nuotinpään rakenne</translation>
+        <translation>nuotinpään malli</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="313"/>
@@ -23277,7 +23277,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml" line="83"/>
         <source>Tuning (cents)</source>
-        <translation>Viritys (senttiä)</translation>
+        <translation>Viritys (sentteinä)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/PausesExpandableBlank.qml" line="51"/>
@@ -24500,13 +24500,13 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="100"/>
         <source>Duration dot position</source>
-        <translation>Kestoaikapisteen sijainti</translation>
+        <translation>Pidennyspisteen sijainti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="136"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="183"/>
         <source>Notehead scheme</source>
-        <translation>Nuotinpään rakenne:</translation>
+        <translation>Nuotinpään malli:</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="148"/>
@@ -24826,12 +24826,12 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="194"/>
         <source>Solfege movable Do</source>
-        <translation>Solfeesi liikkuva Do</translation>
+        <translation>Solmisaatio liikkuva Do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="195"/>
         <source>Solfege fixed Do</source>
-        <translation>Solfeesi kiinteä Do</translation>
+        <translation>Solmisaatio kiinteä Do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="196"/>
@@ -25470,32 +25470,32 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="66"/>
         <source>8va alta</source>
-        <translation>8va alta</translation>
+        <translation>8va (okt. ylempää)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="67"/>
         <source>8va bassa</source>
-        <translation>8va bassa</translation>
+        <translation>8va (okt. alempaa)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="68"/>
         <source>15ma alta</source>
-        <translation>15ma alta</translation>
+        <translation>15ma (2 okt. ylempää)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="69"/>
         <source>15ma bassa</source>
-        <translation>15ma bassa</translation>
+        <translation>15ma (2 okt. alempaa)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="70"/>
         <source>22ma alta</source>
-        <translation>22ma alta</translation>
+        <translation>22ma (3 okt. ylempää)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="71"/>
         <source>22ma bassa</source>
-        <translation>22ma bassa</translation>
+        <translation>22ma (3 okt. alempaa)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/palmmutesettingsmodel.cpp" line="30"/>
@@ -26746,7 +26746,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="167"/>
         <source>Edit fret number text style</source>
-        <translation>Nauhanumeron tekstityyli</translation>
+        <translation>Muokkaa nauhanumeron tekstityyliä</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="178"/>

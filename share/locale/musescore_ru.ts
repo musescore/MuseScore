@@ -12767,8 +12767,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="88"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Этот файл был сохранен с использованием более новой версии MuseScore Studio. Пожалуйста, посетите 1
-MuseScore.org1 чтобы получить последнюю версию.</translation>
+        <translation>Этот файл был сохранён в более новой версии MuseScore Studio. Пожалуйста, посетите &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt;, чтобы получить последнюю версию программы.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="93"/>
@@ -12830,7 +12829,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <location filename="../../src/engraving/rw/read410/measureread.cpp" line="91"/>
         <location filename="../../src/engraving/rw/read460/measureread.cpp" line="92"/>
         <source>MSCX error at byte offset %1: invalid measure length: %2</source>
-        <translation>MSCX error at byte offset %1: недопустимая длина такта: %2</translation>
+        <translation>Ошибка MSCX смещения в байтах %1: недопустимая длина такта: %2</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="185"/>
@@ -13089,7 +13088,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="257"/>
         <source>key signature(s)</source>
-        <translation><numerusform>ключевой знак</numerusform><numerusform>ключевые знаки</numerusform><numerusform>ключевые знаки</numerusform><numerusform>ключевые знаки</numerusform></translation>
+        <translation><numerusform>ключевой знак</numerusform><numerusform>ключевых знака</numerusform><numerusform>ключевые знаки</numerusform><numerusform>ключевые знаки</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="258"/>
@@ -13149,22 +13148,22 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="278"/>
         <source>breath(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>цезура</numerusform><numerusform>цезуры</numerusform><numerusform>цезур</numerusform><numerusform>цезуры</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="279"/>
         <source>Breath(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Цезура</numerusform><numerusform>Цезуры</numerusform><numerusform>Цезур</numerusform><numerusform>Цезуры</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="281"/>
         <source>measure repeat(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>повтор такта</numerusform><numerusform>повтора такта</numerusform><numerusform>повторов такта</numerusform><numerusform>повторы такта</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="282"/>
         <source>Measure repeat(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Повтор такта</numerusform><numerusform>Повтора такта</numerusform><numerusform>Повторов такта</numerusform><numerusform>Повторы такта</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="284"/>
@@ -13179,12 +13178,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="287"/>
         <source>laissez vibrer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>laissez vibrer</numerusform><numerusform>laissez vibrer</numerusform><numerusform>laissez vibrer</numerusform><numerusform>laissez vibrer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="288"/>
         <source>Laissez vibrer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Laissez vibrer</numerusform><numerusform>Laissez vibrer</numerusform><numerusform>Laissez vibrer</numerusform><numerusform>Laissez vibrer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="290"/>
@@ -13229,22 +13228,22 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="302"/>
         <source>chord line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>строка аккордов</numerusform><numerusform>строки аккордов</numerusform><numerusform>строк аккордов</numerusform><numerusform>строки аккордов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="303"/>
         <source>Chord line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Строка аккордов</numerusform><numerusform>Строки аккордов</numerusform><numerusform>Строк аккордов</numerusform><numerusform>Строки аккордов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="305"/>
         <source>dynamic(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>динамика</numerusform><numerusform>динамики</numerusform><numerusform>динамик</numerusform><numerusform>динамика</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="306"/>
         <source>Dynamic(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Динамика</numerusform><numerusform>Динамики</numerusform><numerusform>Динамик</numerusform><numerusform>Динамика</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="308"/>
@@ -13299,12 +13298,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="323"/>
         <source>marker(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>маркер</numerusform><numerusform>маркера</numerusform><numerusform>маркеров</numerusform><numerusform>маркеров</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="324"/>
         <source>Marker(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Маркер</numerusform><numerusform>Маркера</numerusform><numerusform>Маркеров</numerusform><numerusform>Маркеров</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="326"/>
@@ -13359,12 +13358,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="341"/>
         <source>system text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>текст системы</numerusform><numerusform>текста системы</numerusform><numerusform>текстов системы</numerusform><numerusform>текстов системы</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="342"/>
         <source>System text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Текст системы</numerusform><numerusform>Текста системы</numerusform><numerusform>Текстов системы</numerusform><numerusform>Текстов системы</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="344"/>
@@ -13440,12 +13439,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="365"/>
         <source>instrument change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>смена инструмента</numerusform><numerusform>смены инструмента</numerusform><numerusform>Смен инструмента</numerusform><numerusform>Смен инструмента</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="366"/>
         <source>Instrument change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Смена инструмента</numerusform><numerusform>Смены инструмента</numerusform><numerusform>Смен инструмента</numerusform><numerusform>Смен инструмента</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="368"/>
@@ -13460,12 +13459,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="371"/>
         <source>chord symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>символ аккорда</numerusform><numerusform>символа аккордов</numerusform><numerusform>символов аккордов</numerusform><numerusform>символов аккордов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="372"/>
         <source>Chord symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Символ аккорда</numerusform><numerusform>Символа аккордов</numerusform><numerusform>Символов аккордов</numerusform><numerusform>Символов аккордов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="374"/>
@@ -13510,12 +13509,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="386"/>
         <source>volta(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>вольта</numerusform><numerusform>вольты</numerusform><numerusform>вольт</numerusform><numerusform>вольт</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="387"/>
         <source>Volta(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Вольта</numerusform><numerusform>Вольты</numerusform><numerusform>Вольт</numerusform><numerusform>Вольт</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="389"/>
@@ -13540,12 +13539,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="395"/>
         <source>trill segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент трели</numerusform><numerusform>сегмента трели</numerusform><numerusform>сегментов трели</numerusform><numerusform>сегментов трели</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="396"/>
         <source>Trill segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент трели</numerusform><numerusform>Сегмента трели</numerusform><numerusform>Сегментов трели</numerusform><numerusform>Сегментов трели</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="398"/>
@@ -13560,22 +13559,22 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="401"/>
         <source>gradual tempo change segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент плавного изменения темпа</numerusform><numerusform>сегмента плавного изменения темпа</numerusform><numerusform>сегментов плавного изменения темпа</numerusform><numerusform>сегментов плавного изменения темпа</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="402"/>
         <source>Gradual tempo change segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент плавного изменения темпа</numerusform><numerusform>Сегмента плавного изменения темпа</numerusform><numerusform>Сегментов плавного изменения темпа</numerusform><numerusform>Сегментов плавного изменения темпа</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="404"/>
         <source>vibrato segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент вибрато</numerusform><numerusform>сегмента вибрато</numerusform><numerusform>сегментов вибрато</numerusform><numerusform>сегментов вибрато</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="405"/>
         <source>Vibrato segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент вибрато</numerusform><numerusform>Сегмента вибрато</numerusform><numerusform>Сегментов вибрато</numerusform><numerusform>Сегментов вибрато</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="407"/>
@@ -13640,12 +13639,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="425"/>
         <source>volta segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент вольты</numerusform><numerusform>сегмента вольты</numerusform><numerusform>сегментов вольты</numerusform><numerusform>сегментов вольты</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="426"/>
         <source>Volta segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент вольты</numerusform><numerusform>Сегмента вольты</numerusform><numerusform>Сегментов вольты</numerusform><numerusform>Сегментов вольты</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="428"/>
@@ -13720,22 +13719,22 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="449"/>
         <source>system lock(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>системный замок</numerusform><numerusform>системных замка</numerusform><numerusform>системных замков</numerusform><numerusform>системных замков</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="450"/>
         <source>System lock(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Системный замок</numerusform><numerusform>Системных замка</numerusform><numerusform>Системных замков</numerusform><numerusform>Системных замков</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="452"/>
         <source>spacer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>распорка</numerusform><numerusform>распорки</numerusform><numerusform>распорок</numerusform><numerusform>распорок</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="453"/>
         <source>Spacer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Распорка</numerusform><numerusform>Распорки</numerusform><numerusform>Распорок</numerusform><numerusform>Распорок</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="455"/>
@@ -13770,32 +13769,32 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="464"/>
         <source>image(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>изображение</numerusform><numerusform>изображения</numerusform><numerusform>изображений</numerusform><numerusform>изображений</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="465"/>
         <source>Image(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Изображение</numerusform><numerusform>Изображения</numerusform><numerusform>Изображений</numerusform><numerusform>Изображений</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="467"/>
         <source>measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>такт</numerusform><numerusform>такта</numerusform><numerusform>тактов</numerusform><numerusform>тактов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="468"/>
         <source>Measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Такт</numerusform><numerusform>Такта</numerusform><numerusform>Тактов</numerusform><numerusform>Тактов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="470"/>
         <source>selection(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>выделение</numerusform><numerusform>выделения</numerusform><numerusform>выделений</numerusform><numerusform>выделений</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="471"/>
         <source>Selection(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Выделение</numerusform><numerusform>Выделения</numerusform><numerusform>Выделений</numerusform><numerusform>Выделений</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="473"/>
@@ -13840,12 +13839,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="485"/>
         <source>page(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>страница</numerusform><numerusform>страницы</numerusform><numerusform>страниц</numerusform><numerusform>страниц</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="486"/>
         <source>Page(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Страница</numerusform><numerusform>Страницы</numerusform><numerusform>Страниц</numerusform><numerusform>Страниц</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="488"/>
@@ -13860,12 +13859,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="491"/>
         <source>hairpin(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>вилочка</numerusform><numerusform>вилочки</numerusform><numerusform>вилочек</numerusform><numerusform>вилочек</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="492"/>
         <source>Hairpin(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Вилочка</numerusform><numerusform>Вилочки</numerusform><numerusform>Вилочек</numerusform><numerusform>Вилочек</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="494"/>
@@ -13880,22 +13879,22 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="497"/>
         <source>pedal(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>педаль</numerusform><numerusform>педали</numerusform><numerusform>педалей</numerusform><numerusform>педалей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="498"/>
         <source>Pedal(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Педаль</numerusform><numerusform>Педали</numerusform><numerusform>Педалей</numerusform><numerusform>Педалей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="500"/>
         <source>trill(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>трель</numerusform><numerusform>трели</numerusform><numerusform>трелей</numerusform><numerusform>трелей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="501"/>
         <source>Trill(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Трель</numerusform><numerusform>Трели</numerusform><numerusform>Трелей</numerusform><numerusform>Трелей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="503"/>
@@ -13911,22 +13910,22 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="506"/>
         <source>gradual tempo change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>плавное изменение темпа</numerusform><numerusform>плавных изменения темпа</numerusform><numerusform>плавных изменений темпа</numerusform><numerusform>плавных изменений темпа</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="507"/>
         <source>Gradual tempo change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Плавное изменение темпа</numerusform><numerusform>Плавных изменения темпа</numerusform><numerusform>Плавных изменений темпа</numerusform><numerusform>Плавных изменений темпа</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="509"/>
         <source>vibrato(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>вибрато</numerusform><numerusform>вибрато</numerusform><numerusform>вибрато</numerusform><numerusform>вибрато</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="510"/>
         <source>Vibrato(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Вибрато</numerusform><numerusform>Вибрато</numerusform><numerusform>Вибрато</numerusform><numerusform>Вибрато</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="512"/>
@@ -14041,32 +14040,32 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="548"/>
         <source>segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент</numerusform><numerusform>сегмента</numerusform><numerusform>сегментов</numerusform><numerusform>сегментов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="549"/>
         <source>Segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент</numerusform><numerusform>Сегмента</numerusform><numerusform>Сегментов</numerusform><numerusform>Сегментов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="551"/>
         <source>system(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>система</numerusform><numerusform>системы</numerusform><numerusform>систем</numerusform><numerusform>систем</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="552"/>
         <source>System(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Система</numerusform><numerusform>Системы</numerusform><numerusform>Систем</numerusform><numerusform>Систем</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="554"/>
         <source>chord(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>аккорд</numerusform><numerusform>аккорда</numerusform><numerusform>аккордов</numerusform><numerusform>аккордов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="555"/>
         <source>Chord(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Аккорд</numerusform><numerusform>Аккорда</numerusform><numerusform>Аккордов</numerusform><numerusform>Аккордов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="557"/>
@@ -14131,12 +14130,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="578"/>
         <source>sticking(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>подсказка по палочкам</numerusform><numerusform>подсказки по палочкам</numerusform><numerusform>подсказок по палочкам</numerusform><numerusform>подсказок по палочкам</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="579"/>
         <source>Sticking(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Подсказка по палочкам</numerusform><numerusform>Подсказки по палочкам</numerusform><numerusform>Подсказок по палочкам</numerusform><numerusform>Подсказок по палочкам</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="584"/>
@@ -14192,13 +14191,13 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <location filename="../../src/engraving/types/typesconv.cpp" line="599"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="602"/>
         <source>tremolo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>тремоло</numerusform><numerusform>тремоло</numerusform><numerusform>тремоло</numerusform><numerusform>тремоло</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="600"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="603"/>
         <source>Tremolo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Тремоло</numerusform><numerusform>Тремоло</numerusform><numerusform>Тремоло</numerusform><numerusform>Тремоло</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="605"/>
@@ -14213,42 +14212,42 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="608"/>
         <source>hammer-on / pull-off(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>подтяжка / срыв</numerusform><numerusform>подтяжки / срыва</numerusform><numerusform>подтяжек / срывов</numerusform><numerusform>подтяжек / срывов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="609"/>
         <source>Hammer-on / pull-off(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Подтяжка / срыв</numerusform><numerusform>Подтяжки / срыва</numerusform><numerusform>Подтяжек / срывов</numerusform><numerusform>Подтяжек / срывов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="611"/>
         <source>hammer-on / pull-off segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент подтяжки / срыва</numerusform><numerusform>сегмента подтяжки / срыва</numerusform><numerusform>сегментов подтяжки / срыва</numerusform><numerusform>сегментов подтяжки / срыва</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="612"/>
         <source>Hammer-on / pull-off segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент подтяжки / срыва</numerusform><numerusform>Сегмента подтяжки / срыва</numerusform><numerusform>Сегментов подтяжки / срыва</numerusform><numerusform>Сегментов подтяжки / срыва</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="614"/>
         <source>hammer-on / pull-off text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>текст подтяжки / срыва</numerusform><numerusform>текста подтяжки / срыва</numerusform><numerusform>текстов подтяжки / срыва</numerusform><numerusform>текстов подтяжки / срыва</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="615"/>
         <source>Hammer-on / pull-off text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Текст подтяжки / срыва</numerusform><numerusform>Текста подтяжки / срыва</numerusform><numerusform>Текстов подтяжки / срыва</numerusform><numerusform>Текстов подтяжки / срыва</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="617"/>
         <source>tapping</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>тэппинг</numerusform><numerusform>тэппинга</numerusform><numerusform>тэппингов</numerusform><numerusform>тэппингов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="618"/>
         <source>Tapping</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Тэппинг</numerusform><numerusform>Тэппинга</numerusform><numerusform>Тэппингов</numerusform><numerusform>Тэппингов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="620"/>
@@ -14263,32 +14262,32 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="623"/>
         <source>tapping half slur segment(s)</source>
-        <translation><numerusform>сегмент частичной лиги тэппинга</numerusform><numerusform>сегмента частичных лиг тэппинга</numerusform><numerusform>сегментов частичных лиг тэппинга</numerusform><numerusform>сегментов частичных лиг тэппинга</numerusform></translation>
+        <translation><numerusform>сегмент частичной лиги тэппинга</numerusform><numerusform>сегмента частичной лиги тэппинга</numerusform><numerusform>сегментов частичной лиги тэппинга</numerusform><numerusform>сегментов частичной лиги тэппинга</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="624"/>
         <source>Tapping half slur segment(s)</source>
-        <translation><numerusform>Сегмент частичной лиги тэппинга</numerusform><numerusform>Сегмента частичных лиг тэппинга</numerusform><numerusform>Сегментов частичных лиг тэппинга</numerusform><numerusform>Сегментов частичных лиг тэппинга</numerusform></translation>
+        <translation><numerusform>Сегмент частичной лиги тэппинга</numerusform><numerusform>Сегмента частичной лиги тэппинга</numerusform><numerusform>Сегментов частичной лиги тэппинга</numerusform><numerusform>Сегментов частичной лиги тэппинга</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="626"/>
         <source>tapping text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>текст тэппинга</numerusform><numerusform>текста тэппинга</numerusform><numerusform>текстов тэппинга</numerusform><numerusform>текстов тэппинга</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="627"/>
         <source>Tapping text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Текст тэппинга</numerusform><numerusform>Текста тэппинга</numerusform><numerusform>Текстов тэппинга</numerusform><numerusform>Текстов тэппинга</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="946"/>
         <source>x%1</source>
-        <translation type="unfinished"/>
+        <translation>x%1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="947"/>
         <source>%1x</source>
-        <translation type="unfinished"/>
+        <translation>%1x</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="948"/>
@@ -14409,7 +14408,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1696"/>
         <source>Measure number (alternate)</source>
-        <translation type="unfinished"/>
+        <translation>Номер такта (альтернативный)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1697"/>
@@ -14534,7 +14533,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1726"/>
         <source>Hammer-ons, pull-offs, and tapping</source>
-        <translation type="unfinished"/>
+        <translation>Подтяжки, срывы и тэппинг</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1730"/>
@@ -15123,7 +15122,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3318"/>
         <source>Open / Atonal</source>
-        <translation type="unfinished"/>
+        <translation>Открытый / Атональный</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/partialtiepopupmodel.cpp" line="192"/>
@@ -16206,7 +16205,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1293"/>
         <source>G clef ottava bassa with C clef</source>
-        <translation type="unfinished"/>
+        <translation>Скрипичный ключ на октаву ниже с ключом до</translation>
     </message>
 </context>
 <context>
@@ -17403,12 +17402,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2090"/>
         <source>Swing up</source>
-        <translation type="unfinished"/>
+        <translation>Взмах вверх</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2092"/>
         <source>Swing down</source>
-        <translation type="unfinished"/>
+        <translation>Взмах вниз</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2093"/>
@@ -19096,7 +19095,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="460"/>
         <source>strings preset</source>
-        <translation type="unfinished"/>
+        <translation>предустановки струн</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="461"/>
@@ -19126,7 +19125,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="468"/>
         <source>is courtesy</source>
-        <translation type="unfinished"/>
+        <translation>вспомогательный</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="469"/>
@@ -20901,7 +20900,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5334"/>
         <source>Haydn ornament</source>
-        <translation type="unfinished"/>
+        <translation>Орнаментика Гайдна</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5352"/>
@@ -20971,12 +20970,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5405"/>
         <source>Turn up</source>
-        <translation type="unfinished"/>
+        <translation>Верхний мордент</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5406"/>
         <source>Inverted turn up</source>
-        <translation type="unfinished"/>
+        <translation>Обратный верхний мордент</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5595"/>
@@ -21196,7 +21195,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5986"/>
         <source>Tuplet 3</source>
-        <translation type="unfinished"/>
+        <translation>Триоль</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6040"/>
@@ -22780,7 +22779,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/shared/musicxmlsupport.cpp" line="50"/>
         <source>byte offset %1:</source>
-        <translation type="unfinished"/>
+        <translation>смещение в байтах %1:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/shared/musicxmlsupport.cpp" line="63"/>
@@ -22937,7 +22936,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="152"/>
         <source>Menu for “%1”</source>
         <extracomment>%1 is replaced with the name of the property</extracomment>
-        <translation type="unfinished"/>
+        <translation>Меню для «%1»</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="157"/>
@@ -25329,7 +25328,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/articulations/articulationsettingsmodel.cpp" line="37"/>
         <source>Tapping</source>
-        <translation>Теппинг</translation>
+        <translation>Тэппинг</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/barlines/barlinesettingsmodel.cpp" line="35"/>
@@ -26947,7 +26946,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="180"/>
         <source>Preset</source>
-        <translation type="unfinished"/>
+        <translation>Профиль</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml" line="44"/>
@@ -27368,7 +27367,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="694"/>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="652"/>
         <source>Insert at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Добавить в конце партитуры</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="163"/>
@@ -27768,12 +27767,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/notationerrors.h" line="69"/>
         <source>No note or rest or chord symbol selected</source>
-        <translation type="unfinished"/>
+        <translation>Не выделена нота, пауза или символ аккорда</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="70"/>
         <source>Please select a note or rest or chord symbol and retry</source>
-        <translation type="unfinished"/>
+        <translation>Пожалуйста, выделите ноту, паузу или символ аккорда и повторите попытку</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="73"/>
@@ -27902,7 +27901,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="217"/>
         <source>Add c&amp;hord symbol</source>
-        <translation type="unfinished"/>
+        <translation>Добавить си&amp;мвол аккорда</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="233"/>
@@ -28407,7 +28406,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1354"/>
         <source>Type these special character combinations in the fields above to reference document data in the header/footer.</source>
-        <translation type="unfinished"/>
+        <translation>Вводите эти специальные комбинации символов в поля выше, чтобы добавить данные документа в колонтитулы.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1391"/>
@@ -28566,7 +28565,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="111"/>
         <source>Preset</source>
-        <translation type="unfinished"/>
+        <translation>Профиль</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="153"/>
@@ -28668,7 +28667,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="78"/>
         <source>Load custom XML…</source>
-        <translation type="unfinished"/>
+        <translation>Загрузить пользовательский XML-файл…</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="155"/>
@@ -28803,7 +28802,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="164"/>
         <source>Consecutive hammer-ons/pull-offs</source>
-        <translation type="unfinished"/>
+        <translation>Последовательные подтяжки/срывы</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="175"/>
@@ -30143,7 +30142,7 @@ failed.</source>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="297"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1850"/>
         <source>Hammer-on / pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Подтяжка / срыв</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="344"/>
@@ -32606,7 +32605,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="640"/>
         <source>Click to manually process online sounds.</source>
-        <translation>Нажмите, чтобы обработать онлайн-звуки вручную</translation>
+        <translation>Нажмите, чтобы обработать онлайн-звуки вручную.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioResourceControl.qml" line="99"/>
@@ -33326,8 +33325,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1788"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Этот файл был сохранен с использованием более новой версии MuseScore Studio. Пожалуйста, посетите 1
-MuseScore.org1 чтобы получить последнюю версию.</translation>
+        <translation>Этот файл был сохранён в более новой версии MuseScore Studio. Пожалуйста, посетите &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt;, чтобы получить последнюю версию программы.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
@@ -35477,7 +35475,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/dom/playcounttext.cpp" line="52"/>
         <source>Update play count text</source>
-        <translation type="unfinished"/>
+        <translation>Обновить текст количества проигрываний</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/textedit.cpp" line="915"/>
