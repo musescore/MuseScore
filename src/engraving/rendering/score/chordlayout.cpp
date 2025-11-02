@@ -389,11 +389,12 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             bool shortStart = false;            // whether tie should clear start note or not
             Note* startNote = tie->startNote();
             Chord* startChord = startNote ? startNote->chord() : nullptr;
+            const bool tieUp = !tie->segmentsEmpty() ? tie->frontSegment()->up() : tie->up();
             if (startChord && startChord->measure() == item->measure() && startChord == prevChordRest(item)) {
                 double startNoteWidth = startNote->width();
                 // overlap into start chord?
                 // if in start chord, there are several notes or stem and tie in same direction
-                if (startChord->notes().size() > 1 || (startChord->stem() && startChord->up() == tie->up())) {
+                if (startChord->notes().size() > 1 || (startChord->stem() && startChord->up() == tieUp)) {
                     // clear start note (1/8 of fret mark width)
                     shortStart = true;
                     overlap -= startNoteWidth * 0.125;
@@ -402,7 +403,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
                 }
                 // overlap into end chord (this)?
                 // if several notes or neither stem or tie are up
-                if (item->notes().size() > 1 || (item->stem() && !item->up() && !tie->up())) {
+                if (item->notes().size() > 1 || (item->stem() && !item->up() && !tieUp)) {
                     // for positive offset:
                     //    use available space
                     // for negative x offset:
@@ -1191,10 +1192,10 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
         bool slurBelowArticulation = a->up() && !(ss->vStaffIdx() < item->vStaffIdx());
         double vertClearance = slurBelowArticulation ? aShape.verticalClearance(sShape) : sShape.verticalClearance(aShape);
         if (vertClearance < minDist) {
-            minDist += slur->up()
+            minDist += ss->up()
                        ? std::max(aShape.minVerticalDistance(sShape), 0.0)
                        : std::max(sShape.minVerticalDistance(aShape), 0.0);
-            minDist *= slur->up() ? -1 : 1;
+            minDist *= ss->up() ? -1 : 1;
             for (auto iter2 = iter; iter2 != item->articulations().end(); ++iter2) {
                 Articulation* aa = *iter2;
                 aa->mutldata()->moveY(minDist);
@@ -3209,7 +3210,7 @@ void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)
         }
         Slur* slur = toSlur(spanner);
         SlurTieLayout::computeUp(slur, ctx);
-        if (slur->up()) {
+        if (!slur->segmentsEmpty() ? slur->frontSegment()->up() : slur->up()) {
             chord->startEndSlurs().startUp = true;
         } else {
             chord->startEndSlurs().startDown = true;
@@ -3224,7 +3225,8 @@ void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)
         if (!spanner->isSlur()) {
             continue;
         }
-        if (toSlur(spanner)->up()) {
+        Slur* slur = toSlur(spanner);
+        if (!slur->segmentsEmpty() ? slur->backSegment()->up() : slur->up()) {
             chord->startEndSlurs().endUp = true;
         } else {
             chord->startEndSlurs().endDown = true;

@@ -46,11 +46,13 @@ SlurTieSegment::SlurTieSegment(const ElementType& type, System* parent)
     : SpannerSegment(type, parent)
 {
     setFlag(ElementFlag::ON_STAFF, true);
+    m_slurDirection = DirectionV::AUTO;
 }
 
 SlurTieSegment::SlurTieSegment(const SlurTieSegment& b)
     : SpannerSegment(b)
 {
+    m_slurDirection = b.m_slurDirection;
     for (int i = 0; i < int(Grip::GRIPS); ++i) {
         m_ups[i]   = b.m_ups[i];
         m_ups[i].p = PointF();
@@ -183,13 +185,15 @@ std::vector<PointF> SlurTieSegment::gripsPositions(const EditData&) const
 
 bool SlurTieSegment::isUserModified() const
 {
-    return SpannerSegment::isUserModified() || !(visible() && autoplace()
-                                                 && color() == configuration()->defaultColor()
-                                                 && offset().isNull()
-                                                 && ups(Grip::START).off.isNull()
-                                                 && ups(Grip::BEZIER1).off.isNull()
-                                                 && ups(Grip::BEZIER2).off.isNull()
-                                                 && ups(Grip::END).off.isNull());
+    return SpannerSegment::isUserModified()
+           || !(visible() && autoplace()
+                && color() == configuration()->defaultColor()
+                && offset().isNull()
+                && slurDirection() == propertyDefault(Pid::SLUR_DIRECTION).value<DirectionV>()
+                && ups(Grip::START).off.isNull()
+                && ups(Grip::BEZIER1).off.isNull()
+                && ups(Grip::BEZIER2).off.isNull()
+                && ups(Grip::END).off.isNull());
 }
 
 //---------------------------------------------------------
@@ -217,6 +221,14 @@ void SlurTieSegment::endDragGrip(EditData& ed)
     triggerLayout();
 }
 
+bool SlurTieSegment::up() const
+{
+    if (m_slurDirection == DirectionV::AUTO && slurTie()) {
+        return slurTie()->up();
+    }
+    return m_slurDirection != DirectionV::DOWN;
+}
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
@@ -225,8 +237,9 @@ PropertyValue SlurTieSegment::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SLUR_STYLE_TYPE:
-    case Pid::SLUR_DIRECTION:
         return slurTie()->getProperty(propertyId);
+    case Pid::SLUR_DIRECTION:
+        return m_slurDirection;
     case Pid::SLUR_UOFF1:
         return ups(Grip::START).off;
     case Pid::SLUR_UOFF2:
@@ -248,8 +261,10 @@ bool SlurTieSegment::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SLUR_STYLE_TYPE:
-    case Pid::SLUR_DIRECTION:
         return slurTie()->setProperty(propertyId, v);
+    case Pid::SLUR_DIRECTION:
+        setSlurDirection(v.value<DirectionV>());
+        break;
     case Pid::SLUR_UOFF1:
         ups(Grip::START).off = v.value<PointF>();
         break;
@@ -300,6 +315,7 @@ void SlurTieSegment::reset()
     undoResetProperty(Pid::SLUR_UOFF2);
     undoResetProperty(Pid::SLUR_UOFF3);
     undoResetProperty(Pid::SLUR_UOFF4);
+    undoResetProperty(Pid::SLUR_DIRECTION);
     slurTie()->reset();
 }
 
@@ -316,6 +332,7 @@ void SlurTieSegment::undoChangeProperty(Pid pid, const PropertyValue& val, Prope
         undoPushProperty(Pid::SLUR_UOFF2);
         undoPushProperty(Pid::SLUR_UOFF3);
         undoPushProperty(Pid::SLUR_UOFF4);
+        undoPushProperty(Pid::SLUR_DIRECTION);
         // other will be saved in base classes.
     }
     SpannerSegment::undoChangeProperty(pid, val, ps);
@@ -353,9 +370,14 @@ SlurTie::~SlurTie()
 //   undoSetSlurDirection
 //---------------------------------------------------------
 
-void SlurTie::undoSetSlurDirection(DirectionV d)
+void SlurTie::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
-    undoChangeProperty(Pid::SLUR_DIRECTION, PropertyValue::fromValue<DirectionV>(d));
+    Spanner::undoChangeProperty(id, v, ps);
+    if (id == Pid::SLUR_DIRECTION) {
+        for (SpannerSegment* ss : spannerSegments()) {
+            ss->undoResetProperty(Pid::SLUR_DIRECTION);
+        }
+    }
 }
 
 //---------------------------------------------------------

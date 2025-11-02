@@ -2621,6 +2621,7 @@ void TWrite::writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& 
     if (!seg->ups(Grip::END).off.isNull()) {
         xml.tagPoint("o4", seg->ups(Grip::END).off / _spatium);
     }
+    writeProperty(seg, xml, Pid::SLUR_DIRECTION);
 
     if (seg->isHammerOnPullOffSegment()) {
         writeProperties(toHammerOnPullOffSegment(seg), xml, ctx);

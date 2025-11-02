@@ -3720,6 +3720,7 @@ void TRead::read(SlurTieSegment* s, XmlReader& e, ReadContext& ctx)
             s->ups(Grip::BEZIER2).off = e.readPoint() * _spatium;
         } else if (tag == "o4") {
             s->ups(Grip::END).off = e.readPoint() * _spatium;
+        } else if (TRead::readProperty(s, tag, e, ctx, Pid::SLUR_DIRECTION)) {
         } else if (tag == "HammerOnPullOffText") {
             DO_ASSERT(s->isHammerOnPullOffSegment());
             readHopoText(toHammerOnPullOffSegment(s), e, ctx, e.intAttribute("idx"));
