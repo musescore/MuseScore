@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_LANGUAGES_LANGUAGESSERVICE_H
-#define MUSE_LANGUAGES_LANGUAGESSERVICE_H
+
+#pragma once
 
 #include "ilanguagesservice.h"
 #include "async/asyncable.h"
@@ -36,10 +36,10 @@ class QTranslator;
 namespace muse::languages {
 class LanguagesService : public ILanguagesService, public Injectable, public async::Asyncable
 {
-    Inject<ILanguagesConfiguration> configuration = { this };
-    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
-    Inject<io::IFileSystem> fileSystem = { this };
-    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    ThreadSafeInject<ILanguagesConfiguration> configuration = { this };
+    ThreadSafeInject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    ThreadSafeInject<io::IFileSystem> fileSystem = { this };
+    ThreadSafeInject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
 
 public:
     LanguagesService(const modularity::ContextPtr& iocCtx)
@@ -86,5 +86,3 @@ private:
     async::Channel<bool> m_restartRequiredToApplyLanguageChanged;
 };
 }
-
-#endif // MUSE_LANGUAGES_LANGUAGESSERVICE_H
