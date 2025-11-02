@@ -148,6 +148,7 @@ class Score;
 class Segment;
 class Slur;
 class SlurSegment;
+class SlurTie;
 class SlurTieSegment;
 class Spacer;
 class Spanner;
@@ -465,6 +466,7 @@ public:
     bool isRestFamily() const { return isRest() || isMMRest() || isMeasureRepeat(); }
     bool isChordRest() const { return isRestFamily() || isChord(); }
     bool isDurationElement() const { return isChordRest() || isTuplet(); }
+    bool isSlurTie() const { return isSlur() || isTie(); }
     bool isSlurTieSegment() const { return isSlurSegment() || isTieSegment(); }
     bool isSLineSegment() const;
     bool isBox() const { return isVBox() || isHBox() || isTBox() || isFBox(); }
@@ -677,6 +679,7 @@ CONVERT(Slur)
 CONVERT(SlurSegment)
 CONVERT(Tie)
 CONVERT(TieSegment)
+CONVERT(SlurTie)
 CONVERT(SlurTieSegment)
 CONVERT(LaissezVibSegment)
 CONVERT(PartialTieSegment)

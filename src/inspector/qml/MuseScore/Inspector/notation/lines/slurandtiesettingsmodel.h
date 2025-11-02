@@ -78,6 +78,7 @@ private:
     void updateIsTiePlacementAvailable();
     void updateIsMinLengthAvailable();
     void updateisLineStyleAvailable();
+    void updateHasMixedDirections();
 
     PropertyItem* m_lineStyle = nullptr;
     PropertyItem* m_direction = nullptr;

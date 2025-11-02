@@ -25,6 +25,7 @@
 #include "types/linetypes.h"
 #include "types/commontypes.h"
 
+#include "engraving/dom/slurtie.h"
 #include "engraving/types/types.h"
 
 #include "translation.h"
@@ -129,6 +130,7 @@ void SlurAndTieSettingsModel::createProperties()
     updateIsTiePlacementAvailable();
     updateIsMinLengthAvailable();
     updateisLineStyleAvailable();
+    updateHasMixedDirections();
 }
 
 void SlurAndTieSettingsModel::loadProperties()
@@ -140,6 +142,7 @@ void SlurAndTieSettingsModel::loadProperties()
     updateIsTiePlacementAvailable();
     updateIsMinLengthAvailable();
     updateisLineStyleAvailable();
+    updateHasMixedDirections();
 }
 
 void SlurAndTieSettingsModel::resetProperties()
@@ -195,5 +198,21 @@ void SlurAndTieSettingsModel::updateisLineStyleAvailable()
     if (available != m_isLineStyleAvailable) {
         m_isLineStyleAvailable = available;
         emit isLineStyleAvailableChanged(m_isLineStyleAvailable);
+    }
+}
+
+void SlurAndTieSettingsModel::updateHasMixedDirections()
+{
+    for (EngravingItem* item : m_elementList) {
+        if (item->isSlurTie()) {
+            const bool up = toSlurTie(item)->up();
+            for (SpannerSegment* sts : toSlurTie(item)->spannerSegments()) {
+                if (toSlurTieSegment(sts)->up() != up) {
+                    m_direction->updateCurrentValue(QVariant());
+                    m_direction->setIsModified(true);
+                    return;
+                }
+            }
+        }
     }
 }
