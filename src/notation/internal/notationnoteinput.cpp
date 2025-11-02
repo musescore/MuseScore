@@ -760,15 +760,21 @@ muse::RectF NotationNoteInput::cursorRect() const
     double w = segmentContentRect.width() + 2 * sideMargin;
     double h = 0.0;
 
-    const mu::engraving::StaffType* staffType = staff->staffType(inputState.tick());
     double spatium = score()->style().spatium();
-    double lineDist = staffType->lineDistance().val() * spatium;
-    int lines = staffType->lines();
-    double yOffset = staffType ? staffType->yoffset().val() * spatium : 0.0;
-    int inputStateStringsCount = inputState.string();
 
+    if (inputState.beyondScore()) {
+        const Measure* lastMeasure = score()->lastMeasure();
+        x = lastMeasure->pageBoundingRect().right() + spatium - sideMargin;
+        w = 2 * spatium + 2 * sideMargin;
+    }
+
+    const mu::engraving::StaffType* staffType = staff->staffType(inputState.tick());
+    double yOffset = staffType ? staffType->yoffset().val() * spatium : 0.0;
     y += yOffset;
 
+    int lines = staffType->lines();
+    double lineDist = staffType->lineDistance().val() * spatium;
+    int inputStateStringsCount = inputState.string();
     int instrumentStringsCount = static_cast<int>(staff->part()->instrument()->stringData()->strings());
     if (staff->isTabStaff(inputState.tick()) && inputStateStringsCount >= 0 && inputStateStringsCount <= instrumentStringsCount) {
         h = lineDist;

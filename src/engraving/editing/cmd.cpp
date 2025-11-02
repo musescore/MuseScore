@@ -1182,9 +1182,11 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             break;
         }
 
+        if (tick >= score()->endTick()) {
+            appendMeasures(1);
+        }
         Segment* nseg = tick2segment(tick, false, SegmentType::ChordRest);
         if (!nseg) {
-            LOGD("reached end of score");
             break;
         }
         segment = nseg;
@@ -1635,9 +1637,8 @@ std::vector<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction
         }
         flist.push_back(rest);
         gap -= rest;
-        m = m->nextMeasure();
-        if (m == 0) {
-            return flist;
+        if (m->nextMeasure() != 0) {
+            m = m->nextMeasure();
         }
         s = m->first(SegmentType::ChordRest);
     }
@@ -1818,6 +1819,11 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
             }
         }
         const Measure* m  = cr1->measure();
+        if (m->nextMeasure() == 0) {
+            if (f.isNotZero()) {
+                appendMeasures(1);
+            }
+        }
         const Measure* m1 = m->nextMeasure();
         if (m1 == 0) {
             break;
@@ -3036,25 +3042,32 @@ EngravingItem* Score::move(const String& cmd)
                 el = cr;
             }
         } else if (!el) {
+            if (noteEntryMode()) {
+                m_is.setBeyondScore(true);
+            }
             el = cr;
         }
     } else if (cmd == u"prev-chord" && cr) {
         // note input cursor
-        if (noteEntryMode() && m_is.segment()) {
-            Measure* m = m_is.segment()->measure();
-            Segment* s = m_is.segment()->prev1(SegmentType::ChordRest);
-            track_idx_t track = m_is.track();
-            for (; s; s = s->prev1(SegmentType::ChordRest)) {
-                if (s->element(track) || (s->measure() != m && s->rtick().isZero())) {
-                    if (s->element(track)) {
-                        if (s->element(track)->isRest() && toRest(s->element(track))->isGap()) {
-                            continue;
+        if (noteEntryMode()) {
+            if (m_is.beyondScore()) {
+                m_is.setBeyondScore(false);
+            } else if (m_is.segment()) {
+                Measure* m = m_is.segment()->measure();
+                Segment* s = m_is.segment()->prev1(SegmentType::ChordRest);
+                track_idx_t track = m_is.track();
+                for (; s; s = s->prev1(SegmentType::ChordRest)) {
+                    if (s->element(track) || (s->measure() != m && s->rtick().isZero())) {
+                        if (s->element(track)) {
+                            if (s->element(track)->isRest() && toRest(s->element(track))->isGap()) {
+                                continue;
+                            }
                         }
+                        break;
                     }
-                    break;
                 }
+                m_is.moveInputPos(s);
             }
-            m_is.moveInputPos(s);
         }
 
         // selection "cursor"
@@ -3442,7 +3455,7 @@ void Score::realtimeAdvance(bool allowTransposition)
     }
 
     ChordRest* prevCR = toChordRest(is.cr());
-    if (inputState().endOfScore()) {
+    if (inputState().beyondScore()) {
         appendMeasures(1);
     }
 
@@ -4887,6 +4900,7 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
     pos.staffIdx  = inputState().track() / VOICES;
     ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
     pos.line      = relStep(step, clef);
+    pos.beyondScore = inputState().beyondScore();
 
     if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
         repitchNote(pos, !addFlag);
