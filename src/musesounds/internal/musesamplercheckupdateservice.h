@@ -34,10 +34,10 @@
 namespace mu::musesounds {
 class MuseSamplerCheckUpdateService : public IMuseSamplerCheckUpdateService, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
-    muse::Inject<muse::musesampler::IMuseSamplerConfiguration> museSamplerConfiguration = { this };
-    muse::Inject<muse::network::INetworkManagerCreator> networkManagerCreator = { this };
-    muse::Inject<IMuseSoundsConfiguration> configuration = { this };
+    muse::ThreadSafeInject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
+    muse::ThreadSafeInject<muse::musesampler::IMuseSamplerConfiguration> museSamplerConfiguration = { this };
+    muse::ThreadSafeInject<muse::network::INetworkManagerCreator> networkManagerCreator = { this };
+    muse::ThreadSafeInject<IMuseSoundsConfiguration> configuration = { this };
 
 public:
     MuseSamplerCheckUpdateService(const muse::modularity::ContextPtr& iocCtx)

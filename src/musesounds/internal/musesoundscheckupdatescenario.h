@@ -36,12 +36,12 @@
 namespace mu::musesounds {
 class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
-    muse::Inject<IMuseSoundsConfiguration> configuration = { this };
+    muse::ThreadSafeInject<muse::IInteractive> interactive = { this };
+    muse::ThreadSafeInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ThreadSafeInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    muse::ThreadSafeInject<IMuseSoundsConfiguration> configuration = { this };
 
-    muse::Inject<IMuseSoundsCheckUpdateService> service = { this };
+    muse::ThreadSafeInject<IMuseSoundsCheckUpdateService> service = { this };
 
 public:
     MuseSoundsCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)

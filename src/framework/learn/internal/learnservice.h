@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_LEARN_LEARNSERVICE_H
-#define MUSE_LEARN_LEARNSERVICE_H
+
+#pragma once
 
 #include "ilearnservice.h"
 
@@ -34,8 +34,8 @@ class QJsonDocument;
 namespace muse::learn {
 class LearnService : public ILearnService, public Injectable
 {
-    Inject<ILearnConfiguration> configuration = { this };
-    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    ThreadSafeInject<ILearnConfiguration> configuration = { this };
+    ThreadSafeInject<network::INetworkManagerCreator> networkManagerCreator = { this };
     Inject<IInteractive> interactive = { this };
 
 public:
@@ -64,5 +64,3 @@ private:
     async::Channel<Playlist> m_advancedPlaylistChannel;
 };
 }
-
-#endif // MUSE_LEARN_LEARNSERVICE_H
