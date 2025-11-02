@@ -296,10 +296,8 @@ private:
     engraving::Staff* createStaff(engraving::Part* part, const musx::dom::MusxInstance<musx::dom::others::Staff> musxStaff, const engraving::InstrumentTemplate* it = nullptr);
     engraving::ClefType toMuseScoreClefType(const musx::dom::MusxInstance<musx::dom::options::ClefOptions::ClefDef>& clefDef,
                                             const musx::dom::MusxInstance<musx::dom::others::Staff>& musxStaff);
-    engraving::Clef* createClef(engraving::Score* score,
-                                const musx::dom::MusxInstance<musx::dom::others::Staff>& musxStaff,
-                                engraving::staff_idx_t staffIdx,
-                                musx::dom::ClefIndex musxClef,
+    engraving::Clef* createClef(const musx::dom::MusxInstance<musx::dom::others::Staff>& musxStaff,
+                                engraving::staff_idx_t staffIdx, musx::dom::ClefIndex musxClef,
                                 engraving::Measure* measure, musx::dom::Edu musxEduPos,
                                 bool afterBarline, bool visible);
     void importClefs(const musx::dom::MusxInstance<musx::dom::others::StaffUsed>& musxScrollViewItem,
