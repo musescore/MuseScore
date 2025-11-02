@@ -204,8 +204,8 @@ static void transferTupletProperties(MusxInstance<details::TupletDef> musxTuplet
 
     // bracket extensions
     /// @todo account for the fact that Finale always includes head widths in total bracket width, an option not yet in MuseScore. See #16973
-    scoreTuplet->setUserPoint1(evpuToPointF(-musxTuplet->leftHookExt, 0));
-    scoreTuplet->setUserPoint2(evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj));
+    scoreTuplet->setUserPoint1(evpuToPointF(-musxTuplet->leftHookExt, 0) * SPATIUM20);
+    scoreTuplet->setUserPoint2(evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj) * SPATIUM20);
     if (musxTuplet->alwaysFlat) {
         scoreTuplet->setUserPoint2(PointF(scoreTuplet->userP2().x(), scoreTuplet->userP1().y()));
     }
