@@ -686,6 +686,7 @@ void Segment::add(EngravingItem* el)
 
     track_idx_t track = el->track();
     assert(track != muse::nidx);
+    assert(track < score()->ntracks());
     assert(el->score() == score());
     assert(score()->nstaves() * VOICES == m_elist.size());
     // make sure offset is correct for staff
