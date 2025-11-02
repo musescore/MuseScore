@@ -80,6 +80,7 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
     *activeSpec = spec;
     activeSpec->format = Format::AudioF32;
     m_data->format = *activeSpec;
+    m_activeSpecChanged.send(m_data->format);
 
     AudioStreamBasicDescription audioFormat;
     audioFormat.mSampleRate = spec.output.sampleRate;
@@ -185,6 +186,11 @@ bool OSXAudioDriver::isOpened() const
 const OSXAudioDriver::Spec& OSXAudioDriver::activeSpec() const
 {
     return m_data->format;
+}
+
+async::Channel<OSXAudioDriver::Spec> OSXAudioDriver::activeSpecChanged() const
+{
+    return m_activeSpecChanged;
 }
 
 AudioDeviceList OSXAudioDriver::availableOutputDevices() const

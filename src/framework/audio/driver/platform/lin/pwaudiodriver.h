@@ -56,6 +56,7 @@ public:
     bool isOpened() const override;
 
     const Spec& activeSpec() const override;
+    async::Channel<Spec> activeSpecChanged() const override;
 
     AudioDeviceID outputDevice() const override;
     bool selectOutputDevice(const AudioDeviceID& deviceId) override;
@@ -77,6 +78,7 @@ public:
     void suspend() override;
 
 private:
+
     async::Notification m_outputDeviceChanged;
 
     std::string m_deviceId;
@@ -85,6 +87,7 @@ private:
     async::Notification m_sampleRateChanged;
 
     Spec m_formatSpec;
+    async::Channel<Spec> m_activeSpecChanged;
 
     pw_thread_loop* m_loop = nullptr;
     pw_context* m_context = nullptr;

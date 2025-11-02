@@ -53,6 +53,12 @@ const AudioDriverStub::Spec& AudioDriverStub::activeSpec() const
     return dummySpec;
 }
 
+async::Channel<AudioDriverStub::Spec> AudioDriverStub::activeSpecChanged() const
+{
+    static async::Channel<Spec> activeSpecChanged;
+    return activeSpecChanged;
+}
+
 std::string AudioDriverStub::outputDevice() const
 {
     return std::string();
