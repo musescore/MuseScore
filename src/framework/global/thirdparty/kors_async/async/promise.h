@@ -172,13 +172,11 @@ public:
 
     Promise<T...>& onResolve(const Asyncable* receiver, const std::function<void(const T&...)>& callback)
     {
-        m_data->resolveCh.onReceive(receiver, [callback](std::shared_ptr<Data> d, const T&... args) {
+        m_data->resolveCh.onReceive(receiver, [data { m_data }, callback](const std::shared_ptr<Data>& d, const T&... args) {
+            (void)data;
+            (void)d;
+            assert(data == d);
             callback(args ...);
-            // we are in the Data context,
-            // we need to exit it, and then Data will be deleted.
-            Async::call(nullptr, [](std::shared_ptr<Data>) {
-                // noop
-            }, d);
         }, Asyncable::Mode::SetOnce);
         return *this;
     }
@@ -188,13 +186,11 @@ public:
         bool has_reject = m_data->rejectCh != nullptr;
         assert(has_reject && "This promise has no rejection");
         if (has_reject) {
-            m_data->rejectCh->onReceive(receiver, [callback](std::shared_ptr<Data> d, int code, const std::string& msg) {
+            m_data->rejectCh->onReceive(receiver, [data { m_data }, callback](const std::shared_ptr<Data>& d, int code, const std::string& msg) {
+                (void)data;
+                (void)d;
+                assert(data == d);
                 callback(code, msg);
-                // we are in the Data context,
-                // we need to exit it, and then Data will be deleted.
-                Async::call(nullptr, [](std::shared_ptr<Data>) {
-                    // noop
-                }, d);
             }, Asyncable::Mode::SetOnce);
         }
         return *this;
