@@ -26,8 +26,6 @@ SOFTWARE.
 #include <map>
 #include <utility>
 
-std::recursive_mutex kors::modularity::StaticMutex::mutex;
-
 static std::map<kors::modularity::IoCID, kors::modularity::ModulesIoC*> s_map;
 
 kors::modularity::ModulesIoC* kors::modularity::_ioc(const ContextPtr& ctx)

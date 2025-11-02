@@ -21,11 +21,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef KORS_MODULARITY_IOC_H
-#define KORS_MODULARITY_IOC_H
+
+#pragma once
 
 #include <memory>
-#include <mutex>
+#include <shared_mutex>
 #include <string_view>
 
 #include "context.h"
@@ -36,26 +36,21 @@ namespace kors::modularity {
 ModulesIoC* _ioc(const ContextPtr& ctx = nullptr);
 void removeIoC(const ContextPtr& ctx = nullptr);
 
-struct StaticMutex
-{
-    static std::recursive_mutex mutex;
-};
-
 template<class I>
 class Inject
 {
 public:
+    virtual ~Inject() = default;
 
 #ifdef MUSE_MODULE_GLOBAL_MULTI_IOC
     Inject(const ContextPtr& ctx)
-        : m_ctx(ctx) {}
 #else
     Inject(const ContextPtr& ctx = nullptr)
+    #endif
         : m_ctx(ctx) {}
-#endif
 
-    Inject(const Injectable* o)
-        : m_inj(o) {}
+    Inject(const Injectable* inj)
+        : m_inj(inj) {}
 
     const ContextPtr& iocContext() const
     {
@@ -75,18 +70,13 @@ public:
     const std::shared_ptr<I>& get() const
     {
         if (!m_i) {
-            //! NOTE In resolve, a new object can be created using a creator,
-            //! in this object injects can be used in the constructor,
-            //! this will lead to a double mutex lock, so the mutex must be recursive.
-            const std::lock_guard<std::recursive_mutex> lock(StaticMutex::mutex);
-            if (!m_i) {
-                static std::string_view module = "";
-                m_i = _ioc(iocContext())->template resolve<I>(module);
-            }
+            static std::string_view module = "";
+            m_i = _ioc(iocContext())->template resolve<I>(module);
         }
         return m_i;
     }
 
+    /// For testing purposes only. Not thread-safe.
     void set(std::shared_ptr<I> impl)
     {
         m_i = impl;
@@ -97,8 +87,7 @@ public:
         return get();
     }
 
-private:
-
+protected:
     const ContextPtr m_ctx;
     const Injectable* m_inj = nullptr;
     mutable std::shared_ptr<I> m_i = nullptr;
@@ -111,6 +100,40 @@ public:
     GlobalInject()
         : Inject<I>(ContextPtr()) {}
 };
-}
 
-#endif // KORS_MODULARITY_IOC_H
+/// Thread-safe (locking) variant of Inject.
+template<class I>
+class ThreadSafeInject : public Inject<I>
+{
+public:
+    using Inject<I>::Inject;
+
+    const std::shared_ptr<I>& get() const
+    {
+        {
+            std::shared_lock lock(m_mutex);
+            if (Inject<I>::m_i) {
+                return Inject<I>::m_i;
+            }
+        }
+
+        std::unique_lock lock(m_mutex);
+        return Inject<I>::get();
+    }
+
+    /// For testing purposes.
+    void set(std::shared_ptr<I> impl)
+    {
+        std::unique_lock lock(m_mutex);
+        Inject<I>::set(impl);
+    }
+
+    const std::shared_ptr<I>& operator()() const
+    {
+        return get();
+    }
+
+private:
+    mutable std::shared_mutex m_mutex;
+};
+}
