@@ -58,6 +58,8 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/utils.h"
 
+#include "engraving/types/symnames.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -464,60 +466,57 @@ ClefType FinaleParser::toMuseScoreClefType(const MusxInstance<musx::dom::options
                                            const MusxInstance<musx::dom::others::Staff>& musxStaff)
 {
     // Musx staff positions start with the reference line as 0. (The reference line on a standard 5-line staff is the top line.)
+    // We don't account for any potential difference here (Staff::calcTopLinePosition()) because we set the stepOffset in StaffType later.
     // Positive values are above the reference line. Negative values are below the reference line.
 
     using MusxClefType = music_theory::ClefType;
     auto [clefType, octaveShift] = clefDef->calcInfo(musxStaff);
 
-    // key:     musx middle-C staff position (35 minus MuseScore-pitchOffset of the clef type)
-    // value:   MuseScore clef type
+    SymId clefSym = SymId::noSym;
+    if (!clefDef->isShape) {
+        if (clefDef->useOwnFont) {
+            clefSym = FinaleTextConv::symIdFromFinaleChar(clefDef->clefChar, clefDef->font);
+        } else {
+            const MusxInstance<FontInfo>& clefFont = options::FontOptions::getFontInfo(musxStaff->getDocument(), options::FontOptions::FontType::Clef);
+            clefSym = FinaleTextConv::symIdFromFinaleChar(clefDef->clefChar, clefFont);
+        }
+    }
 
-    static const std::unordered_map<int, ClefType> gClefTypes = {
-        { -10,  ClefType::G },
-        {  +4,  ClefType::G15_MB },
-        {  -3,  ClefType::G8_VB },
-        { -17,  ClefType::G8_VA },
-        { -24,  ClefType::G15_MA },
-        { -12,  ClefType::G_1 },
-    };
+    // First pass: try to find a perfect match (symbol and pitch)
+    for (int i = 0; i < int(ClefType::MAX); ++i) {
+        ClefType ct = ClefType(i);
+        if (ClefInfo::symId(ct) == clefSym && ClefInfo::pitchOffset(ct) + clefDef->middleCPos == 35) {
+            return ct;
+        }
+    }
 
-    static const std::unordered_map<int, ClefType> cClefTypes = {
-        {   0,  ClefType::C5 },
-        {  -2,  ClefType::C4 },
-        {  -4,  ClefType::C3 },
-        {  -6,  ClefType::C2 },
-        {  -8,  ClefType::C1 },
-        { -10,  ClefType::C_19C },
-        {  +5,  ClefType::C4_8VB },
-    };
-
-    static const std::unordered_map<int, ClefType> fClefTypes = {
-        {  +2,  ClefType::F },
-        { +16,  ClefType::F15_MB },
-        {  +9,  ClefType::F8_VB },
-        {  -5,  ClefType::F_8VA },
-        { -12,  ClefType::F_15MA },
-        {  +4,  ClefType::F_C },
-        {   0,  ClefType::F_B },
-    };
-
-    /// @todo Use clefDef->clefChar to differentiate clef types that only differ by glyph.
-    /// To handle non-SMuFL glyphs we'll need glyph mappings, which are planned.
-
+    // Second attempt: Use sensible defaults for non-standard clef types
+    // We could skip this pass (and set middleCPos to -10), but this yields better results
     switch (clefType) {
-        case MusxClefType::G: return muse::value(gClefTypes, clefDef->middleCPos, ClefType::INVALID);
-        case MusxClefType::C: return muse::value(cClefTypes, clefDef->middleCPos, ClefType::INVALID);
-        case MusxClefType::F: return muse::value(fClefTypes, clefDef->middleCPos, ClefType::INVALID);
         case MusxClefType::Percussion1: return ClefType::PERC;
         case MusxClefType::Percussion2: return ClefType::PERC2;
         case MusxClefType::Tab: return musxStaff->calcNumberOfStafflines() <= 4 ? ClefType::TAB4 : ClefType::TAB;
         case MusxClefType::TabSerif: return musxStaff->calcNumberOfStafflines() <= 4 ? ClefType::TAB4_SERIF : ClefType::TAB_SERIF;
         default: break;
     }
+
+    // Final attempt: prioritise clef type (C/G/F/Tab/Perc)
+    for (int i = 0; i < int(ClefType::MAX); ++i) {
+        ClefType ct = ClefType(i);
+        if (ClefInfo::pitchOffset(ct) + clefDef->middleCPos == /*MuseScore line for middle C*/ 35) {
+            String clefSymName = String::fromAscii(SymNames::nameForSymId(ClefInfo::symId(ct)).ascii());
+            if ((clefType == MusxClefType::G && clefSymName.contains(u"gClef"))
+                || (clefType == MusxClefType::C && clefSymName.contains(u"cClef"))
+                || (clefType == MusxClefType::F && clefSymName.contains(u"fClef"))) {
+                return ct;
+            }
+        }
+    }
+
     return ClefType::INVALID;
 }
 
-Clef* FinaleParser::createClef(Score* score, const MusxInstance<musx::dom::others::Staff>& musxStaff,
+Clef* FinaleParser::createClef(const MusxInstance<musx::dom::others::Staff>& musxStaff,
                                staff_idx_t staffIdx, ClefIndex musxClef, Measure* measure, Edu musxEduPos,
                                bool afterBarline, bool visible)
 {
@@ -526,7 +525,13 @@ Clef* FinaleParser::createClef(Score* score, const MusxInstance<musx::dom::other
     if (entryClefType == ClefType::INVALID) {
         return nullptr;
     }
-    Clef* clef = Factory::createClef(score->dummy()->segment());
+    // Clef positions in musx are staff-level, so back out any time stretch to get global position.
+    Staff* staff = measure->score()->staff(staffIdx);
+    Fraction timeStretch = staff->timeStretch(measure->tick());
+    Fraction clefTick = eduToFraction(musxEduPos) / timeStretch;
+    const bool isHeader = !afterBarline && !measure->prevMeasure() && clefTick.isZero();
+    Segment* clefSeg = measure->getSegmentR(isHeader ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
+    Clef* clef = Factory::createClef(clefSeg);
     clef->setTrack(staff2track(staffIdx));
     clef->setConcertClef(entryClefType);
     clef->setTransposingClef(entryClefType);
@@ -534,45 +539,40 @@ Clef* FinaleParser::createClef(Score* score, const MusxInstance<musx::dom::other
     // clef->setForInstrumentChange();
     clef->setVisible(visible && !clefDef->isBlank());
     clef->setGenerated(false);
-    const bool isHeader = !afterBarline && !measure->prevMeasure() && musxEduPos == 0;
     clef->setIsHeader(isHeader);
     if (afterBarline) {
         clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
-    } else if (musxEduPos == 0) {
+    } else if (clefTick.isZero()) {
         clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
     }
 
-    Staff* staff = score->staff(staffIdx);
-    Fraction timeStretch = staff->timeStretch(measure->tick());
-    // Clef positions in musx are staff-level, so back out any time stretch to get global position.
-    Fraction clefTick = eduToFraction(musxEduPos) / timeStretch;
-    Segment* clefSeg = measure->getSegmentR(clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
     clefSeg->add(clef);
     return clef;
 }
 
 void FinaleParser::importClefs(const MusxInstance<others::StaffUsed>& musxScrollViewItem,
-                                    const MusxInstance<others::Measure>& musxMeasure, Measure* measure, staff_idx_t curStaffIdx,
-                                    ClefIndex& musxCurrClef, const MusxInstance<others::Measure>& prevMusxMeasure)
+                               const MusxInstance<others::Measure>& musxMeasure, Measure* measure, staff_idx_t curStaffIdx,
+                               ClefIndex& musxCurrClef, const MusxInstance<others::Measure>& prevMusxMeasure)
 {
+    const StaffCmper musxStaffId = musxScrollViewItem->staffId;
     // The Finale UI requires transposition to be a full-measure staff-style assignment, so checking only the beginning of the bar should be sufficient.
     // However, it is possible to defeat this requirement using plugins. That said, doing so produces erratic results, so I'm not sure we should support it.
     // For now, only check the start of the measure.
-    auto musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
+    const auto& musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, musxMeasure->getCmper(), 0);
     if (musxStaffAtMeasureStart && musxStaffAtMeasureStart->transposition && musxStaffAtMeasureStart->transposition->setToClef) {
         if (musxStaffAtMeasureStart->transposedClef != musxCurrClef) {
-            if (Clef* clef = createClef(m_score, musxStaffAtMeasureStart, curStaffIdx, musxStaffAtMeasureStart->transposedClef, measure, /*xEduPos*/ 0, false, true)) {
+            if (Clef* clef = createClef(musxStaffAtMeasureStart, curStaffIdx, musxStaffAtMeasureStart->transposedClef, measure, /*xEduPos*/ 0, false, true)) {
                 clef->setShowCourtesy(clef->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
                 musxCurrClef = musxStaffAtMeasureStart->transposedClef;
             }
         }
         return;
     }
-    if (auto gfHold = m_doc->getDetails()->get<details::GFrameHold>(m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper())) {
+    if (auto gfHold = m_doc->getDetails()->get<details::GFrameHold>(m_currentMusxPartId, musxStaffId, musxMeasure->getCmper())) {
         if (gfHold->clefId.has_value()) {
             if (gfHold->clefId.value() != musxCurrClef || gfHold->showClefMode == ShowClefMode::Always) {
                 const bool visible = gfHold->showClefMode != ShowClefMode::Never;
-                if (createClef(m_score, musxStaffAtMeasureStart, curStaffIdx, gfHold->clefId.value(), measure, /*xEduPos*/ 0, gfHold->clefAfterBarline, visible)) {
+                if (createClef(musxStaffAtMeasureStart, curStaffIdx, gfHold->clefId.value(), measure, /*xEduPos*/ 0, gfHold->clefAfterBarline, visible)) {
                     musxCurrClef = gfHold->clefId.value();
                 }
             }
@@ -582,8 +582,8 @@ void FinaleParser::importClefs(const MusxInstance<others::StaffUsed>& musxScroll
                 if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef || midMeasureClef->clefMode == ShowClefMode::Always) {
                     const bool visible = midMeasureClef->clefMode != ShowClefMode::Never;
                     const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
-                    auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), midMeasureClef->xEduPos);
-                    if (Clef* clef = createClef(m_score, currStaff, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline, visible)) {
+                    auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, musxMeasure->getCmper(), midMeasureClef->xEduPos);
+                    if (Clef* clef = createClef(currStaff, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline, visible)) {
                         // only set y offset because MuseScore automatically calculates the horizontal spacing offset
                         clef->setOffset(0.0, -doubleFromEvpu(midMeasureClef->yEvpuPos) * clef->spatium());
                         /// @todo perhaps populate other fields from midMeasureClef, such as clef-specific mag, etc.?
