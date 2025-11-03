@@ -45,6 +45,11 @@
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
+#include "muse_framework_config.h"
+#ifdef MUSE_MODULE_AUDIO_ASIO
+#include "audio/driver/platform/win/asio/asiodiscovery.h"
+#endif
+
 #include "log.h"
 
 using namespace muse;
@@ -150,6 +155,11 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
             pr->reg("soundfonts", p);
         }
     }
+
+#ifdef MUSE_MODULE_AUDIO_ASIO
+    AsioDiscovery d;
+    d.dump();
+#endif
 }
 
 void AudioModule::onDeinit()

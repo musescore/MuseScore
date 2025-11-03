@@ -10,8 +10,10 @@ declare_muse_module_opt(ACCESSIBILITY ON)
 option(MUSE_MODULE_ACCESSIBILITY_TRACE "Enable accessibility logging" OFF)
 
 declare_muse_module_opt(ACTIONS ON)
+
 declare_muse_module_opt(AUDIO ON)
 option(MUSE_MODULE_AUDIO_JACK "Enable jack support" OFF)
+option(MUSE_MODULE_AUDIO_ASIO "Enable asio support" OFF)
 option(MUSE_MODULE_AUDIO_EXPORT "Enable audio export" ON)
 
 # 1 - worker

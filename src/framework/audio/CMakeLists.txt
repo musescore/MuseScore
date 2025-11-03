@@ -21,6 +21,11 @@
 declare_module(muse_audio)
 set(MODULE_ALIAS muse::audio)
 
+set(MODULE_QRC main/audio.qrc)
+
+set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
+set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
+
 include(GetPlatformInfo)
 
 set(MODULE_LINK )
@@ -100,12 +105,20 @@ set(MODULE_SRC
     ${DRIVER_SRC}
 )
 
-set(MODULE_QRC main/audio.qrc)
+set(MODULE_INCLUDE ${MODULE_INCLUDE}
+    ${AUDIO_DRIVER_INC}
+)
 
-set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
+set(MODULE_LINK ${MODULE_LINK}
+    ${AUDIO_DRIVER_LINK}
+)
 
 setup_module()
+
+if (MUSE_MODULE_AUDIO_ASIO)
+    # see driver\platform\win\asio\asiosdk\CMakeLists.txt
+    add_definitions(-DUNICODE)
+endif()
 
 if (MUSE_MODULE_AUDIO_TESTS)
     add_subdirectory(tests)
