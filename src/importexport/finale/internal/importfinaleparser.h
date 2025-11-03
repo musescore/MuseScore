@@ -281,6 +281,7 @@ public:
     engraving::staff_idx_t staffIdxFromAssignment(musx::dom::StaffCmper assign);
     engraving::staff_idx_t staffIdxForRepeats(bool onlyTop, musx::dom::Cmper staffList, musx::dom::Cmper measureId,
                                               std::vector<std::pair<engraving::staff_idx_t, musx::dom::StaffCmper>>& links);
+    musx::dom::MusxInstance<musx::dom::others::LayerAttributes> layerAttributes(const engraving::Fraction& tick, engraving::track_idx_t track);
 
     FinaleLoggerPtr logger() const { return m_logger; }
 
@@ -316,9 +317,10 @@ private:
     void createTupletsFromMap(engraving::Measure* measure, engraving::track_idx_t curTrackIdx, std::vector<ReadableTuplet>& tupletMap);
     bool processEntryInfo(musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx, engraving::Measure* measure, bool graceNotes,
                           std::vector<engraving::Note*>& notesWithUnmanagedTies,
-                          std::vector<ReadableTuplet>& tupletMap, std::unordered_map<engraving::Rest*, musx::dom::NoteInfoPtr>& fixedRests);
+                          std::vector<ReadableTuplet>& tupletMap);
     bool processBeams(musx::dom::EntryInfoPtr entryInfoPtr, engraving::track_idx_t curTrackIdx);
-    bool positionFixedRests(const std::unordered_map<engraving::Rest*, musx::dom::NoteInfoPtr>& fixedRests);
+    engraving::DirectionV getDirectionVForLayer(const engraving::ChordRest* e);
+    engraving::DirectionV calculateTieDirection(engraving::Tie* tie);
     engraving::Note* noteFromEntryInfoAndNumber(const musx::dom::EntryInfoPtr& entryInfoPtr, musx::dom::NoteNumber nn);
     engraving::Note* noteFromNoteInfoPtr(const musx::dom::NoteInfoPtr& noteInfoPtr);
     engraving::ChordRest* chordRestFromEntryInfoPtr(const musx::dom::EntryInfoPtr& entryInfoPtr);
@@ -357,9 +359,10 @@ private:
     std::unordered_map<musx::dom::MeasCmper, engraving::Fraction> m_meas2Tick;
     std::map<engraving::Fraction, musx::dom::MeasCmper> m_tick2Meas; // use std::map to avoid need for Fraction hash function
     std::unordered_map<musx::dom::LayerIndex, engraving::voice_idx_t> m_layer2Voice;
-    std::unordered_set<musx::dom::LayerIndex> m_layerForceStems;
     std::map<std::pair<musx::dom::EntryNumber, musx::dom::NoteNumber>, engraving::Note*> m_entryNoteNumber2Note; // use std::map to avoid need for std::pair hash function
     std::unordered_map<musx::dom::EntryNumber, engraving::ChordRest*> m_entryNumber2CR;
+    std::map<int, std::vector<musx::dom::LayerIndex>> m_track2Layer;
+    std::set<engraving::Chord*> m_fixedChords;
     ReadableCustomLineMap m_customLines;
     ReadableExpressionMap m_expressions;
     ReadableRepeatTextMap m_repeatTexts;
