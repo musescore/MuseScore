@@ -864,6 +864,7 @@ void FinaleParser::importEntries()
             MeasCmper measureId = musxMeasure->getCmper();
             Fraction currTick = muse::value(m_meas2Tick, measureId, Fraction(-1, 1));
             Measure* measure = !currTick.negative()  ? m_score->tick2measure(currTick) : nullptr;
+            bool measureHasVoices = false;
             if (!measure) {
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measureId);
                 break;
@@ -900,6 +901,9 @@ void FinaleParser::importEntries()
 
                         track_idx_t curTrackIdx = staffTrackIdx + voiceOff;
                         // map track and measure to layer here (LayerAttributes)
+                        if (curTrackIdx != staffTrackIdx) {
+                            measureHasVoices = true;
+                        }
 
                         // generate tuplet map, tremolo map and create tuplets
                         // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback
@@ -944,7 +948,7 @@ void FinaleParser::importEntries()
                 rest->setScore(m_score);
                 rest->setTicks(measure->timesig() * curStaff->timeStretch(measure->tick()));
                 rest->setTrack(staffTrackIdx);
-                rest->setVisible(!currMusxStaff->hideRests && !currMusxStaff->blankMeasure);
+                rest->setVisible(!currMusxStaff->hideRests && !currMusxStaff->blankMeasure && !measureHasVoices);
                 segment->add(rest);
             }
         }
