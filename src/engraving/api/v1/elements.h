@@ -69,6 +69,7 @@ class System;
 class Tie;
 class Tuplet;
 class Measure;
+class Beam;
 
 //---------------------------------------------------------
 //   wrap
@@ -283,10 +284,6 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY_T(QPointF, offset,       OFFSET)
     API_PROPERTY_T(bool, ghost,           GHOST)
     API_PROPERTY_T(bool, play,            PLAY)
-    /// For beams: The feathering on its left side.
-    API_PROPERTY_T(qreal, growLeft,       GROW_LEFT)
-    /// For beams: The feathering on its right side.
-    API_PROPERTY_T(qreal, growRight,      GROW_RIGHT)
 
     /// For vertical frames and text frames: Their height.
     API_PROPERTY(boxHeight,               BOX_HEIGHT)
@@ -1403,7 +1400,7 @@ class ChordRest : public DurationElement
     Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> lyrics READ lyrics)
     /// Beam which covers this chord/rest, if such exists.
     /// \since MuseScore 3.6
-    Q_PROPERTY(apiv1::EngravingItem * beam READ beam)
+    Q_PROPERTY(apiv1::Beam * beam READ beam)
     /// Whether this element is a full measure rest.
     /// \since MuseScore 4.6
     Q_PROPERTY(bool isFullMeasureRest READ isFullMeasureRest)
@@ -1430,7 +1427,7 @@ public:
     const mu::engraving::ChordRest* chordRest() const { return toChordRest(e); }
 
     QQmlListProperty<EngravingItem> lyrics() { return wrapContainerProperty<EngravingItem>(this, chordRest()->lyrics()); }   // TODO: special type for Lyrics?
-    EngravingItem* beam() { return wrap(chordRest()->beam()); }
+    Beam* beam() { return wrap<Beam>(chordRest()->beam()); }
 
     bool isFullMeasureRest() { return chordRest()->isFullMeasureRest(); }
 
@@ -1546,6 +1543,52 @@ public:
     /// Remove a chord's element.
     /// \since MuseScore 3.3
     Q_INVOKABLE void remove(apiv1::EngravingItem* wrapped);
+};
+
+//---------------------------------------------------------
+//   Beam
+///    \since MuseScore 4.7
+//---------------------------------------------------------
+
+class Beam : public EngravingItem
+{
+    Q_OBJECT
+
+    /// The feathering on this beam's left side.
+    API_PROPERTY_T(qreal, growLeft,  GROW_LEFT)
+    /// The feathering on this beam's right side.
+    API_PROPERTY_T(qreal, growRight, GROW_RIGHT)
+    /// Whether this beam is a cross-staff beam.
+    Q_PROPERTY(bool isCrossStaff READ cross)
+    /// Whether this beam is entirely on a different staff.
+    Q_PROPERTY(bool isFullCrossStaff READ fullCross)
+    /// The default cross staff position for this beam.
+    /// Add EngravingItem::crossStaffMove to get the actual position.
+    Q_PROPERTY(int defaultCrossStaffIdx READ defaultCrossStaffIdx)
+    /// The lowest possible cross staff position for this beam.
+    Q_PROPERTY(int minCRMove READ minCRMove)
+    /// The highest possible cross staff position for this beam.
+    Q_PROPERTY(int maxCRMove READ maxCRMove)
+    /// List of chords and rests which belong to this beam.
+    Q_PROPERTY(QQmlListProperty<apiv1::ChordRest> elements READ elements)
+
+public:
+    /// \cond MS_INTERNAL
+    Beam(mu::engraving::Beam* b = nullptr, Ownership own = Ownership::PLUGIN)
+        : EngravingItem(b, own) {}
+
+    mu::engraving::Beam* beam() { return toBeam(e); }
+    const mu::engraving::Beam* beam() const { return toBeam(e); }
+
+    bool cross() const { return beam()->cross(); }
+    bool fullCross() const { return beam()->fullCross(); }
+
+    int defaultCrossStaffIdx() const { return beam()->defaultCrossStaffIdx(); }
+    int minCRMove() const { return beam()->minCRMove(); }
+    int maxCRMove() const { return beam()->maxCRMove(); }
+
+    QQmlListProperty<ChordRest> elements() { return wrapContainerProperty<ChordRest>(this, beam()->elements()); }
+    /// \endcond
 };
 
 //---------------------------------------------------------

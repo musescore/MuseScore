@@ -662,47 +662,25 @@ EngravingItem* mu::engraving::apiv1::wrap(mu::engraving::EngravingItem* e, Owner
         return nullptr;
     }
 
-    using mu::engraving::ElementType;
-    switch (e->type()) {
-    case ElementType::TIE:
-    case ElementType::PARTIAL_TIE:
-    case ElementType::LAISSEZ_VIB:
-        return wrap<Tie>(toTie(e), own);
-    case ElementType::ORNAMENT:
-        return wrap<Ornament>(toOrnament(e), own);
-    case ElementType::NOTE:
-        return wrap<Note>(toNote(e), own);
-    case ElementType::CHORD:
-        return wrap<Chord>(toChord(e), own);
-    case ElementType::TUPLET:
-        return wrap<Tuplet>(toTuplet(e), own);
-    case ElementType::SEGMENT:
-        return wrap<Segment>(toSegment(e), own);
-    case ElementType::MEASURE:
-        return wrap<Measure>(toMeasure(e), own);
-    case ElementType::HBOX:
-    case ElementType::VBOX:
-    case ElementType::TBOX:
-    case ElementType::FBOX:
-        return wrap<MeasureBase>(toMeasureBase(e), own);
-    case ElementType::SYSTEM:
-        return wrap<System>(toSystem(e), own);
-    case ElementType::PAGE:
-        return wrap<Page>(toPage(e), own);
-    default:
-        if (e->isDurationElement()) {
-            if (e->isChordRest()) {
-                return wrap<ChordRest>(toChordRest(e), own);
-            }
-            return wrap<DurationElement>(toDurationElement(e), own);
-        }
-        if (e->isSpannerSegment()) {
-            return wrap<SpannerSegment>(toSpannerSegment(e), own);
-        }
-        if (e->isSpanner()) {
-            return wrap<Spanner>(toSpanner(e), own);
-        }
-        break;
-    }
+#define API_WRAP(type) \
+    if (e->is##type()) { return wrap<type>(to##type(e), own); }
+
+    API_WRAP(Tie)
+    API_WRAP(Ornament)
+    API_WRAP(Note)
+    API_WRAP(Chord)
+    API_WRAP(ChordRest)
+    API_WRAP(DurationElement)
+    API_WRAP(Tuplet)
+    API_WRAP(Beam)
+    API_WRAP(Segment)
+    API_WRAP(Measure)
+    API_WRAP(MeasureBase)
+    API_WRAP(System)
+    API_WRAP(Page)
+    API_WRAP(SpannerSegment)
+    API_WRAP(Spanner)
     return wrap<EngravingItem>(e, own);
+
+#undef API_WRAP
 }
