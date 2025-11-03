@@ -1387,9 +1387,13 @@ void FinaleParser::importEntryAdjustments()
         if (chordRest->dots() > 0) {
             const double dotDistance = m_score->style().styleMM(Sid::dotNoteDistance) * chordRest->staff()->staffMag(chordRest);
             if (chordRest->isChord()) {
+                double rightmostNoteX = -DBL_MAX;
                 for (engraving::Note* n : toChord(chordRest)->notes()) {
-                    // Use bbox and not shape
-                    double difference = n->dots().front()->pos().x() - (n->ldata()->bbox().right() + dotDistance - n->offset().x());
+                    rightmostNoteX = std::max(rightmostNoteX, n->ldata()->bbox().right() - n->offset().x());
+                }
+                rightmostNoteX += dotDistance;
+                for (engraving::Note* n : toChord(chordRest)->notes()) {
+                    double difference = n->dots().front()->pos().x() - rightmostNoteX;
                     for (NoteDot* nd : n->dots()) {
                         nd->rxoffset() -= difference;
                     }
