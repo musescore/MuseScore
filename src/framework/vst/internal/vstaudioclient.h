@@ -72,8 +72,8 @@ private:
     void updateProcessSetup();
     void extractInputSamples(muse::audio::samples_t sampleCount, const float* sourceBuffer);
 
-    bool fillOutputBufferInstrument(muse::audio::samples_t sampleCount, float* output);
-    bool fillOutputBufferFx(muse::audio::samples_t sampleCount, float* output);
+    void fillOutputBufferInstrument(muse::audio::samples_t sampleCount, float* output);
+    void fillOutputBufferFx(muse::audio::samples_t sampleCount, float* output);
 
     void ensureActivity();
     void disableActivity();

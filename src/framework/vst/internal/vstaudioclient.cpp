@@ -161,11 +161,9 @@ muse::audio::samples_t VstAudioClient::process(float* output, muse::audio::sampl
         m_eventList.clear();
         m_paramChanges.clearQueue();
 
-        if (!fillOutputBufferInstrument(samplesPerChannel, output)) {
-            return 0;
-        }
-    } else if (!fillOutputBufferFx(samplesPerChannel, output)) {
-        return 0;
+        fillOutputBufferInstrument(samplesPerChannel, output);
+    } else {
+        fillOutputBufferFx(samplesPerChannel, output);
     }
 
     return samplesPerChannel;
@@ -411,13 +409,11 @@ void VstAudioClient::extractInputSamples(samples_t sampleCount, const float* sou
     }
 }
 
-bool VstAudioClient::fillOutputBufferInstrument(samples_t sampleCount, float* output)
+void VstAudioClient::fillOutputBufferInstrument(samples_t sampleCount, float* output)
 {
     if (!m_processData.outputs) {
-        return false;
+        return;
     }
-
-    bool isSilence = true;
 
     for (const int busIndex : m_activeOutputBusses) {
         Steinberg::Vst::AudioBusBuffers bus = m_processData.outputs[busIndex];
@@ -428,24 +424,16 @@ bool VstAudioClient::fillOutputBufferInstrument(samples_t sampleCount, float* ou
             for (audioch_t audioChannelIndex = 0; audioChannelIndex < bus.numChannels; ++audioChannelIndex) {
                 float sample = bus.channelBuffers32[audioChannelIndex][sampleIndex];
                 output[offset + audioChannelIndex] += sample * m_volumeGain;
-
-                if (isSilence && sample != 0.f) {
-                    isSilence = false;
-                }
             }
         }
     }
-
-    return !isSilence;
 }
 
-bool VstAudioClient::fillOutputBufferFx(samples_t sampleCount, float* output)
+void VstAudioClient::fillOutputBufferFx(samples_t sampleCount, float* output)
 {
     if (!m_processData.outputs) {
-        return false;
+        return;
     }
-
-    bool isSilence = true;
 
     for (const int busIndex : m_activeOutputBusses) {
         Steinberg::Vst::AudioBusBuffers bus = m_processData.outputs[busIndex];
@@ -456,15 +444,9 @@ bool VstAudioClient::fillOutputBufferFx(samples_t sampleCount, float* output)
             for (audioch_t audioChannelIndex = 0; audioChannelIndex < bus.numChannels; ++audioChannelIndex) {
                 float sample = bus.channelBuffers32[audioChannelIndex][sampleIndex];
                 output[offset + audioChannelIndex] = sample * m_volumeGain;
-
-                if (isSilence && sample != 0.f) {
-                    isSilence = false;
-                }
             }
         }
     }
-
-    return !isSilence;
 }
 
 void VstAudioClient::ensureActivity()
