@@ -326,6 +326,8 @@ private:
     // styles
     void importStyles();
     void collectElementStyle(const mu::engraving::EngravingObject* e);
+    void collectGlobalProperty(const mu::engraving::Sid styleId, const mu::engraving::PropertyValue& newV);
+    void collectGlobalFont(const std::string& namePrefix, const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo);
     std::unordered_map<Sid, PropertyValue> m_elementStyles;
 
     // smart shapes

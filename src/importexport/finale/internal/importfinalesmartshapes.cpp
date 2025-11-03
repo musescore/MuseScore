@@ -462,7 +462,7 @@ void FinaleParser::importSmartShapes()
                 setAndStyleProperty(newSpanner, Pid::PLAY, false); // Can custom ottavas have playback?
             } else if (newSpanner->isGuitarBend()) {
                 // Assume custom line is for tab bends (with arrow)
-                m_score->style().set(Sid::guitarBendLineWidthTab, customLine->lineWidth);
+                collectGlobalProperty(Sid::guitarBendLineWidthTab, customLine->lineWidth);
             }
         } else {
             if (type == ElementType::OTTAVA) {
