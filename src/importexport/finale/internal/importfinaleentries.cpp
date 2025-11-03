@@ -450,8 +450,14 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     }
                     note->setOffset(evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0) * SPATIUM20); // correctly scaled?
                     const MusxInstance<FontInfo> noteFont = noteInfo->useOwnFont ? noteInfo->customFont : options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Noteheads);
-                    /// @todo some noteheads may have parentheses baked in, but not in SymId yet.
-                    setNoteHeadSymbol(note, FinaleTextConv::symIdFromFinaleChar(noteInfo->altNhead, noteFont));
+                    if (targetStaff->isTabStaff(segment->tick())
+                        && (noteInfo->altNhead == U'X' || noteInfo->altNhead == U'x')) {
+                        // Shortcut for dead notes
+                        note->setProperty(Pid::HEAD_GROUP, NoteHeadGroup::HEAD_CROSS);
+                    } else {
+                        /// @todo some noteheads may have parentheses baked in, but not in SymId yet.
+                        setNoteHeadSymbol(note, FinaleTextConv::symIdFromFinaleChar(noteInfo->altNhead, noteFont));
+                    }
                 }
             }
 
