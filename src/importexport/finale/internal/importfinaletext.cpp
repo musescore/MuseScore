@@ -1587,7 +1587,6 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
                                       + chordAssignment->rootAlter * TPC_DELTA_SEMITONE, config->chordStyle == ChordStyle::Solfeggio);
         int bassTpc = clampEnharmonic(step2tpcByKey(se.degInKey(chordAssignment->bassScaleNum - minorOffset), se.key())
                                       + chordAssignment->bassAlter * TPC_DELTA_SEMITONE, config->chordStyle == ChordStyle::Solfeggio);
-        int solfeggioOffset = step2tpcByKey(se.degInKey(-minorOffset), se.key()) - int(Tpc::TPC_C);
         /// @todo capo options
 
         // Instead of writing the properties ourselves, convert to text and parse that.
@@ -1613,6 +1612,7 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
                     harmonyText.append(accStr + stepStr);
                 }
             } else if (config->chordStyle == ChordStyle::Solfeggio) {
+                int solfeggioOffset = step2tpcByKey(se.degInKey(-minorOffset), se.key()) - int(Tpc::TPC_C);
                 harmonyText.append(muse::value(solfeggioTable, tpc - solfeggioOffset, u"???"));
             } else {
                 String tpcName = tpc2name(tpc, nst, NoteCaseType::CAPITAL);
@@ -1643,7 +1643,7 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         if (chordAssignment->showAltBass) {
             harmonyText.append(u"/");
             getTextForTpc(bassTpc, chordAssignment->bassScaleNum);
-            m_score->style().set(Sid::chordBassNoteStagger, chordAssignment->bassPosition != details::ChordAssign::BassPosition::AfterRoot);
+            collectGlobalProperty(Sid::chordBassNoteStagger, chordAssignment->bassPosition != details::ChordAssign::BassPosition::AfterRoot);
         }
 
         // From Harmony::endEdit
@@ -1688,6 +1688,59 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
             fbOffset.ry() -= (fbBaselinepos - staffReferenceOffset); /// @todo set this as style?
             offset.ry() -= fbOffset.y(); /// @todo also diagram height?
             setAndStyleProperty(fret, Pid::OFFSET, fbOffset, true);
+            if (!chordAssignment->useFretboardFont) {
+                if (const MusxInstance<others::FretboardStyle>& fretboardStyle = chordAssignment->getFretboardStyle()) {
+                    setAndStyleProperty(fret, Pid::ORIENTATION, fretboardStyle->rotate ? Orientation::HORIZONTAL : Orientation::VERTICAL);
+                    setAndStyleProperty(fret, Pid::FRET_NUT, fretboardStyle->nutWidth > 0);
+                    setAndStyleProperty(fret, Pid::OFFSET, PointF(doubleFromEfix(fretboardStyle->horzHandleOff), doubleFromEfix(fretboardStyle->horzHandleOff)) * SPATIUM20); // bind vertical to fretY
+                    String suffix = String::fromStdString(fretboardStyle->fretNumText);
+                    collectGlobalProperty(Sid::fretUseCustomSuffix, !suffix.empty());
+                    if (!suffix.empty()) {
+                        collectGlobalProperty(Sid::fretCustomSuffix, String::fromStdString(fretboardStyle->fretNumText));
+                    }
+                    collectGlobalProperty(Sid::fretDiagramFretNumberPosition, doubleFromEfix(fretboardStyle->horzTextOff) > -3.0 ? AlignH::RIGHT : AlignH::LEFT);
+                    collectGlobalProperty(Sid::fretStringSpacing, doubleFromEfix(fretboardStyle->stringGap));
+                    collectGlobalProperty(Sid::fretFretSpacing, doubleFromEfix(fretboardStyle->fretGap));
+                    collectGlobalProperty(Sid::fretFrets, fretboardStyle->defNumFrets); // note: can be set individually too
+                    if (fretboardStyle->nutWidth > 0) {
+                        collectGlobalProperty(Sid::fretNutThickness, doubleFromEfix(fretboardStyle->nutWidth));
+                    }
+                    collectGlobalFont("fretDiagramFingering", fretboardStyle->fingNumFont);
+                    collectGlobalFont("fretDiagramFretNumber", fretboardStyle->fretNumFont);
+                    // todo: fretNumPos, fretShowFingerings
+                }
+                if (const MusxInstance<others::FretboardGroup>& fretboardGroup = chordAssignment->getFretboardGroup()) {
+                    if (const MusxInstance<others::FretInstrument> instrument = fretboardGroup->getFretInstrument()) {
+                        setAndStyleProperty(fret, Pid::FRET_STRINGS, instrument->numStrings);
+                    }
+                    if (fretboardGroup->getInci().has_value()) {
+                        Cmper fbCmper = (Cmper(fretboardGroup->getInci().value()) * 16) + (tpc2pitch(rootTpc) + 2 + PITCH_DELTA_OCTAVE) % PITCH_DELTA_OCTAVE;
+                        if (const MusxInstance<details::FretboardDiagram> fretDiagram = m_doc->getDetails()->get<details::FretboardDiagram>(m_currentMusxPartId, fretboardGroup->getCmper(), fbCmper)) {
+                            // setAndStyleProperty(fret, Pid::FRET_SHOW_FINGERINGS, )
+                            setAndStyleProperty(fret, Pid::FRET_FRETS, fretDiagram->numFrets);
+                            fret->clear();
+                            if (fretDiagram->showNum) {
+                                setAndStyleProperty(fret, Pid::FRET_OFFSET, fretDiagram->fretboardNum);
+                            }
+                            std::vector<int> fingerings(fret->strings(), 0);
+                            for (const std::shared_ptr<details::FretboardDiagram::Cell>& cell : fretDiagram->cells) {
+                                int string = cell->string - 1;
+                                if (cell->fret == 0) {
+                                    fret->setMarker(string, toFretMarkerType(cell->shape));
+                                } else if (cell->shape != details::FretboardDiagram::Shape::None) {
+                                    fret->setDot(string, cell->fret, true, toFretDotType(cell->shape));
+                                }
+                                if (cell->fingerNum != 0) {
+                                    fingerings.at(string) = cell->fingerNum;
+                                }
+                            }
+                            for (const std::shared_ptr<details::FretboardDiagram::Barre>& barre : fretDiagram->barres) {
+                                fret->setBarre(barre->startString - 1, barre->endString - 1, barre->fret);
+                            }
+                        }
+                    }
+                }
+            }
         } else {
             h = Factory::createHarmony(s);
             h->setTrack(staff2track(staff->idx()));
@@ -1701,7 +1754,7 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         setAndStyleProperty(h, Pid::FONT_STYLE, int(f), true);
         setAndStyleProperty(h, Pid::FONT_SIZE, harmonyFont->fontSize * doubleFromPercent(chordAssignment->chPercent), true);
         setAndStyleProperty(h, Pid::FONT_FACE, fontFamily, true);
-        setAndStyleProperty(h, Pid::OFFSET, offset, true);
+        setAndStyleProperty(h, Pid::OFFSET, offset, true); /// @todo positioning relative to fretboard
         if (fret) {
             s->add(fret);
             collectElementStyle(fret); // also h?
