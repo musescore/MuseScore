@@ -413,28 +413,28 @@ void FinaleParser::importSmartShapes()
                 setAndStyleProperty(textLineBase, Pid::GAP_BETWEEN_TEXT_AND_LINE, customLine->gapBetweenTextAndLine);
                 setAndStyleProperty(textLineBase, Pid::TEXT_SIZE_SPATIUM_DEPENDENT, customLine->textSizeSpatiumDependent);
 
-                setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT_PLACE, customLine->continueTextPlace);
-                setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT, customLine->continueText);
-                setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT_ALIGN, customLine->continueTextAlign);
-                // setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_FACE, customLine->continueFontFamily);
-                // setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_SIZE, customLine->continueFontSize);
-                // setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_STYLE, int(customLine->continueFontStyle));
-                setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT_OFFSET, customLine->continueTextOffset);
+                setAndStyleProperty(textLineBase, Pid::BEGIN_TEXT_PLACE, customLine->continueTextPlace);
+                setAndStyleProperty(textLineBase, Pid::BEGIN_TEXT, customLine->beginText);
+                setAndStyleProperty(textLineBase, Pid::BEGIN_TEXT_ALIGN, customLine->beginTextAlign);
+                setAndStyleProperty(textLineBase, Pid::BEGIN_FONT_FACE, customLine->beginFontFamily);
+                setAndStyleProperty(textLineBase, Pid::BEGIN_FONT_SIZE, customLine->beginFontSize);
+                setAndStyleProperty(textLineBase, Pid::BEGIN_FONT_STYLE, int(customLine->beginFontStyle));
+                setAndStyleProperty(textLineBase, Pid::BEGIN_TEXT_OFFSET, customLine->beginTextOffset);
 
                 setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT_PLACE, customLine->continueTextPlace);
                 setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT, customLine->continueText);
                 setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT_ALIGN, customLine->continueTextAlign);
-                // setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_FACE, customLine->continueFontFamily);
-                // setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_SIZE, customLine->continueFontSize);
-                // setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_STYLE, int(customLine->continueFontStyle));
+                setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_FACE, customLine->continueFontFamily);
+                setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_SIZE, customLine->continueFontSize);
+                setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_STYLE, int(customLine->continueFontStyle));
                 setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT_OFFSET, customLine->continueTextOffset);
 
                 setAndStyleProperty(textLineBase, Pid::END_TEXT_PLACE, customLine->endTextPlace);
                 setAndStyleProperty(textLineBase, Pid::END_TEXT, customLine->endText);
                 setAndStyleProperty(textLineBase, Pid::END_TEXT_ALIGN, customLine->endTextAlign);
-                // setAndStyleProperty(textLineBase, Pid::END_FONT_FACE, customLine->endFontFamily);
-                // setAndStyleProperty(textLineBase, Pid::END_FONT_SIZE, customLine->endFontSize);
-                // setAndStyleProperty(textLineBase, Pid::END_FONT_STYLE, int(customLine->endFontStyle));
+                setAndStyleProperty(textLineBase, Pid::END_FONT_FACE, customLine->endFontFamily);
+                setAndStyleProperty(textLineBase, Pid::END_FONT_SIZE, customLine->endFontSize);
+                setAndStyleProperty(textLineBase, Pid::END_FONT_STYLE, int(customLine->endFontStyle));
                 setAndStyleProperty(textLineBase, Pid::END_TEXT_OFFSET, customLine->endTextOffset);
             } else if (newSpanner->isTrill()) {
                 toTrill(newSpanner)->setTrillType(customLine->trillType);
