@@ -79,6 +79,26 @@ void InteractiveProvider::raiseWindowInStack(QObject* newActiveWindow)
     }
 }
 
+static std::vector<QColor> getCustomColors()
+{
+    const int customColorCount = QColorDialog::customCount();
+    std::vector<QColor> customColors;
+    customColors.reserve(customColorCount);
+    for (int i = 0; i < customColorCount; ++i) {
+        customColors.push_back(QColorDialog::customColor(i));
+    }
+
+    return customColors;
+}
+
+static void setCustomColors(const std::vector<QColor>& customColors)
+{
+    const int customColorCount = std::min(QColorDialog::customCount(), static_cast<int>(customColors.size()));
+    for (int i = 0; i < customColorCount; ++i) {
+        QColorDialog::setCustomColor(i, customColors[i]);
+    }
+}
+
 async::Promise<Color> InteractiveProvider::selectColor(const Color& color, const std::string& title)
 {
     if (m_isSelectColorOpened) {
@@ -90,6 +110,8 @@ async::Promise<Color> InteractiveProvider::selectColor(const Color& color, const
     }
 
     m_isSelectColorOpened = true;
+
+    setCustomColors(config()->colorDialogCustomColors());
 
     return async::make_promise<Color>([this, color, title](auto resolve, auto reject) {
         //! FIX https://github.com/musescore/MuseScore/issues/23208
@@ -104,6 +126,8 @@ async::Promise<Color> InteractiveProvider::selectColor(const Color& color, const
 
         QObject::connect(dlg, &QColorDialog::finished, [this, dlg, resolve, reject](int result) {
             dlg->deleteLater();
+
+            config()->setColorDialogCustomColors(getCustomColors());
 
             m_isSelectColorOpened = false;
             shortcutsRegister()->setActive(true);
