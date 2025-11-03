@@ -29,6 +29,7 @@
 #include "types/string.h"
 
 #include "engraving/dom/accidental.h"
+#include "engraving/dom/fret.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/noteval.h"
 #include "engraving/dom/spanner.h"
@@ -1327,6 +1328,29 @@ engraving::BarLineType toMuseScoreBarLineType(others::Measure::BarlineType blt)
         { others::Measure::BarlineType::Custom,         engraving::BarLineType::NORMAL },
     };
     return muse::value(barLineTable, blt, engraving::BarLineType::NORMAL);
+}
+
+FretDotType toFretDotType(details::FretboardDiagram::Shape shape)
+{
+    static const std::unordered_map<details::FretboardDiagram::Shape, FretDotType> dotTable = {
+        { details::FretboardDiagram::Shape::Closed, FretDotType::NORMAL },
+        { details::FretboardDiagram::Shape::Open,   FretDotType::NORMAL },
+        { details::FretboardDiagram::Shape::Muted,  FretDotType::CROSS },
+        { details::FretboardDiagram::Shape::Custom, FretDotType::TRIANGLE },
+    };
+    return muse::value(dotTable, shape, FretDotType::NORMAL);
+}
+
+FretMarkerType toFretMarkerType(details::FretboardDiagram::Shape shape)
+{
+    static const std::unordered_map<details::FretboardDiagram::Shape, FretMarkerType> dotTable = {
+        { details::FretboardDiagram::Shape::None,   FretMarkerType::NONE },
+        { details::FretboardDiagram::Shape::Closed, FretMarkerType::CIRCLE },
+        { details::FretboardDiagram::Shape::Open,   FretMarkerType::CIRCLE },
+        { details::FretboardDiagram::Shape::Muted,  FretMarkerType::CROSS },
+        { details::FretboardDiagram::Shape::Custom, FretMarkerType::CROSS },
+    };
+    return muse::value(dotTable, shape, FretMarkerType::NONE);
 }
 
 double doubleFromEvpu(double evpuDouble)
