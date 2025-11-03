@@ -776,6 +776,7 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
 
     setStyle(style, Sid::fretMag, doubleFromPercent(prefs.chordOptions->fretPercent));
     setStyle(style, Sid::chordSymPosition, prefs.chordOptions->chordAlignment == options::ChordOptions::ChordAlignment::Left ? AlignH::LEFT : AlignH::HCENTER);
+    setStyle(style, Sid::barreAppearanceSlur, true); // Not detectable (uses shapes), but default in most templates
 }
 
 void FinaleParser::importStyles()
@@ -797,9 +798,10 @@ void FinaleParser::importStyles()
 static PropertyValue compareStyledProperty(const PropertyValue& oldP, const PropertyValue& newP)
 {
     assert(oldP.isValid() && newP.isValid() && (oldP.type() == newP.type()));
-    /// @todo add more sensible exceptions on a case-by-case basis (perhaps using Pid).
+    /// @todo add more sensible conflict management and exceptions on a case-by-case basis (perhaps using Pid).
     /// Styles are default values and in most cases don't override existing behaviour,
     /// what's important is sensible results.
+    /// Note that non-element properties don't have a Pid, so logic elsewhere may be needed.
     switch (newP.type()) {
     case P_TYPE::POINT:
         /// @todo base offset off placement?
@@ -863,17 +865,30 @@ void FinaleParser::collectElementStyle(const EngravingObject* e)
         if (styleId == Sid::NOSTYLE) {
             continue;
         }
-        if (muse::contains(m_elementStyles, styleId)) {
-            // Replace currently found value with new match, assuming there has been no bad match
-            PropertyValue v = muse::value(m_elementStyles, styleId);
-            if (v.isValid()) {
-                muse::remove(m_elementStyles, styleId);
-                m_elementStyles.emplace(styleId, compareStyledProperty(v, styledValueByElement(e, propertyId)));
-            }
-        } else {
-            m_elementStyles.emplace(styleId, styledValueByElement(e, propertyId));
-        }
+        collectGlobalProperty(styleId, styledValueByElement(e, propertyId));
     }
+}
+
+void FinaleParser::collectGlobalProperty(const Sid styleId, const PropertyValue& newV)
+{
+    if (muse::contains(m_elementStyles, styleId)) {
+        // Replace currently found value with new match, assuming there has been no bad match
+        PropertyValue v = muse::value(m_elementStyles, styleId);
+        if (v.isValid()) {
+            muse::remove(m_elementStyles, styleId);
+            m_elementStyles.emplace(styleId, compareStyledProperty(v, newV));
+        }
+    } else {
+        m_elementStyles.emplace(styleId, newV);
+    }
+}
+
+void FinaleParser::collectGlobalFont(const std::string& namePrefix, const MusxInstance<FontInfo>& fontInfo)
+{
+    collectGlobalProperty(styleIdx(namePrefix + "FontFace"), String::fromStdString(fontInfo->getName()));
+    collectGlobalProperty(styleIdx(namePrefix + "FontSize"), spatiumScaledFontSize(fontInfo));
+    collectGlobalProperty(styleIdx(namePrefix + "FontSpatiumDependent"), !fontInfo->absolute);
+    collectGlobalProperty(styleIdx(namePrefix + "FontStyle"), int(FinaleTextConv::museFontEfx(fontInfo)));
 }
 
 }

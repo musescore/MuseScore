@@ -541,7 +541,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             if (m_smallNoteMagFound) {
                 logger()->logWarning(String(u"Inconsistent cue note sizes found. Using the smallest encountered."), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
             }
-            m_score->style().set(Sid::smallNoteMag, crMag);
+            collectGlobalProperty(Sid::smallNoteMag, crMag);
         }
         m_smallNoteMagFound = true;
         cr->setSmall(true);
