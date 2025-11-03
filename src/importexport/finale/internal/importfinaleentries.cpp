@@ -74,7 +74,6 @@ void FinaleParser::mapLayers()
     // MuseScore hardwire voices 0,2 up and voices 1,3 down.
 
     m_layer2Voice.clear();
-    m_layerForceStems.clear();
     std::unordered_map<voice_idx_t, LayerIndex> reverseMap;
 
     auto layerAttrs = m_doc->getOthers()->getArray<others::LayerAttributes>(m_currentMusxPartId);
@@ -93,10 +92,6 @@ void FinaleParser::mapLayers()
             auto [it, emplaced] = reverseMap.emplace(idx, layerIndex);
             if (emplaced) {
                 m_layer2Voice.emplace(layerIndex, idx);
-                // If direction is unspecified or mismatched, force stems
-                if (!layerAttr->freezeLayer || (layerAttr->freezeStemsUp != isUpVoice(idx))) {
-                    m_layerForceStems.insert(layerIndex);
-                }
                 return;
             }
         }
@@ -149,6 +144,61 @@ std::unordered_map<int, voice_idx_t> FinaleParser::mapFinaleVoices(const std::ma
         }
     }
     return result;
+}
+
+MusxInstance<others::LayerAttributes> FinaleParser::layerAttributes(const Fraction& tick, track_idx_t track)
+{
+    if (m_track2Layer.empty()) {
+        return nullptr;
+    }
+    auto i = m_track2Layer.upper_bound(tick.ticks());
+    if (i == m_track2Layer.begin()) {
+        return nullptr;
+    }
+    const LayerIndex& layer = (--i)->second.at(track);
+    return m_doc->getOthers()->get<others::LayerAttributes>(m_currentMusxPartId, layer);
+}
+
+DirectionV FinaleParser::getDirectionVForLayer(const ChordRest* cr)
+{
+    const auto& layerInfo = layerAttributes(cr->segment()->tick(), cr->track());
+    if (!layerInfo || !layerInfo->freezeLayer) {
+        return DirectionV::AUTO;
+    }
+
+    DirectionV d = layerInfo->freezeStemsUp ? DirectionV::UP : DirectionV::DOWN;
+    if (!layerInfo->onlyIfOtherLayersHaveNotes) {
+        return d;
+    }
+
+    track_idx_t strack = trackZeroVoice(cr->track());
+    track_idx_t etrack = strack + VOICES;
+    for (Segment* s = cr->measure()->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        for (track_idx_t track = strack; track < etrack; ++track) {
+            if (ChordRest* chordRest = toChordRest(s->element(track))) {
+                if (track == cr->track()) {
+                    continue;
+                }
+                if (chordRest->isFullMeasureRest() && !chordRest->visible()) {
+                    continue;
+                }
+                if (!layerInfo->ignoreHiddenNotesOnly) {
+                    return d;
+                }
+                if (chordRest->isChord()) {
+                    Chord* c = toChord(chordRest);
+                    for (engraving::Note* n : c->notes()) {
+                        if (n->visible()) {
+                            return d;
+                        }
+                    }
+                } else if (chordRest->isRest() && chordRest->visible() && !toRest(chordRest)->isGap()) {
+                    return d;
+                }
+            }
+        }
+    }
+    return DirectionV::AUTO;
 }
 
 engraving::Note* FinaleParser::noteFromEntryInfoAndNumber(const EntryInfoPtr& entryInfoPtr, NoteNumber nn)
@@ -287,7 +337,7 @@ static void setNoteHeadSymbol(engraving::Note* note, SymId noteHeadSym)
 
 bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrackIdx, Measure* measure, bool graceNotes,
                                          std::vector<engraving::Note*>& notesWithUnmanagedTies,
-                                         std::vector<ReadableTuplet>& tupletMap, std::unordered_map<Rest*, NoteInfoPtr>& fixedRests)
+                                         std::vector<ReadableTuplet>& tupletMap)
 {
     // Retrieve entry from entryInfo
     MusxInstance<Entry> currentEntry = entryInfo->getEntry();
@@ -365,6 +415,9 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         idx = staffIdx;
     }
 
+    const auto& layerInfo = m_doc->getOthers()->get<others::LayerAttributes>(m_currentMusxPartId, entryInfo.getLayerIndex());
+    const bool neverPlayback = layerInfo && !layerInfo->playback;
+
     if (!entryInfo.calcDisplaysAsRest()) {
         engraving::Chord* chord = Factory::createChord(segment);
 
@@ -375,7 +428,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             note->setParent(chord);
             note->setTrack(curTrackIdx);
             note->setVisible(!currentEntry->isHidden);
-            note->setPlay(!currentEntry->noPlayback); /// @todo account for spanners
+            note->setPlay(!currentEntry->noPlayback && !neverPlayback); /// @todo account for spanners
             note->setAutoplace(!noteInfoPtr->noSpacing);
 
             if (targetStaff->isDrumStaff(segment->tick())) {
@@ -500,10 +553,13 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             toRest(cr)->setVisible(false);
         } else {
             // Stem and stem direction
-            if (currentEntry->freezeStem || currentEntry->voice2 || currentEntry->v2Launch
-                || muse::contains(m_layerForceStems, entryInfo.getLayerIndex())) {
+            if (currentEntry->freezeStem || currentEntry->voice2 || currentEntry->v2Launch) {
+                // LayerAttributes are read later on, once all voices have been added to the score.
                 // Additionally, beams have their own vertical direction, which is set in processBeams.
                 chord->setStemDirection(currentEntry->upStem ? DirectionV::UP : DirectionV::DOWN);
+                if (currentEntry->freezeStem) {
+                    m_fixedChords.insert(chord);
+                }
             }
             if (chord->shouldHaveStem() || d.hasStem()) {
                 Stem* stem = Factory::createStem(chord);
@@ -528,7 +584,41 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         // Fixed-positioning for rests is calculated in a 2nd pass after all voices in all layers have been created.
         // This allows MuseScore code to calculate correctly the voice offset for the rest.
         if (!currentEntry->floatRest && !currentEntry->notes.empty()) {
-            fixedRests.emplace(rest, NoteInfoPtr(entryInfo, 0));
+            NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, 0);
+            EntryInfoPtr entryInfo = noteInfoPtr.getEntryInfo();
+            StaffCmper targetMusxStaffId = muse::value(m_staff2Inst, rest->staffIdx(), 0);
+            IF_ASSERT_FAILED (targetMusxStaffId) {
+                logger()->logWarning(String(u"Entry %1 (a rest) was not mapped to a known musx staff.").arg(entryInfo->getEntry()->getEntryNumber()), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
+                return false;
+            }
+            if (noteInfoPtr->getNoteId() == musx::dom::Note::RESTID) {
+                /// @todo correctly calculate default rest position in multi-voice situation. rest->setAutoplace is problematic because it also affects spacing
+                /// (and does not cover all vertical placement situations either).
+                MusxInstance<others::StaffComposite> currMusxStaff = noteInfoPtr.getEntryInfo().createCurrentStaff(targetMusxStaffId);
+                IF_ASSERT_FAILED(currMusxStaff) {
+                    logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
+                }
+                auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNotePropertiesInView();
+                const int defaultLine = (baseStaff->lines(entryStartTick) + 1) / 2; // Spatiums relative to top staff
+                const double lineSpacing = baseStaff->lineDistance(entryStartTick);
+                // const int defaultMusxLine = 2 * defaultLine - currMusxStaff->calcTopLinePosition();
+                staffPosition += currMusxStaff->calcTopLinePosition();
+
+                // convert defaultLine to staff position offset for Finale rest. This value is measured in 0.5sp steps.
+                if (rest->isWholeRest()) {
+                    staffPosition += 2; // account for a whole rest's staff line discrepancy between Finale and MuseScore
+                }
+                rest->setAlignWithOtherRests(false); // override as much automatic positioning as possible
+                rest->setMinDistance(Spatium(-999.0));
+                rest->ryoffset() = double(-staffPosition /*- defaultMusxLine*/) * baseStaff->spatium(entryStartTick) * lineSpacing / 2.0;
+                /// @todo Account for additional default positioning around collision avoidance (when the rest is on the "wrong" side for the voice.)
+                /// Unfortunately, we can't set `autoplace` to false because that also suppresses horizontal spacing.
+                /// The test file `beamsAndRest.musx` includes an example of this issue in the first 32nd rest in the top staff.
+                /// It should be at the same vertical position as the second 32nd rest in the same staff.
+            } else {
+                logger()->logWarning(String(u"Rest found with unexpected note ID %1").arg(noteInfoPtr->getNoteId()), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
+                return false;
+            }
         }
         cr = toChordRest(rest);
         cr->setVisible(!musxStaff->hideRests && !currentEntry->isHidden);
@@ -645,8 +735,6 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
         beam->add(currentCr);
 
         // Secondary beam breaks
-        /// @todo fully test secondary beam breaks: can a smaller beam than 32nd be broken?
-        /// XM: No, not currently in MuseScore.
         unsigned secBeamStart = 0;
         if (currentEntry->secBeam) {
             if (const auto& secBeamBreak = m_doc->getDetails()->get<details::SecondaryBeamBreak>(nextInBeam.getFrame()->getRequestedPartId(), currentEntryNumber)) {
@@ -667,53 +755,6 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
             if (stemDir != DirectionV::AUTO) {
                 beam->setDirection(stemDir);
             }
-        }
-    }
-    return true;
-}
-
-bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom::NoteInfoPtr>& fixedRests)
-{
-    for (const auto& next : fixedRests) {
-        Rest* rest = next.first;
-        NoteInfoPtr noteInfoPtr = next.second;
-        EntryInfoPtr entryInfoPtr = noteInfoPtr.getEntryInfo();
-        StaffCmper targetMusxStaffId = muse::value(m_staff2Inst, rest->staffIdx(), 0);
-        IF_ASSERT_FAILED (targetMusxStaffId) {
-            logger()->logWarning(String(u"Entry %1 (a rest) was not mapped to a known musx staff.").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
-            return false;
-        }
-        if (noteInfoPtr->getNoteId() == musx::dom::Note::RESTID) {
-            /// @todo correctly calculate default rest position in multi-voice situation. rest->setAutoplace is problematic because it also affects spacing
-            /// (and does not cover all vertical placement situations either).
-            MusxInstance<others::StaffComposite> currMusxStaff = noteInfoPtr.getEntryInfo().createCurrentStaff(targetMusxStaffId);
-            IF_ASSERT_FAILED(currMusxStaff) {
-                logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
-            }
-            auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNotePropertiesInView();
-            const StaffType* staffType = rest->staffType();
-            // following code copied from TLayout::layoutRest:
-            /// @todo this code is now private to the layout module, so we will need a new method.
-            // Rest::LayoutData layoutData;
-            // const int naturalLine = rendering::score::RestLayout::computeNaturalLine(staffType->lines()); // Measured in 1sp steps
-            // const int voiceOffset = rendering::score::RestLayout::computeVoiceOffset(rest, &layoutData); // Measured in 1sp steps
-            // omit call to computeWholeOrBreveRestOffset because it requires layout rectangles to have been created
-            int finalLine = 0; //naturalLine + voiceOffset;
-            // convert finalLine to staff position offset for Finale rest. This value is measured in 0.5sp steps.
-            const int staffPositionOffset = 2 * finalLine - currMusxStaff->calcTopLinePosition();
-            const double lineSpacing = staffType->lineDistance().val();
-            if (rest->isWholeRest()) {
-                staffPosition += 2; // account for a whole rest's staff line discrepancy between Finale and MuseScore
-            }
-            rest->setAlignWithOtherRests(false); // override as much automatic positioning as possible
-            rest->ryoffset() = double(-staffPosition - staffPositionOffset) * rest->staff()->spatium(rest->tick()) * lineSpacing / 2.0;
-            /// @todo Account for additional default positioning around collision avoidance (when the rest is on the "wrong" side for the voice.)
-            /// Unfortunately, we can't set `autoplace` to false because that also suppresses horizontal spacing.
-            /// The test file `beamsAndRest.musx` includes an example of this issue in the first 32nd rest in the top staff.
-            /// It should be at the same vertical position as the second 32nd rest in the same staff.
-        } else {
-            logger()->logWarning(String(u"Rest found with unexpected note ID %1").arg(noteInfoPtr->getNoteId()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
-            return false;
         }
     }
     return true;
@@ -869,6 +910,7 @@ void FinaleParser::importEntries()
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measureId);
                 break;
             }
+            std::vector<LayerIndex> trackLayers(m_score->ntracks(), 0);
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxStaffId, measureId);
             bool processContext = bool(gfHold);
             if (processContext && gfHold.calcIsCuesOnly()) {
@@ -881,7 +923,6 @@ void FinaleParser::importEntries()
                 // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
                 std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
                 std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxStaffId, measureId);
-                std::unordered_map<Rest*, musx::dom::NoteInfoPtr> fixedRests;
                 for (const auto& finaleLayer : finaleLayers) {
                     const LayerIndex layer = finaleLayer.first;
                     /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
@@ -900,7 +941,7 @@ void FinaleParser::importEntries()
                         }
 
                         track_idx_t curTrackIdx = staffTrackIdx + voiceOff;
-                        // map track and measure to layer here (LayerAttributes)
+                        trackLayers.at(curTrackIdx) = layer;
                         if (curTrackIdx != staffTrackIdx) {
                             measureHasVoices = true;
                         }
@@ -918,10 +959,10 @@ void FinaleParser::importEntries()
 
                         // add chords and rests
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            processEntryInfo(entryInfoPtr, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap, fixedRests);
+                            processEntryInfo(entryInfoPtr, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap);
                         }
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            processEntryInfo(entryInfoPtr, curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap, fixedRests);
+                            processEntryInfo(entryInfoPtr, curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap);
                         }
 
                         // add tremolos
@@ -934,8 +975,6 @@ void FinaleParser::importEntries()
                         // m_entryNumber2CR.clear(); /// @todo use 2 maps, one of which clears itself, to make beaming more efficient
                     }
                 }
-                // position fixed rests after all layers have been imported
-                positionFixedRests(fixedRests);
             }
             // Avoid corruptions: fill in any gaps in existing voices...
             // logger()->logInfo(String(u"Fixing corruptions for measure at staff %1, tick %2").arg(String::number(curStaffIdx), currTick.toString()));
@@ -951,6 +990,7 @@ void FinaleParser::importEntries()
                 rest->setVisible(!currMusxStaff->hideRests && !currMusxStaff->blankMeasure && !measureHasVoices);
                 segment->add(rest);
             }
+            m_track2Layer.insert(std::make_pair(currTick.ticks(), trackLayers));
         }
 
         // Ties can only be attached to notes within a single part (instrument).
@@ -976,11 +1016,16 @@ void FinaleParser::importEntries()
         Chord* chord = toChord(chordRest);
 
         // Stem direction
+        if (chord->stemDirection() == DirectionV::AUTO) {
+            DirectionV dir = getDirectionVForLayer(chordRest);
+            chord->setStemDirection(dir);
+            if (dir != DirectionV::AUTO) {
+                m_fixedChords.insert(chord);
+            }
+        }
         bool up = chord->stemDirection() == DirectionV::UP;
         if (chord->stemDirection() == DirectionV::AUTO) {
-            if (chord->measure()->hasVoices(chord->staffIdx(), chord->measure()->tick(), chord->measure()->endTick())) {
-                up = !(chord->track() & 1);
-            } else if (chord->isGrace()) {
+            if (chord->isGrace()) {
                 // Can't be set further up due to layers
                 up = true;
             } else if (chord->staffMove() == 0) {
@@ -1009,9 +1054,9 @@ void FinaleParser::importEntries()
                     setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * SPATIUM20, 0.0));
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
                 }
-                chord->stem()->setAutoplace(false);
             }
-            // No support for custom stem shapes
+
+            // No support for custom stem shapes, but read if invisible
             if (up) {
                 if (const auto& customStem = m_doc->getDetails()->get<details::CustomUpStem>(m_currentMusxPartId, entryNumber)) {
                     chord->stem()->setVisible(customStem->calcIsHiddenStem());
@@ -1028,40 +1073,18 @@ void FinaleParser::importEntries()
 static double systemPosByLine(ChordRest* cr, bool up)
 {
     // sensible default for rests, redo once their position is set properly
-    double line = (cr->staffType()->lines() - 1) * 0.5;
+    int line;
     if (cr->isChord()) {
         engraving::Note* n = up ? toChord(cr)->upNote() : toChord(cr)->downNote();
-        line = cr->staffType()->isTabStaff() ? n->string() : n->line() * 0.5;
+        line = cr->staffType()->isTabStaff() ? n->string() * 2 : n->line();
+    } else if (cr->isRest()) {
+        line = std::round((cr->pos().y() - cr->offset().y()) * 2); // Beams in Finale are calculated using the default rest position
     }
     return cr->measure()->system()->staff(cr->vStaffIdx())->y() + cr->staffOffsetY()
-           + (line * cr->spatium() * cr->staffType()->lineDistance().val());
+           + (line * cr->spatium() * cr->staffType()->lineDistance().val() * 0.5);
 }
 
-static bool computeUpCase(Beam* beam, double middleLinePos)
-{
-    if (beam->direction() == DirectionV::AUTO) {
-        // Account for presence of voices
-        ChordRest* startCr = beam->elements().front();
-        if (startCr->measure()->hasVoices(beam->staffIdx(), startCr->tick(), beam->elements().back()->endTick() - startCr->tick())) {
-            return !(beam->track() & 1);
-        }
-        if (startCr->isGrace()) {
-            return true;
-        }
-        // This ugly calculation is needed for cross-staff beams.
-        // But even for non-cross beams, Finale's auto direction can differ.
-        double topPos = DBL_MAX;
-        double bottomPos = -DBL_MAX;
-        for (ChordRest* cr : beam->elements()) {
-            topPos = std::min(topPos, systemPosByLine(cr, true));
-            bottomPos = std::max(bottomPos, systemPosByLine(cr, false));
-        }
-        return bottomPos - middleLinePos > middleLinePos - topPos;
-    }
-    return beam->direction() == DirectionV::UP;
-}
-
-static DirectionV calculateTieDirection(const Tie* tie, const MusxInstance<options::TieOptions>& config)
+DirectionV FinaleParser::calculateTieDirection(Tie* tie)
 {
     // MuseScore requires all tie segments to have the same direction.
     // As such, if the direction has already been set, don't recalculate.
@@ -1070,19 +1093,26 @@ static DirectionV calculateTieDirection(const Tie* tie, const MusxInstance<optio
     }
     // If MS ever does allow it, pass the note as a parameter instead.
     // We should then only calculate tieEnds when there are more than one segment.
-    const engraving::Note* note = tie->startNote() ? tie->startNote() : tie->endNote();
+    engraving::Note* note = tie->startNote() ? tie->startNote() : tie->endNote();
     assert(note);
 
-    const Chord* c = note->chord();
-    const DirectionV stemDir = c->beam() ? c->beam()->direction() : c->stemDirection();
+    Chord* c = note->chord();
+    DirectionV stemDir = c->beam() ? c->beam()->direction() : c->stemDirection();
     assert(stemDir != DirectionV::AUTO);
 
-    // Finale uses voice placement if there are voices anywhere in the measure.
-    if (c->measure()->hasVoices(c->staffIdx())) {
-        return (c->track() & 1) ? DirectionV::DOWN : DirectionV::UP;
+    // Inherit the stem direction only when the chord has a fixed direction, and the layer says to do so.
+    const auto& layerInfo = layerAttributes(c->tick(), c->track());
+    if (layerInfo && layerInfo->freezTiesToStems && muse::contains(m_fixedChords, c)) {
+        return stemDir;
     }
 
-    if (note->chord()->notes().size() > 1) {
+    if (c->staffMove() != 0) {
+        return c->staffMove() > 0 ? DirectionV::UP : DirectionV::DOWN;
+    }
+
+    const MusxInstance<options::TieOptions>& config = musxOptions().tieOptions;
+
+    if (c->notes().size() > 1) {
         // Notes are sorted from lowest to highest
         const size_t noteIndex = muse::indexOf(c->notes(), note);
         const size_t noteCount = c->notes().size();
@@ -1199,7 +1229,9 @@ static TiePlacement calculateTiePlacement(Tie* tie, bool useOuterPlacement)
 
     // Single-note chords
     if ((!startChord || startChord->notes().size() <= 1) && (!endChord || endChord->notes().size() <= 1)) {
-        return useOuterPlacement ? outsideValue : insideValue;
+        bool directionMatch = (!startChord || tie->slurDirection() != startChord->stemDirection())
+                              || (!endChord || tie->slurDirection() != endChord->stemDirection());
+        return (useOuterPlacement && directionMatch) ? outsideValue : insideValue;
     }
 
     // Regardless of setting, Finale always sets ties within a chord (i.e. on not-outermost notes) to inner placement.
@@ -1211,6 +1243,15 @@ static TiePlacement calculateTiePlacement(Tie* tie, bool useOuterPlacement)
 
 void FinaleParser::importEntryAdjustments()
 {
+    logger()->logDebugTrace(String(u"Importing entry adjustments..."));
+
+    // Rebase rest offsets (must happen after layout but before beaming)
+    for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
+        if (chordRest->isRest() && !toRest(chordRest)->alignWithOtherRests()) {
+            toRest(chordRest)->ryoffset() -= chordRest->ldata()->pos().y();
+        }
+    }
+
     // Beam positions
     for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
         if (!chordRest->beam() || chordRest->beamMode() != BeamMode::BEGIN) {
@@ -1222,8 +1263,41 @@ void FinaleParser::importEntryAdjustments()
         const double middleLinePos = beamStaffY + (beam->staffType()->lines() - 1) * beam->spatium() * beam->staffType()->lineDistance().val() * 0.5;
 
         // Set beam direction
-        bool up = computeUpCase(beam, middleLinePos);
-        beam->setDirection(up ? DirectionV::UP : DirectionV::DOWN);
+        if (beam->direction() == DirectionV::AUTO) {
+            beam->doSetDirection(getDirectionVForLayer(chordRest));
+        }
+        bool up = beam->direction() == DirectionV::UP;
+        if (beam->direction() == DirectionV::AUTO) {
+            if (beam->elements().front()->isGrace()) {
+                up = true;
+            } else {
+                // This ugly calculation is needed for cross-staff beams.
+                // But even for non-cross beams, Finale's auto direction can differ.
+                double topPos = DBL_MAX;
+                double bottomPos = -DBL_MAX;
+                for (ChordRest* cr : beam->elements()) {
+                    if (cr->isRest()) {
+                        continue;
+                    }
+                    topPos = std::min(topPos, systemPosByLine(cr, true));
+                    bottomPos = std::max(bottomPos, systemPosByLine(cr, false));
+                }
+                up = bottomPos - middleLinePos > middleLinePos - topPos;
+            }
+            beam->doSetDirection(up ? DirectionV::UP : DirectionV::DOWN);
+        } else {
+            // This may not be correct behaviour for stem-reversed notes.
+            for (ChordRest* cr : beam->elements()) {
+                if (cr->isChord()) {
+                    m_fixedChords.insert(toChord(cr));
+                }
+            }
+        }
+        for (ChordRest* cr : beam->elements()) {
+            if (cr->isChord()) {
+                toChord(cr)->setStemDirection(beam->direction());
+            }
+        }
 
         // Calculate non-adjusted position, in system coordinates
         ChordRest* startCr = beam->elements().front();
@@ -1314,7 +1388,7 @@ void FinaleParser::importEntryAdjustments()
         // Ensure minimum stem lengths
         outermost = getOutermost();
         for (ChordRest* cr : beam->elements()) {
-            if (cr == startCr || cr == endCr) {
+            if (cr == startCr || cr == endCr || cr->isRest()) {
                 continue;
             }
             const double minPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
@@ -1378,15 +1452,19 @@ void FinaleParser::importEntryAdjustments()
         setAndStyleProperty(beam, Pid::GROW_LEFT, feathering.x());
         setAndStyleProperty(beam, Pid::GROW_RIGHT, feathering.y());
         setAndStyleProperty(beam, Pid::USER_MODIFIED, true);
+        setAndStyleProperty(beam, Pid::GENERATED, false);
 
         // Smoothing
         if (!musxOptions().beamOptions->spanSpace && !muse::RealIsEqual(preferredStart, preferredEnd)) {
-            if (up ? muse::RealIsEqualOrMore(innermost, beamStaffY) : innermost < beamStaffY + beam->staff()->staffHeight(beam->tick())) {
             innermost = getInnermost();
+            if (up ? muse::RealIsEqualOrMore(innermost, beamStaffY) : innermost < beamStaffY + beam->staff()->staffHeight(beam->tick())) {
                 /// @todo figure out these calculations - they seem more complex than the rest of the code
                 /// For now, set to default position and add offset
-                int crossStaffMove = (up ? beam->minCRMove() : beam->maxCRMove() + 1) - beam->defaultCrossStaffIdx();
-                setAndStyleProperty(beam, Pid::BEAM_CROSS_STAFF_MOVE, crossStaffMove);
+                logger()->logInfo(String(u"Beam at tick %1, track %2 should inherit default placement.").arg(beam->tick().toString(), String::number(beam->track())));
+                if (beam->cross()) {
+                    int crossStaffMove = (up ? beam->minCRMove() : beam->maxCRMove() + 1) - beam->defaultCrossStaffIdx();
+                    setAndStyleProperty(beam, Pid::BEAM_CROSS_STAFF_MOVE, crossStaffMove);
+                }
                 setAndStyleProperty(beam, Pid::BEAM_POS, PairF(beam->beamPos().first - (posAdjust.x() / beam->spatium()),
                                                                beam->beamPos().second - (posAdjust.y() / beam->spatium())));
                 continue;
@@ -1433,11 +1511,11 @@ void FinaleParser::importEntryAdjustments()
         }
 
         // Stems under beams (require beam direction)
+        Chord* chord = toChord(chordRest);
+        if (!chord->stem()) {
+            continue;
+        }
         if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
-            Chord* chord = toChord(chordRest);
-            if (!chord->stem()) {
-                continue;
-            }
             if (chord->beam()->direction() == DirectionV::UP) {
                 setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * SPATIUM20, 0.0));
                 setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
@@ -1446,9 +1524,19 @@ void FinaleParser::importEntryAdjustments()
                 setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
             }
         }
+        if (chord->beam()->direction() == DirectionV::UP) {
+            if (const auto& customStem = m_doc->getDetails()->get<details::CustomUpStem>(m_currentMusxPartId, entryNumber)) {
+                chord->stem()->setVisible(customStem->calcIsHiddenStem());
+            }
+        } else {
+            if (const auto& customStem = m_doc->getDetails()->get<details::CustomDownStem>(m_currentMusxPartId, entryNumber)) {
+                chord->stem()->setVisible(customStem->calcIsHiddenStem());
+            }
+        }
     }
 
     // Ties
+    logger()->logDebugTrace(String(u"Adjusting ties..."));
     for (auto [numbers, note] : m_entryNoteNumber2Note) {
         EntryNumber entryNumber = numbers.first;
         NoteNumber noteNumber = numbers.second;
@@ -1456,20 +1544,25 @@ void FinaleParser::importEntryAdjustments()
         /// @todo offsets and contour
         auto positionTie = [this](Tie* tie, const MusxInstance<details::TieAlterBase>& tieAlt) {
             // Collect alterations
+            logger()->logDebugTrace(String(u"Importing tie at tick %1...").arg(tie->tick().toString()));
             bool outside = musxOptions().tieOptions->useOuterPlacement;
             DirectionV direction = DirectionV::AUTO;
             if (tieAlt) {
                 if (tieAlt->outerOn) {
+                    logger()->logDebugTrace(String(u"Tie overrides default outer/inner placement"));
                     outside = tieAlt->outerLocal;
                 }
                 if (tieAlt->freezeDirection) {
+                    logger()->logDebugTrace(String(u"Tie overrides default over/under placement"));
                     direction = tieAlt->down ? DirectionV::DOWN : DirectionV::UP;
                 }
+            } else {
+                logger()->logInfo(String("Unable to to find tie details for tie at tick %1").arg(tie->tick().toString()));
             }
 
             // Tie direction (over/under)
             if (direction == DirectionV::AUTO) {
-                direction = calculateTieDirection(tie, musxOptions().tieOptions);
+                direction = calculateTieDirection(tie);
             }
             setAndStyleProperty(tie, Pid::SLUR_DIRECTION, direction);
 
@@ -1488,7 +1581,7 @@ void FinaleParser::importEntryAdjustments()
             }
             positionTie(note->tieFor(), tieAlt);
         }
-        if (note->tieBack()) {
+        if (note->tieBack() && note->tieBack()->nsegments() > 1) {
             MusxInstance<details::TieAlterBase> tieAlt = nullptr;
             for (const auto& endAlt : m_doc->getDetails()->getArray<details::TieAlterEnd>(m_currentMusxPartId, entryNumber)) {
                 if (endAlt->getNoteId() == noteNumber) {
