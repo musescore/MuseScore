@@ -131,6 +131,9 @@ public:
 
     int tooltipDelay() const override;
 
+    std::vector<QColor> colorDialogCustomColors() const override;
+    void setColorDialogCustomColors(const std::vector<QColor>&) override;
+
 private:
     void initThemes();
     void correctUserFontIfNeeded();
