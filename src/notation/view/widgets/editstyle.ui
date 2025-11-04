@@ -10250,19 +10250,30 @@
               <property name="title">
                <string>Lyrics text</string>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_65">
+              <layout class="QVBoxLayout" name="verticalLayout_30">
                <item>
-                <widget class="QPushButton" name="editLyricsTextStyleButton">
-                 <property name="maximumSize">
-                  <size>
-                   <width>130</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Edit lyrics text style</string>
-                 </property>
-                </widget>
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <item>
+                  <widget class="QPushButton" name="editLyricsTextStyleButton">
+                   <property name="text">
+                    <string>Edit lyrics text style</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
                </item>
                <item>
                 <layout class="QGridLayout" name="gridLayout_673">

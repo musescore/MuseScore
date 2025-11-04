@@ -35,12 +35,15 @@ ComboBox {
 
         signal handleItem(var value)
 
-        width: 172
+        implicitWidth: 12 + implicitContentWidth + 6 + implicitIndicatorWidth + 8
+        implicitContentWidthPolicy: ComboBox.WidestText
 
         textRole: "text"
         valueRole: "value"
 
         flat: true
+
+        opacity: enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
         background: Rectangle {
             id: backgroundItem
@@ -51,7 +54,26 @@ ComboBox {
             border.color: ui.theme.strokeColor
             color: ui.theme.buttonColor
             radius: 3
-            opacity: 0.7
+            opacity: ui.theme.buttonOpacityNormal
+
+            states: [
+                State {
+                    name: "hovered"
+                    when: comboDropdown.hovered
+                    PropertyChanges {
+                        target: backgroundItem
+                        opacity: ui.theme.buttonOpacityHover
+                    }
+                },
+                State {
+                    name: "pressed"
+                    when: comboDropdown.pressed
+                    PropertyChanges {
+                        target: backgroundItem
+                        opacity: ui.theme.buttonOpacityPressed
+                    }
+                }
+            ]
         }
 
         indicator: StyledIconLabel {
@@ -63,15 +85,26 @@ ComboBox {
             iconCode: IconCode.SMALL_ARROW_DOWN
         }
 
-        contentItem: StyledTextLabel {
-            id: labelItem
+        // It must be a TextInput to make `implicitContentWidthPolicy` work
+        contentItem: TextInput {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             anchors.right: dropIconItem.left
             anchors.leftMargin: 12
             anchors.rightMargin: 6
-            horizontalAlignment: Text.AlignLeft
+
+            readOnly: true
+            enabled: false // don't consume mouse events
+
+            color: ui.theme.fontPrimaryColor
+            verticalAlignment: Text.AlignVCenter
+
+            font {
+                family: ui.theme.bodyFont.family
+                pixelSize: ui.theme.bodyFont.pixelSize
+            }
+
             text: comboDropdown.displayText
         }
 
