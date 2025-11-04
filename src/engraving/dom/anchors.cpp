@@ -299,22 +299,43 @@ Segment* MoveElementAnchors::findNewAnchorSegmentForLine(LineSegment* lineSegmen
         }
     }
 
-    if (ed.modifiers & ControlModifier) {
-        if (ed.key == Key_Left) {
-            Measure* measure = curSeg->rtick().isZero() ? curSeg->measure()->prevMeasure() : curSeg->measure();
-            return measure ? measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1)) : nullptr;
+    switch (ed.key) {
+    case Key_Left: {
+        if (ed.modifiers & ControlModifier) {
+            Measure* m = curSeg->rtick().isZero() ? curSeg->measure()->prevMeasure() : curSeg->measure();
+            return m ? m->findFirstR(SegmentType::ChordRest, Fraction(0, 1)) : nullptr;
         }
-        if (ed.key == Key_Right) {
-            Measure* measure = curSeg->measure()->nextMeasure();
-            return measure ? measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1)) : nullptr;
-        }
-    }
-
-    if (ed.key == Key_Left) {
         return findNewAnchorableSegment(curSeg, /*forward*/ false);
     }
-    if (ed.key == Key_Right) {
+    case Key_Right: {
+        if (ed.modifiers & ControlModifier) {
+            if (Measure* measure = curSeg->measure()->nextMeasure()) {
+                return measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+            } else {
+                Measure* m = score->lastMeasure();
+                EditTimeTickAnchors::updateAnchors(m, lineSegment->staffIdx());
+                return m->getChordRestOrTimeTickSegment(m->endTick());
+            }
+        }
         return findNewAnchorableSegment(curSeg, /*forward*/ true);
+    }
+    case Key_Home: {
+        Measure* m = curSeg->measure()->system()->firstMeasure();
+        if (curSeg->rtick() == Fraction(0, 1) && m == curSeg->measure() && m->prevMeasure()) {
+            m = m->prevMeasure()->system()->firstMeasure();
+        }
+        return m->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+    }
+    case Key_End: {
+        Measure* measure = curSeg->measure()->system()->lastMeasure()->nextMeasure();
+        if (measure) {
+            return measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+        } else {
+            Measure* m = score->lastMeasure();
+            EditTimeTickAnchors::updateAnchors(m, lineSegment->staffIdx());
+            return m->getChordRestOrTimeTickSegment(m->endTick());
+        }
+    }
     }
 
     return nullptr;

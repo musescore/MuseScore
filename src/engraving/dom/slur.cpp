@@ -134,6 +134,7 @@ bool SlurSegment::edit(EditData& ed)
 
     const bool altMod = ed.modifiers & AltModifier;
     const bool shiftMod = ed.modifiers & ShiftModifier;
+    const bool ctrlMod = ed.modifiers & ControlModifier;
     const bool extendToBarLine = shiftMod && altMod;
     const bool isPartialSlur = sl->isIncoming() || sl->isOutgoing();
 
@@ -153,13 +154,17 @@ bool SlurSegment::edit(EditData& ed)
                 sl->undoSetOutgoing(false);
             }
         } else {
-            if (start && sl->isIncoming()) {
-                sl->undoSetIncoming(false);
-                cr = prevChordRest(e, options);
-            } else if (!start && sl->isOutgoing()) {
+            if (!start && sl->isOutgoing()) {
                 sl->undoSetOutgoing(false);
             } else {
-                cr = prevChordRest(e, options);
+                if (start && sl->isIncoming()) {
+                    sl->undoSetIncoming(false);
+                }
+                if (ctrlMod) {
+                    cr = score()->prevMeasure(cr, true);
+                } else {
+                    cr = prevChordRest(e, options);
+                }
             }
         }
     } else if (ed.key == Key_Right) {
@@ -177,22 +182,24 @@ bool SlurSegment::edit(EditData& ed)
         } else {
             if (start && sl->isIncoming()) {
                 sl->undoSetIncoming(false);
-            } else if (!start && sl->isOutgoing()) {
-                sl->undoSetOutgoing(false);
-                cr = nextChordRest(e, options);
             } else {
-                cr = nextChordRest(e, options);
+                if (!start && sl->isOutgoing()) {
+                    sl->undoSetOutgoing(false);
+                }
+                if (ctrlMod) {
+                    cr = score()->nextMeasure(cr, false, true);
+                } else {
+                    cr = nextChordRest(e, options);
+                }
             }
         }
     } else if (ed.key == Key_Up) {
-        Part* part     = e->part();
-        track_idx_t startTrack = part->startTrack();
+        track_idx_t startTrack = e->part()->startTrack();
         track_idx_t endTrack   = e->track();
         cr = searchCR(e->segment(), endTrack, startTrack);
     } else if (ed.key == Key_Down) {
         track_idx_t startTrack = e->track() + 1;
-        Part* part     = e->part();
-        track_idx_t endTrack   = part->endTrack();
+        track_idx_t endTrack   = e->part()->endTrack();
         cr = searchCR(e->segment(), startTrack, endTrack);
     } else {
         return false;
