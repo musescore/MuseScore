@@ -124,7 +124,9 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
 
     Ret ret = waitForReplyFinished(reply);
     if (!ret) {
-        LOGE() << ret.toString();
+        LOGE() << "Error during request: " << requestTypeToString(requestType)
+               << ", url: " << url.toString()
+               << ", err: " << ret.toString();
     }
 
     m_progress.finish(ret);

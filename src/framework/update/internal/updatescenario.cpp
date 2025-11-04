@@ -71,7 +71,7 @@ muse::async::Promise<Ret> UpdateScenario::checkForUpdate(bool manual)
 
             const bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
             if (!noUpdate && !res.ret) {
-                LOGE() << "Unable to check for update, error: " << res.ret.toString();
+                LOGE() << "Unable to check for app update, error: " << res.ret.toString();
                 ret = muse::make_ret(Ret::Code::UnknownError);
 
                 if (manual) {
