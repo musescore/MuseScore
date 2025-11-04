@@ -92,14 +92,15 @@ void MarkerLayout::doLayoutMarker(Marker* item, TextBase::LayoutData* ldata, Lay
         }
 
         switch (hPos) {
+        case AlignH::LEFT:
+        case AlignH::JUSTIFY:
+            xAdj -= startRepeat ? 0.0 : blWidth;
+            break;
         case AlignH::HCENTER:
             xAdj -=  +blWidth / 2;
             break;
         case AlignH::RIGHT:
             xAdj -=  (startRepeat ? blWidth : 0.0);
-            break;
-        case AlignH::LEFT:
-            xAdj -= startRepeat ? 0.0 : blWidth;
             break;
         }
     } else {
