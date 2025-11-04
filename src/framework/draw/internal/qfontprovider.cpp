@@ -26,6 +26,7 @@
 #include <QFontDatabase>
 #include <QFontMetricsF>
 #include <QRawFont>
+#include <QPainterPath>
 
 using namespace muse;
 using namespace muse::draw;
@@ -131,6 +132,20 @@ RectF QFontProvider::boundingRect(const Font& f, char32_t ucs4) const
 {
     if (Char::requiresSurrogates(ucs4)) {
         return RectF::fromQRectF(QFontMetrics(f.toQFont(), &device).boundingRect(String::fromUcs4(ucs4)));
+    }
+
+    if (f.type() == Font::Type::MusicSymbol || f.type() == Font::Type::MusicSymbolText) {
+        // QFontMetrics::boundingRect returns pixel values obtained by rasterization of the font.
+        // QPainterPath::boundingRect works from the actual vector shape so it's more accurate.
+        // There is still some discretization going on so we can make it even more accurate by upscaling.
+        // CAUTION: More expensive! Ok for music glyphs because they are cached.
+        QFont qf = f.toQFont();
+        qf = QFont(qf, &device);
+        static constexpr double UPSCALING = 4.0;
+        qf.setPointSizeF(qf.pointSizeF() * UPSCALING);
+        QPainterPath path;
+        path.addText(QPointF(), qf, QString(static_cast<char16_t>(ucs4)));
+        return RectF::fromQRectF(path.boundingRect()).scaled(SizeF(1.0 / UPSCALING, 1.0 / UPSCALING));
     }
 
     return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(static_cast<char16_t>(ucs4)));
