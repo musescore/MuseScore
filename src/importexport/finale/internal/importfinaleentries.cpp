@@ -1231,12 +1231,56 @@ void FinaleParser::importEntryAdjustments()
         auto getOutermost = [&]() {
             return up ? std::min(preferredStart, preferredEnd) : std::max(preferredStart, preferredEnd); // closest start/end note
         };
-        const double outermostDefault = getOutermost();
+        double innermost;
+        double outermost = getOutermost();
+
+        // Flatten beams as needed
+        bool forceFlatten = musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::AlwaysFlat;
+        setAndStyleProperty(beam, Pid::BEAM_NO_SLOPE, forceFlatten, true);
+        if (!forceFlatten) {
+            if (musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::OnExtremeNote) {
+                for (ChordRest* cr : beam->elements()) {
+                    if (cr == startCr || cr == endCr) {
+                        continue;
+                    }
+                    double beamPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
+                    if (up ? muse::RealIsEqualOrLess(beamPos, outermost) : muse::RealIsEqualOrMore(beamPos, outermost)) {
+                        forceFlatten = true;
+                        break;
+                    }
+                }
+            } else if (musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::OnStandardNote) {
+                /// @todo improve this algorithm
+                forceFlatten = up && beam->elements().size() > 2;
+                for (ChordRest* cr : beam->elements()) {
+                    if (cr == startCr || cr == endCr) {
+                        continue;
+                    }
+                    double beamPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
+                    if (up) {
+                        if (muse::RealIsEqualOrMore(beamPos, outermost)) {
+                            forceFlatten = false;
+                            break;
+                        }
+                    } else {
+                        if (beamPos > outermost) {
+                            forceFlatten = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (forceFlatten) {
+            preferredStart = up ? std::min(preferredStart, preferredEnd) : std::max(preferredStart, preferredEnd);
+            preferredEnd = preferredStart;
+        }
+        bool isFlat = forceFlatten || muse::RealIsEqual(preferredStart, preferredEnd);
 
         // Compute beam slope
         double slope = 0.0;
-        double innermost = getInnermost();
-        if (!muse::RealIsEqual(preferredStart, preferredEnd)) {
+        if (!isFlat) {
+            innermost = getInnermost();
             double totalX = beam->endAnchor().x() - beam->startAnchor().x();
             double maxSlope = doubleFromEvpu(musxOptions().beamOptions->maxSlope) * beam->spatium();
             double heightDifference = preferredEnd - preferredStart;
@@ -1261,19 +1305,19 @@ void FinaleParser::importEntryAdjustments()
         }
 
         // Ensure minimum stem lengths
-        double outermostCurrent = getOutermost();
+        outermost = getOutermost();
         for (ChordRest* cr : beam->elements()) {
             if (cr == startCr || cr == endCr) {
                 continue;
             }
             const double minPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
-            if (up ? muse::RealIsEqualOrMore(minPos, outermostCurrent) : muse::RealIsEqualOrLess(minPos, outermostCurrent)) {
+            if (up ? muse::RealIsEqualOrMore(minPos, outermost) : muse::RealIsEqualOrLess(minPos, outermost)) {
                 // Yes, this means that stem lengths won't effectively always be respected.
                 // But this bug mimics Finale behaviour...
                 continue;
             }
             double curPos = preferredStart;
-            if (!muse::RealIsEqual(slope, 0.0)) {
+            if (!isFlat) {
                 const double startX = rendering::score::BeamTremoloLayout::chordBeamAnchorX(beam->ldata(), cr, ChordBeamAnchorType::Start);
                 curPos += slope * (startX - beam->startAnchor().x());
             }
@@ -1282,47 +1326,6 @@ void FinaleParser::importEntryAdjustments()
                 preferredStart += difference;
                 preferredEnd += difference;
             }
-        }
-
-        // Flatten beams as needed
-        bool shouldFlatten = musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::AlwaysFlat;
-        setAndStyleProperty(beam, Pid::BEAM_NO_SLOPE, shouldFlatten, true);
-        if (!shouldFlatten) {
-            if (musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::OnExtremeNote) {
-                for (ChordRest* cr : beam->elements()) {
-                    if (cr == startCr || cr == endCr) {
-                        continue;
-                    }
-                    double beamPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
-                    if (up ? muse::RealIsEqualOrLess(beamPos, outermostDefault) : muse::RealIsEqualOrMore(beamPos, outermostDefault)) {
-                        shouldFlatten = true;
-                        break;
-                    }
-                }
-            } else if (musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::OnStandardNote) {
-                shouldFlatten = up && beam->elements().size() > 2;
-                for (ChordRest* cr : beam->elements()) {
-                    if (cr == startCr || cr == endCr) {
-                        continue;
-                    }
-                    double beamPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
-                    if (up) {
-                        if (muse::RealIsEqualOrMore(beamPos, outermostDefault)) {
-                            shouldFlatten = false;
-                            break;
-                        }
-                    } else {
-                        if (beamPos > outermostDefault) {
-                            shouldFlatten = true;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        if (shouldFlatten) {
-            preferredStart = up ? std::min(preferredStart, preferredEnd) : std::max(preferredStart, preferredEnd);
-            preferredEnd = preferredStart;
         }
 
         // Beam alterations
