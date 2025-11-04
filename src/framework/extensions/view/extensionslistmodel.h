@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_EXTENSIONSLISTMODEL_H
-#define MUSE_EXTENSIONS_EXTENSIONSLISTMODEL_H
+
+#pragma once
 
 #include <QAbstractListModel>
 #include <QList>
+#include <QQmlParserStatus>
 
 #include "async/asyncable.h"
 
@@ -35,9 +36,10 @@
 #include "shortcuts/ishortcutsregister.h"
 
 namespace muse::extensions {
-class ExtensionsListModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class ExtensionsListModel : public QAbstractListModel, public QQmlParserStatus, public Injectable, public async::Asyncable
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
 
     Inject<IInteractive> interactive = { this };
     Inject<IExtensionsProvider> provider = { this };
@@ -51,8 +53,6 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
-
-    Q_INVOKABLE void load();
 
     Q_INVOKABLE int currentExecPointIndex(const QString& uri) const;
     Q_INVOKABLE QVariantList execPointsModel(const QString& uri) const;
@@ -85,6 +85,11 @@ private:
         std::vector<ExecPoint> points;
     };
 
+    void classBegin() override;
+    void componentComplete() override {}
+
+    void load();
+
     void updatePlugin(const Manifest& plugin);
     int itemIndexByUri(const QString& uri) const;
 
@@ -95,5 +100,3 @@ private:
     mutable ExecPoints m_execPointsCache;
 };
 }
-
-#endif // MUSE_EXTENSIONS_EXTENSIONSLISTMODEL_H
