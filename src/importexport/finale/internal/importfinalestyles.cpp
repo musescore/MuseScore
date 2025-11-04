@@ -165,7 +165,7 @@ EvpuFloat FinaleParser::evpuAugmentationDotWidth() const
 
 static void setStyle(MStyle& style, const Sid sid, const PropertyValue& v)
 {
-    if (style.value(sid).type() == P_TYPE::SPATIUM) {
+    if (v.type() == P_TYPE::REAL && style.value(sid).type() == P_TYPE::SPATIUM) {
         style.set(sid, Spatium(v.toDouble()));
     } else {
         style.set(sid, v);
