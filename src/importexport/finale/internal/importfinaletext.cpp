@@ -1259,8 +1259,9 @@ void FinaleParser::importPageTexts()
         std::optional<PageCmper> forPageId = hfType != HeaderFooterType::SecondPageToEnd ? startPage : std::nullopt;
         musx::util::EnigmaParsingContext parsingContext = pageText->getRawTextCtx(m_currentMusxPartId, forPageId);
         EnigmaParsingOptions options(hfType);
+        options.scaleFontSizeBy = 6.0 / 5.0; // observed
         /// @todo set options.scaleFontSizeBy to per-page scaling if MuseScore can't do per-page scaling directly.
-        return stringFromEnigmaText(parsingContext, hfType);
+        return stringFromEnigmaText(parsingContext, options);
     };
 
     auto assignPageTextToHF = [&](Sid styleId, const MusxInstance<others::PageTextAssign>& pageText) {
@@ -1406,23 +1407,28 @@ void FinaleParser::importPageTexts()
                         return presentBase;
                     }
                     System* system = page->systems().front();
-                    if (system->vbox()) {
+                    if (system && system->vbox()) {
                         topBoxes.emplace(page->no(), system->first());
                         return system->first();
                     }
                     VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
-                    pageFrame->setTick(system->first()->tick());
-                    pageFrame->setNext(system->first());
-                    pageFrame->setPrev(system->first()->prev());
-                    m_score->measures()->insert(pageFrame, pageFrame);
                     double distToTopStaff = 0.0;
-                    if (Spacer* spacer = system->upSpacer(0, nullptr)) {
-                        distToTopStaff = spacer->absoluteGap();
-                        spacer->measure()->remove(spacer);
+                    if (system) {
+                        pageFrame->setTick(system->first()->tick());
+                        pageFrame->setNext(system->first());
+                        pageFrame->setPrev(system->first()->prev());
+                        m_score->measures()->insert(pageFrame, pageFrame);
+                        if (Spacer* spacer = system->upSpacer(0, nullptr)) {
+                            distToTopStaff = spacer->absoluteGap();
+                            spacer->measure()->remove(spacer);
+                        }
+                    } else {
+                        pageFrame->setTick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
+                        m_score->measures()->append(pageFrame);
                     }
                     /// @todo check scaling on this
                     double boxToNotationDist = m_score->style().styleMM(Sid::minVerticalDistance);
-                    double boxToStaffDist = boxToNotationDist + system->minTop();
+                    double boxToStaffDist = boxToNotationDist + (system ? system->minTop() : 0.0);
                     double headerExtension = page->headerExtension();
                     double headerFooterPadding = m_score->style().styleMM(Sid::staffHeaderFooterPadding);
                     double headerDistance = headerExtension ? headerExtension + headerFooterPadding : 0.0;
@@ -1446,23 +1452,36 @@ void FinaleParser::importPageTexts()
                         return presentBase;
                     }
                     System* system = page->systems().back();
-                    if (system->vbox()) {
+                    if (system && system->vbox()) {
                         bottomBoxes.emplace(page->no(), system->first());
                         return system->last();
                     }
                     VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
-                    pageFrame->setTick(system->last()->endTick());
-                    pageFrame->setPrev(system->last());
-                    pageFrame->setNext(system->last()->next());
-                    m_score->measures()->insert(pageFrame, pageFrame);
                     double distToBottomStaff = 0.0;
-                    if (Spacer* spacer = system->downSpacer(m_score->nstaves() - 1)) {
-                        distToBottomStaff = spacer->absoluteGap();
-                        spacer->measure()->remove(spacer);
+                    if (system) {
+                        pageFrame->setTick(system->last()->endTick());
+                        pageFrame->setPrev(system->last());
+                        pageFrame->setNext(system->last()->next());
+                        m_score->measures()->insert(pageFrame, pageFrame);
+                        if (Spacer* spacer = system->downSpacer(m_score->nstaves() - 1)) {
+                            distToBottomStaff = spacer->absoluteGap();
+                            spacer->measure()->remove(spacer);
+                        }
+                        // Move page break, if it exists
+                        for (EngravingItem* e : system->last()->el()) {
+                            if (e->isLayoutBreak() && toLayoutBreak(e)->layoutBreakType() == LayoutBreakType::PAGE) {
+                                system->last()->remove(e);
+                                pageFrame->add(e->clone());
+                                break;
+                            }
+                        }
+                    } else {
+                        pageFrame->setTick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
+                        m_score->measures()->append(pageFrame);
                     }
                     /// @todo check scaling on this
                     double boxToNotationDist = m_score->style().styleMM(Sid::minVerticalDistance);
-                    double boxToStaffDist = boxToNotationDist + system->minBottom();
+                    double boxToStaffDist = boxToNotationDist + (system ? system->minBottom() : 0.0);
                     double maxBoxHeight = distToBottomStaff - boxToStaffDist;
                     /// @todo account for footer distance?
                     pageFrame->setAutoSizeEnabled(false);
@@ -1470,15 +1489,6 @@ void FinaleParser::importPageTexts()
                     pageFrame->setBoxHeight(Spatium(maxBoxHeight / m_score->style().defaultSpatium()));
                     setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_ABOVE, Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
                     setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
-
-                    // Move page break, if it exists
-                    for (EngravingItem* e : system->last()->el()) {
-                        if (e->isLayoutBreak() && toLayoutBreak(e)->layoutBreakType() == LayoutBreakType::PAGE) {
-                            system->last()->remove(e);
-                            pageFrame->add(e->clone());
-                            break;
-                        }
-                    }
                     bottomBoxes.emplace(page->no(), toMeasureBase(pageFrame));
                     return toMeasureBase(pageFrame);
                 }
