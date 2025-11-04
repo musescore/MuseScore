@@ -1739,31 +1739,33 @@ static Rest* addRest(Score*, Measure* m,
 //   resetTuplets
 //---------------------------------------------------------
 
-static void resetTuplets(Tuplets& tuplets)
+static void resetTuplets(NestedTuplets& nesTuplets)
 {
-    for (auto& pair : tuplets) {
-        Tuplet* tuplet = pair.second;
-        if (tuplet) {
-            const Fraction actualDuration = tuplet->elementsDuration() / tuplet->ratio();
-            const Fraction missingDuration = MusicXmlTupletState::missingTupletDuration(actualDuration);
-            LOGD("tuplet %p not stopped at end of measure, tick %s duration %s missing %s",
-                 tuplet,
-                 muPrintable(tuplet->tick().toString()),
-                 muPrintable(actualDuration.toString()), muPrintable(missingDuration.toString()));
-            if (actualDuration > Fraction(0, 1) && missingDuration > Fraction(0, 1)) {
-                LOGD("add missing %s to previous tuplet", muPrintable(missingDuration.toString()));
-                const DurationElement* firstElement = tuplet->elements().at(0);
-                // appended the rest to the current end of the tuplet (firstElement->tick() + actualDuration)
-                Rest* const extraRest = addRest(firstElement->score(), firstElement->measure(),
-                                                firstElement->tick() + actualDuration, firstElement->track(), 0,
-                                                TDuration { missingDuration* tuplet->ratio() }, missingDuration);
-                if (extraRest) {
-                    extraRest->setTuplet(tuplet);
-                    tuplet->add(extraRest);
+    for (const auto& pairVoice : nesTuplets) {
+        for (const auto& pairNested : pairVoice.second) {
+            Tuplet* tuplet = pairNested.second;
+            if (tuplet) {
+                const Fraction actualDuration = tuplet->elementsDuration() / tuplet->ratio();
+                const Fraction missingDuration = MusicXmlTupletState::missingTupletDuration(actualDuration);
+                LOGD("tuplet %p not stopped at end of measure, tick %s duration %s missing %s",
+                     tuplet,
+                     muPrintable(tuplet->tick().toString()),
+                     muPrintable(actualDuration.toString()), muPrintable(missingDuration.toString()));
+                if (actualDuration > Fraction(0, 1) && missingDuration > Fraction(0, 1)) {
+                    LOGD("add missing %s to previous tuplet", muPrintable(missingDuration.toString()));
+                    const DurationElement* firstElement = tuplet->elements().at(0);
+                    // appended the rest to the current end of the tuplet (firstElement->tick() + actualDuration)
+                    Rest* const extraRest = addRest(firstElement->score(), firstElement->measure(),
+                                                    firstElement->tick() + actualDuration, firstElement->track(), 0,
+                                                    TDuration { missingDuration* tuplet->ratio() }, missingDuration);
+                    if (extraRest) {
+                        extraRest->setTuplet(tuplet);
+                        tuplet->add(extraRest);
+                    }
                 }
+                const int normalNotes = tuplet->ratio().denominator();
+                handleTupletStop(tuplet, normalNotes);
             }
-            const int normalNotes = tuplet->ratio().denominator();
-            handleTupletStop(tuplet, normalNotes);
         }
     }
 }
@@ -2244,7 +2246,6 @@ void MusicXmlParserPass2::part()
     if (m_pass1.nparts() == 1 && mxmlPart.getPrintName() && mxmlPart.getPrintAbbr()) {
         m_score->style().set(Sid::hideInstrumentNameIfOneInstrument, false);
     }
-
 #ifdef DEBUG_VOICE_MAPPER
     VoiceList voicelist = _pass1.getVoiceList(id);
     // debug: print voice mapper contents
@@ -2746,8 +2747,8 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
     Beams beams; // Current beam for each voice in the current part
     String cv = u"1";         // current voice for chords, default is 1
     FiguredBassList fbl;                 // List of figured bass elements under a single note
-    MusicXmlTupletStates tupletStates;         // Tuplet state for each voice in the current part
-    Tuplets tuplets;         // Current tuplet for each voice in the current part
+    MusicXmlNestedTupletStates nestedtupletstates;  // Tuplet state for each voice in the current part
+    NestedTuplets nesTuplets;         // Current tuplet for each voice in the current part
     DelayedDirectionsList delayedDirections; // Directions to be added to score *after* collecting all and sorting
     InferredFingeringsList inferredFingerings; // Directions to be reinterpreted as Fingerings
     ArpeggioMap arpMap;
@@ -2812,7 +2813,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
             // note: chord and grace note handling done in note()
             // dura > 0 iff valid rest or first note of chord found
             Note* n = note(partId, measure, time + mTime, time + prevTime, missingPrev, dura, missingCurr, cv, gcl, gac, beams, fbl, alt,
-                           tupletStates, tuplets, arpMap, delayedArps);
+                           nestedtupletstates, nesTuplets, arpMap, delayedArps);
             if (n && !n->chord()->isGrace()) {
                 prevChord = n->chord();          // remember last non-grace chord
             }
@@ -2903,7 +2904,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
     addGraceChordsAfter(prevChord, gcl, gac);
 
     // prevent tuplets from crossing measure boundaries
-    resetTuplets(tuplets);
+    resetTuplets(nesTuplets);
 
     // fill possible gaps in voice 1
     Part* part = m_pass1.getPart(partId);   // should not fail, we only get here if the part exists
@@ -6876,8 +6877,8 @@ Note* MusicXmlParserPass2::note(const String& partId,
                                 Beams& currBeams,
                                 FiguredBassList& fbl,
                                 int& alt,
-                                MusicXmlTupletStates& tupletStates,
-                                Tuplets& tuplets, ArpeggioMap& arpMap, DelayedArpMap& delayedArps)
+                                MusicXmlNestedTupletStates& nestedtupletstates,
+                                NestedTuplets& nesTuplets, ArpeggioMap& arpMap, DelayedArpMap& delayedArps)
 {
     if (m_e.asciiAttribute("print-spacing") == "no") {
         notePrintSpacingNo(dura);
@@ -6920,6 +6921,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
 
     MusicXmlNoteDuration mnd { m_divs, m_logger, &m_pass1 };
     MusicXmlNotePitch mnp { m_logger };
+    unsigned int tupletsProcessed = 0;
 
     while (m_e.readNextStartElement()) {
         if (mnp.readProperties(m_e, m_score)) {
@@ -6950,7 +6952,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             // add to main note instead
             lyric.parse(printLyric);
         } else if (m_e.name() == "notations") {
-            notations.parse();
+            notations.parse(mnd.timeMod(), tupletsProcessed);
             addError(notations.errors());
         } else if (m_e.name() == "notehead") {
             noteheadColor = Color::fromString(m_e.asciiAttribute("color").ascii());
@@ -7067,29 +7069,82 @@ Note* MusicXmlParserPass2::note(const String& partId,
     Fraction timeMod = mnd.timeMod();
 
     // determine tuplet state, used twice (before and after note allocation)
-    MusicXmlTupletFlags tupletAction;
+    using MusicXmlTupletFlagsList = std::map<unsigned int, MusicXmlTupletFlags>;
+    MusicXmlTupletFlagsList tupletAction;
 
     // handle tuplet state for the previous chord or rest
     if (!chord && !grace) {
-        Tuplet* tuplet = tuplets[voice];
-        MusicXmlTupletState& tupletState = tupletStates[voice];
-        tupletAction = tupletState.determineTupletAction(mnd.duration(), timeMod, notations.tupletDesc().type,
-                                                         mnd.normalType(), missingPrev, missingCurr);
-        if (tupletAction & MusicXmlTupletFlag::STOP_PREVIOUS) {
-            // tuplet start while already in tuplet
-            if (missingPrev.isValid() && missingPrev > Fraction(0, 1)) {
-                const int track = msTrack + msVoice;
-                Rest* const extraRest = addRest(m_score, measure, noteStartTime, track, msMove,
-                                                TDuration { missingPrev* tuplet->ratio() }, missingPrev);
-                if (extraRest) {
-                    extraRest->setTuplet(tuplet);
-                    tuplet->add(extraRest);
-                    noteStartTime += missingPrev;
+        MusicXmlNestedTupletState& nestedTupletState = nestedtupletstates[voice];
+
+        // No tuplet or middle of the tuplet
+        if (tupletsProcessed == 0) {
+            Fraction realTimeMod;
+            unsigned int currentDepth = nestedTupletState.currentTupletDepth();
+            // Outside a Tuplet
+            if ((currentDepth == 0) || (!nesTuplets[voice][currentDepth])) {
+                realTimeMod = timeMod;
+            } else {
+                realTimeMod = Fraction(1, 1) / nesTuplets[voice][currentDepth]->ratio();
+            }
+            // Just one tuplet action
+            tupletAction[1] = nestedTupletState.determineTupletAction(mnd.duration(), realTimeMod,
+                                                                      notations.tupletDescList()[tupletsProcessed].first.type,
+                                                                      mnd.normalType(), missingPrev, missingCurr);
+
+            MusicXmlTupletFlags aTupletStartsOrStops = MusicXmlTupletFlag::NONE;
+            aTupletStartsOrStops |= MusicXmlTupletFlag::START_NEW;
+            aTupletStartsOrStops |= MusicXmlTupletFlag::STOP_PREVIOUS;
+            aTupletStartsOrStops |= MusicXmlTupletFlag::STOP_CURRENT;
+
+            // If no tupletsProcessed and there are start or stop... we consider that there is a tuplet (implicit)
+            if (tupletAction[1] & aTupletStartsOrStops) {
+                tupletsProcessed = 1;
+            }
+        } else {
+            for (unsigned int tupletInNote = 1; tupletInNote <= tupletsProcessed; ++tupletInNote) {
+                Fraction realTimeMod;
+                // IF START current duration
+                if (notations.tupletDescList()[tupletInNote].first.type == MusicXmlStartStop::START) {
+                    // We take the value from the Tuplet
+                    realTimeMod = notations.tupletDescList()[tupletInNote].second;
+                }
+                // starts and stops can't be together in the same note.
+                // As it's not a start we could get the realTimeMod from the previous tuplet
+                else {
+                    // We take the value from the the previous tuplet
+                    unsigned int currentDepth = nestedTupletState.currentTupletDepth();
+
+                    if ((currentDepth > 0) && (nesTuplets[voice][currentDepth])) {
+                        realTimeMod = Fraction(1, 1) / nesTuplets[voice][currentDepth]->ratio();
+                    }
+                    // Error
+                    else {
+                        realTimeMod = Fraction(1, 1);
+                    }
+                }
+
+                tupletAction[tupletInNote] = nestedTupletState.determineTupletAction(mnd.duration(), realTimeMod,
+                                                                                     notations.tupletDescList()[tupletInNote].first.type,
+                                                                                     mnd.normalType(), missingPrev, missingCurr);
+
+                if (tupletAction[tupletInNote] & MusicXmlTupletFlag::STOP_PREVIOUS) {
+                    Tuplet* tuplet = nesTuplets[voice][nestedTupletState.formerTupletDepth()];
+                    // tuplet start while already in tuplet
+                    if (missingPrev.isValid() && missingPrev > Fraction(0, 1)) {
+                        const int track = msTrack + msVoice;
+                        Rest* const extraRest = addRest(m_score, measure, noteStartTime, track, msMove,
+                                                        TDuration { missingPrev* tuplet->ratio() }, missingPrev);
+                        if (extraRest) {
+                            extraRest->setTuplet(tuplet);
+                            tuplet->add(extraRest);
+                            noteStartTime += missingPrev;
+                        }
+                    }
+                    // recover by simply stopping the current tuplet first
+                    const int normalNotes = realTimeMod.numerator();
+                    handleTupletStop(tuplet, normalNotes);
                 }
             }
-            // recover by simply stopping the current tuplet first
-            const int normalNotes = timeMod.numerator();
-            handleTupletStop(tuplet, normalNotes);
         }
     }
 
@@ -7295,36 +7350,112 @@ Note* MusicXmlParserPass2::note(const String& partId,
     // handle tuplet state for the current chord or rest
     if (cr) {
         if (!chord && !grace) {
-            Tuplet*& tuplet = tuplets[voice];
-            // do tuplet if valid time-modification is not 1/1 and is not 1/2 (tremolo)
-            // TODO: check interaction tuplet and tremolo handling
-            if (timeMod.isValid() && timeMod != Fraction(1, 1) && timeMod != Fraction(1, 2)) {
-                const int actualNotes = timeMod.denominator();
-                const int normalNotes = timeMod.numerator();
-                if (tupletAction & MusicXmlTupletFlag::START_NEW) {
-                    // create a new tuplet
-                    handleTupletStart(cr, tuplet, actualNotes, normalNotes, notations.tupletDesc());
+            // Middle of a tuplet
+            if ((tupletsProcessed == 0) && (nestedtupletstates[voice].currentTupletDepth() > 0)) {
+                const int tupletDepth = nestedtupletstates[voice].currentTupletDepth();
+
+                for (int i = tupletDepth; i > 0; --i) {
+                    Tuplet*& tuplet = nesTuplets[voice][i];
+                    // We add the chord to the tuplet if asked (Just one action in this case and we take the first one)
+                    if (tuplet && tupletAction[1] & MusicXmlTupletFlag::ADD_CHORD) {
+                        cr->setTuplet(tuplet);
+                        tuplet->add(cr);
+                        break;
+                    }
                 }
-                if (tuplet && tupletAction & MusicXmlTupletFlag::ADD_CHORD) {
-                    cr->setTuplet(tuplet);
-                    tuplet->add(cr);
-                }
-                if (tuplet && tupletAction & MusicXmlTupletFlag::STOP_CURRENT) {
-                    if (missingCurr.isValid() && missingCurr > Fraction(0, 1)) {
-                        LOGD("add missing %s to current tuplet", muPrintable(missingCurr.toString()));
-                        const int track = msTrack + msVoice;
-                        Rest* const extraRest = addRest(m_score, measure, noteStartTime + dura, track, msMove,
-                                                        TDuration { missingCurr* tuplet->ratio() }, missingCurr);
-                        if (extraRest) {
-                            extraRest->setTuplet(tuplet);
-                            tuplet->add(extraRest);
+            } else {
+                for (unsigned int tupletInNote = 1; tupletInNote <= tupletsProcessed; ++tupletInNote) {
+                    const bool tupletStop = (tupletAction[tupletInNote] & MusicXmlTupletFlag::STOP_CURRENT)
+                                            || (tupletAction[tupletInNote] & MusicXmlTupletFlag::STOP_PREVIOUS);
+                    Fraction realTimeMod;
+                    int tupletDepth;
+
+                    // Just stops OR starts in the same note
+                    // IF stop we should do the for in a reverse way
+                    if (tupletStop) {
+                        tupletDepth = nestedtupletstates[voice].currentTupletDepth() + tupletsProcessed - tupletInNote + 1;
+                    }
+                    // Starts
+                    else {
+                        tupletDepth = nestedtupletstates[voice].currentTupletDepth() - tupletsProcessed + tupletInNote;
+                    }
+
+                    Tuplet*& tuplet = nesTuplets[voice][tupletDepth];
+
+                    if (tupletStop) {
+                        if (tuplet) {
+                            realTimeMod = Fraction(1, 1) / tuplet->ratio();
+                        } else {
+                            realTimeMod = Fraction(1, 1);
+                        }
+                    } else { // Start
+                        realTimeMod = notations.tupletDescList()[tupletInNote].second;
+
+                        // Check if this is an implicit tuplet which has a zero value
+                        if (!(realTimeMod.isValid() && realTimeMod.isNotZero())) {
+                            // TimeMode from the chord
+                            realTimeMod = timeMod;
+                        }
+                        // Initialize just in case this tupletDepth is being reused
+                        tuplet = nullptr;
+                    }
+
+                    Tuplet* parentTuplet = nullptr;
+                    // Looking for the parent tuplet (some "tuplets" are not really tuplets such as a "quatruplet" in a 4/4 from a note)
+                    if (tupletDepth > 1) {
+                        for (int tupletDepthNumber = tupletDepth - 1; tupletDepthNumber > 0; --tupletDepthNumber) {
+                            parentTuplet = nesTuplets[voice][tupletDepthNumber];
+                            if (parentTuplet) {
+                                break;
+                            }
                         }
                     }
-                    handleTupletStop(tuplet, normalNotes);
+
+                    // do tuplet if valid time-modification is not 1/2 (tremolo)
+                    if (realTimeMod.isValid() && realTimeMod != Fraction(1, 2)) {
+                        const int actualNotes = realTimeMod.denominator();
+                        const int normalNotes = realTimeMod.numerator();
+
+                        // if valid time-modification is not 1/1
+                        // (Some "tuplets" are not really tuplets such as a "quatruplet" in a 4/4 from a note)
+                        if ((tupletAction[tupletInNote] & MusicXmlTupletFlag::START_NEW) && (realTimeMod != Fraction(1, 1))) {
+                            // create a new tuplet taking some properties from the CR
+                            handleTupletStart(cr, tuplet, actualNotes, normalNotes, notations.tupletDescList()[tupletInNote].first);
+
+                            // We add a nested tuplet if necessary
+                            if (parentTuplet) {
+                                tuplet->setTuplet(parentTuplet);
+                                parentTuplet->add(tuplet);
+                            }
+                        }
+                        Tuplet* tupletToSet = (tuplet ? tuplet : (parentTuplet ? parentTuplet : nullptr));
+                        // We add the chord to the tuplet if we are in the latest tuplet (1 for stop and latest for start)
+                        if (tupletToSet && (tupletAction[tupletInNote] & MusicXmlTupletFlag::ADD_CHORD)
+                            && (tupletInNote == (tupletStop ? 1 : tupletsProcessed))) {
+                            cr->setTuplet(tupletToSet);
+                            tupletToSet->add(cr);
+                        }
+
+                        // if valid time-modification is not 1/1
+                        // (Some "tuplets" are not really tuplets such as a "quatruplet" in a 4/4 from a note)
+                        if (tuplet && (realTimeMod != Fraction(1, 1)) && tupletAction[tupletInNote] & MusicXmlTupletFlag::STOP_CURRENT) {
+                            if (missingCurr.isValid() && missingCurr > Fraction(0, 1)) {
+                                LOGD("add missing %s to current tuplet", muPrintable(missingCurr.toString()));
+                                const int track = msTrack + msVoice;
+                                Rest* const extraRest = addRest(m_score, measure, noteStartTime + dura, track, msMove,
+                                                                TDuration { missingCurr* tuplet->ratio() }, missingCurr);
+                                if (extraRest) {
+                                    extraRest->setTuplet(tuplet);
+                                    tuplet->add(extraRest);
+                                }
+                            }
+                            handleTupletStop(tuplet, normalNotes);
+                        }
+                    } else if (tuplet) {
+                        // stop any still incomplete tuplet
+                        handleTupletStop(tuplet, 2);
+                    }
                 }
-            } else if (tuplet) {
-                // stop any still incomplete tuplet
-                handleTupletStop(tuplet, 2);
             }
         }
     }
@@ -9221,6 +9352,9 @@ String Notation::print() const
 MusicXmlParserNotations::MusicXmlParserNotations(XmlStreamReader& e, Score* score, MusicXmlLogger* logger, MusicXmlParserPass2& pass2)
     : m_e(e), m_pass2(pass2), m_score(score), m_logger(logger)
 {
+    // Initializacion
+    MusicXmlTupletDesc tupletDesc;
+    m_tupletDescList[1] = std::pair(tupletDesc, Fraction(0, 1));
     // nothing
 }
 
@@ -9259,9 +9393,10 @@ void MusicXmlParserNotations::skipLogCurrElem()
 //   parse
 //---------------------------------------------------------
 
-void MusicXmlParserNotations::parse()
+void MusicXmlParserNotations::parse(const Fraction noteTimeMod, unsigned int& tupletsProcessed)
 {
     m_visible = m_e.asciiAttribute("print-object") != "no";
+    tupletsProcessed = 0;
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "arpeggiate") {
@@ -9293,7 +9428,8 @@ void MusicXmlParserNotations::parse()
         } else if (m_e.name() == "tied") {
             tied();
         } else if (m_e.name() == "tuplet") {
-            tuplet();
+            ++tupletsProcessed;
+            tuplet(noteTimeMod, tupletsProcessed);
         } else if (m_e.name() == "other-notation") {
             otherNotation();
         } else {
@@ -9448,45 +9584,76 @@ void MusicXmlParserNotations::fermata()
  Parse the /score-partwise/part/measure/note/notations/tuplet node.
  */
 
-void MusicXmlParserNotations::tuplet()
+void MusicXmlParserNotations::tuplet(const Fraction noteTimeMod, const unsigned int tupletNumber)
 {
     const String tupletType       = m_e.attribute("type");
     const String tupletPlacement  = m_e.attribute("placement");
     const String tupletBracket    = m_e.attribute("bracket");
     const String tupletShowNumber = m_e.attribute("show-number");
 
-    // ignore possible children (currently not supported)
-    m_e.skipCurrentElement();
-
     if (tupletType == u"start") {
-        m_tupletDesc.type = MusicXmlStartStop::START;
+        m_tupletDescList[tupletNumber].first.type = MusicXmlStartStop::START;
+
+        int tupletActualNumber = 0;
+        int tupletNormalNumber = 0;
+
+        while (m_e.readNextStartElement()) {
+            if (m_e.name() == "tuplet-actual") {
+                while (m_e.readNextStartElement()) {
+                    if (m_e.name() == "tuplet-number") {
+                        tupletActualNumber = m_e.readInt();
+                    }
+                }
+            } else if (m_e.name() == "tuplet-normal") {
+                while (m_e.readNextStartElement()) {
+                    if (m_e.name() == "tuplet-number") {
+                        tupletNormalNumber = m_e.readInt();
+                    }
+                }
+            }
+            // ignore possible children
+            m_e.skipCurrentElement();
+        }
+
+        if ((tupletActualNumber > 0) && (tupletNormalNumber > 0)) {
+            m_tupletDescList[tupletNumber].second = Fraction(tupletNormalNumber, tupletActualNumber);
+        } else {
+            m_tupletDescList[tupletNumber].second = noteTimeMod;
+        }
     } else if (tupletType == u"stop") {
-        m_tupletDesc.type = MusicXmlStartStop::STOP;
+        m_tupletDescList[tupletNumber].first.type = MusicXmlStartStop::STOP;
+        // ignore possible children (currently not supported)
+        m_e.skipCurrentElement();
     } else if (!tupletType.empty() && tupletType != u"start" && tupletType != u"stop") {
         m_logger->logError(String(u"unknown tuplet type '%1'").arg(tupletType), &m_e);
+        // ignore possible children (currently not supported)
+        m_e.skipCurrentElement();
+    } else {
+        // ignore possible children (currently not supported)
+        m_e.skipCurrentElement();
     }
 
     // set bracket, leave at default if unspecified
     if (tupletBracket == u"yes") {
-        m_tupletDesc.bracket = TupletBracketType::SHOW_BRACKET;
+        m_tupletDescList[tupletNumber].first.bracket = TupletBracketType::SHOW_BRACKET;
     } else if (tupletBracket == u"no") {
-        m_tupletDesc.bracket = TupletBracketType::SHOW_NO_BRACKET;
+        m_tupletDescList[tupletNumber].first.bracket = TupletBracketType::SHOW_NO_BRACKET;
     }
 
     // set number, default is "actual" (=NumberType::SHOW_NUMBER)
     if (tupletShowNumber == u"both") {
-        m_tupletDesc.shownumber = TupletNumberType::SHOW_RELATION;
+        m_tupletDescList[tupletNumber].first.shownumber = TupletNumberType::SHOW_RELATION;
     } else if (tupletShowNumber == u"none") {
-        m_tupletDesc.shownumber = TupletNumberType::NO_TEXT;
+        m_tupletDescList[tupletNumber].first.shownumber = TupletNumberType::NO_TEXT;
     } else {
-        m_tupletDesc.shownumber = TupletNumberType::SHOW_NUMBER;
+        m_tupletDescList[tupletNumber].first.shownumber = TupletNumberType::SHOW_NUMBER;
     }
 
     // set number and bracket placement
     if (tupletPlacement == u"above") {
-        m_tupletDesc.direction = DirectionV::UP;
+        m_tupletDescList[tupletNumber].first.direction = DirectionV::UP;
     } else if (tupletPlacement == u"below") {
-        m_tupletDesc.direction = DirectionV::DOWN;
+        m_tupletDescList[tupletNumber].first.direction = DirectionV::DOWN;
     } else if (tupletPlacement.empty()) {
         // ignore
     } else {

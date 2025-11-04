@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "musicxmltupletstate.h"
 
 #include "engraving/dom/tuplet.h"
@@ -42,6 +43,7 @@ void MusicXmlTupletState::determineTupletFractionAndFullDuration(const Fraction 
 {
     fraction = duration;
     fullDuration = Fraction(1, 1);
+
     // move denominator's powers of 2 from fraction to fullDuration
     while (fraction.denominator() % 2 == 0) {
         fraction *= 2;
@@ -138,6 +140,7 @@ bool MusicXmlTupletState::isTupletFilled(const TDuration normalType, const Fract
     if (normalType.isValid()) {
         int matchedNormalType  = int(normalType.type());
         int matchedNormalCount = actualNotes;
+
         // match the types
         matchTypeAndCount(matchedNormalType, matchedNormalCount);
         // ... result scenario (1)
@@ -286,22 +289,14 @@ MusicXmlTupletFlags MusicXmlTupletState::determineTupletAction(const Fraction no
                                                                const MusicXmlStartStop tupletStartStop,
                                                                const TDuration normalType,
                                                                Fraction& missingPreviousDuration,
-                                                               Fraction& missingCurrentDuration)
+                                                               Fraction& missingCurrentDuration,
+                                                               Fraction& durationWhenStopped)
 {
     const int actNotes = timeMod.denominator();
     const int norNotes = timeMod.numerator();
     MusicXmlTupletFlags res = MusicXmlTupletFlag::NONE;
-
-    // check for unexpected termination of previous tuplet
-    if (inTuplet && timeMod == Fraction(1, 1)) {
-        // recover by simply stopping the current tuplet first
-        if (!isTupletFilled(normalType, timeMod)) {
-            missingPreviousDuration = missingTupletDuration(duration);
-            //LOGD("tuplet incomplete, missing %s", muPrintable(missingPreviousDuration.print()));
-        }
-        *this = {};
-        res |= MusicXmlTupletFlag::STOP_PREVIOUS;
-    }
+    durationWhenStopped = Fraction(1, 1);
+    LOGI() << "tpacebes devolvemos res NONE";
 
     // check for obvious errors
     if (inTuplet && tupletStartStop == MusicXmlStartStop::START) {
@@ -311,9 +306,12 @@ MusicXmlTupletFlags MusicXmlTupletState::determineTupletAction(const Fraction no
             missingPreviousDuration = missingTupletDuration(duration);
             //LOGD("tuplet incomplete, missing %s", muPrintable(missingPreviousDuration.print()));
         }
+        // Duration when ended
+        durationWhenStopped = duration;
         *this = {};
         res |= MusicXmlTupletFlag::STOP_PREVIOUS;
     }
+
     if (tupletStartStop == MusicXmlStartStop::STOP && !inTuplet) {
         LOGD("tuplet stop but no tuplet started");           // TODO
         // recovery handled later (automatically, no special case needed)
@@ -338,10 +336,13 @@ MusicXmlTupletFlags MusicXmlTupletState::determineTupletAction(const Fraction no
     // Add chord to the current tuplet.
     // Must also check for actual/normal notes to prevent
     // adding one chord too much if tuplet stop is missing.
-    if (inTuplet && !(actNotes == 1 && norNotes == 1)) {
+    // if (inTuplet && !(actNotes == 1 && norNotes == 1)) {
+    if (inTuplet) {
         addDurationToTuplet(noteDuration, timeMod);
         res |= MusicXmlTupletFlag::ADD_CHORD;
     }
+
+    LOGI() << "tpacebes determineTupletAction duration durationTupleta es " << durationWhenStopped.toString();
 
     // Tuplets are stopped by the tuplet stop
     // or when the tuplet is filled completely
@@ -352,17 +353,109 @@ MusicXmlTupletFlags MusicXmlTupletState::determineTupletAction(const Fraction no
 
     if (inTuplet) {
         if (tupletStartStop == MusicXmlStartStop::STOP
-            || (implicit && isTupletFilled(normalType, timeMod))
-            || (actNotes == 1 && norNotes == 1)) {           // incorrect ??? check scenario incomplete tuplet w/o start
+            || (implicit && isTupletFilled(normalType, timeMod))) {
             if (actNotes > norNotes && !isTupletFilled(normalType, timeMod)) {
                 missingCurrentDuration = missingTupletDuration(duration);
                 LOGD("current tuplet incomplete, missing %s", muPrintable(missingCurrentDuration.toString()));
             }
 
+            // Duration when ended
+            durationWhenStopped = duration;
             *this = {};
             res |= MusicXmlTupletFlag::STOP_CURRENT;
         }
     }
 
     return res;
+}
+
+//---------------------------------------------------------
+//   determineTupletAction
+//---------------------------------------------------------
+
+MusicXmlTupletFlags MusicXmlNestedTupletState::determineTupletAction(const engraving::Fraction noteDuration,
+                                                                     const engraving::Fraction timeMod,
+                                                                     const MusicXmlStartStop tupletStartStop,
+                                                                     const engraving::TDuration normalType,
+                                                                     engraving::Fraction& missingPreviousDuration,
+                                                                     engraving::Fraction& missingCurrentDuration)
+{
+    MusicXmlTupletFlags tupletAction;
+    Fraction tupletDurationWhenStopped = Fraction(1, 1);
+    bool newImplicitTupletStart = false;
+
+    // Check if this is an implicit Tuplet if needed.
+    // We could only deal with implicit tuplets when there aren't any tuplet yet (no nested implicit tuplets)
+    // There is no way to differentiate between a "middle" note in a tuplet and the start of a new implicit tuplet
+    if ((tupletStartStop != MusicXmlStartStop::START) && (tupletStartStop != MusicXmlStartStop::STOP)
+        && (m_tupletNestingDepth == 0) & !m_tupletCurrentDepthIsImplicit) {
+        // We check if there is a new implicit start
+        MusicXmlTupletFlags checkTupletAction;
+        MusicXmlTupletState checkTupletState;
+        checkTupletAction = checkTupletState.determineTupletAction(noteDuration, timeMod, tupletStartStop, normalType,
+                                                                   missingPreviousDuration, missingCurrentDuration,
+                                                                   tupletDurationWhenStopped);
+
+        // If we should start a new tuplet and there isn't a START is an implicit Start
+        m_tupletCurrentDepthIsImplicit = (checkTupletAction & MusicXmlTupletFlag::START_NEW);
+        newImplicitTupletStart = m_tupletCurrentDepthIsImplicit;
+    }
+
+    if (((m_tupletCurrentDepthIsImplicit) && (newImplicitTupletStart)) || (tupletStartStop == MusicXmlStartStop::START)) {
+        ++m_tupletNestingDepth;
+        m_tupletFormerNestingDepth = m_tupletNestingDepth - 1;
+
+        // Adding a new tuplet State
+        MusicXmlTupletState tupletState;
+        m_measureTupletStates[m_tupletNestingDepth] = std::make_pair(tupletState, timeMod);
+    }
+
+    if (m_tupletNestingDepth == 0) {
+        tupletAction = MusicXmlTupletFlag::NONE;
+    } else {
+        tupletAction = m_measureTupletStates[m_tupletNestingDepth].first.determineTupletAction(noteDuration, timeMod, tupletStartStop,
+                                                                                               normalType, missingPreviousDuration,
+                                                                                               missingCurrentDuration,
+                                                                                               tupletDurationWhenStopped);
+
+        if ((tupletAction & MusicXmlTupletFlag::STOP_CURRENT) || (tupletAction & MusicXmlTupletFlag::STOP_PREVIOUS)) {
+            m_measureTupletStates.erase(m_tupletNestingDepth);
+            // End of implicit Tuplet
+            m_tupletCurrentDepthIsImplicit = false;
+            --m_tupletNestingDepth;
+            m_tupletFormerNestingDepth = m_tupletNestingDepth + 1;
+
+            // We add the length of the current tuplet to te parent (if there is a parent)
+            if (m_tupletNestingDepth > 0) {
+                Fraction ignoredMissingPreviousDuration;
+                Fraction ignoredMissingCurrentDuration;
+                Fraction ignoredtupletDurationWhenStopped;
+
+                MusicXmlTupletFlags ignoredTupletAction = m_measureTupletStates[m_tupletNestingDepth].first.determineTupletAction(
+                    tupletDurationWhenStopped + missingCurrentDuration, m_measureTupletStates[m_tupletNestingDepth].second,
+                    MusicXmlStartStop::NONE, normalType, ignoredMissingPreviousDuration, ignoredMissingCurrentDuration,
+                    ignoredtupletDurationWhenStopped);
+            }
+        }
+    }
+
+    return tupletAction;
+}
+
+//---------------------------------------------------------
+//   currentTupletDepth
+//---------------------------------------------------------
+
+unsigned int MusicXmlNestedTupletState::currentTupletDepth()
+{
+    return m_tupletNestingDepth;
+}
+
+//---------------------------------------------------------
+//   formerTupletDepth
+//---------------------------------------------------------
+
+unsigned int MusicXmlNestedTupletState::formerTupletDepth()
+{
+    return m_tupletFormerNestingDepth;
 }
