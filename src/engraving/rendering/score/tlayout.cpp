@@ -3349,13 +3349,13 @@ void TLayout::layoutJump(const Jump* item, Jump::LayoutData* ldata)
         double padding = (startRepeat || endRepeat) ? 0.0 : 0.5 * item->spatium() * fontSizeScaleFactor;
 
         if (position == AlignH::LEFT) {
-            const BarLine* bl = startRepeat || !measure->prevMeasure()
-                                ? measure->startBarLine(blIdx) : measure->prevMeasure()->endBarLine(blIdx);
-            double blWidth = startRepeat ? bl->width() : 0.0;
+            const BarLine* bll = startRepeat || !measure->prevMeasure()
+                                 ? measure->startBarLine(blIdx) : measure->prevMeasure()->endBarLine(blIdx);
+            double blWidth = startRepeat ? bll->width() : 0.0;
             xAdj += padding + blWidth;
         } else if (position == AlignH::RIGHT) {
-            const BarLine* bl = measure->endBarLine(blIdx);
-            xAdj -= bl->width() + padding;
+            const BarLine* blr = measure->endBarLine(blIdx);
+            xAdj -= blr->width() + padding;
         }
     }
     ldata->moveX(xAdj);
