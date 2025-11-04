@@ -334,6 +334,7 @@ private:
 
     // smart shapes
     void importSmartShapes();
+    engraving::DirectionV calculateSlurDirection(engraving::Slur* slur);
 
     // texts
     void importTextExpressions();

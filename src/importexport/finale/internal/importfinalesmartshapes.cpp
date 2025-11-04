@@ -39,6 +39,7 @@
 #include "engraving/dom/glissando.h"
 #include "engraving/dom/line.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/navigate.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/noteline.h"
@@ -223,6 +224,41 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     centerShortTextOffset = evpuToPointF(customLine->centerAbbrX, customLine->lineStartY - customLine->centerAbbrY);
 }
 
+DirectionV FinaleParser::calculateSlurDirection(Slur* slur)
+{
+    // Cross-staff or cross-layer chords
+    if (slur->track() != slur->track2()) {
+        for (ChordRest* cr : {slur->startCR(), slur->endCR() }) {
+            if (!cr->isChord()) {
+                continue;
+            }
+            Chord* c = toChord(cr);
+            if (muse::contains(m_fixedChords, c)) {
+                return c->stemDirection();
+            }
+        }
+        return DirectionV::UP;
+    }
+    for (ChordRest* cr = slur->startCR(); cr; cr = nextChordRest(cr)) {
+        if (!cr->isChord()) {
+            continue;
+        }
+        Chord* c = toChord(cr);
+        if (!c->isGrace()) {
+            if (muse::contains(m_fixedChords, c)) {
+                return c->stemDirection();
+            }
+        }
+        if (c->stemDirection() != DirectionV::UP) {
+            return DirectionV::UP;
+        }
+        if (cr == slur->endCR() || cr->tick() >= slur->endCR()->endTick()) {
+            break;
+        }
+    }
+    return DirectionV::DOWN;
+}
+
 static bool elementsValidForSpannerType(const ElementType type, EngravingItem*& startElement, EngravingItem*& endElement)
 {
     switch (type) {
@@ -354,7 +390,7 @@ void FinaleParser::importSmartShapes()
         Spanner* newSpanner = toSpanner(Factory::createItem(type, m_score->dummy()));
         newSpanner->setScore(m_score);
 
-        if (smartShape->entryBased) {
+        if (smartShape->entryBased || newSpanner->isSlur()) {
             if (!startElement || !endElement) {
                 // should never happen
                 logger()->logInfo(String(u"No start/end element for spanner of %1 type").arg(TConv::userName(type).translated()));
@@ -480,9 +516,19 @@ void FinaleParser::importSmartShapes()
                     setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT, absoluteSpatiumFromEvpu(termSeg->ctlPtAdj->startCtlPtY, newSpanner));
                 }
             } else if (type == ElementType::SLUR) {
-                toSlur(newSpanner)->setStyleType(slurStyleTypeFromShapeType(smartShape->shapeType));
-                /// @todo is there a way to read the calculated direction
-                toSlur(newSpanner)->setSlurDirection(directionVFromShapeType(smartShape->shapeType));
+                Slur* slur = toSlur(newSpanner);
+                setAndStyleProperty(slur, Pid::SLUR_STYLE_TYPE, slurStyleTypeFromShapeType(smartShape->shapeType));
+                setAndStyleProperty(slur, Pid::SLUR_DIRECTION, directionVFromShapeType(smartShape->shapeType));
+                if (slur->slurDirection() == DirectionV::AUTO) {
+                    setAndStyleProperty(slur, Pid::SLUR_DIRECTION, calculateSlurDirection(slur));
+                }
+                if (slur->track() != slur->track2()) {
+                    slur->setAutoplace(false);
+                } else if (smartShape->engraverSlurState == others::SmartShape::EngraverSlurState::Auto) {
+                    slur->setAutoplace(musxOptions().smartShapeOptions->useEngraverSlurs);
+                } else {
+                    slur->setAutoplace(smartShape->engraverSlurState == others::SmartShape::EngraverSlurState::On);
+                }
             } else if (type == ElementType::GLISSANDO) {
                 setAndStyleProperty(newSpanner, Pid::GLISS_TYPE, int(glissandoTypeFromShapeType(smartShape->shapeType)));
                 setAndStyleProperty(newSpanner, Pid::GLISS_SHOW_TEXT, false); /// @todo Is this the correct default?
