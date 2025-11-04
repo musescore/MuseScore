@@ -2299,6 +2299,9 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             success = success && this->readOrnam(xpathNode.node(), measure);
         } else if (elementName == "pedal") {
             success = success && this->readPedal(xpathNode.node(), measure);
+        } else if (elementName == "phrase") {
+            // there is no distinction between phrase and slur in MuseScore
+            success = success && this->readSlur(xpathNode.node(), measure);
         } else if (elementName == "reh") {
             success = success && this->readReh(xpathNode.node(), measure);
         } else if (elementName == "repeatMark") {
