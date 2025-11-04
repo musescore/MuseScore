@@ -39,7 +39,7 @@ public:
     }
 
 protected:
-    static constexpr double MU_ENGRAVING_DPI = 2540; // Same as mu::engraving::DPI. TODO: pass as parameter
+    static constexpr double MU_ENGRAVING_DPI = 1200; // Same as mu::engraving::DPI. TODO: pass as parameter
     int metric(PaintDeviceMetric m) const override
     {
         switch (m) {

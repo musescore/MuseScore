@@ -427,7 +427,7 @@ void Painter::drawRoundedRect(const RectF& rect, double xRadius, double yRadius)
 
 void Painter::applyFontSizeScaling()
 {
-    static constexpr double MU_ENGRAVING_DPI = 2540; // Same as mu::engraving::DPI. TODO: pass as parameter.
+    static constexpr double MU_ENGRAVING_DPI = 1200; // Same as mu::engraving::DPI. TODO: pass as parameter.
     Font f = font();
     double scaledPointSize = f.pointSizeF() * MU_ENGRAVING_DPI / deviceLogicalDpi();
     f.setPointSizeF(scaledPointSize);
