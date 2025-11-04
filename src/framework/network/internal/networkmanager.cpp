@@ -23,7 +23,6 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QTimer>
 #include <QEventLoop>
 #include <QUrl>
 
@@ -33,12 +32,11 @@
 using namespace muse;
 using namespace muse::network;
 
-static constexpr int NET_TIMEOUT_MS = 60000;
-
 NetworkManager::NetworkManager(QObject* parent)
     : QObject(parent)
 {
     m_manager = new QNetworkAccessManager(this);
+    m_manager->setTransferTimeout(); // Use Qt's default timeout (30s)
 }
 
 NetworkManager::~NetworkManager()
@@ -124,7 +122,7 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
         prepareReplyReceive(reply, m_incomingData);
     }
 
-    Ret ret = waitForReplyFinished(reply, NET_TIMEOUT_MS);
+    Ret ret = waitForReplyFinished(reply);
     if (!ret) {
         LOGE() << ret.toString();
     }
@@ -193,7 +191,6 @@ void NetworkManager::abort()
         m_reply->abort();
     }
 
-    m_isAborted = true;
     m_progress.finish(make_ret(Err::Abort));
 }
 
@@ -215,11 +212,6 @@ void NetworkManager::closeDevice(QIODevice* device)
     if (device && device->isOpen()) {
         device->close();
     }
-}
-
-bool NetworkManager::isAborted() const
-{
-    return m_isAborted;
 }
 
 void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IncomingDevice* incomingData)
@@ -251,40 +243,20 @@ void NetworkManager::prepareReplyTransmit(QNetworkReply* reply)
     });
 }
 
-Ret NetworkManager::waitForReplyFinished(QNetworkReply* reply, int timeoutMs)
+Ret NetworkManager::waitForReplyFinished(QNetworkReply* reply)
 {
-    QTimer timeoutTimer;
-    timeoutTimer.setSingleShot(true);
-    m_isAborted = false;
-
-    bool isTimeout = false;
-    connect(&timeoutTimer, &QTimer::timeout, this, [this, &isTimeout]() {
-        isTimeout = true;
-        abort();
-    });
-
-    auto restartTimeoutTimer = [&timeoutTimer, &isTimeout](qint64, qint64) {
-        if (!isTimeout) {
-            timeoutTimer.start();
-        }
-    };
-
-    connect(reply, &QNetworkReply::downloadProgress, this, restartTimeoutTimer);
-    connect(reply, &QNetworkReply::uploadProgress, this, restartTimeoutTimer);
-
     QEventLoop loop;
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
 
     m_reply = reply;
-    timeoutTimer.start(timeoutMs);
     loop.exec();
     m_reply = nullptr;
 
-    if (isTimeout) {
+    if (reply->error() == QNetworkReply::TimeoutError) {
         return make_ret(Err::Timeout);
     }
 
-    if (isAborted()) {
+    if (reply->error() == QNetworkReply::OperationCanceledError) {
         return make_ret(Err::Abort);
     }
 
