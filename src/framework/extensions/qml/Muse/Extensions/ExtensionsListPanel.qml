@@ -71,10 +71,6 @@ Item {
         }
     }
 
-    Component.onCompleted: {
-        extensionsModel.load()
-    }
-
     GradientRectangle {
         id: topGradient
 
