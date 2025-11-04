@@ -817,6 +817,11 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                        || tag == "Arpeggio"
                        || tag == "TremoloSingleChord") {
                 // Elements that can be attached only to a Chord
+                if (destTrack >= maxTrack) {
+                    LOGD() << "No track for " << tag;
+                    e.skipCurrentElement();
+                    continue;
+                }
                 Measure* meas = score->tick2measure(destTick);
                 Segment* seg = meas ? meas->undoGetSegment(SegmentType::ChordRest, destTick) : nullptr;
                 if (!seg) {
@@ -839,6 +844,11 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                 el->setParent(cr);
                 score->undoAddElement(el);
             } else if (tag == "Fermata") {
+                if (destTrack >= maxTrack) {
+                    LOGD() << "No track for Fermata";
+                    e.skipCurrentElement();
+                    continue;
+                }
                 Measure* meas = score->tick2measure(destTick);
                 Segment* seg = meas ? meas->undoGetSegment(SegmentType::ChordRest, destTick) : nullptr;
                 if (!seg) {
@@ -854,6 +864,11 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                 b->setParent(seg);
                 score->undoAddElement(b);
             } else if (tag == "Breath") {
+                if (destTrack >= maxTrack) {
+                    LOGD() << "No track for Breath";
+                    e.skipCurrentElement();
+                    continue;
+                }
                 Measure* meas = score->tick2measure(destTick);
                 Segment* seg = meas ? meas->undoGetSegment(SegmentType::Breath, destTick) : nullptr;
                 if (!seg) {
@@ -876,6 +891,11 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                        || tag == "Capo"
                        || tag == "HarpPedalDiagram"
                        || tag == "StringTunings") {
+                if (destTrack >= maxTrack) {
+                    LOGD() << "No track for " << tag;
+                    e.skipCurrentElement();
+                    continue;
+                }
                 // Text elements that can be attached to ChordRest or TimeTick segments
                 Measure* meas = score->tick2measure(destTick);
                 Segment* seg = meas ? meas->undoGetChordRestOrTimeTickSegment(destTick) : nullptr;
@@ -906,7 +926,7 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                        || tag == "Pedal") {
                 // Spanners
                 if (destTrack >= maxTrack) {
-                    LOGD("PasteSymbols: no track for %s", tag.ascii());
+                    LOGD() << "No track for " << tag;
                     e.skipCurrentElement();
                     continue;
                 }

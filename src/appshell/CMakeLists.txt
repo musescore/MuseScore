@@ -139,7 +139,8 @@ if (NOT OS_IS_MAC)
     )
 
     # we use QKeyMapper to fix https://github.com/musescore/MuseScore/issues/10181
-    set(MODULE_INCLUDE_PRIVATE ${Qt6Gui_PRIVATE_INCLUDE_DIRS} )
+    find_package(Qt6 REQUIRED COMPONENTS GuiPrivate)
+    set(MODULE_LINK ${MODULE_LINK} Qt6::GuiPrivate)
 endif(NOT OS_IS_MAC)
 
 if (QT_SUPPORT)
