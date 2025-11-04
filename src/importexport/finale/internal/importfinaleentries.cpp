@@ -1318,7 +1318,7 @@ void FinaleParser::importEntryAdjustments()
         // Flatten beams as needed
         bool forceFlatten = musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::AlwaysFlat;
         setAndStyleProperty(beam, Pid::BEAM_NO_SLOPE, forceFlatten, true);
-        if (!forceFlatten) {
+        if (!forceFlatten && !muse::RealIsEqual(preferredStart, preferredEnd) && beam->elements().size() > 2) {
             if (musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::OnExtremeNote) {
                 for (ChordRest* cr : beam->elements()) {
                     if (cr == startCr || cr == endCr) {
@@ -1331,29 +1331,51 @@ void FinaleParser::importEntryAdjustments()
                     }
                 }
             } else if (musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::OnStandardNote) {
-                /// @todo improve this algorithm
-                forceFlatten = up && beam->elements().size() > 2;
+                double outermost2 = up ? DBL_MAX : -DBL_MAX;
+                outermost -= stemLengthAdjust * beam->spatium();
+                bool downwardsContour = preferredEnd > preferredStart;
+                bool notesFollowContour = true; // Assume we can slope
+                double prevPos = systemPosByLine(startCr, up);
+
                 for (ChordRest* cr : beam->elements()) {
-                    if (cr == startCr || cr == endCr) {
+                    if (cr == startCr) {
                         continue;
                     }
-                    double beamPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
-                    if (up) {
-                        if (muse::RealIsEqualOrMore(beamPos, outermost)) {
-                            forceFlatten = false;
-                            break;
-                        }
-                    } else {
-                        if (beamPos > outermost) {
-                            forceFlatten = true;
-                            break;
+
+                    double contourPos = systemPosByLine(cr, up);
+
+                    // If the note doesn't follow the contour, don't slope.
+                    // Notes having the same line is not good enough and disallows sloping.
+                    if (notesFollowContour) {
+                        if (downwardsContour) {
+                            notesFollowContour = contourPos > prevPos;
+                        } else {
+                            notesFollowContour = contourPos < prevPos;
                         }
                     }
+                    if (cr != endCr) {
+                        outermost2 = up ? std::min(outermost2, contourPos) : std::max(outermost2, contourPos);
+                        prevPos = contourPos;
+                    }
                 }
+
+                // If the notes don't follow the contour, we flatten if the outermost not-start-end note
+                // is closer to the middle staff line than the outermost.
+                // If their distances are equal, we only flatten if the outermost note is lower (pitchwise) for up, or higher (pitchwise) for down.
+                if (!notesFollowContour) {
+                    double dist = std::abs(outermost - middleLinePos);
+                    double dist2 = std::abs(outermost2 - middleLinePos);
+                    if (up ? outermost2 > outermost : outermost2 < outermost) {
+                        forceFlatten = dist2 < dist;
+                    } else {
+                        forceFlatten = muse::RealIsEqualOrLess(dist2, dist);
+                    }
+                }
+                outermost = getOutermost();
             }
         }
         if (forceFlatten) {
-            preferredStart = up ? std::min(preferredStart, preferredEnd) : std::max(preferredStart, preferredEnd);
+            preferredStart = outermost;
             preferredEnd = preferredStart;
         }
         bool isFlat = forceFlatten || muse::RealIsEqual(preferredStart, preferredEnd);
