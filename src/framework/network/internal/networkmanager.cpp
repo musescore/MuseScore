@@ -102,12 +102,12 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
         _headers = configuration()->defaultHeaders();
     }
 
-    for (QNetworkRequest::KnownHeaders knownHeader: _headers.knownHeaders.keys()) {
-        request.setHeader(knownHeader, _headers.knownHeaders[knownHeader]);
+    for (auto it = _headers.knownHeaders.cbegin(); it != _headers.knownHeaders.cend(); ++it) {
+        request.setHeader(it.key(), it.value());
     }
 
-    for (const QByteArray& rawHeader: _headers.rawHeaders.keys()) {
-        request.setRawHeader(rawHeader, _headers.rawHeaders[rawHeader]);
+    for (auto it = _headers.rawHeaders.cbegin(); it != _headers.rawHeaders.cend(); ++it) {
+        request.setRawHeader(it.key(), it.value());
     }
 
     m_progress.start();
@@ -177,6 +177,7 @@ QNetworkReply* NetworkManager::receiveReply(RequestType requestType, const QNetw
     }
     }
 
+    UNREACHABLE;
     return nullptr;
 }
 
@@ -238,7 +239,7 @@ void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IncomingDevice* i
 
 void NetworkManager::prepareReplyTransmit(QNetworkReply* reply)
 {
-    connect(reply, &QNetworkReply::uploadProgress, [this](const qint64 curr, const qint64 total) {
+    connect(reply, &QNetworkReply::uploadProgress, this, [this](qint64 curr, qint64 total) {
         m_progress.progress(curr, total);
     });
 }
