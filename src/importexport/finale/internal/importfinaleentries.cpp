@@ -980,6 +980,9 @@ void FinaleParser::importEntries()
         if (chord->stemDirection() == DirectionV::AUTO) {
             if (chord->measure()->hasVoices(chord->staffIdx(), chord->measure()->tick(), chord->measure()->endTick())) {
                 up = !(chord->track() & 1);
+            } else if (chord->isGrace()) {
+                // Can't be set further up due to layers
+                up = true;
             } else if (chord->staffMove() == 0) {
                 int middleLine = chord->staffType()->lines() - 1;
                 if (chord->staff()->isTabStaff(chord->segment()->tick())) {
@@ -1041,6 +1044,9 @@ static bool computeUpCase(Beam* beam, double middleLinePos)
         ChordRest* startCr = beam->elements().front();
         if (startCr->measure()->hasVoices(beam->staffIdx(), startCr->tick(), beam->elements().back()->endTick() - startCr->tick())) {
             return !(beam->track() & 1);
+        }
+        if (startCr->isGrace()) {
+            return true;
         }
         // This ugly calculation is needed for cross-staff beams.
         // But even for non-cross beams, Finale's auto direction can differ.
@@ -1222,7 +1228,8 @@ void FinaleParser::importEntryAdjustments()
         // Calculate non-adjusted position, in system coordinates
         ChordRest* startCr = beam->elements().front();
         ChordRest* endCr = beam->elements().back();
-        double stemLengthAdjust =  (up ? -1.0 : 1.0) * doubleFromEvpu(musxOptions().stemOptions->stemLength);
+        double stemLengthAdjust =  (up ? -1.0 : 1.0) * doubleFromEvpu(musxOptions().stemOptions->stemLength)
+                                   * (startCr->isGrace() ? m_score->style().styleD(Sid::graceNoteMag) : 1.0);
         double preferredStart = systemPosByLine(startCr, up) + stemLengthAdjust * startCr->spatium();
         double preferredEnd = systemPosByLine(endCr, up) + stemLengthAdjust * endCr->spatium();
         auto getInnermost = [&]() {
