@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_INTERACTIVEPROVIDER_H
-#define MUSE_UI_INTERACTIVEPROVIDER_H
+#pragma once
 
 #include <QObject>
 #include <QVariant>
@@ -30,6 +29,7 @@
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
 #include "../iinteractiveprovider.h"
 #include "../iinteractiveuriregister.h"
 #include "../imainwindow.h"
@@ -56,6 +56,7 @@ class InteractiveProvider : public QObject, public IInteractiveProvider, public 
 {
     Q_OBJECT
 
+    Inject<IUiConfiguration> config = { this };
     Inject<IInteractiveUriRegister> uriRegister = { this };
     Inject<IMainWindow> mainWindow = { this };
     Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
@@ -149,5 +150,3 @@ private:
     bool m_isSelectColorOpened = false;
 };
 }
-
-#endif // MUSE_UI_INTERACTIVEPROVIDER_H

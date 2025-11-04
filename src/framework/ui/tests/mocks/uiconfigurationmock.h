@@ -108,5 +108,8 @@ public:
     MOCK_METHOD(int, flickableMaxVelocity, (), (const, override));
 
     MOCK_METHOD(int, tooltipDelay, (), (const, override));
+
+    MOCK_METHOD(std::vector<QColor>, colorDialogCustomColors, (), (const, override));
+    MOCK_METHOD(void, setColorDialogCustomColors, (const std::vector<QColor>&), (override));
 };
 }
