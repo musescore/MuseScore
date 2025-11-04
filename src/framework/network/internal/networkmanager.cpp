@@ -245,20 +245,20 @@ void NetworkManager::prepareReplyTransmit(QNetworkReply* reply)
 
 Ret NetworkManager::waitForReplyFinished(QNetworkReply* reply)
 {
+    IF_ASSERT_FAILED(reply) {
+        return make_ret(Err::UnknownError);
+    }
+
+    if (reply->isFinished()) {
+        return errorFromReply(reply);
+    }
+
     QEventLoop loop;
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
 
     m_reply = reply;
     loop.exec();
     m_reply = nullptr;
-
-    if (reply->error() == QNetworkReply::TimeoutError) {
-        return make_ret(Err::Timeout);
-    }
-
-    if (reply->error() == QNetworkReply::OperationCanceledError) {
-        return make_ret(Err::Abort);
-    }
 
     return errorFromReply(reply);
 }
@@ -271,7 +271,11 @@ Ret NetworkManager::errorFromReply(const QNetworkReply* reply) const
 
     Ret ret = muse::make_ok();
 
-    if (reply->error() != QNetworkReply::NoError) {
+    if (reply->error() == QNetworkReply::TimeoutError) {
+        ret = make_ret(Err::Timeout);
+    } else if (reply->error() == QNetworkReply::OperationCanceledError) {
+        ret = make_ret(Err::Abort);
+    } else if (reply->error() != QNetworkReply::NoError) {
         ret.setCode(static_cast<int>(Err::NetworkError));
     }
 
