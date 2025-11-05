@@ -178,6 +178,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
         /// Not detected / needed: VOLTA, SLUR, HAMMER_ON_PULL_OFF, NOTELINE, HARMONIC_MARK, (GLISSANDO, GUITAR_BEND)
         return ElementType::TEXTLINE;
     }();
+    context.logger()->logInfo(String(u"Adding spanner of %1 type to custom library").arg(TConv::userName(elementType).translated()));
 
     if (elementType == ElementType::HAIRPIN) {
         if (beginText.contains(u"decresc", CaseSensitivity::CaseInsensitive)
