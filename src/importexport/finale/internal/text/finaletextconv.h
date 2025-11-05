@@ -52,6 +52,9 @@ public:
     /// @brief Only returns a String if *all* characters in the input text can be mapped to `<sym>` tags.
     static std::optional<engraving::String> symIdInsertsFromStdString(const std::string& text, const musx::dom::MusxInstance<musx::dom::FontInfo>& font);
 
+    /// @brief Returns the SMuFL-equivalent codepoint, including optional codepoints, of the given character in the given font.
+    static std::optional<char32_t> mappedChar(char32_t c, const musx::dom::MusxInstance<musx::dom::FontInfo>& font);
+
     /// @brief Maps a codepoint in the font's encoding to String containing Smufl-encoded character. If the input font is Smufl, it may be an optional codepoint.
     static std::optional<engraving::String> smuflStringFromFinaleChar(char32_t c, const musx::dom::MusxInstance<musx::dom::FontInfo>& font);
 };

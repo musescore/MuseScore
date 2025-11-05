@@ -104,6 +104,24 @@ std::optional<String> FinaleTextConv::symIdInsertsFromStdString(const std::strin
     return result;
 }
 
+std::optional<char32_t> FinaleTextConv::mappedChar(char32_t c, const MusxInstance<FontInfo>& font)
+{
+    if (!font->calcIsSMuFL()) { /// @todo See note above about `calcIsSMuFL`
+        if (const smufl_mapping::LegacyGlyphInfo* legacyGlyphInfo = smufl_mapping::getLegacyGlyphInfo(font->getName(), c)) {
+            if (legacyGlyphInfo->source == smufl_mapping::SmuflGlyphSource::Smufl) { /// @todo do something with optional glyphs from Finale and/or Bravura?
+                if (legacyGlyphInfo->codepoint.has_value()) {
+                    return legacyGlyphInfo->codepoint.value();
+                }
+                if (const smufl_mapping::SmuflGlyphInfo* smuflGlyphInfo = getGlyphInfo(legacyGlyphInfo->name, legacyGlyphInfo->source)) {
+                    return smuflGlyphInfo->codepoint;
+                }
+            }
+        }
+        return std::nullopt;
+    }
+    return c;
+}
+
 std::optional<String> FinaleTextConv::smuflStringFromFinaleChar(char32_t c, const MusxInstance<FontInfo>& font)
 {
     if (!font->calcIsSMuFL()) { /// @todo See note above about `calcIsSMuFL`
