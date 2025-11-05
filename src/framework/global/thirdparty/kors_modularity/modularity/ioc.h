@@ -25,6 +25,7 @@ SOFTWARE.
 #pragma once
 
 #include <memory>
+#include <mutex>
 #include <shared_mutex>
 #include <string_view>
 
