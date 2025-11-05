@@ -85,7 +85,7 @@ void MStyle::set(const Sid t, const PropertyValue& val)
 
 double MStyle::defaultSpatium() const
 {
-    return DefaultStyle::resolveStyleDefaults(defaultStyleVersion()).spatium();
+    return StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue().toDouble();
 }
 
 void MStyle::precomputeValues()
