@@ -508,7 +508,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                         // Shortcut for dead notes
                         note->setProperty(Pid::HEAD_GROUP, NoteHeadGroup::HEAD_CROSS);
                     } else {
-                        /// @todo some noteheads may have parentheses baked in, but not in SymId yet.
+                        /// @todo set parentheses based on 0xF5D1u to 0xF5D4u (optional glyphs in q-whole order)
+                        /// more noteheads may have parentheses baked in, but not in SymId yet.
                         setNoteHeadSymbol(note, FinaleTextConv::symIdFromFinaleChar(noteInfo->altNhead, noteFont));
                     }
                 }

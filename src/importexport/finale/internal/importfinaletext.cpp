@@ -439,6 +439,8 @@ ReadableRepeatText::ReadableRepeatText(const FinaleParser& context, const MusxIn
     tempText.replace(u"<sym>segno</sym>", u"Segno");
     tempText.replace(u"<sym>segnoSerpent1</sym>", u"Segno");
     tempText.replace(u"<sym>segnoSerpent2</sym>", u"Segno");
+    tempText.replace(String::fromUcs4(0xF404u), u"Segno"); // Japanese-style Segno
+    tempText.replace(String::fromUcs4(0xF405u), u"Coda"); // Japanese-style Coda
     tempText.replace(u"<sym>coda</sym>", u"Coda");
     tempText.replace(u"<sym>codaSquare</sym>", u"Coda");
     tempText.replace(u"<sym>dalSegno</sym>", u"D.S.");
