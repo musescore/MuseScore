@@ -43,8 +43,8 @@ if (OS_IS_WIN)
         add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/platform/win/asio/asiosdk)
 
         set(AUDIO_ASIODRIVER_SRC
-            ${CMAKE_CURRENT_LIST_DIR}/platform/win/asio/asiodiscovery.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/platform/win/asio/asiodiscovery.h
+            ${CMAKE_CURRENT_LIST_DIR}/platform/win/asio/asioaudiodriver.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/platform/win/asio/asioaudiodriver.h
         )
 
         set_source_files_properties(

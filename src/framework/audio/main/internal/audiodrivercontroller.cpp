@@ -22,6 +22,8 @@
 
 #include "audiodrivercontroller.h"
 
+#include "muse_framework_config.h"
+
 #ifdef MUSE_MODULE_AUDIO_JACK
 #include "audio/driver/platform/jack/jackaudiodriver.h"
 #endif
@@ -37,8 +39,9 @@
 #ifdef Q_OS_WIN
 //#include "audio/driver/platform/win/winmmdriver.h"
 //#include "audio/driver/platform/win/wincoreaudiodriver.h"
-#include "audio/driver/platform/win/wasapiaudiodriver.h"
+//#include "audio/driver/platform/win/wasapiaudiodriver.h"
 #include "audio/driver/platform/win/wasapiaudiodriver2.h"
+#include "audio/driver/platform/win/asio/asioaudiodriver.h"
 #endif
 
 #ifdef Q_OS_MACOS
@@ -87,7 +90,13 @@ void AudioDriverController::init()
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new WinmmDriver());
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new CoreAudioDriver());
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver());
+
+#ifdef MUSE_MODULE_AUDIO_ASIO
+    m_audioDriver = std::shared_ptr<IAudioDriver>(new AsioAudioDriver());
+#else
     m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver2());
+#endif
+
 #endif
 
 #ifdef Q_OS_MACOS
