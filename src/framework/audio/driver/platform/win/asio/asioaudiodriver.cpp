@@ -98,19 +98,33 @@ static void s_bufferSwitch(long index, ASIOBool /*processNow*/)
     for (size_t s = 0; s < procSamplesTotal; s += channels) {
         for (size_t c = 0; c < channels; c++) {
             const float sample = proc_buf.at(s + c);
-            uint8_t* out = (uint8_t*)s_data.bufferInfos[c].buffers[index];
+            void* out = s_data.bufferInfos[c].buffers[index];
 
             const ASIOSampleType type = s_data.channelInfos[c].type;
             switch (type) {
-            case ASIOSTInt24LSB: { // 3 bytes
-                int32_t val = std::clamp(sample, -1.0f, 1.0f) * 8388608.0f;
-                size_t outIndex = preChannelSample * 3;
-                out[outIndex]=(val) & 0xff;
-                out[outIndex + 1]=(val >> 8) & 0xff;
-                out[outIndex + 2]=(val >> 16) & 0xff;
+            case ASIOSTInt16LSB: {
+                int16_t* out16 = (int16_t*)out;
+                out16[preChannelSample] = std::clamp(sample, -1.0f, 1.0f) * 32767.0f; // 1^15
+            } break;
+            case ASIOSTInt24LSB: {
+                uint8_t* out8 = (uint8_t*)out;
+                int32_t val = std::clamp(sample, -1.0f, 1.0f) * 8388608.0f; // 1^23
+                size_t outIndex = preChannelSample * 3; // 3 bytes
+                out8[outIndex]=(val) & 0xff;
+                out8[outIndex + 1]=(val >> 8) & 0xff;
+                out8[outIndex + 2]=(val >> 16) & 0xff;
+            } break;
+            case ASIOSTInt32LSB: {
+                int32_t* out32 = (int32_t*)out;
+                out32[preChannelSample] = std::clamp(sample, -1.0f, 1.0f) * 2147483647.0f; // 1^31
+            } break;
+            case ASIOSTFloat32LSB: {
+                float* outF32 = (float*)out;
+                outF32[preChannelSample] = sample;
             } break;
             default:
                 // not supported yet
+                //LOGD() << "not supported yet type: " << type;
                 continue;
             }
         }
@@ -253,7 +267,7 @@ bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
         if (devices.empty()) {
             return false;
         }
-        m_deviceId = devices.at(1).id;
+        m_deviceId = devices.at(0).id;
     }
 
     return doOpen(m_deviceId, spec, activeSpec);
