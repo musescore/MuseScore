@@ -1515,6 +1515,10 @@ void FinaleParser::importEntryAdjustments()
                 }
                 rightmostNoteX += dotDistance;
                 for (engraving::Note* n : toChord(chordRest)->notes()) {
+                    // This can happen when dots are shared on layout
+                    if (n->dots().empty()) {
+                        continue;
+                    }
                     double difference = n->dots().front()->pos().x() - rightmostNoteX;
                     for (NoteDot* nd : n->dots()) {
                         nd->rxoffset() -= difference;
