@@ -1106,6 +1106,14 @@ DirectionV FinaleParser::calculateTieDirection(Tie* tie)
     if (layerInfo && layerInfo->freezTiesToStems && muse::contains(m_fixedChords, c)) {
         return stemDir;
     }
+    // Check in both layers where possible
+    if (tie->startNote() && tie->endNote()) {
+        Chord* c2 = c == tie->startNote()->chord() ? tie->endNote()->chord() : tie->startNote()->chord();
+        const auto& otherLayerInfo = layerAttributes(c2->tick(), c2->track());
+        if (otherLayerInfo && otherLayerInfo->freezTiesToStems && muse::contains(m_fixedChords, c2)) {
+            return c2->beam() ? c2->beam()->direction() : c2->stemDirection();
+        }
+    }
 
     if (c->staffMove() != 0) {
         return c->staffMove() > 0 ? DirectionV::UP : DirectionV::DOWN;
@@ -1230,6 +1238,8 @@ static TiePlacement calculateTiePlacement(Tie* tie, bool useOuterPlacement)
 
     // Single-note chords
     if ((!startChord || startChord->notes().size() <= 1) && (!endChord || endChord->notes().size() <= 1)) {
+        /// @todo while the ties are all set to outside placement, checking for direction gives
+        /// a better vidual result in some cases. Possible due to staff line avoidance, but needs testing.
         bool directionMatch = (!startChord || tie->slurDirection() != startChord->stemDirection())
                               || (!endChord || tie->slurDirection() != endChord->stemDirection());
         return (useOuterPlacement && directionMatch) ? outsideValue : insideValue;
