@@ -51,19 +51,15 @@ static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySo
 
 void AudioConfiguration::init()
 {
-    int defaultBufferSize = 0;
-#if defined(Q_OS_WASM)
-    defaultBufferSize = 8192;
-#else
-    defaultBufferSize = 1024;
-#endif
-    settings()->setDefaultValue(AUDIO_BUFFER_SIZE_KEY, Val(defaultBufferSize));
+    settings()->setDefaultValue(AUDIO_BUFFER_SIZE_KEY, Val(1024));
     settings()->valueChanged(AUDIO_BUFFER_SIZE_KEY).onReceive(nullptr, [this](const Val&) {
         m_driverBufferSizeChanged.notify();
         updateSamplesToPreallocate();
     });
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+#if defined(Q_OS_WIN)
+    settings()->setDefaultValue(AUDIO_API_KEY, Val("WASAPI"));
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     settings()->setDefaultValue(AUDIO_API_KEY, Val("PipeWire"));
 #endif
     settings()->valueChanged(AUDIO_API_KEY).onReceive(nullptr, [this](const Val&) {

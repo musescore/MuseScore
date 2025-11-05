@@ -91,11 +91,17 @@ void AudioDriverController::init()
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new CoreAudioDriver());
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver());
 
+    std::string name = configuration()->currentAudioApi();
+    if (name == "ASIO") {
 #ifdef MUSE_MODULE_AUDIO_ASIO
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new AsioAudioDriver());
+        m_audioDriver = std::shared_ptr<IAudioDriver>(new AsioAudioDriver());
 #else
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver2());
+        LOGW() << ASIO is selected but is not available, WASAPI will be used
+            m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver2());
 #endif
+    } else {
+        m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver2());
+    }
 
 #endif
 
@@ -127,7 +133,17 @@ muse::async::Notification AudioDriverController::currentAudioApiChanged() const
 
 std::vector<std::string> AudioDriverController::availableAudioApiList() const
 {
-#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+#if defined(Q_OS_WIN)
+    std::vector<std::string> names {
+        "WASAPI"
+    };
+
+#ifdef MUSE_MODULE_AUDIO_ASIO
+    names.push_back("ASIO");
+#endif
+
+    return names;
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     std::vector<std::string> names {
         "ALSA Audio",
         "PipeWire",
