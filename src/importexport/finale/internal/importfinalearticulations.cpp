@@ -138,6 +138,44 @@ static ArticulationAnchor calculateAnchor(const MusxInstance<details::Articulati
     return ArticulationAnchor::AUTO;
 }
 
+struct OrnamentDefinition {
+    char32_t character;
+    SymId symId;
+    AccidentalType accAbove = AccidentalType::NONE;
+    AccidentalType accBelow = AccidentalType::NONE;
+};
+
+static constexpr OrnamentDefinition ornamentList[] = {
+    { 0xF5B2u, SymId::ornamentTrill, AccidentalType::FLAT,    AccidentalType::NONE },
+    { 0xF5B3u, SymId::ornamentTrill, AccidentalType::NATURAL, AccidentalType::NONE },
+    { 0xF5B4u, SymId::ornamentTrill, AccidentalType::SHARP,   AccidentalType::NONE },
+    { 0xF5B5u, SymId::ornamentTurn, AccidentalType::FLAT,     AccidentalType::NONE },
+    { 0xF5B6u, SymId::ornamentTurn, AccidentalType::FLAT,     AccidentalType::SHARP },
+    { 0xF5B7u, SymId::ornamentTurn, AccidentalType::NONE,     AccidentalType::FLAT },
+    { 0xF5B8u, SymId::ornamentTurn, AccidentalType::NATURAL,  AccidentalType::NONE },
+    { 0xF5B9u, SymId::ornamentTurn, AccidentalType::NONE,     AccidentalType::NATURAL },
+    { 0xF5BAu, SymId::ornamentTurn, AccidentalType::SHARP,    AccidentalType::NONE },
+    { 0xF5BBu, SymId::ornamentTurn, AccidentalType::SHARP,    AccidentalType::FLAT },
+    { 0xF5BAu, SymId::ornamentTurn, AccidentalType::NONE,     AccidentalType::SHARP },
+};
+
+static const std::unordered_set<SymId> ornamentSymbols = {
+    SymId::ornamentTurnInverted,
+    SymId::ornamentMordent,
+    SymId::ornamentTrill,
+    SymId::ornamentTurn,
+    SymId::ornamentShortTrill,
+    SymId::ornamentTremblement,
+    SymId::ornamentUpPrall,
+    SymId::ornamentPrallUp,
+    SymId::ornamentPrallDown,
+    SymId::ornamentPrallMordent,
+    SymId::ornamentUpMordent,
+    SymId::ornamentDownMordent,
+    SymId::ornamentPrecompMordentUpperPrefix,
+    SymId::ornamentTurnSlash,
+};
+
 void FinaleParser::importArticulations()
 {
     /// @todo offset calculations
@@ -153,6 +191,7 @@ void FinaleParser::importArticulations()
 
             const MusxInstance<FontInfo>& mainFont = articDef->fontMain ? articDef->fontMain : options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Articulation);
             SymId mainSym = FinaleTextConv::symIdFromFinaleChar(articDef->charMain, mainFont);
+            std::optional<char32_t> mainChar = FinaleTextConv::mappedChar(articDef->charMain, mainFont).value_or(0);
             // const MusxInstance<FontInfo> altFont = articDef->fontAlt ? articDef->fontAlt : options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Articulation);
             // SymId altSym = FinaleTextConv::symIdFromFinaleChar(articDef->charAlt, altFont);
 
@@ -262,9 +301,8 @@ void FinaleParser::importArticulations()
 
             // Arpeggios
             if (mainSym == SymId::noSym && !c->arpeggio()) {
-                std::optional<char32_t> maybeArpeggio = FinaleTextConv::mappedChar(articDef->charMain, mainFont);
                 // The Finale symbol is an optional character and not in SMuFL
-                if (maybeArpeggio.has_value() && maybeArpeggio.value() == 0xF700u) {
+                if (mainChar.has_value() && mainChar.value() == 0xF700u) {
                     Arpeggio* arpeggio = Factory::createArpeggio(c);
                     arpeggio->setTrack(c->track());
                     arpeggio->setArpeggioType(ArpeggioType::NORMAL);
@@ -284,27 +322,21 @@ void FinaleParser::importArticulations()
             }
 
             /// @todo Ornament properties, chordlines, fingerings, trills, figured bass?, pedal lines?
-            Articulation* a;
-            switch (mainSym) {
-                case SymId::ornamentTurnInverted:
-                case SymId::ornamentMordent:
-                case SymId::ornamentTrill:
-                case SymId::ornamentTurn:
-                case SymId::ornamentShortTrill:
-                case SymId::ornamentTremblement:
-                case SymId::ornamentUpPrall:
-                case SymId::ornamentPrallUp:
-                case SymId::ornamentPrallDown:
-                case SymId::ornamentPrallMordent:
-                case SymId::ornamentUpMordent:
-                case SymId::ornamentDownMordent:
-                case SymId::ornamentPrecompMordentUpperPrefix:
-                case SymId::ornamentTurnSlash:
-                    a = toArticulation(Factory::createOrnament(c));
-                    break;
-                default:
-                    a = Factory::createArticulation(c);
-                    break;
+            Articulation* a = nullptr;
+
+            if (muse::contains(ornamentSymbols, mainSym)) {
+                a = toArticulation(Factory::createOrnament(c));
+            } else {
+                for (OrnamentDefinition od : ornamentList) {
+                    if (od.character == mainChar) {
+                        mainSym = od.symId;
+                        a = toArticulation(Factory::createOrnament(c)); /// @todo accidentals
+                        break;
+                    }
+                }
+            }
+            if (!a) {
+                a = Factory::createArticulation(c);
             }
 
             // Other articulations
