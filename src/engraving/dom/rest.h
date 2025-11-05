@@ -69,10 +69,6 @@ public:
 
     void hack_toRestType();
 
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-    EngravingObjectList scanChildren() const override;
-
     Rest& operator=(const Rest&) = delete;
 
     Rest* clone() const override { return new Rest(*this, false); }
@@ -81,7 +77,7 @@ public:
     double mag() const override;
     double intrinsicMag() const override;
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
     void setTrack(track_idx_t val) override;
 
     bool acceptDrop(EditData&) const override;

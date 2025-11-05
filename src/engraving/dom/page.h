@@ -49,10 +49,6 @@ class Page final : public EngravingItem
     DECLARE_CLASSOF(ElementType::PAGE)
 
 public:
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-    EngravingObjectList scanChildren() const override;
-
     Page* clone() const override { return new Page(*this); }
     const std::vector<System*>& systems() const { return m_systems; }
     std::vector<System*>& systems() { return m_systems; }
@@ -71,7 +67,7 @@ public:
     double headerExtension() const;
     double footerExtension() const;
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
 
     std::vector<EngravingItem*> items(const RectF& r);
     std::vector<EngravingItem*> items(const PointF& p);

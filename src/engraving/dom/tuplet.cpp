@@ -283,17 +283,13 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
 //   scanElements
 //---------------------------------------------------------
 
-void Tuplet::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void Tuplet::scanElements(std::function<void(EngravingItem*)> func)
 {
-    for (EngravingObject* child : scanChildren()) {
-        if (child == m_number && !all) {
-            continue; // don't scan number unless all is true
-        }
-        child->scanElements(data, func, all);
+    if (m_number) {
+        m_number->scanElements(func);
     }
-    if (all || visible() || score()->isShowInvisible()) {
-        func(data, this);
-    }
+
+    func(this);
 }
 
 //---------------------------------------------------------

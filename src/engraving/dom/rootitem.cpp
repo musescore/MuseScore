@@ -57,11 +57,6 @@ void RootItem::init()
     m_dummy->init();
 }
 
-EngravingObject* RootItem::scanParent() const
-{
-    return m_score->scanParent();
-}
-
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 AccessibleItemPtr RootItem::createAccessible()
 {

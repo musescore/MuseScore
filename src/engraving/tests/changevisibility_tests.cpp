@@ -58,7 +58,7 @@ protected:
     {
         std::vector<EngravingItem*> children;
 
-        for (EngravingObject* obj : chord->scanChildren()) {
+        for (EngravingObject* obj : chord->getChildren()) {
             if (obj->isEngravingItem()) {
                 children.push_back(toEngravingItem(obj));
             }
@@ -224,7 +224,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_IgnoredElements)
         ElementType::LYRICS,
     };
 
-    for (EngravingObject* child : chord->scanChildren()) {
+    for (EngravingObject* child : chord->getChildren()) {
         if (muse::contains(IGNORED_TYPES, child->type())) {
             EngravingItem* item = toEngravingItem(child);
             EXPECT_TRUE(item->visible());
@@ -241,7 +241,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_IgnoredElements)
     // [THEN] Everything is visible
     EXPECT_TRUE(note->visible());
 
-    for (EngravingObject* child : chord->scanChildren()) {
+    for (EngravingObject* child : chord->getChildren()) {
         if (muse::contains(IGNORED_TYPES, child->type())) {
             EngravingItem* item = toEngravingItem(child);
             EXPECT_TRUE(item->visible());

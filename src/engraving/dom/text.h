@@ -49,6 +49,8 @@ public:
 
     bool hasVoiceAssignmentProperties() const override;
     VoiceAssignment voiceAssignment() const;
+
+    bool collectForDrawing() const override;
 };
 } // namespace mu::engraving
 

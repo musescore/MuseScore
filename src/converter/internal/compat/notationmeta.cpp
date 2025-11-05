@@ -307,14 +307,13 @@ QJsonObject NotationMeta::pageFormatJson(const mu::engraving::MStyle& style)
     return format;
 }
 
-static void findTextByType(void* data, mu::engraving::EngravingItem* element)
+static void findTextByType(std::pair<TextStyleType, QStringList*>* typeStringsData, mu::engraving::EngravingItem* element)
 {
     if (!element->isTextBase()) {
         return;
     }
 
     const mu::engraving::TextBase* text = toTextBase(element);
-    auto* typeStringsData = static_cast<std::pair<TextStyleType, QStringList*>*>(data);
     if (text->textStyleType() == typeStringsData->first) {
         QStringList* titleStrings = typeStringsData->second;
         Q_ASSERT(titleStrings);
@@ -336,7 +335,7 @@ QJsonObject NotationMeta::typeDataJson(mu::engraving::Score* score)
         QJsonArray typeData;
         QStringList typeTextStrings;
         std::pair<TextStyleType, QStringList*> extendedTitleData = std::make_pair(nameType.second, &typeTextStrings);
-        score->scanElements(&extendedTitleData, findTextByType);
+        score->scanElements([&](EngravingItem* item) { findTextByType(&extendedTitleData, item); });
         for (auto typeStr : typeTextStrings) {
             typeData.append(typeStr);
         }

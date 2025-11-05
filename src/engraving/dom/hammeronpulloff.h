@@ -76,8 +76,7 @@ public:
 
     Color curColor(const rendering::PaintOptions& opt) const override;
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-    EngravingObjectList scanChildren() const override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
 
     void setTrack(track_idx_t idx) override;
     void setSelected(bool f) override;

@@ -160,10 +160,6 @@ public:
     void setScore(Score* s) override;
     Measure* cloneMeasure(Score*, const Fraction& tick, TieMap*);
 
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-    EngravingObjectList scanChildren() const override;
-
     bool isEditable() const override { return false; }
     void checkMeasure(staff_idx_t idx, bool useGapRests = true);
 
@@ -275,7 +271,7 @@ public:
 
     void setEndBarLineType(BarLineType val, track_idx_t track, bool visible = true, Color color = Color());
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
     void createVoice(int track);
     void adjustToLen(Fraction, bool appendRestsIfNecessary = true);
 

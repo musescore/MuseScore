@@ -50,6 +50,10 @@ static bool itemAccepted(const mu::engraving::EngravingItem* item, const mu::eng
         return false;
     }
 
+    if (!item->visible() && !item->score()->isShowInvisible()) {
+        return false;
+    }
+
     if (acceptedTypes.empty()) {
         return true;
     }
@@ -95,9 +99,8 @@ static muse::String chordToNotes(const mu::engraving::Chord* chord)
     return notes.join(u" ");
 }
 
-static void addElementInfoIfNeed(void* data, mu::engraving::EngravingItem* item)
+static void addElementInfoIfNeed(ScannerData* scannerData, mu::engraving::EngravingItem* item)
 {
-    ScannerData* scannerData = static_cast<ScannerData*>(data);
     if (!itemAccepted(item, scannerData->options.acceptedTypes)) {
         return;
     }
@@ -205,7 +208,7 @@ ScoreElementScanner::InstrumentElementMap ScoreElementScanner::scanElements(mu::
     ScannerData data;
     data.options = options;
 
-    score->scanElements(&data, addElementInfoIfNeed, false);
+    score->scanElements([&](mu::engraving::EngravingItem* item) { addElementInfoIfNeed(&data, item); });
 
     return data.elements;
 }

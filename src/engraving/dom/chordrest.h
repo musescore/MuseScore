@@ -65,10 +65,7 @@ public:
     ChordRest& operator=(const ChordRest&) = delete;
     ~ChordRest();
 
-    // Score Tree functions
-    virtual EngravingObject* scanParent() const override;
-    virtual EngravingObjectList scanChildren() const override;
-    virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    virtual void scanElements(std::function<void(EngravingItem*)> func) override;
 
     bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;

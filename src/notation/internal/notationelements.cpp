@@ -158,7 +158,7 @@ std::vector<EngravingItem*> NotationElements::filterElements(const FilterElement
 {
     ElementPattern* pattern = constructElementPattern(elementsOptions);
 
-    score()->scanElements(pattern, mu::engraving::Score::collectMatch);
+    score()->scanElements([&](EngravingItem* item) { mu::engraving::Score::collectMatch(pattern, item); });
 
     std::vector<EngravingItem*> result;
     for (EngravingItem* element: pattern->el) {
@@ -172,7 +172,7 @@ std::vector<EngravingItem*> NotationElements::filterNotes(const FilterNotesOptio
 {
     mu::engraving::NotePattern* pattern = constructNotePattern(notesOptions);
 
-    score()->scanElements(pattern, mu::engraving::Score::collectNoteMatch);
+    score()->scanElements([&](EngravingItem* item) { mu::engraving::Score::collectNoteMatch(pattern, item); });
 
     std::vector<EngravingItem*> result;
     for (EngravingItem* element: pattern->el) {

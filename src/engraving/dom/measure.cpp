@@ -2102,35 +2102,35 @@ bool Measure::isFirstInSection() const
 //   scanElements
 //---------------------------------------------------------
 
-void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void Measure::scanElements(std::function<void(EngravingItem*)> func)
 {
     size_t nstaves = score()->nstaves();
-    if (!all && nstaves == 0) {
+    if (nstaves == 0) {
         return;
     }
 
-    MeasureBase::scanElements(data, func, all);
+    MeasureBase::scanElements(func);
 
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         MStaff* ms = m_mstaves[staffIdx];
         if (ms->measureNumber() && showMeasureNumberOnStaff(staffIdx)) {
-            func(data, ms->measureNumber());
+            func(ms->measureNumber());
         }
 
-        if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show()) && !isCutawayClef(staffIdx)) {
+        if (!(visible(staffIdx) && score()->staff(staffIdx)->show()) && !isCutawayClef(staffIdx)) {
             continue;
         }
 
-        func(data, ms->lines());
+        func(ms->lines());
         if (ms->vspacerUp()) {
-            func(data, ms->vspacerUp());
+            func(ms->vspacerUp());
         }
         if (ms->vspacerDown()) {
-            func(data, ms->vspacerDown());
+            func(ms->vspacerDown());
         }
 
         if (ms->mmRangeText()) {
-            func(data, ms->mmRangeText());
+            func(ms->mmRangeText());
         }
     }
 
@@ -2138,7 +2138,7 @@ void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
         if (!s->enabled()) {
             continue;
         }
-        s->scanElements(data, func, all);
+        s->scanElements(func);
     }
 }
 

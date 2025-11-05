@@ -81,9 +81,8 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
         return;
     }
 
-    const auto doPaint = [](void* context, EngravingItem* item) {
-        PaintParams* ctx = static_cast<PaintParams*>(context);
-        Painter* painter = ctx->painter;
+    const auto doPaint = [&](EngravingItem* item) {
+        Painter* painter = params.painter;
 
         painter->save();
         painter->translate(item->pos()); // necessary for drawing child items
@@ -91,14 +90,14 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
         const Color colorBackup = item->getProperty(Pid::COLOR).value<Color>();
         const Color frameColorBackup = item->getProperty(Pid::FRAME_FG_COLOR).value<Color>();
 
-        if (!ctx->useElementColors) {
-            const Color color = ctx->color;
+        if (!params.useElementColors) {
+            const Color color = params.color;
             item->setProperty(Pid::COLOR, color);
             item->setProperty(Pid::FRAME_FG_COLOR, color);
         }
 
         rendering::PaintOptions opt;
-        opt.invertColors = ctx->colorsInversionEnabled;
+        opt.invertColors = params.colorsInversionEnabled;
 
         engravingRender()->drawItem(item, painter, opt);
 
@@ -108,7 +107,13 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
         painter->restore();
     };
 
-    element->scanElements(&params, doPaint);
+    if (element->isSpanner()) {
+        SpannerSegment* spannerSeg = toSpanner(element)->frontSegment();
+        DO_ASSERT(spannerSeg);
+        spannerSeg->scanElements(doPaint);
+    } else {
+        element->scanElements(doPaint);
+    }
 }
 
 /// Paint a staff centered within a QRect and return the distance from the

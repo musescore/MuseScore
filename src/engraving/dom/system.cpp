@@ -702,34 +702,34 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
 //   scanElements
 //---------------------------------------------------------
 
-void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void System::scanElements(std::function<void(EngravingItem*)> func)
 {
     if (vbox()) {
         return;
     }
     for (Bracket* b : m_brackets) {
-        func(data, b);
+        func(b);
     }
 
     if (m_systemDividerLeft) {
-        func(data, m_systemDividerLeft);
+        func(m_systemDividerLeft);
     }
     if (m_systemDividerRight) {
-        func(data, m_systemDividerRight);
+        func(m_systemDividerRight);
     }
 
     if (m_staffVisibilityIndicator) {
-        func(data, m_staffVisibilityIndicator);
+        func(m_staffVisibilityIndicator);
     }
 
     for (auto i : m_lockIndicators) {
-        func(data, i);
+        func(i);
     }
 
     for (const SysStaff* st : m_staves) {
-        if (all || st->show()) {
+        if (st->show()) {
             for (InstrumentName* t : st->instrumentNames) {
-                func(data, t);
+                func(t);
             }
         }
     }
@@ -758,8 +758,9 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
             }
             v = v1 || v2;       // hide spanner if both chords are hidden
         }
-        if (all || (score()->staff(staffIdx)->show() && m_staves[staffIdx]->show() && v) || spanner->isVolta() || spanner->systemFlag()) {
-            ss->scanElements(data, func, all);
+        if ((score()->staff(staffIdx)->show() && m_staves[staffIdx]->show() && v) || spanner->isVolta()
+            || spanner->systemFlag()) {
+            ss->scanElements(func);
         }
     }
 }

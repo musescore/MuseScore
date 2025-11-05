@@ -716,16 +716,11 @@ void BarLine::endDragGrip(EditData& ed)
 //   scanElements
 //---------------------------------------------------------
 
-void BarLine::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void BarLine::scanElements(std::function<void(EngravingItem*)> func)
 {
-    // if no width (staff has bar lines turned off) and not all requested, do nothing
-    if (RealIsNull(width()) && !all) {
-        return;
-    }
-
-    func(data, this);
+    func(this);
     for (EngravingItem* e : m_el) {
-        e->scanElements(data, func, all);
+        e->scanElements(func);
     }
 }
 

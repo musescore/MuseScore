@@ -1460,14 +1460,14 @@ EngravingItem* Segment::elementAt(track_idx_t track) const
 //   scanElements
 //---------------------------------------------------------
 
-void Segment::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void Segment::scanElements(std::function<void(EngravingItem*)> func)
 {
     bool scanAllTimeSigs = (isType(SegmentType::TimeSigType)
                             && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() != TimeSigPlacement::NORMAL);
     for (size_t track = 0; track < score()->nstaves() * VOICES; ++track) {
         size_t staffIdx = track / VOICES;
         bool thisMeasureVisible = measure()->visible(staffIdx) && score()->staff(staffIdx)->show();
-        if (!all && !scanAllTimeSigs && !thisMeasureVisible) {
+        if (!scanAllTimeSigs && !thisMeasureVisible) {
             Measure* nextMeasure = measure()->nextMeasure();
             bool nextMeasureVisible = nextMeasure
                                       && nextMeasure->system() == measure()->system()
@@ -1483,12 +1483,10 @@ void Segment::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
         if (e == 0) {
             continue;
         }
-        e->scanElements(data, func, all);
+        e->scanElements(func);
     }
     for (EngravingItem* e : annotations()) {
-        if (all || e->systemFlag() || measure()->visible(e->staffIdx())) {
-            e->scanElements(data,  func, all);
-        }
+        e->scanElements(func);
     }
 }
 

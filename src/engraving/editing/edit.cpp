@@ -6510,7 +6510,7 @@ static void undoChangeNoteVisibility(Note* note, bool visible)
         for (const EngravingObject* obj : chord->linkList()) {
             const Chord* linkedChord = toChord(obj);
             chordHasVisibleNote_ = chordHasVisibleNote(linkedChord);
-            for (EngravingObject* child : linkedChord->scanChildren()) {
+            for (EngravingObject* child : linkedChord->getChildren()) {
                 const ElementType type = child->type();
 
                 if (muse::contains(IGNORED_TYPES, type)) {

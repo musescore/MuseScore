@@ -59,23 +59,13 @@ Color HammerOnPullOffSegment::curColor(const rendering::PaintOptions& opt) const
     return SlurSegment::curColor(opt);
 }
 
-void HammerOnPullOffSegment::scanElements(void* data, void (*func)(void*, EngravingItem*), bool all)
+void HammerOnPullOffSegment::scanElements(std::function<void(EngravingItem*)> func)
 {
-    for (EngravingObject* child : scanChildren()) {
-        child->scanElements(data, func, all);
-    }
-
-    func(data, this);
-}
-
-EngravingObjectList HammerOnPullOffSegment::scanChildren() const
-{
-    EngravingObjectList children;
     for (HammerOnPullOffText* hopo : m_hopoText) {
-        children.push_back(hopo);
+        hopo->scanElements(func);
     }
 
-    return children;
+    EngravingItem::scanElements(func);
 }
 
 void HammerOnPullOffSegment::setTrack(track_idx_t idx)

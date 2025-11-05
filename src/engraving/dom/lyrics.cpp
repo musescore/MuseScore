@@ -160,19 +160,6 @@ bool Lyrics::isMelisma() const
 }
 
 //---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void Lyrics::scanElements(void* data, void (* func)(void*, EngravingItem*), bool /*all*/)
-{
-    func(data, this);
-    /* DO NOT ADD EITHER THE LYRICSLINE OR THE SEGMENTS: segments are added through the system each belongs to;
-      LyricsLine is not needed, as it is internally managed.
-      if (_separator)
-            _separator->scanElements(data, func, all); */
-}
-
-//---------------------------------------------------------
 //   paste
 //---------------------------------------------------------
 

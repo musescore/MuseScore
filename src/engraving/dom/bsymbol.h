@@ -40,10 +40,7 @@ public:
 
     Segment* segment() const { return (Segment*)explicitParent(); }
 
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-    EngravingObjectList scanChildren() const override;
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
 
     BSymbol& operator=(const BSymbol&) = delete;
 

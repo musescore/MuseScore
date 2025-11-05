@@ -843,7 +843,7 @@ bool Chord::allNotesTiedToNext() const
 
 bool Chord::allElementsInvisible() const
 {
-    for (EngravingObject* child : scanChildren()) {
+    for (EngravingObject* child : getChildren()) {
         if (toEngravingItem(child)->visible()) {
             return false;
         }
@@ -1213,45 +1213,45 @@ PointF Chord::pagePos() const
 //   scanElements
 //---------------------------------------------------------
 
-void Chord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void Chord::scanElements(std::function<void(EngravingItem*)> func)
 {
     for (Articulation* a : m_articulations) {
-        a->scanElements(data, func, all);
+        a->scanElements(func);
     }
     if (m_hook) {
-        func(data, m_hook);
+        func(m_hook);
     }
     if (m_stem) {
-        func(data, m_stem);
+        func(m_stem);
     }
     if (m_stemSlash) {
-        func(data, m_stemSlash);
+        func(m_stemSlash);
     }
     if (m_arpeggio) {
-        func(data, m_arpeggio);
+        func(m_arpeggio);
     }
     if (m_tremoloTwoChord && (tremoloChordType() != TremoloChordType::TremoloSecondChord)) {
-        func(data, m_tremoloTwoChord);
+        func(m_tremoloTwoChord);
     }
     if (m_tremoloSingleChord) {
-        func(data, m_tremoloSingleChord);
+        func(m_tremoloSingleChord);
     }
     const Staff* st = staff();
     if ((st && st->showLedgerLines(tick())) || !st) {       // also for palette
         for (LedgerLine* ll : m_ledgerLines) {
-            func(data, ll);
+            func(ll);
         }
     }
     for (Note* note : m_notes) {
-        note->scanElements(data, func, all);
+        note->scanElements(func);
     }
     for (Chord* chord : m_graceNotes) {
-        chord->scanElements(data, func, all);
+        chord->scanElements(func);
     }
     for (EngravingItem* e : el()) {
-        e->scanElements(data, func, all);
+        e->scanElements(func);
     }
-    ChordRest::scanElements(data, func, all);
+    ChordRest::scanElements(func);
 }
 
 //---------------------------------------------------------
@@ -2679,10 +2679,10 @@ void Chord::setNoteEventLists(std::vector<NoteEventList>& ell)
 //---------------------------------------------------------
 void Chord::styleChanged()
 {
-    auto updateElementsStyle = [](void*, EngravingItem* e) {
+    auto updateElementsStyle = [](EngravingItem* e) {
         e->styleChanged();
     };
-    scanElements(0, updateElementsStyle);
+    scanElements(updateElementsStyle);
 }
 
 void Chord::computeKerningExceptions()

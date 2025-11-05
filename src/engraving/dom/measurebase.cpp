@@ -391,7 +391,7 @@ void MeasureBase::triggerLayout() const
 //   scanElements
 //---------------------------------------------------------
 
-void MeasureBase::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void MeasureBase::scanElements(std::function<void(EngravingItem*)> func)
 {
     if (isMeasure()) {
         for (EngravingItem* e : m_el) {
@@ -400,16 +400,16 @@ void MeasureBase::scanElements(void* data, void (* func)(void*, EngravingItem*),
                 LOGD("MeasureBase::scanElements: bad staffIdx %zu in element %s", staffIdx, e->typeName());
             }
             if ((e->track() == muse::nidx) || e->systemFlag() || toMeasure(this)->visible(staffIdx)) {
-                e->scanElements(data, func, all);
+                e->scanElements(func);
             }
         }
     } else {
         for (EngravingItem* e : m_el) {
-            e->scanElements(data, func, all);
+            e->scanElements(func);
         }
     }
     if (isBox()) {
-        func(data, this);
+        func(this);
     }
 }
 

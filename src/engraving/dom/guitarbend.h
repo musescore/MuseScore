@@ -163,7 +163,7 @@ public:
 
     double lineWidth() const;
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
 
     GuitarBendText* bendText() const { return m_text; }
     void setBendText(GuitarBendText* t) { m_text = t; }

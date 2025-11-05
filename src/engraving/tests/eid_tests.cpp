@@ -34,24 +34,23 @@ class Engraving_EIDTests : public ::testing::Test
 {
 };
 
-static void checkRegister(void*, EngravingItem* item)
-{
-    EID eid = item->eid();
-    if (eid.isValid()) {
-        EngravingObject* registeredItem = item->masterScore()->eidRegister()->itemFromEID(item->eid());
-        EXPECT_TRUE(registeredItem);
-        EXPECT_EQ(registeredItem, item);
-    }
-}
-
 TEST_F(Engraving_EIDTests, testRegisteredItems)
 {
     MasterScore* score = ScoreRW::readScore(DATA_DIR + u"random_elements.mscx");
     EXPECT_TRUE(score);
 
-    score->scanElements(nullptr, checkRegister, true);
+    auto checkRegister = [&](EngravingItem* item) {
+        EID eid = item->eid();
+        if (eid.isValid()) {
+            EngravingObject* registeredItem = item->masterScore()->eidRegister()->itemFromEID(item->eid());
+            EXPECT_TRUE(registeredItem);
+            EXPECT_EQ(registeredItem, item);
+        }
+    };
+
+    score->scanElements(checkRegister);
     for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-        checkRegister(nullptr, mb);
+        checkRegister(mb);
     }
 
     delete score;
