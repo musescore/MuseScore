@@ -245,7 +245,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>38</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -280,8 +280,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>652</width>
-                <height>710</height>
+                <width>654</width>
+                <height>723</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -924,8 +924,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>641</width>
-             <height>1560</height>
+             <width>633</width>
+             <height>1534</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_72">
@@ -3227,8 +3227,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>716</width>
-             <height>731</height>
+             <width>695</width>
+             <height>684</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -4075,7 +4075,7 @@
                 <item row="0" column="0">
                  <widget class="QLabel" name="label_7">
                   <property name="text">
-                   <string>Symbol:</string>
+                   <string>Symbol size:</string>
                   </property>
                   <property name="buddy">
                    <cstring>dividerLeftSym</cstring>
@@ -4169,7 +4169,7 @@
                 <item row="1" column="0">
                  <widget class="QLabel" name="label_30">
                   <property name="text">
-                   <string>Size:</string>
+                   <string>Scale:</string>
                   </property>
                  </widget>
                 </item>
@@ -4267,7 +4267,7 @@
                 <item row="0" column="0">
                  <widget class="QLabel" name="label_66">
                   <property name="text">
-                   <string>Symbol:</string>
+                   <string>Symbol size:</string>
                   </property>
                   <property name="buddy">
                    <cstring>dividerRightSym</cstring>
@@ -4364,7 +4364,7 @@
                 <item row="1" column="0">
                  <widget class="QLabel" name="label_31">
                   <property name="text">
-                   <string>Size:</string>
+                   <string>Scale:</string>
                   </property>
                  </widget>
                 </item>
@@ -4478,8 +4478,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>656</width>
-             <height>720</height>
+             <width>414</width>
+             <height>745</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_38">
@@ -5281,8 +5281,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>641</width>
-             <height>787</height>
+             <width>615</width>
+             <height>817</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_67">
@@ -6004,8 +6004,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>652</width>
-                <height>710</height>
+                <width>547</width>
+                <height>576</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54" rowstretch="0,0,0,2">
@@ -6892,8 +6892,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>656</width>
-             <height>720</height>
+             <width>621</width>
+             <height>677</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_68">
@@ -10397,8 +10397,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>482</width>
-             <height>541</height>
+             <width>750</width>
+             <height>776</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64" stretch="0,0,2">
@@ -11986,8 +11986,8 @@ followed by dashes</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>650</width>
-                <height>708</height>
+                <width>582</width>
+                <height>768</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">

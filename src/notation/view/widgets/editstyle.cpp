@@ -776,11 +776,15 @@ EditStyle::EditStyle(QWidget* parent)
     static const SymId ids[] = {
         SymId::systemDivider, SymId::systemDividerLong, SymId::systemDividerExtraLong
     };
-    for (SymId id : ids) {
-        const QString& un = SymNames::translatedUserNameForSymId(id);
-        AsciiStringView n = SymNames::nameForSymId(id);
-        dividerLeftSym->addItem(un,  QVariant(QString(n.toQLatin1String())));
-        dividerRightSym->addItem(un, QVariant(QString(n.toQLatin1String())));
+    static const TranslatableString names [] {
+        TranslatableString("engraving", "Normal"),
+        TranslatableString("engraving", "Long"),
+        TranslatableString("engraving", "Extra long"),
+    };
+    for (size_t i = 0; i < 3; ++i) {
+        AsciiStringView n = SymNames::nameForSymId(ids[i]);
+        dividerLeftSym->addItem(names[i].qTranslated(),  QVariant(QString(n.toQLatin1String())));
+        dividerRightSym->addItem(names[i].qTranslated(), QVariant(QString(n.toQLatin1String())));
     }
 
     // ====================================================
