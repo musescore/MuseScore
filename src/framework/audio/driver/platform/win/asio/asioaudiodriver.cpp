@@ -401,6 +401,11 @@ void AsioAudioDriver::close()
     s_data.bufferInfos = nullptr;
     delete[] s_data.channelInfos;
     s_data.channelInfos = nullptr;
+
+    // don't use
+    // ASIOExit();
+
+    s_data.drivers.removeCurrentDriver();
 }
 
 bool AsioAudioDriver::isOpened() const
@@ -420,7 +425,20 @@ async::Channel<AsioAudioDriver::Spec> AsioAudioDriver::activeSpecChanged() const
 
 bool AsioAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
 {
-    return false;
+    bool result = true;
+
+    if (isOpened()) {
+        close();
+        Spec spec = s_data.activeSpec;
+        spec.output.samplesPerChannel = bufferSize;
+        result = open(spec, nullptr);
+    }
+
+    if (result) {
+        m_outputDeviceBufferSizeChanged.notify();
+    }
+
+    return result;
 }
 
 async::Notification AsioAudioDriver::outputDeviceBufferSizeChanged() const
@@ -430,7 +448,20 @@ async::Notification AsioAudioDriver::outputDeviceBufferSizeChanged() const
 
 bool AsioAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
 {
-    return false;
+    bool result = true;
+
+    if (isOpened()) {
+        close();
+        Spec spec = s_data.activeSpec;
+        spec.output.sampleRate = sampleRate;
+        result = open(spec, nullptr);
+    }
+
+    if (result) {
+        m_outputDeviceSampleRateChanged.notify();
+    }
+
+    return result;
 }
 
 async::Notification AsioAudioDriver::outputDeviceSampleRateChanged() const
@@ -440,12 +471,35 @@ async::Notification AsioAudioDriver::outputDeviceSampleRateChanged() const
 
 std::vector<unsigned int> AsioAudioDriver::availableOutputDeviceBufferSizes() const
 {
-    return {};
+    if (!isOpened()) {
+        return {
+            128,
+            256,
+            512,
+            1024,
+            2048,
+        };
+    }
+
+    std::vector<unsigned int> result;
+
+    samples_t n = s_data.deviceMetrics.maxSize;
+    samples_t min = s_data.deviceMetrics.minSize;
+
+    while (n >= min) {
+        result.push_back(n);
+        n /= 2;
+    }
+
+    return result;
 }
 
 std::vector<unsigned int> AsioAudioDriver::availableOutputDeviceSampleRates() const
 {
-    return {};
+    return {
+        44100,
+        48000
+    };
 }
 
 AudioDeviceID AsioAudioDriver::outputDevice() const
@@ -455,12 +509,34 @@ AudioDeviceID AsioAudioDriver::outputDevice() const
 
 bool AsioAudioDriver::selectOutputDevice(const AudioDeviceID& id)
 {
-    return false;
+    bool result = true;
+
+    if (m_deviceId == id) {
+        return result;
+    }
+
+    m_deviceId = id;
+
+    if (isOpened()) {
+        close();
+        Spec spec = s_data.activeSpec;
+
+        //! NOTE We are trying to open a new device with the default value;
+        //! it is not known what it was before.
+        spec.output.samplesPerChannel = 1024;
+        result = open(spec, nullptr);
+    }
+
+    if (result) {
+        m_outputDeviceChanged.notify();
+    }
+
+    return result;
 }
 
 bool AsioAudioDriver::resetToDefaultOutputDevice()
 {
-    return false;
+    return selectOutputDevice(AudioDeviceID());
 }
 
 async::Notification AsioAudioDriver::outputDeviceChanged() const
