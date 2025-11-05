@@ -96,8 +96,8 @@ void AudioDriverController::init()
 #ifdef MUSE_MODULE_AUDIO_ASIO
         m_audioDriver = std::shared_ptr<IAudioDriver>(new AsioAudioDriver());
 #else
-        LOGW() << ASIO is selected but is not available, WASAPI will be used
-            m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver2());
+        LOGW() << "ASIO is selected but is not available, WASAPI will be used";
+        m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver2());
 #endif
     } else {
         m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver2());
