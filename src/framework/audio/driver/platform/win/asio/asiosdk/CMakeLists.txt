@@ -48,6 +48,11 @@ set(MODULE_INCLUDE
     ${ASIO_SDK_PATH}/ASIOSDK/host/pc
     )
 
+set(MODULE_DEF
+    -DIEEE754_64FLOAT
+    -DNATIVE_INT64
+)
+
 set(MODULE_USE_UNITY OFF)
 
 # ASIO SDK is written without UNICODE support (it uses variables like char*).

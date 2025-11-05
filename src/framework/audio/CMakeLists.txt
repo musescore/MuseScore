@@ -113,6 +113,12 @@ set(MODULE_LINK ${MODULE_LINK}
     ${AUDIO_DRIVER_LINK}
 )
 
+set(MODULE_DEF
+    # asio
+    -DIEEE754_64FLOAT
+    -DNATIVE_INT64
+)
+
 setup_module()
 
 if (MUSE_MODULE_AUDIO_ASIO)
