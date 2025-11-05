@@ -31,6 +31,7 @@
 
 #include "types/string.h"
 
+#include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
@@ -61,14 +62,14 @@ static engraving::Note* findClosestNote(const MusxInstance<details::Articulation
     // Attach to correct note based on vertical position
     if (c->notes().size() > 1) {
         // This is a nonsense calculation atm
-        double referencePos = n->pos().y() - n->headHeight() / 2;
+        double referencePos = n->y() + n->headHeight() / 2;
         if (articAssign->overridePlacement) {
             referencePos -= doubleFromEvpu(articAssign->vertOffset) * SPATIUM20;
         }
         referencePos -= doubleFromEvpu(articDef->yOffsetMain + articDef->defVertPos) * SPATIUM20;
         double bestMatch = DBL_MAX;
         for (engraving::Note* note : c->notes()) {
-            double noteDist = std::abs(note->pos().y() - referencePos);
+            double noteDist = std::abs(note->y() - referencePos);
             if (noteDist < bestMatch) {
                 bestMatch = noteDist;
                 n = note;
@@ -259,7 +260,28 @@ void FinaleParser::importArticulations()
                 continue;
             }
 
-            /// @todo Arpeggios; Their symbol is not in SMuFL.
+            // Arpeggios
+            if (mainSym == SymId::noSym && !c->arpeggio()) {
+                std::optional<char32_t> maybeArpeggio = FinaleTextConv::mappedChar(articDef->charMain, mainFont);
+                // The Finale symbol is an optional character and not in SMuFL
+                if (maybeArpeggio.has_value() && maybeArpeggio.value() == 0xF700u) {
+                    Arpeggio* arpeggio = Factory::createArpeggio(c);
+                    arpeggio->setTrack(c->track());
+                    arpeggio->setArpeggioType(ArpeggioType::NORMAL);
+                    // arpeggio->setUserLen1(double * SPATIUM20);
+                    // arpeggio->setUserLen2(double * SPATIUM20);
+                    // arpeggio->setSpan(int);
+                    arpeggio->setPlayArpeggio(articDef->playArtic);
+                    // Playback values in finale are EDUs by default, or in % by non-default (exact workings needs to be investigated)
+                    // MuseScore is relative to BPM 120 (8 notes take the spread time beats).
+                    Fraction totalArpDuration = eduToFraction(articDef->startTopNoteDelta - articDef->startBotNoteDelta);
+                    double beatsPerSecondRatio = m_score->tempo(c->segment()->tick()).val / 2.0; // We are this much faster/slower than 120 bpm
+                    double timeIn120BPM = totalArpDuration.toDouble() / beatsPerSecondRatio;
+                    arpeggio->setStretch(timeIn120BPM * 8.0 / c->notes().size());
+                    arpeggio->setParent(c);
+                    c->setArpeggio(arpeggio);
+                }
+            }
 
             /// @todo Ornament properties, chordlines, fingerings, trills, figured bass?, pedal lines?
             Articulation* a;
