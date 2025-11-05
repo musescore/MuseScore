@@ -196,6 +196,12 @@ public:
         return *this;
     }
 
+    template <typename... U, typename OnResolve>
+    Promise<U...> then(const Asyncable *receiver, OnResolve &&onResolveF);
+
+    template <typename ... U, typename OnResolve, typename OnReject>
+    Promise<U...> then(const Asyncable *receiver, OnResolve &&onResolveF, OnReject &&onRejectF);
+
 private:
     Promise() = default;
 
@@ -245,5 +251,44 @@ template<typename ... T>
 inline Promise<T...> make_promise(typename Promise<T...>::BodyResolve f, PromiseType type = PromiseType::AsyncByPromise)
 {
     return Promise<T...>(f, type);
+}
+
+template <typename ... T>
+template <typename ... U, typename OnResolve>
+Promise<U...> Promise<T...>::then(const Asyncable *receiver, OnResolve &&onResolveF) {
+    if (m_data->rejectCh != nullptr) {
+        return make_promise<U...>([this, receiver, onResolveF](auto resolve, auto reject) {
+            this->onResolve(receiver, [onResolveF, resolve](const T&... args) {
+                onResolveF(args ..., resolve);
+            });
+            this->onReject(receiver, [reject](int code, const std::string& msg) {
+                (void)reject(code, msg);
+            });
+            return Promise<U...>::Result::unchecked();
+        }, PromiseType::AsyncByBody);
+    } else {
+        return make_promise<U...>([this, receiver, onResolveF](auto resolve) {
+            this->onResolve(receiver, [onResolveF, resolve](const T&... args) {
+                onResolveF(args ..., resolve);
+            });
+            return Promise<U...>::Result::unchecked();
+        }, PromiseType::AsyncByBody);
+    }
+}
+
+template <typename ... T>
+template <typename ... U, typename OnResolve, typename OnReject>
+Promise<U...> Promise<T...>::then(const Asyncable *receiver, OnResolve &&onResolveF, OnReject &&onRejectF) {
+    return make_promise<U...>([this, receiver, onResolveF, onRejectF](auto resolve, auto reject) {
+        this->onResolve(receiver, [onResolveF, resolve, reject](const T&... args) {
+            onResolveF(args ..., resolve, reject);
+        });
+        if (this->m_data->rejectCh != nullptr) {
+            this->onReject(receiver, [onRejectF, resolve, reject](int code, const std::string& msg) {
+                onRejectF(code, msg, resolve, reject);
+            });
+        }
+        return Promise<U...>::Result::unchecked();
+    }, PromiseType::AsyncByBody);
 }
 }

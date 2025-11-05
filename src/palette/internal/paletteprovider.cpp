@@ -339,34 +339,29 @@ bool UserPaletteController::move(const QModelIndex& sourceParent, int sourceRow,
     return false;
 }
 
-void UserPaletteController::showHideOrDeleteDialog(const std::string& question,
-                                                   std::function<void(AbstractPaletteController::RemoveAction)> resultHandler) const
+async::Promise<UserPaletteController::RemoveAction> UserPaletteController::showHideOrDeleteDialog(const std::string& question) const
 {
     int hideButton = int(IInteractive::Button::CustomButton) + 1;
     int deleteButton = hideButton + 1;
 
-    auto result = interactive()->question(std::string(), question, {
+    return interactive()->question(std::string(), question, {
         IInteractive::ButtonData(hideButton, muse::trc("palette", "Hide")),
         IInteractive::ButtonData(deleteButton, muse::trc("palette", "Delete permanently")),
         interactive()->buttonData(IInteractive::Button::Cancel)
-    });
-
-    result.onResolve(this, [deleteButton, hideButton, resultHandler](const IInteractive::Result& res) {
+    })
+           .then<RemoveAction>(this, [deleteButton, hideButton](const IInteractive::Result& res, auto resolve) {
         RemoveAction action = RemoveAction::NoAction;
         if (res.isButton(deleteButton)) {
             action = RemoveAction::DeletePermanently;
         } else if (res.isButton(hideButton)) {
             action = RemoveAction::Hide;
         }
-
-        resultHandler(action);
+        resolve(action);
     });
 }
 
 void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, int customCount)
 {
-    using RemoveAction = AbstractPaletteController::RemoveAction;
-
     if (removeIndices.empty() || !canEdit(removeIndices[0].parent())) {
         return;
     }
@@ -388,7 +383,10 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
                                    ? muse::trc("palette", "Do you want to hide this custom palette cell or permanently delete it?")
                                    : muse::trc("palette", "Do you want to hide these custom palette cells or permanently delete them?");
 
-            showHideOrDeleteDialog(question,  [=](RemoveAction action) { remove(removeIndices, action); });
+            showHideOrDeleteDialog(question)
+            .onResolve(this, [=](RemoveAction action) {
+                remove(removeIndices, action);
+            });
             return;
         } else {
             std::string question = customCount == 1
@@ -411,7 +409,8 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
                                    ? muse::trc("palette", "Do you want to hide this custom palette or permanently delete it?")
                                    : muse::trc("palette", "Do you want to hide these custom palettes or permanently delete them?");
 
-            showHideOrDeleteDialog(question,  [=](RemoveAction action) { remove(removeIndices, action); });
+            showHideOrDeleteDialog(question)
+            .onResolve(this, [=](RemoveAction action) { remove(removeIndices, action); });
             return;
         } else {
             action = RemoveAction::Hide;
@@ -424,8 +423,6 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
 void UserPaletteController::remove(const QModelIndexList& unsortedRemoveIndices,
                                    AbstractPaletteController::RemoveAction action)
 {
-    using RemoveAction = AbstractPaletteController::RemoveAction;
-
     if (action == RemoveAction::NoAction) {
         return;
     }
