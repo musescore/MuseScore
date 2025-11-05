@@ -205,7 +205,13 @@ endif ()
 set (MSCORE_APPEND_SRC)
 
 if (OS_IS_WIN)
-    list(APPEND MSCORE_APPEND_SRC ${WINDOWS_ICONS_RC})
+    set(MANIFEST_FILE_NAME "${EXECUTABLE_NAME}.manifest")
+    configure_file("configs/app_win.manifest.in" ${MANIFEST_FILE_NAME} @ONLY)
+
+    list(APPEND MSCORE_APPEND_SRC
+        ${WINDOWS_ICONS_RC}
+        "${CMAKE_CURRENT_BINARY_DIR}/${MANIFEST_FILE_NAME}"
+    )
 endif()
 
 if (MUE_CONFIGURATION_IS_APPWEB)
