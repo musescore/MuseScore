@@ -79,6 +79,31 @@ std::string AsioAudioDriver::name() const
     return "asio";
 }
 
+constexpr uint16_t swap16(uint16_t val)
+{
+    return ((val & 0xFF00) >> 8) | ((val & 0x00FF) << 8);
+}
+
+constexpr uint32_t swap32(uint32_t val)
+{
+    return ((val & 0xFF000000) >> 24)
+           | ((val & 0x00FF0000) >> 8)
+           | ((val & 0x0000FF00) << 8)
+           | ((val & 0x000000FF) << 24);
+}
+
+constexpr uint64_t swap64(uint64_t val)
+{
+    return ((val & 0xFF00000000000000ULL) >> 56)
+           | ((val & 0x00FF000000000000ULL) >> 40)
+           | ((val & 0x0000FF0000000000ULL) >> 24)
+           | ((val & 0x000000FF00000000ULL) >> 8)
+           | ((val & 0x00000000FF000000ULL) << 8)
+           | ((val & 0x0000000000FF0000ULL) << 24)
+           | ((val & 0x000000000000FF00ULL) << 40)
+           | ((val & 0x00000000000000FFULL) << 56);
+}
+
 static void s_bufferSwitch(long index, ASIOBool /*processNow*/)
 {
     const IAudioDriver::Spec& active = s_data.activeSpec;
@@ -94,7 +119,13 @@ static void s_bufferSwitch(long index, ASIOBool /*processNow*/)
     uint8_t* stream = reinterpret_cast<uint8_t*>(&proc_buf[0]);
     active.callback(nullptr, stream, (int)(procSamplesTotal * sizeof(float)));
 
-    size_t preChannelSample = 0;
+    constexpr float MAX_S16 = 32767.0f;
+    constexpr float MAX_S18 = 131071.0f;
+    constexpr float MAX_S20 = 524287.0f;
+    constexpr float MAX_S24 = 8388607.0f;
+    constexpr float MAX_S32 = 2147483647.0f;
+
+    size_t outIndex = 0;
     for (size_t s = 0; s < procSamplesTotal; s += channels) {
         for (size_t c = 0; c < channels; c++) {
             const float sample = proc_buf.at(s + c);
@@ -102,25 +133,116 @@ static void s_bufferSwitch(long index, ASIOBool /*processNow*/)
 
             const ASIOSampleType type = s_data.channelInfos[c].type;
             switch (type) {
+            // MSB
+            case ASIOSTInt16MSB: {
+                int16_t* out16 = (int16_t*)out;
+                int16_t val16LSB = std::clamp(sample, -1.0f, 1.0f) * MAX_S16;
+                out16[outIndex] = swap16(val16LSB); // to big-endian
+            } break;
+            case ASIOSTInt24MSB: {
+                uint8_t* out8 = (uint8_t*)out;
+                int32_t val = std::clamp(sample, -1.0f, 1.0f) * MAX_S24;
+                size_t out8Index = outIndex * 3; // 3 bytes
+                out8[out8Index] = (val >> 16) & 0xFF;
+                out8[out8Index] = (val >> 8) & 0xFF;
+                out8[out8Index] = val & 0xFF;
+            } break;
+            case ASIOSTInt32MSB: {
+                int32_t* out32 = (int32_t*)out;
+                int32_t val32LSB = std::clamp(sample, -1.0f, 1.0f) * MAX_S32;
+                out32[outIndex] = swap32(val32LSB); // to big-endian
+            } break;
+            case ASIOSTFloat32MSB: {
+                float* outF32 = (float*)out;
+                union {
+                    float f;
+                    uint32_t i;
+                } converter;
+
+                converter.f = sample;
+                converter.i = swap32(converter.i);
+                outF32[outIndex] = converter.f;
+            } break;
+            case ASIOSTFloat64MSB: {
+                double* outF64 = (double*)out;
+                union {
+                    double d;
+                    uint64_t i;
+                } converter;
+
+                converter.d = static_cast<double>(sample);
+                converter.i = swap64(converter.i);
+                outF64[outIndex] = converter.d;
+            } break;
+
+            // MSB 32 with alignment
+            case ASIOSTInt32MSB16: {
+                int32_t* out32 = (int32_t*)out;
+                int32_t val32LSB = std::clamp(sample, -1.0f, 1.0f) * MAX_S16;
+                out32[outIndex] = swap32(val32LSB << 16); // 16 alignment and to big-endian
+            } break;
+            case ASIOSTInt32MSB18: {
+                int32_t* out32 = (int32_t*)out;
+                int32_t val32LSB = std::clamp(sample, -1.0f, 1.0f) * MAX_S18;
+                out32[outIndex] = swap32(val32LSB << 14); // 18 alignment and to big-endian
+            } break;
+            case ASIOSTInt32MSB20: {
+                int32_t* out32 = (int32_t*)out;
+                int32_t val32LSB = std::clamp(sample, -1.0f, 1.0f) * MAX_S20;
+                out32[outIndex] = swap32(val32LSB << 12); // 20 alignment and to big-endian
+            } break;
+            case ASIOSTInt32MSB24: {
+                int32_t* out32 = (int32_t*)out;
+                int32_t val32LSB = std::clamp(sample, -1.0f, 1.0f) * MAX_S24;
+                out32[outIndex] = swap32(val32LSB << 8); // 24 alignment and to big-endian
+            } break;
+
+            // LSB
             case ASIOSTInt16LSB: {
                 int16_t* out16 = (int16_t*)out;
-                out16[preChannelSample] = std::clamp(sample, -1.0f, 1.0f) * 32767.0f; // 1^15
+                out16[outIndex] = std::clamp(sample, -1.0f, 1.0f) * MAX_S16;
             } break;
             case ASIOSTInt24LSB: {
                 uint8_t* out8 = (uint8_t*)out;
-                int32_t val = std::clamp(sample, -1.0f, 1.0f) * 8388608.0f; // 1^23
-                size_t outIndex = preChannelSample * 3; // 3 bytes
-                out8[outIndex]=(val) & 0xff;
-                out8[outIndex + 1]=(val >> 8) & 0xff;
-                out8[outIndex + 2]=(val >> 16) & 0xff;
+                int32_t val = std::clamp(sample, -1.0f, 1.0f) * MAX_S24;
+                size_t out8Index = outIndex * 3; // 3 bytes
+                out8[out8Index]=(val) & 0xff;
+                out8[out8Index + 1]=(val >> 8) & 0xff;
+                out8[out8Index + 2]=(val >> 16) & 0xff;
             } break;
             case ASIOSTInt32LSB: {
                 int32_t* out32 = (int32_t*)out;
-                out32[preChannelSample] = std::clamp(sample, -1.0f, 1.0f) * 2147483647.0f; // 1^31
+                out32[outIndex] = std::clamp(sample, -1.0f, 1.0f) * MAX_S32;
             } break;
             case ASIOSTFloat32LSB: {
                 float* outF32 = (float*)out;
-                outF32[preChannelSample] = sample;
+                outF32[outIndex] = sample;
+            } break;
+            case ASIOSTFloat64LSB: {
+                double* outF64 = (double*)out;
+                outF64[outIndex] = static_cast<double>(sample);
+            } break;
+
+            // LSB 32 with alignment
+            case ASIOSTInt32LSB16: {
+                int32_t* out32 = (int32_t*)out;
+                int32_t val = std::clamp(sample, -1.0f, 1.0f) * MAX_S16;
+                out32[outIndex] = val & 0x0000FFFF;
+            } break;
+            case ASIOSTInt32LSB18: {
+                int32_t* out32 = (int32_t*)out;
+                int32_t val = std::clamp(sample, -1.0f, 1.0f) * MAX_S18;
+                out32[outIndex] = val & 0x0003FFFF;
+            } break;
+            case ASIOSTInt32LSB20: {
+                int32_t* out32 = (int32_t*)out;
+                int32_t val = std::clamp(sample, -1.0f, 1.0f) * MAX_S20;
+                out32[outIndex] = val & 0x000FFFFF;
+            } break;
+            case ASIOSTInt32LSB24: {
+                int32_t* out32 = (int32_t*)out;
+                int32_t val = std::clamp(sample, -1.0f, 1.0f) * MAX_S20;
+                out32[outIndex] = val & 0x00FFFFFF;
             } break;
             default:
                 // not supported yet
@@ -128,7 +250,7 @@ static void s_bufferSwitch(long index, ASIOBool /*processNow*/)
                 continue;
             }
         }
-        ++preChannelSample;
+        ++outIndex;
     }
 
     // finally if the driver supports the ASIOOutputReady() optimization, do it here, all data are in place
