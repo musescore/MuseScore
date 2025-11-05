@@ -34,6 +34,8 @@ Item {
     property bool isSorterEnabled: false
     property int sortOrder: Qt.AscendingOrder
 
+    property int headerCapitalization: Font.AllUppercase
+
     property alias navigation: navCtrl
 
     signal clicked()
@@ -79,7 +81,7 @@ Item {
 
             text: headerTitle
             horizontalAlignment: Text.AlignLeft
-            font.capitalization: Font.AllUppercase
+            font.capitalization: root.headerCapitalization
             opacity: ui.theme.buttonOpacityNormal
         }
 

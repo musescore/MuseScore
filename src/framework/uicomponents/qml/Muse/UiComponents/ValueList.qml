@@ -50,10 +50,27 @@ Item {
     property alias hasSelection: selectionModel.hasSelection
     readonly property var selection: sortFilterProxyModel.mapSelectionToSource(selectionModel.selection)
 
+    property string headerColor: ui.theme.backgroundPrimaryColor
+    property bool drawZebra: true
+
+    property int keyColumnWidth: 0
+    property bool isKeyEditable: false
+    property int headerCapitalization: Font.AllUppercase
+    property bool startEditByDoubleClick: false
+
     property NavigationSection navigationSection: null
     property int navigationOrderStart: 0
 
+    property alias currentIndex: view.currentIndex
+    readonly property int currentSourceRow: (
+        view.currentIndex >= 0
+            ? sortFilterProxyModel.mapToSource(sortFilterProxyModel.index(view.currentIndex, 0)).row
+            : -1
+    )
+
     signal handleItem(var index, var item)
+    signal keyEdited(int sourceRow, string newKey)
+    signal valueEdited(int sourceRow, string newValue)
 
     QtObject {
         id: prv
@@ -109,6 +126,18 @@ Item {
         model: sortFilterProxyModel
     }
 
+    Rectangle {
+        id: headerBackground
+
+        anchors.fill: header
+
+        color: root.headerColor
+        border.width: 1
+        border.color: ui.theme.strokeColor
+
+        visible: !root.drawZebra
+    }
+
     RowLayout {
         id: header
 
@@ -136,10 +165,12 @@ Item {
 
         ValueListHeaderItem {
             Layout.fillHeight: true
-            Layout.fillWidth: true
+            Layout.preferredWidth: root.keyColumnWidth != 0 ? root.keyColumnWidth : -1
+            Layout.fillWidth: root.keyColumnWidth != 0 ? false : true
             leftMargin: prv.sideMargin
 
             headerTitle: keyTitle
+            headerCapitalization: root.headerCapitalization
             spacing: prv.spacing
             isSorterEnabled: keySorter.enabled
             sortOrder: keySorter.sortOrder
@@ -154,12 +185,15 @@ Item {
         }
 
         ValueListHeaderItem {
-            Layout.preferredWidth: prv.valueItemWidth + prv.sideMargin
+            Layout.preferredWidth: root.keyColumnWidth != 0 ? -1 : prv.valueItemWidth + prv.sideMargin
+            Layout.fillWidth: root.keyColumnWidth != 0 ? true : false
             Layout.fillHeight: true
-            Layout.alignment: Qt.AlignRight
-            rightMargin: prv.sideMargin
+            Layout.alignment: root.keyColumnWidth != 0 ? Qt.AlignLeft : Qt.AlignRight
+            Layout.leftMargin: root.keyColumnWidth != 0 ? prv.sideMargin : 0
+            rightMargin: root.keyColumnWidth != 0 ? 0 : prv.sideMargin
 
             headerTitle: valueTitle
+            headerCapitalization: root.headerCapitalization
             spacing: prv.spacing
             isSorterEnabled: valueSorter.enabled
             sortOrder: valueSorter.sortOrder
@@ -172,6 +206,12 @@ Item {
                 prv.setSorterEnabled(keySorter, false)
             }
         }
+    }
+
+    SeparatorLine {
+        anchors.bottom: header.bottom
+
+        visible: !root.drawZebra
     }
 
     StyledListView {
@@ -212,6 +252,7 @@ Item {
             item: model
 
             property var modelIndex: sortFilterProxyModel.index(model.index, 0)
+            property int sourceRow: sortFilterProxyModel.mapToSource(modelIndex).row
 
             keyRoleName: root.keyRoleName
             valueRoleName: root.valueRoleName
@@ -223,6 +264,11 @@ Item {
 
             isSelected: selectionModel.hasSelection && selectionModel.isSelected(modelIndex)
             readOnly: root.readOnly
+
+            drawZebra: root.drawZebra
+            keyColumnWidth: root.keyColumnWidth
+            isKeyEditable: root.isKeyEditable
+            startEditByDoubleClick: root.startEditByDoubleClick
 
             spacing: prv.spacing
             sideMargin: prv.sideMargin
@@ -250,10 +296,12 @@ Item {
 
             onClicked: {
                 selectionModel.select(modelIndex)
+                view.currentIndex = index
             }
 
             onDoubleClicked: {
                 selectionModel.select(modelIndex)
+                view.currentIndex = index
                 Qt.callLater(root.handleItem, sortFilterProxyModel.mapToSource(modelIndex), item)
             }
 
@@ -265,6 +313,14 @@ Item {
                 if (activeFocus) {
                     view.positionViewAtIndex(index, ListView.Contain)
                 }
+            }
+
+            onKeyEdited: function(newKey) {
+                root.keyEdited(sourceRow, newKey)
+            }
+
+            onValueEdited: function(newVal) {
+                root.valueEdited(sourceRow, newVal)
             }
         }
     }
