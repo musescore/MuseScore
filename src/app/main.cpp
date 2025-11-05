@@ -22,7 +22,6 @@
 
 #include <csignal>
 
-#include <QTextCodec>
 #include <QApplication>
 #include <QStyleHints>
 #include <QQuickWindow>
@@ -35,13 +34,6 @@
 #include "app_config.h"
 
 #include "log.h"
-
-#if (defined (_MSCVER) || defined (_MSC_VER))
-#include <vector>
-#include <algorithm>
-#include <windows.h>
-#include <shellapi.h>
-#endif
 
 #ifndef MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
 static void crashCallback(int signum)
@@ -84,10 +76,6 @@ int main(int argc, char** argv)
     // ====================================================
     // Setup global Qt application variables
     // ====================================================
-
-    // Force the 8-bit text encoding to UTF-8. This is the default encoding on all supported platforms except for MSVC under Windows, which
-    // would otherwise default to the local ANSI code page and cause corruption of any non-ANSI Unicode characters in command-line arguments.
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
     app_init_qrc();
 
@@ -143,43 +131,6 @@ int main(int argc, char** argv)
     QGuiApplication::setDesktopFileName("org.musescore.MuseScore" MUSE_APP_INSTALL_SUFFIX);
 #endif
 
-#if (defined (_MSCVER) || defined (_MSC_VER))
-    // // On MSVC under Windows, we need to manually retrieve the command-line arguments and convert them from UTF-16 to UTF-8.
-    // // This prevents data loss if there are any characters that wouldn't fit in the local ANSI code page.
-
-    auto utf8_encode = [](const wchar_t* wstr) -> std::string
-    {
-        int size_needed = WideCharToMultiByte(CP_UTF8, 0, &wstr[0], -1, 0, 0, 0, 0);
-        std::string strTo(size_needed, 0);
-        WideCharToMultiByte(CP_UTF8, 0, &wstr[0], -1, &strTo[0], size_needed, 0, 0);
-        return strTo;
-    };
-
-    int argc_utf16 = 0;
-    wchar_t** argv_utf16 = CommandLineToArgvW(GetCommandLineW(), &argc_utf16);
-    std::vector<std::string> argsUtf8; // store data
-    for (int i = 0; i < argc_utf16; ++i) {
-        argsUtf8.push_back(utf8_encode(argv_utf16[i]));
-    }
-
-    std::vector<char*> argsUtf8_с; // convert to char*
-    for (std::string& arg : argsUtf8) {
-        argsUtf8_с.push_back(arg.data());
-    }
-
-    // Don't use the arguments passed to main(), because they're in the local ANSI code page.
-    Q_UNUSED(argc);
-    Q_UNUSED(argv);
-
-    int argcFinal = argc_utf16;
-    char** argvFinal = argsUtf8_с.data();
-#else
-
-    int argcFinal = argc;
-    char** argvFinal = argv;
-
-#endif
-
     using namespace muse;
     using namespace mu::app;
 
@@ -189,22 +140,22 @@ int main(int argc, char** argv)
 #ifdef MUE_ENABLE_CONSOLEAPP
     CommandLineParser commandLineParser;
     commandLineParser.init();
-    commandLineParser.parse(argcFinal, argvFinal);
+    commandLineParser.parse(argc, argv);
 
     IApplication::RunMode runMode = commandLineParser.runMode();
     QCoreApplication* qapp = nullptr;
 
     if (runMode == IApplication::RunMode::AudioPluginRegistration) {
-        qapp = new QCoreApplication(argcFinal, argvFinal);
+        qapp = new QCoreApplication(argc, argv);
     } else {
-        qapp = new QApplication(argcFinal, argvFinal);
+        qapp = new QApplication(argc, argv);
     }
 
     commandLineParser.processBuiltinArgs(*qapp);
     CmdOptions opt = commandLineParser.options();
 
 #else
-    QCoreApplication* qapp = new QApplication(argcFinal, argvFinal);
+    QCoreApplication* qapp = new QApplication(argc, argv);
     CmdOptions opt;
     opt.runMode = IApplication::RunMode::GuiApp;
 #endif
