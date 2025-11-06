@@ -195,74 +195,69 @@ MuseScore {
                 }
             }
         }
-        var shouldAnnotate = annotateBox.checked
-        var cursor = curScore.newCursor()
-        var debugString = ""
+        var startPos = curScore.lastMeasure.tick.plus(curScore.lastMeasure.ticks)
+        var endPos = fraction(0, 1)
         for (var i in chordList) {
             var chord = chordList[i]
-            cursor.track = chord.track
-            cursor.rewindToFraction(chord.fraction)
 
-            // Attempt to remove old texts
-            // Since annotation always restates all tunings, we don't need to check for selected here
-            for (var i in cursor.segment.annotations) {
-                var maybeText = cursor.segment.annotations[i]
-                if (maybeText.track == chord.track && maybeText.type == Element.STAFF_TEXT) {
-                    // Ideally: /^-?\d+(\.\d)?$/ - but seems not to work
-                    // The offset check stops us from removing tunings for grace notes -
-                    // an ugly hack but there is no better way at the moment
-                    if (maybeText.offset.y == 0 && /-?\d+(\.\d)?/.test(maybeText.text)) {
-                        removeElement(maybeText)
-                    } else {
-                        for (var j in currentTunings) {
-                            if (matchText == currentTunings[j]) {
-                                removeElement(maybeText)
-                                break
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Apply new tunings
             for (var j in chord.notes) {
                 var note = chord.notes[j]
+                // Attempt to remove old texts
+                // Since annotation always restates all tunings, we don't need to check for selected here
+                for (var k in note.elements) {
+                    // Ideally: /^-?\d+(\.\d)?$/ - but seems not to work
+                    if (note.elements[k].type == Element.TEXT && /-?\d+(\.\d)?/.test(note.elements[k].text)) {
+                        note.remove(note.elements[k])
+                    }
+                }
+                // Then apply new tuning
                 // list selections could be individual notes
                 if (note.selected) {
                     note.tuning = calculateTuningFromIndex(note.pitch % 12)
                 }
             }
-
-            // Add new text if needed
-            if (shouldAnnotate) {
-                var chordOffset = chord.pagePos.x - cursor.segment.pagePos.x
-                function addText(noteIndex, placement) {
-                    var note = chord.notes[noteIndex]
-                    var text = newElement(Element.STAFF_TEXT)
-                    text.text = '' + note.tuning
-                    text.fontSize *= curScore.style.value("smallNoteMag")
-                                     * (chord.noteType != NoteType.NORMAL ? curScore.style.value("graceNoteMag") : 1) // smaller
-                    text.placement = placement
-                    text.offset.x = chordOffset
-                    cursor.add(text)
-                }
-                // even for list selections, we add text to every note in the chord (for clarity)
-                if (cursor.voice == 0 || cursor.voice == 2) {
-                    for (var index = 0; index < chord.notes.length; index++) {
-                        addText(index, Placement.ABOVE)
-                    }
-                } else {
-                    for (var index = chord.notes.length - 1; index >= 0; index--) {
-                        addText(index, Placement.BELOW)
-                    }
-                }
+            if (chord.fraction.lessThan(startPos)) {
+                startPos = chord.fraction
+            }
+            if (chord.fraction.greaterThan(endPos)) {
+                endPos = chord.fraction
             }
         }
 
-        var text = newElement(Element.STAFF_TEXT)
-                    text.text = debugString
-                    cursor.add(text)
+        // Add new text if needed
+        if (annotateBox.checked) {
+            curScore.doLayout(startPos, endPos) // needed for real-time layout calculations later
+            for (var i in chordList) {
+                var chord = chordList[i]
+                var vstaff = curScore.staves[chord.vStaffIdx]
+                var lines = vstaff.lines(chord.fraction)
+                var above = (chord.voice % 2 == 0)
+                var lineScale = vstaff.lineDistance(chord.fraction) * vstaff.staffMag(chord.fraction)
+                var topline = lineScale * Math.min((chord.bbox.y / lineScale) - 1, -1.5)
+                var bottomline = lineScale * (Math.max((chord.bbox.y + chord.bbox.height) / lineScale + 1, lines + 0.5) - 4)
+                var tabStaff = vstaff.isTabStaff(chord.fraction)
 
+                // Even for list selections, we add text to every note in the chord (for clarity)
+                for (var j in chord.notes) {
+                    var note = chord.notes[j]
+                    var text = newElement(Element.TEXT) // This adds the text to the note: Better for grace notes and easier to remove
+                    text.text = note.tuning.toString()
+                    text.fontSize *= curScore.style.value("smallNoteMag")
+                                     // * (chord.noteType != NoteType.NORMAL ? curScore.style.value("graceNoteMag") : 1)
+                    if (above) {
+                        text.placement = Placement.ABOVE
+                        text.align = Align.BASELINE
+                        text.offset.y = (topline + j * -1.25)
+                    } else {
+                        text.placement = Placement.BELOW
+                        text.align = Align.TOP
+                        text.offset.y = (bottomline + (chord.notes.length - 1 - j) * 1.25)
+                    }
+                    text.offset.y -= (tabStaff ? note.string : 0.5 * note.line) * lineScale
+                    note.add(text)
+                }
+            }
+        }
 
         curScore.endCmd()
         return true
