@@ -25,6 +25,7 @@
 using namespace muse::audio;
 using namespace mu::playback;
 using namespace mu::engraving;
+using namespace mu::notation;
 
 static const Segment* findSegmentFrom(const Score* score, const System* system,
                                       const int tickFrom, const staff_idx_t staffIdx)
@@ -133,7 +134,10 @@ void NotationRegionsBeingProcessedModel::load()
         onOnlineSoundsChanged();
     });
 
+    listenViewModeChanges();
+
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        listenViewModeChanges();
         updateRegionsBeingProcessed(m_tracksBeingProcessed);
     });
 
@@ -245,6 +249,18 @@ void NotationRegionsBeingProcessedModel::onIsPlayingChanged()
     if (!m_tracksBeingProcessed.empty()) {
         emit isEmptyChanged();
     }
+}
+
+void NotationRegionsBeingProcessedModel::listenViewModeChanges()
+{
+    INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    notation->viewModeChanged().onNotify(this, [this]() {
+        updateRegionsBeingProcessed(m_tracksBeingProcessed);
+    });
 }
 
 void NotationRegionsBeingProcessedModel::startListeningToProgress(const TrackId trackId)
