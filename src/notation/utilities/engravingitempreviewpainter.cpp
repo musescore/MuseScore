@@ -109,8 +109,9 @@ void EngravingItemPreviewPainter::paintPreviewForActionIcon(mu::engraving::Engra
 
     double DPIscaling = mu::engraving::PPI / params.dpi;
 
+    painter->scale(params.mag, params.mag);
+
     ActionIcon* action = toActionIcon(element);
-    action->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * params.mag * DPIscaling);
 
     engravingRender()->layoutItem(action);
 

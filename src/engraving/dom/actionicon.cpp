@@ -61,16 +61,6 @@ void ActionIcon::setAction(const std::string& actionCode, char16_t icon)
     m_icon = icon;
 }
 
-double ActionIcon::fontSize() const
-{
-    return m_iconFont.pointSizeF();
-}
-
-void ActionIcon::setFontSize(double size)
-{
-    m_iconFont.setPointSizeF(size);
-}
-
 engraving::PropertyValue ActionIcon::getProperty(Pid pid) const
 {
     switch (pid) {
