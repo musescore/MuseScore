@@ -216,6 +216,11 @@ void Painter::restore()
     }
 }
 
+double Painter::deviceLogicalDpi() const
+{
+    return m_provider->deviceLogicalDpi();
+}
+
 void Painter::setWorldTransform(const Transform& matrix, bool combine)
 {
     State& st = editableState();
@@ -420,8 +425,19 @@ void Painter::drawRoundedRect(const RectF& rect, double xRadius, double yRadius)
     drawPath(path);
 }
 
+void Painter::applyFontSizeScaling()
+{
+    static constexpr double MU_ENGRAVING_DPI = 1200; // Same as mu::engraving::DPI. TODO: pass as parameter.
+    Font f = font();
+    double scaledPointSize = f.pointSizeF() * MU_ENGRAVING_DPI / deviceLogicalDpi();
+    f.setPointSizeF(scaledPointSize);
+    setFont(f);
+}
+
 void Painter::drawText(const PointF& point, const String& text)
 {
+    applyFontSizeScaling();
+
     m_provider->drawText(point, text);
     if (extended) {
         extended->drawText(point, text);
@@ -430,22 +446,18 @@ void Painter::drawText(const PointF& point, const String& text)
 
 void Painter::drawText(const RectF& rect, int flags, const String& text)
 {
+    applyFontSizeScaling();
+
     m_provider->drawText(rect, flags, text);
     if (extended) {
         extended->drawText(rect, flags, text);
     }
 }
 
-void Painter::drawTextWorkaround(Font& f, const PointF pos, const String& text)
-{
-    m_provider->drawTextWorkaround(f, pos, text);
-    if (extended) {
-        extended->drawTextWorkaround(f, pos, text);
-    }
-}
-
 void Painter::drawSymbol(const PointF& point, char32_t ucs4Code)
 {
+    applyFontSizeScaling();
+
     m_provider->drawSymbol(point, ucs4Code);
     if (extended) {
         extended->drawSymbol(point, ucs4Code);

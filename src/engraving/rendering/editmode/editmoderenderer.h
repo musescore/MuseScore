@@ -38,6 +38,8 @@ class BarLine;
 class Dynamic;
 class SlurTieSegment;
 class TextBase;
+class TextBlock;
+class TextFragment;
 }
 
 namespace mu::engraving::rendering::editmode {
@@ -59,7 +61,10 @@ private:
                             const PaintOptions& opt);
     static void drawSlurTieSegment(const SlurTieSegment* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
                                    const PaintOptions& opt);
+
     static void drawTextBase(const TextBase* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
                              const PaintOptions& opt);
+    static void draw(const TextBlock& textBlock, const TextBase* item, muse::draw::Painter* painter);
+    static void draw(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter);
 };
 }

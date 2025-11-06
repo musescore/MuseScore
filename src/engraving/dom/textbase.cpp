@@ -24,7 +24,6 @@
 #include <stack>
 
 #include "draw/fontmetrics.h"
-#include "draw/painter.h"
 
 #include "iengravingfont.h"
 
@@ -852,37 +851,6 @@ bool TextFragment::operator ==(const TextFragment& f) const
 }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void TextFragment::draw(Painter* p, const TextBase* t) const
-{
-    Font f(font(t));
-    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-#ifndef Q_OS_MACOS
-    TextBase::drawTextWorkaround(p, f, pos, text);
-#else
-    p->setFont(f);
-    p->drawText(pos, text);
-#endif
-}
-
-//---------------------------------------------------------
-//   drawTextWorkaround
-//---------------------------------------------------------
-
-void TextBase::drawTextWorkaround(Painter* p, Font& f, const PointF& pos, const String& text)
-{
-    double mm = p->worldTransform().m11();
-    if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline() || f.strike())) {
-        p->drawTextWorkaround(f, pos, text);
-    } else {
-        p->setFont(f);
-        p->drawText(pos, text);
-    }
-}
-
-//---------------------------------------------------------
 //   font
 //---------------------------------------------------------
 
@@ -894,9 +862,9 @@ Font TextFragment::font(const TextBase* t) const
     double spatiumScaling = 0.0;
 
     if (t->isInstrumentName()) {
-        spatiumScaling = toInstrumentName(t)->largestStaffSpatium() / SPATIUM20;
+        spatiumScaling = toInstrumentName(t)->largestStaffSpatium() / t->defaultSpatium();
     } else {
-        spatiumScaling = t->spatium() / SPATIUM20;
+        spatiumScaling = t->spatium() / t->defaultSpatium();
     }
 
     if (t->sizeIsSpatiumDependent()) {
@@ -969,12 +937,12 @@ Font TextFragment::font(const TextBase* t) const
                 const Char& c2 = text.at(i + 1);
                 ++i;
                 char32_t v = Char::surrogateToUcs4(c, c2);
-                if (!fm.inFontUcs4(v)) {
+                if (!fm.inFont(v)) {
                     fail = true;
                     break;
                 }
             } else {
-                if (!fm.inFont(c)) {
+                if (!fm.inFont(c.unicode())) {
                     fail = true;
                     break;
                 }
@@ -1004,19 +972,7 @@ Font TextFragment::font(const TextBase* t) const
 }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
 
-void TextBlock::draw(Painter* p, const TextBase* t) const
-{
-    p->translate(0.0, m_y);
-    for (const TextFragment& f : m_fragments) {
-        f.draw(p, t);
-    }
-    p->translate(0.0, -m_y);
-}
-
-//---------------------------------------------------------
 //   fragmentsWithoutEmpty
 //---------------------------------------------------------
 
@@ -2580,7 +2536,7 @@ Font TextBase::font() const
 {
     double m = size();
     if (sizeIsSpatiumDependent()) {
-        m *= spatium() / SPATIUM20;
+        m *= spatium() / defaultSpatium();
     }
     Font f(family(), Font::Type::Unknown);
     f.setPointSizeF(m);

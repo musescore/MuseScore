@@ -106,7 +106,7 @@ RectF LoopMarker::resolveMarkerRectByTick(engraving::Fraction tick) const
     double y = system->staffYpage(0) + system->page()->pos().y();
     double _spatium = score->style().spatium();
 
-    qreal mag = _spatium / mu::engraving::SPATIUM20;
+    qreal mag = _spatium / score->style().defaultSpatium();
     double width = (_spatium * 2.0 + score->engravingFont()->width(mu::engraving::SymId::noteheadBlack, mag)) / 3;
     double height = 6 * _spatium;
 

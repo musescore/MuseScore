@@ -41,27 +41,19 @@ public:
     double ascent(const Font& f) const override;
     double descent(const Font& f) const override;
 
-    bool inFont(const Font& f, Char ch) const override;
-    bool inFontUcs4(const Font& f, char32_t ucs4) const override;
+    bool inFont(const Font& f, char32_t ucs4) const override;
 
     // Text
     double horizontalAdvance(const Font& f, const String& string) const override;
-    double horizontalAdvance(const Font& f, const Char& ch) const override;
+    double horizontalAdvance(const Font& f, char32_t ucs4) const override;
 
     RectF boundingRect(const Font& f, const String& string) const override;
-    RectF boundingRect(const Font& f, const Char& ch) const override;
-    RectF boundingRect(const Font& f, const RectF& r, int flags, const String& string) const override;
-    RectF tightBoundingRect(const Font& f, const String& string) const override;
+    RectF boundingRect(const Font& f, char32_t ucs4) const override;
 
-    // Score symbols
-    RectF symBBox(const Font& f, char32_t ucs4, double DPI_F) const override;
-    double symAdvance(const Font& f, char32_t ucs4, double DPI_F) const override;
+    RectF tightBoundingRect(const Font& f, const String& string) const override;
 
 private:
 
-    FontEngineFT* symEngine(const Font& f) const;
-
     QHash<QString /*family*/, io::path_t> m_symbolsFonts;
-    mutable QHash<QString /*path*/, FontEngineFT*> m_symEngines;
 };
 }

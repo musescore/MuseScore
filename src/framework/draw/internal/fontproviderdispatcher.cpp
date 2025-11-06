@@ -71,14 +71,9 @@ double FontProviderDispatcher::descent(const muse::draw::Font& f) const
     return m_mainFProvider->descent(f);
 }
 
-bool FontProviderDispatcher::inFont(const muse::draw::Font& f, muse::Char ch) const
+bool FontProviderDispatcher::inFont(const muse::draw::Font& f, char32_t ucs4) const
 {
-    return inFontUcs4(f, static_cast<char32_t>(ch.unicode()));
-}
-
-bool FontProviderDispatcher::inFontUcs4(const muse::draw::Font& f, char32_t ucs4) const
-{
-    bool ret = m_mainFProvider->inFontUcs4(f, ucs4);
+    bool ret = m_mainFProvider->inFont(f, ucs4);
     return ret;
 }
 
@@ -88,9 +83,9 @@ double FontProviderDispatcher::horizontalAdvance(const muse::draw::Font& f, cons
     return m_qtFProvider->horizontalAdvance(f, string);
 }
 
-double FontProviderDispatcher::horizontalAdvance(const muse::draw::Font& f, const muse::Char& ch) const
+double FontProviderDispatcher::horizontalAdvance(const muse::draw::Font& f, char32_t ucs4) const
 {
-    return m_qtFProvider->horizontalAdvance(f, ch.unicode());
+    return m_qtFProvider->horizontalAdvance(f, ucs4);
 }
 
 RectF FontProviderDispatcher::boundingRect(const muse::draw::Font& f, const muse::String& string) const
@@ -98,30 +93,12 @@ RectF FontProviderDispatcher::boundingRect(const muse::draw::Font& f, const muse
     return m_qtFProvider->boundingRect(f, string);
 }
 
-RectF FontProviderDispatcher::boundingRect(const muse::draw::Font& f, const muse::Char& ch) const
+RectF FontProviderDispatcher::boundingRect(const muse::draw::Font& f, char32_t ucs4) const
 {
-    return m_qtFProvider->boundingRect(f, ch.unicode());
-}
-
-RectF FontProviderDispatcher::boundingRect(const muse::draw::Font& f, const RectF& r, int flags, const muse::String& string) const
-{
-    UNUSED(r);
-    UNUSED(flags);
-    return boundingRect(f, string);
+    return m_qtFProvider->boundingRect(f, ucs4);
 }
 
 RectF FontProviderDispatcher::tightBoundingRect(const muse::draw::Font& f, const muse::String& string) const
 {
     return m_qtFProvider->tightBoundingRect(f, string);
-}
-
-// Score symbols
-RectF FontProviderDispatcher::symBBox(const muse::draw::Font& f, char32_t ucs4, double dpi_f) const
-{
-    return m_mainFProvider->symBBox(f, ucs4, dpi_f);
-}
-
-double FontProviderDispatcher::symAdvance(const muse::draw::Font& f, char32_t ucs4, double dpi_f) const
-{
-    return m_mainFProvider->symAdvance(f, ucs4, dpi_f);
 }

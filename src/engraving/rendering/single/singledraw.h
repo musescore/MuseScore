@@ -142,6 +142,8 @@ class Tapping;
 class TempoText;
 class Text;
 class TextBase;
+class TextBlock;
+class TextFragment;
 class TextLine;
 class TextLineSegment;
 class TextLineBaseSegment;
@@ -281,6 +283,8 @@ private:
     static void draw(const WhammyBarSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
     static void drawTextBase(const TextBase* item, muse::draw::Painter* painter, const PaintOptions& opt);
+    static void draw(const TextBlock& textBlock, const TextBase* item, muse::draw::Painter* painter);
+    static void draw(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter);
     static void drawTextLineBaseSegment(const TextLineBaseSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
 };
 }

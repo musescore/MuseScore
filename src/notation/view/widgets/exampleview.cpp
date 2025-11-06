@@ -91,7 +91,7 @@ ExampleView::~ExampleView()
 
 void ExampleView::resetMatrix()
 {
-    qreal _spatium = SPATIUM20 * m_defaultScaling;
+    qreal _spatium = score()->style().defaultSpatium() * m_defaultScaling;
     // example would normally be 10sp from top of page; this leaves 3sp margin above
     m_matrix = Transform(m_defaultScaling, 0.0, 0.0, m_defaultScaling, _spatium, -_spatium * 7.0);
 }
@@ -196,7 +196,7 @@ PointF ExampleView::toLogical(const QPointF& point)
 QSize ExampleView::sizeHint() const
 {
     qreal mag = m_defaultScaling;
-    qreal _spatium = SPATIUM20 * mag;
+    qreal _spatium = score()->style().defaultSpatium() * mag;
     // staff is 4sp tall with 3sp margin above; this leaves 3sp margin below
     qreal height = 10.0 * _spatium;
     if (score() && score()->pages().size() > 0) {
@@ -270,8 +270,8 @@ void ExampleView::constraintCanvas(int* dxx)
     Q_ASSERT(m_score->pages().front()->system(0));   // should exist if doLayout ran
 
     // form rectangle bounding the system with a spatium margin and translate relative to view space
-    qreal xstart = m_score->pages().front()->system(0)->ldata()->bbox().left() - SPATIUM20;
-    qreal xend = m_score->pages().front()->system(0)->ldata()->bbox().right() + 2.0 * SPATIUM20;
+    qreal xstart = m_score->pages().front()->system(0)->ldata()->bbox().left() - score()->style().defaultSpatium();
+    qreal xend = m_score->pages().front()->system(0)->ldata()->bbox().right() + 2.0 * score()->style().defaultSpatium();
     QRectF systemScaledViewRect(xstart * m_matrix.m11(), 0, xend * m_matrix.m11(), 0);
     systemScaledViewRect.translate(m_matrix.dx(), 0);
 

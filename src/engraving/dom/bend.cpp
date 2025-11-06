@@ -95,7 +95,7 @@ Font Bend::font(double sp) const
     f.setUnderline(m_fontStyle & FontStyle::Underline);
     f.setStrike(m_fontStyle & FontStyle::Strike);
     double m = m_fontSize;
-    m *= sp / SPATIUM20;
+    m *= sp / defaultSpatium();
 
     f.setPointSizeF(m);
     return f;

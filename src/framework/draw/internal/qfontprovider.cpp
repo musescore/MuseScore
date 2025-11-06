@@ -25,14 +25,8 @@
 #include <QPaintDevice>
 #include <QFontDatabase>
 #include <QFontMetricsF>
-
-#define DISABLED_MUSICSYMBOLS_METRICS
-
-#ifndef DISABLED_MUSICSYMBOLS_METRICS
-#include "fontengineft.h"
-#endif
-
-#include "log.h"
+#include <QRawFont>
+#include <QPainterPath>
 
 using namespace muse;
 using namespace muse::draw;
@@ -46,11 +40,12 @@ public:
     }
 
 protected:
+    static constexpr double MU_ENGRAVING_DPI = 1200; // Same as mu::engraving::DPI. TODO: pass as parameter
     int metric(PaintDeviceMetric m) const override
     {
         switch (m) {
         case QPaintDevice::PdmDpiY:
-            return 360; // same as mu::engraving::DPI
+            return MU_ENGRAVING_DPI;
         default:
             return 1;
         }
@@ -95,21 +90,23 @@ double QFontProvider::descent(const Font& f) const
     return QFontMetricsF(f.toQFont(), &device).descent();
 }
 
-bool QFontProvider::inFont(const Font& f, Char ch) const
+bool QFontProvider::inFont(const Font& f, char32_t ucs4) const
 {
-    return QFontMetricsF(f.toQFont(), &device).inFont(ch);
-}
-
-bool QFontProvider::inFontUcs4(const Font& f, char32_t ucs4) const
-{
-    if (!QFontMetricsF(f.toQFont(), &device).inFontUcs4(ucs4)) {
+    // NOTE: QFontMetricsF::inFontUcs4 is unreliable for our use case because it uses Qt's fallback
+    // system even if the flag noFontMerging is set, and returns true if the character
+    // is found in any of the fallbacks. We need to use instead QRawFont, which represents the
+    // *actual* font, not Qt's interpretation of the query. From QRawFont we can query the glyph index
+    // of a character (zero if not in font) and the bounding rectangle of the actual glyph at that index.
+    QRawFont qRawFont = QRawFont::fromFont(f.toQFont());
+    int glyphIndex = qRawFont.glyphIndexesForString(QString(QChar::fromUcs4(ucs4)))[0];
+    if (glyphIndex == 0) {
         return false;
     }
 
     //! @NOTE some symbols in fonts dont have glyph. For example U+ee80
     //! exists in Bravura.otf but doesn't have glyph
     //! so QFontMetricsF returns true in that case
-    return symBBox(f, ucs4, 1.).isValid();
+    return qRawFont.boundingRect(glyphIndex).isValid();
 }
 
 double QFontProvider::horizontalAdvance(const Font& f, const String& string) const
@@ -117,9 +114,13 @@ double QFontProvider::horizontalAdvance(const Font& f, const String& string) con
     return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(string);
 }
 
-double QFontProvider::horizontalAdvance(const Font& f, const Char& ch) const
+double QFontProvider::horizontalAdvance(const Font& f, char32_t ucs4) const
 {
-    return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(ch);
+    if (Char::requiresSurrogates(ucs4)) {
+        return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(String::fromUcs4(ucs4));
+    }
+
+    return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(static_cast<char16_t>(ucs4));
 }
 
 RectF QFontProvider::boundingRect(const Font& f, const String& string) const
@@ -127,14 +128,27 @@ RectF QFontProvider::boundingRect(const Font& f, const String& string) const
     return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(string));
 }
 
-RectF QFontProvider::boundingRect(const Font& f, const Char& ch) const
+RectF QFontProvider::boundingRect(const Font& f, char32_t ucs4) const
 {
-    return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(ch));
-}
+    if (Char::requiresSurrogates(ucs4)) {
+        return RectF::fromQRectF(QFontMetrics(f.toQFont(), &device).boundingRect(String::fromUcs4(ucs4)));
+    }
 
-RectF QFontProvider::boundingRect(const Font& f, const RectF& r, int flags, const String& string) const
-{
-    return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(r.toQRectF(), flags, string));
+    if (f.type() == Font::Type::MusicSymbol || f.type() == Font::Type::MusicSymbolText) {
+        // QFontMetrics::boundingRect returns pixel values obtained by rasterization of the font.
+        // QPainterPath::boundingRect works from the actual vector shape so it's more accurate.
+        // There is still some discretization going on so we can make it even more accurate by upscaling.
+        // CAUTION: More expensive! Ok for music glyphs because they are cached.
+        QFont qf = f.toQFont();
+        qf = QFont(qf, &device);
+        static constexpr double UPSCALING = 4.0;
+        qf.setPointSizeF(qf.pointSizeF() * UPSCALING);
+        QPainterPath path;
+        path.addText(QPointF(), qf, QString(static_cast<char16_t>(ucs4)));
+        return RectF::fromQRectF(path.boundingRect()).scaled(SizeF(1.0 / UPSCALING, 1.0 / UPSCALING));
+    }
+
+    return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(static_cast<char16_t>(ucs4)));
 }
 
 RectF QFontProvider::tightBoundingRect(const Font& f, const String& string) const
@@ -145,101 +159,4 @@ RectF QFontProvider::tightBoundingRect(const Font& f, const String& string) cons
         return RectF();
     }
     return RectF::fromQRectF(boundingRect);
-}
-
-// Score symbols
-
-RectF QFontProvider::symBBox(const Font& f, char32_t ucs4, double dpi_f) const
-{
-#ifndef DISABLED_MUSICSYMBOLS_METRICS
-    FontEngineFT* engine = symEngine(f);
-    if (!engine) {
-        return RectF();
-    }
-
-    RectF rect = RectF::fromQRectF(engine->bbox(ucs4, dpi_f));
-    if (!rect.isValid()) {
-        for (const auto& fontName : QFont::substitutes(f.family())) {
-            Font subFont(f);
-            subFont.setFamily(fontName, f.type());
-            engine = symEngine(subFont);
-            if (!engine) {
-                continue;
-            }
-
-            rect = RectF::fromQRectF(engine->bbox(ucs4, dpi_f));
-            if (rect.isValid()) {
-                break;
-            }
-        }
-    }
-
-    return rect;
-#else
-    UNUSED(f);
-    UNUSED(ucs4);
-    UNUSED(dpi_f);
-    UNREACHABLE;
-    return RectF();
-#endif
-}
-
-double QFontProvider::symAdvance(const Font& f, char32_t ucs4, double dpi_f) const
-{
-#ifndef DISABLED_MUSICSYMBOLS_METRICS
-    FontEngineFT* engine = symEngine(f);
-    if (!engine) {
-        return 0.0;
-    }
-
-    double symAdvance = engine->advance(ucs4, dpi_f);
-    if (RealIsNull(symAdvance)) {
-        for (const auto& fontName : QFont::substitutes(f.family())) {
-            Font subFont(f);
-            subFont.setFamily(fontName, f.type());
-            engine = symEngine(subFont);
-            if (!engine) {
-                continue;
-            }
-
-            symAdvance = engine->advance(ucs4, dpi_f);
-            if (!RealIsNull(symAdvance)) {
-                break;
-            }
-        }
-    }
-
-    return symAdvance;
-#else
-    UNUSED(f);
-    UNUSED(ucs4);
-    UNUSED(dpi_f);
-    UNREACHABLE;
-    return 0.0;
-#endif
-}
-
-FontEngineFT* QFontProvider::symEngine(const Font& f) const
-{
-#ifndef DISABLED_MUSICSYMBOLS_METRICS
-    QString path = m_symbolsFonts.value(f.family()).toQString();
-    if (path.isEmpty()) {
-        return nullptr;
-    }
-
-    FontEngineFT* engine = m_symEngines.value(path, nullptr);
-    if (!engine) {
-        engine = new FontEngineFT();
-        if (!engine->load(path)) {
-            delete engine;
-            return nullptr;
-        }
-        m_symEngines[path] = engine;
-    }
-    return engine;
-#else
-    UNUSED(f);
-    UNREACHABLE;
-    return nullptr;
-#endif
 }

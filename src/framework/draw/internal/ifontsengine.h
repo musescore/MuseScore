@@ -42,7 +42,7 @@ public:
     virtual double ascent(const Font& f) const = 0;
     virtual double descent(const Font& f) const = 0;
 
-    virtual bool inFontUcs4(const Font& f, char32_t ucs4) const = 0;
+    virtual bool inFont(const Font& f, char32_t ucs4) const = 0;
 
     virtual double horizontalAdvance(const Font& f, const char32_t& ch) const = 0;
     virtual double horizontalAdvance(const Font& f, const std::u32string& text) const = 0;
@@ -50,10 +50,6 @@ public:
     virtual RectF boundingRect(const Font& f, const char32_t& ch) const = 0;
     virtual RectF boundingRect(const Font& f, const std::u32string& text) const = 0;
     virtual RectF tightBoundingRect(const Font& f, const std::u32string& text) const = 0;
-
-    // Score symbols
-    virtual RectF symBBox(const Font& f, char32_t ucs4) const = 0;
-    virtual double symAdvance(const Font& f, char32_t ucs4) const = 0;
 
     // Draw
     virtual std::vector<GlyphImage> render(const Font& f, const std::u32string& text) const = 0;

@@ -189,6 +189,7 @@ public:
     virtual bool isEngravingItem() const override { return true; }
 
     double spatium() const;
+    double defaultSpatium() const;
 
     inline void setFlag(ElementFlag f, bool v)
     {

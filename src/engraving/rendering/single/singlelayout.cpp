@@ -431,7 +431,7 @@ void SingleLayout::layout(Arpeggio* item, const Context& ctx)
     ldata->bottom = ldata->arpeggioHeight;
 
     ldata->setMag(item->staff() ? item->staff()->staffMag(item->tick()) : item->mag());
-    ldata->magS = ldata->mag() * (ctx.style().spatium() / SPATIUM20);
+    ldata->magS = ldata->mag() * (ctx.style().spatium() / ctx.style().defaultSpatium());
 
     std::shared_ptr<const IEngravingFont> font = ctx.engravingFont();
     switch (item->arpeggioType()) {
@@ -670,9 +670,7 @@ void SingleLayout::layout(Bend* item, const Context&)
 
             int idx = (pitch + 12) / 25;
             const char* l = Bend::label[idx];
-            bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
-                                     muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
-                                     String::fromAscii(l)));
+            bb.unite(fm.boundingRect(String::fromAscii(l)));
             y = y2;
         }
         if (pitch == item->points().at(pt + 1).pitch) {
@@ -697,9 +695,7 @@ void SingleLayout::layout(Bend* item, const Context&)
 
             int idx = (item->points().at(pt + 1).pitch + 12) / 25;
             const char* l = Bend::label[idx];
-            bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
-                                     muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
-                                     String::fromAscii(l)));
+            bb.unite(fm.boundingRect(String::fromAscii(l)));
         } else {
             // down
             x2 = x + spatium * .5;
@@ -2120,8 +2116,8 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
     }
 
     if (!item->textLineBase()->textSizeSpatiumDependent()) {
-        item->text()->setSize(item->text()->size() * SPATIUM20 / item->spatium());
-        item->endText()->setSize(item->endText()->size() * SPATIUM20 / item->spatium());
+        item->text()->setSize(item->text()->size() * item->defaultSpatium() / item->spatium());
+        item->endText()->setSize(item->endText()->size() * item->defaultSpatium() / item->spatium());
     }
 
     PointF pp1;
