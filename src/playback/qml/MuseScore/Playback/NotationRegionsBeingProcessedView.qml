@@ -43,16 +43,11 @@ Loader {
         regionsModel.load()
     }
 
-    onLoaded: {
-        item.x = root.notationViewRect.x
-        item.y = root.notationViewRect.y
-        item.height = root.notationViewRect.height
-        item.width = root.notationViewRect.width
-        item.model = regionsModel
-    }
-
     sourceComponent: Item {
-        property alias model: repeater.model
+        x: root.notationViewRect.x
+        y: root.notationViewRect.y
+        width: root.notationViewRect.width
+        height: root.notationViewRect.height
 
         clip: true
 
@@ -60,6 +55,8 @@ Loader {
             id: repeater
 
             anchors.fill: parent
+
+            model: regionsModel
 
             delegate: AudioProcessingProgressBar {
                 id: progressBar
