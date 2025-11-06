@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QQuickItem>
+#include <functional>
 
 #include "async/notification.h"
 #include "async/asyncable.h"
@@ -57,6 +58,10 @@ public:
     void setIsCloseOnPressOutsideParent(bool arg);
     void setCanClosed(bool arg);
 
+    // Amazon triangle support
+    void setAmazonTriangle(const QPointF& p1, const QPointF& p2, const QPointF& p3, bool active);
+    void setMouseMoveCallback(std::function<void(const QPointF&)> callback);
+
     async::Notification closeNotification() const;
 
 private slots:
@@ -69,6 +74,7 @@ protected:
     virtual void doUpdateEventFilters();
 
     bool isMouseWithinBoundaries(const QPointF& mousePos) const;
+    bool isPointInTriangle(const QPointF& point) const;
 
     void notifyAboutClose();
 
@@ -82,6 +88,13 @@ private:
 
     bool m_isCloseOnPressOutsideParent = false;
     bool m_canClosed = true;
+
+    // Amazon triangle state
+    QPointF m_triangleP1;
+    QPointF m_triangleP2;
+    QPointF m_triangleP3;
+    bool m_amazonTriangleActive = false;
+    std::function<void(const QPointF&)> m_mouseMoveCallback;
 
     async::Notification m_closeNotification;
 };
