@@ -23,9 +23,10 @@ SOFTWARE.
 */
 #pragma once
 
+#include <cassert>
 #include <memory>
 #include <string>
-#include <cassert>
+#include <type_traits>
 
 #include "async.h"
 #include "internal/channelimpl.h"
@@ -256,6 +257,9 @@ inline Promise<T...> make_promise(typename Promise<T...>::BodyResolve f, Promise
 template <typename ... T>
 template <typename ... U, typename OnResolve>
 Promise<U...> Promise<T...>::then(const Asyncable *receiver, OnResolve &&onResolveF) {
+    static_assert(std::is_same_v<std::invoke_result_t<OnResolve, T..., typename Promise<U...>::Resolve>, 
+                                 typename Promise<U...>::Result>,
+                  "onResolveF must return Promise<U...>::Result when called with (T... , Promise<U...>::Resolve)");
     if (m_data->rejectCh != nullptr) {
         return make_promise<U...>([this, receiver, onResolveF](auto resolve, auto reject) {
             this->onResolve(receiver, [onResolveF, resolve](const T&... args) {
@@ -279,6 +283,9 @@ Promise<U...> Promise<T...>::then(const Asyncable *receiver, OnResolve &&onResol
 template <typename ... T>
 template <typename ... U, typename OnResolve, typename OnReject>
 Promise<U...> Promise<T...>::then(const Asyncable *receiver, OnResolve &&onResolveF, OnReject &&onRejectF) {
+    static_assert(std::is_same_v<std::invoke_result_t<OnResolve, T..., typename Promise<U...>::Resolve, typename Promise<U...>::Reject>, 
+                                 typename Promise<U...>::Result>,
+                  "onResolveF must return Promise<U...>::Result when called with (T... , Promise<U...>::Resolve, Promise<U...>::Reject)");
     return make_promise<U...>([this, receiver, onResolveF, onRejectF](auto resolve, auto reject) {
         this->onResolve(receiver, [onResolveF, resolve, reject](const T&... args) {
             onResolveF(args ..., resolve, reject);
