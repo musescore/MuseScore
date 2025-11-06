@@ -157,7 +157,7 @@ class UserPaletteController : public AbstractPaletteController, public muse::asy
 
     bool canDropElements() const override { return _userEditable; }
 
-    void showHideOrDeleteDialog(const std::string& question, std::function<void(RemoveAction)> resultHandler) const;
+    muse::async::Promise<RemoveAction> showHideOrDeleteDialog(const std::string& question) const;
     void queryRemove(const QModelIndexList&, int customCount);
 
     enum RemoveActionConfirmationType {

@@ -146,18 +146,16 @@ async::Promise<IInteractive::Result> Interactive::openStandardAsync(const std::s
 {
     UriQuery q = makeQuery(type, contentTitle, text, buttons, defBtn, options, dialogTitle);
 
-    async::Promise<Val> promise = provider()->openAsync(q);
-
-    return async::make_promise<Result>([promise, this](auto resolve, auto reject) {
-        async::Promise<Val> mut = promise;
-        mut.onResolve(this, [this, resolve](const Val& val) {
-            (void)resolve(makeResult(val));
-        }).onReject(this, [resolve, reject](int code, const std::string& err) {
-            //! NOTE To simplify writing the handlers
-            (void)resolve(IInteractive::Result((int)IInteractive::Button::Cancel, false));
-            (void)reject(code, err);
-        });
-        return async::Promise<IInteractive::Result>::Result::unchecked();
+    return provider()->openAsync(q)
+           .then<IInteractive::Result>(
+        this,
+        [this](const Val& val, auto resolve, auto /*reject*/) {
+        return resolve(makeResult(val));
+    },
+        [](int code, const std::string& msg, auto resolve, auto reject) {
+        //! NOTE To simplify writing the handlers
+        (void)resolve(IInteractive::Result((int)IInteractive::Button::Cancel, false));
+        return reject(code, msg);
     });
 }
 
