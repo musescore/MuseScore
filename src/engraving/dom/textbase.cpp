@@ -63,6 +63,56 @@ namespace mu::engraving {
 static const char* FALLBACK_SYMBOL_FONT = "Bravura";
 static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
 
+static const std::regex URL_PATTERN(
+    R"((https?://[a-zA-Z0-9.-]+(?:/[a-zA-Z0-9._~:/?#[\]@!$&'()*+,;=-]*)?))");
+
+static std::string htmlEscape(const String& text)
+{
+    std::string result = text.toStdString();
+
+    // Replace in order: & first, then < and >
+    size_t pos = 0;
+    while ((pos = result.find('&', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&amp;");
+        pos += 5;
+    }
+
+    pos = 0;
+    while ((pos = result.find('<', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&lt;");
+        pos += 4;
+    }
+
+    pos = 0;
+    while ((pos = result.find('>', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&gt;");
+        pos += 4;
+    }
+
+    pos = 0;
+    while ((pos = result.find('"', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&quot;");
+        pos += 6;
+    }
+
+    pos = 0;
+    while ((pos = result.find('\'', pos)) != std::string::npos) {
+        result.replace(pos, 1, "&#39;");
+        pos += 5;
+    }
+
+    return result;
+}
+
+static String convertUrlsToLinks(const String& text)
+{
+    std::string result = htmlEscape(text);
+    result = std::regex_replace(result, URL_PATTERN,
+                                R"(<a href="$1" style="color: blue; text-decoration: underline;">$1</a>)");
+
+    return String::fromStdString(result);
+}
+
 //---------------------------------------------------------
 //   isSorted
 /// return true if (r1,c1) is at or before (r2,c2)
@@ -863,7 +913,11 @@ void TextFragment::draw(Painter* p, const TextBase* t) const
     TextBase::drawTextWorkaround(p, f, pos, text);
 #else
     p->setFont(f);
-    p->drawText(pos, text);
+    if (p->canDrawHtml() && std::regex_search(text.toStdString(), URL_PATTERN)) {
+        p->drawHtml(pos, convertUrlsToLinks(text));
+    } else {
+        p->drawText(pos, text);
+    }
 #endif
 }
 
