@@ -254,9 +254,9 @@ io::paths_t WebInteractive::selectMultipleDirectories(const std::string& title, 
 #endif
 }
 
-muse::async::Promise<muse::Color> WebInteractive::selectColor(const muse::Color& color, const std::string& title)
+muse::async::Promise<muse::Color> WebInteractive::selectColor(const muse::Color& color, const std::string& title, bool allowAlpha)
 {
-    return m_origin->selectColor(color, title);
+    return m_origin->selectColor(color, title, allowAlpha);
 }
 
 bool WebInteractive::isSelectColorOpened() const

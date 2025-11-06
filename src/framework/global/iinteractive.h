@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_IINTERACTIVE_H
-#define MUSE_GLOBAL_IINTERACTIVE_H
+
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 #include "io/path.h"
@@ -166,10 +166,10 @@ public:
     // question
     virtual async::Promise<Result> question(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
                                             int defBtn = int(Button::NoButton), const Options& options = {},
-                                            const std::string& dialogTitle = "") = 0;
+                                            const std::string& dialogTitle = {}) = 0;
 
     async::Promise<Result> question(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                    Button defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+                                    Button defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = {})
     {
         return question(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
@@ -177,10 +177,10 @@ public:
     // info
     virtual async::Promise<Result> info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
                                         int defBtn = int(Button::NoButton), const Options& options = {},
-                                        const std::string& dialogTitle = "") = 0;
+                                        const std::string& dialogTitle = {}) = 0;
 
     async::Promise<Result> info(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                Button defBtn, const Options& options = {}, const std::string& dialogTitle = "")
+                                Button defBtn, const Options& options = {}, const std::string& dialogTitle = {})
     {
         return info(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
@@ -188,11 +188,11 @@ public:
     // warning
     virtual async::Promise<Result> warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
                                            int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
-                                           const std::string& dialogTitle = "") = 0;
+                                           const std::string& dialogTitle = {}) = 0;
 
     async::Promise<Result> warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
                                    Button defBtn = Button::NoButton, const Options& options = { WithIcon },
-                                   const std::string& dialogTitle = "")
+                                   const std::string& dialogTitle = {})
     {
         return warning(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
@@ -200,11 +200,11 @@ public:
     // error
     virtual async::Promise<Result> error(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
                                          int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
-                                         const std::string& dialogTitle = "") = 0;
+                                         const std::string& dialogTitle = {}) = 0;
 
     async::Promise<Result> error(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
                                  Button defBtn = Button::NoButton, const Options& options = { WithIcon },
-                                 const std::string& dialogTitle = "")
+                                 const std::string& dialogTitle = {})
     {
         return error(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
@@ -226,7 +226,8 @@ public:
                                                   const io::paths_t& selectedDirectories) = 0;
 
     // color
-    virtual async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = "") = 0;
+    virtual async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = {},
+                                              bool allowAlpha = false) = 0;
     virtual bool isSelectColorOpened() const = 0;
 
     // custom
@@ -262,39 +263,39 @@ public:
     //! NOTE Please don't use this
     //! =================================
     virtual Result questionSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
-                                int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") = 0;
+                                int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = {}) = 0;
 
     Result questionSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                        const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+                        const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = {})
     {
         return questionSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
 
     virtual Result infoSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                            int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") = 0;
+                            int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = {}) = 0;
 
     Result infoSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                    const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+                    const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = {})
     {
         return infoSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
 
     virtual Result warningSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
                                int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
-                               const std::string& dialogTitle = "") = 0;
+                               const std::string& dialogTitle = {}) = 0;
 
     Result warningSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                       const Button& defBtn = Button::NoButton, const Options& options = { WithIcon }, const std::string& dialogTitle = "")
+                       const Button& defBtn = Button::NoButton, const Options& options = { WithIcon }, const std::string& dialogTitle = {})
     {
         return warningSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
 
     virtual Result errorSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
                              int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
-                             const std::string& dialogTitle = "") = 0;
+                             const std::string& dialogTitle = {}) = 0;
 
     Result errorSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                     const Button& defBtn = Button::NoButton, const Options& options = { WithIcon }, const std::string& dialogTitle = "")
+                     const Button& defBtn = Button::NoButton, const Options& options = { WithIcon }, const std::string& dialogTitle = {})
     {
         return errorSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
@@ -306,5 +307,3 @@ public:
 };
 DECLARE_OPERATORS_FOR_FLAGS(IInteractive::Options)
 }
-
-#endif // MUSE_GLOBAL_IINTERACTIVE_H

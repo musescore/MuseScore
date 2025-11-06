@@ -372,6 +372,7 @@ Rectangle {
             width: 200
 
             color: "black"
+            allowAlpha: true
 
             onNewColorSelected: function(newColor) {
                 color = newColor

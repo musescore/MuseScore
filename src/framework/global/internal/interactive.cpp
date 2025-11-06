@@ -411,9 +411,9 @@ io::paths_t Interactive::selectMultipleDirectories(const std::string& title, con
     return io::pathsFromString(result.val.toString());
 }
 
-async::Promise<Color> Interactive::selectColor(const Color& color, const std::string& title)
+async::Promise<Color> Interactive::selectColor(const Color& color, const std::string& title, bool allowAlpha)
 {
-    return provider()->selectColor(color, title);
+    return provider()->selectColor(color, title, allowAlpha);
 }
 
 bool Interactive::isSelectColorOpened() const

@@ -31,12 +31,13 @@ ColorPickerModel::ColorPickerModel(QObject* parent)
 {
 }
 
-void ColorPickerModel::selectColor(const QColor& currentColor)
+void ColorPickerModel::selectColor(const QColor& currentColor, bool allowAlpha)
 {
-    auto promise = interactive()->selectColor(Color::fromQColor(currentColor));
-    promise.onResolve(this, [this](const Color& c) {
+    interactive()->selectColor(Color::fromQColor(currentColor), {}, allowAlpha)
+    .onResolve(this, [this](const Color& c) {
         emit colorSelected(c.toQColor());
-    }).onReject(this, [this](int code, const std::string& msg) {
+    })
+    .onReject(this, [this](int code, const std::string& msg) {
         LOGD() << "select color rejected, err code: " << code << ", msg: " << msg;
         emit selectRejected();
     });
