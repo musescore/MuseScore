@@ -271,8 +271,8 @@ FocusableItem {
                                 anchors.rightMargin: 6
 
                                 icon: IconCode.BEAM_HEIGHT_LEFT
-                                isIndeterminate: root.model ? root.model.beamHeightLeft.isUndefined : false
-                                currentValue: root.model ? root.model.beamHeightLeft.value : 0
+                                isIndeterminate: root.model?.beamHeightLeft.isUndefined ?? false
+                                currentValue: root.model?.beamHeightLeft.value ?? 0
 
                                 navigation.name: "BeamHeightLeftControl"
                                 navigation.panel: root.navigationPanel
@@ -315,8 +315,8 @@ FocusableItem {
 
                                 icon: IconCode.BEAM_HEIGHT_RIGHT
                                 iconMode: IncrementalPropertyControl.Right
-                                isIndeterminate: root.model ? root.model.beamHeightRight.isUndefined : false
-                                currentValue: root.model ? root.model.beamHeightRight.value : 0
+                                isIndeterminate: root.model?.beamHeightRight.isUndefined ?? false
+                                currentValue: root.model?.beamHeightRight.value ?? 0
 
                                 navigation.name: "BeamHeightRightControl"
                                 navigation.panel: root.navigationPanel
