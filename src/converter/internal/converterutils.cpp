@@ -128,3 +128,22 @@ Ret ConverterUtils::applyTranspose(const INotationPtr notation, const TransposeO
 
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Err::TransposeFailed);
 }
+
+void ConverterUtils::setVisibleParts(const INotationPtr notation, const std::vector<size_t>& visibleParts)
+{
+    // Receiving in a 0 based order
+    const INotationPartsPtr parts = notation->parts();
+    const muse::async::NotifyList<const Part*> partList = parts->partList();
+    std::vector<muse::ID> visiblePartIds;
+
+    for (size_t i = 0; i < partList.size(); ++i) {
+        if (muse::contains(visibleParts, i)) {
+            const Part* p = partList.at(i);
+            visiblePartIds.push_back(p->id());
+        }
+    }
+
+    for (const Part* p : partList) {
+        parts->setPartVisible(p->id(), muse::contains(visiblePartIds, p->id()));
+    }
+}

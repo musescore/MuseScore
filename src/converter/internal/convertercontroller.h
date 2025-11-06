@@ -80,15 +80,19 @@ private:
         muse::io::path_t out;
         std::optional<notation::TransposeOptions> transposeOptions;
         std::optional<size_t> pageNum;
+        std::vector<size_t> visibleParts;
+        muse::String copyright;
     };
 
     using BatchJob = std::vector<Job>;
+    using TransposeOpts = std::optional<notation::TransposeOptions>;
 
     muse::RetVal<BatchJob> parseBatchJob(const muse::io::path_t& batchJobFile) const;
 
     muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
                           const muse::String& soundProfile = muse::String(),
-                          const muse::UriQuery& extensionUri = muse::UriQuery(), const std::optional<notation::TransposeOptions>& transposeOptions = std::nullopt, const std::optional<size_t>& pageNum = std::nullopt);
+                          const muse::UriQuery& extensionUri = muse::UriQuery(), const TransposeOpts& transposeOptions = std::nullopt, const std::optional<size_t>& pageNum = std::nullopt, const std::vector<size_t>& visibleParts = std::vector<size_t>(),
+                          const muse::String& copyright = muse::String());
 
     muse::Ret convertScoreParts(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
                                 const muse::io::path_t& out);

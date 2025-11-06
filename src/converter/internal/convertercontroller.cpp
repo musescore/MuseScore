@@ -78,7 +78,8 @@ Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, cons
             progress->progress(current, total, job.in.toStdString());
         }
 
-        Ret ret = fileConvert(job.in, job.out, openParams, soundProfile, extensionUri, job.transposeOptions, job.pageNum);
+        Ret ret = fileConvert(job.in, job.out, openParams, soundProfile, extensionUri, job.transposeOptions, job.pageNum, job.visibleParts,
+                              job.copyright);
         if (!ret) {
             errors.emplace_back(String(u"failed convert, err: %1, in: %2, out: %3")
                                 .arg(String::fromStdString(ret.toString())).arg(job.in.toString()).arg(job.out.toString()));
@@ -125,7 +126,8 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
                                      const String& soundProfile,
                                      const muse::UriQuery& extensionUri,
                                      const std::optional<notation::TransposeOptions>& transposeOptions,
-                                     const std::optional<size_t>& pageNum)
+                                     const std::optional<size_t>& pageNum, const std::vector<size_t>& visibleParts,
+                                     const muse::String& copyright)
 {
     TRACEFUNC;
 
@@ -160,6 +162,16 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
             LOGE() << "Failed to apply transposition, err: " << ret.toString();
             return ret;
         }
+    }
+
+    if (!visibleParts.empty()) {
+        ConverterUtils::setVisibleParts(notationProject->masterNotation()->notation(), visibleParts);
+    }
+
+    if (!copyright.isEmpty()) {
+        ProjectMeta meta = notationProject->metaInfo();
+        meta.copyright += copyright;
+        notationProject->setMetaInfo(meta);
     }
 
     globalContext()->setCurrentProject(notationProject);
@@ -296,6 +308,33 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
         QJsonValue pageVal = obj[u"page"];
         if (!pageVal.isUndefined()) {
             job.pageNum = pageVal.toInt() - 1;
+        }
+
+        QJsonValue visibleParts = obj[u"visibleParts"];
+        if (!visibleParts.isUndefined()) {
+            if (visibleParts.isArray()) {
+                const QJsonArray partsArray = visibleParts.toArray();
+                for (const auto part : partsArray) {
+                    if (part.isDouble()) {
+                        job.visibleParts.push_back(part.toInt());
+                    } else {
+                        LOGE() << "Visible parts value must be a Number";
+                    }
+                }
+            } else {
+                rv.ret = make_ret(Err::BatchJobFileFailedParse, err.errorString().toStdString());
+                return rv;
+            }
+        }
+
+        QJsonValue copyright = obj[u"copyright"];
+        if (!copyright.isUndefined()) {
+            if (copyright.isString()) {
+                job.copyright = copyright.toString();
+            } else {
+                rv.ret = make_ret(Err::BatchJobFileFailedParse, err.errorString().toStdString());
+                return rv;
+            }
         }
 
         const QJsonValue outValue = obj[u"out"];
