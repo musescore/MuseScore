@@ -22,6 +22,8 @@
 
 #include <string>
 
+#include "global/containers.h"
+
 #include "measurehandler.h"
 #include "note.h"
 
@@ -121,7 +123,7 @@ void MeasureHandler::initializeMeasureStartsAndGaps(const std::vector<TefMeasure
 // return the index of the measure containing tstart
 // note O2 behaviour in score size
 
-int MeasureHandler::measureIndex(int tstart, const std::vector<TefMeasure>& tefMeasures) const
+size_t MeasureHandler::measureIndex(int tstart, const std::vector<TefMeasure>& tefMeasures) const
 {
     for (size_t i = 0; i < tefMeasures.size(); ++i) {
         auto start { nominalMeasureStarts.at(i) };
@@ -130,34 +132,36 @@ int MeasureHandler::measureIndex(int tstart, const std::vector<TefMeasure>& tefM
             return i;
         }
     }
-    return -1; // not found
+    return muse::nidx; // not found
 }
 
 // return the offset of tstart (distance from its measure's start)
 
 int MeasureHandler::offsetInMeasure(int tstart, const std::vector<TefMeasure>& tefMeasures)
 {
-    auto index { measureIndex(tstart, tefMeasures) };
-    if (0 <= index) {
-        return tstart - nominalMeasureStarts.at(index);
+    size_t index { measureIndex(tstart, tefMeasures) };
+    if (index >= tefMeasures.size()) {
+        return -1; // not found
     }
-    return -1; // not found
+    return tstart - nominalMeasureStarts.at(index);
 }
 
 // find the smallest offset of any note in a pickup measure
 
 void MeasureHandler::updateGapLeft(std::vector<int>& gapLeft, const int position, const std::vector<TefMeasure>& tefMeasures)
 {
-    auto index { measureIndex(position, tefMeasures) };
+    size_t index { measureIndex(position, tefMeasures) };
+    if (index >= tefMeasures.size()) {
+        return; // not found
+    }
     if (tefMeasures.at(index).isPickup) {
         auto offset { offsetInMeasure(position, tefMeasures) };
-        if (0 <= index && 0 <= offset) {
+        if (0 <= offset) {
             if (offset < gapLeft[index]) {
                 gapLeft[index] = offset;
             }
         }
     }
-    return;
 }
 
 // find the largest end time of any note in a pickup measure
@@ -165,11 +169,14 @@ void MeasureHandler::updateGapLeft(std::vector<int>& gapLeft, const int position
 void MeasureHandler::updateGapRight(std::vector<int>& gapRight, const TefNote& note, const std::vector<TefMeasure>& tefMeasures)
 {
     auto pos { note.position };
-    auto index { measureIndex(pos, tefMeasures) };
+    size_t index { measureIndex(pos, tefMeasures) };
+    if (index >= tefMeasures.size()) {
+        return; // not found
+    }
     if (tefMeasures.at(index).isPickup) {
         auto offset { offsetInMeasure(pos, tefMeasures) };
-        LOGN("pos %d index %d offset %d", pos, index, offset);
-        if (0 <= index && 0 <= offset) {
+        LOGN("pos %d index %zu offset %d", pos, index, offset);
+        if (0 <= offset) {
             auto dur { durationToInt(note.duration) };
             auto end { offset + dur };
             auto size { 64 * tefMeasures.at(index).numerator / tefMeasures.at(index).denominator };
@@ -180,7 +187,6 @@ void MeasureHandler::updateGapRight(std::vector<int>& gapRight, const TefNote& n
             }
         }
     }
-    return;
 }
 
 // start time correction to be subtracted from note position due to gaps:
