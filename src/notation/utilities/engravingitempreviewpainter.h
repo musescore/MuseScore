@@ -43,7 +43,6 @@ public:
         double yoffset = 0.0;
 
         muse::RectF rect;
-        double dpi = 1.0;
         double spatium = 1.0;
 
         bool useElementColors = false;

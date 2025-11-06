@@ -51,15 +51,14 @@ QIconEngine* PaletteCellIconEngine::clone() const
 
 void PaletteCellIconEngine::paint(QPainter* qp, const QRect& rect, QIcon::Mode mode, QIcon::State state)
 {
-    qreal dpi = qp->device()->logicalDpiX();
     Painter p(qp, "palettecell");
     p.save();
     p.setAntialiasing(true);
-    paintCell(p, RectF::fromQRectF(rect), mode == QIcon::Selected, state == QIcon::On, dpi);
+    paintCell(p, RectF::fromQRectF(rect), mode == QIcon::Selected, state == QIcon::On);
     p.restore();
 }
 
-void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool selected, bool current, qreal dpi) const
+void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool selected, bool current) const
 {
     paintBackground(painter, rect, selected, current);
 
@@ -82,7 +81,6 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
     params.yoffset = m_cell->yoffset;
 
     params.rect = rect;
-    params.dpi = dpi;
     params.spatium = configuration()->paletteSpatium() * params.mag;
 
     //! NOTE: Slight hack - we can now specify exactly now many staff lines we want...

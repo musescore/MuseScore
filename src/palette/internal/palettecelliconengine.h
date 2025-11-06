@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_PALETTECELLICONENGINE_H
-#define MU_PALETTE_PALETTECELLICONENGINE_H
+
+#pragma once
 
 #include <QIconEngine>
 
@@ -48,12 +48,10 @@ public:
     void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) override;
 
 private:
-    void paintCell(muse::draw::Painter& painter, const muse::RectF& rect, bool selected, bool current, qreal dpi) const;
+    void paintCell(muse::draw::Painter& painter, const muse::RectF& rect, bool selected, bool current) const;
     void paintBackground(muse::draw::Painter& painter, const muse::RectF& rect, bool selected, bool current) const;
 
     PaletteCellConstPtr m_cell;
     qreal m_extraMag = 1.0;
 };
 }
-
-#endif // MU_PALETTE_PALETTECELLICONENGINE_H

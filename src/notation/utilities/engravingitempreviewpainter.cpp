@@ -107,8 +107,6 @@ void EngravingItemPreviewPainter::paintPreviewForActionIcon(mu::engraving::Engra
     Painter* painter = params.painter;
     painter->save();
 
-    double DPIscaling = mu::engraving::PPI / params.dpi;
-
     painter->scale(params.mag, params.mag);
 
     ActionIcon* action = toActionIcon(element);
