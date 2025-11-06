@@ -142,6 +142,7 @@
 #include "dom/soundflag.h"
 
 #include "dom/tapping.h"
+#include "dom/tempo.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
 #include "dom/textbase.h"
@@ -3156,7 +3157,7 @@ void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
     writeProperty(item, xml, Pid::PLAY);
-    xml.tag("tempo", TConv::toXml(item->tempo()));
+    xml.tag("tempo", TConv::toXml(item->tempo(), TEMPO_PRECISION));
     if (item->followText()) {
         xml.tag("followText", item->followText());
     }
