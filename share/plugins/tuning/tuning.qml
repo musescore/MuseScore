@@ -24,14 +24,13 @@ import Muse.Ui 1.0
 import MuseScore 3.0
 
 MuseScore {
-    version: "3.0.5"
+    version: "4.7"
     title: qsTr("Tuning and temperaments")
     description: qsTr("Apply various temperaments and tunings")
     pluginType: "dialog"
     categoryCode: "playback"
     thumbnailName: "modal_tuning.png"
     id: root
-    requiresScore: false
     width: childrenRect.width + 2 * defaultSpacing
     height: childrenRect.height + 2 * defaultSpacing
 
@@ -47,7 +46,7 @@ MuseScore {
      */
     function readDefaults() {
         return [
-            { "name": "separatorLine", "displayName": qsTr("Tunings") },
+            { "name": "separatorLine", "displayName": qsTr("Western tuning systems") },
             { "name": "equal",        "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],                                        "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Equal") },
             { "name": "pythagorean",  "offsets": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22],                                 "root": 9,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Pythagorean") },
             { "name": "aaron",        "offsets": [0, -3.5, -7, -10.5, -14, -17.5, -21, -24.5, -28, -31.5, -35, -38.5],        "root": 9,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Aaron") },
@@ -65,7 +64,27 @@ MuseScore {
             { "name": "rameau",       "offsets": [0, -3.5, -7, -10.5, -14, -17.5, -15.5, -13.5, -11.5, -2, 7, 3.5],           "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Rameau") },
             { "name": "irrFr17e",     "offsets": [-17, -11, -6, -9, -12, -15, -18, -21, -24, -27, -30, -33],                  "root": 9,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Irr Fr 17e") },
             { "name": "bachLehman",   "offsets": [-5.9, -7.9, -9.8, -11.8, -13.7, -11.8, -9.8, -7.9, -7.9, -7.9, -7.9, -3.9], "root": 0,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Bach/Lehman") },
-            { "name": "separatorLine", "displayName": qsTr("Modal tunings") },
+            // { "name": "separatorLine", "displayName": qsTr("Modal temperaments") },
+            { "name": "tuning01", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, 20.5, 17.1, 13.7, 10.2, 6.8, 3.4],     "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone (1/4) 5 flats") },
+            { "name": "tuning02", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, -20.6, -24, -27.4, 10.2, 6.8, 3.4],    "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone 1/4-comma") },
+            { "name": "tuning03", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, -20.6, -24, -27.4, -30.8, -34.3, 3.4], "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone (1/4) 5 sharps") },
+            { "name": "tuning04", "offsets": [0, -2.3, -4.7, -7, -9.3, -11.7, -14, -16.4, -18.7, 7.1, 4.7, 2.4],         "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone 1/5-comma") },
+            { "name": "tuning05", "offsets": [0, -1.6, -3.3, -4.9, -6.5, -8.2, -9.8, -11.4, -13, 4.9, 3.2, 1.6],         "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone 1/6-comma") },
+            { "name": "tuning06", "offsets": [0, -3.9, -7.8, -11.7, -9.7, -7.8, -11.7, -9.7, -7.8, -5.8, -3.9, -1.9],    "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Werckmeister III") },
+            { "name": "tuning07", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -11.8, -9.8, -9.8, -7.9, -5.9, -3.9, -2],     "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Kirnberger III") },
+            { "name": "tuning08", "offsets": [0, -2, -3.9, -5.9, -7.9, -9.8, -7.9, -5.9, -3.9, -2, 0, 1.9],              "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Vallotti") },
+            { "name": "tuning09", "offsets": [0, -2, -4.1, -6.2, -8.3, -8.1, -8, -6.1, -4.1, -2.1, -6.5, -6.3],          "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Young I") },
+            { "name": "tuning10", "offsets": [0, -2.7, -5.5, -8.2, -10.9, -9, -11.7, -9.8, -7.8, -5.9, -3.9, -1.9],      "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Kellner") },
+            { "name": "tuning11", "offsets": [13.2, 10.5, 8.3, 6.6, 5.4, 4.8, 4.6, 5, 5.9, 7.4, 9.3, 11.3],              "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Fernando A. Martin 1/45-comma") },
+            { "name": "tuning12", "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, 31.3, 11.7, 13.7, 15.6, 17.6, -2],       "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D♭ Dm E♭ E♭m Em F Fm A♭ Am B♭") },
+            { "name": "tuning13", "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, -31.3, -29.3, -27.4, 15.6, -3.9, -2],    "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm C♯m D Dm E Em F F♯m A Am B♭") },
+            { "name": "tuning14", "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, -31.3, 11.7, 13.7, 15.6, -3.9, -2],      "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D♭ D Dm Em F Fm A♭ Am B♭ B♭m") },
+            { "name": "tuning15", "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2],         "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D♭ E♭ Em F Fm G Gm A♭ Am Bm") },
+            { "name": "tuning16", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, 19.6],         "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D Dm E♭ Em F♯m G Gm A♭ B♭ Bm") },
+            { "name": "tuning17", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, -27.4, -25.4, -23.5, -21.5],     "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C D E♭m E Em F♯ F♯m G G♯m B♭m B Bm") },
+            { "name": "tuning18", "offsets": [0, 2, 31.2, -15.6, -13.7, -28.3, -17.5, 38.6, 13.7, 15.6, -31.2, -2],      "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Simple Ratios") },
+            { "name": "tuning19", "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, 17.5, 28.3, 13.7, 15.6, 17.6, -2],         "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Alternate Ratios") },
+            { "name": "separatorLine", "displayName": qsTr("Arabic modal systems") },
             { "name": "tuningM01", "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2],       "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Melodic 1♯ 2♭") },
             { "name": "tuningM02", "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2], "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Harmonic 1♯ 2♭") },
             { "name": "tuningM03", "offsets": [0, 2, 3.9, 5.9, -35.2, -33.2, -9.8, -7.8, -7.8, -25.4, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Rast, Sikah") },
@@ -90,32 +109,12 @@ MuseScore {
             { "name": "tuningM22", "offsets": [0, 2, 3.9, -15.6, -13.7, -33.2, 58.9, 11.7, 13.7, 43.3, -3.9, -2], "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Rakb") },
             { "name": "tuningM23", "offsets": [0, 2, 3.9, 5.9, -35.2, -33.2, -9.8, 39.4, 41.4, -25.4, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Sikah Baladi") },
             { "name": "tuningM24", "offsets": [0, 2, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -23.5, -2], "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Iraq (Cadence)") },
-            { "name": "separatorLine", "displayName": qsTr("Modal temperaments") },
-            { "name": "tuning01", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, 20.5, 17.1, 13.7, 10.2, 6.8, 3.4],     "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone (1/4) 5 flats") },
-            { "name": "tuning02", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, -20.6, -24, -27.4, 10.2, 6.8, 3.4],    "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone 1/4-comma") },
-            { "name": "tuning03", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, -20.6, -24, -27.4, -30.8, -34.3, 3.4], "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone (1/4) 5 sharps") },
-            { "name": "tuning04", "offsets": [0, -2.3, -4.7, -7, -9.3, -11.7, -14, -16.4, -18.7, 7.1, 4.7, 2.4],         "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone 1/5-comma") },
-            { "name": "tuning05", "offsets": [0, -1.6, -3.3, -4.9, -6.5, -8.2, -9.8, -11.4, -13, 4.9, 3.2, 1.6],         "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone 1/6-comma") },
-            { "name": "tuning06", "offsets": [0, -3.9, -7.8, -11.7, -9.7, -7.8, -11.7, -9.7, -7.8, -5.8, -3.9, -1.9],    "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Werckmeister III") },
-            { "name": "tuning07", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -11.8, -9.8, -9.8, -7.9, -5.9, -3.9, -2],     "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Kirnberger III") },
-            { "name": "tuning08", "offsets": [0, -2, -3.9, -5.9, -7.9, -9.8, -7.9, -5.9, -3.9, -2, 0, 1.9],              "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Vallotti") },
-            { "name": "tuning09", "offsets": [0, -2, -4.1, -6.2, -8.3, -8.1, -8, -6.1, -4.1, -2.1, -6.5, -6.3],          "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Young I") },
-            { "name": "tuning10", "offsets": [0, -2.7, -5.5, -8.2, -10.9, -9, -11.7, -9.8, -7.8, -5.9, -3.9, -1.9],      "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Kellner") },
-            { "name": "tuning11", "offsets": [13.2, 10.5, 8.3, 6.6, 5.4, 4.8, 4.6, 5, 5.9, 7.4, 9.3, 11.3],              "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Fernando A. Martin 1/45-comma") },
-            { "name": "tuning12", "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, 31.3, 11.7, 13.7, 15.6, 17.6, -2],       "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D♭ Dm E♭ E♭m Em F Fm A♭ Am B♭") },
-            { "name": "tuning13", "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, -31.3, -29.3, -27.4, 15.6, -3.9, -2],    "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm C♯m D Dm E Em F F♯m A Am B♭") },
-            { "name": "tuning14", "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, -31.3, 11.7, 13.7, 15.6, -3.9, -2],      "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D♭ D Dm Em F Fm A♭ Am B♭ B♭m") },
-            { "name": "tuning15", "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2],         "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D♭ E♭ Em F Fm G Gm A♭ Am Bm") },
-            { "name": "tuning16", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, 19.6],         "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D Dm E♭ Em F♯m G Gm A♭ B♭ Bm") },
-            { "name": "tuning17", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, -27.4, -25.4, -23.5, -21.5],     "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C D E♭m E Em F♯ F♯m G G♯m B♭m B Bm") },
-            { "name": "tuning18", "offsets": [0, 2, 31.2, -15.6, -13.7, -28.3, -17.5, 38.6, 13.7, 15.6, -31.2, -2],      "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Simple Ratios") },
-            { "name": "tuning19", "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, 17.5, 28.3, 13.7, 15.6, 17.6, -2],         "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Alternate Ratios") },
             { "name": "separatorLine", "displayName": qsTr("Custom tunings") },
-            { "name": "customSlot1",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],                                        "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom tuning #1") },
-            { "name": "customSlot2",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],                                        "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom tuning #2") },
-            { "name": "customSlot3",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],                                        "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom tuning #3") },
-            { "name": "customSlot4",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],                                        "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom tuning #4") },
-            { "name": "customSlot5",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],                                        "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom tuning #5") },
+            { "name": "customSlot1",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 1") },
+            { "name": "customSlot2",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 2") },
+            { "name": "customSlot3",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 3") },
+            { "name": "customSlot4",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 4") },
+            { "name": "customSlot5",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 5") },
         ]
     }
 
@@ -198,8 +197,34 @@ MuseScore {
         }
         var shouldAnnotate = annotateBox.checked
         var cursor = curScore.newCursor()
+        var debugString = ""
         for (var i in chordList) {
             var chord = chordList[i]
+            cursor.track = chord.track
+            cursor.rewindToFraction(chord.fraction)
+
+            // Attempt to remove old texts
+            // Since annotation always restates all tunings, we don't need to check for selected here
+            for (var i in cursor.segment.annotations) {
+                var maybeText = cursor.segment.annotations[i]
+                if (maybeText.track == chord.track && maybeText.type == Element.STAFF_TEXT) {
+                    // Ideally: /^-?\d+(\.\d)?$/ - but seems not to work
+                    // The offset check stops us from removing tunings for grace notes -
+                    // an ugly hack but there is no better way at the moment
+                    if (maybeText.offset.y == 0 && /-?\d+(\.\d)?/.test(maybeText.text)) {
+                        removeElement(maybeText)
+                    } else {
+                        for (var j in currentTunings) {
+                            if (matchText == currentTunings[j]) {
+                                removeElement(maybeText)
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Apply new tunings
             for (var j in chord.notes) {
                 var note = chord.notes[j]
                 // list selections could be individual notes
@@ -207,17 +232,18 @@ MuseScore {
                     note.tuning = calculateTuningFromIndex(note.pitch % 12)
                 }
             }
+
+            // Add new text if needed
             if (shouldAnnotate) {
-                var isGrace = chord.notes[0].noteType != NoteType.NORMAL
-                cursor.track = chord.track
-                cursor.rewindToTick(isGrace ? chord.parent.parent.tick : chord.parent.tick)
+                var chordOffset = chord.pagePos.x - cursor.segment.pagePos.x
                 function addText(noteIndex, placement) {
                     var note = chord.notes[noteIndex]
-                    var text = newElement(Element.STAFF_TEXT);
+                    var text = newElement(Element.STAFF_TEXT)
                     text.text = '' + note.tuning
-                    text.autoplace = true
-                    text.fontSize = 7 // smaller
+                    text.fontSize *= curScore.style.value("smallNoteMag")
+                                     * (chord.noteType != NoteType.NORMAL ? curScore.style.value("graceNoteMag") : 1) // smaller
                     text.placement = placement
+                    text.offset.x = chordOffset
                     cursor.add(text)
                 }
                 // even for list selections, we add text to every note in the chord (for clarity)
@@ -232,6 +258,12 @@ MuseScore {
                 }
             }
         }
+
+        var text = newElement(Element.STAFF_TEXT)
+                    text.text = debugString
+                    cursor.add(text)
+
+
         curScore.endCmd()
         return true
     }
@@ -320,47 +352,73 @@ MuseScore {
         Row {
             spacing: defaultSpacing
             MU.StyledGroupBox {
-                title: qsTr("Temperament")
-                width: tuningsFlickable.widthToSend + 2 * defaultSpacing
+                title: qsTr("Tuning systems and temperaments")
+                width: tuningsFlickable.width + defaultSpacing + tuningsFlickable.visualScrollBarInset - tuningsFlickable.scrollBarThickness
                 height: configureRow.height
-                Layout.fillHeight: true
-                MU.StyledFlickable {
+
+                MU.StyledListView {
                     id: tuningsFlickable
                     height: configureRowColumn.height
-                    property int widthToSend: contentWidth + scrollBar.thickness
-                    width: widthToSend + 2 * scrollBar.padding
+                    width: 300
                     focus: true
-                    contentWidth: contentItem.childrenRect.width
-                    contentHeight: contentItem.childrenRect.height
-                    Keys.onUpPressed: scrollBar.decrease()
-                    Keys.onDownPressed: scrollBar.increase()
-                    ScrollBar.vertical: MU.StyledScrollBar {
-                        id: scrollBar
-                        bottomPadding: 0
-                        topPadding: 0
-                    }
-                    ColumnLayout {
-                        spacing: 5
 
-                        Repeater {
-                            model: tuningModel
+                    spacing: 8
+                    model: tuningModel
 
-                            MU.RoundedRadioButton {
-                                id: radioButton
-                                property bool isSeparatorLine: modelData.name == "separatorLine"
-                                Layout.minimumWidth: implicitWidth
-                                Layout.preferredHeight: isSeparatorLine ? implicitHeight + 8 : implicitHeight
-                                Layout.fillWidth: true
-                                text: modelData.displayName
-                                indicator.visible: !isSeparatorLine
-                                indicator.width: isSeparatorLine ? 0 : indicator.implicitWidth
-                                checked: isSeparatorLine ? false : index == currentTemperament
-                                font: isSeparatorLine ? ui.theme.bodyBoldFont : ui.theme.bodyFont
-                                onToggled: {
-                                    temperamentClicked(index)
-                                }
+                    delegate: Item {
+                        id: tuningItem
+                        readonly property bool isSeparatorLine: modelData.name == "separatorLine"
+                        anchors.left: parent ? parent.left : undefined
+                        anchors.right: parent ? parent.right : undefined
+                        anchors.rightMargin: defaultSpacing + tuningsFlickable.visualScrollBarInset
+                        height: isSeparatorLine ? tuningLabel.height : radioButton.implicitHeight
+
+                        MU.StyledTextLabel {
+                            id: tuningLabel
+                            visible: tuningItem.isSeparatorLine
+                            text: modelData.displayName
+                            font: ui.theme.bodyBoldFont
+                            width: parent.width
+                            height: implicitHeight + (index > 0) ? 20 : 0
+                            verticalAlignment: Text.AlignBottom
+                            horizontalAlignment: Text.AlignLeft
+                        }
+
+                        MU.RoundedRadioButton {
+                            id: radioButton
+                            text: modelData.displayName
+                            visible: !tuningItem.isSeparatorLine
+                            checked: visible && index == currentTemperament
+                            width: parent.width
+                            // font: ui.theme.bodyFont
+                            onToggled: {
+                                temperamentClicked(index)
                             }
                         }
+                    }
+                }
+                Rectangle {
+                    height: 24
+                    anchors.top: tuningsFlickable.top
+                    anchors.left: tuningsFlickable.left
+                    anchors.right: tuningsFlickable.right
+                    anchors.rightMargin: scrollBar.width
+                    visible: !tuningsFlickable.atYBeginning
+                    gradient: Gradient {
+                        GradientStop {position: 0.0; color: ui.theme.backgroundPrimaryColor }
+                        GradientStop {position: 1.0; color: "transparent"}
+                    }
+                }
+                Rectangle {
+                    height: 24
+                    anchors.left: tuningsFlickable.left
+                    anchors.right: tuningsFlickable.right
+                    anchors.rightMargin: scrollBar.width
+                    anchors.bottom: tuningsFlickable.bottom
+                    visible: !tuningsFlickable.atYEnd
+                    gradient: Gradient {
+                        GradientStop {position: 0.0; color: "transparent"}
+                        GradientStop {position: 1.0; color: ui.theme.backgroundPrimaryColor}
                     }
                 }
             }
@@ -553,6 +611,7 @@ MuseScore {
                 visible: curScore
                 accentButton: true
                 onClicked: {
+                    options.data = formatCurrentValues()
                     applyTemperament()
                     quit()
                 }
