@@ -846,10 +846,7 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
             Char ch = m->ticks() > m->timesig() ? u'+' : u'-';
             RectF r = FontMetrics(f).boundingRect(ch);
 
-            Font scaledFont(f);
-            scaledFont.setPointSizeF(f.pointSizeF());
-            painter->setFont(scaledFont);
-
+            painter->setFont(f);
             painter->drawText(-r.width(), 0.0, ch);
         }
     }
@@ -1558,15 +1555,12 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter, const PaintOpti
 
         // if text longer than available space, skip it
         if (r.width() < l) {
-            double yOffset = r.height() + r.y();             // find text descender height
+            double x = (l - r.width()) * 0.5;
+            double yOffset = r.height() + r.y(); // find text descender height
             // raise text slightly above line and slightly more with WAVY than with STRAIGHT
             yOffset += _spatium * (glissando->glissandoType() == GlissandoType::WAVY ? 0.4 : 0.1);
 
-            Font scaledFont(f);
-            scaledFont.setPointSizeF(f.pointSizeF());
-            painter->setFont(scaledFont);
-
-            double x = (l - r.width()) * 0.5;
+            painter->setFont(f);
             painter->drawText(PointF(x, -yOffset), glissando->text());
         }
     }
@@ -1661,9 +1655,7 @@ void TDraw::draw(const TextBlock& textBlock, const TextBase* item, Painter* pain
 
 void TDraw::draw(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter)
 {
-    Font f(textFragment.font(item));
-    f.setPointSizeF(f.pointSizeF());
-    painter->setFont(f);
+    painter->setFont(textFragment.font(item));
     painter->drawText(textFragment.pos, textFragment.text);
 }
 
@@ -1859,9 +1851,7 @@ void TDraw::draw(const Harmony* item, Painter* painter, const PaintOptions& opt)
     painter->setPen(color);
     for (const HarmonyRenderItem* renderItem : ldata->renderItemList()) {
         if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
-            Font f(ts->font());
-            f.setPointSizeF(f.pointSizeF());
-            painter->setFont(f);
+            painter->setFont(ts->font());
             painter->drawText(ts->pos(), ts->text());
         } else if (const ChordSymbolParen* parenItem = dynamic_cast<const ChordSymbolParen*>(renderItem)) {
             Parenthesis* p = parenItem->parenItem;
@@ -2034,11 +2024,7 @@ void TDraw::draw(const LayoutBreak* item, Painter* painter, const PaintOptions& 
 
     Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingColor());
     painter->setPen(pen);
-
-    Font f(item->font());
-    f.setPointSizeF(f.pointSizeF());
-    painter->setFont(f);
-
+    painter->setFont(item->font());
     painter->drawSymbol(PointF(), item->iconCode());
 }
 
@@ -2880,9 +2866,7 @@ void TDraw::draw(const FSymbol* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
-    Font f(item->font());
-    f.setPointSizeF(f.pointSizeF());
-    painter->setFont(f);
+    painter->setFont(item->font());
     painter->setPen(item->curColor(opt));
     painter->drawText(PointF(0, 0), item->toString());
 }
@@ -2907,11 +2891,7 @@ void TDraw::draw(const IndicatorIcon* item, muse::draw::Painter* painter, const 
 
     Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingColor());
     painter->setPen(pen);
-
-    Font f(item->font());
-    f.setPointSizeF(f.pointSizeF());
-    painter->setFont(f);
-
+    painter->setFont(item->font());
     painter->drawSymbol(PointF(), item->iconCode());
 
     if (item->isSystemLockIndicator() && item->selected()) {
@@ -2974,9 +2954,7 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const PaintOpt
     painter->scale(mag, mag);
     if (ldata->beamGrid == TabBeamGrid::NONE) {
         // if no beam grid, draw symbol
-        Font f(item->tab()->durationFont());
-        f.setPointSizeF(f.pointSizeF());
-        painter->setFont(f);
+        painter->setFont(item->tab()->durationFont());
         painter->drawText(PointF(0.0, 0.0), item->text());
     } else {
         // if beam grid, draw stem line
