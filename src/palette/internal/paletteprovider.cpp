@@ -356,7 +356,7 @@ async::Promise<UserPaletteController::RemoveAction> UserPaletteController::showH
         } else if (res.isButton(hideButton)) {
             action = RemoveAction::Hide;
         }
-        resolve(action);
+        return resolve(action);
     });
 }
 
