@@ -33,5 +33,6 @@ public:
 
     static muse::Ret applyTranspose(const notation::INotationPtr notation, const std::string& optionsJson);
     static muse::Ret applyTranspose(const notation::INotationPtr notation, const notation::TransposeOptions& options);
+    static void setVisibleParts(const notation::INotationPtr notation, const std::vector<size_t>& visibleParts);
 };
 }
