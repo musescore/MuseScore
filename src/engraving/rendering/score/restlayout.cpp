@@ -666,7 +666,7 @@ void RestLayout::fillShape(const MMRest* item, MMRest::LayoutData* ldata, const 
 
     double vStrokeHeight = conf.styleMM(Sid::mmRestHBarVStrokeHeight);
     shape.add(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth, vStrokeHeight), item);
-    if (item->shouldShowNumber()) {
+    if (item->showNumber()) {
         shape.add(item->numberRect().translated(item->numberPos()), item);
     }
 
