@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 HERE="$(dirname ${BASH_SOURCE[0]})"
-SRC_DIR=${HERE}/../../src
-APIDOC_STATIC_DIR=${HERE}/apidocs_static
+ROOT=${HERE}/../..
+SRC_DIR=${ROOT}/src
+APIDOC_STATIC_DIR=${ROOT}/docs/apidocs_static
 
 GEN_APIDOCSRC_DIR=${HERE}/gen_apidocsrc
 GEN_APIDOCS_DIR=${HERE}/gen_apidoc

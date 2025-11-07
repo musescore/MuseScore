@@ -20,6 +20,7 @@
         "destination": "./out/",          
         "recurse": false,                  
         "version": false,
+        "search": false,
         "theme_opts": {
             "default_theme": "light",
             "homepageTitle": "Muse Extensions",
