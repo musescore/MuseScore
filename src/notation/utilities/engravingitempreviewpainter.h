@@ -54,8 +54,6 @@ public:
     static void paintItem(mu::engraving::EngravingItem* element, PaintParams& params);
 
 private:
-    static void paintPreviewForItem(mu::engraving::EngravingItem* element, PaintParams& params);
-    static void paintPreviewForActionIcon(mu::engraving::EngravingItem* element, PaintParams& params);
     static double paintStaff(PaintParams& params);
 };
 }
