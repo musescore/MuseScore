@@ -160,7 +160,7 @@ bool FinaleParser::fontIsEngravingFont(const std::string& fontName) const
 EvpuFloat FinaleParser::evpuAugmentationDotWidth() const
 {
     EvpuFloat result = m_score->engravingFont()->width(SymId::augmentationDot, m_score->style().styleD(Sid::dotMag));
-    return result * (EVPU_PER_SPACE / SPATIUM20);
+    return result * (EVPU_PER_SPACE / m_score->style().defaultSpatium());
 }
 
 static void setStyle(MStyle& style, const Sid sid, const PropertyValue& v)
