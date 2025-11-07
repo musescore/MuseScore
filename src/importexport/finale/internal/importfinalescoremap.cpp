@@ -1354,7 +1354,7 @@ void FinaleParser::importPageLayout()
         if (!muse::RealIsEqual(double(-rightStaffSystem->right), 0.0)) {
             HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
             rightBox->setBoxWidth(absoluteSpatiumFromEvpu(-rightStaffSystem->right, rightBox));
-            rightBox->setSizeIsSpatiumDependent(false); /// @todo still doesn't seem to be scaled correctly, should involve SPATIUM20?
+            rightBox->setSizeIsSpatiumDependent(false); /// @todo still doesn't seem to be scaled correctly
             Fraction rightTick = endMeasure->nextMeasure() ? endMeasure->nextMeasure()->tick() : m_score->last()->endTick();
             rightBox->setTick(rightTick);
             rightBox->setNext(endMeasure->next());
