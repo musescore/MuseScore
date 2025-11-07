@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CONVERTER_BACKENDAPI_H
-#define MU_CONVERTER_BACKENDAPI_H
+
+#pragma once
 
 #include <QFile>
 
@@ -33,6 +33,8 @@
 #include "io/ifilesystem.h"
 #include "project/iprojectcreator.h"
 #include "project/inotationwritersregister.h"
+
+#include "converter/convertertypes.h"
 
 namespace mu::engraving {
 class Score;
@@ -49,26 +51,22 @@ class BackendApi
 
 public:
     static muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,
-                                      const muse::io::path_t& stylePath = "", bool forceMode = false, bool unrollRepeats = false);
-    static muse::Ret exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,
-                                     bool forceMode = false, bool unrollRepeats = false);
-    static muse::Ret exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,
-                                      bool forceMode = false, bool unrollRepeats = false);
-    static muse::Ret exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,
-                                          bool forceMode = false, bool unrollRepeats = false);
+                                      const OpenParams& openParams = {});
+    static muse::Ret exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {});
+    static muse::Ret exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {});
+    static muse::Ret exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {});
     static muse::Ret exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
-                                          const muse::io::path_t& stylePath, bool forceMode = false, bool unrollRepeats = false);
+                                          const OpenParams& openParams = {});
 
     static muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
-                                         const muse::io::path_t& stylePath, bool forceMode = false);
+                                         const OpenParams& openParams = {});
 
     static muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode = false);
 
 private:
     static muse::Ret openOutputFile(QFile& file, const muse::io::path_t& out);
 
-    static muse::RetVal<project::INotationProjectPtr> openProject(const muse::io::path_t& path,
-                                                                  const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false, bool unrollRepeats = false);
+    static muse::RetVal<project::INotationProjectPtr> openProject(const muse::io::path_t& path, const OpenParams& params = {});
 
     static QVariantMap readBeatsColors(const muse::io::path_t& filePath);
 
@@ -106,5 +104,3 @@ private:
     static void initPotentialExcerpts(notation::IMasterNotationPtr masterNotation);
 };
 }
-
-#endif // MU_CONVERTER_BACKENDAPI_H

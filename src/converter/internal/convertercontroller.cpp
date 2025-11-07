@@ -147,7 +147,7 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
         return make_ret(Err::UnknownError);
     }
 
-    Ret ret = notationProject->load(in, openParams.stylePath, openParams.forceMode, openParams.unrollRepeats);
+    Ret ret = notationProject->load(in, openParams);
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);
@@ -251,7 +251,7 @@ Ret ConverterController::convertScoreParts(const muse::io::path_t& in, const mus
         return make_ret(Err::ConvertTypeUnknown);
     }
 
-    Ret ret = notationProject->load(in, openParams.stylePath, openParams.forceMode, openParams.unrollRepeats);
+    Ret ret = notationProject->load(in, openParams);
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);
@@ -622,28 +622,28 @@ Ret ConverterController::exportScoreMedia(const muse::io::path_t& in, const muse
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreMedia(in, out, highlightConfigPath, openParams.stylePath, openParams.forceMode, openParams.unrollRepeats);
+    return BackendApi::exportScoreMedia(in, out, highlightConfigPath, openParams);
 }
 
 Ret ConverterController::exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreMeta(in, out, openParams.stylePath, openParams.forceMode, openParams.unrollRepeats);
+    return BackendApi::exportScoreMeta(in, out, openParams);
 }
 
 Ret ConverterController::exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreParts(in, out, openParams.stylePath, openParams.forceMode, openParams.unrollRepeats);
+    return BackendApi::exportScoreParts(in, out, openParams);
 }
 
 Ret ConverterController::exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScorePartsPdfs(in, out, openParams.stylePath, openParams.forceMode, openParams.unrollRepeats);
+    return BackendApi::exportScorePartsPdfs(in, out, openParams);
 }
 
 Ret ConverterController::exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
@@ -651,7 +651,7 @@ Ret ConverterController::exportScoreTranspose(const muse::io::path_t& in, const 
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreTranspose(in, out, optionsJson, openParams.stylePath, openParams.forceMode, openParams.unrollRepeats);
+    return BackendApi::exportScoreTranspose(in, out, optionsJson, openParams);
 }
 
 Ret ConverterController::exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
@@ -659,7 +659,7 @@ Ret ConverterController::exportScoreElements(const muse::io::path_t& in, const m
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreElements(in, out, optionsJson, openParams.stylePath, openParams.forceMode);
+    return BackendApi::exportScoreElements(in, out, optionsJson, openParams);
 }
 
 Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
@@ -677,7 +677,7 @@ Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse
         return make_ret(Err::ConvertTypeUnknown);
     }
 
-    Ret ret = notationProject->load(in, openParams.stylePath, openParams.forceMode, openParams.unrollRepeats);
+    Ret ret = notationProject->load(in, openParams);
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);

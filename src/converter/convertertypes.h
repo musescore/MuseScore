@@ -21,18 +21,9 @@
  */
 #pragma once
 
-#include "global/containers.h"
-#include "global/io/path.h"
+#include "project/types/projecttypes.h"
 
 namespace mu::converter {
-struct OpenParams {
-    OpenParams() {}
-
-    muse::io::path_t stylePath;
-    bool forceMode = false;
-    bool unrollRepeats = false;
-};
-
 struct ConvertRegion {
     struct Position {
         size_t staffIdx = muse::nidx;
@@ -45,4 +36,5 @@ struct ConvertRegion {
 using ConvertRegionJson = std::string;
 using page_num_t = size_t;
 using ConvertTarget = std::variant<ConvertRegionJson, page_num_t>;
+using OpenParams = project::OpenParams;
 }

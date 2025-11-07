@@ -67,7 +67,6 @@ static const std::string META_DATA_NAME = "metadata";
 static const std::string DEV_INFO_NAME = "devinfo";
 
 static constexpr bool ADD_SEPARATOR = true;
-static constexpr auto NO_STYLE = "";
 
 static ScoreElementScanner::Options parseScoreElementScannerOptions(const std::string& json)
 {
@@ -104,13 +103,11 @@ static ScoreElementScanner::Options parseScoreElementScannerOptions(const std::s
 }
 
 Ret BackendApi::exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,
-                                 const muse::io::path_t& stylePath,
-                                 bool forceMode,
-                                 bool unrollRepeats)
+                                 const OpenParams& openParams)
 {
     TRACEFUNC
 
-    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode, unrollRepeats);
+    RetVal<INotationProjectPtr> prj = openProject(in, openParams);
     if (!prj.ret) {
         return prj.ret;
     }
@@ -139,12 +136,11 @@ Ret BackendApi::exportScoreMedia(const muse::io::path_t& in, const muse::io::pat
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,
-                                bool forceMode, bool unrollRepeats)
+Ret BackendApi::exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
 {
     TRACEFUNC
 
-    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode, unrollRepeats);
+    RetVal<INotationProjectPtr> prj = openProject(in, openParams);
     if (!prj.ret) {
         return prj.ret;
     }
@@ -161,12 +157,11 @@ Ret BackendApi::exportScoreMeta(const muse::io::path_t& in, const muse::io::path
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,
-                                 bool forceMode, bool unrollRepeats)
+Ret BackendApi::exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
 {
     TRACEFUNC
 
-    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode, unrollRepeats);
+    RetVal<INotationProjectPtr> prj = openProject(in, openParams);
     if (!prj.ret) {
         return prj.ret;
     }
@@ -181,12 +176,11 @@ Ret BackendApi::exportScoreParts(const muse::io::path_t& in, const muse::io::pat
     return ret;
 }
 
-Ret BackendApi::exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,
-                                     bool forceMode, bool unrollRepeats)
+Ret BackendApi::exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
 {
     TRACEFUNC
 
-    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode, unrollRepeats);
+    RetVal<INotationProjectPtr> prj = openProject(in, openParams);
     if (!prj.ret) {
         return prj.ret;
     }
@@ -204,12 +198,11 @@ Ret BackendApi::exportScorePartsPdfs(const muse::io::path_t& in, const muse::io:
 }
 
 Ret BackendApi::exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
-                                     const muse::io::path_t& stylePath,
-                                     bool forceMode, bool unrollRepeats)
+                                     const OpenParams& openParams)
 {
     TRACEFUNC
 
-    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode, unrollRepeats);
+    RetVal<INotationProjectPtr> prj = openProject(in, openParams);
     if (!prj.ret) {
         return prj.ret;
     }
@@ -232,11 +225,11 @@ Ret BackendApi::exportScoreTranspose(const muse::io::path_t& in, const muse::io:
 }
 
 Ret BackendApi::exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
-                                    const muse::io::path_t& stylePath, bool forceMode)
+                                    const OpenParams& openParams)
 {
     TRACEFUNC;
 
-    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode);
+    RetVal<INotationProjectPtr> prj = openProject(in, openParams);
     if (!prj.ret) {
         return prj.ret;
     }
@@ -262,10 +255,7 @@ Ret BackendApi::openOutputFile(QFile& file, const muse::io::path_t& out)
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-RetVal<project::INotationProjectPtr> BackendApi::openProject(const muse::io::path_t& path,
-                                                             const muse::io::path_t& stylePath,
-                                                             bool forceMode,
-                                                             bool unrollRepeats)
+RetVal<project::INotationProjectPtr> BackendApi::openProject(const muse::io::path_t& path, const OpenParams& params)
 {
     TRACEFUNC
 
@@ -274,7 +264,7 @@ RetVal<project::INotationProjectPtr> BackendApi::openProject(const muse::io::pat
         return make_ret(Ret::Code::InternalError);
     }
 
-    Ret ret = notationProject->load(path, stylePath, forceMode, unrollRepeats);
+    Ret ret = notationProject->load(path, params);
     if (!ret) {
         LOGE() << "failed load: " << path << ", ret: " << ret.toString();
         return make_ret(Ret::Code::InternalError);
@@ -840,7 +830,10 @@ void BackendApi::initPotentialExcerpts(notation::IMasterNotationPtr masterNotati
 
 Ret BackendApi::updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode)
 {
-    RetVal<INotationProjectPtr> project = openProject(in, NO_STYLE, forceMode);
+    OpenParams openParams;
+    openParams.forceMode = forceMode;
+
+    RetVal<INotationProjectPtr> project = openProject(in, openParams);
     if (!project.ret) {
         return project.ret;
     }
