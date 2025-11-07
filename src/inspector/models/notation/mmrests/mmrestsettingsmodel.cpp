@@ -86,7 +86,7 @@ void MMRestSettingsModel::updateNumberOptionsEnabled()
             break;
         }
         MMRest* mmRest = toMMRest(item);
-        if (!mmRest->shouldShowNumber()) {
+        if (!mmRest->shouldShowNumberByDefault()) {
             enabled = false;
             break;
         }
