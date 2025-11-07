@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_MSCORE_H
-#define MU_ENGRAVING_MSCORE_H
+#pragma once
 
 #include "global/containers.h"
 
@@ -76,6 +75,8 @@ static constexpr double DPMM = DPI / INCH;
 // NOTE: the SMuFL default is actually 20pt. We use 10 for historical reasons
 // and back-compatibility, but this will be multiplied x2 during layout.
 static constexpr double MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE = 10.0;
+
+static constexpr double UI_ICONS_DEFAULT_FONT_SIZE = 12.0;
 
 static constexpr int MAX_STAVES = 4;
 
@@ -233,5 +234,3 @@ public:
     static std::string errorToString(MsError err);
 };
 } // namespace mu::engraving
-
-#endif

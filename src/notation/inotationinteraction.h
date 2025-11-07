@@ -101,7 +101,7 @@ public:
     virtual muse::async::Notification dragChanged() const = 0;
 
     virtual bool isOutgoingDragElementAllowed(const EngravingItem* element) const = 0;
-    virtual void startOutgoingDragElement(const EngravingItem* element, QObject* dragSource) = 0;
+    virtual void startOutgoingDragElement(const EngravingItem* element, QObject* dragSource, const muse::PointF& hotSpot) = 0;
     virtual void startOutgoingDragRange(QObject* dragSource) = 0;
     virtual bool isOutgoingDragStarted() const = 0;
     virtual void endOutgoingDrag() = 0;

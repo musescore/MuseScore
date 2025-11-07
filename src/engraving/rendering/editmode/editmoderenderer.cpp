@@ -290,8 +290,6 @@ void EditModeRenderer::draw(const TextBlock& textBlock, const TextBase* item, mu
 
 void EditModeRenderer::draw(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter)
 {
-    Font f(textFragment.font(item));
-    f.setPointSizeF(f.pointSizeF());
-    painter->setFont(f);
+    painter->setFont(textFragment.font(item));
     painter->drawText(textFragment.pos, textFragment.text);
 }

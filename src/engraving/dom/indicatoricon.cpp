@@ -36,8 +36,6 @@ IndicatorIcon::IndicatorIcon(const ElementType& type, System* parent, ElementFla
 Font IndicatorIcon::font() const
 {
     Font font(configuration()->iconsFontFamily(), Font::Type::Icon);
-    static constexpr double STANDARD_POINT_SIZE = 12.0;
-    const double scaling = spatium() / defaultSpatium();
-    font.setPointSizeF(STANDARD_POINT_SIZE * scaling);
+    font.setPointSizeF(UI_ICONS_DEFAULT_FONT_SIZE);
     return font;
 }

@@ -26,6 +26,7 @@
 
 #include "../editing/editsoundflag.h"
 #include "linkedobjects.h"
+#include "mscore.h"
 #include "score.h"
 
 using namespace muse::draw;
@@ -37,6 +38,7 @@ SoundFlag::SoundFlag(EngravingItem* parent)
     String fontFamily = configuration()->iconsFontFamily();
     m_iconFontValid = !fontFamily.empty();
     m_iconFont = Font(fontFamily, Font::Type::Icon);
+    m_iconFont.setPointSizeF(UI_ICONS_DEFAULT_FONT_SIZE);
 
     //! draw on top of all elements
     setZ(INT_MAX);
@@ -227,11 +229,6 @@ char16_t SoundFlag::iconCode() const
 Font SoundFlag::iconFont() const
 {
     return m_iconFont;
-}
-
-void SoundFlag::setIconFontSize(double size)
-{
-    m_iconFont.setPointSizeF(size);
 }
 
 Color SoundFlag::iconBackgroundColor() const

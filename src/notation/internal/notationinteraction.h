@@ -116,7 +116,7 @@ public:
     muse::async::Notification dragChanged() const override;
 
     bool isOutgoingDragElementAllowed(const EngravingItem* element) const override;
-    void startOutgoingDragElement(const EngravingItem* element, QObject* dragSource) override;
+    void startOutgoingDragElement(const EngravingItem* element, QObject* dragSource, const muse::PointF& hotSpot) override;
     void startOutgoingDragRange(QObject* dragSource) override;
     bool isOutgoingDragStarted() const override;
     void endOutgoingDrag() override;

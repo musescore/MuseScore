@@ -83,15 +83,14 @@ void PaintedEngravingItem::setSpatium(double spatium)
 
 void PaintedEngravingItem::paint(QPainter* painter)
 {
-    qreal dpi = painter->device()->logicalDpiX();
     muse::draw::Painter p(painter, "paintedengravingitem");
     p.save();
     p.setAntialiasing(true);
-    paintNotationPreview(p, dpi);
+    paintNotationPreview(p);
     p.restore();
 }
 
-void PaintedEngravingItem::paintNotationPreview(muse::draw::Painter& painter, qreal dpi) const
+void PaintedEngravingItem::paintNotationPreview(muse::draw::Painter& painter) const
 {
     IF_ASSERT_FAILED(m_item) {
         return;
@@ -99,14 +98,9 @@ void PaintedEngravingItem::paintNotationPreview(muse::draw::Painter& painter, qr
 
     EngravingItemPreviewPainter::PaintParams params;
     params.painter = &painter;
-
     params.color = configuration()->defaultColor();
-
     params.rect = muse::RectF(0, 0, parentItem()->width(), parentItem()->height());
-    params.dpi = dpi;
-
     params.spatium = m_spatium;
-
     params.numStaffLines = m_numStaffLines;
 
     EngravingItemPreviewPainter::paintPreview(m_item.get(), params);

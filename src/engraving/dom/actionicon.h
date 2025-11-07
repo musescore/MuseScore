@@ -79,8 +79,6 @@ public:
     ActionIcon(EngravingItem* score);
     ~ActionIcon() override = default;
 
-    static constexpr double DEFAULT_FONT_SIZE = 16.0;
-
     ActionIcon* clone() const override;
 
     ActionIconType actionType() const;
@@ -92,8 +90,6 @@ public:
     char16_t icon() const { return m_icon; }
 
     const muse::draw::Font& iconFont() const { return m_iconFont; }
-    double fontSize() const;
-    void setFontSize(double size);
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;

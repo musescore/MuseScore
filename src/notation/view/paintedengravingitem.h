@@ -63,7 +63,7 @@ signals:
     void spatiumChanged();
 
 private:
-    void paintNotationPreview(muse::draw::Painter& painter, qreal dpi) const;
+    void paintNotationPreview(muse::draw::Painter& painter) const;
 
     mu::engraving::ElementPtr m_item;
     int m_numStaffLines = 0;

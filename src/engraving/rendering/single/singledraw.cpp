@@ -1397,9 +1397,7 @@ void SingleDraw::draw(const GlissandoSegment* item, Painter* painter, const Pain
             // raise text slightly above line and slightly more with WAVY than with STRAIGHT
             yOffset += _spatium * (glissando->glissandoType() == GlissandoType::WAVY ? 0.4 : 0.1);
 
-            Font scaledFont(f);
-            scaledFont.setPointSizeF(f.pointSizeF());
-            painter->setFont(scaledFont);
+            painter->setFont(f);
 
             double x = (l - r.width()) * 0.5;
             painter->drawText(PointF(x, -yOffset), glissando->text());
@@ -1551,9 +1549,7 @@ void SingleDraw::draw(const TextBlock& textBlock, const TextBase* item, muse::dr
 
 void SingleDraw::draw(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter)
 {
-    Font f(textFragment.font(item));
-    f.setPointSizeF(f.pointSizeF());
-    painter->setFont(f);
+    painter->setFont(textFragment.font(item));
     painter->drawText(textFragment.pos, textFragment.text);
 }
 
@@ -1769,9 +1765,7 @@ void SingleDraw::draw(const Harmony* item, Painter* painter, const PaintOptions&
     painter->setPen(color);
     for (const HarmonyRenderItem* renderItem : ldata->renderItemList()) {
         if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
-            Font f(ts->font());
-            f.setPointSizeF(f.pointSizeF());
-            painter->setFont(f);
+            painter->setFont(ts->font());
             painter->drawText(ts->pos(), ts->text());
         }
     }
@@ -1897,9 +1891,7 @@ void SingleDraw::draw(const LayoutBreak* item, Painter* painter, const PaintOpti
     Pen pen(item->configuration()->fontPrimaryColor());
     painter->setPen(pen);
 
-    Font f(item->font());
-    f.setPointSizeF(f.pointSizeF());
-    painter->setFont(f);
+    painter->setFont(item->font());
 
     painter->drawSymbol(PointF(0.0, 0.0), item->iconCode());
 }
@@ -2190,7 +2182,6 @@ void SingleDraw::draw(const StaffText* item, Painter* painter, const PaintOption
     drawTextBase(item, painter, opt);
 
     if (item->hasSoundFlag()) {
-        item->soundFlag()->setIconFontSize(item->font().pointSizeF());
         draw(item->soundFlag(), painter, opt);
     }
 }
@@ -2250,9 +2241,7 @@ void SingleDraw::draw(const FSymbol* item, Painter* painter, const PaintOptions&
 {
     TRACE_DRAW_ITEM;
 
-    Font f(item->font());
-    f.setPointSizeF(f.pointSizeF());
-    painter->setFont(f);
+    painter->setFont(item->font());
     painter->setPen(item->curColor(opt));
     painter->drawText(PointF(0, 0), item->toString());
 }
@@ -2272,8 +2261,7 @@ void SingleDraw::draw(const SoundFlag* item, Painter* painter, const PaintOption
 {
     TRACE_DRAW_ITEM;
 
-    Font f(item->iconFont());
-    painter->setFont(f);
+    painter->setFont(item->iconFont());
     painter->drawText(item->ldata()->bbox(), muse::draw::AlignCenter, Char(item->iconCode()));
 }
 

@@ -22,7 +22,6 @@
 
 #include "engravingitempreviewpainter.h"
 
-#include "engraving/dom/actionicon.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/textlinebase.h"
 #include "engraving/rendering/paintoptions.h"
@@ -32,7 +31,10 @@ using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse::draw;
 
-/// Paint an EngravingItem - include a staff if specified in the params.
+/// Paint `element` centered inside `params.rect`. If `params.numStaffLines >
+/// 0`, then the element is only centered horizontally; i.e. vertical alignment
+/// is unchanged from the default so that item will appear at the correct height
+/// on the staff.
 void EngravingItemPreviewPainter::paintPreview(mu::engraving::EngravingItem* element, PaintParams& params)
 {
     IF_ASSERT_FAILED(element && params.painter) {
@@ -42,22 +44,35 @@ void EngravingItemPreviewPainter::paintPreview(mu::engraving::EngravingItem* ele
     Painter* painter = params.painter;
     painter->setPen(params.color);
 
-    if (element->isActionIcon()) {
-        paintPreviewForActionIcon(element, params);
-        return; // never draw staff for icon elements
-    }
-
-    PointF origin = params.rect.center(); // draw element at center of cell by default
+    PointF rectOrigin = params.rect.center(); // draw element at center of cell by default
     if (params.numStaffLines > 0) {
         const double topLinePos = paintStaff(params); // draw dummy staff lines onto rect.
-        origin.setY(topLinePos); // vertical position relative to staff instead of cell center.
+        rectOrigin.setY(topLinePos); // vertical position relative to staff instead of cell center.
     }
 
-    painter->translate(origin);
+    painter->translate(rectOrigin);
 
     painter->translate(params.xoffset * params.spatium, params.yoffset * params.spatium); // additional offset for element only
 
-    paintPreviewForItem(element, params);
+    const double sizeRatio = params.spatium / gpaletteScore->style().spatium();
+    painter->scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
+
+    // calculate bbox
+    engravingRender()->layoutItem(element);
+
+    PointF elementOrigin = element->ldata()->bbox().center();
+
+    if (params.numStaffLines > 0) {
+        // y = 0 is position of the element's parent.
+        // If the parent is the staff (or a segment on the staff) then
+        // y = 0 corresponds to the position of the top staff line.
+        elementOrigin.setY(0.0);
+    }
+
+    // shift coordinates so element is drawn at correct position
+    painter->translate(-elementOrigin);
+
+    paintItem(element, params);
 }
 
 void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* element, PaintParams& params)
@@ -96,33 +111,6 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
     element->scanElements(&params, doPaint);
 }
 
-/// Paint an icon element so that it fills a QRect, preserving aspect ratio, and
-/// leaving a small margin around the edges.
-void EngravingItemPreviewPainter::paintPreviewForActionIcon(mu::engraving::EngravingItem* element, PaintParams& params)
-{
-    IF_ASSERT_FAILED(element && element->isActionIcon() && params.painter) {
-        return;
-    }
-
-    Painter* painter = params.painter;
-    painter->save();
-
-    double DPIscaling = mu::engraving::PPI / params.dpi;
-
-    ActionIcon* action = toActionIcon(element);
-    action->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * params.mag * DPIscaling);
-
-    engravingRender()->layoutItem(action);
-
-    painter->translate(params.rect.center() - action->ldata()->bbox().center());
-
-    rendering::PaintOptions opt;
-    opt.invertColors = params.colorsInversionEnabled;
-    engravingRender()->drawItem(action, painter, opt);
-
-    painter->restore();
-}
-
 /// Paint a staff centered within a QRect and return the distance from the
 /// top of the QRect to the uppermost staff line.
 double EngravingItemPreviewPainter::paintStaff(PaintParams& params)
@@ -157,38 +145,4 @@ double EngravingItemPreviewPainter::paintStaff(PaintParams& params)
 
     painter->restore();
     return topLineDist;
-}
-
-/// Paint a non-icon element centered at the origin of the painter's coordinate
-/// system. If drawStaff is true then the element is only centered horizontally;
-/// i.e. vertical alignment is unchanged from the default so that item will appear
-/// at the correct height on the staff.
-void EngravingItemPreviewPainter::paintPreviewForItem(mu::engraving::EngravingItem* element, PaintParams& params)
-{
-    IF_ASSERT_FAILED(element && !element->isActionIcon() && params.painter) {
-        return;
-    }
-
-    Painter* painter = params.painter;
-    painter->save();
-
-    const double sizeRatio = params.spatium / gpaletteScore->style().spatium();
-    painter->scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
-
-    // calculate bbox
-    engravingRender()->layoutItem(element);
-
-    PointF origin = element->ldata()->bbox().center();
-
-    if (params.numStaffLines > 0) {
-        // y = 0 is position of the element's parent.
-        // If the parent is the staff (or a segment on the staff) then
-        // y = 0 corresponds to the position of the top staff line.
-        origin.setY(0.0);
-    }
-
-    painter->translate(-1.0 * origin); // shift coordinates so element is drawn at correct position
-
-    paintItem(element, params);
-    painter->restore();
 }

@@ -43,7 +43,6 @@ public:
         double yoffset = 0.0;
 
         muse::RectF rect;
-        double dpi = 1.0;
         double spatium = 1.0;
 
         bool useElementColors = false;
@@ -55,8 +54,6 @@ public:
     static void paintItem(mu::engraving::EngravingItem* element, PaintParams& params);
 
 private:
-    static void paintPreviewForItem(mu::engraving::EngravingItem* element, PaintParams& params);
-    static void paintPreviewForActionIcon(mu::engraving::EngravingItem* element, PaintParams& params);
     static double paintStaff(PaintParams& params);
 };
 }
