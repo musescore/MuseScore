@@ -1435,22 +1435,26 @@ void NotationInteraction::startOutgoingDragElement(const EngravingItem* element,
         m_outgoingDrag = nullptr;
     });
 
-    const qreal adjustedRatio = 0.4;
-    const RectF bbox = element->ldata()->bbox();
-    const qreal width = bbox.width();
-    const qreal height = bbox.height();
+    const QScreen* screen = QGuiApplication::primaryScreen();
+    const qreal physDpiRatio = screen->physicalDotsPerInch() / mu::engraving::DPI;
+    const qreal devicePixelRatio = screen->devicePixelRatio();
 
-    QSize pixmapSize = QSize(width * adjustedRatio, height * adjustedRatio);
-    QPixmap pixmap(pixmapSize);
-    pixmap.fill(Qt::transparent);
+    const RectF bbox = element->ldata()->bbox().adjusted(-4.0, -4.0, 4.0, 4.0);
+    const double scaledWidth = bbox.width() * physDpiRatio;
+    const double scaledHeight = bbox.height() * physDpiRatio;
+
+    QPixmap pixmap(qCeil(scaledWidth * devicePixelRatio),
+                   qCeil(scaledHeight * devicePixelRatio));
+    pixmap.setDevicePixelRatio(devicePixelRatio);
+    pixmap.fill(Qt::yellow);
 
     QPainter qp(&pixmap);
 
-    Painter p(&qp, "prepareDragCopyElement");
+    Painter p(&qp, "startOutgoingDragElement");
     p.setAntialiasing(true);
 
-    p.translate(qAbs(bbox.x() * adjustedRatio), qAbs(bbox.y() * adjustedRatio));
-    p.scale(adjustedRatio, adjustedRatio);
+    p.scale(physDpiRatio, physDpiRatio);
+    p.translate(qAbs(bbox.x()), qAbs(bbox.y()));
 
     mu::engraving::rendering::PaintOptions opt;
     opt.invertColors = engravingConfiguration()->scoreInversionEnabled();
