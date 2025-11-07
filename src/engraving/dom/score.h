@@ -529,7 +529,6 @@ public:
     void createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& tick);
 
     Fraction makeGap(Segment*, track_idx_t track, const Fraction&, Tuplet*, bool keepChord = false);
-    bool makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, int voiceOffset[VOICES]);
     bool makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick);
 
     Rest* addRest(const Fraction& tick, track_idx_t track, TDuration, Tuplet*);
@@ -1133,7 +1132,7 @@ private:
     bool tryExtendSingleSelectionToRange(EngravingItem* e, staff_idx_t staffIdx);
 
     muse::Ret putNote(const Position&, bool replace);
-    void handleOverlappingChordRest(InputState& inputState);
+    void truncateChordRest(ChordRest* cr, const Fraction& tick, bool fillWithRest);
 
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
