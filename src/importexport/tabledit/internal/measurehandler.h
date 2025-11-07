@@ -32,7 +32,7 @@ public:
     int actualSize(const std::vector<TefMeasure>& tefMeasures, const size_t idx) const;
     void calculate(const std::vector<TefNote>& tefContents, const std::vector<TefMeasure>& tefMeasures);
     int sumPreviousGaps(const size_t idx) const;
-    int measureIndex(int tstart, const std::vector<TefMeasure>& tefMeasures) const;
+    size_t measureIndex(int tstart, const std::vector<TefMeasure>& tefMeasures) const;
 private:
     void dumpActualsAndSumGaps(const std::vector<TefMeasure>& tefMeasures) const;
     void initializeMeasureStartsAndGaps(const std::vector<TefMeasure>& tefMeasures);
