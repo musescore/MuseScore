@@ -263,6 +263,7 @@ public:
     PointF dragOffset;
     EngravingItem* element = nullptr;
     EngravingItem* dropElement = nullptr;
+    track_idx_t track = muse::nidx;
 
     EditData(MuseScoreView* v = nullptr)
         : m_view(v) {}

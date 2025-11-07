@@ -39,6 +39,7 @@ class Rest;
 class Measure;
 class Score;
 class Segment;
+class Selection;
 class Spanner;
 class System;
 class Staff;
@@ -59,7 +60,6 @@ extern String pitch2string(int v, bool useFlats = false);
 extern int string2pitch(const String& s);
 extern String convertPitchStringFlatsAndSharpsToUnicode(const String& str);
 
-extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interval, bool useDoubleSharpsFlats);
 extern int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
 extern int transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepAlteredDegrees, bool useDoubleSharpsFlats);
 
@@ -127,4 +127,6 @@ extern bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const 
 extern bool isValidBarLineForRepeatSection(const Segment* firstSeg, const Segment* secondSeg);
 
 extern bool isElementInFretBox(const EngravingItem* item);
+
+extern std::vector<EngravingItem*> filterTargetElements(const Selection& sel, EngravingItem* dropElement, bool& unique);
 } // namespace mu::engraving

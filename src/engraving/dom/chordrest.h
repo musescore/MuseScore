@@ -70,6 +70,7 @@ public:
     virtual EngravingObjectList scanChildren() const override;
     virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
+    bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
     virtual void undoUnlink() override;
 

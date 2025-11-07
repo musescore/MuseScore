@@ -75,13 +75,12 @@ void Score::transposeChord(Chord* c, const Fraction& tick)
     // check if staffMove moves a note to a
     // nonexistent staff
     //
-    track_idx_t track = c->track();
-    size_t nn = (track / VOICES) + c->staffMove();
-    if (nn >= c->score()->nstaves()) {
+
+    if (c->vStaffIdx() >= c->score()->nstaves()) {
         c->setStaffMove(0);
     }
-    Staff* staff = c->staff();
-    Interval dstTranspose = staff->transpose(tick);
+
+    Interval dstTranspose = c->staff()->transpose(tick);
 
     if (dstTranspose.isZero()) {
         for (Note* n : c->notes()) {
@@ -90,10 +89,7 @@ void Score::transposeChord(Chord* c, const Fraction& tick)
     } else {
         dstTranspose.flip();
         for (Note* n : c->notes()) {
-            int npitch;
-            int ntpc;
-            transposeInterval(n->pitch(), n->tpc1(), &npitch, &ntpc, dstTranspose, true);
-            n->setTpc2(ntpc);
+            n->setTpc2(transposeTpc(n->tpc1(), dstTranspose, true));
         }
     }
 }
@@ -513,23 +509,20 @@ std::vector<EngravingItem*> Score::cmdPasteSymbol(muse::ByteArray& data, MuseSco
     }
 
     std::vector<EngravingItem*> targetElements;
-    switch (m_selection.state()) {
-    case SelState::NONE:
+    if (m_selection.isNone()) {
         UNREACHABLE;
         return {};
-    case SelState::LIST:
-        targetElements = m_selection.elements();
-        break;
-    case SelState::RANGE:
+    } else {
         // TODO: make this as smart as `NotationInteraction::applyPaletteElement`,
         // without duplicating logic. (Currently, for range selections, we only
-        // paste onto the "top-left corner".
-        mu::engraving::Segment* firstSegment = m_selection.startSegment();
-        staff_idx_t firstStaffIndex = m_selection.staffStart();
-
-        // The usage of `firstElementForNavigation` is inspired by `NotationInteraction::applyPaletteElement`.
-        targetElements = { firstSegment->firstElementForNavigation(firstStaffIndex) };
-        break;
+        // paste onto the "top-left corner" for non-measure based elements.)
+        bool unique;
+        targetElements = filterTargetElements(m_selection, el.get(), unique);
+        if (!unique && m_selection.isRange()) {
+            // The usage of `firstElementForNavigation` is inspired by `NotationInteraction::applyPaletteElement`.
+            Segment* firstSegment = m_selection.startSegment();
+            targetElements = { firstSegment->firstElementForNavigation(m_selection.staffStart()) };
+        }
     }
 
     if (targetElements.empty()) {
@@ -538,28 +531,22 @@ std::vector<EngravingItem*> Score::cmdPasteSymbol(muse::ByteArray& data, MuseSco
         return {};
     }
 
+    const bool systemObj = el->systemFlag();
+
     for (EngravingItem* target : targetElements) {
         addRefresh(target->pageBoundingRect()); // layout() ?!
         el->setTrack(target->track());
 
         EditData ddata(view);
+        ddata.pos = target->pagePos();
         ddata.dropElement = el.get();
-        ddata.pos = target->pageBoundingRect().topLeft();
+        ddata.track = target->track();
 
         if (target->acceptDrop(ddata)) {
             if (!el->isNote() || (target = prepareTarget(target, toNote(el.get()), duration))) {
                 ddata.dropElement = el->clone();
 
-                if (ddata.dropElement->systemFlag()) {
-                    EngravingItem* newEl = pasteSystemObject(ddata, target);
-                    if (newEl) {
-                        droppedElements.emplace_back(newEl);
-                    }
-
-                    continue;
-                }
-
-                EngravingItem* dropped = target->drop(ddata);
+                EngravingItem* dropped = systemObj ? pasteSystemObject(ddata, target) : target->drop(ddata);
                 if (dropped) {
                     droppedElements.emplace_back(dropped);
                 }

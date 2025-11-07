@@ -1631,92 +1631,67 @@ public:
 bool Note::acceptDrop(EditData& data) const
 {
     EngravingItem* e = data.dropElement;
-    ElementType type = e->type();
-    if (type == ElementType::GLISSANDO || type == ElementType::GUITAR_BEND) {
+    switch (e->type()) {
+    case ElementType::GLISSANDO:
+    case ElementType::GUITAR_BEND:
         for (auto ee : m_spannerFor) {
             if (ee->isGlissando() || ee->isGuitarBend()) {
                 return false;
             }
         }
         return true;
-    }
-
-    const Staff* st   = staff();
-    bool isTablature  = st->isTabStaff(tick());
-    bool tabFingering = st->staffTypeForElement(this)->showTabFingering();
-
-    if (type == ElementType::STRING_TUNINGS) {
-        staff_idx_t staffIdx = 0;
-        Segment* seg = nullptr;
-        if (!score()->pos2measure(data.pos, &staffIdx, 0, &seg, 0)) {
-            return false;
+    case ElementType::FINGERING:
+        return staff()->isTabStaff(tick()) ? staffType()->showTabFingering() : true;
+    case ElementType::ARTICULATION:
+    case ElementType::ORNAMENT:
+    case ElementType::TAPPING:
+    case ElementType::CHORDLINE:
+    case ElementType::TEXT:
+    case ElementType::ACCIDENTAL:
+    case ElementType::ARPEGGIO:
+    case ElementType::NOTEHEAD:
+    case ElementType::NOTE:
+    case ElementType::TREMOLO_SINGLECHORD:
+    case ElementType::TREMOLO_TWOCHORD:
+    case ElementType::IMAGE:
+    case ElementType::CHORD:
+    case ElementType::SYMBOL:
+    case ElementType::BAR_LINE:
+    case ElementType::STICKING:
+    case ElementType::BEND:
+    case ElementType::FIGURED_BASS:
+    case ElementType::LYRICS:
+        return true;
+    case ElementType::BAGPIPE_EMBELLISHMENT:
+        return noteType() == NoteType::NORMAL;
+    case ElementType::ACTION_ICON: {
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::ACCIACCATURA:
+        case ActionIconType::APPOGGIATURA:
+        case ActionIconType::GRACE4:
+        case ActionIconType::GRACE16:
+        case ActionIconType::GRACE32:
+        case ActionIconType::GRACE8_AFTER:
+        case ActionIconType::GRACE16_AFTER:
+        case ActionIconType::GRACE32_AFTER:
+        case ActionIconType::PARENTHESES:
+        case ActionIconType::STANDARD_BEND:
+        case ActionIconType::PRE_BEND:
+        case ActionIconType::GRACE_NOTE_BEND:
+        case ActionIconType::SLIGHT_BEND:
+        case ActionIconType::NOTE_ANCHORED_LINE:
+            return true;
+        default: break;
         }
-
-        return chord()->measure()->canAddStringTunings(staffIdx);
+        break;
     }
-
-    return type == ElementType::ARTICULATION
-           || type == ElementType::ORNAMENT
-           || type == ElementType::TAPPING
-           || type == ElementType::FERMATA
-           || type == ElementType::CHORDLINE
-           || type == ElementType::TEXT
-           || type == ElementType::REHEARSAL_MARK
-           || (type == ElementType::FINGERING && (!isTablature || tabFingering))
-           || type == ElementType::ACCIDENTAL
-           || type == ElementType::BREATH
-           || type == ElementType::ARPEGGIO
-           || type == ElementType::NOTEHEAD
-           || type == ElementType::NOTE
-           || type == ElementType::TREMOLO_SINGLECHORD
-           || type == ElementType::TREMOLO_TWOCHORD
-           || type == ElementType::STAFF_STATE
-           || type == ElementType::INSTRUMENT_CHANGE
-           || type == ElementType::IMAGE
-           || type == ElementType::CHORD
-           || type == ElementType::HARMONY
-           || type == ElementType::DYNAMIC
-           || type == ElementType::EXPRESSION
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::ACCIACCATURA)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::APPOGGIATURA)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE4)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE16)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE32)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE8_AFTER)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE16_AFTER)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE32_AFTER)
-           || (noteType() == NoteType::NORMAL && type == ElementType::BAGPIPE_EMBELLISHMENT)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_AUTO)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_NONE)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BREAK_LEFT)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BREAK_INNER_8TH)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BREAK_INNER_16TH)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_JOIN)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::PARENTHESES)
-           || (type == ElementType::SYMBOL)
-           || (type == ElementType::CLEF)
-           || (type == ElementType::KEYSIG)
-           || (type == ElementType::TIMESIG)
-           || (type == ElementType::BAR_LINE)
-           || (type == ElementType::STAFF_TEXT)
-           || (type == ElementType::PLAYTECH_ANNOTATION)
-           || (type == ElementType::CAPO)
-           || (type == ElementType::SYSTEM_TEXT)
-           || (type == ElementType::TRIPLET_FEEL)
-           || (type == ElementType::STICKING)
-           || (type == ElementType::TEMPO_TEXT)
-           || (type == ElementType::BEND)
-           || (type == ElementType::TREMOLOBAR)
-           || (type == ElementType::FRET_DIAGRAM)
-           || (type == ElementType::FIGURED_BASS)
-           || (type == ElementType::LYRICS)
-           || (type == ElementType::HARP_DIAGRAM)
-           || (type != ElementType::TIE && type != ElementType::PARTIAL_TIE && e->isSpanner())
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::STANDARD_BEND)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::PRE_BEND)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE_NOTE_BEND)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::SLIGHT_BEND)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::NOTE_ANCHORED_LINE);
+    default:
+        if (e->isSpanner()) {
+            return e->type() != ElementType::TIE && e->type() != ElementType::PARTIAL_TIE;
+        }
+        break;
+    }
+    return toChordRest(chord())->acceptDrop(data);
 }
 
 //---------------------------------------------------------
@@ -1733,9 +1708,6 @@ EngravingItem* Note::drop(EditData& data)
     Chord* ch = chord();
 
     switch (e->type()) {
-    case ElementType::REHEARSAL_MARK:
-        return ch->drop(data);
-
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         e->setParent(this);
@@ -1849,14 +1821,6 @@ EngravingItem* Note::drop(EditData& data)
             break;
         }
 
-        case ActionIconType::BEAM_AUTO:
-        case ActionIconType::BEAM_NONE:
-        case ActionIconType::BEAM_BREAK_LEFT:
-        case ActionIconType::BEAM_BREAK_INNER_8TH:
-        case ActionIconType::BEAM_BREAK_INNER_16TH:
-        case ActionIconType::BEAM_JOIN:
-            return ch->drop(data);
-            break;
         case ActionIconType::PARENTHESES:
             score()->cmdAddParentheses(this);
             break;
@@ -1889,9 +1853,8 @@ EngravingItem* Note::drop(EditData& data)
         default:
             break;
         }
+        return ch->drop(data);
     }
-        delete e;
-        break;
 
     case ElementType::GUITAR_BEND:
     {
@@ -2016,9 +1979,6 @@ EngravingItem* Note::drop(EditData& data)
     case ElementType::CHORDLINE:
         toChordLine(e)->setNote(this);
         return ch->drop(data);
-
-    case ElementType::STRING_TUNINGS:
-        return ch->measure()->drop(data);
 
     default:
         Spanner* spanner;
