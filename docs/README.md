@@ -5,7 +5,7 @@ What does the documentation consist of:
 * Static documentation - here is a tutorial and description of classes
 * Description of API methods - located in the API implementation files. 
 * Snapshots - here is the generated documentation for each version.
-* index.html [docs/index.html] - this is the entry point for https://musescore.github.io 
+* index.html - this is the entry point for https://musescore.github.io 
 * Tools for generation - here you will find a documentation extractor for API methods, a documentation generator (jsdoc) and automation scripts.
 * Generation and update process - see description below  
 
@@ -57,20 +57,13 @@ When generating documentation, we first extract this documentation from the `cpp
    
 ### Snapshots  
 
-location: [docs/snapshots](https://github.com/musescore/MuseScore/tree/master/docs/snapshots) 
+location: [snapshots](https://github.com/musescore/musescore.github.io/tree/main/snapshots) 
 
-To be able to view the documentation for each version, we generate snapshots of the documentation for each version and place them in the appropriate folder, for example: docs/snapshots/4.5, docs/snapshots/4.6
+To be able to view the documentation for each version, we generate snapshots of the documentation for each version and place them in the appropriate folder, for example: snapshots/4.5, snapshots/4.6
 
 ### index.html 
 
-location: [docs/index.html](https://github.com/musescore/MuseScore/blob/master/docs/index.html) - this is the entry point for https://musescore.github.io  
-   
-How does this work: 
-* The organization has a repository [musescore.github.io](https://github.com/musescore/musescore.github.io) - this is a repository for site musescore.github.io. 
-* Opening [musescore.github.io](https://musescore.github.io) by default, without any suffixes, will open [index.html](https://github.com/musescore/musescore.github.io/blob/main/index.html) in this repository.
-* Right now, this index.html simply do a redirect to the MuseScore repository. i.e. by adding the repository name to musescore.github.io, like [musescore.github.io/MuseScore](https://musescore.github.io/MuseScore/), the index.html from this repository will be opened.
-* GitHub first looks for index.html in the repository root; if it's not there, it looks for index.html in the `./docs` directory. 
-* This is how our `docs/index.html` opens.
+location: [index.html](https://github.com/musescore/musescore.github.io/blob/main/index.html) - this is the entry point for https://musescore.github.io  
 
 After generating a snapshot for a new version, we need to add a link to it in this `index.html`, like others. 
 
@@ -100,5 +93,6 @@ Process:
 2. Run `bash ./tools/jsdoc/jsdoc_install.sh`  
 3. Run `bash ./tools/jsdoc/jsdoc_run.sh`  
 4. Look the result, open it in browser index.html from `./tools/jsdoc/gen_apidoc/`  
-5. Copy dir `./tools/jsdoc/gen_apidoc/` to `docs/snapshots/x.x` 
-6. Add a link to the new version in `docs/index.html`
+5. Clone [musescore.github.io](https://github.com/musescore/musescore.github.io)
+5. Copy dir `./tools/jsdoc/gen_apidoc/` to `musescore.github.io/snapshots/x.x` 
+6. Add a link to the new version in `musescore.github.io/index.html`
