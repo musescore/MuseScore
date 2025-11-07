@@ -326,12 +326,15 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
             }
         }
         if (!found) {
-            mmrMeasure->add(e->isLayoutBreak() ? e->clone() : e->linkedClone());
+            EngravingItem* newEl = e->isLayoutBreak() ? e->clone() : e->linkedClone();
+            newEl->setParent(mmrMeasure);
+            ctx.mutDom().doUndoAddElement(newEl);
         }
     }
     for (EngravingItem* e : oldList) {
-        delete e;
+        ctx.mutDom().doUndoRemoveElement(e);
     }
+
     Segment* s = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
     for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
         track_idx_t track = staffIdx * VOICES;
