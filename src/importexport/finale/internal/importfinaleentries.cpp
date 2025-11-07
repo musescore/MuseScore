@@ -231,7 +231,7 @@ static void transferTupletProperties(MusxInstance<details::TupletDef> musxTuplet
     // separate bracket/number offset not supported, just add it to the whole tuplet for now
     /// @todo needs to be negated?
     scoreTuplet->setOffset(evpuToPointF(musxTuplet->tupOffX + musxTuplet->brackOffX,
-                                                     musxTuplet->tupOffY + musxTuplet->brackOffY) * SPATIUM20); // correctly scaled?
+                                        musxTuplet->tupOffY + musxTuplet->brackOffY) * scoreTuplet->defaultSpatium());
     scoreTuplet->setVisible(!musxTuplet->hidden);
     if (musxTuplet->autoBracketStyle != options::TupletOptions::AutoBracketStyle::Always) {
         // Can't be determined until we write all the notes/beams
@@ -254,8 +254,8 @@ static void transferTupletProperties(MusxInstance<details::TupletDef> musxTuplet
 
     // bracket extensions
     /// @todo account for the fact that Finale always includes head widths in total bracket width, an option not yet in MuseScore. See #16973
-    scoreTuplet->setUserPoint1(evpuToPointF(-musxTuplet->leftHookExt, 0) * SPATIUM20);
-    scoreTuplet->setUserPoint2(evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj) * SPATIUM20);
+    scoreTuplet->setUserPoint1(evpuToPointF(-musxTuplet->leftHookExt, 0) * scoreTuplet->defaultSpatium());
+    scoreTuplet->setUserPoint2(evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj) * scoreTuplet->defaultSpatium());
     if (musxTuplet->alwaysFlat) {
         scoreTuplet->setUserPoint2(PointF(scoreTuplet->userP2().x(), scoreTuplet->userP1().y()));
     }
@@ -487,8 +487,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                                 }
                                 /// @todo this calculation needs to take into account the default accidental separation amounts in accidentalOptions. The options
                                 /// should allow us to calculate the default position of the accidental relative to the note. (But it may not be easy.)
-                                /// The result will probably also need to be multiplied by SPATIUM20, if other items are any guide.
-                                a->setOffset(evpuToPointF(accidentalInfo->hOffset, accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0) * SPATIUM20); // correctly scaled?
+                                a->setOffset(evpuToPointF(accidentalInfo->hOffset, accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0) * a->defaultSpatium());
                             }
                         }
                         note->add(a);
@@ -506,7 +505,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     if (noteInfo->percent && muse::RealIsEqualOrLess(doubleFromPercent(noteInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
                         note->setSmall(true);
                     }
-                    note->setOffset(evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0) * SPATIUM20); // correctly scaled?
+                    note->setOffset(evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0) * note->defaultSpatium());
                     const MusxInstance<FontInfo> noteFont = noteInfo->useOwnFont ? noteInfo->customFont : options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Noteheads);
                     if (targetStaff->isTabStaff(segment->tick())
                         && (noteInfo->altNhead == U'X' || noteInfo->altNhead == U'x')) {
@@ -681,7 +680,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     dot->setParent(n);
                     dot->setVisible(n->visible());
                     dot->setTrack(cr->track());
-                    dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset) * SPATIUM20); // correctly scaled?
+                    dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset) * dot->defaultSpatium()); // correctly scaled?
                     n->add(dot);
                 }
             } else if (r) {
@@ -690,7 +689,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     dot->setParent(r);
                     dot->setVisible(r->visible());
                     dot->setTrack(cr->track());
-                    dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset) * SPATIUM20); // correctly scaled?
+                    dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset) * dot->defaultSpatium()); // correctly scaled?
                     r->add(dot);
                 }
                 break;
@@ -1054,10 +1053,10 @@ void FinaleParser::importEntries()
         if (chord->stem()) {
             if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterations>(m_currentMusxPartId, entryNumber)) {
                 if (up) {
-                    setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * SPATIUM20, 0.0));
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0));
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
                 } else {
-                    setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * SPATIUM20, 0.0));
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0));
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
                 }
             }
@@ -1453,7 +1452,7 @@ void FinaleParser::importEntryAdjustments()
                 return PointF();
             }
             beam->setVisible(beamAlter->calcEffectiveBeamWidth() != 0);
-            return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * SPATIUM20;
+            return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * beam->defaultSpatium();
         };
         /// @todo combine these two, one day
         auto getAlterFeatherU = [beam](const MusxInstanceList<details::SecondaryBeamAlterationsUpStem>& beamAlterList) {
@@ -1462,7 +1461,7 @@ void FinaleParser::importEntryAdjustments()
                     if (!beamAlter->isActive() || eduToFraction(beamAlter->dura) != Fraction(1, 16)) {
                         continue;
                     }
-                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * SPATIUM20 / beam->beamDist();
+                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * beam->defaultSpatium() / beam->beamDist();
                 }
             }
             return PointF();
@@ -1473,7 +1472,7 @@ void FinaleParser::importEntryAdjustments()
                     if (!beamAlter->isActive() || eduToFraction(beamAlter->dura) != Fraction(1, 16)) {
                         continue;
                     }
-                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * SPATIUM20 / beam->beamDist();
+                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * beam->defaultSpatium() / beam->beamDist();
                 }
             }
             return PointF();
@@ -1559,10 +1558,10 @@ void FinaleParser::importEntryAdjustments()
         }
         if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
             if (chord->beam()->direction() == DirectionV::UP) {
-                setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * SPATIUM20, 0.0));
+                setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0));
                 setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
             } else {
-                setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * SPATIUM20, 0.0));
+                setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0));
                 setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
             }
         }

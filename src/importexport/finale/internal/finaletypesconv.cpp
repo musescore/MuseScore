@@ -651,7 +651,7 @@ int midiNoteFromPercussionNoteType(const String& instrument, musx::dom::Percussi
     }
 
     const auto& noteType = percussion::getPercussionNoteTypeFromId(noteTypeId);
-    return noteType.generalMidi >= 0 ? noteType.generalMidi : -1;
+    return pitchIsValid(noteType.generalMidi) ? noteType.generalMidi : INVALID_PITCH;
 }
 
 ID createPartId(int partNumber)
@@ -2019,11 +2019,20 @@ double spatiumScaledFontSize(const MusxInstance<FontInfo>& fontInfo)
     return double(fontInfo->fontSize) * (fontInfo->absolute ? 1.0 : MUSE_FINALE_SCALE_DIFFERENTIAL);
 }
 
+double absoluteDouble(double value, EngravingItem* e)
+{
+    return value * e->defaultSpatium();
+}
+
+double absoluteDoubleFromEvpu(Evpu evpu, EngravingItem* e)
+{
+    return absoluteDouble(doubleFromEvpu(evpu), e);
+}
+
 Spatium absoluteSpatium(double value, EngravingItem* e)
 {
     // Returns global spatium value adjusted to preserve value for element scaling
-    // Use style .spatium value or .defaultSpatium ??? or SPATIUM20??
-    return Spatium(value * e->score()->style().defaultSpatium() / e->spatium());
+    return Spatium(value * e->defaultSpatium() / e->spatium());
 }
 
 Spatium absoluteSpatiumFromEvpu(Evpu evpu, EngravingItem* e)
