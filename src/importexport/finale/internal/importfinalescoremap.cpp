@@ -152,7 +152,7 @@ static Drumset* createDrumset(const MusxInstanceList<others::PercussionNoteInfo>
 
     for (size_t i = 0; i < percNoteInfoList.size(); ++i) {
         const auto& percNoteInfo = percNoteInfoList.at(i);
-        int midiPitch = percNoteInfo->getNoteType().generalMidi;
+        int midiPitch = midiNoteFromPercussionNoteType(u"", percNoteInfo->getBaseNoteTypeId());
         const bool hasDefault = defaultDrumset->isValid(midiPitch);
         if (!pitchIsValid(midiPitch)) {
             /// @todo Finale percussion doesn't seem well mapped to midi, so lots of notes are currently ignored.

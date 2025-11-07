@@ -434,7 +434,12 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             if (targetStaff->isDrumStaff(segment->tick())) {
                 NoteVal nval;
                 const Drumset* ds = targetStaff->part()->instrument()->drumset();
-                nval.pitch = noteInfoPtr.calcPercussionNoteInfo()->getNoteType().generalMidi;
+                MusxInstance<others::PercussionNoteInfo> percNoteInfo = noteInfoPtr.calcPercussionNoteInfo();
+                if (!percNoteInfo) {
+                    delete note;
+                    continue;
+                }
+                nval.pitch = midiNoteFromPercussionNoteType(targetStaff->part()->instrument()->id(), percNoteInfo->getBaseNoteTypeId());
                 if (!ds->isValid(nval.pitch)) {
                     delete note;
                     continue;
