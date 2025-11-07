@@ -23,6 +23,7 @@
 
 #include <vector>
 #include <string_view>
+#include <unordered_map>
 
 #include "musx/musx.h"
 
@@ -46,6 +47,612 @@ using namespace muse;
 using namespace musx::dom;
 
 namespace mu::iex::finale {
+
+int midiNoteFromPercussionNoteType(const String& instrument, musx::dom::PercussionNoteTypeId noteTypeId)
+{
+    const std::string instrumentKey = instrument.toStdString();
+
+    static const std::unordered_map<std::string, std::unordered_map<int, int>> instrumentToMidi = {
+        { "agogo-bells", {
+            { 30, 67 }, // agogo-bells: High Agog -> High Agogo (score 17)
+            { 31, 68 }, // agogo-bells: Low Agog -> Low Agogo (score 17)
+        }},
+        { "anvil", {
+            { 216, 68 }, // anvil: Anvil -> Anvil (score 100)
+        }},
+        { "automobile-brake-drums", {
+            { 218, 68 }, // automobile-brake-drums: Brake Drum -> Brake Drum (score 100)
+        }},
+        { "bamboo-wind-chimes", {
+            { 460, 69 }, // bamboo-wind-chimes: Bamboo Wind Chimes -> Wind Chimes (score 22)
+        }},
+        { "bass-drum", {
+            { 13, 36 }, // bass-drum: Concert Bass Drum -> Bass Drum (score 22)
+        }},
+        { "bell-plate", {
+            { 161, 81 }, // bell-plate: Bell Plate -> Bell Plate (score 100)
+        }},
+        { "bell-tree", {
+            { 473, 84 }, // bell-tree: Glissando Down -> Guiro Down Up (score 10)
+        }},
+        { "bird-call", {
+            { 183, 50 }, // bird-call: Bird Call -> Crash Cymbals Whale Call (score 10)
+        }},
+        { "bongos", {
+            { 32, 60 }, // bongos: High Bongo -> High Bongo (score 105)
+            { 33, 61 }, // bongos: Low Bongo -> Low Bongo (score 105)
+        }},
+        { "bowl-gongs", {
+            { 354, 81 }, // bowl-gongs: Bowl Gong -> Bowl (score 12)
+        }},
+        { "cabasa", {
+            { 34, 69 }, // cabasa: Cabasa -> Cabasa (score 105)
+        }},
+        { "cannon", {
+            { 219, 60 }, // cannon: Cannon -> Cannon (score 100)
+        }},
+        { "castanets", {
+            { 362, 85 }, // castanets: Castanets -> Castanets (score 105)
+        }},
+        { "china-cymbal", {
+            { 17, 52 }, // china-cymbal: China Cymbal -> China Cymbal (score 105)
+        }},
+        { "chinese-tom-toms", {
+            { 24, 61 }, // chinese-tom-toms: Chinese Tom-toms -> High Tom (score 10)
+        }},
+        { "claves", {
+            { 35, 75 }, // claves: Claves -> Claves (score 105)
+        }},
+        { "congas", {
+            { 36, 63 }, // congas: High Conga -> Conga (score 17)
+            { 332, 62 }, // congas: Mute High Conga -> High Agogo Mute (score 20)
+        }},
+        { "cowbell", {
+            { 6, 56 }, // cowbell: Cowbell -> Cowbell (score 105)
+        }},
+        { "crash-cymbal", {
+            { 88, 57 }, // crash-cymbal: Suspended Cymbal -> Suspended Cymbal Roll (score 22)
+        }},
+        { "cuica", {
+            { 39, 78 }, // cuica: Mute Cuica -> Cuica High (score 15)
+            { 40, 79 }, // cuica: Open Cuica -> Cuica Low (score 15)
+        }},
+        { "cymbal", {
+            { 164, 57 }, // cymbal: Hand Cymbals -> Crash Cymbals Crash (score 10)
+        }},
+        { "djembe", {
+            { 9, 63 }, // djembe: Open -> Triangle Open (score 12)
+            { 12, 62 }, // djembe: Slap -> Vibra Slap (score 12)
+            { 13, 64 }, // djembe: Bass -> Bass Drum (score 12)
+        }},
+        { "doumbek", {
+            { 9, 63 }, // doumbek: Open -> Triangle Open (score 12)
+            { 12, 62 }, // doumbek: Slap -> Vibra Slap (score 12)
+            { 13, 64 }, // doumbek: Bass -> Bass Drum (score 12)
+        }},
+        { "drum-kit-4", {
+            { 1, 38 }, // drum-kit-4: Snare -> Snare Drum (score 17)
+            { 3, 37 }, // drum-kit-4: Cross-stick -> Snare Cross Stick (score 27)
+            { 4, 49 }, // drum-kit-4: Crash Cymbal -> Crash Cymbal (score 105)
+            { 13, 36 }, // drum-kit-4: Bass Drum -> Bass Drum (score 100)
+            { 14, 46 }, // drum-kit-4: Open Hi-Hat -> Hi-Hat Open (score 35)
+            { 15, 42 }, // drum-kit-4: Closed Hi-Hat -> Hi-Hat Closed (score 35)
+            { 16, 44 }, // drum-kit-4: Pedal Hi-Hat -> Hi-Hat Foot (score 25)
+            { 18, 51 }, // drum-kit-4: Ride Cymbal -> Ride Cymbal (score 105)
+            { 20, 53 }, // drum-kit-4: Ride Bell -> Ride Bell (score 105)
+            { 24, 50 }, // drum-kit-4: Tom -> High Tom (score 17)
+            { 29, 41 }, // drum-kit-4: Floor Tom -> Floor Tom 2 (score 27)
+        }},
+        { "drum-kit-5", {
+            { 1, 38 }, // drum-kit-5: Snare -> Snare Drum (score 17)
+            { 3, 37 }, // drum-kit-5: Cross-stick -> Snare Cross Stick (score 27)
+            { 4, 49 }, // drum-kit-5: Crash Cymbal -> Crash Cymbal (score 105)
+            { 5, 57 }, // drum-kit-5: Crash Cymbal 2 -> Crash Cymbal 2 (score 105)
+            { 13, 36 }, // drum-kit-5: Bass Drum -> Bass Drum (score 100)
+            { 14, 46 }, // drum-kit-5: Open Hi-Hat -> Hi-Hat Open (score 35)
+            { 15, 42 }, // drum-kit-5: Closed Hi-Hat -> Hi-Hat Closed (score 35)
+            { 16, 44 }, // drum-kit-5: Pedal Hi-Hat -> Hi-Hat Foot (score 25)
+            { 17, 52 }, // drum-kit-5: China Cymbal -> China Cymbal (score 105)
+            { 18, 51 }, // drum-kit-5: Ride Cymbal -> Ride Cymbal (score 105)
+            { 20, 53 }, // drum-kit-5: Ride Bell -> Ride Bell (score 105)
+            { 21, 55 }, // drum-kit-5: Splash Cymbal -> Splash Cymbal (score 105)
+            { 24, 50 }, // drum-kit-5: High Tom -> High Tom (score 105)
+            { 27, 47 }, // drum-kit-5: Low Tom -> Low Tom (score 100)
+            { 29, 41 }, // drum-kit-5: Floor Tom -> Floor Tom 2 (score 27)
+        }},
+        { "drumset", {
+            { 1, 38 }, // drumset: Acoustic Snare -> Snare Drum (score 15)
+            { 3, 37 }, // drumset: Side Stick -> Snare Cross Stick (score 15)
+            { 4, 49 }, // drumset: Crash Cymbal 1 -> Crash Cymbal (score 27)
+            { 5, 57 }, // drumset: Crash Cymbal 2 -> Crash Cymbal 2 (score 105)
+            { 6, 56 }, // drumset: Cowbell -> Cowbell (score 105)
+            { 7, 54 }, // drumset: Tambourine -> Tambourine (score 105)
+            { 13, 35 }, // drumset: Bass Drum 2 -> Bass Drum (score 27)
+            { 14, 46 }, // drumset: Open Hi-Hat -> Hi-Hat Open (score 35)
+            { 15, 42 }, // drumset: Closed Hi-Hat -> Hi-Hat Closed (score 35)
+            { 16, 44 }, // drumset: Pedal Hi-Hat -> Hi-Hat Foot (score 25)
+            { 17, 52 }, // drumset: China Cymbal -> China Cymbal (score 105)
+            { 18, 51 }, // drumset: Ride Cymbal 1 -> Ride Cymbal (score 27)
+            { 19, 59 }, // drumset: Ride Cymbal 2 -> Ride Cymbal 2 (score 105)
+            { 20, 53 }, // drumset: Ride Bell -> Ride Bell (score 105)
+            { 21, 55 }, // drumset: Splash Cymbal -> Splash Cymbal (score 105)
+            { 23, 40 }, // drumset: Electric Snare -> Electric Snare Drum (score 27)
+            { 24, 50 }, // drumset: High Tom -> High Tom (score 105)
+            { 25, 48 }, // drumset: Hi-Mid Tom -> High-Mid Tom (score 25)
+            { 26, 47 }, // drumset: Low-Mid Tom -> Low-Mid Tom (score 105)
+            { 27, 45 }, // drumset: Low Tom -> Low Tom (score 105)
+            { 28, 43 }, // drumset: High Floor Tom -> Floor Tom 1 (score 25)
+            { 29, 41 }, // drumset: Low Floor Tom -> Floor Tom 2 (score 25)
+        }},
+        { "finger-cymbals", {
+            { 206, 81 }, // finger-cymbals: Finger Cymbals -> Finger Cymbals (score 100)
+        }},
+        { "finger-snap", {
+            { 234, 75 }, // finger-snap: Finger Snap -> Finger Snaps (score 12)
+        }},
+        { "frame-drum", {
+            { 392, 45 }, // frame-drum: Frame Drum -> Frame Drum (score 100)
+        }},
+        { "glass-wind-chimes", {
+            { 460, 84 }, // glass-wind-chimes: Glass Wind Chimes -> Wind Chimes (score 22)
+        }},
+        { "guiro", {
+            { 41, 74 }, // guiro: Long Giro -> Guiro Long (score 15)
+            { 42, 73 }, // guiro: Short Giro -> Guiro Short (score 15)
+        }},
+        { "hand-clap", {
+            { 22, 39 }, // hand-clap: Hand Clap -> Hand Clap (score 105)
+        }},
+        { "hi-hat", {
+            { 14, 46 }, // hi-hat: Open Hi-Hat -> Hi-Hat Open (score 35)
+            { 15, 42 }, // hi-hat: Closed Hi-Hat -> Hi-Hat Closed (score 35)
+            { 16, 44 }, // hi-hat: Pedal Hi-Hat -> Hi-Hat Foot (score 25)
+        }},
+        { "log-drum", {
+            { 10, 62 }, // log-drum: High Sound -> High Woodblock (score 10)
+            { 25, 61 }, // log-drum: High-Mid Sound -> High-Mid Tom (score 20)
+            { 26, 59 }, // log-drum: Low-Mid Sound -> Low-Mid Tom (score 20)
+            { 522, 58 }, // log-drum: Low Sound -> Flexatone Low (score 10)
+            { 523, 60 }, // log-drum: Mid Sound -> Flexatone Mid (score 10)
+        }},
+        { "maracas", {
+            { 43, 70 }, // maracas: Maracas -> Maracas (score 105)
+        }},
+        { "marching-bass-drums", {
+            { 2, 37 }, // marching-bass-drums: Drum 5 -> Kick Drum (score 10)
+            { 78, 39 }, // marching-bass-drums: Drum 5 Rim -> Bass Drum Rim (score 20)
+            { 82, 90 }, // marching-bass-drums: Unison -> Bass Drum Unison Hits (score 12)
+        }},
+        { "marching-bassline", {
+            { 2, 61 }, // marching-bassline: Hit Drum 10 -> Kick Drum (score 10)
+            { 22, 35 }, // marching-bassline: Hand Clap -> Hand Clap (score 100)
+            { 78, 73 }, // marching-bassline: Rim Drum 10 -> Bass Drum Rim (score 20)
+            { 82, 28 }, // marching-bassline: Dut (Unison) -> Bass Drum Unison Hits (score 10)
+            { 175, 84 }, // marching-bassline: Sticks In -> Crash Cymbals Scratch In (score 10)
+            { 461, 33 }, // marching-bassline: Metronome -> Metronome Click (score 12)
+        }},
+        { "marching-cymballine", {
+            { 4, 38 }, // marching-cymballine: Orchestra Crash 3 -> Crash Cymbal (score 10)
+            { 5, 62 }, // marching-cymballine: Orchestra Crash 2 -> Crash Cymbal 2 (score 20)
+            { 121, 47 }, // marching-cymballine: Sizzle Cymbal 3 -> Sizzle Cymbal (score 22)
+            { 189, 45 }, // marching-cymballine: Crunch Cymbal 3 -> Cymbal Section Crunch Choke (score 20)
+            { 190, 50 }, // marching-cymballine: Ding Cymbal 3 -> Cymbal Section Ding (score 20)
+            { 191, 51 }, // marching-cymballine: Zing Cymbal 3 -> Cymbal Section Fast Zing (score 20)
+            { 201, 43 }, // marching-cymballine: Tap Cymbal 3 -> Cymbal Section Tap Choke (score 20)
+        }},
+        { "marching-cymbals", {
+            { 4, 72 }, // marching-cymbals: Full Crash -> Crash Cymbal (score 10)
+            { 14, 76 }, // marching-cymbals: Hi-Hat -> Hi-Hat Open (score 22)
+            { 49, 93 }, // marching-cymbals: Roll -> Cowbell Roll (score 12)
+            { 70, 84 }, // marching-cymbals: Bell Tap -> Bell Tree (score 15)
+            { 121, 77 }, // marching-cymbals: Sizzle -> Sizzle Cymbal (score 12)
+            { 171, 91 }, // marching-cymbals: Zing -> Crash Cymbals Fast Zing (score 12)
+            { 179, 83 }, // marching-cymbals: Tap-Choke -> Crash Cymbals Tap Choke (score 22)
+            { 187, 79 }, // marching-cymbals: Crash-Choke -> Cymbal Section Crash Choke Fat (score 22)
+        }},
+        { "marching-snare", {
+            { 1, 50 }, // marching-snare: Battery Snare -> Snare Drum (score 10)
+            { 14, 74 }, // marching-snare: Open Hi-Hat -> Hi-Hat Open (score 30)
+            { 15, 76 }, // marching-snare: Closed Hi-Hat -> Hi-Hat Closed (score 30)
+            { 18, 72 }, // marching-snare: Ride Cymbal 1 -> Ride Cymbal (score 22)
+            { 78, 53 }, // marching-snare: Rim Click -> Bass Drum Rim (score 10)
+            { 105, 57 }, // marching-snare: Stick Shot -> Suspended Cymbal Fat Choke w/ Stick (score 10)
+            { 239, 48 }, // marching-snare: Buzz -> Snare Buzz Roll (score 12)
+            { 251, 52 }, // marching-snare: Rim Shot -> Snare Rim Shot (score 22)
+            { 256, 55 }, // marching-snare: Stick Click -> Stick Click (score 100)
+        }},
+        { "marching-snareline", {
+            { 4, 40 }, // marching-snareline: Crash Cymbal -> Crash Cymbal (score 100)
+            { 6, 32 }, // marching-snareline: Cowbell -> Cowbell (score 100)
+            { 15, 36 }, // marching-snareline: Hi-Hat (closed) -> Hi-Hat Closed (score 100)
+            { 18, 38 }, // marching-snareline: Ride Cymbal -> Ride Cymbal (score 100)
+            { 22, 23 }, // marching-snareline: Hand Clap -> Hand Clap (score 100)
+            { 31, 29 }, // marching-snareline: Agogo Low -> Low Agogo (score 20)
+            { 68, 31 }, // marching-snareline: Jam Block -> High Jam Block (score 22)
+            { 78, 63 }, // marching-snareline: Rim -> Bass Drum Rim (score 12)
+            { 82, 28 }, // marching-snareline: Dut Unison -> Bass Drum Unison Hits (score 10)
+            { 105, 65 }, // marching-snareline: Stick Shot -> Suspended Cymbal Fat Choke w/ Stick (score 10)
+            { 175, 77 }, // marching-snareline: Sticks In -> Crash Cymbals Scratch In (score 10)
+            { 240, 64 }, // marching-snareline: Ping Shot -> Snare Cross Shot (score 10)
+            { 251, 61 }, // marching-snareline: Rim Shot -> Snare Rim Shot (score 22)
+            { 256, 76 }, // marching-snareline: Stick Click -> Stick Click (score 100)
+            { 273, 72 }, // marching-snareline: Rods -> Snare Section Rods (score 12)
+            { 461, 21 }, // marching-snareline: Metronome -> Metronome Click (score 12)
+            { 524, 30 }, // marching-snareline: Agogo Hi -> Flexatone Hi (score 10)
+        }},
+        { "marching-tenor-drums", {
+            { 2, 36 }, // marching-tenor-drums: Drum 4 -> Kick Drum (score 15)
+            { 5, 96 }, // marching-tenor-drums: Spock 2 -> Crash Cymbal 2 (score 10)
+            { 23, 40 }, // marching-tenor-drums: Drum 4 Shell -> Electric Snare Drum (score 15)
+            { 28, 84 }, // marching-tenor-drums: Spock 1 -> Floor Tom 1 (score 10)
+            { 78, 37 }, // marching-tenor-drums: Drum 4 Rim -> Bass Drum Rim (score 20)
+            { 256, 43 }, // marching-tenor-drums: Stick Click -> Stick Click (score 100)
+            { 325, 38 }, // marching-tenor-drums: Drum 4 Buzz -> Spock Drum Buzz Roll (score 20)
+            { 328, 85 }, // marching-tenor-drums: Spock 1 Rim -> Spock Drum Rim Shot (score 20)
+        }},
+        { "marching-tenorline", {
+            { 2, 60 }, // marching-tenorline: Hit Drum 4 -> Kick Drum (score 10)
+            { 5, 64 }, // marching-tenorline: Hit Spock 2 -> Crash Cymbal 2 (score 10)
+            { 6, 32 }, // marching-tenorline: Cowbell -> Cowbell (score 100)
+            { 22, 23 }, // marching-tenorline: Hand Clap -> Hand Clap (score 100)
+            { 28, 65 }, // marching-tenorline: Hit Spock 1 -> Floor Tom 1 (score 10)
+            { 31, 29 }, // marching-tenorline: Agogo Low -> Low Agogo (score 20)
+            { 68, 31 }, // marching-tenorline: Jam Block -> High Jam Block (score 22)
+            { 78, 78 }, // marching-tenorline: Rim Drum 4 -> Bass Drum Rim (score 20)
+            { 82, 28 }, // marching-tenorline: Dut (unison) -> Bass Drum Unison Hits (score 10)
+            { 90, 45 }, // marching-tenorline: Mallet Click -> Suspended Cymbal w/ Mallet (Crash) (score 10)
+            { 117, 44 }, // marching-tenorline: Stand Hit -> Hi-Hat Stand (score 10)
+            { 175, 46 }, // marching-tenorline: Sticks In -> Crash Cymbals Scratch In (score 10)
+            { 328, 72 }, // marching-tenorline: Rim Shot Drum 4 -> Spock Drum Rim Shot (score 30)
+            { 461, 21 }, // marching-tenorline: Metronome -> Metronome Click (score 12)
+            { 524, 30 }, // marching-tenorline: Agogo Hi -> Flexatone Hi (score 10)
+        }},
+        { "mark-tree", {
+            { 473, 84 }, // mark-tree: Glissando Down -> Guiro Down Up (score 10)
+        }},
+        { "metal-castanets", {
+            { 362, 67 }, // metal-castanets: Metal Castanets -> Castanets (score 12)
+        }},
+        { "metal-wind-chimes", {
+            { 460, 84 }, // metal-wind-chimes: Metal Wind Chimes -> Wind Chimes (score 22)
+        }},
+        { "military-drum", {
+            { 1, 38 }, // military-drum: Snare -> Snare Drum (score 17)
+            { 3, 37 }, // military-drum: Side Stick -> Snare Cross Stick (score 15)
+        }},
+        { "ocean-drum", {
+            { 506, 48 }, // ocean-drum: Ocean Sound -> Agogo Press Sound (score 10)
+        }},
+        { "okedo-daiko", {
+            { 428, 36 }, // okedo-daiko: Okedo-Daiko -> Okedo (score 12)
+        }},
+        { "opera-gong", {
+            { 135, 52 }, // opera-gong: Opera Gong -> Large Gong (score 10)
+        }},
+        { "percussion", {
+            { 1, 38 }, // percussion: Snare -> Snare Drum (score 17)
+            { 6, 56 }, // percussion: Cowbell -> Cowbell (score 105)
+            { 7, 54 }, // percussion: Tambourine -> Tambourine (score 105)
+            { 8, 80 }, // percussion: Mute Triangle -> Triangle Mute (score 25)
+            { 9, 81 }, // percussion: Triangle -> Triangle Open (score 17)
+            { 10, 76 }, // percussion: Hi Woodblock -> High Woodblock (score 15)
+            { 11, 77 }, // percussion: Lo Woodblock -> Low Woodblock (score 15)
+            { 12, 58 }, // percussion: Vibraslap -> Vibra Slap (score 105)
+            { 13, 36 }, // percussion: Bass Drum -> Bass Drum (score 100)
+            { 14, 29 }, // percussion: Open Hi-Hat -> Hi-Hat Open (score 30)
+            { 15, 27 }, // percussion: Closed Hi-Hat -> Hi-Hat Closed (score 30)
+            { 18, 30 }, // percussion: Ride Cymbal -> Ride Cymbal (score 100)
+            { 21, 55 }, // percussion: Splash Cymbal -> Splash Cymbal (score 105)
+            { 32, 60 }, // percussion: Hi Bongo -> High Bongo (score 15)
+            { 33, 61 }, // percussion: Lo Bongo -> Low Bongo (score 15)
+            { 34, 69 }, // percussion: Cabasa -> Cabasa (score 105)
+            { 35, 75 }, // percussion: Claves -> Claves (score 105)
+            { 36, 63 }, // percussion: Hi Conga -> Conga (score 17)
+            { 37, 62 }, // percussion: Mute Hi Conga -> Conga Dead Stroke (score 15)
+            { 39, 78 }, // percussion: Mute Cuica -> Cuica High (score 15)
+            { 40, 79 }, // percussion: Open Cuica -> Cuica Low (score 15)
+            { 41, 74 }, // percussion: Long Giro -> Guiro Long (score 15)
+            { 42, 73 }, // percussion: Short Giro -> Guiro Short (score 15)
+            { 43, 70 }, // percussion: Maracas -> Maracas (score 105)
+            { 44, 65 }, // percussion: Hi Timbale -> High Timbale (score 15)
+            { 45, 66 }, // percussion: Lo Timbale -> Low Timbale (score 15)
+            { 46, 71 }, // percussion: Long Whistle -> Whistle Long (score 20)
+            { 48, 86 }, // percussion: Mute Surdo -> Cowbell Mute (score 10)
+            { 59, 82 }, // percussion: Shaker -> Shaker (score 105)
+            { 74, 83 }, // percussion: Sleigh Bells -> Sleigh Bells (score 105)
+            { 88, 57 }, // percussion: Suspended Cymbal -> Suspended Cymbal Roll (score 22)
+            { 164, 59 }, // percussion: Hand Cymbals -> Crash Cymbals Crash (score 10)
+            { 225, 72 }, // percussion: Short Whistle -> Police Whistle Short (score 20)
+            { 249, 37 }, // percussion: Snare Rim -> Snare Rim (score 100)
+            { 256, 31 }, // percussion: Stick Click -> Stick Click (score 105)
+            { 362, 85 }, // percussion: Castanets -> Castanets (score 105)
+            { 511, 84 }, // percussion: Mark Tree -> Mark Tree (score 100)
+            { 524, 67 }, // percussion: Hi Agog -> Flexatone Hi (score 10)
+        }},
+        { "percussion-synthesizer", {
+            { 1, 38 }, // percussion-synthesizer: Acoustic Snare -> Snare Drum (score 15)
+            { 3, 37 }, // percussion-synthesizer: Side Stick -> Snare Cross Stick (score 15)
+            { 4, 49 }, // percussion-synthesizer: Crash Cymbal 1 -> Crash Cymbal (score 27)
+            { 5, 57 }, // percussion-synthesizer: Crash Cymbal 2 -> Crash Cymbal 2 (score 105)
+            { 6, 56 }, // percussion-synthesizer: Cowbell -> Cowbell (score 105)
+            { 7, 54 }, // percussion-synthesizer: Tambourine -> Tambourine (score 105)
+            { 8, 80 }, // percussion-synthesizer: Mute Triangle -> Triangle Mute (score 25)
+            { 9, 81 }, // percussion-synthesizer: Open Triangle -> Triangle Open (score 25)
+            { 10, 76 }, // percussion-synthesizer: High Woodblock -> High Woodblock (score 105)
+            { 11, 77 }, // percussion-synthesizer: Low Woodblock -> Low Woodblock (score 105)
+            { 12, 58 }, // percussion-synthesizer: Vibraslap -> Vibra Slap (score 105)
+            { 13, 35 }, // percussion-synthesizer: Acoustic Bass Drum -> Bass Drum (score 27)
+            { 14, 46 }, // percussion-synthesizer: Open Hi-hat -> Hi-Hat Open (score 35)
+            { 15, 42 }, // percussion-synthesizer: Closed Hi-hat -> Hi-Hat Closed (score 35)
+            { 16, 44 }, // percussion-synthesizer: Pedal Hi-hat -> Hi-Hat Foot (score 25)
+            { 17, 52 }, // percussion-synthesizer: China Cymbal -> China Cymbal (score 105)
+            { 18, 51 }, // percussion-synthesizer: Ride Cymbal 1 -> Ride Cymbal (score 27)
+            { 19, 59 }, // percussion-synthesizer: Ride Cymbal 2 -> Ride Cymbal 2 (score 105)
+            { 20, 53 }, // percussion-synthesizer: Ride Bell -> Ride Bell (score 105)
+            { 21, 55 }, // percussion-synthesizer: Splash Cymbal -> Splash Cymbal (score 105)
+            { 22, 39 }, // percussion-synthesizer: Hand Clap -> Hand Clap (score 105)
+            { 23, 40 }, // percussion-synthesizer: Electric Snare -> Electric Snare Drum (score 27)
+            { 24, 50 }, // percussion-synthesizer: High Tom -> High Tom (score 105)
+            { 25, 48 }, // percussion-synthesizer: Hi-Mid Tom -> High-Mid Tom (score 25)
+            { 26, 47 }, // percussion-synthesizer: Low-Mid Tom -> Low-Mid Tom (score 105)
+            { 27, 45 }, // percussion-synthesizer: Low Tom -> Low Tom (score 105)
+            { 28, 43 }, // percussion-synthesizer: High Floor Tom -> Floor Tom 1 (score 25)
+            { 29, 41 }, // percussion-synthesizer: Low Floor Tom -> Floor Tom 2 (score 25)
+            { 30, 67 }, // percussion-synthesizer: High Agog -> High Agogo (score 17)
+            { 31, 68 }, // percussion-synthesizer: Low Agog -> Low Agogo (score 17)
+            { 32, 60 }, // percussion-synthesizer: High Bongo -> High Bongo (score 105)
+            { 33, 61 }, // percussion-synthesizer: Low Bongo -> Low Bongo (score 105)
+            { 34, 69 }, // percussion-synthesizer: Cabasa -> Cabasa (score 105)
+            { 35, 75 }, // percussion-synthesizer: Claves -> Claves (score 105)
+            { 36, 63 }, // percussion-synthesizer: Open High Conga -> Conga (score 17)
+            { 39, 78 }, // percussion-synthesizer: Mute Cuica -> Cuica High (score 15)
+            { 40, 79 }, // percussion-synthesizer: Open Cuica -> Cuica Low (score 15)
+            { 41, 74 }, // percussion-synthesizer: Long Giro -> Guiro Long (score 15)
+            { 42, 73 }, // percussion-synthesizer: Short Giro -> Guiro Short (score 15)
+            { 43, 70 }, // percussion-synthesizer: Maracas -> Maracas (score 105)
+            { 44, 65 }, // percussion-synthesizer: High Timbale -> High Timbale (score 105)
+            { 45, 66 }, // percussion-synthesizer: Low Timbale -> Low Timbale (score 105)
+            { 46, 72 }, // percussion-synthesizer: Long Whistle -> Whistle Long (score 25)
+            { 47, 71 }, // percussion-synthesizer: Short Whistle -> Whistle Short (score 25)
+            { 48, 86 }, // percussion-synthesizer: Mute Surdo -> Cowbell Mute (score 10)
+            { 59, 82 }, // percussion-synthesizer: Shaker -> Shaker (score 105)
+            { 70, 84 }, // percussion-synthesizer: Belltree -> Bell Tree (score 105)
+            { 261, 31 }, // percussion-synthesizer: Sticks -> Snare Section Cross Sticks (score 12)
+            { 332, 62 }, // percussion-synthesizer: Mute High Conga -> High Agogo Mute (score 20)
+            { 362, 85 }, // percussion-synthesizer: Castanets -> Castanets (score 105)
+            { 461, 33 }, // percussion-synthesizer: Metronome Click -> Metronome Click (score 100)
+            { 462, 34 }, // percussion-synthesizer: Metronome Bell -> Metronome Bell (score 105)
+            { 463, 29 }, // percussion-synthesizer: Scratch Push -> Scratch Push (score 105)
+            { 464, 30 }, // percussion-synthesizer: Scratch Pull -> Scratch Pull (score 105)
+        }},
+        { "piccolo-snare-drum", {
+            { 3, 37 }, // piccolo-snare-drum: Side Stick -> Snare Cross Stick (score 15)
+            { 23, 40 }, // piccolo-snare-drum: Snare -> Electric Snare Drum (score 17)
+        }},
+        { "ratchet", {
+            { 71, 73 }, // ratchet: Ratchet -> Ratchet (score 100)
+        }},
+        { "ride-cymbal", {
+            { 18, 51 }, // ride-cymbal: Ride Cymbal -> Ride Cymbal (score 105)
+            { 20, 53 }, // ride-cymbal: Ride Bell -> Ride Bell (score 105)
+        }},
+        { "shaker", {
+            { 59, 82 }, // shaker: Shaker -> Shaker (score 105)
+        }},
+        { "shekere", {
+            { 65, 82 }, // shekere: Shake -> Egg Shaker Multi Shake (score 12)
+        }},
+        { "shell-wind-chimes", {
+            { 460, 69 }, // shell-wind-chimes: Shell Wind Chimes -> Wind Chimes (score 22)
+        }},
+        { "shime-daiko", {
+            { 426, 63 }, // shime-daiko: Shime-Daiko -> Shime (score 12)
+        }},
+        { "slap", {
+            { 12, 28 }, // slap: Slap -> Vibra Slap (score 12)
+        }},
+        { "sleigh-bells", {
+            { 74, 83 }, // sleigh-bells: Sleigh Bell -> Sleigh Bells (score 17)
+        }},
+        { "slit-drum", {
+            { 2, 77 }, // slit-drum: Slit Drum -> Kick Drum (score 10)
+        }},
+        { "snare-drum", {
+            { 1, 38 }, // snare-drum: Snare -> Snare Drum (score 17)
+            { 3, 37 }, // snare-drum: Side Stick -> Snare Cross Stick (score 15)
+        }},
+        { "splash-cymbal", {
+            { 21, 55 }, // splash-cymbal: Splash Cymbal -> Splash Cymbal (score 105)
+        }},
+        { "tablas", {
+            { 418, 62 }, // tablas: High Tabla -> Tabla High (score 20)
+            { 419, 64 }, // tablas: Low Tabla -> Tabla Low (score 20)
+        }},
+        { "taiko", {
+            { 48, 86 }, // taiko: Taiko Mute -> Cowbell Mute (score 10)
+        }},
+        { "tam-tam", {
+            { 149, 52 }, // tam-tam: Tam-tam -> Tam-Tam (score 100)
+        }},
+        { "tambourine", {
+            { 7, 54 }, // tambourine: Tambourine -> Tambourine (score 105)
+        }},
+        { "temple-blocks", {
+            { 459, 58 }, // temple-blocks: Low Temple Block -> Temple Block Low (score 30)
+            { 518, 59 }, // temple-blocks: Low-Mid Temple Block -> Temple Block Low-Mid (score 40)
+            { 520, 61 }, // temple-blocks: High-Mid Temple Block -> Temple Block High-Mid (score 40)
+        }},
+        { "timbales", {
+            { 44, 65 }, // timbales: High Timbale -> High Timbale (score 105)
+            { 45, 66 }, // timbales: Low Timbale -> Low Timbale (score 105)
+        }},
+        { "tom-toms", {
+            { 26, 47 }, // tom-toms: Tom 3 -> Low-Mid Tom (score 15)
+            { 27, 45 }, // tom-toms: Tom 4 -> Low Tom (score 15)
+            { 28, 50 }, // tom-toms: Tom 1 -> Floor Tom 1 (score 22)
+            { 29, 48 }, // tom-toms: Tom 2 -> Floor Tom 2 (score 22)
+        }},
+        { "triangle", {
+            { 8, 80 }, // triangle: Mute Triangle -> Triangle Mute (score 25)
+            { 9, 81 }, // triangle: Open Triangle -> Triangle Open (score 25)
+        }},
+        { "tubo", {
+            { 36, 63 }, // tubo: High Conga -> Conga (score 17)
+            { 332, 62 }, // tubo: Mute High Conga -> High Agogo Mute (score 20)
+        }},
+        { "vibraslap", {
+            { 12, 58 }, // vibraslap: Vibraslap -> Vibra Slap (score 105)
+        }},
+        { "whip", {
+            { 76, 52 }, // whip: Whip -> Whip (score 100)
+        }},
+        { "wind-gong", {
+            { 148, 52 }, // wind-gong: Wind Gong -> Wind Gong (score 100)
+        }},
+        { "wood-blocks", {
+            { 10, 76 }, // wood-blocks: High Wood Block -> High Woodblock (score 105)
+            { 11, 77 }, // wood-blocks: Low Wood Block -> Low Woodblock (score 105)
+        }},
+        { "wooden-wind-chimes", {
+            { 460, 69 }, // wooden-wind-chimes: Wooden Wind Chimes -> Wind Chimes (score 22)
+        }},
+    };
+
+
+    // Fallback generic mappings (independent of instrument id)
+    static const std::unordered_map<int, int> noteFallback = {
+        { 1, 38 }, // snare-drum: Snare -> Snare Drum (score 17)
+        { 2, 36 }, // marching-tenor-drums: Drum 4 -> Kick Drum (score 15)
+        { 3, 37 }, // drum-kit-4: Cross-stick -> Snare Cross Stick (score 27)
+        { 4, 49 }, // drum-kit-4: Crash Cymbal -> Crash Cymbal (score 105)
+        { 5, 57 }, // drumset: Crash Cymbal 2 -> Crash Cymbal 2 (score 105)
+        { 6, 56 }, // drumset: Cowbell -> Cowbell (score 105)
+        { 7, 54 }, // drumset: Tambourine -> Tambourine (score 105)
+        { 8, 80 }, // triangle: Mute Triangle -> Triangle Mute (score 25)
+        { 9, 81 }, // triangle: Open Triangle -> Triangle Open (score 25)
+        { 10, 76 }, // wood-blocks: High Wood Block -> High Woodblock (score 105)
+        { 11, 77 }, // wood-blocks: Low Wood Block -> Low Woodblock (score 105)
+        { 12, 58 }, // vibraslap: Vibraslap -> Vibra Slap (score 105)
+        { 13, 36 }, // drum-kit-4: Bass Drum -> Bass Drum (score 100)
+        { 14, 46 }, // drumset: Open Hi-Hat -> Hi-Hat Open (score 35)
+        { 15, 36 }, // marching-snareline: Hi-Hat (closed) -> Hi-Hat Closed (score 100)
+        { 16, 44 }, // drumset: Pedal Hi-Hat -> Hi-Hat Foot (score 25)
+        { 17, 52 }, // drumset: China Cymbal -> China Cymbal (score 105)
+        { 18, 51 }, // drum-kit-4: Ride Cymbal -> Ride Cymbal (score 105)
+        { 19, 59 }, // drumset: Ride Cymbal 2 -> Ride Cymbal 2 (score 105)
+        { 20, 53 }, // drumset: Ride Bell -> Ride Bell (score 105)
+        { 21, 55 }, // drumset: Splash Cymbal -> Splash Cymbal (score 105)
+        { 22, 39 }, // percussion-synthesizer: Hand Clap -> Hand Clap (score 105)
+        { 23, 40 }, // drumset: Electric Snare -> Electric Snare Drum (score 27)
+        { 24, 50 }, // drumset: High Tom -> High Tom (score 105)
+        { 25, 48 }, // drumset: Hi-Mid Tom -> High-Mid Tom (score 25)
+        { 26, 47 }, // drumset: Low-Mid Tom -> Low-Mid Tom (score 105)
+        { 27, 45 }, // drumset: Low Tom -> Low Tom (score 105)
+        { 28, 43 }, // drumset: High Floor Tom -> Floor Tom 1 (score 25)
+        { 29, 41 }, // drum-kit-4: Floor Tom -> Floor Tom 2 (score 27)
+        { 30, 67 }, // agogo-bells: High Agog -> High Agogo (score 17)
+        { 31, 29 }, // marching-snareline: Agogo Low -> Low Agogo (score 20)
+        { 32, 60 }, // bongos: High Bongo -> High Bongo (score 105)
+        { 33, 61 }, // bongos: Low Bongo -> Low Bongo (score 105)
+        { 34, 69 }, // cabasa: Cabasa -> Cabasa (score 105)
+        { 35, 75 }, // claves: Claves -> Claves (score 105)
+        { 36, 63 }, // congas: High Conga -> Conga (score 17)
+        { 37, 62 }, // percussion: Mute Hi Conga -> Conga Dead Stroke (score 15)
+        { 39, 78 }, // cuica: Mute Cuica -> Cuica High (score 15)
+        { 40, 79 }, // cuica: Open Cuica -> Cuica Low (score 15)
+        { 41, 74 }, // guiro: Long Giro -> Guiro Long (score 15)
+        { 42, 73 }, // guiro: Short Giro -> Guiro Short (score 15)
+        { 43, 70 }, // maracas: Maracas -> Maracas (score 105)
+        { 44, 65 }, // timbales: High Timbale -> High Timbale (score 105)
+        { 45, 66 }, // timbales: Low Timbale -> Low Timbale (score 105)
+        { 46, 72 }, // percussion-synthesizer: Long Whistle -> Whistle Long (score 25)
+        { 47, 71 }, // percussion-synthesizer: Short Whistle -> Whistle Short (score 25)
+        { 48, 86 }, // taiko: Taiko Mute -> Cowbell Mute (score 10)
+        { 49, 93 }, // marching-cymbals: Roll -> Cowbell Roll (score 12)
+        { 59, 82 }, // shaker: Shaker -> Shaker (score 105)
+        { 65, 82 }, // shekere: Shake -> Egg Shaker Multi Shake (score 12)
+        { 68, 31 }, // marching-snareline: Jam Block -> High Jam Block (score 22)
+        { 70, 84 }, // percussion-synthesizer: Belltree -> Bell Tree (score 105)
+        { 71, 73 }, // ratchet: Ratchet -> Ratchet (score 100)
+        { 74, 83 }, // percussion: Sleigh Bells -> Sleigh Bells (score 105)
+        { 76, 52 }, // whip: Whip -> Whip (score 100)
+        { 78, 37 }, // marching-tenor-drums: Drum 4 Rim -> Bass Drum Rim (score 20)
+        { 82, 90 }, // marching-bass-drums: Unison -> Bass Drum Unison Hits (score 12)
+        { 88, 57 }, // crash-cymbal: Suspended Cymbal -> Suspended Cymbal Roll (score 22)
+        { 90, 45 }, // marching-tenorline: Mallet Click -> Suspended Cymbal w/ Mallet (Crash) (score 10)
+        { 105, 57 }, // marching-snare: Stick Shot -> Suspended Cymbal Fat Choke w/ Stick (score 10)
+        { 117, 44 }, // marching-tenorline: Stand Hit -> Hi-Hat Stand (score 10)
+        { 121, 47 }, // marching-cymballine: Sizzle Cymbal 3 -> Sizzle Cymbal (score 22)
+        { 135, 52 }, // opera-gong: Opera Gong -> Large Gong (score 10)
+        { 148, 52 }, // wind-gong: Wind Gong -> Wind Gong (score 100)
+        { 149, 52 }, // tam-tam: Tam-tam -> Tam-Tam (score 100)
+        { 161, 81 }, // bell-plate: Bell Plate -> Bell Plate (score 100)
+        { 164, 57 }, // cymbal: Hand Cymbals -> Crash Cymbals Crash (score 10)
+        { 171, 91 }, // marching-cymbals: Zing -> Crash Cymbals Fast Zing (score 12)
+        { 175, 77 }, // marching-snareline: Sticks In -> Crash Cymbals Scratch In (score 10)
+        { 179, 83 }, // marching-cymbals: Tap-Choke -> Crash Cymbals Tap Choke (score 22)
+        { 183, 50 }, // bird-call: Bird Call -> Crash Cymbals Whale Call (score 10)
+        { 187, 79 }, // marching-cymbals: Crash-Choke -> Cymbal Section Crash Choke Fat (score 22)
+        { 189, 45 }, // marching-cymballine: Crunch Cymbal 3 -> Cymbal Section Crunch Choke (score 20)
+        { 190, 50 }, // marching-cymballine: Ding Cymbal 3 -> Cymbal Section Ding (score 20)
+        { 191, 51 }, // marching-cymballine: Zing Cymbal 3 -> Cymbal Section Fast Zing (score 20)
+        { 201, 43 }, // marching-cymballine: Tap Cymbal 3 -> Cymbal Section Tap Choke (score 20)
+        { 206, 81 }, // finger-cymbals: Finger Cymbals -> Finger Cymbals (score 100)
+        { 216, 68 }, // anvil: Anvil -> Anvil (score 100)
+        { 218, 68 }, // automobile-brake-drums: Brake Drum -> Brake Drum (score 100)
+        { 219, 60 }, // cannon: Cannon -> Cannon (score 100)
+        { 225, 72 }, // percussion: Short Whistle -> Police Whistle Short (score 20)
+        { 234, 75 }, // finger-snap: Finger Snap -> Finger Snaps (score 12)
+        { 239, 48 }, // marching-snare: Buzz -> Snare Buzz Roll (score 12)
+        { 240, 64 }, // marching-snareline: Ping Shot -> Snare Cross Shot (score 10)
+        { 249, 37 }, // percussion: Snare Rim -> Snare Rim (score 100)
+        { 251, 52 }, // marching-snare: Rim Shot -> Snare Rim Shot (score 22)
+        { 256, 31 }, // percussion: Stick Click -> Stick Click (score 105)
+        { 261, 31 }, // percussion-synthesizer: Sticks -> Snare Section Cross Sticks (score 12)
+        { 273, 72 }, // marching-snareline: Rods -> Snare Section Rods (score 12)
+        { 325, 38 }, // marching-tenor-drums: Drum 4 Buzz -> Spock Drum Buzz Roll (score 20)
+        { 328, 72 }, // marching-tenorline: Rim Shot Drum 4 -> Spock Drum Rim Shot (score 30)
+        { 332, 62 }, // congas: Mute High Conga -> High Agogo Mute (score 20)
+        { 354, 81 }, // bowl-gongs: Bowl Gong -> Bowl (score 12)
+        { 362, 85 }, // castanets: Castanets -> Castanets (score 105)
+        { 392, 45 }, // frame-drum: Frame Drum -> Frame Drum (score 100)
+        { 418, 62 }, // tablas: High Tabla -> Tabla High (score 20)
+        { 419, 64 }, // tablas: Low Tabla -> Tabla Low (score 20)
+        { 426, 63 }, // shime-daiko: Shime-Daiko -> Shime (score 12)
+        { 428, 36 }, // okedo-daiko: Okedo-Daiko -> Okedo (score 12)
+        { 459, 58 }, // temple-blocks: Low Temple Block -> Temple Block Low (score 30)
+        { 460, 84 }, // metal-wind-chimes: Metal Wind Chimes -> Wind Chimes (score 22)
+        { 461, 33 }, // percussion-synthesizer: Metronome Click -> Metronome Click (score 100)
+        { 462, 34 }, // percussion-synthesizer: Metronome Bell -> Metronome Bell (score 105)
+        { 463, 29 }, // percussion-synthesizer: Scratch Push -> Scratch Push (score 105)
+        { 464, 30 }, // percussion-synthesizer: Scratch Pull -> Scratch Pull (score 105)
+        { 473, 84 }, // bell-tree: Glissando Down -> Guiro Down Up (score 10)
+        { 506, 48 }, // ocean-drum: Ocean Sound -> Agogo Press Sound (score 10)
+        { 511, 84 }, // percussion: Mark Tree -> Mark Tree (score 100)
+        { 518, 59 }, // temple-blocks: Low-Mid Temple Block -> Temple Block Low-Mid (score 40)
+        { 520, 61 }, // temple-blocks: High-Mid Temple Block -> Temple Block High-Mid (score 40)
+        { 522, 58 }, // log-drum: Low Sound -> Flexatone Low (score 10)
+        { 523, 60 }, // log-drum: Mid Sound -> Flexatone Mid (score 10)
+        { 524, 67 }, // percussion: Hi Agog -> Flexatone Hi (score 10)
+    };
+
+
+
+    if (!instrumentKey.empty()) {
+        if (const auto instIt = instrumentToMidi.find(instrumentKey); instIt != instrumentToMidi.end()) {
+            if (const auto noteIt = instIt->second.find(noteTypeId); noteIt != instIt->second.end()) {
+                return noteIt->second;
+            }
+        }
+    }
+
+    if (const auto fallbackIt = noteFallback.find(noteTypeId); fallbackIt != noteFallback.end()) {
+        return fallbackIt->second;
+    }
+
+    const auto& noteType = percussion::getPercussionNoteTypeFromId(noteTypeId);
+    return noteType.generalMidi >= 0 ? noteType.generalMidi : -1;
+}
 
 ID createPartId(int partNumber)
 {
@@ -688,13 +1295,13 @@ String instrTemplateIdfromUuid(std::string uuid)
         { uuid::SnareDrum,                 u"snare-drum" },
         { uuid::BassDrum,                  u"bass-drum" },
         { uuid::DrumSet,                   u"drumset" },
-        { uuid::TenorDrum,                 u"snare-drum" },
+        { uuid::TenorDrum,                 u"tenor-drum" },
         { uuid::QuadToms,                  u"tom-toms" },
         { uuid::QuintToms,                 u"tom-toms" },
         { uuid::RotoToms,                  u"roto-toms" },
-        { uuid::TenorLine,                 u"snare-drum" },
+        { uuid::TenorLine,                 u"marching-tenorline" },
         { uuid::SnareLine,                 u"marching-snareline" },
-        { uuid::BassDrums5Line,            u"snare-drum" },
+        { uuid::BassDrums5Line,            u"marching-bassline" },
         { uuid::Djembe,                    u"djembe" },
         { uuid::BongoDrums,                u"bongos" },
         { uuid::CongaDrums,                u"congas" },
