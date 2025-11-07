@@ -1800,6 +1800,11 @@ double Staff::lineDistance(const Fraction& tick) const
     return staffType(tick)->lineDistance().val();
 }
 
+double Staff::effectiveLineDistance(const Fraction& tick) const
+{
+    return staffType(tick)->effectiveLineDistance().val();
+}
+
 //---------------------------------------------------------
 //   invisible
 //---------------------------------------------------------
