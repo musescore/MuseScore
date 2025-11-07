@@ -2533,16 +2533,16 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         } else if (m2) {
             m2 = m2->nextMeasureMM();
         }
-        // for clefs, apply to each staff separately
-        // otherwise just apply to top staff
+        // Clefs always apply to every selected staff, key and time signatures only when added locally
+        const bool applyToEachStaff = element->isClef() || (modifiers & Qt::ControlModifier);
         staff_idx_t staffIdx1 = sel.staffStart();
-        staff_idx_t staffIdx2 = elementType == ElementType::CLEF ? sel.staffEnd() : staffIdx1 + 1;
+        staff_idx_t staffIdx2 = applyToEachStaff ? sel.staffEnd() : staffIdx1 + 1;
         for (staff_idx_t i = staffIdx1; i < staffIdx2; ++i) {
-            // for clefs, use mid-measure changes if appropriate
+            // For clefs, use mid-measure changes if appropriate
+            // Mid-measure key signature changes are done via list selections
             EngravingItem* e1 = nullptr;
             EngravingItem* e2 = nullptr;
-            // use mid-measure clef changes as appropriate
-            if (elementType == ElementType::CLEF) {
+            if (element->isClef()) {
                 if (sel.startSegment()->isChordRestType() && sel.startSegment()->rtick().isNotZero()) {
                     ChordRest* cr = toChordRest(sel.startSegment()->nextChordRest(staff2track(i)));
                     if (cr && cr->isChord()) {
@@ -2560,8 +2560,8 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
                     }
                 }
             }
+            // restore clef/keysig/timesig that was in effect at end of selection
             if (m2 || e2) {
-                // restore clef/keysig/timesig that was in effect at end of selection
                 mu::engraving::Staff* staff = score->staff(i);
                 mu::engraving::Fraction tick2 = sel.endSegment()->tick();
                 mu::engraving::EngravingItem* oelement = nullptr;
