@@ -64,9 +64,9 @@ static engraving::Note* findClosestNote(const MusxInstance<details::Articulation
         // This is a nonsense calculation atm
         double referencePos = n->y() + n->headHeight() / 2;
         if (articAssign->overridePlacement) {
-            referencePos -= doubleFromEvpu(articAssign->vertOffset) * SPATIUM20;
+            referencePos -= absoluteDoubleFromEvpu(articAssign->vertOffset, n);
         }
-        referencePos -= doubleFromEvpu(articDef->yOffsetMain + articDef->defVertPos) * SPATIUM20;
+        referencePos -= absoluteDoubleFromEvpu(articDef->yOffsetMain + articDef->defVertPos, n);
         double bestMatch = DBL_MAX;
         for (engraving::Note* note : c->notes()) {
             double noteDist = std::abs(note->y() - referencePos);
@@ -306,8 +306,8 @@ void FinaleParser::importArticulations()
                     Arpeggio* arpeggio = Factory::createArpeggio(c);
                     arpeggio->setTrack(c->track());
                     arpeggio->setArpeggioType(ArpeggioType::NORMAL);
-                    // arpeggio->setUserLen1(double * SPATIUM20);
-                    // arpeggio->setUserLen2(double * SPATIUM20);
+                    // arpeggio->setUserLen1(absoluteDouble);
+                    // arpeggio->setUserLen2(absoluteDouble);
                     // arpeggio->setSpan(int);
                     arpeggio->setPlayArpeggio(articDef->playArtic);
                     // Playback values in finale are EDUs by default, or in % by non-default (exact workings needs to be investigated)
