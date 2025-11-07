@@ -1,14 +1,7 @@
 <section>
 
 <header>
-    <?js if (children.length > 0) { ?>
-    <ul><?js
-        var self = this;
-        children.forEach(function(t) { ?>
-        <li><?js= self.tutoriallink(t.name) ?></li>
-    <?js }); ?></ul>
-    <?js } ?>
-
+    
     <h2><?js= header ?></h2>
 </header>
 
@@ -17,3 +10,23 @@
 </article>
 
 </section>
+
+
+<?js= this.partial('include-target-script-and-styles.tmpl', filename) ?>
+
+
+<?js if (children.length > 0) { ?>
+<br><br>
+
+<div class="child-tutorial-container">
+    <?js
+        var self = this;
+        children.forEach(function(t) {
+            let link = self.tutoriallink(t.name).replaceAll(/<a href=/g, "").replaceAll(/>.*/g,"")
+    ?>
+        <a href=<?js= link ?> class="child-tutorial">
+           <?js= t.name ?> 
+        </a>
+    <?js }); ?>
+</div>
+<?js } ?>

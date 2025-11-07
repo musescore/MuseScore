@@ -19,21 +19,15 @@
         "encoding": "utf8",               
         "destination": "./out/",          
         "recurse": false,                  
-        "version": false                
+        "version": false,
+        "theme_opts": {
+            "default_theme": "light",
+            "homepageTitle": "Muse Extensions",
+            "sections": ["Tutorials", "Namespaces", "Modules", "Classes"]
+        }                
 	},
-    "docdash": {
-        "sort": true,
-        "sectionOrder": [   
-            "Tutorials",    
-            "Modules",        
-            "Externals",
-            "Events",
-            "Namespaces",
-            "Classes",
-            "Mixins",
-            "Interfaces"
-        ],
-        "search": true
+    "markdown": {
+        "hardwrap": false,
+        "idInHeadings": true
     }
-
 }

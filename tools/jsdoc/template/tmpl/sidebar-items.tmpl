@@ -1,0 +1,24 @@
+<?js
+    var data = this.sidebar
+
+    if(Array.isArray(data.sections)) {
+
+        data.sections.forEach(function(section) {
+            if(section.items.length > 0) { ?>
+
+            <div class="sidebar-section-title with-arrow" data-isopen="false" id="<?js= section.id?>">
+                <div><?js= section.name ?></div>
+                <svg><use xlink:href="#down-icon"></use></svg>
+            </div>
+            <div class="sidebar-section-children-container">
+
+                <?js 
+                section.items.forEach(function(item) { ?>
+                    <div class="sidebar-section-children">
+                        <?js= item.anchor ?>
+                    </div>
+                    
+                <?js }) ?>
+            </div>
+
+<?js }})}?>

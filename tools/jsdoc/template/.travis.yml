@@ -1,0 +1,30 @@
+stages:
+  - name: test
+  - name: deploy
+    if: branch == production
+
+cache:
+  directories:
+    - node_modules
+
+jobs:
+  include:
+    - stage: test
+      language: node_js
+      node_js:
+        - "12"
+      install: "npm install && npm install jsdoc"
+      script:
+        - npm run test
+        
+    - stage: deploy
+      language: node_js
+      node_js: "12"
+      script: echo "Deploying to npm ..."
+      deploy:
+        provider: npm
+        email: $NPM_EMAIL
+        api_token: $NPM_API_TOKEN
+        cleanup: false
+        on:
+          tags: true

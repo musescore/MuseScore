@@ -1,0 +1,43 @@
+<?js 
+
+const filename = obj.replace('.html', '')
+const scripts = []
+const styles = []
+
+
+if(Array.isArray(this.includeScript)) {
+    for (const script of this.includeScript) {
+        if(typeof script === 'object') {
+            for (const target of script.targets) {
+                if(filename === target) {
+                    scripts.push(script.filepath)
+                }
+            }
+        }    
+    }
+}
+
+if(Array.isArray(this.includeCss)) {
+    for (const style of this.includeCss) {
+        if(typeof style === 'object') {
+            for (const target of style.targets) {
+                if(filename === target) {
+                    styles.push(style.filepath)
+                }
+            }
+        }    
+    }
+}
+
+
+?>
+
+<?js scripts.forEach(function(source){ ?>
+    <script src="<?js= source ?>"></script>
+<?js }) ?>
+
+<?js styles.forEach(function(source){ ?>
+    <script>
+        document.head.innerHTML += '<link type="text/css" rel="stylesheet" href="<?js= source ?>">'
+    </script>
+<?js }) ?>

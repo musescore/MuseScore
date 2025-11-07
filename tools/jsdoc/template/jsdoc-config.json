@@ -1,0 +1,102 @@
+{
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "include": [
+            "./demo/src",
+            "./README.md"
+        ]
+    },
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "opts": {
+        "encoding": "utf8",
+        "destination": "output/v4",
+        "recurse": true,
+        "template": "./",
+        "tutorials": "./demo/src/tutorials",
+        "theme_opts": {
+            "shouldRemoveScrollbarStyle": false,
+            "includeFilesListInHomepage": true,
+            "search": true,
+            "homepageTitle": "Clean JSDoc Theme",
+            "title": "Clean JSDoc Theme",
+            "default_theme": "dark",
+            "exclude_inherited": false,
+            "include_css": [
+                {
+                    "filepath": "./demo/src/assets/style.css",
+                    "targets": [
+                        "AgentArray"
+                    ]
+                }
+            ],
+            "include_js": [
+                "./demo/src/assets/script.js",
+                {
+                    "filepath": "./demo/src/assets/agentarray.js",
+                    "targets": [
+                        "AgentArray",
+                        "tutorial-AgentArray_"
+                    ]
+                }
+            ],
+            "static_dir": [
+                "./demo/src/assets/png",
+                "./example"
+            ],
+            "add_scripts": "function foo(){console.log('foo')} function bar() {console.log('bar')} bar(); foo();",
+            "create_style": ".test-create-style{ background: red}",
+            "displayModuleHeader": true,
+            "footer": "<div style='margin-bottom: 0.5rem;'>clean-jsdoc-theme</div> Fork: <a href='https://github.com/ankitskvmdam/clean-jsdoc-theme'>https://github.com/ankitskvmdam/clean-jsdoc-theme</a>",
+            "meta": [
+                {
+                    "name": "Author",
+                    "content": "Ankit Kumar"
+                },
+                {
+                    "name": "Description",
+                    "content": "A beautifully crafted theme for jsdoc"
+                }
+            ],
+            "menu": [
+                {
+                    "title": "Github",
+                    "id": "github",
+                    "link": "https://github.com/ankitskvmdam/clean-jsdoc-theme"
+                },
+                {
+                    "title": "npm",
+                    "id": "npm",
+                    "link": "https://www.npmjs.com/package/clean-jsdoc-theme"
+                }
+            ],
+            "codepen": {
+                "enable_for": [
+                    "examples"
+                ],
+                "options": {
+                    "js_external": "https://code.jquery.com/jquery-3.6.0.min.js",
+                    "js_pre_processor": "babel",
+                    "js": "import {AgentArray} from 'https://unpkg.com/agentscript@0.10.19/dist/agentscript.js'"
+                }
+            },
+            "prefixModuleToSidebarItems_experimental": true
+        }
+    },
+    "templates": {
+        "default": {
+            "staticFiles": {
+                "include": [
+                    "./example"
+                ]
+            }
+        }
+    },
+    "markdown": {
+        "hardwrap": false,
+        "idInHeadings": true
+    }
+}

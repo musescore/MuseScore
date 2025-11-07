@@ -1,0 +1,25 @@
+<?js 
+    var data = this.navbar
+    var idSuffix = obj || ''
+    if(data.menu) { ?>
+    <?js 
+        data.menu.forEach(function(item) {
+            var className = item.class || '';
+            var id = item.id || '';
+            var target = item.target || '';
+            className += ' navbar-item'
+            if(id) {
+                id += idSuffix
+            }
+            ?>
+            
+<div class="<?js=className ?>"> 
+    <a id="<?js= id ?>" href="<?js= item.link ?>" target="<?js= target ?>">
+        <?js= item.title?>
+    </a>
+</div>
+
+    <?js
+        })
+    }
+?>

@@ -1,132 +1,175 @@
 <?js
 var data = obj;
 var self = this;
+
 ?>
 <?js if (data.kind !== 'module' && !data.hideconstructor) { ?>
     <?js if (data.kind === 'class' && data.classdesc) { ?>
-    <h2>Constructor</h2>
+        <h2 id="constructor" class="has-anchor">Constructor</h2>
     <?js } ?>
 
-    <h4 class="name" id="<?js= id ?>"><?js= data.attribs ?><?js
-      if(kind === 'class' && name.indexOf('module:') === 0) {
-        print('new (require("' + name.slice(7) + '"))');
-      } else if(kind === 'class') {
-        print('new ' + name);
-      } else if(kind === 'event' && data.alias) {
-        print(data.alias);
-      } else {
-        print(name);
-      }
-    ?><?js= (data.signature || '') ?></h4>
+    <h3 class="name has-anchor" id="<?js= id ?>">
+        <?js= data.attribs + (kind === 'class' ? 'new ' : '') + name + (data.signature || '') ?>
+    </h3>
 
     <?js if (data.summary) { ?>
-    <p class="summary usertext"><?js= summary ?></p>
+        <div class="summary"><?js= summary ?></div>
     <?js } ?>
 <?js } ?>
 
-<?js= this.partial('details.tmpl', data) ?>
-
-<?js if (data.augments && data.alias && data.alias.indexOf('module:') === 0) { ?>
-    <h5 class="h5-extends">Extends:</h5>
-    <?js= self.partial('augments.tmpl', data) ?>
+<?js if (data.kind !== 'module' && data.description) { ?>
+    <div class="description">
+        <?js= data.description ?>
+    </div>
 <?js } ?>
 
+<?js if (data.augments && data.alias && data.alias.indexOf('module:') === 0) { ?>
+    <div class="method-member-container mt-20">
+    <strong>Extends:</strong>
+    <?js= self.partial('augments.tmpl', data) ?>
+    </div>
+<?js } ?>
+
+
 <?js if (kind === 'event' && data.type && data.type.names) {?>
-    <h5 class="h5-types">Type:</h5>
+    <div class="method-member-container mt-20">
+    <strong>Type:</strong>
     <ul>
         <li>
             <?js= self.partial('type.tmpl', data.type.names) ?>
         </li>
     </ul>
+    </div>
 <?js } ?>
 
 <?js if (data['this']) { ?>
-    <h5 class="h5-this">This:</h5>
+    <div class="method-member-container mt-20">
+    <strong>This:</strong>
     <ul><li><?js= this.linkto(data['this'], data['this']) ?></li></ul>
+    </div>
 <?js } ?>
 
-<?js if (data.examples && examples.length) { ?>
-    <h5 class="h5-examples">Example<?js= examples.length > 1? 's':'' ?></h5>
-    <?js= this.partial('examples.tmpl', examples) ?>
+<?js if (data.params && params.length && !data.hideconstructor) { ?>
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        <?js= this.partial('params.tmpl', params) ?>
+    </div>
 <?js } ?>
 
-<?js if (data.params && params.length) { ?>
-    <h5 class="h5-parameters">Parameters:</h5>
-    <?js= this.partial('params.tmpl', params) ?>
-<?js } ?>
+<?js= this.partial('details.tmpl', data) ?>
 
 <?js if (data.kind !== 'module' && data.requires && data.requires.length) { ?>
-<h5 class="h5-requires">Requires:</h5>
-<ul><?js data.requires.forEach(function(r) { ?>
-    <li><?js= self.linkto(r) ?></li>
-<?js }); ?></ul>
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Requires:</strong>
+        <ul>
+            <?js data.requires.forEach(function(r) { ?>
+                <li><?js= self.linkto(r) ?></li>
+            <?js }); ?>
+        </ul>
+    </div>
 <?js } ?>
 
 <?js if (data.fires && fires.length) { ?>
-<h5 class="h5-fires">Fires:</h5>
-<ul><?js fires.forEach(function(f) { ?>
-    <li><?js= self.linkto(f) ?></li>
-<?js }); ?></ul>
+    <div class="method-member-container flex w-100 overflow-auto mt-20">
+        <strong>Fires:</strong>
+            <ul>
+                <?js fires.forEach(function(f) { ?>
+                    <li><?js= self.linkto(f) ?></li>
+                <?js }); ?>
+            </ul>
+    </div>
 <?js } ?>
 
 <?js if (data.listens && listens.length) { ?>
-<h5 class="h5-listens">Listens to Events:</h5>
-<ul><?js listens.forEach(function(f) { ?>
-    <li><?js= self.linkto(f) ?></li>
-<?js }); ?></ul>
+    <div class="method-member-container flex w-100 overflow-auto mt-20">
+        <strong>Listens to Events:</strong>
+        <ul>
+            <?js listens.forEach(function(f) { ?>
+                <li><?js= self.linkto(f) ?></li>
+            <?js }); ?>
+        </ul>
+    </div>
 <?js } ?>
 
 <?js if (data.listeners && listeners.length) { ?>
-<h5 class="h5-listeners">Listeners of This Event:</h5>
-<ul><?js listeners.forEach(function(f) { ?>
-    <li><?js= self.linkto(f) ?></li>
-<?js }); ?></ul>
+    <div class="method-member-container mt-20">
+    <strong>Listeners of This Event:</strong>
+    <ul>
+        <?js listeners.forEach(function(f) { ?>
+            <li><?js= self.linkto(f) ?></li>
+        <?js }); ?>
+    </ul>
+    </div>
 <?js } ?>
 
-<?js if (data.modifies && modifies.length) {?>		
-<h5 class="h5-modifies">Modifies:</h5>		
-<?js if (modifies.length > 1) { ?><ul><?js		
-    modifies.forEach(function(m) { ?>		
-        <li><?js= self.partial('modifies.tmpl', m) ?></li>		
-    <?js });		
-?></ul><?js } else {		
-    modifies.forEach(function(m) { ?>		
-        <?js= self.partial('modifies.tmpl', m) ?>		
-    <?js });		
-} } ?>
+<?js if (data.modifies && modifies.length) {?>
+    <div class="method-member-container mt-20">
+    <strong>Modifies:</strong>
+        <?js if (modifies.length > 1) { ?>
+            <ul>
+                <?js modifies.forEach(function(r) { ?>
+                    <li><?js= self.partial('type.tmpl', r) ?></li>
+                <?js }); ?>
+            </ul>
+
+        <?js } else { modifies.forEach(function(r) { ?>
+            <?js= self.partial('type.tmpl', r) ?>
+            <?js });} ?>
+    </div>
+<?js } ?>
+
 
 <?js if (data.exceptions && exceptions.length) { ?>
-<h5 class="h5-throws">Throws:</h5>
-<?js if (exceptions.length > 1) { ?><ul><?js
-    exceptions.forEach(function(r) { ?>
-        <li><?js= self.partial('exceptions.tmpl', r) ?></li>
-    <?js });
-?></ul><?js } else {
-    exceptions.forEach(function(r) { ?>
+    <div class="method-member-container mt-20">
+    <strong>Throws:</strong>
+    <?js if (exceptions.length > 1) { ?>
+        <ul>
+            <?js exceptions.forEach(function(r) { ?>
+                <li><?js= self.partial('exceptions.tmpl', r) ?></li>
+            <?js }); ?>
+        </ul>
+    <?js } else { exceptions.forEach(function(r) { ?>
         <?js= self.partial('exceptions.tmpl', r) ?>
-    <?js });
-} } ?>
+    <?js });} ?>
+    </div>
+<?js } ?>
 
 <?js if (data.returns && returns.length) { ?>
-<h5 class="h5-returns">Returns:</h5>
-<?js if (returns.length > 1) { ?><ul><?js
-    returns.forEach(function(r) { ?>
-        <li><?js= self.partial('returns.tmpl', r) ?></li>
-    <?js });
-?></ul><?js } else {
-    returns.forEach(function(r) { ?>
-        <?js= self.partial('returns.tmpl', r) ?>
-    <?js });
-} } ?>
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        <?js if (returns.length > 1) { ?>
+            <ul>
+                <?js returns.forEach(function(r) { ?>
+                    <li><?js= self.partial('returns.tmpl', r) ?></li>
+                <?js }); ?>
+            </ul>
 
-<?js if (data.yields && yields.length) { ?>		
-<h5 class="h5-yields">Yields:</h5>		
-<?js if (yields.length > 1) { ?><ul><?js		
-    yields.forEach(function(r) { ?>		
-        <li><?js= self.partial('returns.tmpl', r) ?></li>		
-    <?js });		
-?></ul><?js } else {		
-    yields.forEach(function(r) { ?>		
-        <?js= self.partial('returns.tmpl', r) ?>		
-    <?js });		
-} } ?>
+        <?js } else { returns.forEach(function(r) { ?>
+            <?js= self.partial('returns.tmpl', r) ?>
+            <?js });} ?>
+    </div>
+<?js } ?>
+
+<?js if (data.yields && yields.length) { ?>
+    <div class="method-member-container mt-20">
+    <strong>Yields:</strong>
+        <?js if (yields.length > 1) { ?>
+            <ul>
+                <?js yields.forEach(function(r) { ?>
+                    <li><?js= self.partial('returns.tmpl', r) ?></li>
+                <?js }); ?>
+            </ul>
+
+        <?js } else { yields.forEach(function(r) { ?>
+            <?js= self.partial('returns.tmpl', r) ?>
+            <?js });} ?>
+    </div>
+<?js } ?>
+
+
+<?js if (data.examples && examples.length) { ?>
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example<?js= examples.length > 1? 's':'' ?></strong>
+        <?js= this.partial('examples.tmpl', examples) ?>
+    </div>
+<?js } ?>
