@@ -47,6 +47,7 @@ extern engraving::TDuration noteInfoToDuration(std::pair<musx::dom::NoteType, un
 extern engraving::NoteType durationTypeToNoteType(engraving::DurationType type, bool after);
 extern bool isValidUuid(std::string uuid);
 extern engraving::String instrTemplateIdfromUuid(std::string uuid);
+extern int midiNoteFromPercussionNoteType(const engraving::String& instrument, musx::dom::PercussionNoteTypeId noteTypeId);
 extern engraving::BracketType toMuseScoreBracketType(musx::dom::details::Bracket::BracketStyle bracketStyle);
 extern engraving::TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::NumberStyle numberStyle);
 extern engraving::Align justifyToAlignment(musx::dom::others::NamePositioning::AlignJustify alignJustify);
