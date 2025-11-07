@@ -1038,7 +1038,9 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     case MouseDownInfo::DragOutgoingElement: {
         if (!isDragStarted) {
             const EngravingItem* element = viewInteraction()->hitElementContext().element;
-            viewInteraction()->startOutgoingDragElement(element, m_view->asItem());
+            const PointF hotSpot = m_mouseDownInfo.logicalBeginPoint - element->canvasBoundingRect().topLeft();
+
+            viewInteraction()->startOutgoingDragElement(element, m_view->asItem(), hotSpot);
         }
         return;
     }

@@ -1414,7 +1414,7 @@ bool NotationInteraction::isOutgoingDragElementAllowed(const EngravingItem* elem
 }
 
 //! NOTE: Copied from ScoreView::cloneElement
-void NotationInteraction::startOutgoingDragElement(const EngravingItem* element, QObject* dragSource)
+void NotationInteraction::startOutgoingDragElement(const EngravingItem* element, QObject* dragSource, const PointF& hotSpot)
 {
     if (isDragStarted()) {
         endOutgoingDrag();
@@ -1461,6 +1461,7 @@ void NotationInteraction::startOutgoingDragElement(const EngravingItem* element,
     engravingRenderer()->drawItem(element, &p, opt);
 
     m_outgoingDrag->setPixmap(pixmap);
+    m_outgoingDrag->setHotSpot((hotSpot * physDpiRatio).toQPoint());
 
     m_outgoingDrag->exec(Qt::CopyAction);
 }
