@@ -22,5 +22,5 @@ cp -r ${APIDOC_STATIC_DIR}/* ${GEN_APIDOCSRC_DIR}/
 echo "Generating docs..."
 rm -rf ${GEN_APIDOCS_DIR}
 mkdir -p ${GEN_APIDOCS_DIR}
-jsdoc ${GEN_APIDOCSRC_DIR} ${GEN_APIDOCSRC_DIR}/index.md -r -u ${GEN_APIDOCSRC_DIR}/help -c ${HERE}/conf.json -d ${GEN_APIDOCS_DIR}
-echo "Finished generate docs: ${GEN_APIDOCS_DIR}"
+jsdoc ${GEN_APIDOCSRC_DIR} ${GEN_APIDOCSRC_DIR}/index.md -r -u ${GEN_APIDOCSRC_DIR}/tutorials -c ${HERE}/conf.json -d ${GEN_APIDOCS_DIR}
+echo "Finished generate docs: file://$(cd "$GEN_APIDOCS_DIR" && pwd)/index.html"
