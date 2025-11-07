@@ -2046,11 +2046,16 @@ struct StyleDef
 {
 public:
     struct StyleValue {
+    private:
         Sid _idx;
         muse::AsciiStringView _name;         // xml name for read()/write()
         PropertyValue _defaultValue;
 
     public:
+        StyleValue(Sid idx, muse::AsciiStringView name, PropertyValue defaultValue)
+            : _idx(idx), _name(name), _defaultValue(defaultValue)
+        {}
+
         Sid  styleIdx() const { return _idx; }
         int idx() const { return int(_idx); }
         const muse::AsciiStringView& name() const { return _name; }
