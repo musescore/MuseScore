@@ -230,6 +230,42 @@ FocusScope {
                 onTextChanged: {
                     root.textChanged(text)
                 }
+
+                onCursorRectangleChanged: {
+                    ensureCursorVisible()
+                }
+
+                function ensureCursorVisible() {
+                    if (!activeFocus) {
+                        return
+                    }
+
+                    let flickable = contentView.contentItem
+                    if (!flickable) {
+                        return
+                    }
+
+                    let cursorY = valueInput.cursorRectangle.y
+                    let cursorHeight = valueInput.cursorRectangle.height
+
+                    let visibleTop = flickable.contentY
+                    let visibleBottom = visibleTop + contentView.height
+
+                    let topMargin = root.textSidePadding
+                    let bottomMargin = root.textSidePadding
+
+                    let eps = 2
+
+                    if (cursorY + cursorHeight + bottomMargin > visibleBottom + eps) {
+                        let newContentY = cursorY + cursorHeight + bottomMargin - contentView.height
+                        flickable.contentY = Math.max(0, newContentY)
+                    }
+
+                    else if (cursorY - topMargin < visibleTop - eps) {
+                        let newContentY = cursorY - topMargin
+                        flickable.contentY = Math.max(0, newContentY)
+                    }
+                }
             }
         }
     }
