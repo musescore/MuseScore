@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "importtef.h"
+#include "measurehandler.h"
 #include "tuplethandler.h"
 
 #include "engraving/dom/box.h"
@@ -265,7 +266,7 @@ static void addGraceNotesToChord(mu::engraving::Chord* chord, int pitch, int fre
     chord->add(cr);
 }
 
-static void addRest(Segment* segment, track_idx_t track, TDuration tDuration, Fraction length, muse::draw::Color color)
+static void addRest(Segment* segment, track_idx_t track, TDuration tDuration, Fraction length, muse::draw::Color color, bool visible = true)
 {
     mu::engraving::Rest* rest = Factory::createRest(segment);
     if (rest) {
@@ -273,11 +274,12 @@ static void addRest(Segment* segment, track_idx_t track, TDuration tDuration, Fr
         rest->setDurationType(tDuration);
         rest->setTicks(length);
         rest->setColor(color);
+        rest->setVisible(visible);
         segment->add(rest);
     }
 }
 
-void TablEdit::createContents()
+void TablEdit::createContents(const MeasureHandler& measureHandler)
 {
     if (tefInstruments.size() == 0) {
         LOGD("error: no instruments");
@@ -315,10 +317,14 @@ void TablEdit::createContents()
                 if (firstNote->dots) {
                     tDuration.setDots(firstNote->dots);
                 }
+
+                const auto idx { measureHandler.measureIndex(firstNote->position, tefMeasures) };
+                const Fraction gapCorrection { measureHandler.sumPreviousGaps(idx), 64 };
                 const auto positionCorrection = tupletHandler.doTuplet(firstNote);
 
                 Fraction tick { firstNote->position, 64 }; // position is in 64th
                 tick += positionCorrection;
+                tick -= gapCorrection;
                 LOGN("    positionCorrection %d/%d tick %d/%d length %d/%d",
                      positionCorrection.numerator(), positionCorrection.denominator(),
                      tick.numerator(), tick.denominator(),
@@ -413,19 +419,38 @@ void TablEdit::createLinkedTabs()
     }
 }
 
-void TablEdit::createMeasures()
+static Fraction reducedActualLength(const int actual, const int nominalDenominator)
+{
+    Fraction res { actual, 64 };
+    while (res.denominator() >= 2 * nominalDenominator && res.numerator() % 2 == 0) {
+        res.setNumerator(res.numerator() / 2);
+        res.setDenominator(res.denominator() / 2);
+    }
+    LOGN("actual %d nominalDenominator %d res %d/%d", actual, nominalDenominator, res.numerator(), res.denominator());
+    return res;
+}
+
+void TablEdit::createMeasures(const MeasureHandler& measureHandler)
 {
     int lastKey { 0 };               // safe default
     Fraction lastTimeSig { -1, -1 }; // impossible value
     Fraction tick { 0, 1 };
-    for (const auto& tefMeasure : tefMeasures) {
+    for (size_t idx = 0; idx < tefMeasures.size(); ++idx) {
+        TefMeasure& tefMeasure { tefMeasures.at(idx) };
         // create measure
         auto measure = Factory::createMeasure(score->dummy()->system());
         measure->setTick(tick);
-        Fraction length{ tefMeasure.numerator, tefMeasure.denominator };
-        measure->setTimesig(length);
-        measure->setTicks(length);
+        Fraction nominalLength{ tefMeasure.numerator, tefMeasure.denominator };
+        Fraction actualLength{ reducedActualLength(measureHandler.actualSize(tefMeasures, idx), tefMeasure.denominator) };
+        measure->setTimesig(nominalLength);
+        measure->setTicks(actualLength);
         measure->setEndBarLineType(BarLineType::NORMAL, 0);
+        LOGN("measure %p tick %d/%d nominalLength %d/%d actualLength %d/%d",
+             measure,
+             tick.numerator(), tick.denominator(),
+             nominalLength.numerator(), nominalLength.denominator(),
+             actualLength.numerator(), actualLength.denominator()
+             );
         score->measures()->add(measure);
 
         if (tick == Fraction { 0, 1 }) {
@@ -441,11 +466,11 @@ void TablEdit::createMeasures()
             auto s2 = measure->getSegment(mu::engraving::SegmentType::TimeSig, tick);
             for (size_t i = 0; i < tefInstruments.size(); ++i) {
                 mu::engraving::TimeSig* timesig = Factory::createTimeSig(s2);
-                timesig->setSig(length);
+                timesig->setSig(nominalLength);
                 timesig->setTrack(i * VOICES);
                 s2->add(timesig);
             }
-            lastTimeSig = length;
+            lastTimeSig = nominalLength;
             createTempo();
         } else {
             if (tefMeasure.key != lastKey) {
@@ -458,19 +483,19 @@ void TablEdit::createMeasures()
                 }
                 lastKey = tefMeasure.key;
             }
-            if (length != lastTimeSig) {
+            if (nominalLength != lastTimeSig) {
                 auto s2 = measure->getSegment(mu::engraving::SegmentType::TimeSig, tick);
                 for (size_t i = 0; i < tefInstruments.size(); ++i) {
                     mu::engraving::TimeSig* timesig = Factory::createTimeSig(s2);
-                    timesig->setSig(length);
+                    timesig->setSig(nominalLength);
                     timesig->setTrack(i * VOICES);
                     s2->add(timesig);
                 }
-                lastTimeSig = length;
+                lastTimeSig = nominalLength;
             }
         }
 
-        tick += length;
+        tick += actualLength;
     }
     score->setUpTempoMap();
 }
@@ -569,14 +594,81 @@ static void setInstrumentIDs(const std::vector<Part*>& parts)
     }
 }
 
+//---------------------------------------------------------
+//   fillGap
+//---------------------------------------------------------
+
+// Fill one gap (tstart - tend) in this track in this measure with rest(s).
+
+static void fillGap(Measure* measure, track_idx_t track, const Fraction& tstart, const Fraction& tend)
+{
+    Fraction ctick = tstart;
+    Fraction restLen = tend - tstart;
+    LOGN("measure %p track %zu tstart %d tend %d restLen %d len",
+         measure, track, tstart.ticks(), tend.ticks(), restLen.ticks());
+    auto durList = toDurationList(restLen, true);
+    LOGN("durList.size %zu", durList.size());
+    for (const auto& dur : durList) {
+        LOGN("type %d dots %d fraction %d/%d", dur.type(), dur.dots(), dur.fraction().numerator(), dur.fraction().denominator());
+        Segment* s = measure->getSegment(SegmentType::ChordRest, ctick);
+        addRest(s, track, dur, dur.fraction(), muse::draw::Color::BLACK, false);
+        ctick += dur.fraction();
+    }
+}
+
+//---------------------------------------------------------
+//   fillGapsInFirstVoices
+//---------------------------------------------------------
+
+// Fill gaps in first voice of every staff in this measure for this part with rest(s).
+
+static void fillGapsInFirstVoices(MasterScore* score)
+{
+    IF_ASSERT_FAILED(score) {
+        return;
+    }
+
+    for (staff_idx_t idx = 0; idx < score->nstaves(); ++idx) {
+        for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+            Fraction measTick     = measure->tick();
+            Fraction measLen      = measure->ticks();
+            Fraction nextMeasTick = measTick + measLen;
+            LOGN("measure %p idx %zu tick %d - %d (len %d)",
+                 measure, idx, measTick.ticks(), nextMeasTick.ticks(), measLen.ticks());
+            track_idx_t track = idx * VOICES;
+            Fraction endOfLastCR = measTick;
+            for (Segment* s = measure->first(); s; s = s->next()) {
+                EngravingItem* el = s->element(track);
+                if (el) {
+                    if (s->isChordRestType()) {
+                        ChordRest* cr  = static_cast<ChordRest*>(el);
+                        Fraction crTick     = cr->tick();
+                        Fraction crLen      = cr->globalTicks();
+                        if (crTick > endOfLastCR) {
+                            fillGap(measure, track, endOfLastCR, crTick);
+                        }
+                        endOfLastCR = crTick + crLen;
+                    }
+                }
+            }
+            if (nextMeasTick > endOfLastCR) {
+                fillGap(measure, track, endOfLastCR, nextMeasTick);
+            }
+        }
+    }
+}
+
 void TablEdit::createScore()
 {
+    MeasureHandler measureHandler;
+    measureHandler.calculate(tefContents, tefMeasures);
     createProperties();
     createParts();
     createTitleFrame();
-    createMeasures();
+    createMeasures(measureHandler);
     createNotesFrame();
-    createContents();
+    createContents(measureHandler);
+    fillGapsInFirstVoices(score);
     createRepeats();
     createTexts();
     createLinkedTabs();
@@ -877,6 +969,7 @@ void TablEdit::readTefMeasures()
     for (uint16_t i = 0; i < numberOfMeasures; ++i) {
         TefMeasure measure;
         measure.flag = readUInt8();
+        measure.isPickup = measure.flag & 0x08;
         /* uint8_t uTmp = */ readUInt8();
         measure.key = readInt8();
         measure.size = readUInt8();

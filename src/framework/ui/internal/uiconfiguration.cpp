@@ -26,11 +26,12 @@
 #include "settings.h"
 #include "themeconverter.h"
 
-#include <QScreen>
 #include <QFontDatabase>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
+#include <QScreen>
+#include <QSettings>
 
 #ifdef Q_OS_WIN
 #include <QOperatingSystemVersion>
@@ -40,12 +41,14 @@
 
 #include "log.h"
 
+using namespace Qt::Literals;
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::async;
 
 static const Settings::Key UI_THEMES_KEY("ui", "ui/application/themes");
 static const Settings::Key UI_CURRENT_THEME_CODE_KEY("ui", "ui/application/currentThemeCode");
+static const Settings::Key UI_CUSTOM_COLORS_KEY("ui", "ui/application/customColors");
 static const Settings::Key UI_FOLLOW_SYSTEM_THEME_KEY("ui", "ui/application/followSystemTheme");
 static const Settings::Key UI_FONT_FAMILY_KEY("ui", "ui/theme/fontFamily");
 static const Settings::Key UI_FONT_SIZE_KEY("ui", "ui/theme/fontSize");
@@ -65,11 +68,30 @@ static const int FLICKABLE_MAX_VELOCITY = 1500;
 
 static const int TOOLTIP_DELAY = 500;
 
+// read custom colors saved by Qt < 6.9
+// see: https://github.com/qt/qtbase/blob/v6.2.4/src/gui/kernel/qplatformdialoghelper.cpp#L292-L302
+static std::vector<Val> readLegacyCustomColors()
+{
+    constexpr size_t customColorCount = 16;
+
+    QSettings settings(QSettings::UserScope, u"QtProject"_s);
+    std::vector<Val> legacyValues(customColorCount, Val(QColorConstants::White));
+    for (size_t i = 0; i < customColorCount; ++i) {
+        const QVariant value = settings.value(u"Qt/customColors/"_s + QString::number(i));
+        if (value.isValid()) {
+            legacyValues[i] = Val(QColor::fromRgb(value.toUInt()));
+        }
+    }
+
+    return legacyValues;
+}
+
 void UiConfiguration::init()
 {
     m_config = ConfigReader::read(":/configs/ui.cfg");
 
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
+    settings()->setDefaultValue(UI_CUSTOM_COLORS_KEY, Val(readLegacyCustomColors()));
     settings()->setDefaultValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(false));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val(defaultFontFamily()));
     settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(defaultFontSize()));
@@ -861,4 +883,28 @@ int UiConfiguration::flickableMaxVelocity() const
 int UiConfiguration::tooltipDelay() const
 {
     return TOOLTIP_DELAY;
+}
+
+std::vector<QColor> UiConfiguration::colorDialogCustomColors() const
+{
+    const ValList colorVals = settings()->value(UI_CUSTOM_COLORS_KEY).toList();
+
+    std::vector<QColor> customColors;
+    customColors.reserve(colorVals.size());
+    for (const auto& colorVal : colorVals) {
+        customColors.push_back(colorVal.toQColor());
+    }
+
+    return customColors;
+}
+
+void UiConfiguration::setColorDialogCustomColors(const std::vector<QColor>& customColors)
+{
+    ValList colorVals;
+    colorVals.reserve(customColors.size());
+    for (const auto& color: customColors) {
+        colorVals.emplace_back(color);
+    }
+
+    settings()->setLocalValue(UI_CUSTOM_COLORS_KEY, Val(colorVals));
 }
