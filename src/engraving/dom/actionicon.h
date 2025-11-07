@@ -79,8 +79,6 @@ public:
     ActionIcon(EngravingItem* score);
     ~ActionIcon() override = default;
 
-    static constexpr double DEFAULT_FONT_SIZE = 16.0;
-
     ActionIcon* clone() const override;
 
     ActionIconType actionType() const;

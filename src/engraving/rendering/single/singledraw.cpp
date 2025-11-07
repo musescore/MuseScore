@@ -2182,7 +2182,6 @@ void SingleDraw::draw(const StaffText* item, Painter* painter, const PaintOption
     drawTextBase(item, painter, opt);
 
     if (item->hasSoundFlag()) {
-        item->soundFlag()->setIconFontSize(item->font().pointSizeF());
         draw(item->soundFlag(), painter, opt);
     }
 }

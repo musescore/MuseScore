@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SOUNDFLAG_H
-#define MU_ENGRAVING_SOUNDFLAG_H
+#pragma once
 
 #include "engravingitem.h"
 
@@ -70,7 +69,6 @@ public:
 
     char16_t iconCode() const;
     muse::draw::Font iconFont() const;
-    void setIconFontSize(double size);
     Color iconBackgroundColor() const;
 
 private:
@@ -84,5 +82,3 @@ private:
     bool m_applyToAllStaves = true;
 };
 }
-
-#endif // MU_ENGRAVING_SOUNDFLAG_H

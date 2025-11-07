@@ -22,6 +22,7 @@
 
 #include "actionicon.h"
 
+#include "mscore.h"
 #include "property.h"
 
 using namespace mu;
@@ -32,7 +33,7 @@ ActionIcon::ActionIcon(EngravingItem* parent)
     : EngravingItem(ElementType::ACTION_ICON, parent)
 {
     m_iconFont = Font(configuration()->iconsFontFamily(), Font::Type::Icon);
-    m_iconFont.setPointSizeF(DEFAULT_FONT_SIZE);
+    m_iconFont.setPointSizeF(UI_ICONS_DEFAULT_FONT_SIZE);
 }
 
 ActionIcon* ActionIcon::clone() const

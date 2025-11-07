@@ -2918,12 +2918,9 @@ void TDraw::draw(const SoundFlag* item, Painter* painter, const PaintOptions& op
 
     painter->setNoPen();
     painter->setBrush(item->iconBackgroundColor());
-    painter->drawEllipse(item->ldata()->bbox());
+    painter->drawEllipse(item->ldata()->bbox().adjusted(-4.0, -4.0, 4.0, 4.0));
 
-    Font f(item->iconFont());
-    f.setPointSizeF(item->spatium() * 2.0);
-    painter->setFont(f);
-
+    painter->setFont(item->iconFont());
     painter->setPen(!item->selected() ? item->curColor(true, opt) : Color::WHITE);
     painter->drawText(item->ldata()->bbox(), muse::draw::AlignCenter, Char(item->iconCode()));
 }
