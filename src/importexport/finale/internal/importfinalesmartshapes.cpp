@@ -786,9 +786,9 @@ void FinaleParser::importSmartShapes()
             f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * newSpanner->magS()); // This has been tested and is scaled correctly
             muse::draw::FontMetrics fm(f);
             PointF textoffset(0.0, absoluteDouble(0.75, newSpanner));
-            textoffset.ry() -= fm.tightBoundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))).y();
+            textoffset.ry() -= fm.boundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).y();
             if (newSpanner->placeAbove()) {
-                textoffset.ry() -= fm.tightBoundingRect(String::fromUcs4(score()->engravingFont()->symCode(SymId::ottavaAlta))).height();
+                textoffset.ry() -= fm.boundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).height();
             }
             toOttava(newSpanner)->setBeginTextOffset(textoffset);
             toOttava(newSpanner)->setContinueTextOffset(textoffset);
