@@ -1391,13 +1391,15 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::VBOX:
     case ElementType::TBOX:
     case ElementType::FBOX:
-    case ElementType::HBOX:
+    case ElementType::HBOX: {
+        const Measure* m = isMMRest() ? mmRestFirst() : this;
         for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-            if (isMeasureRepeatGroupWithPrevM(staffIdx)) {
+            if (m->isMeasureRepeatGroupWithPrevM(staffIdx)) {
                 return false;
             }
         }
         [[fallthrough]];
+    }
 
     case ElementType::MEASURE_NUMBER:
     case ElementType::JUMP:
@@ -1444,9 +1446,10 @@ bool Measure::acceptDrop(EditData& data) const
         case ActionIconType::HFRAME:
         case ActionIconType::TFRAME:
         case ActionIconType::FFRAME:
-        case ActionIconType::MEASURE:
+        case ActionIconType::MEASURE: {
+            const Measure* m = isMMRest() ? mmRestFirst() : this;
             for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-                if (isMeasureRepeatGroupWithPrevM(staffIdx)) {
+                if (m->isMeasureRepeatGroupWithPrevM(staffIdx)) {
                     return false;
                 }
             }
@@ -1454,6 +1457,7 @@ bool Measure::acceptDrop(EditData& data) const
                 viewer->setDropRectangle(canvasBoundingRect());
             }
             return true;
+        }
         case ActionIconType::STAFF_TYPE_CHANGE:
             if (!canAddStaffTypeChange(staffIdx)) {
                 return false;
@@ -1785,9 +1789,10 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::HBOX:
     {
         MeasureBase* newBox = toMeasureBase(e);
-        newBox->setTick(tick());
-        newBox->setNext(this);
-        newBox->setPrev(prev());
+        Measure* m = isMMRest() ? mmRestFirst() : this;
+        newBox->setTick(m->tick());
+        newBox->setNext(m);
+        newBox->setPrev(m->prev());
         score()->undo(new InsertMeasures(newBox, newBox));
         return newBox;
     }
