@@ -960,6 +960,16 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
 
     // [THEN] Events received
     EXPECT_EQ(receivedEventCount, expectedEventCount);
+
+    // [WHEN] Send score changes
+    score->changesChannel().send(changes);
+
+    // [WHEN] Re-enable sending events on score change
+    receivedEventCount = 0;
+    model.setSendEventsOnScoreChange(trackId, true);
+
+    // [THEN] Events are sent and received immediately
+    EXPECT_EQ(receivedEventCount, expectedEventCount);
 }
 
 /**
