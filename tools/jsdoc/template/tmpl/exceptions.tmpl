@@ -4,13 +4,13 @@
 <?js if (data.description && data.type && data.type.names) { ?>
 <dl>
     <dt>
-        <div class="param-desc usertext">
+        <div class="param-desc">
         <?js= data.description ?>
         </div>
     </dt>
     <dd></dd>
     <dt>
-        <dl class="param-type">
+        <dl>
             <dt>
                 Type
             </dt>
@@ -22,7 +22,7 @@
     <dd></dd>
 </dl>
 <?js } else { ?>
-    <div class="param-desc usertext">
+    <div class="param-desc">
     <?js if (data.description) { ?>
         <?js= data.description ?>
     <?js } else if (data.type && data.type.names) { ?>

@@ -1,6 +1,7 @@
 <?js
     var data = obj;
     var props = data.subprops || data.properties;
+
     /* sort subprops under their parent props (like opts.classname) */
     var parentProp = null;
     props.forEach(function(prop, i) {
@@ -37,7 +38,7 @@
         }
     });
 ?>
-
+<div class="allow-overflow">
 <table class="props">
     <thead>
     <tr>
@@ -92,7 +93,7 @@
             <?js if (props.hasDefault) {?>
                 <td class="default">
                 <?js if (typeof prop.defaultvalue !== 'undefined') { ?>
-                    <code><?js= self.htmlsafe(prop.defaultvalue) ?></code>
+                    <?js= self.htmlsafe(prop.defaultvalue) ?>
                 <?js } ?>
                 </td>
             <?js } ?>
@@ -105,3 +106,4 @@
     <?js }); ?>
     </tbody>
 </table>
+</div>

@@ -1,13 +1,48 @@
 <?js
     var data = obj;
     var self = this;
+    var codepen = this.codepen;
+    var enable_for = codepen.enable_for || [];
 
     data.forEach(function(example) {
+
         if (example.caption) {
     ?>
         <p class="code-caption"><?js= example.caption ?></p>
     <?js } ?>
+    <div class="rel">
     <pre class="prettyprint"><code><?js= self.htmlsafe(example.code) ?></code></pre>
+    
+    <?js 
+        if(enable_for.findIndex(function (val) { return val === "examples"}) !== -1) { 
+            var options = codepen.options || {};
+            var optionsString = '';
+            
+            var code = `${options.js}
+${example.code}
+            `
+
+            var jsonString = JSON.stringify(code)
+                                    .replace(/"/g, "&quot;")
+                                    .replace(/'/g, "&apos;");
+
+            var optionsKey = Object.keys(options).filter((key) => key !== 'js' )
+            optionsKey.map((key, idx) => {
+                optionsString += '"' + key +'": "' + options[key].replace(/"/g, "&quot;").replace(/'/g, "&apos;") + '"';
+                if(idx !== optionsKey.length - 1) {
+                    optionsString += ','
+                }
+            })
+
+    ?>
+        <form action="https://codepen.io/pen/define" method="POST" target="_blank" class="codepen-form">
+            <input type="hidden" name="data" value='{"title": "<?js= example.caption || 'Example' ?>", "js": <?js= jsonString ?>, <?js= optionsString ?> }' />
+            <button class="icon-button codepen-button" type="submit" value="Create New Pen with Prefilled Data" aria-label='open in codepen'>
+                <svg><use xlink:href="#codepen-icon"></use></svg>
+            </button>
+        </form>
+    <?js } ?>
+    </div>
 <?js
     });
 ?>
