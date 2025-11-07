@@ -20,5 +20,7 @@ Now we have two types of extensions:
 There is also a special type - **complex**. This is an extension that can consist of several forms, or a form and macros.
 
 Each extension consists of a {@tutorial 2_manifest} file that describes the extension - its identifier, type, title, icon, scripts, config and etc.
-Qml is used to create {@tutorial 3_form} user interfaces, and javascript is used to write {@tutorial 3_macros scripts. Api is provided to access the application, and API UI is provided UI controls.   
+Qml is used to create {@tutorial 3_form} user interfaces, and javascript is used to write {@tutorial 4_macros} scripts. Api is provided to access the application, and API UI is provided UI controls.   
 
+## Documentation 
+see [docs/README.md](https://github.com/musescore/MuseScore/tree/master/docs/README.md)
