@@ -363,11 +363,56 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     const Staff* st    = item->staff();
     const StaffType* tab = st->staffTypeForElement(item);
     double lineDist    = tab->lineDistance().val() * _spatium;
-    double stemX       = 0.5 * headWidth;
+    double stemX       = StemLayout::tabStemPosX() * _spatium;
     int ledgerLines = 0;
     double llY         = 0.0;
 
     size_t numOfNotes  = item->notes().size();
+
+    // Check if some of notes need repositioning for zigzag layout
+    std::vector<char> notePositions; // L / C / R
+    constexpr char LEFT = 'L';
+    constexpr char CENTER = 'C';
+    constexpr char RIGHT = 'R';
+    bool hasZigzagAdjustments = false;
+    double rightHeadWidth = 0.0;
+    if (tab->zigzagFretNumbers()) {
+
+        int prevNoteString = 1000; // just a very large value
+        for (size_t i = 0; i < numOfNotes; ++i) {
+            Note *note = item->notes().at(i);
+            char position;
+            // notes in TAB are always sorted by string from highest num (lowest pitch) to lowest num (highest pitch)
+            if (note->string() + 1  != prevNoteString || notePositions.empty()) {
+                position = CENTER;
+            } else {
+                switch (notePositions.back()) {
+                    case LEFT: {
+                        position = RIGHT;
+                        break;
+                    }
+                    case RIGHT: {
+                        position = LEFT;
+                        break;
+                    };
+                    case CENTER: {
+                        position = RIGHT;
+                        notePositions.back() = LEFT;
+                        break;
+                    }
+                    default: {
+                        position = CENTER;
+                    };
+                }
+            }
+            prevNoteString = note->string();
+            notePositions.push_back(position);
+            if (position != CENTER) {
+                hasZigzagAdjustments = true;
+            }
+        }
+    }
+
     double minY        = 1000.0;                 // just a very large value
     for (size_t i = 0; i < numOfNotes; ++i) {
         Note* note = item->notes().at(i);
@@ -379,8 +424,38 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         if (headWidth < fretWidth) {
             headWidth = fretWidth;
         }
-        // centre fret string on stem
-        double x = stemX - fretWidth * 0.5;
+        // centre fret string on stem, or apply zig-zag alignment
+        double x;
+        if (tab->zigzagFretNumbers()) {
+            // Apply zig-zag positioning with proper alignment
+            // Positions were already prepared above
+
+            assert(notePositions.size() == item->notes().size());
+            char position = notePositions[i];
+            switch (position) {
+                case LEFT: {
+                    x = stemX - fretWidth;
+                    break;
+                }
+                case RIGHT: {
+                    x = stemX;
+                    if (fretWidth > rightHeadWidth) {
+                        rightHeadWidth = fretWidth;
+                    }
+                    break;
+                }
+                case CENTER: {
+                    x = stemX - fretWidth * 0.5;
+                    break;
+                }
+                default: ;
+            }
+
+        } else {
+            // Standard centered positioning
+            x = stemX - fretWidth * 0.5;
+        }
+
         double y = note->fixed() ? note->line() * lineDist / 2 : tab->physStringToYOffset(note->string()).toAbsolute(_spatium);
         note->setPos(x, y);
         if (y < minY) {
@@ -459,14 +534,26 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
 
     // horiz. spacing: leave half width at each side of the (potential) stem
     double halfHeadWidth = headWidth * 0.5;
-    if (lll < stemX - halfHeadWidth) {
-        lll = stemX - halfHeadWidth;
+
+    // Account for zig-zag offsets in spacing calculations
+    double extraSpacing = 0.0;
+    if (tab->zigzagFretNumbers() && hasZigzagAdjustments) {
+        // Add extra spacing for the zig-zag offsets (only when notes span both even and odd strings)
+        extraSpacing = 0.5 * _spatium;
     }
-    if (rrr < stemX + halfHeadWidth) {
-        rrr = stemX + halfHeadWidth;
+
+    if (lll < stemX - halfHeadWidth - extraSpacing) {
+        lll = stemX - halfHeadWidth - extraSpacing;
+    }
+    if (rrr < stemX + halfHeadWidth + extraSpacing) {
+        rrr = stemX + halfHeadWidth + extraSpacing;
     }
     // align dots to the widest fret mark (not needed in all TAB styles, but harmless anyway)
-    item->setDotPosX(headWidth);
+    if (tab->zigzagFretNumbers() && hasZigzagAdjustments) {
+        item->setDotPosX(stemX + rightHeadWidth);
+    } else {
+        item->setDotPosX(headWidth);
+    }
 
     if (item->shouldHaveStem()) {
         // if stem is required but missing, add it;
