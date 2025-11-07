@@ -2537,8 +2537,21 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item, { { "id", item->id().toUint64() } });
 
+    auto shouldWriteStaff = [&ctx](const Staff* staff) {
+        if (!ctx.shouldWriteRange()) {
+            return true;
+        }
+
+        const WriteRange& range = ctx.range().value();
+        const staff_idx_t idx = staff->idx();
+
+        return idx >= range.startStaffIdx && idx < range.endStaffIdx;
+    };
+
     for (const Staff* staff : item->staves()) {
-        write(staff, xml, ctx);
+        if (shouldWriteStaff(staff)) {
+            write(staff, xml, ctx);
+        }
     }
 
     if (!item->show()) {
@@ -3459,12 +3472,19 @@ static bool writeVoiceMove(XmlWriter& xml, WriteContext& ctx, Segment* seg, cons
     return voiceTagWritten;
 }
 
+static void writeTimeSig(Score* score, const Fraction& tick, XmlWriter& xml, WriteContext& ctx)
+{
+    Fraction tsf = score->sigmap()->timesig(tick).nominal();
+    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+    ts->setSig(tsf);
+    TWrite::write(ts, xml, ctx);
+}
+
 //---------------------------------------------------------
 //   writeSegments
 //    ls  - write upto this segment (excluding)
 //          can be zero
 //---------------------------------------------------------
-
 void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack, track_idx_t etrack,
                            Segment* sseg, Segment* eseg, bool writeSystemElements, bool forceTimeSig)
 {
@@ -3512,11 +3532,18 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
     int lastTrackWritten = static_cast<int>(strack - 1);   // for counting necessary <voice> tags
     for (track_idx_t track = strack; track < etrack; ++track) {
         if (!ctx.canWriteVoice(track)) {
+            if (forceTimeSig && track2voice(track) == 0) {
+                bool voiceTagWritten = writeVoiceMove(xml, ctx, sseg, startTick, track, &lastTrackWritten);
+                writeTimeSig(score, startTick, xml, ctx);
+                if (voiceTagWritten) {
+                    xml.endElement(); // </voice>
+                }
+            }
+
             continue;
         }
 
         bool voiceTagWritten = false;
-
         bool timeSigWritten = false;     // for forceTimeSig
         bool crWritten = false;          // for forceTimeSig
         bool keySigWritten = false;      // for forceTimeSig
@@ -3636,11 +3663,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                     keySigWritten = true;
                 }
                 // we will miss a time sig!
-                Fraction tsf = score->sigmap()->timesig(segment->tick()).nominal();
-                TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
-                ts->setSig(tsf);
-                TWrite::write(ts, xml, ctx);
-                delete ts;
+                writeTimeSig(score, segment->tick(), xml, ctx);
                 timeSigWritten = true;
             }
             if (needMove) {

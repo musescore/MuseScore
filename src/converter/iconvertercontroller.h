@@ -22,6 +22,9 @@
 #pragma once
 
 #include "modularity/imoduleinterface.h"
+
+#include "convertertypes.h"
+
 #include "global/types/ret.h"
 #include "global/types/uri.h"
 #include "global/io/path.h"
@@ -34,18 +37,10 @@ class IConverterController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IConverterController() = default;
 
-    struct OpenParams {
-        OpenParams() {}
-
-        muse::io::path_t stylePath;
-        bool forceMode = false;
-        bool unrollRepeats = false;
-    };
-
     virtual muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
                                   const muse::String& soundProfile = muse::String(),
                                   const muse::UriQuery& extensionUri = muse::UriQuery(), const std::string& transposeOptionsJson = {},
-                                  const std::optional<size_t>& pageNum = std::nullopt) = 0;
+                                  const std::optional<ConvertTarget>& target = std::nullopt) = 0;
 
     virtual muse::Ret batchConvert(const muse::io::path_t& batchJobFile, const OpenParams& openParams = {},
                                    const muse::String& soundProfile = muse::String(),

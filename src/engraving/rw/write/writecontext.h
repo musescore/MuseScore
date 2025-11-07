@@ -67,10 +67,9 @@ public:
     void setTrackDiff(int v) { _trackDiff = v; }
 
     bool clipboardmode() const { return _clipboardmode; }
-
     void setClipboardmode(bool v) { _clipboardmode = v; }
 
-    void setFilter(SelectionFilter f) { _filter = f; }
+    void setFilter(const SelectionFilter& f) { _filter = f; }
     bool canWrite(const EngravingItem*) const;
     bool canWriteNoteIdx(size_t noteIdx, size_t totalNotesInChord) const;
     bool canWriteVoice(track_idx_t track) const;
@@ -104,7 +103,6 @@ private:
     bool _clipboardmode  { false };     // used to modify write() behaviour
 
     std::optional<WriteRange> _range;
-
-    SelectionFilter _filter;
+    std::optional<SelectionFilter> _filter;
 };
 }

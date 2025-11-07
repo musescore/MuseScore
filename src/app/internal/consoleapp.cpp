@@ -37,16 +37,22 @@
 using namespace muse;
 using namespace mu::app;
 using namespace mu::appshell;
+using namespace mu::converter;
 
-static std::optional<size_t> parsePageNum(const QMap<CmdOptions::ParamKey, QVariant>& params)
+static std::optional<ConvertTarget> parseTarget(const QMap<CmdOptions::ParamKey, QVariant>& params)
 {
-    auto it = params.find(CmdOptions::ParamKey::PageNumber);
+    auto it = params.find(CmdOptions::ParamKey::ScoreRegion);
+    if (it != params.end()) {
+        return it.value().toString().toStdString();
+    }
+
+    it = params.find(CmdOptions::ParamKey::PageNumber);
     if (it == params.end()) {
         return std::nullopt;
     }
 
     bool ok = true;
-    size_t num = it.value().toULongLong(&ok) - 1;
+    page_num_t num = it.value().toULongLong(&ok) - 1;
 
     if (!ok) {
         LOGE() << "Invalid page, ignoring...";
@@ -295,7 +301,7 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
         soundProfile.clear();
     }
 
-    converter::IConverterController::OpenParams openParams;
+    converter::OpenParams openParams;
     openParams.stylePath = task.params[CmdOptions::ParamKey::StylePath].toString();
     openParams.forceMode = task.params[CmdOptions::ParamKey::ForceMode].toBool();
     openParams.unrollRepeats = task.params[CmdOptions::ParamKey::UnrollRepeats].toBool();
@@ -306,9 +312,9 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
         break;
     case ConvertType::File: {
         std::string transposeOptionsJson = task.params[CmdOptions::ParamKey::ScoreTransposeOptions].toString().toStdString();
-        std::optional<size_t> pageNum = parsePageNum(task.params);
+        std::optional<ConvertTarget> target = parseTarget(task.params);
         ret = converter()->fileConvert(task.inputFile, task.outputFile, openParams, soundProfile, extensionUri,
-                                       transposeOptionsJson, pageNum);
+                                       transposeOptionsJson, target);
     } break;
     case ConvertType::ConvertScoreParts:
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, openParams);

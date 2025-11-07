@@ -668,6 +668,7 @@ public:
     EngravingItem* getSelectedElement() const { return m_selection.element(); }
     const Selection& selection() const { return m_selection; }
     Selection& selection() { return m_selection; }
+    const SelectionFilter& selectionFilter() const { return m_selectionFilter; }
     SelectionFilter& selectionFilter() { return m_selectionFilter; }
     void setSelection(const Selection& s);
 

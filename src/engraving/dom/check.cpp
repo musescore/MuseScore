@@ -336,9 +336,10 @@ void Measure::checkMeasure(staff_idx_t staffIdx, bool useGapRests)
             }
             expectedPos = currentPos + de->ticks();
         }
+
         if (f > expectedPos) {
-            // don't fill empty voices
-            if (expectedPos.isNotZero()) {
+            // don't fill empty voices (except for the 1st)
+            if (expectedPos.isNotZero() || track2voice(track) == 0) {
                 fillGap(expectedPos, f - expectedPos, track, stretch);
             }
         } else if (f < expectedPos) {

@@ -150,12 +150,12 @@ Ret EngravingProject::loadMscz(const MscReader& msc, SettingsCompat& settingsCom
     return loader.loadMscz(m_masterScore, msc, settingsCompat, ignoreVersionError);
 }
 
-bool EngravingProject::writeMscz(MscWriter& writer, bool createThumbnail, const write::WriteRange* range)
+bool EngravingProject::writeMscz(MscWriter& writer, bool createThumbnail, const write::WriteContext* ctx)
 {
     TRACEFUNC;
 
     MscSaver saver(iocContext());
-    return saver.writeMscz(m_masterScore, writer, createThumbnail, range);
+    return saver.writeMscz(m_masterScore, writer, createThumbnail, ctx);
 }
 
 bool EngravingProject::isCorruptedUponLoading() const

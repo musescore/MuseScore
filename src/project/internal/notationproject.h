@@ -42,6 +42,10 @@
 namespace mu::engraving {
 class MscReader;
 class MscWriter;
+
+namespace write {
+class WriteContext;
+}
 }
 
 namespace mu::project {
@@ -122,9 +126,9 @@ private:
     muse::Ret doSave(const muse::io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup = true, bool createThumbnail = true,
                      bool isAutosave = false);
     muse::Ret makeBackup(muse::io::path_t filePath);
-    muse::Ret writeRange(const muse::io::path_t& path, const engraving::write::WriteRange& range);
+    muse::Ret writeProject(const muse::io::path_t& path, const engraving::write::WriteContext* ctx = nullptr);
     muse::Ret writeProject(engraving::MscWriter& msczWriter, bool createThumbnail = true,
-                           const engraving::write::WriteRange* range = nullptr);
+                           const engraving::write::WriteContext* ctx = nullptr);
     muse::Ret checkSavedFileForCorruption(engraving::MscIoMode ioMode, const muse::io::path_t& path, const muse::io::path_t& scoreFileName);
 
     void listenIfNeedSaveChanges();

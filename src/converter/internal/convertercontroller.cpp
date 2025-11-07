@@ -106,7 +106,7 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
                                      const muse::String& soundProfile,
                                      const muse::UriQuery& extensionUri,
                                      const std::string& transposeOptionsJson,
-                                     const std::optional<size_t>& pageNum)
+                                     const std::optional<ConvertTarget>& target)
 {
     std::optional<TransposeOptions> transposeOptions;
 
@@ -119,7 +119,7 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
         transposeOptions = transposeOptionsRet.val;
     }
 
-    return fileConvert(in, out, openParams, soundProfile, extensionUri, transposeOptions, pageNum);
+    return fileConvert(in, out, openParams, soundProfile, extensionUri, transposeOptions, target);
 }
 
 Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
@@ -127,7 +127,8 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
                                      const String& soundProfile,
                                      const muse::UriQuery& extensionUri,
                                      const std::optional<notation::TransposeOptions>& transposeOptions,
-                                     const std::optional<size_t>& pageNum, const std::vector<size_t>& visibleParts,
+                                     const std::optional<ConvertTarget>& target,
+                                     const std::vector<size_t>& visibleParts,
                                      const CopyrightInfo& copyright)
 {
     TRACEFUNC;
@@ -200,17 +201,23 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
     }
     // standart convert
     else {
+        const bool pageNumIsSet = target.has_value() && std::holds_alternative<page_num_t>(target.value());
+        const bool regionIsSet = target.has_value() && std::holds_alternative<ConvertRegionJson>(target.value());
+
         if (suffix == engraving::MSCZ || suffix == engraving::MSCX || suffix == engraving::MSCS) {
-            if (pageNum.has_value()) {
-                return notationProject->savePage(out, pageNum.value());
+            if (pageNumIsSet) {
+                return notationProject->savePage(out, std::get<page_num_t>(target.value()));
+            } else if (regionIsSet) {
+                return saveRegion(notationProject, std::get<ConvertRegionJson>(target.value()), out);
             }
 
             return notationProject->save(out);
         }
 
-        if (pageNum.has_value() || isConvertPageByPage(suffix)) {
-            if (pageNum.has_value()) {
-                ret = convertPage(writer, notationProject->masterNotation()->notation(), pageNum.value(), out);
+        if (pageNumIsSet || isConvertPageByPage(suffix)) {
+            if (pageNumIsSet) {
+                page_num_t pageNum = std::get<page_num_t>(target.value());
+                ret = convertPage(writer, notationProject->masterNotation()->notation(), pageNum, out);
             } else {
                 ret = convertPageByPage(writer, notationProject->masterNotation()->notation(), out);
             }
@@ -560,6 +567,53 @@ Ret ConverterController::convertScorePartsToMp3(INotationWriterPtr writer, IMast
     }
 
     return make_ret(Ret::Code::Ok);
+}
+
+muse::Ret ConverterController::saveRegion(INotationProjectPtr project, const ConvertRegionJson& regionJson, const path_t& out) const
+{
+    RetVal<ConvertRegion> region = ConverterUtils::parseRegion(regionJson);
+    if (!region.ret) {
+        return region.ret;
+    }
+
+    INotationPtr notation = project->masterNotation()->notation();
+    const mu::engraving::Score* score = notation->elements()->msScore();
+
+    Measure* startMeasure = score->crMeasure(region.val.start.measureIdx);
+    if (!startMeasure) {
+        startMeasure = score->firstMeasure();
+    }
+
+    Measure* endMeasure = score->crMeasure(region.val.end.measureIdx);
+    if (!endMeasure) {
+        endMeasure = score->lastMeasure();
+    }
+
+    IF_ASSERT_FAILED(startMeasure && endMeasure) {
+        return make_ret(Err::UnknownError);
+    }
+
+    INotationInteractionPtr interaction = notation->interaction();
+
+    if (!region.val.voiceIdxSet.empty()) {
+        using VoiceFilterType = mu::engraving::VoicesSelectionFilterTypes;
+        const std::vector<std::pair<size_t, mu::engraving::VoicesSelectionFilterTypes> > VOICE_FILTERS {
+            { 0, VoiceFilterType::FIRST_VOICE },
+            { 1, VoiceFilterType::SECOND_VOICE },
+            { 2, VoiceFilterType::THIRD_VOICE },
+            { 3, VoiceFilterType::FOURTH_VOICE },
+        };
+
+        for (const auto& pair : VOICE_FILTERS) {
+            const bool voiceAccepted = muse::contains(region.val.voiceIdxSet, pair.first);
+            interaction->selectionFilter()->setSelectionTypeFiltered(pair.second, voiceAccepted);
+        }
+    }
+
+    interaction->select({ startMeasure }, SelectType::RANGE, region.val.start.staffIdx);
+    interaction->select({ endMeasure }, SelectType::RANGE, region.val.end.staffIdx);
+
+    return project->save(out, SaveMode::SaveSelection);
 }
 
 Ret ConverterController::exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out,
