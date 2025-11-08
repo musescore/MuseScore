@@ -23,6 +23,7 @@
 #include <set>
 
 #include <QFile>
+#include <QFileInfo>
 
 #include "translation.h"
 
@@ -1250,7 +1251,13 @@ Err importMidi(MasterScore* score, const QString& name)
         opers.addNewMidiFile(name);
     }
 
-    if (opers.data()->processingsOfOpenedFile == 0) {
+    // Check if file has been modified on disk since last import
+    QFileInfo fileInfo(name);
+    qint64 currentModTime = fileInfo.lastModified().toSecsSinceEpoch();
+    bool needsReload = (opers.data()->processingsOfOpenedFile == 0)
+                       || (opers.data()->fileModificationTime != currentModTime);
+
+    if (needsReload) {
         QFile fp(name);
         if (!fp.open(QIODevice::ReadOnly)) {
             LOGD("importMidi: file open error <%s>", qPrintable(name));
@@ -1274,6 +1281,7 @@ Err importMidi(MasterScore* score, const QString& name)
 
         loadMidiData(mf);
         opers.setMidiFileData(name, mf);
+        opers.data()->fileModificationTime = currentModTime;
     }
 
     opers.data()->tracks = convertMidi(score, opers.midiFile(name));
