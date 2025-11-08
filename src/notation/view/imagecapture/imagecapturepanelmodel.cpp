@@ -112,11 +112,11 @@ QString ImageCapturePanelModel::exportButtonText() const
 {
     switch (m_exportFormatIndex) {
     case 0:
-        return muse::qtrc("notation", "Export as PNG...");
+        return muse::qtrc("notation", "Export as PNG…");
     case 1:
-        return muse::qtrc("notation", "Export as SVG...");
+        return muse::qtrc("notation", "Export as SVG…");
     default:
-        return muse::qtrc("notation", "Export...");
+        return muse::qtrc("notation", "Export…");
     }
 }
 
