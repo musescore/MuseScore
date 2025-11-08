@@ -283,6 +283,13 @@ public:
     virtual ScoreConfig scoreConfig() const = 0;
     virtual void setScoreConfig(const ScoreConfig& config) = 0;
 
+    // Image capture
+    virtual bool isImageCaptureMode() const = 0;
+    virtual void setImageCaptureMode(bool enabled) = 0;
+    virtual muse::RectF captureBounds() const = 0;
+    virtual void clearImageCapture() = 0;
+    virtual muse::async::Channel<bool> imageCaptureModeChanged() const = 0;
+
     virtual void addMelisma() = 0;
     virtual void addLyricsVerse() = 0;
 

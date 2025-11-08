@@ -214,6 +214,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/view/imagecapture/imagecapturepanelmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/imagecapture/imagecapturepanelmodel.h
+
     ${CMAKE_CURRENT_LIST_DIR}/utilities/engravingitempreviewpainter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utilities/engravingitempreviewpainter.h
     ${CMAKE_CURRENT_LIST_DIR}/utilities/percussionutilities.cpp

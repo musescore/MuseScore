@@ -195,6 +195,14 @@ const UiActionList ApplicationUiActions::m_actions = {
              TranslatableString("action", "Show/hide piano keyboard"),
              Checkable::Yes
              ),
+    UiAction("toggle-image-capture",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "&Image capture"),
+             TranslatableString("action", "Show/hide image capture panel"),
+             IconCode::Code::CAMERA,
+             Checkable::Yes
+             ),
     UiAction(TOGGLE_PERCUSSION_PANEL_ACTION_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -391,6 +399,7 @@ const QMap<ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
         { "toggle-timeline", TIMELINE_PANEL_NAME },
         { "toggle-mixer", MIXER_PANEL_NAME },
         { "toggle-piano-keyboard", PIANO_KEYBOARD_PANEL_NAME },
+        { "toggle-image-capture", IMAGE_CAPTURE_PANEL_NAME },
         { TOGGLE_PERCUSSION_PANEL_ACTION_CODE, PERCUSSION_PANEL_NAME },
 
         { "toggle-statusbar", NOTATION_STATUSBAR_NAME },

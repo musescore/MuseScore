@@ -35,6 +35,7 @@
         <file>qml/MuseScore/NotationScene/internal/CustomiseView.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml</file>
         <file>qml/MuseScore/NotationScene/PianoKeyboardPanel.qml</file>
+        <file>qml/MuseScore/NotationScene/ImageCapturePanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml</file>
         <file>qml/MuseScore/NotationScene/AbstractElementPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/ElementPopupLoader.qml</file>

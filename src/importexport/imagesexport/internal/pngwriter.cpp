@@ -47,6 +47,22 @@ Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
 
     const float CANVAS_DPI = configuration()->exportPngDpiResolution();
 
+    // Check if we're exporting a capture rectangle
+    bool hasCaptureRect = options.find(OptionKey::CAPTURE_RECT_X) != options.end()
+                          && options.find(OptionKey::CAPTURE_RECT_Y) != options.end()
+                          && options.find(OptionKey::CAPTURE_RECT_W) != options.end()
+                          && options.find(OptionKey::CAPTURE_RECT_H) != options.end();
+    muse::RectF captureRect;
+    if (hasCaptureRect) {
+        double x = muse::value(options, OptionKey::CAPTURE_RECT_X, Val(0.0)).toDouble();
+        double y = muse::value(options, OptionKey::CAPTURE_RECT_Y, Val(0.0)).toDouble();
+        double w = muse::value(options, OptionKey::CAPTURE_RECT_W, Val(0.0)).toDouble();
+        double h = muse::value(options, OptionKey::CAPTURE_RECT_H, Val(0.0)).toDouble();
+        captureRect = muse::RectF(x, y, w, h);
+        LOGI() << "Capture rectangle: " << captureRect.x() << ", " << captureRect.y()
+               << " size: " << captureRect.width() << " x " << captureRect.height();
+    }
+
     INotationPainting::Options opt;
     opt.fromPage = muse::value(options, OptionKey::PAGE_NUMBER, Val(0)).toInt();
     opt.toPage = opt.fromPage;
@@ -54,10 +70,28 @@ Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
     opt.deviceDpi = CANVAS_DPI;
     opt.printPageBackground = false; // Printed by us using image.fill
 
-    const SizeF pageSizeInch = notation->painting()->pageSizeInch(opt);
+    // Set the viewport to the capture rectangle if provided
+    if (hasCaptureRect && !captureRect.isEmpty()) {
+        opt.frameRect = captureRect;
+        opt.isSetViewport = true;
+        LOGI() << "Set frameRect: " << opt.frameRect.x() << ", " << opt.frameRect.y()
+               << " size: " << opt.frameRect.width() << " x " << opt.frameRect.height();
+    }
 
-    int width = std::lrint(pageSizeInch.width() * CANVAS_DPI);
-    int height = std::lrint(pageSizeInch.height() * CANVAS_DPI);
+    int width, height;
+    if (hasCaptureRect && !captureRect.isEmpty()) {
+        // Convert capture rectangle from staff spaces to pixels
+        // The capture rectangle is in score coordinates (staff spaces)
+        width = std::lrint(captureRect.width() * CANVAS_DPI / mu::engraving::DPI);
+        height = std::lrint(captureRect.height() * CANVAS_DPI / mu::engraving::DPI);
+        LOGI() << "Image size for capture: " << width << " x " << height << " pixels";
+    } else {
+        // Normal page export
+        const SizeF pageSizeInch = notation->painting()->pageSizeInch(opt);
+        width = std::lrint(pageSizeInch.width() * CANVAS_DPI);
+        height = std::lrint(pageSizeInch.height() * CANVAS_DPI);
+        LOGI() << "Image size for full page: " << width << " x " << height << " pixels";
+    }
 
     QImage image(width, height, QImage::Format_ARGB32_Premultiplied);
     image.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
@@ -68,6 +102,12 @@ Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
     image.fill(TRANSPARENT_BACKGROUND ? Qt::transparent : Qt::white);
 
     muse::draw::Painter painter(&image, "pngwriter");
+
+    // Translate painter so capture rectangle starts at origin
+    if (hasCaptureRect && !captureRect.isEmpty()) {
+        painter.translate(-captureRect.x(), -captureRect.y());
+        LOGI() << "Translated painter by " << -captureRect.x() << ", " << -captureRect.y();
+    }
 
     notation->painting()->paintPng(&painter, opt);
 
