@@ -111,20 +111,35 @@ PreferencesPage {
 
         SeparatorLine {}
 
-        UiFontSection {
-            allFonts: appearanceModel.allFonts()
-            currentFontIndex: appearanceModel.currentFontIndex
-            bodyTextSize: appearanceModel.bodyTextSize
+        ColorAndWallpaperSection {
+            id: paperSettings
+
+            width: parent.width
+
+            enabled: !appearanceModel.scoreInversionEnabled
+            opacityOverride: paperSettings.enabled ? 1.0 : 0.6
+
+            title: qsTrc("appshell/preferences", "Page")
+            wallpaperDialogTitle: qsTrc("appshell/preferences", "Choose notepaper")
+            useColor: appearanceModel.foregroundUseColor
+            color: appearanceModel.foregroundColor
+            wallpaperPath: appearanceModel.foregroundWallpaperPath
+            wallpapersDir: appearanceModel.wallpapersDir()
+            wallpaperFilter: appearanceModel.wallpaperPathFilter()
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 4
 
-            onFontChangeRequested: function(newFontIndex) {
-                appearanceModel.currentFontIndex = newFontIndex
+            onUseColorChangeRequested: function(newValue) {
+                appearanceModel.foregroundUseColor = newValue
             }
 
-            onBodyTextSizeChangeRequested: function(newBodyTextSize) {
-                appearanceModel.bodyTextSize = newBodyTextSize
+            onColorChangeRequested: function(newColor) {
+                appearanceModel.foregroundColor = newColor
+            }
+
+            onWallpaperPathChangeRequested: function(newWallpaperPath) {
+                appearanceModel.foregroundWallpaperPath = newWallpaperPath
             }
 
             onFocusChanged: {
@@ -173,35 +188,20 @@ PreferencesPage {
 
         SeparatorLine {}
 
-        ColorAndWallpaperSection {
-            id: paperSettings
-
-            width: parent.width
-
-            enabled: !appearanceModel.scoreInversionEnabled
-            opacityOverride: paperSettings.enabled ? 1.0 : 0.6
-
-            title: qsTrc("appshell/preferences", "Paper")
-            wallpaperDialogTitle: qsTrc("appshell/preferences", "Choose notepaper")
-            useColor: appearanceModel.foregroundUseColor
-            color: appearanceModel.foregroundColor
-            wallpaperPath: appearanceModel.foregroundWallpaperPath
-            wallpapersDir: appearanceModel.wallpapersDir()
-            wallpaperFilter: appearanceModel.wallpaperPathFilter()
+        UiFontSection {
+            allFonts: appearanceModel.allFonts()
+            currentFontIndex: appearanceModel.currentFontIndex
+            bodyTextSize: appearanceModel.bodyTextSize
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 6
 
-            onUseColorChangeRequested: function(newValue) {
-                appearanceModel.foregroundUseColor = newValue
+            onFontChangeRequested: function(newFontIndex) {
+                appearanceModel.currentFontIndex = newFontIndex
             }
 
-            onColorChangeRequested: function(newColor) {
-                appearanceModel.foregroundColor = newColor
-            }
-
-            onWallpaperPathChangeRequested: function(newWallpaperPath) {
-                appearanceModel.foregroundWallpaperPath = newWallpaperPath
+            onBodyTextSizeChangeRequested: function(newBodyTextSize) {
+                appearanceModel.bodyTextSize = newBodyTextSize
             }
 
             onFocusChanged: {

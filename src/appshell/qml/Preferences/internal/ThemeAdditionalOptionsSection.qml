@@ -47,7 +47,7 @@ BaseSection {
     }
 
     FlatButton {
-        text: qsTrc("appshell/preferences", "Reset to default")
+        text: qsTrc("appshell/preferences", "Reset appearance to default")
 
         navigation.name: "ResetButton"
         navigation.panel: root.navigation
