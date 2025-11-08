@@ -92,27 +92,6 @@ bool ImageCapturePanelModel::hasCapture() const
     return !bounds.isEmpty();
 }
 
-QString ImageCapturePanelModel::captureInfo() const
-{
-    INotationInteractionPtr interaction = currentInteraction();
-    if (!interaction) {
-        return QString();
-    }
-
-    muse::RectF bounds = interaction->captureBounds();
-    if (bounds.isEmpty()) {
-        if (m_captureModeEnabled) {
-            return muse::qtrc("notation", "Shift+drag to create capture region");
-        }
-        return muse::qtrc("notation", "Enable capture mode to begin");
-    }
-
-    // Show dimensions in staff spaces (sp)
-    return muse::qtrc("notation", "Region: %1 × %2 sp")
-           .arg(QString::number(bounds.width(), 'f', 1))
-           .arg(QString::number(bounds.height(), 'f', 1));
-}
-
 int ImageCapturePanelModel::exportFormatIndex() const
 {
     return m_exportFormatIndex;
@@ -182,13 +161,20 @@ void ImageCapturePanelModel::exportCapture()
         return;
     }
 
-    // Show file save dialog
-    io::path_t defaultPath = notation->project()->path();
-    if (!defaultPath.empty()) {
-        muse::io::path_t baseName = muse::io::basename(defaultPath);
-        defaultPath = muse::io::dirpath(defaultPath) + "/" + baseName.toString() + "_capture" + defaultExtension;
+    // Show file save dialog - use last export path if available
+    io::path_t defaultPath;
+    if (!m_lastExportPath.empty()) {
+        // Use directory from last export
+        defaultPath = muse::io::dirpath(m_lastExportPath) + "/capture" + defaultExtension;
     } else {
-        defaultPath = "capture" + defaultExtension;
+        // Fall back to project directory
+        io::path_t projectPath = notation->project()->path();
+        if (!projectPath.empty()) {
+            muse::io::path_t baseName = muse::io::basename(projectPath);
+            defaultPath = muse::io::dirpath(projectPath) + "/" + baseName.toString() + "_capture" + defaultExtension;
+        } else {
+            defaultPath = "capture" + defaultExtension;
+        }
     }
 
     io::path_t selectedPath = interactive()->selectSavingFileSync(
@@ -239,17 +225,10 @@ void ImageCapturePanelModel::exportCapture()
         interactive()->error(muse::trc("notation", "Export failed"), ret.text());
     } else {
         LOGI() << "Successfully exported capture to: " << selectedPath;
+        // Remember this location for next export
+        m_lastExportPath = selectedPath;
         interactive()->info(muse::trc("notation", "Export successful"),
                             muse::trc("notation", "Image capture exported successfully."));
-    }
-}
-
-void ImageCapturePanelModel::clearCapture()
-{
-    INotationInteractionPtr interaction = currentInteraction();
-    if (interaction) {
-        interaction->clearImageCapture();
-        updateCaptureInfo();
     }
 }
 
@@ -267,5 +246,4 @@ INotationInteractionPtr ImageCapturePanelModel::currentInteraction() const
 void ImageCapturePanelModel::updateCaptureInfo()
 {
     emit hasCaptureChanged();
-    emit captureInfoChanged();
 }

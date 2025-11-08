@@ -118,64 +118,20 @@ Item {
             }
         }
 
-        // Info text
-        Rectangle {
+        // Export button
+        FlatButton {
+            id: exportButton
+
             Layout.fillWidth: true
-            Layout.preferredHeight: 60
-            Layout.margins: 4
 
-            color: ui.theme.backgroundSecondaryColor
-            border.color: ui.theme.strokeColor
-            border.width: 1
-            radius: 4
+            text: panelModel.exportButtonText
+            enabled: panelModel.hasCapture
 
-            StyledTextLabel {
-                anchors.fill: parent
-                anchors.margins: 8
+            navigation.panel: navPanel
+            navigation.order: 3
 
-                text: panelModel.captureInfo
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                wrapMode: Text.WordWrap
-                font: ui.theme.bodyFont
-            }
-        }
-
-        // Buttons
-        RowLayout {
-            Layout.fillWidth: true
-            spacing: 8
-
-            FlatButton {
-                id: exportButton
-
-                Layout.fillWidth: true
-
-                text: panelModel.exportButtonText
-                enabled: panelModel.hasCapture
-
-                navigation.panel: navPanel
-                navigation.order: 3
-
-                onClicked: {
-                    panelModel.exportCapture()
-                }
-            }
-
-            FlatButton {
-                id: clearButton
-
-                Layout.preferredWidth: 80
-
-                text: qsTrc("notation", "Clear")
-                enabled: panelModel.hasCapture
-
-                navigation.panel: navPanel
-                navigation.order: 4
-
-                onClicked: {
-                    panelModel.clearCapture()
-                }
+            onClicked: {
+                panelModel.exportCapture()
             }
         }
 

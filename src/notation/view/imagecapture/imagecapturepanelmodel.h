@@ -43,7 +43,6 @@ class ImageCapturePanelModel : public QObject, public muse::Injectable, public m
 
     Q_PROPERTY(bool captureModeEnabled READ captureModeEnabled WRITE setCaptureModeEnabled NOTIFY captureModeEnabledChanged)
     Q_PROPERTY(bool hasCapture READ hasCapture NOTIFY hasCaptureChanged)
-    Q_PROPERTY(QString captureInfo READ captureInfo NOTIFY captureInfoChanged)
     Q_PROPERTY(int exportFormatIndex READ exportFormatIndex WRITE setExportFormatIndex NOTIFY exportFormatIndexChanged)
     Q_PROPERTY(QString exportButtonText READ exportButtonText NOTIFY exportButtonTextChanged)
 
@@ -54,7 +53,6 @@ public:
     void setCaptureModeEnabled(bool enabled);
 
     bool hasCapture() const;
-    QString captureInfo() const;
 
     int exportFormatIndex() const;
     void setExportFormatIndex(int index);
@@ -62,12 +60,10 @@ public:
     QString exportButtonText() const;
 
     Q_INVOKABLE void exportCapture();
-    Q_INVOKABLE void clearCapture();
 
 signals:
     void captureModeEnabledChanged();
     void hasCaptureChanged();
-    void captureInfoChanged();
     void exportFormatIndexChanged();
     void exportButtonTextChanged();
 
@@ -80,5 +76,6 @@ private:
 
     bool m_captureModeEnabled = false;
     int m_exportFormatIndex = 0; // 0 = PNG, 1 = SVG
+    muse::io::path_t m_lastExportPath; // Remember last export location
 };
 }
