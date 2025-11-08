@@ -85,6 +85,39 @@ Item {
             }
         }
 
+        // Format selection
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 12
+
+            StyledTextLabel {
+                text: qsTrc("notation", "Format:")
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            Item { Layout.fillWidth: true }
+
+            StyledDropdown {
+                id: formatDropdown
+
+                Layout.preferredWidth: 100
+
+                navigation.panel: navPanel
+                navigation.order: 2
+
+                model: [
+                    { text: "PNG", value: "png" },
+                    { text: "SVG", value: "svg" }
+                ]
+
+                currentIndex: panelModel.exportFormatIndex
+
+                onActivated: function(index, value) {
+                    panelModel.exportFormatIndex = index
+                }
+            }
+        }
+
         // Info text
         Rectangle {
             Layout.fillWidth: true
@@ -118,11 +151,11 @@ Item {
 
                 Layout.fillWidth: true
 
-                text: qsTrc("notation", "Export as PNG...")
+                text: panelModel.exportButtonText
                 enabled: panelModel.hasCapture
 
                 navigation.panel: navPanel
-                navigation.order: 2
+                navigation.order: 3
 
                 onClicked: {
                     panelModel.exportCapture()
@@ -138,7 +171,7 @@ Item {
                 enabled: panelModel.hasCapture
 
                 navigation.panel: navPanel
-                navigation.order: 3
+                navigation.order: 4
 
                 onClicked: {
                     panelModel.clearCapture()

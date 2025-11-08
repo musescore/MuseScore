@@ -113,6 +113,34 @@ QString ImageCapturePanelModel::captureInfo() const
            .arg(QString::number(bounds.height(), 'f', 1));
 }
 
+int ImageCapturePanelModel::exportFormatIndex() const
+{
+    return m_exportFormatIndex;
+}
+
+void ImageCapturePanelModel::setExportFormatIndex(int index)
+{
+    if (m_exportFormatIndex == index) {
+        return;
+    }
+
+    m_exportFormatIndex = index;
+    emit exportFormatIndexChanged();
+    emit exportButtonTextChanged();
+}
+
+QString ImageCapturePanelModel::exportButtonText() const
+{
+    switch (m_exportFormatIndex) {
+    case 0:
+        return muse::qtrc("notation", "Export as PNG...");
+    case 1:
+        return muse::qtrc("notation", "Export as SVG...");
+    default:
+        return muse::qtrc("notation", "Export...");
+    }
+}
+
 void ImageCapturePanelModel::exportCapture()
 {
     INotationPtr notation = currentNotation();
@@ -130,43 +158,67 @@ void ImageCapturePanelModel::exportCapture()
         return;
     }
 
+    // Determine format based on selection
+    std::string formatId;
+    std::string formatFilter;
+    std::string defaultExtension;
+    bool useTransparentBackground;
+
+    switch (m_exportFormatIndex) {
+    case 0: // PNG
+        formatId = "png";
+        formatFilter = muse::trc("project/export", "PNG image") + " (*.png)";
+        defaultExtension = ".png";
+        useTransparentBackground = exportConfiguration()->exportPngWithTransparentBackground();
+        break;
+    case 1: // SVG
+        formatId = "svg";
+        formatFilter = muse::trc("project/export", "SVG image") + " (*.svg)";
+        defaultExtension = ".svg";
+        useTransparentBackground = exportConfiguration()->exportSvgWithTransparentBackground();
+        break;
+    default:
+        LOGE() << "Unknown format index: " << m_exportFormatIndex;
+        return;
+    }
+
     // Show file save dialog
     io::path_t defaultPath = notation->project()->path();
     if (!defaultPath.empty()) {
         muse::io::path_t baseName = muse::io::basename(defaultPath);
-        defaultPath = muse::io::dirpath(defaultPath) + "/" + baseName.toString() + "_capture.png";
+        defaultPath = muse::io::dirpath(defaultPath) + "/" + baseName.toString() + "_capture" + defaultExtension;
     } else {
-        defaultPath = "capture.png";
+        defaultPath = "capture" + defaultExtension;
     }
 
     io::path_t selectedPath = interactive()->selectSavingFileSync(
         muse::trc("notation", "Export Image Capture"),
         defaultPath,
-        { muse::trc("project/export", "PNG image") + " (*.png)" }
+        { formatFilter }
         );
 
     if (selectedPath.empty()) {
         return; // User cancelled
     }
 
-    // Get PNG writer
-    project::INotationWriterPtr writer = writersRegister()->writer("png");
+    // Get writer for selected format
+    project::INotationWriterPtr writer = writersRegister()->writer(formatId);
     if (!writer) {
-        LOGE() << "PNG writer not available";
+        LOGE() << formatId << " writer not available";
         interactive()->error(muse::trc("notation", "Export failed"),
-                             muse::trc("notation", "PNG export format is not available."));
+                             muse::trc("notation", "Export format is not available."));
         return;
     }
 
     // Prepare export options
     project::INotationWriter::Options options;
-    options[project::INotationWriter::OptionKey::TRANSPARENT_BACKGROUND] = Val(exportConfiguration()->exportPngWithTransparentBackground());
+    options[project::INotationWriter::OptionKey::TRANSPARENT_BACKGROUND] = Val(useTransparentBackground);
     // Add capture rectangle option - pass components separately since Val doesn't preserve RectF
     options[project::INotationWriter::OptionKey::CAPTURE_RECT_X] = Val(bounds.x());
     options[project::INotationWriter::OptionKey::CAPTURE_RECT_Y] = Val(bounds.y());
     options[project::INotationWriter::OptionKey::CAPTURE_RECT_W] = Val(bounds.width());
     options[project::INotationWriter::OptionKey::CAPTURE_RECT_H] = Val(bounds.height());
-    LOGI() << "Stored capture rect components in options";
+    LOGI() << "Exporting as " << formatId << " with capture rect components in options";
 
     // Export to file
     muse::io::File file(selectedPath);
