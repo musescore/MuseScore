@@ -111,34 +111,34 @@ PreferencesPage {
 
         SeparatorLine {}
 
-        ColorAndWallpaperSection {
+        PageSection {
             id: paperSettings
 
             width: parent.width
 
-            enabled: !appearanceModel.scoreInversionEnabled
-            opacityOverride: paperSettings.enabled ? 1.0 : 0.6
-
-            title: qsTrc("appshell/preferences", "Page")
-            wallpaperDialogTitle: qsTrc("appshell/preferences", "Choose notepaper")
-            useColor: appearanceModel.foregroundUseColor
-            color: appearanceModel.foregroundColor
-            wallpaperPath: appearanceModel.foregroundWallpaperPath
-            wallpapersDir: appearanceModel.wallpapersDir()
-            wallpaperFilter: appearanceModel.wallpaperPathFilter()
+            scoreInversionEnabled: appearanceModel.scoreInversionEnabled
+            colorAndWallpaper.useColor: appearanceModel.foregroundUseColor
+            colorAndWallpaper.color: appearanceModel.foregroundColor
+            colorAndWallpaper.wallpaperPath: appearanceModel.foregroundWallpaperPath
+            colorAndWallpaper.wallpapersDir: appearanceModel.wallpapersDir()
+            colorAndWallpaper.wallpaperFilter: appearanceModel.wallpaperPathFilter()
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 4
 
-            onUseColorChangeRequested: function(newValue) {
+            onScoreInversionEnableChangeRequested: function(enable) {
+                appearanceModel.scoreInversionEnabled = enable
+            }
+
+            colorAndWallpaper.onUseColorChangeRequested: function(newValue) {
                 appearanceModel.foregroundUseColor = newValue
             }
 
-            onColorChangeRequested: function(newColor) {
+            colorAndWallpaper.onColorChangeRequested: function(newColor) {
                 appearanceModel.foregroundColor = newColor
             }
 
-            onWallpaperPathChangeRequested: function(newWallpaperPath) {
+            colorAndWallpaper.onWallpaperPathChangeRequested: function(newWallpaperPath) {
                 appearanceModel.foregroundWallpaperPath = newWallpaperPath
             }
 
@@ -214,7 +214,6 @@ PreferencesPage {
         SeparatorLine {}
 
         ThemeAdditionalOptionsSection {
-            scoreInversionEnabled: appearanceModel.scoreInversionEnabled
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 7
@@ -227,10 +226,6 @@ PreferencesPage {
                 if (activeFocus) {
                     root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
                 }
-            }
-
-            onScoreInversionEnableChangeRequested: function(enable) {
-                appearanceModel.scoreInversionEnabled = enable
             }
         }
     }

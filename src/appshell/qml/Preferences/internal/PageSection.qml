@@ -26,17 +26,34 @@ import Muse.UiComponents 1.0
 BaseSection {
     id: root
 
-    signal resetThemeToDefaultRequested()
+    title: qsTrc("appshell/preferences", "Page")
 
-    FlatButton {
-        text: qsTrc("appshell/preferences", "Reset appearance to default")
+    property alias scoreInversionEnabled: scoreInversionEnable.checked
+    property alias colorAndWallpaper: colorAndWallpaper
 
-        navigation.name: "ResetButton"
+    signal scoreInversionEnableChangeRequested(bool enable)
+
+    CheckBox {
+        id: scoreInversionEnable
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Invert score")
+
+        navigation.name: "ScoreInversionBox"
         navigation.panel: root.navigation
-        navigation.row: 1
+        navigation.row: 0
 
         onClicked: {
-            root.resetThemeToDefaultRequested()
+            root.scoreInversionEnableChangeRequested(!checked)
         }
+    }
+
+    ColorAndWallpaperSection {
+        id: colorAndWallpaper
+
+        enabled: !scoreInversionEnabled
+        opacityOverride: enabled ? 1.0 : 0.6
+
+        wallpaperDialogTitle: qsTrc("appshell/preferences", "Choose notepaper")
     }
 }
