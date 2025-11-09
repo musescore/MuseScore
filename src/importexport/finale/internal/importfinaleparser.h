@@ -319,6 +319,8 @@ private:
                           std::vector<engraving::Note*>& notesWithUnmanagedTies,
                           std::vector<ReadableTuplet>& tupletMap);
     bool processBeams(musx::dom::EntryInfoPtr entryInfoPtr, engraving::track_idx_t curTrackIdx);
+    bool calculateUp(const musx::dom::MusxInstance<musx::dom::details::ArticulationAssign>& articAssign,
+                     musx::dom::others::ArticulationDef::AutoVerticalMode vm, engraving::ChordRest* cr);
     engraving::DirectionV getDirectionVForLayer(const engraving::ChordRest* e);
     engraving::DirectionV calculateTieDirection(engraving::Tie* tie);
     engraving::Note* noteFromEntryInfoAndNumber(const musx::dom::EntryInfoPtr& entryInfoPtr, musx::dom::NoteNumber nn);
