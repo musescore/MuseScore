@@ -2892,7 +2892,6 @@ void MusicXmlParserPass1::measure(const String& partId,
 
     // delete tuplets
     nesTuplets.clear();
-
     addError(checkAtEndElement(m_e, u"measure"));
 }
 
@@ -3330,6 +3329,10 @@ void MusicXmlParserPass1::notations(MusicXmlStartStop& tupletStartStop, unsigned
     tupletsTimeMod.clear();
 
     while (m_e.readNextStartElement()) {
+        if (m_e.isStartElement()) {
+        }
+        if (m_e.isEndElement()) {
+        }
         if (m_e.name() == "tuplet") {
             String tupletType = m_e.attribute("type");
 
@@ -3545,31 +3548,30 @@ void MusicXmlParserPass1::note(const String& partId,
 
         if (tupletStartStop == MusicXmlStartStop::START) {
             unsigned int tupletDepth = nestedTupletState.currentTupletDepth();
-            Fraction realTimeMod;
+            Fraction currentTupletTimeMod;
 
             for (unsigned int i = 1; i <= numberOfStartsOrStops; ++i) {
                 ++tupletDepth;
                 nesTuplets[voice][tupletDepth] = tupletsTimeMod[i];
-                realTimeMod = nesTuplets[voice][tupletDepth];
-
-                nestedTupletState.determineTupletAction(mnd.duration(), realTimeMod, tupletStartStop,
+                currentTupletTimeMod = nesTuplets[voice][tupletDepth];
+                nestedTupletState.determineTupletAction(mnd.duration(), mnd.timeMod(), currentTupletTimeMod, tupletStartStop,
                                                         mnd.normalType(), missingPrev, missingCurr);
             }
         } else if (tupletStartStop == MusicXmlStartStop::STOP) {
             unsigned int tupletDepth;
-            Fraction realTimeMod;
+            Fraction currentTupletTimeMod;
 
             for (unsigned int i = numberOfStartsOrStops; i > 0; --i) {
                 tupletDepth = nestedTupletState.currentTupletDepth();
-                realTimeMod = nesTuplets[voice][tupletDepth];
-                nestedTupletState.determineTupletAction(mnd.duration(), realTimeMod, tupletStartStop,
+                currentTupletTimeMod = nesTuplets[voice][tupletDepth];
+                nestedTupletState.determineTupletAction(mnd.duration(), mnd.timeMod(), currentTupletTimeMod, tupletStartStop,
                                                         mnd.normalType(), missingPrev, missingCurr);
             }
         } else {
             unsigned int tupletDepth = nestedTupletState.currentTupletDepth();
-            Fraction realTimeMod = nesTuplets[voice][tupletDepth];
-            nestedTupletState.determineTupletAction(mnd.duration(), realTimeMod, tupletStartStop, mnd.normalType(), missingPrev,
-                                                    missingCurr);
+            Fraction currentTupletTimeMod = nesTuplets[voice][tupletDepth];
+            nestedTupletState.determineTupletAction(mnd.duration(), mnd.timeMod(), currentTupletTimeMod, tupletStartStop,
+                                                    mnd.normalType(), missingPrev, missingCurr);
         }
     }
 

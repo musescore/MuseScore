@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
 #include "global/types/flags.h"
+
 #include "engraving/types/fraction.h"
 
 namespace mu::engraving {
@@ -45,8 +45,9 @@ class MusicXmlTupletState
 public:
     MusicXmlTupletFlags determineTupletAction(const engraving::Fraction noteDuration, const engraving::Fraction timeMod,
                                               const MusicXmlStartStop tupletStartStop, const engraving::TDuration normalType,
-                                              engraving::Fraction& missingPreviousDuration, engraving::Fraction& missingCurrentDuration,
-                                              engraving::Fraction& durationWhenStopped);
+                                              const bool falseTuplet, engraving::Fraction& missingPreviousDuration,
+                                              engraving::Fraction& missingCurrentDuration, bool& isImplicit);
+    engraving::Fraction currentTupletDuration();
     static void determineTupletFractionAndFullDuration(const engraving::Fraction duration, engraving::Fraction& fraction,
                                                        engraving::Fraction& fullDuration);
     static engraving::Fraction missingTupletDuration(const engraving::Fraction duration);
@@ -61,8 +62,8 @@ private:
     int actualNotes = 1;
     int normalNotes = 1;
     engraving::Fraction duration{ 0, 1 };
-    int smallestNoteType = 0;       // smallest note type in the tuplet
-    int smallestNoteCount = 0;       // number of smallest notes in the tuplet
+    int smallestNoteType = 0;   // smallest note type in the tuplet
+    int smallestNoteCount = 0;   // number of smallest notes in the tuplet
 };
 
 using MusicXmlTupletStates = std::map<muse::String, MusicXmlTupletState>;
@@ -70,17 +71,26 @@ using MusicXmlTupletStates = std::map<muse::String, MusicXmlTupletState>;
 class MusicXmlNestedTupletState
 {
 public:
-    MusicXmlTupletFlags determineTupletAction(const engraving::Fraction noteDuration, const engraving::Fraction timeMod,
-                                              const MusicXmlStartStop tupletStartStop, const engraving::TDuration normalType,
-                                              engraving::Fraction& missingPreviousDuration, engraving::Fraction& missingCurrentDuration);
+    MusicXmlTupletFlags determineTupletAction(const engraving::Fraction noteDuration, const engraving::Fraction globalTimeMod,
+                                              const engraving::Fraction localTimeMod, const MusicXmlStartStop tupletStartStop,
+                                              const engraving::TDuration normalType, engraving::Fraction& missingPreviousDuration,
+                                              engraving::Fraction& missingCurrentDuration);
+    engraving::Fraction tupletTimeMod(const unsigned int tupletDepth);
     unsigned int currentTupletDepth();
     unsigned int formerTupletDepth();
 
 private:
+    bool isTupletFull(unsigned int depth);
+    engraving::Fraction workingTimeMode(const engraving::Fraction noteTimeMod, const engraving::Fraction currentTupletTimeMod);
     unsigned int m_tupletNestingDepth = 0;
     unsigned int m_tupletFormerNestingDepth = 0;
-    bool m_tupletCurrentDepthIsImplicit = false;
-    std::map <unsigned int, std::pair<MusicXmlTupletState, engraving::Fraction> > m_measureTupletStates;
+    struct TupletInformation {
+        MusicXmlTupletState tupletState;
+        engraving::Fraction tupletTimeMod;
+        engraving::Fraction tupletFullSize;
+    };
+    // Tuplet State, Tuplet TimeMod, Tuplet
+    std::map <unsigned int, TupletInformation> m_measureTupletStates;
 };
 
 using MusicXmlNestedTupletStates = std::map<muse::String, MusicXmlNestedTupletState>;
