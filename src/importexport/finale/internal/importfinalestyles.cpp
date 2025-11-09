@@ -777,6 +777,19 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     setStyle(style, Sid::fretMag, doubleFromPercent(prefs.chordOptions->fretPercent));
     setStyle(style, Sid::chordSymPosition, prefs.chordOptions->chordAlignment == options::ChordOptions::ChordAlignment::Left ? AlignH::LEFT : AlignH::HCENTER);
     setStyle(style, Sid::barreAppearanceSlur, true); // Not detectable (uses shapes), but default in most templates
+
+    using ChordStyle = options::ChordOptions::ChordStyle;
+    static const std::unordered_map<options::ChordOptions::ChordStyle, NoteSpellingType> spellingTypeTable = {
+        // { ChordStyle::Standard, NoteSpellingType::STANDARD },
+        // { ChordStyle::European, NoteSpellingType::STANDARD },
+        { ChordStyle::German,       NoteSpellingType::GERMAN_PURE },
+        // { ChordStyle::Roman,      NoteSpellingType::STANDARD },
+        // { ChordStyle::NashvilleA, NoteSpellingType::STANDARD },
+        // { ChordStyle::NashvilleB, NoteSpellingType::STANDARD },
+        // { ChordStyle::Solfeggio,  NoteSpellingType::STANDARD },
+        { ChordStyle::Scandinavian, NoteSpellingType::GERMAN },
+    };
+    setStyle(style, Sid::chordSymbolSpelling, muse::value(spellingTypeTable, prefs.chordOptions->chordStyle, NoteSpellingType::STANDARD));
 }
 
 void FinaleParser::importStyles()
