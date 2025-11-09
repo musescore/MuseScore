@@ -1543,20 +1543,7 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
     };
     HarmonyType ht = muse::value(harmonyTypeTable, config->chordStyle, HarmonyType::STANDARD);
 
-    static const std::unordered_map<options::ChordOptions::ChordStyle, NoteSpellingType> spellingTypeTable = {
-        // { ChordStyle::Standard, NoteSpellingType::STANDARD },
-        // { ChordStyle::European, NoteSpellingType::STANDARD },
-        { ChordStyle::German,       NoteSpellingType::GERMAN_PURE },
-        // { ChordStyle::Roman,      NoteSpellingType::STANDARD },
-        // { ChordStyle::NashvilleA, NoteSpellingType::STANDARD },
-        // { ChordStyle::NashvilleB, NoteSpellingType::STANDARD },
-        // { ChordStyle::Solfeggio,  NoteSpellingType::STANDARD },
-        { ChordStyle::Scandinavian, NoteSpellingType::GERMAN },
-    };
-    NoteSpellingType nst = muse::value(spellingTypeTable, config->chordStyle, NoteSpellingType::STANDARD);
-
     // https://usermanuals.finalemusic.com/Finale2012Win/Content/Finale/ID_MENU_CHORD_STYLE_SOLFEGGIO.htm
-    /// @todo stop o in "Do" being rendered as dim
     static const std::unordered_map<int, String> solfeggioTable = {
         { int(Tpc::TPC_C_B), u"Ti" },
         { int(Tpc::TPC_D_B), u"Ra" },
@@ -1627,6 +1614,7 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
                 int solfeggioOffset = step2tpcByKey(se.degInKey(-minorOffset), se.key()) - int(Tpc::TPC_C);
                 harmonyText.append(muse::value(solfeggioTable, tpc - solfeggioOffset, u"???"));
             } else {
+                const NoteSpellingType nst = m_score->style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
                 String tpcName = tpc2name(tpc, nst, NoteCaseType::CAPITAL);
                 harmonyText.append(tpcName);
                 if (config->chordStyle == ChordStyle::European && tpcName == u"B") {
