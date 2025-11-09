@@ -11688,7 +11688,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="184"/>
         <source>Import</source>
-        <translation>Importă</translation>
+        <translation>Importare</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="187"/>
@@ -35793,7 +35793,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4213"/>
         <source>Change pitch</source>
-        <translation>Schimbare înălțime</translation>
+        <translation>Modificare înălțime</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4226"/>

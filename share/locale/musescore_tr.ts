@@ -17552,7 +17552,7 @@ Perde %1 teller %2</translation>
         <location filename="../../src/engraving/dom/property.cpp" line="84"/>
         <location filename="../../src/engraving/dom/property.cpp" line="255"/>
         <source>anchor</source>
-        <translation>Bağlantı Noktası</translation>
+        <translation>bağlantı noktası</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="86"/>
@@ -17623,7 +17623,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="100"/>
         <source>span</source>
-        <translation>Uzama</translation>
+        <translation>uzama</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="101"/>
@@ -19143,12 +19143,12 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="473"/>
         <source>play count text</source>
-        <translation>Çalma sayısı metni</translation>
+        <translation>çalma sayısı metni</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="475"/>
         <source>align with other rests in the same voice</source>
-        <translation>Aynı sesteki diğer suslarla hizala</translation>
+        <translation>aynı sesteki diğer suslarla hizala</translation>
     </message>
 </context>
 <context>
