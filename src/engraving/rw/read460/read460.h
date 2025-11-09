@@ -43,6 +43,7 @@ public:
     void readTremoloCompat(compat::TremoloCompat* item, XmlReader& xml) override;
 
 private:
+    void preparePasteDurationElement(Score* score, const Fraction& tick, const Fraction& ticks, const track_idx_t track);
     void doReadItem(EngravingItem* item, XmlReader& xml) override;
 };
 }
