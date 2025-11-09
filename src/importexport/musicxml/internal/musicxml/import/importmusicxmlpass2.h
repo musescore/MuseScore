@@ -343,7 +343,12 @@ using MusicXmlTieMap = std::map<TieLocation, engraving::Tie*>;
 class MusicXmlParserNotations
 {
 public:
-    using MusicXmlTupletDescList = std::map<unsigned int, std::pair <MusicXmlTupletDesc, engraving::Fraction> >;
+    struct TupletDescInformation {
+        MusicXmlTupletDesc tupletDescription;
+        engraving::Fraction tupletTimeMod;
+    };
+    using MusicXmlTupletDescList = std::map<unsigned int, TupletDescInformation>;
+
     MusicXmlParserNotations(muse::XmlStreamReader& e, engraving::Score* score, MusicXmlLogger* logger, MusicXmlParserPass2& pass2);
     void parse(const engraving::Fraction noteTimeMod, unsigned int& tupletsProcessed);
     void addToScore(engraving::ChordRest* const cr, engraving::Note* const note, const engraving::Fraction& tick, SlurStack& slurs,

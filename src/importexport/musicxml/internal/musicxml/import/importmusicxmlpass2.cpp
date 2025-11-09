@@ -7092,7 +7092,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             tupletAction[1]
                 = nestedTupletState.determineTupletAction(mnd.duration(), timeMod,
                                                           nestedTupletState.tupletTimeMod(nestedTupletState.currentTupletDepth()),
-                                                          notations.tupletDescList()[tupletsProcessed].first.type,
+                                                          notations.tupletDescList()[tupletsProcessed].tupletDescription.type,
                                                           mnd.normalType(), missingPrev, missingCurr);
 
             // If no tupletsProcessed and there are start or stop... we consider that this is an only tuplet (implicit)
@@ -7124,9 +7124,9 @@ Note* MusicXmlParserPass2::note(const String& partId,
             for (unsigned int tupletInNote = 1; tupletInNote <= tupletsProcessed; ++tupletInNote) {
                 Fraction currentTupletTimeMod;
                 // IF START current duration
-                if (notations.tupletDescList()[tupletInNote].first.type == MusicXmlStartStop::START) {
+                if (notations.tupletDescList()[tupletInNote].tupletDescription.type == MusicXmlStartStop::START) {
                     // We take the value from the Tuplet
-                    currentTupletTimeMod = notations.tupletDescList()[tupletInNote].second;
+                    currentTupletTimeMod = notations.tupletDescList()[tupletInNote].tupletTimeMod;
                 }
                 // starts and stops can be implicitly together in the same note.
                 // As it's not a start we could get the currentTupletTimeMod from the previous tuplet
@@ -7135,7 +7135,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
                 }
 
                 tupletAction[tupletInNote] = nestedTupletState.determineTupletAction(mnd.duration(), timeMod, currentTupletTimeMod,
-                                                                                     notations.tupletDescList()[tupletInNote].first.type,
+                                                                                     notations.tupletDescList()[tupletInNote].tupletDescription.type,
                                                                                      mnd.normalType(), missingPrev, missingCurr);
 
                 if (tupletAction[tupletInNote] & MusicXmlTupletFlag::STOP_PREVIOUS) {
@@ -7399,7 +7399,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
                     Tuplet*& tuplet = nesTuplets[voice][tupletDepth];
 
                     if (tupletStart) {
-                        currentTupletTimeMod = notations.tupletDescList()[tupletInNote].second;
+                        currentTupletTimeMod = notations.tupletDescList()[tupletInNote].tupletTimeMod;
                         // Initialize just in case this tupletDepth is being reused
                         tuplet = nullptr;
                         // Check if this is an implicit tuplet which has a zero value
@@ -7433,7 +7433,8 @@ Note* MusicXmlParserPass2::note(const String& partId,
 
                         if (tupletStart && (currentTupletTimeMod != Fraction(1, 1))) {
                             // create a new tuplet taking some properties from the CR
-                            handleTupletStart(cr, tuplet, actualNotes, normalNotes, notations.tupletDescList()[tupletInNote].first);
+                            handleTupletStart(cr, tuplet, actualNotes, normalNotes,
+                                              notations.tupletDescList()[tupletInNote].tupletDescription);
 
                             // We add a nested tuplet if necessary
                             if (parentTuplet) {
@@ -9366,7 +9367,7 @@ MusicXmlParserNotations::MusicXmlParserNotations(XmlStreamReader& e, Score* scor
 {
     // Initializacion
     MusicXmlTupletDesc tupletDesc;
-    m_tupletDescList[1] = std::pair(tupletDesc, Fraction(0, 1));
+    m_tupletDescList[1] = { tupletDesc, Fraction(0, 1) };
     // nothing
 }
 
@@ -9604,7 +9605,7 @@ void MusicXmlParserNotations::tuplet(const Fraction noteTimeMod, const unsigned 
     const String tupletShowNumber = m_e.attribute("show-number");
 
     if (tupletType == u"start") {
-        m_tupletDescList[tupletNumber].first.type = MusicXmlStartStop::START;
+        m_tupletDescList[tupletNumber].tupletDescription.type = MusicXmlStartStop::START;
 
         int tupletActualNumber = 0;
         int tupletNormalNumber = 0;
@@ -9628,12 +9629,12 @@ void MusicXmlParserNotations::tuplet(const Fraction noteTimeMod, const unsigned 
         }
 
         if ((tupletActualNumber > 0) && (tupletNormalNumber > 0)) {
-            m_tupletDescList[tupletNumber].second = Fraction(tupletNormalNumber, tupletActualNumber);
+            m_tupletDescList[tupletNumber].tupletTimeMod = Fraction(tupletNormalNumber, tupletActualNumber);
         } else {
-            m_tupletDescList[tupletNumber].second = noteTimeMod;
+            m_tupletDescList[tupletNumber].tupletTimeMod = noteTimeMod;
         }
     } else if (tupletType == u"stop") {
-        m_tupletDescList[tupletNumber].first.type = MusicXmlStartStop::STOP;
+        m_tupletDescList[tupletNumber].tupletDescription.type = MusicXmlStartStop::STOP;
         // ignore possible children (currently not supported)
         m_e.skipCurrentElement();
     } else if (!tupletType.empty() && tupletType != u"start" && tupletType != u"stop") {
@@ -9647,25 +9648,25 @@ void MusicXmlParserNotations::tuplet(const Fraction noteTimeMod, const unsigned 
 
     // set bracket, leave at default if unspecified
     if (tupletBracket == u"yes") {
-        m_tupletDescList[tupletNumber].bracket = TupletBracketType::SHOW_BRACKET;
+        m_tupletDescList[tupletNumber].tupletDescription.bracket = TupletBracketType::SHOW_BRACKET;
     } else if (tupletBracket == u"no") {
-        m_tupletDescList[tupletNumber].bracket = TupletBracketType::SHOW_NO_BRACKET;
+        m_tupletDescList[tupletNumber].tupletDescription.bracket = TupletBracketType::SHOW_NO_BRACKET;
     }
 
     // set number, default is "actual" (=NumberType::SHOW_NUMBER)
     if (tupletShowNumber == u"both") {
-        m_tupletDescList[tupletNumber].shownumber = TupletNumberType::SHOW_RELATION;
+        m_tupletDescList[tupletNumber].tupletDescription.shownumber = TupletNumberType::SHOW_RELATION;
     } else if (tupletShowNumber == u"none") {
-        m_tupletDescList[tupletNumber].shownumber = TupletNumberType::NO_TEXT;
+        m_tupletDescList[tupletNumber].tupletDescription.shownumber = TupletNumberType::NO_TEXT;
     } else {
-        m_tupletDescList[tupletNumber].shownumber = TupletNumberType::SHOW_NUMBER;
+        m_tupletDescList[tupletNumber].tupletDescription.shownumber = TupletNumberType::SHOW_NUMBER;
     }
 
     // set number and bracket placement
     if (tupletPlacement == u"above") {
-        m_tupletDescList[tupletNumber].direction = DirectionV::UP;
+        m_tupletDescList[tupletNumber].tupletDescription.direction = DirectionV::UP;
     } else if (tupletPlacement == u"below") {
-        m_tupletDescList[tupletNumber].direction = DirectionV::DOWN;
+        m_tupletDescList[tupletNumber].tupletDescription.direction = DirectionV::DOWN;
     } else if (tupletPlacement.empty()) {
         // ignore
     } else {
