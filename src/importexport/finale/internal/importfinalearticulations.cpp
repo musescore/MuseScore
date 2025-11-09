@@ -79,7 +79,7 @@ static engraving::Note* findClosestNote(const MusxInstance<details::Articulation
     return n;
 }
 
-static bool calculateUp(const MusxInstance<details::ArticulationAssign>& articAssign, others::ArticulationDef::AutoVerticalMode vm, ChordRest* cr)
+bool FinaleParser::calculateUp(const MusxInstance<details::ArticulationAssign>& articAssign, others::ArticulationDef::AutoVerticalMode vm, ChordRest* cr)
 {
     if (articAssign->overridePlacement) {
         return articAssign->aboveEntry;
@@ -89,8 +89,13 @@ static bool calculateUp(const MusxInstance<details::ArticulationAssign>& articAs
         /// @todo Rests can be affected by beams, but should otherwise be treated like a note on their given line.
         case others::ArticulationDef::AutoVerticalMode::AutoNoteStem:
             // On notehead side (no voices) or stem side (voices);
-            if (cr->measure()->hasVoices(cr->vStaffIdx(), cr->tick(), cr->actualTicks())) {
-                return !(cr->track() & 1);
+            if (cr->isChord() && muse::contains(m_fixedChords, toChord(cr))) {
+                return cr->ldata()->up;
+            } else {
+                DirectionV dir = getDirectionVForLayer(cr);
+                if (dir != DirectionV::AUTO) {
+                    return dir == DirectionV::UP;
+                }
             }
             [[fallthrough]];
 
