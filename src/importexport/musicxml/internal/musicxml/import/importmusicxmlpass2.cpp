@@ -9647,25 +9647,25 @@ void MusicXmlParserNotations::tuplet(const Fraction noteTimeMod, const unsigned 
 
     // set bracket, leave at default if unspecified
     if (tupletBracket == u"yes") {
-        m_tupletDesc.bracket = TupletBracketType::SHOW_BRACKET;
+        m_tupletDescList[tupletNumber].bracket = TupletBracketType::SHOW_BRACKET;
     } else if (tupletBracket == u"no") {
-        m_tupletDesc.bracket = TupletBracketType::SHOW_NO_BRACKET;
+        m_tupletDescList[tupletNumber].bracket = TupletBracketType::SHOW_NO_BRACKET;
     }
 
     // set number, default is "actual" (=NumberType::SHOW_NUMBER)
     if (tupletShowNumber == u"both") {
-        m_tupletDesc.shownumber = TupletNumberType::SHOW_RELATION;
+        m_tupletDescList[tupletNumber].shownumber = TupletNumberType::SHOW_RELATION;
     } else if (tupletShowNumber == u"none") {
-        m_tupletDesc.shownumber = TupletNumberType::NO_TEXT;
+        m_tupletDescList[tupletNumber].shownumber = TupletNumberType::NO_TEXT;
     } else {
-        m_tupletDesc.shownumber = TupletNumberType::SHOW_NUMBER;
+        m_tupletDescList[tupletNumber].shownumber = TupletNumberType::SHOW_NUMBER;
     }
 
     // set number and bracket placement
     if (tupletPlacement == u"above") {
-        m_tupletDesc.direction = DirectionV::UP;
+        m_tupletDescList[tupletNumber].direction = DirectionV::UP;
     } else if (tupletPlacement == u"below") {
-        m_tupletDesc.direction = DirectionV::DOWN;
+        m_tupletDescList[tupletNumber].direction = DirectionV::DOWN;
     } else if (tupletPlacement.empty()) {
         // ignore
     } else {
