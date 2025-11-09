@@ -8076,12 +8076,12 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1369"/>
         <source>Stic&amp;king</source>
-        <translation>Kii&amp;nnittyvä</translation>
+        <translation>Ka&amp;pulointi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1370"/>
         <source>Add text: sticking</source>
-        <translation>Lisää teksti: sticking</translation>
+        <translation>Lisää teksti: kapulointi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1375"/>
@@ -14127,12 +14127,12 @@ Otenauha %1 kielissä %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="578"/>
         <source>sticking(s)</source>
-        <translation><numerusform>käsijärjestys(-tykset)</numerusform><numerusform>käsijärjestys(-tykset)</numerusform></translation>
+        <translation><numerusform>käsijärjestys(-tykset)</numerusform><numerusform>kapulointi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="579"/>
         <source>Sticking(s)</source>
-        <translation><numerusform>Käsijärjestys(-tykset)</numerusform><numerusform>Käsijärjestys(-tykset)</numerusform></translation>
+        <translation><numerusform>Käsijärjestys(-tykset)</numerusform><numerusform>Kapulointi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="584"/>
@@ -14470,7 +14470,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1711"/>
         <source>Hairpin</source>
-        <translation>Dynamiikkaviivat</translation>
+        <translation>Hiusneula</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1712"/>
@@ -14505,7 +14505,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1720"/>
         <source>Sticking</source>
-        <translation>Sticking (kapulointi)</translation>
+        <translation>Kapulointi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1721"/>
@@ -18812,7 +18812,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="384"/>
         <source>voice assignment</source>
-        <translation>äänen määritys</translation>
+        <translation>ääniasetus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="385"/>
@@ -25433,7 +25433,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/hairpinsettingsmodel.cpp" line="38"/>
         <source>Hairpin</source>
-        <translation>Dynamiikkaviivat</translation>
+        <translation>Hiusneula</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/letringsettingsmodel.cpp" line="31"/>
