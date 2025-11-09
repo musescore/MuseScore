@@ -1393,8 +1393,8 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::FBOX:
     case ElementType::HBOX: {
         const Measure* m = isMMRest() ? mmRestFirst() : this;
-        for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-            if (m->isMeasureRepeatGroupWithPrevM(staffIdx)) {
+        for (staff_idx_t staffIdxLoop = 0; staffIdxLoop < score()->nstaves(); ++staffIdxLoop) {
+            if (m->isMeasureRepeatGroupWithPrevM(staffIdxLoop)) {
                 return false;
             }
         }
@@ -1448,8 +1448,8 @@ bool Measure::acceptDrop(EditData& data) const
         case ActionIconType::FFRAME:
         case ActionIconType::MEASURE: {
             const Measure* m = isMMRest() ? mmRestFirst() : this;
-            for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-                if (m->isMeasureRepeatGroupWithPrevM(staffIdx)) {
+            for (staff_idx_t staffIdxLoop = 0; staffIdxLoop < score()->nstaves(); ++staffIdxLoop) {
+                if (m->isMeasureRepeatGroupWithPrevM(staffIdxLoop)) {
                     return false;
                 }
             }
