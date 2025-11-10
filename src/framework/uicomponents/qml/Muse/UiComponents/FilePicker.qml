@@ -50,8 +50,10 @@ Item {
     property int navigationColumnOrderStart: 0
 
     property string pathFieldTitle: qsTrc("ui", "Current path:")
-
     property alias pathFieldWidth: pathField.implicitWidth
+
+    property alias buttonWidth: button.implicitWidth
+
     property alias spacing: row.spacing
 
     signal pathEdited(var newPath)
