@@ -751,7 +751,9 @@ muse::RectF NotationNoteInput::cursorRect() const
         return {};
     }
 
-    constexpr int sideMargin = 4;
+    const bool isTabStaff = staff->isTabStaff(inputState.tick());
+
+    const int sideMargin = isTabStaff ? 12 : 4;
     constexpr int skylineMargin = 20;
 
     RectF segmentContentRect = segment->contentRect();
@@ -770,7 +772,7 @@ muse::RectF NotationNoteInput::cursorRect() const
     y += yOffset;
 
     int instrumentStringsCount = static_cast<int>(staff->part()->instrument()->stringData()->strings());
-    if (staff->isTabStaff(inputState.tick()) && inputStateStringsCount >= 0 && inputStateStringsCount <= instrumentStringsCount) {
+    if (isTabStaff && inputStateStringsCount >= 0 && inputStateStringsCount <= instrumentStringsCount) {
         h = lineDist;
         y += staffType->physStringToYOffset(inputStateStringsCount) * spatium;
         y -= (staffType->onLines() ? lineDist * 0.5 : lineDist);
