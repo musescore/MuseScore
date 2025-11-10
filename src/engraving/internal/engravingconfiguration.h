@@ -82,6 +82,8 @@ public:
 
     Color highlightSelectionColor(voice_idx_t voice = 0) const override;
 
+    bool shouldInvertScore() const override;  // Whether score should be inverted now, based on theme.
+
     bool scoreInversionEnabled() const override;
     void setScoreInversionEnabled(bool value) override;
     muse::async::Notification scoreInversionChanged() const override;

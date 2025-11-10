@@ -70,6 +70,8 @@ public:
     virtual void setSelectionColor(voice_idx_t voiceIndex, Color color) = 0;
     virtual muse::async::Channel<voice_idx_t, Color> selectionColorChanged() const = 0;
 
+    virtual bool shouldInvertScore() const = 0;  // Whether score should be inverted now, based on theme.
+
     virtual bool scoreInversionEnabled() const = 0;
     virtual void setScoreInversionEnabled(bool value) = 0;
     virtual muse::async::Notification scoreInversionChanged() const = 0;

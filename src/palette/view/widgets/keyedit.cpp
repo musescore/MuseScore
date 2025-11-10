@@ -129,13 +129,13 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     RectF background = RectF::fromQRectF(imatrix.mapRect(QRectF(0, 0, ww, wh)));
     painter.fillRect(background, notationConfiguration()->foregroundColor());
 
-    muse::draw::Pen pen(engravingConfiguration()->scoreInversionEnabled() ? engravingConfiguration()->scoreInversionColor()
+    muse::draw::Pen pen(engravingConfiguration()->shouldInvertScore() ? engravingConfiguration()->scoreInversionColor()
                         : engravingConfiguration()->defaultColor());
     pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * gpaletteScore->style().spatium());
     painter.setPen(pen);
 
     rendering::PaintOptions opt;
-    opt.invertColors = engravingConfiguration()->scoreInversionEnabled();
+    opt.invertColors = engravingConfiguration()->shouldInvertScore();
 
     for (int i = 0; i < 5; ++i) {
         qreal yy = r.y() + i * gpaletteScore->style().spatium();

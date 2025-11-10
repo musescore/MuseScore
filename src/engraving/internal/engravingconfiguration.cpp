@@ -353,6 +353,11 @@ Color EngravingConfiguration::highlightSelectionColor(voice_idx_t voice) const
     return Color::fromQColor(selectionColor(voice).toQColor().lighter(135));
 }
 
+bool EngravingConfiguration::shouldInvertScore() const
+{
+    return scoreInversionEnabled() && (!isOnlyInvertInDarkTheme() || uiConfiguration()->isDarkMode());
+}
+
 bool EngravingConfiguration::scoreInversionEnabled() const
 {
     return settings()->value(INVERT_SCORE_COLOR).toBool();

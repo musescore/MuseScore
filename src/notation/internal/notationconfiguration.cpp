@@ -419,7 +419,7 @@ void NotationConfiguration::init()
 
 QColor NotationConfiguration::notationColor() const
 {
-    if (engravingConfiguration()->scoreInversionEnabled()) {
+    if (engravingConfiguration()->shouldInvertScore()) {
         return engravingConfiguration()->scoreInversionColor().toQColor();
     }
 
@@ -509,7 +509,7 @@ muse::async::Notification NotationConfiguration::backgroundChanged() const
 
 QColor NotationConfiguration::foregroundColor() const
 {
-    if (engravingConfiguration()->scoreInversionEnabled()) {
+    if (engravingConfiguration()->shouldInvertScore()) {
         return QColorConstants::Black;
     }
 

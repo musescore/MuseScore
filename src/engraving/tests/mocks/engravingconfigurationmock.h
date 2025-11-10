@@ -72,6 +72,8 @@ public:
     MOCK_METHOD(void, setAutoUpdateFretboardDiagrams, (bool), (override));
     MOCK_METHOD((muse::async::Channel<bool>), autoUpdateFretboardDiagramsChanged, (), (const, override));
 
+    MOCK_METHOD(bool, shouldInvertScore, (), (const, override));
+
     MOCK_METHOD(bool, scoreInversionEnabled, (), (const, override));
     MOCK_METHOD(void, setScoreInversionEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, scoreInversionChanged, (), (const, override));

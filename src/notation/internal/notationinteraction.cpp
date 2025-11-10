@@ -1457,7 +1457,7 @@ void NotationInteraction::startOutgoingDragElement(const EngravingItem* element,
     p.translate(qAbs(bbox.x()), qAbs(bbox.y()));
 
     mu::engraving::rendering::PaintOptions opt;
-    opt.invertColors = engravingConfiguration()->scoreInversionEnabled();
+    opt.invertColors = engravingConfiguration()->shouldInvertScore();
     engravingRenderer()->drawItem(element, &p, opt);
 
     m_outgoingDrag->setPixmap(pixmap);
