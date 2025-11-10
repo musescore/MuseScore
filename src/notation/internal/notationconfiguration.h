@@ -223,13 +223,13 @@ public:
     void setTemplateModeEnabled(std::optional<bool> enabled) override;
     void setTestModeEnabled(std::optional<bool> enabled) override;
 
-    muse::io::path_t instrumentListPath() const override;
+    muse::io::path_t instrumentsXmlPath() const override;
+    muse::io::path_t scoreOrdersXmlPath() const override;
 
-    muse::io::paths_t scoreOrderListPaths() const override;
-    muse::async::Notification scoreOrderListPathsChanged() const override;
-
-    muse::io::paths_t userScoreOrderListPaths() const override;
-    void setUserScoreOrderListPaths(const muse::io::paths_t& paths) override;
+    muse::io::path_t userInstrumentsFolder() const override;
+    muse::io::paths_t userInstrumentsAndScoreOrdersPaths() const override;
+    void setUserInstrumentsFolder(const muse::io::path_t& path) override;
+    muse::async::Channel<muse::io::path_t> userInstrumentsFolderChanged() const override;
 
     muse::io::path_t stringTuningsPresetsPath() const override;
 
@@ -294,12 +294,6 @@ public:
     void resetStyleDialogPageIndices() override;
 
 private:
-    muse::io::path_t firstScoreOrderListPath() const;
-    void setFirstScoreOrderListPath(const muse::io::path_t& path);
-
-    muse::io::path_t secondScoreOrderListPath() const;
-    void setSecondScoreOrderListPath(const muse::io::path_t& path);
-
     muse::async::Notification m_backgroundChanged;
     muse::async::Notification m_foregroundChanged;
     muse::async::Notification m_scoreInversionChanged;
@@ -316,7 +310,7 @@ private:
     muse::async::Channel<muse::Orientation> m_canvasOrientationChanged;
     muse::async::Channel<muse::io::path_t> m_userStylesPathChanged;
     muse::async::Channel<muse::io::path_t> m_userMusicFontsPathChanged;
-    muse::async::Notification m_scoreOrderListPathsChanged;
+    muse::async::Channel<muse::io::path_t> m_userInstrumentsFolderChanged;
     muse::async::Notification m_isLimitCanvasScrollAreaChanged;
     muse::async::Channel<int> m_selectionProximityChanged;
     muse::async::Channel<bool> m_colorNotesOutsideOfUsablePitchRangeChanged;

@@ -209,13 +209,13 @@ public:
     MOCK_METHOD(void, setTemplateModeEnabled, (std::optional<bool>), (override));
     MOCK_METHOD(void, setTestModeEnabled, (std::optional<bool>), (override));
 
-    MOCK_METHOD(muse::io::path_t, instrumentListPath, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, instrumentsXmlPath, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, scoreOrdersXmlPath, (), (const, override));
 
-    MOCK_METHOD(muse::io::paths_t, scoreOrderListPaths, (), (const, override));
-    MOCK_METHOD(muse::async::Notification, scoreOrderListPathsChanged, (), (const, override));
-
-    MOCK_METHOD(muse::io::paths_t, userScoreOrderListPaths, (), (const, override));
-    MOCK_METHOD(void, setUserScoreOrderListPaths, (const muse::io::paths_t&), (override));
+    MOCK_METHOD(muse::io::path_t, userInstrumentsFolder, (), (const, override));
+    MOCK_METHOD(muse::io::paths_t, userInstrumentsAndScoreOrdersPaths, (), (const, override));
+    MOCK_METHOD(void, setUserInstrumentsFolder, (const muse::io::path_t&), (override));
+    MOCK_METHOD(muse::async::Channel<muse::io::path_t>, userInstrumentsFolderChanged, (), (const, override));
 
     MOCK_METHOD(muse::io::path_t, stringTuningsPresetsPath, (), (const, override));
 

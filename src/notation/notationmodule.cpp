@@ -282,16 +282,12 @@ void NotationModule::onInit(const IApplication::RunMode& mode)
 
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        pr->reg("instruments", m_configuration->instrumentListPath());
+        pr->reg("instruments", m_configuration->instrumentsXmlPath());
+        pr->reg("score orders", m_configuration->scoreOrdersXmlPath());
 
-        io::paths_t scoreOrderPaths = m_configuration->scoreOrderListPaths();
-        for (const muse::io::path_t& p : scoreOrderPaths) {
-            pr->reg("scoreOrder", p);
-        }
-
-        io::paths_t uscoreOrderPaths = m_configuration->userScoreOrderListPaths();
-        for (const muse::io::path_t& p : uscoreOrderPaths) {
-            pr->reg("user scoreOrder", p);
+        muse::io::path_t userInstrumentsPath = m_configuration->userInstrumentsFolder();
+        if (!userInstrumentsPath.empty()) {
+            pr->reg("user instruments folder", userInstrumentsPath);
         }
     }
 }
