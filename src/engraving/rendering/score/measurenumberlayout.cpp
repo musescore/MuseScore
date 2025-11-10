@@ -122,11 +122,14 @@ void MeasureNumberLayout::layoutMeasureNumberBase(MeasureNumberBase* item, Measu
 
     TextLayout::layoutBaseTextBase1(item, ldata);
 
+    staff_idx_t effectiveStaffIdx = item->effectiveStaffIdx();
+    Staff* staff = item->score()->staff(effectiveStaffIdx);
+
     if (item->placeBelow()) {
         double yoff = ldata->bbox().height();
 
         // If there is only one line, the barline spans outside the staff lines, so the default position is not correct.
-        if (item->staff()->constStaffType(item->measure()->tick())->lines() == 1) {
+        if (staff && staff->lines(item->tick()) == 1) {
             yoff += 2.0 * item->spatium();
         } else {
             yoff += item->staff()->staffHeight();
@@ -137,8 +140,6 @@ void MeasureNumberLayout::layoutMeasureNumberBase(MeasureNumberBase* item, Measu
         double yoff = 0.0;
 
         // If there is only one line, the barline spans outside the staff lines, so the default position is not correct.
-        staff_idx_t effectiveStaffIdx = item->effectiveStaffIdx();
-        Staff* staff = item->score()->staff(effectiveStaffIdx);
         if (staff && staff->lines(item->tick()) == 1) {
             yoff -= 2.0 * item->spatium();
         }
