@@ -280,8 +280,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>654</width>
-                <height>723</height>
+                <width>408</width>
+                <height>517</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -924,8 +924,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>633</width>
-             <height>1534</height>
+             <width>409</width>
+             <height>1110</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_72">
@@ -3227,8 +3227,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>695</width>
-             <height>684</height>
+             <width>664</width>
+             <height>592</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -4262,7 +4262,7 @@
               <item>
                <layout class="QGridLayout" name="gridLayout_48">
                 <property name="topMargin">
-                 <number>10</number>
+                 <number>0</number>
                 </property>
                 <item row="0" column="0">
                  <widget class="QLabel" name="label_66">
@@ -4478,8 +4478,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>414</width>
-             <height>745</height>
+             <width>268</width>
+             <height>527</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_38">
@@ -5281,8 +5281,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>615</width>
-             <height>817</height>
+             <width>401</width>
+             <height>583</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_67">
@@ -6004,8 +6004,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>547</width>
-                <height>576</height>
+                <width>365</width>
+                <height>408</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54" rowstretch="0,0,0,2">
@@ -6892,8 +6892,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>621</width>
-             <height>677</height>
+             <width>459</width>
+             <height>494</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_68">
@@ -10397,8 +10397,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>750</width>
-             <height>776</height>
+             <width>482</width>
+             <height>543</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64" stretch="0,0,2">
@@ -11986,8 +11986,8 @@ followed by dashes</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>582</width>
-                <height>768</height>
+                <width>362</width>
+                <height>543</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
