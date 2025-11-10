@@ -824,8 +824,8 @@
       <name>Alto</name>
       <Division>480</Division>
       <Style>
-        <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
         <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
+        <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
