@@ -76,6 +76,10 @@ public:
     MOCK_METHOD(void, setScoreInversionEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, scoreInversionChanged, (), (const, override));
 
+    MOCK_METHOD(bool, isOnlyInvertInDarkTheme, (), (const, override));
+    MOCK_METHOD(void, setOnlyInvertInDarkTheme, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, isOnlyInvertInDarkThemeChanged, (), (const, override));
+
     MOCK_METHOD(Color, formattingColor, (), (const, override));
     MOCK_METHOD(muse::async::Channel<Color>, formattingColorChanged, (), (const, override));
 

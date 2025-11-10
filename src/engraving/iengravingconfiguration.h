@@ -74,6 +74,10 @@ public:
     virtual void setScoreInversionEnabled(bool value) = 0;
     virtual muse::async::Notification scoreInversionChanged() const = 0;
 
+    virtual bool isOnlyInvertInDarkTheme() const = 0;
+    virtual void setOnlyInvertInDarkTheme(bool value) = 0;
+    virtual muse::async::Notification isOnlyInvertInDarkThemeChanged() const = 0;
+
     virtual bool dynamicsApplyToAllVoices() const = 0;
     virtual void setDynamicsApplyToAllVoices(bool v) = 0;
     virtual muse::async::Channel<bool> dynamicsApplyToAllVoicesChanged() const = 0;

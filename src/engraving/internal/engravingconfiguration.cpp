@@ -44,6 +44,7 @@ static const Settings::Key DEFAULT_STYLE_FILE_PATH("engraving", "engraving/style
 static const Settings::Key PART_STYLE_FILE_PATH("engraving", "engraving/style/partStyleFile");
 
 static const Settings::Key INVERT_SCORE_COLOR("engraving", "engraving/scoreColorInversion");
+static const Settings::Key ONLY_INVERT_IN_DARK_THEME("engraving", "engraving/onlyInvertInDarkTheme");
 
 static const Settings::Key ALL_VOICES_COLOR("engraving", "engraving/colors/allVoicesColor");
 static const Settings::Key FORMATTING_COLOR("engraving", "engraving/colors/formattingColor");
@@ -89,6 +90,11 @@ void EngravingConfiguration::init()
     settings()->setDefaultValue(INVERT_SCORE_COLOR, Val(false));
     settings()->valueChanged(INVERT_SCORE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_scoreInversionChanged.notify();
+    });
+
+    settings()->setDefaultValue(ONLY_INVERT_IN_DARK_THEME, Val(false));
+    settings()->valueChanged(ONLY_INVERT_IN_DARK_THEME).onReceive(nullptr, [this](const Val&) {
+        m_isOnlyInvertInDarkThemeChanged.notify();
     });
 
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
@@ -357,6 +363,26 @@ void EngravingConfiguration::setScoreInversionEnabled(bool value)
     settings()->setSharedValue(INVERT_SCORE_COLOR, Val(value));
 }
 
+muse::async::Notification EngravingConfiguration::scoreInversionChanged() const
+{
+    return m_scoreInversionChanged;
+}
+
+bool EngravingConfiguration::isOnlyInvertInDarkTheme() const
+{
+    return settings()->value(ONLY_INVERT_IN_DARK_THEME).toBool();
+}
+
+void EngravingConfiguration::setOnlyInvertInDarkTheme(bool value)
+{
+    settings()->setSharedValue(ONLY_INVERT_IN_DARK_THEME, Val(value));
+}
+
+muse::async::Notification EngravingConfiguration::isOnlyInvertInDarkThemeChanged() const
+{
+    return m_isOnlyInvertInDarkThemeChanged;
+}
+
 bool EngravingConfiguration::dynamicsApplyToAllVoices() const
 {
     return settings()->value(DYNAMICS_APPLY_TO_ALL_VOICES).toBool();
@@ -385,11 +411,6 @@ void EngravingConfiguration::setAutoUpdateFretboardDiagrams(bool v)
 muse::async::Channel<bool> EngravingConfiguration::autoUpdateFretboardDiagramsChanged() const
 {
     return m_fretboardDiagramsAutoUpdateChanged;
-}
-
-muse::async::Notification EngravingConfiguration::scoreInversionChanged() const
-{
-    return m_scoreInversionChanged;
 }
 
 Color EngravingConfiguration::formattingColor() const

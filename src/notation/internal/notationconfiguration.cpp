@@ -390,6 +390,10 @@ void NotationConfiguration::init()
         m_foregroundChanged.notify();
     });
 
+    engravingConfiguration()->isOnlyInvertInDarkThemeChanged().onNotify(this, [this]() {
+        m_foregroundChanged.notify();
+    });
+
     engravingConfiguration()->formattingColorChanged().onReceive(this, [this](const Color&) {
         m_foregroundChanged.notify();
     });
@@ -562,6 +566,7 @@ void NotationConfiguration::resetForeground()
     settings()->setSharedValue(FOREGROUND_WALLPAPER_PATH, settings()->defaultValue(FOREGROUND_WALLPAPER_PATH));
 
     engravingConfiguration()->setScoreInversionEnabled(false);
+    engravingConfiguration()->setOnlyInvertInDarkTheme(false);
 }
 
 muse::async::Notification NotationConfiguration::foregroundChanged() const

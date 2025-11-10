@@ -59,6 +59,8 @@ class AppearancePreferencesModel : public QObject, public muse::Injectable, publ
         QString foregroundWallpaperPath READ foregroundWallpaperPath WRITE setForegroundWallpaperPath NOTIFY foregroundWallpaperPathChanged)
 
     Q_PROPERTY(bool scoreInversionEnabled READ scoreInversionEnabled WRITE setScoreInversionEnabled NOTIFY invertScoreColorChanged)
+    Q_PROPERTY(
+        bool isOnlyInvertInDarkTheme READ isOnlyInvertInDarkTheme WRITE setOnlyInvertInDarkTheme NOTIFY isOnlyInvertInDarkThemeChanged)
 
     muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
     muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
@@ -101,6 +103,7 @@ public:
     QString foregroundWallpaperPath() const;
 
     bool scoreInversionEnabled() const;
+    bool isOnlyInvertInDarkTheme() const;
 
     Q_INVOKABLE void resetAppearancePreferencesToDefault();
     Q_INVOKABLE void setNewColor(const QColor& newColor, ColorType colorType);
@@ -122,6 +125,7 @@ public slots:
     void setForegroundColor(const QColor& color);
     void setForegroundWallpaperPath(const QString& path);
     void setScoreInversionEnabled(bool value);
+    void setOnlyInvertInDarkTheme(bool value);
 
 signals:
     void isFollowSystemThemeChanged();
@@ -135,6 +139,7 @@ signals:
     void foregroundColorChanged();
     void foregroundWallpaperPathChanged();
     void invertScoreColorChanged();
+    void isOnlyInvertInDarkThemeChanged();
 
 private:
     muse::ui::ThemeInfo currentTheme() const;

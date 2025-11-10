@@ -84,6 +84,11 @@ public:
 
     bool scoreInversionEnabled() const override;
     void setScoreInversionEnabled(bool value) override;
+    muse::async::Notification scoreInversionChanged() const override;
+
+    bool isOnlyInvertInDarkTheme() const override;
+    void setOnlyInvertInDarkTheme(bool value) override;
+    muse::async::Notification isOnlyInvertInDarkThemeChanged() const override;
 
     bool dynamicsApplyToAllVoices() const override;
     void setDynamicsApplyToAllVoices(bool v) override;
@@ -92,8 +97,6 @@ public:
     bool autoUpdateFretboardDiagrams() const override;
     void setAutoUpdateFretboardDiagrams(bool v) override;
     muse::async::Channel<bool> autoUpdateFretboardDiagramsChanged() const override;
-
-    muse::async::Notification scoreInversionChanged() const override;
 
     Color formattingColor() const override;
     muse::async::Channel<Color> formattingColorChanged() const override;
@@ -132,6 +135,7 @@ public:
 private:
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Notification m_scoreInversionChanged;
+    muse::async::Notification m_isOnlyInvertInDarkThemeChanged;
     muse::async::Channel<bool> m_dynamicsApplyToAllVoicesChanged;
     muse::async::Channel<bool> m_fretboardDiagramsAutoUpdateChanged;
     muse::async::Channel<Color> m_formattingColorChanged;
