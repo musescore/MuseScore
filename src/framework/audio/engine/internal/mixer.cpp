@@ -255,7 +255,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 
     for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
         if (fxProcessor->active()) {
-            fxProcessor->process(outBuffer, samplesPerChannel);
+            fxProcessor->process(outBuffer, samplesPerChannel, currentTime());
         }
     }
 
@@ -283,6 +283,7 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
     };
 
     bool filterTracks = m_isIdle && !m_tracksToProcessWhenIdle.empty();
+    msecs_t playbackPosition = currentTime();
 
 #ifdef MUSE_THREADS_SUPPORT
     if (useMultithreading()) {
@@ -297,6 +298,8 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
                 pair.second->notifyNoAudioSignal();
                 continue;
             }
+
+            pair.second->setPlaybackPosition(playbackPosition);
 
             std::future<std::vector<float> > future = m_taskScheduler->submit(processChannel, pair.second);
             futures.emplace(pair.first, std::move(future));
@@ -317,6 +320,8 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
                 pair.second->notifyNoAudioSignal();
                 continue;
             }
+
+            pair.second->setPlaybackPosition(playbackPosition);
 
             outTracksData.emplace(pair.first, processChannel(pair.second));
         }

@@ -39,7 +39,7 @@ public:
     void setGain(float value);
     void setQ(float value);
 
-    void process(float* buffer, unsigned int sampleCount) override;
+    void process(float* buffer, unsigned int sampleCount, muse::audio::msecs_t playbackPosition = 0) override;
 
 private:
     void calculate();

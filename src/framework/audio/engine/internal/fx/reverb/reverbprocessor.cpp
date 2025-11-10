@@ -333,7 +333,7 @@ void ReverbProcessor::setActive(bool active)
     m_params.active = active;
 }
 
-void ReverbProcessor::process(float* buffer, unsigned int sampleCount)
+void ReverbProcessor::process(float* buffer, unsigned int sampleCount, muse::audio::msecs_t)
 {
     if (m_processor._blockSize != static_cast<int>(sampleCount)) {
         setFormat(m_processor._audioChannelsCount, m_processor._sampleRate, sampleCount);

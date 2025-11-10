@@ -51,6 +51,8 @@ public:
 
     void notifyNoAudioSignal();
 
+    void setPlaybackPosition(muse::audio::msecs_t pos);
+
     const AudioOutputParams& outputParams() const override;
     void applyOutputParams(const AudioOutputParams& requiredParams) override;
     async::Channel<AudioOutputParams> outputParamsChanged() const override;
@@ -71,6 +73,7 @@ private:
     TrackId m_trackId = -1;
 
     OutputSpec m_outputSpec;
+    muse::audio::msecs_t m_playbackPosition = 0;
     AudioOutputParams m_params;
 
     IAudioSourcePtr m_audioSource = nullptr;
