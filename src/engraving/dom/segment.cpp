@@ -1492,35 +1492,6 @@ void Segment::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
     }
 }
 
-RectF Segment::contentRect() const
-{
-    RectF result;
-    for (const EngravingItem* element: elist()) {
-        if (!element) {
-            continue;
-        }
-
-        if (element->isChord()) {
-            const Chord* chord = dynamic_cast<const Chord*>(element);
-            for (const Note* note: chord->notes()) {
-                result = result.united(note->ldata()->bbox());
-            }
-
-            Hook* hook = chord->hook();
-            if (hook) {
-                RectF rect = RectF(hook->pos().x(), hook->pos().y(), hook->width(), hook->height());
-                result = result.united(rect);
-            }
-
-            continue;
-        }
-
-        result = result.united(element->ldata()->bbox());
-    }
-
-    return result;
-}
-
 //---------------------------------------------------------
 //   firstElement
 //   This function returns the first main element from a

@@ -724,6 +724,31 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
     notifyAboutStateChanged();
 }
 
+static muse::RectF segmentContentRect(const Segment* segment, track_idx_t track)
+{
+    RectF result;
+
+    const EngravingItem* el = segment->element(track);
+    if (!el) {
+        return result;
+    }
+
+    if (el->isChord()) {
+        const Chord* chord = toChord(el);
+        for (const Note* note: chord->notes()) {
+            result.unite(note->ldata()->bbox().translated(note->pos()));
+        }
+
+        if (Hook* hook = chord->hook()) {
+            result.unite(hook->ldata()->bbox().translated(hook->pos()));
+        }
+    } else if (el->isRest() && !toRest(el)->isFullMeasureRest()) {
+        result.unite(el->ldata()->bbox());
+    }
+
+    return result;
+}
+
 muse::RectF NotationNoteInput::cursorRect() const
 {
     TRACEFUNC;
@@ -738,50 +763,53 @@ muse::RectF NotationNoteInput::cursorRect() const
         return {};
     }
 
-    mu::engraving::System* system = segment->measure()->system();
+    const mu::engraving::System* system = segment->measure()->system();
     if (!system) {
         return {};
     }
 
-    mu::engraving::track_idx_t track = inputState.track() == muse::nidx ? 0 : inputState.track();
-    mu::engraving::staff_idx_t staffIdx = track / mu::engraving::VOICES;
+    const mu::engraving::track_idx_t track = inputState.track() == muse::nidx ? 0 : inputState.track();
+    const mu::engraving::staff_idx_t staffIdx = track / mu::engraving::VOICES;
 
     const Staff* staff = score()->staff(staffIdx);
     if (!staff) {
         return {};
     }
 
-    const bool isTabStaff = staff->isTabStaff(inputState.tick());
-
-    const int sideMargin = isTabStaff ? 12 : 4;
-    constexpr int skylineMargin = 20;
-
-    RectF segmentContentRect = segment->contentRect();
-    double x = segmentContentRect.translated(segment->pagePos()).x() - sideMargin;
-    double y = system->staffYpage(staffIdx) + system->page()->pos().y();
-    double w = segmentContentRect.width() + 2 * sideMargin;
-    double h = 0.0;
+    const double globalSpatium = score()->style().spatium();
 
     const mu::engraving::StaffType* staffType = staff->staffType(inputState.tick());
-    double spatium = score()->style().spatium();
-    double lineDist = staffType->lineDistance().val() * spatium;
-    int lines = staffType->lines();
-    double yOffset = staffType ? staffType->yoffset().val() * spatium : 0.0;
-    int inputStateStringsCount = inputState.string();
+    const bool isTabStaff = staffType->isTabStaff();
+    const double localSpatium = staffType->spatium();
+
+    const double sideMargin = 0.5 * globalSpatium;
+    const double defaultWidth = score()->noteHeadWidth() * localSpatium / globalSpatium;
+    const double skylineMargin = 0.75 * localSpatium;
+
+    const RectF segmentContentRect = ::segmentContentRect(segment, track);
+    double x = segmentContentRect.x() + segment->pagePos().x() - sideMargin;
+    double y = system->staffCanvasYpage(staffIdx);
+    double w = (segmentContentRect.width() > 0 ? segmentContentRect.width() : defaultWidth) + 2 * sideMargin;
+    double h = 0.0;
+
+    const double lineDist = staffType->lineDistance().val() * localSpatium;
+    const int lines = staffType->lines();
+    const double yOffset = staffType->yoffset().val() * localSpatium;
+    const int inputStateStringsCount = inputState.string();
 
     y += yOffset;
 
-    int instrumentStringsCount = static_cast<int>(staff->part()->instrument()->stringData()->strings());
+    const int instrumentStringsCount = static_cast<int>(staff->part()->instrument()->stringData()->strings());
     if (isTabStaff && inputStateStringsCount >= 0 && inputStateStringsCount <= instrumentStringsCount) {
         h = lineDist;
-        y += staffType->physStringToYOffset(inputStateStringsCount) * spatium;
+        y += staffType->physStringToYOffset(inputStateStringsCount) * localSpatium;
         y -= (staffType->onLines() ? lineDist * 0.5 : lineDist);
     } else {
         h = (lines - 1) * lineDist + 2 * skylineMargin;
         y -= skylineMargin;
     }
 
-    RectF result = RectF(x, y, w, h);
+    RectF result { x, y, w, h };
 
     if (configuration()->canvasOrientation().val == muse::Orientation::Horizontal) {
         result.translate(system->page()->pos());
