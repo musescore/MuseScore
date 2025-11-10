@@ -2194,8 +2194,6 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
 
     bool negativeFret = item->negativeFretUsed() && item->staff()->isTabStaff(item->tick());
 
-    Color c(negativeFret ? config->criticalColor() : item->curColor(opt));
-    painter->setPen(c);
     bool tablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
 
     // tablature
@@ -2217,7 +2215,8 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         Font f(tab->fretFont());
         f.setPointSizeF(f.pointSizeF() * item->magS());
         painter->setFont(f);
-        painter->setPen(c);
+        bool useCritical = negativeFret && !item->deadNote() && !item->score()->printing();
+        painter->setPen(useCritical ? config->criticalColor() : item->curColor(opt));
         double startPosX = ldata->bbox().x();
 
         double yOffset = tab->fretFontYOffset();
