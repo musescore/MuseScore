@@ -61,9 +61,12 @@ inline void multiplySamples(float* buffer, const audioch_t& audioChannelsCount,
 }
 
 template<typename T>
-constexpr T convertFloatSamples(float value)
+constexpr T convertFloatSamples(const float value, const int bits)
 {
-    return static_cast<T>(value * std::numeric_limits<T>::max() - 1);
+    const int64_t max_val = (1LL << (bits - 1)) - 1LL;
+    const float clampedValue = std::clamp(value, -1.0f, 1.0f);
+    const float scaledValue = clampedValue * max_val;
+    return static_cast<T>(std::round(scaledValue));
 }
 }
 

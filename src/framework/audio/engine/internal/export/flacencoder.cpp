@@ -110,7 +110,7 @@ size_t FlacEncoder::encode(samples_t samplesPerChannel, const float* input)
     std::vector<FLAC__int32> buff(samplesPerChannel * sizeof(float));
 
     for (size_t i = 0; i < buff.size(); ++i) {
-        buff[i] = static_cast<FLAC__int32>(dsp::convertFloatSamples<FLAC__int16>(input[i]));
+        buff[i] = dsp::convertFloatSamples<FLAC__int32>(input[i], 16);
     }
 
     std::vector<FLAC__int32> intermBuff(stepSize);
