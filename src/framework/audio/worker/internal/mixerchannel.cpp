@@ -208,10 +208,9 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
     }
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
-        if (!fx->active()) {
-            continue;
+        if (fx->active()) {
+            fx->process(buffer, samplesPerChannel, m_playbackPosition);
         }
-        fx->process(buffer, samplesPerChannel);
     }
 
     completeOutput(buffer, samplesPerChannel);
@@ -270,4 +269,9 @@ void MixerChannel::notifyNoAudioSignal()
     }
 
     m_audioSignalNotifier.notifyAboutChanges();
+}
+
+void MixerChannel::setPlaybackPosition(msecs_t pos)
+{
+    m_playbackPosition = pos;
 }
