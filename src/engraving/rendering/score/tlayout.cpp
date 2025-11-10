@@ -3339,19 +3339,19 @@ void TLayout::layoutJump(const Jump* item, Jump::LayoutData* ldata)
     if (avoidBarline) {
         bool startRepeat = measure->repeatStart();
         bool endRepeat = measure->repeatEnd();
-        staff_idx_t blIdx = item->staffIdx() - 1;
+        staff_idx_t blAboveIdx = item->staffIdx() - 1;
 
         const double fontSizeScaleFactor = item->size() / 10.0;
         double padding = (startRepeat || endRepeat) ? 0.0 : 0.5 * item->spatium() * fontSizeScaleFactor;
 
         if (position == AlignH::LEFT) {
-            const BarLine* bll = startRepeat || !measure->prevMeasure()
-                                 ? measure->startBarLine(blIdx) : measure->prevMeasure()->endBarLine(blIdx);
-            double blWidth = startRepeat ? bll->width() : 0.0;
+            const BarLine* blAbove = startRepeat || !measure->prevMeasure()
+                                     ? measure->startBarLine(blAboveIdx) : measure->prevMeasure()->endBarLine(blAboveIdx);
+            double blWidth = startRepeat ? blAbove->width() : 0.0;
             xAdj += padding + blWidth;
         } else if (position == AlignH::RIGHT) {
-            const BarLine* blr = measure->endBarLine(blIdx);
-            xAdj -= blr->width() + padding;
+            const BarLine* blAbove = measure->endBarLine(blAboveIdx);
+            xAdj -= blAbove->width() + padding;
         }
     }
     ldata->moveX(xAdj);
