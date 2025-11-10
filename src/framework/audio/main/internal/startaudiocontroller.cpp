@@ -172,9 +172,18 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
 #ifndef Q_OS_WASM
 
     m_requiredSamplesTotal = requiredSpec.output.samplesPerChannel * requiredSpec.output.audioChannelCount;
-    audioDriver()->activeSpecChanged().onReceive(this, [this](const IAudioDriver::Spec& spec) {
-        m_requiredSamplesTotal = spec.output.samplesPerChannel * spec.output.audioChannelCount;
+
+    auto subscribeOnActiveSpecChanged = [this]() {
+        audioDriver()->activeSpecChanged().onReceive(this, [this](const IAudioDriver::Spec& spec) {
+            m_requiredSamplesTotal = spec.output.samplesPerChannel * spec.output.audioChannelCount;
+        });
+    };
+
+    audioDriverController()->audioDriverChanged().onNotify(this, [subscribeOnActiveSpecChanged](){
+        subscribeOnActiveSpecChanged();
     });
+
+    subscribeOnActiveSpecChanged();
 
     bool shouldMeasureInputLag = configuration()->shouldMeasureInputLag();
     requiredSpec.callback = [this, shouldMeasureInputLag]

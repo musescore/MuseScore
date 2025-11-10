@@ -28,13 +28,17 @@ namespace muse::audio {
 class AudioDriverControllerStub : public IAudioDriverController
 {
 public:
+
     std::string currentAudioApi() const override;
-    void setCurrentAudioApi(const std::string& name) override;
-    async::Notification currentAudioApiChanged() const override;
+    IAudioDriverPtr audioDriver() const override;
+    void changeAudioDriver(const std::string& name) override;
+    async::Notification audioDriverChanged() const override;
 
     std::vector<std::string> availableAudioApiList() const override;
 
-    IAudioDriverPtr audioDriver() const override;
+    void selectOutputDevice(const std::string& deviceId) override;
+    void changeBufferSize(samples_t samples) override;
+    void changeSampleRate(sample_rate_t sampleRate) override;
 
 private:
     mutable IAudioDriverPtr m_audioDriver;

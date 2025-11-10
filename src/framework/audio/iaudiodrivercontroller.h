@@ -35,11 +35,14 @@ public:
     virtual ~IAudioDriverController() = default;
 
     virtual std::string currentAudioApi() const = 0;
-    virtual void setCurrentAudioApi(const std::string& name) = 0;
-    virtual async::Notification currentAudioApiChanged() const = 0;
+    virtual IAudioDriverPtr audioDriver() const = 0;
+    virtual void changeAudioDriver(const std::string& name) = 0;
+    virtual async::Notification audioDriverChanged() const = 0;
 
     virtual std::vector<std::string> availableAudioApiList() const = 0;
 
-    virtual IAudioDriverPtr audioDriver() const = 0;
+    virtual void selectOutputDevice(const std::string& deviceId) = 0;
+    virtual void changeBufferSize(samples_t samples) = 0;
+    virtual void changeSampleRate(sample_rate_t sampleRate) = 0;
 };
 }

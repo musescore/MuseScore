@@ -79,7 +79,7 @@ QVariantList CommonAudioApiConfigurationModel::deviceList() const
 
 void CommonAudioApiConfigurationModel::deviceSelected(const QString& deviceId)
 {
-    audioConfiguration()->setAudioOutputDeviceId(deviceId.toStdString());
+    audioDriverController()->selectOutputDevice(deviceId.toStdString());
 }
 
 unsigned int CommonAudioApiConfigurationModel::bufferSize() const
@@ -102,7 +102,7 @@ QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
 
 void CommonAudioApiConfigurationModel::bufferSizeSelected(const QString& bufferSizeStr)
 {
-    audioConfiguration()->setDriverBufferSize(bufferSizeStr.toInt());
+    audioDriverController()->changeBufferSize(bufferSizeStr.toInt());
 }
 
 unsigned int CommonAudioApiConfigurationModel::sampleRate() const
@@ -124,7 +124,7 @@ QList<unsigned int> CommonAudioApiConfigurationModel::sampleRateList() const
 
 void CommonAudioApiConfigurationModel::sampleRateSelected(const QString& sampleRateStr)
 {
-    audioConfiguration()->setSampleRate(sampleRateStr.toInt());
+    audioDriverController()->changeSampleRate(sampleRateStr.toInt());
 }
 
 muse::audio::IAudioDriverPtr CommonAudioApiConfigurationModel::audioDriver() const

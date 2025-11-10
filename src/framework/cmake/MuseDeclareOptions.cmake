@@ -13,7 +13,15 @@ declare_muse_module_opt(ACTIONS ON)
 
 declare_muse_module_opt(AUDIO ON)
 option(MUSE_MODULE_AUDIO_JACK "Enable jack support" OFF)
-option(MUSE_MODULE_AUDIO_ASIO "Enable asio support" ON)
+
+if (OS_IS_WIN)
+    option(MUSE_MODULE_AUDIO_ASIO "Enable asio support" ON)
+endif()
+
+if (OS_IS_LIN OR OS_IS_FBSD)
+    option(MUSE_MODULE_AUDIO_PIPEWIRE "Use PipeWire audio driver" OFF) # Turns ON on CI
+endif()
+
 option(MUSE_MODULE_AUDIO_EXPORT "Enable audio export" ON)
 
 # 1 - worker

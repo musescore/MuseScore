@@ -128,7 +128,7 @@ void AlsaAudioDriver::init()
 
 std::string AlsaAudioDriver::name() const
 {
-    return "MUAUDIO(ALSA)";
+    return "ALSA";
 }
 
 bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
