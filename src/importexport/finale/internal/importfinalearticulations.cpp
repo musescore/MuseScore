@@ -196,7 +196,7 @@ void FinaleParser::importArticulations()
 
             const MusxInstance<FontInfo>& mainFont = articDef->fontMain ? articDef->fontMain : options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Articulation);
             SymId mainSym = FinaleTextConv::symIdFromFinaleChar(articDef->charMain, mainFont);
-            std::optional<char32_t> mainChar = FinaleTextConv::mappedChar(articDef->charMain, mainFont).value_or(0);
+            std::optional<char32_t> mainChar = FinaleTextConv::mappedChar(articDef->charMain, mainFont);
             // const MusxInstance<FontInfo> altFont = articDef->fontAlt ? articDef->fontAlt : options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Articulation);
             // SymId altSym = FinaleTextConv::symIdFromFinaleChar(articDef->charAlt, altFont);
 
@@ -307,7 +307,7 @@ void FinaleParser::importArticulations()
             // Arpeggios
             if (mainSym == SymId::noSym && !c->arpeggio()) {
                 // The Finale symbol is an optional character and not in SMuFL
-                if (mainChar.has_value() && mainChar.value() == 0xF700u) {
+                if (mainChar.has_value() && mainChar.value() == U'\uF700') {
                     Arpeggio* arpeggio = Factory::createArpeggio(c);
                     arpeggio->setTrack(c->track());
                     arpeggio->setArpeggioType(ArpeggioType::NORMAL);
@@ -331,9 +331,9 @@ void FinaleParser::importArticulations()
 
             if (muse::contains(ornamentSymbols, mainSym)) {
                 a = toArticulation(Factory::createOrnament(c));
-            } else {
+            } else if (mainChar.has_value()) {
                 for (OrnamentDefinition od : ornamentList) {
-                    if (od.character == mainChar) {
+                    if (od.character == mainChar.value()) {
                         mainSym = od.symId;
                         a = toArticulation(Factory::createOrnament(c)); /// @todo accidentals
                         break;
