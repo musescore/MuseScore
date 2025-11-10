@@ -723,6 +723,18 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             ne->setScore(score);
             ne->setTrack(m_track);
             seg->add(ne);
+        } else if (e->isKeySig()) {
+            Segment* seg;
+            // No remains -> Next Measure if it does exist
+            if ((remains == Fraction(0, 1)) && m->nextMeasure()) {
+                seg = m->nextMeasure()->getSegmentR(SegmentType::KeySig, Fraction(0, 1));
+            } else {
+                seg = m->getSegmentR(SegmentType::KeySig, Fraction());
+            }
+            EngravingItem* ne = e->clone();
+            ne->setScore(score);
+            ne->setTrack(m_track);
+            seg->add(ne);
         } else {
             if (!m) {
                 break;
@@ -730,7 +742,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             // add the element in its own segment;
             // but KeySig has to be at start of (current) measure
 
-            Segment* seg = m->getSegmentR(Segment::segmentType(e->type()), e->isKeySig() ? Fraction() : m->ticks() - remains);
+            Segment* seg = m->getSegmentR(Segment::segmentType(e->type()), m->ticks() - remains);
             EngravingItem* ne = e->clone();
             ne->setScore(score);
             ne->setTrack(m_track);
