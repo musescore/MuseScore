@@ -30,6 +30,8 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/ornament.h"
+#include "engraving/dom/tremolosinglechord.h"
+#include "engraving/dom/tremolotwochord.h"
 
 #include "engraving/playback/playbackeventsrenderer.h"
 
@@ -2451,6 +2453,77 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote)
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 4));
         }
     }
+
+    delete score;
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_Single_Note_Tremolo_OnTiedNote_PlaybackDisabled
+ * @details This test verifies that tied notes with tremolo markings are NOT rendered
+ *          when the tremolo's playTremolo setting is disabled (false).
+ *          This is the fix for issue #30858 - preventing double playback when tremolo is disabled.
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote_PlaybackDisabled)
+{
+    // [GIVEN] Simple piece of score (violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "single_note_tremolo_on_tied_note/single_note_tremolo_on_tied_note.mscx");
+    ASSERT_TRUE(score);
+
+    // [GIVEN] Find the chord with tremolo and disable tremolo playback
+    const Chord* chord = findChord(score, 2880);  // Chord with tremolo
+    ASSERT_TRUE(chord);
+    ASSERT_EQ(chord->notes().size(), 1);
+
+    const Note* lastTiedNote = chord->notes().front();
+    ASSERT_TRUE(lastTiedNote->tieBack() && !lastTiedNote->tieFor());
+
+    // [GIVEN] Disable tremolo playback - this simulates the user unchecking "Play tremolo"
+    TremoloSingleChord* tremoloSingle = chord->tremoloSingleChord();
+    TremoloTwoChord* tremoloTwo = chord->tremoloTwoChord();
+
+    if (tremoloSingle) {
+        tremoloSingle->setPlayTremolo(false);
+    }
+    if (tremoloTwo) {
+        tremoloTwo->setPlayTremolo(false);
+    }
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
+    m_defaultProfile->setPattern(ArticulationType::Tremolo32nd, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [GIVEN] First tied note (without tremolo) - should render normally
+    const Chord* firstChord = findChord(score, 1920);
+    ASSERT_TRUE(firstChord);
+    ASSERT_EQ(firstChord->notes().size(), 1);
+
+    const Note* firstTiedNote = firstChord->notes().front();
+    ASSERT_TRUE(firstTiedNote->tieFor() && !firstTiedNote->tieBack());
+
+    // [WHEN] Request to render the first chord (without tremolo)
+    PlaybackEventsMap result;
+    m_renderer.render(firstChord, 0, m_defaultProfile, ctx, result);
+
+    // [THEN] First note renders normally (standard articulation)
+    ASSERT_EQ(result.size(), 1);
+    ASSERT_EQ(result.begin()->second.size(), 1);
+    mpe::NoteEvent firstNoteEvent = std::get<mpe::NoteEvent>(result.begin()->second.at(0));
+    EXPECT_EQ(firstNoteEvent.expressionCtx().articulations.size(), 1);
+    EXPECT_TRUE(firstNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+    EXPECT_EQ(firstNoteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 4));
+    EXPECT_EQ(firstNoteEvent.arrangementCtx().nominalDuration, WHOLE_NOTE_DURATION);  // Full note, not half note
+
+    // [WHEN] Request to render the second chord (with tremolo disabled)
+    result.clear();
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    // [THEN] Since tremolo playback is disabled, this should NOT render the tied note
+    // This verifies that our fix prevents double playback when playTremolo = false
+    EXPECT_EQ(result.size(), 0);  // No events should be rendered for disabled tremolo on tied note
 
     delete score;
 }
