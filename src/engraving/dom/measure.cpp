@@ -1499,6 +1499,10 @@ EngravingItem* Measure::drop(EditData& data)
 {
     EngravingItem* e = data.dropElement;
     staff_idx_t staffIdx = track2staff(data.track);
+    if (staffIdx == muse::nidx) {
+        delete e;
+        return nullptr;
+    }
     Staff* staff = score()->staff(staffIdx);
     //bool fromPalette = (e->track() == -1);
 

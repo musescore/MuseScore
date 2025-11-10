@@ -321,6 +321,7 @@ void dropNormalBarline(EngravingItem* e)
     BarLine* barLine = Factory::createBarLine(e->score()->dummy()->segment());
     barLine->setBarLineType(BarLineType::NORMAL);
     dropData.dropElement = barLine;
+    dropData.track = 0;
 
     e->score()->startCmd(TranslatableString::untranslatable("Drop normal barline test"));
     e->drop(dropData);
