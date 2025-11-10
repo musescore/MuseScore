@@ -351,8 +351,6 @@ void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int
         return;
     }
 
-    const bool progressStarted = m_renderingInfo.maxChunksDurationUs > 0;
-
     audio::InputProcessingProgress::ChunkInfoList chunks;
     chunks.reserve(size);
 
@@ -382,7 +380,7 @@ void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int
 
         // Failed regions remain in the list, but should be excluded when
         // calculating the total remaining rendering duration
-        if (progressStarted && !m_renderingInfo.error.empty()) {
+        if (info._state != ms_RenderingState_Rendering) {
             continue;
         }
 
@@ -391,15 +389,13 @@ void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int
     }
 
     // Start progress
-    if (!progressStarted) {
+    if (!m_inputProcessingProgress.isStarted) {
         // Rendering has started on the sampler side, but it is not yet ready to report progress
-        if (chunksDurationUs <= 0 && isRendering) {
+        if ((chunksDurationUs <= 0 && isRendering) || size == 0) {
             return;
         }
 
-        if (!m_inputProcessingProgress.isStarted) {
-            m_inputProcessingProgress.start();
-        }
+        m_inputProcessingProgress.start();
     }
 
     m_renderingInfo.maxChunksDurationUs = std::max(m_renderingInfo.maxChunksDurationUs, chunksDurationUs);
