@@ -54,15 +54,15 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
 
     const mu::engraving::Score* score = m_notation->elements()->msScore();
 
-    Fraction tick = Fraction::fromTicks(_tick);
+    const Fraction tick = Fraction::fromTicks(_tick);
 
-    Measure* measure = score->tick2measureMM(tick);
+    const Measure* measure = score->tick2measureMM(tick);
     if (!measure) {
         return RectF();
     }
 
-    mu::engraving::System* system = measure->system();
-    if (!system) {
+    const mu::engraving::System* system = measure->system();
+    if (!system || !system->page() || system->staves().empty()) {
         return RectF();
     }
 
@@ -85,7 +85,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
         } else {
             t2 = measure->endTick();
             // measure->width is not good enough because of courtesy keysig, timesig
-            mu::engraving::Segment* seg = measure->findSegment(mu::engraving::SegmentType::EndBarLine, measure->endTick());
+            const mu::engraving::Segment* seg = measure->findSegment(mu::engraving::SegmentType::EndBarLine, measure->endTick());
             if (seg) {
                 x2 = seg->canvasPos().x();
             } else {
@@ -106,11 +106,12 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
         return RectF();
     }
 
-    double y = system->staffYpage(0) + system->page()->pos().y();
-    double _spatium = score->style().spatium();
+    const double _spatium = score->style().spatium();
 
-    double w  = 8;
-    double h  = 6 * _spatium;
+    x -= _spatium;
+
+    const double y = system->staffCanvasYpage(0) - 3 * _spatium;
+    const double w = 0.4 * _spatium;
     //
     // set cursor height for whole system
     //
@@ -124,11 +125,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
         y2 = ss->bbox().bottom();
     }
 
-    h += y2;
-    x -= _spatium;
-    y -= 3 * _spatium;
+    const double h = y2 + 6 * _spatium;
 
-    return RectF(x, y, w, h);
+    return RectF { x, y, w, h };
 }
 
 bool PlaybackCursor::visible() const
