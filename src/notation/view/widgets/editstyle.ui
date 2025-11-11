@@ -4069,85 +4069,7 @@
                 <property name="topMargin">
                  <number>0</number>
                 </property>
-                <item row="0" column="1">
-                 <widget class="QComboBox" name="dividerLeftSym"/>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_7">
-                  <property name="text">
-                   <string>Symbol size:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>dividerLeftSym</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="5">
-                 <spacer name="horizontalSpacer">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="0" column="2">
-                 <spacer name="horizontalSpacer_37">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QLabel" name="label_29">
-                  <property name="text">
-                   <string>Horizontal offset:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>dividerLeftX</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="4">
-                 <widget class="QDoubleSpinBox" name="dividerLeftX">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="keyboardTracking">
-                   <bool>false</bool>
-                  </property>
-                  <property name="suffix">
-                   <string>sp</string>
-                  </property>
-                  <property name="minimum">
-                   <double>-99.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
-                 <widget class="QLabel" name="label_65">
-                  <property name="text">
-                   <string>Vertical offset:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>dividerLeftY</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="4">
+                <item row="1" column="5">
                  <widget class="QDoubleSpinBox" name="dividerLeftY">
                   <property name="minimumSize">
                    <size>
@@ -4166,10 +4088,10 @@
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_30">
+                <item row="0" column="2">
+                 <widget class="QToolButton" name="dividerLeftSymReset">
                   <property name="text">
-                   <string>Scale:</string>
+                   <string/>
                   </property>
                  </widget>
                 </item>
@@ -4183,6 +4105,112 @@
                   </property>
                   <property name="maximum">
                    <double>1000.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="4">
+                 <widget class="QLabel" name="label_65">
+                  <property name="text">
+                   <string>Vertical offset:</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>dividerLeftY</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="4">
+                 <widget class="QLabel" name="label_29">
+                  <property name="text">
+                   <string>Horizontal offset:</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>dividerLeftX</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <spacer name="horizontalSpacer_37">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="5">
+                 <widget class="QDoubleSpinBox" name="dividerLeftX">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="keyboardTracking">
+                   <bool>false</bool>
+                  </property>
+                  <property name="suffix">
+                   <string>sp</string>
+                  </property>
+                  <property name="minimum">
+                   <double>-99.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_7">
+                  <property name="text">
+                   <string>Symbol size:</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>dividerLeftSym</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_30">
+                  <property name="text">
+                   <string>Scale:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="7">
+                 <spacer name="horizontalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QToolButton" name="dividerLeftSizeReset">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="dividerLeftSym"/>
+                </item>
+                <item row="0" column="6">
+                 <widget class="QToolButton" name="dividerLeftXReset">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="6">
+                 <widget class="QToolButton" name="dividerLeftYReset">
+                  <property name="text">
+                   <string/>
                   </property>
                  </widget>
                 </item>
@@ -4264,86 +4292,8 @@
                 <property name="topMargin">
                  <number>0</number>
                 </property>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_66">
-                  <property name="text">
-                   <string>Symbol size:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>dividerRightSym</cstring>
-                  </property>
-                 </widget>
-                </item>
                 <item row="0" column="5">
-                 <spacer name="horizontalSpacer_6">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="0" column="4">
                  <widget class="QDoubleSpinBox" name="dividerRightX">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="keyboardTracking">
-                   <bool>false</bool>
-                  </property>
-                  <property name="suffix">
-                   <string>sp</string>
-                  </property>
-                  <property name="minimum">
-                   <double>-99.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QComboBox" name="dividerRightSym"/>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QLabel" name="label_67">
-                  <property name="text">
-                   <string>Horizontal offset:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>dividerRightX</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <spacer name="horizontalSpacer_39">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="1" column="3">
-                 <widget class="QLabel" name="label_68">
-                  <property name="text">
-                   <string>Vertical offset:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>dividerRightY</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="4">
-                 <widget class="QDoubleSpinBox" name="dividerRightY">
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -4368,6 +4318,85 @@
                   </property>
                  </widget>
                 </item>
+                <item row="0" column="2">
+                 <widget class="QToolButton" name="dividerRightSymReset">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="7">
+                 <spacer name="horizontalSpacer_6">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="1" column="5">
+                 <widget class="QDoubleSpinBox" name="dividerRightY">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="keyboardTracking">
+                   <bool>false</bool>
+                  </property>
+                  <property name="suffix">
+                   <string>sp</string>
+                  </property>
+                  <property name="minimum">
+                   <double>-99.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="4">
+                 <widget class="QLabel" name="label_68">
+                  <property name="text">
+                   <string>Vertical offset:</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>dividerRightY</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="4">
+                 <widget class="QLabel" name="label_67">
+                  <property name="text">
+                   <string>Horizontal offset:</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>dividerRightX</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QToolButton" name="dividerRightSizeReset">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_66">
+                  <property name="text">
+                   <string>Symbol size:</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>dividerRightSym</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="dividerRightSym"/>
+                </item>
                 <item row="1" column="1">
                  <widget class="QDoubleSpinBox" name="dividerRightSize">
                   <property name="suffix">
@@ -4378,6 +4407,33 @@
                   </property>
                   <property name="maximum">
                    <double>1000.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <spacer name="horizontalSpacer_39">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="6">
+                 <widget class="QToolButton" name="dividerRightXReset">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="6">
+                 <widget class="QToolButton" name="dividerRightYReset">
+                  <property name="text">
+                   <string/>
                   </property>
                  </widget>
                 </item>
