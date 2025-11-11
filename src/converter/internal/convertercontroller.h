@@ -85,6 +85,7 @@ private:
     };
 
     using BatchJob = std::list<Job>;
+    using TransposeOpts = std::optional<notation::TransposeOptions>;
 
     muse::RetVal<BatchJob> parseBatchJob(const muse::io::path_t& batchJobFile) const;
 

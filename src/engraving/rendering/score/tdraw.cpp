@@ -2219,7 +2219,7 @@ void TDraw::draw(const Note* item, Painter* painter)
         f.setPointSizeF(f.pointSizeF() * item->magS() * MScore::pixelRatio);
         painter->setFont(f);
         bool useCritical = negativeFret && !item->deadNote() && !item->score()->printing();
-        painter->setPen(useCritical ? config->criticalColor() : item->curColor(opt));
+        painter->setPen(useCritical ? config->criticalColor() : item->curColor());
         double startPosX = ldata->bbox().x();
 
         double yOffset = tab->fretFontYOffset();
