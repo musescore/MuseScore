@@ -19,7 +19,7 @@ option(MUSE_MODULE_AUDIO_EXPORT "Enable audio export" ON)
 # 1 - worker
 # 2 - driver callback
 # 3 - worker - RPC, driver callback - process
-set(MUSE_MODULE_AUDIO_WORKMODE 1 CACHE INT "Audio subsystem work mode")
+set(MUSE_MODULE_AUDIO_WORKMODE 1 CACHE STRING "Audio subsystem work mode")
 
 declare_muse_module_opt(AUDIOPLUGINS ON)
 
