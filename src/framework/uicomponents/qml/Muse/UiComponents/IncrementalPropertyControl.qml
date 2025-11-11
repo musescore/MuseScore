@@ -81,8 +81,6 @@ Item {
             if (newValue === value) {
                 return
             }
-
-            newValue = ui.df.formatReal(newValue, decimals)
         }
 
         root.valueEdited(newValue)
@@ -104,8 +102,6 @@ Item {
             if (newValue === value) {
                 return
             }
-
-            newValue = ui.df.formatReal(newValue, decimals)
         }
 
         root.valueEdited(newValue)
@@ -151,7 +147,7 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
-        currentText: Qt.locale().toString(root.currentValue ? root.currentValue : 0.0, 'f', decimals)
+        currentText: ui.df.formatReal(root.currentValue ? root.currentValue : 0.0, decimals)
 
         navigation.accessible.role: MUAccessible.SpinBox
         navigation.accessible.value: currentValue + (measureUnitsSymbol !== "" ? " " + measureUnitsSymbol : "")
