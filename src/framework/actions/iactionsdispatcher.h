@@ -110,7 +110,7 @@ public:
     template<typename T>
     void reg(Actionable* client, const ActionQuery& query, T* caller, void (T::* func)())
     {
-        reg(client, query.toString(), [caller, func](const ActionQuery&) { (caller->*func)(); });
+        reg(client, query, [caller, func](const ActionQuery&) { (caller->*func)(); });
     }
 };
 }
