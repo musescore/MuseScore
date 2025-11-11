@@ -41,7 +41,7 @@ BaseSection {
 
             property int initialIndex: -1
 
-            title: qsTrc("appshell/preferences", "Audio API:")
+            title: qsTrc("appshell/preferences", "Audio API")
             columnWidth: root.columnWidth
 
             visible: root.audioApiList.length > 1
