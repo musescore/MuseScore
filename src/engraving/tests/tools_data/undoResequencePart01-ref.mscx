@@ -339,6 +339,7 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
+      <open>1</open>
       <Part id="1">
         <Staff>
           <eid>5_5</eid>

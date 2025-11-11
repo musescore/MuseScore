@@ -2918,7 +2918,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
             }
         } else if (tag == "Excerpt") {
             Excerpt* ex = new Excerpt(masterScore);
-            read400::TRead::read(ex, e, ctx);
+            readExcerpt(ex, e, ctx);
             masterScore->m_excerpts.push_back(ex);
         } else if (tag == "Beam") {
             Beam* beam = Factory::createBeam(masterScore->dummy()->system());
@@ -3176,6 +3176,26 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
     }
 
     return muse::make_ok();
+}
+
+void Read114::readExcerpt(Excerpt* item, XmlReader& e, ReadContext&)
+{
+    const std::vector<Part*>& pl = item->masterScore()->parts();
+    std::vector<Part*> parts;
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag = e.name();
+        if (tag == "name" || tag == "title") {
+            item->setName(e.readText().trimmed());
+        } else if (tag == "part") {
+            size_t partIdx = static_cast<size_t>(e.readInt());
+            if (partIdx >= pl.size()) {
+                LOGD("Excerpt::read: bad part index");
+            } else {
+                parts.push_back(pl.at(partIdx));
+            }
+        }
+    }
+    item->setParts(parts);
 }
 
 bool Read114::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)
