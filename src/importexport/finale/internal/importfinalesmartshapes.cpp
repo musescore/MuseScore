@@ -228,8 +228,8 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
 DirectionV FinaleParser::calculateSlurDirection(Slur* slur)
 {
     // Cross-staff or cross-layer chords
-    if (slur->track() != slur->track2()) {
-        for (ChordRest* cr : {slur->startCR(), slur->endCR() }) {
+    if (slur->track() != slur->track2() || slur->startCR()->vStaffIdx() != slur->endCR()->vStaffIdx()) {
+        for (ChordRest* cr : { slur->startCR(), slur->endCR() }) {
             if (!cr->isChord()) {
                 continue;
             }
@@ -508,6 +508,18 @@ void FinaleParser::importSmartShapes()
                     newSpanner->setEndElement(endElement);
                     newSpanner->setTick2(toChordRest(endElement)->endTick());
                 }
+                // Account for odd text offset
+                muse::draw::Font f(score()->engravingFont()->family(), muse::draw::Font::Type::MusicSymbol);
+                f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * newSpanner->magS()); // This has been tested and is scaled correctly
+                muse::draw::FontMetrics fm(f);
+                PointF textoffset(0.0, absoluteDouble(0.75, newSpanner));
+                textoffset.ry() -= fm.boundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).y();
+                if (newSpanner->placeAbove()) {
+                    textoffset.ry() -= fm.boundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).height();
+                }
+                toOttava(newSpanner)->setBeginTextOffset(textoffset);
+                toOttava(newSpanner)->setContinueTextOffset(textoffset);
+                toOttava(newSpanner)->setEndTextOffset(textoffset);
             } else if (type == ElementType::HAIRPIN) {
                 HairpinType ht = hairpinTypeFromShapeType(smartShape->shapeType);
                 toHairpin(newSpanner)->setHairpinType(ht);
@@ -523,7 +535,7 @@ void FinaleParser::importSmartShapes()
                 if (slur->slurDirection() == DirectionV::AUTO) {
                     setAndStyleProperty(slur, Pid::SLUR_DIRECTION, calculateSlurDirection(slur));
                 }
-                if (slur->track() != slur->track2()) {
+                if (slur->track() != slur->track2() || slur->startCR()->vStaffIdx() != slur->endCR()->vStaffIdx()) {
                     slur->setAutoplace(false);
                 } else if (smartShape->engraverSlurState == others::SmartShape::EngraverSlurState::Auto) {
                     slur->setAutoplace(musxOptions().smartShapeOptions->useEngraverSlurs);
@@ -764,10 +776,13 @@ void FinaleParser::importSmartShapes()
             }
         }
 
+        if (newSpanner->hasVoiceAssignmentProperties()) {
+            setAndStyleProperty(newSpanner, Pid::DIRECTION, newSpanner->placeAbove() ? DirectionV::UP : DirectionV::DOWN);
+        }
+
         if (type == ElementType::HAIRPIN) {
             // todo: declare hairpin placement in hairpin elementStyle?
             /// @todo make hairpins account for anchored dynamics
-            setAndStyleProperty(newSpanner, Pid::DIRECTION, newSpanner->placeAbove() ? DirectionV::UP : DirectionV::DOWN);
 
             // If not otherwise set, determine hairpin height by length
             if (toHairpin(newSpanner)->isLineType() && newSpanner->isStyled(Pid::HAIRPIN_HEIGHT)) {
@@ -780,19 +795,6 @@ void FinaleParser::importSmartShapes()
                                         absoluteSpatiumFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth, newSpanner), true);
                 }
             }
-        } else if (isStandardOttava) {
-            // Account for odd text offset
-            muse::draw::Font f(score()->engravingFont()->family(), muse::draw::Font::Type::MusicSymbol);
-            f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * newSpanner->magS()); // This has been tested and is scaled correctly
-            muse::draw::FontMetrics fm(f);
-            PointF textoffset(0.0, absoluteDouble(0.75, newSpanner));
-            textoffset.ry() -= fm.boundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).y();
-            if (newSpanner->placeAbove()) {
-                textoffset.ry() -= fm.boundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).height();
-            }
-            toOttava(newSpanner)->setBeginTextOffset(textoffset);
-            toOttava(newSpanner)->setContinueTextOffset(textoffset);
-            toOttava(newSpanner)->setEndTextOffset(textoffset);
         }
 
         if (newSpanner->systemFlag()) {
