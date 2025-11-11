@@ -1502,6 +1502,7 @@ void FinaleParser::importEntryAdjustments()
                     int crossStaffMove = (up ? beam->minCRMove() : beam->maxCRMove() + 1) - beam->defaultCrossStaffIdx();
                     setAndStyleProperty(beam, Pid::BEAM_CROSS_STAFF_MOVE, crossStaffMove);
                 }
+                /// @todo requires layout call first - else unexpected results
                 setAndStyleProperty(beam, Pid::BEAM_POS, PairF(beam->beamPos().first - (posAdjust.x() / beam->spatium()),
                                                                beam->beamPos().second - (posAdjust.y() / beam->spatium())));
                 continue;
