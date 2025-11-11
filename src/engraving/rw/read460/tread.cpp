@@ -3788,6 +3788,12 @@ void TRead::readHopoText(HammerOnPullOffSegment* hopoSeg, XmlReader& xml, ReadCo
     hopoSeg->addHopoText(hopoText);
 }
 
+void TRead::lineBreakFromTag(String& str)
+{
+    // Raw newlines appearing next to tags (<font size="10> or <sym>...) get eaten by XML readers.
+    str.replace(u"<br/>", u"\n");
+}
+
 bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
@@ -4416,6 +4422,7 @@ bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
 
     if (tag == "text") {
         String str = e.readXml();
+        lineBreakFromTag(str);
         t->setXmlText(str);
         t->checkCustomFormatting(str);
     } else if (tag == "bold") {

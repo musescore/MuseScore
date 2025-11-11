@@ -171,8 +171,7 @@
             <subtype>mp</subtype>
             <velocity>64</velocity>
             <eid>d_d</eid>
-            <text>sempre <sym>dynamicMezzo</sym><sym>dynamicPiano</sym> e 
-dolce</text>
+            <text>sempre <sym>dynamicMezzo</sym><sym>dynamicPiano</sym> e <br/>dolce</text>
             </Dynamic>
           <Chord>
             <eid>e_e</eid>
@@ -187,8 +186,7 @@ dolce</text>
             <subtype>p</subtype>
             <velocity>49</velocity>
             <eid>g_g</eid>
-            <text><sym>dynamicPiano</sym> e sempre
-dolce</text>
+            <text><sym>dynamicPiano</sym> e sempre<br/>dolce</text>
             </Dynamic>
           <Chord>
             <eid>h_h</eid>

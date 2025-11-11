@@ -132,8 +132,7 @@
           <StaffText>
             <eid>G_G</eid>
             <style>instrument_change</style>
-            <text>Simplify tied eighth notes to indicate rhythms - Compound Meter
-6/8 N = 1</text>
+            <text>Simplify tied eighth notes to indicate rhythms - Compound Meter<br/>6/8 N = 1</text>
             </StaffText>
           <Chord>
             <eid>H_H</eid>

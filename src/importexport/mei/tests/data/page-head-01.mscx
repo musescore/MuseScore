@@ -45,15 +45,12 @@
         <Text>
           <eid>E_E</eid>
           <style>title</style>
-          <text>Title of the score
-with a second line
-and a third one</text>
+          <text>Title of the score<br/>with a second line<br/>and a third one</text>
           </Text>
         <Text>
           <eid>F_F</eid>
           <style>composer</style>
-          <text>Composer
-Arranger (second line)</text>
+          <text>Composer<br/>Arranger (second line)</text>
           </Text>
         </VBox>
       <Measure>

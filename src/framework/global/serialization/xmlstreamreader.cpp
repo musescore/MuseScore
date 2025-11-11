@@ -501,6 +501,11 @@ std::vector<XmlStreamReader::Attribute> XmlStreamReader::attributes() const
     return attrs;
 }
 
+bool XmlStreamReader::noChildren() const
+{
+    return m_xml->node ? !m_xml->node.first_child() && !m_xml->node.last_child() : false;
+}
+
 String XmlStreamReader::readBody() const
 {
     if (!m_xml->node) {

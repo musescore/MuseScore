@@ -168,11 +168,12 @@ double XmlReader::readDouble(double min, double max)
 
 void XmlReader::htmlToString(int level, String* s)
 {
+    bool selfClosing = noChildren();
     *s += u'<' + String::fromAscii(name().ascii());
     for (const Attribute& a : attributes()) {
         *s += u' ' + String::fromAscii(a.name.ascii()) + u"=\"" + a.value + u'\"';
     }
-    *s += u'>';
+    *s += selfClosing ? u"/>" : u">";
     ++level;
     for (;;) {
         XmlStreamReader::TokenType t = readNext();
@@ -181,7 +182,9 @@ void XmlReader::htmlToString(int level, String* s)
             htmlToString(level, s);
             break;
         case XmlStreamReader::EndElement:
-            *s += u"</" + String::fromAscii(name().ascii()) + u'>';
+            if (!selfClosing) {
+                *s += u"</" + String::fromAscii(name().ascii()) + u'>';
+            }
             --level;
             return;
         case XmlStreamReader::Characters:

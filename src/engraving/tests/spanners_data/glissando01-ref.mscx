@@ -201,8 +201,7 @@
         <voice>
           <StaffText>
             <eid>Y_Y</eid>
-            <text>Intervening notes
-in other voice</text>
+            <text>Intervening notes<br/>in other voice</text>
             </StaffText>
           <Chord>
             <eid>Z_Z</eid>
@@ -291,8 +290,7 @@ in other voice</text>
         <voice>
           <StaffText>
             <eid>o_o</eid>
-            <text>Intervening notes
-in other staff</text>
+            <text>Intervening notes<br/>in other staff</text>
             </StaffText>
           <Chord>
             <eid>p_p</eid>

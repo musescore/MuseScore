@@ -227,3 +227,34 @@ TEST_F(Engraving_TextBaseTests, musicalSymbolsNotItalic)
     EXPECT_TRUE(fragmentList.front().font(dynamic).italic());
     EXPECT_TRUE(!std::next(fragmentList.begin())->font(dynamic).italic());
 }
+
+TEST_F(Engraving_TextBaseTests, lineBreakTest)
+{
+    static const String TEXT = u"<b><i><s><font size=\"17\"/>aaa\n\nbbb</s></i></b>";
+
+    // Write
+    {
+        MasterScore* score = ScoreRW::readScore(TEXTBASE_DATA_DIR + u"lineBreak.mscx");
+        StaffText* staffText = addStaffText(score);
+        // Set xmltext with \n between <tags>
+        staffText->setXmlText(TEXT);
+        score->renderer()->layoutItem(staffText);
+        staffText->genText();
+        // Save to file
+        // \n should be converted to <br/>
+        EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lineBreak.mscx", TEXTBASE_DATA_DIR + u"lineBreak-ref.mscx"));
+    }
+
+    // Read
+    {
+        MasterScore* score = ScoreRW::readScore(u"lineBreak.mscx", true);
+        EXPECT_TRUE(score);
+        Segment* seg = score->firstSegment(SegmentType::ChordRest);
+        EXPECT_TRUE(seg);
+
+        StaffText* staffText = toStaffText(seg->findAnnotation(ElementType::STAFF_TEXT, 0, 0));
+        EXPECT_TRUE(staffText);
+
+        EXPECT_EQ(staffText->xmlText(), TEXT);
+    }
+}

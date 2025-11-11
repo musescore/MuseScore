@@ -133,8 +133,7 @@ the video game: a tone poem</metaTag>
         <Text>
           <eid>G_G</eid>
           <style>subtitle</style>
-          <text>from MUSESCORE: the musical: the graphic novel:
-the video game: a tone poem</text>
+          <text>from MUSESCORE: the musical: the graphic novel:<br/>the video game: a tone poem</text>
           </Text>
         </VBox>
       <Measure>
@@ -153,8 +152,7 @@ the video game: a tone poem</text>
             </TimeSig>
           <StaffText>
             <eid>K_K</eid>
-            <text>Lyrics to be sung by candlelight
-        (and this not to be inferred)</text>
+            <text>Lyrics to be sung by candlelight<br/>        (and this not to be inferred)</text>
             </StaffText>
           <Beam>
             <eid>L_L</eid>
