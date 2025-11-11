@@ -782,29 +782,41 @@ muse::RectF NotationNoteInput::cursorRect() const
     const bool isTabStaff = staffType->isTabStaff();
     const double localSpatium = staffType->spatium();
 
-    const double sideMargin = 0.5 * globalSpatium;
     const double defaultWidth = score()->noteHeadWidth() * localSpatium / globalSpatium;
-    const double skylineMargin = 0.75 * localSpatium;
 
     const RectF segmentContentRect = ::segmentContentRect(segment, track);
-    double x = segmentContentRect.x() + segment->pagePos().x() - sideMargin;
+    double x = segmentContentRect.x() + segment->pagePos().x();
     double y = system->staffCanvasYpage(staffIdx);
-    double w = (segmentContentRect.width() > 0 ? segmentContentRect.width() : defaultWidth) + 2 * sideMargin;
+    double w = segmentContentRect.width() > 0 ? segmentContentRect.width() : defaultWidth;
     double h = 0.0;
 
-    const double lineDist = staffType->lineDistance().val() * localSpatium;
-    const int lines = staffType->lines();
-    const double yOffset = staffType->yoffset().val() * localSpatium;
-    const int inputStateStringsCount = inputState.string();
+    if (isTabStaff) {
+        const double minWidth = 2.0 * globalSpatium;
+        const double sideMargin = std::max(0.3 * globalSpatium, 0.5 * (minWidth - w));
+        x -= sideMargin;
+        w += 2 * sideMargin;
+    } else {
+        const double sideMargin = 0.5 * globalSpatium;
+        x -= sideMargin;
+        w += 2 * sideMargin;
+    }
 
+    const double yOffset = staffType->yoffset().val() * localSpatium;
     y += yOffset;
 
+    const int inputStateStringsCount = inputState.string();
     const int instrumentStringsCount = static_cast<int>(staff->part()->instrument()->stringData()->strings());
+
+    const double lineDist = staffType->lineDistance().val() * localSpatium;
+
     if (isTabStaff && inputStateStringsCount >= 0 && inputStateStringsCount <= instrumentStringsCount) {
         h = lineDist;
         y += staffType->physStringToYOffset(inputStateStringsCount) * localSpatium;
         y -= (staffType->onLines() ? lineDist * 0.5 : lineDist);
     } else {
+        const double skylineMargin = 0.75 * localSpatium;
+        const int lines = staffType->lines();
+
         h = (lines - 1) * lineDist + 2 * skylineMargin;
         y -= skylineMargin;
     }
