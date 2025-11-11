@@ -53,7 +53,8 @@ public:
     virtual Ret exportScoreTranspose(const io::path_t& in, const io::path_t& out, const std::string& optionsJson,
                                      const io::path_t& stylePath = io::path_t(), bool forceMode = false) = 0;
 
-    virtual Ret exportScoreVideo(const io::path_t& in, const io::path_t& out) = 0;
+    virtual Ret exportScoreVideo(const io::path_t& in, const io::path_t& out,
+                                 const io::path_t& stylePath = io::path_t(), bool forceMode = false) = 0;
 
     virtual Ret updateSource(const io::path_t& in, const std::string& newSource, bool forceMode = false) = 0;
 };

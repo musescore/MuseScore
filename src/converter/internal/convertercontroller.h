@@ -65,7 +65,8 @@ public:
     Ret exportScoreTranspose(const io::path_t& in, const io::path_t& out, const std::string& optionsJson,
                              const io::path_t& stylePath = io::path_t(), bool forceMode = false) override;
 
-    Ret exportScoreVideo(const io::path_t& in, const io::path_t& out) override;
+    Ret exportScoreVideo(const io::path_t& in, const io::path_t& out,
+                         const io::path_t& stylePath = io::path_t(), bool forceMode = false) override;
 
     Ret updateSource(const io::path_t& in, const std::string& newSource, bool forceMode = false) override;
 

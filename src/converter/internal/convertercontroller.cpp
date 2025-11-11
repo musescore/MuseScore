@@ -356,7 +356,8 @@ mu::Ret ConverterController::exportScoreTranspose(const mu::io::path_t& in, cons
     return BackendApi::exportScoreTranspose(in, out, optionsJson, stylePath, forceMode);
 }
 
-mu::Ret ConverterController::exportScoreVideo(const io::path_t& in, const io::path_t& out)
+mu::Ret ConverterController::exportScoreVideo(const io::path_t& in, const io::path_t& out,
+                                              const io::path_t& stylePath, bool forceMode)
 {
     TRACEFUNC;
 
@@ -371,7 +372,7 @@ mu::Ret ConverterController::exportScoreVideo(const io::path_t& in, const io::pa
         return make_ret(Err::ConvertTypeUnknown);
     }
 
-    Ret ret = notationProject->load(in);
+    Ret ret = notationProject->load(in, stylePath, forceMode);
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);

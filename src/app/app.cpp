@@ -494,7 +494,7 @@ int App::processConverter(const CommandLineParser::ConverterTask& task)
         ret = converter()->exportScoreTranspose(task.inputFile, task.outputFile, scoreTranspose, stylePath, forceMode);
     } break;
     case CommandLineParser::ConvertType::ExportScoreVideo: {
-        ret = converter()->exportScoreVideo(task.inputFile, task.outputFile);
+        ret = converter()->exportScoreVideo(task.inputFile, task.outputFile, stylePath, forceMode);
     } break;
     case CommandLineParser::ConvertType::SourceUpdate: {
         std::string scoreSource = task.params[CommandLineParser::ParamKey::ScoreSource].toString().toStdString();
