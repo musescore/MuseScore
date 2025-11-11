@@ -737,7 +737,7 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
         throw std::invalid_argument("unable to find default abbreviated name positioning for staves");
     }
     setStyle(style, Sid::shortInstrumentAlign, justifyToAlignment(abbreviatedPosition->justify));
-    setStyle(style, Sid::shortInstrumentPosition, justifyToAlignment(fullPosition->hAlign).horizontal);
+    setStyle(style, Sid::shortInstrumentPosition, justifyToAlignment(abbreviatedPosition->hAlign).horizontal);
 
     writeDefaultFontPref(style, context, "partInstrument", FontType::StaffNames);
     writeDefaultFontPref(style, context, "tabFretNumber",  FontType::Tablature);
