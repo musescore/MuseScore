@@ -26,6 +26,8 @@
 #include "dom/note.h"
 #include "dom/staff.h"
 #include "dom/swing.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 
 #include "glissandosrenderer.h"
 
@@ -63,8 +65,27 @@ bool NoteRenderer::shouldRender(const Note* note, const RenderingContext& ctx, c
         const Chord* startChord = startNote->chord();
         const Chord* endChord = endNote->chord();
 
-        if (startChord->tremoloType() != TremoloType::INVALID_TREMOLO
-            || endChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
+        // Helper function to check if tremolo should play
+        auto shouldTremoloPlay = [](const Chord* chord) -> bool {
+            if (chord->tremoloType() == TremoloType::INVALID_TREMOLO) {
+                return false;
+            }
+
+            const TremoloSingleChord* singleTremolo = chord->tremoloSingleChord();
+            if (singleTremolo) {
+                return singleTremolo->playTremolo();
+            }
+
+            const TremoloTwoChord* twoTremolo = chord->tremoloTwoChord();
+            if (twoTremolo) {
+                return twoTremolo->playTremolo();
+            }
+
+            return false;
+        };
+
+        // Only render tied notes if tremolo is actually enabled for playback
+        if (shouldTremoloPlay(startChord) || shouldTremoloPlay(endChord)) {
             return true;
         }
 
