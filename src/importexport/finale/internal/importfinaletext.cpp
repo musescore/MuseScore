@@ -1366,8 +1366,6 @@ void FinaleParser::importPageTexts()
     std::unordered_map<page_idx_t, MeasureBase*> bottomBoxes;
 
     for (MusxInstance<others::PageTextAssign> pageTextAssign : notHF) {
-        musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId);
-        String pageText = stringFromEnigmaText(parsingContext);
         for (page_idx_t i : getPages(pageTextAssign)) {
             Page* page = m_score->pages().at(i);
             MeasureBase* mb = [&]() {
@@ -1496,6 +1494,10 @@ void FinaleParser::importPageTexts()
                 }
                 /// @todo use sophisticated check for whether to import as frame or not. (i.e. distance to measure is too large, frame would get in the way of music)
             }();
+            EnigmaParsingOptions options;
+            options.initialFont = FontTracker(m_score->style(), mb->isMeasure() ? u"staffText" : u"default");
+            musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId, i + 1);
+            String pageText = stringFromEnigmaText(parsingContext, options);
             addPageTextToMeasure(pageTextAssign, mb, page, pageText);
         }
     }
