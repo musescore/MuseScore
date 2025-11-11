@@ -3024,6 +3024,9 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
                     continue;
                 }
                 staff_idx_t thisStaffIdx = timeSig->effectiveStaffIdx();
+                if (thisStaffIdx == muse::nidx) {
+                    continue;
+                }
                 staff_idx_t nextStaffIdx = thisStaffIdx;
                 for (staff_idx_t idx = thisStaffIdx + 1; idx < nstaves; ++idx) {
                     TimeSig* nextTimeSig = toTimeSig(segment.element(staff2track(idx)));

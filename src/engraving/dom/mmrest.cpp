@@ -53,11 +53,9 @@ MMRest::MMRest(const MMRest& r, bool link)
     m_numberVisible = r.m_numberVisible;
 }
 
-bool MMRest::shouldShowNumber() const
+bool MMRest::shouldShowNumberByDefault() const
 {
-    bool shouldShow = isOldStyle() && ldata()->number == 1
-                      ? m_numberVisible && style().styleB(Sid::singleMeasureMMRestShowNumber)
-                      : m_numberVisible;
+    bool shouldShow = isOldStyle() && ldata()->number == 1 ? style().styleB(Sid::singleMeasureMMRestShowNumber) : true;
 
     const Part* itemPart = part();
     const System* system = measure()->system();
@@ -66,6 +64,11 @@ bool MMRest::shouldShowNumber() const
                                                 && style().styleB(Sid::mmRestBetweenStaves);
 
     return shouldShow && !isTopStaffOfPartAndCenteringIsActive;
+}
+
+bool MMRest::showNumber() const
+{
+    return shouldShowNumberByDefault() && m_numberVisible;
 }
 
 bool MMRest::isOldStyle() const

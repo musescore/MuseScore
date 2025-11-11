@@ -2127,7 +2127,7 @@ void TDraw::draw(const MMRest* item, Painter* painter)
     painter->setPen(item->curColor());
     RectF numberBox = item->symBbox(ldata->numberSym);
     PointF numberPos = item->numberPos();
-    if (item->shouldShowNumber()) {
+    if (item->showNumber()) {
         item->drawSymbols(ldata->numberSym, painter, numberPos);
     }
 
@@ -2153,7 +2153,7 @@ void TDraw::draw(const MMRest* item, Painter* painter)
             pen.setWidthF(hBarThickness);
             painter->setPen(pen);
             double halfHBarThickness = hBarThickness * .5;
-            if (item->shouldShowNumber() // avoid painting line through number
+            if (item->showNumber() // avoid painting line through number
                 && item->style().styleB(Sid::mmRestNumberMaskHBar)
                 && numberBox.bottom() >= -halfHBarThickness
                 && numberBox.top() <= halfHBarThickness) {

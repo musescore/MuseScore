@@ -34,6 +34,12 @@ MMRestSettingsModel::MMRestSettingsModel(QObject* parent, IElementRepositoryServ
     setTitle(muse::qtrc("inspector", "Multimeasure rest"));
     setIcon(muse::ui::IconCode::Code::MULTIMEASURE_REST);
     createProperties();
+
+    if (notation::INotationStylePtr notationStyle = style()) {
+        notationStyle->styleChanged().onNotify(this, [this]() {
+            updateNumberOptionsEnabled();
+        });
+    }
 }
 
 void MMRestSettingsModel::createProperties()
@@ -73,26 +79,25 @@ PropertyItem* MMRestSettingsModel::numberPosition() const
 
 bool MMRestSettingsModel::areNumberOptionsEnabled() const
 {
-    return m_isNumberVisibleEnabled;
+    return m_areNumberOptionsEnabled;
 }
 
 void MMRestSettingsModel::updateNumberOptionsEnabled()
 {
     bool enabled = true;
     for (EngravingItem* item : m_elementList) {
-        if (!item->isMMRest()) {
-            enabled = false;
-            break;
+        IF_ASSERT_FAILED(item->isMMRest()) {
+            continue;
         }
         MMRest* mmRest = toMMRest(item);
-        if (!mmRest->shouldShowNumber()) {
+        if (!mmRest->shouldShowNumberByDefault()) {
             enabled = false;
             break;
         }
     }
 
-    if (enabled != m_isNumberVisibleEnabled) {
-        m_isNumberVisibleEnabled = enabled;
-        emit isNumberVisibleEnabledChanged(m_isNumberVisibleEnabled);
+    if (enabled != m_areNumberOptionsEnabled) {
+        m_areNumberOptionsEnabled = enabled;
+        emit areNumberOptionsEnabledChanged(m_areNumberOptionsEnabled);
     }
 }

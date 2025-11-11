@@ -40,7 +40,8 @@ public:
     MMRest* clone() const override { return new MMRest(*this, false); }
     EngravingItem* linkedClone() override { return new MMRest(*this, true); }
 
-    bool shouldShowNumber() const;
+    bool shouldShowNumberByDefault() const;
+    bool showNumber() const;
 
     PropertyValue propertyDefault(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
