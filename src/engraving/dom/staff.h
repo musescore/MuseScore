@@ -32,6 +32,7 @@
 #include "cleflist.h"
 #include "groups.h"
 #include "keylist.h"
+#include "mscore.h"
 #include "stafftypelist.h"
 
 #include "../types/types.h"

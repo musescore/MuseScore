@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_STAFFTYPE_H
-#define MU_ENGRAVING_STAFFTYPE_H
+#pragma once
+
+#include <array>
 
 #include "draw/types/font.h"
 
 #include "engravingitem.h"
-#include "mscore.h"
 
 #include "../types/types.h"
 
@@ -38,35 +38,20 @@ class Chord;
 class ChordRest;
 class Staff;
 
-// HISTORIC TAB BASS STRING NOTATION
-// The following constants refer to the specifics of bass string notation in historic
-//    (Renaiss./Baroque French and Italian) tablatures.
-
-// how much to lower a bass string note with slashes with respect to line distance (in fraction of line distance)
-#define STAFFTYPE_TAB_BASSSLASH_YOFFSET   0.33
-// The following constants could ideally be customizable values;
-//    they are currently constants to simplify implementation;
-// Note that these constants do not constrain which strings of an instrument are
-//    physically frettable (which is defined in the instrument itself) but fix the
-//    number of bass strings for which the notation is able to express a fret number
-//    rather than simply a string ordinal.
-#define NUM_OF_BASSSTRINGS_WITH_LETTER    4     // the max number of bass strings frettable with letter notation (French)
-#define NUM_OF_BASSSTRINGS_WITH_NUMBER    2     // the max number of bass strings frettable with number notation (Italian)
-
 //---------------------------------------------------------
 //   TablatureFont
 //---------------------------------------------------------
 
-#define NUM_OF_DIGITFRETS                 100   // the max fret number which can be rendered with numbers
-#define NUM_OF_LETTERFRETS                17    // the max fret number which can be rendered with letters
-#define NUM_OF_BASSSTRING_SLASHES         5     // the max number of slashes supported for French bass strings notation
-                                                // (currently, only 3 slashes are used at most; another two are
-                                                // foreseen for future customizability)
+constexpr int NUM_OF_DIGITFRETS = 100; // the max fret number which can be rendered with numbers
+constexpr int NUM_OF_LETTERFRETS = 17; // the max fret number which can be rendered with letters
+constexpr int NUM_OF_BASSSTRING_SLASHES = 5; // the max number of slashes supported for French bass strings notation
+                                             // (currently, only 3 slashes are used at most; another two are
+                                             // foreseen for future customizability)
 
 // default values for 'grid'-like beaming to use with value symbols in stemless TAB
-static const double GRID_BEAM_DEF_WIDTH  = 0.25; // all values in sp
-static const double GRID_STEM_DEF_HEIGHT = 1.75;
-static const double GRID_STEM_DEF_WIDTH  = 0.125;
+constexpr double GRID_BEAM_DEF_WIDTH  = 0.25; // all values in sp
+constexpr double GRID_STEM_DEF_HEIGHT = 1.75;
+constexpr double GRID_STEM_DEF_WIDTH  = 0.125;
 
 struct TablatureFretFont {
     TablatureFretFont();
@@ -78,7 +63,7 @@ struct TablatureFretFont {
     Char xChar = u'X';                                        // the char to use for 'x'
     std::array<String, NUM_OF_BASSSTRING_SLASHES> slashChar;  // the char used to draw one or more '/' symbols
     std::array<String, NUM_OF_DIGITFRETS> displayDigit;       // the string to draw for digit frets
-    Char displayLetter[NUM_OF_LETTERFRETS];                   // the char to use for letter frets
+    std::array<Char, NUM_OF_LETTERFRETS> displayLetter;       // the char to use for letter frets
 
     bool read(XmlReader&, int mscVersion);
 };
@@ -223,8 +208,6 @@ public:
     bool stemless() const { return m_stemless; }
     bool genTimesig() const { return m_genTimesig; }
     void setGenTimesig(bool val) { m_genTimesig = val; }
-    double doty1() const;
-    double doty2() const;
 
     // static function to deal with presets
     static const StaffType* getDefaultPreset(StaffGroup grp);
@@ -246,7 +229,6 @@ public:
     int     visualStringToPhys(int line) const;                   // return the string in physical order from visual string
     double   physStringToYOffset(int strg) const;                  // return the string Y offset (in sp, chord-relative)
     String tabBassStringPrefix(int strg, bool* hasFret) const;   // return a string with the prefix, if any, identifying a bass string
-    void    drawInputStringMarks(muse::draw::Painter* p, int string, const Color& selectionColor, const RectF& rect) const;
     int     numOfTabLedgerLines(int string) const;
 
     // properties getters (some getters require updated metrics)
@@ -473,4 +455,3 @@ private:
     bool m_repeat = false;
 };
 } // namespace mu::engraving
-#endif
