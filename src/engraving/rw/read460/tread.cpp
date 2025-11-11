@@ -4032,6 +4032,7 @@ void TRead::read(StaffName* item, XmlReader& xml)
 {
     item->setPos(xml.intAttribute("pos", 0));
     String name = xml.readXml();
+    lineBreakFromTag(name);
     if (name.startsWith(u"<html>")) {
         // compatibility to old html implementation:
         name = HtmlParser::parse(name);

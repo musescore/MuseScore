@@ -884,11 +884,6 @@ String StaffName::toPlainText() const
     return TextBase::unEscape(m_name);
 }
 
-StaffName StaffName::fromPlainText(const String& plainText, int pos)
-{
-    return { TextBase::plainToXmlText(plainText), pos };
-}
-
 //---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------

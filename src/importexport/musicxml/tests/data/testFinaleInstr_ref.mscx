@@ -1206,8 +1206,7 @@
       <trackName>Tuba
 (String Bass)</trackName>
       <Instrument id="tuba">
-        <longName>Tuba
-(String Bass)</longName>
+        <longName>Tuba<br/>(String Bass)</longName>
         <shortName>Tuba</shortName>
         <trackName>Tuba
 (String Bass)</trackName>
