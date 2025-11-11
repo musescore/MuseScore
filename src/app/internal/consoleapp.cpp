@@ -305,7 +305,7 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
         ret = converter()->exportScoreTranspose(task.inputFile, task.outputFile, scoreTranspose, stylePath, forceMode);
     } break;
     case ConvertType::ExportScoreVideo: {
-        ret = converter()->exportScoreVideo(task.inputFile, task.outputFile);
+        ret = converter()->exportScoreVideo(task.inputFile, task.outputFile, stylePath, forceMode);
     } break;
     case ConvertType::SourceUpdate: {
         std::string scoreSource = task.params[CmdOptions::ParamKey::ScoreSource].toString().toStdString();
