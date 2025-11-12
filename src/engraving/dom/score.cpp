@@ -1994,7 +1994,7 @@ int Score::utime2utick(double utime) const
 //   scanElementsInRange
 //---------------------------------------------------------
 
-void Score::scanElementsInRange(std::function<void(EngravingItem*)> func, bool includeInvisible)
+void Score::scanElementsInRange(std::function<void(EngravingItem*)> func)
 {
     Segment* startSeg = m_selection.startSegment();
     for (Segment* s = startSeg; s && s != m_selection.endSegment(); s = s->next1()) {

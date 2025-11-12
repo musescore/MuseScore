@@ -88,7 +88,7 @@ void StaffText::scanElements(std::function<void(EngravingItem*)> func)
         m_soundFlag->scanElements(func);
     }
 
-    EngravingItem::scanElements(func);
+    StaffTextBase::scanElements(func);
 }
 
 void StaffText::add(EngravingItem* e)

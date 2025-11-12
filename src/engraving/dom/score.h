@@ -867,7 +867,7 @@ public:
     void connectTies(bool silent = false);
     void undoRemoveStaleTieJumpPoints(bool undo = true);
 
-    void scanElementsInRange(std::function<void(EngravingItem*)> func, bool all = true);
+    void scanElementsInRange(std::function<void(EngravingItem*)> func);
     int fileDivision() const { return m_fileDivision; }   ///< division of current loading *.msc file
     void splitStaff(staff_idx_t staffIdx, int splitPoint);
     FiguredBass* addFiguredBass();

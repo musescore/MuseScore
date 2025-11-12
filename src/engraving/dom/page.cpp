@@ -31,8 +31,6 @@
 #include "measurebase.h"
 #include "mscore.h"
 #include "score.h"
-#include "staff.h"
-#include "stafflines.h"
 #include "system.h"
 #include "text.h"
 
