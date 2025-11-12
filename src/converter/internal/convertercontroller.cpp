@@ -551,7 +551,8 @@ Ret ConverterController::exportScoreElements(const muse::io::path_t& in, const m
     return BackendApi::exportScoreElements(in, out, optionsJson, openParams.stylePath, openParams.forceMode);
 }
 
-Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out)
+Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out,
+                                          const OpenParams& openParams)
 {
     TRACEFUNC;
 
@@ -566,7 +567,7 @@ Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse
         return make_ret(Err::ConvertTypeUnknown);
     }
 
-    Ret ret = notationProject->load(in);
+    Ret ret = notationProject->load(in, openParams.stylePath, openParams.forceMode);
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);
