@@ -36,24 +36,39 @@ CommonAudioApiConfigurationModel::CommonAudioApiConfigurationModel(QObject* pare
 
 void CommonAudioApiConfigurationModel::load()
 {
-    audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
-        emit deviceListChanged();
-    });
+    auto subscribeOnDriver = [this]() {
+        audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
+            emit deviceListChanged();
+            emit currentDeviceIdChanged();
+        });
 
-    audioDriver()->outputDeviceChanged().onNotify(this, [this]() {
+        audioDriver()->outputDeviceChanged().onNotify(this, [this]() {
+            emit currentDeviceIdChanged();
+            emit sampleRateChanged();
+            emit bufferSizeListChanged();
+            emit bufferSizeChanged();
+        });
+
+        audioDriver()->outputDeviceSampleRateChanged().onNotify(this, [this]() {
+            emit sampleRateChanged();
+        });
+
+        audioDriver()->outputDeviceBufferSizeChanged().onNotify(this, [this]() {
+            emit bufferSizeChanged();
+        });
+    };
+
+    audioDriverController()->audioDriverChanged().onNotify(this, [this, subscribeOnDriver]() {
+        emit deviceListChanged();
         emit currentDeviceIdChanged();
         emit sampleRateChanged();
         emit bufferSizeListChanged();
         emit bufferSizeChanged();
+
+        subscribeOnDriver();
     });
 
-    audioDriver()->outputDeviceSampleRateChanged().onNotify(this, [this]() {
-        emit sampleRateChanged();
-    });
-
-    audioDriver()->outputDeviceBufferSizeChanged().onNotify(this, [this]() {
-        emit bufferSizeChanged();
-    });
+    subscribeOnDriver();
 }
 
 QString CommonAudioApiConfigurationModel::currentDeviceId() const
@@ -79,7 +94,7 @@ QVariantList CommonAudioApiConfigurationModel::deviceList() const
 
 void CommonAudioApiConfigurationModel::deviceSelected(const QString& deviceId)
 {
-    audioConfiguration()->setAudioOutputDeviceId(deviceId.toStdString());
+    audioDriverController()->selectOutputDevice(deviceId.toStdString());
 }
 
 unsigned int CommonAudioApiConfigurationModel::bufferSize() const
@@ -102,7 +117,7 @@ QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
 
 void CommonAudioApiConfigurationModel::bufferSizeSelected(const QString& bufferSizeStr)
 {
-    audioConfiguration()->setDriverBufferSize(bufferSizeStr.toInt());
+    audioDriverController()->changeBufferSize(bufferSizeStr.toInt());
 }
 
 unsigned int CommonAudioApiConfigurationModel::sampleRate() const
@@ -124,7 +139,7 @@ QList<unsigned int> CommonAudioApiConfigurationModel::sampleRateList() const
 
 void CommonAudioApiConfigurationModel::sampleRateSelected(const QString& sampleRateStr)
 {
-    audioConfiguration()->setSampleRate(sampleRateStr.toInt());
+    audioDriverController()->changeSampleRate(sampleRateStr.toInt());
 }
 
 muse::audio::IAudioDriverPtr CommonAudioApiConfigurationModel::audioDriver() const

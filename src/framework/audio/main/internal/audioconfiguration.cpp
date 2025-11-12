@@ -60,7 +60,7 @@ void AudioConfiguration::init()
 #if defined(Q_OS_WIN)
     settings()->setDefaultValue(AUDIO_API_KEY, Val("WASAPI"));
 #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    settings()->setDefaultValue(AUDIO_API_KEY, Val("PipeWire"));
+    settings()->setDefaultValue(AUDIO_API_KEY, Val("ALSA"));
 #endif
     settings()->valueChanged(AUDIO_API_KEY).onReceive(nullptr, [this](const Val&) {
         m_currentAudioApiChanged.notify();

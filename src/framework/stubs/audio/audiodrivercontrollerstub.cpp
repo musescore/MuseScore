@@ -31,11 +31,20 @@ std::string AudioDriverControllerStub::currentAudioApi() const
     return {};
 }
 
-void AudioDriverControllerStub::setCurrentAudioApi(const std::string&)
+IAudioDriverPtr AudioDriverControllerStub::audioDriver() const
+{
+    if (!m_audioDriver) {
+        m_audioDriver = std::make_shared<AudioDriverStub>();
+    }
+
+    return m_audioDriver;
+}
+
+void AudioDriverControllerStub::changeAudioDriver(const std::string&)
 {
 }
 
-muse::async::Notification AudioDriverControllerStub::currentAudioApiChanged() const
+muse::async::Notification AudioDriverControllerStub::audioDriverChanged() const
 {
     return {};
 }
@@ -45,11 +54,14 @@ std::vector<std::string> AudioDriverControllerStub::availableAudioApiList() cons
     return {};
 }
 
-IAudioDriverPtr AudioDriverControllerStub::audioDriver() const
+void AudioDriverControllerStub::selectOutputDevice(const std::string&)
 {
-    if (!m_audioDriver) {
-        m_audioDriver = std::make_shared<AudioDriverStub>();
-    }
+}
 
-    return m_audioDriver;
+void AudioDriverControllerStub::changeBufferSize(samples_t)
+{
+}
+
+void AudioDriverControllerStub::changeSampleRate(sample_rate_t)
+{
 }

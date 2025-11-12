@@ -40,7 +40,6 @@
 #include "internal/audiouiactions.h"
 #include "internal/startaudiocontroller.h"
 #include "internal/playback.h"
-#include "internal/audiooutputdevicecontroller.h"
 #include "internal/audiodrivercontroller.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
@@ -70,7 +69,6 @@ void AudioModule::registerExports()
 {
     m_configuration = std::make_shared<AudioConfiguration>(iocContext());
     m_actionsController = std::make_shared<AudioActionsController>();
-    m_audioOutputController = std::make_shared<AudioOutputDeviceController>(iocContext());
     m_mainPlayback = std::make_shared<Playback>(iocContext());
     m_audioDriverController = std::make_shared<AudioDriverController>(iocContext());
 
@@ -131,8 +129,6 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
         m_rpcChannel->process();
     }, Ticker::Mode::Repeat);
 #endif
-
-    m_audioOutputController->init();
 
     m_mainPlayback->init();
 
