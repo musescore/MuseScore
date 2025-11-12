@@ -31,7 +31,7 @@
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
 #include <QtEnvironmentVariables>
 #include "audio/driver/platform/lin/alsaaudiodriver.h"
-#ifdef MUSE_PIPEWIRE_AUDIO_DRIVER
+#ifdef MUSE_MODULE_AUDIO_PIPEWIRE
 #include "audio/driver/platform/lin/pwaudiodriver.h"
 #endif
 #endif
@@ -41,7 +41,9 @@
 //#include "audio/driver/platform/win/wincoreaudiodriver.h"
 //#include "audio/driver/platform/win/wasapiaudiodriver.h"
 #include "audio/driver/platform/win/wasapiaudiodriver2.h"
+#ifdef MUSE_MODULE_AUDIO_ASIO
 #include "audio/driver/platform/win/asio/asioaudiodriver.h"
+#endif
 #endif
 
 #ifdef Q_OS_MACOS
@@ -55,65 +57,206 @@
 #include "log.h"
 
 using namespace muse::audio;
+using namespace muse::audio::rpc;
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-static std::shared_ptr<IAudioDriver> makeLinuxAudioDriver(const std::string& driverName)
+IAudioDriverPtr AudioDriverController::createDriver(const std::string& name) const
 {
-#if defined(MUSE_PIPEWIRE_AUDIO_DRIVER)
-    if (!qEnvironmentVariableIsSet("MUSESCORE_FORCE_ALSA") && driverName == "PipeWire") {
-        auto driver = std::make_shared<PwAudioDriver>();
-        if (driver->connectedToPwServer()) {
-            LOGI() << "Using audio driver: Pipewire";
-            return driver;
-        }
-    }
-#endif // MUSE_PIPEWIRE_AUDIO_DRIVER
-    UNUSED(driverName);
-    LOGI() << "Using audio driver: ALSA";
-    return std::make_shared<AlsaAudioDriver>();
-}
-
-#endif // Q_OS_LINUX || Q_OS_FREEBSD
-
-void AudioDriverController::init()
-{
-#if defined(MUSE_MODULE_AUDIO_JACK)
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());
-#else
-
-#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    std::string name = configuration()->currentAudioApi();
-    m_audioDriver = makeLinuxAudioDriver(name);
+#ifdef MUSE_MODULE_AUDIO_JACK
+    LOGW() << "required: " << name << ", but is set MUSE_MODULE_AUDIO_JACK";
+    return std::shared_ptr<IAudioDriver>(new JackAudioDriver());
 #endif
 
 #ifdef Q_OS_WIN
-    //m_audioDriver = std::shared_ptr<IAudioDriver>(new WinmmDriver());
-    //m_audioDriver = std::shared_ptr<IAudioDriver>(new CoreAudioDriver());
-    //m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver());
-
-    std::string name = configuration()->currentAudioApi();
     if (name == "ASIO") {
 #ifdef MUSE_MODULE_AUDIO_ASIO
-        m_audioDriver = std::shared_ptr<IAudioDriver>(new AsioAudioDriver());
+        return std::shared_ptr<IAudioDriver>(new AsioAudioDriver());
 #else
-        LOGW() << "ASIO is selected but is not available, WASAPI will be used";
-        m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver2());
+        LOGW() << "ASIO is required but is not available, WASAPI will be used";
 #endif
-    } else {
-        m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver2());
     }
 
+    // required WASAPI or fallback
+    return std::shared_ptr<IAudioDriver>(new WasapiAudioDriver2());
+#endif
+
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    if (qEnvironmentVariableIsSet("MUSESCORE_FORCE_ALSA")) {
+        if (name != "ALSA") {
+            LOGW() << "required: " << name << ", but is set MUSESCORE_FORCE_ALSA";
+        }
+        return std::make_shared<AlsaAudioDriver>();
+    }
+
+    if (name == "PipeWire") {
+#ifdef MUSE_MODULE_AUDIO_PIPEWIRE
+        auto driver = std::make_shared<PwAudioDriver>();
+        if (driver->connectedToPwServer()) {
+            return driver;
+        } else {
+            LOGE() << "PipeWire driver failed connected to server";
+        }
+#else
+        LOGW() << "PipeWire is required but is not available, ALSA will be used";
+#endif
+    }
+
+    // required ALSA or fallback
+    return std::make_shared<AlsaAudioDriver>();
 #endif
 
 #ifdef Q_OS_MACOS
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new OSXAudioDriver());
+    UNUSED(name);
+    return std::shared_ptr<IAudioDriver>(new OSXAudioDriver());
 #endif
 
 #ifdef Q_OS_WASM
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new WebAudioDriver());
+    UNUSED(name);
+    return std::shared_ptr<IAudioDriver>(new WebAudioDriver());
+#endif
+}
+
+std::vector<std::string> AudioDriverController::availableAudioApiList() const
+{
+    std::vector<std::string> names;
+#ifdef MUSE_MODULE_AUDIO_JACK
+    names.push_back("JACK");
+    return names;
 #endif
 
-#endif // MUSE_MODULE_AUDIO_JACK
+#ifdef Q_OS_WIN
+    names.push_back("WASAPI");
+#ifdef MUSE_MODULE_AUDIO_ASIO
+    names.push_back("ASIO");
+#endif
+
+    return names;
+#endif // Q_OS_WIN
+
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    names.push_back("ALSA");
+    if (qEnvironmentVariableIsSet("MUSESCORE_FORCE_ALSA")) {
+        return names;
+    }
+
+#ifdef MUSE_MODULE_AUDIO_PIPEWIRE
+    names.push_back("PipeWire");
+#endif
+
+    return names;
+#endif // Q_OS_LINUX
+
+#ifdef Q_OS_MACOS
+    names.push_back("CoreAudio");
+    return names;
+#endif
+
+#ifdef Q_OS_WASM
+    names.push_back("WASM");
+    return names;
+#endif
+}
+
+void AudioDriverController::init()
+{
+    std::string name = configuration()->currentAudioApi();
+    m_audioDriver = createDriver(name);
+    m_audioDriver->init();
+    subscribeOnDriver();
+    LOGI() << "Used " << m_audioDriver->name() << " audio driver";
+}
+
+void AudioDriverController::changeAudioDriver(const std::string& name)
+{
+    IAudioDriver::Spec activeSpec;
+    if (m_audioDriver && m_audioDriver->isOpened()) {
+        activeSpec = m_audioDriver->activeSpec();
+        m_audioDriver->availableOutputDevicesChanged().disconnect(this);
+        m_audioDriver->close();
+    }
+
+    m_audioDriver = createDriver(name);
+    m_audioDriver->init();
+    subscribeOnDriver();
+    LOGI() << "Used " << m_audioDriver->name() << " audio driver";
+
+    if (activeSpec.isValid()) {
+        m_audioDriver->open(activeSpec, &activeSpec);
+    }
+
+    configuration()->setCurrentAudioApi(name);
+    m_audioDriverChanged.notify();
+}
+
+void AudioDriverController::subscribeOnDriver()
+{
+    IF_ASSERT_FAILED(m_audioDriver) {
+        return;
+    }
+
+    m_audioDriver->availableOutputDevicesChanged().onNotify(this, [this]() {
+        LOGI() << "Available output devices changed, checking connection...";
+        checkOutputDevice();
+    });
+}
+
+void AudioDriverController::selectOutputDevice(const std::string& deviceId)
+{
+    LOGI() << "Trying to change output device: " << deviceId;
+    bool ok = audioDriver()->selectOutputDevice(deviceId);
+    if (ok) {
+        configuration()->setAudioOutputDeviceId(deviceId);
+        updateOutputSpec();
+    }
+}
+
+void AudioDriverController::checkOutputDevice()
+{
+    AudioDeviceID preferredDeviceId = configuration()->audioOutputDeviceId();
+    //! NOTE If the driver cannot open with the selected device,
+    //! it will open with the default device.
+    bool deviceChanged = m_audioDriver->selectOutputDevice(preferredDeviceId);
+    if (deviceChanged) {
+        updateOutputSpec();
+    }
+}
+
+void AudioDriverController::updateOutputSpec()
+{
+    if (!m_audioDriver->isOpened()) {
+        return;
+    }
+
+    IAudioDriver::Spec activeSpec = m_audioDriver->activeSpec();
+    rpcChannel()->send(rpc::make_request(Method::SetOutputSpec, RpcPacker::pack(activeSpec.output)));
+}
+
+void AudioDriverController::changeBufferSize(samples_t samples)
+{
+    IF_ASSERT_FAILED(m_audioDriver) {
+        return;
+    }
+
+    LOGI() << "Trying to change buffer size: " << samples;
+    bool ok = m_audioDriver->setOutputDeviceBufferSize(samples);
+    if (ok) {
+        configuration()->setDriverBufferSize(samples);
+        updateOutputSpec();
+    }
+}
+
+void AudioDriverController::changeSampleRate(sample_rate_t sampleRate)
+{
+    IF_ASSERT_FAILED(m_audioDriver) {
+        return;
+    }
+
+    LOGI() << "Trying to change sample rate: " << sampleRate;
+
+    bool ok = m_audioDriver->setOutputDeviceSampleRate(sampleRate);
+    if (ok) {
+        configuration()->setSampleRate(sampleRate);
+        updateOutputSpec();
+    }
 }
 
 std::string AudioDriverController::currentAudioApi() const
@@ -121,42 +264,13 @@ std::string AudioDriverController::currentAudioApi() const
     return configuration()->currentAudioApi();
 }
 
-void AudioDriverController::setCurrentAudioApi(const std::string& name)
-{
-    configuration()->setCurrentAudioApi(name);
-}
-
-muse::async::Notification AudioDriverController::currentAudioApiChanged() const
-{
-    return configuration()->currentAudioApiChanged();
-}
-
-std::vector<std::string> AudioDriverController::availableAudioApiList() const
-{
-#if defined(Q_OS_WIN)
-    std::vector<std::string> names {
-        "WASAPI"
-    };
-
-#ifdef MUSE_MODULE_AUDIO_ASIO
-    names.push_back("ASIO");
-#endif
-
-    return names;
-#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    std::vector<std::string> names {
-        "ALSA Audio",
-        "PipeWire",
-    };
-
-    return names;
-#else
-    return {};
-#endif
-}
-
 IAudioDriverPtr AudioDriverController::audioDriver() const
 {
     DO_ASSERT(m_audioDriver);
     return m_audioDriver;
+}
+
+muse::async::Notification AudioDriverController::audioDriverChanged() const
+{
+    return configuration()->currentAudioApiChanged();
 }

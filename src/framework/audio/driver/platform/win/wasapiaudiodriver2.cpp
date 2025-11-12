@@ -234,7 +234,7 @@ WasapiAudioDriver2::~WasapiAudioDriver2()
 
 std::string WasapiAudioDriver2::name() const
 {
-    return "WASAPI_driver";
+    return "WASAPI";
 }
 
 void WasapiAudioDriver2::init()

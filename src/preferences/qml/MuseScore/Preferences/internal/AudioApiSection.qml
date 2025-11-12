@@ -39,8 +39,6 @@ BaseSection {
         ComboBoxWithTitle {
             id: apiComboBox
 
-            property int initialIndex: -1
-
             title: qsTrc("preferences", "Audio API")
             columnWidth: root.columnWidth
 
@@ -56,25 +54,6 @@ BaseSection {
             onValueEdited: function(newIndex, newValue) {
                 root.currentAudioApiIndexChangeRequested(newIndex)
             }
-
-            onCurrentIndexChanged: {
-                if (apiComboBox.initialIndex !== -1) {
-                    restartRequiredLabel.visible = apiComboBox.currentIndex !== apiComboBox.initialIndex
-                }
-            }
-
-            Component.onCompleted: {
-                apiComboBox.initialIndex = apiComboBox.currentIndex
-            }
-        }
-
-        StyledTextLabel {
-            id: restartRequiredLabel
-
-            anchors.verticalCenter: parent.verticalCenter
-
-            text: qsTrc("preferences", "Restart required")
-            visible: false
         }
     }
 

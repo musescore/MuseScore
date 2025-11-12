@@ -614,7 +614,7 @@ void PwAudioDriver::init()
     LOGD() << "Running with version " << pw_get_library_version();
 }
 
-std::string PwAudioDriver::name() const { return "MUAUDIO(PipeWire)"; }
+std::string PwAudioDriver::name() const { return "PipeWire"; }
 
 bool PwAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {

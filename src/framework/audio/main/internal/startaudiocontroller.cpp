@@ -172,9 +172,18 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
 #ifndef Q_OS_WASM
 
     m_requiredSamplesTotal = requiredSpec.output.samplesPerChannel * requiredSpec.output.audioChannelCount;
-    audioDriver()->activeSpecChanged().onReceive(this, [this](const IAudioDriver::Spec& spec) {
-        m_requiredSamplesTotal = spec.output.samplesPerChannel * spec.output.audioChannelCount;
+
+    auto subscribeOnActiveSpecChanged = [this]() {
+        audioDriver()->activeSpecChanged().onReceive(this, [this](const IAudioDriver::Spec& spec) {
+            m_requiredSamplesTotal = spec.output.samplesPerChannel * spec.output.audioChannelCount;
+        });
+    };
+
+    audioDriverController()->audioDriverChanged().onNotify(this, [subscribeOnActiveSpecChanged](){
+        subscribeOnActiveSpecChanged();
     });
+
+    subscribeOnActiveSpecChanged();
 
     bool shouldMeasureInputLag = configuration()->shouldMeasureInputLag();
     requiredSpec.callback = [this, shouldMeasureInputLag]
@@ -207,8 +216,8 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
             if (!m_alignmentBuffer || m_alignmentBuffer->capacity() != capacity) {
                 m_alignmentBuffer = std::make_shared<AlignmentBuffer>(capacity);
             }
-            alignbuf = m_alignmentBuffer.get(); // minor optimization and easier debugging
-            static thread_local std::vector<float> proc_buf; // temp buffer
+            alignbuf = m_alignmentBuffer.get();     // minor optimization and easier debugging
+            static thread_local std::vector<float> proc_buf;     // temp buffer
             if (proc_buf.size() != requiredSamplesTotal) {
                 proc_buf.resize(requiredSamplesTotal);
             }
