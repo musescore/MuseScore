@@ -31,14 +31,14 @@ NoteInputCursor::NoteInputCursor(bool isThinLine)
 
 void NoteInputCursor::paint(muse::draw::Painter* painter)
 {
-    INotationNoteInputPtr noteInput = currentNoteInput();
+    const INotationNoteInputPtr noteInput = currentNoteInput();
     if (!noteInput) {
         return;
     }
 
     const NoteInputState& state = noteInput->state();
-    Color fillColor = configuration()->selectionColor(state.voice());
-    RectF cursorRect = noteInput->cursorRect();
+    const Color fillColor = configuration()->selectionColor(state.voice());
+    const RectF cursorRect = noteInput->cursorRect();
 
     if (!m_isThinLine) {
         Color cursorRectColor = fillColor;
@@ -46,19 +46,21 @@ void NoteInputCursor::paint(muse::draw::Painter* painter)
         painter->fillRect(cursorRect, cursorRectColor);
     }
 
-    constexpr int leftLineWidth = 3;
-    RectF leftLine(cursorRect.topLeft().x(), cursorRect.topLeft().y(), leftLineWidth, cursorRect.height());
-    Color lineColor = fillColor;
+    if (!state.staff()) {
+        return;
+    }
+
+    const StaffType* staffType = state.staff()->staffType(state.tick());
+    const double spatium = staffType->spatium();
+    const int leftLineWidth = 0.15 * spatium;
+
+    const RectF leftLine(cursorRect.topLeft().x(), cursorRect.topLeft().y(), leftLineWidth, cursorRect.height());
+    const Color lineColor = fillColor;
     painter->fillRect(leftLine, lineColor);
 
     if (state.staffGroup() == StaffGroup::TAB) {
-        const Staff* staff = state.staff();
-        const StaffType* staffType = staff ? staff->staffType() : nullptr;
-
-        if (staffType) {
-            staffType->drawInputStringMarks(painter, state.string(),
-                                            configuration()->selectionColor(state.voice()), cursorRect);
-        }
+        staffType->drawInputStringMarks(painter, state.string(),
+                                        configuration()->selectionColor(state.voice()), cursorRect);
     }
 }
 
@@ -69,10 +71,5 @@ INotationNoteInputPtr NoteInputCursor::currentNoteInput() const
         return nullptr;
     }
 
-    auto interaction = notation->interaction();
-    if (!interaction) {
-        return nullptr;
-    }
-
-    return interaction->noteInput();
+    return notation->interaction()->noteInput();
 }

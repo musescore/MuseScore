@@ -192,8 +192,6 @@ public:
     System* system() const { return toSystem(explicitParent()->explicitParent()); }
     double x() const override { return ldata()->pos().x(); }
 
-    RectF contentRect() const;
-
     void insertStaff(staff_idx_t staff);
     void removeStaff(staff_idx_t staff);
 
