@@ -4049,11 +4049,8 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         } else {
             const_cast<Note*>(item)->setFretString(tab->fretString(std::fabs(item->fret()), item->string(), item->deadNote()));
 
-            if (item->negativeFretUsed()) {
-                auto note = toNote(item);
-                if (!note->deadNote()) {
-                    const_cast<Note*>(item)->setFretString(u"-" + item->fretString());
-                }
+            if (item->negativeFretUsed() && !item->deadNote()) {
+                const_cast<Note*>(item)->setFretString(u"-" + item->fretString());
             }
 
             if (item->displayFret() == Note::DisplayFretOption::ArtificialHarmonic) {
