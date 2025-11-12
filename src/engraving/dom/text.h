@@ -51,6 +51,8 @@ public:
     VoiceAssignment voiceAssignment() const;
 
     bool collectForDrawing() const override;
+
+    bool positionRelativeToNoteheadRest() const override;
 };
 } // namespace mu::engraving
 

@@ -76,6 +76,8 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
 
+    bool positionRelativeToNoteheadRest() const override { return false; }
+
 private:
     String m_jumpTo;
     String m_playUntil;

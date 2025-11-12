@@ -192,6 +192,10 @@ void TextLayout::textHorizontalLayout(const TextBase* item, Shape& shape, double
         default:
             ASSERT_X("Lay out to parent width only valid for items with page or frame as parent");
         }
+    } else if (item->positionRelativeToNoteheadRest()) {
+        // For items aligned to notehead/rests
+        double mag = item->staff() ? item->staff()->staffMag(item) : 1.0;
+        layoutWidth = item->symWidth(SymId::noteheadBlack) * mag;
     }
 
     // Position and alignment
@@ -217,6 +221,7 @@ void TextLayout::textHorizontalLayout(const TextBase* item, Shape& shape, double
             shape.add(textBlock.shape().translated(PointF(0.0, textBlock.y())));
             continue;
         }
+
         // Align relative to the longest line
         AlignH alignH = item->align().horizontal;
         if (alignH == AlignH::HCENTER) {

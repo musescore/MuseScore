@@ -47,6 +47,8 @@ public:
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
     bool isEditAllowed(EditData&) const override;
+
+    bool positionRelativeToNoteheadRest() const override { return true; }
 };
 } // namespace mu::engraving
 #endif

@@ -63,6 +63,8 @@ public:
 
     PropertyValue propertyDefault(Pid) const override;
 
+    bool positionRelativeToNoteheadRest() const override { return true; }
+
     bool placeMultiple() const override { return false; }
 
 private:

@@ -70,6 +70,8 @@ public:
     bool isEditAllowed(EditData&) const override;
     void endEdit(EditData&) override;
 
+    bool positionRelativeToNoteheadRest() const override { return true; }
+
     const Fraction& ticks() const { return m_ticks; }
     void setTicks(const Fraction& tick) { m_ticks = tick; }
     Fraction endTick() const;

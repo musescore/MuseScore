@@ -291,6 +291,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
+    bool positionRelativeToNoteheadRest() const override { return true; }
+
     size_t itemsCount() const { return m_items.size(); }
     void appendItem(FiguredBassItem* item) { m_items.push_back(item); }
     const std::vector<FiguredBassItem*>& items() const { return m_items; }

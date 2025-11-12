@@ -122,4 +122,13 @@ bool mu::engraving::Text::collectForDrawing() const
 {
     return !(parent() && parent()->isTuplet());
 }
+
+bool Text::positionRelativeToNoteheadRest() const
+{
+    if (parent()->isBox() || parent()->isTuplet() || parent()->isSpannerSegment()) {
+        return false;
+    }
+
+    return true;
+}
 }

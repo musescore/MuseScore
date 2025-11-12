@@ -266,5 +266,7 @@ public:
     GuitarBendText* clone() const override { return new GuitarBendText(*this); }
 
     bool isEditable() const override { return false; }
+
+    bool positionRelativeToNoteheadRest() const override { return false; }
 };
 }

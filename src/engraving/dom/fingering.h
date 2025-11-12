@@ -56,6 +56,8 @@ public:
     String accessibleInfo() const override;
 
     bool isOnCrossBeamSide() const;
+
+    bool positionRelativeToNoteheadRest() const override { return false; }
 };
 } // namespace mu::engraving
 #endif

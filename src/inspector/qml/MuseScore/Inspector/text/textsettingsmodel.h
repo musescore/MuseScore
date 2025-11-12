@@ -74,6 +74,9 @@ class TextSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool isPositionAvailable READ isPositionAvailable NOTIFY isPositionAvailableChanged)
 
     Q_PROPERTY(bool usePositionRelativeToLine READ usePositionRelativeToLine NOTIFY usePositionRelativeToLineChanged)
+    Q_PROPERTY(QString leftPositionText READ leftPositionText NOTIFY leftPositionTextChanged)
+    Q_PROPERTY(QString centerPositionText READ centerPositionText NOTIFY centerPositionTextChanged)
+    Q_PROPERTY(QString rightPositionText READ rightPositionText NOTIFY rightPositionTextChanged)
 
 public:
     explicit TextSettingsModel(QObject* parent, IElementRepositoryService* repository, bool isTextLineText);
@@ -123,6 +126,9 @@ public:
     bool isLineSpacingAvailable() const;
     bool isPositionAvailable() const;
     bool usePositionRelativeToLine() const;
+    QString leftPositionText() const;
+    QString centerPositionText() const;
+    QString rightPositionText() const;
 
 public slots:
     void setAreTextPropertiesAvailable(bool areTextPropertiesAvailable);
@@ -135,6 +141,9 @@ public slots:
     void setIsLineSpacingAvailable(bool isLineSpacingAvailable);
     void setIsPositionAvailableChanged(bool isPositionAvailable);
     void setUsePositionRelativeToLineChanged(bool usePositionRelativeToLine);
+    void setLeftPositionText(QString leftPositionText);
+    void setCenterPositionText(QString centerPositionText);
+    void setRightPositionText(QString rightPositionText);
 
 signals:
     void textStylesChanged();
@@ -149,6 +158,9 @@ signals:
     void isLineSpacingAvailableChanged(bool isLineSpacingAvailable);
     void isPositionAvailableChanged(bool isPositionAvailable);
     void usePositionRelativeToLineChanged(bool positionRelativeToLine);
+    void leftPositionTextChanged(QString leftPositionText);
+    void centerPositionTextChanged(QString centerPositionText);
+    void rightPositionTextChanged(QString rightPositionText);
 
 private:
     bool isTextEditingStarted() const;
@@ -164,6 +176,9 @@ private:
     void updateIsLineSpacingAvailable();
     void updateIsPositionAvailable();
     void updateUsePositionRelativeToLine();
+    void updateLeftPositionText();
+    void updateCenterPositionText();
+    void updateRightPositionText();
 
     void propertyChangedCallback(const mu::engraving::Pid propertyId, const QVariant& newValue);
     void propertyResetCallback(const mu::engraving::Pid propertyId);
@@ -207,5 +222,9 @@ private:
     bool m_isPositionAvailable = false;
 
     bool m_usePositionRelativeToLine = false;
+
+    QString m_leftPositionText;
+    QString m_centerPositionText;
+    QString m_rightPositionText;
 };
 }

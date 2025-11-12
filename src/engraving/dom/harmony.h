@@ -289,6 +289,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;
 
+    bool positionRelativeToNoteheadRest() const override;
+
     double mag() const override;
 
     double bassScale() const { return m_bassScale; }

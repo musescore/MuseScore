@@ -73,6 +73,8 @@ public:
     bool swing() const { return m_swing; }
     int capo() const { return m_capo; }
 
+    bool positionRelativeToNoteheadRest() const override { return true; }
+
 private:
 
     String m_channelNames[4];

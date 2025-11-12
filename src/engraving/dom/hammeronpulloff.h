@@ -54,6 +54,8 @@ public:
 
     PropertyValue propertyDefault(Pid id) const override;
 
+    bool positionRelativeToNoteheadRest() const override { return false; }
+
 private:
     Chord* m_startChord = nullptr;
     Chord* m_endChord = nullptr;

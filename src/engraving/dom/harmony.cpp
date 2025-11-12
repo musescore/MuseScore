@@ -1615,6 +1615,11 @@ PropertyValue Harmony::propertyDefault(Pid id) const
     return v;
 }
 
+bool Harmony::positionRelativeToNoteheadRest() const
+{
+    return !parent()->isFretDiagram();
+}
+
 //---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------

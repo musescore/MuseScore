@@ -83,6 +83,8 @@ public:
     bool isTpcPlayable(int tpc);
     const std::set<int>& playableTpcs() const { return m_playableTpcs; }
 
+    bool positionRelativeToNoteheadRest() const override { return true; }
+
 private:
 
     std::array<PedalPosition, HARP_STRING_NO> m_pedalState;

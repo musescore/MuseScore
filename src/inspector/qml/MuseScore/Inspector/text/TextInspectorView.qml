@@ -165,226 +165,233 @@ InspectorSectionView {
             }
         }
 
-        InspectorPropertyView {
-            id: alignmentSection
-            titleText: qsTrc("inspector", "Alignment")
-            propertyItem: root.model ? root.model.horizontalAlignment : null
+        Column {
+            height: implicitHeight
+            width: parent.width
 
-            navigationName: "AlignmentMenu"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: sizeSection.navigationRowEnd + 1
-            navigationRowEnd: verticalAlignmentButtonList.navigationRowEnd
+            spacing: 8
 
-            isModified: root.model ? (root.model.horizontalAlignment.isModified
-                                      || root.model.verticalAlignment.isModified) : false
+            InspectorPropertyView {
+                id: alignmentSection
+                titleText: qsTrc("inspector", "Alignment")
+                propertyItem: root.model ? root.model.horizontalAlignment : null
 
-            onRequestResetToDefault: {
-                if (root.model) {
-                    root.model.horizontalAlignment.resetToDefault()
-                    root.model.verticalAlignment.resetToDefault()
-                }
-            }
+                navigationName: "AlignmentMenu"
+                navigationPanel: root.navigationPanel
+                navigationRowStart: sizeSection.navigationRowEnd + 1
+                navigationRowEnd: verticalAlignmentButtonList.navigationRowEnd
 
-            onRequestApplyToStyle: {
-                if (root.model) {
-                    root.model.horizontalAlignment.applyToStyle()
-                    root.model.verticalAlignment.applyToStyle()
-                }
-            }
+                isModified: root.model ? (root.model.horizontalAlignment.isModified
+                                          || root.model.verticalAlignment.isModified) : false
 
-            Item {
-                height: childrenRect.height
-                width: parent.width
-
-                RadioButtonGroup {
-                    enabled: root.model ? root.model.isHorizontalAlignmentAvailable : false
-                    id: horizontalAlignmentButtonList
-
-                    property int navigationRowStart: alignmentSection.navigationRowStart + 1
-                    property int navigationRowEnd: navigationRowStart + count
-
-                    anchors.left: parent.left
-                    anchors.right: parent.horizontalCenter
-                    anchors.rightMargin: 2
-
-                    height: 30
-
-                    model: [
-                        {
-                            iconCode: IconCode.TEXT_ALIGN_LEFT,
-                            value: TextTypes.FONT_ALIGN_H_LEFT,
-                            title: qsTrc("inspector", "Align left"),
-                            description: qsTrc("inspector", "Align left edge of text to reference point")
-                        },
-                        {
-                            iconCode: IconCode.TEXT_ALIGN_CENTER,
-                            value: TextTypes.FONT_ALIGN_H_CENTER,
-                            title: qsTrc("inspector", "Align center"),
-                            description: qsTrc("inspector", "Align horizontal center of text to reference point")
-                        },
-                        {
-                            iconCode: IconCode.TEXT_ALIGN_RIGHT,
-                            value: TextTypes.FONT_ALIGN_H_RIGHT,
-                            title: qsTrc("inspector", "Align right"),
-                            description: qsTrc("inspector", "Align right edge of text to reference point")
-                        },
-                        {
-                            iconCode: IconCode.TEXT_ALIGN_JUSTIFY, 
-                            value: TextTypes.FONT_ALIGN_H_JUSTIFY,
-                            title: qsTrc("inspector", "Justify"),
-                            description: qsTrc("inspector", "Justify text to fill the available width")
-                        }
-                    ]
-
-                    delegate: FlatRadioButton {
-                        required iconCode
-                        required property int value
-                        required property string title
-                        required property string description
-                        required property int index
-
-                        navigation.panel: root.navigationPanel
-                        navigation.name: "HAlign" + index
-                        navigation.row: horizontalAlignmentButtonList.navigationRowStart + index
-                        navigation.accessible.name: title
-                        navigation.accessible.description: description
-
-                        toolTipTitle: title
-                        toolTipDescription: description
-
-                        width: 30
-                        transparent: true
-
-                        checked: root.model && !root.model.horizontalAlignment.isUndefined && (root.model.horizontalAlignment.value === value)
-                        onToggled: {
-                            root.model.horizontalAlignment.value = value
-                        }
+                onRequestResetToDefault: {
+                    if (root.model) {
+                        root.model.horizontalAlignment.resetToDefault()
+                        root.model.verticalAlignment.resetToDefault()
                     }
                 }
 
-                RadioButtonGroup {
-                    id: verticalAlignmentButtonList
+                onRequestApplyToStyle: {
+                    if (root.model) {
+                        root.model.horizontalAlignment.applyToStyle()
+                        root.model.verticalAlignment.applyToStyle()
+                    }
+                }
 
-                    property int navigationRowStart: horizontalAlignmentButtonList.navigationRowEnd + 1
-                    property int navigationRowEnd: navigationRowStart + count
+                Item {
+                    height: childrenRect.height
+                    width: parent.width
 
-                    anchors.left: parent.horizontalCenter
-                    anchors.leftMargin: 2
-                    anchors.right: parent.right
+                    RadioButtonGroup {
+                        enabled: root.model ? root.model.isHorizontalAlignmentAvailable : false
+                        id: horizontalAlignmentButtonList
 
-                    height: 30
+                        property int navigationRowStart: alignmentSection.navigationRowStart + 1
+                        property int navigationRowEnd: navigationRowStart + count
 
-                    model: [
-                        {
-                            iconCode: IconCode.TEXT_ALIGN_TOP,
-                            value: TextTypes.FONT_ALIGN_V_TOP,
-                            title: qsTrc("inspector", "Align top"),
-                            description: qsTrc("inspector", "Align top edge of text to reference point")
-                        },
-                        {
-                            iconCode: IconCode.TEXT_ALIGN_MIDDLE,
-                            value: TextTypes.FONT_ALIGN_V_CENTER,
-                            title: qsTrc("inspector", "Align middle"),
-                            description: qsTrc("inspector", "Align vertical center of text to reference point")
-                        },
-                        {
-                            iconCode: IconCode.TEXT_ALIGN_BOTTOM,
-                            value: TextTypes.FONT_ALIGN_V_BOTTOM,
-                            title:qsTrc("inspector", "Align bottom"),
-                            description: qsTrc("inspector", "Align bottom edge of text to reference point")
-                        },
-                        {
-                            iconCode: IconCode.TEXT_ALIGN_BASELINE,
-                            value: TextTypes.FONT_ALIGN_V_BASELINE,
-                            title: qsTrc("inspector", "Align baseline"),
-                            description: qsTrc("inspector", "Align baseline of text to reference point")
+                        anchors.left: parent.left
+                        anchors.right: parent.horizontalCenter
+                        anchors.rightMargin: 2
+
+                        height: 30
+
+                        model: [
+                            {
+                                iconCode: IconCode.TEXT_ALIGN_LEFT,
+                                value: TextTypes.FONT_ALIGN_H_LEFT,
+                                title: qsTrc("inspector", "Align left"),
+                                description: qsTrc("inspector", "Left-align text within its bounding box")
+                            },
+                            {
+                                iconCode: IconCode.TEXT_ALIGN_CENTER,
+                                value: TextTypes.FONT_ALIGN_H_CENTER,
+                                title: qsTrc("inspector", "Align center"),
+                                description: qsTrc("inspector", "Horizontally center text within its bounding box")
+                            },
+                            {
+                                iconCode: IconCode.TEXT_ALIGN_RIGHT,
+                                value: TextTypes.FONT_ALIGN_H_RIGHT,
+                                title: qsTrc("inspector", "Align right"),
+                                description: qsTrc("inspector", "Right-align text within its bounding box")
+                            },
+                            {
+                                iconCode: IconCode.TEXT_ALIGN_JUSTIFY,
+                                value: TextTypes.FONT_ALIGN_H_JUSTIFY,
+                                title: qsTrc("inspector", "Justify"),
+                                description: qsTrc("inspector", "Justify text to fill the available width")
+                            }
+                        ]
+
+                        delegate: FlatRadioButton {
+                            required iconCode
+                            required property int value
+                            required property string title
+                            required property string description
+                            required property int index
+
+                            navigation.panel: root.navigationPanel
+                            navigation.name: "HAlign" + index
+                            navigation.row: horizontalAlignmentButtonList.navigationRowStart + index
+                            navigation.accessible.name: title
+                            navigation.accessible.description: description
+
+                            toolTipTitle: title
+                            toolTipDescription: description
+
+                            width: 30
+                            transparent: true
+
+                            checked: root.model && !root.model.horizontalAlignment.isUndefined && (root.model.horizontalAlignment.value === value)
+                            onToggled: {
+                                root.model.horizontalAlignment.value = value
+                            }
                         }
-                    ]
+                    }
 
-                    delegate: FlatRadioButton {
-                        required iconCode
-                        required property int value
-                        required property string title
-                        required property string description
-                        required property int index
+                    RadioButtonGroup {
+                        enabled: root.model ? root.model.isHorizontalAlignmentAvailable : false
+                        id: positionButtonList
 
-                        navigation.panel: root.navigationPanel
-                        navigation.name: "VAlign" + index
-                        navigation.row: verticalAlignmentButtonList.navigationRowStart + index
-                        navigation.accessible.name: title
-                        navigation.accessible.description: description
+                        property int navigationRowStart: horizontalAlignmentButtonList.navigationRowEnd + 1
+                        property int navigationRowEnd: navigationRowStart + count
 
-                        toolTipTitle: title
-                        toolTipDescription: description
+                        anchors.leftMargin: 2
+                        anchors.right: parent.right
 
-                        width: 30
-                        transparent: true
+                        height: 30
 
-                        checked: root.model && !root.model.verticalAlignment.isUndefined && (root.model.verticalAlignment.value === value)
-                        onToggled: {
-                            root.model.verticalAlignment.value = value
+                        model: [
+                            {
+                                iconCode: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_LEFT : IconCode.NOTE_ALIGN_LEFT,
+                                value: CommonTypes.LEFT,
+                                title: root.model ? root.model.leftPositionText : "",
+                                description: ""
+                            },
+                            {
+                                iconCode: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_HORIZONTAL_CENTER : IconCode.NOTE_ALIGN_CENTER,
+                                value:
+                                CommonTypes.HCENTER,
+                                title: root.model ? root.model.centerPositionText : "",
+                                description: ""
+                            },
+                            {
+                                iconCode: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_RIGHT : IconCode.NOTE_ALIGN_RIGHT,
+                                value: CommonTypes.RIGHT,
+                                title: root.model ? root.model.rightPositionText : "",
+                                description: ""
+                            }
+                        ]
+
+                        delegate: FlatRadioButton {
+                            required iconCode
+                            required property int value
+                            required property string title
+                            required property string description
+                            required property int index
+
+                            navigation.panel: root.navigationPanel
+                            navigation.name: "HAlign" + index
+                            navigation.row: positionButtonList.navigationRowStart + index
+                            navigation.accessible.name: title
+                            navigation.accessible.description: description
+
+                            toolTipTitle: title
+                            toolTipDescription: description
+
+                            width: 30
+                            transparent: true
+
+                            checked: root.model && !root.model.horizontalPosition.isUndefined && (root.model.horizontalPosition.value === value)
+                            onToggled: {
+                                root.model.horizontalPosition.value = value
+                            }
                         }
                     }
                 }
             }
-        }
 
-        RadioButtonGroup {
-            enabled: root.model ? root.model.isHorizontalAlignmentAvailable : false
-            id: positionButtonList
+            RadioButtonGroup {
+                id: verticalAlignmentButtonList
 
-            property int navigationRowStart: alignmentSection.navigationRowEnd + 1
-            property int navigationRowEnd: navigationRowStart + count
+                property int navigationRowStart: positionButtonList.navigationRowEnd + 1
+                property int navigationRowEnd: navigationRowStart + count
 
-            anchors.left: parent.left
-            anchors.right: parent.horizontalCenter
-            anchors.rightMargin: 2
+                anchors.left: parent.left
+                anchors.right: parent.horizontalCenter
+                anchors.rightMargin: 2
 
-            height: 30
+                height: 30
 
-            model: [
-                {
-                    iconCode: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_LEFT : IconCode.NOTE_ALIGN_LEFT,
-                    value: CommonTypes.LEFT,
-                    title: qsTrc("inspector", "Align left"),
-                    description: qsTrc("inspector", "Align left edge of text to reference point")
-                },
-                {
-                    iconCode: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_HORIZONTAL_CENTER : IconCode.NOTE_ALIGN_CENTER,
-                    value: CommonTypes.HCENTER,
-                    title: qsTrc("inspector", "Align center"),
-                    description: qsTrc("inspector", "Align horizontal center of text to reference point")
-                },
-                {
-                    iconCode: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_RIGHT : IconCode.NOTE_ALIGN_RIGHT,
-                    value: CommonTypes.RIGHT,
-                    title: qsTrc("inspector", "Align right"),
-                    description: qsTrc("inspector", "Align right edge of text to reference point")
-                }
-            ]
+                model: [
+                    {
+                        iconCode: IconCode.TEXT_ALIGN_TOP,
+                        value: TextTypes.FONT_ALIGN_V_TOP,
+                        title: qsTrc("inspector", "Align top"),
+                        description: qsTrc("inspector", "Align top edge of text to reference point")
+                    },
+                    {
+                        iconCode: IconCode.TEXT_ALIGN_MIDDLE,
+                        value: TextTypes.FONT_ALIGN_V_CENTER,
+                        title: qsTrc("inspector", "Align middle"),
+                        description: qsTrc("inspector", "Align vertical center of text to reference point")
+                    },
+                    {
+                        iconCode: IconCode.TEXT_ALIGN_BOTTOM,
+                        value: TextTypes.FONT_ALIGN_V_BOTTOM,
+                        title:qsTrc("inspector", "Align bottom"),
+                        description: qsTrc("inspector", "Align bottom edge of text to reference point")
+                    },
+                    {
+                        iconCode: IconCode.TEXT_ALIGN_BASELINE,
+                        value: TextTypes.FONT_ALIGN_V_BASELINE,
+                        title: qsTrc("inspector", "Align baseline"),
+                        description: qsTrc("inspector", "Align baseline of text to reference point")
+                    }
+                ]
 
-            delegate: FlatRadioButton {
-                required iconCode
-                required property int value
-                required property string title
-                required property string description
-                required property int index
+                delegate: FlatRadioButton {
+                    required iconCode
+                    required property int value
+                    required property string title
+                    required property string description
+                    required property int index
 
-                navigation.panel: root.navigationPanel
-                navigation.name: "HAlign" + index
-                navigation.row: positionButtonList.navigationRowStart + index
-                navigation.accessible.name: title
-                navigation.accessible.description: description
+                    navigation.panel: root.navigationPanel
+                    navigation.name: "VAlign" + index
+                    navigation.row: verticalAlignmentButtonList.navigationRowStart + index
+                    navigation.accessible.name: title
+                    navigation.accessible.description: description
 
-                toolTipTitle: title
-                toolTipDescription: description
+                    toolTipTitle: title
+                    toolTipDescription: description
 
-                width: 30
-                transparent: true
+                    width: 30
+                    transparent: true
 
-                checked: root.model && !root.model.horizontalPosition.isUndefined && (root.model.horizontalPosition.value === value)
-                onToggled: {
-                    root.model.horizontalPosition.value = value
+                    checked: root.model && !root.model.verticalAlignment.isUndefined && (root.model.verticalAlignment.value === value)
+                    onToggled: {
+                        root.model.verticalAlignment.value = value
+                    }
                 }
             }
         }
@@ -395,7 +402,7 @@ InspectorSectionView {
 
             navigation.panel: root.navigationPanel
             navigation.name: "Insert special characters"
-            navigation.row: positionButtonList.navigationRowEnd + 1
+            navigation.row: verticalAlignmentButtonList.navigationRowEnd + 1
 
             text: qsTrc("inspector", "Insert special characters")
 
