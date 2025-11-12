@@ -61,54 +61,68 @@ RectF LoopMarker::resolveMarkerRectByTick(engraving::Fraction tick) const
         tick -= Fraction::fromTicks(1);
     }
 
-    Measure* measure = score->tick2measureMM(tick);
-    if (measure == nullptr) {
+    const Measure* measure = score->tick2measureMM(tick);
+    if (!measure) {
         return RectF();
     }
 
-    qreal x = 0.0;
+    const mu::engraving::System* system = measure->system();
+    if (!system || !system->page() || system->staves().empty()) {
+        return RectF();
+    }
 
+    double x = 0.0;
     mu::engraving::Segment* s = nullptr;
     for (s = measure->first(mu::engraving::SegmentType::ChordRest); s;) {
         Fraction t1 = s->tick();
         int x1 = s->canvasPos().x();
-        qreal x2 = 0.0;
+        double x2 = 0.0;
         Fraction t2;
+
         mu::engraving::Segment* ns = s->next(mu::engraving::SegmentType::ChordRest);
+        while (ns && !ns->visible()) {
+            ns = ns->next(mu::engraving::SegmentType::ChordRest);
+        }
 
         if (ns) {
             t2 = ns->tick();
             x2 = ns->canvasPos().x();
         } else {
             t2 = measure->endTick();
-            x2 = measure->canvasPos().x() + measure->width();
+            // measure->width is not good enough because of courtesy keysig, timesig
+            const mu::engraving::Segment* seg = measure->findSegment(mu::engraving::SegmentType::EndBarLine, measure->endTick());
+            if (seg) {
+                x2 = seg->canvasPos().x();
+            } else {
+                x2 = measure->canvasPos().x() + measure->width(); // safety, should not happen
+            }
         }
 
         if (tick >= t1 && tick < t2) {
             Fraction dt = t2 - t1;
-            qreal dx = x2 - x1;
+            double dx = x2 - x1;
             x = x1 + dx * (tick - t1).ticks() / dt.ticks();
             break;
         }
-
         s = ns;
     }
 
-    if (s == nullptr) {
+    if (!s) {
         return RectF();
     }
 
-    const mu::engraving::System* system = measure->system();
-    if (system == nullptr || system->page() == nullptr || system->staves().empty()) {
-        return RectF();
+    const double _spatium = score->style().spatium();
+    const double mag = _spatium / score->style().defaultSpatium();
+
+    const double width = (_spatium * 2.0 + score->engravingFont()->width(mu::engraving::SymId::noteheadBlack, mag)) / 3;
+
+    if (m_type == LoopBoundaryType::LoopIn) {
+        x = x - _spatium + width / 1.5;
+    } else {
+        x = x - _spatium * .5;
     }
 
-    double y = system->staffYpage(0) + system->page()->pos().y();
-    double _spatium = score->style().spatium();
-
-    qreal mag = _spatium / score->style().defaultSpatium();
-    double width = (_spatium * 2.0 + score->engravingFont()->width(mu::engraving::SymId::noteheadBlack, mag)) / 3;
-    double height = 6 * _spatium;
+    const double y = system->staffCanvasYpage(0) - 3 * _spatium;
 
     // set cursor height for whole system
     double y2 = 0.0;
@@ -121,16 +135,9 @@ RectF LoopMarker::resolveMarkerRectByTick(engraving::Fraction tick) const
         y2 = ss->y() + ss->bbox().height();
     }
 
-    height += y2;
-    y -= 3 * _spatium;
+    const double height = y2 + 6 * _spatium;
 
-    if (m_type == LoopBoundaryType::LoopIn) {
-        x = x - _spatium + width / 1.5;
-    } else {
-        x = x - _spatium * .5;
-    }
-
-    return RectF(x, y, width, height);
+    return RectF { x, y, width, height };
 }
 
 void LoopMarker::paint(muse::draw::Painter* painter)
@@ -141,17 +148,20 @@ void LoopMarker::paint(muse::draw::Painter* painter)
         return;
     }
 
+    const mu::engraving::Score* score = m_notation->elements()->msScore();
+    const double spatium = score->style().spatium();
+
     PolygonF triangle(3);
 
-    qreal x = m_rect.left();
-    qreal y = m_rect.top();
-    qreal h = m_notation->style()->styleValue(StyleId::spatium).toDouble() * 2;
+    const double x = m_rect.left();
+    const double y = m_rect.top();
+    const double h = m_notation->style()->styleValue(StyleId::spatium).toDouble() * 2;
 
-    QColor color = configuration()->loopMarkerColor();
+    const QColor color = configuration()->loopMarkerColor();
 
     switch (m_type) {
     case LoopBoundaryType::LoopIn: { // draw a right-pointing triangle
-        qreal tx = x - 1.0;
+        const double tx = x - 1.0;
         triangle[0] = PointF(tx, y);
         triangle[1] = PointF(tx, y + h);
         triangle[2] = PointF(tx + h, y + h / 2);
@@ -166,7 +176,9 @@ void LoopMarker::paint(muse::draw::Painter* painter)
     case LoopBoundaryType::Unknown: return;
     }
 
-    painter->setPen(Pen(color, 2.0, PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin));
+    const double lineWidth = 0.15 * spatium;
+
+    painter->setPen(Pen(color, lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin));
     painter->drawLine(x, y, x, m_rect.bottom());
     painter->setBrush(color);
     painter->drawConvexPolygon(triangle);
