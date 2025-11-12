@@ -60,7 +60,7 @@ elseif(OS_IS_LIN OR OS_IS_FBSD)
         ${CMAKE_CURRENT_LIST_DIR}/platform/lin/audiodeviceslistener.cpp
         ${CMAKE_CURRENT_LIST_DIR}/platform/lin/audiodeviceslistener.h
     )
-    if (MUSE_PIPEWIRE_AUDIO_DRIVER)
+    if (MUSE_MODULE_AUDIO_PIPEWIRE)
         # this is conditionally added to module source if
         # pipewire is actually found on the system
         set(PW_AUDIO_DRIVER_SRC

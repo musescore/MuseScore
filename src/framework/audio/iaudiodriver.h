@@ -50,6 +50,8 @@ public:
         Format format;                // Audio data format
         Callback callback;            // Callback that feeds the audio device
         void* userdata;               // Userdata passed to callback (ignored for NULL callbacks).
+
+        inline bool isValid() const { return output.isValid() && callback != nullptr; }
     };
 
     virtual void init() = 0;
