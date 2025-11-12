@@ -1412,10 +1412,15 @@ void FinaleParser::importEntryAdjustments()
         }
 
         // Ensure middle staff line distance is respected
+        outermost = getOutermost();
+        if (up ? outermost > middleLinePos : outermost < middleLinePos) {
+            const double diff = middleLinePos - outermost;
+            preferredStart += diff;
+            preferredEnd += diff;
+        }
         innermost = getInnermost();
-        const double middleLineLimit = beamStaffY + beam->spatium() * beam->staffType()->lineDistance().val()
-                                       /// @todo Middle line (2.0) seems to be in a hard-coded location, but location may differ by staff type in musescore
-                                       * std::max(2.0 + (up ? -1.0 : 1.0) * doubleFromEvpu(musxOptions().beamOptions->maxFromMiddle), 1.5);
+        const double middleLineLimit = middleLinePos + beam->spatium() * beam->staffType()->lineDistance().val()
+                                       * doubleFromEvpu(musxOptions().beamOptions->maxFromMiddle) * (up ? 1.0 : -1.0);
         if (up ? (middleLineLimit < innermost) : (middleLineLimit > innermost)) {
             const double middleLineAdjust = middleLineLimit - innermost;
             preferredStart += middleLineAdjust;
