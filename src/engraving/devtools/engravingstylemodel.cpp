@@ -52,17 +52,17 @@ QVariant EngravingStyleModel::data(const QModelIndex& index, int role) const
 
     const StyleDef::StyleValue& t = StyleDef::styleValues[static_cast<size_t>(index.row())];
     switch (role) {
-    case TitleRole: return QString::fromStdString(t.name().ascii());
-    case KeyRole:   return QVariant(t.idx());
+    case TitleRole: return QString::fromStdString(t.xmlName.ascii());
+    case KeyRole:   return QVariant(static_cast<int>(t.idx()));
     case TypeRole:  return typeToString(t.valueType());
     case ValueRole:
         if (INotationPtr notation = context()->currentNotation()) {
-            return notation->style()->styleValue(t.styleIdx()).toQVariant();
+            return notation->style()->styleValue(t.sid).toQVariant();
         }
         break;
     case isDefaultRole:
         if (INotationPtr notation = context()->currentNotation()) {
-            return QVariant(notation->style()->styleValue(t.styleIdx()) == notation->style()->defaultStyleValue(t.styleIdx()));
+            return QVariant(notation->style()->styleValue(t.sid) == notation->style()->defaultStyleValue(t.sid));
         }
         break;
     }
@@ -105,7 +105,7 @@ void EngravingStyleModel::changeVal(int idx, QVariant newVal)
     LOGD() << "changeVal index: " << idx << ", newVal: " << newVal;
     context()->currentNotation()->undoStack()->prepareChanges(
         muse::TranslatableString::untranslatable("Edit style: set %1 to %2").arg(
-            TranslatableString::untranslatable(String(StyleDef::styleValues[static_cast<size_t>(idx)].name().ascii())),
+            TranslatableString::untranslatable(String(StyleDef::styleValues[static_cast<size_t>(idx)].xmlName.ascii())),
             TranslatableString::untranslatable(String::fromQString(newVal.value<QString>()))
             ));
 

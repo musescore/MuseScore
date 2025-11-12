@@ -2045,22 +2045,15 @@ typedef std::vector<StyledProperty> ElementStyle;
 struct StyleDef
 {
 public:
-    struct StyleValue {
-    private:
-        Sid _idx;
-        muse::AsciiStringView _name;         // xml name for read()/write()
-        PropertyValue _defaultValue;
+    struct StyleValue
+    {
+        Sid sid { Sid::NOSTYLE };
+        muse::AsciiStringView xmlName;
+        PropertyValue defaultValue;
 
-    public:
-        StyleValue(Sid idx, muse::AsciiStringView name, PropertyValue defaultValue)
-            : _idx(idx), _name(name), _defaultValue(defaultValue)
-        {}
+        inline size_t idx() const { return size_t(sid); }
 
-        Sid  styleIdx() const { return _idx; }
-        int idx() const { return int(_idx); }
-        const muse::AsciiStringView& name() const { return _name; }
-        P_TYPE valueType() const { return _defaultValue.type(); }
-        const PropertyValue& defaultValue() const { return _defaultValue; }
+        inline P_TYPE valueType() const { return defaultValue.type(); }
     };
 
     static const std::array<StyleValue, size_t(Sid::STYLES)> styleValues;

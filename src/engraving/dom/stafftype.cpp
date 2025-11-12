@@ -524,7 +524,7 @@ void StaffType::setDurationFontName(const String& name)
 
 double StaffType::defaultSpatium() const
 {
-    return StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue().toDouble();
+    return StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue.toDouble();
 }
 
 double StaffType::durationBoxH() const
