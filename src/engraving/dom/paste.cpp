@@ -486,7 +486,7 @@ void Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
             }
         }
 
-        // TODO: select droppedElements
+        select(droppedElements);
         return;
     }
 
@@ -568,7 +568,7 @@ void Score::cmdPasteSymbol(muse::ByteArray& data, MuseScoreView* view, Fraction 
         }
     }
 
-    // TODO: select droppedElements
+    select(droppedElements);
 }
 
 void Score::cmdPasteStaffList(muse::ByteArray& data, Fraction scale)
