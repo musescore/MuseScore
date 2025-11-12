@@ -63,6 +63,8 @@ void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundPreset& value);
 
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundTrackType& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackType& value);
+void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSampleFormat& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSampleFormat& value);
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundTrackFormat& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackFormat& value);
 
@@ -259,14 +261,26 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackTyp
     value = static_cast<muse::audio::SoundTrackType>(type);
 }
 
+inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSampleFormat& value)
+{
+    p.process(static_cast<int>(value));
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSampleFormat& value)
+{
+    int format = 0;
+    p.process(format);
+    value = static_cast<muse::audio::AudioSampleFormat>(format);
+}
+
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundTrackFormat& value)
 {
-    p.process(value.type, value.outputSpec, value.bitRate);
+    p.process(value.type, value.outputSpec, value.sampleFormat, value.bitRate);
 }
 
 inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackFormat& value)
 {
-    p.process(value.type, value.outputSpec, value.bitRate);
+    p.process(value.type, value.outputSpec, value.sampleFormat, value.bitRate);
 }
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSignalVal& value)

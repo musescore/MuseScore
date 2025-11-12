@@ -38,6 +38,7 @@ Ret OggWriter::write(notation::INotationPtr notation, io::IODevice& destinationD
             configuration()->exportBufferSize(),
             2 /* audioChannelsNumber */
         },
+        AudioSampleFormat::Undefined,
         128 /* bitRate */
     };
 

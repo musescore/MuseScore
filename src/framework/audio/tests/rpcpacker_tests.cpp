@@ -258,11 +258,13 @@ TEST_F(Audio_RpcPackerTests, SoundTrackFormat)
     origin.outputSpec.samplesPerChannel = 256;
     origin.outputSpec.audioChannelCount = 2;
     origin.bitRate = 196;
+    origin.sampleFormat = AudioSampleFormat::Float32;
 
     KNOWN_FIELDS(origin,
                  origin.type,
                  origin.outputSpec,
-                 origin.bitRate);
+                 origin.bitRate,
+                 origin.sampleFormat);
 
     ByteArray data = rpc::RpcPacker::pack(origin);
 
