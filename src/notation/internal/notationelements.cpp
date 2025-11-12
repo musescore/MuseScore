@@ -156,12 +156,12 @@ std::vector<EngravingItem*> NotationElements::allScoreElements() const
 
 std::vector<EngravingItem*> NotationElements::filterElements(const FilterElementsOptions* elementsOptions) const
 {
-    ElementPattern* pattern = constructElementPattern(elementsOptions);
+    ElementPattern pattern = constructElementPattern(elementsOptions);
 
-    score()->scanElements([&](EngravingItem* item) { mu::engraving::Score::collectMatch(pattern, item); });
+    score()->scanElements([&](EngravingItem* item) { mu::engraving::Score::collectMatch(&pattern, item); });
 
     std::vector<EngravingItem*> result;
-    for (EngravingItem* element: pattern->el) {
+    for (EngravingItem* element: pattern.el) {
         result.push_back(element);
     }
 
@@ -170,12 +170,12 @@ std::vector<EngravingItem*> NotationElements::filterElements(const FilterElement
 
 std::vector<EngravingItem*> NotationElements::filterNotes(const FilterNotesOptions* notesOptions) const
 {
-    mu::engraving::NotePattern* pattern = constructNotePattern(notesOptions);
+    mu::engraving::NotePattern pattern = constructNotePattern(notesOptions);
 
-    score()->scanElements([&](EngravingItem* item) { mu::engraving::Score::collectNoteMatch(pattern, item); });
+    score()->scanElements([&](EngravingItem* item) { mu::engraving::Score::collectNoteMatch(&pattern, item); });
 
     std::vector<EngravingItem*> result;
-    for (EngravingItem* element: pattern->el) {
+    for (EngravingItem* element: pattern.el) {
         result.push_back(element);
     }
 
@@ -191,39 +191,39 @@ mu::engraving::Score* NotationElements::score() const
     return m_getScore->score();
 }
 
-ElementPattern* NotationElements::constructElementPattern(const FilterElementsOptions* elementOptions) const
+ElementPattern NotationElements::constructElementPattern(const FilterElementsOptions* elementOptions) const
 {
-    mu::engraving::ElementPattern* pattern = new mu::engraving::ElementPattern();
-    pattern->type = static_cast<int>(elementOptions->elementType);
-    pattern->subtype = elementOptions->subtype;
-    pattern->subtypeValid = elementOptions->bySubtype;
-    pattern->staffStart = elementOptions->staffStart;
-    pattern->staffEnd = elementOptions->staffEnd;
-    pattern->voice   = elementOptions->voice;
-    pattern->system  = elementOptions->system;
-    pattern->durationTicks = elementOptions->durationTicks;
-    pattern->beat = elementOptions->beat;
-    pattern->measure = elementOptions->measure;
+    mu::engraving::ElementPattern pattern;
+    pattern.type = static_cast<int>(elementOptions->elementType);
+    pattern.subtype = elementOptions->subtype;
+    pattern.subtypeValid = elementOptions->bySubtype;
+    pattern.staffStart = elementOptions->staffStart;
+    pattern.staffEnd = elementOptions->staffEnd;
+    pattern.voice   = elementOptions->voice;
+    pattern.system  = elementOptions->system;
+    pattern.durationTicks = elementOptions->durationTicks;
+    pattern.beat = elementOptions->beat;
+    pattern.measure = elementOptions->measure;
 
     return pattern;
 }
 
-mu::engraving::NotePattern* NotationElements::constructNotePattern(const FilterNotesOptions* notesOptions) const
+mu::engraving::NotePattern NotationElements::constructNotePattern(const FilterNotesOptions* notesOptions) const
 {
-    mu::engraving::NotePattern* pattern = new mu::engraving::NotePattern();
-    pattern->pitch = notesOptions->pitch;
-    pattern->string = notesOptions->string;
-    pattern->tpc = notesOptions->tpc;
-    pattern->notehead = notesOptions->notehead;
-    pattern->durationType = notesOptions->durationType;
-    pattern->durationTicks = notesOptions->durationTicks;
-    pattern->type = notesOptions->noteType;
-    pattern->staffStart = notesOptions->staffStart;
-    pattern->staffEnd = notesOptions->staffEnd;
-    pattern->voice = notesOptions->voice;
-    pattern->system = notesOptions->system;
-    pattern->beat = notesOptions->beat;
-    pattern->measure = notesOptions->measure;
+    mu::engraving::NotePattern pattern;
+    pattern.pitch = notesOptions->pitch;
+    pattern.string = notesOptions->string;
+    pattern.tpc = notesOptions->tpc;
+    pattern.notehead = notesOptions->notehead;
+    pattern.durationType = notesOptions->durationType;
+    pattern.durationTicks = notesOptions->durationTicks;
+    pattern.type = notesOptions->noteType;
+    pattern.staffStart = notesOptions->staffStart;
+    pattern.staffEnd = notesOptions->staffEnd;
+    pattern.voice = notesOptions->voice;
+    pattern.system = notesOptions->system;
+    pattern.beat = notesOptions->beat;
+    pattern.measure = notesOptions->measure;
 
     return pattern;
 }

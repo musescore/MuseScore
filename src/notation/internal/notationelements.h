@@ -51,8 +51,8 @@ private:
     std::vector<EngravingItem*> filterElements(const FilterElementsOptions* elementsOptions) const;
     std::vector<EngravingItem*> filterNotes(const FilterNotesOptions* notesOptions) const;
 
-    ElementPattern* constructElementPattern(const FilterElementsOptions* elementsOptions) const;
-    mu::engraving::NotePattern* constructNotePattern(const FilterNotesOptions* notesOptions) const;
+    ElementPattern constructElementPattern(const FilterElementsOptions* elementsOptions) const;
+    mu::engraving::NotePattern constructNotePattern(const FilterNotesOptions* notesOptions) const;
 
     IGetScore* m_getScore = nullptr;
 };
