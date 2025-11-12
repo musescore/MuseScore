@@ -18,7 +18,7 @@ manifest.json
     "ui_context": "Any",
     "apiversion": 1,
 
-    "main": "main.js"
+    "path": "main.js"
 }
 ```
 
@@ -39,7 +39,7 @@ manifest.json
 * apiversion (optional)- required api version
   * 1 - api of old plugins, deprecated, don't use this for new extensions
   * 2 (default) - actual api   
-* main (required) - Main entry point, .js or .qml file
+* path (required) - path to main entry point, .js or .qml file
 
 ## Categories 
 

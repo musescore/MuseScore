@@ -1,0 +1,8 @@
+{
+    "uri": "musescore://extensions/dev/quickstart",
+    "type": "macros",
+    "title": "Quick start",
+    "description": "This is a development extension for API research.",
+
+    "path": "main.js"
+}
