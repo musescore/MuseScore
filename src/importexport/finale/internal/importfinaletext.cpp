@@ -1736,6 +1736,7 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
                                     fingerings.at(string) = cell->fingerNum;
                                 }
                             }
+                            setAndStyleProperty(fret, Pid::FRET_FINGERING, fingerings);
                             for (const std::shared_ptr<details::FretboardDiagram::Barre>& barre : fretDiagram->barres) {
                                 fret->setBarre(barre->startString - 1, barre->endString - 1, barre->fret);
                             }
