@@ -40,10 +40,15 @@ if (OS_IS_WIN)
 
     if (MUSE_MODULE_AUDIO_ASIO)
 
-        add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/platform/win/asio)
+        add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/platform/win/asio/asiosdk)
+
+        set(AUDIO_DRIVER_SRC ${AUDIO_DRIVER_SRC}
+            ${CMAKE_CURRENT_LIST_DIR}/platform/win/asio/asioaudiodriver.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/platform/win/asio/asioaudiodriver.h
+        )
 
         set(AUDIO_DRIVER_LINK
-            asiodriver
+            asiosdk
         )
 
     endif()

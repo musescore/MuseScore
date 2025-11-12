@@ -56,13 +56,13 @@ struct WasapiData {
     winrt::com_ptr<winrt::WasapiAudioClient> wasapiClient;
 };
 
-static WasapiData s_data;
+static WasapiData s_wdata;
 
 WasapiAudioDriver::WasapiAudioDriver()
 {
-    s_data.clientStartedEvent = CreateEvent(NULL, FALSE, FALSE, L"WASAPI_Client_Started");
-    s_data.clientFailedToStartEvent = CreateEvent(NULL, FALSE, FALSE, L"WASAPI_Client_Failed_To_Start");
-    s_data.clientStoppedEvent = CreateEvent(NULL, FALSE, FALSE, L"WASAPI_Client_Stopped");
+    s_wdata.clientStartedEvent = CreateEvent(NULL, FALSE, FALSE, L"WASAPI_Client_Started");
+    s_wdata.clientFailedToStartEvent = CreateEvent(NULL, FALSE, FALSE, L"WASAPI_Client_Failed_To_Start");
+    s_wdata.clientStoppedEvent = CreateEvent(NULL, FALSE, FALSE, L"WASAPI_Client_Stopped");
 
     m_devicesListener = std::make_unique<AudioDevicesListener>();
     m_devicesListener->devicesChanged().onNotify(this, [this]() {
@@ -70,8 +70,8 @@ WasapiAudioDriver::WasapiAudioDriver()
     });
 
     m_devicesListener->defaultDeviceChanged().onNotify(this, [this]() {
-        if (s_data.wasapiClient.get()) {
-            s_data.wasapiClient->setFallbackDevice(to_hstring<std::string>(this->defaultDeviceId()));
+        if (s_wdata.wasapiClient.get()) {
+            s_wdata.wasapiClient->setFallbackDevice(to_hstring<std::string>(this->defaultDeviceId()));
         }
 
         if (m_deviceId == DEFAULT_DEVICE_ID) {
@@ -92,20 +92,20 @@ std::string WasapiAudioDriver::name() const
 
 bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
-    if (!s_data.wasapiClient.get()) {
-        s_data.wasapiClient = make_self<WasapiAudioClient>(s_data.clientStartedEvent,
-                                                           s_data.clientFailedToStartEvent,
-                                                           s_data.clientStoppedEvent);
+    if (!s_wdata.wasapiClient.get()) {
+        s_wdata.wasapiClient = make_self<WasapiAudioClient>(s_wdata.clientStartedEvent,
+                                                            s_wdata.clientFailedToStartEvent,
+                                                            s_wdata.clientStoppedEvent);
     }
 
     m_desiredSpec = spec;
 
-    s_data.wasapiClient->setBufferDuration(samplesToRefTime(spec.output.samplesPerChannel, spec.output.sampleRate));
+    s_wdata.wasapiClient->setBufferDuration(samplesToRefTime(spec.output.samplesPerChannel, spec.output.sampleRate));
 
-    bool lowLatencyModeRequired = spec.output.samplesPerChannel <= s_data.wasapiClient->lowLatencyUpperBound();
+    bool lowLatencyModeRequired = spec.output.samplesPerChannel <= s_wdata.wasapiClient->lowLatencyUpperBound();
 
-    s_data.wasapiClient->setLowLatency(lowLatencyModeRequired);
-    s_data.wasapiClient->setSampleRequestCallback(spec.callback);
+    s_wdata.wasapiClient->setLowLatency(lowLatencyModeRequired);
+    s_wdata.wasapiClient->setSampleRequestCallback(spec.callback);
 
     LOGI() << "WASAPI: trying to open the audio end-point with"
            << " the following sample rate - " << spec.output.sampleRate;
@@ -121,11 +121,11 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
         deviceId = to_hstring<std::string>(m_deviceId);
     }
 
-    s_data.wasapiClient->setFallbackDevice(defaultDeviceId);
-    s_data.wasapiClient->asyncInitializeAudioDevice(deviceId);
+    s_wdata.wasapiClient->setFallbackDevice(defaultDeviceId);
+    s_wdata.wasapiClient->asyncInitializeAudioDevice(deviceId);
 
     static constexpr DWORD handleCount = 2;
-    const HANDLE handles[handleCount] = { s_data.clientStartedEvent, s_data.clientFailedToStartEvent };
+    const HANDLE handles[handleCount] = { s_wdata.clientStartedEvent, s_wdata.clientFailedToStartEvent };
 
     DWORD waitResult = WaitForMultipleObjects(handleCount, handles, false, INFINITE);
     if (waitResult != WAIT_OBJECT_0) {
@@ -135,7 +135,7 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
         LOGE() << "WASAPI: error open the device " << to_string(deviceId) << ", trying to use closest supported format";
 
         static constexpr bool USE_CLOSEST_SUPPORTED_FORMAT = true;
-        s_data.wasapiClient->asyncInitializeAudioDevice(deviceId, USE_CLOSEST_SUPPORTED_FORMAT);
+        s_wdata.wasapiClient->asyncInitializeAudioDevice(deviceId, USE_CLOSEST_SUPPORTED_FORMAT);
 
         waitResult = WaitForMultipleObjects(handleCount, handles, false, INFINITE);
         if (waitResult != WAIT_OBJECT_0) {
@@ -144,7 +144,7 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
     }
 
     m_activeSpec = m_desiredSpec;
-    m_activeSpec.output.sampleRate = s_data.wasapiClient->sampleRate();
+    m_activeSpec.output.sampleRate = s_wdata.wasapiClient->sampleRate();
     m_activeSpec.output.samplesPerChannel = std::max(m_activeSpec.output.samplesPerChannel,
                                                      static_cast<samples_t>(minSupportedBufferSize()));
     *activeSpec = m_activeSpec;
@@ -156,14 +156,14 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
 void WasapiAudioDriver::close()
 {
-    if (!s_data.wasapiClient.get()) {
+    if (!s_wdata.wasapiClient.get()) {
         return;
     }
 
-    s_data.wasapiClient->stopPlaybackAsync();
+    s_wdata.wasapiClient->stopPlaybackAsync();
 
-    WaitForSingleObject(s_data.clientStoppedEvent, INFINITE);
-    s_data.wasapiClient = nullptr;
+    WaitForSingleObject(s_wdata.clientStoppedEvent, INFINITE);
+    s_wdata.wasapiClient = nullptr;
 
     m_isOpened = false;
 }
@@ -373,11 +373,11 @@ void WasapiAudioDriver::updateAvailableOutputDevices()
 
 unsigned int WasapiAudioDriver::minSupportedBufferSize() const
 {
-    IF_ASSERT_FAILED(s_data.wasapiClient.get()) {
+    IF_ASSERT_FAILED(s_wdata.wasapiClient.get()) {
         return MINIMUM_BUFFER_SIZE;
     }
 
-    unsigned int minPeriod = s_data.wasapiClient->minPeriodInFrames();
+    unsigned int minPeriod = s_wdata.wasapiClient->minPeriodInFrames();
     unsigned int closestBufferSize = MINIMUM_BUFFER_SIZE;
 
     while (closestBufferSize < minPeriod) {

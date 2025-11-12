@@ -1,5 +1,5 @@
 
-declare_thirdparty_module(asiodriver)
+declare_thirdparty_module(asiosdk)
 
 if(MUSE_MODULE_AUDIO_ASIO_SDK_PATH)
     set(ASIO_SDK_PATH ${MUSE_MODULE_AUDIO_ASIO_SDK_PATH})
@@ -28,23 +28,10 @@ else()
 
 endif()
 
-set(ASIO_SDK_SRC
-    ${ASIO_SDK_PATH}/ASIOSDK/common/asio.cpp
-    ${ASIO_SDK_PATH}/ASIOSDK/common/asio.h
-    ${ASIO_SDK_PATH}/ASIOSDK/host/asiodrivers.cpp
-    ${ASIO_SDK_PATH}/ASIOSDK/host/asiodrivers.h
-    ${ASIO_SDK_PATH}/ASIOSDK/host/pc/asiolist.cpp
-    ${ASIO_SDK_PATH}/ASIOSDK/host/pc/asiolist.h
-)
-
-set(ASIODRIVER_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/asioaudiodriver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/asioaudiodriver.h
-)
-
 set(MODULE_SRC
-    ${ASIO_SDK_SRC}
-    ${ASIODRIVER_SRC}
+    ${CMAKE_CURRENT_LIST_DIR}/asiosdk_asio.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/asiosdk_asiolist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/asiosdk_asiodrivers.cpp
     )
 
 set(MODULE_INCLUDE
@@ -54,18 +41,9 @@ set(MODULE_INCLUDE
     ${ASIO_SDK_PATH}/ASIOSDK/host/pc
     )
 
-set(MODULE_DEF_PRIVATE
-    -DIEEE754_64FLOAT
-    -DNATIVE_INT64
-
-    -DNO_QT_SUPPORT
-)
-
 set(MODULE_USE_UNITY OFF)
 
-# ASIO SDK is written without UNICODE support (it uses variables like char*).
-# Define UNICODE is returned at the end of adding the audio module.
-remove_definitions(-DUNICODE)
-remove_definitions(-DKORS_LOGGER_QT_SUPPORT)
-
 setup_module()
+
+# Silence warnings from SDK
+target_compile_options(asiosdk PRIVATE /wd4267)
