@@ -862,10 +862,10 @@ void PageLayout::updateSystemDivider(LayoutContext& ctx, System* system, System*
     } else {
         xDefault = systemBBox.right() - (ctx.conf().styleB(Sid::dividerRightAlignToSystemBarline) ? 0.5 : 1.0) * ldata->bbox().width();
     }
-    double xPos = xDefault + spatium * (left ? ctx.conf().styleD(Sid::dividerLeftX) : ctx.conf().styleD(Sid::dividerRightX));
+    double xPos = xDefault + (left ? ctx.conf().styleS(Sid::dividerLeftX) : ctx.conf().styleS(Sid::dividerRightX)).toMM(spatium);
 
     double yInnerPos = -ldata->bbox().top() - 0.5 * ldata->bbox().height()
-                       + spatium * (left ? ctx.conf().styleD(Sid::dividerLeftY) : ctx.conf().styleD(Sid::dividerRightY));
+                       + (left ? ctx.conf().styleS(Sid::dividerLeftY) : ctx.conf().styleS(Sid::dividerRightY)).toMM(spatium);
 
     SysStaff* lastVisibleOfThis = system->staff(system->lastVisibleStaff());
     double bottomOfThisSystem = lastVisibleOfThis->bbox().bottom();
