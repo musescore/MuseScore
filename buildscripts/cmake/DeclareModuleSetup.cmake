@@ -28,6 +28,7 @@
 # set(MODULE_INCLUDE ...)                     - set include (by default see below include_directories)
 # set(MODULE_INCLUDE_PRIVATE ...)             - set private include
 # set(MODULE_DEF ...)                         - set definitions
+# set(MODULE_DEF_PRIVATE ...)                 - set private definitions
 # set(MODULE_SRC ...)                         - set sources and headers files
 # set(MODULE_LINK ...)                        - set libraries for link
 # set(MODULE_LINK_PUBLIC ...)                 - set libraries for link and transitive link
@@ -192,6 +193,10 @@ macro(setup_module)
     target_compile_definitions(${MODULE} PUBLIC
         ${MODULE_DEF}
         ${MODULE}_QML_IMPORT="${MODULE_QML_IMPORT}"
+    )
+
+    target_compile_definitions(${MODULE} PRIVATE
+        ${MODULE_DEF_PRIVATE}
     )
 
     if (MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE AND MODULE_USE_COVERAGE)
