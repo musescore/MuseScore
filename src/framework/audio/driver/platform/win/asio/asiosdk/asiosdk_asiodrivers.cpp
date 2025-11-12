@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,39 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
 
-#include <cmath>
-
-#include "number.h"
-
-namespace muse {
-[[nodiscard]] inline float db_to_linear(const float v)
-{
-    return std::pow(10.0f, v / 20.0f);
-}
-
-[[nodiscard]] inline float linear_to_db(const float v)
-{
-    return 20.0f * std::log10(std::abs(v));
-}
-
-//! NOTE Just linear ratio
-using ratio_t = number_t<float>;
-
-//! NOTE logarithmic ratio (decibel)
-using db_t = number_t<float>;
-
-inline ratio_t db_to_linear(db_t v)
-{
-    return muse::db_to_linear(v.raw());
-}
-
-inline db_t linear_to_db(ratio_t v)
-{
-    return muse::linear_to_db(v.raw());
-}
-
-//! NOTE Percent
-using percent_t = number_t<float>;
-}
+#undef UNICODE
+#include "ASIOSDK/host/asiodrivers.cpp"

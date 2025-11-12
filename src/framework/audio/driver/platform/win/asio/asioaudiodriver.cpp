@@ -21,6 +21,8 @@
  */
 #include "asioaudiodriver.h"
 
+#undef UNICODE
+#include "ASIOSDK/common/asiosys.h"
 #include "ASIOSDK/common/asio.h"
 #include "ASIOSDK/host/asiodrivers.h"
 
@@ -29,7 +31,7 @@
 using namespace muse;
 using namespace muse::audio;
 
-struct Data {
+struct AsioData {
     AsioDrivers drivers;
 
     // ASIOInit()
@@ -64,7 +66,7 @@ struct Data {
     ASIOCallbacks callbacks;
 };
 
-static Data s_data;
+static AsioData s_adata;
 
 AsioAudioDriver::AsioAudioDriver()
 {
@@ -106,7 +108,7 @@ constexpr uint64_t swap64(uint64_t val)
 
 static void s_bufferSwitch(long index, ASIOBool /*processNow*/)
 {
-    const IAudioDriver::Spec& active = s_data.activeSpec;
+    const IAudioDriver::Spec& active = s_adata.activeSpec;
 
     const size_t channels = active.output.audioChannelCount;
     const size_t procSamplesTotal = active.output.audioChannelCount * active.output.samplesPerChannel;
@@ -129,19 +131,19 @@ static void s_bufferSwitch(long index, ASIOBool /*processNow*/)
     for (size_t s = 0; s < procSamplesTotal; s += channels) {
         for (size_t c = 0; c < channels; c++) {
             const float sample = proc_buf.at(s + c);
-            void* out = s_data.bufferInfos[c].buffers[index];
+            void* out = s_adata.bufferInfos[c].buffers[index];
 
-            const ASIOSampleType type = s_data.channelInfos[c].type;
+            const ASIOSampleType type = s_adata.channelInfos[c].type;
             switch (type) {
             // MSB
             case ASIOSTInt16MSB: {
                 int16_t* out16 = (int16_t*)out;
-                int16_t val16LSB = std::clamp(sample, -1.0f, 1.0f) * MAX_S16;
+                int16_t val16LSB = static_cast<int16_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S16);
                 out16[outIndex] = swap16(val16LSB); // to big-endian
             } break;
             case ASIOSTInt24MSB: {
                 uint8_t* out8 = (uint8_t*)out;
-                int32_t val = std::clamp(sample, -1.0f, 1.0f) * MAX_S24;
+                int32_t val = static_cast<int32_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S24);
                 size_t out8Index = outIndex * 3; // 3 bytes
                 out8[out8Index] = (val >> 16) & 0xFF;
                 out8[out8Index] = (val >> 8) & 0xFF;
@@ -149,7 +151,7 @@ static void s_bufferSwitch(long index, ASIOBool /*processNow*/)
             } break;
             case ASIOSTInt32MSB: {
                 int32_t* out32 = (int32_t*)out;
-                int32_t val32LSB = std::clamp(sample, -1.0f, 1.0f) * MAX_S32;
+                int32_t val32LSB = static_cast<int32_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S32);
                 out32[outIndex] = swap32(val32LSB); // to big-endian
             } break;
             case ASIOSTFloat32MSB: {
@@ -178,33 +180,33 @@ static void s_bufferSwitch(long index, ASIOBool /*processNow*/)
             // MSB 32 with alignment
             case ASIOSTInt32MSB16: {
                 int32_t* out32 = (int32_t*)out;
-                int32_t val32LSB = std::clamp(sample, -1.0f, 1.0f) * MAX_S16;
+                int32_t val32LSB = static_cast<int32_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S16);
                 out32[outIndex] = swap32(val32LSB << 16); // 16 alignment and to big-endian
             } break;
             case ASIOSTInt32MSB18: {
                 int32_t* out32 = (int32_t*)out;
-                int32_t val32LSB = std::clamp(sample, -1.0f, 1.0f) * MAX_S18;
+                int32_t val32LSB = static_cast<int32_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S18);
                 out32[outIndex] = swap32(val32LSB << 14); // 18 alignment and to big-endian
             } break;
             case ASIOSTInt32MSB20: {
                 int32_t* out32 = (int32_t*)out;
-                int32_t val32LSB = std::clamp(sample, -1.0f, 1.0f) * MAX_S20;
+                int32_t val32LSB = static_cast<int32_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S20);
                 out32[outIndex] = swap32(val32LSB << 12); // 20 alignment and to big-endian
             } break;
             case ASIOSTInt32MSB24: {
                 int32_t* out32 = (int32_t*)out;
-                int32_t val32LSB = std::clamp(sample, -1.0f, 1.0f) * MAX_S24;
+                int32_t val32LSB = static_cast<int32_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S24);
                 out32[outIndex] = swap32(val32LSB << 8); // 24 alignment and to big-endian
             } break;
 
             // LSB
             case ASIOSTInt16LSB: {
                 int16_t* out16 = (int16_t*)out;
-                out16[outIndex] = std::clamp(sample, -1.0f, 1.0f) * MAX_S16;
+                out16[outIndex] = static_cast<int16_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S16);
             } break;
             case ASIOSTInt24LSB: {
                 uint8_t* out8 = (uint8_t*)out;
-                int32_t val = std::clamp(sample, -1.0f, 1.0f) * MAX_S24;
+                int32_t val = static_cast<int32_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S24);
                 size_t out8Index = outIndex * 3; // 3 bytes
                 out8[out8Index]=(val) & 0xff;
                 out8[out8Index + 1]=(val >> 8) & 0xff;
@@ -212,7 +214,7 @@ static void s_bufferSwitch(long index, ASIOBool /*processNow*/)
             } break;
             case ASIOSTInt32LSB: {
                 int32_t* out32 = (int32_t*)out;
-                out32[outIndex] = std::clamp(sample, -1.0f, 1.0f) * MAX_S32;
+                out32[outIndex] = static_cast<int32_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S32);
             } break;
             case ASIOSTFloat32LSB: {
                 float* outF32 = (float*)out;
@@ -226,22 +228,22 @@ static void s_bufferSwitch(long index, ASIOBool /*processNow*/)
             // LSB 32 with alignment
             case ASIOSTInt32LSB16: {
                 int32_t* out32 = (int32_t*)out;
-                int32_t val = std::clamp(sample, -1.0f, 1.0f) * MAX_S16;
+                int32_t val = static_cast<int32_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S16);
                 out32[outIndex] = val & 0x0000FFFF;
             } break;
             case ASIOSTInt32LSB18: {
                 int32_t* out32 = (int32_t*)out;
-                int32_t val = std::clamp(sample, -1.0f, 1.0f) * MAX_S18;
+                int32_t val = static_cast<int32_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S18);
                 out32[outIndex] = val & 0x0003FFFF;
             } break;
             case ASIOSTInt32LSB20: {
                 int32_t* out32 = (int32_t*)out;
-                int32_t val = std::clamp(sample, -1.0f, 1.0f) * MAX_S20;
+                int32_t val = static_cast<int32_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S20);
                 out32[outIndex] = val & 0x000FFFFF;
             } break;
             case ASIOSTInt32LSB24: {
                 int32_t* out32 = (int32_t*)out;
-                int32_t val = std::clamp(sample, -1.0f, 1.0f) * MAX_S20;
+                int32_t val = static_cast<int32_t>(std::clamp(sample, -1.0f, 1.0f) * MAX_S20);
                 out32[outIndex] = val & 0x00FFFFFF;
             } break;
             default:
@@ -254,7 +256,7 @@ static void s_bufferSwitch(long index, ASIOBool /*processNow*/)
     }
 
     // finally if the driver supports the ASIOOutputReady() optimization, do it here, all data are in place
-    if (s_data.postOutput) {
+    if (s_adata.postOutput) {
         ASIOOutputReady();
     }
 }
@@ -340,41 +342,41 @@ static ASIOError create_asio_buffers(long bufferSize, long outputChannels, long 
 {
     // Create buffer info array
     long totalChannels = inputChannels + outputChannels;
-    s_data.bufferInfos = new ASIOBufferInfo[totalChannels];
+    s_adata.bufferInfos = new ASIOBufferInfo[totalChannels];
 
     // Setup output buffers
     for (long i = 0; i < outputChannels; i++) {
-        s_data.bufferInfos[i].isInput = ASIOFalse;
-        s_data.bufferInfos[i].channelNum = i;
-        s_data.bufferInfos[i].buffers[0] = s_data.bufferInfos[i].buffers[1] = nullptr;
+        s_adata.bufferInfos[i].isInput = ASIOFalse;
+        s_adata.bufferInfos[i].channelNum = i;
+        s_adata.bufferInfos[i].buffers[0] = s_adata.bufferInfos[i].buffers[1] = nullptr;
     }
 
     // Setup input buffers
     for (long i = 0; i < inputChannels; i++) {
-        s_data.bufferInfos[outputChannels + i].isInput = ASIOTrue;
-        s_data.bufferInfos[outputChannels + i].channelNum = i;
-        s_data.bufferInfos[outputChannels + i].buffers[0] = s_data.bufferInfos[outputChannels + i].buffers[1] = nullptr;
+        s_adata.bufferInfos[outputChannels + i].isInput = ASIOTrue;
+        s_adata.bufferInfos[outputChannels + i].channelNum = i;
+        s_adata.bufferInfos[outputChannels + i].buffers[0] = s_adata.bufferInfos[outputChannels + i].buffers[1] = nullptr;
     }
 
     // Create buffers
-    ASIOError result = ASIOCreateBuffers(s_data.bufferInfos, totalChannels, bufferSize, &s_data.callbacks);
+    ASIOError result = ASIOCreateBuffers(s_adata.bufferInfos, totalChannels, bufferSize, &s_adata.callbacks);
     if (result != ASE_OK) {
         LOGE() << "failed create buffers";
-        delete[] s_data.bufferInfos;
-        s_data.bufferInfos = nullptr;
+        delete[] s_adata.bufferInfos;
+        s_adata.bufferInfos = nullptr;
         return result;
     }
 
     // Get channels info
-    s_data.channelInfos = new ASIOChannelInfo[totalChannels];
+    s_adata.channelInfos = new ASIOChannelInfo[totalChannels];
     for (long i = 0; i < totalChannels; i++) {
-        s_data.channelInfos[i].channel = s_data.bufferInfos[i].channelNum;
-        s_data.channelInfos[i].isInput = s_data.bufferInfos[i].isInput;
-        result = ASIOGetChannelInfo(&s_data.channelInfos[i]);
+        s_adata.channelInfos[i].channel = s_adata.bufferInfos[i].channelNum;
+        s_adata.channelInfos[i].isInput = s_adata.bufferInfos[i].isInput;
+        result = ASIOGetChannelInfo(&s_adata.channelInfos[i]);
         if (result != ASE_OK) {
             LOGE() << "failed get channels info";
-            delete[] s_data.channelInfos;
-            s_data.channelInfos = nullptr;
+            delete[] s_adata.channelInfos;
+            s_adata.channelInfos = nullptr;
             return result;
         }
     }
@@ -398,24 +400,24 @@ bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
 bool AsioAudioDriver::doOpen(const AudioDeviceID& device, const Spec& spec, Spec* activeSpec)
 {
     const char* name = device.c_str();
-    bool ok = s_data.drivers.loadDriver(const_cast<char*>(name));
+    bool ok = s_adata.drivers.loadDriver(const_cast<char*>(name));
     if (!ok) {
         LOGE() << "failed load driver: " << name;
         return ok;
     }
 
-    ok = ASIOInit(&s_data.driverInfo) == ASE_OK;
+    ok = ASIOInit(&s_adata.driverInfo) == ASE_OK;
     if (!ok) {
-        LOGE() << "failed init driver: " << name << ", error: " << s_data.driverInfo.errorMessage;
+        LOGE() << "failed init driver: " << name << ", error: " << s_adata.driverInfo.errorMessage;
         return ok;
     }
 
-    LOGI() << "asioVersion: " << s_data.driverInfo.asioVersion
-           << " driverVersion: " << s_data.driverInfo.driverVersion
-           << " name: " << s_data.driverInfo.name;
+    LOGI() << "asioVersion: " << s_adata.driverInfo.asioVersion
+           << " driverVersion: " << s_adata.driverInfo.driverVersion
+           << " name: " << s_adata.driverInfo.name;
 
     // Get device metrics
-    Data::DeviceMetrics& metrics = s_data.deviceMetrics;
+    AsioData::DeviceMetrics& metrics = s_adata.deviceMetrics;
     ok =  ASIOGetChannels(&metrics.inputChannels, &metrics.outputChannels) == ASE_OK;
     if (!ok) {
         LOGE() << "failed get num of channels, driver: " << name;
@@ -444,44 +446,44 @@ bool AsioAudioDriver::doOpen(const AudioDeviceID& device, const Spec& spec, Spec
     }
 
     // Set active
-    s_data.activeSpec = spec;
-    OutputSpec& active = s_data.activeSpec.output;
+    s_adata.activeSpec = spec;
+    OutputSpec& active = s_adata.activeSpec.output;
     active.audioChannelCount = 2;
 
     active.samplesPerChannel = std::clamp(spec.output.samplesPerChannel,
                                           (samples_t)metrics.minSize,
                                           (samples_t)metrics.maxSize);
 
-    ok = ASIOSetSampleRate(spec.output.sampleRate) == ASE_OK;
+    ok = ASIOSetSampleRate(static_cast<double>(spec.output.sampleRate)) == ASE_OK;
     if (!ok) {
         LOGW() << "failed set sample rate: " << spec.output.sampleRate << ", driver: " << name;
     }
-    active.sampleRate = ok ? spec.output.sampleRate : metrics.sampleRate;
+    active.sampleRate = ok ? spec.output.sampleRate : static_cast<sample_rate_t>(metrics.sampleRate);
 
     LOGI() << "active spec"
            << " audioChannelCount: " << active.audioChannelCount
            << " samplesPerChannel: " << active.samplesPerChannel
            << " sampleRate: " << active.sampleRate;
 
-    m_activeSpecChanged.send(s_data.activeSpec);
+    m_activeSpecChanged.send(s_adata.activeSpec);
     if (activeSpec) {
-        *activeSpec = s_data.activeSpec;
+        *activeSpec = s_adata.activeSpec;
     }
 
     if (ASIOOutputReady() == ASE_OK) {
-        s_data.postOutput = true;
+        s_adata.postOutput = true;
     } else {
-        s_data.postOutput = false;
+        s_adata.postOutput = false;
     }
 
-    LOGI() << "ASIOOutputReady - " << (s_data.postOutput ? "Supported" : "Not supported");
+    LOGI() << "ASIOOutputReady - " << (s_adata.postOutput ? "Supported" : "Not supported");
 
-    s_data.callbacks.bufferSwitch = &s_bufferSwitch;
-    s_data.callbacks.bufferSwitchTimeInfo = s_bufferSwitchTimeInfo;
-    s_data.callbacks.sampleRateDidChange = &s_sampleRateChanged;
-    s_data.callbacks.asioMessage = &s_asioMessages;
+    s_adata.callbacks.bufferSwitch = &s_bufferSwitch;
+    s_adata.callbacks.bufferSwitchTimeInfo = s_bufferSwitchTimeInfo;
+    s_adata.callbacks.sampleRateDidChange = &s_sampleRateChanged;
+    s_adata.callbacks.asioMessage = &s_asioMessages;
 
-    ok = create_asio_buffers(active.samplesPerChannel, active.audioChannelCount) == ASE_OK;
+    ok = create_asio_buffers((long)active.samplesPerChannel, (long)active.audioChannelCount) == ASE_OK;
     if (!ok) {
         LOGE() << "failed create asio buffers, driver: " << name;
         return ok;
@@ -519,15 +521,15 @@ void AsioAudioDriver::close()
 
     ASIODisposeBuffers();
 
-    delete[] s_data.bufferInfos;
-    s_data.bufferInfos = nullptr;
-    delete[] s_data.channelInfos;
-    s_data.channelInfos = nullptr;
+    delete[] s_adata.bufferInfos;
+    s_adata.bufferInfos = nullptr;
+    delete[] s_adata.channelInfos;
+    s_adata.channelInfos = nullptr;
 
     // don't use
     // ASIOExit();
 
-    s_data.drivers.removeCurrentDriver();
+    s_adata.drivers.removeCurrentDriver();
 }
 
 bool AsioAudioDriver::isOpened() const
@@ -537,7 +539,7 @@ bool AsioAudioDriver::isOpened() const
 
 const AsioAudioDriver::Spec& AsioAudioDriver::activeSpec() const
 {
-    return s_data.activeSpec;
+    return s_adata.activeSpec;
 }
 
 async::Channel<AsioAudioDriver::Spec> AsioAudioDriver::activeSpecChanged() const
@@ -551,7 +553,7 @@ bool AsioAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
 
     if (isOpened()) {
         close();
-        Spec spec = s_data.activeSpec;
+        Spec spec = s_adata.activeSpec;
         spec.output.samplesPerChannel = bufferSize;
         result = open(spec, nullptr);
     }
@@ -574,7 +576,7 @@ bool AsioAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
 
     if (isOpened()) {
         close();
-        Spec spec = s_data.activeSpec;
+        Spec spec = s_adata.activeSpec;
         spec.output.sampleRate = sampleRate;
         result = open(spec, nullptr);
     }
@@ -605,11 +607,11 @@ std::vector<unsigned int> AsioAudioDriver::availableOutputDeviceBufferSizes() co
 
     std::vector<unsigned int> result;
 
-    samples_t n = s_data.deviceMetrics.maxSize;
-    samples_t min = s_data.deviceMetrics.minSize;
+    samples_t n = s_adata.deviceMetrics.maxSize;
+    samples_t min = s_adata.deviceMetrics.minSize;
 
     while (n >= min) {
-        result.push_back(n);
+        result.push_back(static_cast<unsigned int>(n));
         n /= 2;
     }
 
@@ -641,7 +643,7 @@ bool AsioAudioDriver::selectOutputDevice(const AudioDeviceID& id)
 
     if (isOpened()) {
         close();
-        Spec spec = s_data.activeSpec;
+        Spec spec = s_adata.activeSpec;
 
         //! NOTE We are trying to open a new device with the default value;
         //! it is not known what it was before.
@@ -675,7 +677,7 @@ AudioDeviceList AsioAudioDriver::availableOutputDevices() const
         pointers[i] = names[i];
     }
 
-    long count = s_data.drivers.getDriverNames(pointers, 16);
+    long count = s_adata.drivers.getDriverNames(pointers, 16);
 
     AudioDeviceList devices;
     devices.reserve(count);

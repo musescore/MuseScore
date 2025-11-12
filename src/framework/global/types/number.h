@@ -9,7 +9,7 @@
 
 namespace muse {
 // default
-inline constexpr double COMPARE_REAL_PREC(7);
+inline constexpr int COMPARE_REAL_PREC(7);
 
 inline constexpr double _pow_minus10(int prec)
 {
