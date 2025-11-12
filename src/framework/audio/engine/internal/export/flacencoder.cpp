@@ -66,11 +66,23 @@ bool FlacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, c
         m_progress.progress(current, total);
     });
 
+    int bitsPerSample = 0;
+    switch (m_format.sampleFormat) {
+    case AudioSampleFormat::Int16:
+        bitsPerSample = 16;
+        break;
+    case AudioSampleFormat::Int24:
+        bitsPerSample = 24;
+        break;
+    default:
+        return false;
+    }
+
     if (!m_flac->set_verify(true)
         || !m_flac->set_compression_level(0)
         || !m_flac->set_channels(m_format.outputSpec.audioChannelCount)
         || !m_flac->set_sample_rate(m_format.outputSpec.sampleRate)
-        || !m_flac->set_bits_per_sample(16)
+        || !m_flac->set_bits_per_sample(bitsPerSample)
         || !m_flac->set_total_samples_estimate(totalSamplesNumber)) {
         return false;
     }
@@ -107,18 +119,34 @@ size_t FlacEncoder::encode(samples_t samplesPerChannel, const float* input)
     uint32_t frameSize = 1024;
     size_t stepSize = frameSize * m_format.outputSpec.audioChannelCount;
 
-    std::vector<FLAC__int32> buff(samplesPerChannel * sizeof(float));
+    int bitsPerSample = 0;
+    switch (m_format.sampleFormat) {
+    case AudioSampleFormat::Int16:
+        bitsPerSample = 16;
+        break;
+    case AudioSampleFormat::Int24:
+        bitsPerSample = 24;
+        break;
+    default:
+        return 0;
+    }
 
-    for (size_t i = 0; i < buff.size(); ++i) {
-        buff[i] = dsp::convertFloatSamples<FLAC__int32>(input[i], 16);
+    std::vector<FLAC__int32> buff(totalSamplesNumber);
+
+    for (size_t i = 0; i < totalSamplesNumber; ++i) {
+        buff[i] = dsp::convertFloatSamples<FLAC__int32>(input[i], bitsPerSample);
     }
 
     std::vector<FLAC__int32> intermBuff(stepSize);
 
     for (size_t i = 0; i < totalSamplesNumber; i += stepSize) {
-        std::copy(buff.data() + i, buff.data() + i + stepSize, intermBuff.data());
+        size_t remainingSamples = totalSamplesNumber - i;
+        size_t samplesToCopy = std::min(stepSize, remainingSamples);
+        uint32_t samplesPerChannelToProcess = samplesToCopy / m_format.outputSpec.audioChannelCount;
 
-        if (m_flac->process_interleaved(intermBuff.data(), frameSize)) {
+        std::copy(buff.data() + i, buff.data() + i + samplesToCopy, intermBuff.data());
+
+        if (m_flac->process_interleaved(intermBuff.data(), samplesPerChannelToProcess)) {
             result += stepSize;
         } else {
             break;
