@@ -50,8 +50,10 @@ Item {
     property int navigationColumnOrderStart: 0
 
     property string pathFieldTitle: qsTrc("ui", "Current path:")
-
     property alias pathFieldWidth: pathField.implicitWidth
+
+    property alias buttonWidth: button.implicitWidth
+
     property alias spacing: row.spacing
 
     signal pathEdited(var newPath)
@@ -63,6 +65,12 @@ Item {
         id: filePickerModel
     }
 
+    QtObject {
+        id: prv
+
+        property bool isNavigationBoth: root.navigation && root.navigation.direction === NavigationPanel.Both
+    }
+
     RowLayout {
         id: row
         anchors.fill: parent
@@ -70,6 +78,7 @@ Item {
 
         TextInputField {
             id: pathField
+
             Layout.fillWidth: true
             Layout.minimumWidth: implicitWidth
             Layout.alignment: Qt.AlignVCenter
@@ -78,10 +87,12 @@ Item {
 
             navigation.name: "PathFieldBox"
             navigation.panel: root.navigation
-            navigation.row: root.navigationRowOrderStart
             navigation.enabled: root.visible && root.enabled
-            navigation.column: root.navigationColumnOrderStart
             navigation.accessible.name: root.pathFieldTitle + " " + pathField.currentText
+
+            navigation.row: prv.isNavigationBoth ? root.navigationRowOrderStart : -1
+            navigation.column: prv.isNavigationBoth ? root.navigationColumnOrderStart : -1
+            navigation.order: prv.isNavigationBoth ? -1 : root.navigationRowOrderStart
 
             onTextEditingFinished: function(newTextValue) {
                 root.pathEdited(newTextValue)
@@ -99,11 +110,13 @@ Item {
 
             navigation.name: "FilePickerButton"
             navigation.panel: root.navigation
-            navigation.row: root.navigationRowOrderStart
             navigation.enabled: root.visible && root.enabled
-            navigation.column: root.navigationColumnOrderStart + 1
             accessible.name: root.pickerType === FilePicker.PickerType.File ? qsTrc("ui", "Choose file")
                                                                             : qsTrc("ui", "Choose directory")
+
+            navigation.row: prv.isNavigationBoth ? root.navigationRowOrderStart : -1
+            navigation.column: prv.isNavigationBoth ? root.navigationColumnOrderStart + 1 : -1
+            navigation.order: prv.isNavigationBoth ? -1 : root.navigationRowOrderStart + 1
 
             onClicked: {
                 switch (root.pickerType) {
