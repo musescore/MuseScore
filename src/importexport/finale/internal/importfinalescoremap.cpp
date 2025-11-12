@@ -1333,7 +1333,7 @@ void FinaleParser::importPageLayout()
         MeasureBase* sysStart = startMeasure;
         if (!muse::RealIsEqual(double(leftStaffSystem->left), 0.0)) {
             // for the very first system, create a non-frame indent instead
-            if (isFirstSystemOnPage && currentPageIndex == 0) {
+            if (startMeasure->tick().isZero()) {
                 m_score->style().set(Sid::enableIndentationOnFirstSystem, true);
                 m_score->style().set(Sid::firstSystemIndentationValue, doubleFromEvpu(leftStaffSystem->left));
             } else {
