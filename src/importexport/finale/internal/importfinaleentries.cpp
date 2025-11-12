@@ -1461,7 +1461,7 @@ void FinaleParser::importEntryAdjustments()
                     if (!beamAlter->isActive() || eduToFraction(beamAlter->dura) != Fraction(1, 16)) {
                         continue;
                     }
-                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * beam->defaultSpatium() / beam->beamDist();
+                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * beam->spatium() / beam->beamDist();
                 }
             }
             return PointF();
@@ -1472,7 +1472,7 @@ void FinaleParser::importEntryAdjustments()
                     if (!beamAlter->isActive() || eduToFraction(beamAlter->dura) != Fraction(1, 16)) {
                         continue;
                     }
-                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * beam->defaultSpatium() / beam->beamDist();
+                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * beam->spatium() / beam->beamDist();
                 }
             }
             return PointF();
