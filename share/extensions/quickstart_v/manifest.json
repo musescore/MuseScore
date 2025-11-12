@@ -1,0 +1,8 @@
+{
+    "uri": "musescore://extensions/dev/quickstart_v",
+    "type": "form",
+    "title": "Quick start visual",
+    "description": "This is a development extension for API research.",
+
+    "path": "Main.qml"
+}

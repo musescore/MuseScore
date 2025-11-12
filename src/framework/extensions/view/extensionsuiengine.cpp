@@ -85,6 +85,9 @@ void ExtensionsUiEngine::setup()
     //! NOTE We prohibit importing default modules;
     //! only what is in the `api` folder will be imported.
     m_engine->addImportPath(":/api");
+
+    //! NOTE Temporarily for development
+    m_engine->addImportPath(":/qml");
 }
 
 QQmlEngine* ExtensionsUiEngine::engine()
