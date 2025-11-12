@@ -44,9 +44,9 @@ bool MScore::noGui = false;
 int MScore::_vRaster;
 int MScore::_hRaster;
 bool MScore::_verticalOrientation = false;
-double MScore::verticalPageGap = 5.0;
-double MScore::horizontalPageGapEven = 1.0;
-double MScore::horizontalPageGapOdd = 50.0;
+double MScore::verticalPageGap = 0.35 * DPMM;
+double MScore::horizontalPageGapEven = 0.07 * DPMM;
+double MScore::horizontalPageGapOdd = 3.5 * DPMM;
 
 bool MScore::warnPitchRange;
 bool MScore::warnGuitarBends;
