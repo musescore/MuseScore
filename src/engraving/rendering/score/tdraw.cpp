@@ -2190,21 +2190,24 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
 
     const Note::LayoutData* ldata = item->ldata();
 
-    auto config = item->configuration();
+    const auto config = item->configuration();
+    const StaffType* staffType = item->staff() ? item->staff()->staffTypeForElement(item) : nullptr;
 
-    bool negativeFret = item->negativeFretUsed() && item->staff()->isTabStaff(item->tick());
+    const bool isTabStaff = staffType && staffType->isTabStaff();
+    const bool negativeFret = isTabStaff && item->negativeFretUsed();
+    const bool useCriticalColor = negativeFret && !item->deadNote() && opt.isPrinting;
 
-    bool tablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
+    painter->setPen(useCriticalColor ? config->criticalColor() : item->curColor(opt));
 
     // tablature
-    if (tablature) {
+    if (isTabStaff) {
         if (item->displayFret() == Note::DisplayFretOption::Hide || item->shouldHideFret()) {
             return;
         }
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
 
-        if (negativeFret || (item->fretConflict() && !opt.isPrinting && item->score()->showUnprintable())) {                    // fret conflict
+        if (negativeFret || (item->fretConflict() && !opt.isPrinting && item->score()->showUnprintable())) { // fret conflict
             painter->save();
             painter->setPen(config->criticalColor());
             painter->setBrush(config->criticalBackgroundColor());
@@ -2215,11 +2218,9 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         Font f(tab->fretFont());
         f.setPointSizeF(f.pointSizeF() * item->magS());
         painter->setFont(f);
-        bool useCritical = negativeFret && !item->deadNote() && !item->score()->printing();
-        painter->setPen(useCritical ? config->criticalColor() : item->curColor(opt));
-        double startPosX = ldata->bbox().x();
 
-        double yOffset = tab->fretFontYOffset();
+        const double startPosX = ldata->bbox().x();
+        const double yOffset = tab->fretFontYOffset();
         painter->drawText(PointF(startPosX, yOffset * item->magS()), item->fretString());
     }
     // NOT tablature
@@ -2235,8 +2236,7 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
             const Instrument* in = item->part()->instrument(item->chord()->tick());
             int i = item->ppitch();
             if (i < in->minPitchP() || i > in->maxPitchP()) {
-                painter->setPen(
-                    item->selected() ? config->criticalSelectedColor() : config->criticalColor());
+                painter->setPen(item->selected() ? config->criticalSelectedColor() : config->criticalColor());
             } else if (i < in->minPitchA() || i > in->maxPitchA()) {
                 painter->setPen(item->selected() ? config->warningSelectedColor() : config->warningColor());
             }
