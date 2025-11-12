@@ -240,6 +240,11 @@ DirectionV FinaleParser::calculateSlurDirection(Slur* slur)
         }
         return DirectionV::UP;
     }
+    // Exception for grace notes
+    if (slur->startCR()->isGrace() && slur->startCR()->stemDirection() == DirectionV::UP
+        && (!slur->endCR()->isChord()|| (!muse::contains(m_fixedChords, toChord(slur->startCR())) && toChord(slur->startCR())->notes().size() == 1))) {
+        return DirectionV::DOWN;
+    }
     for (ChordRest* cr = slur->startCR(); cr; cr = nextChordRest(cr)) {
         if (!cr->isChord()) {
             continue;
