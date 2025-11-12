@@ -702,13 +702,13 @@ void FinaleParser::importTextExpressions()
                 case others::HorizontalMeasExprAlign::CenterAllNoteheads: {
                     Shape staffShape = s->staffShape(expr->staffIdx());
                     staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
-                    p.rx() = staffShape.right() / 2 + s->x() + s->measure()->x();
+                    p.rx() = staffShape.right() / 2 + s->pageX();
                     break;
                 }
                 case others::HorizontalMeasExprAlign::RightOfAllNoteheads: {
                     Shape staffShape = s->staffShape(expr->staffIdx());
                     staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
-                    p.rx() = staffShape.right() + s->x() + s->measure()->x();
+                    p.rx() = staffShape.right() + s->pageX();
                     break;
                 }
                 case others::HorizontalMeasExprAlign::StartTimeSig: {
