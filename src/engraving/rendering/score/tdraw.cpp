@@ -852,8 +852,13 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
         const Measure* measure = s->measure();
         if (s->isStartRepeatBarLineType()) {
             const Measure* prevMeasure = measure ? measure->prevMeasure() : nullptr;
-            if (!prevMeasure || prevMeasure->system() != measure->system()) {
+            if (!prevMeasure) {
                 return;
+            }
+            if (const BarLine* prevEndBl = prevMeasure->endBarLine(item->staffIdx())) {
+                if (prevEndBl->segment() && prevEndBl->segment()->enabled()) {
+                    return;
+                }
             }
             measure = prevMeasure;
         }
