@@ -267,6 +267,11 @@ bool AppearancePreferencesModel::isOnlyInvertInDarkTheme() const
     return engravingConfiguration()->isOnlyInvertInDarkTheme();
 }
 
+bool AppearancePreferencesModel::isCurrentThemeDark() const
+{
+    return uiConfiguration()->isDarkMode();
+}
+
 void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
 {
     if (themeCode == currentThemeCode() && !isFollowSystemTheme()) {

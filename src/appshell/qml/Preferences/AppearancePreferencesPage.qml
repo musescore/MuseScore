@@ -117,6 +117,9 @@ PreferencesPage {
             width: parent.width
 
             scoreInversionEnabled: appearanceModel.scoreInversionEnabled
+            isOnlyInvertInDarkTheme: appearanceModel.isOnlyInvertInDarkTheme
+            isCurrentThemeDark: appearanceModel.isCurrentThemeDark
+
             colorAndWallpaper.useColor: appearanceModel.foregroundUseColor
             colorAndWallpaper.color: appearanceModel.foregroundColor
             colorAndWallpaper.wallpaperPath: appearanceModel.foregroundWallpaperPath
@@ -128,6 +131,10 @@ PreferencesPage {
 
             onScoreInversionEnableChangeRequested: function(enable) {
                 appearanceModel.scoreInversionEnabled = enable
+            }
+
+            onIsOnlyInvertInDarkThemeChangeRequested: function(enable) {
+                appearanceModel.isOnlyInvertInDarkTheme = enable
             }
 
             colorAndWallpaper.onUseColorChangeRequested: function(newValue) {

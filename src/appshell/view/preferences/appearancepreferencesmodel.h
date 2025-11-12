@@ -61,6 +61,7 @@ class AppearancePreferencesModel : public QObject, public muse::Injectable, publ
     Q_PROPERTY(bool scoreInversionEnabled READ scoreInversionEnabled WRITE setScoreInversionEnabled NOTIFY invertScoreColorChanged)
     Q_PROPERTY(
         bool isOnlyInvertInDarkTheme READ isOnlyInvertInDarkTheme WRITE setOnlyInvertInDarkTheme NOTIFY isOnlyInvertInDarkThemeChanged)
+    Q_PROPERTY(bool isCurrentThemeDark READ isCurrentThemeDark NOTIFY themesChanged)
 
     muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
     muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
@@ -104,6 +105,7 @@ public:
 
     bool scoreInversionEnabled() const;
     bool isOnlyInvertInDarkTheme() const;
+    bool isCurrentThemeDark() const;
 
     Q_INVOKABLE void resetAppearancePreferencesToDefault();
     Q_INVOKABLE void setNewColor(const QColor& newColor, ColorType colorType);

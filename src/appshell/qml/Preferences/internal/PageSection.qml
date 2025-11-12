@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import Muse.UiComponents 1.0
 
@@ -29,29 +30,61 @@ BaseSection {
     title: qsTrc("appshell/preferences", "Page")
 
     property alias scoreInversionEnabled: scoreInversionEnable.checked
+    property alias isOnlyInvertInDarkTheme: isOnlyInvertInDarkTheme.checked
+    property bool isCurrentThemeDark
     property alias colorAndWallpaper: colorAndWallpaper
 
     signal scoreInversionEnableChangeRequested(bool enable)
+    signal isOnlyInvertInDarkThemeChangeRequested(bool enable)
 
-    CheckBox {
-        id: scoreInversionEnable
-        width: parent.width
+    GridLayout {
+        id: gridSection
 
-        text: qsTrc("appshell/preferences", "Invert score")
+        rows: 2
+        columns: 2
 
-        navigation.name: "ScoreInversionBox"
-        navigation.panel: root.navigation
-        navigation.row: 0
+        rowSpacing: root.rowSpacing
+        columnSpacing: root.columnSpacing
 
-        onClicked: {
-            root.scoreInversionEnableChangeRequested(!checked)
+        ToggleButton {
+            id: scoreInversionEnable
+            implicitWidth: root.columnWidth
+
+            text: qsTrc("appshell/preferences", "Invert score colors")
+
+            navigation.name: "ScoreInversionBox"
+            navigation.panel: root.navigation
+            navigation.row: 0
+            navigation.column: 0
+
+            onToggled: {
+                root.scoreInversionEnableChangeRequested(!checked)
+            }
+        }
+
+        CheckBox {
+            id: isOnlyInvertInDarkTheme
+            width: root.columnWidth
+
+            enabled: root.scoreInversionEnabled
+
+            text: qsTrc("appshell/preferences", "Only invert score in dark theme")
+
+            navigation.name: "IsOnlyInvertInDarkThemeBox"
+            navigation.panel: root.navigation
+            navigation.row: 0
+            navigation.column: 1
+
+            onClicked: {
+                root.isOnlyInvertInDarkThemeChangeRequested(!checked)
+            }
         }
     }
 
     ColorAndWallpaperSection {
         id: colorAndWallpaper
 
-        enabled: !scoreInversionEnabled
+        enabled: !root.scoreInversionEnabled || (root.isOnlyInvertInDarkTheme && !root.isCurrentThemeDark)
         opacityOverride: enabled ? 1.0 : 0.6
 
         wallpaperDialogTitle: qsTrc("appshell/preferences", "Choose notepaper")
