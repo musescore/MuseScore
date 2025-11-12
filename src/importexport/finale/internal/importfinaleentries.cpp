@@ -1452,7 +1452,7 @@ void FinaleParser::importEntryAdjustments()
                 return PointF();
             }
             beam->setVisible(beamAlter->calcEffectiveBeamWidth() != 0);
-            return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * beam->defaultSpatium();
+            return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * beam->spatium();
         };
         /// @todo combine these two, one day
         auto getAlterFeatherU = [beam](const MusxInstanceList<details::SecondaryBeamAlterationsUpStem>& beamAlterList) {
