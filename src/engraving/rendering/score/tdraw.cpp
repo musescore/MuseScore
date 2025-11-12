@@ -21,6 +21,8 @@
  */
 #include "tdraw.h"
 
+#include "defer.h"
+
 #include "draw/fontmetrics.h"
 #include "draw/svgrenderer.h"
 
@@ -677,13 +679,17 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
-    painter->save();
-    setMask(item, painter);
-
     const BarLine::LayoutData* data = item->ldata();
     IF_ASSERT_FAILED(data) {
         return;
     }
+
+    painter->save();
+    DEFER {
+        painter->restore();
+    };
+
+    setMask(item, painter);
 
     switch (item->barLineType()) {
     case BarLineType::NORMAL: {
@@ -834,19 +840,25 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
     }
     break;
     }
-    Segment* s = item->segment();
-    if (s && (s->isEndBarLineType() || s->isStartRepeatBarLineType()) && !opt.isPrinting && item->score()->markIrregularMeasures()) {
-        Measure* measure = s->measure();
+
+    // draw irregular measure mark
+
+    if (opt.isPrinting || !item->score()->markIrregularMeasures()) {
+        return;
+    }
+
+    const Segment* s = item->segment();
+    if (s && (s->isEndBarLineType() || s->isStartRepeatBarLineType())) {
+        const Measure* measure = s->measure();
         if (s->isStartRepeatBarLineType()) {
-            Measure* prevMeasure = measure ? measure->prevMeasure() : nullptr;
+            const Measure* prevMeasure = measure ? measure->prevMeasure() : nullptr;
             if (!prevMeasure || prevMeasure->system() != measure->system()) {
-                measure = nullptr;
-            } else {
-                measure = prevMeasure;
+                return;
             }
+            measure = prevMeasure;
         }
 
-        if (measure && measure->isIrregular() && item->score()->markIrregularMeasures() && !measure->isMMRest()) {
+        if (measure && measure->isIrregular() && !measure->isMMRest()) {
             painter->setPen(item->configuration()->invisibleColor());
             Font f(u"Edwin", Font::Type::Text);
             f.setPointSizeF(12 * item->spatium() / item->defaultSpatium());
@@ -858,8 +870,6 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
             painter->drawText(-r.width(), -item->spatium(), ch);
         }
     }
-
-    painter->restore();
 }
 
 void TDraw::draw(const Beam* item, Painter* painter, const PaintOptions& opt)
