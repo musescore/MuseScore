@@ -2018,9 +2018,9 @@ AccidentalRole TConv::fromXml(const AsciiStringView& tag, AccidentalRole def)
     return ok ? static_cast<AccidentalRole>(r) : def;
 }
 
-String TConv::toXml(BeatsPerSecond v)
+String TConv::toXml(BeatsPerSecond v, int precision)
 {
-    return String::number(v.val);
+    return String::number(v.val, precision);
 }
 
 BeatsPerSecond TConv::fromXml(const AsciiStringView& tag, BeatsPerSecond def)

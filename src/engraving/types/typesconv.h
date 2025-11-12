@@ -119,7 +119,7 @@ public:
     static String toXml(AccidentalRole v);
     static AccidentalRole fromXml(const AsciiStringView& tag, AccidentalRole def);
 
-    static String toXml(BeatsPerSecond v);
+    static String toXml(BeatsPerSecond v, int precision);
     static BeatsPerSecond fromXml(const AsciiStringView& tag, BeatsPerSecond def);
 
     static String translatedUserName(DurationType v);

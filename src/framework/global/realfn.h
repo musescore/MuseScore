@@ -39,7 +39,7 @@ inline double _compare_double_null(COMPARE_DOUBLE_NULL);
 inline double _compare_float_epsilon(COMPARE_FLOAT_EPSILON);
 inline double _compare_float_null(COMPARE_FLOAT_NULL);
 
-inline int _pow10(int power)
+inline constexpr int _pow10(int power)
 {
     int result = 1;
     for (int i = 0; i < power; ++i) {

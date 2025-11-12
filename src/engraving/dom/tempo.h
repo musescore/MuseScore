@@ -30,6 +30,8 @@
 #include "../types/bps.h"
 
 namespace mu::engraving {
+static constexpr int TEMPO_PRECISION = 6;
+
 enum class TempoType : char {
     INVALID = 0x0, PAUSE = 0x1, FIX = 0x2, RAMP = 0x4
 };
