@@ -67,8 +67,6 @@ static constexpr double INCH      = 25.4; // millimitres per inch
 static constexpr double PPI       = 72.0; // typographical points per inch
 
 // INTERNAL DRAWING UNITS
-// Given that it's ultimately arbitrary, we may as well set our internal units to
-// something that makes them easier to read when debugging, e.g. 1/100 of millimitre.
 static constexpr double DPI = 1200;
 static constexpr double DPMM = DPI / INCH;
 

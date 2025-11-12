@@ -163,8 +163,9 @@ void NotationPainting::paintPageSheet(Painter* painter, const Page* page, const 
         return;
     }
 
+    const double strokeWidth = 0.07 * DPMM;
     painter->setBrush(BrushStyle::NoBrush);
-    painter->setPen(Pen(configuration()->borderColor(), configuration()->borderWidth()));
+    painter->setPen(Pen(configuration()->borderColor(), strokeWidth));
     painter->drawRect(pageRect);
 
     if (!score()->showPageborders()) {
@@ -174,7 +175,7 @@ void NotationPainting::paintPageSheet(Painter* painter, const Page* page, const 
     RectF pageContentRect = page->ldata()->bbox().adjusted(page->lm(), page->tm(), -page->rm(), -page->bm());
 
     painter->setBrush(BrushStyle::NoBrush);
-    painter->setPen(engravingConfiguration()->scoreGreyColor());
+    painter->setPen(Pen(engravingConfiguration()->scoreGreyColor(), strokeWidth));
     painter->drawRect(pageContentRect);
 
     if (!page->isOdd()) {
