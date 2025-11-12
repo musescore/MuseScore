@@ -105,25 +105,6 @@ muse::async::Channel<const mu::engraving::EngravingObject*, bool> EngravingEleme
     return m_selectChanged;
 }
 
-void EngravingElementsProvider::checkTree(mu::engraving::Score* score)
-{
-    LOGD() << "\n\n\n";
-    LOGD() << "========================";
-    checkObjectTree(score->rootItem());
-
-    LOGD() << "========================";
-//    LOGI() << "dumpTree:";
-//    int level = 0;
-//    dumpTree(m_masterScore->rootItem(), level);
-
-//    LOGI() << "========================";
-//    LOGI() << "dumpTreeTree:";
-//    level = 0;
-//    dumpTreeTree(m_masterScore, level);
-
-//    LOGI() << "========================";
-}
-
 void EngravingElementsProvider::dumpTree(const mu::engraving::EngravingItem* item, int& level)
 {
     ++level;
@@ -138,13 +119,5 @@ void EngravingElementsProvider::dumpTree(const mu::engraving::EngravingItem* ite
         dumpTree(static_cast<const mu::engraving::EngravingItem*>(ch), level);
     }
     --level;
-}
-
-void EngravingElementsProvider::dumpTreeTree(const mu::engraving::EngravingObject* obj, int& level)
-{
-}
-
-void EngravingElementsProvider::checkObjectTree(const mu::engraving::EngravingObject* obj)
-{
 }
 }
