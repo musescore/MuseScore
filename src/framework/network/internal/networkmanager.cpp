@@ -26,7 +26,6 @@
 #include <QEventLoop>
 #include <QUrl>
 
-#include "log.h"
 #include "networkerrors.h"
 
 using namespace muse;
@@ -79,8 +78,6 @@ Ret NetworkManager::del(const QUrl& url, IncomingDevice* incomingData, const Req
 Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IncomingDevice* incomingData, OutgoingDevice* outgoingData,
                                 const RequestHeaders& headers)
 {
-    LOGI() << "Start: " << requestTypeToString(requestType) << ", url: " << url.toString();
-
     if (outgoingData && outgoingData->device()) {
         if (!openDevice(outgoingData->device(), QIODevice::ReadOnly)) {
             return make_ret(Err::FiledOpenIODeviceRead);
@@ -123,12 +120,6 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
     }
 
     Ret ret = waitForReplyFinished(reply);
-    if (!ret) {
-        LOGE() << "Error during request: " << requestTypeToString(requestType)
-               << ", url: " << url.toString()
-               << ", err: " << ret.toString();
-    }
-
     m_progress.finish(ret);
 
     if (reply) {
@@ -141,8 +132,6 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
 
     closeDevice(m_incomingData);
     m_incomingData = nullptr;
-
-    LOGI() << "Finish: " << requestTypeToString(requestType) << ", url: " << url.toString();
 
     return ret;
 }
@@ -293,18 +282,4 @@ Ret NetworkManager::errorFromReply(const QNetworkReply* reply) const
     }
 
     return ret;
-}
-
-String NetworkManager::requestTypeToString(RequestType type)
-{
-    switch (type) {
-    case GET_REQUEST: return u"GET";
-    case HEAD_REQUEST: return u"HEAD";
-    case POST_REQUEST: return u"POST";
-    case PUT_REQUEST: return u"PUT";
-    case PATCH_REQUEST: return u"PATCH";
-    case DELETE_REQUEST: return u"DELETE";
-    }
-
-    return String();
 }
