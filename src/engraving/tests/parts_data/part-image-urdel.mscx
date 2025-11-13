@@ -119,7 +119,6 @@
         <Image>
           <eid>G_G</eid>
           <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-          <linkPath>schnee.png</linkPath>
           <size w="38.52" h="38.64"/>
           </Image>
         </VBox>
@@ -891,7 +890,6 @@
           <Image>
             <eid>8B_8B</eid>
             <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-            <linkPath>schnee.png</linkPath>
             <size w="38.52" h="38.64"/>
             </Image>
           <Text>
@@ -924,11 +922,9 @@
                     <eid>DC_DC</eid>
                     <z>9299</z>
                     <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-                    <linkPath>schnee.png</linkPath>
                     </Image>
                   <eid>EC_EC</eid>
                   <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-                  <linkPath>schnee.png</linkPath>
                   <size w="38.52" h="38.64"/>
                   </Image>
                 <pitch>72</pitch>
