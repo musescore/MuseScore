@@ -2029,6 +2029,11 @@ double absoluteDoubleFromEvpu(Evpu evpu, EngravingItem* e)
     return absoluteDouble(doubleFromEvpu(evpu), e);
 }
 
+double scaledDoubleFromEvpu(Evpu evpu, EngravingItem* e)
+{
+    return doubleFromEvpu(evpu) * e->spatium();
+}
+
 Spatium absoluteSpatium(double value, EngravingItem* e)
 {
     // Returns global spatium value adjusted to preserve value for element scaling

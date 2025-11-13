@@ -751,10 +751,10 @@ void FinaleParser::importTextExpressions()
             switch (exprDef->vertMeasExprAlign) {
                 case others::VerticalMeasExprAlign::AboveStaff: {
                     expr->setPlacement(PlacementV::ABOVE);
-                    p.ry() = expr->pagePos().y() - absoluteDoubleFromEvpu(exprDef->yAdjustBaseline, expr);
+                    p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(exprDef->yAdjustBaseline, expr);
 
                     SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
-                    double baselinepos = absoluteDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
+                    double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
                     p.ry() -= (baselinepos - staffReferenceOffset);
                     break;
                 }
@@ -766,15 +766,15 @@ void FinaleParser::importTextExpressions()
                 }
                 case others::VerticalMeasExprAlign::RefLine: {
                     expr->setPlacement(PlacementV::ABOVE);
-                    p.ry() = expr->pagePos().y() - staffReferenceOffset - absoluteDoubleFromEvpu(exprDef->yAdjustBaseline, expr);
+                    p.ry() = expr->pagePos().y() - staffReferenceOffset - scaledDoubleFromEvpu(exprDef->yAdjustBaseline, expr);
                     break;
                 }
                 case others::VerticalMeasExprAlign::BelowStaff: {
                     expr->setPlacement(PlacementV::BELOW);
-                    p.ry() = expr->pagePos().y() - absoluteDoubleFromEvpu(exprDef->yAdjustBaseline, expr);
+                    p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(exprDef->yAdjustBaseline, expr);
 
                     SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
-                    double baselinepos = absoluteDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
+                    double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
                     p.ry() -= (baselinepos - staffReferenceOffset);
                     break;
                 }
@@ -796,7 +796,7 @@ void FinaleParser::importTextExpressions()
                             p.ry() = rest->pagePos().y() - rest->ldata()->bbox().center().y();
                         }
                     }
-                    p.ry() -= absoluteDoubleFromEvpu(exprDef->yAdjustEntry, expr);
+                    p.ry() -= scaledDoubleFromEvpu(exprDef->yAdjustEntry, expr);
                     break;
                 }
                 case others::VerticalMeasExprAlign::BottomNote: {
@@ -817,7 +817,7 @@ void FinaleParser::importTextExpressions()
                             p.ry() = rest->pagePos().y() - rest->ldata()->bbox().center().y();
                         }
                     }
-                    p.ry() -= absoluteDoubleFromEvpu(exprDef->yAdjustEntry, expr);
+                    p.ry() -= scaledDoubleFromEvpu(exprDef->yAdjustEntry, expr);
                     break;
                 }
                 case others::VerticalMeasExprAlign::AboveEntry:
@@ -829,11 +829,11 @@ void FinaleParser::importTextExpressions()
                     Shape staffShape = seg->staffShape(expr->staffIdx());
                     staffShape.translate(PointF(seg->pageX(), seg->system()->pagePos().y() + seg->system()->staff(expr->staffIdx())->y()));
                     // staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
-                    double entryY = staffShape.top() - absoluteDoubleFromEvpu(exprDef->yAdjustEntry, expr);
+                    double entryY = staffShape.top() - scaledDoubleFromEvpu(exprDef->yAdjustEntry, expr);
 
                     SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
-                    double baselinepos = absoluteDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
-                    baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset) - absoluteDoubleFromEvpu(exprDef->yAdjustBaseline, expr);
+                    double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
+                    baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(exprDef->yAdjustBaseline, expr);
                     p.ry() = std::min(baselinepos, entryY);
                     break;
                 }
@@ -846,17 +846,17 @@ void FinaleParser::importTextExpressions()
                     Shape staffShape = s->staffShape(expr->staffIdx());
                     // staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
                     staffShape.translate(PointF(s->pageX(), s->system()->pagePos().y() + s->system()->staff(expr->staffIdx())->y()));
-                    double entryY = staffShape.bottom() - absoluteDoubleFromEvpu(exprDef->yAdjustEntry, expr);
+                    double entryY = staffShape.bottom() - scaledDoubleFromEvpu(exprDef->yAdjustEntry, expr);
 
                     SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
-                    double baselinepos = absoluteDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
-                    baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset) - absoluteDoubleFromEvpu(exprDef->yAdjustBaseline, expr);
+                    double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
+                    baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(exprDef->yAdjustBaseline, expr);
                     p.ry() = std::max(baselinepos, entryY);
                     break;
                 }
                 default: {
                     expr->setPlacement(PlacementV::ABOVE); // Finale default
-                    p.ry() = expr->pagePos().y() - absoluteDoubleFromEvpu(exprDef->yAdjustEntry, expr);
+                    p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(exprDef->yAdjustEntry, expr);
                     break;
                 }
             }
@@ -876,7 +876,7 @@ void FinaleParser::importTextExpressions()
             if (expr->hasVoiceAssignmentProperties()) {
                 setAndStyleProperty(expr, Pid::DIRECTION, expr->placeAbove() ? DirectionV::UP : DirectionV::DOWN);
             }
-            p += evpuToPointF(exprAssign->horzEvpuOff, -exprAssign->vertEvpuOff) * expr->defaultSpatium(); // assignment offset
+            p += evpuToPointF(exprAssign->horzEvpuOff * expr->defaultSpatium(), -exprAssign->vertEvpuOff * expr->spatium()); // assignment offset
             setAndStyleProperty(expr, Pid::OFFSET, p);
         };
         positionExpression(item, expressionAssignment, expressionDef);
