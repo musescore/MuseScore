@@ -21,6 +21,8 @@
  */
 #include "asioaudiodriver.h"
 
+#include "global/async/notification.h"
+
 #undef UNICODE
 #include "ASIOSDK/common/asiosys.h"
 #include "ASIOSDK/common/asio.h"
@@ -32,6 +34,7 @@ using namespace muse;
 using namespace muse::audio;
 
 struct AsioData {
+    // Drivers list
     AsioDrivers drivers;
 
     // ASIOInit()
@@ -64,6 +67,9 @@ struct AsioData {
 
     // ASIOCallbacks
     ASIOCallbacks callbacks;
+
+    // Reset
+    async::Notification resetRequest;
 };
 
 static AsioData s_adata;
@@ -267,28 +273,29 @@ static ASIOTime* s_bufferSwitchTimeInfo(ASIOTime* /*params*/, long index, ASIOBo
     return nullptr;
 }
 
+static void s_resetRequest()
+{
+    s_adata.resetRequest.notify();
+}
+
 static void s_sampleRateChanged(ASIOSampleRate rate)
 {
     LOGI() << "rate: " << rate;
+    s_resetRequest();
 }
 
-static long s_asioMessages(long selector, long value, void* message, double* /*opt*/)
+static long s_asioMessages(long selector, long value, void* /*message*/, double* /*opt*/)
 {
     LOGI() << "selector: " << selector
-           << "value: " << value
-           << "message: " << (const char*)message;
+           << " value: " << value;
 
     long ret = 0;
     switch (selector) {
     case kAsioSelectorSupported:
         if (value == kAsioEngineVersion
-            // || value == kAsioResetRequest
-            // || value == kAsioResyncRequest
-            // || value == kAsioLatenciesChanged
-            // // the following three were added for ASIO 2.0, you don't necessarily have to support them
-            // || value == kAsioSupportsTimeInfo
-            // || value == kAsioSupportsTimeCode
-            // || value == kAsioSupportsInputMonitor
+            || value == kAsioResetRequest
+            || value == kAsioResyncRequest
+            || value == kAsioLatenciesChanged
             ) {
             ret = 1L;
         }
@@ -298,8 +305,12 @@ static long s_asioMessages(long selector, long value, void* message, double* /*o
         // You cannot reset the driver right now, as this code is called from the driver.
         // Reset the driver is done by completely destruct is. I.e. ASIOStop(), ASIODisposeBuffers(), Destruction
         // Afterwards you initialize the driver again.
-        ret = 0L;
+        s_resetRequest();
+        ret = 1L;
         break;
+    case kAsioBufferSizeChange:
+        s_resetRequest();
+        ret = 1L;
     case kAsioResyncRequest:
         // This informs the application, that the driver encountered some non fatal data loss.
         // It is used for synchronization purposes of different media.
@@ -307,13 +318,15 @@ static long s_asioMessages(long selector, long value, void* message, double* /*o
         // Windows Multimedia system, which could loose data because the Mutex was hold too long
         // by another thread.
         // However a driver can issue it in other situations, too.
+        s_resetRequest();
         ret = 1L;
         break;
     case kAsioLatenciesChanged:
         // This will inform the host application that the drivers were latencies changed.
         // Beware, it this does not mean that the buffer sizes have changed!
         // You might need to update internal delay data.
-        ret = 0L;
+        s_resetRequest();
+        ret = 1L;
         break;
     case kAsioEngineVersion:
         // return the supported ASIO version of the host application
@@ -489,6 +502,10 @@ bool AsioAudioDriver::doOpen(const AudioDeviceID& device, const Spec& spec, Spec
         return ok;
     }
 
+    s_adata.resetRequest.onNotify(this, [this]() {
+        reset();
+    }, async::Asyncable::Mode::SetReplace);
+
     m_running = true;
     m_thread = std::thread([this]() {
         bool ok = ASIOStart() == ASE_OK;
@@ -530,6 +547,18 @@ void AsioAudioDriver::close()
     // ASIOExit();
 
     s_adata.drivers.removeCurrentDriver();
+}
+
+void AsioAudioDriver::reset()
+{
+    LOGI() << "! driver reset called";
+    if (!isOpened()) {
+        return;
+    }
+
+    Spec spec = s_adata.activeSpec;
+    close();
+    open(spec, nullptr);
 }
 
 bool AsioAudioDriver::isOpened() const

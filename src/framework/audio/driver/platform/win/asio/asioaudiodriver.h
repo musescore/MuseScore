@@ -26,8 +26,10 @@
 
 #include "../../../../iaudiodriver.h"
 
+#include "global/async/asyncable.h"
+
 namespace muse::audio {
-class AsioAudioDriver : public IAudioDriver
+class AsioAudioDriver : public IAudioDriver, public async::Asyncable
 {
 public:
     AsioAudioDriver();
@@ -63,6 +65,7 @@ public:
 private:
 
     bool doOpen(const AudioDeviceID& device, const Spec& spec, Spec* activeSpec);
+    void reset();
 
     std::thread m_thread;
     std::atomic<bool> m_running = false;
