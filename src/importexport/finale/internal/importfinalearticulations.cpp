@@ -210,7 +210,7 @@ void FinaleParser::importArticulations()
                         }
                     }
                 } else if (theChar) {
-                    SymId result = FinaleTextConv::symIdFromFinaleChar(theChar, font);
+                    SymId result = FinaleTextConv::symIdFromFinaleChar(theChar, font); // articDef fonts are guaranteed non-null by musxdom
                     articChar = FinaleTextConv::mappedChar(theChar, font);
                     articMusxChar = theChar;
                     articFontName = font->getName();
