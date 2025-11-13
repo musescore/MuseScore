@@ -348,11 +348,14 @@ TEST_F(Audio_RpcPackerTests, InputProcessingProgress)
         origin.status = InputProcessingProgress::Status::Started;
         origin.errorCode = 73;
         origin.errorText = "Some error";
+        origin.data["key1"] = "AAAA";
+        origin.data["key2"] = "BBBB";
 
         KNOWN_FIELDS(origin,
                      origin.status,
                      origin.errorCode,
-                     origin.errorText);
+                     origin.errorText,
+                     origin.data);
 
         ByteArray data = rpc::RpcPacker::pack(origin);
 
@@ -363,6 +366,7 @@ TEST_F(Audio_RpcPackerTests, InputProcessingProgress)
         EXPECT_TRUE(origin.status == unpacked.status);
         EXPECT_TRUE(origin.errorCode == unpacked.errorCode);
         EXPECT_TRUE(origin.errorText == unpacked.errorText);
+        EXPECT_TRUE(origin.data == unpacked.data);
     }
 }
 

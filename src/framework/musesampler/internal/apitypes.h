@@ -395,14 +395,23 @@ typedef enum ms_RenderingState
     ms_RenderingState_ErrorNetwork,
     ms_RenderingState_ErrorFileIO,
     ms_RenderingState_ErrorTimeOut,
+    ms_RenderingState_ErrorLimitReached,
 } ms_RenderingState;
 
-typedef struct ms_RenderProgressInfo
+typedef struct ms_RenderRangeInfo
 {
     long long _start_us;
     long long _end_us;
     ms_RenderingState _state;
 } ms_RenderRangeInfo;
+
+typedef struct ms_RenderRangeInfo2
+{
+    long long _start_us;
+    long long _end_us;
+    ms_RenderingState _state;
+    const char* _error_message; // possibly null
+} ms_RenderRangeInfo2;
 
 typedef void* ms_RenderingRangeList;
 
@@ -422,6 +431,10 @@ typedef ms_Result (* ms_MuseSampler_start_audition_note_5)(ms_MuseSampler ms, ms
 typedef void (* ms_rendering_state_changed_callback)(void* user_data, ms_RenderingRangeList list, int num_ranges);
 typedef void (* ms_MuseSampler_set_rendering_state_changed_callback)(ms_MuseSampler ms, ms_rendering_state_changed_callback callback,
                                                                      void* user_data);
+// ------------------------------------------------------------
+
+// added in v0.104
+typedef ms_RenderRangeInfo2 (* ms_RenderProgressInfo2_get_next)(ms_RenderingRangeList range_list);
 // ------------------------------------------------------------
 
 namespace muse::musesampler {
@@ -459,4 +472,5 @@ using DynamicEvent = ms_DynamicsEvent_2;
 using PedalEvent = ms_PedalEvent_2;
 using NoteEvent = ms_NoteEvent_5;
 using SyllableEvent = ms_SyllableEvent2;
+using RenderRangeInfo = ms_RenderRangeInfo2;
 }
