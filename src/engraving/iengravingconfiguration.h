@@ -133,6 +133,8 @@ public:
     virtual bool doNotSaveEIDsForBackCompat() const = 0;
     virtual void setDoNotSaveEIDsForBackCompat(bool doNotSave) = 0;
 
+    virtual bool allowReadingImagesFromOutsideMscz() const = 0;
+
     /// these configurations will be removed after solving https://github.com/musescore/MuseScore/issues/14294
     virtual bool guitarProImportExperimental() const = 0;
     virtual bool shouldAddParenthesisOnStandardStaff() const = 0;

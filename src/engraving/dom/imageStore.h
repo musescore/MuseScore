@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_IMAGE_CACHE_H
-#define MU_ENGRAVING_IMAGE_CACHE_H
+#pragma once
 
 #include <list>
+#include <string>
 
 #include "types/string.h"
 #include "types/bytearray.h"
@@ -45,29 +45,25 @@ class ImageStoreItem
     muse::GlobalInject<muse::ICryptographicHash> cryptographicHash;
 
 public:
-    ImageStoreItem(const muse::io::path_t& p);
+    ImageStoreItem(const std::string& p);
     void dereference(Image*);
     void reference(Image*);
 
-    const muse::io::path_t& path() const { return m_path; }
     muse::ByteArray& buffer() { return m_buffer; }
     const muse::ByteArray& buffer() const { return m_buffer; }
     bool loaded() const { return !m_buffer.empty(); }
-    void setPath(const muse::io::path_t& val);
     bool isUsed(Score*) const;
     bool isUsed() const { return !m_references.empty(); }
-    void load();
-    muse::String hashName() const;
+    std::string hashName() const;
     const muse::ByteArray& hash() const { return m_hash; }
     void set(const muse::ByteArray& b, const muse::ByteArray& h) { m_buffer = b; m_hash = h; }
 
 private:
 
     std::list<Image*> m_references;
-    muse::io::path_t m_path;                  // original location of image
-    muse::String m_type;                      // image type (file extension)
+    std::string m_type; // image type (file extension)
     muse::ByteArray m_buffer;
-    muse::ByteArray m_hash;               // 16 byte md4 hash of _buffer
+    muse::ByteArray m_hash; // 16 byte md4 hash of _buffer
 };
 
 //---------------------------------------------------------
@@ -84,8 +80,8 @@ public:
     ImageStore& operator=(const ImageStore&) = delete;
     ~ImageStore();
 
-    ImageStoreItem* getImage(const muse::io::path_t& path) const;
-    ImageStoreItem* add(const muse::io::path_t& path, const muse::ByteArray&);
+    ImageStoreItem* getImage(std::string name) const;
+    ImageStoreItem* add(const std::string& name, const muse::ByteArray&);
     void clearUnused();
 
     typedef std::vector<ImageStoreItem*> ItemList;
@@ -104,4 +100,3 @@ private:
 
 extern ImageStore imageStore;       // this is the global imageStore
 } // namespace mu::engraving
-#endif

@@ -61,7 +61,7 @@ size_t path_t::size() const
     return m_path.size();
 }
 
-bool path_t::withSuffix(const char* str) const
+bool path_t::hasSuffix(const char* str) const
 {
     return io::FileInfo::suffix(m_path).toLower() == str;
 }

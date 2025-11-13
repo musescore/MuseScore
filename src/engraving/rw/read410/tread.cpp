@@ -1536,6 +1536,8 @@ bool TRead::readProperties(Fermata* f, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
 {
+    bool loaded = false;
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "autoScale") {
@@ -1552,17 +1554,17 @@ void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
             //    sp if size is spatium
             img->setSizeIsSpatium(e.readBool());
         } else if (tag == "path") {
-            img->setStorePath(e.readText());
+            loaded = img->loadFromStore(e.readText().toStdString());
         } else if (tag == "linkPath") {
-            img->setLinkPath(e.readText());
-        } else if (tag == "subtype") {    // obsolete
-            e.skipCurrentElement();
+            if (img->configuration()->allowReadingImagesFromOutsideMscz() && !loaded) {
+                loaded = img->loadFromFile(e.readText());
+            } else {
+                e.skipCurrentElement();
+            }
         } else if (!TRead::readProperties(img, e, ctx)) {
             e.unknown();
         }
     }
-
-    img->load();
 }
 
 void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)

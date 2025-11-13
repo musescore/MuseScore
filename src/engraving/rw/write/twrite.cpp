@@ -1879,57 +1879,10 @@ void TWrite::writeProperties(const BSymbol* item, XmlWriter& xml, WriteContext& 
 
 void TWrite::write(const Image* item, XmlWriter& xml, WriteContext& ctx)
 {
-    // attempt to convert the _linkPath to a path relative to the score
-    //
-    // TODO : on Save As, score()->fileInfo() still contains the old path and fname
-    //          if the Save As path is different, image relative path will be wrong!
-    //
-    String relativeFilePath;
-    if (!item->linkPath().isEmpty() && item->linkIsValid()) {
-        muse::io::FileInfo fi(item->linkPath());
-        // score()->fileInfo()->canonicalPath() would be better
-        // but we are saving under a temp file name and the 'final' file
-        // might not exist yet, so canonicalFilePath() may return only "/"
-        // OTOH, the score 'final' file name is practically always canonical, at this point
-        String scorePath = item->score()->masterScore()->fileInfo()->absoluteDirPath().toString();
-        String imgFPath  = fi.canonicalFilePath();
-        // if imgFPath is in (or below) the directory of scorePath
-        if (imgFPath.startsWith(scorePath, muse::CaseSensitive)) {
-            // relative img path is the part exceeding scorePath
-            imgFPath.remove(0, scorePath.size());
-            if (imgFPath.startsWith(u'/')) {
-                imgFPath.remove(0, 1);
-            }
-            relativeFilePath = imgFPath;
-        }
-        // try 1 level up
-        else {
-            // reduce scorePath by one path level
-            fi = muse::io::FileInfo(scorePath);
-            scorePath = fi.path();
-            // if imgFPath is in (or below) the directory up the score directory
-            if (imgFPath.startsWith(scorePath, muse::CaseSensitive)) {
-                // relative img path is the part exceeding new scorePath plus "../"
-                imgFPath.remove(0, scorePath.size());
-                if (!imgFPath.startsWith(u'/')) {
-                    imgFPath.prepend(u'/');
-                }
-                imgFPath.prepend(u"..");
-                relativeFilePath = imgFPath;
-            }
-        }
-    }
-    // if no match, use full _linkPath
-    if (relativeFilePath.isEmpty()) {
-        relativeFilePath = item->linkPath();
-    }
-
     xml.startElement(item);
     writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
-    // keep old "path" tag, for backward compatibility and because it is used elsewhere
-    // (for instance by Box:read(), Measure:read(), Note:read(), ...)
-    xml.tag("path", item->storeItem() ? item->storeItem()->hashName() : relativeFilePath);
-    xml.tag("linkPath", relativeFilePath);
+
+    xml.tag("path", item->storeItem() ? item->storeItem()->hashName() : std::string());
 
     writeProperty(item, xml, Pid::AUTOSCALE);
     writeProperty(item, xml, Pid::SIZE);
