@@ -1594,7 +1594,7 @@ bool NotationInteraction::startDropImage(const QUrl& url)
     }
 
     auto image = static_cast<mu::engraving::Image*>(Factory::createItem(mu::engraving::ElementType::IMAGE, score()->dummy()));
-    if (!image->load(url.toLocalFile())) {
+    if (!image->loadFromFile(url.toLocalFile())) {
         return false;
     }
 
@@ -6142,7 +6142,7 @@ void NotationInteraction::addImageToItem(const muse::io::path_t& imagePath, Engr
     Image* image = Factory::createImage(item);
     image->setImageType(type);
 
-    if (!image->load(imagePath)) {
+    if (!image->loadFromFile(imagePath)) {
         delete image;
         return;
     }

@@ -1013,7 +1013,7 @@ MasterScore* Engraving_PartsTests::doAddImage()
     Note* note   = chord->upNote();
     EditData dd(0);
     Image* b = Factory::createImage(note);
-    b->load(PARTS_DATA_DIR + u"schnee.png");
+    b->loadFromFile(PARTS_DATA_DIR + u"schnee.png");
     dd.dropElement = b;
 
     score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));

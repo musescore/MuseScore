@@ -853,7 +853,7 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         if (u.scheme() == "file") {
             auto image = std::make_shared<Image>(gpaletteScore->dummy());
             QString filePath(u.toLocalFile());
-            image->load(filePath);
+            image->loadFromFile(filePath);
             element = image;
             QFileInfo file(filePath);
             name = file.completeBaseName();

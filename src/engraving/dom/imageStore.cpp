@@ -22,8 +22,7 @@
 
 #include "imageStore.h"
 
-#include "io/fileinfo.h"
-#include "io/file.h"
+#include "io/path.h"
 
 #include "image.h"
 #include "score.h"
@@ -41,9 +40,9 @@ ImageStore imageStore;  // the global image store
 //   ImageStoreItem
 //---------------------------------------------------------
 
-ImageStoreItem::ImageStoreItem(const path_t& p)
+ImageStoreItem::ImageStoreItem(const std::string& type)
+    : m_type(type)
 {
-    setPath(p);
 }
 
 //---------------------------------------------------------
@@ -82,30 +81,10 @@ bool ImageStoreItem::isUsed(Score* score) const
 }
 
 //---------------------------------------------------------
-//   load
-//---------------------------------------------------------
-
-void ImageStoreItem::load()
-{
-    if (!m_buffer.empty()) {
-        return;
-    }
-    File inFile(m_path);
-    if (!inFile.open(IODevice::ReadOnly)) {
-        LOGD("Cannot open picture file");
-        return;
-    }
-    m_buffer = inFile.readAll();
-    inFile.close();
-
-    m_hash = cryptographicHash()->hash(m_buffer, ICryptographicHash::Algorithm::Md4);
-}
-
-//---------------------------------------------------------
 //   hashName
 //---------------------------------------------------------
 
-String ImageStoreItem::hashName() const
+std::string ImageStoreItem::hashName() const
 {
     const char hex[17] = "0123456789abcdef";
     char p[33];
@@ -114,17 +93,7 @@ String ImageStoreItem::hashName() const
         p[i * 2 + 1] = hex[m_hash[i] & 0xf];
     }
     p[32] = 0;
-    return String::fromAscii(p) + u"." + m_type;
-}
-
-//---------------------------------------------------------
-//   setPath
-//---------------------------------------------------------
-
-void ImageStoreItem::setPath(const path_t& val)
-{
-    m_path = val;
-    m_type = FileInfo::suffix(m_path);
+    return std::string(p) + "." + m_type;
 }
 
 //---------------------------------------------------------
@@ -152,30 +121,22 @@ ImageStore::~ImageStore()
 //   getImage
 //---------------------------------------------------------
 
-ImageStoreItem* ImageStore::getImage(const path_t& path) const
+ImageStoreItem* ImageStore::getImage(std::string name) const
 {
-    String s = FileInfo(path).completeBaseName();
-    if (s.size() != 32) {
-        //
-        // some limited support for backward compatibility
-        //
-        for (ImageStoreItem* item: m_items) {
-            if (item->path() == path) {
-                return item;
-            }
-        }
+    name = muse::io::completeBasename(name).toStdString();
+    if (name.size() != 32) {
         return nullptr;
     }
     ByteArray hash(16);
     for (int i = 0; i < 16; ++i) {
-        hash[i] = toInt(s.at(i * 2).toAscii()) * 16 + toInt(s.at(i * 2 + 1).toAscii());
+        hash[i] = toInt(name.at(i * 2)) * 16 + toInt(name.at(i * 2 + 1));
     }
     for (ImageStoreItem* item : m_items) {
         if (item->hash() == hash) {
             return item;
         }
     }
-    LOGW() << "image not found: " << path;
+    LOGW() << "image not found: " << name;
     return nullptr;
 }
 
@@ -183,7 +144,7 @@ ImageStoreItem* ImageStore::getImage(const path_t& path) const
 //   add
 //---------------------------------------------------------
 
-ImageStoreItem* ImageStore::add(const path_t& path, const ByteArray& ba)
+ImageStoreItem* ImageStore::add(const std::string& name, const ByteArray& ba)
 {
     ByteArray hash = cryptographicHash()->hash(ba, ICryptographicHash::Algorithm::Md4);
     for (ImageStoreItem* item : m_items) {
@@ -191,7 +152,7 @@ ImageStoreItem* ImageStore::add(const path_t& path, const ByteArray& ba)
             return item;
         }
     }
-    ImageStoreItem* item = new ImageStoreItem(path);
+    ImageStoreItem* item = new ImageStoreItem(muse::io::suffix(name));
     item->set(ba, hash);
     m_items.push_back(item);
     return item;

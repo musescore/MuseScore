@@ -44,7 +44,7 @@ struct path_t {
 
     bool empty() const;
     size_t size() const;
-    bool withSuffix(const char* str) const;
+    bool hasSuffix(const char* str) const;
 
     path_t appendingComponent(const path_t& other) const;
     path_t appendingSuffix(const path_t& suffix) const;

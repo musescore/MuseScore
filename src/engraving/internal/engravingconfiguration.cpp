@@ -445,6 +445,11 @@ void EngravingConfiguration::setDoNotSaveEIDsForBackCompat(bool doNotSave)
     settings()->setSharedValue(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, Val(doNotSave));
 }
 
+bool EngravingConfiguration::allowReadingImagesFromOutsideMscz() const
+{
+    return false;
+}
+
 bool EngravingConfiguration::guitarProImportExperimental() const
 {
     return guitarProConfiguration() ? guitarProConfiguration()->experimental() : false;
