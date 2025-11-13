@@ -524,6 +524,11 @@ void FinaleParser::importTextExpressions()
         if (!expressionAssignment->calcIsAssignedInRequestedPart()) {
             continue;
         }
+        if (expressionAssignment->calcIsHiddenByAlternateNotation()) {
+            /// @todo Expressions hidden by alt notation are primarily cue names, but we may need to get smarter for other edge cases
+            /// @todo Revisit this when we know how we are importing cues
+            continue;
+        }
         if (!expressionAssignment->textExprId) {
             // Shapes are currently unsupported
             continue;
