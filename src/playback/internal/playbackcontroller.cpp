@@ -1384,12 +1384,17 @@ void PlaybackController::listenOnlineSoundsProcessingProgress(const TrackId trac
                     muse::remove(m_onlineSoundsBeingProcessed, trackId);
 
                     if (status.errorCode != 0 && status.errorCode != (int)Ret::Code::Cancel) {
-                        m_onlineSoundsErrorDetected = true;
                         LOGE() << "Error during online sounds processing: " << status.errorText << ", track: " << trackId;
+
+                        if (status.errorCode == (int)audio::Err::OnlineSoundsLimitReached) {
+                            showOnlineSoundsLimitReachedError(status);
+                        } else {
+                            m_onlineSoundsErrorDetected = true;
+                        }
                     }
 
                     if (m_onlineSoundsBeingProcessed.empty()) {
-                        m_onlineSoundsProcessingProgress.finish(Ret(!m_onlineSoundsErrorDetected));
+                        m_onlineSoundsProcessingProgress.finish(Ret(status.errorCode, status.errorText));
                     }
                 } break;
             }
@@ -1427,6 +1432,30 @@ void PlaybackController::showOnlineSoundsProcessingError()
 
         togglePlay();
     });
+}
+
+void PlaybackController::showOnlineSoundsLimitReachedError(const InputProcessingProgress::StatusInfo& status)
+{
+    IF_ASSERT_FAILED(status.errorCode == (int)audio::Err::OnlineSoundsLimitReached) {
+        return;
+    }
+
+    const String libName = String::fromStdString(muse::value(status.data, "libraryName"));
+    const String date = String::fromStdString(muse::value(status.data, "date"));
+    const String url = String::fromStdString(muse::value(status.data, "url"));
+
+    IF_ASSERT_FAILED(!libName.empty() && !date.empty() && !url.empty()) {
+        return;
+    }
+
+    const std::string text = muse::mtrc("playback", "You’ve reached your current render limit for %1. "
+                                                    "You will be able to process online sounds again after your quota resets on %2. "
+                                                    "More info: <a href=\"%3\">%3</a>.")
+                             .arg(libName)
+                             .arg(date)
+                             .arg(url).toStdString();
+
+    interactive()->warning(muse::trc("playback", "Unable to process online sounds"), text);
 }
 
 void PlaybackController::processOnlineSounds()

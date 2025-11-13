@@ -230,6 +230,7 @@ private:
     void listenOnlineSoundsProcessingProgress(const muse::audio::TrackId trackId);
     bool shouldShowOnlineSoundsProcessingError() const;
     void showOnlineSoundsProcessingError();
+    void showOnlineSoundsLimitReachedError(const muse::audio::InputProcessingProgress::StatusInfo& status);
     void processOnlineSounds();
     void clearOnlineSoundsCache();
 
