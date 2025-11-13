@@ -189,16 +189,47 @@ void FinaleParser::importArticulations()
         for (const MusxInstance<details::ArticulationAssign>& articAssign : articAssignList) {
             const MusxInstance<others::ArticulationDef>& articDef = m_doc->getOthers()->get<others::ArticulationDef>(m_currentMusxPartId, articAssign->articDef);
 
-            if (articDef->mainShape) {
-                // shapes currently unsupported
+            /// @todo perhaps process the articulation defs once and determine their properties. Then they can be assigned per assignment without recalculating
+            /// every time.
+
+            std::optional<char32_t> articChar;
+            char32_t articMusxChar = 0;
+            std::string articFontName;
+
+            auto calcArticSymbol = [&](char32_t theChar, const MusxInstance<FontInfo>& font, bool isShape, Cmper shapeId) -> std::optional<SymId> {
+                if (isShape) {
+                    if (MusxInstance<others::ShapeDef> shape = m_doc->getOthers()->get<others::ShapeDef>(m_currentMusxPartId, shapeId)) {
+                        if (std::optional<KnownShapeDefType> knownShape = shape->recognize()) {
+                            switch (knownShape.value()) {
+                                case KnownShapeDefType::TenutoMark:
+                                    return SymId::articTenutoAbove; // MuseScore figures out the actual above/below symbol
+                                /// @todo: add other cases if ever defined in musxdom
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                } else if (theChar) {
+                    SymId result = FinaleTextConv::symIdFromFinaleChar(theChar, font);
+                    articChar = FinaleTextConv::mappedChar(theChar, font);
+                    articMusxChar = theChar;
+                    articFontName = font->getName();
+                    return result;
+                }
+                return std::nullopt;
+            };
+
+            auto articSym = [&]() -> std::optional<SymId> {
+                if (std::optional<SymId> mainSym = calcArticSymbol(articDef->charMain, articDef->fontMain, articDef->mainIsShape, articDef->mainShape)) {
+                    return mainSym;
+                }
+                return calcArticSymbol(articDef->charAlt, articDef->fontAlt, articDef->altIsShape, articDef->altShape);
+            }();
+
+            if (!articSym.has_value()) {
+                // unknown value or shape
                 continue;
             }
-
-            const MusxInstance<FontInfo>& mainFont = articDef->fontMain ? articDef->fontMain : options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Articulation);
-            SymId mainSym = FinaleTextConv::symIdFromFinaleChar(articDef->charMain, mainFont);
-            std::optional<char32_t> mainChar = FinaleTextConv::mappedChar(articDef->charMain, mainFont);
-            // const MusxInstance<FontInfo> altFont = articDef->fontAlt ? articDef->fontAlt : options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Articulation);
-            // SymId altSym = FinaleTextConv::symIdFromFinaleChar(articDef->charAlt, altFont);
 
             // Fermatas
             /// @todo table copied from engraving/dom/fermata.cpp, maybe expose?
@@ -218,13 +249,13 @@ void FinaleParser::importArticulations()
                 { SymId::fermataShortAbove, FermataType::Short },
                 { SymId::fermataShortBelow, FermataType::Short },
             };
-            FermataType ft = muse::value(FERMATA_TYPES, mainSym, FermataType::Undefined);
+            FermataType ft = muse::value(FERMATA_TYPES, articSym.value(), FermataType::Undefined);
             if (ft != FermataType::Undefined) {
                 Fermata* fermata = Factory::createFermata(cr->segment());
                 fermata->setTrack(cr->track());
                 fermata->setPlacement(calculateUp(articAssign, articDef->autoVertMode, cr) ? PlacementV::ABOVE : PlacementV::BELOW);
                 /// @todo Verify that fermatas have no playback effect in Finale.
-                fermata->setSymIdAndTimeStretch(mainSym);
+                fermata->setSymIdAndTimeStretch(articSym.value());
                 fermata->setPlay(false);
                 // fermata->setSymId(mainSym);
                 // fermata->setPlay(articDef->playArtic);
@@ -237,7 +268,7 @@ void FinaleParser::importArticulations()
             // Breaths and pauses
             bool breathCreated = false;
             for (BreathType breathType : Breath::BREATH_LIST) {
-                if (mainSym == breathType.id) {
+                if (articSym.value() == breathType.id) {
                     Segment* breathSegment = cr->measure()->getSegment(SegmentType::Breath, cr->endTick());
                     Breath* breath = Factory::createBreath(breathSegment);
                     breath->setTrack(cr->track());
@@ -262,7 +293,7 @@ void FinaleParser::importArticulations()
             Chord* c = toChord(cr);
 
             // Notehead parentheses
-            if (mainSym == SymId::noteheadParenthesisLeft || (articDef->charMain == U'(' && !mainFont->calcIsSMuFL())) {
+            if (articSym.value() == SymId::noteheadParenthesisLeft || (articMusxChar == U'(' && !fontIsEngravingFont(articFontName))) {
                 engraving::Note* n = findClosestNote(articAssign, articDef, c);
                 if (!n->leftParen()) {
                     Parenthesis* p = Factory::createParenthesis(n);
@@ -275,7 +306,7 @@ void FinaleParser::importArticulations()
                     continue;
                 }
             }
-            if (mainSym == SymId::noteheadParenthesisRight || (articDef->charMain == U')' && !mainFont->calcIsSMuFL())) {
+            if (articSym.value() == SymId::noteheadParenthesisRight || (articMusxChar == U')' && !fontIsEngravingFont(articFontName))) {
                 engraving::Note* n = findClosestNote(articAssign, articDef, c);
                 if (!n->rightParen()) {
                     Parenthesis* p = Factory::createParenthesis(n);
@@ -290,7 +321,7 @@ void FinaleParser::importArticulations()
             }
 
             // Single-chord tremolos
-            TremoloType tt = tremoloTypeFromSymId(mainSym);
+            TremoloType tt = tremoloTypeFromSymId(articSym.value());
             if (tt != TremoloType::INVALID_TREMOLO) {
                 TremoloSingleChord* tremolo = Factory::createTremoloSingleChord(c);
                 tremolo->setTrack(c->track());
@@ -305,9 +336,9 @@ void FinaleParser::importArticulations()
             }
 
             // Arpeggios
-            if (mainSym == SymId::noSym && !c->arpeggio()) {
+            if (articSym.value() == SymId::noSym && !c->arpeggio()) {
                 // The Finale symbol is an optional character and not in SMuFL
-                if (mainChar.has_value() && mainChar.value() == U'\uF700') {
+                if (articChar.has_value() && articChar.value() == U'\uF700') {
                     Arpeggio* arpeggio = Factory::createArpeggio(c);
                     arpeggio->setTrack(c->track());
                     arpeggio->setArpeggioType(ArpeggioType::NORMAL);
@@ -329,12 +360,12 @@ void FinaleParser::importArticulations()
             /// @todo Ornament properties, chordlines, fingerings, trills, figured bass?, pedal lines?
             Articulation* a = nullptr;
 
-            if (muse::contains(ornamentSymbols, mainSym)) {
+            if (muse::contains(ornamentSymbols, articSym.value())) {
                 a = toArticulation(Factory::createOrnament(c));
-            } else if (mainChar.has_value()) {
+            } else if (articChar.has_value()) {
                 for (OrnamentDefinition od : ornamentList) {
-                    if (od.character == mainChar.value()) {
-                        mainSym = od.symId;
+                    if (od.character == articChar.value()) {
+                        articSym = od.symId;
                         a = toArticulation(Factory::createOrnament(c)); /// @todo accidentals
                         break;
                     }
@@ -346,7 +377,7 @@ void FinaleParser::importArticulations()
 
             // Other articulations
             a->setTrack(c->track());
-            a->setSymId(mainSym);
+            a->setSymId(articSym.value());
             a->setVisible(!articAssign->hide);
             setAndStyleProperty(a, Pid::ARTICULATION_ANCHOR, int(calculateAnchor(articAssign, articDef->autoVertMode, cr)), true);
             a->setPlayArticulation(articDef->playArtic);
