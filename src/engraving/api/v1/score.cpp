@@ -303,6 +303,14 @@ QString Score::extractLyrics() const
     return score()->extractLyrics();
 }
 
+/** APIDOC @property {Spanner[]} - list of spanners */
+QQmlListProperty<Spanner> Score::spanners()
+{
+    static std::vector<mu::engraving::Spanner*> spannerList;
+    spannerList = score()->spannerList();
+    return wrapContainerProperty<Spanner>(this, spannerList);
+}
+
 //---------------------------------------------------------
 //   Score::startCmd
 //---------------------------------------------------------
