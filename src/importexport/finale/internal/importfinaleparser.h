@@ -115,6 +115,8 @@ struct FontTracker
 
     static FontTracker fromEngravingFont(const engraving::MStyle& style, engraving::Sid styleId = engraving::Sid::musicalSymbolFont, double scaling = 1.0);
 
+    muse::draw::FontMetrics toFontMetrics(double mag);
+
     engraving::String fontName;
     double fontSize = 0.0;
     engraving::FontStyle fontStyle = engraving::FontStyle::Normal;

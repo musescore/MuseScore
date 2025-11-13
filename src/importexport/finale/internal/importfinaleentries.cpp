@@ -1077,7 +1077,6 @@ void FinaleParser::importEntries()
 
 static double systemPosByLine(ChordRest* cr, bool up)
 {
-    // sensible default for rests, redo once their position is set properly
     int line;
     if (cr->isChord()) {
         engraving::Note* n = up ? toChord(cr)->upNote() : toChord(cr)->downNote();
