@@ -122,6 +122,8 @@ private:
     void onOnlineSoundsChanged();
     void onIsPlayingChanged();
 
+    void listenViewModeChanges();
+
     void startListeningToProgress(const muse::audio::TrackId trackId);
     void stopListeningToProgress(const muse::audio::TrackId trackId);
 

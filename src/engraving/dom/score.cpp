@@ -146,6 +146,11 @@ static void markInstrumentsAsPrimary(std::vector<Part*>& parts)
     }
 }
 
+static BeatsPerSecond roundTempo(const BeatsPerSecond& bps)
+{
+    return muse::RealRound(bps.val, TEMPO_PRECISION);
+}
+
 //---------------------------------------------------------
 //   Score
 //---------------------------------------------------------
@@ -478,7 +483,7 @@ void Score::setUpTempoMap()
                 int tick2 = tickPositionFrom + pair2.first;
 
                 if (tempomap()->find(tick2) == tempomap()->end()) {
-                    tempomap()->setTempo(tick2, BeatsPerSecond(currentBps.val + pair2.second));
+                    tempomap()->setTempo(tick2, roundTempo(currentBps.val + pair2.second));
                 }
             }
         }
@@ -572,7 +577,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                     }
 
                     if (tt->isNormal() && !tt->isRelative() && !tempoPrimo) {
-                        tempoPrimo = tt->tempo();
+                        tempoPrimo = roundTempo(tt->tempo());
                     } else if (tt->isRelative()) {
                         tt->updateRelative();
                     }
@@ -585,14 +590,14 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                     } else if (tt->isTempoPrimo() && tt->followText()) {
                         tempomap()->setTempo(ticks, tempoPrimo ? *tempoPrimo : Constants::DEFAULT_TEMPO);
                     } else {
-                        tempomap()->setTempo(ticks, tt->tempo());
+                        tempomap()->setTempo(ticks, roundTempo(tt->tempo()));
                     }
                 }
             }
 
             if (!RealIsNull(stretch) && !RealIsEqual(stretch, 1.0)) {
                 BeatsPerSecond otempo = tempomap()->tempo(segment.tick().ticks());
-                BeatsPerSecond ntempo = otempo.val / stretch;
+                BeatsPerSecond ntempo = roundTempo(otempo.val / stretch);
                 tempomap()->setTempo(segment.tick().ticks(), ntempo);
 
                 Fraction tempoEndTick;
@@ -657,7 +662,7 @@ void Score::fixAnacrusisTempo(const std::vector<Measure*>& measures) const
         Measure* nextMeasure = measure->nextMeasure();
         if (nextMeasure) {
             if (TempoText* tt = getTempoTextIfExist(nextMeasure); tt) {
-                tempomap()->setTempo(measure->tick().ticks(), tt->tempo());
+                tempomap()->setTempo(measure->tick().ticks(), roundTempo(tt->tempo()));
             }
         }
     }
@@ -4299,7 +4304,7 @@ void Score::setTempo(Segment* segment, BeatsPerSecond tempo)
 
 void Score::setTempo(const Fraction& tick, BeatsPerSecond tempo)
 {
-    tempomap()->setTempo(tick.ticks(), tempo);
+    tempomap()->setTempo(tick.ticks(), roundTempo(tempo));
     setPlaylistDirty();
 }
 
