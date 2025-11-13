@@ -54,6 +54,7 @@ class Selection;
 class Score;
 class Staff;
 class Lyric;
+class Spanner;
 
 extern Selection* selectionWrap(mu::engraving::Selection* select);
 
@@ -169,6 +170,9 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     /// List of lyrics in this score.
     /// \since MuseScore 4.7
     Q_PROPERTY(QQmlListProperty<apiv1::Lyric> lyrics READ lyrics)
+    /// List of spanners (hairpins, slurs, etc.) in this score.
+    /// \since MuseScore 4.7
+    Q_PROPERTY(QQmlListProperty<apiv1::Spanner> spanners READ spanners)
 
     muse::Inject<mu::context::IGlobalContext> context = { this };
 
@@ -350,6 +354,7 @@ public:
     QQmlListProperty<apiv1::Staff> staves();
     QQmlListProperty<apiv1::Page> pages();
     QQmlListProperty<apiv1::System> systems();
+    QQmlListProperty<apiv1::Spanner> spanners();
 
     static const mu::engraving::InstrumentTemplate* instrTemplateFromName(const QString& name);   // used by PluginAPI::newScore()
     /// \endcond

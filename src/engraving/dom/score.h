@@ -953,6 +953,7 @@ public:
     const std::multimap<int, Spanner*>& spanner() const { return m_spanner.map(); }
     SpannerMap& spannerMap() { return m_spanner; }
     const SpannerMap& spannerMap() const { return m_spanner; }
+    std::vector<Spanner*> spannerList() const; // Return all spanners as a vector for Plugin API
     bool isSpannerStartEnd(const Fraction& tick, track_idx_t track) const;
     void removeSpanner(Spanner*);
     void addSpanner(Spanner*, bool computeStartEnd = true);
