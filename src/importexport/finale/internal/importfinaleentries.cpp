@@ -591,7 +591,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         if (!currentEntry->floatRest && !currentEntry->notes.empty()) {
             NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, 0);
             EntryInfoPtr entryInfo = noteInfoPtr.getEntryInfo();
-            StaffCmper targetMusxStaffId = muse::value(m_staff2Inst, rest->staffIdx(), 0);
+            StaffCmper targetMusxStaffId = muse::value(m_staff2Inst, idx, 0);
             IF_ASSERT_FAILED (targetMusxStaffId) {
                 logger()->logWarning(String(u"Entry %1 (a rest) was not mapped to a known musx staff.").arg(entryInfo->getEntry()->getEntryNumber()), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
                 return false;
