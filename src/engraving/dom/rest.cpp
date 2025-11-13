@@ -248,10 +248,10 @@ SymId Rest::getSymbol(DurationType type, int line, int lines) const
     case DurationType::V_LONG:
         return SymId::restLonga;
     case DurationType::V_BREVE:
-        return SymId::restDoubleWhole;
+        return (line < 0 || line >= lines) ? SymId::restDoubleWholeLegerLine : SymId::restDoubleWhole;
     case DurationType::V_MEASURE:
         if (ticks() >= Fraction(2, 1)) {
-            return SymId::restDoubleWhole;
+            return (line < 0 || line >= lines) ? SymId::restDoubleWholeLegerLine : SymId::restDoubleWhole;
         }
     // fall through
     case DurationType::V_WHOLE:
