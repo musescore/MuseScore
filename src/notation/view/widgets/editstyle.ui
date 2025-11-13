@@ -10463,7 +10463,7 @@
               <property name="title">
                <string>Lyrics text</string>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_30">
+              <layout class="QVBoxLayout" name="verticalLayout_302">
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_7">
                  <item>
@@ -10474,7 +10474,7 @@
                   </widget>
                  </item>
                  <item>
-                  <spacer name="horizontalSpacer">
+                  <spacer name="horizontalSpacer_1">
                    <property name="orientation">
                     <enum>Qt::Orientation::Horizontal</enum>
                    </property>
