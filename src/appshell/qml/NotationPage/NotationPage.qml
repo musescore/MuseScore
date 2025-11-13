@@ -622,7 +622,7 @@ DockPage {
                 "steps": [
                     {
                         "title": qsTrc("playback", "This sound processes online"),
-                        "description": qsTrc("playback", "An animated bar will let you know when sounds are processing online. You’ll also see a notification in the status bar. You can change when these notifications appear in Preferences > Audio & MIDI…"),
+                        "description": qsTrc("playback", "Audio is processed in the background while you work. To trigger processing yourself, turn off automatic processing in Preferences > Audio & MIDI > Online sounds."),
                         "controlUri": "control://NotationStatusBar/NotationStatusBar/OnlineSoundsStatusView",
                         "previewImageOrGifUrl": "qrc:/resources/OnlineSoundsPreview.gif",
                         "videoExplanationUrl": "https://youtu.be/hQ4YqmHM3BE?utm_source=mss-app-yt-4.6-cantai&utm_medium=mss-app-yt-4.6-cantai&utm_campaign=mss-app-yt-4.6-cantai"
