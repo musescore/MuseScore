@@ -108,7 +108,7 @@ std::optional<char32_t> FinaleTextConv::mappedChar(char32_t c, const MusxInstanc
 {
     if (!font->calcIsSMuFL()) { /// @todo See note above about `calcIsSMuFL`
         if (const smufl_mapping::LegacyGlyphInfo* legacyGlyphInfo = smufl_mapping::getLegacyGlyphInfo(font->getName(), c)) {
-            if (legacyGlyphInfo->source == smufl_mapping::SmuflGlyphSource::Smufl) { /// @todo do something with optional glyphs from Finale and/or Bravura?
+            if (legacyGlyphInfo->source == smufl_mapping::SmuflGlyphSource::Smufl || legacyGlyphInfo->source == smufl_mapping::SmuflGlyphSource::Finale) {
                 if (legacyGlyphInfo->codepoint.has_value()) {
                     return legacyGlyphInfo->codepoint.value();
                 }

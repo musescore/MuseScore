@@ -28,6 +28,7 @@
 #include <exception>
 
 #include "musx/musx.h"
+#include "smufl_mapping.h"
 
 #include "types/string.h"
 
@@ -337,23 +338,26 @@ void FinaleParser::importArticulations()
 
             // Arpeggios
             if (articSym.value() == SymId::noSym && !c->arpeggio()) {
-                // The Finale symbol is an optional character and not in SMuFL
-                if (articChar.has_value() && articChar.value() == U'\uFFFD') {
-                    Arpeggio* arpeggio = Factory::createArpeggio(c);
-                    arpeggio->setTrack(c->track());
-                    arpeggio->setArpeggioType(ArpeggioType::NORMAL);
-                    // arpeggio->setUserLen1(absoluteDouble);
-                    // arpeggio->setUserLen2(absoluteDouble);
-                    // arpeggio->setSpan(int);
-                    arpeggio->setPlayArpeggio(articDef->playArtic);
-                    // Playback values in finale are EDUs by default, or in % by non-default (exact workings needs to be investigated)
-                    // MuseScore is relative to BPM 120 (8 notes take the spread time beats).
-                    Fraction totalArpDuration = eduToFraction(articDef->startTopNoteDelta - articDef->startBotNoteDelta);
-                    double beatsPerSecondRatio = m_score->tempo(c->segment()->tick()).val / 2.0; // We are this much faster/slower than 120 bpm
-                    double timeIn120BPM = totalArpDuration.toDouble() / beatsPerSecondRatio;
-                    arpeggio->setStretch(timeIn120BPM * 8.0 / c->notes().size());
-                    arpeggio->setParent(c);
-                    c->setArpeggio(arpeggio);
+                if (articChar.has_value()) {
+                    // The Finale symbol is an optional character and not in SMuFL
+                    const std::string_view* glyphName = smufl_mapping::getGlyphName(articChar.value(), smufl_mapping::SmuflGlyphSource::Finale);
+                    if (glyphName && *glyphName == "arpeggioVerticalSegment") {
+                        Arpeggio* arpeggio = Factory::createArpeggio(c);
+                        arpeggio->setTrack(c->track());
+                        arpeggio->setArpeggioType(ArpeggioType::NORMAL);
+                        // arpeggio->setUserLen1(absoluteDouble);
+                        // arpeggio->setUserLen2(absoluteDouble);
+                        // arpeggio->setSpan(int);
+                        arpeggio->setPlayArpeggio(articDef->playArtic);
+                        // Playback values in finale are EDUs by default, or in % by non-default (exact workings needs to be investigated)
+                        // MuseScore is relative to BPM 120 (8 notes take the spread time beats).
+                        Fraction totalArpDuration = eduToFraction(articDef->startTopNoteDelta - articDef->startBotNoteDelta);
+                        double beatsPerSecondRatio = m_score->tempo(c->segment()->tick()).val / 2.0; // We are this much faster/slower than 120 bpm
+                        double timeIn120BPM = totalArpDuration.toDouble() / beatsPerSecondRatio;
+                        arpeggio->setStretch(timeIn120BPM * 8.0 / c->notes().size());
+                        arpeggio->setParent(c);
+                        c->setArpeggio(arpeggio);
+                    }
                 }
             }
 
