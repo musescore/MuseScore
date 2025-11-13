@@ -338,7 +338,7 @@ void FinaleParser::importArticulations()
             // Arpeggios
             if (articSym.value() == SymId::noSym && !c->arpeggio()) {
                 // The Finale symbol is an optional character and not in SMuFL
-                if (articChar.has_value() && articChar.value() == U'\uF700') {
+                if (articChar.has_value() && articChar.value() == U'\uFFFD') {
                     Arpeggio* arpeggio = Factory::createArpeggio(c);
                     arpeggio->setTrack(c->track());
                     arpeggio->setArpeggioType(ArpeggioType::NORMAL);
