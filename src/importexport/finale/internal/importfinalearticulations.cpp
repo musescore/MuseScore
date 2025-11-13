@@ -344,6 +344,7 @@ void FinaleParser::importArticulations()
                     if (c->isGrace()) {
                         continue;
                     }
+                    Segment* s = c->segment();
                     track_idx_t topChordTrack = c->track();
                     track_idx_t bottomChordTrack = c->track();
                     if (const System* sys = c->measure()->system()) {
@@ -377,8 +378,8 @@ void FinaleParser::importArticulations()
                             if (!sys->staff(track2staff(track))->show()) {
                                 continue;
                             }
-                            if (c->segment()->element(track) && c->segment()->element(track)->isChord()) {
-                                Chord* potentialMatch = toChord(c->segment()->element(track));
+                            if (s->element(track) && s->element(track)->isChord()) {
+                                Chord* potentialMatch = toChord(s->element(track));
                                 // Check for up match
                                 // Iterate through and find best top/bottom matches
                                 // Then add to top chord (not c) and set spanArpeggio (only for lower chord?) as appropriate
@@ -401,14 +402,15 @@ void FinaleParser::importArticulations()
                             }
                         }
                     }
-                    Chord* arpChord = toChord(c->segment()->element(topChordTrack));
+                    Chord* arpChord = toChord(s->element(topChordTrack));
                     Arpeggio* arpeggio = Factory::createArpeggio(arpChord);
                     arpeggio->setTrack(topChordTrack);
                     arpeggio->setArpeggioType(ArpeggioType::NORMAL);
                     arpeggio->setSpan(int(bottomChordTrack + 1 - topChordTrack));
-                    if (arpeggio->span() > 1) {
-                        Chord* spanChord = toChord(toChord(c->segment()->element(bottomChordTrack)));
-                        spanChord->setSpanArpeggio(arpeggio);
+                    for (track_idx_t track = topChordTrack; track <= bottomChordTrack; ++track) {
+                        if (s->element(track) && s->element(track)->isChord()) {
+                            toChord(s->element(track))->setSpanArpeggio(arpeggio);
+                        }
                     }
                     // Unused, probably don't map nicely
                     // arpeggio->setUserLen1(absoluteDouble);
@@ -417,11 +419,11 @@ void FinaleParser::importArticulations()
                     // Playback values in finale are EDUs by default, or in % by non-default (exact workings needs to be investigated)
                     // MuseScore is relative to BPM 120 (8 notes take the spread time beats).
                     Fraction totalArpDuration = eduToFraction(articDef->startTopNoteDelta - articDef->startBotNoteDelta);
-                    double beatsPerSecondRatio = m_score->tempo(c->segment()->tick()).val / 2.0; // We are this much faster/slower than 120 bpm
+                    double beatsPerSecondRatio = m_score->tempo(s->tick()).val / 2.0; // We are this much faster/slower than 120 bpm
                     double timeIn120BPM = totalArpDuration.toDouble() / beatsPerSecondRatio;
                     arpeggio->setStretch(timeIn120BPM * 8.0 / c->notes().size());
                     arpeggio->setParent(arpChord);
-                    c->setArpeggio(arpeggio);
+                    arpChord->setArpeggio(arpeggio);
                 }
             }
 
