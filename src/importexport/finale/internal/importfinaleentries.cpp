@@ -1336,7 +1336,7 @@ void FinaleParser::importEntryAdjustments()
         if (!forceFlatten && !muse::RealIsEqual(preferredStart, preferredEnd) && beam->elements().size() > 2) {
             if (musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::OnExtremeNote) {
                 for (ChordRest* cr : beam->elements()) {
-                    if (cr == startCr || cr == endCr) {
+                    if (cr == startCr || cr == endCr || cr->isRest()) {
                         continue;
                     }
                     double beamPos = systemPosByLine(cr, up) + stemLengthAdjust * cr->spatium();
@@ -1353,7 +1353,7 @@ void FinaleParser::importEntryAdjustments()
                 double prevPos = systemPosByLine(startCr, up);
 
                 for (ChordRest* cr : beam->elements()) {
-                    if (cr == startCr) {
+                    if (cr == startCr || cr->isRest()) {
                         continue;
                     }
 
