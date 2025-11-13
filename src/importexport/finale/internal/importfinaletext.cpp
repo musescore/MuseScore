@@ -743,7 +743,7 @@ void FinaleParser::importTextExpressions()
             }
             p.rx() += absoluteDoubleFromEvpu(exprDef->measXAdjust, expr);
 
-            StaffCmper effectiveMusxStaffId = expressionAssignment->staffAssign >= 0 ? expressionAssignment->staffAssign : muse::value(m_staff2Inst, expr->staffIdx(), 1);
+            StaffCmper effectiveMusxStaffId = exprAssign->staffAssign >= 0 ? exprAssign->staffAssign : muse::value(m_staff2Inst, expr->staffIdx(), 1);
             const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, effectiveMusxStaffId, exprAssign->getCmper(), 0);
             const Staff* staff = m_score->staff(expr->staffIdx());
             const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick()) * staff->staffType(s->tick())->lineDistance().val();
