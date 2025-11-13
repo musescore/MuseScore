@@ -53,7 +53,7 @@ const PropertyValue& MStyle::value(Sid idx) const
         return val;
     }
 
-    return StyleDef::styleValues[size_t(idx)].defaultValue();
+    return StyleDef::styleValues[size_t(idx)].defaultValue;
 }
 
 Millimetre MStyle::valueMM(Sid idx) const
@@ -85,7 +85,7 @@ void MStyle::set(const Sid t, const PropertyValue& val)
 
 double MStyle::defaultSpatium() const
 {
-    return StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue().toDouble();
+    return StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue.toDouble();
 }
 
 void MStyle::precomputeValues()
@@ -93,7 +93,7 @@ void MStyle::precomputeValues()
     double _spatium = value(Sid::spatium).toReal();
     for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
         if (t.valueType() == P_TYPE::SPATIUM) {
-            m_precomputedValues[t.idx()] = value(t.styleIdx()).value<Spatium>().val() * _spatium;
+            m_precomputedValues[t.idx()] = value(t.sid).value<Spatium>().val() * _spatium;
         }
     }
 }
@@ -118,8 +118,8 @@ bool MStyle::readProperties(XmlReader& e)
     const AsciiStringView tag(e.name());
 
     for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
-        Sid idx = t.styleIdx();
-        if (t.name() == tag) {
+        Sid idx = t.sid;
+        if (t.xmlName == tag) {
             P_TYPE type = t.valueType();
             switch (type) {
             case P_TYPE::SPATIUM:
@@ -633,11 +633,11 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
         set(Sid::verticallyAlignChordSymbols, verticalChordAlign);
         // Make sure new position styles are initially the same as align values
         for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
-            Sid positionSid = compat::CompatUtils::positionStyleFromAlign(st.styleIdx());
+            Sid positionSid = compat::CompatUtils::positionStyleFromAlign(st.sid);
             if (positionSid == Sid::NOSTYLE) {
                 continue;
             }
-            AlignH val = value(st.styleIdx()).value<Align>().horizontal;
+            AlignH val = value(st.sid).value<Align>().horizontal;
             set(positionSid, val);
         }
 
@@ -700,7 +700,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
     xml.startElement("Style");
 
     for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
-        Sid idx = st.styleIdx();
+        Sid idx = st.sid;
         if (idx == Sid::spatium) {         // special handling for spatium
             continue;
         }
@@ -709,53 +709,53 @@ void MStyle::save(XmlWriter& xml, bool optimize)
         }
         P_TYPE type = st.valueType();
         if (P_TYPE::SPATIUM == type) {
-            xml.tag(st.name(), value(idx).value<Spatium>().val());
+            xml.tag(st.xmlName, value(idx).value<Spatium>().val());
         } else if (P_TYPE::DIRECTION_V == type) {
-            xml.tag(st.name(), int(value(idx).value<DirectionV>()));
+            xml.tag(st.xmlName, int(value(idx).value<DirectionV>()));
         } else if (P_TYPE::ALIGN == type) {
             Align a = value(idx).value<Align>();
             // Don't write if it's the default value
-            if (optimize && a == st.defaultValue().value<Align>()) {
+            if (optimize && a == st.defaultValue.value<Align>()) {
                 continue;
             }
-            xml.tag(st.name(), TConv::toXml(a));
+            xml.tag(st.xmlName, TConv::toXml(a));
         } else if (P_TYPE::ALIGN_H == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<AlignH>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<AlignH>()));
         } else if (P_TYPE::LINE_TYPE == type) {
-            xml.tagProperty(st.name(), value(idx));
+            xml.tagProperty(st.xmlName, value(idx));
         } else if (P_TYPE::TIE_PLACEMENT == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<TiePlacement>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<TiePlacement>()));
         } else if (P_TYPE::TIE_DOTS_PLACEMENT == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<TieDotsPlacement>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<TieDotsPlacement>()));
         } else if (P_TYPE::TIMESIG_PLACEMENT == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigPlacement>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<TimeSigPlacement>()));
         } else if (P_TYPE::TIMESIG_STYLE == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigStyle>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<TimeSigStyle>()));
         } else if (P_TYPE::TIMESIG_MARGIN == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigVSMargin>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<TimeSigVSMargin>()));
         } else if (P_TYPE::CHORD_PRESET_TYPE == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<ChordStylePreset>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<ChordStylePreset>()));
         } else if (P_TYPE::NOTE_SPELLING_TYPE == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<NoteSpellingType>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<NoteSpellingType>()));
         } else if (P_TYPE::LH_TAPPING_SYMBOL == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<LHTappingSymbol>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<LHTappingSymbol>()));
         } else if (P_TYPE::RH_TAPPING_SYMBOL == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<RHTappingSymbol>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<RHTappingSymbol>()));
         } else if (P_TYPE::TEXT_STYLE == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<TextStyleType>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<TextStyleType>()));
         } else if (P_TYPE::PARENTHESES_MODE == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<ParenthesesMode>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<ParenthesesMode>()));
         } else if (P_TYPE::PLAY_COUNT_PRESET == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<RepeatPlayCountPreset>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<RepeatPlayCountPreset>()));
         } else if (P_TYPE::MEASURE_NUMBER_PLACEMENT == type) {
-            xml.tag(st.name(), TConv::toXml(value(idx).value<MeasureNumberPlacement>()));
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<MeasureNumberPlacement>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility
             if (val.isEnum()) {
                 val = val.value<int>();
             }
-            xml.tagProperty(st.name(), val);
+            xml.tagProperty(st.xmlName, val);
         }
     }
 
@@ -778,15 +778,15 @@ const char* MStyle::valueName(const Sid i)
         static const char* no_style = "no style";
         return no_style;
     }
-    return StyleDef::styleValues[size_t(i)].name().ascii();
+    return StyleDef::styleValues[size_t(i)].xmlName.ascii();
 }
 
 Sid MStyle::styleIdx(const String& name)
 {
     muse::ByteArray ba = name.toAscii();
     for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
-        if (st.name() == ba.constChar()) {
-            return st.styleIdx();
+        if (st.xmlName == ba.constChar()) {
+            return st.sid;
         }
     }
     return Sid::NOSTYLE;

@@ -93,7 +93,7 @@ double EngravingFont::textEnclosureThickness()
 
 double DEFAULT_SMUFL_POINT_SIZE()
 {
-    const double DEFAULT_SPATIUM = StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue().toDouble();
+    const double DEFAULT_SPATIUM = StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue.toDouble();
     const double DEFAULT_SPATIUM_IN_POINT_UNITS = DEFAULT_SPATIUM / mu::engraving::DPI * mu::engraving::PPI;
     const double DEFAULT_SMUFL_POINT_SIZE = 4 * DEFAULT_SPATIUM_IN_POINT_UNITS; // By Smufl spec the spatium is 1/4 of the em
 
@@ -757,7 +757,7 @@ void EngravingFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
             const JsonArray arr = anchors.value(anchorId).toArray();
             const double x = arr.at(0).toDouble();
             const double y = arr.at(1).toDouble();
-            const double defaultSpatium = StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue().toDouble();
+            const double defaultSpatium = StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue.toDouble();
             sym.smuflAnchors[search->second] = PointF(x, -y) * defaultSpatium;
         }
     }
