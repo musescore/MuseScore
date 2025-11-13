@@ -27,6 +27,7 @@
 namespace mu::engraving {
 class Page;
 class System;
+enum class SystemDividerType : unsigned char;
 }
 
 namespace mu::engraving::rendering::score {
@@ -39,12 +40,14 @@ public:
 
 private:
     static void layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding);
-    static void checkDivider(LayoutContext& ctx, bool left, System* s, double yOffset, bool remove = false);
     static void distributeStaves(LayoutContext& ctx, Page* page, double footerPadding);
 
     static void layoutCrossStaffElements(LayoutContext& ctx, Page* page);
     static void layoutCrossStaffSlurs(LayoutContext& ctx, System* system);
     static void layoutArticAndFingeringOnCrossStaffBeams(LayoutContext& ctx, System* system);
+
+    static void layoutSystemDividers(LayoutContext& ctx, Page* page);
+    static void updateSystemDivider(LayoutContext& ctx, System* system, System* nextSystem, SystemDividerType type, bool needsDivider);
 };
 }
 

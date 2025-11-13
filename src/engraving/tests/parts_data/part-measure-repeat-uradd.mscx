@@ -5,6 +5,8 @@
     <Division>480</Division>
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
+      <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
+      <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
@@ -834,6 +836,8 @@
       <name>Alto</name>
       <Division>480</Division>
       <Style>
+        <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
+        <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -1313,6 +1317,8 @@
       <name>Tenor</name>
       <Division>480</Division>
       <Style>
+        <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
+        <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>

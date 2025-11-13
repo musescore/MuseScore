@@ -315,6 +315,14 @@ EditStyle::EditStyle(QWidget* parent)
     mmRestConstantWidth->addButton(mmRestWidthProportional, 0);
     mmRestConstantWidth->addButton(mmRestWidthConstant, 1);
 
+    QButtonGroup* dividerLeftAlignToSystemBarline = new QButtonGroup(this);
+    dividerLeftAlignToSystemBarline->addButton(leftDividerAlignToSystemBarline, 1);
+    dividerLeftAlignToSystemBarline->addButton(leftDividerAlignToMargin, 0);
+
+    QButtonGroup* dividerRightAlignToSystemBarline = new QButtonGroup(this);
+    dividerRightAlignToSystemBarline->addButton(rightDividerAlignToSystemBarline, 1);
+    dividerRightAlignToSystemBarline->addButton(rightDividerAlignToPageMargin, 0);
+
     // ====================================================
     // Style widgets
     // ====================================================
@@ -470,11 +478,15 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::akkoladeWidth,           false, akkoladeWidth,           resetBraceThickness },
         { StyleId::akkoladeBarDistance,     false, akkoladeBarDistance,     resetBraceDistance },
         { StyleId::dividerLeft,             false, dividerLeft,             0 },
-        { StyleId::dividerLeftX,            false, dividerLeftX,            0 },
-        { StyleId::dividerLeftY,            false, dividerLeftY,            0 },
+        { StyleId::dividerLeftX,            false, dividerLeftX,            dividerLeftXReset },
+        { StyleId::dividerLeftY,            false, dividerLeftY,            dividerLeftYReset },
         { StyleId::dividerRight,            false, dividerRight,            0 },
-        { StyleId::dividerRightX,           false, dividerRightX,           0 },
-        { StyleId::dividerRightY,           false, dividerRightY,           0 },
+        { StyleId::dividerRightX,           false, dividerRightX,           dividerRightXReset },
+        { StyleId::dividerRightY,           false, dividerRightY,           dividerRightYReset },
+        { StyleId::dividerLeftSize,         true,  dividerLeftSize,         dividerLeftSizeReset },
+        { StyleId::dividerRightSize,        true,  dividerRightSize,        dividerRightSizeReset },
+        { StyleId::dividerLeftAlignToSystemBarline, true, dividerLeftAlignToSystemBarline, 0 },
+        { StyleId::dividerRightAlignToSystemBarline, false, dividerRightAlignToSystemBarline, 0 },
         { StyleId::articulationMinDistance, false, articMinVerticalDist,    resetArticMinVerticalDist },
         { StyleId::propertyDistanceHead,    false, articNoteHeadDist,       resetArticNoteHeadDist },
         { StyleId::propertyDistanceStem,    false, articStemDist,           resetArticStemDist },
@@ -531,8 +543,8 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::startBarlineSingle,       false, showStartBarlineSingle,       resetShowStartBarlineSingle },
         { StyleId::startBarlineMultiple,     false, showStartBarlineMultiple,     resetShowStartBarlineMultiple },
         { StyleId::maskBarlinesForText,      false, maskBarlines,                 resetMaskBarlines },
-        { StyleId::dividerLeftSym,           false, dividerLeftSym,               0 },
-        { StyleId::dividerRightSym,          false, dividerRightSym,              0 },
+        { StyleId::dividerLeftSym,           false, dividerLeftSym,               dividerLeftSymReset },
+        { StyleId::dividerRightSym,          false, dividerRightSym,              dividerRightSymReset },
 
         { StyleId::graceNoteMag,             true,  graceNoteSize,                resetGraceNoteSize },
         { StyleId::smallStaffMag,            true,  smallStaffSize,               resetSmallStaffSize },
@@ -764,11 +776,15 @@ EditStyle::EditStyle(QWidget* parent)
     static const SymId ids[] = {
         SymId::systemDivider, SymId::systemDividerLong, SymId::systemDividerExtraLong
     };
-    for (SymId id : ids) {
-        const QString& un = SymNames::translatedUserNameForSymId(id);
-        AsciiStringView n = SymNames::nameForSymId(id);
-        dividerLeftSym->addItem(un,  QVariant(QString(n.toQLatin1String())));
-        dividerRightSym->addItem(un, QVariant(QString(n.toQLatin1String())));
+    static const TranslatableString names [] {
+        TranslatableString("engraving", "Normal"),
+        TranslatableString("engraving", "Long"),
+        TranslatableString("engraving", "Extra long"),
+    };
+    for (size_t i = 0; i < 3; ++i) {
+        AsciiStringView n = SymNames::nameForSymId(ids[i]);
+        dividerLeftSym->addItem(names[i].qTranslated(),  QVariant(QString(n.toQLatin1String())));
+        dividerRightSym->addItem(names[i].qTranslated(), QVariant(QString(n.toQLatin1String())));
     }
 
     // ====================================================
@@ -2077,6 +2093,8 @@ bool EditStyle::isBoolStyleRepresentedByButtonGroup(StyleId id)
     case StyleId::singleMeasureMMRestUseNormalRest:
     case StyleId::mmRestConstantWidth:
     case StyleId::angleHangingSlursAwayFromStaff:
+    case StyleId::dividerLeftAlignToSystemBarline:
+    case StyleId::dividerRightAlignToSystemBarline:
         return true;
     default:
         return false;

@@ -29,6 +29,9 @@ namespace mu::engraving {
 //---------------------------------------------------------
 //   SystemDivider
 //---------------------------------------------------------
+enum class SystemDividerType : unsigned char {
+    LEFT, RIGHT
+};
 
 class SystemDivider final : public Symbol
 {
@@ -41,22 +44,24 @@ public:
 
     SystemDivider* clone() const override { return new SystemDivider(*this); }
 
-    enum class Type : unsigned char {
-        LEFT, RIGHT
-    };
-
-    Type dividerType() const { return m_dividerType; }
-    void setDividerType(Type v);
+    SystemDividerType dividerType() const { return m_dividerType; }
+    void setDividerType(SystemDividerType v);
 
     RectF drag(EditData&) override;
 
     Segment* segment() const override { return nullptr; }
     System* system() const { return (System*)explicitParent(); }
 
+    PropertyValue propertyDefault(Pid id) const override;
+
     void styleChanged() override;
 
+    std::vector<LineF> dragAnchorLines() const override;
+
+    void reset() override;
+
 private:
-    Type m_dividerType = Type::LEFT;
+    SystemDividerType m_dividerType = SystemDividerType::LEFT;
 };
 } // namespace mu::engraving
 

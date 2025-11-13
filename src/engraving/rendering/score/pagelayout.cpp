@@ -22,7 +22,6 @@
 #include "pagelayout.h"
 
 #include "realfn.h"
-#include "defer.h"
 
 #include "dom/barline.h"
 #include "dom/beam.h"
@@ -45,7 +44,6 @@
 #include "dom/staff.h"
 #include "dom/staffvisibilityindicator.h"
 #include "dom/system.h"
-#include "dom/systemdivider.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 #include "dom/tuplet.h"
@@ -400,6 +398,8 @@ void PageLayout::collectPage(LayoutContext& ctx)
 
     MaskLayout::computeMasks(ctx, page);
 
+    layoutSystemDividers(ctx, page);
+
     page->invalidateBspTree();
 }
 
@@ -528,21 +528,10 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
         System* s2 = page->systems().at(i + 1);
         s1->setDistance(s2->y() - s1->y());
         if (s1->vbox() || s2->vbox() || s1->hasFixedDownDistance()) {
-            if (s2->vbox()) {
-                checkDivider(ctx, true, s1, 0.0, true);              // remove
-                checkDivider(ctx, false, s1, 0.0, true);             // remove
-                checkDivider(ctx, true, s2, 0.0, true);              // remove
-                checkDivider(ctx, false, s2, 0.0, true);             // remove
-            }
             continue;
         }
         sList.push_back(s1);
     }
-
-    // last system needs no divider
-    System* lastSystem = page->systems().back();
-    checkDivider(ctx, true, lastSystem, 0.0, true);        // remove
-    checkDivider(ctx, false, lastSystem, 0.0, true);       // remove
 
     if (sList.empty() || MScore::noVerticalStretch || ctx.conf().isVerticalSpreadEnabled()
         || ctx.conf().viewMode() == LayoutMode::SYSTEM) {
@@ -554,16 +543,6 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
             distributeStaves(ctx, page, footerPadding);
         }
 
-        // system dividers
-        for (int i = 0; i < gaps; ++i) {
-            System* s1 = page->systems().at(i);
-            System* s2 = page->systems().at(i + 1);
-            if (!(s1->vbox() || s2->vbox())) {
-                double yOffset = s1->height() + (s1->distance() - s1->height()) * .5;
-                checkDivider(ctx, true,  s1, yOffset);
-                checkDivider(ctx, false, s1, yOffset);
-            }
-        }
         return;
     }
 
@@ -613,49 +592,11 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
     double y = page->systems().at(0)->y();
     for (int i = 0; i < gaps; ++i) {
         System* s1  = page->systems().at(i);
-        System* s2  = page->systems().at(i + 1);
         s1->mutldata()->setPosY(y);
-        y          += s1->distance();
-
-        if (!(s1->vbox() || s2->vbox())) {
-            double yOffset = s1->height() + (s1->distance() - s1->height()) * .5;
-            checkDivider(ctx, true,  s1, yOffset);
-            checkDivider(ctx, false, s1, yOffset);
-        }
+        y += s1->distance();
     }
+
     page->systems().back()->mutldata()->setPosY(y);
-}
-
-void PageLayout::checkDivider(LayoutContext& ctx, bool left, System* s, double yOffset, bool remove)
-{
-    SystemDivider* divider = left ? s->systemDividerLeft() : s->systemDividerRight();
-    SystemDivider::LayoutData* dividerLdata = nullptr;
-    if ((ctx.conf().styleB(left ? Sid::dividerLeft : Sid::dividerRight)) && !remove) {
-        if (!divider) {
-            divider = new SystemDivider(s);
-            divider->setDividerType(left ? SystemDivider::Type::LEFT : SystemDivider::Type::RIGHT);
-            divider->setGenerated(true);
-            s->add(divider);
-        }
-        dividerLdata = divider->mutldata();
-        TLayout::layoutSystemDivider(divider, divider->mutldata(), ctx);
-        dividerLdata->setPosY(divider->height() * .5 + yOffset);
-        if (left) {
-            dividerLdata->moveY(ctx.conf().styleD(Sid::dividerLeftY) * ctx.conf().defaultSpatium());
-            dividerLdata->setPosX(ctx.conf().styleD(Sid::dividerLeftX) * ctx.conf().defaultSpatium());
-        } else {
-            dividerLdata->moveY(ctx.conf().styleD(Sid::dividerRightY) * ctx.conf().defaultSpatium());
-            dividerLdata->setPosX(ctx.conf().styleD(Sid::pagePrintableWidth) * DPI - divider->width());
-            dividerLdata->moveX(ctx.conf().styleD(Sid::dividerRightX) * ctx.conf().defaultSpatium());
-        }
-    } else if (divider) {
-        if (divider->generated()) {
-            s->remove(divider);
-            delete divider;
-        } else {
-            ctx.mutDom().undoRemoveElement(divider);
-        }
-    }
 }
 
 void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerPadding)
@@ -858,4 +799,82 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
         SystemLayout::layoutInstrumentNames(system, ctx);
     }
     vgdl.deleteAll();
+}
+
+void PageLayout::layoutSystemDividers(LayoutContext& ctx, Page* page)
+{
+    const std::vector<System*>& systems = page->systems();
+    for (size_t i = 0; i < systems.size(); ++i) {
+        System* system = systems[i];
+        if (system->vbox()) {
+            continue;
+        }
+
+        System* nextSystem = i + 1 < systems.size() ? systems[i + 1] : nullptr;
+
+        bool needsDivider = nextSystem && !nextSystem->vbox();
+        bool needsLeftDivider = needsDivider && ctx.conf().styleB(Sid::dividerLeft);
+        bool needsRightDivider = needsDivider && ctx.conf().styleB(Sid::dividerRight);
+
+        updateSystemDivider(ctx, system, nextSystem, SystemDividerType::LEFT, needsLeftDivider);
+        updateSystemDivider(ctx, system, nextSystem, SystemDividerType::RIGHT, needsRightDivider);
+    }
+}
+
+void PageLayout::updateSystemDivider(LayoutContext& ctx, System* system, System* nextSystem, SystemDividerType type, bool needsDivider)
+{
+    bool left = type == SystemDividerType::LEFT;
+    SystemDivider* divider = left ? system->systemDividerLeft() : system->systemDividerRight();
+    if (divider) {
+        system->remove(divider);
+    }
+
+    if (!needsDivider) {
+        return;
+    }
+
+    DO_ASSERT(system && nextSystem);
+
+    Score* score = system->score();
+    size_t systemIdx = muse::indexOf(score->systems(), system);
+    IF_ASSERT_FAILED(systemIdx != muse::nidx) {
+        return;
+    }
+
+    divider = score->systemDivider(systemIdx, type);
+    if (!divider) {
+        divider = new SystemDivider(system);
+        divider->setDividerType(type);
+        divider->setGenerated(true);
+        score->addSystemDivider(systemIdx, divider);
+    }
+
+    system->add(divider);
+
+    SystemDivider::LayoutData* ldata = divider->mutldata();
+    TLayout::layoutSystemDivider(divider, ldata, ctx);
+
+    double spatium = system->spatium();
+    RectF systemBBox = system->ldata()->bbox();
+    double xDefault = 0.0;
+    if (left) {
+        xDefault = ctx.conf().styleB(Sid::dividerLeftAlignToSystemBarline) ? system->leftMargin() - 0.5 * ldata->bbox().width() : 0.0;
+    } else {
+        xDefault = systemBBox.right() - (ctx.conf().styleB(Sid::dividerRightAlignToSystemBarline) ? 0.5 : 1.0) * ldata->bbox().width();
+    }
+    double xPos = xDefault + (left ? ctx.conf().styleS(Sid::dividerLeftX) : ctx.conf().styleS(Sid::dividerRightX)).toMM(spatium);
+
+    double yInnerPos = -ldata->bbox().top() - 0.5 * ldata->bbox().height()
+                       + (left ? ctx.conf().styleS(Sid::dividerLeftY) : ctx.conf().styleS(Sid::dividerRightY)).toMM(spatium);
+
+    SysStaff* lastVisibleOfThis = system->staff(system->lastVisibleStaff());
+    double bottomOfThisSystem = lastVisibleOfThis->bbox().bottom();
+
+    SysStaff* firstVisibleOfNext = system->staff(system->firstVisibleStaff());
+    double yNextSystem = nextSystem->pagePos().y() - system->pagePos().y();
+    double topOfNextSystem = yNextSystem + firstVisibleOfNext->bbox().top();
+
+    double yMid = 0.5 * (bottomOfThisSystem + topOfNextSystem);
+
+    ldata->setPos(xPos, yInnerPos + yMid);
 }

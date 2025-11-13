@@ -1799,11 +1799,8 @@ void TRead::read(MMRestRange* r, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(SystemDivider* d, XmlReader& e, ReadContext& ctx)
 {
-    if (e.attribute("type") == "left") {
-        d->setDividerType(SystemDivider::Type::LEFT);
-    } else {
-        d->setDividerType(SystemDivider::Type::RIGHT);
-    }
+    SystemDividerType type = e.attribute("type") == "left" ? SystemDividerType::LEFT : SystemDividerType::RIGHT;
+    d->setDividerType(type);
     TRead::read(static_cast<Symbol*>(d), e, ctx);
 }
 
@@ -2407,7 +2404,9 @@ void TRead::read(Symbol* sym, XmlReader& e, ReadContext& ctx)
     }
 
     sym->setPos(PointF());
-    sym->setSym(symId, scoreFont);
+    if (!sym->isSystemDivider()) {
+        sym->setSym(symId, scoreFont);
+    }
 }
 
 void TRead::read(SoundFlag* item, XmlReader& xml, ReadContext&)
@@ -4615,4 +4614,24 @@ void TRead::readSystemLock(Score* score, XmlReader& e)
     }
 
     score->addSystemLock(new SystemLock(startMeas, endMeas));
+}
+
+void TRead::readSystemDividers(Score* score, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "system") {
+            size_t systemIdx = e.intAttribute("idx");
+            while (e.readNextStartElement()) {
+                if (e.name() == "SystemDivider") {
+                    SystemDivider* divider = new SystemDivider(score->dummy()->system());
+                    read(divider, e, ctx);
+                    score->addSystemDivider(systemIdx, divider);
+                } else {
+                    e.unknown();
+                }
+            }
+        } else {
+            e.unknown();
+        }
+    }
 }

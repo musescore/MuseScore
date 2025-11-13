@@ -1451,15 +1451,15 @@ static void defaults(XmlWriter& xml, const MStyle& s, double& millimeters, const
         xml.startElement("system-dividers");
         if (s.styleB(Sid::dividerLeft)) {
             xml.tag("left-divider", { { "print-object", "yes" },
-                        { "relative-x", s.styleD(Sid::dividerLeftX) * 10 },
-                        { "relative-y", s.styleD(Sid::dividerLeftY) * 10 } });
+                        { "relative-x", s.styleS(Sid::dividerLeftX).val() * 10 },
+                        { "relative-y", s.styleS(Sid::dividerLeftY).val() * 10 } });
         } else {
             xml.tag("left-divider", { { "print-object", "no" } });
         }
         if (s.styleB(Sid::dividerRight)) {
             xml.tag("right-divider", { { "print-object", "yes" },
-                        { "relative-x", s.styleD(Sid::dividerRightX) * 10 },
-                        { "relative-y", s.styleD(Sid::dividerRightY) * 10 } });
+                        { "relative-x", s.styleS(Sid::dividerRightX).val() * 10 },
+                        { "relative-y", s.styleS(Sid::dividerRightY).val() * 10 } });
         } else {
             xml.tag("right-divider", { { "print-object", "no" } });
         }

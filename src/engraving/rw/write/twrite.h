@@ -314,6 +314,7 @@ public:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, bool force = false);
 
     static void writeSystemLocks(const Score* score, XmlWriter& xml);
+    static void writeSystemDividers(const Score* score, XmlWriter& xml, WriteContext& ctx);
 
     static void writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx);
     static void writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx);

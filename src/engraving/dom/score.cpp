@@ -92,6 +92,7 @@
 #include "stafftype.h"
 #include "synthesizerstate.h"
 #include "system.h"
+#include "systemdivider.h"
 #include "tempo.h"
 #include "tempotext.h"
 #include "text.h"
@@ -6245,6 +6246,24 @@ void Score::updateChannel()
             }
         }
     }
+}
+
+SystemDivider* Score::systemDivider(size_t systemIdx, SystemDividerType type) const
+{
+    if (muse::contains(m_systemDividers, systemIdx)) {
+        return m_systemDividers.at(systemIdx).at(static_cast<size_t>(type));
+    }
+
+    return nullptr;
+}
+
+void Score::addSystemDivider(size_t systemIdx, SystemDivider* divider)
+{
+    if (!muse::contains(m_systemDividers, systemIdx)) {
+        m_systemDividers.emplace(systemIdx, std::array<SystemDivider*, 2> { nullptr, nullptr });
+    }
+
+    m_systemDividers.at(systemIdx)[static_cast<size_t>(divider->dividerType())] = divider;
 }
 
 UndoStack* Score::undoStack() const { return m_masterScore->undoStack(); }
