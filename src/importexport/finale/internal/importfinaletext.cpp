@@ -112,6 +112,18 @@ FontTracker FontTracker::fromEngravingFont(const engraving::MStyle& style, engra
     return result;
 }
 
+muse::draw::FontMetrics FontTracker::toFontMetrics(double mag)
+{
+    muse::draw::Font f(fontName, muse::draw::Font::Type::Unknown);
+    f.setBold(fontStyle & FontStyle::Bold);
+    f.setItalic(fontStyle & FontStyle::Italic);
+    f.setUnderline(fontStyle & FontStyle::Underline);
+    f.setStrike(fontStyle & FontStyle::Strike);
+    f.setPointSizeF(fontSize * mag);
+    muse::draw::FontMetrics fm(f);
+    return fm;
+}
+
 // Passing in the firstFontInfo pointer suppresses any first font information from being generated in the output string.
 // Instead, it is returned in the pointer.
 String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext& parsingContext, const EnigmaParsingOptions& options, FontTracker* firstFontInfo) const
