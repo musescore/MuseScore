@@ -541,19 +541,17 @@ std::vector<QRectF> NotationRegionsBeingProcessedModel::calculateRects(const Par
             logicRect.setWidth(width);
         }
 
-        bool shouldAdd = true;
-
-        for (QRectF& rect: result) {
-            if (rect.intersects(logicRect)) {
-                rect = rect.united(logicRect);
-                shouldAdd = false;
-                break;
+        // Merge with overlapping rects
+        for (auto it = result.begin(); it != result.end();) {
+            if (logicRect.intersects(*it)) {
+                logicRect = logicRect.united(*it);
+                it = result.erase(it);
+            } else {
+                ++it;
             }
         }
 
-        if (shouldAdd) {
-            result.push_back(logicRect);
-        }
+        result.push_back(logicRect);
     }
 
     return result;
