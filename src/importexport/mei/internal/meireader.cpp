@@ -60,9 +60,9 @@ Err MeiReader::import(MasterScore* score, const muse::io::path_t& path, const Op
     bool hasWarnings = (Convert::logs.size() > 0);
 
     if (!forceMode && !MScore::noGui && hasWarnings) {
-        const String text
-            = muse::qtrc("iex_mei", "%n problem(s) occured and the import may be incomplete.", nullptr,
-                         static_cast<int>(Convert::logs.size()));
+        int numLogs = static_cast<int>(Convert::logs.size());
+        const String text = muse::qtrc("iex_mei", "%n problem(s) occurred and the import may be incomplete.",
+                                       nullptr, numLogs);
         if (!this->askToLoadDespiteWarnings(text, Convert::logs.join(u"\n"))) {
             return Err::FileBadFormat;
         }

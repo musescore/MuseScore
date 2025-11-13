@@ -163,7 +163,7 @@ jobs:
     - name: Install Qt
       # uses: jurplel/install-qt-action@v4
       # with:
-      #   version: 6.9.3
+      #   version: 6.10.0
       #   host: 'mac'
       #   target: 'desktop'
       #   arch: 'clang_64'
