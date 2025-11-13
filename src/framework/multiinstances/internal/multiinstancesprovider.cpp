@@ -85,7 +85,7 @@ bool MultiInstancesProvider::isInited() const
 
 void MultiInstancesProvider::onMsg(const Msg& msg)
 {
-    LOGI() << msg.method;
+    LOGI() << msg.method << ", me: " << m_selfID << ", msg src: " << msg.srcID << ", msg dest: " << msg.destID;
 
 #define CHECK_ARGS_COUNT(c) IF_ASSERT_FAILED(msg.args.count() >= c) { return; }
 
@@ -165,7 +165,7 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
     } else if (msg.method == METHOD_QUIT_WITH_RUNING_INSTALLATION) {
         CHECK_ARGS_COUNT(1);
         dispatcher()->dispatch("quit", ActionData::make_arg2<bool, std::string>(false, msg.args.at(0).toStdString()));
-    } else if (msg.method == METHOD_QUITED) {
+    } else if (msg.method == METHOD_QUITED && msg.type == ipc::MsgType::Request) {
         m_ipcChannel->response(METHOD_QUITED, { }, msg.srcID);
     } else if (msg.method == METHOD_RESOURCE_CHANGED) {
         resourceChanged().send(msg.args.at(0).toStdString());
