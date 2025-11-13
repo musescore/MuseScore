@@ -509,6 +509,9 @@ void FinaleParser::importTextExpressions()
     parsedAssignments.reserve(expressionAssignments.size());
     logger()->logInfo(String(u"Import text expressions: Found %1 expressions.").arg(expressionAssignments.size()));
     for (const auto& expressionAssignment : expressionAssignments) {
+        if (!expressionAssignment->calcIsAssignedInRequestedPart()) {
+            continue;
+        }
         if (!expressionAssignment->textExprId) {
             // Shapes are currently unsupported
             continue;
@@ -891,12 +894,12 @@ void FinaleParser::importTextExpressions()
             /// @todo improved handling for bottom system objects
             const MusxInstanceList<others::MeasureExprAssign> possibleLinks = m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId, expressionAssignment->getCmper());
             for (const auto& linkedAssignment : possibleLinks) {
-                if (linkedAssignment->eduPosition != expressionAssignment->eduPosition
+                if (linkedAssignment->staffGroup != expressionAssignment->staffGroup // checking staffGroup by itself is probably sufficient.
                     || linkedAssignment->textExprId != expressionAssignment->textExprId) {
                     continue;
                 }
                 staff_idx_t linkedStaffIdx = staffIdxFromAssignment(linkedAssignment->staffAssign);
-                std::pair<Cmper, Inci> linkedExpressionId = std::make_pair(expressionAssignment->getCmper(), expressionAssignment->getInci().value_or(0));
+                std::pair<Cmper, Inci> linkedExpressionId = std::make_pair(linkedAssignment->getCmper(), linkedAssignment->getInci().value_or(0));
                 if (muse::contains(parsedAssignments, linkedExpressionId) || linkedStaffIdx == muse::nidx) {
                     continue;
                 }
