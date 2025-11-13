@@ -466,7 +466,7 @@ const UiActionList NotationUiActions::s_actions = {
     UiAction("slash-fill",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Fill with slashes"),
+             TranslatableString("action", "Fill with &slashes"),
              TranslatableString("action", "Fill with slashes")
              ),
     UiAction("slash-rhythm",
@@ -496,7 +496,7 @@ const UiActionList NotationUiActions::s_actions = {
     UiAction("unroll-repeats",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Unroll repeats"),
+             TranslatableString("action", "U&nroll repeats"),
              TranslatableString("action", "Unroll repeats")
              ),
     UiAction("copy-lyrics-to-clipboard",
