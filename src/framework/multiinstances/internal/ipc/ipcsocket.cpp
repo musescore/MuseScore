@@ -128,7 +128,7 @@ void IpcSocket::onDataReceived(const QByteArray& data)
         return;
     }
 
-    if (receivedMsg.method == "METHOD_QUITED") {
+    if (receivedMsg.method == "INSTANCE_CLOSED") {
         m_instances.removeAll(receivedMsg.srcID);
         m_instancesChanged.notify();
     }
