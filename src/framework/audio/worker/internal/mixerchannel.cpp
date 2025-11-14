@@ -26,6 +26,7 @@
 #include "audio/common/audiosanitizer.h"
 
 #include "dsp/audiomathutils.h"
+#include "igetplaybackposition.h"
 
 #include "log.h"
 
@@ -35,9 +36,11 @@ using namespace muse::audio;
 using namespace muse::audio::worker;
 
 MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate,
+                           const IGetPlaybackPosition* getPlaybackPosition,
                            const modularity::ContextPtr& iocCtx)
     : Injectable(iocCtx), m_trackId(trackId),
     m_sampleRate(sampleRate),
+    m_getPlaybackPosition(getPlaybackPosition),
     m_audioSource(std::move(source)),
     m_compressor(std::make_unique<dsp::Compressor>(sampleRate))
 {
@@ -47,8 +50,9 @@ MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const 
 }
 
 MixerChannel::MixerChannel(const TrackId trackId, const unsigned int sampleRate, unsigned int audioChannelsCount,
+                           const IGetPlaybackPosition* getPlaybackPosition,
                            const modularity::ContextPtr& iocCtx)
-    : MixerChannel(trackId, nullptr, sampleRate, iocCtx)
+    : MixerChannel(trackId, nullptr, sampleRate, getPlaybackPosition, iocCtx)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -209,7 +213,8 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
         if (fx->active()) {
-            fx->process(buffer, samplesPerChannel, m_playbackPosition);
+            const msecs_t pos = m_getPlaybackPosition ? m_getPlaybackPosition->playbackPosition() : 0;
+            fx->process(buffer, samplesPerChannel, pos);
         }
     }
 
@@ -269,9 +274,4 @@ void MixerChannel::notifyNoAudioSignal()
     }
 
     m_audioSignalNotifier.notifyAboutChanges();
-}
-
-void MixerChannel::setPlaybackPosition(msecs_t pos)
-{
-    m_playbackPosition = pos;
 }
