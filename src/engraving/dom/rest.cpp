@@ -396,17 +396,17 @@ double Rest::downPos() const
 //   scanElements
 //---------------------------------------------------------
 
-void Rest::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void Rest::scanElements(std::function<void(EngravingItem*)> func)
 {
-    ChordRest::scanElements(data, func, all);
+    ChordRest::scanElements(func);
     for (EngravingItem* e : el()) {
-        e->scanElements(data, func, all);
+        e->scanElements(func);
     }
     for (NoteDot* dot : m_dots) {
-        dot->scanElements(data, func, all);
+        dot->scanElements(func);
     }
     if (!isGap() || debugDrawGap()) {
-        func(data, this);
+        func(this);
     }
 }
 

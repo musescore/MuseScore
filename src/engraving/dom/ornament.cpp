@@ -114,16 +114,16 @@ void Ornament::setTrack(track_idx_t val)
     m_track = val;
 }
 
-void Ornament::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void Ornament::scanElements(std::function<void(EngravingItem*)> func)
 {
-    func(data, this);
+    func(this);
     for (Accidental* accidental : m_accidentalsAboveAndBelow) {
         if (accidental) {
-            func(data, accidental);
+            func(accidental);
         }
     }
     if (m_cueNoteChord) {
-        m_cueNoteChord->scanElements(data, func, all);
+        m_cueNoteChord->scanElements(func);
     }
 }
 

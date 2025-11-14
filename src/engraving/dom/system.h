@@ -101,17 +101,13 @@ public:
 
     void moveToPage(Page* parent);
 
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-    EngravingObjectList scanChildren() const override;
-
     System* clone() const override { return new System(*this); }
 
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
     void change(EngravingItem* o, EngravingItem* n) override;
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
 
     void appendMeasure(MeasureBase*);
     void removeMeasure(MeasureBase*);

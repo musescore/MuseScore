@@ -54,9 +54,6 @@ class Beam final : public BeamBase
 public:
     ~Beam();
 
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-
     Beam* clone() const override { return new Beam(*this); }
     PointF pagePos() const override;      ///< position in page coordinates
     PointF canvasPos() const override;    ///< position in page coordinates

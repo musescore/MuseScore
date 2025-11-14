@@ -347,10 +347,7 @@ public:
 
     static void onElementDestruction(EngravingItem* se);
 
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-    EngravingObjectList scanChildren() const override;
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
 
     void dumpScoreTree();  // for debugging purposes
 
@@ -669,8 +666,8 @@ public:
     void select(const std::vector<EngravingItem*>& items, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
     void selectSimilar(EngravingItem* e, bool sameStaff);
     void selectSimilarInRange(EngravingItem* e);
-    static void collectMatch(void* data, EngravingItem* e);
-    static void collectNoteMatch(void* data, EngravingItem* e);
+    static void collectMatch(ElementPattern* p, EngravingItem* e);
+    static void collectNoteMatch(NotePattern* p, EngravingItem* e);
     void deselect(EngravingItem* obj);
     void deselectAll() { m_selection.deselectAll(); }
     void updateSelection() { m_selection.update(); }
@@ -871,7 +868,7 @@ public:
     void connectTies(bool silent = false);
     void undoRemoveStaleTieJumpPoints(bool undo = true);
 
-    void scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all = true);
+    void scanElementsInRange(std::function<void(EngravingItem*)> func);
     int fileDivision() const { return m_fileDivision; }   ///< division of current loading *.msc file
     void splitStaff(staff_idx_t staffIdx, int splitPoint);
     FiguredBass* addFiguredBass();

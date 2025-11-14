@@ -154,7 +154,7 @@ static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoMacro:
 //    element.
 //---------------------------------------------------------
 
-static void resetElementPosition(void*, EngravingItem* e)
+static void resetElementPosition(EngravingItem* e)
 {
     if (e->generated()) {
         return;
@@ -169,7 +169,7 @@ static void resetElementPosition(void*, EngravingItem* e)
     }
 }
 
-static void resetTextProperties(void*, EngravingItem* e)
+static void resetTextProperties(EngravingItem* e)
 {
     if (e->generated() || !e->isTextBase()) {
         return;
@@ -2691,13 +2691,13 @@ void Score::cmdResetToDefaultLayout()
         Sid::createMultiMeasureRests
     };
 
-    auto resetPositionAndTextProperties = [](void* ptr, EngravingItem* e) {
-        resetElementPosition(ptr, e);
-        resetTextProperties(ptr, e);
+    auto resetPositionAndTextProperties = [](EngravingItem* e) {
+        resetElementPosition(e);
+        resetTextProperties(e);
     };
 
     cmdResetMeasuresLayout();
-    scanElements(nullptr, resetPositionAndTextProperties);
+    scanElements(resetPositionAndTextProperties);
     cmdResetAllStyles(dontResetTheseStyles);
     EditSystemLocks::undoRemoveAllLocks(this);
 }
@@ -2753,7 +2753,7 @@ void Score::cmdResetTextStyleOverrides()
 {
     TRACEFUNC;
 
-    scanElements(nullptr, resetTextProperties);
+    scanElements(resetTextProperties);
 }
 
 void Score::cmdResetAllStyles(const StyleIdSet& exceptTheseOnes)
@@ -2853,7 +2853,7 @@ void Score::cmdResetNoteAndRestGroupings()
     selection().updateSelectedElements();
 }
 
-static void resetBeamOffSet(void*, EngravingItem* e)
+static void resetBeamOffSet(EngravingItem* e)
 {
     // Reset completely cross staff beams from MU1&2
     if (e->isBeam() && toBeam(e)->fullCross()) {
@@ -2881,14 +2881,14 @@ void Score::resetAutoplace()
 {
     TRACEFUNC;
 
-    scanElements(nullptr, resetElementPosition);
+    scanElements(resetElementPosition);
 }
 
 void Score::resetCrossBeams()
 {
     TRACEFUNC;
 
-    scanElements(nullptr, resetBeamOffSet);
+    scanElements(resetBeamOffSet);
 }
 
 //---------------------------------------------------------

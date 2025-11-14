@@ -125,17 +125,17 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 //   scanElements
 //---------------------------------------------------------
 
-void TrillSegment::scanElements(void* data, void (* func)(void*, EngravingItem*), bool)
+void TrillSegment::scanElements(std::function<void(EngravingItem*)> func)
 {
-    func(data, this);
+    func(this);
     if (isSingleType() || isBeginType()) {
         Accidental* a = trill()->accidental();
         if (a) {
-            func(data, a);
+            func(a);
         }
         Chord* cueNoteChord = trill()->cueNoteChord();
         if (cueNoteChord) {
-            cueNoteChord->scanElements(data, func);
+            cueNoteChord->scanElements(func);
         }
     }
 }

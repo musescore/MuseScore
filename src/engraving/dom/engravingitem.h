@@ -388,7 +388,8 @@ public:
 
     mutable bool itemDiscovered = false;       // helper flag for bsp
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
+    virtual bool collectForDrawing() const;
 
     virtual void reset() override;           // reset all properties & position to default
 
@@ -762,7 +763,6 @@ public:
 };
 
 extern bool elementLessThan(const EngravingItem* const, const EngravingItem* const);
-extern void collectElements(void* data, EngravingItem* e);
 } // mu::engraving
 
 #ifndef NO_QT_SUPPORT

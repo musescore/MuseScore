@@ -1366,25 +1366,12 @@ bool Score::checkHasMeasures() const
 }
 
 //---------------------------------------------------------
-//   spatiumHasChanged
-//---------------------------------------------------------
-
-static void spatiumHasChanged(void* data, EngravingItem* e)
-{
-    double* val = (double*)data;
-    e->spatiumChanged(val[0], val[1]);
-}
-
-//---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
 
 void Score::spatiumChanged(double oldValue, double newValue)
 {
-    double data[2];
-    data[0] = oldValue;
-    data[1] = newValue;
-    scanElements(data, spatiumHasChanged, true);
+    scanElements([&](EngravingItem* e) { e->spatiumChanged(oldValue, newValue); });
     for (Staff* staff : m_staves) {
         staff->spatiumChanged(oldValue, newValue);
     }
@@ -1396,7 +1383,7 @@ void Score::spatiumChanged(double oldValue, double newValue)
 //   updateStyle
 //---------------------------------------------------------
 
-static void updateStyle(void*, EngravingItem* e)
+static void updateStyle(EngravingItem* e)
 {
     bool v = e->generated();
     e->styleChanged();
@@ -1410,7 +1397,7 @@ static void updateStyle(void*, EngravingItem* e)
 
 void Score::styleChanged()
 {
-    scanElements(0, updateStyle);
+    scanElements(updateStyle);
     for (int i = 0; i < MAX_HEADERS; i++) {
         if (headerText(i)) {
             headerText(i)->styleChanged();
@@ -1818,8 +1805,7 @@ bool Score::canReselectItem(const EngravingItem* item) const
 
     EngravingItem* seg = const_cast<EngravingItem*>(item->findAncestor(ElementType::SEGMENT));
     if (seg) {
-        std::vector<EngravingItem*> elements;
-        seg->scanElements(&elements, collectElements, false /*all*/);
+        std::vector<EngravingItem*> elements = seg->getChildren(false);
         return muse::contains(elements, const_cast<EngravingItem*>(item));
     }
 
@@ -2014,16 +2000,16 @@ int Score::utime2utick(double utime) const
 //   scanElementsInRange
 //---------------------------------------------------------
 
-void Score::scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all)
+void Score::scanElementsInRange(std::function<void(EngravingItem*)> func)
 {
     Segment* startSeg = m_selection.startSegment();
     for (Segment* s = startSeg; s && s != m_selection.endSegment(); s = s->next1()) {
-        s->scanElements(data, func, all);
+        s->scanElements(func);
         Measure* m = s->measure();
         if (m && s == m->first()) {
             Measure* mmr = m->mmRest();
             if (mmr) {
-                mmr->scanElements(data, func, all);
+                mmr->scanElements(func);
             }
         }
     }
@@ -2036,7 +2022,7 @@ void Score::scanElementsInRange(void* data, void (* func)(void*, EngravingItem*)
         Spanner* spanner = toSpannerSegment(e)->spanner();
         if (handledSpanners.insert(spanner).second) {
             for (SpannerSegment* ss : spanner->spannerSegments()) {
-                ss->scanElements(data, func, all);
+                ss->scanElements(func);
             }
         }
     }
@@ -3819,10 +3805,8 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
 //   collectMatch
 //---------------------------------------------------------
 
-void Score::collectMatch(void* data, EngravingItem* e)
+void Score::collectMatch(ElementPattern* p, EngravingItem* e)
 {
-    ElementPattern* p = static_cast<ElementPattern*>(data);
-
     if (p->type != int(ElementType::INVALID) && p->type != int(e->type())) {
         return;
     }
@@ -3895,9 +3879,8 @@ void Score::collectMatch(void* data, EngravingItem* e)
 //   collectNoteMatch
 //---------------------------------------------------------
 
-void Score::collectNoteMatch(void* data, EngravingItem* e)
+void Score::collectNoteMatch(NotePattern* p, EngravingItem* e)
 {
-    NotePattern* p = static_cast<NotePattern*>(data);
     if (!e->isNote()) {
         return;
     }
@@ -3969,7 +3952,7 @@ void Score::selectSimilar(EngravingItem* e, bool sameStaff)
     pattern.staffEnd = sameStaff ? e->staffIdx() + 1 : muse::nidx;
     pattern.voice = muse::nidx;
 
-    score->scanElements(&pattern, collectMatch);
+    score->scanElements([&](EngravingItem* item) { collectMatch(&pattern, item); });
 
     score->select(0, SelectType::SINGLE, 0);
     score->select(pattern.el, SelectType::ADD, 0);
@@ -4003,7 +3986,7 @@ void Score::selectSimilarInRange(EngravingItem* e)
     pattern.staffEnd = selection().staffEnd();
     pattern.voice = muse::nidx;
 
-    score->scanElementsInRange(&pattern, collectMatch);
+    score->scanElementsInRange([&](EngravingItem* item) { collectMatch(&pattern, item); });
 
     score->select(0, SelectType::SINGLE, 0);
     score->select(pattern.el, SelectType::ADD, 0);
@@ -5866,23 +5849,23 @@ void Score::rebuildBspTree()
 //    scan all elements
 //---------------------------------------------------------
 
-void Score::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void Score::scanElements(std::function<void(EngravingItem*)> func)
 {
     for (MeasureBase* mb = first(); mb; mb = mb->next()) {
-        mb->scanElements(data, func, all);
+        mb->scanElements(func);
         if (mb->type() == ElementType::MEASURE) {
             Measure* m = toMeasure(mb);
             Measure* mmr = m->mmRest();
             if (mmr) {
-                mmr->scanElements(data, func, all);
+                mmr->scanElements(func);
             }
         }
     }
     for (Page* page : pages()) {
         for (System* s :page->systems()) {
-            s->scanElements(data, func, all);
+            s->scanElements(func);
         }
-        func(data, page);
+        func(page);
     }
 }
 

@@ -58,8 +58,6 @@ public:
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()->explicitParent()); }
     ChordRest* chordRest() const { return toChordRest(explicitParent()); }
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-
     int subtype() const override { return m_verse; }
     TranslatableString subtypeUserName() const override;
     void setVerse(int n) { m_verse = n; }

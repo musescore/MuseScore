@@ -1041,22 +1041,22 @@ EngravingItem* ChordRest::nextSegmentElement()
 //   scanElements
 //---------------------------------------------------------
 
-void ChordRest::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void ChordRest::scanElements(std::function<void(EngravingItem*)> func)
 {
     if (m_beam && (m_beam->elements().front() == this)
         && !measure()->stemless(staffIdx())) {
-        m_beam->scanElements(data, func, all);
+        m_beam->scanElements(func);
     }
     for (Lyrics* l : m_lyrics) {
-        l->scanElements(data, func, all);
+        l->scanElements(func);
     }
     DurationElement* de = this;
     while (de->tuplet() && de->tuplet()->elements().front() == de) {
-        de->tuplet()->scanElements(data, func, all);
+        de->tuplet()->scanElements(func);
         de = de->tuplet();
     }
     if (m_tabDur) {
-        func(data, m_tabDur);
+        func(m_tabDur);
     }
 }
 

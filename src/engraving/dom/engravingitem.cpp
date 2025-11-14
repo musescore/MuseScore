@@ -346,23 +346,32 @@ void EngravingItem::deleteLater()
 /// or to apply `func` even to non-leaf nodes.
 //---------------------------------------------------------
 
-void EngravingItem::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void EngravingItem::scanElements(std::function<void(EngravingItem*)> func)
 {
     if (m_leftParenthesis) {
-        func(data, m_leftParenthesis);
+        m_leftParenthesis->scanElements(func);
     }
 
     if (m_rightParenthesis) {
-        func(data, m_rightParenthesis);
+        m_rightParenthesis->scanElements(func);
     }
 
-    if (scanChildren().size() == 0) {
-        if (all || visible() || score()->isShowInvisible()) {
-            func(data, this);
-        }
-    } else {
-        EngravingObject::scanElements(data, func, all);
+    func(this);
+}
+
+bool EngravingItem::collectForDrawing() const
+{
+    if (!visible() && !score()->isShowInvisible()) {
+        return false;
     }
+
+    bool isAnnotation = parent() && parent()->isSegment() && toSegment(parent())->element(track()) != this;
+    if (isAnnotation) {
+        Segment* segment = toSegment(parent());
+        return systemFlag() || (segment->measure() && segment->measure()->visible(staffIdx()));
+    }
+
+    return true;
 }
 
 //---------------------------------------------------------
@@ -1061,16 +1070,6 @@ bool elementLessThan(const EngravingItem* const e1, const EngravingItem* const e
     }
 
     return e1->z() < e2->z();
-}
-
-//---------------------------------------------------------
-//   collectElements
-//---------------------------------------------------------
-
-void collectElements(void* data, EngravingItem* e)
-{
-    std::vector<EngravingItem*>* el = static_cast<std::vector<EngravingItem*>*>(data);
-    el->push_back(e);
 }
 
 //---------------------------------------------------------

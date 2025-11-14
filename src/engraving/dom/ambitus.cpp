@@ -224,16 +224,15 @@ void Ambitus::setBottomTpc(int val, bool applyLogic)
 //   scanElements
 //---------------------------------------------------------
 
-void Ambitus::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void Ambitus::scanElements(std::function<void(EngravingItem*)> func)
 {
-    UNUSED(all);
-    func(data, this);
+    func(this);
     if (m_topAccidental->accidentalType() != AccidentalType::NONE) {
-        func(data, m_topAccidental);
+        func(m_topAccidental);
     }
 
     if (m_bottomAccidental->accidentalType() != AccidentalType::NONE) {
-        func(data, m_bottomAccidental);
+        func(m_bottomAccidental);
     }
 }
 

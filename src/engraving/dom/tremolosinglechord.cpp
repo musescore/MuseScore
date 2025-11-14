@@ -355,11 +355,11 @@ PropertyValue TremoloSingleChord::propertyDefault(Pid propertyId) const
 //   scanElements
 //---------------------------------------------------------
 
-void TremoloSingleChord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void TremoloSingleChord::scanElements(std::function<void(EngravingItem*)> func)
 {
     if (chord() && chord()->tremoloChordType() == TremoloChordType::TremoloSecondChord) {
         return;
     }
-    EngravingItem::scanElements(data, func, all);
+    EngravingItem::scanElements(func);
 }
 }

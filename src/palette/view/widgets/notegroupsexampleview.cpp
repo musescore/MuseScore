@@ -86,14 +86,6 @@ struct MoveContext
     mu::engraving::Score* score = nullptr;
 };
 
-static void moveElement(void* data, EngravingItem* e)
-{
-    MoveContext* ctx = (MoveContext*)data;
-    ctx->score->addRefresh(e->canvasBoundingRect());
-    e->setPos(ctx->pos);
-    ctx->score->addRefresh(e->canvasBoundingRect());
-}
-
 void NoteGroupsExampleView::dragMoveEvent(QDragMoveEvent* event)
 {
     event->acceptProposedAction();
@@ -117,7 +109,15 @@ void NoteGroupsExampleView::dragMoveEvent(QDragMoveEvent* event)
     setDropTarget(newDropTarget);
 
     MoveContext ctx{ position, m_score };
-    m_dragElement->scanElements(&ctx, moveElement, false);
+    auto moveElement = [&](EngravingItem* e) {
+        if (!e->visible() && !e->score()->isShowInvisible()) {
+            return;
+        }
+        ctx.score->addRefresh(e->canvasBoundingRect());
+        e->setPos(ctx.pos);
+        ctx.score->addRefresh(e->canvasBoundingRect());
+    };
+    m_dragElement->scanElements(moveElement);
     m_score->update();
     return;
 }

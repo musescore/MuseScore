@@ -80,11 +80,11 @@ void BSymbol::add(EngravingItem* e)
 //   scanElements
 //---------------------------------------------------------
 
-void BSymbol::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void BSymbol::scanElements(std::function<void(EngravingItem*)> func)
 {
-    func(data, this);
+    func(this);
     for (EngravingItem* e : m_leafs) {
-        e->scanElements(data, func, all);
+        e->scanElements(func);
     }
 }
 

@@ -82,25 +82,13 @@ PropertyValue StaffText::propertyDefault(Pid id) const
     }
 }
 
-void StaffText::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void StaffText::scanElements(std::function<void(EngravingItem*)> func)
 {
-    for (EngravingObject* child: scanChildren()) {
-        child->scanElements(data, func, all);
-    }
-    if (all || visible() || score()->isShowInvisible()) {
-        func(data, this);
-    }
-}
-
-EngravingObjectList StaffText::scanChildren() const
-{
-    EngravingObjectList children;
-
     if (m_soundFlag) {
-        children.push_back(m_soundFlag);
+        m_soundFlag->scanElements(func);
     }
 
-    return children;
+    StaffTextBase::scanElements(func);
 }
 
 void StaffText::add(EngravingItem* e)

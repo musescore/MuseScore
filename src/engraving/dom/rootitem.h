@@ -39,8 +39,6 @@ public:
     compat::DummyElement* dummy() const;
     void init();
 
-    EngravingObject* scanParent() const override;
-
     EngravingItem* clone() const override { return nullptr; }
     PropertyValue getProperty(Pid) const override { return PropertyValue(); }
     bool setProperty(Pid, const PropertyValue&) override { return false; }

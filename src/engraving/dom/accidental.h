@@ -239,9 +239,6 @@ public:
 
     Note* note() const { return (explicitParent() && explicitParent()->isNote()) ? toNote(explicitParent()) : 0; }
 
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-
     TranslatableString subtypeUserName() const override;
     void setSubtype(const AsciiStringView& s);
     int subtype() const override { return (int)m_accidentalType; }

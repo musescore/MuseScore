@@ -725,9 +725,9 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
     ns->styleChanged();
 }
 
-static void updateSpatium(void* oldElement, EngravingItem* newElement)
+static void updateSpatium(EngravingItem* oldElement, EngravingItem* newElement)
 {
-    double oldSpatium = static_cast<EngravingItem*>(oldElement)->spatium();
+    double oldSpatium = oldElement->spatium();
     double newSpatium = newElement->spatium();
     if (!muse::RealIsEqual(oldSpatium, newSpatium)) {
         newElement->spatiumChanged(oldSpatium, newSpatium);
@@ -741,7 +741,7 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
         tuplet->setTrack(track);
         tuplet->setParent(nm);
         tuplet->styleChanged();
-        tuplet->scanElements(ot, updateSpatium);
+        tuplet->scanElements([&](EngravingItem* newElement) { updateSpatium(ot, newElement); });
     };
 
     ot->setTrack(ocr->track());
@@ -1525,7 +1525,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         ne->setParent(ns);
                         ne->setScore(score);
                         ne->styleChanged();
-                        ne->scanElements(oef, updateSpatium);
+                        ne->scanElements([&](EngravingItem* newElement) { updateSpatium(oef, newElement); });
                         addElement(ne);
                     }
                 }
@@ -1565,7 +1565,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 ne->setParent(ns);
                 ne->setScore(score);
                 ne->styleChanged();
-                ne->scanElements(oe, updateSpatium);
+                ne->scanElements([&](EngravingItem* newElement) { updateSpatium(oe, newElement); });
                 addElement(ne);
                 if (oe->isChordRest()) {
                     ChordRest* ocr = toChordRest(oe);

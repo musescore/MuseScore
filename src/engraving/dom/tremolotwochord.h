@@ -50,7 +50,7 @@ public:
     int subtype() const override { return static_cast<int>(m_tremoloType); }
     TranslatableString subtypeUserName() const override;
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
 
     void setTremoloType(TremoloType t);
     TremoloType tremoloType() const { return m_tremoloType; }

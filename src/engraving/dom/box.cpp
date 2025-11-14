@@ -986,6 +986,12 @@ TBox::~TBox()
     delete m_text;
 }
 
+void TBox::scanElements(std::function<void(EngravingItem*)> func)
+{
+    m_text->scanElements(func);
+    Box::scanElements(func);
+}
+
 //---------------------------------------------------------
 //   drop
 //---------------------------------------------------------

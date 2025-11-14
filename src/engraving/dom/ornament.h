@@ -53,7 +53,7 @@ public:
 
     void computeNotesAboveAndBelow(AccidentalState* accState);
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
 
     void remove(EngravingItem* e) override;
 

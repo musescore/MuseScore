@@ -2203,29 +2203,29 @@ String Note::noteTypeUserName() const
 //   scanElements
 //---------------------------------------------------------
 
-void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void Note::scanElements(std::function<void(EngravingItem*)> func)
 {
-    func(data, this);
+    func(this);
 
     for (EngravingItem* e : m_el) {
-        e->scanElements(data, func, all);
+        e->scanElements(func);
     }
     for (Spanner* sp : m_spannerFor) {
-        sp->scanElements(data, func, all);
+        sp->scanElements(func);
     }
 
     if (m_accidental) {
-        func(data, m_accidental);
+        func(m_accidental);
     }
     for (NoteDot* dot : m_dots) {
-        func(data, dot);
+        func(dot);
     }
 
     if (leftParen()) {
-        func(data, leftParen());
+        func(leftParen());
     }
     if (rightParen()) {
-        func(data, rightParen());
+        func(rightParen());
     }
 }
 

@@ -46,8 +46,6 @@ public:
     PointF pagePos() const override;      ///< position in page coordinates
     PointF canvasPos() const override;    ///< position in page coordinates
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-
     const std::vector<LineF>& lines() const { return m_lines; }
     void setLines(const std::vector<LineF>& l) { m_lines = l; }
 
@@ -59,6 +57,8 @@ public:
 
     RectF hitBBox() const override;
     Shape hitShape() const override;
+
+    bool collectForDrawing() const override;
 
 private:
     friend class Factory;

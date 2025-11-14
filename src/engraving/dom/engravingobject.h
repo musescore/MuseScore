@@ -231,11 +231,8 @@ public:
 
     const EngravingObjectList& children() const { return m_children; }
 
-    // Score Tree functions for scan function
-    friend class EngravingElementsProvider;
-    virtual EngravingObject* scanParent() const { return m_parent; }
-    virtual EngravingObjectList scanChildren() const { return {}; }
-    virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true);
+    std::vector<EngravingItem*> getChildren(bool includeInvisible = true) const;
+    virtual void scanElements(std::function<void(EngravingItem*)>) {}
 
     // context
     virtual void setScore(Score* s);

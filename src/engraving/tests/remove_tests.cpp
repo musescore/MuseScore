@@ -38,29 +38,6 @@ class Engraving_RemoveTests : public ::testing::Test
 {
 };
 
-//---------------------------------------------------------
-//    For passing to the defined below inStaff() function.
-//---------------------------------------------------------
-
-struct StaffCheckData {
-    staff_idx_t staffIdx;
-    bool staffHasElements;
-};
-
-//---------------------------------------------------------
-//    for usage with Score::scanElements to check whether
-//    the element belongs to a staff with a certain number.
-//---------------------------------------------------------
-
-static void inStaff(void* staffCheckData, EngravingItem* e)
-{
-    StaffCheckData* checkData = static_cast<StaffCheckData*>(staffCheckData);
-    if (e->staffIdx() == checkData->staffIdx) {
-        LOGD() << e->typeName() << " is in staff " << checkData->staffIdx;
-        checkData->staffHasElements = true;
-    }
-}
-
 static bool staffHasElements(Score* score, staff_idx_t staffIdx)
 {
     for (auto i = score->spannerMap().cbegin(); i != score->spannerMap().cend(); ++i) {
@@ -76,9 +53,17 @@ static bool staffHasElements(Score* score, staff_idx_t staffIdx)
             return true;
         }
     }
-    StaffCheckData checkData { staffIdx, false };
-    score->scanElements(&checkData, inStaff, true);
-    return checkData.staffHasElements;
+
+    bool staffHasElements = false;
+
+    auto inStaff = [&](EngravingItem* item) {
+        if (item->staffIdx() == staffIdx) {
+            staffHasElements = true;
+        }
+    };
+    score->scanElements(inStaff);
+
+    return staffHasElements;
 }
 
 //---------------------------------------------------------

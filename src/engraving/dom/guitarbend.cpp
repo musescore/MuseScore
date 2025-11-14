@@ -621,10 +621,10 @@ double GuitarBendSegment::lineWidth() const
     return guitarBend()->lineWidth();
 }
 
-void GuitarBendSegment::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void GuitarBendSegment::scanElements(std::function<void(EngravingItem*)> func)
 {
-    func(data, m_text);
-    LineSegment::scanElements(data, func, all);
+    func(m_text);
+    LineSegment::scanElements(func);
 }
 
 bool GuitarBendSegment::isUserModified() const

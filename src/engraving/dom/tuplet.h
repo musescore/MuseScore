@@ -60,10 +60,6 @@ public:
 
     void setParent(Measure* parent);
 
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-    EngravingObjectList scanChildren() const override;
-
     Tuplet* clone() const override { return new Tuplet(*this); }
     void setTrack(track_idx_t val) override;
 
@@ -105,7 +101,7 @@ public:
         return std::find(m_currentElements.begin(), m_currentElements.end(), el) != m_currentElements.end();
     }
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
 
     void reset() override;
 

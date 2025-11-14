@@ -53,10 +53,6 @@ public:
 
     Ambitus* clone() const override { return new Ambitus(*this); }
 
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-    EngravingObjectList scanChildren() const override;
-
     double mag() const override;
 
     void initFrom(Ambitus* a);
@@ -94,7 +90,7 @@ public:
 
     // re-implemented virtual functions
     PointF pagePos() const override;        // position in page coordinates
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
     void setTrack(track_idx_t val) override;
 
     String accessibleInfo() const override;

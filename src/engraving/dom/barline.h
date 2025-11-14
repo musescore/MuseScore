@@ -87,15 +87,11 @@ public:
 
     void setParent(Segment* parent);
 
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-    EngravingObjectList scanChildren() const override;
-
     BarLine* clone() const override { return new BarLine(*this); }
     PointF canvasPos() const override;      ///< position in canvas coordinates
     PointF pagePos() const override;        ///< position in page coordinates
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
     void setTrack(track_idx_t t) override;
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;

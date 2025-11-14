@@ -1077,15 +1077,13 @@ EngravingItem* FretDiagram::drop(EditData& data)
 //   scanElements
 //---------------------------------------------------------
 
-void FretDiagram::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void FretDiagram::scanElements(std::function<void(EngravingItem*)> func)
 {
-    UNUSED(all);
-
-    func(data, this);
+    func(this);
 
     // don't display harmony in palette
     if (m_harmony && !score()->isPaletteScore()) {
-        func(data, m_harmony);
+        func(m_harmony);
     }
 }
 

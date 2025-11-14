@@ -285,29 +285,15 @@ double Page::footerExtension() const
 //   scanElements
 //---------------------------------------------------------
 
-void Page::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void Page::scanElements(std::function<void(EngravingItem*)> func)
 {
     for (System* s :m_systems) {
         for (MeasureBase* m : s->measures()) {
-            m->scanElements(data, func, all);
+            m->scanElements(func);
         }
-        s->scanElements(data, func, all);
+        s->scanElements(func);
     }
-    func(data, this);
-}
-
-//---------------------------------------------------------
-//   bspInsert
-//---------------------------------------------------------
-
-static void bspInsert(void* bspTree, EngravingItem* e)
-{
-    ((BspTree*)bspTree)->insert(e);
-}
-
-static void countElements(void* data, EngravingItem* /*e*/)
-{
-    ++(*(int*)data);
+    func(this);
 }
 
 //---------------------------------------------------------
@@ -317,7 +303,13 @@ static void countElements(void* data, EngravingItem* /*e*/)
 void Page::doRebuildBspTree()
 {
     int n = 0;
-    scanElements(&n, countElements, false);
+    auto countElements = [&](EngravingItem* item) {
+        if (item->collectForDrawing()) {
+            ++n;
+        }
+    };
+
+    scanElements(countElements);
 
     RectF r;
     if (score()->linearMode()) {
@@ -336,7 +328,14 @@ void Page::doRebuildBspTree()
     }
 
     bspTree.initialize(r, n);
-    scanElements(&bspTree, &bspInsert, false);
+
+    auto bspInsert = [&] (EngravingItem* item) {
+        if (item->collectForDrawing()) {
+            bspTree.insert(item);
+        }
+    };
+    scanElements(bspInsert);
+
     m_bspTreeValid = true;
 }
 
@@ -590,9 +589,7 @@ bool Page::isOdd() const
 
 std::vector<EngravingItem*> Page::elements() const
 {
-    std::vector<EngravingItem*> el;
-    const_cast<Page*>(this)->scanElements(&el, collectElements, false);
-    return el;
+    return getChildren(false);
 }
 
 //---------------------------------------------------------

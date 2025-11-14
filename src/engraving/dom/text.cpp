@@ -117,4 +117,9 @@ bool Text::hasVoiceAssignmentProperties() const
     }
     return false;
 }
+
+bool mu::engraving::Text::collectForDrawing() const
+{
+    return !(parent() && parent()->isTuplet());
+}
 }

@@ -45,9 +45,6 @@ class SpannerSegment : public EngravingItem
 
 public:
 
-    // Score Tree functions
-    virtual EngravingObject* scanParent() const override;
-
     virtual double mag() const override;
     virtual Fraction tick() const override;
 
@@ -107,7 +104,7 @@ public:
     void setVisible(bool f) override;
     void setColor(const Color& col) override;
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    bool collectForDrawing() const override;
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
@@ -158,10 +155,6 @@ public:
         SEGMENT, MEASURE, CHORD, NOTE
     };
 
-    // Score Tree functions
-    virtual EngravingObject* scanParent() const override;
-    virtual EngravingObjectList scanChildren() const override;
-
     virtual double mag() const override;
 
     virtual void setScore(Score* s) override;
@@ -204,7 +197,7 @@ public:
     virtual void triggerLayout() const override;
     virtual void add(EngravingItem*) override;
     virtual void remove(EngravingItem*) override;
-    virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    virtual void scanElements(std::function<void(EngravingItem*)>) override {}
     bool removeSpannerBack();
     virtual void removeUnmanaged();
     virtual void insertTimeUnmanaged(const Fraction& tick, const Fraction& len);

@@ -54,9 +54,8 @@ public:
 //    data.
 //---------------------------------------------------------
 
-static void isLayoutDone(void* data, EngravingItem* e)
+static void isLayoutDone(bool* result, EngravingItem* e)
 {
-    bool* result = static_cast<bool*>(data);
     if (e->isTuplet()) {
         Tuplet* t = toTuplet(e);
         if (!t->hasBracket() || !t->number()) {
@@ -117,7 +116,7 @@ void Engraving_LayoutElementsTests::tstLayoutAll(String file)
         score->setLayoutMode(mode);
         bool layoutDone = true;
         for (Score* s : score->scoreList()) {
-            s->scanElements(&layoutDone, isLayoutDone, /* all */ true);
+            s->scanElements([&](EngravingItem* item) { isLayoutDone(&layoutDone, item); });
             EXPECT_TRUE(layoutDone);
         }
     }

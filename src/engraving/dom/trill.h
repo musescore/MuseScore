@@ -46,7 +46,7 @@ public:
 
     TrillSegment* clone() const override { return new TrillSegment(*this); }
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all) override;
+    void scanElements(std::function<void(EngravingItem*)> func) override;
 
     EngravingObject* propertyDelegate(Pid) const override;
 
@@ -77,10 +77,6 @@ class Trill final : public SLine
 public:
     Trill(EngravingItem* parent);
     Trill(const Trill& t);
-
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-    EngravingObjectList scanChildren() const override;
 
     Trill* clone() const override { return new Trill(*this); }
     EngravingItem* linkedClone() override;
