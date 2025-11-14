@@ -32,9 +32,9 @@ class DynamicsSettingsModel : public InspectorModelWithVoiceAndPositionOptions
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(mu::inspector::PropertyItem * avoidBarLines READ avoidBarLines CONSTANT)
-    Q_PROPERTY(mu::inspector::PropertyItem * dynamicSize READ dynamicSize CONSTANT)
-    Q_PROPERTY(mu::inspector::PropertyItem * centerOnNotehead READ centerOnNotehead CONSTANT)
+    Q_PROPERTY(PropertyItem * avoidBarLines READ avoidBarLines CONSTANT)
+    Q_PROPERTY(PropertyItem * dynamicScale READ dynamicScale CONSTANT)
+    Q_PROPERTY(PropertyItem * centerOnNotehead READ centerOnNotehead CONSTANT)
 
     // Frame-related settings
     Q_PROPERTY(mu::inspector::PropertyItem * frameType READ frameType CONSTANT)
@@ -53,7 +53,7 @@ public:
     void resetProperties() override;
 
     PropertyItem* avoidBarLines() const;
-    PropertyItem* dynamicSize() const;
+    PropertyItem* dynamicScale() const;
     PropertyItem* centerOnNotehead() const;
 
     PropertyItem* frameType() const;
@@ -68,7 +68,7 @@ private:
 
 private:
     PropertyItem* m_avoidBarLines = nullptr;
-    PropertyItem* m_dynamicSize = nullptr;
+    PropertyItem* m_dynamicScale = nullptr;
     PropertyItem* m_centerOnNotehead = nullptr;
 
     PropertyItem* m_frameType = nullptr;

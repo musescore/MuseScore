@@ -143,7 +143,6 @@ public:
 private:
 
     M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
-    M_PROPERTY(double, dynamicsSize, setDynamicsSize)
     M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
 
     std::pair<DynamicType, String> parseDynamicText(const String&) const;

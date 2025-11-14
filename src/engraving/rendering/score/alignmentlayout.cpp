@@ -212,7 +212,7 @@ double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
             break;
         case AlignV::BASELINE:
             if (item->isDynamic()) {
-                curY -= 0.46 * item->spatium() * toDynamic(item)->dynamicsSize(); // approximated half x-height of dynamic
+                curY -= 0.46 * item->spatium() * toDynamic(item)->symbolScale(); // approximated half x-height of dynamic
             } else {
                 curY -= 0.5 * toExpression(item)->fontMetrics().xHeight();
             }

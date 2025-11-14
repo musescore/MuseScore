@@ -574,8 +574,9 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
             d->setVelChangeSpeed(TConv::fromXml(e.readAsciiText(), DynamicSpeed::NORMAL));
         } else if (tag == "size" && mscVersion < 400) {
             e.skipCurrentElement();
+        } else if (tag == "dynamicsSize") {
+            d->setSymbolScale(e.readDouble());
         } else if (readProperty(d, tag, e, ctx, Pid::AVOID_BARLINES)) {
-        } else if (readProperty(d, tag, e, ctx, Pid::DYNAMICS_SIZE)) {
         } else if (readProperty(d, tag, e, ctx, Pid::CENTER_ON_NOTEHEAD)) {
         } else if (!readProperties(static_cast<TextBase*>(d), e, ctx)) {
             e.unknown();

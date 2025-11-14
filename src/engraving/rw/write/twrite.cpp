@@ -1245,7 +1245,6 @@ void TWrite::write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::DYNAMIC_TYPE);
     writeProperty(item, xml, Pid::VELOCITY);
     writeProperty(item, xml, Pid::AVOID_BARLINES);
-    writeProperty(item, xml, Pid::DYNAMICS_SIZE);
     writeProperty(item, xml, Pid::CENTER_ON_NOTEHEAD);
     writeProperty(item, xml, Pid::PLAY);
     writeProperty(item, xml, Pid::ANCHOR_TO_END_OF_PREVIOUS);

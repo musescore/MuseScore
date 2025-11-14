@@ -84,10 +84,10 @@ TEST_F(Engraving_DynamicTests, test1)
     d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
     EXPECT_EQ(d->avoidBarLines(), false);
 
-    dynamic->setProperty(Pid::DYNAMICS_SIZE, 0.5);
-    dynamic->setPropertyFlags(Pid::DYNAMICS_SIZE, PropertyFlags::UNSTYLED);
+    dynamic->setProperty(Pid::MUSICAL_SYMBOLS_SCALE, 0.5);
+    dynamic->setPropertyFlags(Pid::MUSICAL_SYMBOLS_SCALE, PropertyFlags::UNSTYLED);
     d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->dynamicsSize(), 0.5);
+    EXPECT_EQ(d->symbolScale(), 0.5);
 
     dynamic->setProperty(Pid::CENTER_ON_NOTEHEAD, true);
     dynamic->setPropertyFlags(Pid::CENTER_ON_NOTEHEAD, PropertyFlags::UNSTYLED);
