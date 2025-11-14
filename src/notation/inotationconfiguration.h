@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONCONFIGURATION_H
-#define MU_NOTATION_INOTATIONCONFIGURATION_H
+
+#pragma once
 
 #include <QColor>
 #include <optional>
@@ -71,6 +71,16 @@ public:
     virtual muse::async::Notification foregroundChanged() const = 0;
 
     virtual muse::io::path_t wallpapersDefaultDirPath() const = 0;
+
+    virtual bool shouldInvertScore() const = 0;  // Whether score should be inverted now, based on theme.
+
+    virtual bool scoreInversionEnabled() const = 0;
+    virtual void setScoreInversionEnabled(bool value) = 0;
+    virtual muse::async::Notification scoreInversionChanged() const = 0;
+
+    virtual bool isOnlyInvertInDarkTheme() const = 0;
+    virtual void setOnlyInvertInDarkTheme(bool value) = 0;
+    virtual muse::async::Notification isOnlyInvertInDarkThemeChanged() const = 0;
 
     virtual QColor borderColor() const = 0;
     virtual int borderWidth() const = 0;
@@ -280,5 +290,3 @@ public:
     virtual void resetStyleDialogPageIndices() = 0;
 };
 }
-
-#endif // MU_NOTATION_INOTATIONCONFIGURATION_H

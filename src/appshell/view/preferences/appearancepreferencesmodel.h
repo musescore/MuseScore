@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_APPEARANCEPREFERENCESMODEL_H
-#define MU_APPSHELL_APPEARANCEPREFERENCESMODEL_H
+
+#pragma once
 
 #include <QObject>
 
@@ -65,7 +65,6 @@ class AppearancePreferencesModel : public QObject, public muse::Injectable, publ
 
     muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
     muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
     explicit AppearancePreferencesModel(QObject* parent = nullptr);
@@ -148,5 +147,3 @@ private:
     muse::ui::ThemeList allThemes() const;
 };
 }
-
-#endif // MU_APPSHELL_APPEARANCEPREFERENCESMODEL_H

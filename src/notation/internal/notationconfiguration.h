@@ -76,6 +76,16 @@ public:
 
     muse::io::path_t wallpapersDefaultDirPath() const override;
 
+    bool shouldInvertScore() const override;  // Whether score should be inverted now, based on theme.
+
+    bool scoreInversionEnabled() const override;
+    void setScoreInversionEnabled(bool value) override;
+    muse::async::Notification scoreInversionChanged() const override;
+
+    bool isOnlyInvertInDarkTheme() const override;
+    void setOnlyInvertInDarkTheme(bool value) override;
+    muse::async::Notification isOnlyInvertInDarkThemeChanged() const override;
+
     QColor borderColor() const override;
     int borderWidth() const override;
 
@@ -292,6 +302,8 @@ private:
 
     muse::async::Notification m_backgroundChanged;
     muse::async::Notification m_foregroundChanged;
+    muse::async::Notification m_scoreInversionChanged;
+    muse::async::Notification m_isOnlyInvertInDarkThemeChanged;
 
     muse::async::Notification m_defaultNoteInputMethodChanged;
     muse::async::Notification m_addAccidentalDotsArticulationsToNextNoteEnteredChanged;

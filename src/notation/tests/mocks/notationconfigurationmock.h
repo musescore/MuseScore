@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONCONFIGURATIONMOCK_H
-#define MU_NOTATION_NOTATIONCONFIGURATIONMOCK_H
+
+#pragma once
 
 #include <gmock/gmock.h>
 
@@ -61,6 +61,16 @@ public:
     MOCK_METHOD(muse::async::Notification, foregroundChanged, (), (const, override));
 
     MOCK_METHOD(muse::io::path_t, wallpapersDefaultDirPath, (), (const, override));
+
+    MOCK_METHOD(bool, shouldInvertScore, (), (const, override));
+
+    MOCK_METHOD(bool, scoreInversionEnabled, (), (const, override));
+    MOCK_METHOD(void, setScoreInversionEnabled, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, scoreInversionChanged, (), (const, override));
+
+    MOCK_METHOD(bool, isOnlyInvertInDarkTheme, (), (const, override));
+    MOCK_METHOD(void, setOnlyInvertInDarkTheme, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, isOnlyInvertInDarkThemeChanged, (), (const, override));
 
     MOCK_METHOD(QColor, borderColor, (), (const, override));
     MOCK_METHOD(int, borderWidth, (), (const, override));
@@ -269,5 +279,3 @@ public:
     MOCK_METHOD(void, resetStyleDialogPageIndices, (), (override));
 };
 }
-
-#endif // MU_NOTATION_NOTATIONCONFIGURATIONMOCK_H

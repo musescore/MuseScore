@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ENGRAVINGCONFIGURATIONMOCK_H
-#define MU_ENGRAVING_ENGRAVINGCONFIGURATIONMOCK_H
+
+#pragma once
 
 #include <gmock/gmock.h>
 
@@ -72,16 +72,6 @@ public:
     MOCK_METHOD(void, setAutoUpdateFretboardDiagrams, (bool), (override));
     MOCK_METHOD((muse::async::Channel<bool>), autoUpdateFretboardDiagramsChanged, (), (const, override));
 
-    MOCK_METHOD(bool, shouldInvertScore, (), (const, override));
-
-    MOCK_METHOD(bool, scoreInversionEnabled, (), (const, override));
-    MOCK_METHOD(void, setScoreInversionEnabled, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, scoreInversionChanged, (), (const, override));
-
-    MOCK_METHOD(bool, isOnlyInvertInDarkTheme, (), (const, override));
-    MOCK_METHOD(void, setOnlyInvertInDarkTheme, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, isOnlyInvertInDarkThemeChanged, (), (const, override));
-
     MOCK_METHOD(Color, formattingColor, (), (const, override));
     MOCK_METHOD(muse::async::Channel<Color>, formattingColorChanged, (), (const, override));
 
@@ -119,5 +109,3 @@ public:
     MOCK_METHOD(void, setPreferSameStringForTranspose, (bool), (override));
 };
 }
-
-#endif // MU_ENGRAVING_ENGRAVINGCONFIGURATIONMOCK_H

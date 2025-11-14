@@ -68,7 +68,7 @@ BaseSection {
 
             enabled: root.scoreInversionEnabled
 
-            text: qsTrc("appshell/preferences", "Only invert score in dark theme")
+            text: qsTrc("appshell/preferences", "Only invert colors in dark theme")
 
             navigation.name: "IsOnlyInvertInDarkThemeBox"
             navigation.panel: root.navigation

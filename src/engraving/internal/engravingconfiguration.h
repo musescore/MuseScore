@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ENGRAVINGCONFIGURATION_H
-#define MU_ENGRAVING_ENGRAVINGCONFIGURATION_H
+
+#pragma once
 
 #include "async/asyncable.h"
 
@@ -82,16 +82,6 @@ public:
 
     Color highlightSelectionColor(voice_idx_t voice = 0) const override;
 
-    bool shouldInvertScore() const override;  // Whether score should be inverted now, based on theme.
-
-    bool scoreInversionEnabled() const override;
-    void setScoreInversionEnabled(bool value) override;
-    muse::async::Notification scoreInversionChanged() const override;
-
-    bool isOnlyInvertInDarkTheme() const override;
-    void setOnlyInvertInDarkTheme(bool value) override;
-    muse::async::Notification isOnlyInvertInDarkThemeChanged() const override;
-
     bool dynamicsApplyToAllVoices() const override;
     void setDynamicsApplyToAllVoices(bool v) override;
     muse::async::Channel<bool> dynamicsApplyToAllVoicesChanged() const override;
@@ -136,8 +126,6 @@ public:
 
 private:
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
-    muse::async::Notification m_scoreInversionChanged;
-    muse::async::Notification m_isOnlyInvertInDarkThemeChanged;
     muse::async::Channel<bool> m_dynamicsApplyToAllVoicesChanged;
     muse::async::Channel<bool> m_fretboardDiagramsAutoUpdateChanged;
     muse::async::Channel<Color> m_formattingColorChanged;
@@ -152,5 +140,3 @@ private:
     bool m_multiVoice = false;
 };
 }
-
-#endif // MU_ENGRAVING_ENGRAVINGCONFIGURATION_H

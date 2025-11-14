@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_IENGRAVINGCONFIGURATION_H
-#define MU_ENGRAVING_IENGRAVINGCONFIGURATION_H
+
+#pragma once
 
 #include "types/string.h"
 #include "io/path.h"
@@ -69,16 +69,6 @@ public:
     virtual Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const = 0;
     virtual void setSelectionColor(voice_idx_t voiceIndex, Color color) = 0;
     virtual muse::async::Channel<voice_idx_t, Color> selectionColorChanged() const = 0;
-
-    virtual bool shouldInvertScore() const = 0;  // Whether score should be inverted now, based on theme.
-
-    virtual bool scoreInversionEnabled() const = 0;
-    virtual void setScoreInversionEnabled(bool value) = 0;
-    virtual muse::async::Notification scoreInversionChanged() const = 0;
-
-    virtual bool isOnlyInvertInDarkTheme() const = 0;
-    virtual void setOnlyInvertInDarkTheme(bool value) = 0;
-    virtual muse::async::Notification isOnlyInvertInDarkThemeChanged() const = 0;
 
     virtual bool dynamicsApplyToAllVoices() const = 0;
     virtual void setDynamicsApplyToAllVoices(bool v) = 0;
@@ -156,5 +146,3 @@ public:
     virtual void setPreferSameStringForTranspose(bool preferSameString) = 0;
 };
 }
-
-#endif // MU_ENGRAVING_IENGRAVINGCONFIGURATION_H

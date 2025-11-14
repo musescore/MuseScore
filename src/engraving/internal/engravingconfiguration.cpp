@@ -43,9 +43,6 @@ using namespace mu::engraving;
 static const Settings::Key DEFAULT_STYLE_FILE_PATH("engraving", "engraving/style/defaultStyleFile");
 static const Settings::Key PART_STYLE_FILE_PATH("engraving", "engraving/style/partStyleFile");
 
-static const Settings::Key INVERT_SCORE_COLOR("engraving", "engraving/scoreColorInversion");
-static const Settings::Key ONLY_INVERT_IN_DARK_THEME("engraving", "engraving/onlyInvertInDarkTheme");
-
 static const Settings::Key ALL_VOICES_COLOR("engraving", "engraving/colors/allVoicesColor");
 static const Settings::Key FORMATTING_COLOR("engraving", "engraving/colors/formattingColor");
 static const Settings::Key FRAME_COLOR("engraving", "engraving/colors/frameColor");
@@ -85,16 +82,6 @@ void EngravingConfiguration::init()
     settings()->setDefaultValue(PART_STYLE_FILE_PATH, Val(muse::io::path_t()));
     settings()->valueChanged(PART_STYLE_FILE_PATH).onReceive(this, [this](const Val& val) {
         m_partStyleFilePathChanged.send(val.toPath());
-    });
-
-    settings()->setDefaultValue(INVERT_SCORE_COLOR, Val(false));
-    settings()->valueChanged(INVERT_SCORE_COLOR).onReceive(nullptr, [this](const Val&) {
-        m_scoreInversionChanged.notify();
-    });
-
-    settings()->setDefaultValue(ONLY_INVERT_IN_DARK_THEME, Val(false));
-    settings()->valueChanged(ONLY_INVERT_IN_DARK_THEME).onReceive(nullptr, [this](const Val&) {
-        m_isOnlyInvertInDarkThemeChanged.notify();
     });
 
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
@@ -351,41 +338,6 @@ muse::async::Channel<voice_idx_t, Color> EngravingConfiguration::selectionColorC
 Color EngravingConfiguration::highlightSelectionColor(voice_idx_t voice) const
 {
     return Color::fromQColor(selectionColor(voice).toQColor().lighter(135));
-}
-
-bool EngravingConfiguration::shouldInvertScore() const
-{
-    return scoreInversionEnabled() && (!isOnlyInvertInDarkTheme() || uiConfiguration()->isDarkMode());
-}
-
-bool EngravingConfiguration::scoreInversionEnabled() const
-{
-    return settings()->value(INVERT_SCORE_COLOR).toBool();
-}
-
-void EngravingConfiguration::setScoreInversionEnabled(bool value)
-{
-    settings()->setSharedValue(INVERT_SCORE_COLOR, Val(value));
-}
-
-muse::async::Notification EngravingConfiguration::scoreInversionChanged() const
-{
-    return m_scoreInversionChanged;
-}
-
-bool EngravingConfiguration::isOnlyInvertInDarkTheme() const
-{
-    return settings()->value(ONLY_INVERT_IN_DARK_THEME).toBool();
-}
-
-void EngravingConfiguration::setOnlyInvertInDarkTheme(bool value)
-{
-    settings()->setSharedValue(ONLY_INVERT_IN_DARK_THEME, Val(value));
-}
-
-muse::async::Notification EngravingConfiguration::isOnlyInvertInDarkThemeChanged() const
-{
-    return m_isOnlyInvertInDarkThemeChanged;
 }
 
 bool EngravingConfiguration::dynamicsApplyToAllVoices() const
