@@ -182,7 +182,7 @@ void NotationMidiInput::doProcessEvents()
         if (note) {
             if (useDurationAndVelocity) {
                 note->setUserVelocity(event.velocity7());
-                m_playingNotes[note->pitch()] = note;
+                m_playingNotes[note->pitch()] = { isSoundPreview, note };
             }
             notesOn.push_back(note);
         }
@@ -213,7 +213,7 @@ void NotationMidiInput::doProcessEvents()
     }
 
     if (!notesOff.empty()) {
-        releasePlayingNotes(notesOff, isSoundPreview);
+        releasePlayingNotes(notesOff);
     }
 }
 
@@ -421,9 +421,10 @@ void NotationMidiInput::triggerControllers(const ControllerEventMap& events)
     playbackController()->triggerControllers(controllers, is.staffIdx(), is.tick().ticks());
 }
 
-void NotationMidiInput::releasePlayingNotes(const std::vector<int>& pitches, bool deleteNotes)
+void NotationMidiInput::releasePlayingNotes(const std::vector<int>& pitches)
 {
-    std::vector<const EngravingItem*> notes;
+    std::vector<const EngravingItem*> notesOff;
+    std::vector<Note*> notesToDelete;
 
     const staff_idx_t staffIdx = score()->inputState().staffIdx();
     const bool useWrittenPitch = configuration()->midiUseWrittenPitch().val;
@@ -436,16 +437,20 @@ void NotationMidiInput::releasePlayingNotes(const std::vector<int>& pitches, boo
             continue;
         }
 
-        notes.push_back(it->second);
-        it->second->setUserVelocity(0);
+        Note* note = it->second.note;
+        note->setUserVelocity(0);
+
+        notesOff.push_back(note);
+
+        if (it->second.isPreview) {
+            notesToDelete.push_back(note);
+        }
+
         m_playingNotes.erase(it);
     }
 
-    playbackController()->playElements(notes, makeNoteOffParams(), true /*isMidi*/);
-
-    if (deleteNotes) {
-        muse::DeleteAll(notes);
-    }
+    playbackController()->playElements(notesOff, makeNoteOffParams(), true /*isMidi*/);
+    muse::DeleteAll(notesToDelete);
 }
 
 void NotationMidiInput::enableMetronome()
