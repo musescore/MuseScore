@@ -97,3 +97,28 @@ void MStyle::setValue(const QString& key, QVariant value)
         m_style->set(sid, PropertyValue::fromQVariant(value, mu::engraving::MStyle::valueType(sid)));
     }
 }
+
+//---------------------------------------------------------
+//   MStyle::resetValue
+///   Resets the value of style setting named \p key to its default.
+///   Key should be one of \ref Sid values.
+///   \since MuseScore 4.7
+//---------------------------------------------------------
+
+void MStyle::resetValue(const QString& key)
+{
+    const Sid sid = keyToSid(key);
+
+    if (sid == Sid::NOSTYLE) {
+        return;
+    }
+
+    const mu::engraving::MStyle& defStyle = DefaultStyle::defaultStyle();
+    if (m_score) {
+        // Style belongs to actual score: change style value in undoable way
+        m_score->undoChangeStyleVal(sid, defStyle.value(sid));
+    } else {
+        // Style is not bound to a score: change the value directly
+        m_style->set(sid, defStyle.value(sid));
+    }
+}

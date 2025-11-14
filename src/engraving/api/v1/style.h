@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_APIV1_STYLE_H
-#define MU_ENGRAVING_APIV1_STYLE_H
+#pragma once
 
 #include "engraving/style/style.h"
+#include "engraving/style/defaultstyle.h"
 
 namespace mu::engraving {
 class Score;
@@ -63,9 +63,8 @@ public:
 
     Q_INVOKABLE QVariant value(const QString& key) const;
     Q_INVOKABLE void setValue(const QString& key, QVariant value);
+    Q_INVOKABLE void resetValue(const QString& key);
 };
 
 extern MStyle* styleWrap(mu::engraving::MStyle*, mu::engraving::Score*);
 }
-
-#endif
