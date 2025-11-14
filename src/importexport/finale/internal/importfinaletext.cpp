@@ -847,9 +847,7 @@ void FinaleParser::importTextExpressions()
 
                     // should this really be all tracks?
                     Shape staffShape = seg->staffShape(expr->staffIdx());
-                    staffShape.translate(PointF(seg->pageX(), seg->system()->pagePos().y() + seg->system()->staff(expr->staffIdx())->y()));
-                    // staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
-                    double entryY = staffShape.top() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
+                    double entryY = expr->pagePos().y() + staffShape.top() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
 
                     SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
                     double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
@@ -864,9 +862,7 @@ void FinaleParser::importTextExpressions()
 
                     // should this really be all tracks?
                     Shape staffShape = s->staffShape(expr->staffIdx());
-                    // staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
-                    staffShape.translate(PointF(s->pageX(), s->system()->pagePos().y() + s->system()->staff(expr->staffIdx())->y()));
-                    double entryY = staffShape.bottom() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
+                    double entryY = expr->pagePos().y() + staffShape.bottom() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
 
                     SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
                     double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
