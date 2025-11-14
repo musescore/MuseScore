@@ -221,37 +221,44 @@ EngravingItem* ChordRest::drop(EditData& data)
     }
 
     case ElementType::BAR_LINE:
+    {
+        BarLine* bl = toBarLine(e);
+        Fraction barLineTick = bl->barLineType() == BarLineType::START_REPEAT ? tick() : endTick();
+
         if (data.control()) {
-            SplitJoinMeasure::splitMeasure(masterScore(), tick());
-        } else {
-            BarLine* bl = toBarLine(e);
-            bl->setPos(PointF());
-            bl->setTrack(staffIdx() * VOICES);
-            bl->setGenerated(false);
-            Fraction blt = bl->barLineType() == BarLineType::START_REPEAT ? tick() : endTick();
-
-            if (blt == m->tick() || blt == m->endTick()) {
-                return m->drop(data);
-            }
-
-            BarLine* obl = nullptr;
-            for (Staff* st  : staff()->staffList()) {
-                Score* score = st->score();
-                Measure* measure = score->tick2measure(m->tick());
-                Segment* seg = measure->undoGetSegment(SegmentType::BarLine, blt);
-                BarLine* l;
-                if (!obl) {
-                    obl = l = bl->clone();
-                } else {
-                    l = toBarLine(obl->linkedClone());
-                }
-                l->setTrack(st->idx() * VOICES);
-                l->setParent(seg);
-                score->undoAddElement(l);
-            }
+            SplitJoinMeasure::splitMeasure(masterScore(), barLineTick);
+            m = score()->tick2measure(tick());
+            // consume the ControlModifier flag
+            data.modifiers &= ~ControlModifier;
         }
+
+        if (barLineTick == m->tick() || barLineTick == m->endTick()) {
+            return m->drop(data);
+        }
+
+        bl->setPos(PointF());
+        bl->setTrack(staffIdx() * VOICES);
+        bl->setGenerated(false);
+
+        BarLine* obl = nullptr;
+        for (Staff* st : staff()->staffList()) {
+            Score* score = st->score();
+            Measure* measure = score->tick2measure(m->tick());
+            Segment* seg = measure->undoGetSegment(SegmentType::BarLine, barLineTick);
+            BarLine* l;
+            if (!obl) {
+                obl = l = bl->clone();
+            } else {
+                l = toBarLine(obl->linkedClone());
+            }
+            l->setTrack(st->idx() * VOICES);
+            l->setParent(seg);
+            score->undoAddElement(l);
+        }
+
         delete e;
         return nullptr;
+    }
 
     case ElementType::CLEF:
         score()->cmdInsertClef(toClef(e), this);

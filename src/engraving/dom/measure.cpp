@@ -1499,6 +1499,10 @@ EngravingItem* Measure::drop(EditData& data)
 {
     EngravingItem* e = data.dropElement;
     staff_idx_t staffIdx = track2staff(data.track);
+    if (staffIdx == muse::nidx) {
+        delete e;
+        return nullptr;
+    }
     Staff* staff = score()->staff(staffIdx);
     //bool fromPalette = (e->track() == -1);
 
@@ -1658,7 +1662,7 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::BAR_LINE:
     {
         BarLine* bl = toBarLine(e);
-\
+
         if (bl->playCount() != -1) {
             undoChangeProperty(Pid::REPEAT_COUNT, bl->playCount());
         }
@@ -1670,7 +1674,7 @@ EngravingItem* Measure::drop(EditData& data)
             Segment* seg = undoGetSegmentR(SegmentType::EndBarLine, ticks());
             BarLine* cbl = toBarLine(seg->element(trackZeroVoice(data.track)));
             if (cbl) {
-                cbl->drop(data);
+                return cbl->drop(data);
             }
         } else if (bl->barLineType() == BarLineType::START_REPEAT) {
             Measure* m2 = isMMRest() ? mmRestFirst() : this;
@@ -1719,16 +1723,20 @@ EngravingItem* Measure::drop(EditData& data)
                     }
                 }
             }
-        } else if (Segment* seg = findSegmentR(SegmentType::EndBarLine, ticks())) {
-            // drop to first end barline
-            for (EngravingItem* ee : seg->elist()) {
-                if (ee) {
-                    ee->drop(data);
-                    break;
+        } else {
+            Segment* seg = undoGetSegmentR(SegmentType::EndBarLine, ticks());
+            // if any staff lacks a barline, create one
+            for (size_t stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
+                BarLine* staffBarLine = toBarLine(seg->element(stIdx * VOICES));
+                if (!staffBarLine) {
+                    staffBarLine = Factory::createBarLine(seg);
+                    staffBarLine->setParent(seg);
+                    staffBarLine->setTrack(stIdx * VOICES);
+                    undoAddElement(staffBarLine);
                 }
             }
-        } else {
-            delete e;
+            // drop to barline
+            return seg->element(trackZeroVoice(data.track))->drop(data);
         }
         break;
     }
