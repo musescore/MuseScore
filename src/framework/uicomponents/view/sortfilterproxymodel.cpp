@@ -105,7 +105,11 @@ void SortFilterProxyModel::setAlwaysIncludeIndices(const QList<int>& indices)
 
     beginFilterChange();
     m_alwaysIncludeIndices = indices;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
     endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
+    invalidateFilter();
+#endif
 
     emit alwaysIncludeIndicesChanged();
 }
@@ -123,7 +127,11 @@ void SortFilterProxyModel::setAlwaysExcludeIndices(const QList<int>& indices)
 
     beginFilterChange();
     m_alwaysExcludeIndices = indices;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
     endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
+    invalidateFilter();
+#endif
 
     emit alwaysExcludeIndicesChanged();
 }
@@ -231,7 +239,11 @@ void SortFilterProxyModel::fillRoleIds()
     beginFilterChange();
 
     DEFER {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
         endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
+        invalidateFilter();
+#endif
     };
 
     m_roleIdToFilterValueHash.clear();
@@ -242,7 +254,7 @@ void SortFilterProxyModel::fillRoleIds()
 
     QHash<QString, FilterValue*> roleNameToValueHash;
     QList<FilterValue*> filterList = m_filters.list();
-    for (FilterValue* filter: filterList) {
+    for (FilterValue* filter : std::as_const(filterList)) {
         roleNameToValueHash.insert(filter->roleName(), filter);
     }
 
@@ -259,7 +271,7 @@ void SortFilterProxyModel::fillRoleIds()
 SorterValue* SortFilterProxyModel::currentSorterValue() const
 {
     QList<SorterValue*> sorterList = m_sorters.list();
-    for (SorterValue* sorter: sorterList) {
+    for (SorterValue* sorter : std::as_const(sorterList)) {
         if (sorter->enabled()) {
             return sorter;
         }
