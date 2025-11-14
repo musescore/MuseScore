@@ -899,7 +899,7 @@ void FinaleParser::importTextExpressions()
             p += evpuToPointF(exprAssign->horzEvpuOff * expr->defaultSpatium(), -exprAssign->vertEvpuOff * expr->spatium()); // assignment offset
             setAndStyleProperty(expr, Pid::OFFSET, p);
         };
-        positionExpression(item, expressionAssignment, expressionDef);
+        positionExpression(item, expressionAssignment);
         collectElementStyle(item);
 
         if (item->systemFlag()) {
@@ -928,7 +928,7 @@ void FinaleParser::importTextExpressions()
                 setAndStyleProperty(copy, Pid::POSITION, toAlignH(expressionDef->horzExprJustification));
                 copy->linkTo(item);
                 s->add(copy);
-                positionExpression(copy, linkedAssignment, expressionDef);
+                positionExpression(copy, linkedAssignment);
                 collectElementStyle(copy);
                 m_systemObjectStaves.insert(linkedStaffIdx);
                 parsedAssignments.push_back(linkedExpressionId);
