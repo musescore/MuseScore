@@ -380,7 +380,7 @@ public:
     EngravingItem* prevInEl(EngravingItem* e);
     EngravingItem* nextElement() override;
     EngravingItem* prevElement() override;
-    virtual EngravingItem* lastElementBeforeSegment();
+    EngravingItem* lastElementBeforeSegment();
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
 
