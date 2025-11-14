@@ -21,6 +21,8 @@
  */
 #include "tdraw.h"
 
+#include "defer.h"
+
 #include "draw/fontmetrics.h"
 #include "draw/svgrenderer.h"
 
@@ -677,13 +679,17 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
-    painter->save();
-    setMask(item, painter);
-
     const BarLine::LayoutData* data = item->ldata();
     IF_ASSERT_FAILED(data) {
         return;
     }
+
+    painter->save();
+    DEFER {
+        painter->restore();
+    };
+
+    setMask(item, painter);
 
     switch (item->barLineType()) {
     case BarLineType::NORMAL: {
@@ -834,24 +840,41 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
     }
     break;
     }
-    Segment* s = item->segment();
-    if (s && s->isEndBarLineType() && !opt.isPrinting) {
-        Measure* m = s->measure();
-        if (m->isIrregular() && item->score()->markIrregularMeasures() && !m->isMMRest()) {
-            painter->setPen(item->configuration()->invisibleColor());
 
+    // draw irregular measure mark
+
+    if (opt.isPrinting || !item->score()->markIrregularMeasures()) {
+        return;
+    }
+
+    const Segment* s = item->segment();
+    if (s && (s->isEndBarLineType() || s->isStartRepeatBarLineType())) {
+        const Measure* measure = s->measure();
+        if (s->isStartRepeatBarLineType()) {
+            const Measure* prevMeasure = measure ? measure->prevMeasure() : nullptr;
+            if (!prevMeasure) {
+                return;
+            }
+            if (const BarLine* prevEndBl = prevMeasure->endBarLine(item->staffIdx())) {
+                if (prevEndBl->segment() && prevEndBl->segment()->enabled()) {
+                    return;
+                }
+            }
+            measure = prevMeasure;
+        }
+
+        if (measure && measure->isIrregular() && !measure->isMMRest()) {
+            painter->setPen(item->configuration()->invisibleColor());
             Font f(u"Edwin", Font::Type::Text);
             f.setPointSizeF(12 * item->spatium() / item->defaultSpatium());
             f.setBold(true);
-            Char ch = m->ticks() > m->timesig() ? u'+' : u'-';
+            Char ch = measure->ticks() > measure->timesig() ? u'+' : u'-';
             RectF r = FontMetrics(f).boundingRect(ch);
 
             painter->setFont(f);
-            painter->drawText(-r.width(), 0.0, ch);
+            painter->drawText(-r.width(), -item->spatium(), ch);
         }
     }
-
-    painter->restore();
 }
 
 void TDraw::draw(const Beam* item, Painter* painter, const PaintOptions& opt)
