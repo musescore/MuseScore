@@ -82,6 +82,16 @@ void FileDialog::setVisible(bool newVisible)
     }
 }
 
+void FileDialog::open()
+{
+    setVisible(true);
+}
+
+void FileDialog::close()
+{
+    setVisible(false);
+}
+
 QString FileDialog::folder() const
 {
     return m_folder;
@@ -108,6 +118,32 @@ void FileDialog::setFilePath(const QString& newFilePath)
     }
     m_filePath = newFilePath;
     emit filePathChanged();
+}
+
+QUrl FileDialog::fileUrl() const
+{
+    return QUrl::fromLocalFile(m_filePath);
+}
+
+void FileDialog::setFileUrl(const QUrl& newFileUrl)
+{
+    setFilePath(newFileUrl.toLocalFile());
+}
+
+QList<QUrl> FileDialog::fileUrls() const
+{
+    QList<QUrl> urls;
+    urls.append(QUrl::fromLocalFile(m_filePath));
+    return urls;
+}
+
+void FileDialog::setFileUrls(const QList<QUrl>& newFileUrls)
+{
+    if (newFileUrls.isEmpty()) {
+        setFilePath(QString());
+    } else {
+        setFilePath(newFileUrls.first().toLocalFile());
+    }
 }
 
 FileDialog::Type FileDialog::type() const

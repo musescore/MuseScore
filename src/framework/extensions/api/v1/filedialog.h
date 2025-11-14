@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_APIV1_FILEDIALOG_H
-#define MUSE_EXTENSIONS_APIV1_FILEDIALOG_H
+
+#pragma once
 
 #include <QObject>
 #include <QString>
+#include <QUrl>
 
 #include "global/modularity/ioc.h"
 #include "global/iinteractive.h"
@@ -37,6 +38,8 @@ class FileDialog : public QObject, public Injectable
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged FINAL)
     Q_PROPERTY(QString folder READ folder WRITE setFolder NOTIFY folderChanged FINAL)
     Q_PROPERTY(QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged FINAL)
+    Q_PROPERTY(QUrl fileUrl READ fileUrl WRITE setFileUrl FINAL)
+    Q_PROPERTY(QList<QUrl> fileUrls READ fileUrls WRITE setFileUrls FINAL)
 
     Inject<IInteractive> interactive = { this };
 
@@ -57,11 +60,20 @@ public:
     bool visible() const;
     void setVisible(bool newVisible);
 
+    Q_INVOKABLE void open();
+    Q_INVOKABLE void close();
+
     QString folder() const;
     void setFolder(const QString& newFolder);
 
     QString filePath() const;
     void setFilePath(const QString& newFilePath);
+
+    QUrl fileUrl() const;
+    void setFileUrl(const QUrl& newFileUrl);
+
+    QList<QUrl> fileUrls() const;
+    void setFileUrls(const QList<QUrl>& newFileUrls);
 
 signals:
     void accepted();
@@ -84,5 +96,3 @@ private:
     Type m_type = Type::Load;
 };
 }
-
-#endif // MUSE_EXTENSIONS_APIV1_FILEDIALOG_H
