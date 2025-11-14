@@ -166,7 +166,7 @@ void NavigationControl::setPanel(NavigationPanel* panel)
         connect(m_panel, &NavigationPanel::destroyed, this, &NavigationControl::onPanelDestroyed);
 
         if (!isComponentCompleted()) {
-            AbstractNavigation::componentComplete();
+            componentComplete();
         }
     }
 
