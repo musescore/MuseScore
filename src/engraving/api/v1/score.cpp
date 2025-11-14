@@ -28,6 +28,8 @@
 #include "dom/measure.h"
 #include "dom/score.h"
 #include "dom/segment.h"
+#include "dom/spanner.h"
+#include "dom/spannermap.h"
 #include "dom/text.h"
 #include "editing/editsystemlocks.h"
 #include "types/typesconv.h"
@@ -38,6 +40,51 @@
 #include "elements.h"
 
 using namespace mu::engraving::apiv1;
+
+qsizetype Score::spannerListCount(QQmlListProperty<Spanner>* list)
+{
+    auto* scoreWrapper = static_cast<Score*>(list->data);
+    if (!scoreWrapper) {
+        return 0;
+    }
+
+    mu::engraving::Score* nativeScore = scoreWrapper->score();
+    if (!nativeScore) {
+        return 0;
+    }
+
+    return static_cast<qsizetype>(nativeScore->spannerMap().map().size());
+}
+
+Spanner* Score::spannerListAt(QQmlListProperty<Spanner>* list, qsizetype index)
+{
+    auto* scoreWrapper = static_cast<Score*>(list->data);
+    if (!scoreWrapper || index < 0) {
+        return nullptr;
+    }
+
+    mu::engraving::Score* nativeScore = scoreWrapper->score();
+    if (!nativeScore) {
+        return nullptr;
+    }
+
+    const auto& spanMap = nativeScore->spannerMap().map();
+    qsizetype current = 0;
+    for (const auto& [tick, spanner] : spanMap) {
+        UNUSED(tick);
+        if (!spanner) {
+            continue;
+        }
+
+        if (current == index) {
+            return qobject_cast<Spanner*>(wrap(spanner, Ownership::SCORE));
+        }
+
+        ++current;
+    }
+
+    return nullptr;
+}
 
 Cursor* Score::newCursor()
 {
@@ -260,6 +307,15 @@ QQmlListProperty<Page> Score::pages()
 QQmlListProperty<System> Score::systems()
 {
     return wrapContainerProperty<System>(this, score()->systems());
+}
+
+//---------------------------------------------------------
+//   Score::spanners
+//---------------------------------------------------------
+
+QQmlListProperty<Spanner> Score::spanners()
+{
+    return QQmlListProperty<Spanner>(this, this, &Score::spannerListCount, &Score::spannerListAt);
 }
 
 //---------------------------------------------------------

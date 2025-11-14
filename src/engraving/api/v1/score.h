@@ -41,6 +41,7 @@ Q_MOC_INCLUDE("engraving/api/v1/selection.h")
 namespace mu::engraving {
 class InstrumentTemplate;
 class Selection;
+class Spanner;
 }
 
 namespace mu::engraving::apiv1 {
@@ -53,6 +54,7 @@ class System;
 class Selection;
 class Score;
 class Staff;
+class Spanner;
 
 extern Selection* selectionWrap(mu::engraving::Selection* select);
 
@@ -165,6 +167,9 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     /// List of systems in this score.
     /// \since MuseScore 4.6
     Q_PROPERTY(QQmlListProperty<apiv1::System> systems READ systems)
+    /// List of score-level spanners.
+    /// \since MuseScore 4.7
+    Q_PROPERTY(QQmlListProperty<apiv1::Spanner> spanners READ spanners)
 
     muse::Inject<mu::context::IGlobalContext> context = { this };
 
@@ -345,6 +350,7 @@ public:
     QQmlListProperty<apiv1::Staff> staves();
     QQmlListProperty<apiv1::Page> pages();
     QQmlListProperty<apiv1::System> systems();
+    QQmlListProperty<apiv1::Spanner> spanners();
 
     static const mu::engraving::InstrumentTemplate* instrTemplateFromName(const QString& name);   // used by PluginAPI::newScore()
     /// \endcond
@@ -352,5 +358,8 @@ public:
 private:
     mu::notation::INotationPtr notation() const;
     mu::notation::INotationUndoStackPtr undoStack() const;
+
+    static qsizetype spannerListCount(QQmlListProperty<Spanner>* list);
+    static Spanner* spannerListAt(QQmlListProperty<Spanner>* list, qsizetype index);
 };
 }
