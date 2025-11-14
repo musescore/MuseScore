@@ -1247,11 +1247,7 @@ static TiePlacement calculateTiePlacement(Tie* tie, bool useOuterPlacement)
 
     // Single-note chords
     if ((!startChord || startChord->notes().size() <= 1) && (!endChord || endChord->notes().size() <= 1)) {
-        /// @todo while the ties are all set to outside placement, checking for direction gives
-        /// a better vidual result in some cases. Possible due to staff line avoidance, but needs testing.
-        bool directionMatch = (!startChord || tie->slurDirection() != startChord->stemDirection())
-                              || (!endChord || tie->slurDirection() != endChord->stemDirection());
-        return (useOuterPlacement && directionMatch) ? outsideValue : insideValue;
+        return useOuterPlacement ? outsideValue : insideValue;
     }
 
     // Regardless of setting, Finale always sets ties within a chord (i.e. on not-outermost notes) to inner placement.
