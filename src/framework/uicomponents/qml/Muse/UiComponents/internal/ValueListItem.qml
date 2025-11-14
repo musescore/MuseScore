@@ -39,11 +39,16 @@ ListItemBlank {
     property string iconRoleName: "icon"
 
     property bool readOnly: false
+    //! NOTE: is keys column generally editable
+    property bool keysEditable: false
+    //! NOTE:  is this particular key editable
+    property bool keyReadOnly: false
 
     property bool drawZebra: true
     property int keyColumnWidth: 0
-    property bool isKeyEditable: false
     property bool startEditByDoubleClick: false
+    property int textInputSidePadding: 12
+    property int textInputHeight: 28
 
     property alias spacing: row.spacing
     property real sideMargin: 0
@@ -60,13 +65,13 @@ ListItemBlank {
     navigation.accessible.name: root.item[keyRoleName] + ": " + (Boolean(valueLoader.item) ? valueLoader.item.accessibleName : "")
 
     navigation.onTriggered: {
-        if (isKeyEditable) {
+        if (keysEditable && startEditByDoubleClick) {
             keyLoader.item.startEdit(keyLoader.item.val)
         }
     }
 
     navigation.onActiveChanged: {
-        if (isKeyEditable) {
+        if (keysEditable && startEditByDoubleClick) {
             keyLoader.item.escaped()
         }
     }
@@ -102,10 +107,13 @@ ListItemBlank {
         anchors.fill: parent
 
         RowLayout {
+            readonly property bool alignTextInputText: root.keysEditable && !root.keyReadOnly && !root.readOnly
+
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
             Layout.fillWidth: root.keyColumnWidth != 0 ? false : true
             Layout.preferredWidth: root.keyColumnWidth != 0 ? root.keyColumnWidth : -1
-            Layout.leftMargin: root.sideMargin
+            Layout.leftMargin:  root.sideMargin - (alignTextInputText ? root.textInputSidePadding : 0)
+            Layout.rightMargin: root.sideMargin + (alignTextInputText ? root.textInputSidePadding : 0)
 
             spacing: icon.iconCode == IconCode.NONE ? 0 : 18
 
@@ -120,10 +128,11 @@ ListItemBlank {
                 property var val: root.item[keyRoleName]
 
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                Layout.fillHeight: true
+                Layout.fillHeight: !root.keyReadOnly ? false : true
+                Layout.preferredHeight: !root.keyReadOnly ? root.textInputHeight : -1
                 Layout.fillWidth: true
 
-                sourceComponent: root.isKeyEditable ? textComp : titleLabelComp
+                sourceComponent: root.keysEditable && !root.keyReadOnly ? textComp : titleLabelComp
 
                 onLoaded: {
                     keyLoader.item.val = keyLoader.val
@@ -159,6 +168,8 @@ ListItemBlank {
             }
         }
 
+        SeparatorLine {}
+
         Loader {
             id: valueLoader
             property var val: root.item[valueRoleName]
@@ -166,9 +177,15 @@ ListItemBlank {
             property int navRow: root.navigation.row
             property int navColumn: 1
 
+            readonly property bool useTextIndent: privateProperties.componentByType(root.item[valueTypeRole]) === textComp
+                                                  || !root.keysEditable
+                                                  || root.keyReadOnly
+
             Layout.alignment: root.keyColumnWidth != 0 ? (Qt.AlignLeft | Qt.AlignVCenter) : (Qt.AlignRight | Qt.AlignVCenter)
+            Layout.preferredHeight: privateProperties.componentByType(root.item[valueTypeRole]) === textComp ? root.textInputHeight : -1
             Layout.preferredWidth: root.keyColumnWidth != 0 ? -1 : root.valueItemWidth
             Layout.fillWidth: root.keyColumnWidth != 0 ? true : false
+            Layout.leftMargin: root.sideMargin - (useTextIndent ? root.textInputSidePadding : 0)
             Layout.rightMargin: root.sideMargin
 
             enabled: root.item[valueEnabledRoleName] !== undefined ? root.item[valueEnabledRoleName] : true
@@ -227,9 +244,8 @@ ListItemBlank {
 
             property bool isKey: parent && parent === keyLoader
 
-            property NavigationPanel navPanel: !isKey ? root.navigation.panel : null
-            property int navRow: !isKey ? root.navigation.row : 0
-            property int navColumn: !isKey ? 1 : 0
+            property NavigationPanel navPanel: (root.keysEditable && !root.keyReadOnly) || !isKey ? root.navigation.panel : null
+            property int navRow: !isKey ? root.navigation.row * 2 + 1 : root.navigation.row * 2
 
             sourceComponent: root.startEditByDoubleClick ? doubleClickTextComp : singleClickTextComp
 
@@ -282,8 +298,10 @@ ListItemBlank {
 
             currentText: val
 
-            onTextChanged: function(newTextValue) {
-                textControl.changed(newTextValue)
+            textSidePadding: root.textInputSidePadding
+
+            onTextEdited: function(newTextValue) {
+                changed(newTextValue)
             }
         }
     }
