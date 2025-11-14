@@ -143,24 +143,27 @@ static ArticulationAnchor calculateAnchor(const MusxInstance<details::Articulati
 }
 
 struct OrnamentDefinition {
-    char32_t character;
+    std::string_view name;
     SymId symId;
     AccidentalType accAbove = AccidentalType::NONE;
     AccidentalType accBelow = AccidentalType::NONE;
 };
 
 static constexpr OrnamentDefinition ornamentList[] = {
-    { 0xF5B2u, SymId::ornamentTrill, AccidentalType::FLAT,    AccidentalType::NONE },
-    { 0xF5B3u, SymId::ornamentTrill, AccidentalType::NATURAL, AccidentalType::NONE },
-    { 0xF5B4u, SymId::ornamentTrill, AccidentalType::SHARP,   AccidentalType::NONE },
-    { 0xF5B5u, SymId::ornamentTurn, AccidentalType::FLAT,     AccidentalType::NONE },
-    { 0xF5B6u, SymId::ornamentTurn, AccidentalType::FLAT,     AccidentalType::SHARP },
-    { 0xF5B7u, SymId::ornamentTurn, AccidentalType::NONE,     AccidentalType::FLAT },
-    { 0xF5B8u, SymId::ornamentTurn, AccidentalType::NATURAL,  AccidentalType::NONE },
-    { 0xF5B9u, SymId::ornamentTurn, AccidentalType::NONE,     AccidentalType::NATURAL },
-    { 0xF5BAu, SymId::ornamentTurn, AccidentalType::SHARP,    AccidentalType::NONE },
-    { 0xF5BBu, SymId::ornamentTurn, AccidentalType::SHARP,    AccidentalType::FLAT },
-    { 0xF5BAu, SymId::ornamentTurn, AccidentalType::NONE,     AccidentalType::SHARP },
+    { "ornamentTrillFlatAbove",          SymId::ornamentTrill, AccidentalType::FLAT,    AccidentalType::NONE },
+    { "ornamentTrillFlatAboveLegacy",    SymId::ornamentTrill, AccidentalType::FLAT,    AccidentalType::NONE },
+    { "ornamentTrillNaturalAbove",       SymId::ornamentTrill, AccidentalType::NATURAL, AccidentalType::NONE },
+    { "ornamentTrillNaturalAboveLegacy", SymId::ornamentTrill, AccidentalType::NATURAL, AccidentalType::NONE },
+    { "ornamentTrillSharpAbove",         SymId::ornamentTrill, AccidentalType::SHARP,   AccidentalType::NONE },
+    { "ornamentTrillSharpAboveLegacy",   SymId::ornamentTrill, AccidentalType::SHARP,   AccidentalType::NONE },
+    { "ornamentTurnFlatAbove",           SymId::ornamentTurn,  AccidentalType::FLAT,    AccidentalType::NONE },
+    { "ornamentTurnFlatAboveSharpBelow", SymId::ornamentTurn,  AccidentalType::FLAT,    AccidentalType::SHARP },
+    { "ornamentTurnFlatBelow",           SymId::ornamentTurn,  AccidentalType::NONE,    AccidentalType::FLAT },
+    { "ornamentTurnNaturalAbove",        SymId::ornamentTurn,  AccidentalType::NATURAL, AccidentalType::NONE },
+    { "ornamentTurnNaturalBelow",        SymId::ornamentTurn,  AccidentalType::NONE,    AccidentalType::NATURAL },
+    { "ornamentTurnSharpAbove",          SymId::ornamentTurn,  AccidentalType::SHARP,   AccidentalType::NONE },
+    { "ornamentTurnSharpAboveFlatBelow", SymId::ornamentTurn,  AccidentalType::SHARP,   AccidentalType::FLAT },
+    { "ornamentTurnSharpBelow",          SymId::ornamentTurn,  AccidentalType::NONE,    AccidentalType::SHARP },
 };
 
 static const std::unordered_set<SymId> ornamentSymbols = {
@@ -431,11 +434,13 @@ void FinaleParser::importArticulations()
             if (muse::contains(ornamentSymbols, articSym.value())) {
                 a = toArticulation(Factory::createOrnament(c));
             } else if (articChar.has_value()) {
-                for (OrnamentDefinition od : ornamentList) {
-                    if (od.character == articChar.value()) {
-                        articSym = od.symId;
-                        a = toArticulation(Factory::createOrnament(c)); /// @todo accidentals
-                        break;
+                if (const std::string_view* glyphName = smufl_mapping::getGlyphName(articChar.value(), smufl_mapping::SmuflGlyphSource::Finale)) {
+                    for (OrnamentDefinition od : ornamentList) {
+                        if (od.name == *glyphName) {
+                            articSym = od.symId;
+                            a = toArticulation(Factory::createOrnament(c)); /// @todo accidentals
+                            break;
+                        }
                     }
                 }
             }
