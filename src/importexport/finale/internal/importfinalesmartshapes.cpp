@@ -915,7 +915,7 @@ void FinaleParser::importSmartShapes()
     // Read the back endings and inherit existing volta if possible
     for (const MusxInstance<others::RepeatBack>& endingEnd : endingEnds) {
         const MusxInstance<others::Measure>& musxMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, endingEnd->getCmper());
-        if (!musxMeasure->hasEnding) {
+        if (!musxMeasure || !musxMeasure->hasEnding) {
             continue;
         }
         // Find staff
