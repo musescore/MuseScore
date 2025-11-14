@@ -366,11 +366,8 @@ void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     writeEvpuSpace(style, Sid::keysigLeftMargin, prefs.keyOptions->keyFront);
 
     const double timeSigSpaceBefore = context.partScore()
-                                          ? prefs.timeOptions->timeFrontParts
-                                          : prefs.timeOptions->timeFront;
-    const double timeSigSpaceAfter = context.partScore()
-                                          ? prefs.timeOptions->timeBackParts
-                                          : prefs.timeOptions->timeBack;
+                                    ? prefs.timeOptions->timeFrontParts
+                                    : prefs.timeOptions->timeFront;
     writeEvpuSpace(style, Sid::timesigLeftMargin, timeSigSpaceBefore);
 
     writeEvpuSpace(style, Sid::clefKeyDistance,
@@ -382,6 +379,9 @@ void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     writeEvpuSpace(style, Sid::keyBarlineDistance, prefs.repeatOptions->afterKeySpace - 1.5 * EVPU_PER_SPACE); // observed fudge factor
 
     // Skipped: systemHeaderDistance, systemHeaderTimeSigDistance: these do not translate well from Finale
+    // const double timeSigSpaceAfter = context.partScore()
+    //                                ? prefs.timeOptions->timeBackParts
+    //                                : prefs.timeOptions->timeBack;
     // writeEvpuSpace(style, Sid::headerToLineStartDistance, (prefs.keyOptions->keyBack + timeSigSpaceAfter) / 2);
 
     writeEvpuSpace(style, Sid::clefBarlineDistance, -prefs.clefOptions->clefChangeOffset);

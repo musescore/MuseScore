@@ -604,7 +604,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
                 }
                 auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNotePropertiesInView();
-                const int defaultLine = (baseStaff->lines(entryStartTick) + 1) / 2; // Spatiums relative to top staff
+                //const int defaultLine = (baseStaff->lines(entryStartTick) + 1) / 2; // Spatiums relative to top staff
                 const double lineSpacing = baseStaff->lineDistance(entryStartTick);
                 // const int defaultMusxLine = 2 * defaultLine - currMusxStaff->calcTopLinePosition();
                 staffPosition += currMusxStaff->calcTopLinePosition();
@@ -1077,7 +1077,7 @@ void FinaleParser::importEntries()
 
 static double systemPosByLine(ChordRest* cr, bool up)
 {
-    int line;
+    int line = 0;
     if (cr->isChord()) {
         engraving::Note* n = up ? toChord(cr)->upNote() : toChord(cr)->downNote();
         line = cr->staffType()->isTabStaff() ? n->string() * 2 : n->line();
