@@ -65,6 +65,27 @@ Column {
         maxValue: 1000
     }
 
+    SpinBoxPropertyView {
+        id: symbolScale
+
+        anchors.left: parent.left
+
+        navigationName: "Scale"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
+
+        titleText: qsTrc("inspector", "Scale")
+        measureUnitsSymbol: "%"
+        propertyItem: root.model ? root.model.symbolScale: null
+        visible: root.model ? !root.model.isSymbolSizeAvailable : false
+
+
+        decimals: 0
+        step: 1
+        minValue: 0
+        maxValue: 1000
+    }
+
     Item {
         height: childrenRect.height
         width: parent.width
@@ -78,7 +99,7 @@ Column {
 
             navigation.name: "Scale with staff size"
             navigation.panel: root.navigationPanel
-            navigation.row: symbolSize.navigationRowEnd + 1
+            navigation.row: root.model.isSymbolSizeAvailable ? symbolSize.navigationRowEnd  : symbolScale.navigationRowEnd + 1
 
             text: qsTrc("inspector", "Scale with staff size")
             propertyItem: root.model ? root.model.isSizeSpatiumDependent : null

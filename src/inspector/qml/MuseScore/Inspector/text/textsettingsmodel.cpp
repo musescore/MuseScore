@@ -96,6 +96,12 @@ void TextSettingsModel::createProperties()
 
     m_horizontalPosition = buildPropertyItem(textPositionId, onPropertyChanged, nullptr, onPropertyReset);
     m_symbolSize = buildPropertyItem(mu::engraving::Pid::MUSIC_SYMBOL_SIZE);
+    m_symbolScale = buildPropertyItem(mu::engraving::Pid::MUSICAL_SYMBOLS_SCALE, [this](const Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue.toDouble() / 100);
+    }, [this](const Sid sid, const QVariant& newValue) {
+        updateStyleValue(sid, newValue.toDouble() / 100);
+        emit requestReloadPropertyItems();
+    });
     m_isSizeSpatiumDependent = buildPropertyItem(mu::engraving::Pid::SIZE_SPATIUM_DEPENDENT);
 
     m_frameType = buildPropertyItem(mu::engraving::Pid::FRAME_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
@@ -136,6 +142,7 @@ void TextSettingsModel::loadProperties()
         Pid::ALIGN,
         Pid::POSITION,
         Pid::MUSIC_SYMBOL_SIZE,
+        Pid::MUSICAL_SYMBOLS_SCALE,
         Pid::TEXT_SIZE_SPATIUM_DEPENDENT,
         Pid::FRAME_TYPE,
         Pid::FRAME_BG_COLOR,
@@ -156,6 +163,7 @@ void TextSettingsModel::loadProperties()
         Pid::BEGIN_TEXT_ALIGN,
         Pid::BEGIN_TEXT_POSITION,
         Pid::MUSIC_SYMBOL_SIZE,
+        Pid::MUSICAL_SYMBOLS_SCALE,
         Pid::TEXT_SIZE_SPATIUM_DEPENDENT,
         Pid::FRAME_TYPE,
         Pid::FRAME_BG_COLOR,
@@ -224,6 +232,12 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         loadPropertyItem(m_symbolSize);
     }
 
+    if (muse::contains(propertyIdSet, Pid::MUSICAL_SYMBOLS_SCALE)) {
+        loadPropertyItem(m_symbolScale, [](const QVariant& elementPropertyValue) -> QVariant {
+            return static_cast<int>(muse::DataFormatter::roundDouble(elementPropertyValue.toDouble() * 100.0));
+        });
+    }
+
     if (muse::contains(propertyIdSet, Pid::TEXT_SIZE_SPATIUM_DEPENDENT)) {
         loadPropertyItem(m_isSizeSpatiumDependent);
     }
@@ -290,6 +304,7 @@ void TextSettingsModel::resetProperties()
     m_textLineSpacing->resetToDefault();
     m_isSizeSpatiumDependent->resetToDefault();
     m_symbolSize->resetToDefault();
+    m_symbolScale->resetToDefault();
 
     m_frameType->resetToDefault();
     m_frameBorderColor->resetToDefault();
@@ -377,6 +392,11 @@ PropertyItem* TextSettingsModel::horizontalPosition() const
 PropertyItem* TextSettingsModel::symbolSize() const
 {
     return m_symbolSize;
+}
+
+PropertyItem* TextSettingsModel::symbolScale() const
+{
+    return m_symbolScale;
 }
 
 PropertyItem* TextSettingsModel::isSizeSpatiumDependent() const

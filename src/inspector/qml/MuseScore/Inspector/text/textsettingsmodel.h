@@ -47,14 +47,15 @@ class TextSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(mu::inspector::PropertyItem * horizontalPosition READ horizontalPosition CONSTANT)
 
-    Q_PROPERTY(mu::inspector::PropertyItem * symbolSize READ symbolSize CONSTANT)
-    Q_PROPERTY(mu::inspector::PropertyItem * isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
-    Q_PROPERTY(mu::inspector::PropertyItem * frameType READ frameType CONSTANT)
-    Q_PROPERTY(mu::inspector::PropertyItem * frameBorderColor READ frameBorderColor CONSTANT)
-    Q_PROPERTY(mu::inspector::PropertyItem * frameFillColor READ frameFillColor CONSTANT)
-    Q_PROPERTY(mu::inspector::PropertyItem * frameThickness READ frameThickness CONSTANT)
-    Q_PROPERTY(mu::inspector::PropertyItem * frameMargin READ frameMargin CONSTANT)
-    Q_PROPERTY(mu::inspector::PropertyItem * frameCornerRadius READ frameCornerRadius CONSTANT)
+    Q_PROPERTY(PropertyItem * symbolSize READ symbolSize CONSTANT)
+    Q_PROPERTY(PropertyItem * symbolScale READ symbolScale CONSTANT)
+    Q_PROPERTY(PropertyItem * isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
+    Q_PROPERTY(PropertyItem * frameType READ frameType CONSTANT)
+    Q_PROPERTY(PropertyItem * frameBorderColor READ frameBorderColor CONSTANT)
+    Q_PROPERTY(PropertyItem * frameFillColor READ frameFillColor CONSTANT)
+    Q_PROPERTY(PropertyItem * frameThickness READ frameThickness CONSTANT)
+    Q_PROPERTY(PropertyItem * frameMargin READ frameMargin CONSTANT)
+    Q_PROPERTY(PropertyItem * frameCornerRadius READ frameCornerRadius CONSTANT)
 
     Q_PROPERTY(mu::inspector::PropertyItem * textType READ textType CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * textPlacement READ textPlacement CONSTANT)
@@ -102,6 +103,7 @@ public:
     PropertyItem* horizontalPosition() const;
 
     PropertyItem* symbolSize() const;
+    PropertyItem* symbolScale() const;
     PropertyItem* isSizeSpatiumDependent() const;
     PropertyItem* frameType() const;
     PropertyItem* frameBorderColor() const;
@@ -197,6 +199,7 @@ private:
     PropertyItem* m_horizontalPosition = nullptr;
 
     PropertyItem* m_symbolSize = nullptr;
+    PropertyItem* m_symbolScale = nullptr;
     PropertyItem* m_isSizeSpatiumDependent = nullptr;
     PropertyItem* m_frameType = nullptr;
     PropertyItem* m_frameBorderColor = nullptr;

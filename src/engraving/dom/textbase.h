@@ -500,7 +500,12 @@ public:
 
     double symbolSize() const { return m_symbolSize; }
     void setSymbolSize(double v) { m_symbolSize = v; }
-    inline bool hasSymbolSize() const { return isMarker() || isTempoText() || isSystemText() || isStaffText(); }
+
+    double symbolScale() const { return m_symbolScale; }
+    void setSymbolScale(double v) { m_symbolScale = v; }
+
+    bool hasSymbolScale() const;
+    bool hasSymbolSize() const { return !hasSymbolScale(); }
 
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
@@ -563,6 +568,7 @@ private:
     bool m_primed = 0;
 
     double m_symbolSize = 18.0;
+    double m_symbolScale = 1.0;
 
     TextCursor* m_cursor = nullptr;
 
