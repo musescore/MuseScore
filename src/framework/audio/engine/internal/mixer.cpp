@@ -89,7 +89,7 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, ITrackAudioInpu
         return result;
     }
 
-    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, source, m_outputSpec, iocContext());
+    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_outputSpec, source, this, iocContext());
     std::weak_ptr<MixerChannel> channelWeakPtr = channel;
 
     m_nonMutedTrackCount++;
@@ -116,7 +116,7 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, ITrackAudioInpu
 
         if (source) {
             source->setIsActive(isActive());
-            source->seek(currentTime());
+            source->seek(playbackPosition());
         }
     });
 
@@ -140,7 +140,7 @@ RetVal<MixerChannelPtr> Mixer::addAuxChannel(const TrackId trackId)
         return RetVal<MixerChannelPtr>::make_ret(Ret::Code::InternalError);
     }
 
-    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_outputSpec, iocContext());
+    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_outputSpec, this, iocContext());
 
     AuxChannelInfo aux;
     aux.channel = channel;
@@ -206,6 +206,16 @@ unsigned int Mixer::audioChannelsCount() const
     return m_outputSpec.audioChannelCount;
 }
 
+msecs_t Mixer::playbackPosition() const
+{
+    if (m_clocks.empty()) {
+        return 0;
+    }
+
+    const IClockPtr clock = *m_clocks.begin();
+    return clock->currentTime();
+}
+
 samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_ENGINE_THREAD;
@@ -255,7 +265,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 
     for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
         if (fxProcessor->active()) {
-            fxProcessor->process(outBuffer, samplesPerChannel, currentTime());
+            fxProcessor->process(outBuffer, samplesPerChannel, playbackPosition());
         }
     }
 
@@ -283,7 +293,6 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
     };
 
     bool filterTracks = m_isIdle && !m_tracksToProcessWhenIdle.empty();
-    msecs_t playbackPosition = currentTime();
 
 #ifdef MUSE_THREADS_SUPPORT
     if (useMultithreading()) {
@@ -298,8 +307,6 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
                 pair.second->notifyNoAudioSignal();
                 continue;
             }
-
-            pair.second->setPlaybackPosition(playbackPosition);
 
             std::future<std::vector<float> > future = m_taskScheduler->submit(processChannel, pair.second);
             futures.emplace(pair.first, std::move(future));
@@ -320,8 +327,6 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
                 pair.second->notifyNoAudioSignal();
                 continue;
             }
-
-            pair.second->setPlaybackPosition(playbackPosition);
 
             outTracksData.emplace(pair.first, processChannel(pair.second));
         }
@@ -602,14 +607,4 @@ void Mixer::notifyNoAudioSignal()
     }
 
     m_audioSignalNotifier.notifyAboutChanges();
-}
-
-msecs_t Mixer::currentTime() const
-{
-    if (m_clocks.empty()) {
-        return 0;
-    }
-
-    IClockPtr clock = *m_clocks.begin();
-    return clock->currentTime();
 }

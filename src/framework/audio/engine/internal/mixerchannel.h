@@ -32,14 +32,16 @@
 #include "track.h"
 
 namespace muse::audio::engine {
+class IGetPlaybackPosition;
 class MixerChannel : public ITrackAudioOutput, public Injectable, public async::Asyncable
 {
     Inject<fx::IFxResolver> fxResolver = { this };
 
 public:
-    explicit MixerChannel(const TrackId trackId, IAudioSourcePtr source, const OutputSpec& outputSpec,
+    explicit MixerChannel(const TrackId trackId, const OutputSpec& outputSpec, IAudioSourcePtr source,
+                          const IGetPlaybackPosition* getPlaybackPosition, const modularity::ContextPtr& iocCtx);
+    explicit MixerChannel(const TrackId trackId, const OutputSpec& outputSpec, const IGetPlaybackPosition* getPlaybackPosition,
                           const modularity::ContextPtr& iocCtx);
-    explicit MixerChannel(const TrackId trackId, const OutputSpec& outputSpec, const modularity::ContextPtr& iocCtx);
 
     TrackId trackId() const;
     IAudioSourcePtr source() const;
@@ -50,8 +52,6 @@ public:
     bool isSilent() const;
 
     void notifyNoAudioSignal();
-
-    void setPlaybackPosition(muse::audio::msecs_t pos);
 
     const AudioOutputParams& outputParams() const override;
     void applyOutputParams(const AudioOutputParams& requiredParams) override;
@@ -73,10 +73,10 @@ private:
     TrackId m_trackId = -1;
 
     OutputSpec m_outputSpec;
-    muse::audio::msecs_t m_playbackPosition = 0;
     AudioOutputParams m_params;
 
     IAudioSourcePtr m_audioSource = nullptr;
+    const IGetPlaybackPosition* m_getPlaybackPosition = nullptr;
     std::vector<IFxProcessorPtr> m_fxProcessors = {};
 
     dsp::CompressorPtr m_compressor = nullptr;
