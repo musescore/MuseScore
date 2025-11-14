@@ -62,11 +62,9 @@ static engraving::Note* findClosestNote(const MusxInstance<details::Articulation
     engraving::Note* n = c->upNote();
     // Attach to correct note based on vertical position
     if (c->notes().size() > 1) {
-        // This is a nonsense calculation atm
+        /// @todo Account for placement (and more articulation position options in general)
         double referencePos = n->y() + n->headHeight() / 2;
-        if (articAssign->overridePlacement) {
-            referencePos -= absoluteDoubleFromEvpu(articAssign->vertOffset, n);
-        }
+        referencePos -= absoluteDoubleFromEvpu(articAssign->vertOffset, n);
         referencePos -= absoluteDoubleFromEvpu(articDef->yOffsetMain + articDef->defVertPos, n);
         double bestMatch = DBL_MAX;
         for (engraving::Note* note : c->notes()) {
