@@ -218,10 +218,10 @@ QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& reso
     using PackMap = std::map<String, CategoryMap>;
     using VendorMap = std::map<String, PackMap>;
 
-    for (const auto& pair : resourcesByVendor) {
+    for (const auto& [_, metaList] : resourcesByVendor) {
         VendorMap vendorMap;
 
-        for (const AudioResourceMeta& resourceMeta : pair.second) {
+        for (const AudioResourceMeta& resourceMeta : metaList) {
             const muse::String& vendorName = resourceMeta.attributeVal(u"museVendorName");
             const muse::String& pack = resourceMeta.attributeVal(u"musePack");
             const muse::String& category = resourceMeta.attributeVal(u"museCategory");
@@ -230,31 +230,29 @@ QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& reso
             vendorMap[vendorName][pack][category].emplace_back(std::make_pair(resourceMeta.id, name));
         }
 
-        for (const auto& vendor : vendorMap) {
+        for (const auto& [vendorName, packs] : vendorMap) {
             QVariantList subItemsByVendor;
             bool isCurrentVendor = false;
 
-            for (const auto& pack : vendor.second) {
+            for (const auto& [packName, categories] : packs) {
                 QVariantList subItemsByPack;
                 bool isCurrentPack = false;
 
-                for (const auto& category : pack.second) {
+                for (const auto& [categoryName, instruments] : categories) {
                     QVariantList subItemsByCategory;
                     bool isCurrentCategory = false;
 
-                    for (const auto& inst : category.second) {
-                        const std::string& instId = inst.first;
+                    for (const auto& [instId, instName] : instruments) {
                         bool isCurrentInstrument = m_currentInputParams.resourceMeta.id == instId;
-                        QString instName = inst.second.toQString();
                         QString itemId = makeMenuResourceItemId(AudioResourceType::MuseSamplerSoundPack, QString::fromStdString(instId));
 
-                        subItemsByCategory << buildMenuItem(itemId, instName, isCurrentInstrument);
+                        subItemsByCategory << buildMenuItem(itemId, instName.toQString(), isCurrentInstrument);
                         isCurrentCategory = isCurrentCategory || isCurrentInstrument;
                     }
 
                     // Create submenu only if there are 2 or more categories
-                    if (pack.second.size() > 1 && !category.first.empty()) {
-                        QString categoryString = category.first.toQString();
+                    if (categories.size() > 1 && !categoryName.empty()) {
+                        QString categoryString = categoryName.toQString();
                         subItemsByPack << buildMenuItem(categoryString,
                                                         categoryString,
                                                         isCurrentCategory,
@@ -267,8 +265,8 @@ QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& reso
                 }
 
                 // Create submenu only if there are 2 or more packs
-                if (vendor.second.size() > 1 && !pack.first.empty()) {
-                    QString packString = pack.first.toQString();
+                if (packs.size() > 1 && !packName.empty()) {
+                    QString packString = packName.toQString();
                     subItemsByVendor << buildMenuItem(packString,
                                                       packString,
                                                       isCurrentPack,
@@ -280,9 +278,8 @@ QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& reso
                 isCurrentVendor = isCurrentVendor || isCurrentPack;
             }
 
-            // Create submenu only if there are 2 or more vendors
-            if (vendorMap.size() > 1 && !vendor.first.empty()) {
-                QString vendorString = vendor.first.toQString();
+            if (!vendorName.empty()) {
+                QString vendorString = vendorName.toQString();
                 subItemsByType << buildMenuItem(vendorString,
                                                 vendorString,
                                                 isCurrentVendor,
