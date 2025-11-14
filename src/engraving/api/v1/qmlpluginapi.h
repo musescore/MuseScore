@@ -29,20 +29,16 @@
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "global/iapplication.h"
-#include "engraving/iengraving.h"
 
-#include "enums.h"
-#include "engraving/dom/score.h"
-#include "engraving/types/types.h"
-#include "project/iexportprojectscenario.h"
-#include "project/inotationwritersregister.h"
-#include "project/iprojectfilescontroller.h"
+#include "../../iengravingpluginapihelper.h"
 
 #include "apitypes.h"
 #include "cursor.h"
+#include "enums.h"
 
 namespace mu::engraving {
 class EngravingItem;
+class Score;
 }
 
 /**
@@ -134,11 +130,11 @@ class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV
     /// List of currently open scores (read only).\n \since MuseScore 3.2
     Q_PROPERTY(QQmlListProperty<mu::engraving::apiv1::Score> scores READ scores)
 
-public:
+private:
     muse::Inject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
     muse::Inject<mu::context::IGlobalContext> context = { this };
     muse::Inject<muse::IApplication> application = { this };
-    muse::Inject<mu::engraving::IEngraving> engravingInterface = { this };
+    muse::Inject<mu::engraving::IEngravingPluginAPIHelper> helper = { this };
 
 public:
     // Should be initialized in qmlpluginapi.cpp

@@ -84,6 +84,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectautosaver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectactionscontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectactionscontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingpluginapihelper.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingpluginapihelper.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectconfiguration.cpp

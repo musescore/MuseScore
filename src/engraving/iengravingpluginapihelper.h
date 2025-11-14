@@ -22,20 +22,20 @@
 #pragma once
 
 #include <QString>
+
 #include "modularity/imoduleinterface.h"
 
 namespace mu::engraving {
 class Score;
 
-class IEngraving : MODULE_EXPORT_INTERFACE
+class IEngravingPluginAPIHelper : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IEngraving)
+    INTERFACE_ID(IEngravingPluginAPIHelper)
 public:
-    virtual ~IEngraving() = default;
+    virtual ~IEngravingPluginAPIHelper() = default;
 
-    // methods for plugin API
-    virtual bool APIwriteScore(const QString& name, const QString& ext) = 0;
-    virtual Score* APIreadScore(const QString& name) = 0;
-    virtual void APIcloseScore() = 0;
+    virtual bool writeScore(const QString& name, const QString& ext) = 0;
+    virtual Score* readScore(const QString& name) = 0;
+    virtual void closeScore() = 0;
 };
 }

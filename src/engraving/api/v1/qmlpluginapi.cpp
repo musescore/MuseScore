@@ -26,13 +26,12 @@
 #include <QJSValueIterator>
 
 #include "engraving/compat/scoreaccess.h"
-#include "engraving/dom/masterscore.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/interval.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/types/types.h"
 
 // api
-#include "apitypes.h"
 #include "engravingapiv1.h"
 #include "score.h"
 #include "instrument.h"
@@ -269,15 +268,16 @@ QQmlListProperty<apiv1::Score> PluginAPI::scores()
 bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
 {
     if (!s || !s->score()) {
-        LOGW("PluginAPI::writeScore: no score provided");
+        LOGW() << "No score provided";
         return false;
     }
 
     if (s->score() != currentScore()) {
-        LOGW("PluginAPI::writeScore: only writing the selected score is currently supported");
+        LOGW() << "Only writing the selected score is currently supported";
         return false;
     }
-    return engravingInterface.get()->APIwriteScore(name, ext);
+
+    return helper()->writeScore(name, ext);
 }
 
 //---------------------------------------------------------
@@ -295,15 +295,15 @@ apiv1::Score* PluginAPI::readScore(const QString& name, bool noninteractive)
     const bool hadScoreOpened = currentScore();
 
     if (hadScoreOpened) {
-        LOGW("PluginAPI::readScore: will open a score in a new window");
+        LOGW() << "Will open a score in a new window";
     }
 
     if (noninteractive) {
-        LOGW("PluginAPI::readScore: noninteractive flag is not yet implemented");
+        LOGW() << "Noninteractive flag is not yet implemented";
         return nullptr;
     }
 
-    mu::engraving::Score* score = engravingInterface.get()->APIreadScore(name);
+    mu::engraving::Score* score = helper()->readScore(name);
     if (score) {
         return wrap<apiv1::Score>(score, Ownership::SCORE);
     }
@@ -313,6 +313,7 @@ apiv1::Score* PluginAPI::readScore(const QString& name, bool noninteractive)
 //---------------------------------------------------------
 //   closeScore
 //---------------------------------------------------------
+
 void PluginAPI::closeScore()
 {
     return closeScore(curScore());
@@ -321,16 +322,16 @@ void PluginAPI::closeScore()
 void PluginAPI::closeScore(apiv1::Score* score)
 {
     if (!score || !score->score()) {
-        LOGW("PluginAPI::closeScore: no score provided");
+        LOGW() << "No score provided";
         return;
     }
 
     if (score->score() != currentScore()) {
-        LOGW("PluginAPI::closeScore: only closing the selected score is currently supported");
+        LOGW() << "Only closing the selected score is currently supported";
         return;
     }
 
-    engravingInterface.get()->APIcloseScore();
+    helper()->closeScore();
 }
 
 //---------------------------------------------------------

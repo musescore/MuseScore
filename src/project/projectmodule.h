@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_PROJECTMODULE_H
-#define MU_PROJECT_PROJECTMODULE_H
+
+#pragma once
 
 #include <memory>
 
@@ -31,6 +31,7 @@ class ProjectConfiguration;
 class ProjectActionsController;
 class RecentFilesController;
 class ProjectAutoSaver;
+class EngravingPluginAPIHelper;
 class ProjectModule : public muse::modularity::IModuleSetup
 {
 public:
@@ -47,7 +48,6 @@ private:
     std::shared_ptr<ProjectActionsController> m_actionsController;
     std::shared_ptr<RecentFilesController> m_recentFilesController;
     std::shared_ptr<ProjectAutoSaver> m_projectAutoSaver;
+    std::shared_ptr<EngravingPluginAPIHelper> m_engravingPluginAPIHelper;
 };
 }
-
-#endif // MU_PROJECT_PROJECTMODULE_H
