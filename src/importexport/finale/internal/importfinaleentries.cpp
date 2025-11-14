@@ -1296,7 +1296,7 @@ void FinaleParser::importEntryAdjustments()
                     topPos = std::min(topPos, systemPosByLine(cr, true));
                     bottomPos = std::max(bottomPos, systemPosByLine(cr, false));
                 }
-                up = bottomPos - middleLinePos > middleLinePos - topPos;
+                up = muse::RealIsEqualOrLess(middleLinePos - topPos, bottomPos - middleLinePos);
             }
             beam->doSetDirection(up ? DirectionV::UP : DirectionV::DOWN);
         } else {
