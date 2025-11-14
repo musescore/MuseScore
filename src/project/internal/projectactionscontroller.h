@@ -19,12 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_PROJECTACTIONSCONTROLLER_H
-#define MU_PROJECT_PROJECTACTIONSCONTROLLER_H
+
+#pragma once
 
 #include "iprojectfilescontroller.h"
 
 #include <QObject>
+#include <QString>
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
@@ -37,11 +38,11 @@
 #include "cloud/audiocom/iaudiocomservice.h"
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
+#include "iexportprojectscenario.h"
 #include "inotationreadersregister.h"
 #include "iopensaveprojectscenario.h"
 #include "imscmetareader.h"
 #include "io/ifilesystem.h"
-#include "internal/iexportprojectscenario.h"
 #include "notation/inotationconfiguration.h"
 #include "musesounds/imusesoundscheckupdatescenario.h"
 #include "musesounds/imusesamplercheckupdatescenario.h"
@@ -235,5 +236,3 @@ private:
     muse::async::Notification m_projectBeingDownloadedChanged;
 };
 }
-
-#endif // MU_PROJECT_PROJECTACTIONSCONTROLLER_H

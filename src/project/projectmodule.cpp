@@ -27,6 +27,7 @@
 #include "internal/projectcreator.h"
 #include "internal/projectautosaver.h"
 #include "internal/projectactionscontroller.h"
+#include "internal/engravingpluginapihelper.h"
 #include "internal/projectuiactions.h"
 #include "internal/projectconfiguration.h"
 #include "internal/opensaveprojectscenario.h"
@@ -86,6 +87,7 @@ void ProjectModule::registerExports()
     m_configuration = std::make_shared<ProjectConfiguration>();
     m_actionsController = std::make_shared<ProjectActionsController>(iocContext());
     m_projectAutoSaver = std::make_shared<ProjectAutoSaver>();
+    m_engravingPluginAPIHelper = std::make_shared<EngravingPluginAPIHelper>(iocContext());
 
 #ifdef Q_OS_MAC
     m_recentFilesController = std::make_shared<MacOSRecentFilesController>();
@@ -106,6 +108,7 @@ void ProjectModule::registerExports()
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
     ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator());
     ioc()->registerExport<IProjectAutoSaver>(moduleName(), m_projectAutoSaver);
+    ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(moduleName(), m_engravingPluginAPIHelper);
 
     //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
     ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());

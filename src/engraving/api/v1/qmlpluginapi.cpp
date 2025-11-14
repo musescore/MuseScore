@@ -28,10 +28,10 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/interval.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/types/types.h"
 
 // api
-#include "apitypes.h"
 #include "engravingapiv1.h"
 #include "score.h"
 #include "instrument.h"
@@ -268,14 +268,16 @@ QQmlListProperty<apiv1::Score> PluginAPI::scores()
 bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
 {
     if (!s || !s->score()) {
+        LOGW() << "No score provided";
         return false;
     }
 
-    UNUSED(name);
-    UNUSED(ext);
+    if (s->score() != currentScore()) {
+        LOGW() << "Only writing the selected score is currently supported";
+        return false;
+    }
 
-    NOT_IMPLEMENTED;
-    return false;
+    return helper()->writeScore(name, ext);
 }
 
 //---------------------------------------------------------
@@ -290,10 +292,21 @@ bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
 
 apiv1::Score* PluginAPI::readScore(const QString& name, bool noninteractive)
 {
-    UNUSED(name);
-    UNUSED(noninteractive);
+    const bool hadScoreOpened = currentScore();
 
-    NOT_IMPLEMENTED;
+    if (hadScoreOpened) {
+        LOGW() << "Will open a score in a new window";
+    }
+
+    if (noninteractive) {
+        LOGW() << "Noninteractive flag is not yet implemented";
+        return nullptr;
+    }
+
+    mu::engraving::Score* score = helper()->readScore(name);
+    if (score) {
+        return wrap<apiv1::Score>(score, Ownership::SCORE);
+    }
     return nullptr;
 }
 
@@ -301,11 +314,24 @@ apiv1::Score* PluginAPI::readScore(const QString& name, bool noninteractive)
 //   closeScore
 //---------------------------------------------------------
 
+void PluginAPI::closeScore()
+{
+    return closeScore(curScore());
+}
+
 void PluginAPI::closeScore(apiv1::Score* score)
 {
-    UNUSED(score);
+    if (!score || !score->score()) {
+        LOGW() << "No score provided";
+        return;
+    }
 
-    NOT_IMPLEMENTED;
+    if (score->score() != currentScore()) {
+        LOGW() << "Only closing the selected score is currently supported";
+        return;
+    }
+
+    helper()->closeScore();
 }
 
 //---------------------------------------------------------
