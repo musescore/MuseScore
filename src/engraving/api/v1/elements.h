@@ -2313,7 +2313,7 @@ public:
     const mu::engraving::Spanner* spanner() const { return toSpanner(e); }
 
     EngravingItem* startElement() const { return wrap(spanner()->startElement()); }
-    EngravingItem* endElement() const { return wrap(spanner()->startElement()); }
+    EngravingItem* endElement() const { return wrap(spanner()->endElement()); }
 
     QQmlListProperty<SpannerSegment> spannerSegments()
     {
@@ -2350,7 +2350,7 @@ public:
     const mu::engraving::Tie* tie() const { return toTie(e); }
 
     Note* startNote() const { return wrap<Note>(tie()->startNote()); }
-    Note* endNote() const { return wrap<Note>(tie()->startNote()); }
+    Note* endNote() const { return wrap<Note>(tie()->endNote()); }
     bool isInside() const { return tie()->isInside(); }
 
     /// \endcond
