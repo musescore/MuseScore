@@ -88,11 +88,8 @@ static void setTempoToScore(Score* score, int tick, double beatsPerSecond, const
             LOGD("MidiTempo::setTempoToScore: no measure for tick %d", tick);
             return;
         }
-        Segment* segment = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(tick));
-        if (!segment) {
-            LOGD("MidiTempo::setTempoToScore: no chord/rest segment for tempo at %d", tick);
-            return;
-        }
+
+        Segment* segment = measure->getChordRestOrTimeTickSegment(Fraction::fromTicks(tick));
 
         TempoText* tempoText = mu::engraving::Factory::createTempoText(segment);
         tempoText->setTempo(beatsPerSecond);
