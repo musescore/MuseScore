@@ -25,6 +25,7 @@
 #include <unordered_map>
 #include <memory>
 
+#include "engraving/dom/hairpin.h"
 #include "engraving/iengravingfontsprovider.h"
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/tuplet.h"
@@ -92,7 +93,7 @@ struct ReadableTuplet {
 
 struct FrameSettings {
     FrameSettings() = default;
-    FrameSettings(const others::Enclosure* enclosure);
+    FrameSettings(const musx::dom::others::Enclosure* enclosure);
     engraving::FrameType frameType = engraving::FrameType::NO_FRAME;
     double frameWidth = 0.1;
     double paddingWidth = 0.2;
@@ -153,13 +154,13 @@ struct ReadableExpression
     ReadableExpression() = default;
     ReadableExpression(const FinaleParser&, const musx::dom::MusxInstance<musx::dom::others::TextExpressionDef>&);
 
-    String xmlText = String();
+    engraving::String xmlText = engraving::String();
     FrameSettings frameSettings;
-    ElementType elementType = ElementType::STAFF_TEXT;
+    engraving::ElementType elementType = engraving::ElementType::STAFF_TEXT;
 
     // Element-specific
-    DynamicType dynamicType = DynamicType::OTHER;
-    std::array<PedalPosition, HARP_STRING_NO> pedalState;
+    engraving::DynamicType dynamicType = engraving::DynamicType::OTHER;
+    std::array<engraving::PedalPosition, engraving::HARP_STRING_NO> pedalState;
 };
 using ReadableExpressionMap = std::map<musx::dom::Cmper, ReadableExpression*>;
 
@@ -168,14 +169,14 @@ struct ReadableRepeatText
     ReadableRepeatText() = default;
     ReadableRepeatText(const FinaleParser&, const musx::dom::MusxInstance<musx::dom::others::TextRepeatDef>&);
 
-    String xmlText = String();
+    engraving::String xmlText = engraving::String();
     FrameSettings frameSettings;
-    ElementType elementType = ElementType::INVALID;
-    AlignH repeatAlignment;
+    engraving::ElementType elementType = engraving::ElementType::INVALID;
+    engraving::AlignH repeatAlignment;
 
     // Element-specific
-    MarkerType markerType = MarkerType::USER;
-    JumpType jumpType = JumpType::USER;
+    engraving::MarkerType markerType = engraving::MarkerType::USER;
+    engraving::JumpType jumpType = engraving::JumpType::USER;
 };
 using ReadableRepeatTextMap = std::map<musx::dom::Cmper, ReadableRepeatText*>;
 
@@ -206,8 +207,8 @@ struct ReadableCustomLine
     engraving::TrillType trillType;
     engraving::VibratoType vibratoType;
     // OttavaType requires placement, so must be computed after layout
-    engraving::GlissandoType glissandoType = GlissandoType::STRAIGHT;
-    engraving::HairpinType hairpinType = HairpinType::CRESC_LINE;
+    engraving::GlissandoType glissandoType = engraving::GlissandoType::STRAIGHT;
+    engraving::HairpinType hairpinType = engraving::HairpinType::CRESC_LINE;
 
     // Begin text
     engraving::TextPlace beginTextPlace;
@@ -334,7 +335,7 @@ private:
     void collectElementStyle(const mu::engraving::EngravingObject* e);
     void collectGlobalProperty(const mu::engraving::Sid styleId, const mu::engraving::PropertyValue& newV);
     void collectGlobalFont(const std::string& namePrefix, const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo);
-    std::unordered_map<Sid, PropertyValue> m_elementStyles;
+    std::unordered_map<engraving::Sid, engraving::PropertyValue> m_elementStyles;
 
     // smart shapes
     void importSmartShapes();
@@ -371,7 +372,7 @@ private:
     ReadableCustomLineMap m_customLines;
     ReadableExpressionMap m_expressions;
     ReadableRepeatTextMap m_repeatTexts;
-    std::set<staff_idx_t> m_systemObjectStaves;
+    std::set<engraving::staff_idx_t> m_systemObjectStaves;
 };
 
 extern void setAndStyleProperty(mu::engraving::EngravingObject* e, mu::engraving::Pid id,
