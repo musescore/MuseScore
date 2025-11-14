@@ -3529,7 +3529,8 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
             && (conf.styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0))
             && ((s && (s->isType(SegmentType::CourtesyKeySigType) || !s->rtick().isZero()))
                 || (pm && !pm->sectionBreak() && !pm->hasCourtesyKeySig()))) {
-            int t2 = item->staff() ? int(item->staff()->key(item->tick() - Fraction::eps())) : 0;
+            KeySigEvent prevKsEvent = item->staff() ? item->staff()->keySigEvent(item->tick() - Fraction::eps()) : KeySigEvent();
+            int t2 = int(prevKsEvent.key());
 
             // Handle naturals in continuation courtesy
             if (pm && s && s->isType(SegmentType::KeySigStartRepeatAnnounce)) {
@@ -3578,6 +3579,20 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
                 } else {
                     layoutSharpsFlats();
                     layoutNaturals();
+                }
+            } else if (prevKsEvent.custom()) {
+                Fraction prevKeyTick = Fraction::fromTicks(item->staff()->keyList()->currentKeyTick(
+                                                               (item->tick() - Fraction::eps()).ticks()));
+                Segment* prevKsSeg = item->score()->tick2segment(prevKeyTick, true, SegmentType::KeySig);
+                if (prevKsSeg) {
+                    KeySig* prevCustomKeySig = toKeySig(prevKsSeg->element(item->track()));
+                    if (prevCustomKeySig) {
+                        for (KeySym keySym : prevCustomKeySig->ldata()->keySymbols) {
+                            if (keySym.sym != SymId::accidentalNatural) {
+                                keySigAddLayout(item, conf, SymId::accidentalNatural, keySym.line, ldata);
+                            }
+                        }
+                    }
                 }
             }
         }
