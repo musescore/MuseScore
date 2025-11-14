@@ -646,6 +646,7 @@ void FinaleParser::importTextExpressions()
                                       const MusxInstance<others::TextExpressionDef>& exprDef) {
             expr->setAutoplace(false);
             setAndStyleProperty(expr, Pid::PLACEMENT, PlacementV::ABOVE);
+            setAndStyleProperty(expr, Pid::OFFSET, PointF{});
             m_score->renderer()->layoutItem(expr);
             PointF p;
             switch (exprDef->horzMeasExprAlign) {
@@ -912,7 +913,8 @@ void FinaleParser::importTextExpressions()
             const MusxInstanceList<others::MeasureExprAssign> possibleLinks = m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId, expressionAssignment->getCmper());
             for (const auto& linkedAssignment : possibleLinks) {
                 if (linkedAssignment->staffGroup != expressionAssignment->staffGroup // checking staffGroup by itself is probably sufficient.
-                    || linkedAssignment->textExprId != expressionAssignment->textExprId) {
+                    || linkedAssignment->textExprId != expressionAssignment->textExprId
+                    || !linkedAssignment->calcIsAssignedInRequestedPart()) {
                     continue;
                 }
                 staff_idx_t linkedStaffIdx = staffIdxFromAssignment(linkedAssignment->staffAssign);
@@ -924,11 +926,10 @@ void FinaleParser::importTextExpressions()
                 TextBase* copy = toTextBase(item->clone());
                 copy->setVisible(!linkedAssignment->hidden);
                 copy->setStaffIdx(linkedStaffIdx);
-                const MusxInstance<others::TextExpressionDef>& linkedDef = linkedAssignment->getTextExpression();
-                setAndStyleProperty(copy, Pid::POSITION, toAlignH(linkedDef->horzExprJustification));
+                setAndStyleProperty(copy, Pid::POSITION, toAlignH(expressionDef->horzExprJustification));
                 copy->linkTo(item);
                 s->add(copy);
-                positionExpression(copy, linkedAssignment, linkedDef);
+                positionExpression(copy, linkedAssignment, expressionDef);
                 collectElementStyle(copy);
                 m_systemObjectStaves.insert(linkedStaffIdx);
                 parsedAssignments.push_back(linkedExpressionId);
