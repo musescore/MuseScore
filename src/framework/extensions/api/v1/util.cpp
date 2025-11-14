@@ -1,8 +1,8 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -21,7 +21,6 @@
  */
 
 #include <QDateTime>
-#include <QUrl>
 
 #include "util.h"
 
@@ -41,12 +40,12 @@ FileIO::FileIO(QObject* parent)
 
 QString FileIO::read()
 {
-    if (mSource.isEmpty()) {
+    if (m_source.isEmpty()) {
         emit error("source is empty");
         return QString();
     }
-    QUrl url(mSource);
-    QString source(mSource);
+    QUrl url(m_source);
+    QString source(m_source);
     if (url.isValid() && url.isLocalFile()) {
         source = url.toLocalFile();
     }
@@ -69,13 +68,13 @@ QString FileIO::read()
 
 bool FileIO::write(const QString& data)
 {
-    if (mSource.isEmpty()) {
+    if (m_source.isEmpty()) {
         return false;
     }
 
-    QUrl url(mSource);
+    QUrl url(m_source);
 
-    QString source = (url.isValid() && url.isLocalFile()) ? url.toLocalFile() : mSource;
+    QString source = (url.isValid() && url.isLocalFile()) ? url.toLocalFile() : m_source;
 
     QFile file(source);
     if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
@@ -94,28 +93,28 @@ bool FileIO::write(const QString& data)
 
 bool FileIO::remove()
 {
-    if (mSource.isEmpty()) {
+    if (m_source.isEmpty()) {
         return false;
     }
 
-    QFile file(mSource);
+    QFile file(m_source);
     return file.remove();
 }
 
 bool FileIO::exists()
 {
-    QFile file(mSource);
+    QFile file(m_source);
     return file.exists();
 }
 
 int FileIO::modifiedTime()
 {
-    if (mSource.isEmpty()) {
+    if (m_source.isEmpty()) {
         emit error("source is empty");
         return 0;
     }
-    QUrl url(mSource);
-    QString source(mSource);
+    QUrl url(m_source);
+    QString source(m_source);
     if (url.isValid() && url.isLocalFile()) {
         source = url.toLocalFile();
     }

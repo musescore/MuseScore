@@ -1,8 +1,8 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_EXTENSIONS_APIV1_UTIL_H
-#define MUSE_EXTENSIONS_APIV1_UTIL_H
+#pragma once
 
 #include <QDir>
 #include <QProcess>
@@ -56,7 +55,7 @@ class FileIO : public QObject
     Q_OBJECT
 
 public:
-    /** Path to the file which is operated on */
+    /// Path to the file which is operated on
     Q_PROPERTY(QString source
                READ source
                WRITE setSource
@@ -64,47 +63,41 @@ public:
     /// \cond PLUGIN_API \private \endcond
     explicit FileIO(QObject* parent = 0);
 
-    /**
-     * Reads file contents and returns a string.
-     * In case error occurs, error() signal is emitted
-     * and an empty string is returned.
-     */
+    /// Reads file contents and returns a string.
+    /// In case error occurs, error() signal is emitted
+    /// and an empty string is returned.
     Q_INVOKABLE QString read();
-    /** Returns true if the file exists */
+    /// muse::Returns true if the file exists
     Q_INVOKABLE bool exists();
-    /**
-     * Writes a string to the file.
-     * \warning This function overwrites all the contents of
-     * the file pointed by FileIO::source so it becomes lost.
-     * \returns `true` if an operation finished successfully.
-     */
+    /// Writes a string to the file.
+    /// \warning This function overwrites all the contents of
+    /// the file pointed by FileIO::source so it becomes lost.
+    /// \returns `true` if an operation finished successfully.
     Q_INVOKABLE bool write(const QString& data);
-    /** Removes the file */
+    /// Removes the file
     Q_INVOKABLE bool remove();
-    /** Returns user's home directory */
+    /// muse::Returns user's home directory
     Q_INVOKABLE QString homePath() { QDir dir; return dir.homePath(); }
-    /** Returns a path suitable for a temporary file */
+    /// muse::Returns a path suitable for a temporary file
     Q_INVOKABLE QString tempPath() { QDir dir; return dir.tempPath(); }
-    /** Returns the file's last modification time */
+    /// muse::Returns the file's last modification time
     Q_INVOKABLE int modifiedTime();
 
     /// \cond MS_INTERNAL
-    QString source() { return mSource; }
+    QString source() { return m_source; }
 
 public slots:
-    void setSource(const QString& source) { mSource = source; }
+    void setSource(const QString& source) { m_source = source; }
     /// \endcond
 
 signals:
-    /**
-     * Emitted on file operations errors.
-     * Implement onError() in your FileIO object to handle this signal.
-     * \param msg A short textual description of the error occurred.
-     */
+    /// Emitted on file operations errors.
+    /// Implement onError() in your FileIO object to handle this signal.
+    /// \param msg A short textual description of the error occurred.
     void error(const QString& msg);
 
 private:
-    QString mSource;
+    QString m_source;
 };
 
 //---------------------------------------------------------
@@ -125,18 +118,14 @@ public:
         : QProcess(parent) {}
 
 public slots:
-    /**
-     * Execute an external command.
-     * \param command A command line to execute.
-     * \warning This function is deprecated. Use \ref startWithArgs instead.
-     */
+    /// Execute an external command.
+    /// \param command A command line to execute.
+    /// \warning This function is deprecated. Use \ref startWithArgs instead.
     Q_INVOKABLE void start(const QString& command);
-    /**
-     * Execute an external command.
-     * \param program A program to execute.
-     * \param args An array of arguments passed to the program.
-     * \since MuseScore 4.3
-     */
+    /// Execute an external command.
+    /// \param program A program to execute.
+    /// \param args An array of arguments passed to the program.
+    /// \since MuseScore 4.3
     Q_INVOKABLE void startWithArgs(const QString& program, const QStringList& args);
     //@ --
     Q_INVOKABLE bool waitForFinished(int msecs = 30000) { return QProcess::waitForFinished(msecs); }
@@ -144,5 +133,3 @@ public slots:
     Q_INVOKABLE QByteArray readAllStandardOutput() { return QProcess::readAllStandardOutput(); }
 };
 }
-
-#endif
