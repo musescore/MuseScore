@@ -847,6 +847,7 @@ void FinaleParser::importTextExpressions()
 
                     // should this really be all tracks?
                     Shape staffShape = seg->staffShape(expr->staffIdx());
+                    staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
                     double entryY = expr->pagePos().y() + staffShape.top() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
 
                     SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
@@ -862,6 +863,7 @@ void FinaleParser::importTextExpressions()
 
                     // should this really be all tracks?
                     Shape staffShape = s->staffShape(expr->staffIdx());
+                    staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
                     double entryY = expr->pagePos().y() + staffShape.bottom() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
 
                     SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
