@@ -1107,14 +1107,20 @@ DirectionV FinaleParser::calculateTieDirection(Tie* tie)
     // Inherit the stem direction only when the chord has a fixed direction, and the layer says to do so.
     const auto& layerInfo = layerAttributes(c->tick(), c->track());
     if (layerInfo && layerInfo->freezTiesToStems && muse::contains(m_fixedChords, c)) {
-        return stemDir;
+        DirectionV layerDir = getDirectionVForLayer(toChordRest(c));
+        if (layerDir != DirectionV::AUTO) {
+            return layerDir;
+        }
     }
     // Check in both layers where possible
     if (tie->startNote() && tie->endNote()) {
         Chord* c2 = c == tie->startNote()->chord() ? tie->endNote()->chord() : tie->startNote()->chord();
         const auto& otherLayerInfo = layerAttributes(c2->tick(), c2->track());
         if (otherLayerInfo && otherLayerInfo->freezTiesToStems && muse::contains(m_fixedChords, c2)) {
-            return c2->beam() ? c2->beam()->direction() : c2->stemDirection();
+            DirectionV layerDir = getDirectionVForLayer(toChordRest(c2));
+            if (layerDir != DirectionV::AUTO) {
+                return layerDir;
+            }
         }
     }
 
@@ -1170,7 +1176,7 @@ DirectionV FinaleParser::calculateTieDirection(Tie* tie)
         }
 
         const int middleLine = (c->staffType()->lines() - 1) * (!tabStaff ? 2 : 1);
-        return (line > middleLine) ? DirectionV::DOWN : DirectionV::UP;
+        return (line * 2 > middleLine) ? DirectionV::DOWN : DirectionV::UP;
     }
 
     // Single-note chords
