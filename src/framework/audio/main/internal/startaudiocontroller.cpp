@@ -299,6 +299,13 @@ void StartAudioController::stopAudioProcessing()
         audioDriver()->close();
     }
 #ifndef Q_OS_WASM
+    // Must call deinit() before stopping worker, so disconnect messages can
+    // still be processed on the worker thread
+    if (m_engineController) {
+        m_engineController->deinit();
+        m_engineController.reset();
+    }
+
     if (m_worker && m_worker->isRunning()) {
         m_worker->stop();
     }
