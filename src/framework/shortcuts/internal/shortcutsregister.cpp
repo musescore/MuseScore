@@ -23,8 +23,10 @@
 
 #include <QKeySequence>
 
-#include "global/deprecated/xmlreader.h"
-#include "global/deprecated/xmlwriter.h"
+#include "global/io/file.h"
+#include "global/serialization/xmlstreamreader.h"
+#include "global/serialization/xmlstreamwriter.h"
+
 #include "multiinstances/resourcelockguard.h"
 
 #include "log.h"
@@ -245,15 +247,21 @@ bool ShortcutsRegister::readFromFile(ShortcutList& shortcuts, const io::path_t& 
 {
     TRACEFUNC;
 
-    deprecated::XmlReader reader(path);
+    io::File file(path);
+    if (!file.open(io::IODevice::ReadOnly)) {
+        LOGD() << "failed to open shortcuts file: " << file.error();
+        return false;
+    }
+
+    XmlStreamReader reader(&file);
 
     reader.readNextStartElement();
-    if (reader.tagName() != SHORTCUTS_TAG) {
+    if (reader.name() != SHORTCUTS_TAG) {
         return false;
     }
 
     while (reader.readNextStartElement()) {
-        if (reader.tagName() != SHORTCUT_TAG) {
+        if (reader.name() != SHORTCUT_TAG) {
             reader.skipCurrentElement();
             continue;
         }
@@ -264,26 +272,27 @@ bool ShortcutsRegister::readFromFile(ShortcutList& shortcuts, const io::path_t& 
         }
     }
 
-    if (!reader.success()) {
+    if (reader.isError()) {
         LOGE() << "failed parse xml, error: " << reader.error() << ", path: " << path;
+        return false;
     }
 
-    return reader.success();
+    return true;
 }
 
-Shortcut ShortcutsRegister::readShortcut(deprecated::XmlReader& reader) const
+Shortcut ShortcutsRegister::readShortcut(XmlStreamReader& reader) const
 {
     Shortcut shortcut;
 
     while (reader.readNextStartElement()) {
-        std::string tag(reader.tagName());
+        const std::string tag(reader.name());
 
         if (tag == ACTION_CODE_TAG) {
-            shortcut.action = reader.readString();
+            shortcut.action = reader.readAsciiText();
         } else if (tag == STANDARD_KEY_TAG) {
             shortcut.standardKey = QKeySequence::StandardKey(reader.readInt());
         } else if (tag == SEQUENCE_TAG) {
-            shortcut.sequences.push_back(reader.readString());
+            shortcut.sequences.emplace_back(reader.readAsciiText());
         } else if (tag == AUTOREPEAT_TAG) {
             shortcut.autoRepeat = reader.readInt();
         } else {
@@ -343,35 +352,40 @@ bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::pat
 
     mi::WriteResourceLockGuard guard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
 
-    deprecated::XmlWriter writer(path);
+    io::File file(path);
+    if (!file.open(io::IODevice::WriteOnly)) {
+        LOGD() << "failed to open shortcuts file: " << file.error();
+        return false;
+    }
 
-    writer.writeStartDocument();
-    writer.writeStartElement(SHORTCUTS_TAG);
+    XmlStreamWriter writer(&file);
+
+    writer.startDocument();
+    writer.startElement(SHORTCUTS_TAG);
 
     for (const Shortcut& shortcut : shortcuts) {
         writeShortcut(writer, shortcut);
     }
 
-    writer.writeEndElement();
-    writer.writeEndDocument();
+    writer.endElement();
 
-    return writer.success();
+    return file.hasError();
 }
 
-void ShortcutsRegister::writeShortcut(deprecated::XmlWriter& writer, const Shortcut& shortcut) const
+void ShortcutsRegister::writeShortcut(XmlStreamWriter& writer, const Shortcut& shortcut) const
 {
-    writer.writeStartElement(SHORTCUT_TAG);
-    writer.writeTextElement(ACTION_CODE_TAG, shortcut.action);
+    writer.startElement(SHORTCUT_TAG);
+    writer.element(ACTION_CODE_TAG, shortcut.action);
 
     if (shortcut.standardKey != QKeySequence::UnknownKey) {
-        writer.writeTextElement(STANDARD_KEY_TAG, QString("%1").arg(shortcut.standardKey).toStdString());
+        writer.element(STANDARD_KEY_TAG, QString("%1").arg(shortcut.standardKey).toStdString());
     }
 
     for (const std::string& seq : shortcut.sequences) {
-        writer.writeTextElement(SEQUENCE_TAG, seq);
+        writer.element(SEQUENCE_TAG, seq);
     }
 
-    writer.writeEndElement();
+    writer.endElement();
 }
 
 Notification ShortcutsRegister::shortcutsChanged() const

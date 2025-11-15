@@ -21,12 +21,9 @@
  */
 #include "mscmetareader.h"
 
-#include <sstream>
+#include "global/io/buffer.h"
+#include "global/serialization/xmlstreamreader.h"
 
-#include "io/buffer.h"
-
-#include "stringutils.h"
-#include "global/deprecated/xmlreader.h"
 #include "engraving/infrastructure/mscreader.h"
 
 #include "log.h"
@@ -45,8 +42,12 @@ RetVal<ProjectMeta> MscMetaReader::readMeta(const muse::io::path_t& filePath) co
     }
 
     // Read score meta
-    ByteArray scoreData = msczReader.readScoreFile();
-    deprecated::XmlReader xmlReader(scoreData.toQByteArray());
+    io::Buffer scoreData(msczReader.readScoreFile());
+    if (!scoreData.open(io::IODevice::ReadOnly)) {
+        return RetVal<ProjectMeta>::make_ret(Ret::Code::InternalError);
+    }
+
+    XmlStreamReader xmlReader(&scoreData);
 
     RetVal<ProjectMeta> meta;
     meta.ret = make_ok();
@@ -76,8 +77,11 @@ muse::RetVal<CloudProjectInfo> MscMetaReader::readCloudProjectInfo(const muse::i
     }
 
     // Read score meta
-    ByteArray scoreData = msczReader.readScoreFile();
-    deprecated::XmlReader xmlReader(scoreData.toQByteArray());
+    io::Buffer scoreData(msczReader.readScoreFile());
+    if (!scoreData.open(io::IODevice::ReadOnly)) {
+        return RetVal<CloudProjectInfo>::make_ret(Ret::Code::InternalError);
+    }
+    XmlStreamReader xmlReader(&scoreData);
 
     ProjectMeta meta;
     doReadMeta(xmlReader, meta);
@@ -113,21 +117,22 @@ Ret MscMetaReader::prepareReader(const muse::io::path_t& filePath, MscReader& re
     return make_ok();
 }
 
-MscMetaReader::RawMeta MscMetaReader::doReadBox(deprecated::XmlReader& xmlReader) const
+MscMetaReader::RawMeta MscMetaReader::doReadBox(XmlStreamReader& xmlReader) const
 {
     RawMeta meta;
 
     while (xmlReader.readNextStartElement()) {
-        if (xmlReader.tagName() == "Text") {
+        if (xmlReader.name() == "Text") {
             bool isTitle = false;
             bool isSubtitle = false;
             bool isComposer = false;
             bool isLyricist = false;
             while (xmlReader.readNextStartElement()) {
-                std::string tag(xmlReader.tagName());
+                const std::string tag(xmlReader.name());
 
                 if (tag == "style") {
-                    std::string val = strings::toLower(xmlReader.readString());
+                    const std::string val = xmlReader.readText()
+                                            .toLower().toStdString();
 
                     if (val == "title" || val == "2") {
                         isTitle = true;
@@ -176,17 +181,17 @@ MscMetaReader::RawMeta MscMetaReader::doReadBox(deprecated::XmlReader& xmlReader
     return meta;
 }
 
-MscMetaReader::RawMeta MscMetaReader::doReadRawMeta(deprecated::XmlReader& xmlReader) const
+MscMetaReader::RawMeta MscMetaReader::doReadRawMeta(XmlStreamReader& xmlReader) const
 {
     RawMeta meta;
 
     while (xmlReader.readNextStartElement()) {
-        std::string tag(xmlReader.tagName());
+        const std::string tag(xmlReader.name());
 
         if (tag == "work-title") {
-            meta.titleTag = QString::fromStdString(xmlReader.readString());
+            meta.titleTag = xmlReader.readText().toQString();
         } else if (tag == "metaTag") {
-            std::string name = xmlReader.attribute("name");
+            const std::string name(xmlReader.asciiAttribute("name"));
 
             if (name == "workTitle") {
                 meta.titleAttribute = readMetaTagText(xmlReader);
@@ -203,12 +208,12 @@ MscMetaReader::RawMeta MscMetaReader::doReadRawMeta(deprecated::XmlReader& xmlRe
             } else if (name == "creationDate") {
                 meta.creationDate = readMetaTagText(xmlReader);
             } else {
-                meta.additionalTags[QString::fromStdString(name)] = readMetaTagText(xmlReader);
+                meta.additionalTags[QString::fromUtf8(name)] = readMetaTagText(xmlReader);
             }
         } else if (tag == "Staff") {
             if (meta.titleStyle.isEmpty()) {
                 while (xmlReader.readNextStartElement()) {
-                    std::string boxTag(xmlReader.tagName());
+                    const std::string boxTag(xmlReader.name());
 
                     if (boxTag == "HBox"
                         || boxTag == "VBox"
@@ -242,20 +247,20 @@ MscMetaReader::RawMeta MscMetaReader::doReadRawMeta(deprecated::XmlReader& xmlRe
     return meta;
 }
 
-void MscMetaReader::doReadMeta(deprecated::XmlReader& xmlReader, ProjectMeta& meta) const
+void MscMetaReader::doReadMeta(XmlStreamReader& xmlReader, ProjectMeta& meta) const
 {
     RawMeta rawMeta;
 
     while (xmlReader.readNextStartElement()) {
-        if (xmlReader.tagName() == "museScore") {
-            std::string version = xmlReader.attribute("version");
+        if (xmlReader.name() == "museScore") {
+            const std::string version(xmlReader.asciiAttribute("version"));
             bool suitedVersion = version.rfind("1", 0) == 0;
 
             if (suitedVersion) {
                 rawMeta = doReadRawMeta(xmlReader);
             } else {
                 while (xmlReader.readNextStartElement()) {
-                    if (xmlReader.tagName() == "Score") {
+                    if (xmlReader.name() == "Score") {
                         rawMeta = doReadRawMeta(xmlReader);
                     } else {
                         xmlReader.skipCurrentElement();
@@ -359,13 +364,15 @@ std::string MscMetaReader::cutXmlTags(const std::string& str) const
     return fin;
 }
 
-QString MscMetaReader::readText(deprecated::XmlReader& xmlReader) const
+QString MscMetaReader::readText(XmlStreamReader& xmlReader) const
 {
-    std::string str = xmlReader.readString(deprecated::XmlReader::IncludeChildElements);
+    const std::string str = xmlReader.readBody().toStdString();
     return formatFromXml(str);
 }
 
-QString MscMetaReader::readMetaTagText(deprecated::XmlReader& xmlReader) const
+QString MscMetaReader::readMetaTagText(XmlStreamReader& xmlReader) const
 {
-    return QString::fromStdString(xmlReader.readString());
+    const std::string_view metaText = xmlReader.readAsciiText();
+
+    return QString::fromUtf8(metaText);
 }

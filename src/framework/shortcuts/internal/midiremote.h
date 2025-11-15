@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_MIDIREMOTE_H
-#define MUSE_SHORTCUTS_MIDIREMOTE_H
+
+#pragma once
 
 #include "async/asyncable.h"
 
@@ -33,9 +33,9 @@
 #include "shortcutstypes.h"
 #include "../imidiremote.h"
 
-namespace muse::deprecated {
-class XmlReader;
-class XmlWriter;
+namespace muse {
+class XmlStreamReader;
+class XmlStreamWriter;
 }
 
 namespace muse::shortcuts {
@@ -68,10 +68,10 @@ public:
 
 private:
     void readMidiMappings();
-    MidiControlsMapping readMidiMapping(deprecated::XmlReader& reader) const;
+    MidiControlsMapping readMidiMapping(XmlStreamReader& reader) const;
 
     bool writeMidiMappings(const MidiMappingList& midiMappings) const;
-    void writeMidiMapping(deprecated::XmlWriter& writer, const MidiControlsMapping& midiMapping) const;
+    void writeMidiMapping(XmlStreamWriter& writer, const MidiControlsMapping& midiMapping) const;
 
     bool needIgnoreEvent(const muse::midi::Event& event) const;
 
@@ -83,5 +83,3 @@ private:
     async::Notification m_midiMappingsChanged;
 };
 }
-
-#endif // MUSE_SHORTCUTS_MIDIREMOTE_H

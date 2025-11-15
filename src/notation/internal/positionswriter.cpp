@@ -25,13 +25,14 @@
 #include <cmath>
 #include <QBuffer>
 
+#include "global/io/buffer.h"
+#include "global/serialization/xmlstreamwriter.h"
+
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/system.h"
 
 #include "engraving/types/types.h"
-
-#include "global/deprecated/xmlwriter.h"
 
 #include "log.h"
 
@@ -41,34 +42,38 @@ using namespace mu::engraving;
 using namespace muse;
 using namespace muse::io;
 
-constexpr std::string_view SCORE_TAG("score");
-constexpr std::string_view ELEMENTS_TAG("elements");
-constexpr std::string_view ELEMENT_TAG("element");
-constexpr std::string_view EVENTS_TAG("events");
-constexpr std::string_view EVENT_TAG("event");
+static constexpr std::string_view SCORE_TAG("score");
+static constexpr std::string_view ELEMENTS_TAG("elements");
+static constexpr std::string_view ELEMENT_TAG("element");
+static constexpr std::string_view EVENTS_TAG("events");
+static constexpr std::string_view EVENT_TAG("event");
 
-static void writeElementPosition(deprecated::XmlWriter& writer, const std::string& id, const muse::PointF& pos, const muse::PointF& sPos,
+static void writeElementPosition(XmlStreamWriter& writer, const std::string& id, const muse::PointF& pos, const muse::PointF& sPos,
                                  page_idx_t pageIndex)
 {
-    writer.writeStartElement(ELEMENT_TAG);
-    writer.writeAttribute("id", id);
-    writer.writeAttribute("x", std::to_string(pos.x()));
-    writer.writeAttribute("y", std::to_string(pos.y()));
-    writer.writeAttribute("sx", std::to_string(sPos.x()));
-    writer.writeAttribute("sy", std::to_string(sPos.y()));
-    writer.writeAttribute("page", std::to_string(pageIndex));
-    writer.writeEndElement();
+    XmlStreamWriter::Attributes attributes;
+    attributes.emplace_back("id", id);
+    attributes.emplace_back("x", pos.x());
+    attributes.emplace_back("y", pos.y());
+    attributes.emplace_back("sx", sPos.x());
+    attributes.emplace_back("sy", sPos.y());
+    attributes.emplace_back("page", pageIndex);
+
+    writer.startElement(ELEMENT_TAG, attributes);
+    writer.endElement();
 }
 
-static void writeEventPosition(deprecated::XmlWriter& writer, const std::string& id, int time)
+static void writeEventPosition(XmlStreamWriter& writer, const std::string& id, int time)
 {
-    writer.writeStartElement(EVENT_TAG);
-    writer.writeAttribute("elid", id);
-    writer.writeAttribute("position", std::to_string(time));
-    writer.writeEndElement();
+    XmlStreamWriter::Attributes attributes;
+    attributes.emplace_back("elid", id);
+    attributes.emplace_back("position", time);
+
+    writer.startElement(EVENT_TAG, attributes);
+    writer.endElement();
 }
 
-static void writeMeasureEvents(deprecated::XmlWriter& writer, Measure* m, int offset, const QHash<void*, int>& segments)
+static void writeMeasureEvents(XmlStreamWriter& writer, Measure* m, int offset, const QHash<void*, int>& segments)
 {
     for (mu::engraving::Segment* s = m->first(mu::engraving::SegmentType::ChordRest); s;
          s = s->next(mu::engraving::SegmentType::ChordRest)) {
@@ -108,23 +113,23 @@ Ret PositionsWriter::write(INotationPtr notation, io::IODevice& destinationDevic
         return make_ret(Ret::Code::UnknownError);
     }
 
-    QByteArray qdata;
-    QBuffer buf(&qdata);
-    buf.open(QIODevice::WriteOnly);
+    Buffer buf;
+    if (!buf.open(IODevice::WriteOnly)) {
+        return make_ret(Ret::Code::InternalError);
+    }
 
-    deprecated::XmlWriter writer(&buf);
+    XmlStreamWriter writer(&buf);
 
-    writer.writeStartDocument();
-    writer.writeStartElement(SCORE_TAG);
+    writer.startDocument();
+    writer.startElement(SCORE_TAG);
 
     writeElementsPositions(writer, score);
     writeEventsPositions(writer, score);
 
-    writer.writeEndElement();
-    writer.writeEndDocument();
+    writer.endElement();
+    writer.flush();
 
-    ByteArray data = ByteArray::fromQByteArrayNoCopy(qdata);
-    destinationDevice.write(data);
+    destinationDevice.write(buf.data());
 
     return true;
 }
@@ -160,9 +165,9 @@ QHash<void*, int> PositionsWriter::elementIds(const mu::engraving::Score* score)
     return elementIds;
 }
 
-void PositionsWriter::writeElementsPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
+void PositionsWriter::writeElementsPositions(XmlStreamWriter& writer, const mu::engraving::Score* score) const
 {
-    writer.writeStartElement(ELEMENTS_TAG);
+    writer.startElement(ELEMENTS_TAG);
 
     switch (m_elementType) {
     case ElementType::SEGMENT:
@@ -173,10 +178,10 @@ void PositionsWriter::writeElementsPositions(deprecated::XmlWriter& writer, cons
         break;
     }
 
-    writer.writeEndElement();
+    writer.endElement();
 }
 
-void PositionsWriter::writeSegmentsPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
+void PositionsWriter::writeSegmentsPositions(XmlStreamWriter& writer, const mu::engraving::Score* score) const
 {
     int id = 0;
     qreal ndpi = pngDpiResolution();
@@ -208,7 +213,7 @@ void PositionsWriter::writeSegmentsPositions(deprecated::XmlWriter& writer, cons
     }
 }
 
-void PositionsWriter::writeMeasuresPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
+void PositionsWriter::writeMeasuresPositions(XmlStreamWriter& writer, const mu::engraving::Score* score) const
 {
     int id = 0;
     qreal ndpi = pngDpiResolution();
@@ -228,11 +233,11 @@ void PositionsWriter::writeMeasuresPositions(deprecated::XmlWriter& writer, cons
     }
 }
 
-void PositionsWriter::writeEventsPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
+void PositionsWriter::writeEventsPositions(XmlStreamWriter& writer, const mu::engraving::Score* score) const
 {
     QHash<void*, int> elementIds = this->elementIds(score);
 
-    writer.writeStartElement(EVENTS_TAG);
+    writer.startElement(EVENTS_TAG);
 
     score->masterScore()->setExpandRepeats(true);
 
@@ -257,5 +262,5 @@ void PositionsWriter::writeEventsPositions(deprecated::XmlWriter& writer, const 
         }
     }
 
-    writer.writeEndElement();
+    writer.endElement();
 }

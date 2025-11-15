@@ -208,14 +208,6 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/systeminfo.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/tickerprovider.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/tickerprovider.h
-
-        ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlreader.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlreader.h
-        ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlwriter.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlwriter.h
-        ${CMAKE_CURRENT_LIST_DIR}/deprecated/qzip.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/deprecated/qzipreader_p.h
-        ${CMAKE_CURRENT_LIST_DIR}/deprecated/qzipwriter_p.h
         )
 
     if (MU_BUILD_UI_MODULE)

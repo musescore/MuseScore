@@ -19,16 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_MSCMETAREADER_H
-#define MU_PROJECT_MSCMETAREADER_H
+
+#pragma once
 
 #include "imscmetareader.h"
 
 #include "io/ifilesystem.h"
 #include "modularity/ioc.h"
 
-namespace muse::deprecated {
-class XmlReader;
+namespace muse {
+class XmlStreamReader;
 }
 
 namespace mu::project {
@@ -72,9 +72,9 @@ private:
 
     muse::Ret prepareReader(const muse::io::path_t& filePath, mu::engraving::MscReader& reader) const;
 
-    void doReadMeta(muse::deprecated::XmlReader& xmlReader, ProjectMeta& meta) const;
-    RawMeta doReadBox(muse::deprecated::XmlReader& xmlReader) const;
-    RawMeta doReadRawMeta(muse::deprecated::XmlReader& xmlReader) const;
+    void doReadMeta(muse::XmlStreamReader& xmlReader, ProjectMeta& meta) const;
+    RawMeta doReadBox(muse::XmlStreamReader& xmlReader) const;
+    RawMeta doReadRawMeta(muse::XmlStreamReader& xmlReader) const;
     QString formatFromXml(const std::string& xml) const;
 
     QString format(const std::string& str) const;
@@ -82,9 +82,7 @@ private:
     QString simplified(const std::string& str) const;
     std::string cutXmlTags(const std::string& str) const;
 
-    QString readText(muse::deprecated::XmlReader& xmlReader) const;
-    QString readMetaTagText(muse::deprecated::XmlReader& xmlReader) const;
+    QString readText(muse::XmlStreamReader& xmlReader) const;
+    QString readMetaTagText(muse::XmlStreamReader& xmlReader) const;
 };
 }
-
-#endif // MU_PROJECT_MSCMETAREADER_H
