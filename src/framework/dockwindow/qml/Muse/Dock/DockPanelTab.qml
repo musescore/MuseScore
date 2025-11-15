@@ -121,7 +121,6 @@ StyledTabButton {
 
         width: 20
 
-        opacity: 0.7
         gradient: Gradient {
             orientation: Qt.Horizontal
 
@@ -131,7 +130,7 @@ StyledTabButton {
             }
             GradientStop {
                 position: 1.0
-                color: backgroundRect.color
+                color: Utils.colorWithAlpha(backgroundRect.color, 0.7)
             }
         }
     }
