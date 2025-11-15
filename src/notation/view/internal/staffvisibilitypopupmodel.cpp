@@ -48,11 +48,6 @@ StaffVisibilityPopupModel::StaffVisibilityPopupModel(QObject* parent)
 
 void StaffVisibilityPopupModel::classBegin()
 {
-    init();
-}
-
-void StaffVisibilityPopupModel::init()
-{
     AbstractElementPopupModel::init();
 
     System* system = m_item && m_item->isStaffVisibilityIndicator()
@@ -66,6 +61,10 @@ void StaffVisibilityPopupModel::init()
 
     m_systemIndex = muse::indexOf(system->score()->systems(), system);
     emit systemIndexChanged();
+}
+
+void StaffVisibilityPopupModel::init()
+{
 }
 
 struct EmptyStavesVisibilityModel::Item {
