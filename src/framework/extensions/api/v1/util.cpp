@@ -87,6 +87,30 @@ bool FileIO::write(const QString& data)
     return true;
 }
 
+bool FileIO::writeBinary(const QString& data)
+{
+    if (m_source.isEmpty()) {
+        return false;
+    }
+
+    QUrl url(m_source);
+
+    QString source = (url.isValid() && url.isLocalFile()) ? url.toLocalFile() : m_source;
+
+    QFile file(source);
+    if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
+        return false;
+    }
+
+    // Write binary data without text encoding
+    // Each character in the QString represents a byte (0-255)
+    QByteArray bytes = data.toLatin1();
+    qint64 written = file.write(bytes);
+    file.close();
+
+    return written == bytes.size();
+}
+
 //---------------------------------------------------------
 //   remove
 //---------------------------------------------------------
