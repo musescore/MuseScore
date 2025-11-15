@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_APPEARANCEPREFERENCESMODEL_H
-#define MU_APPSHELL_APPEARANCEPREFERENCESMODEL_H
+
+#pragma once
 
 #include <QObject>
 
@@ -59,10 +59,12 @@ class AppearancePreferencesModel : public QObject, public muse::Injectable, publ
         QString foregroundWallpaperPath READ foregroundWallpaperPath WRITE setForegroundWallpaperPath NOTIFY foregroundWallpaperPathChanged)
 
     Q_PROPERTY(bool scoreInversionEnabled READ scoreInversionEnabled WRITE setScoreInversionEnabled NOTIFY invertScoreColorChanged)
+    Q_PROPERTY(
+        bool isOnlyInvertInDarkTheme READ isOnlyInvertInDarkTheme WRITE setOnlyInvertInDarkTheme NOTIFY isOnlyInvertInDarkThemeChanged)
+    Q_PROPERTY(bool isCurrentThemeDark READ isCurrentThemeDark NOTIFY themesChanged)
 
     muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
     muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
     explicit AppearancePreferencesModel(QObject* parent = nullptr);
@@ -101,6 +103,8 @@ public:
     QString foregroundWallpaperPath() const;
 
     bool scoreInversionEnabled() const;
+    bool isOnlyInvertInDarkTheme() const;
+    bool isCurrentThemeDark() const;
 
     Q_INVOKABLE void resetAppearancePreferencesToDefault();
     Q_INVOKABLE void setNewColor(const QColor& newColor, ColorType colorType);
@@ -122,6 +126,7 @@ public slots:
     void setForegroundColor(const QColor& color);
     void setForegroundWallpaperPath(const QString& path);
     void setScoreInversionEnabled(bool value);
+    void setOnlyInvertInDarkTheme(bool value);
 
 signals:
     void isFollowSystemThemeChanged();
@@ -135,11 +140,10 @@ signals:
     void foregroundColorChanged();
     void foregroundWallpaperPathChanged();
     void invertScoreColorChanged();
+    void isOnlyInvertInDarkThemeChanged();
 
 private:
     muse::ui::ThemeInfo currentTheme() const;
     muse::ui::ThemeList allThemes() const;
 };
 }
-
-#endif // MU_APPSHELL_APPEARANCEPREFERENCESMODEL_H

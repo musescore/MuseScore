@@ -26,7 +26,7 @@ import Muse.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell/preferences", "Appearance")
+    title: qsTrc("appshell/preferences", "App text")
 
     property alias allFonts: selectFontControl.model
 
@@ -39,7 +39,7 @@ BaseSection {
     ComboBoxWithTitle {
         id: selectFontControl
 
-        title: qsTrc("appshell/preferences", "Font face")
+        title: qsTrc("appshell/preferences", "Typeface")
         columnWidth: root.columnWidth
 
         navigation.name: "FontFaceBox"

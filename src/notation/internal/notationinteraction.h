@@ -27,7 +27,6 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "iinteractive.h"
-#include "engraving/iengravingconfiguration.h"
 #include "engraving/rendering/isinglerenderer.h"
 #include "engraving/rendering/ieditmoderenderer.h"
 
@@ -57,7 +56,6 @@ class NotationInteraction : public INotationInteraction, public muse::Injectable
     muse::Inject<INotationConfiguration> configuration = { this };
     muse::Inject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
     muse::Inject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
     muse::Inject<engraving::rendering::IEditModeRenderer> editModeRenderer = { this };
 

@@ -56,8 +56,13 @@ void AppearancePreferencesModel::init()
         emit bodyTextSizeChanged();
     });
 
-    engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
+    notationConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
         emit invertScoreColorChanged();
+        emit foregroundColorChanged();
+    });
+
+    notationConfiguration()->isOnlyInvertInDarkThemeChanged().onNotify(this, [this]() {
+        emit isOnlyInvertInDarkThemeChanged();
         emit foregroundColorChanged();
     });
 
@@ -254,7 +259,17 @@ QString AppearancePreferencesModel::foregroundWallpaperPath() const
 
 bool AppearancePreferencesModel::scoreInversionEnabled() const
 {
-    return engravingConfiguration()->scoreInversionEnabled();
+    return notationConfiguration()->scoreInversionEnabled();
+}
+
+bool AppearancePreferencesModel::isOnlyInvertInDarkTheme() const
+{
+    return notationConfiguration()->isOnlyInvertInDarkTheme();
+}
+
+bool AppearancePreferencesModel::isCurrentThemeDark() const
+{
+    return uiConfiguration()->isDarkMode();
 }
 
 void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
@@ -368,6 +383,16 @@ void AppearancePreferencesModel::setScoreInversionEnabled(bool value)
         return;
     }
 
-    engravingConfiguration()->setScoreInversionEnabled(value);
+    notationConfiguration()->setScoreInversionEnabled(value);
     emit invertScoreColorChanged();
+}
+
+void AppearancePreferencesModel::setOnlyInvertInDarkTheme(bool value)
+{
+    if (value == isOnlyInvertInDarkTheme()) {
+        return;
+    }
+
+    notationConfiguration()->setOnlyInvertInDarkTheme(value);
+    emit isOnlyInvertInDarkThemeChanged();
 }

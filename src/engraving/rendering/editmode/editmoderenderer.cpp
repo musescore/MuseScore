@@ -135,11 +135,11 @@ void EditModeRenderer::drawItem(const EngravingItem* item, muse::draw::Painter* 
 }
 
 void EditModeRenderer::drawEngravingItem(const EngravingItem* item, muse::draw::Painter* painter, const EditData& ed,
-                                         double currentViewScaling, const PaintOptions&)
+                                         double currentViewScaling, const PaintOptions& opt)
 {
     UNUSED(currentViewScaling);
 
-    Pen pen(item->configuration()->scoreInversionEnabled()
+    Pen pen(opt.invertColors
             ? item->configuration()->scoreInversionColor()
             : item->configuration()->defaultColor(), 0.0);
     painter->setPen(pen);

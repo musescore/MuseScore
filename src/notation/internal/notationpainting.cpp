@@ -191,7 +191,7 @@ void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool 
     opt.frameRect = frameRect;
     opt.deviceDpi = uiConfiguration()->logicalDpi();
     opt.isPrinting = isPrinting;
-    opt.invertColors = engravingConfiguration()->scoreInversionEnabled();
+    opt.invertColors = configuration()->shouldInvertScore();
     doPaint(painter, opt);
 }
 

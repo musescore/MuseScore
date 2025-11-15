@@ -46,6 +46,7 @@
         <file>qml/Preferences/internal/UiFontSection.qml</file>
         <file>qml/Preferences/internal/UiColorsSection.qml</file>
         <file>qml/Preferences/internal/ColorAndWallpaperSection.qml</file>
+        <file>qml/Preferences/internal/PageSection.qml</file>
         <file>qml/Preferences/internal/ImportStyleSection.qml</file>
         <file>qml/Preferences/internal/CharsetsSection.qml</file>
         <file>qml/Preferences/internal/MidiSection.qml</file>

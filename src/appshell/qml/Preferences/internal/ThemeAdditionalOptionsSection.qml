@@ -26,28 +26,10 @@ import Muse.UiComponents 1.0
 BaseSection {
     id: root
 
-    property alias scoreInversionEnabled: scoreInversionEnable.checked
-
     signal resetThemeToDefaultRequested()
-    signal scoreInversionEnableChangeRequested(bool enable)
-
-    CheckBox {
-        id: scoreInversionEnable
-        width: parent.width
-
-        text: qsTrc("appshell/preferences", "Invert score")
-
-        navigation.name: "ScoreInversionBox"
-        navigation.panel: root.navigation
-        navigation.row: 0
-
-        onClicked: {
-            root.scoreInversionEnableChangeRequested(!checked)
-        }
-    }
 
     FlatButton {
-        text: qsTrc("appshell/preferences", "Reset to default")
+        text: qsTrc("appshell/preferences", "Reset appearance to default")
 
         navigation.name: "ResetButton"
         navigation.panel: root.navigation
