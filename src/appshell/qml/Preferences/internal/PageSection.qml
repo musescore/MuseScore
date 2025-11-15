@@ -19,15 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Layouts
 
-import Muse.UiComponents 1.0
+import Muse.Ui
+import Muse.UiComponents
 
 BaseSection {
     id: root
 
     title: qsTrc("appshell/preferences", "Page")
+
+    navigation.direction: NavigationPanel.Both
 
     property alias scoreInversionEnabled: scoreInversionEnable.checked
     property alias isOnlyInvertInDarkTheme: isOnlyInvertInDarkTheme.checked
@@ -85,8 +88,11 @@ BaseSection {
         id: colorAndWallpaper
 
         enabled: !root.scoreInversionEnabled || (root.isOnlyInvertInDarkTheme && !root.isCurrentThemeDark)
-        opacityOverride: enabled ? 1.0 : 0.6
+        opacityOverride: enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
         wallpaperDialogTitle: qsTrc("appshell/preferences", "Choose notepaper")
+
+        navigation: root.navigation
+        navigationRowStart: 1
     }
 }

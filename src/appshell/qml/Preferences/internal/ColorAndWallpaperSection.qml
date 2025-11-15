@@ -30,6 +30,8 @@ BaseSection {
 
     navigation.direction: NavigationPanel.Both
 
+    property int navigationRowStart: 0
+
     property alias wallpaperDialogTitle: wallpaperPicker.dialogTitle
 
     property bool useColor: true
@@ -63,7 +65,7 @@ BaseSection {
 
             navigation.name: "ColorBox"
             navigation.panel: root.navigation
-            navigation.row: 0
+            navigation.row: root.navigationRowStart
             navigation.column: 0
 
             onToggled: {
@@ -80,7 +82,7 @@ BaseSection {
 
             navigation.name: "ColorBox"
             navigation.panel: root.navigation
-            navigation.row: 0
+            navigation.row: root.navigationRowStart
             navigation.column: 1
 
             onNewColorSelected: function(newColor) {
@@ -96,7 +98,7 @@ BaseSection {
 
             navigation.name: "WallpaperBox"
             navigation.panel: root.navigation
-            navigation.row: 1
+            navigation.row: root.navigationRowStart + 1
             navigation.column: 0
 
             onToggled: {
@@ -111,7 +113,7 @@ BaseSection {
             enabled: !root.useColor
 
             navigation: root.navigation
-            navigationRowOrderStart: 1
+            navigationRowOrderStart: root.navigationRowStart + 1
             navigationColumnOrderStart: 1
 
             onPathEdited: function(newPath) {

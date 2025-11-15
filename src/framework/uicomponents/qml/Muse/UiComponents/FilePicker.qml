@@ -65,10 +65,30 @@ Item {
         id: filePickerModel
     }
 
-    QtObject {
+    Item {
         id: prv
 
         property bool isNavigationBoth: root.navigation && root.navigation.direction === NavigationPanel.Both
+
+        states: [
+            State {
+                when: prv.isNavigationBoth
+                PropertyChanges {
+                    pathField.navigation.row: root.navigationRowOrderStart
+                    pathField.navigation.column: root.navigationColumnOrderStart
+
+                    button.navigation.row: root.navigationRowOrderStart
+                    button.navigation.column: root.navigationColumnOrderStart + 1
+                }
+            },
+            State {
+                when: !prv.isNavigationBoth
+                PropertyChanges {
+                    pathField.navigation.order: root.navigationRowOrderStart
+                    button.navigation.order: root.navigationRowOrderStart + 1
+                }
+            }
+        ]
     }
 
     RowLayout {
@@ -90,10 +110,6 @@ Item {
             navigation.enabled: root.visible && root.enabled
             navigation.accessible.name: root.pathFieldTitle + " " + pathField.currentText
 
-            navigation.row: prv.isNavigationBoth ? root.navigationRowOrderStart : -1
-            navigation.column: prv.isNavigationBoth ? root.navigationColumnOrderStart : -1
-            navigation.order: prv.isNavigationBoth ? -1 : root.navigationRowOrderStart
-
             onTextEditingFinished: function(newTextValue) {
                 root.pathEdited(newTextValue)
             }
@@ -113,10 +129,6 @@ Item {
             navigation.enabled: root.visible && root.enabled
             accessible.name: root.pickerType === FilePicker.PickerType.File ? qsTrc("ui", "Choose file")
                                                                             : qsTrc("ui", "Choose directory")
-
-            navigation.row: prv.isNavigationBoth ? root.navigationRowOrderStart : -1
-            navigation.column: prv.isNavigationBoth ? root.navigationColumnOrderStart + 1 : -1
-            navigation.order: prv.isNavigationBoth ? -1 : root.navigationRowOrderStart + 1
 
             onClicked: {
                 switch (root.pickerType) {
