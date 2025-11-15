@@ -3335,10 +3335,24 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
     } else if (m_selection.isList()) {
         const std::set<ChordRest*> crs = getSelectedChordRests();
         for (ChordRest* cr : crs) {
-            TDuration newDuration(stepDotted
-                                  ? cr->durationType().fraction() * Fraction(3, 3 + nSteps)
-                                  : cr->durationType().fraction()* Fraction(3 - nSteps, 3 + nSteps), true);
-            if (cr->isChord() && (toChord(cr)->noteType() != NoteType::NORMAL)) {
+            // if measure rest is selected as input, then the correct initialDuration will be the
+            // duration of the measure's time signature, else is just the ChordRest's duration
+            TDuration initialDuration = cr->durationType();
+            if (initialDuration == DurationType::V_MEASURE) {
+                initialDuration = TDuration(cr->measure()->timesig(), true);
+
+                if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
+                    // Duration already shortened by truncation; shorten one step less
+                    --nSteps;
+                }
+            }
+
+            TDuration newDuration { stepDotted ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration.shift(nSteps) };
+            if (!newDuration.isValid()) {
+                continue;
+            }
+
+            if (cr->isGrace()) {
                 undoChangeChordRestLen(cr, newDuration);
             } else {
                 changeCRlen(cr, newDuration);
