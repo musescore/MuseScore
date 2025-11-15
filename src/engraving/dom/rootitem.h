@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ROOTITEM_H
-#define MU_ENGRAVING_ROOTITEM_H
+
+#pragma once
 
 #include "engravingitem.h"
 
@@ -49,9 +49,6 @@ private:
     AccessibleItemPtr createAccessible() override;
 #endif
 
-    Score* m_score = nullptr;
     compat::DummyElement* m_dummy = nullptr;
 };
 }
-
-#endif // MU_ENGRAVING_ROOTITEM_H
