@@ -21,8 +21,6 @@
  */
 #include "searchpopupmodel.h"
 
-#include "log.h"
-
 using namespace mu::notation;
 
 void SearchPopupModel::load()

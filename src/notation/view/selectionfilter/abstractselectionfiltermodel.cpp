@@ -23,7 +23,6 @@
 #include "abstractselectionfiltermodel.h"
 
 #include "log.h"
-#include "translation.h"
 
 using namespace mu::notation;
 

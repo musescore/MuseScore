@@ -23,8 +23,6 @@
 #include "editmidimappingmodel.h"
 
 #include "translation.h"
-#include "utils.h"
-#include "log.h"
 
 using namespace muse::shortcuts;
 using namespace muse::midi;

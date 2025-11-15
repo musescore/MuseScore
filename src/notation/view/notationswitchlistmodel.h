@@ -28,7 +28,6 @@
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"
-#include "project/inotationproject.h"
 
 namespace mu::notation {
 class NotationSwitchListModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable

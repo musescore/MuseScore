@@ -21,6 +21,8 @@
  */
 #include "testcaserunmodel.h"
 
+#include "internal/scriptengine.h"
+
 #include "log.h"
 
 using namespace muse::autobot;
