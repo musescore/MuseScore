@@ -118,7 +118,7 @@ std::string XmlStreamWriter::escapeString(const std::string_view str)
 void XmlStreamWriter::writeValue(const Value& v)
 {
     // std::monostate, int, unsigned int, signed long int, unsigned long int, signed long long, unsigned long long,
-    // double, const char*, AsciiStringView, String
+    // double, const char*, std::string_view, String
     switch (v.index()) {
     case 0:
         break;
@@ -138,7 +138,7 @@ void XmlStreamWriter::writeValue(const Value& v)
         break;
     case 8: m_impl->stream << escapeString(AsciiStringView(std::get<const char*>(v)));
         break;
-    case 9: m_impl->stream << escapeString(std::get<AsciiStringView>(v));
+    case 9: m_impl->stream << escapeString(std::get<std::string_view>(v));
         break;
     case 10: m_impl->stream << escapeString(std::get<String>(v).toStdString());
         break;
@@ -149,9 +149,9 @@ void XmlStreamWriter::writeValue(const Value& v)
     }
 }
 
-void XmlStreamWriter::startElement(const AsciiStringView& name, const Attributes& attrs)
+void XmlStreamWriter::startElement(const std::string_view& name, const Attributes& attrs)
 {
-    IF_ASSERT_FAILED(!name.contains(' ')) {
+    IF_ASSERT_FAILED(name.find(' ') == std::string_view::npos) {
     }
 
     m_impl->putLevel();
@@ -162,7 +162,7 @@ void XmlStreamWriter::startElement(const AsciiStringView& name, const Attributes
         m_impl->stream << '\"';
     }
     m_impl->stream << '>' << '\n';
-    m_impl->stack.push_back(name.ascii());
+    m_impl->stack.emplace_back(name);
 }
 
 void XmlStreamWriter::startElement(const String& name, const Attributes& attrs)
@@ -186,9 +186,9 @@ void XmlStreamWriter::endElement()
 }
 
 // <element attr="value" />
-void XmlStreamWriter::element(const AsciiStringView& name, const Attributes& attrs)
+void XmlStreamWriter::element(const std::string_view& name, const Attributes& attrs)
 {
-    IF_ASSERT_FAILED(!name.contains(' ')) {
+    IF_ASSERT_FAILED(name.find(' ') == std::string_view::npos) {
     }
 
     m_impl->putLevel();
@@ -201,9 +201,9 @@ void XmlStreamWriter::element(const AsciiStringView& name, const Attributes& att
     m_impl->stream << "/>\n";
 }
 
-void XmlStreamWriter::element(const AsciiStringView& name, const Value& body)
+void XmlStreamWriter::element(const std::string_view& name, const Value& body)
 {
-    IF_ASSERT_FAILED(!name.contains(' ')) {
+    IF_ASSERT_FAILED(name.find(' ') == std::string_view::npos) {
     }
 
     m_impl->putLevel();
@@ -212,9 +212,9 @@ void XmlStreamWriter::element(const AsciiStringView& name, const Value& body)
     m_impl->stream << "</" << name << '>' << '\n';
 }
 
-void XmlStreamWriter::element(const AsciiStringView& name, const Attributes& attrs, const Value& body)
+void XmlStreamWriter::element(const std::string_view& name, const Attributes& attrs, const Value& body)
 {
-    IF_ASSERT_FAILED(!name.contains(' ')) {
+    IF_ASSERT_FAILED(name.find(' ') == std::string_view::npos) {
     }
 
     m_impl->putLevel();

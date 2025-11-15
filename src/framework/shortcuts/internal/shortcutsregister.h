@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_SHORTCUTSREGISTER_H
-#define MUSE_SHORTCUTS_SHORTCUTSREGISTER_H
+
+#pragma once
 
 #include <unordered_map>
 
@@ -32,9 +32,9 @@
 #include "io/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
 
-namespace muse::deprecated {
-class XmlReader;
-class XmlWriter;
+namespace muse {
+class XmlStreamReader;
+class XmlStreamWriter;
 }
 
 namespace muse::shortcuts {
@@ -76,10 +76,10 @@ public:
 private:
 
     bool readFromFile(ShortcutList& shortcuts, const io::path_t& path) const;
-    Shortcut readShortcut(deprecated::XmlReader& reader) const;
+    Shortcut readShortcut(XmlStreamReader& reader) const;
 
     bool writeToFile(const ShortcutList& shortcuts, const io::path_t& path) const;
-    void writeShortcut(deprecated::XmlWriter& writer, const Shortcut& shortcut) const;
+    void writeShortcut(XmlStreamWriter& writer, const Shortcut& shortcut) const;
 
     void mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const;
     void mergeAdditionalShortcuts(ShortcutList& shortcuts);
@@ -98,5 +98,3 @@ private:
     async::Notification m_activeChanged;
 };
 }
-
-#endif // MUSE_SHORTCUTS_SHORTCUTSREGISTER_H
