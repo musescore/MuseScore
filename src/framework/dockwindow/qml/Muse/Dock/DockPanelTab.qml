@@ -31,6 +31,8 @@ StyledTabButton {
 
     property alias contextMenuModel: contextMenuButton.menuModel
 
+    property bool isCutOff: false
+
     signal handleContextMenuItemRequested(string itemId)
 
     readonly property real actualHeight: 34
@@ -109,7 +111,7 @@ StyledTabButton {
     }
 
     Rectangle {
-        visible: root.width < root.implicitWidth
+        visible: root.isCutOff
 
         anchors.top: root.top
         anchors.right: root.right

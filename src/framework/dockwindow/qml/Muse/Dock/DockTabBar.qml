@@ -105,10 +105,12 @@ Rectangle {
             for (let tab of contentItem.children) {
                 if (tab.isCurrent || enoughSpace) {
                     tab.width = tab.implicitWidth
+                    tab.isCutOff = false
                 } else {
                     tab.width = (availableWidth - implicitWidthOfActiveTab)
                             / (implicitWidthOfAllTabsTogether - implicitWidthOfActiveTab)
                             * tab.implicitWidth
+                    tab.isCutOff = true
                 }
             }
         }
