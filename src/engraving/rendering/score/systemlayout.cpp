@@ -2877,9 +2877,14 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
         return std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()),
                         top->minBottom() + bottomVBox->absoluteFromSpatium(bottomVBox->paddingToNotationAbove()));
     } else if (topVBox && bottomVBox) {
-        double largestGap = std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()),
-                                     topVBox->absoluteFromSpatium(topVBox->bottomGap()));
-        return largestGap;
+        const double topToBottomGap = topVBox->absoluteFromSpatium(topVBox->bottomGap());
+        const double bottomToTopGap = bottomVBox->absoluteFromSpatium(bottomVBox->topGap());
+        if (topToBottomGap >= 0 && bottomToTopGap >= 0) {
+            double largestGap = std::max(bottomToTopGap, topToBottomGap);
+            return largestGap;
+        } else {
+            return topToBottomGap + bottomToTopGap;
+        }
     }
 
     if (top->staves().empty() || bottom->staves().empty()) {
@@ -2954,7 +2959,7 @@ void SystemLayout::removeElementFromSkyline(EngravingItem* element, const System
     SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
 
     skylineLine.remove_if([element](ShapeElement& shapeEl) {
-        return element == shapeEl.item() || element == shapeEl.item()->parentItem();
+        return shapeEl.item() && (element == shapeEl.item() || element == shapeEl.item()->parentItem());
     });
 }
 
