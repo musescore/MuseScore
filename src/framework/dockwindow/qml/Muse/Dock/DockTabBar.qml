@@ -93,7 +93,18 @@ Rectangle {
 
         onAvailableWidthChanged: { layoutTabs() }
 
+        property bool layoutTabsScheduled: false
+
         function layoutTabs() {
+            if (!layoutTabsScheduled) {
+                Qt.callLater(doLayoutTabs)
+                layoutTabsScheduled = true
+            }
+        }
+
+        function doLayoutTabs() {
+            layoutTabsScheduled = false
+
             let implicitWidthOfActiveTab = currentItem?.implicitWidth ?? 0
             let implicitWidthOfAllTabsTogether = 0
 
