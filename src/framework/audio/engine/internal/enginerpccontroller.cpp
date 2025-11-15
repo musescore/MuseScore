@@ -641,6 +641,7 @@ void EngineRpcController::deinit()
     playback()->trackRemoved().disconnect(this);
     playback()->inputParamsChanged().disconnect(this);
     playback()->outputParamsChanged().disconnect(this);
+    playback()->masterOutputParamsChanged().disconnect(this);
 
     for (const Method& m : m_usedMethods) {
         channel()->onMethod(m, nullptr);

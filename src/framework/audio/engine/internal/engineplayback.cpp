@@ -54,6 +54,16 @@ void EnginePlayback::deinit()
 
     m_sequences.clear();
 
+    // Explicitly disconnect and clear all channel members before
+    // async_disconnectAll() and before the destructor runs. This ensures
+    // subscribers are disconnected while they're still alive, not during IoC
+    // teardown when some may already be destroyed.
+    m_masterOutputParamsChanged = async::Channel<AudioOutputParams>();
+    m_outputParamsChanged = async::Channel<TrackSequenceId, TrackId, AudioOutputParams>();
+    m_inputParamsChanged = async::Channel<TrackSequenceId, TrackId, AudioInputParams>();
+    m_trackRemoved = async::Channel<TrackSequenceId, TrackId>();
+    m_trackAdded = async::Channel<TrackSequenceId, TrackId>();
+
     async_disconnectAll();
 }
 
