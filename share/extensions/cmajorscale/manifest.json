@@ -1,0 +1,11 @@
+{
+    "uri": "musescore://extensions/cmajorscale",
+    "type": "macros",
+    "title": "C Major Scale Generator",
+    "description": "Generates a one-octave C major scale starting at the cursor position",
+    "category": "composing-arranging-tools",
+    "version": "1.0",
+    "apiversion": 1,
+
+    "path": "main.js"
+}
