@@ -39,8 +39,10 @@
 #include "../dom/barline.h"
 #include "../dom/box.h"
 #include "../dom/chord.h"
+#include "../dom/chordrest.h"
 #include "../dom/clef.h"
 #include "../dom/drumset.h"
+#include "../dom/durationtype.h"
 #include "../dom/dynamic.h"
 #include "../dom/factory.h"
 #include "../dom/glissando.h"
@@ -3303,45 +3305,71 @@ void Score::cmdMirrorNoteHead()
 
 void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
 {
-    EngravingItem* el = selection().element();
-    if (el == 0) {
-        return;
-    }
-    if (el->isNote()) {
-        el = el->parentItem();
-    }
-    if (!el->isChordRest()) {
-        return;
-    }
+    if (m_selection.isRange()) {
+        if (!m_selection.canCopy()) {
+            return;
+        }
+        ChordRest* firstCR = m_selection.firstChordRest();
+        if (firstCR->isGrace()) {
+            firstCR = toChordRest(firstCR->parent());
+        }
+        TDuration initialDuration = firstCR->ticks();
+        TDuration d = initialDuration.shiftRetainDots(nSteps, stepDotted);
+        if (!d.isValid()) {
+            return;
+        }
+        Fraction scale = d.ticks() / initialDuration.ticks();
+        for (ChordRest* cr : getSelectedChordRests()) {
+            Fraction newTicks = cr->ticks() * scale;
+            if (newTicks < Fraction(1, 1024)
+                || (stepDotted && cr->durationType().dots() != firstCR->durationType().dots()
+                    && !cr->isGrace())) {
+                return;
+            }
+        }
+        const muse::ByteArray mimeData(m_selection.mimeData());
+        XmlReader e(mimeData);
+        deleteRange(m_selection.startSegment(), m_selection.endSegment(), staff2track(m_selection.staffStart()),
+                    staff2track(m_selection.staffEnd()), selectionFilter(), m_selection.rangeContainsMultiNoteChords());
+        pasteStaff(e, m_selection.startSegment(), m_selection.staffStart(), scale);
+    } else if (m_selection.isList()) {
+        const std::set<ChordRest*> crs = getSelectedChordRests();
+        for (ChordRest* cr : crs) {
+            // if measure rest is selected as input, then the correct initialDuration will be the
+            // duration of the measure's time signature, else is just the ChordRest's duration
+            TDuration initialDuration = cr->durationType();
+            if (initialDuration == DurationType::V_MEASURE) {
+                initialDuration = TDuration(cr->measure()->timesig(), true);
 
-    ChordRest* cr = toChordRest(el);
+                if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
+                    // Duration already shortened by truncation; shorten one step less
+                    --nSteps;
+                }
+            }
 
-    // if measure rest is selected as input, then the correct initialDuration will be the
-    // duration of the measure's time signature, else is just the ChordRest's duration
-    TDuration initialDuration = cr->durationType();
-    if (initialDuration == DurationType::V_MEASURE) {
-        initialDuration = TDuration(cr->measure()->timesig(), true);
+            TDuration newDuration { stepDotted ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration.shift(nSteps) };
+            if (!newDuration.isValid()) {
+                continue;
+            }
 
-        if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
-            // Duration already shortened by truncation; shorten one step less
-            --nSteps;
+            if (cr->isGrace()) {
+                undoChangeChordRestLen(cr, newDuration);
+            } else {
+                changeCRlen(cr, newDuration);
+            }
+        }
+        // 2nd loop needed to reselect what was selected before 1st loop
+        // as `changeCRlen()` changes the selection to `SelectType::SINGLE`
+        for (ChordRest* cr : crs) {
+            EngravingItem* e = cr;
+            if (cr->isChord()) {
+                e = toChord(cr)->upNote();
+            }
+            if (canReselectItem(e)) {
+                select(e, SelectType::ADD);
+            }
         }
     }
-
-    TDuration d = (nSteps != 0) ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration;
-    if (!d.isValid()) {
-        return;
-    }
-    if (cr->isChord() && (toChord(cr)->noteType() != NoteType::NORMAL)) {
-        //
-        // handle appoggiatura and acciaccatura
-        //
-        undoChangeChordRestLen(cr, d);
-    } else {
-        changeCRlen(cr, d);
-    }
-    m_is.setDuration(d);
-    nextInputPos(cr, false);
 }
 
 //---------------------------------------------------------

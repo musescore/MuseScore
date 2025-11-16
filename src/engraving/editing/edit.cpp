@@ -6195,7 +6195,7 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
     Segment* s = c->segment();
     Measure* nm = nstaff->score()->tick2measure(s->tick());
     Segment* ns = nm->findSegment(s->segmentType(), s->tick());
-    EngravingItem* ne = ns->element(dtrack);
+    EngravingItem* ne = ns ? ns->element(dtrack) : nullptr;
     if (!ne || !ne->isChord()) {
         return nullptr;
     }
