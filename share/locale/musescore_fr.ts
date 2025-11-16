@@ -26010,7 +26010,7 @@ l&apos;anacrouse</translation>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="1025"/>
         <source>This will remove the instrument(s) from the full score and all part scores.</source>
-        <translation><numerusform>Cela supprimera l&apos;instrument de la partition et de sa partie.</numerusform><numerusform>Cela supprimera les instruments de la partition et de toutes les parties.</numerusform><numerusform>Cela supprimera les instruments de la partition et de toutes les parties.</numerusform></translation>
+        <translation><numerusform>Cela supprimera l&apos;instrument de la partition et de toutes les parties.</numerusform><numerusform>Cela supprimera les instruments de la partition et de toutes les parties.</numerusform><numerusform>Cela supprimera les instruments de la partition et de toutes les parties.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="252"/>

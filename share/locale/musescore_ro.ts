@@ -3122,7 +3122,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4741"/>
         <source>Only before courtesy key signatures</source>
-        <translation>Doar înaintea armurilor de curtoazie</translation>
+        <translation>Doar înaintea armurilor de precauție</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4751"/>
@@ -3132,7 +3132,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4771"/>
         <source>Only before courtesy time signatures</source>
-        <translation>Doar înaintea metricii de curtoazie</translation>
+        <translation>Doar înaintea metricii de precauție</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4781"/>
@@ -9158,7 +9158,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2121"/>
         <source>Input by note name</source>
-        <translation>după nume notă</translation>
+        <translation>Introducere după nume notă</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2122"/>
@@ -9168,7 +9168,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2128"/>
         <source>Input by duration</source>
-        <translation>după durată</translation>
+        <translation>Introducere după durată</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2129"/>
@@ -9188,12 +9188,12 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2142"/>
         <source>Re-pitch existing notes</source>
-        <translation>Ajustează înălțimi note</translation>
+        <translation>Ajustare înălțimi note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2143"/>
         <source>Toggle note input mode: re-pitch existing notes</source>
-        <translation>Comută mod introducere note: ajustează înălțimea</translation>
+        <translation>Comută mod introducere note: ajustare înălțimi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2149"/>
@@ -17485,7 +17485,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="70"/>
         <source>show courtesy</source>
-        <translation>afișare cheia de curtuazie</translation>
+        <translation>afișare cheia de precauție</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="71"/>
@@ -19123,7 +19123,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="468"/>
         <source>is courtesy</source>
-        <translation>este de curtoazie</translation>
+        <translation>este de precauție</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="469"/>
@@ -23376,17 +23376,17 @@ anacruzele</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="49"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tuplets/TupletSettings.qml" line="69"/>
         <source>Bracket type</source>
-        <translation>Tip acoladă</translation>
+        <translation>Tip paranteze</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="57"/>
         <source>Parentheses</source>
-        <translation>Paranteze</translation>
+        <translation>rotunde</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="58"/>
         <source>Brackets</source>
-        <translation>Paranteze</translation>
+        <translation>pătrate</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="66"/>
@@ -23752,7 +23752,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="55"/>
         <source>Show courtesy clef</source>
-        <translation>Arată cheia de curtoazie</translation>
+        <translation>Arată cheia de precauție</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="63"/>
@@ -24138,7 +24138,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature</source>
-        <translation>Arată armura de curtoazie</translation>
+        <translation>Arată armura de precauție</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
@@ -24785,7 +24785,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="95"/>
         <source>Hide courtesy clefs and signatures</source>
-        <translation>Ascunde cheile și armurile de curtoazie</translation>
+        <translation>Ascunde cheile și armurile de precauție</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="111"/>
@@ -24930,7 +24930,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature</source>
-        <translation>Arată metrică de curtoazie</translation>
+        <translation>Arată metrică de precauție</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
@@ -25720,7 +25720,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="68"/>
         <source>Ratio</source>
-        <translation>raport</translation>
+        <translation>Raport</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/parts/partssettingsmodel.cpp" line="33"/>
@@ -29006,7 +29006,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="108"/>
         <source>Show courtesy clefs</source>
-        <translation>Arată cheile de curtoazie</translation>
+        <translation>Arată cheile de precauție</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="115"/>
@@ -29091,7 +29091,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="393"/>
         <source>Show courtesy time signatures</source>
-        <translation>Arată metrica de curtoazie</translation>
+        <translation>Arată metrica de precauție</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="412"/>
@@ -29131,7 +29131,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="474"/>
         <source>Show courtesy key signatures</source>
-        <translation>Arată armurile de curtoazie</translation>
+        <translation>Arată armurile de precauție</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="483"/>
@@ -29196,12 +29196,12 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="684"/>
         <source>Show when cancelling a courtesy before repeats</source>
-        <translation>Afișează la anularea unui simbol de curtuazie înainte de repetări</translation>
+        <translation>Afișează la anularea unui simbol de precauție înainte de repetări</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="695"/>
         <source>Show when cancelling a courtesy before all other jumps</source>
-        <translation>Afișează la anularea unui simbol de curtuazie înainte de toate celelalte salturi</translation>
+        <translation>Afișează la anularea unui simbol de precauție înainte de toate celelalte salturi</translation>
     </message>
 </context>
 <context>

@@ -19086,67 +19086,67 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="459"/>
         <source>strings count</source>
-        <translation type="unfinished"/>
+        <translation>strängantal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="460"/>
         <source>strings preset</source>
-        <translation type="unfinished"/>
+        <translation>förinställning av strängar</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="461"/>
         <source>visible strings</source>
-        <translation type="unfinished"/>
+        <translation>synliga strängar</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="463"/>
         <source>score font</source>
-        <translation type="unfinished"/>
+        <translation>dokumentteckensnitt</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="464"/>
         <source>symbols size</source>
-        <translation type="unfinished"/>
+        <translation>synbolstorlek</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="465"/>
         <source>symbol angle</source>
-        <translation type="unfinished"/>
+        <translation>symbolvinkel</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="467"/>
         <source>apply to all staves</source>
-        <translation type="unfinished"/>
+        <translation>tillämpa på alla system</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="468"/>
         <source>is courtesy</source>
-        <translation type="unfinished"/>
+        <translation>är påminnelse</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="469"/>
         <source>exclude vertical align</source>
-        <translation type="unfinished"/>
+        <translation>undanta från vertikal justering</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="471"/>
         <source>show bar numbers</source>
-        <translation type="unfinished"/>
+        <translation>visa taktnummer</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="472"/>
         <source>play count text setting</source>
-        <translation type="unfinished"/>
+        <translation>spelräkningstextinställning</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="473"/>
         <source>play count text</source>
-        <translation type="unfinished"/>
+        <translation>spelräkningstext</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="475"/>
         <source>align with other rests in the same voice</source>
-        <translation type="unfinished"/>
+        <translation>justera mot andra pauser i samma stämma</translation>
     </message>
 </context>
 <context>
@@ -22929,7 +22929,7 @@ upptakt</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="152"/>
         <source>Menu for “%1”</source>
         <extracomment>%1 is replaced with the name of the property</extracomment>
-        <translation type="unfinished"/>
+        <translation>Meny för “%1”</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="157"/>
@@ -23725,17 +23725,17 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="182"/>
         <source>Align left edge of text to notehead</source>
-        <translation type="unfinished"/>
+        <translation>Justera textens vänsterkant mot nothuvud</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="187"/>
         <source>Align horizontal center of text to notehead</source>
-        <translation type="unfinished"/>
+        <translation>Justera textens horisontalcentrum mot nothuvud</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="192"/>
         <source>Align right edge of text to notehead</source>
-        <translation type="unfinished"/>
+        <translation>Justera textens högerkant mot nothuvud</translation>
     </message>
     <message>
         <source>Alignment to notehead</source>
@@ -23940,12 +23940,12 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="72"/>
         <source>Gap to staff/frames above</source>
-        <translation type="unfinished"/>
+        <translation>Avstånd till system/ramar ovanför</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="90"/>
         <source>Gap to staff/frames below</source>
-        <translation type="unfinished"/>
+        <translation>Avstånd till system/ramar nedanför</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="98"/>
@@ -23955,12 +23955,12 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="118"/>
         <source>Clearance for notation above</source>
-        <translation type="unfinished"/>
+        <translation>Frirymd för notering ovanför</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="136"/>
         <source>Clearance for notation below</source>
-        <translation type="unfinished"/>
+        <translation>Frirymd för notering nedanför</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="49"/>
@@ -26606,17 +26606,17 @@ Därutöver mönstrar Bemästra MuseScore en stödjande gemenskap av musiker, me
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="672"/>
         <source>Min. space to fretboard diagram:</source>
-        <translation type="unfinished"/>
+        <translation>Minsta avstånd till greppbrädesdiagram:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="711"/>
         <source>Min. space to other notation:</source>
-        <translation type="unfinished"/>
+        <translation>Minsta avstånd till annan notering:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="739"/>
         <source>Min. space between chord symbols:</source>
-        <translation type="unfinished"/>
+        <translation>Minsta avstånd mellan ackordsymboler:</translation>
     </message>
     <message>
         <source>Minimum space from fretboard diagram:</source>
@@ -26664,7 +26664,7 @@ Därutöver mönstrar Bemästra MuseScore en stödjande gemenskap av musiker, me
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="56"/>
         <source>Position above staff:</source>
-        <translation type="unfinished"/>
+        <translation>Position ovanför system:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="64"/>

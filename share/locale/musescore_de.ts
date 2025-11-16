@@ -7053,7 +7053,7 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="413"/>
         <source>&amp;Load style…</source>
-        <translation>&amp;Lade Stil…</translation>
+        <translation>Stil &amp;laden…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="414"/>
@@ -7134,7 +7134,7 @@ niemals linksbündig ausrichten</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="463"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="464"/>
         <source>Fill with slashes</source>
-        <translation>Mit Schr&amp;ägstrichen füllen</translation>
+        <translation>Mit Schrägstrichen füllen</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="469"/>
@@ -9009,12 +9009,12 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2023"/>
         <source>Add double-flat</source>
-        <translation>Doppel-Kreuz hinzufügen</translation>
+        <translation>Doppel-Be hinzufügen</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2024"/>
         <source>Add accidental: double-flat</source>
-        <translation>Versetzungszeichen hinzufügen: Doppel-Kreuz</translation>
+        <translation>Versetzungszeichen hinzufügen: Doppel-Be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2029"/>
@@ -9460,12 +9460,12 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2399"/>
         <source>Toggle double-flat</source>
-        <translation>Doppel-Kreuz umschalten</translation>
+        <translation>Doppel-Be umschalten</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2400"/>
         <source>Toggle accidental: double-flat</source>
-        <translation>Versetzungszeichen umschalten: Doppel-Kreuz</translation>
+        <translation>Versetzungszeichen umschalten: Doppel-Be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2406"/>
@@ -9535,7 +9535,7 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2449"/>
         <source>Add articulation: marcato</source>
-        <translation>Artikulation hinzufügen: Markato</translation>
+        <translation>Artikulation hinzufügen: Marcato</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2455"/>
@@ -10453,7 +10453,7 @@ Diese Aktion kann nicht rückgängig gemacht werden.</translation>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="33"/>
         <source>About MuseScore Studio</source>
-        <translation>&amp;Über MuseScore Studio…</translation>
+        <translation>Über MuseScore Studio…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="85"/>
@@ -10975,7 +10975,7 @@ Veröffentlicht unter der &lt;a href=&quot;%1&quot;&gt;GNU General Public Licens
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CharsetsSection.qml" line="37"/>
         <source>Overture import character set:</source>
-        <translation>Verwendeter Zeichensatz beim Import von Overture Dateien:</translation>
+        <translation>Overture Import-Zeichensatz:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ColorAndWallpaperSection.qml" line="62"/>
@@ -11184,7 +11184,7 @@ Veröffentlicht unter der &lt;a href=&quot;%1&quot;&gt;GNU General Public Licens
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="58"/>
         <source>Color guitar bends and hammer-ons/pull-offs outside of playable range</source>
-        <translation>Gitarren-Bendings und Hamer-Ons/Pull-Offs außerhalb des spielbaren Bereichs einfärben</translation>
+        <translation>Gitarren-Bendings und Hammer-Ons/Pull-Offs außerhalb des spielbaren Bereichs einfärben</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="33"/>
@@ -11235,7 +11235,7 @@ Veröffentlicht unter der &lt;a href=&quot;%1&quot;&gt;GNU General Public Licens
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="82"/>
         <source>Hear playback when adding, editing, and selecting notes</source>
-        <translation>Wiedergabe beim hinzufügen, bearbeiten und auswählen von Noten hören</translation>
+        <translation>Wiedergabe beim Hinzufügen, Bearbeiten und Auswählen von Noten hören</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="89"/>
@@ -11550,7 +11550,8 @@ Veröffentlicht unter der &lt;a href=&quot;%1&quot;&gt;GNU General Public Licens
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="112"/>
         <source>Musical symbol fonts</source>
-        <translation>Zeichensätze für musikalische Symbole</translation>
+        <translation>Zeichensätze für
+musikalische Symbole</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="118"/>
@@ -16281,7 +16282,7 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2932"/>
         <source>Low Floor Tom</source>
-        <translation>Tiefe Boden-Tom</translation>
+        <translation>Tiefes Boden-Tom</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2933"/>
@@ -16291,7 +16292,7 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2934"/>
         <source>High Floor Tom</source>
-        <translation>Hohe Boden-Tom</translation>
+        <translation>Hohes Boden-Tom</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2935"/>
@@ -16301,7 +16302,7 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2936"/>
         <source>Low Tom</source>
-        <translation>Tiefe Tom</translation>
+        <translation>Tiefes Tom</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2937"/>
@@ -16311,12 +16312,12 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2938"/>
         <source>Low-Mid Tom</source>
-        <translation>Mitteltiefe Tom</translation>
+        <translation>Mitteltiefes Tom</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2939"/>
         <source>Hi-Mid Tom</source>
-        <translation>Mittelhohe Tom</translation>
+        <translation>Mittelhohes Tom</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2940"/>
@@ -16326,7 +16327,7 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2942"/>
         <source>High Tom</source>
-        <translation>Hohe Tom</translation>
+        <translation>Hohes Tom</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2943"/>
@@ -16341,7 +16342,7 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2945"/>
         <source>Ride Bell</source>
-        <translation>Ride-Becken</translation>
+        <translation>Ride-Glocke</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2946"/>
@@ -29460,7 +29461,7 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="56"/>
         <source>Triggering the percussion panel</source>
-        <translation> Schlagwerkpult-Pult auslösen</translation>
+        <translation> Schlagwerkpult aktivieren</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="68"/>

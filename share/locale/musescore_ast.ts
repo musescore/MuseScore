@@ -2269,7 +2269,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="547"/>
         <source>Automatically hide all empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Anubrir automáticamente tolos pentagrames baleros</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="559"/>
@@ -10754,7 +10754,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="208"/>
         <source>Save o&amp;ther</source>
-        <translation type="unfinished"/>
+        <translation>Guardar o&amp;tros</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="209"/>
@@ -11295,12 +11295,12 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="30"/>
         <source>Online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Soníos online</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="53"/>
         <source>Show error dialog when online sounds cannot be processed</source>
-        <translation type="unfinished"/>
+        <translation>Amosar diálogu de fellu cuando los soníos online nun se puen procesar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="69"/>
@@ -11466,7 +11466,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/WelcomeDialogSection.qml" line="43"/>
         <source>Show welcome screen when MuseScore Studio launches</source>
-        <translation type="unfinished"/>
+        <translation>Amosar diálogu de bienllegada cuando s&apos;anicia MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ZoomSection.qml" line="30"/>
@@ -11877,7 +11877,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="882"/>
         <source>Navigation mode</source>
-        <translation type="unfinished"/>
+        <translation>Mou de navegación</translation>
     </message>
 </context>
 <context>
@@ -11897,7 +11897,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
         <location filename="../../src/braille/qml/MuseScore/Braille/BrailleView.qml" line="173"/>
         <source>Navigation mode</source>
         <extracomment>Braille navigation.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mou de navegación</translation>
     </message>
 </context>
 <context>
@@ -12843,13 +12843,13 @@ Traste %1 en cuerdes %2</translation>
         <location filename="../../src/engraving/types/typesconv.cpp" line="188"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="545"/>
         <source>bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>corchetes</numerusform><numerusform>corchete</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="189"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="546"/>
         <source>Bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Corchetes</numerusform><numerusform>Corchete</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="191"/>
@@ -13835,22 +13835,22 @@ Traste %1 en cuerdes %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="485"/>
         <source>page(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>páxines</numerusform><numerusform>páxina</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="486"/>
         <source>Page(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Páxines</numerusform><numerusform>Páxina</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="488"/>
         <source>parenthesis</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>paréntesis</numerusform><numerusform>paréntesis</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="489"/>
         <source>Parenthesis</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Paréntesis</numerusform><numerusform>Paréntesis</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="491"/>
@@ -13875,12 +13875,12 @@ Traste %1 en cuerdes %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="497"/>
         <source>pedal(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>pedales</numerusform><numerusform>pedal</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="498"/>
         <source>Pedal(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pedales</numerusform><numerusform>Pedal</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="500"/>
@@ -14026,32 +14026,32 @@ Traste %1 en cuerdes %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="542"/>
         <source>glissando(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>gllissandos</numerusform><numerusform>glissando</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="543"/>
         <source>Glissando(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Glissandos</numerusform><numerusform>Glissando</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="548"/>
         <source>segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segmentos</numerusform><numerusform>segmentu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="549"/>
         <source>Segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segmentos</numerusform><numerusform>Segmentu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="551"/>
         <source>system(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>sistemes</numerusform><numerusform>sistema</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="552"/>
         <source>System(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Sistemes</numerusform><numerusform>Sistema</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="554"/>
@@ -14076,22 +14076,22 @@ Traste %1 en cuerdes %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="560"/>
         <source>horizontal frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>marcos horizontales</numerusform><numerusform>marcu horizontal</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="561"/>
         <source>Horizontal frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Marcos horizontales</numerusform><numerusform>Marcu horizontal</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="563"/>
         <source>vertical frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>marcos verticales</numerusform><numerusform>marcu vertical</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="564"/>
         <source>Vertical frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Marcos verticales</numerusform><numerusform>Marcu vertical</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="566"/>
@@ -14187,13 +14187,13 @@ Traste %1 en cuerdes %2</translation>
         <location filename="../../src/engraving/types/typesconv.cpp" line="599"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="602"/>
         <source>tremolo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>trémolos</numerusform><numerusform>trémolu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="600"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="603"/>
         <source>Tremolo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Trémolos</numerusform><numerusform>Trémolu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="605"/>
@@ -14288,7 +14288,7 @@ Traste %1 en cuerdes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="948"/>
         <source>Play %1 times</source>
-        <translation type="unfinished"/>
+        <translation>Reproducir %1 vegaes</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="949"/>
@@ -17686,7 +17686,7 @@ Traste %1 en cuerdes %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="114"/>
         <source>bracket type</source>
-        <translation type="unfinished"/>
+        <translation>triba de corchete</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="115"/>
@@ -17913,7 +17913,7 @@ Traste %1 en cuerdes %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="168"/>
         <source>bracket</source>
-        <translation type="unfinished"/>
+        <translation>corchete</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="169"/>
@@ -25038,7 +25038,7 @@ compás d&apos;anacrusa</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="50"/>
         <source>Automatically hide all empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Anubrir automáticamente tolos pentagrames baleros</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="77"/>
@@ -32592,7 +32592,7 @@ falló: %2</translation>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="116"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="126"/>
         <source>Online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Soníos online</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="640"/>

@@ -2776,7 +2776,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2927"/>
         <source>Last system fill threshold:</source>
-        <translation>Viimeisen viivastoryhmän täyttöraja:</translation>
+        <translation>Viimeisen viivastoryhmän täyttökynnys:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2962"/>
@@ -3219,7 +3219,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10396"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11445"/>
         <source>Reset &apos;Offset above&apos; value</source>
-        <translation>Palauta &apos;Siirto yläpuolella&apos; -arvo</translation>
+        <translation>Palauta &apos;Siirtymä yläpuolella&apos; -arvo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5186"/>
@@ -3633,7 +3633,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10064"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11372"/>
         <source>Autoplace min. distance:</source>
-        <translation>Automaattisijoituksen minimietäisyys:</translation>
+        <translation>Automaattisijoittelun min. etäisyys:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6797"/>
@@ -3704,7 +3704,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10422"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11382"/>
         <source>Offset below:</source>
-        <translation>Siirto alapuolella:</translation>
+        <translation>Siirtymä alapuolella:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6903"/>
@@ -3722,7 +3722,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10468"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11422"/>
         <source>Reset &apos;Offset below&apos; value</source>
-        <translation>Palauta &apos;Siirto alapuolella&apos; -arvo</translation>
+        <translation>Palauta &apos;Siirtymä alapuolella&apos; -arvo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6916"/>
@@ -3749,7 +3749,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10675"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11432"/>
         <source>Offset above:</source>
-        <translation>Siirto ylläpuolella:</translation>
+        <translation>Siirtymä ylläpuolella:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7000"/>
@@ -3794,7 +3794,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7174"/>
         <source>Reset &apos;Continue height&apos; value</source>
-        <translation>Palauta &apos;Jatka korkeutta&apos; -arvo</translation>
+        <translation>Palauta &apos;Jatkokorkeus&apos; -arvo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7184"/>
@@ -3814,7 +3814,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7298"/>
         <source>Continue height:</source>
-        <translation>Jatka korkeutta:</translation>
+        <translation>Jatkokorkeus:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7317"/>
@@ -4327,7 +4327,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11336"/>
         <source>Reset &apos;Snap to dynamics&apos; value</source>
-        <translation>Palauta &apos;Napsauta dynamiikkaan&apos; -arvo</translation>
+        <translation>Palauta &apos;Nappaa dynamiikkaan&apos; -arvo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11558"/>
@@ -9625,7 +9625,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2517"/>
         <source>Use all voices on instrument</source>
-        <translation>Käytä kaikki soittimen ääniä</translation>
+        <translation>Käytä kaikkia soittimen ääniä</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2522"/>
@@ -9895,12 +9895,12 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="52"/>
         <source>Pause and select</source>
-        <translation>Tauko ja valinta</translation>
+        <translation>Paussi ja valinta</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="53"/>
         <source>Pause and select playback position</source>
-        <translation>Tauko ja toistokohdan valinta</translation>
+        <translation>Paussi ja toistokohdan valinta</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="59"/>
@@ -11271,7 +11271,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="195"/>
         <source>Play MIDI notes with velocity and duration during note input</source>
-        <translation>Soita MIDI-nuotit nopeuden ja keston mukaan nuotinsyötön aikana</translation>
+        <translation>Soita MIDI-nuotit iskuvoiman ja keston mukaan nuotinsyötön aikana</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="35"/>
@@ -13716,12 +13716,12 @@ Otenauha %1 kielissä %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="449"/>
         <source>system lock(s)</source>
-        <translation><numerusform>järjestelmän lukitus(-tukset)</numerusform><numerusform>järjestelmän lukitus(-tukset)</numerusform></translation>
+        <translation><numerusform>järjestelmän lukitus(-tukset)</numerusform><numerusform>viivastoryhmän lukitus(-tukset)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="450"/>
         <source>System lock(s)</source>
-        <translation><numerusform>Järjestelmän lukitus(-tukset)</numerusform><numerusform>Järjestelmän lukitus(-tukset)</numerusform></translation>
+        <translation><numerusform>Järjestelmän lukitus(-tukset)</numerusform><numerusform>Viivastoryhmän lukitus(-tukset)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="452"/>
@@ -17539,13 +17539,13 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="82"/>
         <source>velocity type</source>
-        <translation>Voimakkuuden tyyppi</translation>
+        <translation>iskuvoiman tyyppi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="83"/>
         <location filename="../../src/engraving/dom/property.cpp" line="203"/>
         <source>velocity</source>
-        <translation>nopeus</translation>
+        <translation>iskuvoima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="84"/>
@@ -17582,7 +17582,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="91"/>
         <source>leading space</source>
-        <translation>riviväli</translation>
+        <translation>etuväli</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="92"/>
@@ -17612,7 +17612,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="97"/>
         <source>pause</source>
-        <translation>tauko</translation>
+        <translation>paussi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="99"/>
@@ -17999,17 +17999,17 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="193"/>
         <source>velocity change</source>
-        <translation>nopeuden muutos</translation>
+        <translation>iskuvoiman muutos</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="194"/>
         <source>velocity change method</source>
-        <translation>nopeuden muutostapa</translation>
+        <translation>iskuvoiman muutostapa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="195"/>
         <source>velocity change speed</source>
-        <translation>nopeuden muutosnopeus</translation>
+        <translation>iskuvoiman muutosnopeus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="196"/>
@@ -19052,12 +19052,12 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="450"/>
         <source>tie placement</source>
-        <translation>yhdyskaaren sijoittelu</translation>
+        <translation>yhdyskaaren sijoitus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="451"/>
         <source>minimum length</source>
-        <translation>vähimmäispituus</translation>
+        <translation>minimipituus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="452"/>
@@ -19168,7 +19168,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="436"/>
         <source>Solid</source>
-        <translation>Vol</translation>
+        <translation>Kiinteä</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="438"/>
@@ -23028,7 +23028,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="187"/>
         <source>Center between staves</source>
-        <translation>Keskellä viivastojen väliin</translation>
+        <translation>Keskitä viivastojen väliin</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="196"/>
@@ -23102,7 +23102,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml" line="58"/>
         <source>Leading space</source>
-        <translation>Riviväli</translation>
+        <translation>Etuväli</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml" line="74"/>
@@ -23155,13 +23155,13 @@ kohotahti</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="66"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml" line="64"/>
         <source>Velocity</source>
-        <translation>Nopeus</translation>
+        <translation>Iskuvoima</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="85"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="57"/>
         <source>Velocity change</source>
-        <translation>Nopeuden muutos</translation>
+        <translation>Iskuvoiman muutos</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="97"/>
@@ -23189,7 +23189,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/FermataExpandableBlank.qml" line="51"/>
         <source>Time stretch</source>
-        <translation>Keston jousto</translation>
+        <translation>Ajan jousto</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="51"/>
@@ -23240,7 +23240,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GradualTempoChangeBlank.qml" line="65"/>
         <source>Easing method</source>
-        <translation>Vaikuttavuus</translation>
+        <translation>Helpotettu menetelmä</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="73"/>
@@ -23282,7 +23282,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/PausesExpandableBlank.qml" line="51"/>
         <source>Pause time</source>
-        <translation>Tauon pituus</translation>
+        <translation>Paussin pituus</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="58"/>
@@ -23787,7 +23787,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="107"/>
         <source>Alignment with notehead</source>
-        <translation>Kohdista nuotinpään kanssa</translation>
+        <translation>Kohdistus nuotinpään kanssa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="114"/>
@@ -23802,7 +23802,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/expressions/ExpressionsSettings.qml" line="82"/>
         <source>Align with preceding dynamic</source>
-        <translation>Tasaa edellisen dynaamiikan kanssa</translation>
+        <translation>Tasaa edeltävän dynaamiikan kanssa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/FretFrameSettings.qml" line="58"/>
@@ -24263,7 +24263,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="142"/>
         <source>Height (new system)</source>
-        <translation>Korkeus (uusi systeemi)</translation>
+        <translation>Korkeus (uusi viivastoryhmä)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HooksSection.qml" line="61"/>
@@ -24460,7 +24460,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="188"/>
         <source>Move cross-staff beam</source>
-        <translation>Siirrä poikittaispalkkia</translation>
+        <translation>Siirrä viivastonvälistä palkkia</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="227"/>
@@ -24764,7 +24764,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="48"/>
         <source>Pause before new section starts</source>
-        <translation>Tauko ennen uuden osion alkua</translation>
+        <translation>Paussi ennen uuden osion alkua</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="65"/>
@@ -24779,7 +24779,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="85"/>
         <source>Indent first system of new section</source>
-        <translation>Sisennä uuden osan ensimmäinen viivasto</translation>
+        <translation>Sisennä uuden osan ensimmäinen viivastoryhmä</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="95"/>
@@ -28280,7 +28280,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="219"/>
         <source>Based on voice</source>
-        <translation>Äänen perusteella</translation>
+        <translation>Ääneen perustuva</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="220"/>
@@ -28941,7 +28941,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/SlursSection.qml" line="113"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiesSection.qml" line="113"/>
         <source>Autoplace min. distance:</source>
-        <translation>Automaattisijoituksen minimietäisyys:</translation>
+        <translation>Automaattisijoittelun min. etäisyys:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/SlursSection.qml" line="140"/>
@@ -32716,7 +32716,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/PlaybackToolBar.qml" line="44"/>
         <source>Playback toolbar</source>
-        <translation>Toiston palkki</translation>
+        <translation>Toiston työkalupalkki</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="78"/>

@@ -4921,7 +4921,7 @@ som följs av streck</translation>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="386"/>
         <source>Add to measure number:</source>
-        <translation>Addera till taktsiffra:</translation>
+        <translation>Addera till taktnummer:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="412"/>
@@ -9430,7 +9430,7 @@ som följs av streck</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2380"/>
         <source>Accessibility: Next segment element</source>
-        <translation>Tillgänglighet: Nästa segmentelement</translation>
+        <translation>Tillgänglighet: Nästa del-element</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2381"/>
@@ -9440,7 +9440,7 @@ som följs av streck</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2386"/>
         <source>Accessibility: Previous segment element</source>
-        <translation>Tillgänglighet: Föregående segmentelement</translation>
+        <translation>Tillgänglighet: Föregående del-element</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2387"/>
@@ -9754,7 +9754,7 @@ som följs av streck</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2632"/>
         <source>Color element shapes</source>
-        <translation>Färga elementformer</translation>
+        <translation>Färglägg elementformer</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2638"/>
@@ -9769,7 +9769,7 @@ som följs av streck</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2645"/>
         <source>Color segment shapes</source>
-        <translation>Färga segmentformer</translation>
+        <translation>Färgglägg segmentformer</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2651"/>
@@ -11179,7 +11179,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="43"/>
         <source>Color notes outside of usable pitch range</source>
-        <translation>Färga noter utanför användbart register</translation>
+        <translation>Färglägg noter utanför användbart register</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="58"/>
