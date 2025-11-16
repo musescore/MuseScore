@@ -77,6 +77,8 @@ if (MUE_BUILD_PLAYBACK_MODULE)
     add_subdirectory(playback)
 endif()
 
+add_subdirectory(preferences)
+
 if (MUE_BUILD_PRINT_MODULE)
     add_subdirectory(print)
 endif()
@@ -87,5 +89,3 @@ endif()
 
 # Stubs
 add_subdirectory(stubs)
-
-

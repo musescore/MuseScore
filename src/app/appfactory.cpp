@@ -214,6 +214,8 @@
 #include "stubs/playback/playbackstubmodule.h"
 #endif
 
+#include "preferences/preferencesmodule.h"
+
 #ifdef MUE_BUILD_PRINT_MODULE
 #include "print/printmodule.h"
 #endif
@@ -361,6 +363,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new mu::notation::NotationModule());
     app->addModule(new mu::palette::PaletteModule());
     app->addModule(new mu::playback::PlaybackModule());
+    app->addModule(new mu::preferences::PreferencesModule());
     app->addModule(new muse::extensions::ExtensionsModule());
 
 #ifdef MUE_BUILD_PRINT_MODULE
