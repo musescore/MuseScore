@@ -22,7 +22,6 @@
 #include "uicomponentsmodule.h"
 
 #include <QQmlEngine>
-#include "view/sampleobject.h"
 #include "view/validators/doubleinputvalidator.h"
 #include "view/validators/intinputvalidator.h"
 #include "view/iconview.h"
@@ -84,8 +83,6 @@ void UiComponentsModule::registerResources()
 
 void UiComponentsModule::registerUiTypes()
 {
-    qmlRegisterType<SampleObject>("Muse.UiComponents", 1, 0, "SampleObject");
-
     qmlRegisterUncreatableType<QAbstractItemModel>("Muse.UiComponents", 1, 0, "AbstractItemModel", "Cannot …");
 
     qmlRegisterType<DoubleInputValidator>("Muse.UiComponents", 1, 0, "DoubleInputValidator");
