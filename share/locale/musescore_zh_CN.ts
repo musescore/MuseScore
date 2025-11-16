@@ -17621,22 +17621,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="100"/>
         <source>span</source>
-        <translation type="unfinished"/>
+        <translation>管辖范围</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="101"/>
         <source>span from</source>
-        <translation type="unfinished"/>
+        <translation>延伸起点</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="102"/>
         <source>span to</source>
-        <translation type="unfinished"/>
+        <translation>延伸终点</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="103"/>
         <source>show tips</source>
-        <translation type="unfinished"/>
+        <translation>显示提示</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="105"/>
@@ -18236,27 +18236,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="245"/>
         <source>vertical position of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>多节休止的数字垂直位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="246"/>
         <source>vertical offset of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>多节休止的数字垂直偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="247"/>
         <source>visibility of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>多节休止的数字可见性</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="249"/>
         <source>vertical position of measure repeat number</source>
-        <translation type="unfinished"/>
+        <translation>小节反复号垂直位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="250"/>
         <source>repeat count</source>
-        <translation type="unfinished"/>
+        <translation>反复次数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="252"/>
@@ -18406,7 +18406,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="287"/>
         <source>chord symbol do not stack modifiers</source>
-        <translation type="unfinished"/>
+        <translation>禁止和弦符号修饰符堆叠</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="289"/>
@@ -18416,7 +18416,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="290"/>
         <source>gap</source>
-        <translation type="unfinished"/>
+        <translation>间隔</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="291"/>
@@ -18426,12 +18426,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="292"/>
         <source>dash line length</source>
-        <translation type="unfinished"/>
+        <translation>虚线长度</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="293"/>
         <source>dash gap length</source>
-        <translation type="unfinished"/>
+        <translation>虚线间隔长度</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="295"/>
@@ -18531,22 +18531,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="318"/>
         <source>barline span</source>
-        <translation type="unfinished"/>
+        <translation>小节线管辖范围</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="319"/>
         <source>barline span from</source>
-        <translation type="unfinished"/>
+        <translation>小节线延伸起点</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="320"/>
         <source>barline span to</source>
-        <translation type="unfinished"/>
+        <translation>小节线延伸终点</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="321"/>
         <source>bracket span</source>
-        <translation type="unfinished"/>
+        <translation>括号管辖范围</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="323"/>
@@ -18936,7 +18936,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="416"/>
         <source>arpeggio span</source>
-        <translation type="unfinished"/>
+        <translation>琶音管辖范围</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="418"/>
@@ -18946,27 +18946,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="419"/>
         <source>bend curve</source>
-        <translation type="unfinished"/>
+        <translation>弯音曲线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="420"/>
         <source>bend vertex offset</source>
-        <translation type="unfinished"/>
+        <translation>弯音顶点偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="421"/>
         <source>bend show hold line</source>
-        <translation type="unfinished"/>
+        <translation>显示弯音延音线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="422"/>
         <source>bend start time factor</source>
-        <translation type="unfinished"/>
+        <translation>弯音开始时间系数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="423"/>
         <source>bend end time factor</source>
-        <translation type="unfinished"/>
+        <translation>弯音结束时间系数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="425"/>
@@ -19006,22 +19006,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="436"/>
         <source>playing technique type</source>
-        <translation type="unfinished"/>
+        <translation>演奏技巧类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="438"/>
         <source>gradual tempo change type</source>
-        <translation type="unfinished"/>
+        <translation>速度渐变类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="439"/>
         <source>tempo easing method</source>
-        <translation type="unfinished"/>
+        <translation>速度变化曲线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="440"/>
         <source>tempo change factor</source>
-        <translation type="unfinished"/>
+        <translation>速度变化系数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="442"/>
@@ -32690,7 +32690,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="84"/>
         <source>Playing techniques</source>
-        <translation>演奏技术</translation>
+        <translation>演奏技巧</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="108"/>

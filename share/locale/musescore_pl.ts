@@ -10906,7 +10906,7 @@ Opublikowano na licencji &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioApiSection.qml" line="44"/>
         <source>Audio API:</source>
-        <translation>API dźwięku:</translation>
+        <translation>API dźwięku</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioEngineSection.qml" line="31"/>

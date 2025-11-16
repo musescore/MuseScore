@@ -14951,28 +14951,28 @@
         <source>Electric piano.</source>
         <comment>electric-piano description</comment>
         <extracomment>description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Elektrisches Klavier.</translation>
+        <translation>Elektrisches Piano.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4977"/>
         <source>Electric Piano</source>
         <comment>electric-piano trackName</comment>
         <extracomment>trackName for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Elektrisches Klavier</translation>
+        <translation>Elektrisches Piano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4979"/>
         <source>Electric Piano</source>
         <comment>electric-piano longName</comment>
         <extracomment>longName for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Elektrisches Klavier</translation>
+        <translation>Elektrisches Piano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4981"/>
         <source>El. Pno.</source>
         <comment>electric-piano shortName</comment>
         <extracomment>shortName for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>El. Klav.</translation>
+        <translation>E. Pno.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4984"/>
@@ -15007,28 +15007,28 @@
         <source>Honky-tonk (very out of tune) piano.</source>
         <comment>honky-tonk-piano description</comment>
         <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Honkeytonk (sehr verstimmtes) Klavier.</translation>
+        <translation>Honkytonk (sehr verstimmtes) Klavier.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4995"/>
         <source>Honky Tonk Piano</source>
         <comment>honky-tonk-piano trackName</comment>
         <extracomment>trackName for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Honkeytonkklavier</translation>
+        <translation>Honkytonk-Klavier</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4997"/>
         <source>Honky Tonk Piano</source>
         <comment>honky-tonk-piano longName</comment>
         <extracomment>longName for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Honkeytonkklavier</translation>
+        <translation>Honkytonk-Klavier</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4999"/>
         <source>Hnk. Pno.</source>
         <comment>honky-tonk-piano shortName</comment>
         <extracomment>shortName for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Htklav.</translation>
+        <translation>Ht-Klav.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5002"/>

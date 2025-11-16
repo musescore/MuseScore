@@ -10756,7 +10756,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="208"/>
         <source>Save o&amp;ther</source>
-        <translation>Сохранить &amp;другой</translation>
+        <translation>Сохранить &amp;другое</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="209"/>
@@ -11313,7 +11313,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="103"/>
         <source>To process online sounds, press ‘Process online sounds’ in the status bar at the bottom of the app window</source>
-        <translation>Чтобы обрабатывать онлайн-звуки, нажмите кнопку &quot;Обработать онлайн-звуки&quot; в строке состояния в нижней части окна приложения</translation>
+        <translation>Чтобы обрабатывать онлайн-звуки, нажмите кнопку «Обработать онлайн-звуки» в строке состояния в нижней части окна приложения</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="115"/>
@@ -12829,7 +12829,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/rw/read410/measureread.cpp" line="91"/>
         <location filename="../../src/engraving/rw/read460/measureread.cpp" line="92"/>
         <source>MSCX error at byte offset %1: invalid measure length: %2</source>
-        <translation>Ошибка MSCX смещения в байтах %1: недопустимая длина такта: %2</translation>
+        <translation>Ошибка MSCX в байтовом смещении %1: недопустимая длина такта: %2</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="185"/>
@@ -17882,7 +17882,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="159"/>
         <source>beam staff move</source>
-        <translation type="unfinished"/>
+        <translation>перемещение реестра нотоносца</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="160"/>
@@ -17912,7 +17912,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="166"/>
         <source>tempo align right of rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>выравнивание темпа по правому краю партитурного ориентира</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="168"/>
@@ -18295,7 +18295,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="260"/>
         <source>staff move</source>
-        <translation type="unfinished"/>
+        <translation>перемещение нотоносца</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="261"/>
@@ -18635,7 +18635,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="341"/>
         <source>text script align</source>
-        <translation type="unfinished"/>
+        <translation>выравнивание индексов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="342"/>
