@@ -82,3 +82,6 @@ __pycache__/
 
 # CMake User presets
 CMakeUserPresets.json
+
+# QML language server
+**/.qmlls.ini
