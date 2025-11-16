@@ -117,7 +117,10 @@ public:
     Control* make_control(INavigation::Index& idx)
     {
         Control* c = new Control();
+
         NavigationControl* navCtrl = new NavigationControl();
+        navCtrl->navigationController.set(m_controller);
+
         navCtrl->setRow(idx.row);
         navCtrl->setColumn(idx.column);
         navCtrl->setOrder(idx.order());
@@ -125,8 +128,6 @@ public:
         navCtrl->setActive(false);
 
         setComponentWindow(navCtrl, &m_window);
-
-        navCtrl->navigationController.set(m_controller);
 
         c->control = navCtrl;
 
@@ -138,6 +139,7 @@ public:
         Panel* p = new Panel();
 
         NavigationPanel* navPanel = new NavigationPanel();
+        navPanel->navigationController.set(m_controller);
 
         for (size_t ci = 0; ci < controlsCount; ++ci) {
             INavigation::Index& idx = make_idx();
@@ -162,8 +164,6 @@ public:
 
         setComponentWindow(navPanel, &m_window);
 
-        navPanel->navigationController.set(m_controller);
-
         p->panel = navPanel;
 
         return p;
@@ -174,6 +174,8 @@ public:
         Section* s = new Section();
 
         NavigationSection* navSection = new NavigationSection();
+        navSection->application.set(m_applicationMock);
+        navSection->navigationController.set(m_controller);
 
         for (size_t pi = 0; pi < panelsCount; ++pi) {
             Panel* p = make_panel(static_cast<int>(pi), controlsCount);
@@ -195,9 +197,6 @@ public:
         navSection->setOrder(idx.order());
 
         setComponentWindow(navSection, &m_window);
-        navSection->application.set(m_applicationMock);
-
-        navSection->navigationController.set(m_controller);
 
         s->section = navSection;
 
