@@ -4098,7 +4098,7 @@
                 <item row="1" column="1">
                  <widget class="QDoubleSpinBox" name="dividerLeftSize">
                   <property name="suffix">
-                   <string>%</string>
+                   <string notr="true">%</string>
                   </property>
                   <property name="decimals">
                    <number>0</number>
@@ -4400,7 +4400,7 @@
                 <item row="1" column="1">
                  <widget class="QDoubleSpinBox" name="dividerRightSize">
                   <property name="suffix">
-                   <string>%</string>
+                   <string notr="true">%</string>
                   </property>
                   <property name="decimals">
                    <number>0</number>
