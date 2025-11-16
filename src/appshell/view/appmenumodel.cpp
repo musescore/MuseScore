@@ -41,6 +41,7 @@ using namespace muse::actions;
 using namespace muse::extensions;
 
 static const ActionCode TOGGLE_UNDO_HISTORY_PANEL_CODE = "toggle-undo-history-panel";
+static const ActionCode TOGGLE_PIANO_ROLL_PANEL_CODE = "toggle-piano-roll-panel";
 static const QString VIEW_TOGGLE_UNDO_HISTORY_PANEL_ITEM_ID = "view/toggle-undo-history-panel";
 
 static QString makeId(const ActionCode& actionCode, int itemIndex)
@@ -308,6 +309,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-timeline"),
         makeMenuItem("toggle-mixer"),
         makeMenuItem("toggle-piano-keyboard"),
+        makeMenuItem(TOGGLE_PIANO_ROLL_PANEL_CODE),
         makeMenuItem("toggle-percussion-panel"),
         makeMenuItem("playback-setup"),
         //makeMenuItem("toggle-scorecmp-tool"), // not implemented
