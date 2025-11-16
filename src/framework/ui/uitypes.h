@@ -156,6 +156,7 @@ public:
 struct ContainerMeta
 {
     ContainerType::Type type = ContainerType::Undefined;
+    QString qmlModule;
     QString qmlPath;
     int widgetMetaTypeId = QMetaType::UnknownType;
 
@@ -165,6 +166,8 @@ struct ContainerMeta
         : type(type) {}
     ContainerMeta(const ContainerType::Type& type, const QString& qmlPath)
         : type(type), qmlPath(qmlPath) {}
+    ContainerMeta(const ContainerType::Type& type, const QString& qmlModule, const QString& qmlPath)
+        : type(type), qmlModule(qmlModule), qmlPath(qmlPath) {}
     ContainerMeta(const ContainerType::Type& type, int widgetMetaTypeId)
         : type(type), widgetMetaTypeId(widgetMetaTypeId) {}
 };

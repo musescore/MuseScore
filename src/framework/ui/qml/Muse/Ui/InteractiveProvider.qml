@@ -56,26 +56,27 @@ Item {
 
             console.log("try open uri: " + uri + ", page: " + JSON.stringify(page))
             if (!(page && (page.type === ContainerType.PrimaryPage || page.type === ContainerType.QmlDialog))) {
-                data.setValue("ret", {errcode: 101 }) // ResolveFailed
+                data.setValue("ret", { errcode: 101 }) // ResolveFailed
                 return;
             }
 
             if (page.type === ContainerType.PrimaryPage) {
                 root.requestedDockPage(uri, page.params)
-                data.setValue("ret", {errcode: 0 })
+                data.setValue("ret", { errcode: 0 })
                 return;
             }
 
             if (page.type === ContainerType.QmlDialog) {
-                var dialogPath = "../../" + page.path
+                var dialogPath = page.module ? page.path : "../../" + page.path
 
-                var dialogObj = root.createDialog(dialogPath, page.params)
+                var dialogObj = root.createDialog(page.module, dialogPath, page.params)
                 data.setValue("ret", dialogObj.ret)
-                data.setValue("objectId", dialogObj.object.objectId)
 
                 if (dialogObj.ret.errcode > 0) {
                     return
                 }
+
+                data.setValue("objectId", dialogObj.object.objectId)
 
                 dialogObj.object.show()
             }
@@ -97,10 +98,10 @@ Item {
         }
     }
 
-    function createDialog(path, params) {
-        var comp = Qt.createComponent(path)
+    function createDialog(module, path, params) {
+        var comp = module ? Qt.createComponent(module, path) : Qt.createComponent(path)
         if (comp.status !== Component.Ready) {
-            console.log("[qml] failed create component: " + path + ", err: " + comp.errorString())
+            console.error("Could not create component: " + path + ", err: " + comp.errorString())
             return { "ret": { "errcode": 102 } } // CreateFailed
         }
 
