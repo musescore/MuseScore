@@ -2320,12 +2320,6 @@ space unit</extracomment>
         <translation type="unfinished">System dividers</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4101"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4403"/>
-        <source>%</source>
-        <translation type="unfinished">%</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4114"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4363"/>
         <source>Vertical offset:</source>
@@ -2336,6 +2330,45 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4373"/>
         <source>Horizontal offset:</source>
         <translation type="unfinished">Horizontal offset:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4166"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4390"/>
+        <source>Symbol size:</source>
+        <translation type="unfinished">Symbol size:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4176"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4317"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7197"/>
+        <source>Scale:</source>
+        <translation type="unfinished">Scale:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4238"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4461"/>
+        <source>Horizontal alignment:</source>
+        <translation type="unfinished">Horizontal alignment:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4248"/>
+        <source>Center on the left system barline</source>
+        <translation type="unfinished">Center on the left system barline</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4255"/>
+        <source>Align to the left page margin</source>
+        <translation type="unfinished">Align to the left page margin</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4468"/>
+        <source>Center on the right system barline</source>
+        <translation type="unfinished">Center on the right system barline</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4475"/>
+        <source>Align to the right page margin</source>
+        <translation type="unfinished">Align to the right page margin</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4563"/>
@@ -3100,45 +3133,6 @@ space unit</extracomment>
         <translation type="unfinished">Avoid barlines</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4176"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4317"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7197"/>
-        <source>Scale:</source>
-        <translation type="unfinished">Scale:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4166"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4390"/>
-        <source>Symbol size:</source>
-        <translation type="unfinished">Symbol size:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4238"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4461"/>
-        <source>Horizontal alignment:</source>
-        <translation type="unfinished">Horizontal alignment:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4248"/>
-        <source>Center on the left system barline</source>
-        <translation type="unfinished">Center on the left system barline</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4255"/>
-        <source>Align to the left page margin</source>
-        <translation type="unfinished">Align to the left page margin</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4468"/>
-        <source>Center on the right system barline</source>
-        <translation type="unfinished">Center on the right system barline</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="4475"/>
-        <source>Align to the right page margin</source>
-        <translation type="unfinished">Align to the right page margin</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7207"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7210"/>
         <source>Override score font</source>
@@ -3883,6 +3877,42 @@ followed by dashes</translation>
         <translation type="unfinished">Edit text style</translation>
     </message>
     <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12611"/>
+        <source>Offset:</source>
+        <translation type="unfinished">Offset:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12624"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12954"/>
+        <source>Reset &apos;Font size&apos; value</source>
+        <translation type="unfinished">Reset &apos;Font size&apos; value</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12634"/>
+        <source>Style:</source>
+        <translation type="unfinished">Style:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12660"/>
+        <source>Reset &apos;Offset&apos; values</source>
+        <translation type="unfinished">Reset &apos;Offset&apos; values</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12670"/>
+        <source>Use musical symbols font for tuplet numbers</source>
+        <translation type="unfinished">Use musical symbols font for tuplet numbers</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12677"/>
+        <source>Follow staff size</source>
+        <translation type="unfinished">Follow staff size</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12684"/>
+        <source>Color:</source>
+        <translation type="unfinished">Color:</translation>
+    </message>
+    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12700"/>
         <source>Frame:</source>
         <translation type="unfinished">Frame:</translation>
@@ -3944,97 +3974,6 @@ followed by dashes</translation>
         <translation type="unfinished">Reset &apos;Corner radius&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13045"/>
-        <source>Reset &apos;Font style&apos; values</source>
-        <translation type="unfinished">Reset &apos;Font style&apos; values</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12980"/>
-        <source>Reset &apos;Align&apos; values</source>
-        <translation type="unfinished">Reset &apos;Align&apos; values</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13032"/>
-        <source>Reset &apos;Color&apos; value</source>
-        <translation type="unfinished">Reset &apos;Color&apos; value</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12684"/>
-        <source>Color:</source>
-        <translation type="unfinished">Color:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12624"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12954"/>
-        <source>Reset &apos;Font size&apos; value</source>
-        <translation type="unfinished">Reset &apos;Font size&apos; value</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12634"/>
-        <source>Style:</source>
-        <translation type="unfinished">Style:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13075"/>
-        <source>Reset &apos;Follow staff size&apos; value</source>
-        <translation type="unfinished">Reset &apos;Follow staff size&apos; value</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12611"/>
-        <source>Offset:</source>
-        <translation type="unfinished">Offset:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12677"/>
-        <source>Follow staff size</source>
-        <translation type="unfinished">Follow staff size</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13137"/>
-        <source>Reset &apos;Name&apos; value</source>
-        <translation type="unfinished">Reset &apos;Name&apos; value</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12967"/>
-        <source>Reset &apos;Font face&apos; value</source>
-        <translation type="unfinished">Reset &apos;Font face&apos; value</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12660"/>
-        <source>Reset &apos;Offset&apos; values</source>
-        <translation type="unfinished">Reset &apos;Offset&apos; values</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13085"/>
-        <source>Align:</source>
-        <translation type="unfinished">Align:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13114"/>
-        <source>Name:</source>
-        <translation type="unfinished">Name:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12993"/>
-        <source>li</source>
-        <translation type="unfinished">li</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13062"/>
-        <source>Line spacing:</source>
-        <translation type="unfinished">Line spacing:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12670"/>
-        <source>Use musical symbols font for tuplet numbers</source>
-        <translation type="unfinished">Use musical symbols font for tuplet numbers</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13104"/>
-        <source>Reset &apos;Use musical symbols font for tuplet numbers&apos; value</source>
-        <translation type="unfinished">Reset &apos;Use musical symbols font for tuplet numbers&apos; value</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12910"/>
         <source>Musical symbols scale:</source>
         <translation type="unfinished">Musical symbols scale:</translation>
@@ -4043,6 +3982,61 @@ followed by dashes</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12939"/>
         <source>Reset &apos;Musical symbols scale&apos; value</source>
         <translation type="unfinished">Reset &apos;Musical symbols scale&apos; value</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12967"/>
+        <source>Reset &apos;Font face&apos; value</source>
+        <translation type="unfinished">Reset &apos;Font face&apos; value</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12980"/>
+        <source>Reset &apos;Align&apos; values</source>
+        <translation type="unfinished">Reset &apos;Align&apos; values</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12993"/>
+        <source>li</source>
+        <translation type="unfinished">li</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13032"/>
+        <source>Reset &apos;Color&apos; value</source>
+        <translation type="unfinished">Reset &apos;Color&apos; value</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13045"/>
+        <source>Reset &apos;Font style&apos; values</source>
+        <translation type="unfinished">Reset &apos;Font style&apos; values</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13062"/>
+        <source>Line spacing:</source>
+        <translation type="unfinished">Line spacing:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13075"/>
+        <source>Reset &apos;Follow staff size&apos; value</source>
+        <translation type="unfinished">Reset &apos;Follow staff size&apos; value</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13085"/>
+        <source>Align:</source>
+        <translation type="unfinished">Align:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13104"/>
+        <source>Reset &apos;Use musical symbols font for tuplet numbers&apos; value</source>
+        <translation type="unfinished">Reset &apos;Use musical symbols font for tuplet numbers&apos; value</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13114"/>
+        <source>Name:</source>
+        <translation type="unfinished">Name:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13137"/>
+        <source>Reset &apos;Name&apos; value</source>
+        <translation type="unfinished">Reset &apos;Name&apos; value</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13192"/>
@@ -5765,6 +5759,21 @@ followed by dashes</translation>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="166"/>
         <source>Redo ‘%1’</source>
         <translation type="unfinished">Redo ‘%1’</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="39"/>
+        <source>1. Worker mode</source>
+        <translation type="unfinished">1. Worker mode</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="45"/>
+        <source>2. Driver mode</source>
+        <translation type="unfinished">2. Driver mode</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="51"/>
+        <source>3. Worker RPC mode</source>
+        <translation type="unfinished">3. Worker RPC mode</translation>
     </message>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="37"/>
@@ -9607,21 +9616,6 @@ followed by dashes</translation>
         <source>Se&amp;lection filter</source>
         <translation type="unfinished">Se&amp;lection filter</translation>
     </message>
-    <message>
-        <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="39"/>
-        <source>1. Worker mode</source>
-        <translation type="unfinished">1. Worker mode</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="45"/>
-        <source>2. Driver mode</source>
-        <translation type="unfinished">2. Driver mode</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="51"/>
-        <source>3. Worker RPC mode</source>
-        <translation type="unfinished">3. Worker RPC mode</translation>
-    </message>
 </context>
 <context>
     <name>appshell</name>
@@ -10324,26 +10318,6 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Choose background wallpaper</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/PageSection.qml" line="31"/>
-        <source>Page</source>
-        <translation type="unfinished">Page</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/PageSection.qml" line="56"/>
-        <source>Invert score colors</source>
-        <translation type="unfinished">Invert score colors</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/PageSection.qml" line="74"/>
-        <source>Only invert colors in dark theme</source>
-        <translation type="unfinished">Only invert colors in dark theme</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/PageSection.qml" line="93"/>
-        <source>Choose notepaper</source>
-        <translation type="unfinished">Choose notepaper</translation>
-    </message>
-    <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AccentColorsSection.qml" line="63"/>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="47"/>
         <source>Accent color</source>
@@ -10470,6 +10444,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/qml/Preferences/internal/CommonAudioApiConfiguration.qml" line="89"/>
         <source>Sample rate</source>
         <translation type="unfinished">Sample rate</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/DefaultStyleSection.qml" line="32"/>
+        <source>Default style</source>
+        <translation type="unfinished">Default style</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/DefaultStyleSection.qml" line="73"/>
+        <source>Style for parts</source>
+        <translation type="unfinished">Style for parts</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/DefaultStyleSection.qml" line="80"/>
+        <source>Choose default style for parts</source>
+        <translation type="unfinished">Choose default style for parts</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/DefaultStyleSection.qml" line="81"/>
+        <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="110"/>
+        <source>MuseScore style file</source>
+        <translation type="unfinished">MuseScore style file</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/FoldersSection.qml" line="31"/>
@@ -10791,6 +10786,26 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Never</translation>
     </message>
     <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/PageSection.qml" line="31"/>
+        <source>Page</source>
+        <translation type="unfinished">Page</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/PageSection.qml" line="56"/>
+        <source>Invert score colors</source>
+        <translation type="unfinished">Invert score colors</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/PageSection.qml" line="74"/>
+        <source>Only invert colors in dark theme</source>
+        <translation type="unfinished">Only invert colors in dark theme</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/PageSection.qml" line="93"/>
+        <source>Choose notepaper</source>
+        <translation type="unfinished">Choose notepaper</translation>
+    </message>
+    <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PreferencesButtonsPanel.qml" line="50"/>
         <source>Reset preferences</source>
         <translation type="unfinished">Reset preferences</translation>
@@ -10856,6 +10871,11 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Limit scroll area to page borders</translation>
     </message>
     <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/ThemeAdditionalOptionsSection.qml" line="32"/>
+        <source>Reset appearance to default</source>
+        <translation type="unfinished">Reset appearance to default</translation>
+    </message>
+    <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="32"/>
         <source>High-contrast theme</source>
         <translation type="unfinished">High-contrast theme</translation>
@@ -10894,11 +10914,6 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="50"/>
         <source>Border color</source>
         <translation type="unfinished">Border color</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="160"/>
-        <source>Appearance</source>
-        <translation type="unfinished">Appearance</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="29"/>
@@ -11100,22 +11115,6 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">1024th</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/DefaultStyleSection.qml" line="32"/>
-        <source>Default style</source>
-        <translation type="unfinished">Default style</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/DefaultStyleSection.qml" line="73"/>
-        <source>Style for parts</source>
-        <translation type="unfinished">Style for parts</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/DefaultStyleSection.qml" line="81"/>
-        <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="110"/>
-        <source>MuseScore style file</source>
-        <translation type="unfinished">MuseScore style file</translation>
-    </message>
-    <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="115"/>
         <source>Choose default style for imports</source>
         <translation type="unfinished">Choose default style for imports</translation>
@@ -11124,6 +11123,11 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="157"/>
         <source>General</source>
         <translation type="unfinished">General</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="160"/>
+        <source>Appearance</source>
+        <translation type="unfinished">Appearance</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="163"/>
@@ -11179,16 +11183,6 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="199"/>
         <source>Braille</source>
         <translation type="unfinished">Braille</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/DefaultStyleSection.qml" line="80"/>
-        <source>Choose default style for parts</source>
-        <translation type="unfinished">Choose default style for parts</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/ThemeAdditionalOptionsSection.qml" line="32"/>
-        <source>Reset appearance to default</source>
-        <translation type="unfinished">Reset appearance to default</translation>
     </message>
 </context>
 <context>
@@ -15477,11 +15471,6 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Remove partial tie</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="374"/>
-        <source>Staff text</source>
-        <translation type="unfinished">Staff text</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="780"/>
         <source>Normal</source>
         <translation type="unfinished">Normal</translation>
@@ -15495,6 +15484,11 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="782"/>
         <source>Extra long</source>
         <translation type="unfinished">Extra long</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="374"/>
+        <source>Staff text</source>
+        <translation type="unfinished">Staff text</translation>
     </message>
 </context>
 <context>
@@ -24457,18 +24451,6 @@ pickup measure</translation>
         <translation type="unfinished">Right</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="211"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="280"/>
-        <source>Left</source>
-        <translation type="unfinished">Left</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="212"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="324"/>
-        <source>Right</source>
-        <translation type="unfinished">Right</translation>
-    </message>
-    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="49"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/FretFrameSettings.qml" line="66"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="471"/>
@@ -25045,6 +25027,18 @@ pickup measure</translation>
         <translation type="unfinished">Show more</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="211"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="280"/>
+        <source>Left</source>
+        <translation type="unfinished">Left</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="212"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="324"/>
+        <source>Right</source>
+        <translation type="unfinished">Right</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="237"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="114"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tuplets/TupletSettings.qml" line="82"/>
@@ -25335,36 +25329,6 @@ pickup measure</translation>
         <translation type="unfinished">Bass note scale</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="33"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="162"/>
-        <source>Alignment</source>
-        <translation type="unfinished">Alignment</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="58"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="208"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="331"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="277"/>
-        <source>Align left</source>
-        <translation type="unfinished">Align left</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="64"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="214"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="338"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="283"/>
-        <source>Align center</source>
-        <translation type="unfinished">Align center</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="70"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="220"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="344"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="289"/>
-        <source>Align right</source>
-        <translation type="unfinished">Align right</translation>
-    </message>
-    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="167"/>
         <source>Add fretboard diagram</source>
         <translation type="unfinished">Add fretboard diagram</translation>
@@ -25450,14 +25414,44 @@ pickup measure</translation>
         <translation type="unfinished">Display brackets, clefs and key signatures in the next measure</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="33"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="162"/>
+        <source>Alignment</source>
+        <translation type="unfinished">Alignment</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="58"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="208"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="331"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="277"/>
+        <source>Align left</source>
+        <translation type="unfinished">Align left</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="59"/>
         <source>Align left edge of legend to reference point</source>
         <translation type="unfinished">Align left edge of legend to reference point</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="64"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="214"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="338"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="283"/>
+        <source>Align center</source>
+        <translation type="unfinished">Align center</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="65"/>
         <source>Align horizontal center of legend to reference point</source>
         <translation type="unfinished">Align horizontal center of legend to reference point</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="70"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="220"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="344"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="289"/>
+        <source>Align right</source>
+        <translation type="unfinished">Align right</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="71"/>
@@ -25744,6 +25738,20 @@ pickup measure</translation>
         <translation type="unfinished">None</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="69"/>
+        <source>Major</source>
+        <comment>key signature mode</comment>
+        <extracomment>mode of a key signature, not an interval</extracomment>
+        <translation type="unfinished">Major</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="71"/>
+        <source>Minor</source>
+        <comment>key signature mode</comment>
+        <extracomment>mode of a key signature, not an interval</extracomment>
+        <translation type="unfinished">Minor</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="72"/>
         <source>Dorian</source>
         <comment>key signature mode</comment>
@@ -25784,20 +25792,6 @@ pickup measure</translation>
         <source>Locrian</source>
         <comment>key signature mode</comment>
         <translation type="unfinished">Locrian</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="69"/>
-        <source>Major</source>
-        <comment>key signature mode</comment>
-        <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation type="unfinished">Major</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="71"/>
-        <source>Minor</source>
-        <comment>key signature mode</comment>
-        <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation type="unfinished">Minor</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="50"/>
@@ -37269,6 +37263,13 @@ failed: %2</translation>
         <translation type="unfinished">Paste text</translation>
     </message>
     <message>
+        <location filename="../../src/engraving/tests/voiceswitching_tests.cpp" line="118"/>
+        <location filename="../../src/inspector/models/inspectormodelwithvoiceandpositionoptions.cpp" line="163"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5913"/>
+        <source>Change voice</source>
+        <translation type="unfinished">Change voice</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="432"/>
         <location filename="../../src/inspector/models/notation/frames/verticalframesettingsmodel.cpp" line="65"/>
         <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="208"/>
@@ -37314,13 +37315,6 @@ failed: %2</translation>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="503"/>
         <source>Make element(s) invisible</source>
         <translation type="unfinished">Make element(s) invisible</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/tests/voiceswitching_tests.cpp" line="118"/>
-        <location filename="../../src/inspector/models/inspectormodelwithvoiceandpositionoptions.cpp" line="163"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5913"/>
-        <source>Change voice</source>
-        <translation type="unfinished">Change voice</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/barlines/barlinesettingsmodel.cpp" line="233"/>
