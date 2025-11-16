@@ -164,9 +164,11 @@ void PlaybackToolBarModel::onActionsStateChanges(const ActionCodeList& codes)
     }
 }
 
-bool PlaybackToolBarModel::isAdditionalAction(const ActionCode& actionCode) const
+bool PlaybackToolBarModel::isAdditionalAction(const ActionCode& code) const
 {
-    return PlaybackUiActions::loopBoundaryActions().contains(actionCode);
+    return muse::contains_if(PlaybackUiActions::loopBoundaryActions(), [code](const UiAction& a) {
+        return a.code == code;
+    });
 }
 
 bool PlaybackToolBarModel::isPlayAllowed() const

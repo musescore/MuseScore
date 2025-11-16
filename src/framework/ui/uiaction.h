@@ -116,34 +116,7 @@ struct UiAction
     }
 };
 
-class UiActionList : public std::vector<UiAction>
-{
-public:
-    UiActionList() = default;
-    UiActionList(std::initializer_list<UiAction> l)
-        : std::vector<UiAction>(l) {}
-    UiActionList(std::vector<UiAction>::iterator b, std::vector<UiAction>::iterator e)
-        : std::vector<UiAction>(b, e) {}
-
-    bool contains(const actions::ActionCode& code) const
-    {
-        auto it = std::find_if(cbegin(), cend(), [code](const UiAction& a) {
-            return a.code == code;
-        });
-        return it != cend();
-    }
-
-    std::optional<size_t> indexOf(const actions::ActionCode& code) const
-    {
-        for (size_t i = 0; i < size(); ++i) {
-            if (at(i).code == code) {
-                return i;
-            }
-        }
-
-        return std::nullopt;
-    }
-};
+using UiActionList = std::vector<UiAction>;
 
 struct UiActionState
 {
