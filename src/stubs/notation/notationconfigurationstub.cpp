@@ -568,29 +568,34 @@ void NotationConfigurationStub::setTestModeEnabled(std::optional<bool>)
 {
 }
 
-muse::io::path_t NotationConfigurationStub::instrumentListPath() const
+muse::io::path_t NotationConfigurationStub::instrumentsXmlPath() const
 {
     return muse::io::path_t();
 }
 
-io::paths_t NotationConfigurationStub::scoreOrderListPaths() const
+muse::io::path_t NotationConfigurationStub::scoreOrdersXmlPath() const
 {
-    return io::paths_t();
+    return muse::io::path_t();
 }
 
-muse::async::Notification NotationConfigurationStub::scoreOrderListPathsChanged() const
+muse::io::path_t NotationConfigurationStub::userInstrumentsFolder() const
 {
-    static muse::async::Notification n;
-    return n;
+    return muse::io::path_t();
 }
 
-io::paths_t NotationConfigurationStub::userScoreOrderListPaths() const
+muse::io::paths_t NotationConfigurationStub::userInstrumentsAndScoreOrdersPaths() const
 {
-    return io::paths_t();
+    return muse::io::paths_t();
 }
 
-void NotationConfigurationStub::setUserScoreOrderListPaths(const io::paths_t&)
+void NotationConfigurationStub::setUserInstrumentsFolder(const muse::io::path_t&)
 {
+}
+
+muse::async::Channel<muse::io::path_t> NotationConfigurationStub::userInstrumentsFolderChanged() const
+{
+    static muse::async::Channel<muse::io::path_t> ch;
+    return ch;
 }
 
 bool NotationConfigurationStub::isSnappedToGrid(muse::Orientation) const

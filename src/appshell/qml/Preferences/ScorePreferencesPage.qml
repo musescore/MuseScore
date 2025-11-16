@@ -37,7 +37,7 @@ PreferencesPage {
         scorePreferencesModel.load()
     }
 
-    DefaultFilesSection {
+    DefaultStyleSection {
         width: parent.width
 
         model: scorePreferencesModel

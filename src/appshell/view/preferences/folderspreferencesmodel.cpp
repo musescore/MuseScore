@@ -96,6 +96,11 @@ void FoldersPreferencesModel::load()
             notationConfiguration()->userStylesPath().toQString()
         },
         {
+            FolderType::Instruments, muse::qtrc("appshell/preferences", "Instruments and score orders"),
+            notationConfiguration()->userInstrumentsFolder().toQString(),
+            notationConfiguration()->userInstrumentsFolder().toQString()
+        },
+        {
             FolderType::Templates, muse::qtrc("appshell/preferences", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
             projectConfiguration()->userTemplatesPath().toQString()
         },
@@ -136,6 +141,10 @@ void FoldersPreferencesModel::setupConnections()
         setFolderPaths(FolderType::Styles, path.toQString());
     });
 
+    notationConfiguration()->userInstrumentsFolderChanged().onReceive(this, [this](const muse::io::path_t& path) {
+        setFolderPaths(FolderType::Instruments, path.toQString());
+    });
+
     projectConfiguration()->userTemplatesPathChanged().onReceive(this, [this](const muse::io::path_t& path) {
         setFolderPaths(FolderType::Templates, path.toQString());
     });
@@ -169,6 +178,11 @@ void FoldersPreferencesModel::saveFolderPaths(FoldersPreferencesModel::FolderTyp
     case FolderType::Styles: {
         muse::io::path_t folderPath = paths.toStdString();
         notationConfiguration()->setUserStylesPath(folderPath);
+        break;
+    }
+    case FolderType::Instruments: {
+        muse::io::path_t folderPath = paths.toStdString();
+        notationConfiguration()->setUserInstrumentsFolder(folderPath);
         break;
     }
     case FolderType::Templates: {

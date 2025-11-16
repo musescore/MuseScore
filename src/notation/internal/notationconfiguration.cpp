@@ -100,8 +100,7 @@ static const Settings::Key USE_MIDI_VELOCITY_AND_DURATION_DURING_NOTE_INPUT(modu
                                                                             "io/midi/useMidiVelocityAndDurationDuringNoteInput");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
 
-static const Settings::Key FIRST_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList1");
-static const Settings::Key SECOND_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList2");
+static const Settings::Key USER_INSTRUMENTS_PATH(module_name, "application/paths/userInstruments");
 
 static const Settings::Key IS_SNAPPED_TO_VERTICAL_GRID_KEY(module_name,  "ui/application/raster/isSnappedToVerticalGrid");
 static const Settings::Key IS_SNAPPED_TO_HORIZONTAL_GRID_KEY(module_name,  "ui/application/raster/isSnappedToHorizontalGrid");
@@ -342,14 +341,9 @@ void NotationConfiguration::init()
         m_styleFileImportPathChanged.send(val.toString());
     });
 
-    settings()->setDefaultValue(FIRST_SCORE_ORDER_LIST_KEY, Val(":/engraving/instruments/orders.xml"));
-    settings()->valueChanged(FIRST_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
-        m_scoreOrderListPathsChanged.notify();
-    });
-
-    settings()->setDefaultValue(SECOND_SCORE_ORDER_LIST_KEY, Val(""));
-    settings()->valueChanged(SECOND_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
-        m_scoreOrderListPathsChanged.notify();
+    settings()->setDefaultValue(USER_INSTRUMENTS_PATH, Val(""));
+    settings()->valueChanged(USER_INSTRUMENTS_PATH).onReceive(nullptr, [this](const Val& val) {
+        m_userInstrumentsFolderChanged.send(val.toPath());
     });
 
     settings()->setDefaultValue(HORIZONTAL_GRID_SIZE_KEY, Val(DEFAULT_GRID_SIZE_SPATIUM));
@@ -1137,51 +1131,47 @@ void NotationConfiguration::setTestModeEnabled(std::optional<bool> enabled)
     mu::engraving::MScore::testMode = enabled ? enabled.value() : false;
 }
 
-muse::io::path_t NotationConfiguration::instrumentListPath() const
+muse::io::path_t NotationConfiguration::instrumentsXmlPath() const
 {
     return ":/engraving/instruments/instruments.xml";
 }
 
-io::paths_t NotationConfiguration::scoreOrderListPaths() const
+muse::io::path_t NotationConfiguration::scoreOrdersXmlPath() const
 {
-    io::paths_t paths;
+    return ":/engraving/instruments/orders.xml";
+}
 
-    muse::io::path_t firstScoreOrderListPath = this->firstScoreOrderListPath();
-    paths.push_back(firstScoreOrderListPath);
+muse::io::path_t NotationConfiguration::userInstrumentsFolder() const
+{
+    return settings()->value(USER_INSTRUMENTS_PATH).toPath();
+}
 
-    muse::io::path_t secondScoreOrderListPath = this->secondScoreOrderListPath();
-    if (!secondScoreOrderListPath.empty()) {
-        paths.push_back(secondScoreOrderListPath);
+muse::io::paths_t NotationConfiguration::userInstrumentsAndScoreOrdersPaths() const
+{
+    muse::io::paths_t paths;
+
+    // Scan user instruments folder for XML files
+    muse::io::path_t folder = userInstrumentsFolder();
+    if (!folder.empty()) {
+        RetVal<io::paths_t> userFiles = fileSystem()->scanFiles(folder, { "*.xml" }, io::ScanMode::FilesInCurrentDir);
+        if (userFiles.ret) {
+            for (const io::path_t& file : userFiles.val) {
+                paths.push_back(file);
+            }
+        }
     }
 
     return paths;
 }
 
-muse::async::Notification NotationConfiguration::scoreOrderListPathsChanged() const
+void NotationConfiguration::setUserInstrumentsFolder(const muse::io::path_t& path)
 {
-    return m_scoreOrderListPathsChanged;
+    settings()->setSharedValue(USER_INSTRUMENTS_PATH, Val(path));
 }
 
-io::paths_t NotationConfiguration::userScoreOrderListPaths() const
+muse::async::Channel<muse::io::path_t> NotationConfiguration::userInstrumentsFolderChanged() const
 {
-    io::paths_t paths = {
-        firstScoreOrderListPath(),
-        secondScoreOrderListPath()
-    };
-
-    return paths;
-}
-
-void NotationConfiguration::setUserScoreOrderListPaths(const io::paths_t& paths)
-{
-    if (paths.empty()) {
-        return;
-    }
-
-    setFirstScoreOrderListPath(paths[0]);
-    if (paths.size() > 1) {
-        setSecondScoreOrderListPath(paths[1]);
-    }
+    return m_userInstrumentsFolderChanged;
 }
 
 muse::io::path_t NotationConfiguration::stringTuningsPresetsPath() const
@@ -1388,26 +1378,6 @@ ValCh<bool> NotationConfiguration::midiUseWrittenPitch() const
 void NotationConfiguration::setMidiUseWrittenPitch(bool useWrittenPitch)
 {
     settings()->setSharedValue(USE_MIDI_INPUT_WRITTEN_PITCH, Val(useWrittenPitch));
-}
-
-muse::io::path_t NotationConfiguration::firstScoreOrderListPath() const
-{
-    return settings()->value(FIRST_SCORE_ORDER_LIST_KEY).toString();
-}
-
-void NotationConfiguration::setFirstScoreOrderListPath(const muse::io::path_t& path)
-{
-    settings()->setSharedValue(FIRST_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
-}
-
-muse::io::path_t NotationConfiguration::secondScoreOrderListPath() const
-{
-    return settings()->value(SECOND_SCORE_ORDER_LIST_KEY).toString();
-}
-
-void NotationConfiguration::setSecondScoreOrderListPath(const muse::io::path_t& path)
-{
-    settings()->setSharedValue(SECOND_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
 }
 
 muse::io::path_t NotationConfiguration::styleFileImportPath() const

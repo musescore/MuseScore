@@ -219,13 +219,13 @@ public:
     virtual void setTemplateModeEnabled(std::optional<bool> enabled) = 0;
     virtual void setTestModeEnabled(std::optional<bool> enabled) = 0;
 
-    virtual muse::io::path_t instrumentListPath() const = 0;
+    virtual muse::io::path_t instrumentsXmlPath() const = 0;
+    virtual muse::io::path_t scoreOrdersXmlPath() const = 0;
 
-    virtual muse::io::paths_t scoreOrderListPaths() const = 0;
-    virtual muse::async::Notification scoreOrderListPathsChanged() const = 0;
-
-    virtual muse::io::paths_t userScoreOrderListPaths() const = 0;
-    virtual void setUserScoreOrderListPaths(const muse::io::paths_t& paths) = 0;
+    virtual muse::io::path_t userInstrumentsFolder() const = 0;
+    virtual muse::io::paths_t userInstrumentsAndScoreOrdersPaths() const = 0;
+    virtual void setUserInstrumentsFolder(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<muse::io::path_t> userInstrumentsFolderChanged() const = 0;
 
     virtual muse::io::path_t stringTuningsPresetsPath() const = 0;
 

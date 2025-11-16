@@ -68,6 +68,7 @@ private:
         Undefined,
         Scores,
         Styles,
+        Instruments,
         Templates,
         Plugins,
         SoundFonts,

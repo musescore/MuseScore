@@ -26,6 +26,7 @@
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/types/types.h"
 
+#include "io/path.h"
 #include "mpe/playbacksetupdata.h"
 
 #include "log.h"
@@ -79,7 +80,7 @@ static size_t staffCount(musesampler::StaffType type)
 
 void InstrumentsRepository::init()
 {
-    configuration()->scoreOrderListPathsChanged().onNotify(this, [this]() {
+    configuration()->userInstrumentsFolderChanged().onReceive(this, [this](const auto&) {
         load();
     });
 
@@ -146,14 +147,19 @@ void InstrumentsRepository::load()
     m_instrumentTemplateMap.clear();
     mu::engraving::clearInstrumentTemplates();
 
-    path_t instrumentsPath = configuration()->instrumentListPath();
-    if (!mu::engraving::loadInstrumentTemplates(instrumentsPath)) {
-        LOGE() << "Could not load instruments from " << instrumentsPath << "!";
+    const path_t instrumentsXmlPath = configuration()->instrumentsXmlPath();
+    if (!mu::engraving::loadInstrumentTemplates(instrumentsXmlPath)) {
+        LOGE() << "Could not load instruments from " << instrumentsXmlPath;
     }
 
-    for (const path_t& ordersPath : configuration()->scoreOrderListPaths()) {
-        if (!mu::engraving::loadInstrumentTemplates(ordersPath)) {
-            LOGE() << "Could not load orders from " << ordersPath << "!";
+    const path_t scoreOrdersXmlPath = configuration()->scoreOrdersXmlPath();
+    if (!mu::engraving::loadInstrumentTemplates(scoreOrdersXmlPath)) {
+        LOGE() << "Could not load score orders from " << scoreOrdersXmlPath;
+    }
+
+    for (const path_t& path : configuration()->userInstrumentsAndScoreOrdersPaths()) {
+        if (!mu::engraving::loadInstrumentTemplates(path)) {
+            LOGE() << "Could not load user instruments and score orders from " << path;
         }
     }
 
