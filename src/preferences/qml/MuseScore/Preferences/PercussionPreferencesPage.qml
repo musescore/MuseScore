@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+pragma ComponentBehavior: Bound
+
 import QtQuick 2.15
 
 import Muse.Ui 1.0
@@ -81,6 +83,8 @@ PreferencesPage {
                 model: percussionPreferencesModel.autoShowModes
 
                 delegate: RoundedRadioButton {
+                    required property var modelData
+
                     width: ListView.view?.width ?? 0
 
                     text: modelData.title

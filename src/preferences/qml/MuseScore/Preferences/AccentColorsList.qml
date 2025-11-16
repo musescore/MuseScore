@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick 2.15
 
 import Muse.Ui 1.0
@@ -37,7 +39,7 @@ RadioButtonGroup {
 
         onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.AboutActive) {
-                event.setData("controlIndex", [navigationRow, navigationColumnStart + root.currentIndex])
+                event.setData("controlIndex", [root.navigationRow, root.navigationColumnStart + root.currentIndex])
             }
         }
     }
@@ -58,21 +60,23 @@ RadioButtonGroup {
     delegate: RoundedRadioButton {
         id: button
 
+        required property int index
+        required property var modelData
+        readonly property color accentColor: modelData
+
         width: root.totalSampleSize
         height: width
 
-        checked: root.currentIndex === model.index
-
-        property color accentColor: modelData
+        checked: root.currentIndex === index
 
         navigation.name: "AccentColourButton"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRow
-        navigation.column: root.navigationColumnStart + model.index
+        navigation.column: root.navigationColumnStart + index
         navigation.accessible.name: Utils.accessibleColorDescription(accentColor)
 
         onToggled: {
-            root.accentColorChangeRequested(model.index)
+            root.accentColorChangeRequested(index)
         }
 
         indicator: Rectangle {
@@ -99,6 +103,6 @@ RadioButtonGroup {
             }
         }
 
-        background: Item {}
+        background: null
     }
 }
