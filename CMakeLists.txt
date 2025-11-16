@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 3.22) # Min. required by Qt 6.9
+cmake_minimum_required(VERSION 3.22) # Min. required by Qt 6.10
 
 project(MuseScore LANGUAGES C CXX)
 

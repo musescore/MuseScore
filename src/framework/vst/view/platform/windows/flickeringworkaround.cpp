@@ -36,7 +36,7 @@ WNDPROC g_pOriginalWndProc = nullptr;
  * Inspired by comment from Grzegorz Plonka.
  * Pass the `hWnd` belongs to the `QWindow` hosting the QML view and VST window.
  * When being dragged, this will undo a change apparently introduced in Qt 6.5.8
- * and that is still present in 6.9.1: the wrong adding of the `SWP_NOCOPYBITS` flag
+ * and that is still present in 6.10.0: the wrong adding of the `SWP_NOCOPYBITS` flag
  * due to misinterpreted window size when the DPI scaling is not 100%.
  */
 LRESULT CALLBACK RemoveNoCopybitsFlagWndProc(HWND hWnd, UINT uMsg, WPARAM wParam,

@@ -98,7 +98,7 @@ include(QtInstallPaths)
 
 message(STATUS "Qt version: ${Qt6_VERSION}")
 
-qt_standard_project_setup(REQUIRES 6.8 SUPPORTS_UP_TO 6.9)
+qt_standard_project_setup(REQUIRES 6.8 SUPPORTS_UP_TO 6.10)
 
 if (QT_IS_STATIC)
     qt_add_library(all_qml_plugins STATIC)

@@ -19,7 +19,7 @@ set(CMAKE_MODULE_PATH
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
 
-set(QT_MIN_VERSION "6.9.2")
+set(QT_MIN_VERSION "6.8")
 include(SetupQt6)
 
 include_directories(

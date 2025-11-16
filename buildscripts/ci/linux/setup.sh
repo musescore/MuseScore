@@ -28,7 +28,7 @@ BUILD_TOOLS=$HOME/build_tools
 ENV_FILE=$BUILD_TOOLS/environment.sh
 PACKARCH="x86_64" # x86_64, armv7l, aarch64, wasm
 COMPILER="gcc" # gcc, clang
-EMSDK_VERSION="3.1.70" # for Qt 6.9
+EMSDK_VERSION="4.0.7" # for Qt 6.10
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
