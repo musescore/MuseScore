@@ -2604,7 +2604,18 @@ void Segment::createShape(staff_idx_t staffIdx)
             setVisible(true);
             if (e->isRest() && toRest(e)->isFullMeasureRest() && measure()->hasVoices(e->staffIdx())) {
                 // A full measure rest in a measure with multiple voices must be ignored
-                continue;
+                // Unless the measure is made of *only* full rests
+                bool isAllFullRests = true;
+                for (track_idx_t track = strack; track < etrack; ++track) {
+                    EngravingItem* element = m_elist[track];
+                    if (element && !(element->isRest() && toRest(element)->isFullMeasureRest())) {
+                        isAllFullRests = false;
+                        break;
+                    }
+                }
+                if (!isAllFullRests) {
+                    continue;
+                }
             }
             if (e->isMMRest() || (e->isMeasureRepeat() && toMeasureRepeat(e)->numMeasures() > 1)) {
                 continue;
