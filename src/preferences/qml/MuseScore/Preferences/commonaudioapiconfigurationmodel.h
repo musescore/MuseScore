@@ -31,6 +31,7 @@
 
 #include "audio/main/iaudioconfiguration.h"
 #include "audio/iaudiodrivercontroller.h"
+#include "global/iinteractive.h"
 
 namespace mu::preferences {
 class CommonAudioApiConfigurationModel : public QObject, public muse::Injectable, public muse::async::Asyncable
@@ -49,6 +50,7 @@ class CommonAudioApiConfigurationModel : public QObject, public muse::Injectable
 
     muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
     muse::Inject<muse::audio::IAudioDriverController> audioDriverController = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
 
 public:
     explicit CommonAudioApiConfigurationModel(QObject* parent = nullptr);
@@ -76,8 +78,5 @@ signals:
 
     void bufferSizeChanged();
     void bufferSizeListChanged();
-
-private:
-    muse::audio::IAudioDriverPtr audioDriver() const;
 };
 }

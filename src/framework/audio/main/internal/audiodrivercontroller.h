@@ -42,25 +42,49 @@ public:
 
     void init();
 
-    std::string currentAudioApi() const override;
+    // Api
     std::vector<std::string> availableAudioApiList() const override;
 
-    IAudioDriverPtr audioDriver() const override;
-    void changeAudioDriver(const std::string& name) override;
-    async::Notification audioDriverChanged() const override;
+    std::string currentAudioApi() const override;
+    void changeCurrentAudioApi(const std::string& name) override;
+    async::Notification currentAudioApiChanged() const override;
 
-    void selectOutputDevice(const std::string& deviceId) override;
+    // Current driver operation
+    AudioDeviceList availableOutputDevices() const override;
+    async::Notification availableOutputDevicesChanged() const override;
+
+    bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec) override;
+    void close() override;
+    bool isOpened() const override;
+
+    const IAudioDriver::Spec& activeSpec() const override;
+    async::Channel<IAudioDriver::Spec> activeSpecChanged() const override;
+
+    AudioDeviceID outputDevice() const override;
+    bool selectOutputDevice(const std::string& deviceId) override;
+    async::Notification outputDeviceChanged() const override;
+
+    std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
     void changeBufferSize(samples_t samples) override;
+    async::Notification outputDeviceBufferSizeChanged() const override;
+
+    std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
     void changeSampleRate(sample_rate_t sampleRate) override;
+    async::Notification outputDeviceSampleRateChanged() const override;
 
 private:
     IAudioDriverPtr createDriver(const std::string& name) const;
-    void subscribeOnDriver();
+    void setNewDriver(IAudioDriverPtr newDriver);
 
     void checkOutputDevice();
     void updateOutputSpec();
 
     IAudioDriverPtr m_audioDriver;
-    async::Notification m_audioDriverChanged;
+    async::Notification m_currentAudioApiChanged;
+    async::Notification m_availableOutputDevicesChanged;
+    async::Channel<IAudioDriver::Spec> m_activeSpecChanged;
+    async::Notification m_outputDeviceChanged;
+    async::Notification m_outputDeviceBufferSizeChanged;
+    async::Notification m_outputDeviceSampleRateChanged;
 };
 }

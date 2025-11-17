@@ -412,6 +412,7 @@ bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
 bool AsioAudioDriver::doOpen(const AudioDeviceID& device, const Spec& spec, Spec* activeSpec)
 {
+    LOGI() << "try open: " << device;
     const char* name = device.c_str();
     bool ok = s_adata.drivers.loadDriver(const_cast<char*>(name));
     if (!ok) {
@@ -427,7 +428,7 @@ bool AsioAudioDriver::doOpen(const AudioDeviceID& device, const Spec& spec, Spec
 
     LOGI() << "asioVersion: " << s_adata.driverInfo.asioVersion
            << " driverVersion: " << s_adata.driverInfo.driverVersion
-           << " name: " << s_adata.driverInfo.name;
+           << " driverName: " << s_adata.driverInfo.name;
 
     // Get device metrics
     AsioData::DeviceMetrics& metrics = s_adata.deviceMetrics;
@@ -534,7 +535,9 @@ bool AsioAudioDriver::doOpen(const AudioDeviceID& device, const Spec& spec, Spec
 void AsioAudioDriver::close()
 {
     m_running = false;
-    m_thread.join();
+    if (m_thread.joinable()) {
+        m_thread.join();
+    }
 
     ASIODisposeBuffers();
 
@@ -676,7 +679,7 @@ bool AsioAudioDriver::selectOutputDevice(const AudioDeviceID& id)
 
         //! NOTE We are trying to open a new device with the default value;
         //! it is not known what it was before.
-        spec.output.samplesPerChannel = 1024;
+        spec.output.samplesPerChannel = DEFAULT_BUFFER_SIZE;
         result = open(spec, nullptr);
     }
 

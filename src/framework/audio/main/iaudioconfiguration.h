@@ -39,6 +39,7 @@ public:
 
     virtual AudioEngineConfig engineConfig() const = 0;
 
+    virtual std::string defaultAudioApi() const = 0;
     virtual std::string currentAudioApi() const = 0;
     virtual void setCurrentAudioApi(const std::string& name) = 0;
     virtual async::Notification currentAudioApiChanged() const = 0;

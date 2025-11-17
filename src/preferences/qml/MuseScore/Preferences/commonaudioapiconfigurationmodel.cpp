@@ -22,6 +22,8 @@
 
 #include "commonaudioapiconfigurationmodel.h"
 
+#include "global/translation.h"
+
 #include "audio/common/audiotypes.h"
 
 using namespace mu::preferences;
@@ -34,51 +36,45 @@ CommonAudioApiConfigurationModel::CommonAudioApiConfigurationModel(QObject* pare
 
 void CommonAudioApiConfigurationModel::load()
 {
-    auto subscribeOnDriver = [this]() {
-        audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
-            emit deviceListChanged();
-            emit currentDeviceIdChanged();
-        });
-
-        audioDriver()->outputDeviceChanged().onNotify(this, [this]() {
-            emit currentDeviceIdChanged();
-            emit sampleRateChanged();
-            emit bufferSizeListChanged();
-            emit bufferSizeChanged();
-        });
-
-        audioDriver()->outputDeviceSampleRateChanged().onNotify(this, [this]() {
-            emit sampleRateChanged();
-        });
-
-        audioDriver()->outputDeviceBufferSizeChanged().onNotify(this, [this]() {
-            emit bufferSizeChanged();
-        });
-    };
-
-    audioDriverController()->audioDriverChanged().onNotify(this, [this, subscribeOnDriver]() {
+    audioDriverController()->currentAudioApiChanged().onNotify(this, [this]() {
         emit deviceListChanged();
         emit currentDeviceIdChanged();
         emit sampleRateChanged();
         emit bufferSizeListChanged();
         emit bufferSizeChanged();
-
-        subscribeOnDriver();
     });
 
-    subscribeOnDriver();
+    audioDriverController()->availableOutputDevicesChanged().onNotify(this, [this]() {
+        emit deviceListChanged();
+        emit currentDeviceIdChanged();
+    });
+
+    audioDriverController()->outputDeviceChanged().onNotify(this, [this]() {
+        emit currentDeviceIdChanged();
+        emit sampleRateChanged();
+        emit bufferSizeListChanged();
+        emit bufferSizeChanged();
+    });
+
+    audioDriverController()->outputDeviceSampleRateChanged().onNotify(this, [this]() {
+        emit sampleRateChanged();
+    });
+
+    audioDriverController()->outputDeviceBufferSizeChanged().onNotify(this, [this]() {
+        emit bufferSizeChanged();
+    });
 }
 
 QString CommonAudioApiConfigurationModel::currentDeviceId() const
 {
-    return QString::fromStdString(audioDriver()->outputDevice());
+    return QString::fromStdString(audioDriverController()->outputDevice());
 }
 
 QVariantList CommonAudioApiConfigurationModel::deviceList() const
 {
     QVariantList result;
 
-    AudioDeviceList devices = audioDriver()->availableOutputDevices();
+    AudioDeviceList devices = audioDriverController()->availableOutputDevices();
     for (const AudioDevice& device : devices) {
         QVariantMap obj;
         obj["value"] = QString::fromStdString(device.id);
@@ -92,19 +88,23 @@ QVariantList CommonAudioApiConfigurationModel::deviceList() const
 
 void CommonAudioApiConfigurationModel::deviceSelected(const QString& deviceId)
 {
-    audioDriverController()->selectOutputDevice(deviceId.toStdString());
+    bool ok = audioDriverController()->selectOutputDevice(deviceId.toStdString());
+    if (!ok) {
+        interactive()->error("",
+                             muse::trc("appshell/preferences", "The driver for this device could not be opened."));
+    }
 }
 
 unsigned int CommonAudioApiConfigurationModel::bufferSize() const
 {
-    unsigned int val = audioDriver()->activeSpec().output.samplesPerChannel;
+    unsigned int val = audioDriverController()->activeSpec().output.samplesPerChannel;
     return val;
 }
 
 QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
 {
     QList<unsigned int> result;
-    std::vector<unsigned int> bufferSizes = audioDriver()->availableOutputDeviceBufferSizes();
+    std::vector<unsigned int> bufferSizes = audioDriverController()->availableOutputDeviceBufferSizes();
 
     for (unsigned int bufferSize : bufferSizes) {
         result << bufferSize;
@@ -120,13 +120,13 @@ void CommonAudioApiConfigurationModel::bufferSizeSelected(const QString& bufferS
 
 unsigned int CommonAudioApiConfigurationModel::sampleRate() const
 {
-    return audioDriver()->activeSpec().output.sampleRate;
+    return audioDriverController()->activeSpec().output.sampleRate;
 }
 
 QList<unsigned int> CommonAudioApiConfigurationModel::sampleRateList() const
 {
     QList<unsigned int> result;
-    std::vector<unsigned int> sampleRates = audioDriver()->availableOutputDeviceSampleRates();
+    std::vector<unsigned int> sampleRates = audioDriverController()->availableOutputDeviceSampleRates();
 
     for (unsigned int sampleRate : sampleRates) {
         result << sampleRate;
@@ -138,9 +138,4 @@ QList<unsigned int> CommonAudioApiConfigurationModel::sampleRateList() const
 void CommonAudioApiConfigurationModel::sampleRateSelected(const QString& sampleRateStr)
 {
     audioDriverController()->changeSampleRate(sampleRateStr.toInt());
-}
-
-muse::audio::IAudioDriverPtr CommonAudioApiConfigurationModel::audioDriver() const
-{
-    return audioDriverController()->audioDriver();
 }

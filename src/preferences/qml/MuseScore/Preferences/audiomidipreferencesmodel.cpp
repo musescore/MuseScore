@@ -50,7 +50,7 @@ void AudioMidiPreferencesModel::setCurrentAudioApiIndex(int index)
         return;
     }
 
-    audioDriverController()->changeAudioDriver(apiList.at(index));
+    audioDriverController()->changeCurrentAudioApi(apiList.at(index));
     emit currentAudioApiIndexChanged(index);
 }
 
@@ -108,7 +108,7 @@ void AudioMidiPreferencesModel::init()
         emit onlineSoundsShowProgressBarModeChanged();
     });
 
-    audioDriverController()->audioDriverChanged().onNotify(this, [this]() {
+    audioDriverController()->currentAudioApiChanged().onNotify(this, [this]() {
         emit currentAudioApiIndexChanged(currentAudioApiIndex());
     });
 

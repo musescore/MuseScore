@@ -173,17 +173,9 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
 
     m_requiredSamplesTotal = requiredSpec.output.samplesPerChannel * requiredSpec.output.audioChannelCount;
 
-    auto subscribeOnActiveSpecChanged = [this]() {
-        audioDriver()->activeSpecChanged().onReceive(this, [this](const IAudioDriver::Spec& spec) {
-            m_requiredSamplesTotal = spec.output.samplesPerChannel * spec.output.audioChannelCount;
-        });
-    };
-
-    audioDriverController()->audioDriverChanged().onNotify(this, [subscribeOnActiveSpecChanged](){
-        subscribeOnActiveSpecChanged();
+    audioDriverController()->activeSpecChanged().onReceive(this, [this](const IAudioDriver::Spec& spec) {
+        m_requiredSamplesTotal = spec.output.samplesPerChannel * spec.output.audioChannelCount;
     });
-
-    subscribeOnActiveSpecChanged();
 
     bool shouldMeasureInputLag = configuration()->shouldMeasureInputLag();
     requiredSpec.callback = [this, shouldMeasureInputLag]
@@ -271,11 +263,7 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
 
     IAudioDriver::Spec activeSpec;
     if (mode == IApplication::RunMode::GuiApp) {
-        audioDriver()->init();
-
-        audioDriver()->selectOutputDevice(configuration()->audioOutputDeviceId());
-
-        if (!audioDriver()->open(requiredSpec, &activeSpec)) {
+        if (!audioDriverController()->open(requiredSpec, &activeSpec)) {
             return;
         }
     } else {
@@ -304,9 +292,8 @@ void StartAudioController::stopAudioProcessing()
 {
     m_isAudioStarted.set(false);
 
-    if (audioDriver()->isOpened()) {
-        audioDriver()->close();
-    }
+    audioDriverController()->close();
+
 #ifndef Q_OS_WASM
     // Must call deinit() before stopping worker, so disconnect messages can
     // still be processed on the worker thread
@@ -319,9 +306,4 @@ void StartAudioController::stopAudioProcessing()
         m_worker->stop();
     }
 #endif
-}
-
-IAudioDriverPtr StartAudioController::audioDriver() const
-{
-    return audioDriverController()->audioDriver();
 }
