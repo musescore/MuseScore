@@ -5187,8 +5187,8 @@ void NotationInteraction::repeatListSelection(const Selection& selection)
 
     InputState& is = score()->inputState();
 
-    std::list<Note*> notes = selection.uniqueNotes();
-    notes.sort([](const Note* a, const Note* b) { return a->track() < b->track(); });
+    std::vector<Note*> notes = selection.noteList();
+    std::sort(notes.begin(), notes.end(), [](const Note* a, const Note* b) { return a->track() < b->track(); });
 
     std::vector<EngravingItem*> toSelect;
     std::unordered_set<const Chord*> foundChords;
