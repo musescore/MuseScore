@@ -69,9 +69,6 @@ class ScoreElement : public QObject
     /// The EID of this element.
     /// \since MuseScore 4.6
     Q_PROPERTY(QString eid READ eid)
-    /// The children of this element. Does not include children of children.
-    /// \since MuseScore 4.7
-    Q_PROPERTY(QQmlListProperty<apiv1::ScoreElement> children READ children)
 
     Ownership m_ownership;
 
@@ -101,8 +98,6 @@ public:
 
     QString eid() const { return QString::fromStdString(element()->eid().toStdString()); }
 
-    QQmlListProperty<apiv1::ScoreElement> children();
-
     QVariant get(mu::engraving::Pid pid) const;
     void set(mu::engraving::Pid pid, const QVariant& val);
     void reset(mu::engraving::Pid pid);
@@ -112,6 +107,10 @@ public:
     Q_INVOKABLE QString userName() const;
     /// Checks whether two variables represent the same object. \since MuseScore 3.3
     Q_INVOKABLE bool is(apiv1::ScoreElement* other) { return other && element() == other->element(); }
+    /// Gets the children of this element. Includes children of children.
+    /// \param includeInvisible Whether invisible elements are included in the list.
+    /// \since MuseScore 4.7
+    Q_INVOKABLE QQmlListProperty<apiv1::ScoreElement> children(bool includeInvisible = true);
 };
 
 //---------------------------------------------------------
