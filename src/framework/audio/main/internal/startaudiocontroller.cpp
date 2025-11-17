@@ -164,7 +164,7 @@ async::Channel<bool> StartAudioController::isAudioStartedChanged() const
 void StartAudioController::startAudioProcessing(const IApplication::RunMode& mode)
 {
     IAudioDriver::Spec requiredSpec;
-    requiredSpec.format = IAudioDriver::Format::AudioF32;
+    requiredSpec.deviceId = configuration()->audioOutputDeviceId();
     requiredSpec.output.sampleRate = configuration()->sampleRate();
     requiredSpec.output.audioChannelCount = configuration()->audioChannelsCount();
     requiredSpec.output.samplesPerChannel = configuration()->driverBufferSize();
@@ -179,7 +179,7 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
 
     bool shouldMeasureInputLag = configuration()->shouldMeasureInputLag();
     requiredSpec.callback = [this, shouldMeasureInputLag]
-                            (void* /*userdata*/, uint8_t* stream, int byteCount) {
+                            (uint8_t* stream, int byteCount) {
         std::memset(stream, 0, byteCount);
         // driver metrics
         const size_t driverSamplesTotal = byteCount / sizeof(float);

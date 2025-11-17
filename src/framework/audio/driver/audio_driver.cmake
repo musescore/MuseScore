@@ -27,13 +27,13 @@ if (OS_IS_WIN)
         #${CMAKE_CURRENT_LIST_DIR}/platform/win/winmmdriver.h
         #${CMAKE_CURRENT_LIST_DIR}/platform/win/wincoreaudiodriver.cpp
         #${CMAKE_CURRENT_LIST_DIR}/platform/win/wincoreaudiodriver.h
-        ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapiaudioclient.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapiaudioclient.h
-        ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapitypes.h
-        ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapiaudiodriver.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapiaudiodriver.h
-        ${CMAKE_CURRENT_LIST_DIR}/platform/win/audiodeviceslistener.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/platform/win/audiodeviceslistener.h
+        # ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapiaudioclient.cpp
+        # ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapiaudioclient.h
+        # ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapitypes.h
+        # ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapiaudiodriver.cpp
+        # ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapiaudiodriver.h
+        # ${CMAKE_CURRENT_LIST_DIR}/platform/win/audiodeviceslistener.cpp
+        # ${CMAKE_CURRENT_LIST_DIR}/platform/win/audiodeviceslistener.h
         ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapiaudiodriver2.cpp
         ${CMAKE_CURRENT_LIST_DIR}/platform/win/wasapiaudiodriver2.h
     )

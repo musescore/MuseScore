@@ -41,6 +41,7 @@ void CommonAudioApiConfigurationModel::load()
     audioDriverController()->currentAudioApiChanged().onNotify(this, [this]() {
         emit deviceListChanged();
         emit currentDeviceIdChanged();
+        emit sampleRateListChanged();
         emit sampleRateChanged();
         emit bufferSizeListChanged();
         emit bufferSizeChanged();
@@ -53,6 +54,7 @@ void CommonAudioApiConfigurationModel::load()
 
     audioDriverController()->outputDeviceChanged().onNotify(this, [this]() {
         emit currentDeviceIdChanged();
+        emit sampleRateListChanged();
         emit sampleRateChanged();
         emit bufferSizeListChanged();
         emit bufferSizeChanged();
@@ -69,7 +71,8 @@ void CommonAudioApiConfigurationModel::load()
 
 QString CommonAudioApiConfigurationModel::currentDeviceId() const
 {
-    return QString::fromStdString(audioDriverController()->outputDevice());
+    AudioDeviceID device = audioDriverController()->outputDevice();
+    return QString::fromStdString(device);
 }
 
 QVariantList CommonAudioApiConfigurationModel::deviceList() const
@@ -106,10 +109,10 @@ unsigned int CommonAudioApiConfigurationModel::bufferSize() const
 QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
 {
     QList<unsigned int> result;
-    std::vector<unsigned int> bufferSizes = audioDriverController()->availableOutputDeviceBufferSizes();
+    std::vector<samples_t> bufferSizes = audioDriverController()->availableOutputDeviceBufferSizes();
 
-    for (unsigned int bufferSize : bufferSizes) {
-        result << bufferSize;
+    for (samples_t bufferSize : bufferSizes) {
+        result << static_cast<unsigned int>(bufferSize);
     }
 
     return result;
@@ -128,10 +131,10 @@ unsigned int CommonAudioApiConfigurationModel::sampleRate() const
 QList<unsigned int> CommonAudioApiConfigurationModel::sampleRateList() const
 {
     QList<unsigned int> result;
-    std::vector<unsigned int> sampleRates = audioDriverController()->availableOutputDeviceSampleRates();
+    std::vector<sample_rate_t> sampleRates = audioDriverController()->availableOutputDeviceSampleRates();
 
-    for (unsigned int sampleRate : sampleRates) {
-        result << sampleRate;
+    for (sample_rate_t sampleRate : sampleRates) {
+        result << static_cast<unsigned int>(sampleRate);
     }
 
     return result;

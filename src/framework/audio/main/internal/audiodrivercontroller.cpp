@@ -22,6 +22,8 @@
 
 #include "audiodrivercontroller.h"
 
+#include "global/async/async.h"
+
 #include "muse_framework_config.h"
 
 #ifdef MUSE_MODULE_AUDIO_JACK
@@ -163,9 +165,6 @@ void AudioDriverController::setNewDriver(IAudioDriverPtr newDriver)
         // unsubscribe
         m_audioDriver->availableOutputDevicesChanged().disconnect(this);
         m_audioDriver->activeSpecChanged().disconnect(this);
-        m_audioDriver->outputDeviceChanged().disconnect(this);
-        m_audioDriver->outputDeviceBufferSizeChanged().disconnect(this);
-        m_audioDriver->outputDeviceSampleRateChanged().disconnect(this);
     }
 
     m_audioDriver = newDriver;
@@ -180,24 +179,28 @@ void AudioDriverController::setNewDriver(IAudioDriverPtr newDriver)
 
         m_audioDriver->activeSpecChanged().onReceive(this, [this](const IAudioDriver::Spec& spec) {
             m_activeSpecChanged.send(spec);
-        });
 
-        m_audioDriver->outputDeviceChanged().onNotify(this, [this]() {
-            m_outputDeviceChanged.notify();
-        });
+            async::Async::call(this, [this, spec]() {
+                configuration()->setAudioOutputDeviceId(spec.deviceId);
 
-        m_audioDriver->outputDeviceBufferSizeChanged().onNotify(this, [this]() {
-            m_outputDeviceBufferSizeChanged.notify();
-        });
+                m_outputDeviceChanged.notify();
+                m_outputDeviceBufferSizeChanged.notify();
+                m_outputDeviceSampleRateChanged.notify();
 
-        m_audioDriver->outputDeviceSampleRateChanged().onNotify(this, [this]() {
-            m_outputDeviceSampleRateChanged.notify();
+                updateOutputSpec();
+            });
         });
     }
 }
 
-void AudioDriverController::init()
+IAudioDriver::Spec AudioDriverController::defaultSpec() const
 {
+    IAudioDriver::Spec spec;
+    spec.deviceId = m_audioDriver ? m_audioDriver->defaultDevice() : AudioDeviceID();
+    spec.output.audioChannelCount = 2;
+    spec.output.sampleRate = 44100;
+    spec.output.samplesPerChannel = DEFAULT_BUFFER_SIZE;
+    return spec;
 }
 
 std::string AudioDriverController::currentAudioApi() const
@@ -207,28 +210,28 @@ std::string AudioDriverController::currentAudioApi() const
 
 void AudioDriverController::changeCurrentAudioApi(const std::string& name)
 {
-    IAudioDriver::Spec activeSpec;
-    if (m_audioDriver && m_audioDriver->isOpened()) {
-        activeSpec = m_audioDriver->activeSpec();
+    IF_ASSERT_FAILED(m_audioDriver) {
+        return;
+    }
+
+    IAudioDriver::Spec oldSpec = m_audioDriver->activeSpec();
+    if (m_audioDriver->isOpened()) {
         m_audioDriver->close();
     }
 
     IAudioDriverPtr driver = createDriver(name);
     driver->init();
     setNewDriver(driver);
-    m_audioDriver->resetToDefaultOutputDevice();
     LOGI() << "Used " << m_audioDriver->name() << " audio driver";
 
-    if (activeSpec.isValid()) {
-        activeSpec.output.samplesPerChannel = DEFAULT_BUFFER_SIZE;
-        m_audioDriver->open(activeSpec, &activeSpec);
-    }
-
-    updateOutputSpec();
+    // reset to default
+    IAudioDriver::Spec spec = defaultSpec();
+    spec.callback = oldSpec.callback;
+    m_audioDriver->open(spec, nullptr);
 
     configuration()->setCurrentAudioApi(name);
-    configuration()->setAudioOutputDeviceId(m_audioDriver->outputDevice());
     m_currentAudioApiChanged.notify();
+    m_availableOutputDevicesChanged.notify();
 }
 
 async::Notification AudioDriverController::currentAudioApiChanged() const
@@ -256,16 +259,12 @@ bool AudioDriverController::open(const IAudioDriver::Spec& spec, IAudioDriver::S
     driver->init();
     setNewDriver(driver);
 
-    const std::string audioOutputDeviceId = configuration()->audioOutputDeviceId();
-    m_audioDriver->selectOutputDevice(audioOutputDeviceId);
-
     bool ok = m_audioDriver->open(spec, activeSpec);
     if (!ok) {
-        m_audioDriver->resetToDefaultOutputDevice();
-        ok = m_audioDriver->open(spec, activeSpec);
-        if (ok) {
-            configuration()->setAudioOutputDeviceId(m_audioDriver->outputDevice());
-        }
+        // reset to default device
+        IAudioDriver::Spec defaultDeviceSpec = spec;
+        defaultDeviceSpec.deviceId = m_audioDriver->defaultDevice();
+        ok = m_audioDriver->open(defaultDeviceSpec, activeSpec);
     }
 
     if (!ok) {
@@ -274,20 +273,19 @@ bool AudioDriverController::open(const IAudioDriver::Spec& spec, IAudioDriver::S
             IAudioDriverPtr defaultDriver = createDriver(defaultAudioApi);
             defaultDriver->init();
             setNewDriver(defaultDriver);
-            m_audioDriver->resetToDefaultOutputDevice();
-            ok = m_audioDriver->open(spec, activeSpec);
+            // reset to default
+            IAudioDriver::Spec defSpec = defaultSpec();
+            defSpec.callback = spec.callback;
+            ok = m_audioDriver->open(defSpec, activeSpec);
             if (ok) {
                 configuration()->setCurrentAudioApi(defaultAudioApi);
-                configuration()->setAudioOutputDeviceId(m_audioDriver->outputDevice());
             }
         }
     }
 
     LOGI() << "Used audio driver: " << m_audioDriver->name()
            << ", opened: " << (ok ? "success" : "failed")
-           << ", device: " << m_audioDriver->outputDevice();
-
-    updateOutputSpec();
+           << ", device: " << m_audioDriver->activeSpec().deviceId;
 
     return ok;
 }
@@ -327,26 +325,34 @@ AudioDeviceID AudioDriverController::outputDevice() const
     IF_ASSERT_FAILED(m_audioDriver) {
         return AudioDeviceID();
     }
-    return m_audioDriver->outputDevice();
+    return m_audioDriver->activeSpec().deviceId;
 }
 
-bool AudioDriverController::selectOutputDevice(const std::string& deviceId)
+bool AudioDriverController::selectOutputDevice(const AudioDeviceID& deviceId)
 {
     IF_ASSERT_FAILED(m_audioDriver) {
         return false;
     }
 
-    const AudioDeviceID oldDeviceId = m_audioDriver->outputDevice();
-    LOGI() << "Trying to change output device"
-           << " from: " << oldDeviceId
-           << ", to: " << deviceId;
-    bool ok = m_audioDriver->selectOutputDevice(deviceId);
-    if (ok) {
+    if (!m_audioDriver->isOpened()) {
         configuration()->setAudioOutputDeviceId(deviceId);
-        updateOutputSpec();
-    } else {
-        LOGE() << "failed select device, return to old: " << oldDeviceId;
-        m_audioDriver->selectOutputDevice(oldDeviceId);
+        return true;
+    }
+
+    const IAudioDriver::Spec oldSpec = m_audioDriver->activeSpec();
+    LOGI() << "Trying to change output device"
+           << " from: " << oldSpec.deviceId
+           << ", to: " << deviceId;
+
+    IAudioDriver::Spec spec = defaultSpec();
+    spec.deviceId = deviceId;
+    spec.callback = oldSpec.callback;
+
+    m_audioDriver->close();
+    bool ok = m_audioDriver->open(spec, nullptr);
+    if (!ok) {
+        LOGE() << "failed select device, return to old: " << oldSpec.deviceId;
+        m_audioDriver->open(oldSpec, nullptr);
     }
     return ok;
 }
@@ -358,12 +364,17 @@ async::Notification AudioDriverController::outputDeviceChanged() const
 
 void AudioDriverController::checkOutputDevice()
 {
-    AudioDeviceID preferredDeviceId = configuration()->audioOutputDeviceId();
-    //! NOTE If the driver cannot open with the selected device,
-    //! it will open with the default device.
-    bool deviceChanged = m_audioDriver->selectOutputDevice(preferredDeviceId);
-    if (deviceChanged) {
-        updateOutputSpec();
+    if (!m_audioDriver->isOpened()) {
+        return;
+    }
+
+    IAudioDriver::Spec spec = m_audioDriver->activeSpec();
+    m_audioDriver->close();
+    bool ok = m_audioDriver->open(spec, nullptr);
+    if (!ok) {
+        // reset to default device
+        spec.deviceId = m_audioDriver->defaultDevice();
+        m_audioDriver->open(spec, nullptr);
     }
 }
 
@@ -377,7 +388,7 @@ void AudioDriverController::updateOutputSpec()
     rpcChannel()->send(rpc::make_request(Method::SetOutputSpec, RpcPacker::pack(activeSpec.output)));
 }
 
-std::vector<unsigned int> AudioDriverController::availableOutputDeviceBufferSizes() const
+std::vector<samples_t> AudioDriverController::availableOutputDeviceBufferSizes() const
 {
     IF_ASSERT_FAILED(m_audioDriver) {
         return {};
@@ -392,10 +403,19 @@ void AudioDriverController::changeBufferSize(samples_t samples)
     }
 
     LOGI() << "Trying to change buffer size: " << samples;
-    bool ok = m_audioDriver->setOutputDeviceBufferSize(samples);
+    bool ok = true;
+
+    if (m_audioDriver->isOpened()) {
+        IAudioDriver::Spec spec = m_audioDriver->activeSpec();
+        m_audioDriver->close();
+        spec.output.samplesPerChannel = samples;
+        ok = m_audioDriver->open(spec, &spec);
+    }
+
     if (ok) {
-        configuration()->setDriverBufferSize(samples);
         updateOutputSpec();
+        configuration()->setDriverBufferSize(samples);
+        m_outputDeviceBufferSizeChanged.notify();
     }
 }
 
@@ -404,7 +424,7 @@ async::Notification AudioDriverController::outputDeviceBufferSizeChanged() const
     return m_outputDeviceBufferSizeChanged;
 }
 
-std::vector<unsigned int> AudioDriverController::availableOutputDeviceSampleRates() const
+std::vector<sample_rate_t> AudioDriverController::availableOutputDeviceSampleRates() const
 {
     IF_ASSERT_FAILED(m_audioDriver) {
         return {};
@@ -418,12 +438,20 @@ void AudioDriverController::changeSampleRate(sample_rate_t sampleRate)
         return;
     }
 
-    LOGI() << "Trying to change sample rate: " << sampleRate;
+    LOGI() << "Trying to change sampleRate: " << sampleRate;
+    bool ok = true;
 
-    bool ok = m_audioDriver->setOutputDeviceSampleRate(sampleRate);
+    if (m_audioDriver->isOpened()) {
+        IAudioDriver::Spec spec = m_audioDriver->activeSpec();
+        m_audioDriver->close();
+        spec.output.sampleRate = sampleRate;
+        ok = m_audioDriver->open(spec, &spec);
+    }
+
     if (ok) {
-        configuration()->setSampleRate(sampleRate);
         updateOutputSpec();
+        configuration()->setSampleRate(sampleRate);
+        m_outputDeviceSampleRateChanged.notify();
     }
 }
 

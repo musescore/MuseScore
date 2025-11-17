@@ -40,8 +40,6 @@ public:
     AudioDriverController(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
-    void init();
-
     // Api
     std::vector<std::string> availableAudioApiList() const override;
 
@@ -61,20 +59,22 @@ public:
     async::Channel<IAudioDriver::Spec> activeSpecChanged() const override;
 
     AudioDeviceID outputDevice() const override;
-    bool selectOutputDevice(const std::string& deviceId) override;
+    bool selectOutputDevice(const AudioDeviceID& deviceId) override;
     async::Notification outputDeviceChanged() const override;
 
-    std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+    std::vector<samples_t> availableOutputDeviceBufferSizes() const override;
     void changeBufferSize(samples_t samples) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
 
-    std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
+    std::vector<sample_rate_t> availableOutputDeviceSampleRates() const override;
     void changeSampleRate(sample_rate_t sampleRate) override;
     async::Notification outputDeviceSampleRateChanged() const override;
 
 private:
     IAudioDriverPtr createDriver(const std::string& name) const;
     void setNewDriver(IAudioDriverPtr newDriver);
+
+    IAudioDriver::Spec defaultSpec() const;
 
     void checkOutputDevice();
     void updateOutputSpec();
