@@ -29,9 +29,14 @@ AudioEngineConfig AudioConfigurationStub::engineConfig() const
     return {};
 }
 
+std::string AudioConfigurationStub::defaultAudioApi() const
+{
+    return {};
+}
+
 std::string AudioConfigurationStub::currentAudioApi() const
 {
-    return std::string();
+    return {};
 }
 
 void AudioConfigurationStub::setCurrentAudioApi(const std::string&)

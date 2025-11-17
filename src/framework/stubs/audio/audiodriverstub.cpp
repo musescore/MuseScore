@@ -30,7 +30,12 @@ void AudioDriverStub::init()
 
 std::string AudioDriverStub::name() const
 {
-    return std::string();
+    return {};
+}
+
+AudioDeviceID AudioDriverStub::defaultDevice() const
+{
+    return {};
 }
 
 bool AudioDriverStub::open(const IAudioDriver::Spec&, IAudioDriver::Spec*)
@@ -59,26 +64,6 @@ async::Channel<AudioDriverStub::Spec> AudioDriverStub::activeSpecChanged() const
     return activeSpecChanged;
 }
 
-std::string AudioDriverStub::outputDevice() const
-{
-    return std::string();
-}
-
-bool AudioDriverStub::selectOutputDevice(const std::string&)
-{
-    return false;
-}
-
-bool AudioDriverStub::resetToDefaultOutputDevice()
-{
-    return false;
-}
-
-async::Notification AudioDriverStub::outputDeviceChanged() const
-{
-    return async::Notification();
-}
-
 AudioDeviceList AudioDriverStub::availableOutputDevices() const
 {
     return {};
@@ -89,40 +74,12 @@ async::Notification AudioDriverStub::availableOutputDevicesChanged() const
     return async::Notification();
 }
 
-bool AudioDriverStub::setOutputDeviceBufferSize(unsigned int)
-{
-    return false;
-}
-
-async::Notification AudioDriverStub::outputDeviceBufferSizeChanged() const
-{
-    return async::Notification();
-}
-
-std::vector<unsigned int> AudioDriverStub::availableOutputDeviceBufferSizes() const
+std::vector<samples_t> AudioDriverStub::availableOutputDeviceBufferSizes() const
 {
     return {};
 }
 
-bool AudioDriverStub::setOutputDeviceSampleRate(unsigned int)
-{
-    return false;
-}
-
-async::Notification AudioDriverStub::outputDeviceSampleRateChanged() const
-{
-    return async::Notification();
-}
-
-std::vector<unsigned int> AudioDriverStub::availableOutputDeviceSampleRates() const
+std::vector<sample_rate_t> AudioDriverStub::availableOutputDeviceSampleRates() const
 {
     return {};
-}
-
-void AudioDriverStub::resume()
-{
-}
-
-void AudioDriverStub::suspend()
-{
 }
