@@ -104,9 +104,11 @@ std::string MScore::errorToString(MsError err)
     case MsError::CANNOT_REMOVE_TIME_TUPLET: return "CANNOT_REMOVE_TIME_TUPLET";
     case MsError::CANNOT_REMOVE_TIME_MEASURE_REPEAT: return "CANNOT_REMOVE_TIME_MEASURE_REPEAT";
     case MsError::NO_DEST: return "NO_DEST";
+    case MsError::SOURCE_PARTIAL_TUPLET: return "SOURCE_PARTIAL_TUPLET";
     case MsError::DEST_TUPLET: return "DEST_TUPLET";
     case MsError::TUPLET_CROSSES_BAR: return "TUPLET_CROSSES_BAR";
     case MsError::DEST_LOCAL_TIME_SIGNATURE: return "DEST_LOCAL_TIME_SIGNATURE";
+    case MsError::SOURCE_PARTIAL_TREMOLO: return "SOURCE_PARTIAL_TREMOLO";
     case MsError::DEST_TREMOLO: return "DEST_TREMOLO";
     case MsError::NO_MIME: return "NO_MIME";
     case MsError::DEST_NO_CR: return "DEST_NO_CR";
