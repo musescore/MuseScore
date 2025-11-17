@@ -33,6 +33,33 @@ using namespace muse::io;
 using namespace mu::project;
 using namespace mu::engraving;
 
+// emulates QXmlStreamReader::readElementText(QXmlStreamReader::IncludeChildElements)
+static std::string readTextAndChildrenText(XmlStreamReader& reader)
+{
+    if (!reader.isStartElement()) {
+        return std::string();
+    }
+
+    std::string text;
+    while (true) {
+        switch (reader.readNext()) {
+        case XmlStreamReader::Comment:
+            break;
+        case XmlStreamReader::Characters:
+            text += reader.asciiText();
+            break;
+        case XmlStreamReader::StartElement:
+            text += readTextAndChildrenText(reader);
+            break;
+        case XmlStreamReader::EndElement:
+            return text;
+        default:
+            LOGE() << "Unexpected token: " << reader.tokenString();
+            return text;
+        }
+    }
+}
+
 RetVal<ProjectMeta> MscMetaReader::readMeta(const muse::io::path_t& filePath) const
 {
     MscReader msczReader;
@@ -366,7 +393,8 @@ std::string MscMetaReader::cutXmlTags(const std::string& str) const
 
 QString MscMetaReader::readText(XmlStreamReader& xmlReader) const
 {
-    const std::string str = xmlReader.readBody().toStdString();
+    const std::string str = readTextAndChildrenText(xmlReader);
+
     return formatFromXml(str);
 }
 
