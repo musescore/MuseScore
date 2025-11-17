@@ -40,7 +40,9 @@ bool UpdateScenarioStub::hasUpdate() const
     return false;
 }
 
-muse::Ret UpdateScenarioStub::showUpdate()
+muse::async::Promise<muse::Ret> UpdateScenarioStub::showUpdate()
 {
-    return muse::make_ok();
+    return muse::async::make_promise<Ret>([](auto, auto) {
+        return muse::async::Promise<muse::Ret>::dummy_result();
+    });
 }

@@ -309,34 +309,45 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
     } break;
     }
 
-    if (appUpdateScenario() && appUpdateScenario()->hasUpdate()) {
-        appUpdateScenario()->showUpdate();
-    }
+    const auto showWelcomeDialogAndSamplerUpdateIfNeed = [this, shouldCheckForMuseSamplerUpdate]() {
+        //! NOTE: The welcome dialog should not show if the first launch setup has not been completed, or if we're going
+        //! to show a MuseSounds update dialog (see ProjectActionsController::doFinishOpenProject). MuseSampler's update
+        //! dialog should be shown after the welcome dialog.
 
-    //! NOTE: The welcome dialog should not show if the first launch setup has not been completed, or if we're going
-    //! to show a MuseSounds update dialog (see ProjectActionsController::doFinishOpenProject). MuseSampler's update
-    //! dialog should be shown after the welcome dialog.
+        if (!configuration()->hasCompletedFirstLaunchSetup()) {
+            interactive()->open(FIRST_LAUNCH_SETUP_URI);
+            return;
+        }
 
-    if (!configuration()->hasCompletedFirstLaunchSetup()) {
-        interactive()->open(FIRST_LAUNCH_SETUP_URI);
+        const Version welcomeDialogLastShownVersion(configuration()->welcomeDialogLastShownVersion());
+        const Version currentMuseScoreVersion(configuration()->museScoreVersion());
+        if (welcomeDialogLastShownVersion < currentMuseScoreVersion) {
+            configuration()->setWelcomeDialogShowOnStartup(true); // override user preference
+            configuration()->setWelcomeDialogLastShownIndex(-1); // reset
+        }
+
+        const size_t numInstances = multiInstancesProvider()->instances().size();
+        if (numInstances == 1 && configuration()->welcomeDialogShowOnStartup() && !museSoundsUpdateScenario()->hasUpdate()) {
+            showWelcomeDialog();
+        }
+
+        if (shouldCheckForMuseSamplerUpdate) {
+            checkAndShowMuseSamplerUpdateIfNeed();
+        }
+    };
+
+    if (!appUpdateScenario() || !appUpdateScenario()->hasUpdate()) {
+        showWelcomeDialogAndSamplerUpdateIfNeed();
         return;
     }
 
-    const Version welcomeDialogLastShownVersion(configuration()->welcomeDialogLastShownVersion());
-    const Version currentMuseScoreVersion(configuration()->museScoreVersion());
-    if (welcomeDialogLastShownVersion < currentMuseScoreVersion) {
-        configuration()->setWelcomeDialogShowOnStartup(true); // override user preference
-        configuration()->setWelcomeDialogLastShownIndex(-1); // reset
-    }
-
-    const size_t numInstances = multiInstancesProvider()->instances().size();
-    if (numInstances == 1 && configuration()->welcomeDialogShowOnStartup() && !museSoundsUpdateScenario()->hasUpdate()) {
-        showWelcomeDialog();
-    }
-
-    if (shouldCheckForMuseSamplerUpdate) {
-        checkAndShowMuseSamplerUpdateIfNeed();
-    }
+    auto promise = appUpdateScenario()->showUpdate();
+    promise.onResolve(this, [showWelcomeDialogAndSamplerUpdateIfNeed](const Ret& ret) {
+        if (ret.code() == static_cast<int>(Ret::Code::Ok)) {
+            return; // OK means the user wants to close and complete installation - don't show any more dialogs...
+        }
+        showWelcomeDialogAndSamplerUpdateIfNeed();
+    });
 }
 
 void StartupScenario::checkAndShowMuseSamplerUpdateIfNeed()
