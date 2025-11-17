@@ -45,6 +45,7 @@ public:
     AudioEngineConfig engineConfig() const override;
     void onWorkerConfigChanged();
 
+    std::string defaultAudioApi() const override;
     std::string currentAudioApi() const override;
     void setCurrentAudioApi(const std::string& name) override;
     async::Notification currentAudioApiChanged() const override;

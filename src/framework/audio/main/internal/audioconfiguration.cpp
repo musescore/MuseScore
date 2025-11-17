@@ -108,6 +108,11 @@ void AudioConfiguration::onWorkerConfigChanged()
     rpcChannel()->send(rpc::make_notification(rpc::Method::EngineConfigChanged, rpc::RpcPacker::pack(engineConfig())));
 }
 
+std::string AudioConfiguration::defaultAudioApi() const
+{
+    return settings()->defaultValue(AUDIO_API_KEY).toString();
+}
+
 std::string AudioConfiguration::currentAudioApi() const
 {
     return settings()->value(AUDIO_API_KEY).toString();
