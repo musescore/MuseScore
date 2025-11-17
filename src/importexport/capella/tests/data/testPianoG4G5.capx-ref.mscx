@@ -68,11 +68,20 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <Chord>
+          <KeySig>
             <eid>H_H</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>I_I</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>I_I</eid>
+              <eid>K_K</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -87,13 +96,22 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>J_J</eid>
+            <eid>L_L</eid>
             </Clef>
+          <KeySig>
+            <eid>M_M</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>N_N</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Chord>
-            <eid>K_K</eid>
+            <eid>O_O</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>P_P</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
