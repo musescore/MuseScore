@@ -78,6 +78,8 @@ void WindowView::init()
         }
     });
 
+    resolveParentWindow();
+
     emit windowChanged();
 }
 
@@ -158,7 +160,6 @@ void WindowView::doOpen()
         return;
     }
 
-    resolveParentWindow();
     updateGeometry();
 
     beforeOpen();
