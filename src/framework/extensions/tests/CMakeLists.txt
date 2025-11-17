@@ -29,8 +29,12 @@ set(MODULE_TEST_LINK
     muse_global
     muse_ui
     muse_uicomponents
-    muse_autobot
     muse_draw
 )
+
+# Conditionally link to muse_autobot if it exists (not available in all build configurations)
+if(TARGET muse_autobot)
+    list(APPEND MODULE_TEST_LINK muse_autobot)
+endif()
 
 include(SetupGTest)
