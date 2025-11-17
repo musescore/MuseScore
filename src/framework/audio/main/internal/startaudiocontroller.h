@@ -58,7 +58,6 @@ public:
     void stopAudioProcessing() override;
 
 private:
-    IAudioDriverPtr audioDriver() const;
 
     void th_setupEngine();
 

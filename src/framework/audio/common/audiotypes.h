@@ -81,6 +81,7 @@ static constexpr samples_t MINIMUM_BUFFER_SIZE = 128;
 #endif
 
 static constexpr samples_t MAXIMUM_BUFFER_SIZE = 4096;
+static constexpr samples_t DEFAULT_BUFFER_SIZE = 1024;
 
 struct OutputSpec {
     sample_rate_t sampleRate = 0;
