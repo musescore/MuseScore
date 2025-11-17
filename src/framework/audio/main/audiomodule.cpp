@@ -120,7 +120,6 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
     }
 
     m_actionsController->init();
-    m_audioDriverController->init();
 
     // rpc
     m_rpcChannel->setupOnMain();

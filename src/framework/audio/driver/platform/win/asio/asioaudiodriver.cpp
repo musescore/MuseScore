@@ -125,7 +125,7 @@ static void s_bufferSwitch(long index, ASIOBool /*processNow*/)
     }
 
     uint8_t* stream = reinterpret_cast<uint8_t*>(&proc_buf[0]);
-    active.callback(nullptr, stream, (int)(procSamplesTotal * sizeof(float)));
+    active.callback(stream, (int)(procSamplesTotal * sizeof(float)));
 
     constexpr float MAX_S16 = 32767.0f;
     constexpr float MAX_S18 = 131071.0f;
@@ -397,23 +397,23 @@ static ASIOError create_asio_buffers(long bufferSize, long outputChannels, long 
     return ASE_OK;
 }
 
-bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
+AudioDeviceID AsioAudioDriver::defaultDevice() const
 {
-    if (m_deviceId.empty()) {
-        AudioDeviceList devices = availableOutputDevices();
-        if (devices.empty()) {
-            return false;
-        }
-        m_deviceId = devices.at(0).id;
+    AudioDeviceList devices = availableOutputDevices();
+    if (devices.empty()) {
+        return AudioDeviceID();
     }
-
-    return doOpen(m_deviceId, spec, activeSpec);
+    return devices.at(0).id;
 }
 
-bool AsioAudioDriver::doOpen(const AudioDeviceID& device, const Spec& spec, Spec* activeSpec)
+bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
-    LOGI() << "try open: " << device;
-    const char* name = device.c_str();
+    LOGI() << "try open: " << spec.deviceId;
+    IF_ASSERT_FAILED(!spec.deviceId.empty()) {
+        return false;
+    }
+
+    const char* name = spec.deviceId.c_str();
     bool ok = s_adata.drivers.loadDriver(const_cast<char*>(name));
     if (!ok) {
         LOGE() << "failed load driver: " << name;
@@ -579,53 +579,7 @@ async::Channel<AsioAudioDriver::Spec> AsioAudioDriver::activeSpecChanged() const
     return m_activeSpecChanged;
 }
 
-bool AsioAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
-{
-    bool result = true;
-
-    if (isOpened()) {
-        close();
-        Spec spec = s_adata.activeSpec;
-        spec.output.samplesPerChannel = bufferSize;
-        result = open(spec, nullptr);
-    }
-
-    if (result) {
-        m_outputDeviceBufferSizeChanged.notify();
-    }
-
-    return result;
-}
-
-async::Notification AsioAudioDriver::outputDeviceBufferSizeChanged() const
-{
-    return m_outputDeviceBufferSizeChanged;
-}
-
-bool AsioAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
-{
-    bool result = true;
-
-    if (isOpened()) {
-        close();
-        Spec spec = s_adata.activeSpec;
-        spec.output.sampleRate = sampleRate;
-        result = open(spec, nullptr);
-    }
-
-    if (result) {
-        m_outputDeviceSampleRateChanged.notify();
-    }
-
-    return result;
-}
-
-async::Notification AsioAudioDriver::outputDeviceSampleRateChanged() const
-{
-    return m_outputDeviceSampleRateChanged;
-}
-
-std::vector<unsigned int> AsioAudioDriver::availableOutputDeviceBufferSizes() const
+std::vector<samples_t> AsioAudioDriver::availableOutputDeviceBufferSizes() const
 {
     if (!isOpened()) {
         return {
@@ -637,67 +591,25 @@ std::vector<unsigned int> AsioAudioDriver::availableOutputDeviceBufferSizes() co
         };
     }
 
-    std::vector<unsigned int> result;
+    std::vector<samples_t> result;
 
     samples_t n = s_adata.deviceMetrics.maxSize;
     samples_t min = s_adata.deviceMetrics.minSize;
 
     while (n >= min) {
-        result.push_back(static_cast<unsigned int>(n));
+        result.push_back(n);
         n /= 2;
     }
 
     return result;
 }
 
-std::vector<unsigned int> AsioAudioDriver::availableOutputDeviceSampleRates() const
+std::vector<sample_rate_t> AsioAudioDriver::availableOutputDeviceSampleRates() const
 {
     return {
         44100,
         48000
     };
-}
-
-AudioDeviceID AsioAudioDriver::outputDevice() const
-{
-    return m_deviceId;
-}
-
-bool AsioAudioDriver::selectOutputDevice(const AudioDeviceID& id)
-{
-    bool result = true;
-
-    if (m_deviceId == id) {
-        return result;
-    }
-
-    m_deviceId = id;
-
-    if (isOpened()) {
-        close();
-        Spec spec = s_adata.activeSpec;
-
-        //! NOTE We are trying to open a new device with the default value;
-        //! it is not known what it was before.
-        spec.output.samplesPerChannel = DEFAULT_BUFFER_SIZE;
-        result = open(spec, nullptr);
-    }
-
-    if (result) {
-        m_outputDeviceChanged.notify();
-    }
-
-    return result;
-}
-
-bool AsioAudioDriver::resetToDefaultOutputDevice()
-{
-    return selectOutputDevice(AudioDeviceID());
-}
-
-async::Notification AsioAudioDriver::outputDeviceChanged() const
-{
-    return m_outputDeviceChanged;
 }
 
 AudioDeviceList AsioAudioDriver::availableOutputDevices() const
@@ -726,12 +638,4 @@ AudioDeviceList AsioAudioDriver::availableOutputDevices() const
 async::Notification AsioAudioDriver::availableOutputDevicesChanged() const
 {
     return m_availableOutputDevicesChanged;
-}
-
-void AsioAudioDriver::resume()
-{
-}
-
-void AsioAudioDriver::suspend()
-{
 }
