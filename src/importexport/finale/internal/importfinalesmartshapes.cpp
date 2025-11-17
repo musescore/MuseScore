@@ -634,13 +634,13 @@ void FinaleParser::importSmartShapes()
 
             auto positionSegmentFromEndPoints = [&](std::shared_ptr<smartshape::EndPointAdjustment> leftPoint, std::shared_ptr<smartshape::EndPointAdjustment> rightPoint) {
                 if (leftPoint->active) {
-                    ss->setOffset(evpuToPointF(leftPoint->horzOffset, -leftPoint->vertOffset) * ss->defaultSpatium());
+                    ss->setOffset(evpuToPointF(leftPoint->horzOffset, -leftPoint->vertOffset) * ss->spatium());
                     if (leftPoint->contextDir == smartshape::DirectionType::Under) {
                         ss->ryoffset() += staffHeight;
                     }
                 }
                 if (rightPoint->active) {
-                    ss->setUserOff2(evpuToPointF(rightPoint->horzOffset, -rightPoint->vertOffset) * ss->defaultSpatium());
+                    ss->setUserOff2(evpuToPointF(rightPoint->horzOffset, -rightPoint->vertOffset) * ss->spatium());
                     // For non-diagonal line segments, MS resets userOff2's Y component.
                     // If the left point doesn't set the value, get it from the right point instead.
                     // Points can be active but still not specify a value.
@@ -858,10 +858,10 @@ void FinaleParser::importSmartShapes()
 
         double startHook = doubleFromEvpu(beginHookLen - endingBegin->leftVPos + endingBegin->rightVPos);
         double endHook = doubleFromEvpu(endHookLen - endingBegin->endLineVPos + endingBegin->rightVPos);
-        PointF startP = evpuToPointF(leftInset + endingBegin->leftHPos, startY - endingBegin->rightVPos) * volta->defaultSpatium();
-        PointF endP = evpuToPointF(-rightInset + endingBegin->rightHPos - startP.x(), 0.0) * volta->defaultSpatium();
-        PointF textP = evpuToPointF(textPosX - 24 + endingBegin->textHPos, -endingBegin->textVPos) * volta->defaultSpatium();
-        textP.ry() += startHook * volta->defaultSpatium();
+        PointF startP = evpuToPointF(leftInset + endingBegin->leftHPos, startY - endingBegin->rightVPos) * volta->spatium();
+        PointF endP = evpuToPointF(-rightInset + endingBegin->rightHPos - startP.x(), 0.0) * volta->spatium();
+        PointF textP = evpuToPointF(textPosX - 24 + endingBegin->textHPos, -endingBegin->textVPos) * volta->spatium();
+        textP.ry() += startHook * volta->spatium();
 
         volta->setBeginHookHeight(Spatium(startHook));
         // For open voltas, inherit the starting height (but don't display it)
@@ -894,10 +894,10 @@ void FinaleParser::importSmartShapes()
                 double linkedStartHook = doubleFromEvpu(beginHookLen - indiv->y1add + indiv->y2add);
                 // MuseScore doesn't (yet?) allow for independent staff hook heights
                 // double linkedEndHook = doubleFromEvpu(endHookLen - textindiv->y2add + indiv->y2add);
-                PointF linkedStartP = evpuToPointF(leftInset + indiv->x1add, startY - indiv->y2add) * copy->defaultSpatium();
-                PointF linkedEndP = evpuToPointF(-rightInset + indiv->x2add - linkedStartP.x(), 0.0) * copy->defaultSpatium();
-                PointF linkedTextP = evpuToPointF(textPosX - 24 + textindiv->x1add, -textindiv->y1add) * copy->defaultSpatium();
-                linkedTextP.ry() += linkedStartHook * copy->defaultSpatium();
+                PointF linkedStartP = evpuToPointF(leftInset + indiv->x1add, startY - indiv->y2add) * copy->spatium();
+                PointF linkedEndP = evpuToPointF(-rightInset + indiv->x2add - linkedStartP.x(), 0.0) * copy->spatium();
+                PointF linkedTextP = evpuToPointF(textPosX - 24 + textindiv->x1add, -textindiv->y1add) * copy->spatium();
+                linkedTextP.ry() += linkedStartHook * copy->spatium();
 
                 // copy->setEndHookHeight(Spatium(linkedEndHook));
                 setAndStyleProperty(linkedVs, Pid::OFFSET, linkedStartP, true);
@@ -988,15 +988,15 @@ void FinaleParser::importSmartShapes()
         // There is no start hook or text for repeat back
         /// @todo verify these calculations
         double endHook = doubleFromEvpu(beginHookLen - endingEnd->leftVPos + endingEnd->rightVPos);
-        PointF startP = evpuToPointF(leftInset + endingEnd->leftHPos, startY - endingEnd->rightVPos) * cur->defaultSpatium();
-        PointF endP = evpuToPointF(-rightInset + endingEnd->rightHPos - startP.x(), 0.0) * cur->defaultSpatium();
+        PointF startP = evpuToPointF(leftInset + endingEnd->leftHPos, startY - endingEnd->rightVPos) * cur->spatium();
+        PointF endP = evpuToPointF(-rightInset + endingEnd->rightHPos - startP.x(), 0.0) * cur->spatium();
 
         auto voltaCompare = [endingEnd](double current, double possible) {
             // Inherit hook/position values if they are more extreme than
             // existing ones, and only if this ending is visible
             return !endingEnd->hidden && (std::abs(possible) > std::abs(current));
         };
-        if (voltaCompare(cur->endHookHeight().val(), endHook * cur->defaultSpatium())) {
+        if (voltaCompare(cur->endHookHeight().val(), endHook * cur->spatium())) {
             cur->setEndHookHeight(Spatium(endHook));
         }
         /// @todo rebase text offset
@@ -1052,10 +1052,10 @@ void FinaleParser::importSmartShapes()
                 copy->setVisible(!indiv->hidden);
                 // MuseScore doesn't (yet?) allow for independent staff hook heights
                 // double linkedEndHook = doubleFromEvpu(endHookLen - indiv->y1add + indiv->y2add);
-                PointF linkedStartP = evpuToPointF(leftInset + indiv->x1add, startY - indiv->y2add) * copy->defaultSpatium();
-                PointF linkedEndP = evpuToPointF(-rightInset + indiv->x2add - linkedStartP.x(), 0.0) * copy->defaultSpatium();
+                PointF linkedStartP = evpuToPointF(leftInset + indiv->x1add, startY - indiv->y2add) * copy->spatium();
+                PointF linkedEndP = evpuToPointF(-rightInset + indiv->x2add - linkedStartP.x(), 0.0) * copy->spatium();
 
-                // if (voltaCompare(copy->endHookHeight(), linkedEndHook * copy->defaultSpatium())) {
+                // if (voltaCompare(copy->endHookHeight(), linkedEndHook * copy->spatium())) {
                     // copy->setEndHookHeight(Spatium(linkedEndHook));
                 // }
                 if (!voltaCompare(linkedVs->offset().x(), linkedStartP.x())) {
