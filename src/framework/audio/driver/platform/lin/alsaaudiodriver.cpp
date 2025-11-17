@@ -68,7 +68,7 @@ static void* alsaThread(void* aParam)
         uint8_t* stream = (uint8_t*)data->buffer;
         int len = data->samples * data->channels * sizeof(float);
 
-        data->callback(data->userdata, stream, len);
+        data->callback(stream, len);
 
         snd_pcm_sframes_t pcm = snd_pcm_writei(data->alsaDeviceHandle, data->buffer, data->samples);
         if (pcm != -EPIPE) {
@@ -107,7 +107,6 @@ static void alsaCleanup()
 
 AlsaAudioDriver::AlsaAudioDriver()
 {
-    m_deviceId = DEFAULT_DEVICE_ID;
 }
 
 AlsaAudioDriver::~AlsaAudioDriver()
@@ -131,18 +130,26 @@ std::string AlsaAudioDriver::name() const
     return "ALSA";
 }
 
+AudioDeviceID AlsaAudioDriver::defaultDevice() const
+{
+    return DEFAULT_DEVICE_ID;
+}
+
 bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
+    IF_ASSERT_FAILED(!spec.deviceId.empty()) {
+        return false;
+    }
+
     s_alsaData = new ALSAData();
     s_alsaData->samples = spec.output.samplesPerChannel;
     s_alsaData->channels = spec.output.audioChannelCount;
     s_alsaData->callback = spec.callback;
-    s_alsaData->userdata = spec.userdata;
 
     snd_pcm_t* handle;
-    int rc = snd_pcm_open(&handle, outputDevice().c_str(), SND_PCM_STREAM_PLAYBACK, 0);
+    int rc = snd_pcm_open(&handle, spec.deviceId.c_str(), SND_PCM_STREAM_PLAYBACK, 0);
     if (rc < 0) {
-        LOGE() << "Unable to open device: " << outputDevice() << ", err code: " << rc;
+        LOGE() << "Unable to open device: " << spec.deviceId << ", err code: " << rc;
         return false;
     }
 
@@ -183,7 +190,6 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
     //_alsaData->sampleBuffer = new short[_alsaData->samples * _alsaData->channels];
 
     s_format = spec;
-    s_format.format = Format::AudioF32;
     s_format.output.sampleRate = aSamplerate;
     m_activeSpecChanged.send(s_format);
 
@@ -199,7 +205,7 @@ bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    LOGI() << "Connected to " << outputDevice()
+    LOGI() << "Connected to " << spec.deviceId
            << " with bufferSize " << s_format.output.samplesPerChannel
            << ", sampleRate " << s_format.output.sampleRate
            << ", channels:  " << s_format.output.audioChannelCount;
@@ -227,43 +233,6 @@ async::Channel<IAudioDriver::Spec> AlsaAudioDriver::activeSpecChanged() const
     return m_activeSpecChanged;
 }
 
-AudioDeviceID AlsaAudioDriver::outputDevice() const
-{
-    return m_deviceId;
-}
-
-bool AlsaAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
-{
-    if (m_deviceId == deviceId) {
-        return true;
-    }
-
-    bool reopen = isOpened();
-    close();
-    m_deviceId = deviceId;
-
-    bool ok = true;
-    if (reopen) {
-        ok = open(s_format, &s_format);
-    }
-
-    if (ok) {
-        m_outputDeviceChanged.notify();
-    }
-
-    return ok;
-}
-
-bool AlsaAudioDriver::resetToDefaultOutputDevice()
-{
-    return selectOutputDevice(DEFAULT_DEVICE_ID);
-}
-
-async::Notification AlsaAudioDriver::outputDeviceChanged() const
-{
-    return m_outputDeviceChanged;
-}
-
 AudioDeviceList AlsaAudioDriver::availableOutputDevices() const
 {
     AudioDeviceList devices;
@@ -277,38 +246,11 @@ async::Notification AlsaAudioDriver::availableOutputDevicesChanged() const
     return m_availableOutputDevicesChanged;
 }
 
-bool AlsaAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
+std::vector<samples_t> AlsaAudioDriver::availableOutputDeviceBufferSizes() const
 {
-    if (s_format.output.samplesPerChannel == bufferSize) {
-        return true;
-    }
+    std::vector<samples_t> result;
 
-    bool reopen = isOpened();
-    close();
-    s_format.output.samplesPerChannel = bufferSize;
-
-    bool ok = true;
-    if (reopen) {
-        ok = open(s_format, &s_format);
-    }
-
-    if (ok) {
-        m_bufferSizeChanged.notify();
-    }
-
-    return ok;
-}
-
-async::Notification AlsaAudioDriver::outputDeviceBufferSizeChanged() const
-{
-    return m_bufferSizeChanged;
-}
-
-std::vector<unsigned int> AlsaAudioDriver::availableOutputDeviceBufferSizes() const
-{
-    std::vector<unsigned int> result;
-
-    unsigned int n = MAXIMUM_BUFFER_SIZE;
+    samples_t n = MAXIMUM_BUFFER_SIZE;
     while (n >= MINIMUM_BUFFER_SIZE) {
         result.push_back(n);
         n /= 2;
@@ -319,34 +261,7 @@ std::vector<unsigned int> AlsaAudioDriver::availableOutputDeviceBufferSizes() co
     return result;
 }
 
-bool AlsaAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
-{
-    if (s_format.output.sampleRate == sampleRate) {
-        return true;
-    }
-
-    bool reopen = isOpened();
-    close();
-    s_format.output.sampleRate = sampleRate;
-
-    bool ok = true;
-    if (reopen) {
-        ok = open(s_format, &s_format);
-    }
-
-    if (ok) {
-        m_sampleRateChanged.notify();
-    }
-
-    return ok;
-}
-
-async::Notification AlsaAudioDriver::outputDeviceSampleRateChanged() const
-{
-    return m_sampleRateChanged;
-}
-
-std::vector<unsigned int> AlsaAudioDriver::availableOutputDeviceSampleRates() const
+std::vector<sample_rate_t> AlsaAudioDriver::availableOutputDeviceSampleRates() const
 {
     // ALSA API is not of any help to get sample rates supported by the driver.
     // (snd_pcm_hw_params_get_rate_[min|max] will return 1 to 384000 Hz)
@@ -357,12 +272,4 @@ std::vector<unsigned int> AlsaAudioDriver::availableOutputDeviceSampleRates() co
         88200,
         96000,
     };
-}
-
-void AlsaAudioDriver::resume()
-{
-}
-
-void AlsaAudioDriver::suspend()
-{
 }
