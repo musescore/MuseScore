@@ -1856,8 +1856,8 @@ void TextBase::layoutFrame(LayoutData* ldata) const
     }
 
     if (rectangle()) {
-        // make sure width >= height
-        if (ldata->frame.height() > ldata->frame.width()) {
+        // make sure width >= height, if only one row (basically: make square for single characters)
+        if (ldata->frame.height() > ldata->frame.width() && ldata->rows() == 1) {
             double w = ldata->frame.height() - ldata->frame.width();
             ldata->frame.adjust(-w * .5, 0.0, w * .5, 0.0);
         }
