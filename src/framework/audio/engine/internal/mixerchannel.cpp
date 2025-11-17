@@ -41,8 +41,7 @@ MixerChannel::MixerChannel(const TrackId trackId, const OutputSpec& outputSpec, 
     : Injectable(iocCtx), m_trackId(trackId),
     m_outputSpec(outputSpec),
     m_audioSource(std::move(source)),
-    m_getPlaybackPosition(getPlaybackPosition),
-    m_compressor(std::make_unique<dsp::Compressor>(outputSpec.sampleRate))
+    m_getPlaybackPosition(getPlaybackPosition)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 }
@@ -223,39 +222,35 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 
 void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount)
 {
-    unsigned int channelsCount = audioChannelsCount();
-    float volume = muse::db_to_linear(m_params.volume);
-    float totalSquaredSum = 0.f;
+    const unsigned int channelsCount = audioChannelsCount();
+    const float volume = muse::db_to_linear(m_params.volume);
+    float globalPeak = 0.f;
 
     for (audioch_t audioChNum = 0; audioChNum < channelsCount; ++audioChNum) {
-        float singleChannelSquaredSum = 0.f;
-
-        gain_t totalGain = dsp::balanceGain(m_params.balance, audioChNum) * volume;
+        const gain_t totalGain = dsp::balanceGain(m_params.balance, audioChNum) * volume;
+        float peak = 0.f;
 
         for (unsigned int s = 0; s < samplesCount; ++s) {
-            int idx = s * channelsCount + audioChNum;
+            const unsigned int idx = s * channelsCount + audioChNum;
+            const float resultSample = buffer[idx] * totalGain;
+            const float absSample = std::fabs(resultSample);
 
-            float resultSample = buffer[idx] * totalGain;
             buffer[idx] = resultSample;
 
-            float squaredSample = resultSample * resultSample;
-            singleChannelSquaredSum += squaredSample;
-            totalSquaredSum += squaredSample;
+            if (absSample > peak) {
+                peak = absSample;
+            }
         }
 
-        float rms = dsp::samplesRootMeanSquare(singleChannelSquaredSum, samplesCount);
-        m_audioSignalNotifier.updateSignalValues(audioChNum, rms);
+        m_audioSignalNotifier.updateSignalValues(audioChNum, peak);
+
+        if (peak > globalPeak) {
+            globalPeak = peak;
+        }
     }
 
-    m_isSilent = RealIsNull(totalSquaredSum);
+    m_isSilent = RealIsNull(globalPeak);
     m_audioSignalNotifier.notifyAboutChanges();
-
-    if (!m_compressor->isActive()) {
-        return;
-    }
-
-    float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesCount * channelsCount);
-    m_compressor->process(totalRms, buffer, channelsCount, samplesCount);
 }
 
 bool MixerChannel::isSilent() const
