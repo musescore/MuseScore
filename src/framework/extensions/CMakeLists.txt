@@ -89,3 +89,7 @@ if (QT_SUPPORT)
 endif()
 
 setup_module()
+
+if (MUSE_MODULE_EXTENSIONS_TESTS)
+    add_subdirectory(tests)
+endif()
