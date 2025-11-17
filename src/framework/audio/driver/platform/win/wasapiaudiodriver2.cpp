@@ -223,6 +223,8 @@ WasapiAudioDriver2::WasapiAudioDriver2()
 
 WasapiAudioDriver2::~WasapiAudioDriver2()
 {
+    close();
+
     if (m_data->enumerator) {
         m_data->enumerator->UnregisterEndpointNotificationCallback(m_deviceListener.get());
     }
@@ -369,23 +371,28 @@ static IAudioClient* audioClientForDevice(IMMDeviceEnumerator* enumerator, const
     return audioClient;
 }
 
+AudioDeviceID WasapiAudioDriver2::defaultDevice() const
+{
+    return m_defaultDeviceId;
+}
+
 bool WasapiAudioDriver2::open(const Spec& spec, Spec* activeSpec)
 {
     TRACEFUNC;
+
+    IF_ASSERT_FAILED(!spec.deviceId.empty()) {
+        return false;
+    }
 
     IF_ASSERT_FAILED(m_data->enumerator) {
         return false;
     }
 
-    LOGI() << "begin driver open";
+    LOGI() << "try open driver, device: " << spec.deviceId;
 
-    m_data->audioClient = audioClientForDevice(m_data->enumerator, m_deviceId);
+    m_data->audioClient = audioClientForDevice(m_data->enumerator, spec.deviceId);
     if (!m_data->audioClient) {
-        m_deviceId = m_defaultDeviceId;
-        m_data->audioClient = audioClientForDevice(m_data->enumerator, m_deviceId);
-    }
-
-    if (!m_data->audioClient) {
+        LOGE() << "failed get audio client for device: " << spec.deviceId;
         return false;
     }
 
@@ -520,8 +527,7 @@ void WasapiAudioDriver2::th_processAudioData()
                 m_surroundAudioBuffer.resize(surroundBufferDesiredSize, 0);
             }
 
-            m_activeSpec.callback(m_activeSpec.userdata,
-                                  m_surroundAudioBuffer.data(),
+            m_activeSpec.callback(m_surroundAudioBuffer.data(),
                                   (int)surroundBufferDesiredSize);
 
             for (uint32_t i = 0; i < actualFramesToRead; ++i) {
@@ -530,7 +536,7 @@ void WasapiAudioDriver2::th_processAudioData()
                 std::memset(frameStartPos + muFrameSize, 0, clientFrameSize - muFrameSize);
             }
         } else {
-            m_activeSpec.callback(m_activeSpec.userdata, data, actualFramesToRead * clientFrameSize);
+            m_activeSpec.callback(data, actualFramesToRead * clientFrameSize);
         }
     }
     m_data->renderClient->ReleaseBuffer(actualFramesToRead, 0);
@@ -539,7 +545,9 @@ void WasapiAudioDriver2::th_processAudioData()
 void WasapiAudioDriver2::close()
 {
     m_opened = false;
-    m_audioThread.join();
+    if (m_audioThread.joinable()) {
+        m_audioThread.join();
+    }
 
     m_data->releaseClient();
 }
@@ -559,43 +567,6 @@ async::Channel<IAudioDriver::Spec> WasapiAudioDriver2::activeSpecChanged() const
     return m_activeSpecChanged;
 }
 
-AudioDeviceID WasapiAudioDriver2::outputDevice() const
-{
-    return m_deviceId;
-}
-
-bool WasapiAudioDriver2::selectOutputDevice(const AudioDeviceID& id)
-{
-    bool result = true;
-
-    if (m_deviceId == id) {
-        return result;
-    }
-
-    m_deviceId = id;
-
-    if (isOpened()) {
-        close();
-        result = open(m_activeSpec, &m_activeSpec);
-    }
-
-    if (result) {
-        m_outputDeviceChanged.notify();
-    }
-
-    return result;
-}
-
-bool WasapiAudioDriver2::resetToDefaultOutputDevice()
-{
-    return selectOutputDevice(m_defaultDeviceId);
-}
-
-async::Notification WasapiAudioDriver2::outputDeviceChanged() const
-{
-    return m_outputDeviceChanged;
-}
-
 AudioDeviceList WasapiAudioDriver2::availableOutputDevices() const
 {
     return m_deviceList;
@@ -606,28 +577,9 @@ async::Notification WasapiAudioDriver2::availableOutputDevicesChanged() const
     return m_deviceListChanged;
 }
 
-bool WasapiAudioDriver2::setOutputDeviceBufferSize(unsigned int bufferSize)
+std::vector<samples_t> WasapiAudioDriver2::availableOutputDeviceBufferSizes() const
 {
-    bool result = true;
-
-    if (isOpened()) {
-        close();
-        m_activeSpec.output.samplesPerChannel = bufferSize;
-        result = open(m_activeSpec, &m_activeSpec);
-    }
-    m_outputDeviceBufferSizeChanged.notify();
-
-    return result;
-}
-
-async::Notification WasapiAudioDriver2::outputDeviceBufferSizeChanged() const
-{
-    return m_outputDeviceBufferSizeChanged;
-}
-
-std::vector<unsigned int> WasapiAudioDriver2::availableOutputDeviceBufferSizes() const
-{
-    std::vector<unsigned int> result;
+    std::vector<samples_t> result;
 
     samples_t n = MAXIMUM_BUFFER_SIZE;
     samples_t min = std::max(m_minimumPeriod, MINIMUM_BUFFER_SIZE);
@@ -640,28 +592,7 @@ std::vector<unsigned int> WasapiAudioDriver2::availableOutputDeviceBufferSizes()
     return result;
 }
 
-bool WasapiAudioDriver2::setOutputDeviceSampleRate(unsigned int sampleRate)
-{
-    bool result = true;
-
-    if (isOpened()) {
-        close();
-
-        m_activeSpec.output.sampleRate = sampleRate;
-        result = open(m_activeSpec, &m_activeSpec);
-    }
-
-    m_outputDeviceSampleRateChanged.notify();
-
-    return result;
-}
-
-async::Notification WasapiAudioDriver2::outputDeviceSampleRateChanged() const
-{
-    return m_outputDeviceSampleRateChanged;
-}
-
-std::vector<unsigned int> WasapiAudioDriver2::availableOutputDeviceSampleRates() const
+std::vector<sample_rate_t> WasapiAudioDriver2::availableOutputDeviceSampleRates() const
 {
     return {
         44100,
@@ -669,12 +600,4 @@ std::vector<unsigned int> WasapiAudioDriver2::availableOutputDeviceSampleRates()
         88200,
         96000,
     };
-}
-
-void WasapiAudioDriver2::resume()
-{
-}
-
-void WasapiAudioDriver2::suspend()
-{
 }

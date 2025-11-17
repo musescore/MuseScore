@@ -37,26 +37,22 @@ class IAudioDriver
 public:
     virtual ~IAudioDriver() = default;
 
-    enum class Format {
-        AudioF32, // float 32 bit
-        AudioS16  // short 16 bit
-    };
-
-    using Callback = std::function<void (void* userdata, uint8_t* stream, int len)>;
+    using Callback = std::function<void (uint8_t* stream, int len)>;
 
     struct Spec
     {
+        AudioDeviceID deviceId;
         OutputSpec output;
-        Format format;                // Audio data format
-        Callback callback;            // Callback that feeds the audio device
-        void* userdata;               // Userdata passed to callback (ignored for NULL callbacks).
-
-        inline bool isValid() const { return output.isValid() && callback != nullptr; }
+        Callback callback;
+        inline bool isValid() const { return output.isValid() && !deviceId.empty() && callback != nullptr; }
     };
 
     virtual void init() = 0;
 
     virtual std::string name() const = 0;
+
+    virtual AudioDeviceID defaultDevice() const = 0;
+
     virtual bool open(const Spec& spec, Spec* activeSpec) = 0;
     virtual void close() = 0;
     virtual bool isOpened() const = 0;
@@ -64,23 +60,10 @@ public:
     virtual const Spec& activeSpec() const = 0;
     virtual async::Channel<Spec> activeSpecChanged() const = 0;
 
-    virtual bool setOutputDeviceBufferSize(unsigned int bufferSize) = 0;
-    virtual async::Notification outputDeviceBufferSizeChanged() const = 0;
-    virtual bool setOutputDeviceSampleRate(unsigned int sampleRate) = 0;
-    virtual async::Notification outputDeviceSampleRateChanged() const = 0;
-    virtual std::vector<unsigned int> availableOutputDeviceBufferSizes() const = 0;
-    virtual std::vector<unsigned int> availableOutputDeviceSampleRates() const = 0;
-
-    virtual AudioDeviceID outputDevice() const = 0;
-    virtual bool selectOutputDevice(const AudioDeviceID& id) = 0;
-    virtual bool resetToDefaultOutputDevice() = 0;
-    virtual async::Notification outputDeviceChanged() const = 0;
-
+    virtual std::vector<samples_t> availableOutputDeviceBufferSizes() const = 0;
+    virtual std::vector<sample_rate_t> availableOutputDeviceSampleRates() const = 0;
     virtual AudioDeviceList availableOutputDevices() const = 0;
     virtual async::Notification availableOutputDevicesChanged() const = 0;
-
-    virtual void resume() = 0;
-    virtual void suspend() = 0;
 };
 using IAudioDriverPtr = std::shared_ptr<IAudioDriver>;
 }
