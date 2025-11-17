@@ -1914,7 +1914,16 @@ void SingleLayout::layout(VoltaSegment* item, const Context& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);
     item->setOffset(PointF());
-    item->text()->setOffset(PointF(10.0, 54.0)); //! TODO
+
+    double spatium = ctx.style().spatium();
+    double hookHeight = item->volta()->beginHookHeight().toMM(spatium);
+    if (item->text()) {
+        Text* text = item->text();
+        text->setParent(item);
+        RectF textBBox = text->ldata()->bbox().translated(text->pos());
+        text->mutldata()->moveY(hookHeight - textBBox.bottom());
+        text->mutldata()->moveX(0.5 * spatium);
+    }
 }
 
 void SingleLayout::layout(Text* item, const Context& ctx)
