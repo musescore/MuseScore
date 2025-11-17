@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,72 +22,61 @@
 #pragma once
 
 #include <memory>
-
-#include "global/async/asyncable.h"
+#include <thread>
+#include <atomic>
 
 #include "iaudiodriver.h"
 
 namespace muse::audio {
-class AudioDevicesListener;
-class WasapiAudioDriver : public IAudioDriver, public async::Asyncable
+class WasapiAudioDriver : public IAudioDriver
 {
 public:
     WasapiAudioDriver();
+    ~WasapiAudioDriver();
 
     void init() override;
 
     std::string name() const override;
+
+    AudioDeviceID defaultDevice() const override;
     bool open(const Spec& spec, Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
 
     const Spec& activeSpec() const override;
-
-    AudioDeviceID outputDevice() const override;
-    bool selectOutputDevice(const AudioDeviceID& id) override;
-    bool resetToDefaultOutputDevice() override;
-    async::Notification outputDeviceChanged() const override;
+    async::Channel<Spec> activeSpecChanged() const override;
 
     AudioDeviceList availableOutputDevices() const override;
     async::Notification availableOutputDevicesChanged() const override;
-
-    bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
-    async::Notification outputDeviceBufferSizeChanged() const override;
-
-    std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
-
-    bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
-    async::Notification outputDeviceSampleRateChanged() const override;
-    std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
-
-    void resume() override;
-    void suspend() override;
+    std::vector<samples_t> availableOutputDeviceBufferSizes() const override;
+    std::vector<sample_rate_t> availableOutputDeviceSampleRates() const override;
 
 private:
 
-    void reopen();
+    void updateAudioDeviceList();
 
-    AudioDeviceID defaultDeviceId() const;
+    void th_audioThread();
+    bool th_audioInitialize();
+    void th_processAudioData();
 
-    void updateAvailableOutputDevices();
+    struct Data;
+    std::shared_ptr<Data> m_data;
 
-    unsigned int minSupportedBufferSize() const;
-
-    bool m_isOpened = false;
-
-    AudioDeviceID m_deviceId;
-
-    mutable std::mutex m_availableOutputDevicesMutex;
-    mutable AudioDeviceList m_availableOutputDevices;
-
-    std::unique_ptr<AudioDevicesListener> m_devicesListener;
-
+    AudioDeviceID m_defaultDeviceId;
     async::Notification m_outputDeviceChanged;
-    async::Notification m_availableOutputDevicesChanged;
-    async::Notification m_outputDeviceBufferSizeChanged;
-    async::Notification m_outputDeviceSampleRateChanged;
 
-    Spec m_desiredSpec;
-    Spec m_activeSpec;
+    struct DeviceListener;
+    std::shared_ptr<DeviceListener> m_deviceListener;
+    AudioDeviceList m_deviceList;
+    async::Notification m_deviceListChanged;
+
+    std::thread m_audioThread;
+    IAudioDriver::Spec m_activeSpec;
+    async::Channel<Spec> m_activeSpecChanged;
+    uint32_t m_bufferFrames = 0;
+    samples_t m_defaultPeriod = 0;
+    samples_t m_minimumPeriod = 0;
+    std::vector<uint8_t> m_surroundAudioBuffer; //! NOTE: See #17648
+    std::atomic<bool> m_opened;
 };
 }

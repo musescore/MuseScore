@@ -38,7 +38,6 @@ struct OSXAudioDriver::Data {
     Spec format;
     AudioQueueRef audioQueue;
     Callback callback;
-    void* mUserData;
 };
 
 OSXAudioDriver::OSXAudioDriver()
@@ -49,8 +48,6 @@ OSXAudioDriver::OSXAudioDriver()
 
     initDeviceMapListener();
     updateDeviceMap();
-
-    m_deviceId = DEFAULT_DEVICE_ID;
 }
 
 OSXAudioDriver::~OSXAudioDriver()
@@ -64,7 +61,12 @@ void OSXAudioDriver::init()
 
 std::string OSXAudioDriver::name() const
 {
-    return "MUAUDIO(OSX)";
+    return "OSX";
+}
+
+muse::audio::AudioDeviceID OSXAudioDriver::defaultDevice() const
+{
+    return DEFAULT_DEVICE_ID;
 }
 
 bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
@@ -77,9 +79,11 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return 0;
     }
 
-    *activeSpec = spec;
-    activeSpec->format = Format::AudioF32;
-    m_data->format = *activeSpec;
+    if (activeSpec) {
+        *activeSpec = spec;
+    }
+
+    m_data->format = spec;
     m_activeSpecChanged.send(m_data->format);
 
     AudioStreamBasicDescription audioFormat;
@@ -88,21 +92,12 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
     audioFormat.mFramesPerPacket = 1;
     audioFormat.mChannelsPerFrame = spec.output.audioChannelCount;
     audioFormat.mReserved = 0;
-    switch (activeSpec->format) {
-    case Format::AudioF32:
-        audioFormat.mBitsPerChannel = 32;
-        audioFormat.mFormatFlags = kLinearPCMFormatFlagIsFloat;
-        break;
-    case Format::AudioS16:
-        audioFormat.mBitsPerChannel = 16;
-        audioFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
-        break;
-    }
+    audioFormat.mBitsPerChannel = 32;
+    audioFormat.mFormatFlags = kLinearPCMFormatFlagIsFloat;
     audioFormat.mBytesPerPacket = audioFormat.mBitsPerChannel * spec.output.audioChannelCount / 8;
     audioFormat.mBytesPerFrame = audioFormat.mBytesPerPacket * audioFormat.mFramesPerPacket;
 
     m_data->callback = spec.callback;
-    m_data->mUserData = spec.userdata;
 
     OSStatus result = AudioQueueNewOutput(&audioFormat, OnFillBuffer, m_data.get(), NULL, NULL, 0, &m_data->audioQueue);
     if (result != noErr) {
@@ -110,7 +105,7 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    audioQueueSetDeviceName(outputDevice());
+    audioQueueSetDeviceName(m_data->format.deviceId);
 
     AudioValueRange bufferSizeRange = { 0, 0 };
     UInt32 bufferSizeRangeSize = sizeof(AudioValueRange);
@@ -164,7 +159,9 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    LOGI() << "Connected to " << outputDevice() << " with bufferSize " << bufferSizeOut << ", sampleRate " << spec.output.sampleRate;
+    LOGI() << "Connected to " << m_data->format.deviceId
+           << " with bufferSize " << bufferSizeOut
+           << ", sampleRate " << spec.output.sampleRate;
 
     return true;
 }
@@ -214,11 +211,6 @@ AudioDeviceList OSXAudioDriver::availableOutputDevices() const
 async::Notification OSXAudioDriver::availableOutputDevicesChanged() const
 {
     return m_availableOutputDevicesChanged;
-}
-
-muse::audio::AudioDeviceID OSXAudioDriver::outputDevice() const
-{
-    return m_deviceId;
 }
 
 void OSXAudioDriver::updateDeviceMap()
@@ -306,34 +298,7 @@ void OSXAudioDriver::updateDeviceMap()
     m_availableOutputDevicesChanged.notify();
 }
 
-bool OSXAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
-{
-    if (m_data->format.output.samplesPerChannel == bufferSize) {
-        return true;
-    }
-
-    bool reopen = isOpened();
-    close();
-    m_data->format.output.samplesPerChannel = bufferSize;
-
-    bool ok = true;
-    if (reopen) {
-        ok = open(m_data->format, &m_data->format);
-    }
-
-    if (ok) {
-        m_bufferSizeChanged.notify();
-    }
-
-    return ok;
-}
-
-async::Notification OSXAudioDriver::outputDeviceBufferSizeChanged() const
-{
-    return m_bufferSizeChanged;
-}
-
-std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() const
+std::vector<samples_t> OSXAudioDriver::availableOutputDeviceBufferSizes() const
 {
     OSXAudioDeviceID osxDeviceId = this->osxDeviceId();
     AudioObjectPropertyAddress bufferFrameSizePropertyAddress = {
@@ -346,15 +311,15 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() con
     UInt32 dataSize = sizeof(AudioValueRange);
     OSStatus rangeResult = AudioObjectGetPropertyData(osxDeviceId, &bufferFrameSizePropertyAddress, 0, NULL, &dataSize, &range);
     if (rangeResult != noErr) {
-        logError("Failed to get device " + outputDevice() + " bufferFrameSize, err: ", rangeResult);
+        logError("Failed to get device " + m_data->format.deviceId + " bufferFrameSize, err: ", rangeResult);
         return {};
     }
 
-    unsigned int minimum = std::max(static_cast<samples_t>(range.mMinimum), MINIMUM_BUFFER_SIZE);
-    unsigned int maximum = std::min(static_cast<samples_t>(range.mMaximum), MAXIMUM_BUFFER_SIZE);
+    samples_t minimum = std::max(static_cast<samples_t>(range.mMinimum), MINIMUM_BUFFER_SIZE);
+    samples_t maximum = std::min(static_cast<samples_t>(range.mMaximum), MAXIMUM_BUFFER_SIZE);
 
-    std::vector<unsigned int> result;
-    for (unsigned int bufferSize = maximum; bufferSize >= minimum;) {
+    std::vector<samples_t> result;
+    for (samples_t bufferSize = maximum; bufferSize >= minimum;) {
         result.push_back(bufferSize);
         bufferSize /= 2;
     }
@@ -364,34 +329,7 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() con
     return result;
 }
 
-bool OSXAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
-{
-    if (m_data->format.output.sampleRate == sampleRate) {
-        return true;
-    }
-
-    bool reopen = isOpened();
-    close();
-    m_data->format.output.sampleRate = sampleRate;
-
-    bool ok = true;
-    if (reopen) {
-        ok = open(m_data->format, &m_data->format);
-    }
-
-    if (ok) {
-        m_sampleRateChanged.notify();
-    }
-
-    return ok;
-}
-
-async::Notification OSXAudioDriver::outputDeviceSampleRateChanged() const
-{
-    return m_sampleRateChanged;
-}
-
-std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceSampleRates() const
+std::vector<sample_rate_t> OSXAudioDriver::availableOutputDeviceSampleRates() const
 {
     return {
         44100,
@@ -463,52 +401,12 @@ muse::audio::AudioDeviceID OSXAudioDriver::defaultDeviceId() const
 
 UInt32 OSXAudioDriver::osxDeviceId() const
 {
-    AudioDeviceID deviceId = outputDevice();
+    AudioDeviceID deviceId = m_data->format.deviceId;
     if (deviceId == DEFAULT_DEVICE_ID) {
         deviceId = defaultDeviceId();
     }
 
     return QString::fromStdString(deviceId).toInt();
-}
-
-bool OSXAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId /*, unsigned int bufferSize*/)
-{
-    if (m_deviceId == deviceId) {
-        return true;
-    }
-
-    bool reopen = isOpened();
-    close();
-    m_deviceId = deviceId;
-
-    bool ok = true;
-    if (reopen) {
-        ok = open(m_data->format, &m_data->format);
-    }
-
-    if (ok) {
-        m_outputDeviceChanged.notify();
-    }
-
-    return ok;
-}
-
-bool OSXAudioDriver::resetToDefaultOutputDevice()
-{
-    return selectOutputDevice(DEFAULT_DEVICE_ID);
-}
-
-async::Notification OSXAudioDriver::outputDeviceChanged() const
-{
-    return m_outputDeviceChanged;
-}
-
-void OSXAudioDriver::resume()
-{
-}
-
-void OSXAudioDriver::suspend()
-{
 }
 
 void OSXAudioDriver::logError(const std::string message, OSStatus error)
@@ -561,6 +459,6 @@ void OSXAudioDriver::initDeviceMapListener()
 void OSXAudioDriver::OnFillBuffer(void* context, AudioQueueRef, AudioQueueBufferRef buffer)
 {
     Data* pData = (Data*)context;
-    pData->callback(pData->mUserData, (uint8_t*)buffer->mAudioData, buffer->mAudioDataByteSize);
+    pData->callback((uint8_t*)buffer->mAudioData, buffer->mAudioDataByteSize);
     AudioQueueEnqueueBuffer(pData->audioQueue, buffer, 0, NULL);
 }

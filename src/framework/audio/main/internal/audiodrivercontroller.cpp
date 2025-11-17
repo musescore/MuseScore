@@ -39,10 +39,7 @@
 #endif
 
 #ifdef Q_OS_WIN
-//#include "audio/driver/platform/win/winmmdriver.h"
-//#include "audio/driver/platform/win/wincoreaudiodriver.h"
-//#include "audio/driver/platform/win/wasapiaudiodriver.h"
-#include "audio/driver/platform/win/wasapiaudiodriver2.h"
+#include "audio/driver/platform/win/wasapiaudiodriver.h"
 #ifdef MUSE_MODULE_AUDIO_ASIO
 #include "audio/driver/platform/win/asio/asioaudiodriver.h"
 #endif
@@ -79,7 +76,7 @@ IAudioDriverPtr AudioDriverController::createDriver(const std::string& name) con
     }
 
     // required WASAPI or fallback
-    return std::shared_ptr<IAudioDriver>(new WasapiAudioDriver2());
+    return std::shared_ptr<IAudioDriver>(new WasapiAudioDriver());
 #endif
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)

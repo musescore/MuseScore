@@ -44,6 +44,9 @@ public:
     void init() override;
 
     std::string name() const override;
+
+    AudioDeviceID defaultDevice() const override;
+
     bool open(const Spec& spec, Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
@@ -51,27 +54,12 @@ public:
     const Spec& activeSpec() const override;
     async::Channel<Spec> activeSpecChanged() const override;
 
-    void resume() override;
-    void suspend() override;
-
-    AudioDeviceID outputDevice() const override;
-    bool selectOutputDevice(const AudioDeviceID& deviceId) override;
-    bool resetToDefaultOutputDevice() override;
-    async::Notification outputDeviceChanged() const override;
-
     AudioDeviceList availableOutputDevices() const override;
     async::Notification availableOutputDevicesChanged() const override;
     void updateDeviceMap();
 
-    bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
-    async::Notification outputDeviceBufferSizeChanged() const override;
-
-    std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
-
-    bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
-    async::Notification outputDeviceSampleRateChanged() const override;
-
-    std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
+    std::vector<samples_t> availableOutputDeviceBufferSizes() const override;
+    std::vector<sample_rate_t> availableOutputDeviceSampleRates() const override;
 
 private:
     static void OnFillBuffer(void* context, OpaqueAudioQueue* queue, AudioQueueBuffer* buffer);
@@ -89,12 +77,7 @@ private:
     async::Channel<Spec> m_activeSpecChanged;
     std::map<unsigned int, std::string> m_outputDevices = {}, m_inputDevices = {};
     mutable std::mutex m_devicesMutex;
-    async::Notification m_outputDeviceChanged;
     async::Notification m_availableOutputDevicesChanged;
-    AudioDeviceID m_deviceId;
-
-    async::Notification m_bufferSizeChanged;
-    async::Notification m_sampleRateChanged;
 };
 }
 #endif // MUSE_AUDIO_OSXAUDIODRIVER_H

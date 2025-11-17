@@ -29,16 +29,35 @@ class AudioDriverControllerStub : public IAudioDriverController
 {
 public:
 
-    std::string currentAudioApi() const override;
-    IAudioDriverPtr audioDriver() const override;
-    void changeAudioDriver(const std::string& name) override;
-    async::Notification audioDriverChanged() const override;
-
+    // Api
     std::vector<std::string> availableAudioApiList() const override;
 
-    void selectOutputDevice(const std::string& deviceId) override;
-    void changeBufferSize(samples_t samples) override;
-    void changeSampleRate(sample_rate_t sampleRate) override;
+    std::string currentAudioApi() const override;
+    void changeCurrentAudioApi(const std::string& name)  override;
+    async::Notification currentAudioApiChanged() const override;
+
+    // Current driver operation
+    AudioDeviceList availableOutputDevices() const override;
+    async::Notification availableOutputDevicesChanged() const override;
+
+    bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec)  override;
+    void close()  override;
+    bool isOpened() const override;
+
+    const IAudioDriver::Spec& activeSpec() const override;
+    async::Channel<IAudioDriver::Spec> activeSpecChanged() const override;
+
+    AudioDeviceID outputDevice() const override;
+    bool selectOutputDevice(const AudioDeviceID& deviceId)  override;
+    async::Notification outputDeviceChanged() const override;
+
+    std::vector<samples_t> availableOutputDeviceBufferSizes() const override;
+    void changeBufferSize(samples_t samples)  override;
+    async::Notification outputDeviceBufferSizeChanged() const override;
+
+    std::vector<sample_rate_t> availableOutputDeviceSampleRates() const override;
+    void changeSampleRate(sample_rate_t sampleRate)  override;
+    async::Notification outputDeviceSampleRateChanged() const override;
 
 private:
     mutable IAudioDriverPtr m_audioDriver;
