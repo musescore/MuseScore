@@ -1855,7 +1855,7 @@ void TextBase::layoutFrame(LayoutData* ldata) const
         ldata->frame = ldata->bbox();
     }
 
-    if (square()) {
+    if (rectangle()) {
         // make sure width >= height
         if (ldata->frame.height() > ldata->frame.width()) {
             double w = ldata->frame.height() - ldata->frame.width();
