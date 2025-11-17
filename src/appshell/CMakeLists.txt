@@ -60,38 +60,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/themespagemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/tutorialspagemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/tutorialspagemodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/preferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/preferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/preferencepageitem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/preferencepageitem.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/folderspreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/folderspreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/canvaspreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/canvaspreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/saveandpublishpreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/saveandpublishpreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/generalpreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/generalpreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/updatepreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/updatepreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/appearancepreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/appearancepreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/noteinputpreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/noteinputpreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/advancedpreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/advancedpreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/scorepreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/scorepreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/importpreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/importpreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/audiomidipreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/audiomidipreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/percussionpreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/percussionpreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/braillepreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/braillepreferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/publish/publishtoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/publish/publishtoolbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/iappmenumodelhook.h
@@ -137,7 +105,7 @@ if (NOT OS_IS_MAC)
 endif(NOT OS_IS_MAC)
 
 if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Core5Compat Qt::Quick Qt::Svg Qt::Widgets)
+    list(APPEND MODULE_LINK Qt::Quick Qt::Svg Qt::Widgets)
 endif()
 
 setup_module()

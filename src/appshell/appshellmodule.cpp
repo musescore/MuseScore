@@ -45,21 +45,6 @@
 #include "view/firstlaunchsetup/firstlaunchsetupmodel.h"
 #include "view/firstlaunchsetup/themespagemodel.h"
 #include "view/firstlaunchsetup/tutorialspagemodel.h"
-#include "view/preferences/preferencesmodel.h"
-#include "view/preferences/generalpreferencesmodel.h"
-#include "view/preferences/updatepreferencesmodel.h"
-#include "view/preferences/appearancepreferencesmodel.h"
-#include "view/preferences/folderspreferencesmodel.h"
-#include "view/preferences/noteinputpreferencesmodel.h"
-#include "view/preferences/advancedpreferencesmodel.h"
-#include "view/preferences/canvaspreferencesmodel.h"
-#include "view/preferences/saveandpublishpreferencesmodel.h"
-#include "view/preferences/scorepreferencesmodel.h"
-#include "view/preferences/importpreferencesmodel.h"
-#include "view/preferences/audiomidipreferencesmodel.h"
-#include "view/preferences/percussionpreferencesmodel.h"
-#include "view/preferences/commonaudioapiconfigurationmodel.h"
-#include "view/preferences/braillepreferencesmodel.h"
 #include "view/publish/publishtoolbarmodel.h"
 #include "view/internal/maintoolbarmodel.h"
 
@@ -123,7 +108,6 @@ void AppShellModule::resolveImports()
         ir->registerUri(Uri("musescore://welcomedialog"), ContainerMeta(ContainerType::QmlDialog, "WelcomeDialog.qml"));
         ir->registerUri(Uri("musescore://firstLaunchSetup"),
                         ContainerMeta(ContainerType::QmlDialog, "FirstLaunchSetup/FirstLaunchSetupDialog.qml"));
-        ir->registerUri(Uri("muse://preferences"), ContainerMeta(ContainerType::QmlDialog, "Preferences/PreferencesDialog.qml"));
     }
 }
 
@@ -134,22 +118,7 @@ void AppShellModule::registerResources()
 
 void AppShellModule::registerUiTypes()
 {
-    qmlRegisterType<SettingListModel>("MuseScore.Preferences", 1, 0, "SettingListModel");
-    qmlRegisterType<PreferencesModel>("MuseScore.Preferences", 1, 0, "PreferencesModel");
-    qmlRegisterType<GeneralPreferencesModel>("MuseScore.Preferences", 1, 0, "GeneralPreferencesModel");
-    qmlRegisterType<UpdatePreferencesModel>("MuseScore.Preferences", 1, 0, "UpdatePreferencesModel");
-    qmlRegisterType<AppearancePreferencesModel>("MuseScore.Preferences", 1, 0, "AppearancePreferencesModel");
-    qmlRegisterType<FoldersPreferencesModel>("MuseScore.Preferences", 1, 0, "FoldersPreferencesModel");
-    qmlRegisterType<NoteInputPreferencesModel>("MuseScore.Preferences", 1, 0, "NoteInputPreferencesModel");
-    qmlRegisterType<AdvancedPreferencesModel>("MuseScore.Preferences", 1, 0, "AdvancedPreferencesModel");
-    qmlRegisterType<CanvasPreferencesModel>("MuseScore.Preferences", 1, 0, "CanvasPreferencesModel");
-    qmlRegisterType<SaveAndPublishPreferencesModel>("MuseScore.Preferences", 1, 0, "SaveAndPublishPreferencesModel");
-    qmlRegisterType<ScorePreferencesModel>("MuseScore.Preferences", 1, 0, "ScorePreferencesModel");
-    qmlRegisterType<ImportPreferencesModel>("MuseScore.Preferences", 1, 0, "ImportPreferencesModel");
-    qmlRegisterType<AudioMidiPreferencesModel>("MuseScore.Preferences", 1, 0, "AudioMidiPreferencesModel");
-    qmlRegisterType<PercussionPreferencesModel>("MuseScore.Preferences", 1, 0, "PercussionPreferencesModel");
-    qmlRegisterType<CommonAudioApiConfigurationModel>("MuseScore.Preferences", 1, 0, "CommonAudioApiConfigurationModel");
-    qmlRegisterType<BraillePreferencesModel>("MuseScore.Preferences", 1, 0, "BraillePreferencesModel");
+    qmlRegisterType<SettingListModel>("MuseScore.AppShell", 1, 0, "SettingListModel");
 
 #if defined(Q_OS_MACOS)
     qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "PlatformAppMenuModel");
