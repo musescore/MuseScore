@@ -295,6 +295,30 @@ TEST_F(Engraving_PartsTests, createPart1)
     testPartCreation(u"part-empty");
 }
 
+TEST_F(Engraving_PartsTests, createEmptyPart)
+{
+    String sourceFileName = u"part-empty";
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + sourceFileName + u".mscx");
+    ASSERT_TRUE(score);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, sourceFileName + u"-1.mscx", PARTS_DATA_DIR + sourceFileName + u".mscx"));
+
+    TestUtils::createEmptyPart(score);
+
+    // Check that measures have correct ticks set
+    for (Excerpt* excerpt : score->excerpts()) {
+        Score* excerptScore = excerpt->excerptScore();
+        EXPECT_TRUE(excerptScore);
+        for (MeasureBase* mb = excerptScore->first(); mb; mb = mb->next()) {
+            if (mb->isMeasure()) {
+                EXPECT_GT(mb->ticks(), Fraction(0, 1));
+            }
+            if (mb->prev()) {
+                EXPECT_EQ(mb->prev()->endTick(), mb->tick());
+            }
+        }
+    }
+}
+
 TEST_F(Engraving_PartsTests, createPart2)
 {
     testPartCreation(u"part-all");

@@ -29,6 +29,7 @@ class TestUtils
 {
 public:
     static Score* createPart(MasterScore* masterScore, size_t partNumber = 0);
+    static Score* createEmptyPart(MasterScore* masterScore);
     static void createParts(MasterScore* masterScore, size_t numberOfParts);
 };
 }
