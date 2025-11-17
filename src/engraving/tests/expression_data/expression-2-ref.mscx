@@ -6,6 +6,7 @@
     <Style>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
+      <pageNumberMusicalSymbolSize>9</pageNumberMusicalSymbolSize>
       <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>

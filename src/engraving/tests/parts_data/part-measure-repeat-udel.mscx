@@ -204,6 +204,27 @@
       <fermataPosAbove x="0" y="-0.5"/>
       <fermataPosBelow x="0" y="0.5"/>
       <trillMinDistance>0.5</trillMinDistance>
+      <chordSymbolAMusicalSymbolSize>10</chordSymbolAMusicalSymbolSize>
+      <chordSymbolBMusicalSymbolSize>10</chordSymbolBMusicalSymbolSize>
+      <composerMusicalSymbolSize>10</composerMusicalSymbolSize>
+      <copyrightMusicalSymbolSize>9</copyrightMusicalSymbolSize>
+      <dynamicsMusicalSymbolSize>10</dynamicsMusicalSymbolSize>
+      <expressionMusicalSymbolSize>10</expressionMusicalSymbolSize>
+      <footerMusicalSymbolSize>9</footerMusicalSymbolSize>
+      <frameMusicalSymbolSize>10</frameMusicalSymbolSize>
+      <headerMusicalSymbolSize>9</headerMusicalSymbolSize>
+      <instrumentChangeMusicalSymbolSize>10</instrumentChangeMusicalSymbolSize>
+      <longInstrumentMusicalSymbolSize>10</longInstrumentMusicalSymbolSize>
+      <lyricistMusicalSymbolSize>10</lyricistMusicalSymbolSize>
+      <lyricsEvenMusicalSymbolSize>10</lyricsEvenMusicalSymbolSize>
+      <lyricsOddMusicalSymbolSize>10</lyricsOddMusicalSymbolSize>
+      <pageNumberMusicalSymbolSize>11</pageNumberMusicalSymbolSize>
+      <partInstrumentMusicalSymbolSize>14</partInstrumentMusicalSymbolSize>
+      <shortInstrumentMusicalSymbolSize>10</shortInstrumentMusicalSymbolSize>
+      <stickingMusicalSymbolSize>10</stickingMusicalSymbolSize>
+      <titleMusicalSymbolSize>22</titleMusicalSymbolSize>
+      <translatorMusicalSymbolSize>10</translatorMusicalSymbolSize>
+      <tupletMusicalSymbolSize>9</tupletMusicalSymbolSize>
       <defaultsVersion>301</defaultsVersion>
       <changesBeforeBarlineRepeats>1</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>1</changesBeforeBarlineOtherJumps>

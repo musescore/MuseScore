@@ -1284,9 +1284,6 @@ void TWrite::writeProperties(const TextBase* item, XmlWriter& xml, WriteContext&
             writeProperty(item, xml, spp.pid);
         }
     }
-    if (item->hasSymbolSize()) {
-        writeProperty(item, xml, Pid::MUSIC_SYMBOL_SIZE);
-    }
     for (const auto& spp : *textStyle(item->textStyleType())) {
         if (item->isStyled(spp.pid)
             || (spp.pid == Pid::FONT_SIZE && item->getProperty(spp.pid).toDouble() == TextBase::UNDEFINED_FONT_SIZE)

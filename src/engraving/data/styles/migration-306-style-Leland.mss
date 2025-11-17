@@ -26,5 +26,8 @@
     <voltaLineWidth>0.11</voltaLineWidth>
     <lyricsLineThickness>0.1</lyricsLineThickness>
     <tupletBracketWidth>0.1</tupletBracketWidth>
+    <lyricsEvenMusicalSymbolSize>11.0</lyricsEvenMusicalSymbolSize>
+    <lyricsOddMusicalSymbolSize>11.0</lyricsOddMusicalSymbolSize>
+    <pageNumberMusicalSymbolSize>9.0</pageNumberMusicalSymbolSize>
   </Style>
 </museScore>

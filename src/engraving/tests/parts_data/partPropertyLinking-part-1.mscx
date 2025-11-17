@@ -63,12 +63,11 @@
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <dynamicsSize>1.2</dynamicsSize>
             <eid>R_R</eid>
             <linkedTo>H_H</linkedTo>
             <positionLinkedToMaster>0</positionLinkedToMaster>
             <appearanceLinkedToMaster>0</appearanceLinkedToMaster>
-            <dynamicsSize>1.2</dynamicsSize>
+            <musicalSymbolsScale>1.2</musicalSymbolsScale>
             </Dynamic>
           <Chord>
             <eid>S_S</eid>

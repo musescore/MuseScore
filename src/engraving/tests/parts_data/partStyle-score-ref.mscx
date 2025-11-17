@@ -11,6 +11,7 @@
       <titleFontFace>Arial</titleFontFace>
       <titleFontSize>48</titleFontSize>
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
+      <titleMusicalSymbolSize>48</titleMusicalSymbolSize>
       <defaultsVersion>301</defaultsVersion>
       <spatium>1.364</spatium>
       </Style>

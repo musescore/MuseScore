@@ -977,3 +977,34 @@ void CompatUtils::setTextLineTextPositionFromAlign(TextLineBase* tl)
         tl->setPropertyFlags(Pid::END_TEXT_POSITION, PropertyFlags::UNSTYLED);
     }
 }
+
+void mu::engraving::compat::CompatUtils::setMusicSymbolSize470(MStyle& style)
+{
+    // Music symbols have their own point size in 4.7
+    // Initialize this to the text type's default font size
+    for (TextStyleType textStyleType : allTextStyles()) {
+        if (textStyleType == TextStyleType::REPEAT_LEFT || textStyleType == TextStyleType::REPEAT_RIGHT) {
+            continue;
+        }
+
+        const TextStyle* ts = textStyle(textStyleType);
+        Sid musicSymbolSizeSid = Sid::NOSTYLE;
+        Sid fontSizeSid = Sid::NOSTYLE;
+
+        for (size_t i = 0; i < TEXT_STYLE_SIZE; ++i) {
+            if (ts->at(i).pid == Pid::MUSIC_SYMBOL_SIZE) {
+                musicSymbolSizeSid = ts->at(i).sid;
+            }
+
+            if (ts->at(i).pid == Pid::FONT_SIZE) {
+                fontSizeSid = ts->at(i).sid;
+            }
+        }
+
+        if (musicSymbolSizeSid == Sid::NOSTYLE || fontSizeSid == Sid::NOSTYLE) {
+            continue;
+        }
+
+        style.set(musicSymbolSizeSid, style.value(fontSizeSid));
+    }
+}

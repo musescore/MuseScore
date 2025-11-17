@@ -1127,5 +1127,8 @@
     <bracketedAccidentalPadding>0</bracketedAccidentalPadding>
     <alignAccidentalsLeft>true</alignAccidentalsLeft>
     <Spatium>1.76389</Spatium>
+    <lyricsEvenMusicalSymbolSize>11.0</lyricsEvenMusicalSymbolSize>
+    <lyricsOddMusicalSymbolSize>11.0</lyricsOddMusicalSymbolSize>
+    <pageNumberMusicalSymbolSize>9.0</pageNumberMusicalSymbolSize>
     </Style>
   </museScore>

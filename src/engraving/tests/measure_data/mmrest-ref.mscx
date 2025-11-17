@@ -22,6 +22,7 @@
       <createMultiMeasureRests>1</createMultiMeasureRests>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
+      <pageNumberMusicalSymbolSize>9</pageNumberMusicalSymbolSize>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
