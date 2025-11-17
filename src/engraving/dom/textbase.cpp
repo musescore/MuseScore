@@ -2760,8 +2760,6 @@ PropertyValue TextBase::propertyDefault(Pid id) const
         return AutoOnOff::AUTO;
     case Pid::VOICE_ASSIGNMENT:
         return VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
-    case Pid::MUSIC_SYMBOL_SIZE:
-        return styleValue(Pid::FONT_SIZE, getPropertyStyle(Pid::FONT_SIZE));
     default:
         for (const auto& p : *textStyle(TextStyleType::DEFAULT)) {
             if (p.pid == id) {
@@ -3079,8 +3077,6 @@ void TextBase::initTextStyleType(TextStyleType tid)
     for (const auto& p : *textStyle(tid)) {
         setProperty(getTextPID(p.pid), styleValue(p.pid, p.sid));
     }
-
-    resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
 RectF TextBase::drag(EditData& ed)
