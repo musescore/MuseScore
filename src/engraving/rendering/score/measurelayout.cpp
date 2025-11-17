@@ -950,12 +950,9 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     Measure* measure = toMeasure(currentMB);
 
     measure->moveTicks(ctx.state().tick() - measure->tick());
+    ctx.mutState().setTick(ctx.state().tick() + measure->ticks());
 
     if (ctx.conf().isLinearMode() && (measure->tick() < ctx.state().startTick() || measure->tick() > ctx.state().endTick())) {
-        // needed to reset segment widths if they can change after measure width is computed
-        //for (Segment& s : measure->segments())
-        //      s.createShapes();
-        ctx.mutState().setTick(ctx.state().tick() + measure->ticks());
         return;
     }
 
@@ -1097,8 +1094,6 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
 
     measure->computeTicks(); // Must be called *after* Segment::createShapes() because it relies on the
     // Segment::visible() property, which is determined by Segment::createShapes().
-
-    ctx.mutState().setTick(ctx.state().tick() + measure->ticks());
 }
 
 void MeasureLayout::updateGraceNotes(Measure* measure, LayoutContext& ctx)
