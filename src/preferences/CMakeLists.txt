@@ -18,8 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(preferences)
-setup_module()
+muse_create_module(preferences)
 
 target_sources(preferences PRIVATE
     preferencesmodule.cpp

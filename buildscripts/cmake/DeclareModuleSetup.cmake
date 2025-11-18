@@ -110,6 +110,21 @@ function(muse_create_module target_name)
     endif()
 endfunction()
 
+function(muse_create_qml_module target_name)
+    set(oneValueArgs FOR)
+    cmake_parse_arguments(PARSE_ARGV 1 arg "" "${oneValueArgs}" "")
+
+    muse_create_module(${target_name} ${arg_UNPARSED_ARGUMENTS})
+    target_link_libraries(${target_name} INTERFACE ${target_name}plugin)
+
+    if (arg_FOR)
+        get_target_property(_for_dir ${arg_FOR} SOURCE_DIR)
+        target_include_directories(${target_name} PRIVATE ${_for_dir})
+        
+        target_link_libraries(${target_name} PRIVATE ${arg_FOR})
+    endif()
+endfunction()
+
 # - Creates a target and sets up common properties for Muse thirdparty modules
 function(muse_create_thirdparty_module target_name)
     set(oneValueArgs ALIAS)

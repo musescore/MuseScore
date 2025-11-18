@@ -133,7 +133,6 @@ set(LINK_LIB
     playback
     preferences
     preferences_qml
-    preferences_qmlplugin
     instrumentsscene
     musesounds
     )
