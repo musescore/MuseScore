@@ -1307,7 +1307,7 @@ void FinaleParser::importPageLayout()
                     logger()->logInfo(String(u"Adding space between systems at tick %1").arg(distTick.toString()));
                     HBox* distBox = Factory::createHBox(m_score->dummy()->system());
                     distBox->setBoxWidth(absoluteSpatiumFromEvpu(dist, distBox)); /// @todo for HBoxes: is this correct?
-                    distBox->setSizeIsSpatiumDependent(false);
+                    setAndStyleProperty(distBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
                     distBox->setTick(distMeasure->tick());
                     distBox->setNext(distMeasure);
                     distBox->setPrev(distMeasure->prev());
@@ -1339,7 +1339,7 @@ void FinaleParser::importPageLayout()
             } else {
                 HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
                 leftBox->setBoxWidth(absoluteSpatiumFromEvpu(leftStaffSystem->left, leftBox));
-                leftBox->setSizeIsSpatiumDependent(false);
+                setAndStyleProperty(leftBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
                 leftBox->setTick(startMeasure->tick());
                 leftBox->setNext(startMeasure);
                 leftBox->setPrev(startMeasure->prev());
@@ -1354,7 +1354,7 @@ void FinaleParser::importPageLayout()
         if (!muse::RealIsEqual(double(-rightStaffSystem->right), 0.0)) {
             HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
             rightBox->setBoxWidth(absoluteSpatiumFromEvpu(-rightStaffSystem->right, rightBox));
-            rightBox->setSizeIsSpatiumDependent(false); /// @todo still doesn't seem to be scaled correctly
+            setAndStyleProperty(rightBox, Pid::SIZE_SPATIUM_DEPENDENT, false); /// @todo still doesn't seem to be scaled correctly
             Fraction rightTick = endMeasure->nextMeasure() ? endMeasure->nextMeasure()->tick() : m_score->last()->endTick();
             rightBox->setTick(rightTick);
             rightBox->setNext(endMeasure->next());
