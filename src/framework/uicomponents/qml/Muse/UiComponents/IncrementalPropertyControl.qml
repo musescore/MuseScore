@@ -81,8 +81,6 @@ Item {
             if (newValue === value) {
                 return
             }
-
-            newValue = ui.df.formatReal(newValue, decimals)
         }
 
         root.valueEdited(newValue)
@@ -104,8 +102,6 @@ Item {
             if (newValue === value) {
                 return
             }
-
-            newValue = ui.df.formatReal(newValue, decimals)
         }
 
         root.valueEdited(newValue)
@@ -259,7 +255,7 @@ Item {
                 return
             }
 
-            var newVal = parseFloat(newTextValue)
+            var newVal = Number.fromLocaleString(Qt.locale(), newTextValue)
 
             if (isNaN(newVal)) {
                 newVal = 0
@@ -274,7 +270,7 @@ Item {
                 return
             }
 
-            var newVal = parseFloat(newTextValue)
+            var newVal = Number.fromLocaleString(Qt.locale(), newTextValue)
 
             if (isNaN(newVal)) {
                 newVal = 0
