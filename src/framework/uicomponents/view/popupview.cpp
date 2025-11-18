@@ -22,32 +22,32 @@
 
 #include "popupview.h"
 
+#include <QSysInfo>
+
 #if defined(Q_OS_MAC)
 #include "internal/platform/macos/macospopupviewclosecontroller.h"
 #elif defined(Q_OS_WIN)
 #include "internal/platform/win/winpopupviewclosecontroller.h"
 #endif
 
-static bool isWayland()
+static bool isLinuxKde()
 {
 #if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
     return false;
 #else
-    static int sIsWayland = -1;
-    if (sIsWayland == -1) {
-        static const QString XCB = "xcb";
+    static int sIsLinuxKde = -1;
+    if (sIsLinuxKde == -1) {
+        QString desktop = qEnvironmentVariable("XDG_CURRENT_DESKTOP").toLower();
+        QString session = qEnvironmentVariable("XDG_SESSION_DESKTOP").toLower();
 
-        QString platformName = qGuiApp->platformName();
-        if (platformName.contains(XCB)) {
-            sIsWayland = 0;
-        } else {
-            static const QString WAYLAND = "wayland";
-            QString sessionType = qEnvironmentVariable("XDG_SESSION_TYPE");
-            sIsWayland = sessionType.contains(WAYLAND) || platformName.contains(WAYLAND);
-        }
+        LOGI() << "XDG_CURRENT_DESKTOP:" << desktop;
+        LOGI() << "XDG_SESSION_DESKTOP:" << session;
+
+        sIsLinuxKde = (desktop.contains("kde") || session.contains("kde"))
+                      && QSysInfo::productType() == "ubuntu";
     }
 
-    return sIsWayland;
+    return sIsLinuxKde;
 #endif
 }
 
@@ -76,7 +76,7 @@ void PopupView::initView()
     WindowView::initView();
 
     Qt::WindowFlags flags;
-    if (isWayland()) {
+    if (isLinuxKde()) {
         flags = Qt::Popup;
     } else {
         flags = Qt::Tool
