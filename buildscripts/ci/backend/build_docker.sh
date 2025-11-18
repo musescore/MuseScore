@@ -25,10 +25,12 @@ ORIGIN_DIR=${PWD}
 ARTIFACTS_DIR=build.artifacts
 DOCKER_WORK_DIR=$ARTIFACTS_DIR/docker
 MU_VERSION=""
+INSTALL_MUSE_SOUNDS="off"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -v|--version) MU_VERSION="$2"; shift ;;
+        --install_muse_sounds) INSTALL_MUSE_SOUNDS="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -37,6 +39,8 @@ done
 if [ -z "$MU_VERSION" ]; then MU_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env); fi
 
 if [ -z "$MU_VERSION" ]; then echo "Error: Version not set"; exit 1; fi
+
+echo "INSTALL_MUSE_SOUNDS: $INSTALL_MUSE_SOUNDS"
 
 # Make MU docker files
 echo "Prepare Docker files"
@@ -48,6 +52,11 @@ cp $HERE/docker/install_mu_template.sh $DOCKER_WORK_DIR/install_mu.sh
 
 sed -i 's|x.x.x.xxxxxx|'${MU_VERSION}'|' $DOCKER_WORK_DIR/install_mu.sh
 
+if [ "$INSTALL_MUSE_SOUNDS" = "on" ]; then
+    echo "Copying Muse Sounds installation template"
+    cp $HERE/docker/install_muse_sounds_template.sh $DOCKER_WORK_DIR/install_muse_sounds.sh
+    sed -i 's|x.x.x.xxxxxx|'${MU_VERSION}'|' $DOCKER_WORK_DIR/install_muse_sounds.sh
+fi
 
 cd $DOCKER_WORK_DIR
 echo "Build Docker"

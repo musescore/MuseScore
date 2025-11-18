@@ -86,6 +86,7 @@ apt-get install -y --no-install-recommends \
 # DISTROS
 HERE="$(cd "$(dirname "$0")" && pwd)"
 bash $HERE/install_mu.sh
+bash $HERE/install_muse_sounds.sh
 
 # Google Fonts installation
 TEMP_DIR=$(mktemp -d)
