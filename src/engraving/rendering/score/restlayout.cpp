@@ -619,10 +619,15 @@ void RestLayout::checkFullMeasureRestCollisions(const System* system, LayoutCont
                 double xSegment = segment.pagePos().x() - system->pagePos().x();
                 measureShape.add(segment.staffShape(staffIdx).translated(PointF(xSegment, 0.0)));
             }
-            measureShape.remove_if([fullMeasureRest] (const ShapeElement& shapeEl) {
+            measureShape.remove_if([] (const ShapeElement& shapeEl) {
                 const EngravingItem* shapeItem = shapeEl.item();
-                return shapeItem && (shapeItem == fullMeasureRest || shapeItem->isBarLine() || shapeItem->isAccidental());
+                return shapeItem && ((shapeItem->isRest() && toRest(shapeItem)->isFullMeasureRest())
+                                     || shapeItem->isBarLine() || shapeItem->isAccidental());
             });
+
+            if (measureShape.size() == 0) {
+                continue;
+            }
 
             const double spatium = fullMeasureRest->spatium();
             const double lineDist = fullMeasureRest->staff()->lineDistance(fullMeasureRest->tick()) * spatium;
