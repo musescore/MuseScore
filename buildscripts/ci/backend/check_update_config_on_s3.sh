@@ -19,6 +19,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+trap 'echo Check and update config failed; exit 1' ERR
+
+ACCESS_USER="igorkorsukov" # For test, should be replaced with muse-bot
+ACCESS_TOKEN=$GITHUB_TOKEN
 S3_KEY=""
 S3_SECRET=""
 S3_URL="s3://convertor.musescore.org"
@@ -30,6 +34,8 @@ MU_VERSION_MAJOR_MINOR=""
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
+        -t|--token) ACCESS_TOKEN="$2"; shift ;;
+        -u|--user) ACCESS_USER="$2"; shift ;;
         --s3_key) S3_KEY="$2"; shift ;;
         --s3_secret) S3_SECRET="$2"; shift ;;
         --stage) STAGE="$2"; shift ;;
@@ -39,6 +45,27 @@ while [[ "$#" -gt 0 ]]; do
     esac
     shift
 done
+
+# Check
+echo "Login Docker"
+echo $ACCESS_TOKEN | docker login ghcr.io -u $ACCESS_USER --password-stdin
+
+echo "Pull Docker"
+docker pull ghcr.io/musescore/converter_4:${MU_VERSION}
+
+echo "Check version..."
+docker run ghcr.io/musescore/converter_4:${MU_VERSION} /musescore/convertor -v > $ARTIFACTS_DIR/conv_output.txt
+
+APP_VERSION=$(echo "$MU_VERSION" | cut -d '.' -f 1,2,3)
+CONV_OUT=$(cat $ARTIFACTS_DIR/conv_output.txt)
+if [[ "$CONV_OUT" == *"$APP_VERSION" ]]; then
+    echo "The test was successful, convertor output: $CONV_OUT, version: $APP_VERSION"
+else
+    echo "The test failed, convertor output: $CONV_OUT, version: $APP_VERSION"
+    exit 1
+fi
+
+echo "Update config..."
 
 bash ./buildscripts/ci/tools/s3_install.sh --s3_key ${S3_KEY} --s3_secret ${S3_SECRET}
 
