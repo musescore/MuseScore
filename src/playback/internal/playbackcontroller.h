@@ -165,7 +165,7 @@ private:
 
     void addSoundFlagsIfNeed(const std::vector<engraving::EngravingItem*>& selection);
 
-    void togglePlay();
+    void togglePlay(bool showErrors = true);
     void rewind(const muse::actions::ActionData& args);
     void play();
     void pause(bool select = false);
@@ -229,8 +229,8 @@ private:
     void removeFromOnlineSounds(const muse::audio::TrackId trackId);
     void listenOnlineSoundsProcessingProgress(const muse::audio::TrackId trackId);
     bool shouldShowOnlineSoundsProcessingError() const;
-    void showOnlineSoundsProcessingError();
-    void showOnlineSoundsLimitReachedError(const muse::audio::InputProcessingProgress::StatusInfo& status);
+    void showOnlineSoundsProcessingErrorAndPlay();
+    void showOnlineSoundsLimitReachedErrorIfNeed(const muse::audio::InputProcessingProgress::StatusInfo& status);
     void processOnlineSounds();
     void clearOnlineSoundsCache();
 
@@ -275,7 +275,7 @@ private:
     std::set<muse::audio::TrackId> m_onlineSoundsBeingProcessed;
     muse::async::Notification m_onlineSoundsChanged;
     muse::Progress m_onlineSoundsProcessingProgress;
-    bool m_onlineSoundsErrorDetected = false;
+    muse::Ret m_onlineSoundsProcessingRet;
 };
 }
 
