@@ -1554,13 +1554,13 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter, const PaintOpti
 
         painter->drawLine(LineF(0.0, 0.0, l, 0.0));
     } else if (glissando->glissandoType() == GlissandoType::WAVY) {
-        RectF b = item->symBbox(SymId::wiggleTrill);
-        double a  = item->symAdvance(SymId::wiggleTrill);
+        RectF b = item->symBbox(SymId::wiggleGlissando);
+        double a  = item->symAdvance(SymId::wiggleGlissando);
         int n    = static_cast<int>(l / a);          // always round down (truncate) to avoid overlap
         double x  = (l - n * a) * 0.5;     // centre line in available space
         SymIdList ids;
         for (int i = 0; i < n; ++i) {
-            ids.push_back(SymId::wiggleTrill);
+            ids.push_back(SymId::wiggleGlissando);
         }
 
         item->score()->engravingFont()->draw(ids, painter, item->magS(), PointF(x, -(b.y() + b.height() * 0.5)));
