@@ -175,10 +175,10 @@ DirectionV FinaleParser::getDirectionVForLayer(const ChordRest* cr)
     track_idx_t etrack = strack + VOICES;
     for (Segment* s = cr->measure()->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
         for (track_idx_t track = strack; track < etrack; ++track) {
+            if (track == cr->track()) {
+                continue;
+            }
             if (ChordRest* chordRest = toChordRest(s->element(track))) {
-                if (track == cr->track()) {
-                    continue;
-                }
                 if (chordRest->isFullMeasureRest() && !chordRest->visible()) {
                     continue;
                 }
@@ -721,7 +721,7 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
     if (firstEntry->isNote && firstCr->isChord()) {
         DirectionV stemDir = toChord(firstCr)->stemDirection();
         if (stemDir != DirectionV::AUTO) {
-            beam->setDirection(stemDir);
+            beam->doSetDirection(stemDir);
         }
     }
 
@@ -758,7 +758,7 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
         if (currentEntry->isNote && currentCr->isChord()) {
             DirectionV stemDir = toChord(currentCr)->stemDirection();
             if (stemDir != DirectionV::AUTO) {
-                beam->setDirection(stemDir);
+                beam->doSetDirection(stemDir);
             }
         }
     }
