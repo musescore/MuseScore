@@ -1380,10 +1380,19 @@ RectF Measure::staffPageBoundingRect(staff_idx_t staffIdx) const
 bool Measure::acceptDrop(EditData& data) const
 {
     MuseScoreView* viewer = data.view();
-    EngravingItem* e = data.dropElement;
-    staff_idx_t staffIdx = track2staff(data.track);
+    const EngravingItem* e = data.dropElement;
 
-    RectF staffRect = system()->staff(staffIdx)->bbox().translated(system()->canvasPos());
+    if (data.track == muse::nidx) {
+        return false;
+    }
+
+    const staff_idx_t staffIdx = track2staff(data.track);
+    const SysStaff* sysStaff = system()->staff(staffIdx);
+    IF_ASSERT_FAILED(sysStaff) {
+        return false;
+    }
+
+    RectF staffRect = sysStaff->bbox().translated(system()->canvasPos());
     staffRect.intersect(canvasBoundingRect());
 
     //! NOTE: Should match NotationInteraction::dragMeasureAnchorElement
