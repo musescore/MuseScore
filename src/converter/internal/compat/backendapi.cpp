@@ -686,6 +686,21 @@ muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notatio
         obj["duration"] = durObj;
     };
 
+    auto writeNotes = [](const ElementInfo::NoteList& notes, QJsonObject& obj) {
+        QJsonArray noteArray;
+
+        for (const ElementInfo::Note& note : notes) {
+            QJsonObject noteObj;
+            noteObj["name"] = note.name.toQString();
+            for (const auto& [key, val] : note.data) {
+                noteObj[key.toQString()] = val.toQString();
+            }
+            noteArray << noteObj;
+        }
+
+        obj["notes"] = noteArray;
+    };
+
     for (const auto& instrumentPair : elements) {
         QJsonArray elementArray;
 
@@ -698,7 +713,7 @@ muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notatio
             }
 
             if (!element.notes.empty()) {
-                obj["notes"] = element.notes.toQString();
+                writeNotes(element.notes, obj);
             }
 
             if (!element.duration.name.empty()) {

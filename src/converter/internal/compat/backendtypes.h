@@ -32,8 +32,15 @@ struct ElementInfo
 {
     mu::engraving::ElementType type = mu::engraving::ElementType::INVALID;
     muse::String name;
-    muse::String notes;
     std::map<muse::String, muse::Val> data;
+
+    struct Note {
+        muse::String name;
+        std::map<muse::String, muse::Val> data;
+    };
+
+    using NoteList = std::vector<Note>;
+    NoteList notes;
 
     struct Duration {
         muse::String name;
