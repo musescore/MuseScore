@@ -54,6 +54,7 @@ class ImportPreferencesModel : public QObject, public muse::Injectable, public m
     Q_PROPERTY(bool meiImportLayout READ meiImportLayout WRITE setMeiImportLayout NOTIFY meiImportLayoutChanged)
 
     Q_PROPERTY(int currentShortestNote READ currentShortestNote WRITE setCurrentShortestNote NOTIFY currentShortestNoteChanged)
+    Q_PROPERTY(bool roundTempo READ roundTempo WRITE setRoundTempo NOTIFY roundTempoChanged)
 
     Q_PROPERTY(
         bool needAskAboutApplyingNewStyle READ needAskAboutApplyingNewStyle WRITE setNeedAskAboutApplyingNewStyle NOTIFY needAskAboutApplyingNewStyleChanged)
@@ -85,6 +86,7 @@ public:
     bool inferTextType() const;
 
     int currentShortestNote() const;
+    bool roundTempo() const;
 
     bool needAskAboutApplyingNewStyle() const;
 
@@ -100,6 +102,7 @@ public slots:
     void setInferTextType(bool value);
 
     void setCurrentShortestNote(int note);
+    void setRoundTempo(bool round);
 
     void setNeedAskAboutApplyingNewStyle(bool value);
 
@@ -113,6 +116,7 @@ signals:
     void needUseDefaultFontChanged(bool needUseDefaultFont);
     void inferTextTypeChanged(bool inferTextType);
     void currentShortestNoteChanged(int currentShortestNote);
+    void roundTempoChanged(bool round);
     void needAskAboutApplyingNewStyleChanged(bool needAskAboutApplyingNewStyle);
     void meiImportLayoutChanged(bool importLayout);
 };

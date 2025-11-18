@@ -122,11 +122,17 @@ PreferencesPage {
             shortestNotes: importPreferencesModel.shortestNotes()
             currentShortestNote: importPreferencesModel.currentShortestNote
 
+            roundTempo: importPreferencesModel.roundTempo
+
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 4
 
             onCurrentShortestNoteChangeRequested: function(note) {
                 importPreferencesModel.currentShortestNote = note
+            }
+
+            onRoundTempoChangeRequested: function(round) {
+                importPreferencesModel.roundTempo = round
             }
 
             onFocusChanged: {

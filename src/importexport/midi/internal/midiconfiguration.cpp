@@ -34,12 +34,18 @@ using namespace mu::iex::midi;
 static const Settings::Key SHORTEST_NOTE_KEY("iex_midi", "io/midi/shortestNote");
 static const Settings::Key EXPORTRPNS_KEY("iex_midi", "io/midi/exportRPNs");
 static const Settings::Key EXPAND_REPEATS_KEY("iex_midi", "io/midi/expandRepeats");
+static const Settings::Key ROUND_TEMPO_KEY("iex_midi", "io/midi/roundTempo");
 
 void MidiConfiguration::init()
 {
     settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(mu::engraving::Constants::DIVISION / 4));
     settings()->valueChanged(SHORTEST_NOTE_KEY).onReceive(this, [this](const Val& val) {
         m_midiShortestNoteChanged.send(val.toInt());
+    });
+
+    settings()->setDefaultValue(ROUND_TEMPO_KEY, Val(true));
+    settings()->valueChanged(ROUND_TEMPO_KEY).onReceive(this, [this](const Val& val) {
+        m_roundTempoChanged.send(val.toBool());
     });
 
     settings()->setDefaultValue(EXPAND_REPEATS_KEY, Val(true));
@@ -59,6 +65,21 @@ void MidiConfiguration::setMidiShortestNote(int ticks)
 async::Channel<int> MidiConfiguration::midiShortestNoteChanged() const
 {
     return m_midiShortestNoteChanged;
+}
+
+bool MidiConfiguration::roundTempo() const
+{
+    return settings()->value(ROUND_TEMPO_KEY).toBool();
+}
+
+void MidiConfiguration::setRoundTempo(bool round)
+{
+    settings()->setSharedValue(ROUND_TEMPO_KEY, Val(round));
+}
+
+async::Channel<bool> MidiConfiguration::roundTempoChanged() const
+{
+    return m_roundTempoChanged;
 }
 
 void MidiConfiguration::setMidiImportOperationsFile(const std::optional<muse::io::path_t>& filePath) const
