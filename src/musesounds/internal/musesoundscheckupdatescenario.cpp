@@ -70,7 +70,7 @@ muse::async::Promise<Ret> MuseSoundsCheckUpdateScenario::checkForUpdate(bool man
             };
 
             if (!res.ret) {
-                LOGE() << "Unable to check for update, error: " << res.ret.toString();
+                LOGE() << "Unable to check for MuseSounds update, error: " << res.ret.toString();
                 ret = muse::make_ret(Ret::Code::UnknownError);
                 return;
             }

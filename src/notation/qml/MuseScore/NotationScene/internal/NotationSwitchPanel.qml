@@ -111,7 +111,7 @@ Rectangle {
                 }
 
                 onCloseRequested: {
-                    notationSwitchModel.closeNotation(index)
+                    Qt.callLater(notationSwitchModel.closeNotation, index)
                 }
 
                 onContextMenuItemsRequested: {
