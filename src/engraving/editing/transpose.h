@@ -31,7 +31,6 @@ namespace mu::engraving {
 class Transpose
 {
 public:
-    static bool transpose(Score* score, Note* n, Interval interval, bool useDoubleSharpsFlats);
     static bool transpose(Score* score, TransposeMode mode, TransposeDirection direction, Key trKey, int transposeInterval, bool trKeys,
                           bool transposeChordNames, bool useDoubleSharpsFlats);
     static void transposeKeys(Score* score, staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& ts, const Fraction& tickEnd,

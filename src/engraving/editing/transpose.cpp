@@ -36,32 +36,6 @@
 
 using namespace mu::engraving;
 
-//---------------------------------------------------------
-//   transpose
-//    return false on failure
-//---------------------------------------------------------
-
-bool Transpose::transpose(Score* score, Note* n, Interval interval, bool useDoubleSharpsFlats)
-{
-    int npitch = n->pitch() + interval.chromatic;
-    if (!pitchIsValid(npitch)) {
-        return false;
-    }
-    int ntpc1 = transposeTpc(n->tpc1(), interval, useDoubleSharpsFlats);
-    int ntpc2 = ntpc1;
-    if (n->transposition()) {
-        if (n->staff()) {
-            Interval v = n->staff()->transpose(n->tick());
-            v.flip();
-            ntpc2 = transposeTpc(ntpc1, v, useDoubleSharpsFlats);
-        } else {
-            ntpc2 = transposeTpc(n->tpc2(), interval, useDoubleSharpsFlats);
-        }
-    }
-    score->undoChangePitch(n, npitch, ntpc1, ntpc2);
-    return true;
-}
-
 bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection direction, Key trKey, int transposeInterval, bool trKeys,
                           bool transposeChordNames, bool useDoubleSharpsFlats)
 {
@@ -139,7 +113,7 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
                 if (mode == TransposeMode::DIATONICALLY) {
                     note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                 } else {
-                    if (!transpose(score, note, interval, useDoubleSharpsFlats)) {
+                    if (!note->transpose(interval, useDoubleSharpsFlats)) {
                         result = false;
                         continue;
                     }
@@ -245,19 +219,24 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
                     }
                     Note* note = nl.at(noteIdx);
                     if (mode == TransposeMode::DIATONICALLY) {
-                        note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
+                        if (!note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats)) {
+                            result = false;
+                        }
                         continue;
                     }
-                    if (!transpose(score, note, interval, useDoubleSharpsFlats)) {
+                    if (!note->transpose(interval, useDoubleSharpsFlats)) {
                         result = false;
                     }
                 }
                 for (Chord* g : chord->graceNotes()) {
                     for (Note* n : g->notes()) {
                         if (mode == TransposeMode::DIATONICALLY) {
-                            n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
+                            if (!n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats)) {
+                                result = false;
+                                continue;
+                            }
                         } else {
-                            if (!transpose(score, n, interval, useDoubleSharpsFlats)) {
+                            if (!n->transpose(interval, useDoubleSharpsFlats)) {
                                 result = false;
                                 continue;
                             }

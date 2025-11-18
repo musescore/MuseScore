@@ -3939,7 +3939,7 @@ int Note::stringOrLine() const
 //   Note::transposeDiatonic
 //---------------------------------------------------------
 
-void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals)
+bool Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals)
 {
     // compute note current absolute step
     int alter;
@@ -3950,6 +3950,10 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
     // get pitch and tcp corresponding to unaltered degree for this key
     int newPitch = absStep2pitchByKey(absStep + interval, key);
     int newTpc   = step2tpcByKey((absStep + interval) % STEP_DELTA_OCTAVE, key);
+
+    if (!pitchIsValid(newPitch)) {
+        return false;
+    }
 
     // if required, transfer original degree alteration to new pitch and tpc
     if (keepAlterations) {
@@ -3976,5 +3980,27 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
 
     // store new data
     score()->undoChangePitch(this, newPitch, newTpc1, newTpc2);
+    return true;
+}
+
+bool Note::transpose(Interval interval, bool useDoubleSharpsFlats)
+{
+    int npitch = pitch() + interval.chromatic;
+    if (!pitchIsValid(npitch)) {
+        return false;
+    }
+    int ntpc1 = Transpose::transposeTpc(tpc1(), interval, useDoubleSharpsFlats);
+    int ntpc2 = ntpc1;
+    if (transposition()) {
+        if (staff()) {
+            Interval v = staff()->transpose(tick());
+            v.flip();
+            ntpc2 = Transpose::transposeTpc(ntpc1, v, useDoubleSharpsFlats);
+        } else {
+            ntpc2 = Transpose::transposeTpc(tpc2(), interval, useDoubleSharpsFlats);
+        }
+    }
+    score()->undoChangePitch(this, npitch, ntpc1, ntpc2);
+    return true;
 }
 }
