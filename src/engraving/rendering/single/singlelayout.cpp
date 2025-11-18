@@ -2042,7 +2042,7 @@ void SingleLayout::layout1TextBase(const TextBase* item, const Context&, TextBas
 void SingleLayout::layoutLine(SLine* item, const Context& ctx)
 {
     if (item->spannerSegments().empty()) {
-        item->setLen(ctx.style().spatium() * 7);
+        item->setLen(ctx.style().spatium() * 8);
     }
 
     LineSegment* lineSegm = item->frontSegment();

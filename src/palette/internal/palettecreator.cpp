@@ -267,12 +267,9 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
         HairpinType::DIM_HAIRPIN,
     };
 
-    const qreal w = gpaletteScore->style().spatium() * 8;
-
     for (HairpinType hairpinType : hairpins) {
         auto hairpin = Factory::makeHairpin(gpaletteScore->dummy());
         hairpin->setHairpinType(hairpinType);
-        hairpin->setLen(w);
         qreal mag = (hairpinType == HairpinType::CRESC_LINE || hairpinType == HairpinType::DIM_LINE) ? 1 : 0.9;
         const QPointF offset = (hairpinType == HairpinType::CRESC_LINE || hairpinType == HairpinType::DIM_LINE)
                                ? QPointF(1, 0.25) : QPointF(0, 0);
@@ -478,7 +475,6 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
     qreal w = gpaletteScore->style().spatium() * 8;
     auto volta = makeElement<Volta>(gpaletteScore);
     volta->setVoltaType(Volta::Type::CLOSED);
-    volta->setLen(w);
     volta->setText(u"1.");
     std::vector<int> il;
     il.push_back(1);
@@ -487,7 +483,6 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 
     volta = makeElement<Volta>(gpaletteScore);
     volta->setVoltaType(Volta::Type::OPEN);
-    volta->setLen(w);
     volta->setText(u"2.");
     il.clear();
     il.push_back(2);
@@ -496,7 +491,6 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 
     volta = makeElement<Volta>(gpaletteScore);
     volta->setVoltaType(Volta::Type::CLOSED);
-    volta->setLen(w);
     volta->setText(u"2.");
     il.clear();
     il.push_back(2);
@@ -505,7 +499,6 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 
     volta = makeElement<Volta>(gpaletteScore);
     volta->setVoltaType(Volta::Type::CLOSED);
-    volta->setLen(w);
     volta->setText(u"3.");
     il.clear();
     il.push_back(3);
@@ -515,12 +508,10 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
     if (!defaultPalette) {
         auto vibrato = makeElement<Vibrato>(gpaletteScore);
         vibrato->setVibratoType(VibratoType::VIBRATO_SAWTOOTH);
-        vibrato->setLen(w);
         sp->appendElement(vibrato, TConv::userName(VibratoType::VIBRATO_SAWTOOTH));
 
         vibrato = makeElement<Vibrato>(gpaletteScore);
         vibrato->setVibratoType(VibratoType::VIBRATO_SAWTOOTH_WIDE);
-        vibrato->setLen(w);
         sp->appendElement(vibrato, TConv::userName(VibratoType::VIBRATO_SAWTOOTH_WIDE));
     }
 
@@ -842,7 +833,6 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
     for (TrillType trillType : trillTypes) {
         auto trill = makeElement<Trill>(gpaletteScore);
         trill->setTrillType(trillType);
-        trill->setLen(gpaletteScore->style().spatium() * 8);
 
         qreal mag = (trillType == TrillType::TRILL_LINE || trillType == TrillType::PRALLPRALL_LINE) ? 1.0 : 0.8;
         sp->appendElement(trill, TConv::userName(trillType), mag);
@@ -1147,8 +1137,6 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    qreal w = gpaletteScore->style().spatium() * 8;
-
     auto slur = Factory::makeSlur(gpaletteScore->dummy());
     sp->appendElement(slur, QT_TRANSLATE_NOOP("palette", "Slur"));
 
@@ -1162,13 +1150,11 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     for (HairpinType hairpinType : hairpins) {
         auto hairpin = Factory::makeHairpin(gpaletteScore->dummy());
         hairpin->setHairpinType(hairpinType);
-        hairpin->setLen(w);
         sp->appendElement(hairpin, hairpin->subtypeUserName());
     }
 
     auto volta = makeElement<Volta>(gpaletteScore);
     volta->setVoltaType(Volta::Type::CLOSED);
-    volta->setLen(w);
     volta->setText(u"1.");
     std::vector<int> il;
     il.push_back(1);
@@ -1178,7 +1164,6 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     if (!defaultPalette) {
         volta = makeElement<Volta>(gpaletteScore);
         volta->setVoltaType(Volta::Type::CLOSED);
-        volta->setLen(w);
         volta->setText(u"2.");
         il.clear();
         il.push_back(2);
@@ -1187,7 +1172,6 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
         volta = makeElement<Volta>(gpaletteScore);
         volta->setVoltaType(Volta::Type::CLOSED);
-        volta->setLen(w);
         volta->setText(u"3.");
         il.clear();
         il.push_back(3);
@@ -1197,7 +1181,6 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
     volta = makeElement<Volta>(gpaletteScore);
     volta->setVoltaType(Volta::Type::OPEN);
-    volta->setLen(w);
     volta->setText(u"2.");
     il.clear();
     il.push_back(2);
@@ -1220,13 +1203,11 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     for (OttavaType ottavaType : defaultPalette ? ottavasDefault : ottavasMaster) {
         auto ottava = makeElement<Ottava>(gpaletteScore);
         ottava->setOttavaType(ottavaType);
-        ottava->setLen(w);
         ottava->styleChanged();
         sp->appendElement(ottava, ottava->subtypeUserName());
     }
 
     auto pedal = makeElement<Pedal>(gpaletteScore);
-    pedal->setLen(w);
     pedal->setEndHookType(HookType::HOOK_90);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
     pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
@@ -1234,7 +1215,6 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
-    pedal->setLen(w);
     pedal->setLineVisible(false);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
     pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
@@ -1242,7 +1222,6 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and asterisk)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
-    pedal->setLen(w);
     pedal->setBeginHookType(HookType::HOOK_90);
     pedal->setEndHookType(HookType::HOOK_90);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
@@ -1252,7 +1231,6 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
     if (!defaultPalette) {
         pedal = makeElement<Pedal>(gpaletteScore);
-        pedal->setLen(w);
         pedal->setBeginHookType(HookType::HOOK_90);
         pedal->setEndHookType(HookType::HOOK_45);
         pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
@@ -1261,7 +1239,6 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
         sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled end hook)"));
 
         pedal = makeElement<Pedal>(gpaletteScore);
-        pedal->setLen(w);
         pedal->setBeginHookType(HookType::HOOK_45);
         pedal->setEndHookType(HookType::HOOK_45);
         pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
@@ -1270,7 +1247,6 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
         sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (both hooks angled)"));
 
         pedal = makeElement<Pedal>(gpaletteScore);
-        pedal->setLen(w);
         pedal->setBeginHookType(HookType::HOOK_45);
         pedal->setEndHookType(HookType::HOOK_90);
         pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
@@ -1290,32 +1266,28 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     for (TrillType trillType : defaultPalette ? defaultTrills : trillTypes) {
         auto trill = makeElement<Trill>(gpaletteScore);
         trill->setTrillType(trillType);
-        trill->setLen(w);
         sp->appendElement(trill, TConv::userName(trillType));
     }
 
     auto staffTextLine = makeElement<TextLine>(gpaletteScore);
-    staffTextLine->setLen(w);
     staffTextLine->setBeginText(u"Staff");
     staffTextLine->setEndHookType(HookType::HOOK_90);
     sp->appendElement(staffTextLine, QT_TRANSLATE_NOOP("palette", "Staff text line"));
 
     auto systemTextLine = makeElement<TextLine>(gpaletteScore, true);
-    systemTextLine->setLen(w * 1.5);
+    systemTextLine->setLen(12 * gpaletteScore->style().spatium());
     systemTextLine->setBeginText(u"System");
     systemTextLine->setEndHookType(HookType::HOOK_90);
     sp->appendElement(systemTextLine, QT_TRANSLATE_NOOP("palette", "System text line"));
 
     if (!defaultPalette) {
         auto textLine = makeElement<TextLine>(gpaletteScore);
-        textLine->setLen(w);
         textLine->setBeginText(u"VII");
         textLine->setEndHookType(HookType::HOOK_90);
         sp->appendElement(textLine, QT_TRANSLATE_NOOP("palette", "Text line"));
     }
 
     auto line = makeElement<TextLine>(gpaletteScore);
-    line->setLen(w);
     line->setDiagonal(true);
     sp->appendElement(line, QT_TRANSLATE_NOOP("palette", "Line"));
 
@@ -1325,7 +1297,6 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     sp->appendElement(a, QT_TRANSLATE_NOOP("palette", "Ambitus"));
 
     auto letRing = makeElement<LetRing>(gpaletteScore);
-    letRing->setLen(w);
     sp->appendElement(letRing, QT_TRANSLATE_NOOP("palette", "Let ring"));
 
     static const std::vector<VibratoType> vibratoTable = {
@@ -1340,12 +1311,10 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     for (VibratoType vibratoType : defaultPalette ? defaultVibratoTable : vibratoTable) {
         auto vibrato = makeElement<Vibrato>(gpaletteScore);
         vibrato->setVibratoType(vibratoType);
-        vibrato->setLen(w);
         sp->appendElement(vibrato, TConv::userName(vibratoType));
     }
 
     auto pm = makeElement<PalmMute>(gpaletteScore);
-    pm->setLen(w);
     sp->appendElement(pm, QT_TRANSLATE_NOOP("palette", "Palm mute"));
 
     return sp;
@@ -1525,9 +1494,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     st->setXmlText(QT_TRANSLATE_NOOP("palette", "Staff text"));
     sp->appendElement(st, QT_TRANSLATE_NOOP("palette", "Staff text"))->setElementTranslated(true);
 
-    qreal w = gpaletteScore->style().spatium() * 8;
     auto staffTextLine = makeElement<TextLine>(gpaletteScore);
-    staffTextLine->setLen(w);
     staffTextLine->setBeginText(u"Staff");
     staffTextLine->setEndHookType(HookType::HOOK_90);
     sp->appendElement(staffTextLine, QT_TRANSLATE_NOOP("palette", "Staff text line"));
@@ -1537,7 +1504,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "System text"))->setElementTranslated(true);
 
     auto systemTextLine = makeElement<TextLine>(gpaletteScore, true);
-    systemTextLine->setLen(w * 1.5);
+    systemTextLine->setLen(12 * gpaletteScore->style().spatium());
     systemTextLine->setBeginText(u"System");
     systemTextLine->setEndHookType(HookType::HOOK_90);
     sp->appendElement(systemTextLine, QT_TRANSLATE_NOOP("palette", "System text line"));
@@ -1758,20 +1725,15 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    qreal w = gpaletteScore->style().spatium() * 8;
-
     auto capoLine = makeElement<TextLine>(gpaletteScore);
-    capoLine->setLen(w);
     capoLine->setBeginText(u"VII");
     capoLine->setEndHookType(HookType::HOOK_90);
     sp->appendElement(capoLine, QT_TRANSLATE_NOOP("palette", "Barré line"), 0.8);
 
     auto pm = makeElement<PalmMute>(gpaletteScore);
-    pm->setLen(w);
     sp->appendElement(pm, QT_TRANSLATE_NOOP("palette", "Palm mute"), 0.8);
 
     auto letRing = makeElement<LetRing>(gpaletteScore);
-    letRing->setLen(w);
     sp->appendElement(letRing, QT_TRANSLATE_NOOP("palette", "Let ring"), 0.8);
 
     auto tb = Factory::makeTremoloBar(gpaletteScore->dummy());
@@ -1787,7 +1749,6 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     for (VibratoType vibratoType : vibratos) {
         auto vibrato = makeElement<Vibrato>(gpaletteScore);
         vibrato->setVibratoType(vibratoType);
-        vibrato->setLen(gpaletteScore->style().spatium() * 8);
         sp->appendElement(vibrato, TConv::userName(vibratoType));
     }
 
@@ -1883,10 +1844,7 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     sp->setGridSize(73, 30);
     sp->setDrawGrid(true);
 
-    qreal w = gpaletteScore->style().spatium() * 8;
-
     auto pedal = makeElement<Pedal>(gpaletteScore);
-    pedal->setLen(w);
     pedal->setLineVisible(false);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
     pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
@@ -1894,7 +1852,6 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and asterisk)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
-    pedal->setLen(w);
     pedal->setEndHookType(HookType::HOOK_90);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
     pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
@@ -1902,7 +1859,6 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
-    pedal->setLen(w);
     pedal->setBeginHookType(HookType::HOOK_90);
     pedal->setEndHookType(HookType::HOOK_90);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
@@ -1911,7 +1867,6 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (straight hooks)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
-    pedal->setLen(w);
     pedal->setBeginHookType(HookType::HOOK_90);
     pedal->setEndHookType(HookType::HOOK_45);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
@@ -1920,7 +1875,6 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled end hook)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
-    pedal->setLen(w);
     pedal->setBeginHookType(HookType::HOOK_45);
     pedal->setEndHookType(HookType::HOOK_45);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
@@ -1929,7 +1883,6 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (both hooks angled)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
-    pedal->setLen(w);
     pedal->setBeginHookType(HookType::HOOK_45);
     pedal->setEndHookType(HookType::HOOK_90);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
@@ -1968,7 +1921,6 @@ PalettePtr PaletteCreator::newPitchPalette(bool defaultPalette)
     for (OttavaType ottavaType : defaultPalette ? ottavasDefault : ottavasMaster) {
         auto ottava = makeElement<Ottava>(gpaletteScore);
         ottava->setOttavaType(ottavaType);
-        ottava->setLen(gpaletteScore->style().spatium() * 8);
         ottava->styleChanged();
         sp->appendElement(ottava, ottava->subtypeUserName());
     }
