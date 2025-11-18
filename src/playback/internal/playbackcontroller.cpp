@@ -1433,13 +1433,26 @@ void PlaybackController::processOnlineSounds()
 
 void PlaybackController::clearOnlineSoundsCache()
 {
-    IF_ASSERT_FAILED(playback()) {
-        return;
-    }
+    auto promise = interactive()->warning(
+        muse::trc("playback", "Are you sure you want to clear online sounds cache?"),
+        muse::trc("playback", "This will delete online sounds data stored on your computer for this score. "
+                              "Online sounds processing will try to restart immediately."),
+        { IInteractive::Button::Ok, IInteractive::Button::Cancel },
+        IInteractive::Button::Ok);
 
-    for (const auto& pair : m_onlineSounds) {
-        playback()->clearCache(m_currentSequenceId, pair.first);
-    }
+    promise.onResolve(this, [this](const IInteractive::Result& res) {
+        if (!res.isButton(IInteractive::Button::Ok)) {
+            return;
+        }
+
+        IF_ASSERT_FAILED(playback()) {
+            return;
+        }
+
+        for (const auto& pair : m_onlineSounds) {
+            playback()->clearCache(m_currentSequenceId, pair.first);
+        }
+    });
 }
 
 void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceId)
