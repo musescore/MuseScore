@@ -34,12 +34,18 @@ static const muse::String CONVERTER_DATA_DIR("data/");
 class Converter_ScoreElementsTests : public ::testing::Test
 {
 public:
-    ElementInfo makeInfo(ElementType type, const String& name = u"", const String& notes = u"") const
+    ElementInfo makeInfo(ElementType type, const String& name = u"", const StringList& notes = {}) const
     {
         ElementInfo info;
         info.type = type;
         info.name = name;
-        info.notes = notes;
+
+        info.notes.reserve(notes.size());
+        for (const String& name : notes) {
+            ElementInfo::Note note;
+            note.name = name;
+            info.notes.push_back(note);
+        }
 
         return info;
     }
@@ -61,15 +67,15 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
     expectedList.emplace_back(makeInfo(ElementType::CLEF, u"Treble clef"));
     expectedList.emplace_back(makeInfo(ElementType::KEYSIG, u"C major / A minor"));
     expectedList.emplace_back(makeInfo(ElementType::TIMESIG, u"4/4 time"));
-    expectedList.emplace_back(makeInfo(ElementType::ARPEGGIO, u"Up arpeggio", u"C5 E5 G5 B5"));
-    expectedList.emplace_back(makeInfo(ElementType::CHORD, u"", u"C5 E5 G5 B5"));
-    expectedList.emplace_back(makeInfo(ElementType::TREMOLO_SINGLECHORD, u"32nd through stem", u"F4 A4 C5"));
+    expectedList.emplace_back(makeInfo(ElementType::ARPEGGIO, u"Up arpeggio", { u"C5", u"E5", u"G5", u"B5" }));
+    expectedList.emplace_back(makeInfo(ElementType::CHORD, u"", { u"C5", u"E5", u"G5", u"B5" }));
+    expectedList.emplace_back(makeInfo(ElementType::TREMOLO_SINGLECHORD, u"32nd through stem", { u"F4", u"A4", u"C5" }));
     expectedList.emplace_back(makeInfo(ElementType::REST));
 
     // 2nd measure
     expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
-    expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", u"A4 E5"));
-    expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", u"A4 E5"));
+    expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", { u"A4", u"E5" }));
+    expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", { u"A4", u"E5" }));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"C5"));
     expectedList.emplace_back(makeInfo(ElementType::REST));
 
@@ -112,8 +118,16 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
 
         EXPECT_EQ(actualInfo.type, expectedInfo.type);
         EXPECT_EQ(actualInfo.name, expectedInfo.name);
-        EXPECT_EQ(actualInfo.notes, expectedInfo.notes);
         EXPECT_EQ(actualInfo.data, expectedInfo.data);
+        ASSERT_EQ(actualInfo.notes.size(), expectedInfo.notes.size());
+
+        for (size_t j = 0; j < actualInfo.notes.size(); ++j) {
+            const ElementInfo::Note& actualNote = actualInfo.notes.at(j);
+            const ElementInfo::Note& expectedNote = expectedInfo.notes.at(j);
+
+            EXPECT_EQ(actualNote.name, expectedNote.name);
+            EXPECT_EQ(actualInfo.data, expectedInfo.data);
+        }
     }
 
     delete score;

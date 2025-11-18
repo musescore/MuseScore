@@ -54,6 +54,8 @@ static bool itemAccepted(const EngravingItem* item)
         ElementType::HOOK,
         ElementType::BEAM,
         ElementType::NOTEDOT,
+        ElementType::TIE,
+        ElementType::TIE_SEGMENT,
     };
 
     if (muse::contains(NOTE_PARTS, item->type())) {
@@ -88,16 +90,23 @@ static muse::String noteName(const Note* note)
     return tpc2name(note->tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO) + String::number(note->octave());
 }
 
-static muse::String chordToNotes(const Chord* chord)
+static ElementInfo::NoteList chordToNotes(const Chord* chord)
 {
-    muse::StringList notes;
+    ElementInfo::NoteList notes;
     notes.reserve(chord->notes().size());
 
     for (const Note* note : chord->notes()) {
-        notes.push_back(noteName(note));
+        ElementInfo::Note info;
+        info.name = noteName(note);
+
+        if (note->tieFor() && note->tieFor()->endNote()) {
+            info.data[u"tied"] = muse::Val(true);
+        }
+
+        notes.emplace_back(std::move(info));
     }
 
-    return notes.join(u" ");
+    return notes;
 }
 
 static ElementInfo::Duration durationInfo(const TDuration& dur)
@@ -132,6 +141,10 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
             info.notes = chordToNotes(chord);
         } else {
             info.name = noteName(note);
+
+            if (note->tieFor() && note->tieFor()->endNote()) {
+                info.data[u"tied"] = muse::Val(true);
+            }
         }
         info.duration = durationInfo(chord->durationType());
     } else if (isChordArticulation(item)) {
