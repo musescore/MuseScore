@@ -93,8 +93,14 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
 
     int twoNoteTremoloFactor = 1;
     if (cr->isChord()) {
-        Transpose::transposeChord(toChord(cr), tick);
-        if (toChord(cr)->tremoloTwoChord()) {
+        Chord* chord = toChord(cr);
+        if (chord->vStaffIdx() >= chord->score()->nstaves()) {
+            // check if staffMove moves a note to a
+            // nonexistent staff
+            chord->setStaffMove(0);
+        }
+        Transpose::transposeChord(chord, tick);
+        if (chord->tremoloTwoChord()) {
             twoNoteTremoloFactor = 2;
         } else if (cr->durationTypeTicks() == (cr->actualTicksAt(tick) * 2)) {
             // this could be the 2nd note of a two-note tremolo

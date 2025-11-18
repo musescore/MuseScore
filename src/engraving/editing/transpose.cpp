@@ -513,15 +513,6 @@ void Transpose::transpositionChanged(Score* score, Part* part, const Fraction& i
 
 void Transpose::transposeChord(Chord* c, const Fraction& tick)
 {
-    // set note track
-    // check if staffMove moves a note to a
-    // nonexistent staff
-    //
-
-    if (c->vStaffIdx() >= c->score()->nstaves()) {
-        c->setStaffMove(0);
-    }
-
     Interval dstTranspose = c->staff()->transpose(tick);
 
     if (dstTranspose.isZero()) {

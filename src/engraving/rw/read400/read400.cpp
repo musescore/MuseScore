@@ -524,6 +524,11 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             for (size_t i = 0; i < graceNotes.size(); ++i) {
                                 Chord* gc = graceNotes.at(i);
                                 gc->setGraceIndex(i);
+                                if (gc->vStaffIdx() >= gc->score()->nstaves()) {
+                                    // check if staffMove moves a note to a
+                                    // nonexistent staff
+                                    gc->setStaffMove(0);
+                                }
                                 Transpose::transposeChord(gc, tick);
                                 chord->add(gc);
                             }
