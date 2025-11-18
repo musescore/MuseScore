@@ -40,7 +40,7 @@ public:
     virtual bool active() const = 0;
     virtual void setActive(bool active) = 0;
 
-    virtual void process(float* buffer, unsigned int sampleCount) = 0;
+    virtual void process(float* buffer, unsigned int sampleCount, muse::audio::msecs_t playbackPosition = 0) = 0;
 };
 
 using IFxProcessorPtr = std::shared_ptr<IFxProcessor>;

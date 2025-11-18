@@ -36,13 +36,15 @@
 
 #include "dsp/limiter.h"
 #include "mixerchannel.h"
+#include "igetplaybackposition.h"
 
 namespace muse {
 class TaskScheduler;
 }
 
 namespace muse::audio::worker {
-class Mixer : public AbstractAudioSource, public Injectable, public async::Asyncable, public std::enable_shared_from_this<Mixer>
+class Mixer : public AbstractAudioSource, public IGetPlaybackPosition, public Injectable, public async::Asyncable,
+    public std::enable_shared_from_this<Mixer>
 {
     Inject<fx::IFxResolver> fxResolver = { this };
 
@@ -82,6 +84,8 @@ public:
 private:
     using TracksData = std::map<TrackId, std::vector<float> >;
 
+    msecs_t playbackPosition() const override;
+
     void processTrackChannels(size_t outBufferSize, size_t samplesPerChannel, TracksData& outTracksData);
     void mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount) const;
     void prepareAuxBuffers(size_t outBufferSize);
@@ -92,8 +96,6 @@ private:
     bool useMultithreading() const;
 
     void notifyNoAudioSignal();
-
-    msecs_t currentTime() const;
 
     std::unique_ptr<TaskScheduler> m_taskScheduler;
 

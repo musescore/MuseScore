@@ -79,7 +79,7 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, ITrackAudioInpu
         return result;
     }
 
-    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, std::move(source), m_sampleRate, iocContext());
+    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, std::move(source), m_sampleRate, this, iocContext());
     std::weak_ptr<MixerChannel> channelWeakPtr = channel;
 
     m_nonMutedTrackCount++;
@@ -106,7 +106,7 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, ITrackAudioInpu
 
         if (source) {
             source->setIsActive(isActive());
-            source->seek(currentTime());
+            source->seek(playbackPosition());
         }
     });
 
@@ -130,7 +130,7 @@ RetVal<MixerChannelPtr> Mixer::addAuxChannel(const TrackId trackId)
         return RetVal<MixerChannelPtr>::make_ret(Ret::Code::InternalError);
     }
 
-    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_sampleRate, m_audioChannelsCount, iocContext());
+    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_sampleRate, m_audioChannelsCount, this, iocContext());
 
     AuxChannelInfo aux;
     aux.channel = channel;
@@ -201,6 +201,16 @@ unsigned int Mixer::audioChannelsCount() const
     return m_audioChannelsCount;
 }
 
+msecs_t Mixer::playbackPosition() const
+{
+    if (m_clocks.empty()) {
+        return 0;
+    }
+
+    const IClockPtr clock = *m_clocks.begin();
+    return clock->currentTime();
+}
+
 samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -250,7 +260,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 
     for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
         if (fxProcessor->active()) {
-            fxProcessor->process(outBuffer, samplesPerChannel);
+            fxProcessor->process(outBuffer, samplesPerChannel, playbackPosition());
         }
     }
 
@@ -585,14 +595,4 @@ void Mixer::notifyNoAudioSignal()
     }
 
     m_audioSignalNotifier.notifyAboutChanges();
-}
-
-msecs_t Mixer::currentTime() const
-{
-    if (m_clocks.empty()) {
-        return 0;
-    }
-
-    IClockPtr clock = *m_clocks.begin();
-    return clock->currentTime();
 }
