@@ -169,6 +169,7 @@ FocusableItem {
                     id: noteOffsetSection
                     titleText: qsTrc("inspector", "Notehead offset")
                     propertyItem: root.headModel ? root.headModel.offset : null
+                    measurementUnits: root.headModel?.measurementUnits ?? CommonTypes.UNITS_UNKNOWN
 
                     navigationName: "NoteHeadOffsetSection"
                     navigationPanel: root.navigationPanel

@@ -82,9 +82,16 @@ public:
         AUTO_ON_OFF_OFF,
     };
 
+    enum class MeasurementUnits {
+        UNITS_UNKNOWN = -1,
+        UNITS_MM,
+        UNITS_SPATIUM,
+    };
+
     Q_ENUM(AutoOnOff);
     Q_ENUM(Placement)
     Q_ENUM(AlignmentH)
+    Q_ENUM(MeasurementUnits);
 };
 
 inline double formatDoubleFunc(const QVariant& elementPropertyValue)

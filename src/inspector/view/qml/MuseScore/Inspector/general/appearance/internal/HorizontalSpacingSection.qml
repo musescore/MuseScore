@@ -57,6 +57,7 @@ Item {
 
         titleText: qsTrc("inspector", "Leading space")
         propertyItem: root.leadingSpace
+        measureUnitsSymbol: qsTrc("global", "sp")
 
         icon: IconCode.HORIZONTAL
     }
@@ -73,6 +74,12 @@ Item {
 
         titleText: qsTrc("inspector", "Measure width")
         propertyItem: root.measureWidth
+        measureUnitsSymbol: "%"
+
+        decimals: 0
+        step: 5
+        minValue: 0
+        maxValue: 1000
 
         icon: IconCode.HORIZONTAL
     }

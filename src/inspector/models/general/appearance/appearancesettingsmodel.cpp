@@ -43,7 +43,15 @@ AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, IElementReposi
 void AppearanceSettingsModel::createProperties()
 {
     m_leadingSpace = buildPropertyItem(Pid::LEADING_SPACE);
-    m_measureWidth = buildPropertyItem(Pid::USER_STRETCH);
+    m_measureWidth = buildPropertyItem(Pid::USER_STRETCH,
+                                       [this](const Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue.toDouble() / 100);
+    },
+                                       [this](const Sid sid, const QVariant& newValue) {
+        updateStyleValue(sid, newValue.toDouble() / 100);
+        emit requestReloadPropertyItems();
+    });
+
     m_minimumDistance = buildPropertyItem(Pid::MIN_DISTANCE);
     m_color = buildPropertyItem(Pid::COLOR);
     m_arrangeOrder = buildPropertyItem(Pid::Z);
@@ -115,6 +123,7 @@ void AppearanceSettingsModel::loadProperties()
     loadProperties(propertyIdSet);
 
     updateIsVerticalOffsetAvailable();
+    updatemeasurementUnits();
 }
 
 void AppearanceSettingsModel::resetProperties()
@@ -139,7 +148,9 @@ void AppearanceSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (muse::contains(propertyIdSet, Pid::USER_STRETCH)) {
-        loadPropertyItem(m_measureWidth, formatDoubleFunc);
+        loadPropertyItem(m_measureWidth, [](const QVariant& elementPropertyValue) -> QVariant {
+            return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
+        });
     }
 
     if (muse::contains(propertyIdSet, Pid::MIN_DISTANCE)) {
