@@ -1457,8 +1457,8 @@ void FinaleParser::importPageTexts()
                         boxToNotationDist += maxBoxHeight - preferredHeight;
                         maxBoxHeight = preferredHeight;
                     }
-                    pageFrame->setSizeIsSpatiumDependent(false);
-                    pageFrame->setAutoSizeEnabled(false);
+                    setAndStyleProperty(pageFrame, Pid::BOX_AUTOSIZE, false);
+                    setAndStyleProperty(pageFrame, Pid::SIZE_SPATIUM_DEPENDENT, false);
                     pageFrame->setBoxHeight(Spatium(maxBoxHeight / m_score->style().defaultSpatium()));
                     setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_BELOW, Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
                     setAndStyleProperty(pageFrame, Pid::BOTTOM_GAP, Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
@@ -1502,8 +1502,8 @@ void FinaleParser::importPageTexts()
                     double boxToStaffDist = boxToNotationDist + (system ? system->minBottom() : 0.0);
                     double maxBoxHeight = distToBottomStaff - boxToStaffDist;
                     /// @todo account for footer distance?
-                    pageFrame->setAutoSizeEnabled(false);
-                    pageFrame->setSizeIsSpatiumDependent(false);
+                    setAndStyleProperty(pageFrame, Pid::BOX_AUTOSIZE, false);
+                    setAndStyleProperty(pageFrame, Pid::SIZE_SPATIUM_DEPENDENT, false);
                     pageFrame->setBoxHeight(Spatium(maxBoxHeight / m_score->style().defaultSpatium()));
                     setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_ABOVE, Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
                     setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
