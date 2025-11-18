@@ -493,14 +493,15 @@ void SingleLayout::layout(Articulation* item, const Context& ctx)
         text->setXmlText(TConv::text(item->textType()));
         text->setTrack(item->track());
         text->setParent(item);
-        text->setAlign(Align(AlignH::HCENTER, AlignV::VCENTER));
 
         layoutTextBase(item->text(), ctx, item->text()->mutldata());
+        bbox = text->ldata()->bbox();
     } else {
         bbox = item->symBbox(item->symId());
+        bbox.translate(-0.5 * bbox.width(), 0.0);
     }
 
-    item->setbbox(bbox.translated(-0.5 * bbox.width(), 0.0));
+    item->setbbox(bbox);
 }
 
 void SingleLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
@@ -1412,28 +1413,7 @@ void SingleLayout::layout(MeasureRepeat* item, const Context& ctx)
 
 void SingleLayout::layout(Ornament* item, const Context& ctx)
 {
-    double spatium = item->spatium();
-    double vertMargin = 0.35 * spatium;
-    constexpr double ornamentAccidentalMag = 0.6; // TODO: style?
-
-    if (!item->showCueNote()) {
-        for (size_t i = 0; i < item->accidentalsAboveAndBelow().size(); ++i) {
-            bool above = (i == 0);
-            Accidental* accidental = item->accidentalsAboveAndBelow()[i];
-            if (!accidental) {
-                continue;
-            }
-            accidental->computeMag();
-            accidental->mutldata()->setMag(accidental->mag() * ornamentAccidentalMag);
-            layout(accidental, ctx);
-            Shape accidentalShape = accidental->shape();
-            double minVertDist = above
-                                 ? accidentalShape.minVerticalDistance(item->ldata()->bbox())
-                                 : Shape(item->ldata()->bbox()).minVerticalDistance(accidentalShape);
-            accidental->setPos(-0.5 * accidental->width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
-        }
-        return;
-    }
+    layout(toArticulation(item), ctx);
 }
 
 void SingleLayout::layout(Ottava* item, const Context& ctx)
