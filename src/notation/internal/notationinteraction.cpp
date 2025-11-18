@@ -92,6 +92,7 @@
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/splitjoinmeasure.h"
+#include "engraving/editing/transpose.h"
 #include "engraving/editing/textedit.h"
 #include "engraving/rw/rwregister.h"
 #include "engraving/rw/xmlreader.h"
@@ -5836,8 +5837,8 @@ bool NotationInteraction::transpose(const TransposeOptions& options)
 {
     startEdit(TranslatableString("undoableAction", "Transposition"));
 
-    bool ok = score()->transpose(options.mode, options.direction, options.key, options.interval,
-                                 options.needTransposeKeys, options.needTransposeChordNames, options.needTransposeDoubleSharpsFlats);
+    bool ok = Transpose::transpose(score(), options.mode, options.direction, options.key, options.interval,
+                                   options.needTransposeKeys, options.needTransposeChordNames, options.needTransposeDoubleSharpsFlats);
 
     apply();
 
@@ -8062,13 +8063,16 @@ void NotationInteraction::changeAccidental(mu::engraving::AccidentalType acciden
 
 void NotationInteraction::transposeSemitone(int steps)
 {
-    execute(&mu::engraving::Score::transposeSemitone, steps, TranslatableString("undoableAction", "Transpose semitone"));
+    startEdit(TranslatableString("undoableAction", "Transpose semitone"));
+    Transpose::transposeSemitone(score(), steps);
+    apply();
 }
 
 void NotationInteraction::transposeDiatonicAlterations(mu::engraving::TransposeDirection direction)
 {
-    execute(&mu::engraving::Score::transposeDiatonicAlterations, direction,
-            TranslatableString("undoableAction", "Transpose diatonically"));
+    startEdit(TranslatableString("undoableAction", "Transpose diatonically"));
+    Transpose::transposeDiatonicAlterations(score(), direction);
+    apply();
 }
 
 void NotationInteraction::getLocation()

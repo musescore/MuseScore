@@ -45,6 +45,7 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "timesig.h"
+#include "editing/transpose.h"
 
 // #define DEBUG_CLEFS
 
@@ -864,7 +865,7 @@ Interval Staff::transpose(const Fraction& tick) const
     }
     Key cKey = concertKey(tick);
     v.flip();
-    Key tKey = transposeKey(cKey, v, part()->preferSharpFlat());
+    Key tKey = Transpose::transposeKey(cKey, v, part()->preferSharpFlat());
     v.flip();
 
     int chromatic = (7 * (static_cast<int>(cKey) - static_cast<int>(tKey))) % 12;

@@ -22,6 +22,7 @@
 #include "read410.h"
 
 #include "../editing/mscoreview.h"
+#include "../editing/transpose.h"
 #include "../types/types.h"
 
 #include "dom/anchors.h"
@@ -550,7 +551,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             for (size_t i = 0; i < graceNotes.size(); ++i) {
                                 Chord* gc = graceNotes.at(i);
                                 gc->setGraceIndex(i);
-                                Score::transposeChord(gc, tick);
+                                Transpose::transposeChord(gc, tick);
                                 chord->add(gc);
                             }
                             graceNotes.clear();

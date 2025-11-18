@@ -87,6 +87,7 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 #include "engraving/dom/volta.h"
+#include "engraving/editing/transpose.h"
 #include "engraving/engravingerrors.h"
 
 #include "importmusicxmllogger.h"
@@ -294,7 +295,7 @@ static void xmlSetPitch(Note* n, int step, int alter, double tuning, int octave,
     pitch = std::clamp(pitch, 0, 127);
 
     int tpc2 = step2tpc(step, AccidentalVal(alter));
-    int tpc1 = mu::engraving::transposeTpc(tpc2, intval, true);
+    int tpc1 = Transpose::transposeTpc(tpc2, intval, true);
     n->setPitch(pitch, tpc1, tpc2);
     n->setTuning(tuning);
     //LOGD("  pitch=%d tpc1=%d tpc2=%d", n->pitch(), n->tpc1(), n->tpc2());
@@ -5999,7 +6000,7 @@ void MusicXmlParserPass2::key(const String& partId, Measure* measure, const Frac
             Key cKey = tKey;
             Interval v = m_pass1.getPart(partId)->instrument()->transpose();
             if (!v.isZero() && !m_score->style().styleB(Sid::concertPitch)) {
-                cKey = transposeKey(tKey, v);
+                cKey = Transpose::transposeKey(tKey, v);
                 // if there are more than 6 accidentals in transposing key, it cannot be PreferSharpFlat::AUTO
                 Part* part = m_pass1.getPart(partId);
                 if ((tKey > 6 || tKey < -6) && part->preferSharpFlat() == PreferSharpFlat::AUTO) {

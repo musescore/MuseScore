@@ -31,6 +31,7 @@
 
 #include "../editing/textedit.h"
 #include "../editing/undo.h"
+#include "../editing/transpose.h"
 
 #include "chordlist.h"
 #include "fret.h"
@@ -834,8 +835,8 @@ void Harmony::endEdit(EditData& ed)
                         interval.flip();
                     }
                     for (HarmonyInfo* info : h->m_chords) {
-                        int rootTpc = transposeTpc(info->rootTpc(), interval, true);
-                        int bassTpc = transposeTpc(info->bassTpc(), interval, true);
+                        int rootTpc = Transpose::transposeTpc(info->rootTpc(), interval, true);
+                        int bassTpc = Transpose::transposeTpc(info->bassTpc(), interval, true);
                         info->setRootTpc(rootTpc);
                         info->setBassTpc(bassTpc);
                         // score()->undoTransposeHarmony(h, rootTpc, bassTpc);

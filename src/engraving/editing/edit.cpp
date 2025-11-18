@@ -1727,7 +1727,7 @@ NoteVal Score::noteVal(int pitch, staff_idx_t staffIdx, bool allowTransposition)
             nval.tpc1 = pitch2tpc(nval.pitch, Key::C, prefer);
             Interval vFlipped = v;
             vFlipped.flip();
-            nval.tpc2 = transposeTpc(nval.tpc1, vFlipped, true);
+            nval.tpc2 = Transpose::transposeTpc(nval.tpc1, vFlipped, true);
         } else {
             // Spell the transposed pitch first, then convert to concert pitch
             int writtenPitch = nval.pitch;
@@ -1735,7 +1735,7 @@ NoteVal Score::noteVal(int pitch, staff_idx_t staffIdx, bool allowTransposition)
                 writtenPitch -= v.chromatic;
             }
             nval.tpc2 = pitch2tpc(writtenPitch, Key::C, prefer);
-            nval.tpc1 = transposeTpc(nval.tpc2, v, true);
+            nval.tpc1 = Transpose::transposeTpc(nval.tpc2, v, true);
         }
     }
 
@@ -2761,7 +2761,7 @@ void Score::deleteItem(EngravingItem* el)
             if (!style().styleB(Sid::concertPitch)) {
                 Interval v = k->part()->instrument(k->tick())->transpose();
                 v.flip();
-                tKey = transposeKey(cKey, v, k->part()->preferSharpFlat());
+                tKey = Transpose::transposeKey(cKey, v, k->part()->preferSharpFlat());
             }
             ke.setConcertKey(cKey);
             ke.setKey(tKey);
@@ -3221,7 +3221,7 @@ void Score::deleteItem(EngravingItem* el)
             } else {
                 tickEnd = Fraction::fromTicks(i->first);
             }
-            transpositionChanged(part, oldV, tickStart, tickEnd);
+            Transpose::transpositionChanged(this, part, oldV, tickStart, tickEnd);
         }
     }
     break;
@@ -3427,7 +3427,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                     if (!concertPitch && !nkse.isAtonal()) {
                         Interval v = instrument->transpose();
                         v.flip();
-                        nkse.setKey(transposeKey(nkse.concertKey(), v, part->preferSharpFlat()));
+                        nkse.setKey(Transpose::transposeKey(nkse.concertKey(), v, part->preferSharpFlat()));
                     }
                 }
 
@@ -4696,7 +4696,7 @@ void Score::restoreInitialKeySigAndTimeSig()
         const Instrument* instrument = part->instrument();
         int transpose = -instrument->transpose().chromatic;
         if (!concertPitch) {
-            transposedKey = mu::engraving::transposeKey(transposedKey, transpose, part->preferSharpFlat());
+            transposedKey = Transpose::transposeKey(transposedKey, transpose, part->preferSharpFlat());
         }
 
         Segment* keySegment = firstMeas->undoGetSegment(SegmentType::KeySig, startTick);
@@ -5224,7 +5224,7 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
                             nn->setTpc2(on->tpc1());
                         } else {
                             v.flip();
-                            nn->setTpc2(transposeTpc(nn->tpc1(), v, true));
+                            nn->setTpc2(Transpose::transposeTpc(nn->tpc1(), v, true));
                         }
 
                         if (on->tieFor()) {
@@ -5942,7 +5942,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
 
         if (interval.chromatic && !concertPitch && !nkey.isAtonal()) {
             interval.flip();
-            nkey.setKey(transposeKey(key.concertKey(), interval, staff->part()->preferSharpFlat()));
+            nkey.setKey(Transpose::transposeKey(key.concertKey(), interval, staff->part()->preferSharpFlat()));
             interval.flip();
         }
 
@@ -5968,7 +5968,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
     }
     if (needsUpdate) {
         Fraction tickEnd = Fraction::fromTicks(ostaff->keyList()->nextKeyTick(tick.ticks()));
-        transpositionChanged(ostaff->part(), ostaff->transpose(tick), tick, tickEnd);
+        Transpose::transpositionChanged(this, ostaff->part(), ostaff->transpose(tick), tick, tickEnd);
     }
 }
 
@@ -5992,7 +5992,7 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
                     Interval transposeInterval = staff->part()->instrument(Fraction::fromTicks(nextTick))->transpose();
                     transposeInterval.flip();
                     Key ckey = key.concertKey();
-                    Key nkey = transposeKey(ckey, transposeInterval, staff->part()->preferSharpFlat());
+                    Key nkey = Transpose::transposeKey(ckey, transposeInterval, staff->part()->preferSharpFlat());
                     e.setConcertKey(ckey);
                     e.setKey(nkey);
                 }
@@ -7211,7 +7211,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             if (score->isMaster() && nis->staff()->transpose(tickStart) != oldV) {
                 auto i = part->instruments().upper_bound(tickStart.ticks());
                 Fraction tickEnd = i == part->instruments().end() ? Fraction(-1, 1) : Fraction::fromTicks(i->first);
-                transpositionChanged(part, oldV, tickStart, tickEnd);
+                Transpose::transpositionChanged(this, part, oldV, tickStart, tickEnd);
             }
         } else if (element->isBreath()) {
             Breath* breath   = toBreath(element);

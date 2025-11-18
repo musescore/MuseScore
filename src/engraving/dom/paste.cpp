@@ -27,6 +27,7 @@
 #include "../editing/editmeasures.h"
 #include "../editing/editstaff.h"
 #include "../editing/mscoreview.h"
+#include "../editing/transpose.h"
 
 #include "rw/read400/tread.h"
 #include "rw/rwregister.h"
@@ -66,35 +67,6 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 //---------------------------------------------------------
-//   transposeChord
-//---------------------------------------------------------
-
-void Score::transposeChord(Chord* c, const Fraction& tick)
-{
-    // set note track
-    // check if staffMove moves a note to a
-    // nonexistent staff
-    //
-
-    if (c->vStaffIdx() >= c->score()->nstaves()) {
-        c->setStaffMove(0);
-    }
-
-    Interval dstTranspose = c->staff()->transpose(tick);
-
-    if (dstTranspose.isZero()) {
-        for (Note* n : c->notes()) {
-            n->setTpc2(n->tpc1());
-        }
-    } else {
-        dstTranspose.flip();
-        for (Note* n : c->notes()) {
-            n->setTpc2(transposeTpc(n->tpc1(), dstTranspose, true));
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   pasteStaff
 //    return false if paste fails
 //---------------------------------------------------------
@@ -121,7 +93,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
 
     int twoNoteTremoloFactor = 1;
     if (cr->isChord()) {
-        transposeChord(toChord(cr), tick);
+        Transpose::transposeChord(toChord(cr), tick);
         if (toChord(cr)->tremoloTwoChord()) {
             twoNoteTremoloFactor = 2;
         } else if (cr->durationTypeTicks() == (cr->actualTicksAt(tick) * 2)) {

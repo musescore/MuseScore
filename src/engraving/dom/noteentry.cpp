@@ -26,6 +26,7 @@
 
 #include "../editing/editmeasures.h"
 #include "../editing/inserttime.h"
+#include "../editing/transpose.h"
 #include "infrastructure/messagebox.h"
 
 #include "accidental.h"
@@ -154,7 +155,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
             if (v.isZero()) {
                 nval.tpc1 = nval.tpc2;
             } else {
-                nval.tpc1 = mu::engraving::transposeTpc(nval.tpc2, v, true);
+                nval.tpc1 = Transpose::transposeTpc(nval.tpc2, v, true);
             }
         }
     }

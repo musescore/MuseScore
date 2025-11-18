@@ -161,6 +161,8 @@
 
 #include "dom/whammybar.h"
 
+#include "editing/transpose.h"
+
 #include "../xmlwriter.h"
 #include "writecontext.h"
 #include "connectorinfowriter.h"
@@ -1789,8 +1791,8 @@ static void writeHarmonyInfo(const HarmonyInfo* item, const Harmony* h, XmlWrite
             Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
             const Interval& interval = h->staff()->transpose(tick);
             if (ctx.clipboardmode() && !h->score()->style().styleB(Sid::concertPitch) && interval.chromatic) {
-                rRootTpc = transposeTpc(item->rootTpc(), interval, true);
-                rBassTpc = transposeTpc(item->bassTpc(), interval, true);
+                rRootTpc = Transpose::transposeTpc(item->rootTpc(), interval, true);
+                rBassTpc = Transpose::transposeTpc(item->bassTpc(), interval, true);
             }
         }
 

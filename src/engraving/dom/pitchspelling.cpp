@@ -28,6 +28,7 @@
 
 #include "translation.h"
 #include "types/typesconv.h"
+#include "editing/transpose.h"
 
 #include "chord.h"
 #include "key.h"
@@ -687,7 +688,7 @@ void changeAllTpcs(Note* n, int tpc1)
         v = n->staff()->transpose(tick);
         v.flip();
     }
-    int tpc2 = transposeTpc(tpc1, v, true);
+    int tpc2 = Transpose::transposeTpc(tpc1, v, true);
     n->undoChangeProperty(Pid::TPC1, tpc1);
     n->undoChangeProperty(Pid::TPC2, tpc2);
 }
