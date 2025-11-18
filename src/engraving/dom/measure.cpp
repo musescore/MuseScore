@@ -2130,12 +2130,17 @@ void Measure::scanElements(std::function<void(EngravingItem*)> func)
 
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         MStaff* ms = m_mstaves[staffIdx];
-        if (ms->measureNumber() && showMeasureNumberOnStaff(staffIdx)) {
-            func(ms->measureNumber());
+        MeasureNumber* measureNumber = ms->measureNumber();
+        if (measureNumber && measureNumber->systemFlag() && showMeasureNumberOnStaff(staffIdx)) {
+            func(measureNumber);
         }
 
         if (!(visible(staffIdx) && score()->staff(staffIdx)->show()) && !isCutawayClef(staffIdx)) {
             continue;
+        }
+
+        if (measureNumber && !measureNumber->systemFlag()) {
+            func(measureNumber);
         }
 
         func(ms->lines());
