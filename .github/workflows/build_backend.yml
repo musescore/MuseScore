@@ -137,10 +137,11 @@ jobs:
       run: |
         bash ./buildscripts/ci/backend/publish_to_registry.sh --token ${{ secrets.PACKAGES_PAT }}
 
-    - name: Deploy to musescore.com
+    - name: Check and update config on S3
       if: env.DO_DEPLOY == 'true'
       run: |
-        bash ./buildscripts/ci/backend/update_config_on_s3.sh \
+        bash ./buildscripts/ci/backend/check_update_config_on_s3.sh \
+          --token ${{ secrets.PACKAGES_PAT }} \
           --s3_key ${{ secrets.S3_KEY_CONVERTER }} \
           --s3_secret ${{ secrets.S3_SECRET_CONVERTER }} \
           --stage ${{ inputs.build_mode }} \
