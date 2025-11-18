@@ -89,9 +89,19 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
     return muse::mtrc("playback", "Aux %1").arg(index + 1).toStdString();
 }
 
+static muse::Ret retFromProcessingStatus(const InputProcessingProgress::StatusInfo& status)
+{
+    muse::Ret ret(status.errorCode, status.errorText);
+    for (const auto& pair : status.data) {
+        ret.setData(pair.first, pair.second);
+    }
+
+    return ret;
+}
+
 void PlaybackController::init()
 {
-    dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
+    dispatcher()->reg(this, PLAY_CODE, [this]() { PlaybackController::togglePlay(); });
     dispatcher()->reg(this, PLAY_FROM_SELECTION, this, &PlaybackController::playFromSelection);
     dispatcher()->reg(this, STOP_CODE, [this]() { PlaybackController::pause(/*select*/ false); });
     dispatcher()->reg(this, PAUSE_AND_SELECT_CODE, [this]() { PlaybackController::pause(/*select*/ true); });
@@ -148,6 +158,7 @@ void PlaybackController::init()
         notifyActionCheckedChanged(TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE);
     });
 
+    m_onlineSoundsProcessingRet = make_ok();
     m_measureInputLag = configuration()->shouldMeasureInputLag();
 }
 
@@ -614,15 +625,15 @@ void PlaybackController::onSelectionChanged()
     updateSoloMuteStates();
 }
 
-void PlaybackController::togglePlay()
+void PlaybackController::togglePlay(bool showErrors)
 {
     if (!isPlayAllowed()) {
         LOGW() << "playback not allowed";
         return;
     }
 
-    if (shouldShowOnlineSoundsProcessingError()) {
-        showOnlineSoundsProcessingError();
+    if (showErrors && shouldShowOnlineSoundsProcessingError()) {
+        showOnlineSoundsProcessingErrorAndPlay();
         return;
     }
 
@@ -1042,7 +1053,7 @@ void PlaybackController::resetCurrentSequence()
     const bool hadOnlineSounds = !m_onlineSounds.empty();
     m_onlineSounds.clear();
     m_onlineSoundsBeingProcessed.clear();
-    m_onlineSoundsErrorDetected = false;
+    m_onlineSoundsProcessingRet = make_ok();
 
     if (hadOnlineSounds) {
         m_onlineSoundsChanged.notify();
@@ -1371,7 +1382,7 @@ void PlaybackController::listenOnlineSoundsProcessingProgress(const TrackId trac
                     m_onlineSoundsBeingProcessed.insert(trackId);
 
                     if (!m_onlineSoundsProcessingProgress.isStarted()) {
-                        m_onlineSoundsErrorDetected = false;
+                        m_onlineSoundsProcessingRet = make_ok();
                         m_onlineSoundsProcessingProgress.start();
                     }
                 } break;
@@ -1384,17 +1395,16 @@ void PlaybackController::listenOnlineSoundsProcessingProgress(const TrackId trac
                     muse::remove(m_onlineSoundsBeingProcessed, trackId);
 
                     if (status.errorCode != 0 && status.errorCode != (int)Ret::Code::Cancel) {
+                        m_onlineSoundsProcessingRet = retFromProcessingStatus(status);
                         LOGE() << "Error during online sounds processing: " << status.errorText << ", track: " << trackId;
 
                         if (status.errorCode == (int)audio::Err::OnlineSoundsLimitReached) {
-                            showOnlineSoundsLimitReachedError(status);
-                        } else {
-                            m_onlineSoundsErrorDetected = true;
+                            showOnlineSoundsLimitReachedErrorIfNeed(status);
                         }
                     }
 
                     if (m_onlineSoundsBeingProcessed.empty()) {
-                        m_onlineSoundsProcessingProgress.finish(Ret(status.errorCode, status.errorText));
+                        m_onlineSoundsProcessingProgress.finish(m_onlineSoundsProcessingRet);
                     }
                 } break;
             }
@@ -1404,14 +1414,16 @@ void PlaybackController::listenOnlineSoundsProcessingProgress(const TrackId trac
 
 bool PlaybackController::shouldShowOnlineSoundsProcessingError() const
 {
-    if (m_onlineSoundsErrorDetected) {
-        return configuration()->shouldShowOnlineSoundsProcessingError() && !isPlaying();
+    if (!m_onlineSoundsProcessingRet) {
+        if (m_onlineSoundsProcessingRet.code() != (int)audio::Err::OnlineSoundsLimitReached) {
+            return configuration()->shouldShowOnlineSoundsProcessingError() && !isPlaying();
+        }
     }
 
     return false;
 }
 
-void PlaybackController::showOnlineSoundsProcessingError()
+void PlaybackController::showOnlineSoundsProcessingErrorAndPlay()
 {
     const std::string text = muse::mtrc("playback", "This may be due to a poor internet connection or server issue. "
                                                     "Your score will still play, but some sounds may be missing. "
@@ -1423,18 +1435,16 @@ void PlaybackController::showOnlineSoundsProcessingError()
                                           { IInteractive::Button::Ok }, IInteractive::Button::Ok,
                                           IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 
-    m_onlineSoundsErrorDetected = false;
-
     promise.onResolve(this, [this](const IInteractive::Result& res) {
         if (!res.showAgain()) {
             configuration()->setShouldShowOnlineSoundsProcessingError(false);
         }
 
-        togglePlay();
+        togglePlay(false /*showErrors*/);
     });
 }
 
-void PlaybackController::showOnlineSoundsLimitReachedError(const InputProcessingProgress::StatusInfo& status)
+void PlaybackController::showOnlineSoundsLimitReachedErrorIfNeed(const InputProcessingProgress::StatusInfo& status)
 {
     IF_ASSERT_FAILED(status.errorCode == (int)audio::Err::OnlineSoundsLimitReached) {
         return;
@@ -1447,6 +1457,13 @@ void PlaybackController::showOnlineSoundsLimitReachedError(const InputProcessing
     IF_ASSERT_FAILED(!libName.empty() && !date.empty() && !url.empty()) {
         return;
     }
+
+    //! NOTE: we never clear it; it's one list per app instance
+    static std::unordered_set<String> onlineLibrariesWithExceededLimit;
+    if (muse::contains(onlineLibrariesWithExceededLimit, libName)) {
+        return;
+    }
+    onlineLibrariesWithExceededLimit.insert(libName);
 
     const std::string text = muse::mtrc("playback", "You’ve reached your current render limit for %1. "
                                                     "You will be able to process online sounds again after your quota resets on %2. "
