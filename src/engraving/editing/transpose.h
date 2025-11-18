@@ -47,6 +47,11 @@ public:
 
 private:
     static Interval keydiff2Interval(Key oKey, Key nKey, TransposeDirection dir);
+
+    static bool transposeNote(Note* note, TransposeMode mode, int transposeInterval, bool trKeys, bool useDoubleSharpsFlats,
+                              Interval interval);
+    static void transposeHarmony(Harmony* harmony, Score* score, Interval interval, TransposeMode mode, int transposeInterval, bool trKeys,
+                                 bool useDoubleSharpsFlats);
 };
 
 class TransposeHarmony : public UndoCommand

@@ -110,24 +110,11 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
             }
             if (e->isNote()) {
                 Note* note = toNote(e);
-                if (mode == TransposeMode::DIATONICALLY) {
-                    note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
-                } else {
-                    if (!note->transpose(interval, useDoubleSharpsFlats)) {
-                        result = false;
-                        continue;
-                    }
+                if (!transposeNote(note, mode, transposeInterval, trKeys, useDoubleSharpsFlats, interval)) {
+                    result = false;
                 }
             } else if (e->isHarmony() && transposeChordNames) {
-                Harmony* h  = toHarmony(e);
-                Interval kv = e->staff()->transpose(e->tick());
-                Interval iv = e->part()->instrument(e->tick())->transpose();
-                Interval hInterval((interval.diatonic - kv.diatonic + iv.diatonic), (interval.chromatic - kv.chromatic + iv.chromatic));
-                if (mode == TransposeMode::DIATONICALLY) {
-                    score->undoTransposeHarmonyDiatonic(h, transposeInterval, useDoubleSharpsFlats, trKeys);
-                } else {
-                    score->undoTransposeHarmony(h, hInterval, useDoubleSharpsFlats);
-                }
+                transposeHarmony(toHarmony(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
             } else if (e->isKeySig() && mode != TransposeMode::DIATONICALLY && trKeys) {
                 // TODO: this currently is disabled in dialog
                 // if we enabled it, then it will need work
@@ -218,28 +205,14 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
                         continue;
                     }
                     Note* note = nl.at(noteIdx);
-                    if (mode == TransposeMode::DIATONICALLY) {
-                        if (!note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats)) {
-                            result = false;
-                        }
-                        continue;
-                    }
-                    if (!note->transpose(interval, useDoubleSharpsFlats)) {
+                    if (!transposeNote(note, mode, transposeInterval, trKeys, useDoubleSharpsFlats, interval)) {
                         result = false;
                     }
                 }
                 for (Chord* g : chord->graceNotes()) {
                     for (Note* n : g->notes()) {
-                        if (mode == TransposeMode::DIATONICALLY) {
-                            if (!n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats)) {
-                                result = false;
-                                continue;
-                            }
-                        } else {
-                            if (!n->transpose(interval, useDoubleSharpsFlats)) {
-                                result = false;
-                                continue;
-                            }
+                        if (!transposeNote(n, mode, transposeInterval, trKeys, useDoubleSharpsFlats, interval)) {
+                            result = false;
                         }
                     }
                 }
@@ -269,26 +242,7 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
                 if (!e->isHarmony() || (!muse::contains(tracks, e->track()))) {
                     continue;
                 }
-                // TODO also source interval should reflect modified key (f.ex. by prefer flat)
-                // now we calculate interval from first pitched staff
-                // but even if it were right staff, this may differ each tick (actual key signature)
-                // we can  add something like "concert pitch rootTpc" to harmony definition, or ...
-                Interval kv = e->staff()->transpose(e->tick());
-                Interval iv = e->part()->instrument(e->tick())->transpose();
-                Interval hInterval((interval.diatonic - kv.diatonic + iv.diatonic), (interval.chromatic - kv.chromatic + iv.chromatic));
-
-                Harmony* hh  = toHarmony(e);
-                // undoTransposeHarmony does not do links
-                // because it is also used to handle transposing instruments
-                // and score / parts could be in different concert pitch states
-                for (EngravingObject* se : hh->linkList()) {
-                    Harmony* h = toHarmony(se);
-                    if (mode == TransposeMode::DIATONICALLY) {
-                        score->undoTransposeHarmonyDiatonic(h, transposeInterval, useDoubleSharpsFlats, trKeys);
-                    } else {
-                        score->undoTransposeHarmony(h, hInterval, useDoubleSharpsFlats);
-                    }
-                }
+                transposeHarmony(toHarmony(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
             }
         }
     }
@@ -556,6 +510,40 @@ Interval Transpose::keydiff2Interval(Key oKey, Key nKey, TransposeDirection dir)
         diatonic  = diatonic == 0 ? 0 : diatonic - 7;
     }
     return Interval(diatonic, chromatic);
+}
+
+bool Transpose::transposeNote(Note* note, TransposeMode mode, int transposeInterval, bool trKeys, bool useDoubleSharpsFlats,
+                              Interval interval)
+{
+    if (mode == TransposeMode::DIATONICALLY) {
+        return note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
+    }
+
+    return note->transpose(interval, useDoubleSharpsFlats);
+}
+
+void Transpose::transposeHarmony(Harmony* harmony, Score* score, Interval interval, TransposeMode mode, int transposeInterval, bool trKeys,
+                                 bool useDoubleSharpsFlats)
+{
+    // TODO also source interval should reflect modified key (f.ex. by prefer flat)
+    // now we calculate interval from first pitched staff
+    // but even if it were right staff, this may differ each tick (actual key signature)
+    // we can  add something like "concert pitch rootTpc" to harmony definition, or ...
+    Interval kv = harmony->staff()->transpose(harmony->tick());
+    Interval iv = harmony->part()->instrument(harmony->tick())->transpose();
+    Interval hInterval((interval.diatonic - kv.diatonic + iv.diatonic), (interval.chromatic - kv.chromatic + iv.chromatic));
+
+    // undoTransposeHarmony does not do links
+    // because it is also used to handle transposing instruments
+    // and score / parts could be in different concert pitch states
+    for (EngravingObject* se : harmony->linkList()) {
+        Harmony* h = toHarmony(se);
+        if (mode == TransposeMode::DIATONICALLY) {
+            score->undoTransposeHarmonyDiatonic(h, transposeInterval, useDoubleSharpsFlats, trKeys);
+        } else {
+            score->undoTransposeHarmony(h, hInterval, useDoubleSharpsFlats);
+        }
+    }
 }
 
 //---------------------------------------------------------
