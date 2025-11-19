@@ -22,6 +22,7 @@
 
 #include "transposedialog.h"
 
+#include "internal/mscoreerrorscontroller.h"
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
@@ -217,6 +218,8 @@ void TransposeDialog::apply()
     options.needTransposeDoubleSharpsFlats = useDoubleSharpsFlats();
 
     interaction()->transpose(options);
+
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 
     if (m_allSelected) {
         interaction()->clearSelection();

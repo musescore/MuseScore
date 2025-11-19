@@ -574,7 +574,8 @@ void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interva
 
         std::vector<DiagramInfo> availableDiagrams = diagram->patternsFromHarmony(harmony->plainText());
         if (availableDiagrams.empty()) {
-            LOGI() << "ERROR";
+            diagram->undoFretClear();
+            MScore::setError(MsError::TRANSPOSE_NO_FRET_DIAGRAM, true);
             return;
         }
         score->undo(new FretDataChange(diagram, harmony->plainText()));
@@ -585,7 +586,8 @@ void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interva
     String pattern = FretDiagram::patternFromDiagram(diagram);
     std::vector<String> names = FretDiagram::harmoniesFromPattern(pattern);
     if (names.empty()) {
-        LOGI() << "ERROR";
+        diagram->undoFretClear();
+        MScore::setError(MsError::TRANSPOSE_NO_FRET_DIAGRAM, true);
         return;
     }
 
@@ -622,7 +624,8 @@ void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interva
 
     std::vector<DiagramInfo> availableDiagrams = diagram->patternsFromHarmony(harmony->plainText());
     if (availableDiagrams.empty()) {
-        LOGI() << "ERROR";
+        diagram->undoFretClear();
+        MScore::setError(MsError::TRANSPOSE_NO_FRET_DIAGRAM, true);
         return;
     }
     score->undo(new FretDataChange(diagram, harmony->plainText()));
