@@ -1645,17 +1645,6 @@ void TWrite::writeProperties(const SLine* item, XmlWriter& xml, WriteContext& ct
     writeProperty(item, xml, Pid::DASH_LINE_LEN);
     writeProperty(item, xml, Pid::DASH_GAP_LEN);
 
-    if (item->score()->isPaletteScore()) {
-        // when used as icon
-        if (!item->spannerSegments().empty()) {
-            const LineSegment* s = item->frontSegment();
-            xml.tag("length", s->pos2().x());
-        } else {
-            xml.tag("length", item->spatium() * 4);
-        }
-        return;
-    }
-
     if (!item->isUserModified()) {
         return;
     }

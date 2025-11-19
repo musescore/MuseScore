@@ -133,7 +133,6 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
         Pedal* newPedal = Factory::createPedal(paletteScore->dummy());
         Pedal* oldPedal = toPedal(item);
 
-        newPedal->setLen(oldPedal->frontSegment()->pos2().x());
         newPedal->setLineVisible(oldPedal->lineVisible());
         newPedal->setBeginHookType(oldPedal->beginHookType());
         newPedal->setEndHookType(oldPedal->endHookType());
