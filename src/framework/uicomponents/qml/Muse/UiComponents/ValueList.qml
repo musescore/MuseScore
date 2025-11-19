@@ -34,6 +34,7 @@ Item {
     property alias model: sortFilterProxyModel.sourceModel
 
     property bool readOnly: false
+    property var isReadOnlyFunction: null
 
     property string keyRoleName: "key"
     //: As in a "key/value" pair: for example, the "key" could be
@@ -57,6 +58,7 @@ Item {
     property bool isKeyEditable: false
     property int headerCapitalization: Font.AllUppercase
     property bool startEditByDoubleClick: false
+    property bool sorterEnabled: true
 
     property NavigationSection navigationSection: null
     property int navigationOrderStart: 0
@@ -165,43 +167,54 @@ Item {
 
         ValueListHeaderItem {
             Layout.fillHeight: true
-            Layout.preferredWidth: root.keyColumnWidth != 0 ? root.keyColumnWidth : -1
+            Layout.preferredWidth: root.keyColumnWidth != 0 ? root.keyColumnWidth + 2 * prv.sideMargin : -1
             Layout.fillWidth: root.keyColumnWidth != 0 ? false : true
             leftMargin: prv.sideMargin
+            rightMargin: prv.sideMargin
 
             headerTitle: keyTitle
             headerCapitalization: root.headerCapitalization
             spacing: prv.spacing
-            isSorterEnabled: keySorter.enabled
+            isSorterEnabled: root.sorterEnabled ? keySorter.enabled : false
             sortOrder: keySorter.sortOrder
 
             navigation.panel: header.headerNavigation
             navigation.column: 0
 
             onClicked: {
+                if (!root.sorterEnabled) {
+                    return
+                }
+
                 prv.toggleSorter(keySorter)
                 prv.setSorterEnabled(valueSorter, false)
             }
         }
+
+        SeparatorLine {}
 
         ValueListHeaderItem {
             Layout.preferredWidth: root.keyColumnWidth != 0 ? -1 : prv.valueItemWidth + prv.sideMargin
             Layout.fillWidth: root.keyColumnWidth != 0 ? true : false
             Layout.fillHeight: true
             Layout.alignment: root.keyColumnWidth != 0 ? Qt.AlignLeft : Qt.AlignRight
-            Layout.leftMargin: root.keyColumnWidth != 0 ? prv.sideMargin : 0
-            rightMargin: root.keyColumnWidth != 0 ? 0 : prv.sideMargin
+            Layout.leftMargin: root.keyColumnWidth != 0 ? prv.sideMargin : 18
+            rightMargin: prv.sideMargin
 
             headerTitle: valueTitle
             headerCapitalization: root.headerCapitalization
             spacing: prv.spacing
-            isSorterEnabled: valueSorter.enabled
+            isSorterEnabled: root.sorterEnabled ? valueSorter.enabled : false
             sortOrder: valueSorter.sortOrder
 
             navigation.panel: header.headerNavigation
             navigation.column: 1
 
             onClicked: {
+                if (!root.sorterEnabled) {
+                    return
+                }
+
                 prv.toggleSorter(valueSorter)
                 prv.setSorterEnabled(keySorter, false)
             }
@@ -264,10 +277,11 @@ Item {
 
             isSelected: selectionModel.hasSelection && selectionModel.isSelected(modelIndex)
             readOnly: root.readOnly
+            keyReadOnly: root.isReadOnlyFunction(model.index)
 
             drawZebra: root.drawZebra
             keyColumnWidth: root.keyColumnWidth
-            isKeyEditable: root.isKeyEditable
+            keysEditable: root.isKeyEditable
             startEditByDoubleClick: root.startEditByDoubleClick
 
             spacing: prv.spacing
@@ -275,7 +289,7 @@ Item {
             valueItemWidth: prv.valueItemWidth
 
             navigation.panel: view.navigation
-            navigation.enabled: enabled
+            navigation.enabled: root.isKeyEditable ? false : enabled
             navigation.row: model.index
             navigation.column: 0
 
