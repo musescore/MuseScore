@@ -262,6 +262,12 @@ QQmlListProperty<System> Score::systems()
     return wrapContainerProperty<System>(this, score()->systems());
 }
 
+QQmlListProperty<Lyric> Score::lyrics()
+{
+    static std::vector<Lyrics*> list = score()->lyrics();
+    return wrapContainerProperty<Lyric>(this, list);
+}
+
 //---------------------------------------------------------
 //   Score::startCmd
 //---------------------------------------------------------

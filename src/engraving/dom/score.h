@@ -1006,7 +1006,8 @@ public:
     size_t nmeasures() const;
     bool hasLyrics();
     bool hasHarmonies();
-    int  lyricCount();
+    int  lyricCount() const;
+    std::vector<Lyrics*> lyrics() const;
     int  harmonyCount();
     String extractLyrics();
     int keysig();

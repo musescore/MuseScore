@@ -5037,46 +5037,14 @@ bool Score::hasHarmonies()
 //   lyricCount
 //---------------------------------------------------------
 
-int Score::lyricCount()
+int Score::lyricCount() const
 {
-    size_t count = 0;
-    SegmentType st = SegmentType::ChordRest;
-    for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-        for (size_t i = 0; i < ntracks(); ++i) {
-            ChordRest* cr = toChordRest(seg->element(static_cast<int>(i)));
-            if (cr) {
-                count += cr->lyrics().size();
-            }
-        }
-    }
-    return int(count);
+    return int(lyrics().size());
 }
 
-//---------------------------------------------------------
-//   harmonyCount
-//---------------------------------------------------------
-
-int Score::harmonyCount()
+std::vector<Lyrics*> Score::lyrics() const
 {
-    int count = 0;
-    SegmentType st = SegmentType::ChordRest;
-    for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-        for (EngravingItem* e : seg->annotations()) {
-            if (e->type() == ElementType::HARMONY) {
-                count++;
-            }
-        }
-    }
-    return count;
-}
-
-//---------------------------------------------------------
-//   extractLyrics
-//---------------------------------------------------------
-
-String Score::extractLyrics()
-{
-    String result;
+    std::vector<Lyrics*> result;
     masterScore()->setExpandRepeats(true);
     SegmentType st = SegmentType::ChordRest;
     for (size_t track = 0; track < ntracks(); track++) {
@@ -5106,13 +5074,7 @@ String Score::extractLyrics()
                     if (!l) {
                         continue;
                     }
-                    String lyric = l->plainText().trimmed();
-                    LyricsSyllabic ls = l->syllabic();
-                    if (ls == LyricsSyllabic::SINGLE || ls == LyricsSyllabic::END) {
-                        result += lyric + u" ";
-                    } else if (ls == LyricsSyllabic::BEGIN || ls == LyricsSyllabic::MIDDLE) {
-                        result += lyric;
-                    }
+                    result.push_back(l);
                 }
                 m->setPlaybackCount(m->playbackCount() + 1);
                 if (m->endTick() >= endTick) {
@@ -5142,19 +5104,53 @@ String Score::extractLyrics()
                     if (!l) {
                         continue;
                     }
-                    String lyric = l->plainText().trimmed();
-                    LyricsSyllabic ls = l->syllabic();
-                    if (ls == LyricsSyllabic::SINGLE || ls == LyricsSyllabic::END) {
-                        result += lyric + u" ";
-                    } else if (ls == LyricsSyllabic::BEGIN || ls == LyricsSyllabic::MIDDLE) {
-                        result += lyric;
-                    }
+                    result.push_back(l);
                 }
             }
         }
     }
+    return result;
+}
+
+//---------------------------------------------------------
+//   extractLyrics
+//---------------------------------------------------------
+
+String Score::extractLyrics()
+{
+    String result;
+    std::vector<Lyrics*> list = lyrics();
+    for (const Lyrics* l : list) {
+        String lyric = l->plainText().trimmed();
+        LyricsSyllabic ls = l->syllabic();
+        if (ls == LyricsSyllabic::SINGLE || ls == LyricsSyllabic::END) {
+            result += lyric + u" ";
+        } else if (ls == LyricsSyllabic::BEGIN || ls == LyricsSyllabic::MIDDLE) {
+            result += lyric;
+        }
+    }
     return result.trimmed();
 }
+
+
+//---------------------------------------------------------
+//   harmonyCount
+//---------------------------------------------------------
+
+int Score::harmonyCount()
+{
+    int count = 0;
+    SegmentType st = SegmentType::ChordRest;
+    for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
+        for (EngravingItem* e : seg->annotations()) {
+            if (e->type() == ElementType::HARMONY) {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
 
 //---------------------------------------------------------
 //   keysig
