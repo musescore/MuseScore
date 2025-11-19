@@ -2172,31 +2172,34 @@ Tie* Score::cmdToggleTie()
     bool canAddTies = false;
     const size_t notes = noteList.size();
     std::vector<Note*> tieNoteList(notes);
+    Note* tieNote = nullptr;
+    Note* n = nullptr;
 
     bool sameChord = std::all_of(noteList.begin(), noteList.end(), [&](const Note* n) { return n->chord() == noteList[0]->chord(); });
     const bool shouldTieListSelection = !sameChord;
 
     for (size_t i = 0; i < notes; ++i) {
-        Note* n = noteList[i];
+        n = noteList[i];
         if (n->tieFor()) {
             tieNoteList[i] = nullptr;
         } else {
-            Note* tieNote = searchTieNote(n);
+            tieNote = searchTieNote(n);
             tieNoteList[i] = tieNote;
             if (tieNote) {
                 canAddTies = true;
             }
-            if (!tieNote && selection().isList() && sameChord) {
-                cmdAddTie();
-                if (notes >= 2) {
-                    Chord* c = n->chord()->next();
-                    for (Note* cn : c->notes()) {
-                        score()->select(cn, SelectType::ADD);
-                    }
-                }
-                return nullptr;
+        }
+    }
+
+    if (!tieNote && selection().isList() && sameChord) {
+        cmdAddTie();
+        if (notes >= 2) {
+            Chord* c = n->chord()->next();
+            for (Note* cn : c->notes()) {
+                score()->select(cn, SelectType::ADD);
             }
         }
+        return nullptr;
     }
 
     const TranslatableString actionName = canAddTies
