@@ -18,23 +18,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE_TEST muse_extensions_tests)
+set(MODULE_TEST engraving_api_tests)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/util_tests.cpp
 )
 
 set(MODULE_TEST_LINK
-    muse_extensions
-    muse_global
-    muse_ui
-    muse_uicomponents
-    muse_draw
+    engraving
 )
-
-# Conditionally link to muse_autobot if it exists (not available in all build configurations)
-if(TARGET muse_autobot)
-    list(APPEND MODULE_TEST_LINK muse_autobot)
-endif()
 
 include(SetupGTest)

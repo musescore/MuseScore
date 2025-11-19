@@ -35,7 +35,7 @@
 
 using namespace muse;
 
-namespace muse::extensions::apiv1 {
+namespace mu::engraving::apiv1 {
 //---------------------------------------------------------
 //   isPathAllowed
 //   Check if the file path is within allowed directories

@@ -25,7 +25,7 @@
 #include <QDir>
 #include <QProcess>
 
-namespace muse::extensions::apiv1 {
+namespace mu::engraving::apiv1 {
 //---------------------------------------------------------
 ///   \class FileIO
 ///   Provides a simple API to perform file reading and
