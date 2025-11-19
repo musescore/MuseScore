@@ -49,6 +49,22 @@ Score* TestUtils::createPart(MasterScore* masterScore, size_t partNumber)
     return nscore;
 }
 
+Score* TestUtils::createEmptyPart(MasterScore* masterScore)
+{
+    Score* nscore = masterScore->createScore();
+
+    Excerpt* ex = new Excerpt(masterScore);
+    ex->setExcerptScore(nscore);
+
+    Excerpt::createExcerpt(ex);
+
+    masterScore->excerpts().push_back(ex);
+    masterScore->setExcerptsChanged(true);
+
+    EXPECT_TRUE(nscore);
+    return nscore;
+}
+
 void TestUtils::createParts(MasterScore* masterScore, size_t numberOfParts)
 {
     EXPECT_TRUE(numberOfParts > 0);
