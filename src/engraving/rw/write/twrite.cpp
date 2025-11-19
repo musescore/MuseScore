@@ -1498,11 +1498,18 @@ void TWrite::write(const GuitarBend* item, XmlWriter& xml, WriteContext& ctx)
         return;
     }
     xml.startElement(item);
-    xml.tag("guitarBendType", static_cast<int>(item->type()));
+    xml.tag("guitarBendType", static_cast<int>(item->bendType()));
     xml.tag("bendStartTimeFactor", item->startTimeFactor());
     xml.tag("bendEndTimeFactor", item->endTimeFactor());
     writeProperty(item, xml, Pid::DIRECTION);
     writeProperty(item, xml, Pid::BEND_SHOW_HOLD_LINE);
+    if (item->isDive()) {
+        writeProperty(item, xml, Pid::GUITAR_DIVE_TAB_POS);
+        writeProperty(item, xml, Pid::GUITAR_BEND_AMOUNT);
+        writeProperty(item, xml, Pid::VIBRATO_LINE_TYPE);
+        writeProperty(item, xml, Pid::GUITAR_DIVE_IS_SLACK);
+    }
+
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
 
     GuitarBendHold* hold = item->holdLine();

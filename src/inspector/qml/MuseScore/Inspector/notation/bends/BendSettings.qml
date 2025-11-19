@@ -46,6 +46,8 @@ Column {
     PlacementSection {
         id: placmentSection
 
+        visible: root.model ? !root.model.isTabStaff && !root.model.isDip : true
+
         propertyItem: root.model ? root.model.bendDirection : null
 
         //! NOTE: Bend uses the direction property,
@@ -62,6 +64,7 @@ Column {
 
     FlatRadioButtonGroupPropertyView {
         id: showHoldSection
+        visible: root.model ? root.model.isShowHoldLineAvailable : false
         titleText: qsTrc("inspector", "Hold line")
         propertyItem: root.model ? root.model.showHoldLine : null
 
@@ -76,15 +79,49 @@ Column {
         ]
     }
 
+    FlatRadioButtonGroupPropertyView {
+        id: dipVibratoTypeSection
+        visible: root.model ? root.model.isDip && root.model.isTabStaff : false
+        titleText: qsTrc("inspector", "Tremolo line")
+        propertyItem: root.model ? root.model.dipVibratoType : null
+
+        navigationName: "TremoloLine"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: showHoldSection.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("inspector", "None"), value: BendTypes.VIBRATO_NONE },
+            { text: qsTrc("inspector", "Normal"), value: BendTypes.VIBRATO_VIBRATO },
+            { text: qsTrc("inspector", "Wide"), value: BendTypes.VIBRATO_VIBRATO_WIDE },
+        ]
+    }
+
+    FlatRadioButtonGroupPropertyView {
+        id: tabStaffLayout
+        visible: root.model ? root.model.isDiveTabPosAvailable : false
+        titleText: qsTrc("inspector", "Tablature staff layout")
+        propertyItem: root.model ? root.model.diveTabPos : null
+
+        navigationName: "HoldLine"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: dipVibratoTypeSection.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO},
+            { text: qsTrc("inspector", "On staff"), value: DirectionTypes.VERTICAL_DOWN},
+            { text: qsTrc("inspector", "Above staff"), value: DirectionTypes.VERTICAL_UP},
+        ]
+    }
+
     InspectorPropertyView {
         id: bend
-        titleText: qsTrc("inspector", "Customize bend")
+        titleText: root.model && root.model.isDive ? qsTrc("inspector", "Customize dive") : qsTrc("inspector", "Customize bend")
 
         enabled: root.model ? root.model.isBendCurveEnabled : false
         visible: true
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: showHoldSection.navigationRowEnd + 1
+        navigationRowStart: tabStaffLayout.navigationRowEnd + 1
 
         spacing: 0
 
@@ -160,17 +197,21 @@ Column {
                 id: bendCanvas
 
                 width: parent.width
-                height: 200
+                height: root.model && root.model.isDive ? 400 : 200
 
                 enabled: bend.enabled
                 focus: true
 
                 pointList: root.model ? root.model.bendCurve : null
 
-                rowCount: 13
+                rowCount: root.model && root.model.isDive ? 50 : 13
                 columnCount: 13
                 rowSpacing: 4
                 columnSpacing: 3
+
+                topLineValue: root.model && root.model.isDive ? 4 : 3
+                showHalfs: !(root.model && root.model.isDive)
+                straightLines: root.model && root.model.isDive
 
                 accessibleParent: navCtrl.accessible
 

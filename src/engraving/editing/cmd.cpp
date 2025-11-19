@@ -924,10 +924,12 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
     }
 
     Chord* chord = note->chord();
+    bool isDive = static_cast<int>(type) >= static_cast<int>(GuitarBendType::DIVE)
+                  && static_cast<int>(type) <= static_cast<int>(GuitarBendType::SCOOP);
 
-    if (type == GuitarBendType::BEND) {
+    if (type == GuitarBendType::BEND || type == GuitarBendType::DIVE) {
         for (Spanner* sp : note->spannerFor()) {
-            if (sp->isGuitarBend() || sp->isGlissando()) {
+            if ((sp->isGuitarBend() && toGuitarBend(sp)->isDive() == isDive) || sp->isGlissando()) {
                 return nullptr;
             }
         }
@@ -939,7 +941,7 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         bool suitableEndNote = endNote;
         if (endNote) {
             for (Spanner* sp : endNote->spannerBack()) {
-                if (sp->isTie() || sp->isGlissando() || sp->isGuitarBend()) {
+                if (sp->isTie() || sp->isGlissando() || (sp->isGuitarBend() && toGuitarBend(sp)->isDive() == isDive)) {
                     suitableEndNote = false;
                     break;
                 }
@@ -947,7 +949,7 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         }
 
         if (!suitableEndNote) {
-            endNote = GuitarBend::createEndNote(note);
+            endNote = GuitarBend::createEndNote(note, type);
         }
 
         if (!endNote) {
@@ -960,27 +962,29 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
     bend->setTick(chord->tick());
     bend->setTrack(chord->track());
 
-    if (type == GuitarBendType::BEND) {
-        bend->setType(chord->isGrace() ? GuitarBendType::GRACE_NOTE_BEND : type);
+    if (type == GuitarBendType::BEND || type == GuitarBendType::DIVE) {
+        bend->setBendType(chord->isGrace() ? GuitarBendType::GRACE_NOTE_BEND : type);
         bend->setStartElement(note);
         bend->setTick2(endNote->tick());
         bend->setTrack2(endNote->track());
         bend->setEndElement(endNote);
         bend->setParent(note);
-        GuitarBend::fixNotesFrettingForStandardBend(note, endNote);
+        if (type == GuitarBendType::BEND) {
+            GuitarBend::fixNotesFrettingForStandardBend(note, endNote);
+        }
     } else {
-        bend->setType(type);
+        bend->setBendType(type);
         bend->setTick2(chord->tick());
         bend->setTrack2(chord->track());
 
-        if (type == GuitarBendType::PRE_BEND || type == GuitarBendType::GRACE_NOTE_BEND) {
+        if (type == GuitarBendType::PRE_BEND || type == GuitarBendType::GRACE_NOTE_BEND || type == GuitarBendType::PRE_DIVE) {
             const GraceNotesGroup& gracesBefore = chord->graceNotesBefore();
 
             // Create grace note
             Note* graceNote = gracesBefore.empty()
                               ? setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, Constants::DIVISION / 2)
                               : addNote(gracesBefore.back(), note->noteVal());
-            graceNote->transposeDiatonic(-1, true, false);
+            graceNote->transposeDiatonic(type == GuitarBendType::PRE_DIVE ? 1 : -1, true, false);
             GuitarBend::fixNotesFrettingForGraceBend(graceNote, note);
 
             Chord* graceChord = graceNote->chord();
@@ -994,7 +998,7 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
             bend->setParent(graceNote);
             bend->setStartElement(graceNote);
             bend->setEndElement(note);
-        } else if (type == GuitarBendType::SLIGHT_BEND) {
+        } else if (type == GuitarBendType::SLIGHT_BEND || type == GuitarBendType::DIP || type == GuitarBendType::SCOOP) {
             bend->setParent(note);
             bend->setStartElement(note);
             // Slight bends don't end on another note
@@ -1002,8 +1006,12 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         }
     }
 
-    if (bend->type() == GuitarBendType::GRACE_NOTE_BEND) {
+    if (bend->bendType() == GuitarBendType::GRACE_NOTE_BEND) {
         bend->setEndTimeFactor(GuitarBend::GRACE_NOTE_BEND_DEFAULT_END_TIME_FACTOR);
+    }
+
+    if (bend->bendType() == GuitarBendType::DIP || bend->bendType() == GuitarBendType::SCOOP) {
+        bend->setBendAmountInQuarterTones(-2);
     }
 
     Chord* startChord = bend->startNote()->chord();

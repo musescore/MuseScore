@@ -160,6 +160,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "pedal",
     "bend",
     "let-ring",
+    "whammy-bar",
     "palm-mute",
     "user1",
     "user2",
@@ -632,12 +633,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::staffTextPosBelow,       false, staffTextPosBelow,     resetStaffTextPosBelow },
         { StyleId::staffTextMinDistance,    false, staffTextMinDistance,  resetStaffTextMinDistance },
 
-        { StyleId::guitarBendLineWidth,     false, bendLineWidth,     resetBendLineWidth },
-        { StyleId::guitarBendLineWidthTab,  false, bendLineWidthTab,  resetBendLineWidthTab },
-        { StyleId::guitarBendArrowWidth,    false, bendArrowWidth,    resetBendArrowWidth },
-        { StyleId::guitarBendArrowHeight,   false, bendArrowHeight,   resetBendArrowHeight },
-        { StyleId::useCueSizeFretForGraceBends, false, guitarBendCueSizedGraceFrets, 0 },
-
         /// Tablature styles
 
         { StyleId::slurShowTabSimple, false, slurShowTabSimple, 0 },
@@ -829,11 +824,12 @@ EditStyle::EditStyle(QWidget* parent)
     // BENDS (QML)
     // ====================================================
 
-    auto fullBendStyleSelector = createQmlWidget(
-        fullBendStyleBoxSelector,
-        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml")));
-    fullBendStyleSelector.widget->setMinimumSize(224, 60);
-    fullBendStyleBoxSelector->layout()->addWidget(fullBendStyleSelector.widget);
+    auto bendsPage = createQmlWidget(
+        PageBend,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/BendsPage.qml")));
+    bendsPage.widget->setMinimumSize(224, 60);
+    connect(bendsPage.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
+    PageBend->layout()->addWidget(bendsPage.widget);
 
     // ====================================================
     //  SLURS AND TIES (QML)
@@ -1845,6 +1841,9 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
 
         case TextStyleType::LET_RING:
             return "let-ring";
+
+        case TextStyleType::WHAMMY_BAR:
+            return "whammy_bar";
 
         case TextStyleType::PALM_MUTE:
             return "palm-mute";

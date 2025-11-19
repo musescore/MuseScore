@@ -64,6 +64,11 @@ enum class ActionIconType : signed char {
     GRACE_NOTE_BEND,
     SLIGHT_BEND,
 
+    DIVE,
+    PRE_DIVE,
+    DIP,
+    SCOOP,
+
     NOTE_ANCHORED_LINE,
 
     SYSTEM_LOCK,
