@@ -73,6 +73,7 @@ public:
 
     Q_INVOKABLE QString mixerPanelName() const;
     Q_INVOKABLE QString pianoKeyboardPanelName() const;
+    Q_INVOKABLE QString pianoRollPanelName() const;
     Q_INVOKABLE QString timelinePanelName() const;
     Q_INVOKABLE QString drumsetPanelName() const;
     Q_INVOKABLE QString percussionPanelName() const;
@@ -97,9 +98,13 @@ private:
     void scheduleUpdateExtensionsToolBarVisibility();
     void doUpdateExtensionsToolBarVisibility();
 
+    void scheduleUpdatePianoRollPanelVisibility();
+    void doUpdatePianoRollPanelVisibility();
+
     bool m_inited = false;
     bool m_updateDrumsetPanelVisibilityScheduled = false;
     bool m_updatePercussionPanelVisibilityScheduled = false;
     bool m_updateExtensionsToolBarVisibilityScheduled = false;
+    bool m_updatePianoRollPanelVisibilityScheduled = false;
 };
 }

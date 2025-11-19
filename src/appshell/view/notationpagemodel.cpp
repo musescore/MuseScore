@@ -81,6 +81,7 @@ void NotationPageModel::init()
     scheduleUpdateDrumsetPanelVisibility();
     scheduleUpdatePercussionPanelVisibility();
     scheduleUpdateExtensionsToolBarVisibility();
+    scheduleUpdatePianoRollPanelVisibility();
 
     notationConfiguration()->useNewPercussionPanelChanged().onNotify(this, [this]() {
         scheduleUpdateDrumsetPanelVisibility();
@@ -154,6 +155,11 @@ QString NotationPageModel::pianoKeyboardPanelName() const
     return PIANO_KEYBOARD_PANEL_NAME;
 }
 
+QString NotationPageModel::pianoRollPanelName() const
+{
+    return PIANO_ROLL_PANEL_NAME;
+}
+
 QString NotationPageModel::timelinePanelName() const
 {
     return TIMELINE_PANEL_NAME;
@@ -185,6 +191,7 @@ void NotationPageModel::onNotationChanged()
     noteInput->stateChanged().onNotify(this, [this]() {
         scheduleUpdateDrumsetPanelVisibility();
         scheduleUpdatePercussionPanelVisibility();
+        scheduleUpdatePianoRollPanelVisibility();
     });
 
     INotationInteractionPtr notationInteraction = notation->interaction();
@@ -401,4 +408,48 @@ void NotationPageModel::doUpdateExtensionsToolBarVisibility()
     }
 
     setExtensionsToolBarOpen(false);
+}
+
+void NotationPageModel::scheduleUpdatePianoRollPanelVisibility()
+{
+    if (m_updatePianoRollPanelVisibilityScheduled) {
+        return;
+    }
+
+    m_updatePianoRollPanelVisibilityScheduled = true;
+
+    //! NOTE: ensure we don't update it multiple times in succession
+    muse::async::Async::call(this, [this]() {
+        doUpdatePianoRollPanelVisibility();
+        m_updatePianoRollPanelVisibilityScheduled = false;
+    });
+}
+
+void NotationPageModel::doUpdatePianoRollPanelVisibility()
+{
+    TRACEFUNC;
+
+    const muse::dock::IDockWindow* window = dockWindowProvider()->window();
+    if (!window) {
+        return;
+    }
+
+    auto setPianoRollPanelOpen = [this, window](bool open) {
+        if (open == window->isDockOpen(PIANO_ROLL_PANEL_NAME)) {
+            return;
+        }
+
+        dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(PIANO_ROLL_PANEL_NAME, open));
+    };
+
+    const INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
+        setPianoRollPanelOpen(false);
+        return;
+    }
+
+    const INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
+    const bool shouldOpen = noteInput->isNoteInputMode() && noteInput->state().drumset() != nullptr;
+
+    setPianoRollPanelOpen(shouldOpen);
 }
