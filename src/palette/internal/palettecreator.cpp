@@ -472,7 +472,6 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         cell->drawStaff = false;
     }
 
-    qreal w = gpaletteScore->style().spatium() * 8;
     auto volta = makeElement<Volta>(gpaletteScore);
     volta->setVoltaType(Volta::Type::CLOSED);
     volta->setText(u"1.");
