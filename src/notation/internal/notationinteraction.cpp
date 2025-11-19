@@ -97,7 +97,6 @@
 #include "engraving/rw/rwregister.h"
 #include "engraving/rw/xmlreader.h"
 
-#include "mscoreerrorscontroller.h"
 #include "notationerrors.h"
 #include "notation.h"
 #include "notationnoteinput.h"
@@ -237,6 +236,8 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     m_selectionFilter = std::make_shared<NotationSelectionFilter>(notation, [this]() {
         notifyAboutSelectionChangedIfNeed();
     });
+
+    m_errorsController = std::make_shared<MScoreErrorsController>(iocContext());
 
     m_noteInput->stateChanged().onNotify(this, [this]() {
         if (!m_noteInput->isNoteInputMode()) {
@@ -1379,8 +1380,7 @@ void NotationInteraction::endDrag()
     }
 
     notifyAboutDragChanged();
-
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    checkAndShowError();
 }
 
 muse::async::Notification NotationInteraction::dragChanged() const
@@ -2079,7 +2079,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
         notifyAboutDropChanged();
     }
 
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    checkAndShowError();
 
     return accepted;
 }
@@ -2196,7 +2196,7 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
         endDrop();
         notifyAboutDropChanged();
         //MScore::setError(MsError::DEST_TUPLET);
-        //MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+        // checkAndShowError();
         // NOTE: if we show the error popup here it seems that the mouse-release event is missed
         // so the dragged region stays sticked to the mouse and move around. Don't know how to fix it. [M.S.]
         return false;
@@ -2231,7 +2231,7 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     endDrop();
     apply();
 
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    checkAndShowError();
 
     return true;
 }
@@ -2332,7 +2332,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
 
     setDropTarget(nullptr);
 
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    checkAndShowError();
 
     return true;
 }
@@ -4870,7 +4870,7 @@ void NotationInteraction::splitSelectedMeasure()
     SplitJoinMeasure::splitMeasure(score()->masterScore(), chordRest->tick());
     apply();
 
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    checkAndShowError();
 }
 
 void NotationInteraction::joinSelectedMeasures()
@@ -4885,7 +4885,7 @@ void NotationInteraction::joinSelectedMeasures()
     SplitJoinMeasure::joinMeasures(score()->masterScore(), measureRange.startMeasure->tick(), measureRange.endMeasure->tick());
     apply();
 
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    checkAndShowError();
 }
 
 Ret NotationInteraction::canAddBoxes() const
@@ -5077,7 +5077,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
 void NotationInteraction::copySelection()
 {
     if (!selection()->canCopy()) {
-        MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+        checkAndShowError();
         return;
     }
 
@@ -5224,7 +5224,7 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
         selectAndStartEditIfNeeded(pastedElement);
     }
 
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    checkAndShowError();
 }
 
 void NotationInteraction::swapSelection()
@@ -5267,7 +5267,7 @@ void NotationInteraction::deleteSelection()
         score()->cmdDeleteSelection();
     }
 
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    checkAndShowError();
     apply();
     resetHitElementContext();
 }
@@ -5886,7 +5886,7 @@ void NotationInteraction::addIntervalToSelectedNotes(int interval)
 
     if (notes.empty()) {
         MScore::setError(MsError::NO_NOTE_SELECTED);
-        MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+        checkAndShowError();
         return;
     }
 
@@ -8207,4 +8207,12 @@ muse::async::Channel<NotationInteraction::ShowItemRequest> NotationInteraction::
 void NotationInteraction::setGetViewRectFunc(const std::function<RectF()>& func)
 {
     static_cast<NotationNoteInput*>(m_noteInput.get())->setGetViewRectFunc(func);
+}
+
+void NotationInteraction::checkAndShowError()
+{
+    IF_ASSERT_FAILED(m_errorsController) {
+        return;
+    }
+    m_errorsController->checkAndShowMScoreError();
 }

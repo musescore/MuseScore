@@ -35,8 +35,6 @@
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/utils.h"
 
-#include "mscoreerrorscontroller.h"
-
 #include "log.h"
 
 using namespace mu::notation;
@@ -464,8 +462,7 @@ void NotationNoteInput::addNote(const NoteInputParams& params, NoteAddingMode ad
     notifyNoteAddedChanged();
     notifyAboutStateChanged();
 
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
-
+    m_interaction->checkAndShowError();
     m_interaction->showItem(state().cr());
 }
 
@@ -481,7 +478,7 @@ void NotationNoteInput::padNote(const Pad& pad)
 
     notifyAboutStateChanged();
 
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    m_interaction->checkAndShowError();
 }
 
 Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
@@ -501,7 +498,7 @@ Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
     notifyNoteAddedChanged();
     notifyAboutStateChanged();
 
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    m_interaction->checkAndShowError();
 
     return ret;
 }
@@ -521,7 +518,7 @@ void NotationNoteInput::removeNote(const PointF& pos)
 
     notifyAboutStateChanged();
 
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    m_interaction->checkAndShowError();
 }
 
 void NotationNoteInput::setInputNote(const NoteInputParams& params)
@@ -646,7 +643,7 @@ void NotationNoteInput::setAccidental(AccidentalType accidentalType)
 
     notifyAboutStateChanged();
 
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    m_interaction->checkAndShowError();
 }
 
 void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
@@ -661,7 +658,7 @@ void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
 
     notifyAboutStateChanged();
 
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    m_interaction->checkAndShowError();
 }
 
 void NotationNoteInput::setDrumNote(int note)
@@ -870,8 +867,7 @@ void NotationNoteInput::addTie()
     score()->cmdAddTie();
 
     notifyAboutStateChanged();
-
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    m_interaction->checkAndShowError();
 }
 
 void NotationNoteInput::addLaissezVib()
@@ -882,8 +878,7 @@ void NotationNoteInput::addLaissezVib()
     score()->cmdToggleLaissezVib();
 
     notifyAboutStateChanged();
-
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    m_interaction->checkAndShowError();
 }
 
 Notification NotationNoteInput::noteAdded() const
@@ -965,8 +960,7 @@ void NotationNoteInput::doubleNoteInputDuration()
     apply();
 
     notifyAboutStateChanged();
-
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    m_interaction->checkAndShowError();
 }
 
 void NotationNoteInput::halveNoteInputDuration()
@@ -978,6 +972,5 @@ void NotationNoteInput::halveNoteInputDuration()
     apply();
 
     notifyAboutStateChanged();
-
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+    m_interaction->checkAndShowError();
 }
