@@ -81,7 +81,7 @@ void BendsRenderer::render(const Note* note, const RenderingContext& ctx, mpe::P
     }
 
     if (const GuitarBend* bendBack = note->bendBack()) {
-        if (bendBack->type() != GuitarBendType::PRE_BEND) {
+        if (bendBack->bendType() != GuitarBendType::PRE_BEND) {
             return;
         }
     }
@@ -120,13 +120,13 @@ void BendsRenderer::renderMultibend(const Note* startNote, const RenderingContex
         }
 
         if (currBend) {
-            if (currBend->type() == GuitarBendType::SLIGHT_BEND) {
+            if (currBend->bendType() == GuitarBendType::SLIGHT_BEND) {
                 bendEvents.emplace_back(buildSlightNoteEvent(currNote, currNoteCtx));
                 break;
             }
         }
 
-        currNote = currBend ? currBend->endNote() : nullptr;
+        currNote = currBend && currBend->endNote() != currNote ? currBend->endNote() : nullptr;
         currBend = currNote ? currNote->bendFor() : nullptr;
     }
 

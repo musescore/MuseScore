@@ -732,7 +732,7 @@ bool EngravingObject::isSLineSegment() const
     return isHairpinSegment() || isOttavaSegment() || isPedalSegment()
            || isTrillSegment() || isVoltaSegment() || isTextLineSegment()
            || isGlissandoSegment() || isLetRingSegment() || isVibratoSegment() || isPalmMuteSegment()
-           || isGradualTempoChangeSegment();
+           || isGradualTempoChangeSegment() || isWhammyBarSegment();
 }
 
 //---------------------------------------------------------

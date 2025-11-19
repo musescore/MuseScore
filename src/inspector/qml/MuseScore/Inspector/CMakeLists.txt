@@ -120,14 +120,10 @@ qt_add_qml_module(inspector_qml
         notation/lines/hairpinlinesettingsmodel.h
         notation/lines/hairpinsettingsmodel.cpp
         notation/lines/hairpinsettingsmodel.h
-        notation/lines/letringsettingsmodel.cpp
-        notation/lines/letringsettingsmodel.h
         notation/lines/notelinesettingsmodel.cpp
         notation/lines/notelinesettingsmodel.h
         notation/lines/ottavasettingsmodel.cpp
         notation/lines/ottavasettingsmodel.h
-        notation/lines/palmmutesettingsmodel.cpp
-        notation/lines/palmmutesettingsmodel.h
         notation/lines/pedalsettingsmodel.cpp
         notation/lines/pedalsettingsmodel.h
         notation/lines/slurandtiesettingsmodel.cpp

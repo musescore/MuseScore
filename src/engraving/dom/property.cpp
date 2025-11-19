@@ -424,6 +424,10 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BEND_SHOW_HOLD_LINE,                 P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "bendShowHoldLine",                QT_TRANSLATE_NOOP("engraving/propertyName", "bend show hold line") },
     { Pid::BEND_START_TIME_FACTOR,              P_TYPE::REAL,                      PropertyGroup::APPEARANCE, true,  "bendStartTimeFactor",             QT_TRANSLATE_NOOP("engraving/propertyName", "bend start time factor") },
     { Pid::BEND_END_TIME_FACTOR,                P_TYPE::REAL,                      PropertyGroup::APPEARANCE, true,  "bendEndTimeFactor",               QT_TRANSLATE_NOOP("engraving/propertyName", "bend end time factor") },
+    { Pid::GUITAR_DIVE_TAB_POS ,                P_TYPE::DIRECTION_V,               PropertyGroup::POSITION,   true,  "guitarDiveTabPos",                QT_TRANSLATE_NOOP("engraving/propertyName", "guitar dive tab pos") },
+    { Pid::GUITAR_BEND_AMOUNT ,                 P_TYPE::INT,                       PropertyGroup::NONE,       true,  "guitarDipAmount",                 QT_TRANSLATE_NOOP("engraving/propertyName", "guitar dip amount") },
+    { Pid::VIBRATO_LINE_TYPE ,                  P_TYPE::INT,                       PropertyGroup::NONE,       true,  "guitarDipTremoloLine",            QT_TRANSLATE_NOOP("engraving/propertyName", "guitar dip tremolo line") },
+    { Pid::GUITAR_DIVE_IS_SLACK ,               P_TYPE::BOOL,                      PropertyGroup::NONE,       true,  "guitarDiveIsSlack",               QT_TRANSLATE_NOOP("engraving/propertyName", "guitar dive is slack") },
 
     { Pid::TREMOLOBAR_TYPE,                     P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "tremoloBarType",                  QT_TRANSLATE_NOOP("engraving/propertyName", "tremolobar type") },
     { Pid::TREMOLOBAR_CURVE,                    P_TYPE::PITCH_VALUES,              PropertyGroup::APPEARANCE, true,  "tremoloBarCurve",                 QT_TRANSLATE_NOOP("engraving/propertyName", "tremolobar curve") },

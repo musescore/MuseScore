@@ -92,7 +92,7 @@
 #include "view/styledialog/notespagemodel.h"
 #include "view/styledialog/restspagemodel.h"
 #include "view/styledialog/beamspagemodel.h"
-#include "view/styledialog/bendstyleselector.h"
+#include "view/styledialog/bendspagemodel.h"
 #include "view/styledialog/accidentalspagemodel.h"
 #include "view/styledialog/fretboardspagemodel.h"
 #include "view/styledialog/glissandosectionmodel.h"
@@ -234,7 +234,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NotesPageModel>("MuseScore.NotationScene", 1, 0, "NotesPageModel");
     qmlRegisterType<RestsPageModel>("MuseScore.NotationScene", 1, 0, "RestsPageModel");
     qmlRegisterType<BeamsPageModel>("MuseScore.NotationScene", 1, 0, "BeamsPageModel");
-    qmlRegisterType<BendStyleSelector>("MuseScore.NotationScene", 1, 0, "BendStyleSelector");
+    qmlRegisterType<BendsPageModel>("MuseScore.NotationScene", 1, 0, "BendsPageModel");
     qmlRegisterType<AccidentalsPageModel>("MuseScore.NotationScene", 1, 0, "AccidentalsPageModel");
     qmlRegisterType<FretboardsPageModel>("MuseScore.NotationScene", 1, 0, "FretboardsPageModel");
     qmlRegisterType<GlissandoSectionModel>("MuseScore.NotationScene", 1, 0, "GlissandoSectionModel");

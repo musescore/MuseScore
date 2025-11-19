@@ -1807,6 +1807,11 @@ static void setActionIconTypeFromAction(ActionIcon* i, const std::string& action
         { "grace-note-bend", ActionIconType::GRACE_NOTE_BEND },
         { "slight-bend", ActionIconType::SLIGHT_BEND },
 
+        { "dive", ActionIconType::DIVE },
+        { "pre-dive", ActionIconType::PRE_DIVE },
+        { "dip", ActionIconType::DIP },
+        { "scoop", ActionIconType::SCOOP },
+
         { "add-noteline", ActionIconType::NOTE_ANCHORED_LINE },
 
         { "toggle-system-lock", ActionIconType::SYSTEM_LOCK }
@@ -2824,7 +2829,7 @@ void TRead::read(GuitarBend* g, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "guitarBendType") {
-            g->setType(static_cast<GuitarBendType>(e.readInt()));
+            g->setBendType(static_cast<GuitarBendType>(e.readInt()));
         } else if (tag == "GuitarBendHold") {
             GuitarBendHold* hold = new GuitarBendHold(g);
             TRead::read(hold, e, ctx);
@@ -2834,6 +2839,10 @@ void TRead::read(GuitarBend* g, XmlReader& e, ReadContext& ctx)
         } else if (TRead::readProperty(g, tag, e, ctx, Pid::BEND_SHOW_HOLD_LINE)) {
         } else if (TRead::readProperty(g, tag, e, ctx, Pid::BEND_START_TIME_FACTOR)) {
         } else if (TRead::readProperty(g, tag, e, ctx, Pid::BEND_END_TIME_FACTOR)) {
+        } else if (TRead::readProperty(g, tag, e, ctx, Pid::GUITAR_DIVE_TAB_POS)) {
+        } else if (TRead::readProperty(g, tag, e, ctx, Pid::GUITAR_BEND_AMOUNT)) {
+        } else if (TRead::readProperty(g, tag, e, ctx, Pid::VIBRATO_LINE_TYPE)) {
+        } else if (TRead::readProperty(g, tag, e, ctx, Pid::GUITAR_DIVE_IS_SLACK)) {
         } else if (TRead::readStyledProperty(g, tag, e, ctx)) {
         } else if (!TRead::readProperties(static_cast<SLine*>(g), e, ctx)) {
             e.unknown();

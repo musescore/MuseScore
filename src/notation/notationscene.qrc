@@ -43,7 +43,7 @@
         <file>qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/DynamicPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/StaffVisibilityPopup.qml</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/BendsPage.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleToggleWithImage.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/AccidentalsPage.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/followOffset-OFF.png</file>

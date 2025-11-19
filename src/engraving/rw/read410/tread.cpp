@@ -2885,7 +2885,7 @@ void TRead::read(GuitarBend* g, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "guitarBendType") {
-            g->setType(static_cast<GuitarBendType>(e.readInt()));
+            g->setBendType(static_cast<GuitarBendType>(e.readInt()));
         } else if (tag == "GuitarBendHold") {
             GuitarBendHold* hold = new GuitarBendHold(g);
             TRead::read(hold, e, ctx);

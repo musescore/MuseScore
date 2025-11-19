@@ -63,6 +63,19 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
                     }
                 }
             }
+
+            staff_idx_t nstaves = ctx.dom().nstaves();
+            for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+                if (staffIdx >= system->staves().size() || !system->staff(staffIdx)->show()) {
+                    continue;
+                }
+                const Staff* staff = ctx.dom().staff(staffIdx);
+                const StaffType* staffType = staff->staffType(measure->tick());
+                StaffLines* staffLines = measure->staffLines(staffIdx);
+                if (staffType->isTabStaff()) {
+                    maskTABStringLinesForFrets(staffLines, ctx);
+                }
+            }
         }
     }
 }
@@ -272,7 +285,10 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
 
     auto maskFret = [&mask, linesThrough, padding, staffLinesPos] (Chord* chord) {
         for (Note* note : chord->notes()) {
-            if (note->visible() && !note->shouldHideFret() && (!linesThrough || note->fretConflict())) {
+            if (!note->visible()) {
+                continue;
+            }
+            if (!note->shouldHideFret() && (!linesThrough || note->fretConflict())) {
                 Shape noteShape = note->ldata()->bbox();
                 const Parenthesis* leftParen = note->leftParen();
                 if (leftParen && leftParen->addToSkyline()) {

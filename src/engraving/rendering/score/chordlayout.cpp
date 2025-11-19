@@ -349,7 +349,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     const Staff* st    = item->staff();
     const StaffType* tab = st->staffTypeForElement(item);
     double lineDist    = tab->lineDistance().val() * _spatium;
-    double stemX       = StemLayout::tabStemPosX() * _spatium;
+    double stemX       = 0.5 * headWidth;
     int ledgerLines = 0;
     double llY         = 0.0;
 
@@ -2965,7 +2965,11 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
                 if (sp->isGlissando()) {
                     TLayout::layoutGlissando(toGlissando(sp), ctx);
                 } else if (sp->isGuitarBend()) {
-                    TLayout::layoutGuitarBend(toGuitarBend(sp), ctx);
+                    const StaffType* staffType = chord->staffType();
+                    bool isDiveOnTab = toGuitarBend(sp)->isDive() && staffType && staffType->isTabStaff();
+                    if (!isDiveOnTab) {
+                        TLayout::layoutGuitarBend(toGuitarBend(sp), ctx);
+                    }
                 } else if (sp->isNoteLine()) {
                     TLayout::layoutNoteLine(toNoteLine(sp), ctx);
                 }
@@ -3366,6 +3370,11 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
 
     for (Note* note : item->notes()) {
         shape.add(note->shape().translate(note->pos()));
+        if (GuitarBend* bendBack = note->bendBack(); bendBack && bendBack->bendType() == GuitarBendType::SCOOP
+            && !bendBack->segmentsEmpty()) {
+            RectF scoopBbox = bendBack->frontSegment()->ldata()->bbox();
+            shape.add(scoopBbox.translated(PointF(-scoopBbox.width() - 0.35 * item->spatium(), 0.0)), bendBack);
+        }
     }
 
     for (EngravingItem* e : item->el()) {
