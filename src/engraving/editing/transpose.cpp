@@ -562,6 +562,7 @@ void Transpose::transposeHarmony(Harmony* harmony, Score* score, Interval interv
             undoTransposeHarmony(score, h, hInterval, useDoubleSharpsFlats);
         }
     }
+    score->rebuildFretBox();
 }
 
 void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interval interval, TransposeMode mode,
@@ -579,6 +580,8 @@ void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interva
             return;
         }
         score->undo(new FretDataChange(diagram, harmony->plainText()));
+
+        score->rebuildFretBox();
         return;
     }
 
@@ -632,6 +635,8 @@ void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interva
 
     diagram->remove(harmony);
     delete harmony;
+
+    score->rebuildFretBox();
 
     return;
 }
