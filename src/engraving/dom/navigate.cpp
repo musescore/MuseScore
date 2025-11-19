@@ -823,7 +823,7 @@ EngravingItem* Score::nextElement()
             GuitarBend* bend
                 = e->isGuitarBendSegment() ? toGuitarBendSegment(e)->guitarBend() : toGuitarBendHoldSegment(e)->guitarBendHold()->
                   guitarBend();
-            if (bend->type() != GuitarBendType::SLIGHT_BEND) {
+            if (bend->bendType() != GuitarBendType::SLIGHT_BEND) {
                 return bend->endNote();
             } else {
                 EngravingItem* next = nextElementForSpannerSegment(toSpannerSegment(e));

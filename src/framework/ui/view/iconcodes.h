@@ -526,6 +526,16 @@ public:
 
         EYE_OPEN_THICK = 0xF4AE,
 
+        GUITAR_DIVE_REGULAR = 0xF4B3,
+        GUITAR_PRE_DIVE = 0xF4B4,
+        GUITAR_DIP_DOWN = 0xF4B5,
+        GUITAR_DIP_UP = 0xF4B6,
+        GUITAR_SCOOP = 0xF4B7,
+        FRACTION_DIAGONAL = 0xF4B8,
+        FRACTION_LEVEL = 0xF4B9,
+        GUITAR_WIGGLE_WIDE = 0xF4BA,
+        GUITAR_WIGGLE = 0xF4BB,
+
         NONE = 0xFFFF
     };
 
