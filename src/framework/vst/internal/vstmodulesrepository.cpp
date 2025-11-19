@@ -126,8 +126,9 @@ muse::audio::AudioResourceMetaList VstModulesRepository::modulesMetaList(const a
         return info.type == type && info.meta.type == muse::audio::AudioResourceType::VstPlugin && info.enabled;
     };
 
-    std::vector<audioplugins::AudioPluginInfo> infoList = knownPlugins()->pluginInfoList(infoAccepted);
+    audioplugins::AudioPluginInfoList infoList = knownPlugins()->pluginInfoList(infoAccepted);
     muse::audio::AudioResourceMetaList result;
+    result.reserve(infoList.size());
 
     for (const audioplugins::AudioPluginInfo& info : infoList) {
         result.push_back(info.meta);
