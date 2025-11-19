@@ -43,6 +43,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/editing/transpose.h"
 
 #include "log.h"
 
@@ -64,7 +65,7 @@ void MuseData::musicalAttribute(QStringView s, Part* part)
             ke.setConcertKey(key);
             if (!v.isZero() && !score->style().styleB(Sid::concertPitch)) {
                 v.flip();
-                ke.setKey(transposeKey(key, v));
+                ke.setKey(Transpose::transposeKey(key, v));
             }
             for (Staff* staff : part->staves()) {
                 staff->setKey(curTick, ke);

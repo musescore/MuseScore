@@ -72,6 +72,7 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/trill.h"
 #include "engraving/dom/utils.h"
+#include "engraving/editing/transpose.h"
 
 #include "thirdparty/libmei/cmn.h"
 #include "thirdparty/libmei/fingering.h"
@@ -2014,7 +2015,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
         m_endIdNotes[meiNote.m_xmlId] = note;
     }
 
-    int tpc1 = mu::engraving::transposeTpc(pitchSt.tpc2, interval, true);
+    int tpc1 = Transpose::transposeTpc(pitchSt.tpc2, interval, true);
     note->setPitch(pitchSt.pitch, tpc1, pitchSt.tpc2);
 
     if (meiNote.HasVel()) {

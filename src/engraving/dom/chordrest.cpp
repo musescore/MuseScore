@@ -58,6 +58,7 @@
 #include "volta.h"
 
 #include "editing/splitjoinmeasure.h"
+#include "editing/transpose.h"
 
 #include "log.h"
 
@@ -304,7 +305,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         // calculate correct transposed tpc
         Interval v = staff()->transpose(tick());
         v.flip();
-        note->setTpc2(transposeTpc(note->tpc1(), v, true));
+        note->setTpc2(Transpose::transposeTpc(note->tpc1(), v, true));
 
         Segment* seg = segment();
         score()->undoRemoveElement(this);
@@ -325,7 +326,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         Interval interval = staff()->transpose(tick());
         if (!style().styleB(Sid::concertPitch) && !interval.isZero()) {
             interval.flip();
-            score()->undoTransposeHarmony(harmony, interval);
+            Transpose::undoTransposeHarmony(score(), harmony, interval);
         }
     }
         [[fallthrough]];

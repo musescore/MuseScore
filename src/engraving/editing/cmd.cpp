@@ -90,6 +90,7 @@
 #include "editstaff.h"
 #include "editsystemlocks.h"
 #include "editvoicing.h"
+#include "transpose.h"
 #include "mscoreview.h"
 
 #include "log.h"
@@ -783,11 +784,11 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
                     if (style().styleB(Sid::concertPitch)) {
                         v.flip();
                         nval.tpc1 = ntpc;
-                        nval.tpc2 = transposeTpc(ntpc, v, true);
+                        nval.tpc2 = Transpose::transposeTpc(ntpc, v, true);
                     } else {
                         nval.pitch += v.chromatic;
                         nval.tpc2 = ntpc;
-                        nval.tpc1 = transposeTpc(ntpc, v, true);
+                        nval.tpc1 = Transpose::transposeTpc(ntpc, v, true);
                     }
                 }
             }

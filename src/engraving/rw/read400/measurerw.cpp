@@ -56,6 +56,7 @@
 #include "../dom/tremolobar.h"
 #include "../dom/tempotext.h"
 #include "../dom/image.h"
+#include "../editing/transpose.h"
 
 #include "tread.h"
 
@@ -554,7 +555,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                     InstrumentChange* ic = toInstrumentChange(el);
                     for (KeySig* ks : ic->keySigs(true)) {
                         KeySigEvent ke = ks->keySigEvent();
-                        ke.setConcertKey(transposeKey(key, vi));
+                        ke.setConcertKey(Transpose::transposeKey(key, vi));
                         ke.setKey(key);
                         ks->setKeySigEvent(ke);
                         //segment->add(ks);

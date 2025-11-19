@@ -22,6 +22,7 @@
 
 #include "../editing/editdata.h"
 #include "../editing/elementeditdata.h"
+#include "../editing/transpose.h"
 
 #include "accidental.h"
 #include "chord.h"
@@ -110,7 +111,7 @@ void GuitarBend::setEndNotePitch(int pitch, QuarterOffset quarterOff)
     interval.flip();
 
     int targetTpc1 = pitch2tpc(pitch, key, Prefer::NEAREST);
-    int targetTpc2 = transposeTpc(targetTpc1, interval, true);
+    int targetTpc2 = Transpose::transposeTpc(targetTpc1, interval, true);
 
     score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
 

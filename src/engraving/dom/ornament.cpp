@@ -33,6 +33,8 @@
 #include "staff.h"
 #include "utils.h"
 
+#include "editing/transpose.h"
+
 using namespace mu::engraving;
 
 Ornament::Ornament(ChordRest* parent)
@@ -304,14 +306,14 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
                 AccidentalVal accidentalVal = accState->accidentalVal(pitchLine);
                 AccidentalVal noteAccidentalVal = tpc2alter(note->tpc());
                 int accidentalDiff = static_cast<int>(accidentalVal) - static_cast<int>(noteAccidentalVal);
-                score()->transpose(note, Interval(0, accidentalDiff), true);
+                note->transpose(Interval(0, accidentalDiff), true);
             }
         } else {
             Interval interval = Interval::fromOrnamentInterval(above ? _intervalAbove : _intervalBelow);
             if (!above) {
                 interval.flip();
             }
-            score()->transpose(note, interval, true);
+            note->transpose(interval, true);
         }
 
         AccidentalState copyOfAccState = *accState;
@@ -445,7 +447,7 @@ void Ornament::mapOldTrillAccidental(Note* note, const Note* mainNote)
     AccidentalVal oldCompatValue = Accidental::subtype2value(m_trillOldCompatAccidental->accidentalType());
     AccidentalVal noteAccidentalVal = tpc2alter(note->tpc());
     int accidentalDiff = static_cast<int>(oldCompatValue) - static_cast<int>(noteAccidentalVal);
-    score()->transpose(note, Interval(0, accidentalDiff), true);
+    note->transpose(Interval(0, accidentalDiff), true);
     int semitones = note->pitch() - mainNote->pitch();
     switch (semitones) {
     case 0:

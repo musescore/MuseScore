@@ -131,6 +131,7 @@
 #include "../../dom/vibrato.h"
 #include "../../dom/volta.h"
 #include "../../dom/whammybar.h"
+#include "../../editing/transpose.h"
 
 #include "../xmlreader.h"
 #include "../read206/read206.h"
@@ -1339,7 +1340,7 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
             if (p && !s->concertPitch()) {
                 Interval v = p->instrument(s->tick())->transpose();
                 if (!v.isZero()) {
-                    cKey = transposeKey(key, v);
+                    cKey = Transpose::transposeKey(key, v);
                 }
             }
             sig.setConcertKey(cKey);

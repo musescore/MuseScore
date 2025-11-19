@@ -25,6 +25,7 @@
 #include "containers.h"
 
 #include "engravingitem.h"
+#include "interval.h"
 #include "noteevent.h"
 #include "noteval.h"
 #include "pitchspelling.h"
@@ -355,7 +356,8 @@ public:
 
     bool removeSpannerFor(Spanner* e) { return muse::remove(m_spannerFor, e); }
 
-    void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
+    bool transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
+    bool transpose(Interval interval, bool useDoubleSharpsFlats);
 
     void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue getProperty(Pid propertyId) const override;

@@ -69,6 +69,7 @@
 #include "engraving/dom/marker.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/bracketItem.h"
+#include "engraving/editing/transpose.h"
 
 #include "modularity/ioc.h"
 #include "importexport/ove/ioveconfiguration.h"
@@ -840,7 +841,7 @@ void OveToMScore::convertSignatures()
                             Key cKey = key;
                             Interval v = staff.part()->instrument(tick)->transpose();
                             if (!v.isZero() && !m_score->style().styleB(Sid::concertPitch)) {
-                                cKey = transposeKey(key, v);
+                                cKey = Transpose::transposeKey(key, v);
                                 // if there are more than 6 accidentals in transposing key, it cannot be PreferSharpFlat::AUTO
                                 if ((key > 6 || key < -6) && staff.part()->preferSharpFlat() == PreferSharpFlat::AUTO) {
                                     staff.part()->setPreferSharpFlat(PreferSharpFlat::NONE);

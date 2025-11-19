@@ -444,11 +444,6 @@ public:
 
     void realtimeAdvance(bool allowTransposition);
 
-    bool transpose(Note* n, Interval, bool useSharpsFlats);
-    void transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& tickStart, const Fraction& tickEnd, bool flip = false);
-    bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval, bool trKeys, bool transposeChordNames,
-                   bool useDoubleSharpsFlats);
-
     bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
@@ -485,8 +480,6 @@ public:
     void spellNotelist(std::vector<Note*>& notes);
     void undoChangeTpc(Note* note, int tpc);
     void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
-    void undoTransposeHarmony(Harmony*, Interval interval, bool doubleSharpFlat = true);
-    void undoTransposeHarmonyDiatonic(Harmony*, int interval, bool doubleSharpFlat, bool transposeKeys);
     void undoExchangeVoice(Measure* measure, voice_idx_t val1, voice_idx_t val2, staff_idx_t staff1, staff_idx_t staff2);
     void undoRemovePart(Part* part, size_t partIdx = muse::nidx);
     void undoInsertPart(Part* part, size_t targetPartIndex);
@@ -772,8 +765,6 @@ public:
     bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void pasteSymbols(XmlReader& e, ChordRest* dst);
 
-    static void transposeChord(Chord* c, const Fraction& tick);
-
     BeatType tick2beatType(const Fraction& tick) const;
 
     int mscVersion() const { return m_mscVersion; }
@@ -932,8 +923,6 @@ public:
 
     void cmdSelectAll();
     void cmdSelectSection();
-    void transposeSemitone(int semitone);
-    void transposeDiatonicAlterations(TransposeDirection direction);
 
     struct InsertMeasureOptions {
         InsertMeasureOptions() {}
@@ -989,9 +978,6 @@ public:
     void setEngravingFont(std::shared_ptr<IEngravingFont> f) { m_engravingFont = f; }
 
     std::vector<staff_idx_t> uniqueStaves() const;
-
-    void transpositionChanged(Part* part, Interval oldTransposition, Fraction tickStart = { 0, 1 }, Fraction tickEnd = { -1, 1 });
-    void transpositionChanged(Part* part, const Fraction& instrumentTick, Interval oldTransposition);
 
     void moveUp(ChordRest*);
     void moveDown(ChordRest*);

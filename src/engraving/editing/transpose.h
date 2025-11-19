@@ -28,6 +28,35 @@
 #include "../dom/interval.h"
 
 namespace mu::engraving {
+class Transpose
+{
+public:
+    static bool transpose(Score* score, TransposeMode mode, TransposeDirection direction, Key trKey, int transposeInterval, bool trKeys,
+                          bool transposeChordNames, bool useDoubleSharpsFlats);
+    static void transposeKeys(Score* score, staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& ts, const Fraction& tickEnd,
+                              bool flip);
+    static void transposeSemitone(Score* score, int step);
+    static void transposeDiatonicAlterations(Score* score, TransposeDirection direction);
+    static void transpositionChanged(Score* score, Part* part, Interval oldV, Fraction tickStart= { 0, 1 }, Fraction tickEnd= { -1, 1 });
+    static void transpositionChanged(Score* score, Part* part, const Fraction& instrumentTick, Interval oldTransposition);
+    static void transposeChord(Chord* c, const Fraction& tick);
+
+    static int transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepAlteredDegrees, bool useDoubleSharpsFlats);
+    static Key transposeKey(Key oldKey, const Interval& interval, PreferSharpFlat prefer = PreferSharpFlat::NONE);
+    static int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
+
+    static void undoTransposeHarmony(Score* score, Harmony* harmony, Interval interval, bool doubleSharpFlat = true);
+
+private:
+    static void undoTransposeHarmonyDiatonic(Score* score, Harmony* harmony, int interval, bool doubleSharpFlat, bool transposeKeys);
+    static Interval keydiff2Interval(Key oKey, Key nKey, TransposeDirection dir);
+
+    static bool transposeNote(Note* note, TransposeMode mode, int transposeInterval, bool trKeys, bool useDoubleSharpsFlats,
+                              Interval interval);
+    static void transposeHarmony(Harmony* harmony, Score* score, Interval interval, TransposeMode mode, int transposeInterval, bool trKeys,
+                                 bool useDoubleSharpsFlats);
+};
+
 class TransposeHarmony : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, TransposeHarmony)

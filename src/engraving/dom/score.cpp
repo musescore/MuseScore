@@ -35,6 +35,7 @@
 #include "editing/addremoveelement.h"
 #include "editing/mscoreview.h"
 #include "editing/splitjoinmeasure.h"
+#include "editing/transpose.h"
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
@@ -2758,7 +2759,7 @@ void Score::adjustKeySigs(track_idx_t sidx, track_idx_t eidx, KeyList km)
             Interval v = staff->part()->instrument(tick)->transpose();
             if (!v.isZero() && !style().styleB(Sid::concertPitch) && !key.isAtonal()) {
                 v.flip();
-                key.setKey(transposeKey(key.concertKey(), v, staff->part()->preferSharpFlat()));
+                key.setKey(Transpose::transposeKey(key.concertKey(), v, staff->part()->preferSharpFlat()));
             }
             staff->setKey(tick, key);
 
@@ -2838,7 +2839,7 @@ KeyList Score::keyList() const
     if (firstStaff && !masterScore()->style().styleB(Sid::concertPitch)
         && (firstStaff->part()->instrument()->transpose().chromatic || firstStaff->part()->instruments().size() > 1)) {
         int interval = firstStaff->part()->instrument()->transpose().chromatic;
-        normalizedC = transposeKey(normalizedC, interval);
+        normalizedC = Transpose::transposeKey(normalizedC, interval);
     }
 
     // create initial keyevent for transposing instrument if necessary
@@ -3016,7 +3017,7 @@ void Score::cmdConcertPitchChanged(bool flag)
         track_idx_t startTrack = staffIdx * VOICES;
         track_idx_t endTrack   = startTrack + VOICES;
 
-        transposeKeys(staffIdx, staffIdx + 1, Fraction(0, 1), lastSegment()->tick(), !flag);
+        Transpose::transposeKeys(this, staffIdx, staffIdx + 1, Fraction(0, 1), lastSegment()->tick(), !flag);
 
         for (Segment* segment = firstSegment(SegmentType::ChordRest); segment; segment = segment->next1(SegmentType::ChordRest)) {
             interval = staff->transpose(segment->tick());
@@ -3033,7 +3034,7 @@ void Score::cmdConcertPitchChanged(bool flag)
                     // just ones resulting from mmrests
                     Harmony* he = toHarmony(se);              // toHarmony() does not work as e is an ScoreElement
                     if (he->staff() == h->staff()) {
-                        undoTransposeHarmony(he, interval);
+                        Transpose::undoTransposeHarmony(this, he, interval);
                     }
                 }
                 //realized harmony should be invalid after a transpose command

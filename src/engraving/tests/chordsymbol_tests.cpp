@@ -33,6 +33,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
+#include "engraving/editing/transpose.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -203,7 +204,7 @@ TEST_F(Engraving_ChordSymbolTests, testTranspose)
     MasterScore* score = test_pre(u"transpose");
     score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
     score->cmdSelectAll();
-    score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
+    Transpose::transpose(score, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
     score->endCmd();
     test_post(score, u"transpose");
 }
@@ -213,7 +214,7 @@ TEST_F(Engraving_ChordSymbolTests, testTransposePart)
     MasterScore* score = test_pre(u"transpose-part");
     score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
     score->cmdSelectAll();
-    score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
+    Transpose::transpose(score, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
     score->endCmd(false, /*layoutAllParts = */ true);
     test_post(score, u"transpose-part");
 }
@@ -302,7 +303,7 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeTransposed)
     MasterScore* score = test_pre(u"transpose");
     //transpose
     score->cmdSelectAll();
-    score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
+    Transpose::transpose(score, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
 
     //realize all chord symbols
     selectAllChordSymbols(score);

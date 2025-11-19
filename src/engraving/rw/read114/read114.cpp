@@ -89,6 +89,8 @@
 #include "dom/utils.h"
 #include "dom/volta.h"
 
+#include "editing/transpose.h"
+
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"
 #include "../compat/tremolocompat.h"
@@ -738,13 +740,13 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             if (v.isZero()) {
                 note->setTpc2(note->tpc1());
             } else {
-                note->setTpc2(transposeTpc(note->tpc1(), v, true));
+                note->setTpc2(Transpose::transposeTpc(note->tpc1(), v, true));
             }
         } else {
             if (v.isZero()) {
                 note->setTpc1(note->tpc2());
             } else {
-                note->setTpc1(transposeTpc(note->tpc2(), v, true));
+                note->setTpc1(Transpose::transposeTpc(note->tpc2(), v, true));
             }
         }
     }
@@ -769,7 +771,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             LOGD("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);
             // just in case the staff transposition info is not reliable here,
             v.flip();
-            note->setTpc2(mu::engraving::transposeTpc(note->tpc1(), v, true));
+            note->setTpc2(Transpose::transposeTpc(note->tpc1(), v, true));
         }
     }
 }

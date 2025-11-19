@@ -32,6 +32,7 @@
 #include "translation.h"
 
 #include "../editing/addremoveelement.h"
+#include "../editing/transpose.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
 
@@ -753,7 +754,7 @@ int Note::tpc2default(int p) const
             Interval interval = part()->instrument(tick)->transpose();
             if (!interval.isZero()) {
                 interval.flip();
-                key = transposeKey(key, interval);
+                key = Transpose::transposeKey(key, interval);
             }
         }
     }
@@ -777,7 +778,7 @@ void Note::setTpcFromPitch(Prefer prefer /* = Prefer::NEAREST */)
         m_tpc[1] = m_tpc[0];
     } else {
         v.flip();
-        m_tpc[1] = mu::engraving::transposeTpc(m_tpc[0], v, true);
+        m_tpc[1] = Transpose::transposeTpc(m_tpc[0], v, true);
     }
     assert(tpcIsValid(m_tpc[0]));
     assert(tpcIsValid(m_tpc[1]));
@@ -894,9 +895,9 @@ int Note::transposeTpc(int tpc) const
     }
     if (concertPitch()) {
         v.flip();
-        return mu::engraving::transposeTpc(tpc, v, true);
+        return Transpose::transposeTpc(tpc, v, true);
     } else {
-        return mu::engraving::transposeTpc(tpc, v, true);
+        return Transpose::transposeTpc(tpc, v, true);
     }
 }
 
@@ -915,7 +916,7 @@ int Note::playingTpc() const
 
     int steps = ottaveCapoFret();
     if (steps != 0) {
-        result = mu::engraving::transposeTpc(result, Interval(steps), true);
+        result = Transpose::transposeTpc(result, Interval(steps), true);
     }
 
     return result;
@@ -1517,13 +1518,13 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
             if (v.isZero()) {
                 m_tpc[1] = m_tpc[0];
             } else {
-                m_tpc[1] = mu::engraving::transposeTpc(m_tpc[0], v, true);
+                m_tpc[1] = Transpose::transposeTpc(m_tpc[0], v, true);
             }
         } else {
             if (v.isZero()) {
                 m_tpc[0] = m_tpc[1];
             } else {
-                m_tpc[0] = mu::engraving::transposeTpc(m_tpc[1], v, true);
+                m_tpc[0] = Transpose::transposeTpc(m_tpc[1], v, true);
             }
         }
     }
@@ -1551,11 +1552,11 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
                     // assume we want to keep sounding pitch
                     // so fix written pitch (tpc only)
                     v.flip();
-                    m_tpc[1] = mu::engraving::transposeTpc(m_tpc[0], v, true);
+                    m_tpc[1] = Transpose::transposeTpc(m_tpc[0], v, true);
                 } else {
                     // assume we want to keep written pitch
                     // so fix sounding pitch (both tpc and pitch)
-                    m_tpc[0] = mu::engraving::transposeTpc(m_tpc[1], v, true);
+                    m_tpc[0] = Transpose::transposeTpc(m_tpc[1], v, true);
                     m_pitch += tpc2Pitch - writtenPitch;
                 }
             }
@@ -1884,7 +1885,7 @@ EngravingItem* Note::drop(EditData& data)
         const Segment* segment = ch->segment();
         Interval v = staff()->transpose(ch->tick());
         v.flip();
-        n->setTpc2(mu::engraving::transposeTpc(n->tpc1(), v, true));
+        n->setTpc2(Transpose::transposeTpc(n->tpc1(), v, true));
         // replace this note with new note
         n->setParent(ch);
         if (this->tieBack()) {
@@ -2865,7 +2866,7 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
             m_tpc[1] = m_tpc[0];
         } else {
             v.flip();
-            m_tpc[1] = mu::engraving::transposeTpc(m_tpc[0], v, true);
+            m_tpc[1] = Transpose::transposeTpc(m_tpc[0], v, true);
         }
     }
 
@@ -3932,5 +3933,74 @@ int Note::stringOrLine() const
 {
     // The number string() returns doesn't count spaces.  This should be used where it is expected even numbers are spaces and odd are lines
     return staff()->staffType(tick())->isTabStaff() ? string() * 2 : line();
+}
+
+//---------------------------------------------------------
+//   Note::transposeDiatonic
+//---------------------------------------------------------
+
+bool Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals)
+{
+    // compute note current absolute step
+    int alter;
+    Fraction tick = chord()->segment()->tick();
+    Key key       = staff() ? staff()->key(tick) : Key::C;
+    int absStep   = pitch2absStepByKey(epitch(), tpc(), key, alter);
+
+    // get pitch and tcp corresponding to unaltered degree for this key
+    int newPitch = absStep2pitchByKey(absStep + interval, key);
+    int newTpc   = step2tpcByKey((absStep + interval) % STEP_DELTA_OCTAVE, key);
+
+    if (!pitchIsValid(newPitch)) {
+        return false;
+    }
+
+    // if required, transfer original degree alteration to new pitch and tpc
+    if (keepAlterations) {
+        newPitch += alter;
+        newTpc  += alter * TPC_DELTA_SEMITONE;
+    }
+
+    // transpose appropriately
+    int newTpc1 = TPC_INVALID;
+    int newTpc2 = TPC_INVALID;
+    Interval v  = staff() ? staff()->transpose(tick) : Interval(0);
+    if (concertPitch()) {
+        v.flip();
+        newTpc1 = clampEnharmonic(newTpc, useDoubleAccidentals);
+        newTpc2 = Transpose::transposeTpc(newTpc, v, useDoubleAccidentals);
+    } else {
+        newPitch += v.chromatic;
+        newTpc1 = Transpose::transposeTpc(newTpc, v, useDoubleAccidentals);
+        newTpc2 = clampEnharmonic(newTpc, useDoubleAccidentals);
+    }
+
+    // check pitch is in range
+    newPitch = clampPitch(newPitch, true);
+
+    // store new data
+    score()->undoChangePitch(this, newPitch, newTpc1, newTpc2);
+    return true;
+}
+
+bool Note::transpose(Interval interval, bool useDoubleSharpsFlats)
+{
+    int npitch = pitch() + interval.chromatic;
+    if (!pitchIsValid(npitch)) {
+        return false;
+    }
+    int ntpc1 = Transpose::transposeTpc(tpc1(), interval, useDoubleSharpsFlats);
+    int ntpc2 = ntpc1;
+    if (transposition()) {
+        if (staff()) {
+            Interval v = staff()->transpose(tick());
+            v.flip();
+            ntpc2 = Transpose::transposeTpc(ntpc1, v, useDoubleSharpsFlats);
+        } else {
+            ntpc2 = Transpose::transposeTpc(tpc2(), interval, useDoubleSharpsFlats);
+        }
+    }
+    score()->undoChangePitch(this, npitch, ntpc1, ntpc2);
+    return true;
 }
 }
