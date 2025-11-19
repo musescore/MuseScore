@@ -22,7 +22,7 @@
 
 #include "onlinesoundsstatusmodel.h"
 
-#include "audio/audioerrors.h"
+#include "audio/common/audioerrors.h"
 
 #include "async/async.h"
 #include "translation.h"

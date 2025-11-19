@@ -38,6 +38,8 @@ set(MODULE_SRC
     #internals
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/onlinesoundscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/onlinesoundscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackconfiguration.cpp
