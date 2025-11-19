@@ -2356,6 +2356,20 @@ public:
     /// \endcond
 };
 
+class Lyric : public EngravingItem
+{
+    Q_OBJECT
+
+    Q_PROPERTY(QString plainText READ plainText)
+
+public:
+
+    Lyric(mu::engraving::Lyrics* l = nullptr, Ownership own = Ownership::PLUGIN)
+        : EngravingItem(l, own) {}
+
+    QString plainText() const { return toLyrics(e)->plainText(); }
+};
+
 #undef API_PROPERTY
 #undef API_PROPERTY_T
 #undef API_PROPERTY_READ_ONLY

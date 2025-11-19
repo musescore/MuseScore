@@ -53,6 +53,7 @@ class System;
 class Selection;
 class Score;
 class Staff;
+class Lyric;
 
 extern Selection* selectionWrap(mu::engraving::Selection* select);
 
@@ -80,8 +81,6 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     Q_PROPERTY(int harmonyCount READ harmonyCount)
     /// Whether score has harmonies (chord symbols) (read only).\n \since MuseScore 3.2
     Q_PROPERTY(bool hasHarmonies READ hasHarmonies)
-    /// Whether score has lyrics (read only).\n \since MuseScore 3.2
-    Q_PROPERTY(bool hasLyrics READ hasLyrics)
     /// Key signature at the start of the score, in number of accidentals,
     /// negative for flats, positive for sharps (read only).\n \since MuseScore 3.2
     Q_PROPERTY(int keysig READ keysig)
@@ -93,8 +92,6 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     Q_PROPERTY(apiv1::Measure * lastMeasureMM READ lastMeasureMM)
     /// Last score segment (read only)
     Q_PROPERTY(apiv1::Segment * lastSegment READ lastSegment)                // TODO: make it function? Was property in 2.X, but firstSegment is a function...
-    /// Number of lyrics items (syllables) in the score (read only).\n \since MuseScore 3.2
-    Q_PROPERTY(int lyricCount READ lyricCount)
     /// Name of the score, without path leading to it and extension.\n \since MuseScore 3.2
     Q_PROPERTY(QString scoreName READ name WRITE setName)
     /// Number of measures (read only)
@@ -165,6 +162,13 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     /// List of systems in this score.
     /// \since MuseScore 4.6
     Q_PROPERTY(QQmlListProperty<apiv1::System> systems READ systems)
+    /// Whether score has lyrics (read only).\n \since MuseScore 3.2
+    Q_PROPERTY(bool hasLyrics READ hasLyrics)
+    /// Number of lyrics items (syllables) in the score (read only).\n \since MuseScore 3.2
+    Q_PROPERTY(int lyricCount READ lyricCount)
+    /// List of lyrics in this score.
+    /// \since MuseScore 4.7
+    Q_PROPERTY(QQmlListProperty<apiv1::Lyric> lyrics READ lyrics)
 
     muse::Inject<mu::context::IGlobalContext> context = { this };
 
@@ -180,9 +184,7 @@ public:
     int duration() { return score()->duration(); }
     int harmonyCount() { return score()->harmonyCount(); }
     bool hasHarmonies() { return score()->hasHarmonies(); }
-    bool hasLyrics() { return score()->hasLyrics(); }
     int keysig() { return score()->keysig(); }
-    int lyricCount() { return score()->lyricCount(); }
     QString lyricist() { return score()->metaTag(u"lyricist"); }   // not the meanwhile obsolete "poet"
     QString title() { return score()->metaTag(u"workTitle"); }
     apiv1::Selection* selection() { return selectionWrap(&score()->selection()); }
@@ -270,6 +272,10 @@ public:
     /// \since MuseScore 4.6
     Q_INVOKABLE apiv1::Segment* findSegmentAtTick(int types, apiv1::FractionWrapper* tick);
 
+    // === Lyrics ===
+    bool hasLyrics() { return score()->hasLyrics(); }
+    int lyricCount() { return score()->lyricCount(); }
+    QQmlListProperty<apiv1::Lyric> lyrics();
     /// Extracts all lyrics in the score and returns them in a single string.
     Q_INVOKABLE QString extractLyrics() { return score()->extractLyrics(); }
 
