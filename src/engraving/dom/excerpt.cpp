@@ -467,7 +467,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         if (hh->staff() != h->staff()) {
                             continue;
                         }
-                        score->undoTransposeHarmony(hh, interval);
+                        Transpose::undoTransposeHarmony(score, hh, interval);
                     }
                 }
             }

@@ -3034,7 +3034,7 @@ void Score::cmdConcertPitchChanged(bool flag)
                     // just ones resulting from mmrests
                     Harmony* he = toHarmony(se);              // toHarmony() does not work as e is an ScoreElement
                     if (he->staff() == h->staff()) {
-                        undoTransposeHarmony(he, interval);
+                        Transpose::undoTransposeHarmony(this, he, interval);
                     }
                 }
                 //realized harmony should be invalid after a transpose command

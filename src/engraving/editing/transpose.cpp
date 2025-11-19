@@ -439,7 +439,7 @@ void Transpose::transpositionChanged(Score* score, Part* part, Interval oldV, Fr
                     Harmony* h  = toHarmony(element);
                     for (EngravingObject* scoreElement : h->linkList()) {
                         if (!scoreElement->style().styleB(Sid::concertPitch)) {
-                            score->undoTransposeHarmony(toHarmony(scoreElement), diffV, false);
+                            undoTransposeHarmony(score, toHarmony(scoreElement), diffV, false);
                         }
                     }
                 }
@@ -539,9 +539,9 @@ void Transpose::transposeHarmony(Harmony* harmony, Score* score, Interval interv
     for (EngravingObject* se : harmony->linkList()) {
         Harmony* h = toHarmony(se);
         if (mode == TransposeMode::DIATONICALLY) {
-            score->undoTransposeHarmonyDiatonic(h, transposeInterval, useDoubleSharpsFlats, trKeys);
+            undoTransposeHarmonyDiatonic(score, h, transposeInterval, useDoubleSharpsFlats, trKeys);
         } else {
-            score->undoTransposeHarmony(h, hInterval, useDoubleSharpsFlats);
+            undoTransposeHarmony(score, h, hInterval, useDoubleSharpsFlats);
         }
     }
 }
@@ -607,6 +607,16 @@ int Transpose::transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlat
         return tpc;
     }
     return clampEnharmonic(tpc + deltaTpc, useDoubleSharpsFlats);
+}
+
+void Transpose::undoTransposeHarmony(Score* score, Harmony* harmony, Interval interval, bool doubleSharpFlat)
+{
+    score->undo(new TransposeHarmony(harmony, interval, doubleSharpFlat));
+}
+
+void Transpose::undoTransposeHarmonyDiatonic(Score* score, Harmony* harmony, int interval, bool doubleSharpFlat, bool transposeKeys)
+{
+    score->undo(new TransposeHarmonyDiatonic(harmony, interval, doubleSharpFlat, transposeKeys));
 }
 
 //---------------------------------------------------------

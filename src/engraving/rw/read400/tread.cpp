@@ -124,7 +124,7 @@
 #include "../../dom/vibrato.h"
 #include "../../dom/volta.h"
 #include "../../dom/whammybar.h"
-#include "../editing/transpose.h"
+#include "../../editing/transpose.h"
 
 #include "../xmlreader.h"
 #include "../read206/read206.h"

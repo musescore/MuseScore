@@ -326,7 +326,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         Interval interval = staff()->transpose(tick());
         if (!style().styleB(Sid::concertPitch) && !interval.isZero()) {
             interval.flip();
-            score()->undoTransposeHarmony(harmony, interval);
+            Transpose::undoTransposeHarmony(score(), harmony, interval);
         }
     }
         [[fallthrough]];

@@ -6227,20 +6227,6 @@ void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
 }
 
 //---------------------------------------------------------
-//   undoTransposeHarmony
-//---------------------------------------------------------
-
-void Score::undoTransposeHarmony(Harmony* h, Interval interval, bool doubleSharpFlat)
-{
-    undo(new TransposeHarmony(h, interval, doubleSharpFlat));
-}
-
-void Score::undoTransposeHarmonyDiatonic(Harmony* h, int interval, bool doubleSharpFlat, bool transposeKeys)
-{
-    undo(new TransposeHarmonyDiatonic(h, interval, doubleSharpFlat, transposeKeys));
-}
-
-//---------------------------------------------------------
 //   undoExchangeVoice
 //---------------------------------------------------------
 
@@ -7061,7 +7047,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                         if (!score->style().styleB(Sid::concertPitch)) {
                             interval.flip();
                         }
-                        score->undoTransposeHarmony(h, interval);
+                        Transpose::undoTransposeHarmony(score, h, interval);
                     }
                 }
             }

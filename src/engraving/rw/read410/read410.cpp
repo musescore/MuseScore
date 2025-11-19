@@ -624,7 +624,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     Interval interval = staffDest->transpose(tick);
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
-                        score->undoTransposeHarmony(harmony, interval);
+                        Transpose::undoTransposeHarmony(score, harmony, interval);
                     }
 
                     // remove pre-existing chords on this track
@@ -1007,7 +1007,7 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                     Interval interval = staffDest->transpose(destTick);
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
-                        score->undoTransposeHarmony(el, interval);
+                        Transpose::undoTransposeHarmony(score, el, interval);
                     }
                     el->setParent(seg);
                     score->undoAddElement(el);

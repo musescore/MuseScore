@@ -45,7 +45,10 @@ public:
     static Key transposeKey(Key oldKey, const Interval& interval, PreferSharpFlat prefer = PreferSharpFlat::NONE);
     static int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
 
+    static void undoTransposeHarmony(Score* score, Harmony* harmony, Interval interval, bool doubleSharpFlat = true);
+
 private:
+    static void undoTransposeHarmonyDiatonic(Score* score, Harmony* harmony, int interval, bool doubleSharpFlat, bool transposeKeys);
     static Interval keydiff2Interval(Key oKey, Key nKey, TransposeDirection dir);
 
     static bool transposeNote(Note* note, TransposeMode mode, int transposeInterval, bool trKeys, bool useDoubleSharpsFlats,
