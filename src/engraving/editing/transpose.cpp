@@ -32,12 +32,14 @@
 #include "../dom/keysig.h"
 #include "../dom/linkedobjects.h"
 #include "../dom/utils.h"
+#include "../dom/fret.h"
+#include "editing/editfretboarddiagram.h"
 #include "editing/editkeysig.h"
 
 using namespace mu::engraving;
 
-bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection direction, Key trKey, int transposeInterval, bool trKeys,
-                          bool transposeChordNames, bool useDoubleSharpsFlats)
+bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection direction, Key trKey, int transposeInterval,
+                          bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats)
 {
     const Selection& selection = score->selection();
     bool result = true;
@@ -101,7 +103,8 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
     }
 
     if (selection.isList()) {
-        for (EngravingItem* e : selection.uniqueElements()) {
+        const std::list<EngravingItem*>& selectionList = selection.uniqueElements();
+        for (EngravingItem* e : selectionList) {
             if (!e->staff() || e->staff()->staffType(e->tick())->group() == StaffGroup::PERCUSSION) {
                 continue;
             }
@@ -114,7 +117,14 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
                     result = false;
                 }
             } else if (e->isHarmony() && transposeChordNames) {
+                const EngravingObject* parent = e->parent();
+                if (parent && parent->isFretDiagram()
+                    && std::find(selectionList.begin(), selectionList.end(), parent) != selectionList.end()) {
+                    continue;
+                }
                 transposeHarmony(toHarmony(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
+            } else if (e->isFretDiagram() && transposeChordNames) {
+                transposeFretDiagram(toFretDiagram(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
             } else if (e->isKeySig() && mode != TransposeMode::DIATONICALLY && trKeys) {
                 // TODO: this currently is disabled in dialog
                 // if we enabled it, then it will need work
@@ -237,12 +247,21 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
                 }
             }
         }
-        if (transposeChordNames && score->selectionFilter().isFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL)) {
+        if (transposeChordNames
+            && (score->selectionFilter().isFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL)
+                || score->selectionFilter().isFiltered(ElementsSelectionFilterTypes::FRET_DIAGRAM))) {
             for (EngravingItem* e : segment->annotations()) {
-                if (!e->isHarmony() || (!muse::contains(tracks, e->track()))) {
+                if ((!e->isHarmony() && !e->isFretDiagram()) || (!muse::contains(tracks, e->track()))) {
                     continue;
                 }
-                transposeHarmony(toHarmony(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
+
+                if (e->isHarmony()) {
+                    transposeHarmony(toHarmony(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
+                }
+
+                if (e->isFretDiagram()) {
+                    transposeFretDiagram(toFretDiagram(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
+                }
             }
         }
     }
@@ -354,7 +373,6 @@ void Transpose::transposeSemitone(Score* score, int step)
 
     if (!transpose(score, TransposeMode::BY_INTERVAL, dir, Key::C, 1, true, true, false)) {
         LOGD("Score::transposeSemitone: failed");
-        // TODO: set error message
     } else {
         score->setSelectionChanged(true);
     }
@@ -546,6 +564,75 @@ void Transpose::transposeHarmony(Harmony* harmony, Score* score, Interval interv
     }
 }
 
+void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interval interval, TransposeMode mode,
+                                     int transposeInterval, bool trKeys, bool useDoubleSharpsFlats)
+{
+    Harmony* harmony = diagram->harmony();
+
+    if (harmony) {
+        transposeHarmony(harmony, score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
+
+        std::vector<DiagramInfo> availableDiagrams = diagram->patternsFromHarmony(harmony->plainText());
+        if (availableDiagrams.empty()) {
+            LOGI() << "ERROR";
+            return;
+        }
+        score->undo(new FretDataChange(diagram, harmony->plainText()));
+        return;
+    }
+
+    // No chord symbol attached. Create harmony from diagram, transpose it, then use the new harmony to update the fret diagram
+    String pattern = FretDiagram::patternFromDiagram(diagram);
+    std::vector<String> names = FretDiagram::harmoniesFromPattern(pattern);
+    if (names.empty()) {
+        LOGI() << "ERROR";
+        return;
+    }
+
+    String name = names.front();
+
+    diagram->setHarmony(name);
+    harmony = diagram->harmony();
+    IF_ASSERT_FAILED(harmony) {
+        return;
+    }
+
+    // Transpose harmony without undo
+    Fraction tick = Fraction(0, 1);
+    Segment* seg = harmony->getParentSeg();
+    if (seg) {
+        tick = seg->tick();
+    }
+
+    Interval kv = harmony->staff()->transpose(harmony->tick());
+    Interval iv = harmony->part()->instrument(harmony->tick())->transpose();
+    Interval hInterval((interval.diatonic - kv.diatonic + iv.diatonic), (interval.chromatic - kv.chromatic + iv.chromatic));
+
+    Key key = !harmony->staff() ? Key::C : harmony->staff()->key(tick);
+    for (HarmonyInfo* info : harmony->chords()) {
+        if (mode == TransposeMode::DIATONICALLY) {
+            info->setRootTpc(Transpose::transposeTpcDiatonicByKey(info->rootTpc(), transposeInterval, key, trKeys, useDoubleSharpsFlats));
+            info->setBassTpc(Transpose::transposeTpcDiatonicByKey(info->bassTpc(), transposeInterval, key, trKeys, useDoubleSharpsFlats));
+        } else {
+            info->setRootTpc(Transpose::transposeTpc(info->rootTpc(), hInterval, useDoubleSharpsFlats));
+            info->setBassTpc(Transpose::transposeTpc(info->bassTpc(), hInterval, useDoubleSharpsFlats));
+        }
+    }
+    harmony->setXmlText(harmony->harmonyName());
+
+    std::vector<DiagramInfo> availableDiagrams = diagram->patternsFromHarmony(harmony->plainText());
+    if (availableDiagrams.empty()) {
+        LOGI() << "ERROR";
+        return;
+    }
+    score->undo(new FretDataChange(diagram, harmony->plainText()));
+
+    diagram->remove(harmony);
+    delete harmony;
+
+    return;
+}
+
 //---------------------------------------------------------
 //   transposeTpcDiatonicByKey
 //
@@ -661,7 +748,7 @@ void TransposeHarmonyDiatonic::flip(EditData*)
     m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
 
     Fraction tick = Fraction(0, 1);
-    Segment* seg = toSegment(m_harmony->findAncestor(ElementType::SEGMENT));
+    Segment* seg = m_harmony->getParentSeg();
     if (seg) {
         tick = seg->tick();
     }

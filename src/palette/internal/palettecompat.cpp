@@ -165,7 +165,7 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
     if (item->isFretDiagram()) {
         FretDiagram* oldFretDiagram = toFretDiagram(item);
         String oldFretDiagramPattern = FretDiagram::patternFromDiagram(oldFretDiagram);
-        std::vector<String> oldFretDiagramPatternHarmonies = FretDiagram::patternHarmonies(oldFretDiagramPattern);
+        std::vector<String> oldFretDiagramPatternHarmonies = FretDiagram::harmoniesFromPattern(oldFretDiagramPattern);
 
         String harmonyName = muse::value(FRET_DIAGRAMS_MIGRATION_MAP, oldFretDiagramPattern);
         if (harmonyName.empty() || muse::contains(oldFretDiagramPatternHarmonies, harmonyName)) {

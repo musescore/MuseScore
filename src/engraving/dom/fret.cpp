@@ -96,12 +96,6 @@ struct HarmonyMapKey
     }
 };
 
-struct DiagramInfo {
-    String harmonyName;
-    String diagramXml;
-    String diagramPattern;
-};
-
 static std::map<HarmonyMapKey /*key*/, std::vector<DiagramInfo> > s_harmonyToDiagramMap;
 static std::unordered_map<String /*pattern*/, std::vector<String /*harmonyName*/> > s_diagramPatternToHarmoniesMap;
 
@@ -244,16 +238,7 @@ Segment* FretDiagram::segment() const
 
 void FretDiagram::updateDiagram(const String& harmonyName)
 {
-    if (s_harmonyToDiagramMap.empty()) {
-        readHarmonyToDiagramFile(HARMONY_TO_DIAGRAM_FILE_PATH);
-    }
-
-    String _harmonyName = harmonyName;
-
-    NoteSpellingType spellingType = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
-    HarmonyMapKey key = createHarmonyMapKey(_harmonyName, spellingType, score()->chordList());
-
-    std::vector<DiagramInfo> availableDiagrams = muse::value(s_harmonyToDiagramMap, key);
+    std::vector<DiagramInfo> availableDiagrams = patternsFromHarmony(harmonyName);
     if (availableDiagrams.empty()) {
         return;
     }
@@ -272,6 +257,7 @@ void FretDiagram::updateDiagram(const String& harmonyName)
     read460::TRead::read(this, reader, ctx);
 
     triggerLayout();
+    return;
 }
 
 //---------------------------------------------------------
@@ -848,9 +834,23 @@ String FretDiagram::patternFromDiagram(const FretDiagram* diagram)
     return pattern;
 }
 
-std::vector<String> FretDiagram::patternHarmonies(const String& pattern)
+std::vector<String> FretDiagram::harmoniesFromPattern(const String& pattern)
 {
     return muse::value(s_diagramPatternToHarmoniesMap, pattern);
+}
+
+std::vector<DiagramInfo> FretDiagram::patternsFromHarmony(const String& harmonyName)
+{
+    if (s_harmonyToDiagramMap.empty()) {
+        readHarmonyToDiagramFile(HARMONY_TO_DIAGRAM_FILE_PATH);
+    }
+
+    String _harmonyName = harmonyName;
+
+    NoteSpellingType spellingType = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
+    HarmonyMapKey key = createHarmonyMapKey(_harmonyName, spellingType, score()->chordList());
+
+    return muse::value(s_harmonyToDiagramMap, key);
 }
 
 //---------------------------------------------------------

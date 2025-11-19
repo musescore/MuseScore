@@ -55,6 +55,8 @@ private:
                               Interval interval);
     static void transposeHarmony(Harmony* harmony, Score* score, Interval interval, TransposeMode mode, int transposeInterval, bool trKeys,
                                  bool useDoubleSharpsFlats);
+    static void transposeFretDiagram(FretDiagram* diagram, Score* score, Interval interval, TransposeMode mode, int transposeInterval,
+                                     bool trKeys, bool useDoubleSharpsFlats);
 };
 
 class TransposeHarmony : public UndoCommand
@@ -94,4 +96,11 @@ public:
     UNDO_NAME("TransposeHarmonyDiatonic")
     UNDO_CHANGED_OBJECTS({ m_harmony })
 };
+
+// class TransposeFretDiagram : public UndoCommand
+// {
+//     OBJECT_ALLOCATOR(engraving, TransposeFretDiagram)
+
+//     FretDiagram* m_fretDiagram = nullptr;
+// };
 }
