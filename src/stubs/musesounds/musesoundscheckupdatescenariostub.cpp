@@ -30,8 +30,8 @@ bool MuseSoundsCheckUpdateScenarioStub::needCheckForUpdate() const
 
 muse::async::Promise<muse::Ret> MuseSoundsCheckUpdateScenarioStub::checkForUpdate(bool)
 {
-    return muse::async::make_promise<muse::Ret>([](auto, auto) {
-        return muse::async::Promise<muse::Ret>::dummy_result();
+    return muse::async::Promise<muse::Ret>([](auto /*resolve*/, auto reject) {
+        return reject(int(muse::Ret::Code::UnknownError), "stub");
     });
 }
 

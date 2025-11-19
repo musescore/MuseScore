@@ -52,22 +52,22 @@ public:
     muse::async::Promise<Ret> checkForUpdate(bool manual) override;
 
     bool hasUpdate() const override;
-    muse::Ret showUpdate() override;
+    muse::async::Promise<Ret> showUpdate() override;  // NOTE: Resolves to "OK" if the user wants to close and complete install of update...
 
 private:
     bool isCheckInProgress() const;
 
     void th_checkForUpdate();
 
-    void processUpdateResult(int errorCode);
+    muse::async::Promise<Ret> processUpdateError(int errorCode);
 
-    void showNoUpdateMsg();
-    void showReleaseInfo(const ReleaseInfo& info);
+    async::Promise<IInteractive::Result> showNoUpdateMsg();
+    muse::async::Promise<Ret> showReleaseInfo(const ReleaseInfo& info);
 
-    void showServerErrorMsg();
+    async::Promise<IInteractive::Result> showServerErrorMsg();
 
-    void downloadRelease();
-    void closeAppAndStartInstallation(const io::path_t& installerPath);
+    muse::async::Promise<Ret> downloadRelease();
+    muse::async::Promise<Ret> askToCloseAppAndCompleteInstall(const io::path_t& installerPath);
 
     bool shouldIgnoreUpdate(const ReleaseInfo& info) const;
 

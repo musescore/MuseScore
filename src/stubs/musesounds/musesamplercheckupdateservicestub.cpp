@@ -36,7 +36,7 @@ bool MuseSamplerCheckUpdateServiceStub::incompatibleLocalVersion() const
 
 muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateServiceStub::checkForUpdate()
 {
-    return muse::async::Promise<muse::RetVal<bool> >([](auto, auto) {
-        return muse::async::Promise<muse::RetVal<bool> >::dummy_result();
+    return muse::async::Promise<muse::RetVal<bool> >([](auto /*resolve*/, auto reject) {
+        return reject(int(muse::Ret::Code::UnknownError), "stub");
     });
 }

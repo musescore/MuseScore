@@ -40,7 +40,7 @@ public:
     virtual muse::async::Promise<Ret> checkForUpdate(bool manual) = 0;
 
     virtual bool hasUpdate() const = 0;
-    virtual muse::Ret showUpdate() = 0;
+    virtual muse::async::Promise<Ret> showUpdate() = 0;
 };
 }
 
