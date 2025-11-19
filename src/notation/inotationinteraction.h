@@ -335,6 +335,8 @@ public:
 
     virtual void setGetViewRectFunc(const std::function<muse::RectF()>& func) = 0;
 
+    virtual void checkAndShowError() = 0;
+
     virtual void toggleDebugShowGapRests() = 0;
 };
 
