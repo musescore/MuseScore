@@ -60,6 +60,7 @@ FocusableItem {
             id: beginningTextOffsetSection
             titleText: qsTrc("inspector", "Offset")
             propertyItem: root.model ? root.model.beginningTextOffset : null
+            measurementUnits: root.model?.measurementUnits ?? CommonTypes.UNITS_UNKNOWN
 
             navigationPanel: root.navigationPanel
             navigationRowStart: beginningTextSection.navigationRowEnd + 1
@@ -80,6 +81,7 @@ FocusableItem {
             id: continuousTextOffsetSection
             titleText: qsTrc("inspector", "Offset")
             propertyItem: root.model ? root.model.continuousTextOffset : null
+            measurementUnits: root.model?.measurementUnits ?? CommonTypes.UNITS_UNKNOWN
 
             navigationPanel: root.navigationPanel
             navigationRowStart: continuousTextSection.navigationRowEnd + 1
@@ -100,6 +102,7 @@ FocusableItem {
             id: endTextOffsetSection
             titleText: qsTrc("inspector", "Offset")
             propertyItem: root.model ? root.model.endTextOffset : null
+            measurementUnits: root.model?.measurementUnits ?? CommonTypes.UNITS_UNKNOWN
 
             navigationPanel: root.navigationPanel
             navigationRowStart: endTextSection.navigationRowEnd + 1

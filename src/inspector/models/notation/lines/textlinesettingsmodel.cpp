@@ -132,6 +132,7 @@ void TextLineSettingsModel::loadProperties()
     loadProperties(propertyIdSet);
 
     updateIsSystemObjectBelowBottomStaff();
+    updatemeasurementUnits();
 }
 
 void TextLineSettingsModel::resetProperties()

@@ -39,6 +39,7 @@ SpinBoxPropertyView {
 
     titleText: qsTrc("inspector", "Minimum distance")
     propertyItem: minimumDistance
+    measureUnitsSymbol: qsTrc("global", "sp")
 
     icon: IconCode.VERTICAL
 }
