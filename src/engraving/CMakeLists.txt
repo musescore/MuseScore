@@ -420,4 +420,5 @@ set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGI
 
 if (MUE_BUILD_ENGRAVING_TESTS)
     add_subdirectory(tests)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/api/tests)
 endif()

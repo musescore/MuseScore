@@ -10,6 +10,4 @@ set(API_V1_SRC
     ${CMAKE_CURRENT_LIST_DIR}/filedialog.h
     ${CMAKE_CURRENT_LIST_DIR}/qqmlsettings.cpp
     ${CMAKE_CURRENT_LIST_DIR}/qqmlsettings_p.h
-    ${CMAKE_CURRENT_LIST_DIR}/util.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/util.h
 )

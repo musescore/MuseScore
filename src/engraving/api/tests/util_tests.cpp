@@ -27,10 +27,10 @@
 #include <QString>
 #include <QByteArray>
 
-#include "extensions/api/v1/util.h"
+#include "engraving/api/v1/util.h"
 #include "global/modularity/ioc.h"
 
-using namespace muse::extensions::apiv1;
+using namespace mu::engraving::apiv1;
 
 class Extensions_UtilTests : public ::testing::Test
 {
