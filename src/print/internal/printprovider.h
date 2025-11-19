@@ -19,19 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PRINT_PRINTPROVIDER_H
-#define MU_PRINT_PRINTPROVIDER_H
+#pragma once
 
-#include "../iprintprovider.h"
+#include "print/iprintprovider.h"
+
+#include "global/modularity/ioc.h"
+#include "ui/imainwindow.h"
 
 namespace mu::print {
-class PrintProvider : public IPrintProvider
+class PrintProvider : public IPrintProvider, public muse::Injectable
 {
+    muse::Inject<muse::ui::IMainWindow> mainWindow{ this };
+
 public:
-    PrintProvider() = default;
+    explicit PrintProvider(const muse::modularity::ContextPtr&);
 
     muse::Ret printNotation(notation::INotationPtr notation) override;
 };
 }
-
-#endif // MU_PRINT_PRINTPROVIDER_H
