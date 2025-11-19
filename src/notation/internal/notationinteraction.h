@@ -35,6 +35,8 @@
 #include "../iselectinstrumentscenario.h"
 #include "inotationundostack.h"
 
+#include "mscoreerrorscontroller.h"
+
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/elementgroup.h"
 #include "engraving/types/symid.h"
@@ -333,6 +335,7 @@ public:
     muse::async::Channel<ShowItemRequest> showItemRequested() const override;
 
     void setGetViewRectFunc(const std::function<muse::RectF()>& func) override;
+    void checkAndShowError() override;
 
 private:
     mu::engraving::Score* score() const;
@@ -519,6 +522,8 @@ private:
     muse::async::Notification m_selectionChanged;
 
     std::shared_ptr<NotationSelectionFilter> m_selectionFilter = nullptr;
+
+    std::shared_ptr<MScoreErrorsController> m_errorsController = nullptr;
 
     DragData m_dragData;
     muse::async::Notification m_dragChanged;

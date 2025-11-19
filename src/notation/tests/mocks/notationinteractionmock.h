@@ -286,5 +286,6 @@ public:
     MOCK_METHOD(muse::async::Channel<ShowItemRequest>, showItemRequested, (), (const, override));
 
     MOCK_METHOD(void, setGetViewRectFunc, (const std::function<muse::RectF()>&), (override));
+    MOCK_METHOD(void, checkAndShowError, (), (override));
 };
 }
