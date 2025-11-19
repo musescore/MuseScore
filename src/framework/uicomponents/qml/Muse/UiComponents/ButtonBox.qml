@@ -25,7 +25,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import Muse.UiComponents
 
 Container {
     id: root
@@ -82,7 +82,7 @@ Container {
 
     function addButton(text, buttonId, buttonRole, isAccent, isLeftSide) {
         const button = Qt.createQmlObject('
-                                    import Muse.UiComponents 1.0
+                                    import Muse.UiComponents
                                     FlatButton {
                                     }', root)
         button.text = text

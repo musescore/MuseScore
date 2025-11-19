@@ -22,7 +22,7 @@
 import QtQuick 2.15
 
 import Muse.Ui 1.0
-import Muse.GraphicalEffects 1.0
+import Muse.GraphicalEffects
 
 FocusScope {
     id: root

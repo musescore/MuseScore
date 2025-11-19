@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls
 
 import MuseScore.NotationScene 1.0
-import Muse.UiComponents 1.0
+import Muse.UiComponents
 import Muse.Ui 1.0
 
 FlatButton {

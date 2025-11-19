@@ -24,7 +24,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import Muse.UiComponents
 
 import MuseScore.AppShell 1.0
 import MuseScore.Playback 1.0

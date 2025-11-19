@@ -23,7 +23,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import Muse.UiComponents
 import MuseScore.Inspector 1.0
 
 import "../../../common"
@@ -144,4 +144,3 @@ FocusableItem {
         visible: root.model ? !root.model.areSettingsAvailable : false
     }
 }
-

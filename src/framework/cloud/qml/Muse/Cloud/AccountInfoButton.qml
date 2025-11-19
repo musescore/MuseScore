@@ -22,7 +22,7 @@
 import QtQuick 2.7
 
 import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import Muse.UiComponents
 import Muse.Cloud 1.0
 
 import "internal"

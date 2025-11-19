@@ -23,7 +23,7 @@ import QtQuick 2.8
 import QtQuick.Controls 2.1
 
 import MuseScore.Palette 1.0
-import Muse.UiComponents 1.0
+import Muse.UiComponents
 import Muse.Ui 1.0
 
 Item {

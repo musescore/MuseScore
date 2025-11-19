@@ -26,7 +26,7 @@ import QtQml.Models 2.2
 
 import MuseScore.Palette 1.0
 import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import Muse.UiComponents
 
 import "utils.js" as Utils
 
