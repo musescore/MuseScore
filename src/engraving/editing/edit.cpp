@@ -2071,7 +2071,7 @@ void Score::cmdAddTie(bool addToChord)
             }
         }
 
-        if (noteEntryMode()) {
+        if (noteEntryMode() || selection().isList()) {
             ChordRest* cr = nullptr;
             Chord* c = note->chord();
             int staffMove = c->staffMove();
@@ -2177,7 +2177,9 @@ Tie* Score::cmdToggleTie()
     bool canAddTies = false;
     const size_t notes = noteList.size();
     std::vector<Note*> tieNoteList(notes);
-    const bool shouldTieListSelection = notes >= 2;
+
+    bool sameChord = std::all_of(noteList.begin(), noteList.end(), [&](const Note* n) { return n->chord() == noteList[0]->chord(); });
+    const bool shouldTieListSelection = !sameChord;
 
     for (size_t i = 0; i < notes; ++i) {
         Note* n = noteList[i];
@@ -2188,6 +2190,16 @@ Tie* Score::cmdToggleTie()
             tieNoteList[i] = tieNote;
             if (tieNote) {
                 canAddTies = true;
+            }
+            if (!tieNote && selection().isList() && sameChord) {
+                cmdAddTie();
+                if (notes >= 2) {
+                    Chord* c = n->chord()->next();
+                    for (Note* cn : c->notes()) {
+                        score()->select(cn, SelectType::ADD);
+                    }
+                }
+                return nullptr;
             }
         }
     }
