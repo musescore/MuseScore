@@ -281,9 +281,9 @@ static bool elementsValidForSpannerType(const ElementType type, EngravingItem*& 
         if (endElement->isChord()) {
             endElement = toChord(endElement)->upNote();
         }
-        return startElement->isNote() && endElement->isNote();
+        return startElement->isNote() && endElement->isNote() && startElement->parentItem() != endElement->parentItem();
     case ElementType::SLUR:
-        return startElement && startElement->isChordRest() && endElement && endElement->isChordRest();
+        return startElement && startElement->isChordRest() && endElement && endElement->isChordRest() && startElement != endElement;
     default:
         break;
     }
