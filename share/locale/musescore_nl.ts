@@ -3420,7 +3420,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6021"/>
         <source>Vertical distance from notehead:</source>
-        <translation>Verticale afstand vanaf de notenkop:</translation>
+        <translation>Verticale afstand vanaf de nootkop:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6066"/>
@@ -4036,7 +4036,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9491"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
-        <translation>Herstel &apos;Notenkop afstand&apos; waarde</translation>
+        <translation>Herstel &apos;Nootkop afstand&apos; waarde</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9498"/>
@@ -12198,17 +12198,17 @@ Fret %1 op snaren %2</translation>
         <translation>Herstel uitgaande gedeeltelijke legatoboog</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2663"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2676"/>
         <source>Measure: %1</source>
         <translation>Maat: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2666"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2679"/>
         <source>Displayed measure: %1</source>
         <translation>Maat weergegeven als: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2670"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2683"/>
         <source>Beat: %1</source>
         <translation>Tel: %1</translation>
     </message>
@@ -14405,7 +14405,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1696"/>
         <source>Measure number (alternate)</source>
-        <translation>Maatcijfer (alternatief)</translation>
+        <translation>Maatnummer (alternatief)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1697"/>
@@ -17879,7 +17879,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="159"/>
         <source>beam staff move</source>
-        <translation type="unfinished"/>
+        <translation>waardestreep notenbalk verschuiving</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="160"/>
@@ -17889,7 +17889,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="161"/>
         <source>show stem slash</source>
-        <translation type="unfinished"/>
+        <translation>toon streep door stok</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="163"/>
@@ -17954,7 +17954,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="176"/>
         <source>continuation line</source>
-        <translation type="unfinished"/>
+        <translation>vervolglijn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="184"/>
@@ -17979,22 +17979,22 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="188"/>
         <source>hairpin with circled tip</source>
-        <translation type="unfinished"/>
+        <translation>cresc./dim.-teken met punt</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="190"/>
         <source>hairpin type</source>
-        <translation type="unfinished"/>
+        <translation>cresc./dim.-teken type</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="191"/>
         <source>hairpin height</source>
-        <translation type="unfinished"/>
+        <translation>cresc./dim.-teken hoogte</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="192"/>
         <source>hairpin cont height</source>
-        <translation type="unfinished"/>
+        <translation>cresc./dim.-teken vervolg hoogte</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="193"/>
@@ -18019,12 +18019,12 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="198"/>
         <source>single note dynamics</source>
-        <translation type="unfinished"/>
+        <translation>dynamiek voor enkele noot</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="199"/>
         <source>change method</source>
-        <translation type="unfinished"/>
+        <translation>wijzig methode</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="200"/>
@@ -18039,7 +18039,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="202"/>
         <source>multimeasure rest range bracket type</source>
-        <translation type="unfinished"/>
+        <translation>meermaatsrustbereik haak type</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="204"/>
@@ -18069,12 +18069,12 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="209"/>
         <source>music symbol size</source>
-        <translation type="unfinished"/>
+        <translation>muzieksymbool grootte</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="210"/>
         <source>marker center on symbol</source>
-        <translation type="unfinished"/>
+        <translation>markeer midden op symbool</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="211"/>
@@ -18104,7 +18104,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="216"/>
         <source>measure number mode</source>
-        <translation>maatcijfermodus</translation>
+        <translation>maatnummermodus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="218"/>
@@ -18159,7 +18159,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="229"/>
         <source>time stretch</source>
-        <translation type="unfinished"/>
+        <translation>tijdsuitrekking</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="230"/>
@@ -18179,17 +18179,17 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="233"/>
         <source>ornament show accidental</source>
-        <translation type="unfinished"/>
+        <translation>voorteken bij versiering</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="234"/>
         <source>ornament show cue note</source>
-        <translation type="unfinished"/>
+        <translation>voorteken met siernoot</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="235"/>
         <source>start on upper note</source>
-        <translation type="unfinished"/>
+        <translation>begin op de bovenste noot</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="237"/>
@@ -18210,49 +18210,49 @@ Fret %1 op snaren %2</translation>
         <location filename="../../src/engraving/dom/property.cpp" line="240"/>
         <location filename="../../src/engraving/dom/property.cpp" line="294"/>
         <source>tick</source>
-        <translation type="unfinished"/>
+        <translation>tik</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="241"/>
         <location filename="../../src/engraving/dom/property.cpp" line="264"/>
         <source>ticks</source>
-        <translation type="unfinished"/>
+        <translation>tikken</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="242"/>
         <source>end track</source>
-        <translation type="unfinished"/>
+        <translation>einde track</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="243"/>
         <location filename="../../src/engraving/dom/property.cpp" line="259"/>
         <source>end offset</source>
-        <translation type="unfinished"/>
+        <translation>eind correctie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="244"/>
         <source>breaking multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>meermaatrust onderbreken</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="245"/>
         <source>vertical position of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>verticale positie van het meermaatsrust getal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="246"/>
         <source>vertical offset of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>verticale correctie van het meermaatsrust getal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="247"/>
         <source>visibility of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>zichtbaarheid van het meermaatsrust getal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="249"/>
         <source>vertical position of measure repeat number</source>
-        <translation type="unfinished"/>
+        <translation>verticale positie van het herhalingsnummer van de maat</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="250"/>
@@ -18277,22 +18277,22 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="256"/>
         <source>start offset</source>
-        <translation type="unfinished"/>
+        <translation>start correctie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="257"/>
         <source>left shoulder offset</source>
-        <translation type="unfinished"/>
+        <translation>linker schouder correctie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="258"/>
         <source>right shoulder offset</source>
-        <translation type="unfinished"/>
+        <translation>rechter schouder correctie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="260"/>
         <source>staff move</source>
-        <translation type="unfinished"/>
+        <translation>notenbalk verschuiving</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="261"/>
@@ -18307,7 +18307,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="265"/>
         <source>endings</source>
-        <translation type="unfinished"/>
+        <translation>eindes</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="266"/>
@@ -18317,7 +18317,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="267"/>
         <source>magnification</source>
-        <translation type="unfinished"/>
+        <translation>vergroting</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="268"/>
@@ -18847,7 +18847,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="393"/>
         <source>grace note index</source>
-        <translation type="unfinished"/>
+        <translation>siernoot index</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="394"/>
@@ -18942,212 +18942,212 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="418"/>
         <source>bend type</source>
-        <translation type="unfinished"/>
+        <translation>bend type</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="419"/>
         <source>bend curve</source>
-        <translation type="unfinished"/>
+        <translation>bend-curve</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="420"/>
         <source>bend vertex offset</source>
-        <translation type="unfinished"/>
+        <translation>bend hoekpunt correctie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="421"/>
         <source>bend show hold line</source>
-        <translation type="unfinished"/>
+        <translation>bend toon greeplijn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="422"/>
         <source>bend start time factor</source>
-        <translation type="unfinished"/>
+        <translation>bend start tijd factor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="423"/>
         <source>bend end time factor</source>
-        <translation type="unfinished"/>
+        <translation>bend eind tijd factor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="425"/>
         <source>tremolobar type</source>
-        <translation type="unfinished"/>
+        <translation>tremolohendel type</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="426"/>
         <source>tremolobar curve</source>
-        <translation type="unfinished"/>
+        <translation>tremolohendel curve</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="428"/>
         <source>start with long names</source>
-        <translation type="unfinished"/>
+        <translation>start met lange namen</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="429"/>
         <source>start with measure one</source>
-        <translation type="unfinished"/>
+        <translation>start met maat één</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="430"/>
         <source>first system indentation</source>
-        <translation type="unfinished"/>
+        <translation>inspringafstand eerste systeem</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="432"/>
         <source>path</source>
-        <translation type="unfinished"/>
+        <translation>pad</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="434"/>
         <source>prefer sharps or flats</source>
-        <translation type="unfinished"/>
+        <translation>voorkeur voor kruisen of mollen</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="436"/>
         <source>playing technique type</source>
-        <translation type="unfinished"/>
+        <translation>speeltechniek type</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="438"/>
         <source>gradual tempo change type</source>
-        <translation type="unfinished"/>
+        <translation>geleidelijk tempoveranderingstype</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="439"/>
         <source>tempo easing method</source>
-        <translation type="unfinished"/>
+        <translation>tempo verloop methode</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="440"/>
         <source>tempo change factor</source>
-        <translation type="unfinished"/>
+        <translation>tempowijzigingsfactor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="442"/>
         <source>is diagram</source>
-        <translation type="unfinished"/>
+        <translation>is diagram</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="444"/>
         <source>active</source>
-        <translation type="unfinished"/>
+        <translation>actief</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="446"/>
         <source>fret position</source>
-        <translation type="unfinished"/>
+        <translation>fret positie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="447"/>
         <source>ignored strings</source>
-        <translation type="unfinished"/>
+        <translation>genegeerde snaren</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="448"/>
         <source>automatically generate text</source>
-        <translation type="unfinished"/>
+        <translation>automatisch tekst genereren</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="450"/>
         <source>tie placement</source>
-        <translation type="unfinished"/>
+        <translation>overbinding plaatsing</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="451"/>
         <source>minimum length</source>
-        <translation type="unfinished"/>
+        <translation>minimum lengte</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="452"/>
         <source>partial spanner direction</source>
-        <translation type="unfinished"/>
+        <translation>gedeeltelijke sleutelrichting</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="454"/>
         <source>position linked to main score</source>
-        <translation type="unfinished"/>
+        <translation>positie gekoppeld aan partituur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="455"/>
         <source>appearance linked to main score</source>
-        <translation type="unfinished"/>
+        <translation>uiterlijk gekoppeld aan partituur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="456"/>
         <source>text linked to main score</source>
-        <translation type="unfinished"/>
+        <translation>tekst gekoppeld aan partituur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="457"/>
         <source>exclude from parts</source>
-        <translation type="unfinished"/>
+        <translation>sluit uit van partijen</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="459"/>
         <source>strings count</source>
-        <translation type="unfinished"/>
+        <translation>aantal snaren</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="460"/>
         <source>strings preset</source>
-        <translation type="unfinished"/>
+        <translation>snaren voorinstelling</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="461"/>
         <source>visible strings</source>
-        <translation type="unfinished"/>
+        <translation>zichtbare snaren</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="463"/>
         <source>score font</source>
-        <translation type="unfinished"/>
+        <translation>partituur lettertype</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="464"/>
         <source>symbols size</source>
-        <translation type="unfinished"/>
+        <translation>symboolgrootte</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="465"/>
         <source>symbol angle</source>
-        <translation type="unfinished"/>
+        <translation>symbool hoek</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="467"/>
         <source>apply to all staves</source>
-        <translation type="unfinished"/>
+        <translation>pas toe op alle notenbalken</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="468"/>
         <source>is courtesy</source>
-        <translation type="unfinished"/>
+        <translation>is herinnering</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="469"/>
         <source>exclude vertical align</source>
-        <translation type="unfinished"/>
+        <translation>sluit uit van verticale uitlijning</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="471"/>
         <source>show bar numbers</source>
-        <translation type="unfinished"/>
+        <translation>toon maatnummers</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="472"/>
         <source>play count text setting</source>
-        <translation type="unfinished"/>
+        <translation>aantal keer spelen-tekst instelling</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="473"/>
         <source>play count text</source>
-        <translation type="unfinished"/>
+        <translation>aantal keer spelen-tekst</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="475"/>
         <source>align with other rests in the same voice</source>
-        <translation type="unfinished"/>
+        <translation>lijn uit met andere rusten in dezelfde stem</translation>
     </message>
 </context>
 <context>
@@ -21783,7 +21783,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="71"/>
         <location filename="../../src/framework/ui/qml/Muse/Ui/internal/ProgressDialog.qml" line="98"/>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="88"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="86"/>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="146"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="69"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="349"/>
@@ -22143,9 +22143,9 @@ Fret %1 op snaren %2</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml" line="57"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml" line="73"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="68"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="85"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="112"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="129"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="86"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="114"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="132"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="61"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="101"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml" line="57"/>
@@ -22160,12 +22160,14 @@ Fret %1 op snaren %2</translation>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="574"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="687"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="723"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="751"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="357"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="57"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="82"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="170"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="231"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="238"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="65"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="91"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="179"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="240"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="247"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LaissezVibrSection.qml" line="59"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="59"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="62"/>
@@ -22912,33 +22914,38 @@ opmaat</translation>
         <translation>Hoekradius</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="127"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="129"/>
         <source>Reset “%1” to default value</source>
         <translation>Herstel &quot;%1&quot; naar standaardwaarde</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="128"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="130"/>
         <source>Reset property to default value</source>
         <translation>Herstel eigenschap naar standaardwaarde</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="148"/>
         <source>Menu</source>
         <translation>Menu</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="153"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="152"/>
+        <source>Menu for “%1”</source>
+        <extracomment>%1 is replaced with the name of the property</extracomment>
+        <translation>Menu voor “%1”</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="157"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/PropertyResetButton.qml" line="35"/>
         <source>Reset</source>
         <translation>Herstel de standaardwaarde</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="156"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="160"/>
         <source>Save as default style for this score</source>
         <translation>Sla op als standaardstijl voor deze partituur</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="158"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="162"/>
         <source>This is set as the default style for this score</source>
         <translation>Dit is ingesteld als de standaardstijl voor deze partituur</translation>
     </message>
@@ -22980,7 +22987,7 @@ opmaat</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="60"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="55"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="64"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="108"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="110"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="79"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="232"/>
         <source>Above</source>
@@ -22991,8 +22998,8 @@ opmaat</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="177"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="61"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="56"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="81"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="125"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="82"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="128"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="80"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="233"/>
         <source>Below</source>
@@ -23718,12 +23725,26 @@ opmaat</translation>
         <translation>Basnoot schaal</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="161"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="182"/>
+        <source>Align left edge of text to notehead</source>
+        <translation>Lijn de linkerkant van de tekst uit met de nootkop</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="187"/>
+        <source>Align horizontal center of text to notehead</source>
+        <translation>Lijn het horizontale middelpunt van de tekst uit met de nootkop</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="192"/>
+        <source>Align right edge of text to notehead</source>
+        <translation>Lijn de rechterkant van de tekst uit met de nootkop</translation>
+    </message>
+    <message>
         <source>Alignment to notehead</source>
         <translation>Uitlijning met nootkop</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="186"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="206"/>
         <source>Add fretboard diagram</source>
         <translation>Voeg fretborddiagram toe</translation>
     </message>
@@ -23808,12 +23829,14 @@ opmaat</translation>
         <translation>Toon haken, sleutels en toonsoort in de volgende maat</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="169"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="33"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="162"/>
         <source>Alignment</source>
         <translation>Uitlijning</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="181"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="58"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="208"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="277"/>
@@ -23826,6 +23849,7 @@ opmaat</translation>
         <translation>Lijn linkerrand van de legenda uit met het referentiepunt</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="186"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="64"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="214"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="283"/>
@@ -23838,6 +23862,7 @@ opmaat</translation>
         <translation>Lijn horizontaal midden van de legenda uit met het referentiepunt</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="191"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="70"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="220"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="289"/>
@@ -23850,17 +23875,17 @@ opmaat</translation>
         <translation>Lijn rechterrand van de legenda uit met het referentiepunt</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="64"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="60"/>
         <source>Move up</source>
         <translation>Verplaats omhoog</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="82"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="78"/>
         <source>Move down</source>
         <translation>Verplaats omlaag</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="95"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="93"/>
         <source>Reset chord list</source>
         <translation>Herstel akkoordenlijst</translation>
     </message>
@@ -23915,9 +23940,29 @@ opmaat</translation>
         <translation>Afstand tot notenbalk/kaders</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="96"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="72"/>
+        <source>Gap to staff/frames above</source>
+        <translation>Afstand tot notenbalk/kaders boven</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="90"/>
+        <source>Gap to staff/frames below</source>
+        <translation>Afstand tot notenbalk/kaders onder</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="98"/>
         <source>Clearance for notation</source>
         <translation>Afstand tot notatie</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="118"/>
+        <source>Clearance for notation above</source>
+        <translation>Afstand tot notatie boven</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="136"/>
+        <source>Clearance for notation below</source>
+        <translation>Afstand tot notatie onder</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="49"/>
@@ -26520,7 +26565,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="263"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="340"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="63"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="72"/>
         <source>Scale:</source>
         <translation>Schaal:</translation>
     </message>
@@ -26562,31 +26607,44 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="672"/>
+        <source>Min. space to fretboard diagram:</source>
+        <translation>Min. afstand tot fretbord diagram:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="711"/>
+        <source>Min. space to other notation:</source>
+        <translation>Min. afstand tot andere notatie:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="739"/>
+        <source>Min. space between chord symbols:</source>
+        <translation>Min. afstand tussen akkoordsymbolen:</translation>
+    </message>
+    <message>
         <source>Minimum space from fretboard diagram:</source>
         <translation>Minimum afstand van fretbord diagram:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="711"/>
         <source>Minimum space between chord symbols:</source>
         <translation>Minimum afstand tussen akkoordsymbolen:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="750"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="778"/>
         <source>Interpretation:</source>
         <translation>Interpretatie:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="783"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="811"/>
         <source>Voicing:</source>
         <translation>Samenstelling</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="809"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="837"/>
         <source>Duration:</source>
         <translation>Duur:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="834"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="862"/>
         <source>Capo fret position:</source>
         <translation>Capo fret positie:</translation>
     </message>
@@ -26602,148 +26660,157 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
         <translation>Fretborddiagrammen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="56"/>
         <source>Position above:</source>
         <translation>Positie boven:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="70"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="56"/>
+        <source>Position above staff:</source>
+        <translation>Positie boven notenbalk:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="64"/>
+        <source>Min. space to notation:</source>
+        <translation>Min. afstand tot notatie:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="79"/>
         <source>Orientation:</source>
         <translation>Oriëntatie:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="74"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="83"/>
         <source>Vertical</source>
         <translation>Verticaal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="75"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="84"/>
         <source>Horizontal</source>
         <translation>Horizontaal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="81"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="90"/>
         <source>Nut line thickness:</source>
         <translation>Bruglijndikte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="89"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="98"/>
         <source>Fret number</source>
         <translation>Fretnummer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="100"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="109"/>
         <source>Position:</source>
         <translation>Positie:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="104"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="113"/>
         <source>Left</source>
         <translation>Links</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="104"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="113"/>
         <source>Bottom</source>
         <translation>Beneden</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="110"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="119"/>
         <source>Right</source>
         <translation>Rechts</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="110"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="119"/>
         <source>Top</source>
         <translation>Bovenaan</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="117"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="126"/>
         <source>Format:</source>
         <translation>Formaat:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="125"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="134"/>
         <source>Number only</source>
         <translation>Alleen getal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="134"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="143"/>
         <source>Custom suffix:</source>
         <translation>Eigen toevoeging:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="151"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="160"/>
         <source>Preview:</source>
         <translation>Voorbeeld:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="158"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="167"/>
         <source>Edit fret number text style</source>
         <translation>Bewerk tekststijl fretnummer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="169"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="178"/>
         <source>Dot size:</source>
         <translation>Puntgrootte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="177"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="186"/>
         <source>Barré</source>
         <translation>Barré</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="185"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="194"/>
         <source>Appearance:</source>
         <translation>Uiterlijk:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="189"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="198"/>
         <source>Line</source>
         <translation>Lijn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="190"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="199"/>
         <source>Slur</source>
         <translation>Legatoboog</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="196"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="205"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="58"/>
         <source>Line thickness:</source>
         <translation>Lijndikte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="204"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="213"/>
         <source>Show fingerings</source>
         <translation>Laat vingerzetting zien</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="210"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="219"/>
         <source>Edit fingering text style</source>
         <translation>Bewerk tekststijl vingerzetting</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="219"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="228"/>
         <source>Fretboard style:</source>
         <translation>Fretbordstijl:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="223"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="232"/>
         <source>Trimmed</source>
         <translation>Ingekort</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="224"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="233"/>
         <source>Extended</source>
         <translation>Verlengd</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="230"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="239"/>
         <source>String spacing:</source>
         <translation>Snaarafstand:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="237"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="246"/>
         <source>Fret spacing:</source>
         <translation>Fretafstand:</translation>
     </message>
@@ -26873,7 +26940,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="180"/>
         <source>Preset</source>
-        <translation>Voorinstelling</translation>
+        <translation>Instelling</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml" line="44"/>
@@ -27596,7 +27663,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1874"/>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="120"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="121"/>
         <source>Load style</source>
         <translation>Laad stijl</translation>
     </message>
@@ -27796,7 +27863,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
         <translation>Eigen aangepast</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="265"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="263"/>
         <source>%n string(s)</source>
         <translation><numerusform>%n snaar</numerusform><numerusform>%n snaren</numerusform></translation>
     </message>
@@ -28134,7 +28201,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
         <translation>Laagste noot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="118"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="119"/>
         <source>MuseScore chord symbol style files</source>
         <translation>MuseScore akkoordsymbolen-stijlbestanden</translation>
     </message>
@@ -28492,7 +28559,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="111"/>
         <source>Preset</source>
-        <translation>Voorinstelling</translation>
+        <translation>Instelling</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="153"/>
@@ -28570,104 +28637,104 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
         <translation>Positionering</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="736"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="764"/>
         <source>Playback</source>
         <translation>Afspelen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="68"/>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="151"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="69"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="152"/>
         <source>Standard</source>
         <translation>Standaard</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="71"/>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="182"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="72"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="184"/>
         <source>Jazz</source>
         <translation>Jazz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="74"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="75"/>
         <source>Legacy MuseScore</source>
         <translation>Eerdere versies van MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="77"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="78"/>
         <source>Load custom XML…</source>
         <translation>Laad eigen XML-bestand…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="154"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="155"/>
         <source>German</source>
         <translation>Duits</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="157"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="158"/>
         <source>Full German</source>
         <translation>Volledig Duits</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="160"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="161"/>
         <source>Solfeggio</source>
         <translation>Solfeggio</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="163"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="164"/>
         <source>French</source>
         <translation>Frans</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="185"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="187"/>
         <source>Literal</source>
         <translation>Letterlijk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="196"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="198"/>
         <source>Automatic</source>
         <translation>Automatisch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="199"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="201"/>
         <source>Root only</source>
         <translation>Alleen grondtoon</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="202"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="204"/>
         <source>Close</source>
         <translation>Sluit</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="205"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="207"/>
         <source>Drop two</source>
         <translation>Verlaag tweede</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="208"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="210"/>
         <source>Six note</source>
         <translation>Zes noten</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="211"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="213"/>
         <source>Four note</source>
         <translation>Vier noten</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="214"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="216"/>
         <source>Three note</source>
         <translation>Drie noten</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="225"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="227"/>
         <source>Until next chord symbol</source>
         <translation>Tot volgende akkoordsymbool</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="228"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="230"/>
         <source>Until end of measure</source>
         <translation>Tot het einde van de maat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="231"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="233"/>
         <source>Chord/rest duration</source>
         <translation>Akkoord/rust duur</translation>
     </message>
@@ -29164,12 +29231,12 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="61"/>
         <source>Show measure numbers</source>
-        <translation>Toon maatcijfers</translation>
+        <translation>Toon maatnummers</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="68"/>
         <source>Show initial measure number</source>
-        <translation>Toon eerste maatcijfer</translation>
+        <translation>Toon eerste maatnummer</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="78"/>
@@ -29276,12 +29343,12 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="301"/>
         <source>Measure number range at multimeasure rests</source>
-        <translation>Maatcijferbereik bij meermaatsrusten</translation>
+        <translation>Maatnummerbereik bij meermaatsrusten</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="309"/>
         <source>Show measure number ranges</source>
-        <translation>Toon maatcijferbereik</translation>
+        <translation>Toon maatnummerbereik</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="353"/>
@@ -29797,7 +29864,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
         <translation>Kit aanpassen</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="66"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="65"/>
         <source>More palettes</source>
         <translation>Meer paletten</translation>
     </message>
@@ -29807,7 +29874,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
         <translation>Maak eigen palet</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="88"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="89"/>
         <source>All palettes were added</source>
         <translation>Alle paletten zijn toegevoegd</translation>
     </message>
@@ -29827,12 +29894,12 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
         <translation>%1 verwijderd</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="59"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="57"/>
         <source>Name your custom palette</source>
         <translation>Geef uw eigen palet een naam</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="102"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="100"/>
         <source>Create</source>
         <translation>Maak</translation>
     </message>
@@ -30094,7 +30161,7 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="288"/>
         <location filename="../../src/palette/view/widgets/keyedit.cpp" line="310"/>
-        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="168"/>
+        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="167"/>
         <source>Key signatures</source>
         <translation>Toonsoort</translation>
     </message>
@@ -30640,7 +30707,7 @@ is mislukt.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1642"/>
-        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
+        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="168"/>
         <location filename="../../src/palette/view/widgets/timedialog.cpp" line="44"/>
         <source>Time signatures</source>
         <translation>Maatsoorten</translation>
@@ -30955,7 +31022,7 @@ mislukt: %2</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="133"/>
-        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="170"/>
+        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
         <source>Symbols</source>
         <translation>Symbolen</translation>
     </message>
@@ -33669,52 +33736,52 @@ mislukt: %2</translation>
         <translation>Partijen</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="359"/>
         <source>File already exists</source>
         <translation>Bestand bestaat al</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="360"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
         <translation>Er bestaat al een bestand met de bestandsnaam %1. Wilt u het vervangen?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="366"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="362"/>
         <source>Replace</source>
         <translation>Vervang</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="367"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
         <source>Replace all</source>
         <translation>Vervang alles</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="368"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
         <source>Skip</source>
         <translation>Sla over</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="369"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="365"/>
         <source>Skip all</source>
         <translation>Sla alles over</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="392"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="388"/>
         <source>Error</source>
         <translation>Fout</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="393"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="389"/>
         <source>An error occurred while writing the file %1. Do you want to retry?</source>
         <translation>Er is een fout opgetreden tijdens het schrijven van het bestand %1. Wilt u het opnieuw proberen?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="445"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="441"/>
         <source>Exporting audio…</source>
         <translation>Audio exporteren…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="445"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="441"/>
         <source>Exporting…</source>
         <translation>Bezig met exporteren…</translation>
     </message>
@@ -33843,40 +33910,40 @@ mislukt: %2</translation>
         <translation>MEI-bestanden</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="303"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="308"/>
         <source>Each page to a separate file</source>
         <translation>Elke pagina in een apart bestand</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="304"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="309"/>
         <source>Each part to a separate file</source>
         <translation>Elke partij in een apart bestand</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="305"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="310"/>
         <source>All parts combined in one file</source>
         <translation>Alle partijen gecombineerd in één bestand</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="590"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="595"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Alle opmaak</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="592"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="597"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Systeemomslagen en pagina-eindes</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="594"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="599"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Alleen handmatig toegevoegde systeemomslagen en pagina-eindes</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="596"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="601"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Geen systeemomslagen of pagina-eindes</translation>
@@ -35477,22 +35544,22 @@ mislukt: %2</translation>
         <translation>Bewerk bend-curve</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="119"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="121"/>
         <source>Make chord(s) visible</source>
         <translation>Maak akkoord(en) zichtbaar</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="120"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="122"/>
         <source>Make chord(s) invisible</source>
         <translation>Maar akkoord(en) onzichtbaar</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="148"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="150"/>
         <source>Move chord(s) up</source>
         <translation>Verplaats akkoord(en) naar boven</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="170"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="172"/>
         <source>Move chord(s) down</source>
         <translation>Verplaats akkoord(en) naar beneden</translation>
     </message>
@@ -35827,7 +35894,7 @@ mislukt: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5375"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5415"/>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="201"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="207"/>
         <source>Add hairpin</source>
         <translation>Voeg cresc./decresc.-teken toe</translation>
     </message>
@@ -35853,7 +35920,7 @@ mislukt: %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5556"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8033"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8036"/>
         <source>Toggle articulation</source>
         <translation>Schakel articulatie in/uit</translation>
     </message>
@@ -35890,7 +35957,7 @@ mislukt: %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5685"/>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="193"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="199"/>
         <source>Change hairpin type</source>
         <translation>Wissel tussen cresc./dim.</translation>
     </message>
@@ -36132,71 +36199,72 @@ mislukt: %2</translation>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7554"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7561"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7621"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7681"/>
         <source>Enter lyrics extension line</source>
         <translation>Voeg liedtekst verlenglijn toe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7703"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7706"/>
         <source>Add lyrics verse</source>
         <translation>Voeg liedtekstvers toe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7751"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7754"/>
         <source>Enter guitar bend</source>
         <translation>Voeg gitaar bend toe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7824"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7827"/>
         <source>Add fretboard diagram</source>
         <translation>Voeg fretborddiagram toe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7957"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7960"/>
         <source>Format text</source>
         <translation>Tekst opmaken</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7977"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7980"/>
         <source>Toggle subscript</source>
         <translation>Schakel subscript in/uit</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7979"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7982"/>
         <source>Toggle superscript</source>
         <translation>Schakel superscript in/uit</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7981"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7984"/>
         <source>Toggle subscript/superscript</source>
         <translation>Schakel subscript/superscript om</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8038"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8041"/>
         <source>Toggle ornament</source>
         <translation>Schakel versiering in/uit</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8043"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8046"/>
         <source>Toggle automatic placement</source>
         <translation>Schakel automatisch plaatsen in/uit</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8054"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8057"/>
         <source>Add clef</source>
         <translation>Voeg sleutel toe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8059"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8062"/>
         <source>Add accidental</source>
         <translation>Voeg voorteken toe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8064"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8067"/>
         <source>Transpose semitone</source>
         <translation>Transponeer halve toon</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8070"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8073"/>
         <source>Transpose diatonically</source>
         <translation>Transponeer diatonisch</translation>
     </message>
@@ -36350,7 +36418,7 @@ mislukt: %2</translation>
         <translation>Laad stijl</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="190"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="196"/>
         <source>Remove hairpin</source>
         <translation>Verwijder cresc./decresc.-teken</translation>
     </message>
@@ -36365,17 +36433,17 @@ mislukt: %2</translation>
         <translation>Stel snaarstemming in</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="232"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="230"/>
         <source>Load string tunings preset</source>
         <translation>Laad snaarstemming voorinstelling</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="285"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="283"/>
         <source>Set number of strings</source>
         <translation>Stel het aantal snaren in</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="356"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="354"/>
         <source>Edit strings</source>
         <translation>Bewerk snaren</translation>
     </message>

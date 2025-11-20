@@ -16981,7 +16981,7 @@
         <source>5-string electric bass guitar (staff notation).</source>
         <comment>5-string-electric-bass description</comment>
         <extracomment>description for 5-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>5-kielinen sähköbassokitara (viivasto notaatio).</translation>
+        <translation>5-kielinen sähköbassokitara (viivastonotaatio).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5624"/>

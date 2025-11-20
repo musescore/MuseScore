@@ -12197,17 +12197,17 @@ Fret %1 on strings %2</source>
         <translation>重置圆滑线的出走部分</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2663"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2676"/>
         <source>Measure: %1</source>
         <translation>小节：%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2666"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2679"/>
         <source>Displayed measure: %1</source>
         <translation>谱面小节：%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2670"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2683"/>
         <source>Beat: %1</source>
         <translation>%1拍</translation>
     </message>
@@ -17442,7 +17442,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="62"/>
         <source>generated</source>
-        <translation type="unfinished"/>
+        <translation>已生成</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="63"/>
@@ -17458,7 +17458,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="65"/>
         <source>stacking order</source>
-        <translation type="unfinished"/>
+        <translation>堆叠次序</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="66"/>
@@ -17621,22 +17621,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="100"/>
         <source>span</source>
-        <translation type="unfinished"/>
+        <translation>管辖范围</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="101"/>
         <source>span from</source>
-        <translation type="unfinished"/>
+        <translation>延伸起点</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="102"/>
         <source>span to</source>
-        <translation type="unfinished"/>
+        <translation>延伸终点</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="103"/>
         <source>show tips</source>
-        <translation type="unfinished"/>
+        <translation>显示提示</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="105"/>
@@ -17908,7 +17908,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="166"/>
         <source>tempo align right of rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>速度与排练号右侧对齐</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="168"/>
@@ -17923,7 +17923,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="170"/>
         <source>stacking order offset</source>
-        <translation type="unfinished"/>
+        <translation>堆叠次序偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="171"/>
@@ -17958,37 +17958,37 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="184"/>
         <source>ottava type</source>
-        <translation type="unfinished"/>
+        <translation>八度记号类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="185"/>
         <source>numbers only</source>
-        <translation type="unfinished"/>
+        <translation>仅数字</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="186"/>
         <source>trill type</source>
-        <translation type="unfinished"/>
+        <translation>颤音类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="187"/>
         <source>vibrato type</source>
-        <translation type="unfinished"/>
+        <translation>揉颤音类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="188"/>
         <source>hairpin with circled tip</source>
-        <translation type="unfinished"/>
+        <translation>尖端带圆的楔形记号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="190"/>
         <source>hairpin type</source>
-        <translation type="unfinished"/>
+        <translation>楔形记号类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="191"/>
         <source>hairpin height</source>
-        <translation type="unfinished"/>
+        <translation>楔形记号高度</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="192"/>
@@ -18013,12 +18013,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="196"/>
         <source>dynamic type</source>
-        <translation type="unfinished"/>
+        <translation>力度记号键入</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="198"/>
         <source>single note dynamics</source>
-        <translation type="unfinished"/>
+        <translation>单音符力度</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="199"/>
@@ -18043,22 +18043,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="204"/>
         <source>jump to</source>
-        <translation type="unfinished"/>
+        <translation>跳转到</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="205"/>
         <source>play until</source>
-        <translation type="unfinished"/>
+        <translation>播放到</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="206"/>
         <source>continue at</source>
-        <translation type="unfinished"/>
+        <translation>继续于</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="207"/>
         <source>label</source>
-        <translation type="unfinished"/>
+        <translation>标签</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="208"/>
@@ -18068,7 +18068,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="209"/>
         <source>music symbol size</source>
-        <translation type="unfinished"/>
+        <translation>音乐符号大小</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="210"/>
@@ -18078,47 +18078,47 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="211"/>
         <source>length 1</source>
-        <translation type="unfinished"/>
+        <translation>长度1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="212"/>
         <source>length 2</source>
-        <translation type="unfinished"/>
+        <translation>长度2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="213"/>
         <source>repeat end</source>
-        <translation type="unfinished"/>
+        <translation>反复结束</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="214"/>
         <source>repeat start</source>
-        <translation type="unfinished"/>
+        <translation>反复开始</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="215"/>
         <source>repeat jump</source>
-        <translation type="unfinished"/>
+        <translation>重复跳转</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="216"/>
         <source>measure number mode</source>
-        <translation type="unfinished"/>
+        <translation>小节号显模式</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="218"/>
         <source>glissando type</source>
-        <translation type="unfinished"/>
+        <translation>滑音线类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="220"/>
         <source>showing text</source>
-        <translation type="unfinished"/>
+        <translation>显示文本</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="221"/>
         <source>glissando style</source>
-        <translation type="unfinished"/>
+        <translation>滑音线样式</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="222"/>
@@ -18143,7 +18143,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="226"/>
         <source>groups</source>
-        <translation type="unfinished"/>
+        <translation>组</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="227"/>
@@ -18153,7 +18153,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="228"/>
         <source>line width</source>
-        <translation type="unfinished"/>
+        <translation>线条宽度</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="229"/>
@@ -18163,17 +18163,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="230"/>
         <source>ornament style</source>
-        <translation type="unfinished"/>
+        <translation>装饰音样式</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="231"/>
         <source>interval above</source>
-        <translation type="unfinished"/>
+        <translation>上方音程</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="232"/>
         <source>interval below</source>
-        <translation type="unfinished"/>
+        <translation>下方音程</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="233"/>
@@ -18193,7 +18193,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="237"/>
         <source>time signature</source>
-        <translation type="unfinished"/>
+        <translation>拍号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="238"/>
@@ -18203,7 +18203,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="239"/>
         <source>time signature type</source>
-        <translation type="unfinished"/>
+        <translation>拍号类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="240"/>
@@ -18236,27 +18236,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="245"/>
         <source>vertical position of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>多节休止的数字垂直位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="246"/>
         <source>vertical offset of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>多节休止的数字垂直偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="247"/>
         <source>visibility of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>多节休止的数字可见性</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="249"/>
         <source>vertical position of measure repeat number</source>
-        <translation type="unfinished"/>
+        <translation>小节反复号垂直位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="250"/>
         <source>repeat count</source>
-        <translation type="unfinished"/>
+        <translation>反复次数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="252"/>
@@ -18266,7 +18266,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="253"/>
         <source>numbering offset</source>
-        <translation type="unfinished"/>
+        <translation>标号偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="254"/>
@@ -18311,7 +18311,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="266"/>
         <source>visible line</source>
-        <translation type="unfinished"/>
+        <translation>可见的线条</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="267"/>
@@ -18321,17 +18321,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="268"/>
         <source>using drumset</source>
-        <translation type="unfinished"/>
+        <translation>使用鼓组</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="269"/>
         <source>duration</source>
-        <translation type="unfinished"/>
+        <translation>时值</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="270"/>
         <source>duration type</source>
-        <translation type="unfinished"/>
+        <translation>时值类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="271"/>
@@ -18346,12 +18346,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="274"/>
         <source>strings</source>
-        <translation type="unfinished"/>
+        <translation>弦</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="275"/>
         <source>frets</source>
-        <translation type="unfinished"/>
+        <translation>品格</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="276"/>
@@ -18361,32 +18361,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="277"/>
         <source>fret offset</source>
-        <translation type="unfinished"/>
+        <translation>品格偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="278"/>
         <source>fret number position</source>
-        <translation type="unfinished"/>
+        <translation>品号位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="279"/>
         <source>orientation</source>
-        <translation type="unfinished"/>
+        <translation>方向</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="280"/>
         <source>fretboard diagram fingering visible</source>
-        <translation type="unfinished"/>
+        <translation>品格图指法可见</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="281"/>
         <source>fretboard diagram fingering</source>
-        <translation type="unfinished"/>
+        <translation>品格图指法</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="283"/>
         <source>chord symbol interpretation</source>
-        <translation type="unfinished"/>
+        <translation>和弦符号演绎风格</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="284"/>
@@ -18396,7 +18396,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="285"/>
         <source>chord symbol duration</source>
-        <translation type="unfinished"/>
+        <translation>和弦符号时值</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="286"/>
@@ -18406,32 +18406,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="287"/>
         <source>chord symbol do not stack modifiers</source>
-        <translation type="unfinished"/>
+        <translation>禁止和弦符号修饰符堆叠</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="289"/>
         <source>type</source>
-        <translation type="unfinished"/>
+        <translation>类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="290"/>
         <source>gap</source>
-        <translation type="unfinished"/>
+        <translation>间隔</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="291"/>
         <source>autoplace</source>
-        <translation type="unfinished"/>
+        <translation>自动排布</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="292"/>
         <source>dash line length</source>
-        <translation type="unfinished"/>
+        <translation>虚线长度</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="293"/>
         <source>dash gap length</source>
-        <translation type="unfinished"/>
+        <translation>虚线间隔长度</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="295"/>
@@ -18531,22 +18531,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="318"/>
         <source>barline span</source>
-        <translation type="unfinished"/>
+        <translation>小节线管辖范围</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="319"/>
         <source>barline span from</source>
-        <translation type="unfinished"/>
+        <translation>小节线延伸起点</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="320"/>
         <source>barline span to</source>
-        <translation type="unfinished"/>
+        <translation>小节线延伸终点</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="321"/>
         <source>bracket span</source>
-        <translation type="unfinished"/>
+        <translation>括号管辖范围</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="323"/>
@@ -18561,7 +18561,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="325"/>
         <source>style</source>
-        <translation type="unfinished"/>
+        <translation>样式</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="326"/>
@@ -18571,7 +18571,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="328"/>
         <source>font style</source>
-        <translation type="unfinished"/>
+        <translation>字体样式</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="329"/>
@@ -18626,7 +18626,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="340"/>
         <source>align</source>
-        <translation type="unfinished"/>
+        <translation>对齐</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="341"/>
@@ -18776,7 +18776,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="375"/>
         <source>avoid barlines</source>
-        <translation type="unfinished"/>
+        <translation>避开小节线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="376"/>
@@ -18786,7 +18786,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="377"/>
         <source>use text alignment</source>
-        <translation type="unfinished"/>
+        <translation>使用文本对齐</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="378"/>
@@ -18851,7 +18851,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="394"/>
         <source>note index</source>
-        <translation type="unfinished"/>
+        <translation>音符索引</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="396"/>
@@ -18936,37 +18936,37 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="416"/>
         <source>arpeggio span</source>
-        <translation type="unfinished"/>
+        <translation>琶音管辖范围</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="418"/>
         <source>bend type</source>
-        <translation type="unfinished"/>
+        <translation>弯音类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="419"/>
         <source>bend curve</source>
-        <translation type="unfinished"/>
+        <translation>弯音曲线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="420"/>
         <source>bend vertex offset</source>
-        <translation type="unfinished"/>
+        <translation>弯音顶点偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="421"/>
         <source>bend show hold line</source>
-        <translation type="unfinished"/>
+        <translation>显示弯音延音线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="422"/>
         <source>bend start time factor</source>
-        <translation type="unfinished"/>
+        <translation>弯音开始时间系数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="423"/>
         <source>bend end time factor</source>
-        <translation type="unfinished"/>
+        <translation>弯音结束时间系数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="425"/>
@@ -19006,22 +19006,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="436"/>
         <source>playing technique type</source>
-        <translation type="unfinished"/>
+        <translation>演奏技巧类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="438"/>
         <source>gradual tempo change type</source>
-        <translation type="unfinished"/>
+        <translation>速度渐变类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="439"/>
         <source>tempo easing method</source>
-        <translation type="unfinished"/>
+        <translation>速度变化曲线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="440"/>
         <source>tempo change factor</source>
-        <translation type="unfinished"/>
+        <translation>速度变化系数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="442"/>
@@ -19101,12 +19101,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="463"/>
         <source>score font</source>
-        <translation type="unfinished"/>
+        <translation>乐谱字体</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="464"/>
         <source>symbols size</source>
-        <translation type="unfinished"/>
+        <translation>符号大小</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="465"/>
@@ -21782,7 +21782,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="71"/>
         <location filename="../../src/framework/ui/qml/Muse/Ui/internal/ProgressDialog.qml" line="98"/>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="88"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="86"/>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="146"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="69"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="349"/>
@@ -22142,9 +22142,9 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml" line="57"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml" line="73"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="68"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="85"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="112"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="129"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="86"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="114"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="132"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="61"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="101"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml" line="57"/>
@@ -22159,12 +22159,14 @@ Fret %1 on strings %2</source>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="574"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="687"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="723"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="751"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="357"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="57"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="82"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="170"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="231"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="238"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="65"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="91"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="179"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="240"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="247"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LaissezVibrSection.qml" line="59"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="59"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="62"/>
@@ -22911,33 +22913,38 @@ pickup measure</source>
         <translation>圆角半径</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="127"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="129"/>
         <source>Reset “%1” to default value</source>
         <translation>重置“%1”为默认值</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="128"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="130"/>
         <source>Reset property to default value</source>
         <translation>将属性重置为默认值</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="148"/>
         <source>Menu</source>
         <translation>菜单</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="153"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="152"/>
+        <source>Menu for “%1”</source>
+        <extracomment>%1 is replaced with the name of the property</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="157"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/PropertyResetButton.qml" line="35"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="156"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="160"/>
         <source>Save as default style for this score</source>
         <translation>保存为此乐谱的默认样式</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="158"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="162"/>
         <source>This is set as the default style for this score</source>
         <translation>已设为本乐谱默认样式</translation>
     </message>
@@ -22979,7 +22986,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="60"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="55"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="64"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="108"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="110"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="79"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="232"/>
         <source>Above</source>
@@ -22990,8 +22997,8 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="177"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="61"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="56"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="81"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="125"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="82"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="128"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="80"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="233"/>
         <source>Below</source>
@@ -23717,12 +23724,26 @@ pickup measure</source>
         <translation>低音音符缩放</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="161"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="182"/>
+        <source>Align left edge of text to notehead</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="187"/>
+        <source>Align horizontal center of text to notehead</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="192"/>
+        <source>Align right edge of text to notehead</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Alignment to notehead</source>
         <translation>对齐到符头</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="186"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="206"/>
         <source>Add fretboard diagram</source>
         <translation>添加品格图</translation>
     </message>
@@ -23807,12 +23828,14 @@ pickup measure</source>
         <translation>在下一小节显示连谱号、谱号和调号</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="169"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="33"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="162"/>
         <source>Alignment</source>
         <translation>对齐方式</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="181"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="58"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="208"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="277"/>
@@ -23825,6 +23848,7 @@ pickup measure</source>
         <translation>将图例左边缘对齐到参考点</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="186"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="64"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="214"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="283"/>
@@ -23837,6 +23861,7 @@ pickup measure</source>
         <translation>将图例的水平中心对齐到参考点</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="191"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="70"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="220"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="289"/>
@@ -23849,17 +23874,17 @@ pickup measure</source>
         <translation>图例右边缘对齐到参考点</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="64"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="60"/>
         <source>Move up</source>
         <translation>向上移动</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="82"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="78"/>
         <source>Move down</source>
         <translation>向下移动</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="95"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="93"/>
         <source>Reset chord list</source>
         <translation>重置和弦列表</translation>
     </message>
@@ -23914,9 +23939,29 @@ pickup measure</source>
         <translation>到谱表/框体的间距</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="96"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="72"/>
+        <source>Gap to staff/frames above</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="90"/>
+        <source>Gap to staff/frames below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="98"/>
         <source>Clearance for notation</source>
         <translation>记谱的间隙</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="118"/>
+        <source>Clearance for notation above</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="136"/>
+        <source>Clearance for notation below</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="49"/>
@@ -26519,7 +26564,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="263"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="340"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="63"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="72"/>
         <source>Scale:</source>
         <translation>缩放比：</translation>
     </message>
@@ -26561,31 +26606,44 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="672"/>
+        <source>Min. space to fretboard diagram:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="711"/>
+        <source>Min. space to other notation:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="739"/>
+        <source>Min. space between chord symbols:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Minimum space from fretboard diagram:</source>
         <translation>到品格图的最小间距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="711"/>
         <source>Minimum space between chord symbols:</source>
         <translation>和弦符号最小间距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="750"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="778"/>
         <source>Interpretation:</source>
         <translation>演绎风格：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="783"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="811"/>
         <source>Voicing:</source>
         <translation>和弦排列：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="809"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="837"/>
         <source>Duration:</source>
         <translation>时值：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="834"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="862"/>
         <source>Capo fret position:</source>
         <translation>变调夹品格位：</translation>
     </message>
@@ -26601,148 +26659,157 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>品格图</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="56"/>
         <source>Position above:</source>
         <translation>在上方的位置：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="70"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="56"/>
+        <source>Position above staff:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="64"/>
+        <source>Min. space to notation:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="79"/>
         <source>Orientation:</source>
         <translation>方向：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="74"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="83"/>
         <source>Vertical</source>
         <translation>垂直</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="75"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="84"/>
         <source>Horizontal</source>
         <translation>水平</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="81"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="90"/>
         <source>Nut line thickness:</source>
         <translation>弦枕线粗细：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="89"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="98"/>
         <source>Fret number</source>
         <translation>品格数量</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="100"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="109"/>
         <source>Position:</source>
         <translation>位置：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="104"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="113"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="104"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="113"/>
         <source>Bottom</source>
         <translation>底部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="110"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="119"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="110"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="119"/>
         <source>Top</source>
         <translation>顶部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="117"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="126"/>
         <source>Format:</source>
         <translation>格式：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="125"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="134"/>
         <source>Number only</source>
         <translation>仅数字</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="134"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="143"/>
         <source>Custom suffix:</source>
         <translation>自定后缀</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="151"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="160"/>
         <source>Preview:</source>
         <translation>预览：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="158"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="167"/>
         <source>Edit fret number text style</source>
         <translation>编辑品号文本样式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="169"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="178"/>
         <source>Dot size:</source>
         <translation>附点大小：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="177"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="186"/>
         <source>Barré</source>
         <translation>食指横按</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="185"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="194"/>
         <source>Appearance:</source>
         <translation>外观：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="189"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="198"/>
         <source>Line</source>
         <translation>线条连谱号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="190"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="199"/>
         <source>Slur</source>
         <translation>圆滑线</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="196"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="205"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="58"/>
         <source>Line thickness:</source>
         <translation>线条粗细：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="204"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="213"/>
         <source>Show fingerings</source>
         <translation>显示指法</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="210"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="219"/>
         <source>Edit fingering text style</source>
         <translation>编辑指法文本样式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="219"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="228"/>
         <source>Fretboard style:</source>
         <translation>品格样式：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="223"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="232"/>
         <source>Trimmed</source>
         <translation>截短</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="224"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="233"/>
         <source>Extended</source>
         <translation>延伸</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="230"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="239"/>
         <source>String spacing:</source>
         <translation>弦间距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="237"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="246"/>
         <source>Fret spacing:</source>
         <translation>品格间距：</translation>
     </message>
@@ -27595,7 +27662,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1874"/>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="120"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="121"/>
         <source>Load style</source>
         <translation>加载样式</translation>
     </message>
@@ -27795,7 +27862,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>自定义</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="265"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="263"/>
         <source>%n string(s)</source>
         <translation><numerusform>%n根弦</numerusform></translation>
     </message>
@@ -28133,7 +28200,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>底部音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="118"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="119"/>
         <source>MuseScore chord symbol style files</source>
         <translation>MuseScore 和弦符号样式文件</translation>
     </message>
@@ -28569,104 +28636,104 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>定位</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="736"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="764"/>
         <source>Playback</source>
         <translation>回放</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="68"/>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="151"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="69"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="152"/>
         <source>Standard</source>
         <translation>标准</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="71"/>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="182"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="72"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="184"/>
         <source>Jazz</source>
         <translation>爵士</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="74"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="75"/>
         <source>Legacy MuseScore</source>
         <translation>旧版MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="77"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="78"/>
         <source>Load custom XML…</source>
         <translation>载入自定义 XML…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="154"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="155"/>
         <source>German</source>
         <translation>德式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="157"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="158"/>
         <source>Full German</source>
         <translation>完整德式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="160"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="161"/>
         <source>Solfeggio</source>
         <translation>视唱练耳</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="163"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="164"/>
         <source>French</source>
         <translation>法式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="185"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="187"/>
         <source>Literal</source>
         <translation>原样</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="196"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="198"/>
         <source>Automatic</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="199"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="201"/>
         <source>Root only</source>
         <translation>仅根音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="202"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="204"/>
         <source>Close</source>
         <translation>密集排列</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="205"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="207"/>
         <source>Drop two</source>
         <translation>Drop 2</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="208"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="210"/>
         <source>Six note</source>
         <translation>六音和弦</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="211"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="213"/>
         <source>Four note</source>
         <translation>四音和弦</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="214"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="216"/>
         <source>Three note</source>
         <translation>三音和弦</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="225"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="227"/>
         <source>Until next chord symbol</source>
         <translation>直到下一和弦符号为止</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="228"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="230"/>
         <source>Until end of measure</source>
         <translation>直到小节末尾为止</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="231"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="233"/>
         <source>Chord/rest duration</source>
         <translation>和弦/休止符时值</translation>
     </message>
@@ -29796,7 +29863,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>自定义套组</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="66"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="65"/>
         <source>More palettes</source>
         <translation>更多面板</translation>
     </message>
@@ -29806,7 +29873,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>创建自定面板</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="88"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="89"/>
         <source>All palettes were added</source>
         <translation>已添加所有面板</translation>
     </message>
@@ -29826,12 +29893,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>已移除%1</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="59"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="57"/>
         <source>Name your custom palette</source>
         <translation>为您的自定面板命名</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="102"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="100"/>
         <source>Create</source>
         <translation>创建</translation>
     </message>
@@ -30093,7 +30160,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="288"/>
         <location filename="../../src/palette/view/widgets/keyedit.cpp" line="310"/>
-        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="168"/>
+        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="167"/>
         <source>Key signatures</source>
         <translation>调号</translation>
     </message>
@@ -30639,7 +30706,7 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1642"/>
-        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
+        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="168"/>
         <location filename="../../src/palette/view/widgets/timedialog.cpp" line="44"/>
         <source>Time signatures</source>
         <translation>拍号</translation>
@@ -30954,7 +31021,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="133"/>
-        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="170"/>
+        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
         <source>Symbols</source>
         <translation>符号</translation>
     </message>
@@ -32623,7 +32690,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="84"/>
         <source>Playing techniques</source>
-        <translation>演奏技术</translation>
+        <translation>演奏技巧</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="108"/>
@@ -33668,52 +33735,52 @@ failed: %2</source>
         <translation>分谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="359"/>
         <source>File already exists</source>
         <translation>文件已存在</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="360"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
         <translation>文件名为%1的文件已经存在。您想替换它吗？</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="366"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="362"/>
         <source>Replace</source>
         <translation>替换</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="367"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
         <source>Replace all</source>
         <translation>替换全部</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="368"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
         <source>Skip</source>
         <translation>跳过</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="369"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="365"/>
         <source>Skip all</source>
         <translation>跳过全部</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="392"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="388"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="393"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="389"/>
         <source>An error occurred while writing the file %1. Do you want to retry?</source>
         <translation>写入文件%1时出错。您是否要重试？</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="445"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="441"/>
         <source>Exporting audio…</source>
         <translation>导出音频中…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="445"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="441"/>
         <source>Exporting…</source>
         <translation>正在导出…</translation>
     </message>
@@ -33842,40 +33909,40 @@ failed: %2</source>
         <translation>MEI文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="303"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="308"/>
         <source>Each page to a separate file</source>
         <translation>每页作为单独文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="304"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="309"/>
         <source>Each part to a separate file</source>
         <translation>每个分谱作为单独文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="305"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="310"/>
         <source>All parts combined in one file</source>
         <translation>所有分谱合为一个文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="590"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="595"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>所有布局</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="592"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="597"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>换行与分页符</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="594"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="599"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>仅手动添加的换行符和分页符</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="596"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="601"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>无换行符或分页符</translation>
@@ -35476,22 +35543,22 @@ failed: %2</source>
         <translation>编辑变音曲线</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="119"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="121"/>
         <source>Make chord(s) visible</source>
         <translation>使和弦可见</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="120"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="122"/>
         <source>Make chord(s) invisible</source>
         <translation>使和弦不可见</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="148"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="150"/>
         <source>Move chord(s) up</source>
         <translation>向上移动和弦</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="170"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="172"/>
         <source>Move chord(s) down</source>
         <translation>向下移动和弦</translation>
     </message>
@@ -35826,7 +35893,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5375"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5415"/>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="201"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="207"/>
         <source>Add hairpin</source>
         <translation>添加楔形记号</translation>
     </message>
@@ -35852,7 +35919,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5556"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8033"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8036"/>
         <source>Toggle articulation</source>
         <translation>切换运音法记号</translation>
     </message>
@@ -35889,7 +35956,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5685"/>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="193"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="199"/>
         <source>Change hairpin type</source>
         <translation>更改楔形记号类型</translation>
     </message>
@@ -36131,71 +36198,72 @@ failed: %2</source>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7554"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7561"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7621"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7681"/>
         <source>Enter lyrics extension line</source>
         <translation>输入唱词延长线</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7703"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7706"/>
         <source>Add lyrics verse</source>
         <translation>添加唱词段落</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7751"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7754"/>
         <source>Enter guitar bend</source>
         <translation>输入吉他弯音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7824"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7827"/>
         <source>Add fretboard diagram</source>
         <translation>添加品格图</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7957"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7960"/>
         <source>Format text</source>
         <translation>格式化文本</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7977"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7980"/>
         <source>Toggle subscript</source>
         <translation>切换下标</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7979"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7982"/>
         <source>Toggle superscript</source>
         <translation>切换上标</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7981"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7984"/>
         <source>Toggle subscript/superscript</source>
         <translation>切换下/上标</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8038"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8041"/>
         <source>Toggle ornament</source>
         <translation>切换装饰音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8043"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8046"/>
         <source>Toggle automatic placement</source>
         <translation>切换自动排布</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8054"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8057"/>
         <source>Add clef</source>
         <translation>添加谱号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8059"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8062"/>
         <source>Add accidental</source>
         <translation>添加变音号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8064"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8067"/>
         <source>Transpose semitone</source>
         <translation>半音移调</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8070"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8073"/>
         <source>Transpose diatonically</source>
         <translation>按全音移调</translation>
     </message>
@@ -36349,7 +36417,7 @@ failed: %2</source>
         <translation>加载样式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="190"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="196"/>
         <source>Remove hairpin</source>
         <translation>移除楔形记号</translation>
     </message>
@@ -36364,17 +36432,17 @@ failed: %2</source>
         <translation>设置定弦</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="232"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="230"/>
         <source>Load string tunings preset</source>
         <translation>载入预设定弦</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="285"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="283"/>
         <source>Set number of strings</source>
         <translation>设置弦数</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="356"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="354"/>
         <source>Edit strings</source>
         <translation>编辑弦</translation>
     </message>

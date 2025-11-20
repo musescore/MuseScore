@@ -1843,7 +1843,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="181"/>
         <source>Hammer-ons, pull-offs &amp; tapping</source>
-        <translation type="unfinished"/>
+        <translation>Подтяжки, срывы и тэппинг</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="186"/>
@@ -2918,7 +2918,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3811"/>
         <source>Using variables in the header/footer</source>
-        <translation type="unfinished"/>
+        <translation>Использование переменных в колонтитулах</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3867"/>
@@ -7774,12 +7774,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="968"/>
         <source>Tenth above</source>
-        <translation type="unfinished"/>
+        <translation>Децима вверх</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="969"/>
         <source>Enter interval: tenth above</source>
-        <translation type="unfinished"/>
+        <translation>Добавить интервал: децима вверх</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="974"/>
@@ -7864,12 +7864,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1022"/>
         <source>Tenth below</source>
-        <translation type="unfinished"/>
+        <translation>Децима вниз</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1023"/>
         <source>Enter interval: tenth below</source>
-        <translation type="unfinished"/>
+        <translation>Добавить интервал: децима вниз</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1147"/>
@@ -9675,12 +9675,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2571"/>
         <source>Hammer-on/pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Подтяжка/срыв</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2572"/>
         <source>Add hammer-on/pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Добавить подтяжку/срыв</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2580"/>
@@ -10005,7 +10005,7 @@ followed by dashes</source>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="154"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="155"/>
         <source>Enable count-in when playing</source>
-        <translation type="unfinished"/>
+        <translation>Включить обратный отсчёт перед воспроизведением</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="165"/>
@@ -10611,7 +10611,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="104"/>
         <source>If you choose to cancel, then be sure to check out our free MuseSounds playback libraries on &lt;a href=&quot;%1&quot;&gt;MuseHub.com&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Если вы решите отменить, обязательно ознакомьтесь с нашими бесплатными библиотеками звуков MuseSounds на &lt;a href=&quot;%1&quot;&gt;MuseHub.com&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="114"/>
@@ -10756,7 +10756,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="208"/>
         <source>Save o&amp;ther</source>
-        <translation>Сохранить &amp;другой</translation>
+        <translation>Сохранить &amp;другое</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="209"/>
@@ -10907,7 +10907,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioApiSection.qml" line="44"/>
         <source>Audio API:</source>
-        <translation type="unfinished"/>
+        <translation>Аудио API:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioEngineSection.qml" line="31"/>
@@ -11186,7 +11186,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="58"/>
         <source>Color guitar bends and hammer-ons/pull-offs outside of playable range</source>
-        <translation type="unfinished"/>
+        <translation>Подцветка бендов и подтяжек/срывов за пределами диапазона</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="33"/>
@@ -11263,7 +11263,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="163"/>
         <source>Play preview notes with score dynamics</source>
-        <translation type="unfinished"/>
+        <translation>Воспроизводить ноты при перемещении по партитуре с динамикой из партитуры</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="180"/>
@@ -11273,7 +11273,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="195"/>
         <source>Play MIDI notes with velocity and duration during note input</source>
-        <translation type="unfinished"/>
+        <translation>Воспроизводить MIDI-ноты с динамикой и длительностью во время ввода</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="35"/>
@@ -11308,12 +11308,12 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="69"/>
         <source>Automatically process online sounds in the background</source>
-        <translation>Автоматически обрабатывать онлайн-звуков в фоновом режиме</translation>
+        <translation>Автоматически обрабатывать онлайн-звуки в фоновом режиме</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="103"/>
         <source>To process online sounds, press ‘Process online sounds’ in the status bar at the bottom of the app window</source>
-        <translation>Чтобы обрабатывать онлайн-звуки, нажмите кнопку &quot;Обработать онлайн-звуки&quot; в строке состояния в нижней части окна приложения</translation>
+        <translation>Чтобы обрабатывать онлайн-звуки, нажмите кнопку «Обработать онлайн-звуки» в строке состояния в нижней части окна приложения</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="115"/>
@@ -11782,7 +11782,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="236"/>
         <source>Includes a new system for hiding empty staves, a new text editing widget, guitar notation improvements, engraving improvements and more.</source>
-        <translation>Включает в себя новую систему скрытия пустых нотоносцевв, новый виджет для редактирования текста, улучшения гитарной нотации, гравировки и многое другое.</translation>
+        <translation>Теперь в MuseScore Studio есть новая система скрытия пустых нотоносцев, новый виджет для редактирования текста, улучшения гитарной нотации, расположения и многое другое.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="238"/>
@@ -11792,12 +11792,12 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="243"/>
         <source>Install our free MuseSounds libraries</source>
-        <translation>Установить наши бесплатные библиотеки MuseSounds</translation>
+        <translation>Установите бесплатные библиотеки MuseSounds</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="245"/>
         <source>Explore our collection of realistic sample libraries, including solo instruments, marching percussion, and full orchestra - available for free on MuseHub.</source>
-        <translation>Ознакомьтесь с нашей коллекцией реалистичных библиотек сэмплов, включая сольные инструменты, Маршевые ударные и полный состав оркестра, которые доступны бесплатно на MuseHub.</translation>
+        <translation>Ознакомьтесь с нашей коллекцией реалистичных библиотек сэмплов, включающие сольные инструменты, маршевые ударные и полный состав оркестра, которые доступны бесплатно на MuseHub.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="247"/>
@@ -11807,7 +11807,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="252"/>
         <source>Explore our tutorials</source>
-        <translation>Просмотреть наши обучающие уроки</translation>
+        <translation>Посмотрите обучающие уроки</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="254"/>
@@ -12200,17 +12200,17 @@ Fret %1 on strings %2</source>
         <translation>Сбросить выходящую частичную лигу</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2663"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2676"/>
         <source>Measure: %1</source>
         <translation>Такт: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2666"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2679"/>
         <source>Displayed measure: %1</source>
         <translation>Отображемый такт: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2670"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2683"/>
         <source>Beat: %1</source>
         <translation>Доля: %1</translation>
     </message>
@@ -12767,8 +12767,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="88"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Этот файл был сохранен с использованием более новой версии MuseScore Studio. Пожалуйста, посетите 1
-MuseScore.org1 чтобы получить последнюю версию.</translation>
+        <translation>Этот файл был сохранён в более новой версии MuseScore Studio. Пожалуйста, посетите &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt;, чтобы получить последнюю версию программы.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="93"/>
@@ -12830,7 +12829,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <location filename="../../src/engraving/rw/read410/measureread.cpp" line="91"/>
         <location filename="../../src/engraving/rw/read460/measureread.cpp" line="92"/>
         <source>MSCX error at byte offset %1: invalid measure length: %2</source>
-        <translation>MSCX error at byte offset %1: недопустимая длина такта: %2</translation>
+        <translation>Ошибка MSCX в байтовом смещении %1: недопустимая длина такта: %2</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="185"/>
@@ -12858,77 +12857,78 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="191"/>
         <source>part(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>партия</numerusform><numerusform>партии</numerusform><numerusform>партий</numerusform><numerusform>партий</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="192"/>
         <source>Part(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Партия</numerusform><numerusform>Партии</numerusform><numerusform>Партий</numerusform><numerusform>Партий</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
         <source>staff/staves</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>нотоносец</numerusform><numerusform>нотоносца</numerusform><numerusform>нотоносцев</numerusform><numerusform>нотоносцев</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="195"/>
         <source>Staff/Staves</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Нотоносец</numerusform><numerusform>Нотоносца</numerusform><numerusform>Нотоносцев</numerusform><numerusform>Нотоносцев</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="197"/>
         <source>score(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>партитура</numerusform><numerusform>партитуры</numerusform><numerusform>партитур</numerusform><numerusform>партитур</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="198"/>
         <source>Score(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Партитура</numerusform><numerusform>Партитуры</numerusform><numerusform>Партитур</numerusform><numerusform>Партитур</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="275"/>
         <source>symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>символ</numerusform><numerusform>символа</numerusform><numerusform>символов</numerusform><numerusform>символов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="276"/>
         <source>Symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Символ</numerusform><numerusform>Символа</numerusform><numerusform>Символов</numerusform><numerusform>Символов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
         <source>text</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>текст</numerusform><numerusform>текста</numerusform><numerusform>текстов</numerusform><numerusform>текстов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="201"/>
         <source>Text</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Текст</numerusform><numerusform>Текста
+Текста</numerusform><numerusform>Текстов</numerusform><numerusform>Текстов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="203"/>
         <source>measure number(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>номер такта</numerusform><numerusform>номера тактов</numerusform><numerusform>номеров тактов</numerusform><numerusform>номеров тактов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="204"/>
         <source>Measure number(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Номер такта</numerusform><numerusform>Номера тактов</numerusform><numerusform>Номеров тактов</numerusform><numerusform>Номеров тактов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="206"/>
         <source>multimeasure rest range(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>диапазон оркестровой паузы</numerusform><numerusform>диапазона оркестровых пауз</numerusform><numerusform>диапазонов оркестровых пауз</numerusform><numerusform>диапазонов оркестровых пауз</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="207"/>
         <source>Multimeasure rest range(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Диапазон оркестровой паузы</numerusform><numerusform>Диапазона оркестровых пауз</numerusform><numerusform>Диапазонов оркестровых пауз</numerusform><numerusform>Диапазонов оркестровых пауз</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="209"/>
         <source>instrument name(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>название инструмента</numerusform><numerusform>названия инструментов</numerusform><numerusform>названия инструментов</numerusform><numerusform>названия инструментов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="210"/>
@@ -12938,1356 +12938,1356 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="212"/>
         <source>slur segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент лиги</numerusform><numerusform>сегмента лиги</numerusform><numerusform>сегментов лиги</numerusform><numerusform>сегментов лиги</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="213"/>
         <source>Slur segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент лиги</numerusform><numerusform>Сегмента лиги</numerusform><numerusform>Сегментов лиги</numerusform><numerusform>Сегментов лиги</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="215"/>
         <source>tie segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент связующей лиги</numerusform><numerusform>сегмента связующей лиги</numerusform><numerusform>сегментов связующей лиги</numerusform><numerusform>сегментов связующей лиги</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="216"/>
         <source>Tie segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент связующей лиги</numerusform><numerusform>Сегмента связующей лиги</numerusform><numerusform>Сегментов связующей лиги</numerusform><numerusform>Сегментов связующей лиги</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="218"/>
         <source>laissez vibrer segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент laissez vibrer</numerusform><numerusform>сегмента laissez vibrer</numerusform><numerusform>сегменты laissez vibrer</numerusform><numerusform>сегмент(ы) laissez vibrer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="219"/>
         <source>Laissez vibrer segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент laissez vibrer</numerusform><numerusform>Сегмента laissez vibrer</numerusform><numerusform>Сегменты laissez vibrer</numerusform><numerusform>Сегмент(ы) laissez vibrer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
         <source>partial tie segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент частичной связующей лиги</numerusform><numerusform>сегмента частичной связующей лиги</numerusform><numerusform>сегментов частичной связующей лиги</numerusform><numerusform>сегментов частичной связующей лиги</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="222"/>
         <source>Partial tie segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент частичной связующей лиги</numerusform><numerusform>Сегмента частичной связующей лиги</numerusform><numerusform>Сегментов частичной связующей лиги</numerusform><numerusform>Сегментов частичной связующей лиги</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="224"/>
         <source>barline(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>тактовая черта</numerusform><numerusform>тактовые черты</numerusform><numerusform>тактовых черт</numerusform><numerusform>тактовых черт</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="225"/>
         <source>Barline(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Тактовая черта</numerusform><numerusform>Тактовые черты</numerusform><numerusform>Тактовых черт</numerusform><numerusform>Тактовых черт</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="227"/>
         <source>staff lines</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>линейка нотоносца</numerusform><numerusform>линейки нотоносца</numerusform><numerusform>линеек нотоносца</numerusform><numerusform>линеек нотоносца</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="228"/>
         <source>Staff lines</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Линейка нотоносца</numerusform><numerusform>Линейки нотоносца</numerusform><numerusform>Линеек нотоносца</numerusform><numerusform>Линеек нотоносца</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="230"/>
         <source>system divider(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>системный разделитель</numerusform><numerusform>системных разделителя</numerusform><numerusform>системных разделителей</numerusform><numerusform>системных разделителей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="231"/>
         <source>System divider(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Системный разделитель</numerusform><numerusform>Системных разделителя</numerusform><numerusform>Системных разделителей</numerusform><numerusform>Системных разделителей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="233"/>
         <source>stem slash(es)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>наклонная черта штиля</numerusform><numerusform>наклонные черты штилей</numerusform><numerusform>наклонных черт штилей</numerusform><numerusform>наклонных черт штилей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="234"/>
         <source>Stem slash(es)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Наклонная черта штиля</numerusform><numerusform>Наклонные черты штилей</numerusform><numerusform>Наклонных черт штилей</numerusform><numerusform>Наклонных черт штилей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="236"/>
         <source>arpeggio(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>арпеджио</numerusform><numerusform>арпеджио</numerusform><numerusform>арпеджио</numerusform><numerusform>арпеджио</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="237"/>
         <source>Arpeggio(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Арпеджио</numerusform><numerusform>Арпеджио</numerusform><numerusform>Арпеджио</numerusform><numerusform>Арпеджио</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="239"/>
         <source>accidental(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>знак альтерации</numerusform><numerusform>знаки альтерации</numerusform><numerusform>знаки альтерации</numerusform><numerusform>знаки альтерации</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="240"/>
         <source>Accidental(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Знак альтерации</numerusform><numerusform>Знаки альтерации</numerusform><numerusform>Знаки альтерации</numerusform><numerusform>Знаки альтерации</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="242"/>
         <source>ledger line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>добавочная линейка</numerusform><numerusform>добавочные линейки</numerusform><numerusform>добавочных линеек</numerusform><numerusform>добавочных линеек</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="243"/>
         <source>Ledger line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Добавочная линейка</numerusform><numerusform>Добавочные линейки</numerusform><numerusform>Добавочных линеек</numerusform><numerusform>Добавочных линеек</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="245"/>
         <source>stem(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>штиль</numerusform><numerusform>штиля</numerusform><numerusform>штилей</numerusform><numerusform>штилей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="246"/>
         <source>Stem(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Штиль</numerusform><numerusform>Штиля</numerusform><numerusform>Штилей</numerusform><numerusform>Штилей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="248"/>
         <source>flag(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>флажок</numerusform><numerusform>флажка</numerusform><numerusform>флажков</numerusform><numerusform>флажков</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="249"/>
         <source>Flag(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Флажок</numerusform><numerusform>Флажка</numerusform><numerusform>Флажков</numerusform><numerusform>Флажков</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="251"/>
         <source>note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>нота</numerusform><numerusform>ноты</numerusform><numerusform>нот</numerusform><numerusform>нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="252"/>
         <source>Note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Нота</numerusform><numerusform>Ноты</numerusform><numerusform>Нот</numerusform><numerusform>Нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="254"/>
         <source>clef(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>ключ</numerusform><numerusform>ключа</numerusform><numerusform>ключи</numerusform><numerusform>ключи</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="255"/>
         <source>Clef(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ключ</numerusform><numerusform>Ключа</numerusform><numerusform>Ключи</numerusform><numerusform>Ключи</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="257"/>
         <source>key signature(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>ключевой знак</numerusform><numerusform>ключевых знака</numerusform><numerusform>ключевые знаки</numerusform><numerusform>ключевые знаки</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="258"/>
         <source>Key signature(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ключевой знак</numerusform><numerusform>Ключевые знаки</numerusform><numerusform>Ключевые знаки</numerusform><numerusform>Ключевые знаки</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="260"/>
         <source>ambitus</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>диапазон голоса</numerusform><numerusform>диапазоны голоса</numerusform><numerusform>диапазоны голоса</numerusform><numerusform>диапазоны голоса</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="261"/>
         <source>Ambitus</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Диапазон голоса</numerusform><numerusform>Диапазоны голоса</numerusform><numerusform>Диапазоны голоса</numerusform><numerusform>Диапазоны голоса</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="263"/>
         <source>time signature(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>тактовый размер</numerusform><numerusform>тактовых размера</numerusform><numerusform>тактовых размеров</numerusform><numerusform>тактовых размеров</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="264"/>
         <source>Time signature(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Тактовые размеры</numerusform><numerusform>Тактовых размера</numerusform><numerusform>Тактовых размеров</numerusform><numerusform>Тактовых размеров</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="266"/>
         <source>rest(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>пауза</numerusform><numerusform>паузы</numerusform><numerusform>пауз</numerusform><numerusform>пауз</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="267"/>
         <source>Rest(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Пауза</numerusform><numerusform>Паузы</numerusform><numerusform>Пауз</numerusform><numerusform>Пауз</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="269"/>
         <source>multimeasure rest(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>оркестровая пауза</numerusform><numerusform>оркестровые паузы</numerusform><numerusform>оркестровых пауз</numerusform><numerusform>оркестровых пауз</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="270"/>
         <source>Multimeasure rest(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Оркестровая пауза</numerusform><numerusform>Оркестровые паузы</numerusform><numerusform>Оркестровых пауз</numerusform><numerusform>Оркестровых пауз</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="272"/>
         <source>dead slapped</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>глухой шлепок</numerusform><numerusform>глухих шлепка</numerusform><numerusform>глухих шлепков</numerusform><numerusform>глухих шлепков</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="273"/>
         <source>Dead slapped</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Глухой шлепок</numerusform><numerusform>Глухих шлепка</numerusform><numerusform>Глухих шлепков</numerusform><numerusform>Глухих шлепков</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="278"/>
         <source>breath(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>цезура</numerusform><numerusform>цезуры</numerusform><numerusform>цезур</numerusform><numerusform>цезуры</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="279"/>
         <source>Breath(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Цезура</numerusform><numerusform>Цезуры</numerusform><numerusform>Цезур</numerusform><numerusform>Цезуры</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="281"/>
         <source>measure repeat(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>повтор такта</numerusform><numerusform>повтора такта</numerusform><numerusform>повторов такта</numerusform><numerusform>повторы такта</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="282"/>
         <source>Measure repeat(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Повтор такта</numerusform><numerusform>Повтора такта</numerusform><numerusform>Повторов такта</numerusform><numerusform>Повторы такта</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="284"/>
         <source>tie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>связующая лига</numerusform><numerusform>связующие лиги</numerusform><numerusform>связующих лиг</numerusform><numerusform>связующих лиг</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="285"/>
         <source>Tie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Связующая лига</numerusform><numerusform>Связующие лиги</numerusform><numerusform>Связующих лиг</numerusform><numerusform>Связующих лиг</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="287"/>
         <source>laissez vibrer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>laissez vibrer</numerusform><numerusform>laissez vibrer</numerusform><numerusform>laissez vibrer</numerusform><numerusform>laissez vibrer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="288"/>
         <source>Laissez vibrer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Laissez vibrer</numerusform><numerusform>Laissez vibrer</numerusform><numerusform>Laissez vibrer</numerusform><numerusform>Laissez vibrer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="290"/>
         <source>partial tie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>частичная связующая лига</numerusform><numerusform>частичные связующие лиги</numerusform><numerusform>частичных связующих лиг</numerusform><numerusform>частичных связующих лиг</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="291"/>
         <source>Partial tie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Частичная связующая лига</numerusform><numerusform>Частичные связующие лиги</numerusform><numerusform>Частичных связующих лиг</numerusform><numerusform>Частичных связующих лиг</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="293"/>
         <source>articulation(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>штрих</numerusform><numerusform>штриха</numerusform><numerusform>штрихов</numerusform><numerusform>штрихов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="294"/>
         <source>Articulation(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Штрих</numerusform><numerusform>Штриха</numerusform><numerusform>Штрихов</numerusform><numerusform>Штрихов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="296"/>
         <source>ornament(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>орнаментика</numerusform><numerusform>орнаментика</numerusform><numerusform>орнаментика</numerusform><numerusform>орнаментика</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="297"/>
         <source>Ornament(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Орнаментика</numerusform><numerusform>Орнаментика</numerusform><numerusform>Орнаментика</numerusform><numerusform>Орнаментика</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="299"/>
         <source>fermata(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>фермата</numerusform><numerusform>ферматы</numerusform><numerusform>фермат</numerusform><numerusform>фермат</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="300"/>
         <source>Fermata(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Фермата</numerusform><numerusform>Ферматы</numerusform><numerusform>Фермат</numerusform><numerusform>Фермат</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="302"/>
         <source>chord line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>строка аккордов</numerusform><numerusform>строки аккордов</numerusform><numerusform>строк аккордов</numerusform><numerusform>строки аккордов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="303"/>
         <source>Chord line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Строка аккордов</numerusform><numerusform>Строки аккордов</numerusform><numerusform>Строк аккордов</numerusform><numerusform>Строки аккордов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="305"/>
         <source>dynamic(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>динамика</numerusform><numerusform>динамики</numerusform><numerusform>динамик</numerusform><numerusform>динамика</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="306"/>
         <source>Dynamic(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Динамика</numerusform><numerusform>Динамики</numerusform><numerusform>Динамик</numerusform><numerusform>Динамика</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="308"/>
         <source>expression(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>средство выразительности</numerusform><numerusform>средства выразительности</numerusform><numerusform>средств выразительности</numerusform><numerusform>средств выразительности</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="309"/>
         <source>Expression(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Средство выразительности</numerusform><numerusform>Средства выразительности</numerusform><numerusform>Средств выразительности</numerusform><numerusform>Средств выразительности</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="311"/>
         <source>beam(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>ребро</numerusform><numerusform>ребра</numerusform><numerusform>рёбер</numerusform><numerusform>рёбер</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="312"/>
         <source>Beam(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ребро</numerusform><numerusform>Ребра</numerusform><numerusform>Рёбер</numerusform><numerusform>Рёбер</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="314"/>
         <source>lyrics</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>вокальный текст</numerusform><numerusform>вокальных текста</numerusform><numerusform>вокальных текстов</numerusform><numerusform>вокальных текстов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="315"/>
         <source>Lyrics</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Вокальный текст</numerusform><numerusform>Вокальных текста</numerusform><numerusform>Вокальных текстов</numerusform><numerusform>Вокальных текстов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="317"/>
         <source>figured bass</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>генерал-бас</numerusform><numerusform>генерал-баса</numerusform><numerusform>генерал-басов</numerusform><numerusform>генерал-басов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="318"/>
         <source>Figured bass</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Генерал-бас</numerusform><numerusform>Генерал-баса</numerusform><numerusform>Генерал-басов</numerusform><numerusform>Генерал-басов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="320"/>
         <source>figured bass item(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>элемент генерал-баса</numerusform><numerusform>элемента генерал-баса</numerusform><numerusform>элементов генерал-баса</numerusform><numerusform>элементов генерал-баса</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="321"/>
         <source>Figured bass item(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Элемент генерал-баса</numerusform><numerusform>Элемента генерал-баса</numerusform><numerusform>Элементов генерал-баса</numerusform><numerusform>Элементов генерал-баса</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="323"/>
         <source>marker(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>маркер</numerusform><numerusform>маркера</numerusform><numerusform>маркеров</numerusform><numerusform>маркеров</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="324"/>
         <source>Marker(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Маркер</numerusform><numerusform>Маркера</numerusform><numerusform>Маркеров</numerusform><numerusform>Маркеров</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="326"/>
         <source>jump(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>переход</numerusform><numerusform>перехода</numerusform><numerusform>переходов</numerusform><numerusform>переходов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="327"/>
         <source>Jump(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Переход</numerusform><numerusform>Перехода</numerusform><numerusform>Переходов</numerusform><numerusform>Переходов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="329"/>
         <source>fingering(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>аппликатура</numerusform><numerusform>аппликатуры</numerusform><numerusform>аппликатур</numerusform><numerusform>аппликатур</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="330"/>
         <source>Fingering(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Аппликатура</numerusform><numerusform>Аппликатуры</numerusform><numerusform>Аппликатур</numerusform><numerusform>Аппликатур</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="332"/>
         <source>tuplet(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>мультиоль</numerusform><numerusform>мультиоли</numerusform><numerusform>мультиолей</numerusform><numerusform>мультиолей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="333"/>
         <source>Tuplet(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Мультиоль</numerusform><numerusform>Мультиоли</numerusform><numerusform>Мультиолей</numerusform><numerusform>Мультиолей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="335"/>
         <source>tempo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>темп</numerusform><numerusform>темпа</numerusform><numerusform>темпов</numerusform><numerusform>темпов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="336"/>
         <source>Tempo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Темп</numerusform><numerusform>Темпа</numerusform><numerusform>Темпов</numerusform><numerusform>Темпов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="338"/>
         <source>staff text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>текст нотоносца</numerusform><numerusform>текста нотоносца</numerusform><numerusform>текстов нотоносца</numerusform><numerusform>текстов нотоносца</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="339"/>
         <source>Staff text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Текст нотоносца</numerusform><numerusform>Текста нотоносца</numerusform><numerusform>Текстов нотоносца</numerusform><numerusform>Текстов нотоносца</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="341"/>
         <source>system text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>текст системы</numerusform><numerusform>текста системы</numerusform><numerusform>текстов системы</numerusform><numerusform>текстов системы</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="342"/>
         <source>System text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Текст системы</numerusform><numerusform>Текста системы</numerusform><numerusform>Текстов системы</numerusform><numerusform>Текстов системы</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="344"/>
         <source>sound flag(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>звуковой флажок</numerusform><numerusform>звуковых флажка</numerusform><numerusform>звуковых флажков</numerusform><numerusform>звуковых флажков</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="345"/>
         <source>Sound flag(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Звуковой флажок</numerusform><numerusform>Звуковых флажка</numerusform><numerusform>Звуковых флажков</numerusform><numerusform>Звуковых флажков</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="347"/>
         <source>play count text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>текст количества проигрываний</numerusform><numerusform>текста количества проигрываний</numerusform><numerusform>текстов количества проигрываний</numerusform><numerusform>текстов количества проигрываний</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="348"/>
         <source>Play count text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Текст количества проигрываний</numerusform><numerusform>Текста количества проигрываний</numerusform><numerusform>Текстов количества проигрываний</numerusform><numerusform>Текстов количества проигрываний</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="350"/>
         <source>playing technique annotation(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>аннотация к технике исполнения</numerusform><numerusform>аннотации к технике исполнения</numerusform><numerusform>аннотаций к технике исполнения</numerusform><numerusform>аннотаций к технике исполнения</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="351"/>
         <source>Playing technique annotation(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Аннотация к технике исполнения</numerusform><numerusform>Аннотации к технике исполнения</numerusform><numerusform>Аннотаций к технике исполнения</numerusform><numerusform>Аннотаций к технике исполнения</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="353"/>
         <source>capo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>каподастр</numerusform><numerusform>каподастра</numerusform><numerusform>каподастров</numerusform><numerusform>каподастры</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="354"/>
         <source>Capo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Каподастр</numerusform><numerusform>Каподастра</numerusform><numerusform>Каподастров</numerusform><numerusform>Каподастры</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="356"/>
         <source>string tunings</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>настройка струн</numerusform><numerusform>настройки струн</numerusform><numerusform>настроек струн</numerusform><numerusform>настройки струн</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="357"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1728"/>
         <source>String tunings</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Настройка струн</numerusform><numerusform>Настройки струн</numerusform><numerusform>Настроек струн</numerusform><numerusform>Настройки струн</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="359"/>
         <source>triplet feel</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>в ритме триоли</numerusform><numerusform>в ритме триоли</numerusform><numerusform>в ритме триоли</numerusform><numerusform>в ритме триоли</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="360"/>
         <source>Triplet feel</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>В ритме триоли</numerusform><numerusform>В ритме триоли</numerusform><numerusform>В ритме триоли</numerusform><numerusform>В ритме триоли</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="362"/>
         <source>rehearsal mark(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>партитурный ориентир</numerusform><numerusform>партитурных ориентира</numerusform><numerusform>партитурных ориентиров</numerusform><numerusform>партитурных ориентиров</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="363"/>
         <source>Rehearsal mark(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Партитурный ориентир</numerusform><numerusform>Партитурных ориентира</numerusform><numerusform>Партитурных ориентиров</numerusform><numerusform>Партитурных ориентиров</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="365"/>
         <source>instrument change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>смена инструмента</numerusform><numerusform>смены инструмента</numerusform><numerusform>Смен инструмента</numerusform><numerusform>Смен инструмента</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="366"/>
         <source>Instrument change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Смена инструмента</numerusform><numerusform>Смены инструмента</numerusform><numerusform>Смен инструмента</numerusform><numerusform>Смен инструмента</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="368"/>
         <source>staff type change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>смена типа нотоносца</numerusform><numerusform>смены типа нотоносца</numerusform><numerusform>смен типа нотоносца</numerusform><numerusform>смены типа нотоносца</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="369"/>
         <source>Staff type change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Смена типа нотоносца</numerusform><numerusform>Смены типа нотоносца</numerusform><numerusform>Смен типа нотоносца</numerusform><numerusform>Смены типа нотоносца</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="371"/>
         <source>chord symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>символ аккорда</numerusform><numerusform>символа аккордов</numerusform><numerusform>символов аккордов</numerusform><numerusform>символов аккордов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="372"/>
         <source>Chord symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Символ аккорда</numerusform><numerusform>Символа аккордов</numerusform><numerusform>Символов аккордов</numerusform><numerusform>Символов аккордов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="374"/>
         <source>fretboard diagram(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>схема грифа</numerusform><numerusform>схемы грифа</numerusform><numerusform>схем грифа</numerusform><numerusform>схем грифа</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="375"/>
         <source>Fretboard diagram(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Схема грифа</numerusform><numerusform>Схемы грифа</numerusform><numerusform>Схем грифа</numerusform><numerusform>Схем грифа</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="377"/>
         <source>harp pedal diagram(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>схема педали арфы</numerusform><numerusform>схемы педали арфы</numerusform><numerusform>схем педали арфы</numerusform><numerusform>схем педали арфы</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="378"/>
         <source>Harp pedal diagram(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Схема педали арфы</numerusform><numerusform>Схемы педали арфы</numerusform><numerusform>Схем педали арфы</numerusform><numerusform>Схем педали арфы</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="380"/>
         <source>bend(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>бенд</numerusform><numerusform>бенда</numerusform><numerusform>бендов</numerusform><numerusform>бенды</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="381"/>
         <source>Bend(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Бенд</numerusform><numerusform>Бенда</numerusform><numerusform>Бендов</numerusform><numerusform>Бенды</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="383"/>
         <source>tremolo bar(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>рычаг тремоло</numerusform><numerusform>рычага тремоло</numerusform><numerusform>рычагов тремоло</numerusform><numerusform>рычаги тремоло</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="384"/>
         <source>Tremolo bar(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Рычаг тремоло</numerusform><numerusform>Рычага тремоло</numerusform><numerusform>Рычагов тремоло</numerusform><numerusform>Рычаги тремоло</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="386"/>
         <source>volta(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>вольта</numerusform><numerusform>вольты</numerusform><numerusform>вольт</numerusform><numerusform>вольт</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="387"/>
         <source>Volta(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Вольта</numerusform><numerusform>Вольты</numerusform><numerusform>Вольт</numerusform><numerusform>Вольт</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="389"/>
         <source>hairpin segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент вилочки</numerusform><numerusform>сегмента вилочки</numerusform><numerusform>сегментов вилочки</numerusform><numerusform>сегментов вилочки</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="390"/>
         <source>Hairpin segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент вилочки</numerusform><numerusform>Сегмента вилочки</numerusform><numerusform>Сегментов вилочки</numerusform><numerusform>Сегментов вилочки</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="392"/>
         <source>ottava segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент линии октавы</numerusform><numerusform>сегмента линии октавы</numerusform><numerusform>сегментов линии октавы</numerusform><numerusform>сегменты линии октавы</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="393"/>
         <source>Ottava segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент линии октавы</numerusform><numerusform>Сегментов линии октавы</numerusform><numerusform>Сегментов линии октавы</numerusform><numerusform>Сегменты линии октавы</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="395"/>
         <source>trill segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент трели</numerusform><numerusform>сегмента трели</numerusform><numerusform>сегментов трели</numerusform><numerusform>сегментов трели</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="396"/>
         <source>Trill segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент трели</numerusform><numerusform>Сегмента трели</numerusform><numerusform>Сегментов трели</numerusform><numerusform>Сегментов трели</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="398"/>
         <source>let ring segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент долгозвучащей ноты</numerusform><numerusform>сегмента долгозвучащей ноты</numerusform><numerusform>сегментов долгозвучащей ноты</numerusform><numerusform>сегментов долгозвучащей ноты</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="399"/>
         <source>Let ring segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент долгозвучащей ноты</numerusform><numerusform>Сегмента долгозвучащей ноты</numerusform><numerusform>Сегментов долгозвучащей ноты</numerusform><numerusform>Сегментов долгозвучащей ноты</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="401"/>
         <source>gradual tempo change segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент плавного изменения темпа</numerusform><numerusform>сегмента плавного изменения темпа</numerusform><numerusform>сегментов плавного изменения темпа</numerusform><numerusform>сегментов плавного изменения темпа</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="402"/>
         <source>Gradual tempo change segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент плавного изменения темпа</numerusform><numerusform>Сегмента плавного изменения темпа</numerusform><numerusform>Сегментов плавного изменения темпа</numerusform><numerusform>Сегментов плавного изменения темпа</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="404"/>
         <source>vibrato segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент вибрато</numerusform><numerusform>сегмента вибрато</numerusform><numerusform>сегментов вибрато</numerusform><numerusform>сегментов вибрато</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="405"/>
         <source>Vibrato segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент вибрато</numerusform><numerusform>Сегмента вибрато</numerusform><numerusform>Сегментов вибрато</numerusform><numerusform>Сегментов вибрато</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="407"/>
         <source>palm mute segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент приглушения ладонью</numerusform><numerusform>сегмента приглушения ладонью</numerusform><numerusform>сегментов приглушения ладонью</numerusform><numerusform>сегментов приглушения ладонью</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="408"/>
         <source>Palm mute segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент приглушения ладонью</numerusform><numerusform>Сегмента приглушения ладонью</numerusform><numerusform>Сегментов приглушения ладонью</numerusform><numerusform>Сегментов приглушения ладонью</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="410"/>
         <source>whammy bar segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент рычага тремоло</numerusform><numerusform>сегмента рычага тремоло</numerusform><numerusform>сегментов рычага тремоло</numerusform><numerusform>сегментов рычага тремоло</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="411"/>
         <source>Whammy bar segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент рычага тремоло</numerusform><numerusform>Сегмента рычага тремоло</numerusform><numerusform>Сегментов рычага тремоло</numerusform><numerusform>Сегментов рычага тремоло</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="413"/>
         <source>rasgueado segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент расгеадо</numerusform><numerusform>сегмента расгеадо</numerusform><numerusform>сегментов расгеадо</numerusform><numerusform>сегментов расгеадо</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="414"/>
         <source>Rasgueado segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент расгеадо</numerusform><numerusform>Сегмента расгеадо</numerusform><numerusform>Сегментов расгеадо</numerusform><numerusform>Сегментов расгеадо</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="416"/>
         <source>harmonic mark segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент знака флажолета</numerusform><numerusform>сегмента знака флажолета</numerusform><numerusform>сегментов знака флажолета</numerusform><numerusform>сегментов знака флажолета</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="417"/>
         <source>Harmonic mark segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент знака флажолета</numerusform><numerusform>Сегмента знака флажолета</numerusform><numerusform>Сегментов знака флажолета</numerusform><numerusform>Сегментов знака флажолета</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="419"/>
         <source>pick scrape segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент слайда медиатором</numerusform><numerusform>сегмента слайда медиатором</numerusform><numerusform>сегментов слайда медиатором</numerusform><numerusform>сегментов слайда медиатором</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="420"/>
         <source>Pick scrape segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент слайда медиатором</numerusform><numerusform>Сегмента слайда медиатором</numerusform><numerusform>Сегментов слайда медиатором</numerusform><numerusform>Сегментов слайда медиатором</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="422"/>
         <source>text line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент текстовой линии</numerusform><numerusform>сегмента текстовой линии</numerusform><numerusform>сегментов текстовой линии</numerusform><numerusform>сегменты текстовой линии</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="423"/>
         <source>Text line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент текстовой линии</numerusform><numerusform>Сегмента текстовой линии</numerusform><numerusform>Сегментовы текстовой линии</numerusform><numerusform>Сегменты текстовой линии</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="425"/>
         <source>volta segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент вольты</numerusform><numerusform>сегмента вольты</numerusform><numerusform>сегментов вольты</numerusform><numerusform>сегментов вольты</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="426"/>
         <source>Volta segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент вольты</numerusform><numerusform>Сегмента вольты</numerusform><numerusform>Сегментов вольты</numerusform><numerusform>Сегментов вольты</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="428"/>
         <source>pedal segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент педали</numerusform><numerusform>сегмента педали</numerusform><numerusform>сегментов педали</numerusform><numerusform>сегментов педали</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="429"/>
         <source>Pedal segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент педали</numerusform><numerusform>Сегмента педали</numerusform><numerusform>Сегментов педали</numerusform><numerusform>Сегментов педали</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="431"/>
         <source>extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент выносной линии</numerusform><numerusform>сегмента выносной линии</numerusform><numerusform>сегментов выносной линии</numerusform><numerusform>сегменты выносной линии</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="432"/>
         <source>Extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент выносной линии</numerusform><numerusform>Сегмента выносной линии</numerusform><numerusform>Сегментов выносной линии</numerusform><numerusform>Сегменты выносной линии</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="434"/>
         <source>partial extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент частичной выносной линии</numerusform><numerusform>сегмента частичной выносной линии</numerusform><numerusform>сегментов частичной выносной линии</numerusform><numerusform>сегменты частичной выносной линии</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="435"/>
         <source>Partial extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент частичной выносной линии</numerusform><numerusform>Сегмента частичной выносной линии</numerusform><numerusform>Сегментов частичной выносной линии</numerusform><numerusform>Сегменты частичной выносной линии</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="437"/>
         <source>glissando segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент глиссандо</numerusform><numerusform>сегмента глиссандо</numerusform><numerusform>сегментов глиссандо</numerusform><numerusform>сегментов глиссандо</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="438"/>
         <source>Glissando segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент глиссандо</numerusform><numerusform>Сегмента глиссандо</numerusform><numerusform>Сегментов глиссандо</numerusform><numerusform>Сегментов глиссандо</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="440"/>
         <source>note-anchored line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент линии привязки нот</numerusform><numerusform>сегмента линии привязки нот</numerusform><numerusform>сегментов линии привязки нот</numerusform><numerusform>сегменты линии привязки нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="441"/>
         <source>Note-anchored line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент линии привязки нот</numerusform><numerusform>Сегмента линии привязки нот</numerusform><numerusform>Сегментов линии привязки нот</numerusform><numerusform>Сегменты линии привязки нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="443"/>
         <source>layout break(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>разрыв разметки</numerusform><numerusform>разрыва разметки</numerusform><numerusform>разрывов разметки</numerusform><numerusform>разрывы разметки</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="444"/>
         <source>Layout break(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Разрыв разметки</numerusform><numerusform>Разрыва разметки</numerusform><numerusform>Разрывов разметки</numerusform><numerusform>Разрывы разметки</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="446"/>
         <source>staff visibility icon(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>значок видимости нотоносца</numerusform><numerusform>значка видимости нотоносца</numerusform><numerusform>значков видимости нотоносца</numerusform><numerusform>значков видимости нотоносца</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="447"/>
         <source>Staff visibility icon(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Значок видимости нотоносца</numerusform><numerusform>Значка видимости нотоносца</numerusform><numerusform>Значков видимости нотоносца</numerusform><numerusform>Значков видимости нотоносца</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="449"/>
         <source>system lock(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>системный замок</numerusform><numerusform>системных замка</numerusform><numerusform>системных замков</numerusform><numerusform>системных замков</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="450"/>
         <source>System lock(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Системный замок</numerusform><numerusform>Системных замка</numerusform><numerusform>Системных замков</numerusform><numerusform>Системных замков</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="452"/>
         <source>spacer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>распорка</numerusform><numerusform>распорки</numerusform><numerusform>распорок</numerusform><numerusform>распорок</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="453"/>
         <source>Spacer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Распорка</numerusform><numerusform>Распорки</numerusform><numerusform>Распорок</numerusform><numerusform>Распорок</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="455"/>
         <source>staff state(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>состояние нотоносца</numerusform><numerusform>состояния нотоносца</numerusform><numerusform>состояний нотоносца</numerusform><numerusform>состояний нотоносца</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="456"/>
         <source>Staff state(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Состояние нотоносца</numerusform><numerusform>Состояния нотоносца</numerusform><numerusform>Состояний нотоносца</numerusform><numerusform>Состояний нотоносца</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="458"/>
         <source>notehead(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>головка ноты</numerusform><numerusform>головки нот</numerusform><numerusform>головок нот</numerusform><numerusform>головок нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="459"/>
         <source>Notehead(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Головка ноты</numerusform><numerusform>Головки нот</numerusform><numerusform>Головок нот</numerusform><numerusform>Головок нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="461"/>
         <source>note dot(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>точка возле ноты</numerusform><numerusform>точки возле нот</numerusform><numerusform>точек возле нот</numerusform><numerusform>точек возле нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="462"/>
         <source>Note dot(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Точка возле ноты</numerusform><numerusform>Точки возле нот</numerusform><numerusform>Точек возле нот</numerusform><numerusform>Точек возле нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="464"/>
         <source>image(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>изображение</numerusform><numerusform>изображения</numerusform><numerusform>изображений</numerusform><numerusform>изображений</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="465"/>
         <source>Image(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Изображение</numerusform><numerusform>Изображения</numerusform><numerusform>Изображений</numerusform><numerusform>Изображений</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="467"/>
         <source>measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>такт</numerusform><numerusform>такта</numerusform><numerusform>тактов</numerusform><numerusform>тактов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="468"/>
         <source>Measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Такт</numerusform><numerusform>Такта</numerusform><numerusform>Тактов</numerusform><numerusform>Тактов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="470"/>
         <source>selection(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>выделение</numerusform><numerusform>выделения</numerusform><numerusform>выделений</numerusform><numerusform>выделений</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="471"/>
         <source>Selection(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Выделение</numerusform><numerusform>Выделения</numerusform><numerusform>Выделений</numerusform><numerusform>Выделений</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="473"/>
         <source>lasso(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>лассо</numerusform><numerusform>лассо</numerusform><numerusform>лассо</numerusform><numerusform>лассо</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="474"/>
         <source>Lasso(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Лассо</numerusform><numerusform>Лассо</numerusform><numerusform>Лассо</numerusform><numerusform>Лассо</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="476"/>
         <source>shadow note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>теневая нота</numerusform><numerusform>теневые ноты</numerusform><numerusform>теневых нот</numerusform><numerusform>теневых нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="477"/>
         <source>Shadow note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Теневая нота</numerusform><numerusform>Теневые ноты</numerusform><numerusform>Теневых нот</numerusform><numerusform>Теневых нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="479"/>
         <source>tab duration symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>символ длительности в табулатуре</numerusform><numerusform>символа длительности в табулатуре</numerusform><numerusform>символов длительности в табулатуре</numerusform><numerusform>символов длительности в табулатуре</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="480"/>
         <source>Tab duration symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Символ длительности в табулатуре</numerusform><numerusform>Символа длительности в табулатуре</numerusform><numerusform>Символов длительности в табулатуре</numerusform><numerusform>Символов длительности в табулатуре</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="482"/>
         <source>font symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>символ шрифта</numerusform><numerusform>символа шрифта</numerusform><numerusform>символов шрифта</numerusform><numerusform>символов шрифта</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="483"/>
         <source>Font symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Символ шрифта</numerusform><numerusform>Символа шрифта</numerusform><numerusform>Символов шрифта</numerusform><numerusform>Символов шрифта</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="485"/>
         <source>page(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>страница</numerusform><numerusform>страницы</numerusform><numerusform>страниц</numerusform><numerusform>страниц</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="486"/>
         <source>Page(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Страница</numerusform><numerusform>Страницы</numerusform><numerusform>Страниц</numerusform><numerusform>Страниц</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="488"/>
         <source>parenthesis</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>круглая скобка</numerusform><numerusform>круглые скобки</numerusform><numerusform>круглых скобок</numerusform><numerusform>круглых скобок</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="489"/>
         <source>Parenthesis</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Круглая скобка</numerusform><numerusform>Круглые скобки</numerusform><numerusform>Круглых скобок</numerusform><numerusform>Круглых скобок</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="491"/>
         <source>hairpin(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>вилочка</numerusform><numerusform>вилочки</numerusform><numerusform>вилочек</numerusform><numerusform>вилочек</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="492"/>
         <source>Hairpin(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Вилочка</numerusform><numerusform>Вилочки</numerusform><numerusform>Вилочек</numerusform><numerusform>Вилочек</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="494"/>
         <source>ottava(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>октавный пунктир</numerusform><numerusform>октавных пунктира</numerusform><numerusform>октавных пунктиров</numerusform><numerusform>октавных пунктиров</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="495"/>
         <source>Ottava(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Октавный пунктир</numerusform><numerusform>Октавных пунктира</numerusform><numerusform>Октавных пунктиров</numerusform><numerusform>Октавных пунктиров</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="497"/>
         <source>pedal(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>педаль</numerusform><numerusform>педали</numerusform><numerusform>педалей</numerusform><numerusform>педалей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="498"/>
         <source>Pedal(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Педаль</numerusform><numerusform>Педали</numerusform><numerusform>Педалей</numerusform><numerusform>Педалей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="500"/>
         <source>trill(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>трель</numerusform><numerusform>трели</numerusform><numerusform>трелей</numerusform><numerusform>трелей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="501"/>
         <source>Trill(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Трель</numerusform><numerusform>Трели</numerusform><numerusform>Трелей</numerusform><numerusform>Трелей</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="503"/>
         <source>let ring</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>долгозвучащая нота</numerusform><numerusform>долгозвучащие ноты</numerusform><numerusform>долгозвучащих нот</numerusform><numerusform>долгозвучащих нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="504"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1744"/>
         <source>Let ring</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Долгозвучащая нота</numerusform><numerusform>Долгозвучащие ноты</numerusform><numerusform>Долгозвучащах нот</numerusform><numerusform>Долгозвучащах нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="506"/>
         <source>gradual tempo change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>плавное изменение темпа</numerusform><numerusform>плавных изменения темпа</numerusform><numerusform>плавных изменений темпа</numerusform><numerusform>плавных изменений темпа</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="507"/>
         <source>Gradual tempo change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Плавное изменение темпа</numerusform><numerusform>Плавных изменения темпа</numerusform><numerusform>Плавных изменений темпа</numerusform><numerusform>Плавных изменений темпа</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="509"/>
         <source>vibrato(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>вибрато</numerusform><numerusform>вибрато</numerusform><numerusform>вибрато</numerusform><numerusform>вибрато</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="510"/>
         <source>Vibrato(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Вибрато</numerusform><numerusform>Вибрато</numerusform><numerusform>Вибрато</numerusform><numerusform>Вибрато</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="512"/>
         <source>palm mute(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>приглушение ладонью</numerusform><numerusform>приглушения ладонью</numerusform><numerusform>приглушений ладонью</numerusform><numerusform>приглушений ладонью</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="513"/>
         <source>Palm mute(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Приглушение ладонью</numerusform><numerusform>Приглушения ладонью</numerusform><numerusform>Приглушений ладонью</numerusform><numerusform>Приглушений ладонью</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="515"/>
         <source>whammy bar(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>рычаг тремоло</numerusform><numerusform>рычага тремоло</numerusform><numerusform>рычагов тремоло</numerusform><numerusform>рычагов тремоло</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="516"/>
         <source>Whammy bar(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Рычаг тремоло</numerusform><numerusform>Рычага тремоло</numerusform><numerusform>Рычагов тремоло</numerusform><numerusform>Рычагов тремоло</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="518"/>
         <source>rasgueado(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>расгеадо</numerusform><numerusform>расгеадо</numerusform><numerusform>расгеадо</numerusform><numerusform>расгеадо</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="519"/>
         <source>Rasgueado(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Расгеадо</numerusform><numerusform>Расгеадо</numerusform><numerusform>Расгеадо</numerusform><numerusform>Расгеадо</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="521"/>
         <source>harmonic mark(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>знак флажолета</numerusform><numerusform>знака флажолета</numerusform><numerusform>знаков флажолета</numerusform><numerusform>знаков флажолета</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="522"/>
         <source>Harmonic mark(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Знак флажолета</numerusform><numerusform>Знака флажолета</numerusform><numerusform>Знаков флажолета</numerusform><numerusform>Знаков флажолета</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="524"/>
         <source>pick scrape out(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>слайд медиатором от себя</numerusform><numerusform>слайда медиатором от себя</numerusform><numerusform>слайдов медиатором от себя</numerusform><numerusform>слайдов медиатором от себя</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="525"/>
         <source>Pick scrape out(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Слайд медиатором от себя</numerusform><numerusform>Слайда медиатором от себя</numerusform><numerusform>Слайдов медиатором от себя</numerusform><numerusform>Слайдов медиатором от себя</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="527"/>
         <source>text line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>текстовая линия</numerusform><numerusform>текстовых линии</numerusform><numerusform>текстовых линий</numerusform><numerusform>текстовых линий</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="528"/>
         <source>Text line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Текстовая линия</numerusform><numerusform>Текстовые линии</numerusform><numerusform>Текстовых линий</numerusform><numerusform>Текстовых линий</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="530"/>
         <source>text line base(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>основание текстовой линии</numerusform><numerusform>основания текстовой линии</numerusform><numerusform>оснований текстовой линии</numerusform><numerusform>оснований текстовой линии</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="531"/>
         <source>Text line base(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Основание текстовой линии</numerusform><numerusform>Основания текстовой линии</numerusform><numerusform>Оснований текстовой линии</numerusform><numerusform>Оснований текстовой линии</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="533"/>
         <source>note-anchored line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>линия привязки нот</numerusform><numerusform>линии привязки нот</numerusform><numerusform>линий привязки нот</numerusform><numerusform>линий привязки нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="534"/>
         <source>Note-anchored line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Линия привязки нот</numerusform><numerusform>Линии привязки нот</numerusform><numerusform>Линий привязки нот</numerusform><numerusform>Линий привязки нот</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="536"/>
         <source>extension line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>выносная линия</numerusform><numerusform>выносные линии</numerusform><numerusform>выносных линий</numerusform><numerusform>выносных линий</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="537"/>
         <source>Extension line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Выносная линия</numerusform><numerusform>Выносные линии</numerusform><numerusform>Выносных линий</numerusform><numerusform>Выносных линий</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="539"/>
         <source>partial extension line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>частичная выносная линия</numerusform><numerusform>частичные выносные линии</numerusform><numerusform>частичных выносных линий</numerusform><numerusform>частичных выносных линий</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="540"/>
         <source>Partial extension line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Частичная выносная линия</numerusform><numerusform>Частичные выносные линии</numerusform><numerusform>Частичных выносных линий</numerusform><numerusform>Частичных выносных линий</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="542"/>
         <source>glissando(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>глиссандо</numerusform><numerusform>глиссандо</numerusform><numerusform>глиссандо</numerusform><numerusform>глиссандо</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="543"/>
         <source>Glissando(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Глиссандо</numerusform><numerusform>Глиссандо</numerusform><numerusform>Глиссандо</numerusform><numerusform>Глиссандо</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="548"/>
         <source>segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент</numerusform><numerusform>сегмента</numerusform><numerusform>сегментов</numerusform><numerusform>сегментов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="549"/>
         <source>Segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент</numerusform><numerusform>Сегмента</numerusform><numerusform>Сегментов</numerusform><numerusform>Сегментов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="551"/>
         <source>system(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>система</numerusform><numerusform>системы</numerusform><numerusform>систем</numerusform><numerusform>систем</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="552"/>
         <source>System(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Система</numerusform><numerusform>Системы</numerusform><numerusform>Систем</numerusform><numerusform>Систем</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="554"/>
         <source>chord(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>аккорд</numerusform><numerusform>аккорда</numerusform><numerusform>аккордов</numerusform><numerusform>аккордов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="555"/>
         <source>Chord(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Аккорд</numerusform><numerusform>Аккорда</numerusform><numerusform>Аккордов</numerusform><numerusform>Аккордов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="557"/>
         <source>slur(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>лига</numerusform><numerusform>лиги</numerusform><numerusform>лиг</numerusform><numerusform>лиг</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="558"/>
         <source>Slur(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Лига</numerusform><numerusform>Лиги</numerusform><numerusform>Лиг</numerusform><numerusform>Лиг</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="560"/>
         <source>horizontal frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>горизонтальная рамка</numerusform><numerusform>горизонтальные рамки</numerusform><numerusform>горизонтальных рамок</numerusform><numerusform>горизонтальных рамок</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="561"/>
         <source>Horizontal frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Горизонтальная рамка</numerusform><numerusform>Горизонтальные рамки</numerusform><numerusform>Горизонтальных рамок</numerusform><numerusform>Горизонтальных рамок</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="563"/>
         <source>vertical frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>вертикальная рамка</numerusform><numerusform>вертикальные рамки</numerusform><numerusform>вертикальных рамок</numerusform><numerusform>вертикальных рамок</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="564"/>
         <source>Vertical frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Вертикальная рамка</numerusform><numerusform>Вертикальные рамки</numerusform><numerusform>Вертикальных рамок</numerusform><numerusform>Вертикальных рамок</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="566"/>
         <source>text frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>текстовая рамка</numerusform><numerusform>текстовые рамки</numerusform><numerusform>текстовых рамок</numerusform><numerusform>текстовых рамок</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="567"/>
         <source>Text frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>текстовая рамка</numerusform><numerusform>Текстовые рамки</numerusform><numerusform>Текстовых рамок</numerusform><numerusform>Текстовых рамок</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="569"/>
         <source>fretboard diagram frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>рамка схемы грифа</numerusform><numerusform>рамки схемы грифа</numerusform><numerusform>рамок схемы грифа</numerusform><numerusform>рамок схемы грифа</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="570"/>
         <source>Fretboard diagram frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Рамка схемы грифа</numerusform><numerusform>Рамки схемы грифа</numerusform><numerusform>Рамок схемы грифа</numerusform><numerusform>Рамок схемы грифа</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="575"/>
         <source>bagpipe embellishment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>орнаментика для волынки</numerusform><numerusform>орнаментики для волынки</numerusform><numerusform>орнаментик для волынки</numerusform><numerusform>орнаментик для волынки</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="576"/>
         <source>Bagpipe embellishment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Орнаментика для волынки</numerusform><numerusform>Орнаментики для волынки</numerusform><numerusform>Орнаментик для волынки</numerusform><numerusform>Орнаментик для волынки</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="578"/>
         <source>sticking(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>барабанная аппликатура</numerusform><numerusform>барабанная аппликатура</numerusform><numerusform>барабанная аппликатура</numerusform><numerusform>барабанная аппликатура</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="579"/>
         <source>Sticking(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Барабанная аппликатура</numerusform><numerusform>Барабанная аппликатура</numerusform><numerusform>Барабанная аппликатура</numerusform><numerusform>Барабанная аппликатура</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="584"/>
         <source>guitar bend(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>гитарный бенд</numerusform><numerusform>гитарных бенда</numerusform><numerusform>гитарных бендов</numerusform><numerusform>гитарных бендов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="585"/>
         <source>Guitar bend(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Гитарный бенд</numerusform><numerusform>Гитарных бенда</numerusform><numerusform>Гитарных бендов</numerusform><numerusform>Гитарных бендов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="587"/>
         <source>guitar bend segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент гитарного бенда</numerusform><numerusform>сегмента гитарного бенда</numerusform><numerusform>сегментов гитарного бенда</numerusform><numerusform>сегментов гитарного бенда</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="588"/>
         <source>Guitar bend segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент гитарного бенда</numerusform><numerusform>Сегмента гитарного бенда</numerusform><numerusform>Сегментов гитарного бенда</numerusform><numerusform>Сегментов гитарного бенда</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="590"/>
         <source>guitar bend hold(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>удержание гитарного бенда</numerusform><numerusform>удержания гитарного бенда</numerusform><numerusform>удержаний гитарного бенда</numerusform><numerusform>удержаний гитарного бенда</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="591"/>
         <source>Guitar bend hold(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Удержание гитарного бенда</numerusform><numerusform>Удержания гитарного бенда</numerusform><numerusform>Удержаний гитарного бенда</numerusform><numerusform>Удержаний гитарного бенда</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="593"/>
         <source>guitar bend hold segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент удержания гитарного бенда</numerusform><numerusform>сегмента удержания гитарного бенда</numerusform><numerusform>сегментов удержания гитарного бенда</numerusform><numerusform>сегментов удержания гитарного бенда</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="594"/>
         <source>Guitar bend hold segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент удержания гитарного бенда</numerusform><numerusform>Сегмента удержания гитарного бенда</numerusform><numerusform>Сегментов удержания гитарного бенда</numerusform><numerusform>Сегментов удержания гитарного бенда</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="596"/>
         <source>guitar bend text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>текст гитарного бенда</numerusform><numerusform>текста гитарного бенда</numerusform><numerusform>текстов гитарного бенда</numerusform><numerusform>текстов гитарного бенда</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="597"/>
         <source>Guitar bend text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Текст гитарного бенда</numerusform><numerusform>Текста гитарного бенда</numerusform><numerusform>Текстов гитарного бенда</numerusform><numerusform>Текстов гитарного бенда</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="599"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="602"/>
         <source>tremolo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>тремоло</numerusform><numerusform>тремоло</numerusform><numerusform>тремоло</numerusform><numerusform>тремоло</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="600"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="603"/>
         <source>Tremolo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Тремоло</numerusform><numerusform>Тремоло</numerusform><numerusform>Тремоло</numerusform><numerusform>Тремоло</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="605"/>
         <source>time tick anchor(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>привязка временных меток</numerusform><numerusform>привязки временных меток</numerusform><numerusform>привязок временных меток</numerusform><numerusform>привязок временных меток</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="606"/>
         <source>Time tick anchor(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Привязка временных меток</numerusform><numerusform>Привязки временных меток</numerusform><numerusform>Привязок временных меток</numerusform><numerusform>Привязок временных меток</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="608"/>
         <source>hammer-on / pull-off(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>подтяжка / срыв</numerusform><numerusform>подтяжки / срыва</numerusform><numerusform>подтяжек / срывов</numerusform><numerusform>подтяжек / срывов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="609"/>
         <source>Hammer-on / pull-off(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Подтяжка / срыв</numerusform><numerusform>Подтяжки / срыва</numerusform><numerusform>Подтяжек / срывов</numerusform><numerusform>Подтяжек / срывов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="611"/>
         <source>hammer-on / pull-off segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент подтяжки / срыва</numerusform><numerusform>сегмента подтяжки / срыва</numerusform><numerusform>сегментов подтяжки / срыва</numerusform><numerusform>сегментов подтяжки / срыва</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="612"/>
         <source>Hammer-on / pull-off segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент подтяжки / срыва</numerusform><numerusform>Сегмента подтяжки / срыва</numerusform><numerusform>Сегментов подтяжки / срыва</numerusform><numerusform>Сегментов подтяжки / срыва</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="614"/>
         <source>hammer-on / pull-off text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>текст подтяжки / срыва</numerusform><numerusform>текста подтяжки / срыва</numerusform><numerusform>текстов подтяжки / срыва</numerusform><numerusform>текстов подтяжки / срыва</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="615"/>
         <source>Hammer-on / pull-off text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Текст подтяжки / срыва</numerusform><numerusform>Текста подтяжки / срыва</numerusform><numerusform>Текстов подтяжки / срыва</numerusform><numerusform>Текстов подтяжки / срыва</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="617"/>
         <source>tapping</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>тэппинг</numerusform><numerusform>тэппинга</numerusform><numerusform>тэппингов</numerusform><numerusform>тэппингов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="618"/>
         <source>Tapping</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Тэппинг</numerusform><numerusform>Тэппинга</numerusform><numerusform>Тэппингов</numerusform><numerusform>Тэппингов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="620"/>
         <source>tapping half slur(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>тэппинг с частичной лигой</numerusform><numerusform>тэппинг с частичными лигами</numerusform><numerusform>тэппинг с частичными лигами</numerusform><numerusform>тэппинг с частичными лигами</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="621"/>
         <source>Tapping half slur(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Тэппинг с частичной лигой</numerusform><numerusform>Тэппинг с частичными лигами</numerusform><numerusform>Тэппинг с частичными лигами</numerusform><numerusform>Тэппинг с частичными лигами</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="623"/>
         <source>tapping half slur segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>сегмент частичной лиги тэппинга</numerusform><numerusform>сегмента частичной лиги тэппинга</numerusform><numerusform>сегментов частичной лиги тэппинга</numerusform><numerusform>сегментов частичной лиги тэппинга</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="624"/>
         <source>Tapping half slur segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Сегмент частичной лиги тэппинга</numerusform><numerusform>Сегмента частичной лиги тэппинга</numerusform><numerusform>Сегментов частичной лиги тэппинга</numerusform><numerusform>Сегментов частичной лиги тэппинга</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="626"/>
         <source>tapping text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>текст тэппинга</numerusform><numerusform>текста тэппинга</numerusform><numerusform>текстов тэппинга</numerusform><numerusform>текстов тэппинга</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="627"/>
         <source>Tapping text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Текст тэппинга</numerusform><numerusform>Текста тэппинга</numerusform><numerusform>Текстов тэппинга</numerusform><numerusform>Текстов тэппинга</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="946"/>
         <source>x%1</source>
-        <translation type="unfinished"/>
+        <translation>x%1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="947"/>
         <source>%1x</source>
-        <translation type="unfinished"/>
+        <translation>%1x</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="948"/>
@@ -14408,7 +14408,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1696"/>
         <source>Measure number (alternate)</source>
-        <translation type="unfinished"/>
+        <translation>Номер такта (альтернативный)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1697"/>
@@ -14433,7 +14433,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1702"/>
         <source>Repeat play count</source>
-        <translation type="unfinished"/>
+        <translation>Повтор текста количества проигрываний</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1703"/>
@@ -14533,7 +14533,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1726"/>
         <source>Hammer-ons, pull-offs, and tapping</source>
-        <translation type="unfinished"/>
+        <translation>Подтяжки, срывы и тэппинг</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1730"/>
@@ -15122,7 +15122,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3318"/>
         <source>Open / Atonal</source>
-        <translation type="unfinished"/>
+        <translation>Открытый / Атональный</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/partialtiepopupmodel.cpp" line="192"/>
@@ -16205,7 +16205,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1293"/>
         <source>G clef ottava bassa with C clef</source>
-        <translation type="unfinished"/>
+        <translation>Скрипичный ключ на октаву ниже с ключом до</translation>
     </message>
 </context>
 <context>
@@ -17402,33 +17402,33 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2090"/>
         <source>Swing up</source>
-        <translation type="unfinished"/>
+        <translation>Взмах вверх</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2092"/>
         <source>Swing down</source>
-        <translation type="unfinished"/>
+        <translation>Взмах вниз</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2093"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2094"/>
         <source>Echo</source>
-        <translation type="unfinished"/>
+        <translation>Эхо</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2095"/>
         <source>Damp</source>
-        <translation type="unfinished"/>
+        <translation>Приглушение</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2096"/>
         <source>Let vibrate</source>
-        <translation type="unfinished"/>
+        <translation>Дать вибрировать</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2097"/>
         <source>Ring</source>
-        <translation type="unfinished"/>
+        <translation>Звенеть</translation>
     </message>
 </context>
 <context>
@@ -17436,7 +17436,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="60"/>
         <source>subtype</source>
-        <translation type="unfinished"/>
+        <translation>подтип</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="61"/>
@@ -17446,13 +17446,13 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="62"/>
         <source>generated</source>
-        <translation type="unfinished"/>
+        <translation>сгенерирован</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="63"/>
         <location filename="../../src/engraving/dom/property.cpp" line="310"/>
         <source>color</source>
-        <translation type="unfinished"/>
+        <translation>цвет</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="64"/>
@@ -17462,82 +17462,82 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="65"/>
         <source>stacking order</source>
-        <translation type="unfinished"/>
+        <translation>порядок наложения</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="66"/>
         <source>small</source>
-        <translation type="unfinished"/>
+        <translation>малый</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="67"/>
         <source>hide when empty</source>
-        <translation type="unfinished"/>
+        <translation>скрывать, когда пустой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="68"/>
         <source>hide staves when individually empty</source>
-        <translation type="unfinished"/>
+        <translation>скрывать пустые нотоносцы</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="69"/>
         <source>show if entire system empty</source>
-        <translation type="unfinished"/>
+        <translation>показывать, если система пуста</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="70"/>
         <source>show courtesy</source>
-        <translation type="unfinished"/>
+        <translation>показывать вспомогательные</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="71"/>
         <source>key signature mode</source>
-        <translation type="unfinished"/>
+        <translation>режим ключевых знаков</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="72"/>
         <source>line type</source>
-        <translation type="unfinished"/>
+        <translation>тип линии</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="73"/>
         <source>pitch</source>
-        <translation type="unfinished"/>
+        <translation>высота звука</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="75"/>
         <source>tonal pitch class</source>
-        <translation type="unfinished"/>
+        <translation>класс тональной высоты</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="76"/>
         <source>transposed tonal pitch class</source>
-        <translation type="unfinished"/>
+        <translation>класс транспонированной тональной высоты</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="77"/>
         <source>line</source>
-        <translation type="unfinished"/>
+        <translation>линия</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="78"/>
         <source>fixed</source>
-        <translation type="unfinished"/>
+        <translation>фиксированный</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="79"/>
         <source>fixed line</source>
-        <translation type="unfinished"/>
+        <translation>фиксированная линия</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="80"/>
         <source>head type</source>
-        <translation type="unfinished"/>
+        <translation>тип головки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="81"/>
         <source>head</source>
-        <translation type="unfinished"/>
+        <translation>головка</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="82"/>
@@ -17548,28 +17548,28 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <location filename="../../src/engraving/dom/property.cpp" line="83"/>
         <location filename="../../src/engraving/dom/property.cpp" line="203"/>
         <source>velocity</source>
-        <translation type="unfinished"/>
+        <translation>сила нажатия</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="84"/>
         <location filename="../../src/engraving/dom/property.cpp" line="255"/>
         <source>anchor</source>
-        <translation type="unfinished"/>
+        <translation>привязка</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="86"/>
         <source>direction</source>
-        <translation type="unfinished"/>
+        <translation>направление</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="87"/>
         <source>horizontal direction</source>
-        <translation type="unfinished"/>
+        <translation>горизонтальное направление</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="88"/>
         <source>stem direction</source>
-        <translation type="unfinished"/>
+        <translation>направление штиля</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="89"/>
@@ -17580,67 +17580,67 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="90"/>
         <source>up</source>
-        <translation type="unfinished"/>
+        <translation>вверх</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="91"/>
         <source>leading space</source>
-        <translation type="unfinished"/>
+        <translation>начальный пробел</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="92"/>
         <source>mirror</source>
-        <translation type="unfinished"/>
+        <translation>зеркальный</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="93"/>
         <source>parentheses</source>
-        <translation type="unfinished"/>
+        <translation>скобки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="94"/>
         <source>dot position</source>
-        <translation type="unfinished"/>
+        <translation>положение точки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="95"/>
         <source>combine voice</source>
-        <translation type="unfinished"/>
+        <translation>скомбинировать голос</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="96"/>
         <source>tuning</source>
-        <translation type="unfinished"/>
+        <translation>строй</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="97"/>
         <source>pause</source>
-        <translation type="unfinished"/>
+        <translation>пауза</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="99"/>
         <source>barline type</source>
-        <translation type="unfinished"/>
+        <translation>тип тактовой черты</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="100"/>
         <source>span</source>
-        <translation type="unfinished"/>
+        <translation>размах</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="101"/>
         <source>span from</source>
-        <translation type="unfinished"/>
+        <translation>размах от</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="102"/>
         <source>span to</source>
-        <translation type="unfinished"/>
+        <translation>размах до</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="103"/>
         <source>show tips</source>
-        <translation type="unfinished"/>
+        <translation>показывать подсказки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="105"/>
@@ -17650,213 +17650,213 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="106"/>
         <source>fret</source>
-        <translation type="unfinished"/>
+        <translation>лад</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="107"/>
         <source>string</source>
-        <translation type="unfinished"/>
+        <translation>струна</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="108"/>
         <source>ghost</source>
-        <translation type="unfinished"/>
+        <translation>призрачный</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="109"/>
         <source>dead</source>
-        <translation type="unfinished"/>
+        <translation>мёртвый</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="110"/>
         <source>played</source>
-        <translation type="unfinished"/>
+        <translation>сыгранный</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="111"/>
         <source>nominal time signature</source>
-        <translation type="unfinished"/>
+        <translation>номинальный тактовый размер</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="112"/>
         <source>actual time signature</source>
-        <translation type="unfinished"/>
+        <translation>реальный тактовый размер</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="113"/>
         <source>number type</source>
-        <translation type="unfinished"/>
+        <translation>тип номера</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="114"/>
         <source>bracket type</source>
-        <translation type="unfinished"/>
+        <translation>тип скобки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="115"/>
         <source>normal notes</source>
-        <translation type="unfinished"/>
+        <translation>нормальные ноты</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="116"/>
         <source>actual notes</source>
-        <translation type="unfinished"/>
+        <translation>реальные ноты</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="117"/>
         <source>bracket start offset</source>
-        <translation type="unfinished"/>
+        <translation>смещение начала скобки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="118"/>
         <source>bracket end offset</source>
-        <translation type="unfinished"/>
+        <translation>смещение конца скобки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="119"/>
         <source>grow left</source>
-        <translation type="unfinished"/>
+        <translation>увеличить слева</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="120"/>
         <source>grow right</source>
-        <translation type="unfinished"/>
+        <translation>увеличить справа</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="122"/>
         <source>height</source>
-        <translation type="unfinished"/>
+        <translation>высота</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="123"/>
         <source>width</source>
-        <translation type="unfinished"/>
+        <translation>ширина</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="124"/>
         <source>autosize frame</source>
-        <translation type="unfinished"/>
+        <translation>авторазмер рамки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="125"/>
         <source>top gap</source>
-        <translation type="unfinished"/>
+        <translation>зазор сверху</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="126"/>
         <source>bottom gap</source>
-        <translation type="unfinished"/>
+        <translation>зазор снизу</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="127"/>
         <source>left padding</source>
-        <translation type="unfinished"/>
+        <translation>отступ слева</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="128"/>
         <source>right padding</source>
-        <translation type="unfinished"/>
+        <translation>отступ справа</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="129"/>
         <source>top padding</source>
-        <translation type="unfinished"/>
+        <translation>отступ сверху</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="130"/>
         <source>bottom padding</source>
-        <translation type="unfinished"/>
+        <translation>отступ снизу</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="131"/>
         <source>padding to notation above</source>
-        <translation type="unfinished"/>
+        <translation>отступ от нотации сверху</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="132"/>
         <source>padding to notation below</source>
-        <translation type="unfinished"/>
+        <translation>отступ от нотации снизу</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="134"/>
         <source>layout break type</source>
-        <translation type="unfinished"/>
+        <translation>тип разрыва разметки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="135"/>
         <source>autoscale</source>
-        <translation type="unfinished"/>
+        <translation>автомасштаб</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="136"/>
         <location filename="../../src/engraving/dom/property.cpp" line="327"/>
         <source>size</source>
-        <translation type="unfinished"/>
+        <translation>размер</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="138"/>
         <source>image height</source>
-        <translation type="unfinished"/>
+        <translation>высота изображения</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="139"/>
         <source>image width</source>
-        <translation type="unfinished"/>
+        <translation>ширина изображения</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="140"/>
         <source>image framed</source>
-        <translation type="unfinished"/>
+        <translation>изображение в рамке</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="142"/>
         <source>text scale</source>
-        <translation type="unfinished"/>
+        <translation>масштаб текста</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="143"/>
         <source>diagram scale</source>
-        <translation type="unfinished"/>
+        <translation>масштаб диаграммы</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="144"/>
         <source>column gap</source>
-        <translation type="unfinished"/>
+        <translation>зазор между столбцами</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="145"/>
         <source>row gap</source>
-        <translation type="unfinished"/>
+        <translation>зазор между строками</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="146"/>
         <source>chord symbols per row</source>
-        <translation type="unfinished"/>
+        <translation>символов аккордов на строку</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="147"/>
         <source>horizontal alignment</source>
-        <translation type="unfinished"/>
+        <translation>горизонтальное выравнивание</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="148"/>
         <source>diagrams order</source>
-        <translation type="unfinished"/>
+        <translation>порядок диаграмм</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="150"/>
         <source>scale</source>
-        <translation type="unfinished"/>
+        <translation>масштаб</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="151"/>
         <source>aspect ratio locked</source>
-        <translation type="unfinished"/>
+        <translation>соотношение сторон заблокировано</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="152"/>
         <source>size is spatium</source>
-        <translation type="unfinished"/>
+        <translation>размер в спация</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="153"/>
@@ -17867,32 +17867,32 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="156"/>
         <source>beam position</source>
-        <translation type="unfinished"/>
+        <translation>положение штиля</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="157"/>
         <source>beam mode</source>
-        <translation type="unfinished"/>
+        <translation>режим штиля</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="158"/>
         <source>without slope</source>
-        <translation type="unfinished"/>
+        <translation>без наклона</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="159"/>
         <source>beam staff move</source>
-        <translation type="unfinished"/>
+        <translation>перемещение реестра нотоносца</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="160"/>
         <source>length</source>
-        <translation type="unfinished"/>
+        <translation>длина</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="161"/>
         <source>show stem slash</source>
-        <translation type="unfinished"/>
+        <translation>показывать перечёркнутый штиль</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="163"/>
@@ -17907,360 +17907,360 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="165"/>
         <source>following text</source>
-        <translation type="unfinished"/>
+        <translation>следующий текст</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="166"/>
         <source>tempo align right of rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>выравнивание темпа по правому краю партитурного ориентира</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="168"/>
         <source>bracket</source>
-        <translation type="unfinished"/>
+        <translation>скобка</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="169"/>
         <source>accidental type</source>
-        <translation type="unfinished"/>
+        <translation>тип знака альтерации</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="170"/>
         <source>stacking order offset</source>
-        <translation type="unfinished"/>
+        <translation>смещение порядка наложения</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="171"/>
         <source>numerator string</source>
-        <translation type="unfinished"/>
+        <translation>выражение в числителе</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="172"/>
         <source>denominator string</source>
-        <translation type="unfinished"/>
+        <translation>выражение в знаменателе</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="173"/>
         <source>prefix</source>
-        <translation type="unfinished"/>
+        <translation>приставка</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="174"/>
         <source>digit</source>
-        <translation type="unfinished"/>
+        <translation>цифра</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="175"/>
         <source>suffix</source>
-        <translation type="unfinished"/>
+        <translation>суффикс</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="176"/>
         <source>continuation line</source>
-        <translation type="unfinished"/>
+        <translation>линия продолжения</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="184"/>
         <source>ottava type</source>
-        <translation type="unfinished"/>
+        <translation>тип ottava</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="185"/>
         <source>numbers only</source>
-        <translation type="unfinished"/>
+        <translation>только цифры</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="186"/>
         <source>trill type</source>
-        <translation type="unfinished"/>
+        <translation>тип трели</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="187"/>
         <source>vibrato type</source>
-        <translation type="unfinished"/>
+        <translation>тип вибрато</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="188"/>
         <source>hairpin with circled tip</source>
-        <translation type="unfinished"/>
+        <translation>вилочка с кругом на острие</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="190"/>
         <source>hairpin type</source>
-        <translation type="unfinished"/>
+        <translation>тип вилочки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="191"/>
         <source>hairpin height</source>
-        <translation type="unfinished"/>
+        <translation>высота вилочки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="192"/>
         <source>hairpin cont height</source>
-        <translation type="unfinished"/>
+        <translation>высота продолж. вилочки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="193"/>
         <source>velocity change</source>
-        <translation type="unfinished"/>
+        <translation>изменение силы нажатия</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="194"/>
         <source>velocity change method</source>
-        <translation type="unfinished"/>
+        <translation>метод изменения силы нажатия</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="195"/>
         <source>velocity change speed</source>
-        <translation type="unfinished"/>
+        <translation>скорость изменения силы нажатия</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="196"/>
         <source>dynamic type</source>
-        <translation type="unfinished"/>
+        <translation>тип динамики</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="198"/>
         <source>single note dynamics</source>
-        <translation type="unfinished"/>
+        <translation>динамика одной ноты</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="199"/>
         <source>change method</source>
-        <translation type="unfinished"/>
+        <translation>метод изменения</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="200"/>
         <source>placement</source>
-        <translation type="unfinished"/>
+        <translation>размещение</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="201"/>
         <source>horizontal placement</source>
-        <translation type="unfinished"/>
+        <translation>горизонтальное размещение</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="202"/>
         <source>multimeasure rest range bracket type</source>
-        <translation type="unfinished"/>
+        <translation>тип скобки диапазона оркестровой паузы</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="204"/>
         <source>jump to</source>
-        <translation type="unfinished"/>
+        <translation>прыгнуть на</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="205"/>
         <source>play until</source>
-        <translation type="unfinished"/>
+        <translation>играть до</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="206"/>
         <source>continue at</source>
-        <translation type="unfinished"/>
+        <translation>продолжить на</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="207"/>
         <source>label</source>
-        <translation type="unfinished"/>
+        <translation>метка</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="208"/>
         <source>marker type</source>
-        <translation type="unfinished"/>
+        <translation>тип маркера</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="209"/>
         <source>music symbol size</source>
-        <translation type="unfinished"/>
+        <translation>размер музыкальных символов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="210"/>
         <source>marker center on symbol</source>
-        <translation type="unfinished"/>
+        <translation>центрировать маркер по символу</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="211"/>
         <source>length 1</source>
-        <translation type="unfinished"/>
+        <translation>длина 1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="212"/>
         <source>length 2</source>
-        <translation type="unfinished"/>
+        <translation>длина 2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="213"/>
         <source>repeat end</source>
-        <translation type="unfinished"/>
+        <translation>конец повтора</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="214"/>
         <source>repeat start</source>
-        <translation type="unfinished"/>
+        <translation>начало повтора</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="215"/>
         <source>repeat jump</source>
-        <translation type="unfinished"/>
+        <translation>прыжок повтора</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="216"/>
         <source>measure number mode</source>
-        <translation type="unfinished"/>
+        <translation>режим нумерации тактов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="218"/>
         <source>glissando type</source>
-        <translation type="unfinished"/>
+        <translation>тип глиссандо</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="220"/>
         <source>showing text</source>
-        <translation type="unfinished"/>
+        <translation>отображение текста</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="221"/>
         <source>glissando style</source>
-        <translation type="unfinished"/>
+        <translation>стиль глиссандо</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="222"/>
         <source>glissando shift</source>
-        <translation type="unfinished"/>
+        <translation>сдвиг глиссандо</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="223"/>
         <source>ease in</source>
-        <translation type="unfinished"/>
+        <translation>плавный вход</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="224"/>
         <source>ease out</source>
-        <translation type="unfinished"/>
+        <translation>плавный выход</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="225"/>
         <source>diagonal</source>
-        <translation type="unfinished"/>
+        <translation>диагональ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="226"/>
         <source>groups</source>
-        <translation type="unfinished"/>
+        <translation>группы</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="227"/>
         <source>line style</source>
-        <translation type="unfinished"/>
+        <translation>стиль линии</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="228"/>
         <source>line width</source>
-        <translation type="unfinished"/>
+        <translation>ширина линии</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="229"/>
         <source>time stretch</source>
-        <translation type="unfinished"/>
+        <translation>удлинение:</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="230"/>
         <source>ornament style</source>
-        <translation type="unfinished"/>
+        <translation>стиль орнаментики</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="231"/>
         <source>interval above</source>
-        <translation type="unfinished"/>
+        <translation>интервал выше</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="232"/>
         <source>interval below</source>
-        <translation type="unfinished"/>
+        <translation>интервал ниже</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="233"/>
         <source>ornament show accidental</source>
-        <translation type="unfinished"/>
+        <translation>показывать знаки альтерации в орнаментике</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="234"/>
         <source>ornament show cue note</source>
-        <translation type="unfinished"/>
+        <translation>показывать форшлаг в орнаментике</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="235"/>
         <source>start on upper note</source>
-        <translation type="unfinished"/>
+        <translation>начинать с верхней ноты</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="237"/>
         <source>time signature</source>
-        <translation type="unfinished"/>
+        <translation>тактовый размер</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="238"/>
         <source>time signature stretch</source>
-        <translation type="unfinished"/>
+        <translation>растяжение тактового размера</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="239"/>
         <source>time signature type</source>
-        <translation type="unfinished"/>
+        <translation>тип тактового размера</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="240"/>
         <location filename="../../src/engraving/dom/property.cpp" line="294"/>
         <source>tick</source>
-        <translation type="unfinished"/>
+        <translation>тик</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="241"/>
         <location filename="../../src/engraving/dom/property.cpp" line="264"/>
         <source>ticks</source>
-        <translation type="unfinished"/>
+        <translation>тики</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="242"/>
         <source>end track</source>
-        <translation type="unfinished"/>
+        <translation>конец дорожки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="243"/>
         <location filename="../../src/engraving/dom/property.cpp" line="259"/>
         <source>end offset</source>
-        <translation type="unfinished"/>
+        <translation>конец смещения</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="244"/>
         <source>breaking multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>разделение оркестровой паузы</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="245"/>
         <source>vertical position of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>вертикальное положение числа в оркестровой паузе</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="246"/>
         <source>vertical offset of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>вертикальный сдвиг числа в оркестровой паузе</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="247"/>
         <source>visibility of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>видимость числа в оркестровой паузе</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="249"/>
         <source>vertical position of measure repeat number</source>
-        <translation type="unfinished"/>
+        <translation>вертикальное положение числа тактового повтора</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="250"/>
         <source>repeat count</source>
-        <translation type="unfinished"/>
+        <translation>число повторов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="252"/>
@@ -18270,232 +18270,232 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="253"/>
         <source>numbering offset</source>
-        <translation type="unfinished"/>
+        <translation>смещение нумерации</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="254"/>
         <source>irregular</source>
-        <translation type="unfinished"/>
+        <translation>нерегулярный</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="256"/>
         <source>start offset</source>
-        <translation type="unfinished"/>
+        <translation>начало сдвига</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="257"/>
         <source>left shoulder offset</source>
-        <translation type="unfinished"/>
+        <translation>сдвиг левого плеча</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="258"/>
         <source>right shoulder offset</source>
-        <translation type="unfinished"/>
+        <translation>сдвиг правого плеча</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="260"/>
         <source>staff move</source>
-        <translation type="unfinished"/>
+        <translation>перемещение нотоносца</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="261"/>
         <source>verse</source>
-        <translation type="unfinished"/>
+        <translation>строк</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="263"/>
         <source>syllabic</source>
-        <translation type="unfinished"/>
+        <translation>слоговый</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="265"/>
         <source>endings</source>
-        <translation type="unfinished"/>
+        <translation>окончания</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="266"/>
         <source>visible line</source>
-        <translation type="unfinished"/>
+        <translation>видимая линия</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="267"/>
         <source>magnification</source>
-        <translation type="unfinished"/>
+        <translation>масштабирование</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="268"/>
         <source>using drumset</source>
-        <translation type="unfinished"/>
+        <translation>использование ударной установки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="269"/>
         <source>duration</source>
-        <translation type="unfinished"/>
+        <translation>длительность</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="270"/>
         <source>duration type</source>
-        <translation type="unfinished"/>
+        <translation>тип длительности</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="271"/>
         <source>role</source>
-        <translation type="unfinished"/>
+        <translation>роль</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="272"/>
         <source>track</source>
-        <translation type="unfinished"/>
+        <translation>дорожка</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="274"/>
         <source>strings</source>
-        <translation type="unfinished"/>
+        <translation>струны</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="275"/>
         <source>frets</source>
-        <translation type="unfinished"/>
+        <translation>лады</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="276"/>
         <source>show nut</source>
-        <translation type="unfinished"/>
+        <translation>показывать порожек</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="277"/>
         <source>fret offset</source>
-        <translation type="unfinished"/>
+        <translation>смещение ладов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="278"/>
         <source>fret number position</source>
-        <translation type="unfinished"/>
+        <translation>положение номера лада</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="279"/>
         <source>orientation</source>
-        <translation type="unfinished"/>
+        <translation>ориентация</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="280"/>
         <source>fretboard diagram fingering visible</source>
-        <translation type="unfinished"/>
+        <translation>видимая аппликатура на схеме грифа</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="281"/>
         <source>fretboard diagram fingering</source>
-        <translation type="unfinished"/>
+        <translation>аппликатура на схеме грифа</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="283"/>
         <source>chord symbol interpretation</source>
-        <translation type="unfinished"/>
+        <translation>интерпретация символов аккорда</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="284"/>
         <source>chord symbol voicing</source>
-        <translation type="unfinished"/>
+        <translation>голоса в символе аккорда</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="285"/>
         <source>chord symbol duration</source>
-        <translation type="unfinished"/>
+        <translation>длительность в символе аккорда</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="286"/>
         <source>chord symbol bass scale</source>
-        <translation type="unfinished"/>
+        <translation>басовая линия в символе аккорда</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="287"/>
         <source>chord symbol do not stack modifiers</source>
-        <translation type="unfinished"/>
+        <translation>не наслаивать модификаторы в символе аккорда</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="289"/>
         <source>type</source>
-        <translation type="unfinished"/>
+        <translation>тип</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="290"/>
         <source>gap</source>
-        <translation type="unfinished"/>
+        <translation>зазор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="291"/>
         <source>autoplace</source>
-        <translation type="unfinished"/>
+        <translation>авторазмещение</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="292"/>
         <source>dash line length</source>
-        <translation type="unfinished"/>
+        <translation>длина пунктирной линии</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="293"/>
         <source>dash gap length</source>
-        <translation type="unfinished"/>
+        <translation>ширина разрыва между дефисами</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="295"/>
         <source>playback voice 1</source>
-        <translation type="unfinished"/>
+        <translation>воспроизводимый голос 1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="296"/>
         <source>playback voice 2</source>
-        <translation type="unfinished"/>
+        <translation>воспроизводимый голос 2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="297"/>
         <source>playback voice 3</source>
-        <translation type="unfinished"/>
+        <translation>воспроизводимый голос 3</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="299"/>
         <source>playback voice 4</source>
-        <translation type="unfinished"/>
+        <translation>воспроизводимый голос 4</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="300"/>
         <source>symbol</source>
-        <translation type="unfinished"/>
+        <translation>символ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="301"/>
         <source>playing repeats</source>
-        <translation type="unfinished"/>
+        <translation>воспроизведение повторов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="302"/>
         <source>creating system header</source>
-        <translation type="unfinished"/>
+        <translation>создание заголовка системы</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="303"/>
         <source>lines</source>
-        <translation type="unfinished"/>
+        <translation>линии</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="304"/>
         <source>line distance</source>
-        <translation type="unfinished"/>
+        <translation>расстояние между линиями</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="305"/>
         <source>step offset</source>
-        <translation type="unfinished"/>
+        <translation>смещение ступеней</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="306"/>
         <source>showing barlines</source>
-        <translation type="unfinished"/>
+        <translation>отображение тактовых черт</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="307"/>
         <source>showing ledgerlines</source>
-        <translation type="unfinished"/>
+        <translation>отображение добавочных линеек</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="309"/>
@@ -18505,652 +18505,652 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="312"/>
         <source>notehead scheme</source>
-        <translation type="unfinished"/>
+        <translation>схема головок нот</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="313"/>
         <source>generating clefs</source>
-        <translation type="unfinished"/>
+        <translation>генерация ключей</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="314"/>
         <source>generating time signature</source>
-        <translation type="unfinished"/>
+        <translation>генерация тактового размера</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="315"/>
         <source>generating key signature</source>
-        <translation type="unfinished"/>
+        <translation>генерация ключевых знаков</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="316"/>
         <source>y-offset</source>
-        <translation type="unfinished"/>
+        <translation>Y-сдвиг</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="317"/>
         <source>distance offset</source>
-        <translation type="unfinished"/>
+        <translation>расстояние сдвига</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="318"/>
         <source>barline span</source>
-        <translation type="unfinished"/>
+        <translation>размах тактовой черты</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="319"/>
         <source>barline span from</source>
-        <translation type="unfinished"/>
+        <translation>размах тактовой черты от</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="320"/>
         <source>barline span to</source>
-        <translation type="unfinished"/>
+        <translation>размах тактовой черты до</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="321"/>
         <source>bracket span</source>
-        <translation type="unfinished"/>
+        <translation>размах скобок</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="323"/>
         <source>level</source>
-        <translation type="unfinished"/>
+        <translation>уровень</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="324"/>
         <source>layout position</source>
-        <translation type="unfinished"/>
+        <translation>позиция макета</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="325"/>
         <source>style</source>
-        <translation type="unfinished"/>
+        <translation>стиль</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="326"/>
         <source>family</source>
-        <translation type="unfinished"/>
+        <translation>семейство</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="328"/>
         <source>font style</source>
-        <translation type="unfinished"/>
+        <translation>начертание</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="329"/>
         <source>user line distancing</source>
-        <translation type="unfinished"/>
+        <translation>пользовательское расстояние между линиями</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="331"/>
         <source>frame type</source>
-        <translation type="unfinished"/>
+        <translation>тип рамки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="332"/>
         <source>frame width</source>
-        <translation type="unfinished"/>
+        <translation>ширина рамки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="333"/>
         <source>frame padding</source>
-        <translation type="unfinished"/>
+        <translation>отступы внутри рамки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="334"/>
         <source>frame round</source>
-        <translation type="unfinished"/>
+        <translation>скругление рамки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="335"/>
         <source>frame foreground color</source>
-        <translation type="unfinished"/>
+        <translation>основной цвет рамки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="336"/>
         <source>frame background color</source>
-        <translation type="unfinished"/>
+        <translation>цвет фона рамки</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="337"/>
         <source>spatium dependent size</source>
-        <translation type="unfinished"/>
+        <translation>размер относительно спация</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="338"/>
         <source>spatium dependent text size</source>
-        <translation type="unfinished"/>
+        <translation>размер текста относительно спация</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="339"/>
         <source>musical symbols scale</source>
-        <translation type="unfinished"/>
+        <translation>масштаб музыкальных символов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="340"/>
         <source>align</source>
-        <translation type="unfinished"/>
+        <translation>выравнивание</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="341"/>
         <source>text script align</source>
-        <translation type="unfinished"/>
+        <translation>выравнивание индексов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="342"/>
         <source>system flag</source>
-        <translation type="unfinished"/>
+        <translation>системный флаг</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="344"/>
         <source>begin text</source>
-        <translation type="unfinished"/>
+        <translation>текст в начале</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="345"/>
         <source>begin text align</source>
-        <translation type="unfinished"/>
+        <translation>выравнивание текста в начале</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="346"/>
         <source>begin text place</source>
-        <translation type="unfinished"/>
+        <translation>размещение текста в начале</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="347"/>
         <source>begin hook type</source>
-        <translation type="unfinished"/>
+        <translation>тип загиба в начале</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="348"/>
         <source>begin hook height</source>
-        <translation type="unfinished"/>
+        <translation>высота загиба в начале</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="349"/>
         <source>begin font face</source>
-        <translation type="unfinished"/>
+        <translation>шрифт в начале</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="350"/>
         <source>begin font size</source>
-        <translation type="unfinished"/>
+        <translation>размер шрифта в начале</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="351"/>
         <source>begin font style</source>
-        <translation type="unfinished"/>
+        <translation>начертание шрифта в начале</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="352"/>
         <source>begin text offset</source>
-        <translation type="unfinished"/>
+        <translation>смещение текста в начале</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="353"/>
         <source>gap between text and line</source>
-        <translation type="unfinished"/>
+        <translation>зазор между текстом и строкой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="355"/>
         <source>continue text</source>
-        <translation type="unfinished"/>
+        <translation>текст в продолжении</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="356"/>
         <source>continue text align</source>
-        <translation type="unfinished"/>
+        <translation>выравнивание текста в продолжении</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="357"/>
         <source>continue text place</source>
-        <translation type="unfinished"/>
+        <translation>размещение текста в продолжении</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="358"/>
         <source>continue font face</source>
-        <translation type="unfinished"/>
+        <translation>шрифт в продолжении</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="359"/>
         <source>continue font size</source>
-        <translation type="unfinished"/>
+        <translation>размер шрифта в продолжении</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="360"/>
         <source>continue font style</source>
-        <translation type="unfinished"/>
+        <translation>стиль шрифта в продолжении</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="361"/>
         <source>continue text offset</source>
-        <translation type="unfinished"/>
+        <translation>смещение текста в продолжении</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="363"/>
         <source>end text</source>
-        <translation type="unfinished"/>
+        <translation>текст в конце</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="364"/>
         <source>end text align</source>
-        <translation type="unfinished"/>
+        <translation>выравнивание текста в конце</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="365"/>
         <source>end text place</source>
-        <translation type="unfinished"/>
+        <translation>размещение текста в конце</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="366"/>
         <source>end hook type</source>
-        <translation type="unfinished"/>
+        <translation>тип загиба в конце</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="367"/>
         <source>end hook height</source>
-        <translation type="unfinished"/>
+        <translation>высота загиба в конце</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="368"/>
         <source>end font face</source>
-        <translation type="unfinished"/>
+        <translation>шрифт в конце</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="369"/>
         <source>end font size</source>
-        <translation type="unfinished"/>
+        <translation>размер шрифта в конце</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="370"/>
         <source>end font style</source>
-        <translation type="unfinished"/>
+        <translation>начертание шрифта в конце</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="371"/>
         <source>end text offset</source>
-        <translation type="unfinished"/>
+        <translation>смещение текста в конце</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="373"/>
         <source>note-anchored line placement</source>
-        <translation type="unfinished"/>
+        <translation>размещение линии привязки ноты</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="375"/>
         <source>avoid barlines</source>
-        <translation type="unfinished"/>
+        <translation>избегать тактовых черт</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="376"/>
         <source>dynamic size</source>
-        <translation type="unfinished"/>
+        <translation>динамический размер</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="377"/>
         <source>use text alignment</source>
-        <translation type="unfinished"/>
+        <translation>использовать выравнивание текста</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="378"/>
         <source>anchor to end of previous</source>
-        <translation type="unfinished"/>
+        <translation>привязать к концу предыдущего</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="380"/>
         <source>snap expression</source>
-        <translation type="unfinished"/>
+        <translation>привязать средство выразительности</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="381"/>
         <source>snap before</source>
-        <translation type="unfinished"/>
+        <translation>привязать до</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="382"/>
         <source>snap after</source>
-        <translation type="unfinished"/>
+        <translation>привязать после</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="384"/>
         <source>voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>распределение голосов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="385"/>
         <source>center between staves</source>
-        <translation type="unfinished"/>
+        <translation>центрировать между нотоносцами</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="387"/>
         <source>position above</source>
-        <translation type="unfinished"/>
+        <translation>позиция сверху</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="389"/>
         <source>staves distance</source>
-        <translation type="unfinished"/>
+        <translation>расстояние между нотоносцами</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="390"/>
         <source>voices distance</source>
-        <translation type="unfinished"/>
+        <translation>расстояние между голосами</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="391"/>
         <source>measures distance</source>
-        <translation type="unfinished"/>
+        <translation>расстояние между тактами</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="392"/>
         <source>position distance</source>
-        <translation type="unfinished"/>
+        <translation>расстояние между позициями</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="393"/>
         <source>grace note index</source>
-        <translation type="unfinished"/>
+        <translation>индекс форшлага</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="394"/>
         <source>note index</source>
-        <translation type="unfinished"/>
+        <translation>индекс ноты</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="396"/>
         <source>voice</source>
-        <translation type="unfinished"/>
+        <translation>голос</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="397"/>
         <source>position</source>
-        <translation type="unfinished"/>
+        <translation>позиция</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="399"/>
         <source>concert clef type</source>
-        <translation type="unfinished"/>
+        <translation>концертный тип ключа</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="400"/>
         <source>transposing clef type</source>
-        <translation type="unfinished"/>
+        <translation>транспонируемый тип ключа</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="401"/>
         <source>clef to barline position</source>
-        <translation type="unfinished"/>
+        <translation>положение от ключа до тактовой черты</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="402"/>
         <source>is header</source>
-        <translation type="unfinished"/>
+        <translation>заголовок</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="403"/>
         <source>concert key</source>
-        <translation type="unfinished"/>
+        <translation>концертный ключ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="404"/>
         <source>key</source>
-        <translation type="unfinished"/>
+        <translation>ключ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="406"/>
         <source>autoplace minimum distance</source>
-        <translation type="unfinished"/>
+        <translation>минимальное расстояние при авторазмещении:</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="408"/>
         <source>arpeggio type</source>
-        <translation type="unfinished"/>
+        <translation>тип арпеджио</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="409"/>
         <source>chord line type</source>
-        <translation type="unfinished"/>
+        <translation>тип строки аккордов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="410"/>
         <source>straight chord line</source>
-        <translation type="unfinished"/>
+        <translation>ровная строка аккордов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="411"/>
         <source>wavy chord line</source>
-        <translation type="unfinished"/>
+        <translation>волнистая строка аккордов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="412"/>
         <source>tremolo type</source>
-        <translation type="unfinished"/>
+        <translation>тип тремоло</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="413"/>
         <source>tremolo style</source>
-        <translation type="unfinished"/>
+        <translation>стиль тремоло</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="414"/>
         <source>harmony type</source>
-        <translation type="unfinished"/>
+        <translation>тип гармонии</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="416"/>
         <source>arpeggio span</source>
-        <translation type="unfinished"/>
+        <translation>размах арпеджио</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="418"/>
         <source>bend type</source>
-        <translation type="unfinished"/>
+        <translation>тип бенда</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="419"/>
         <source>bend curve</source>
-        <translation type="unfinished"/>
+        <translation>кривая бенда</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="420"/>
         <source>bend vertex offset</source>
-        <translation type="unfinished"/>
+        <translation>смещение вершины бенда</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="421"/>
         <source>bend show hold line</source>
-        <translation type="unfinished"/>
+        <translation>показывать линию удержания бенда</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="422"/>
         <source>bend start time factor</source>
-        <translation type="unfinished"/>
+        <translation>множитель времени начала бенда</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="423"/>
         <source>bend end time factor</source>
-        <translation type="unfinished"/>
+        <translation>множитель времени конца бенда</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="425"/>
         <source>tremolobar type</source>
-        <translation type="unfinished"/>
+        <translation>тип рычага тремоло</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="426"/>
         <source>tremolobar curve</source>
-        <translation type="unfinished"/>
+        <translation>кривая рычага тремоло</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="428"/>
         <source>start with long names</source>
-        <translation type="unfinished"/>
+        <translation>начинать с длинных имён</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="429"/>
         <source>start with measure one</source>
-        <translation type="unfinished"/>
+        <translation>начинать с первого такта</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="430"/>
         <source>first system indentation</source>
-        <translation type="unfinished"/>
+        <translation>отступ первой системы</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="432"/>
         <source>path</source>
-        <translation type="unfinished"/>
+        <translation>путь</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="434"/>
         <source>prefer sharps or flats</source>
-        <translation type="unfinished"/>
+        <translation>предпочитать диезы или бемоли</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="436"/>
         <source>playing technique type</source>
-        <translation type="unfinished"/>
+        <translation>тип техники исполнения</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="438"/>
         <source>gradual tempo change type</source>
-        <translation type="unfinished"/>
+        <translation>тип постепенного изменения темпа</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="439"/>
         <source>tempo easing method</source>
-        <translation type="unfinished"/>
+        <translation>метод сглаживания темпа</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="440"/>
         <source>tempo change factor</source>
-        <translation type="unfinished"/>
+        <translation>множитель изменения темпа</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="442"/>
         <source>is diagram</source>
-        <translation type="unfinished"/>
+        <translation>диаграмма</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="444"/>
         <source>active</source>
-        <translation type="unfinished"/>
+        <translation>активный</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="446"/>
         <source>fret position</source>
-        <translation type="unfinished"/>
+        <translation>позиция ладов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="447"/>
         <source>ignored strings</source>
-        <translation type="unfinished"/>
+        <translation>игнорируемые струны</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="448"/>
         <source>automatically generate text</source>
-        <translation type="unfinished"/>
+        <translation>автоматически генерировать текст</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="450"/>
         <source>tie placement</source>
-        <translation type="unfinished"/>
+        <translation>расположение связующих лиг</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="451"/>
         <source>minimum length</source>
-        <translation type="unfinished"/>
+        <translation>минимальная длина</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="452"/>
         <source>partial spanner direction</source>
-        <translation type="unfinished"/>
+        <translation>направление частичной протяжённой линии</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="454"/>
         <source>position linked to main score</source>
-        <translation type="unfinished"/>
+        <translation>положение, привязанное к основной партитуре</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="455"/>
         <source>appearance linked to main score</source>
-        <translation type="unfinished"/>
+        <translation>внешний вид, привязанный к основной партитуре</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="456"/>
         <source>text linked to main score</source>
-        <translation type="unfinished"/>
+        <translation>текст, привязанный к основной партитуре</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="457"/>
         <source>exclude from parts</source>
-        <translation type="unfinished"/>
+        <translation>исключить из отдельных партий</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="459"/>
         <source>strings count</source>
-        <translation type="unfinished"/>
+        <translation>количество струн</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="460"/>
         <source>strings preset</source>
-        <translation type="unfinished"/>
+        <translation>предустановки струн</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="461"/>
         <source>visible strings</source>
-        <translation type="unfinished"/>
+        <translation>видимые струны</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="463"/>
         <source>score font</source>
-        <translation type="unfinished"/>
+        <translation>шрифт партитуры</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="464"/>
         <source>symbols size</source>
-        <translation type="unfinished"/>
+        <translation>размер символов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="465"/>
         <source>symbol angle</source>
-        <translation type="unfinished"/>
+        <translation>угол символов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="467"/>
         <source>apply to all staves</source>
-        <translation type="unfinished"/>
+        <translation>применить ко всем нотоносцам</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="468"/>
         <source>is courtesy</source>
-        <translation type="unfinished"/>
+        <translation>вспомогательный</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="469"/>
         <source>exclude vertical align</source>
-        <translation type="unfinished"/>
+        <translation>исключить вертикальное выравнивание</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="471"/>
         <source>show bar numbers</source>
-        <translation type="unfinished"/>
+        <translation>показывать номера тактов</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="472"/>
         <source>play count text setting</source>
-        <translation type="unfinished"/>
+        <translation>настройка текста количества проигрываний</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="473"/>
         <source>play count text</source>
-        <translation type="unfinished"/>
+        <translation>текст количества проигрываний</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="475"/>
         <source>align with other rests in the same voice</source>
-        <translation type="unfinished"/>
+        <translation>выравнивать по остальным паузам в том же голосе</translation>
     </message>
 </context>
 <context>
@@ -20660,82 +20660,82 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4252"/>
         <source>Combining flag 8 (1024th) below</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 8 (1024-я) снизу</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4253"/>
         <source>Combining flag 8 (1024th) above</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 8 (1024-я) сверху</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4254"/>
         <source>Combining flag 5 (128th) below</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 5 (128-я) снизу</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4255"/>
         <source>Combining flag 5 (128th) above</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 5 (128-я) сверху</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4256"/>
         <source>Combining flag 2 (16th) below</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 2 (16-я) снизу</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4257"/>
         <source>Combining flag 2 (16th) above</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 2 (16-я) сверху</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4258"/>
         <source>Combining flag 6 (256th) below</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 6 (256-я) снизу</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4259"/>
         <source>Combining flag 6 (256th) above</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 6 (256-я) сверху</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4260"/>
         <source>Combining flag 3 (32nd) below</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 3 (32-я) снизу</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4261"/>
         <source>Combining flag 3 (32nd) above</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 3 (32-я) сверху</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4262"/>
         <source>Combining flag 7 (512th) below</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 7 (512-я) снизу</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4263"/>
         <source>Combining flag 7 (512th) above</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 7 (512-я) сверху</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4264"/>
         <source>Combining flag 4 (64th) below</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 4 (64-я) снизу</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4265"/>
         <source>Combining flag 4 (64th) above</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 4 (64-я) сверху</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4266"/>
         <source>Combining flag 1 (8th) below</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 1 (8-я) снизу</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4267"/>
         <source>Combining flag 1 (8th) above</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 1 (8-я) сверху</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4333"/>
@@ -20760,47 +20760,47 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4392"/>
         <source>Gyro</source>
-        <translation type="unfinished"/>
+        <translation>Гиро</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4393"/>
         <source>Hand martellato</source>
-        <translation type="unfinished"/>
+        <translation>Ручное мартеллато</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4394"/>
         <source>Mallet, bell on table</source>
-        <translation type="unfinished"/>
+        <translation>Удар молоточком по колоколу на столе</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4395"/>
         <source>Mallet, bell suspended</source>
-        <translation type="unfinished"/>
+        <translation>Удар молоточком по подвешенному колоколу</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4396"/>
         <source>Mallet lift</source>
-        <translation type="unfinished"/>
+        <translation>Подъем молоточком</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4397"/>
         <source>Martellato</source>
-        <translation type="unfinished"/>
+        <translation>Мартеллато</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4398"/>
         <source>Martellato lift</source>
-        <translation type="unfinished"/>
+        <translation>Подъем с мартеллато</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4399"/>
         <source>Muted martellato</source>
-        <translation type="unfinished"/>
+        <translation>Приглушенное мартеллато</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4400"/>
         <source>Pluck lift</source>
-        <translation type="unfinished"/>
+        <translation>Подъем щипком</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4595"/>
@@ -20900,7 +20900,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5334"/>
         <source>Haydn ornament</source>
-        <translation type="unfinished"/>
+        <translation>Орнаментика Гайдна</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5352"/>
@@ -20970,12 +20970,12 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5405"/>
         <source>Turn up</source>
-        <translation type="unfinished"/>
+        <translation>Верхний мордент</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5406"/>
         <source>Inverted turn up</source>
-        <translation type="unfinished"/>
+        <translation>Обратный верхний мордент</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5595"/>
@@ -21195,7 +21195,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5986"/>
         <source>Tuplet 3</source>
-        <translation type="unfinished"/>
+        <translation>Триоль</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6040"/>
@@ -21220,82 +21220,82 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6136"/>
         <source>Combining flag 8 (1024th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 8 (1024-я) снизу прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6137"/>
         <source>Combining flag 8 (1024th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 8 (1024-я) сверху прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6138"/>
         <source>Combining flag 5 (128th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 5 (128-я) снизу прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6139"/>
         <source>Combining flag 5 (128th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 5 (128-я) сверху прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6140"/>
         <source>Combining flag 2 (16th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 2 (16-я) снизу прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6141"/>
         <source>Combining flag 2 (16th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 2 (16-я) сверху прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6142"/>
         <source>Combining flag 6 (256th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 6 (256-я) снизу прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6143"/>
         <source>Combining flag 6 (256th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 6 (256-я) сверху прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6144"/>
         <source>Combining flag 3 (32nd) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 3 (32-я) снизу прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6145"/>
         <source>Combining flag 3 (32nd) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 3 (32-я) сверху прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6146"/>
         <source>Combining flag 7 (512th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 7 (512-я) снизу прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6147"/>
         <source>Combining flag 7 (512th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 7 (512-я) сверху прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6148"/>
         <source>Combining flag 4 (64th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 4 (64-я) снизу прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6149"/>
         <source>Combining flag 4 (64th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 4 (64-я) сверху прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6150"/>
         <source>Combining flag 1 (8th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 1 (8-я) снизу прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6151"/>
         <source>Combining flag 1 (8th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Комбинируемый флажок 1 (8-я) сверху прямой</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6238"/>
@@ -21350,27 +21350,27 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3208"/>
         <source>Thumb damp</source>
-        <translation type="unfinished"/>
+        <translation>Глушение большим пальцем</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3209"/>
         <source>Brush damp</source>
-        <translation type="unfinished"/>
+        <translation>Глушение кистью</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3210"/>
         <source>Ring touch</source>
-        <translation type="unfinished"/>
+        <translation>Касание с звоном</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3211"/>
         <source>Pluck</source>
-        <translation type="unfinished"/>
+        <translation>Щипок</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3212"/>
         <source>Singing bell</source>
-        <translation type="unfinished"/>
+        <translation>Поющий колокольчик</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3213"/>
@@ -21625,43 +21625,43 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="34"/>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="96"/>
         <source>Failed to install extension</source>
-        <translation type="unfinished"/>
+        <translation>Не удалось установить расширение</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="35"/>
         <source>The extension does not contain a valid manifest file.</source>
-        <translation type="unfinished"/>
+        <translation>Расширение не содержит допустимый файл манифеста.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="55"/>
         <source>The extension is already installed.</source>
-        <translation type="unfinished"/>
+        <translation>Расширение уже установлено.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="62"/>
         <source>This extension cannot be updated.</source>
-        <translation type="unfinished"/>
+        <translation>Это расширение не может быть обновлено.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="63"/>
         <source>The currently installed version cannot be uninstalled.</source>
-        <translation type="unfinished"/>
+        <translation>Установленная версия не может быть удалена.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="69"/>
         <source>Another version of the extension “%1” is already installed (version %2). Do you want to replace it with version %3?</source>
-        <translation type="unfinished"/>
+        <translation>Другая версия расширения «%1» уже установлена (версия %2). Вы хотите заменить её на версию %3?</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="73"/>
         <source>Update extension</source>
-        <translation type="unfinished"/>
+        <translation>Обновить расширение</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="98"/>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="100"/>
         <source>Error code: %1</source>
-        <translation type="unfinished"/>
+        <translation>Код ошибки: %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="76"/>
@@ -21786,7 +21786,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="71"/>
         <location filename="../../src/framework/ui/qml/Muse/Ui/internal/ProgressDialog.qml" line="98"/>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="88"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="86"/>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="146"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="69"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="349"/>
@@ -22146,9 +22146,9 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml" line="57"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml" line="73"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="68"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="85"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="112"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="129"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="86"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="114"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="132"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="61"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="101"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml" line="57"/>
@@ -22163,12 +22163,14 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="574"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="687"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="723"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="751"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="357"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="57"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="82"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="170"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="231"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="238"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="65"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="91"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="179"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="240"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="247"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LaissezVibrSection.qml" line="59"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="59"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="62"/>
@@ -22254,7 +22256,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml" line="107"/>
         <source>Processing %1%…</source>
         <extracomment>%1 will be replaced with percentage (i.e. if it is replaced with 50, the string will read &quot;Processing 50%…&quot;)</extracomment>
-        <translation type="unfinished"/>
+        <translation>Обработка %1%…</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml" line="108"/>
@@ -22265,7 +22267,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml" line="110"/>
         <source>%1%</source>
         <extracomment>%1 will be replaced with percentage (i.e. if it is replaced with 50, the string will read &quot;50%&quot;)</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1%</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
@@ -22469,7 +22471,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/importexport/audioexport/internal/abstractaudiowriter.cpp" line="114"/>
         <source>Processing online sounds…</source>
-        <translation type="unfinished"/>
+        <translation>Обработка онлайн-звуков…</translation>
     </message>
 </context>
 <context>
@@ -22777,7 +22779,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/shared/musicxmlsupport.cpp" line="50"/>
         <source>byte offset %1:</source>
-        <translation type="unfinished"/>
+        <translation>смещение в байтах %1:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/shared/musicxmlsupport.cpp" line="63"/>
@@ -22917,33 +22919,38 @@ pickup measure</source>
         <translation>Радиус закругления</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="127"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="129"/>
         <source>Reset “%1” to default value</source>
         <translation>Сбросить «%1» на значение по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="128"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="130"/>
         <source>Reset property to default value</source>
         <translation>Сбросить свойство к значению по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="148"/>
         <source>Menu</source>
         <translation>Меню</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="153"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="152"/>
+        <source>Menu for “%1”</source>
+        <extracomment>%1 is replaced with the name of the property</extracomment>
+        <translation>Меню для «%1»</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="157"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/PropertyResetButton.qml" line="35"/>
         <source>Reset</source>
         <translation>Сбросить положение выделенного элемента</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="156"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="160"/>
         <source>Save as default style for this score</source>
         <translation>Сохранить как стиль по умолчанию для этой партитуры</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="158"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="162"/>
         <source>This is set as the default style for this score</source>
         <translation>Это установлено стилем по умолчанию для этой партитуры</translation>
     </message>
@@ -22985,7 +22992,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="60"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="55"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="64"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="108"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="110"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="79"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="232"/>
         <source>Above</source>
@@ -22996,8 +23003,8 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="177"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="61"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="56"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="81"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="125"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="82"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="128"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="80"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="233"/>
         <source>Below</source>
@@ -23495,17 +23502,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="67"/>
         <source>Right (end) repeat barline</source>
-        <translation type="unfinished"/>
+        <translation>Правая тактовая черта повтора (конец)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="66"/>
         <source>Left (start) repeat barline</source>
-        <translation type="unfinished"/>
+        <translation>Левая тактовая черта повтора (начало)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="68"/>
         <source>Right and left (end/start) repeat barline</source>
-        <translation type="unfinished"/>
+        <translation>Левая и правая (начало/конец) тактовые черты повтора</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="74"/>
@@ -23720,15 +23727,29 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="136"/>
         <source>Bass note scale</source>
-        <translation type="unfinished"/>
+        <translation>Масштаб басовой ноты</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="161"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="182"/>
+        <source>Align left edge of text to notehead</source>
+        <translation>Выровнять левый край текста по нотной головке</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="187"/>
+        <source>Align horizontal center of text to notehead</source>
+        <translation>Выровнять горизонтальный центр текста по нотной головке</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="192"/>
+        <source>Align right edge of text to notehead</source>
+        <translation>Выровнять правый край текста по нотной головке</translation>
+    </message>
+    <message>
         <source>Alignment to notehead</source>
-        <translation type="unfinished"/>
+        <translation>Выравнивание по нотной головке</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="186"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="206"/>
         <source>Add fretboard diagram</source>
         <translation>Добавить схему грифа</translation>
     </message>
@@ -23813,12 +23834,14 @@ pickup measure</source>
         <translation>Отображать скобки, ключи и ключевые знаки в следующем такте</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="169"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="33"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="162"/>
         <source>Alignment</source>
         <translation>Выравнивание</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="181"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="58"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="208"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="277"/>
@@ -23828,9 +23851,10 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="59"/>
         <source>Align left edge of legend to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Выровнять левый край подписи по точке привязки</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="186"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="64"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="214"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="283"/>
@@ -23840,9 +23864,10 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="65"/>
         <source>Align horizontal center of legend to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Выровнять центр подписи горизонтально по точке привязки</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="191"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="70"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="220"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="289"/>
@@ -23852,47 +23877,47 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="71"/>
         <source>Align right edge of legend to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Выровнять правый край подписи по точке привязки</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="64"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="60"/>
         <source>Move up</source>
         <translation>Переместить вверх</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="82"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="78"/>
         <source>Move down</source>
         <translation>Переместить вниз</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="95"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="93"/>
         <source>Reset chord list</source>
-        <translation type="unfinished"/>
+        <translation>Сбросить список аккордов</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml" line="53"/>
         <source>Column gap</source>
-        <translation type="unfinished"/>
+        <translation>Зазор между столбцами</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml" line="69"/>
         <source>Row gap</source>
-        <translation type="unfinished"/>
+        <translation>Зазор между строками</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameScalesSection.qml" line="53"/>
         <source>Text scale</source>
-        <translation type="unfinished"/>
+        <translation>Масштаб текста</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameScalesSection.qml" line="72"/>
         <source>Diagram scale</source>
-        <translation type="unfinished"/>
+        <translation>Масштаб диаграмм</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameSettingsTab.qml" line="85"/>
         <source>Chords per row</source>
-        <translation type="unfinished"/>
+        <translation>Аккордов в строке</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalGapsSection.qml" line="49"/>
@@ -23917,12 +23942,32 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="52"/>
         <source>Gap to staff/frames</source>
-        <translation type="unfinished"/>
+        <translation>Зазор до нотоносца/рамок</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="96"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="72"/>
+        <source>Gap to staff/frames above</source>
+        <translation>Зазор сверху до нотоносца/рамок</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="90"/>
+        <source>Gap to staff/frames below</source>
+        <translation>Зазор снизу до нотоносца/рамок</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="98"/>
         <source>Clearance for notation</source>
-        <translation type="unfinished"/>
+        <translation>Клиренс для нотации</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="118"/>
+        <source>Clearance for notation above</source>
+        <translation>Клиренс для нотации сверху</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="136"/>
+        <source>Clearance for notation below</source>
+        <translation>Клиренс для нотации снизу</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="49"/>
@@ -24354,17 +24399,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="55"/>
         <source>Symbol size</source>
-        <translation type="unfinished"/>
+        <translation>Размер символов</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="64"/>
         <source>Align symbol with barline</source>
-        <translation type="unfinished"/>
+        <translation>Выравнивать символ по тактовой черте</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="73"/>
         <source>Alignment to barline</source>
-        <translation type="unfinished"/>
+        <translation>Выравнивание по тактовой черте</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml" line="48"/>
@@ -24527,7 +24572,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="62"/>
         <source>Show stem slash</source>
-        <translation>Перечёркнутый штиль</translation>
+        <translation>Показывать перечёркнутый штиль</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="75"/>
@@ -24708,7 +24753,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/playcounttext/PlayCountSettings.qml" line="55"/>
         <location filename="../../src/inspector/models/notation/playcounttext/playcounttextsettingsmodel.cpp" line="33"/>
         <source>Play count text</source>
-        <translation type="unfinished"/>
+        <translation>Текст количества проигрываний</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/playcounttext/PlayCountSettings.qml" line="68"/>
@@ -24719,7 +24764,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/rests/RestSettings.qml" line="71"/>
         <source>Align with other rests in the same voice</source>
-        <translation type="unfinished"/>
+        <translation>Выравнивать по остальным паузам в том же голосе</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="48"/>
@@ -25176,12 +25221,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/FrameSubPopup.qml" line="49"/>
         <source>Frame settings</source>
-        <translation type="unfinished"/>
+        <translation>Параметры рамки</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="73"/>
         <source>Text style settings buttons</source>
-        <translation type="unfinished"/>
+        <translation>Кнопки параметров стиля текста</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="126"/>
@@ -25191,22 +25236,22 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="185"/>
         <source>Vertical alignment buttons</source>
-        <translation type="unfinished"/>
+        <translation>Кнопки вертикального выравнивания</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="243"/>
         <source>Text style buttons</source>
-        <translation type="unfinished"/>
+        <translation>Кнопки стиля текста</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="298"/>
         <source>Horizontal alignment buttons</source>
-        <translation type="unfinished"/>
+        <translation>Кнопки горизонтального выравнивания</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="343"/>
         <source>Subscript buttons</source>
-        <translation type="unfinished"/>
+        <translation>Кнопки нижнего индекса</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="374"/>
@@ -25216,17 +25261,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="418"/>
         <source>Add symbols</source>
-        <translation type="unfinished"/>
+        <translation>Добавить символы</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStyleSubPopup.qml" line="51"/>
         <source>Additional text style controls</source>
-        <translation type="unfinished"/>
+        <translation>Дополнительные элементы управления стилем текста</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="39"/>
         <source>Empty staves visibility</source>
-        <translation type="unfinished"/>
+        <translation>Видимость пустых нотоносцев</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/arpeggioplaybackmodel.cpp" line="33"/>
@@ -25283,7 +25328,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/articulations/articulationsettingsmodel.cpp" line="37"/>
         <source>Tapping</source>
-        <translation>Теппинг</translation>
+        <translation>Тэппинг</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/barlines/barlinesettingsmodel.cpp" line="35"/>
@@ -25503,7 +25548,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="64"/>
         <source>Hammer-on/pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Подтяжка/срыв</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="115"/>
@@ -25700,7 +25745,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsTab.qml" line="115"/>
         <source>Add chord symbols to your score and they’ll automatically appear in the legend.</source>
-        <translation type="unfinished"/>
+        <translation>Добавляйте символы аккордов в партитуру, и они автоматически появятся в подписи.</translation>
     </message>
 </context>
 <context>
@@ -25967,12 +26012,12 @@ pickup measure</source>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="1024"/>
         <source>Are you sure you want to delete the selected instrument(s)?</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Вы уверены, что хотите удалить выбранный инструмент?</numerusform><numerusform>Вы уверены, что хотите удалить выбранных инструмента?</numerusform><numerusform>Вы уверены, что хотите удалить выбранных инструментов?</numerusform><numerusform>Вы уверены, что хотите удалить выбранных инструментов?</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="1025"/>
         <source>This will remove the instrument(s) from the full score and all part scores.</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Это удалит инструмент(ы) из общей партитуры и всех партитур частей.</numerusform><numerusform>Это удалит инструмент(ы) из общей партитуры и всех партитур частей.</numerusform><numerusform>Это удалит инструмент(ы) из общей партитуры и всех партитур частей.</numerusform><numerusform>Это удалит инструмент(ы) из общей партитуры и всех партитур частей.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="252"/>
@@ -26015,7 +26060,7 @@ pickup measure</source>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="71"/>
         <source>%1 &amp; %2</source>
         <extracomment>%1 is the system markings list, %2 is the last system marking name to add to list</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1 и %2</translation>
     </message>
 </context>
 <context>
@@ -26058,7 +26103,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="173"/>
         <source>Only hide staves on a system if the entire instrument is empty</source>
-        <translation type="unfinished"/>
+        <translation>Скрывать нотоносцы в системе, только если весь инструмент пустой</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="194"/>
@@ -26102,7 +26147,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="206"/>
         <source>Follow instrument</source>
-        <translation type="unfinished"/>
+        <translation>Следовать за инструментом</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="207"/>
@@ -26117,7 +26162,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="235"/>
         <source>If the entire system is empty, show this staff</source>
-        <translation type="unfinished"/>
+        <translation>Если вся система пустая, показывать этот нотоносец</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="256"/>
@@ -26127,7 +26172,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="267"/>
         <source>Linked staves contain identical notation (e.g. for guitar tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Связанные нотоносцы содержат одинаковые ноты (например, для гитарной табулатуры)</translation>
     </message>
 </context>
 <context>
@@ -26231,7 +26276,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="57"/>
         <source>Installed MuseSampler library is not supported, version %1</source>
-        <translation type="unfinished"/>
+        <translation>Установленная библиотека MuseSampler не поддерживается, версия %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="60"/>
@@ -26255,54 +26300,54 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="63"/>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="91"/>
         <source>Not now</source>
-        <translation type="unfinished"/>
+        <translation>Не сейчас</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="67"/>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="95"/>
         <source>Quit &amp; launch MuseSounds Manager</source>
-        <translation type="unfinished"/>
+        <translation>Закрыть и запустить MuseSounds Manager</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="69"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. Your MuseSounds libraries won’t work until the update is complete.</source>
-        <translation type="unfinished"/>
+        <translation>Для применения этого обновления MuseScore Studio потребуется ненадолго закрыться, и откроется MuseSounds Manager. Ваши библиотеки MuseSounds не будут работать до завершения обновления.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="73"/>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="102"/>
         <source>Quit &amp; launch MuseHub</source>
-        <translation type="unfinished"/>
+        <translation>Закрыть и запустить MuseHub</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="75"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseHub will open. Your MuseSounds libraries won’t work until the update is complete.</source>
-        <translation type="unfinished"/>
+        <translation>Для применения этого обновления MuseScore Studio потребуется ненадолго закрыться, и откроется MuseHub. Ваши библиотеки MuseSounds не будут работать до завершения обновления.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="79"/>
         <source>MuseSounds needs an update</source>
-        <translation type="unfinished"/>
+        <translation>Необходимо обновить MuseSounds</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="97"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseSounds Manager can apply the update. You’ll need to restart MuseScore Studio when the update is complete.</source>
-        <translation type="unfinished"/>
+        <translation>Чтобы обеспечить бесперебойную работу MuseSounds, MuseScore Studio потребуется ненадолго закрыться для применения обновления при помощи MuseSounds Manager. После завершения обновления вам потребуется перезапустить MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="104"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseHub can apply the update. You’ll be prompted to relaunch MuseScore Studio when it’s ready.</source>
-        <translation type="unfinished"/>
+        <translation>Чтобы обеспечить бесперебойную работу MuseSounds, MuseScore Studio потребуется ненадолго закрыться для применения обновления при помощи MuseHub. Вам будет предложено перезапустить MuseScore Studio после завершения обновления.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="109"/>
         <source>An update for MuseSounds is available</source>
-        <translation type="unfinished"/>
+        <translation>Доступна новая версия MuseSounds</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesoundsconfiguration.cpp" line="59"/>
         <source>Show occasional MuseHub promotions</source>
-        <translation type="unfinished"/>
+        <translation>Периодически показывать рекламные предложения MuseHub</translation>
     </message>
 </context>
 <context>
@@ -26451,7 +26496,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/DynamicPopup.qml" line="45"/>
         <source>Dynamics popup</source>
-        <translation type="unfinished"/>
+        <translation>Всплывающее окно с динамикой</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalsPage.qml" line="99"/>
@@ -26521,12 +26566,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="160"/>
         <source>Edit chord symbol text style</source>
-        <translation type="unfinished"/>
+        <translation>Редактировать текстовый стиль символов аккордов</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="263"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="340"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="63"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="72"/>
         <source>Scale:</source>
         <translation>Масштаб:</translation>
     </message>
@@ -26544,55 +26589,68 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="485"/>
         <source>Bass note scale:</source>
-        <translation type="unfinished"/>
+        <translation>Масштаб басовой ноты:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="523"/>
         <source>Divider thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Толщина разделителя:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="562"/>
         <source>Divider spacing:</source>
-        <translation type="unfinished"/>
+        <translation>Расстояние между разделителями:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="621"/>
         <source>Alignment to notehead:</source>
-        <translation type="unfinished"/>
+        <translation>Выравнивание по головке ноты:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="635"/>
         <source>Alignment to fretboard diagram:</source>
-        <translation type="unfinished"/>
+        <translation>Выравнивание по схеме грифа:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="672"/>
-        <source>Minimum space from fretboard diagram:</source>
-        <translation type="unfinished"/>
+        <source>Min. space to fretboard diagram:</source>
+        <translation>Мин. расстояние до схемы грифа:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="711"/>
-        <source>Minimum space between chord symbols:</source>
-        <translation type="unfinished"/>
+        <source>Min. space to other notation:</source>
+        <translation>Мин. расстояние до прочей нотации:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="750"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="739"/>
+        <source>Min. space between chord symbols:</source>
+        <translation>Мин. расстояние между символами аккордов:</translation>
+    </message>
+    <message>
+        <source>Minimum space from fretboard diagram:</source>
+        <translation>Минимальное расстояние от схемы грифа:</translation>
+    </message>
+    <message>
+        <source>Minimum space between chord symbols:</source>
+        <translation>Минимальное расстояние между символами аккордов:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="778"/>
         <source>Interpretation:</source>
         <translation>Интерпретация:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="783"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="811"/>
         <source>Voicing:</source>
         <translation>Распределение по голосам:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="809"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="837"/>
         <source>Duration:</source>
         <translation>Длительность:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="834"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="862"/>
         <source>Capo fret position:</source>
         <translation>Позиция каподастра</translation>
     </message>
@@ -26608,148 +26666,157 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Схемы грифа</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="56"/>
         <source>Position above:</source>
         <translation>Позиция сверху:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="70"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="56"/>
+        <source>Position above staff:</source>
+        <translation>Положение над нотоносцем:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="64"/>
+        <source>Min. space to notation:</source>
+        <translation>Мин. расстояние до нотации:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="79"/>
         <source>Orientation:</source>
         <translation>Ориентация:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="74"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="83"/>
         <source>Vertical</source>
         <translation>Вертикально</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="75"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="84"/>
         <source>Horizontal</source>
         <translation>Горизонтально</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="81"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="90"/>
         <source>Nut line thickness:</source>
         <translation>Толщина линии порожка:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="89"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="98"/>
         <source>Fret number</source>
         <translation>Номер лада</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="100"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="109"/>
         <source>Position:</source>
         <translation>Позиция:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="104"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="113"/>
         <source>Left</source>
         <translation>Слева</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="104"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="113"/>
         <source>Bottom</source>
         <translation>Низ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="110"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="119"/>
         <source>Right</source>
         <translation>Справа</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="110"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="119"/>
         <source>Top</source>
         <translation>Верх</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="117"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="126"/>
         <source>Format:</source>
         <translation>Формат:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="125"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="134"/>
         <source>Number only</source>
         <translation>Только число</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="134"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="143"/>
         <source>Custom suffix:</source>
         <translation>Произвольный суффикс:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="151"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="160"/>
         <source>Preview:</source>
         <translation>Предпросмотр:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="158"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="167"/>
         <source>Edit fret number text style</source>
         <translation>Редактировать стиль номера лада</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="169"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="178"/>
         <source>Dot size:</source>
         <translation>Размер точки:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="177"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="186"/>
         <source>Barré</source>
         <translation>Барре</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="185"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="194"/>
         <source>Appearance:</source>
         <translation>Оформление:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="189"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="198"/>
         <source>Line</source>
         <translation>Линия</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="190"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="199"/>
         <source>Slur</source>
         <translation>Лига</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="196"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="205"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="58"/>
         <source>Line thickness:</source>
         <translation>Толщина линии:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="204"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="213"/>
         <source>Show fingerings</source>
         <translation>Показать аппликатуру</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="210"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="219"/>
         <source>Edit fingering text style</source>
         <translation>Редактировать стиль текста аппликатуры</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="219"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="228"/>
         <source>Fretboard style:</source>
         <translation>Стиль схемы грифа:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="223"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="232"/>
         <source>Trimmed</source>
         <translation>Обрезанный</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="224"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="233"/>
         <source>Extended</source>
         <translation>Удлинённый</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="230"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="239"/>
         <source>String spacing:</source>
         <translation>Расстояние между струнами</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="237"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="246"/>
         <source>Fret spacing:</source>
         <translation>Расстояние между ладами:</translation>
     </message>
@@ -26874,12 +26941,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="147"/>
         <source>Repeat play count text</source>
-        <translation type="unfinished"/>
+        <translation>Повтор текста количества проигрываний</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="180"/>
         <source>Preset</source>
-        <translation type="unfinished"/>
+        <translation>Профиль</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml" line="44"/>
@@ -27230,12 +27297,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="188"/>
         <source>Include single notes</source>
-        <translation type="unfinished"/>
+        <translation>Включать одиночные ноты</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="200"/>
         <source>Notation elements</source>
-        <translation type="unfinished"/>
+        <translation>Элементы нотации</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="272"/>
@@ -27300,7 +27367,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="694"/>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="652"/>
         <source>Insert at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Добавить в конце партитуры</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="163"/>
@@ -27602,7 +27669,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1874"/>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="120"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="121"/>
         <source>Load style</source>
         <translation>Загрузить стиль</translation>
     </message>
@@ -27649,7 +27716,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="2222"/>
         <source>Sorry, instrument change on the web is not supported at this time.</source>
-        <translation type="unfinished"/>
+        <translation>К сожалению, смена инструмента онлайн пока не поддерживается.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="50"/>
@@ -27700,12 +27767,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/notationerrors.h" line="69"/>
         <source>No note or rest or chord symbol selected</source>
-        <translation type="unfinished"/>
+        <translation>Не выделена нота, пауза или символ аккорда</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="70"/>
         <source>Please select a note or rest or chord symbol and retry</source>
-        <translation type="unfinished"/>
+        <translation>Пожалуйста, выделите ноту, паузу или символ аккорда и повторите попытку</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="73"/>
@@ -27802,7 +27869,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Пользовательский</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="265"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="263"/>
         <source>%n string(s)</source>
         <translation><numerusform>%n струна</numerusform><numerusform>%n струны</numerusform><numerusform>%n струн</numerusform><numerusform>%n струн(ы)</numerusform></translation>
     </message>
@@ -27834,7 +27901,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="217"/>
         <source>Add c&amp;hord symbol</source>
-        <translation type="unfinished"/>
+        <translation>Добавить си&amp;мвол аккорда</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="233"/>
@@ -27932,7 +27999,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="574"/>
         <source>Chords and fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Аккорды и схемы грифа</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="719"/>
@@ -28107,32 +28174,32 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="151"/>
         <source>Seventh note</source>
-        <translation type="unfinished"/>
+        <translation>Седьмая нота</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="153"/>
         <source>Sixth note</source>
-        <translation type="unfinished"/>
+        <translation>Шестая нота</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="155"/>
         <source>Fifth note</source>
-        <translation type="unfinished"/>
+        <translation>Пятая нота</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="157"/>
         <source>Fourth note</source>
-        <translation type="unfinished"/>
+        <translation>Четвёртая нота</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="159"/>
         <source>Third note</source>
-        <translation type="unfinished"/>
+        <translation>Третья нота</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="161"/>
         <source>Second note</source>
-        <translation type="unfinished"/>
+        <translation>Вторая нота</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="163"/>
@@ -28140,7 +28207,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Нижняя нота</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="118"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="119"/>
         <source>MuseScore chord symbol style files</source>
         <translation>Файлы стиля символов аккордов MuseScore</translation>
     </message>
@@ -28334,22 +28401,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1352"/>
         <source>Using variables in the header/footer</source>
-        <translation type="unfinished"/>
+        <translation>Использование переменных в колонтитулах</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1354"/>
         <source>Type these special character combinations in the fields above to reference document data in the header/footer.</source>
-        <translation type="unfinished"/>
+        <translation>Вводите эти специальные комбинации символов в поля выше, чтобы добавить данные документа в колонтитулы.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1391"/>
         <source>&lt;b&gt;Metadata tags and current values&lt;/b&gt; (configured in &lt;b&gt;File &gt; Project properties…&lt;/b&gt;)</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Тэги метаданных и текущие значения&lt;/b&gt; (настраивается в &lt;b&gt;Файл &gt; Свойства проекта…&lt;/b&gt;)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1393"/>
         <source>Type $:tag: into a field above, replacing the word ‘tag’ with one of the labels below. Its associated metadata will be shown on your score.</source>
-        <translation type="unfinished"/>
+        <translation>Напишите $:tag: в поле выше, заменив «tag» одной из меток ниже. Ассоциированные метаданные будут показаны на партитуре.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1357"/>
@@ -28452,12 +28519,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalsPage.qml" line="65"/>
         <source>♮ in key signature changes</source>
-        <translation type="unfinished"/>
+        <translation>♮ в изменениях ключевых знаков</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalsPage.qml" line="73"/>
         <source>Only for a change to C major / A minor</source>
-        <translation type="unfinished"/>
+        <translation>Только при переходе в до мажор/ля минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalsPage.qml" line="74"/>
@@ -28467,7 +28534,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalsPage.qml" line="75"/>
         <source>After key signature if changing to fewer ♯ or ♭; before if changing between ♯ and ♭</source>
-        <translation type="unfinished"/>
+        <translation>После ключевого знака, если становится меньше ♯ или ♭; перед, если меняются ♯ и ♭.</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalsPage.qml" line="89"/>
@@ -28480,17 +28547,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml" line="58"/>
         <source>Show barline before key and time signature changes</source>
-        <translation type="unfinished"/>
+        <translation>Показывать тактовую черту перед сменой размера и тональности</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml" line="66"/>
         <source>Use double barline before key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Использовать двойные тактовые черты перед сменой тональности</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml" line="74"/>
         <source>Use double barline before time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Использовать двойные тактовые черты перед размером такта</translation>
     </message>
 </context>
 <context>
@@ -28498,7 +28565,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="111"/>
         <source>Preset</source>
-        <translation type="unfinished"/>
+        <translation>Профиль</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="153"/>
@@ -28513,17 +28580,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="204"/>
         <source>Automatically capitalize note names</source>
-        <translation type="unfinished"/>
+        <translation>Автоматически капитализировать названия нот</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="221"/>
         <source>Lowercase minor chords</source>
-        <translation type="unfinished"/>
+        <translation>Минорные аккорды в малом регистре</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="227"/>
         <source>Lowercase bass notes</source>
-        <translation type="unfinished"/>
+        <translation>Басовые ноты в малом регистре</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="233"/>
@@ -28533,27 +28600,27 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="249"/>
         <source>Extensions (e.g. 7, 11)</source>
-        <translation type="unfinished"/>
+        <translation>Расширения (напр. 7, 11)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="326"/>
         <source>Modifiers (e.g. sus4, no 3)</source>
-        <translation type="unfinished"/>
+        <translation>Модификаторы (напр. sus4, no 3)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="400"/>
         <source>Vertically stack modifiers</source>
-        <translation type="unfinished"/>
+        <translation>Наслаивать модификаторы вертикально</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="409"/>
         <source>Altered bass notes (e.g. A7/G)</source>
-        <translation type="unfinished"/>
+        <translation>Альтерированные басовые ноты (напр. A7/G)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="509"/>
         <source>Polychords (e.g. C|F♯)</source>
-        <translation type="unfinished"/>
+        <translation>Полиаккорды (напр. C|F♯)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="589"/>
@@ -28563,12 +28630,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="604"/>
         <source>Vertically align chord symbols and fretboard diagrams on the same system</source>
-        <translation type="unfinished"/>
+        <translation>Вертикально выравнивать символы аккордов и схемы грифа на одной системе</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="648"/>
         <source>Exclude modifiers from horizontal alignment</source>
-        <translation type="unfinished"/>
+        <translation>Исключить модификаторы из горизонтального выравнивания</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="658"/>
@@ -28576,104 +28643,104 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Позиция</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="736"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="764"/>
         <source>Playback</source>
         <translation>Воспроизведение</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="68"/>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="151"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="69"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="152"/>
         <source>Standard</source>
         <translation>Стандартный</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="71"/>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="182"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="72"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="184"/>
         <source>Jazz</source>
         <translation>Джазовые</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="74"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="75"/>
         <source>Legacy MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Устаревшие версии MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="77"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="78"/>
         <source>Load custom XML…</source>
-        <translation type="unfinished"/>
+        <translation>Загрузить пользовательский XML-файл…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="154"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="155"/>
         <source>German</source>
         <translation>Немецкое</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="157"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="158"/>
         <source>Full German</source>
         <translation>Немецкое полное</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="160"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="161"/>
         <source>Solfeggio</source>
         <translation>Сольфеджио</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="163"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="164"/>
         <source>French</source>
         <translation>Французское</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="185"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="187"/>
         <source>Literal</source>
         <translation>Буквальная</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="196"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="198"/>
         <source>Automatic</source>
         <translation>Автоматически</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="199"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="201"/>
         <source>Root only</source>
         <translation>Только базовая нота</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="202"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="204"/>
         <source>Close</source>
         <translation>Все ноты в пределах октавы</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="205"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="207"/>
         <source>Drop two</source>
         <translation>2 ноты (октава)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="208"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="210"/>
         <source>Six note</source>
         <translation>Шесть нот</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="211"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="213"/>
         <source>Four note</source>
         <translation>Четыре ноты</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="214"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="216"/>
         <source>Three note</source>
         <translation>Три ноты</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="225"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="227"/>
         <source>Until next chord symbol</source>
         <translation>До следующего символа аккорда</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="228"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="230"/>
         <source>Until end of measure</source>
         <translation>До конца такта</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="231"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="233"/>
         <source>Chord/rest duration</source>
         <translation>Длительность аккорда/паузы</translation>
     </message>
@@ -28688,13 +28755,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="56"/>
         <source>Show ‘H’ and ‘P’ symbols on</source>
-        <translation type="unfinished"/>
+        <translation>Показывать символы «H» и «P» на</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="72"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="148"/>
         <source>Standard staves</source>
-        <translation type="unfinished"/>
+        <translation>Стандартные нотоносцы</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="89"/>
@@ -28730,32 +28797,32 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="144"/>
         <source>Align ‘H’, ‘P’ and ‘T’ symbols in the same slur on</source>
-        <translation type="unfinished"/>
+        <translation>Выравнивать символы «H», «P» и «T» на одной лиге на</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="164"/>
         <source>Consecutive hammer-ons/pull-offs</source>
-        <translation type="unfinished"/>
+        <translation>Последовательные подтяжки/срывы</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="175"/>
         <source>Show ‘H’ or ‘P’ between each pair of notes</source>
-        <translation type="unfinished"/>
+        <translation>Показывать «H» и «P» между каждой парой нот</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="176"/>
         <source>Show ‘H’ or ‘P’ once per group of ascending/descending notes</source>
-        <translation type="unfinished"/>
+        <translation>Показывать «H» и «P» один раз на группу восходящих/нисходящих нот</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="196"/>
         <source>Left-hand tapping</source>
-        <translation type="unfinished"/>
+        <translation>Тэппинг левой рукой</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="209"/>
         <source>Show on standard staves</source>
-        <translation type="unfinished"/>
+        <translation>Показывать на стандартных нотоносцах</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="216"/>
@@ -28790,17 +28857,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="326"/>
         <source>Right-hand tapping</source>
-        <translation type="unfinished"/>
+        <translation>Тэппинг правой рукой</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="336"/>
         <source>Symbol (standard staff)</source>
-        <translation type="unfinished"/>
+        <translation>Символ (стандартный нотоносец)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="361"/>
         <source>Symbol (tablature staff)</source>
-        <translation type="unfinished"/>
+        <translation>Символ (табулатура)</translation>
     </message>
 </context>
 <context>
@@ -28808,7 +28875,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="164"/>
         <source>Automatically show text at repeat barlines</source>
-        <translation type="unfinished"/>
+        <translation>Автоматически показывать текст на тактовых чертах повторов</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="169"/>
@@ -29085,7 +29152,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="557"/>
         <source>Changes that apply to both the repeat/jump and the subsequent measure</source>
-        <translation type="unfinished"/>
+        <translation>Изменения, которые применяются как к репризе/переходу, так и к последующему такту</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="564"/>
@@ -29804,7 +29871,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Настроить набор ударных</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="66"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="65"/>
         <source>More palettes</source>
         <translation>Дополнительные панели</translation>
     </message>
@@ -29814,7 +29881,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Создать пользовательскую панель</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="88"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="89"/>
         <source>All palettes were added</source>
         <translation>Все панели уже добавлены</translation>
     </message>
@@ -29834,12 +29901,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Удалено: «%1»</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="59"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="57"/>
         <source>Name your custom palette</source>
         <translation>Назовите свою пользовательскую панель</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="102"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="100"/>
         <source>Create</source>
         <translation>Создать</translation>
     </message>
@@ -30063,19 +30130,19 @@ failed.</source>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="287"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1843"/>
         <source>Left-hand tapping</source>
-        <translation type="unfinished"/>
+        <translation>Тэппинг левой рукой</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="291"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1847"/>
         <source>Right-hand tapping</source>
-        <translation type="unfinished"/>
+        <translation>Тэппинг правой рукой</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="297"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1850"/>
         <source>Hammer-on / pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Подтяжка / срыв</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="344"/>
@@ -30101,7 +30168,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="288"/>
         <location filename="../../src/palette/view/widgets/keyedit.cpp" line="310"/>
-        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="168"/>
+        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="167"/>
         <source>Key signatures</source>
         <translation>Ключевые знаки</translation>
     </message>
@@ -30647,7 +30714,7 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1642"/>
-        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
+        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="168"/>
         <location filename="../../src/palette/view/widgets/timedialog.cpp" line="44"/>
         <source>Time signatures</source>
         <translation>Тактовые размеры</translation>
@@ -30801,7 +30868,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="2013"/>
         <source>Handbells</source>
-        <translation type="unfinished"/>
+        <translation>Ручные колокола</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="73"/>
@@ -30962,7 +31029,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="133"/>
-        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="170"/>
+        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
         <source>Symbols</source>
         <translation>Символы</translation>
     </message>
@@ -32526,7 +32593,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="625"/>
         <source>An animated bar will let you know when sounds are processing online. You’ll also see a notification in the status bar. You can change when these notifications appear in Preferences &gt; Audio &amp; MIDI…</source>
-        <translation type="unfinished"/>
+        <translation>Анимированная панель сообщит вам, когда звуки будут обрабатываться в режиме онлайн. Вы также увидите уведомление в строке состояния. Вы можете изменить время появления этих уведомлений по пути Настройки &gt; Аудио &amp; MIDI…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="639"/>
@@ -32538,7 +32605,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="640"/>
         <source>Click to manually process online sounds.</source>
-        <translation>Нажмите, чтобы обработать онлайн-звуки вручную</translation>
+        <translation>Нажмите, чтобы обработать онлайн-звуки вручную.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioResourceControl.qml" line="99"/>
@@ -32727,7 +32794,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1348"/>
         <source>This may be due to a poor internet connection or server issue. Your score will still play, but some sounds may be missing. Please check your connection, and make sure MuseHub is running and you are logged in. &lt;a href=&quot;%1&quot;&gt;Learn more here&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Это может быть связано с плохим подключением к Интернету или неполадками с сервером. Ваша партитура по-прежнему будет воспроизводиться, но некоторые звуки могут отсутствовать. Пожалуйста, проверьте подключение к интернету и убедитесь, что MuseHub запущен, а вы вошли в аккаунт. Более подробную информацию можно узнать, перейдя по &lt;a href=&quot;%1&quot;&gt;Этой ссылке&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1354"/>
@@ -32869,7 +32936,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="105"/>
         <source>Please check your connection, and make sure MuseHub is running and you are logged in.</source>
-        <translation type="unfinished"/>
+        <translation>Пожалуйста, проверьте подключение к интернету и убедитесь, что MuseHub запущен и вы вошли в аккаунт.</translation>
     </message>
 </context>
 <context>
@@ -32882,7 +32949,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="131"/>
         <source>Scores will appear here when you save a file to the cloud, or publish a score on &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Когда вы сохраните файл в облаке или опубликуете партитуру на &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;, здесь появятся партитуры.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="155"/>
@@ -32892,7 +32959,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="156"/>
         <source>Log in or create a new account on &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt; to view online scores.</source>
-        <translation type="unfinished"/>
+        <translation>Для просмотра онлайн-партитур войдите или создайте новый аккаунт на &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="219"/>
@@ -33258,8 +33325,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1788"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Этот файл был сохранен с использованием более новой версии MuseScore Studio. Пожалуйста, посетите 1
-MuseScore.org1 чтобы получить последнюю версию.</translation>
+        <translation>Этот файл был сохранён в более новой версии MuseScore Studio. Пожалуйста, посетите &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt;, чтобы получить последнюю версию программы.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
@@ -33677,52 +33743,52 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <translation>Партии</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="359"/>
         <source>File already exists</source>
         <translation>Файл уже существует</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="360"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
         <translation>Уже существует файл с именем %1. Вы хотите его заменить?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="366"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="362"/>
         <source>Replace</source>
         <translation>Заменить</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="367"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
         <source>Replace all</source>
         <translation>Заменить всё</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="368"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
         <source>Skip</source>
         <translation>Пропустить</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="369"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="365"/>
         <source>Skip all</source>
         <translation>Пропустить всё</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="392"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="388"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="393"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="389"/>
         <source>An error occurred while writing the file %1. Do you want to retry?</source>
         <translation>Произошла ошибка при записи файла %1. Повторить попытку?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="445"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="441"/>
         <source>Exporting audio…</source>
         <translation>Экспортируется аудио...</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="445"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="441"/>
         <source>Exporting…</source>
         <translation>Экспортируется…</translation>
     </message>
@@ -33851,40 +33917,40 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <translation>Файлы MEI</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="303"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="308"/>
         <source>Each page to a separate file</source>
         <translation>Каждую страницу отдельным файлом</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="304"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="309"/>
         <source>Each part to a separate file</source>
         <translation>Каждую партию отдельным файлом</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="305"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="310"/>
         <source>All parts combined in one file</source>
         <translation>Все партии, собранные в один файл</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="590"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="595"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Весь макет</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="592"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="597"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Разрывы систем и страниц</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="594"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="599"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Только разрывы систем и страниц, добавленные вручную</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="596"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="601"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Без разрывов систем или страниц</translation>
@@ -34336,17 +34402,17 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="80"/>
         <source>Save files privately on your personal MuseScore.com account, share drafts with others, and publish your finished scores when you’re ready.</source>
-        <translation type="unfinished"/>
+        <translation>Сохраняйте файлы конфиденциально в своём аккаунте musescore.com делитесь черновиками проектов с другими, и публикуйте готовые партитуры.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
         <source>Save to cloud on MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Сохранить в облако на MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="88"/>
         <source>Save to cloud on MuseScore.com (free)</source>
-        <translation type="unfinished"/>
+        <translation>Сохранить в облако на MuseScore.com (бесплатно)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
@@ -34686,22 +34752,22 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/SaveToCloud/SaveLocationOption.qml" line="102"/>
         <source>Free</source>
-        <translation type="unfinished"/>
+        <translation>Бесплатно</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="47"/>
         <source>Save this score to your MuseScore.com account</source>
-        <translation type="unfinished"/>
+        <translation>Сохранить партитуру в свой аккаунт MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="51"/>
         <source>Share this score and its audio on MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Поделиться партитурой и ее аудиозаписью на MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="52"/>
         <source>Share the audio from this score on Audio.com</source>
-        <translation type="unfinished"/>
+        <translation>Поделиться аудиозаписью этой партитуры на Audio.com</translation>
     </message>
 </context>
 <context>
@@ -35409,7 +35475,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/engraving/dom/playcounttext.cpp" line="52"/>
         <source>Update play count text</source>
-        <translation type="unfinished"/>
+        <translation>Обновить текст количества проигрываний</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/textedit.cpp" line="915"/>
@@ -35485,22 +35551,22 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <translation>Редактировать кривую бэнда</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="119"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="121"/>
         <source>Make chord(s) visible</source>
         <translation>Сделать аккорд(ы) видимыми</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="120"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="122"/>
         <source>Make chord(s) invisible</source>
         <translation>Сделать аккорд(ы) невидимыми</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="148"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="150"/>
         <source>Move chord(s) up</source>
         <translation>Переместить аккорд(ы) вверх</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="170"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="172"/>
         <source>Move chord(s) down</source>
         <translation>Переместить аккорд(ы) вниз</translation>
     </message>
@@ -35703,7 +35769,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3411"/>
         <source>Add chord symbol to fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>Добавить символ аккорда на схему грифа</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3949"/>
@@ -35835,7 +35901,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5375"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5415"/>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="201"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="207"/>
         <source>Add hairpin</source>
         <translation>Добавить вилочку</translation>
     </message>
@@ -35861,7 +35927,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5556"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8033"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8036"/>
         <source>Toggle articulation</source>
         <translation>Вкл./Выкл. артикуляцию</translation>
     </message>
@@ -35898,7 +35964,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5685"/>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="193"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="199"/>
         <source>Change hairpin type</source>
         <translation>Изменить тип вилочки</translation>
     </message>
@@ -36140,71 +36206,72 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7554"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7561"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7621"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7681"/>
         <source>Enter lyrics extension line</source>
         <translation>Ввести добавочную линию вокального текста</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7703"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7706"/>
         <source>Add lyrics verse</source>
         <translation>Добавить вокальный текст припева</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7751"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7754"/>
         <source>Enter guitar bend</source>
         <translation>Ввести гитарный бэнд</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7824"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7827"/>
         <source>Add fretboard diagram</source>
         <translation>Добавить схему грифа</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7957"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7960"/>
         <source>Format text</source>
         <translation>Формат текста</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7977"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7980"/>
         <source>Toggle subscript</source>
         <translation>Вкл./Выкл. подстрочный индекс </translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7979"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7982"/>
         <source>Toggle superscript</source>
         <translation>Вкл./Выкл. надстрочный индекс</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7981"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7984"/>
         <source>Toggle subscript/superscript</source>
         <translation>Вкл./Выкл. подстрочный/надстрочный индексы</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8038"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8041"/>
         <source>Toggle ornament</source>
         <translation>Вкл./Выкл. орнаментику</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8043"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8046"/>
         <source>Toggle automatic placement</source>
         <translation>Вкл./Выкл. авторазмещение </translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8054"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8057"/>
         <source>Add clef</source>
         <translation>Добавить ключ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8059"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8062"/>
         <source>Add accidental</source>
         <translation>Добавить знак альтерации</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8064"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8067"/>
         <source>Transpose semitone</source>
         <translation>Транспонировать полутон</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8070"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8073"/>
         <source>Transpose diatonically</source>
         <translation>Транспонировать диатонически</translation>
     </message>
@@ -36358,7 +36425,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <translation>Загрузить стиль</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="190"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="196"/>
         <source>Remove hairpin</source>
         <translation>Удалить вилочку</translation>
     </message>
@@ -36373,17 +36440,17 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
         <translation>Задать настройку струны</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="232"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="230"/>
         <source>Load string tunings preset</source>
         <translation>Загрузить предустановленные настройки струн</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="285"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="283"/>
         <source>Set number of strings</source>
         <translation>Задать количество струн</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="356"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="354"/>
         <source>Edit strings</source>
         <translation>Редактировать струны</translation>
     </message>
@@ -36441,7 +36508,7 @@ MuseScore.org1 чтобы получить последнюю версию.</tra
     <message>
         <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordssettingsmodel.cpp" line="134"/>
         <source>Reset fretboard diagram legend chords list</source>
-        <translation type="unfinished"/>
+        <translation>Сбросить список аккордов для подписи схемы грифа</translation>
     </message>
 </context>
 <context>

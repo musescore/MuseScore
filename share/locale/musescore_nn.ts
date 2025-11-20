@@ -1015,7 +1015,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="95"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>På</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="100"/>
@@ -1025,7 +1025,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="114"/>
         <source>Merge matching rests:</source>
-        <translation type="unfinished"/>
+        <translation>Slå i hop samtidige pausar:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="127"/>
@@ -1086,12 +1086,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="293"/>
         <source>Advanced style properties…</source>
-        <translation type="unfinished"/>
+        <translation>Avanserte eigenskapar for stil…</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="309"/>
         <source>Part properties</source>
-        <translation type="unfinished"/>
+        <translation>Eigenskap for enkeltstemme</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="332"/>
@@ -1334,19 +1334,19 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="913"/>
         <source>Don’t reflect transposition in linked tablature staves</source>
-        <translation type="unfinished"/>
+        <translation>Ikkje bruk transponeringa i lenka tabulatursystem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="950"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="953"/>
         <source>Apply and go to previous staff</source>
-        <translation type="unfinished"/>
+        <translation>Bruk endringar og gå til føregåande notesystem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="969"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="972"/>
         <source>Apply and go to next staff</source>
-        <translation type="unfinished"/>
+        <translation>Bruk endringar og gå til neste notesystem</translation>
     </message>
 </context>
 <context>
@@ -1354,12 +1354,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="20"/>
         <source>Edit staff type</source>
-        <translation type="unfinished"/>
+        <translation>Rediger type notesystem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="36"/>
         <source>STANDARD STAFF</source>
-        <translation type="unfinished"/>
+        <translation>STANDARD NOTESYSTEM</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="107"/>
@@ -1430,17 +1430,17 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="437"/>
         <source>Fret marks</source>
-        <translation type="unfinished"/>
+        <translation>Tverrbandmerke</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="445"/>
         <source>Text style</source>
-        <translation type="unfinished"/>
+        <translation>Tekststil</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="452"/>
         <source>Tab font preset</source>
-        <translation type="unfinished"/>
+        <translation>Førehandsvald tabulatur-skrifttype</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="466"/>
@@ -1494,7 +1494,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="640"/>
         <source>Numbers</source>
-        <translation>Nummerering</translation>
+        <translation>Nummer</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="662"/>
@@ -1514,7 +1514,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="698"/>
         <source>Broken</source>
-        <translation>Øydelagd</translation>
+        <translation>Brotne</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="718"/>
@@ -1545,7 +1545,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="897"/>
         <source>Stems and beams</source>
-        <translation>Notehalsar og bindebogar</translation>
+        <translation>Notehalsar og -bjelkar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="947"/>
@@ -1659,7 +1659,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="14"/>
         <source>Default strings tuning:</source>
-        <translation type="unfinished"/>
+        <translation>Standard strengstemming:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="51"/>
@@ -1700,7 +1700,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="51"/>
         <source>Spacing</source>
-        <translation type="unfinished"/>
+        <translation>Avstandar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="56"/>
@@ -1710,7 +1710,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="61"/>
         <source>Header &amp; footer</source>
-        <translation type="unfinished"/>
+        <translation>Topp- &amp; botntekst</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="66"/>
@@ -1726,7 +1726,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="76"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Nøklar og tone- og taktartar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="81"/>
@@ -1748,18 +1748,18 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="96"/>
         <source>Rests</source>
-        <translation type="unfinished"/>
+        <translation>Pausar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="101"/>
         <source>Repeats</source>
-        <translation type="unfinished"/>
+        <translation>Repetisjonar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="106"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5819"/>
         <source>Beams</source>
-        <translation>Bindebogar</translation>
+        <translation>Notebjelkar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="111"/>
@@ -1776,87 +1776,87 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="121"/>
         <source>Slurs &amp; ties</source>
-        <translation type="unfinished"/>
+        <translation>Bogar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="126"/>
         <source>Dynamics &amp; hairpins</source>
-        <translation type="unfinished"/>
+        <translation>Dynamikk</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="131"/>
         <source>Voltas</source>
-        <translation type="unfinished"/>
+        <translation>Hus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="136"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7395"/>
         <source>Ottavas</source>
-        <translation type="unfinished"/>
+        <translation>Ottava</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="141"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7833"/>
         <source>Pedal lines</source>
-        <translation type="unfinished"/>
+        <translation>Pedallinjer</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="146"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8154"/>
         <source>Trill lines</source>
-        <translation type="unfinished"/>
+        <translation>Trillinjer</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="151"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8290"/>
         <source>Vibrato lines</source>
-        <translation type="unfinished"/>
+        <translation>Vibratolinjer</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="156"/>
         <source>Glissandos &amp; note-anchored lines</source>
-        <translation type="unfinished"/>
+        <translation>Glissandoar &amp; note-ankra linjer</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="161"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8473"/>
         <source>Bends</source>
-        <translation type="unfinished"/>
+        <translation>Bending</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="166"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8721"/>
         <source>Text lines</source>
-        <translation type="unfinished"/>
+        <translation>Tekstlinjer</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="171"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9057"/>
         <source>System text lines</source>
-        <translation type="unfinished"/>
+        <translation>Systemtekstlinjer</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="176"/>
         <source>Articulations &amp; ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Artikulasjonar &amp; ornament</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="181"/>
         <source>Hammer-ons, pull-offs &amp; tapping</source>
-        <translation type="unfinished"/>
+        <translation>Hammer-on, pull-off &amp; tapping</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="186"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9718"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12086"/>
         <source>Fermatas</source>
-        <translation type="unfinished"/>
+        <translation>Fermatar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="191"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9862"/>
         <source>Staff text</source>
-        <translation type="unfinished"/>
+        <translation>Notesystemtekst</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="196"/>
@@ -1873,19 +1873,19 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="206"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11307"/>
         <source>Expression text</source>
-        <translation type="unfinished"/>
+        <translation>Uttrykkstekst</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="211"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11366"/>
         <source>Rehearsal marks</source>
-        <translation type="unfinished"/>
+        <translation>Prøveteikn</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="216"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11550"/>
         <source>Figured bass</source>
-        <translation type="unfinished"/>
+        <translation>Generalbass</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="221"/>
@@ -1895,7 +1895,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="226"/>
         <source>Fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Gripebrettdiagram</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="231"/>
@@ -1903,7 +1903,7 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8540"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11835"/>
         <source>Tablature</source>
-        <translation type="unfinished"/>
+        <translation>Tabulatur</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="236"/>
@@ -1918,12 +1918,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="353"/>
         <source>MuseScore Studio will change the style to suit the font better</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio vil endre stilen så den passar skrifttypen betre</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="356"/>
         <source>Automatically load style settings based on font</source>
-        <translation type="unfinished"/>
+        <translation>Last automatisk inn stil basert på skrifttype</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="379"/>
@@ -1933,7 +1933,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="423"/>
         <source>Staff line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Tjukkleik, notelinje:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="439"/>
@@ -2244,7 +2244,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="452"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Tjukkleik, notelinje»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="464"/>
@@ -2254,63 +2254,63 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="471"/>
         <source>Enable indentation on first system</source>
-        <translation type="unfinished"/>
+        <translation>Slå på innrykk av fyrste system</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="489"/>
         <source>First system indentation:</source>
-        <translation type="unfinished"/>
+        <translation>Innrykk av fyrste system:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="521"/>
         <source>Reset &apos;First system indentation&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Innrykk av fyrste system»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="547"/>
         <source>Automatically hide all empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Gøym automatisk alle tomme notesystem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="559"/>
         <source>Don’t hide empty staves in first system</source>
-        <translation type="unfinished"/>
+        <translation>Ikkje gøym tomme notesystem i fyrste system</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="566"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation type="unfinished"/>
+        <translation>Vis klammer som omfamnar berre eitt notesystem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="576"/>
         <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation type="unfinished"/>
+        <translation>Vis noteverdiar som strekk seg over taktgrenser (EKSPERIMENTALT, berre for tidlegmusikk!)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="583"/>
         <source>Instrument names</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentnamn</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="589"/>
         <source>Hide if there is only 1 instrument</source>
-        <translation type="unfinished"/>
+        <translation>Gøym om det berre er 1 instrument</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="598"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="618"/>
         <source>Long name</source>
-        <translation type="unfinished"/>
+        <translation>Langt namn</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="608"/>
         <source>Reset &apos;Instrument labels on subsequent systems&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Instrumentnamnemerke på påfølgjande system»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="628"/>
         <source>Reset &apos;Instrument labels on first system of sections&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Instrumentnamnemerke på fyrste system»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="638"/>
@@ -2321,28 +2321,28 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="645"/>
         <source>On subsequent systems:</source>
-        <translation type="unfinished"/>
+        <translation>På påfølgjande system:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="652"/>
         <source>On first system of sections:</source>
-        <translation type="unfinished"/>
+        <translation>På fyrste systemet i seksjonar:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="659"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="666"/>
         <source>Short name</source>
-        <translation type="unfinished"/>
+        <translation>Kort namn</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="714"/>
         <source>Swing settings</source>
-        <translation type="unfinished"/>
+        <translation>Swing-innstillingar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="722"/>
         <source>Swing:</source>
-        <translation type="unfinished"/>
+        <translation>Swing:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="729"/>
@@ -2362,166 +2362,166 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="770"/>
         <source>Select swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Vel swing-proporsjon:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="820"/>
         <source>Autoplace</source>
-        <translation type="unfinished"/>
+        <translation>Autoplassering</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="826"/>
         <source>Min. vertical distance:</source>
-        <translation type="unfinished"/>
+        <translation>Minste loddrette avstand:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="880"/>
         <source>Reset &apos;Min. vertical distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Minste loddrette avstand»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="890"/>
         <source>Vertical align range:</source>
-        <translation type="unfinished"/>
+        <translation>Loddrett justering, område:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="903"/>
         <source>Reset &apos;Vertical align range&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Loddrett justering, område»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="997"/>
         <source>Vertical spacing</source>
-        <translation type="unfinished"/>
+        <translation>Loddrette avstandar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1026"/>
         <source>Reset &apos;Music bottom margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Botnmarg til musikk»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1064"/>
         <source>Music bottom margin:</source>
-        <translation type="unfinished"/>
+        <translation>Botnmarg til musikk:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1090"/>
         <source>Reset &apos;Music top margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Toppmarg til musikk»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1134"/>
         <source>Music top margin:</source>
-        <translation type="unfinished"/>
+        <translation>Toppmarg til musikk:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1151"/>
         <source>Enable vertical justification of staves</source>
-        <translation type="unfinished"/>
+        <translation>Bruk varierande loddrett avstand mellom notesystem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1178"/>
         <source>Reset &apos;Factor for distance between systems&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Faktor for avstand mellom system»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1247"/>
         <source>Reset &apos;Factor for distance above/below bracket&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Faktor for avstand over/under klamme»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1260"/>
         <source>Reset &apos;Factor for distance above/below brace&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Faktor for avstand over/under accolade»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1314"/>
         <source>Factor for distance between systems:</source>
-        <translation type="unfinished"/>
+        <translation>Faktor for avstand mellom system:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1327"/>
         <source>Factor for distance above/below bracket:</source>
-        <translation type="unfinished"/>
+        <translation>Faktor for avstand over/under klamme:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1340"/>
         <source>Factor for distance above/below brace:</source>
-        <translation type="unfinished"/>
+        <translation>Faktor for avstand over/under accolade:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1386"/>
         <source>Max. staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Maks. notesystemavstand</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1396"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1694"/>
         <source>Reset &apos;Max. system distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Maks. notesystemavstand»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1409"/>
         <source>Reset &apos;Min. staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Min. notesystemavstand»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1438"/>
         <source>Max. grand staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Maks. avstand til systemklamme</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1467"/>
         <source>Min. staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Min. notesystemavstand</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1505"/>
         <source>Reset &apos;Max. page fill distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Maks. sidefyllingavstand»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1534"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1789"/>
         <source>Reset &apos;Min. system distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Maks. avstand til system»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1547"/>
         <source>Reset &apos;Max. staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Maks. notesystemavstand»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1557"/>
         <source>Max. page fill distance:</source>
-        <translation type="unfinished"/>
+        <translation>Maks. sidefyllingavstand:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1583"/>
         <source>Reset &apos;Max. grand staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Maks. avstand til systemklamme»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1593"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1850"/>
         <source>Max. system distance:</source>
-        <translation type="unfinished"/>
+        <translation>Maks. avstand til system:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1603"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1653"/>
         <source>Min. system distance:</source>
-        <translation type="unfinished"/>
+        <translation>Min. avstand til system:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1635"/>
         <source>Disable vertical justification of staves</source>
-        <translation type="unfinished"/>
+        <translation>Bruk fast loddrett avstand mellom notesystem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1735"/>
         <source>Reset &apos;Staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Avstand til notesystem»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1818"/>
@@ -2531,57 +2531,57 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1834"/>
         <source>Grand staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Avstand til systemklamme:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1904"/>
         <source>Reset &apos;Grand staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Avstand til systemklamme»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1937"/>
         <source>Vertical frame top margin:</source>
-        <translation type="unfinished"/>
+        <translation>Toppmarg til loddrett ramme:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1950"/>
         <source>Reset &apos;Vertical frame top margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Toppmarg til loddrett ramme»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2026"/>
         <source>Reset &apos;Vertical frame bottom margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Tilbakestill verdien til «Botnmarg til loddrett ramme»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2036"/>
         <source>Vertical frame bottom margin:</source>
-        <translation type="unfinished"/>
+        <translation>Botnmarg til loddrett ramme:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2051"/>
         <source>Horizontal spacing</source>
-        <translation type="unfinished"/>
+        <translation>Vassrette avstandar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2069"/>
         <source>Padding</source>
-        <translation type="unfinished"/>
+        <translation>Polstring</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2082"/>
         <source>Barline to grace note:</source>
-        <translation type="unfinished"/>
+        <translation>Taktstrek til forslagsnote:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2092"/>
         <source>Note to barline:</source>
-        <translation type="unfinished"/>
+        <translation>Note til taktstrek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2102"/>
         <source>Key signature to time signature:</source>
-        <translation type="unfinished"/>
+        <translation>Toneart til taktart:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2115"/>
@@ -2596,7 +2596,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2164"/>
         <source>Barline to time signature:</source>
-        <translation type="unfinished"/>
+        <translation>Taktstrek til taktart:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2177"/>
@@ -2606,7 +2606,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2200"/>
         <source>Clef to barline:</source>
-        <translation type="unfinished"/>
+        <translation>Nøkkel til taktstrek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2272"/>
@@ -2616,7 +2616,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2282"/>
         <source>Barline to key signature:</source>
-        <translation type="unfinished"/>
+        <translation>Taktstrek til toneart:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2295"/>
@@ -2646,27 +2646,27 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2370"/>
         <source>Key signature to barline:</source>
-        <translation type="unfinished"/>
+        <translation>Toneart til taktstrek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2380"/>
         <source>Barline to note:</source>
-        <translation type="unfinished"/>
+        <translation>Taktstrek til note:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2397"/>
         <source>Clef to note:</source>
-        <translation type="unfinished"/>
+        <translation>Nøkkel til note:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2410"/>
         <source>Barline to clef:</source>
-        <translation type="unfinished"/>
+        <translation>Taktstrek til nøkkel:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2420"/>
         <source>Time signature to barline:</source>
-        <translation type="unfinished"/>
+        <translation>Taktart til taktstrek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2472"/>
@@ -2681,7 +2681,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2534"/>
         <source>Barline to accidental:</source>
-        <translation type="unfinished"/>
+        <translation>Taktstrek til forteikn:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2547"/>
@@ -2691,12 +2691,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2570"/>
         <source>Clef to key signature:</source>
-        <translation type="unfinished"/>
+        <translation>Nøkkel til toneart:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2593"/>
         <source>Clef to time signature:</source>
-        <translation type="unfinished"/>
+        <translation>Nøkkel til taktart:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2613"/>
@@ -2711,7 +2711,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2636"/>
         <source>Note to note:</source>
-        <translation type="unfinished"/>
+        <translation>Note til note:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2662"/>
@@ -2726,12 +2726,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2730"/>
         <source>System density:</source>
-        <translation type="unfinished"/>
+        <translation>Systemtettleik:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2737"/>
         <source>Minimum measure width:</source>
-        <translation type="unfinished"/>
+        <translation>Minimum breidde på takt:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2750"/>
@@ -2741,7 +2741,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2760"/>
         <source>System header</source>
-        <translation type="unfinished"/>
+        <translation>Starten av system</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2769"/>
@@ -2751,7 +2751,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2779"/>
         <source>Time signature to first note:</source>
-        <translation type="unfinished"/>
+        <translation>Taktart til fyrste note:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2818"/>
@@ -2761,12 +2761,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2828"/>
         <source>Clef/key signature to first note:</source>
-        <translation type="unfinished"/>
+        <translation>Nøkkel/toneart til fyrste note:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2864"/>
         <source>Start of the system to first note:</source>
-        <translation type="unfinished"/>
+        <translation>Systemstart til fyrste note:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2917"/>
@@ -4116,7 +4116,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10302"/>
         <source>Edit lyrics text style</source>
-        <translation type="unfinished"/>
+        <translation>Rediger songtekststil</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10370"/>
@@ -4767,7 +4767,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="38"/>
         <source>Create key signature</source>
-        <translation type="unfinished"/>
+        <translation>Opprett taktart</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="111"/>
@@ -4961,12 +4961,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/palette/view/widgets/note_groups.ui" line="17"/>
         <source>Beam groups</source>
-        <translation type="unfinished"/>
+        <translation>Bjelkegrupper</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/note_groups.ui" line="37"/>
         <source>Beam selector</source>
-        <translation type="unfinished"/>
+        <translation>Bjelkeveljar</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/note_groups.ui" line="69"/>
@@ -5370,12 +5370,12 @@ followed by dashes</source>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="27"/>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="33"/>
         <source>Swing settings</source>
-        <translation type="unfinished"/>
+        <translation>Swing-innstillingar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="54"/>
         <source>Swing:</source>
-        <translation type="unfinished"/>
+        <translation>Swing:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="67"/>
@@ -5395,7 +5395,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="112"/>
         <source>Select swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Vel swing-proporsjon:</translation>
     </message>
 </context>
 <context>
@@ -5431,7 +5431,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="41"/>
         <source>Create time signature</source>
-        <translation type="unfinished"/>
+        <translation>Opprett toneart</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="57"/>
@@ -5507,7 +5507,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="49"/>
         <source>Beam groups</source>
-        <translation type="unfinished"/>
+        <translation>Bjelkegrupper</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="56"/>
@@ -6441,12 +6441,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="42"/>
         <source>Edit workspaces</source>
-        <translation type="unfinished"/>
+        <translation>Rediger arbeidsområde</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="43"/>
         <source>Edit workspaces…</source>
-        <translation type="unfinished"/>
+        <translation>Rediger arbeidsområde…</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="49"/>
@@ -7603,61 +7603,61 @@ followed by dashes</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="837"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="838"/>
         <source>Auto beam</source>
-        <translation type="unfinished"/>
+        <translation>Automatisk bjelke</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="844"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="845"/>
         <source>No beam</source>
-        <translation type="unfinished"/>
+        <translation>Ingen bjelke</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="851"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="852"/>
         <source>Break beam left</source>
-        <translation type="unfinished"/>
+        <translation>Bryt bjelke til venstre</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="858"/>
         <source>Break inner beams (8th)</source>
-        <translation type="unfinished"/>
+        <translation>Bryt indre bjelkar (8-del)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="859"/>
         <source>Break inner beams (eighth)</source>
-        <translation type="unfinished"/>
+        <translation>Bryt indre bjelkar (åttedel)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="865"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="866"/>
         <source>Break inner beams (16th)</source>
-        <translation type="unfinished"/>
+        <translation>Bryt indre bjelkar (16-del)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="872"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="873"/>
         <source>Join beams</source>
-        <translation type="unfinished"/>
+        <translation>Slå i hop bjelkar</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="879"/>
         <source>Feathered beam, decelerate</source>
-        <translation type="unfinished"/>
+        <translation>Fjørbjelke, retarder</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="880"/>
         <source>Add feathered beam: decelerate</source>
-        <translation type="unfinished"/>
+        <translation>Legg til fjørbjelke: retarder</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="886"/>
         <source>Feathered beam, accelerate</source>
-        <translation type="unfinished"/>
+        <translation>Fjørbjelke, akselerer</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="887"/>
         <source>Add feathered beam: accelerate</source>
-        <translation type="unfinished"/>
+        <translation>Legg til fjørbjelke: akselerer</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="893"/>
@@ -8350,7 +8350,7 @@ followed by dashes</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1551"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1552"/>
         <source>Edit element</source>
-        <translation type="unfinished"/>
+        <translation>Rediger element</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1557"/>
@@ -10371,7 +10371,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="372"/>
         <source>The previous session quit unexpectedly.</source>
-        <translation type="unfinished"/>
+        <translation>Uventa avslutting av føregåande økt.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="373"/>
@@ -11125,7 +11125,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/FretboardDiagramsSection.qml" line="35"/>
         <source>Fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Gripebrettdiagram</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/FretboardDiagramsSection.qml" line="41"/>
@@ -11770,7 +11770,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="236"/>
         <source>Includes a new system for hiding empty staves, a new text editing widget, guitar notation improvements, engraving improvements and more.</source>
-        <translation type="unfinished"/>
+        <translation>Inkluderer eit nytt system for å gøyma tomme notesystem, eit nytt skjermelement for tekstredigering, forbetringar til gitarnotar, betre notesetting og meir.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="238"/>
@@ -12188,17 +12188,17 @@ Band %1 på streng %2</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2663"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2676"/>
         <source>Measure: %1</source>
         <translation>Takt: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2666"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2679"/>
         <source>Displayed measure: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2670"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2683"/>
         <source>Beat: %1</source>
         <translation type="unfinished"/>
     </message>
@@ -14500,7 +14500,7 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1721"/>
         <source>Fingering</source>
-        <translation type="unfinished"/>
+        <translation>Fingersetjing</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1722"/>
@@ -14535,12 +14535,12 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1733"/>
         <source>Harp pedal diagram</source>
-        <translation type="unfinished"/>
+        <translation>Diagram for harpepedalar</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1734"/>
         <source>Harp pedal text diagram</source>
-        <translation type="unfinished"/>
+        <translation>Tekstdiagram for harpepedalar</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1737"/>
@@ -14555,7 +14555,7 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1739"/>
         <source>Volta</source>
-        <translation type="unfinished"/>
+        <translation>Hus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1740"/>
@@ -15119,7 +15119,7 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="374"/>
         <source>Staff text</source>
-        <translation type="unfinished"/>
+        <translation>Notesystemtekst</translation>
     </message>
 </context>
 <context>
@@ -16167,7 +16167,7 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1287"/>
         <source>Tablature</source>
-        <translation type="unfinished"/>
+        <translation>Tabulatur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1288"/>
@@ -19214,7 +19214,7 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3106"/>
         <source>Tablature</source>
-        <translation type="unfinished"/>
+        <translation>Tabulatur</translation>
     </message>
 </context>
 <context>
@@ -19357,32 +19357,32 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3427"/>
         <source>Combining accordion coupler dot</source>
-        <translation type="unfinished"/>
+        <translation>Kombineringspunkt for trekkspel</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3428"/>
         <source>Combining left hand, 2 ranks, empty</source>
-        <translation type="unfinished"/>
+        <translation>Kombinert venstre hand, 2 kordar, tomt</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3429"/>
         <source>Combining left hand, 3 ranks, empty (square)</source>
-        <translation type="unfinished"/>
+        <translation>Kombinert venstre hand, 3 kordar, tomt (firkant)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3430"/>
         <source>Combining right hand, 3 ranks, empty</source>
-        <translation type="unfinished"/>
+        <translation>Kombinert høgre hand, 3 kordar, tomt</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3431"/>
         <source>Combining right hand, 4 ranks, empty</source>
-        <translation type="unfinished"/>
+        <translation>Kombinert høgre hand, 4 kordar, tomt</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3432"/>
         <source>Diatonic accordion clef</source>
-        <translation type="unfinished"/>
+        <translation>Diatonisk akkordeon-nøkkel</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3433"/>
@@ -21773,7 +21773,7 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="71"/>
         <location filename="../../src/framework/ui/qml/Muse/Ui/internal/ProgressDialog.qml" line="98"/>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="88"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="86"/>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="146"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="69"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="349"/>
@@ -21870,7 +21870,7 @@ Band %1 på streng %2</translation>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="127"/>
         <source>On</source>
         <extracomment>as opposed to Off</extracomment>
-        <translation type="unfinished"/>
+        <translation>På</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
@@ -22133,9 +22133,9 @@ Band %1 på streng %2</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml" line="57"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml" line="73"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="68"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="85"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="112"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="129"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="86"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="114"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="132"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="61"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="101"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml" line="57"/>
@@ -22150,12 +22150,14 @@ Band %1 på streng %2</translation>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="574"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="687"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="723"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="751"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="357"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="57"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="82"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="170"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="231"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="238"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="65"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="91"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="179"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="240"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="247"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LaissezVibrSection.qml" line="59"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="59"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml" line="62"/>
@@ -22888,7 +22890,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="140"/>
         <source>Padding</source>
-        <translation type="unfinished"/>
+        <translation>Polstring</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="162"/>
@@ -22896,33 +22898,38 @@ pickup measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="127"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="129"/>
         <source>Reset “%1” to default value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="128"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="130"/>
         <source>Reset property to default value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="148"/>
         <source>Menu</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="153"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="152"/>
+        <source>Menu for “%1”</source>
+        <extracomment>%1 is replaced with the name of the property</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="157"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/PropertyResetButton.qml" line="35"/>
         <source>Reset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="156"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="160"/>
         <source>Save as default style for this score</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="158"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="162"/>
         <source>This is set as the default style for this score</source>
         <translation type="unfinished"/>
     </message>
@@ -22964,7 +22971,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="60"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="55"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="64"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="108"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="110"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="79"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="232"/>
         <source>Above</source>
@@ -22975,8 +22982,8 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="177"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="61"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="56"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="81"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="125"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="82"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="128"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="80"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="233"/>
         <source>Below</source>
@@ -23012,7 +23019,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="201"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="206"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>På</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="197"/>
@@ -23551,27 +23558,27 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="61"/>
         <source>No beam</source>
-        <translation type="unfinished"/>
+        <translation>Ingen bjelke</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="62"/>
         <source>Break beam left</source>
-        <translation type="unfinished"/>
+        <translation>Bryt bjelke til venstre</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="63"/>
         <source>Break inner beams (8th)</source>
-        <translation type="unfinished"/>
+        <translation>Bryt indre bjelkar (8-del)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="64"/>
         <source>Break inner beams (16th)</source>
-        <translation type="unfinished"/>
+        <translation>Bryt indre bjelkar (16-del)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="65"/>
         <source>Join beams</source>
-        <translation type="unfinished"/>
+        <translation>Slå i hop bjelkar</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="65"/>
@@ -23702,12 +23709,26 @@ pickup measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="161"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="182"/>
+        <source>Align left edge of text to notehead</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="187"/>
+        <source>Align horizontal center of text to notehead</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="192"/>
+        <source>Align right edge of text to notehead</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Alignment to notehead</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="186"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="206"/>
         <source>Add fretboard diagram</source>
         <translation type="unfinished"/>
     </message>
@@ -23792,12 +23813,14 @@ pickup measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="169"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="33"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="162"/>
         <source>Alignment</source>
         <translation>Justering</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="181"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="58"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="208"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="277"/>
@@ -23810,6 +23833,7 @@ pickup measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="186"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="64"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="214"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="283"/>
@@ -23822,6 +23846,7 @@ pickup measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="191"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="70"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="220"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="289"/>
@@ -23834,17 +23859,17 @@ pickup measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="64"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="60"/>
         <source>Move up</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="82"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="78"/>
         <source>Move down</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="95"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml" line="93"/>
         <source>Reset chord list</source>
         <translation type="unfinished"/>
     </message>
@@ -23899,8 +23924,28 @@ pickup measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="96"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="72"/>
+        <source>Gap to staff/frames above</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="90"/>
+        <source>Gap to staff/frames below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="98"/>
         <source>Clearance for notation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="118"/>
+        <source>Clearance for notation above</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="136"/>
+        <source>Clearance for notation below</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -24963,12 +25008,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/HideEmptyStavesSettings.qml" line="51"/>
         <source>Don’t hide empty staves in first system</source>
-        <translation type="unfinished"/>
+        <translation>Ikkje gøym tomme notesystem i fyrste system</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/HideEmptyStavesSettings.qml" line="68"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation type="unfinished"/>
+        <translation>Vis klammer som omfamnar berre eitt notesystem</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAccessibilityInspectorView.qml" line="44"/>
@@ -24978,7 +25023,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="50"/>
         <source>Automatically hide all empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Gøym automatisk alle tomme notesystem</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="77"/>
@@ -25144,7 +25189,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="441"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStyleSubPopup.qml" line="56"/>
         <source>Text style</source>
-        <translation type="unfinished"/>
+        <translation>Tekststil</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="207"/>
@@ -25214,12 +25259,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/breathplaybackmodel.cpp" line="33"/>
         <source>Breaths &amp; pauses</source>
-        <translation type="unfinished"/>
+        <translation>Pusteteikn &amp; pausar</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/fermataplaybackmodel.cpp" line="33"/>
         <source>Fermatas</source>
-        <translation type="unfinished"/>
+        <translation>Fermatar</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/glissandoplaybackmodel.cpp" line="34"/>
@@ -25337,7 +25382,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/instrumentname/instrumentnamesettingsmodel.cpp" line="33"/>
         <source>Instrument names</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentnamn</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/jumps/jumpsettingsmodel.cpp" line="32"/>
@@ -25517,7 +25562,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="37"/>
         <source>Volta</source>
-        <translation type="unfinished"/>
+        <translation>Hus</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lyrics/lyricssettingsmodel.cpp" line="32"/>
@@ -25643,7 +25688,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/tremolos/tremolosettingsmodel.cpp" line="37"/>
         <source>Tremolos</source>
-        <translation type="unfinished"/>
+        <translation>Tremoloar</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="37"/>
@@ -26498,7 +26543,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="263"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="340"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="63"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="72"/>
         <source>Scale:</source>
         <translation>Skalering:</translation>
     </message>
@@ -26540,31 +26585,44 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="672"/>
-        <source>Minimum space from fretboard diagram:</source>
+        <source>Min. space to fretboard diagram:</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="711"/>
+        <source>Min. space to other notation:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="739"/>
+        <source>Min. space between chord symbols:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Minimum space from fretboard diagram:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Minimum space between chord symbols:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="750"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="778"/>
         <source>Interpretation:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="783"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="811"/>
         <source>Voicing:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="809"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="837"/>
         <source>Duration:</source>
         <translation>Varigheit:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="834"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="862"/>
         <source>Capo fret position:</source>
         <translation type="unfinished"/>
     </message>
@@ -26577,151 +26635,160 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="48"/>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="85"/>
         <source>Fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Gripebrettdiagram</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="56"/>
         <source>Position above:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="70"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="56"/>
+        <source>Position above staff:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="64"/>
+        <source>Min. space to notation:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="79"/>
         <source>Orientation:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="74"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="83"/>
         <source>Vertical</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="75"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="84"/>
         <source>Horizontal</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="81"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="90"/>
         <source>Nut line thickness:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="89"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="98"/>
         <source>Fret number</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="100"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="109"/>
         <source>Position:</source>
         <translation>Posisjon:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="104"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="113"/>
         <source>Left</source>
         <translation>Venstre</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="104"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="113"/>
         <source>Bottom</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="110"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="119"/>
         <source>Right</source>
         <translation>Høgre</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="110"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="119"/>
         <source>Top</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="117"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="126"/>
         <source>Format:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="125"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="134"/>
         <source>Number only</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="134"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="143"/>
         <source>Custom suffix:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="151"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="160"/>
         <source>Preview:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="158"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="167"/>
         <source>Edit fret number text style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="169"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="178"/>
         <source>Dot size:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="177"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="186"/>
         <source>Barré</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="185"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="194"/>
         <source>Appearance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="189"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="198"/>
         <source>Line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="190"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="199"/>
         <source>Slur</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="196"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="205"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="58"/>
         <source>Line thickness:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="204"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="213"/>
         <source>Show fingerings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="210"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="219"/>
         <source>Edit fingering text style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="219"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="228"/>
         <source>Fretboard style:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="223"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="232"/>
         <source>Trimmed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="224"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="233"/>
         <source>Extended</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="230"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="239"/>
         <source>String spacing:</source>
         <translation>Avstand mellom strengar_</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="237"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="246"/>
         <source>Fret spacing:</source>
         <translation type="unfinished"/>
     </message>
@@ -27574,7 +27641,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1874"/>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="120"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="121"/>
         <source>Load style</source>
         <translation>Last inn stil</translation>
     </message>
@@ -27647,7 +27714,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/searchcommandsparser.cpp" line="40"/>
         <source>Rehearsal marks</source>
-        <translation type="unfinished"/>
+        <translation>Prøveteikn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/searchcommandsparser.cpp" line="41"/>
@@ -27774,7 +27841,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Tilpassa</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="265"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="263"/>
         <source>%n string(s)</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
@@ -27989,7 +28056,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="57"/>
         <source>Fingerings</source>
-        <translation type="unfinished"/>
+        <translation>Fingersetjing</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="59"/>
@@ -28029,17 +28096,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="73"/>
         <source>Figured bass</source>
-        <translation type="unfinished"/>
+        <translation>Generalbass</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="75"/>
         <source>Ottavas</source>
-        <translation type="unfinished"/>
+        <translation>Ottava</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="77"/>
         <source>Pedal lines</source>
-        <translation type="unfinished"/>
+        <translation>Pedallinjer</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="79"/>
@@ -28064,7 +28131,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="89"/>
         <source>Tremolos</source>
-        <translation type="unfinished"/>
+        <translation>Tremoloar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="91"/>
@@ -28112,7 +28179,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="118"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="119"/>
         <source>MuseScore chord symbol style files</source>
         <translation type="unfinished"/>
     </message>
@@ -28548,104 +28615,104 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Posisjonering</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="736"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="764"/>
         <source>Playback</source>
         <translation>Spel av</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="68"/>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="151"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="69"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="152"/>
         <source>Standard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="71"/>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="182"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="72"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="184"/>
         <source>Jazz</source>
         <translation>Jazz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="74"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="75"/>
         <source>Legacy MuseScore</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="77"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="78"/>
         <source>Load custom XML…</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="154"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="155"/>
         <source>German</source>
         <translation>Tysk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="157"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="158"/>
         <source>Full German</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="160"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="161"/>
         <source>Solfeggio</source>
         <translation>Solfeggio</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="163"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="164"/>
         <source>French</source>
         <translation>Fransk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="185"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="187"/>
         <source>Literal</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="196"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="198"/>
         <source>Automatic</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="199"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="201"/>
         <source>Root only</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="202"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="204"/>
         <source>Close</source>
         <translation>Lat att</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="205"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="207"/>
         <source>Drop two</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="208"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="210"/>
         <source>Six note</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="211"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="213"/>
         <source>Four note</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="214"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="216"/>
         <source>Three note</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="225"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="227"/>
         <source>Until next chord symbol</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="228"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="230"/>
         <source>Until end of measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="231"/>
+        <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="233"/>
         <source>Chord/rest duration</source>
         <translation type="unfinished"/>
     </message>
@@ -28936,7 +29003,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="138"/>
         <source>Time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Taktartar</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="152"/>
@@ -29153,7 +29220,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="78"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="318"/>
         <source>Text style</source>
-        <translation type="unfinished"/>
+        <translation>Tekststil</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="115"/>
@@ -29289,7 +29356,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="48"/>
         <source>Voltas</source>
-        <translation type="unfinished"/>
+        <translation>Hus</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="57"/>
@@ -29775,7 +29842,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Tilpass settet</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="66"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="65"/>
         <source>More palettes</source>
         <translation>Fleire palettar</translation>
     </message>
@@ -29785,7 +29852,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Opprett tilpassa palett</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="88"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="89"/>
         <source>All palettes were added</source>
         <translation>Alle palettar vart lagt til</translation>
     </message>
@@ -29805,19 +29872,19 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="59"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="57"/>
         <source>Name your custom palette</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="102"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="100"/>
         <source>Create</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/MoreElementsPopup.qml" line="89"/>
         <source>Add to %1</source>
-        <translation type="unfinished"/>
+        <translation>Legg til i %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/MoreElementsPopup.qml" line="261"/>
@@ -30050,7 +30117,7 @@ failed.</source>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="344"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1711"/>
         <source>Blank</source>
-        <translation type="unfinished"/>
+        <translation>Tom</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteconfiguration.cpp" line="44"/>
@@ -30060,7 +30127,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="218"/>
         <source>Beam properties</source>
-        <translation type="unfinished"/>
+        <translation>Bjelkeeigenskapar</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="239"/>
@@ -30070,7 +30137,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="288"/>
         <location filename="../../src/palette/view/widgets/keyedit.cpp" line="310"/>
-        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="168"/>
+        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="167"/>
         <source>Key signatures</source>
         <translation>Toneartar</translation>
     </message>
@@ -30093,25 +30160,25 @@ failed.</source>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="486"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1186"/>
         <source>Prima volta</source>
-        <translation type="unfinished"/>
+        <translation>Fyrste hus</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="495"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1215"/>
         <source>Seconda volta, open</source>
-        <translation type="unfinished"/>
+        <translation>Andre hus, open</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="504"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1196"/>
         <source>Seconda volta</source>
-        <translation type="unfinished"/>
+        <translation>Andre hus</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="513"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1205"/>
         <source>Terza volta</source>
-        <translation type="unfinished"/>
+        <translation>Tredje hus</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="534"/>
@@ -30122,7 +30189,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="583"/>
         <source>Fingerings</source>
-        <translation type="unfinished"/>
+        <translation>Fingersetjing</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="593"/>
@@ -30150,12 +30217,12 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="639"/>
         <source>Tremolos</source>
-        <translation type="unfinished"/>
+        <translation>Tremoloar</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="674"/>
         <source>Noteheads</source>
-        <translation type="unfinished"/>
+        <translation>Notehovud</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="699"/>
@@ -30214,12 +30281,12 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="968"/>
         <source>Breaths &amp; pauses</source>
-        <translation type="unfinished"/>
+        <translation>Pusteteikn &amp; pausar</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1015"/>
         <source>Arpeggios &amp; glissandos</source>
-        <translation type="unfinished"/>
+        <translation>Arpeggioar &amp; glissandoar</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1070"/>
@@ -30234,7 +30301,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1124"/>
         <source>Bagpipe embellishments</source>
-        <translation type="unfinished"/>
+        <translation>Sekkepipeprydnadar</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1144"/>
@@ -30478,7 +30545,7 @@ failed.</source>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1535"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1536"/>
         <source>Staff text</source>
-        <translation type="unfinished"/>
+        <translation>Notesystemtekst</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1546"/>
@@ -30494,7 +30561,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1559"/>
         <source>Expression text</source>
-        <translation type="unfinished"/>
+        <translation>Uttrykkstekst</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1562"/>
@@ -30616,15 +30683,15 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1642"/>
-        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
+        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="168"/>
         <location filename="../../src/palette/view/widgets/timedialog.cpp" line="44"/>
         <source>Time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Taktartar</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1700"/>
         <source>Fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Gripebrettdiagram</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1713"/>
@@ -30724,12 +30791,12 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1738"/>
         <source>Bm</source>
-        <translation type="unfinished"/>
+        <translation>Hm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1739"/>
         <source>B7</source>
-        <translation type="unfinished"/>
+        <translation>H7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1765"/>
@@ -30755,32 +30822,32 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1994"/>
         <source>Harp</source>
-        <translation type="unfinished"/>
+        <translation>Harpe</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="2000"/>
         <source>Harp pedal diagram</source>
-        <translation type="unfinished"/>
+        <translation>Diagram for harpepedalar</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="2005"/>
         <source>Harp pedal text diagram</source>
-        <translation type="unfinished"/>
+        <translation>Tekstdiagram for harpepedalar</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="2013"/>
         <source>Handbells</source>
-        <translation type="unfinished"/>
+        <translation>Handklokker</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="73"/>
         <source>Create key signature</source>
-        <translation type="unfinished"/>
+        <translation>Opprett taktart</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="75"/>
         <source>Create time signature</source>
-        <translation type="unfinished"/>
+        <translation>Opprett toneart</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="106"/>
@@ -30851,28 +30918,28 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="67"/>
         <source>Single-click to open a palette</source>
-        <translation type="unfinished"/>
+        <translation>Enkeltklikk for å opne ein palett</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="100"/>
         <source>Open only one palette at a time</source>
         <extracomment>This is the name of a setting that can be turned on or off. &quot;Open&quot; is a verb here.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Opn berre éin palett om gongen</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="132"/>
         <source>Allow reordering palettes</source>
-        <translation type="unfinished"/>
+        <translation>Tillat omorganisering av palettar</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="164"/>
         <source>Expand all palettes</source>
-        <translation type="unfinished"/>
+        <translation>Utvid alle palettar</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="165"/>
         <source>Collapse all palettes</source>
-        <translation type="unfinished"/>
+        <translation>Fald saman alle palettar</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.cpp" line="600"/>
@@ -30929,14 +30996,14 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="133"/>
-        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="170"/>
+        <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
         <source>Symbols</source>
         <translation>Symbol</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/noteGroups.cpp" line="85"/>
         <source>Beam selector</source>
-        <translation type="unfinished"/>
+        <translation>Bjelkeveljar</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1139"/>
@@ -33643,52 +33710,52 @@ failed: %2</source>
         <translation>Stemmer</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="359"/>
         <source>File already exists</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="360"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="366"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="362"/>
         <source>Replace</source>
         <translation>Erstatt</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="367"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
         <source>Replace all</source>
         <translation>Erstatt alle</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="368"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
         <source>Skip</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="369"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="365"/>
         <source>Skip all</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="392"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="388"/>
         <source>Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="393"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="389"/>
         <source>An error occurred while writing the file %1. Do you want to retry?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="445"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="441"/>
         <source>Exporting audio…</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="445"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="441"/>
         <source>Exporting…</source>
         <translation>Eksporterer…</translation>
     </message>
@@ -33817,40 +33884,40 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="303"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="308"/>
         <source>Each page to a separate file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="304"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="309"/>
         <source>Each part to a separate file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="305"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="310"/>
         <source>All parts combined in one file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="590"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="595"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="592"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="597"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="594"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="599"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="596"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="601"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation type="unfinished"/>
@@ -35451,22 +35518,22 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="119"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="121"/>
         <source>Make chord(s) visible</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="120"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="122"/>
         <source>Make chord(s) invisible</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="148"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="150"/>
         <source>Move chord(s) up</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="170"/>
+        <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="172"/>
         <source>Move chord(s) down</source>
         <translation type="unfinished"/>
     </message>
@@ -35801,7 +35868,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5375"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5415"/>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="201"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="207"/>
         <source>Add hairpin</source>
         <translation type="unfinished"/>
     </message>
@@ -35827,7 +35894,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5556"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8033"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8036"/>
         <source>Toggle articulation</source>
         <translation type="unfinished"/>
     </message>
@@ -35864,7 +35931,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5685"/>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="193"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="199"/>
         <source>Change hairpin type</source>
         <translation type="unfinished"/>
     </message>
@@ -36106,71 +36173,72 @@ failed: %2</source>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7554"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7561"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7621"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7681"/>
         <source>Enter lyrics extension line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7703"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7706"/>
         <source>Add lyrics verse</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7751"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7754"/>
         <source>Enter guitar bend</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7824"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7827"/>
         <source>Add fretboard diagram</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7957"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7960"/>
         <source>Format text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7977"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7980"/>
         <source>Toggle subscript</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7979"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7982"/>
         <source>Toggle superscript</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7981"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7984"/>
         <source>Toggle subscript/superscript</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8038"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8041"/>
         <source>Toggle ornament</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8043"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8046"/>
         <source>Toggle automatic placement</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8054"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8057"/>
         <source>Add clef</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8059"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8062"/>
         <source>Add accidental</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8064"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8067"/>
         <source>Transpose semitone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8070"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8073"/>
         <source>Transpose diatonically</source>
         <translation type="unfinished"/>
     </message>
@@ -36324,7 +36392,7 @@ failed: %2</source>
         <translation>Last inn stil</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="190"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="196"/>
         <source>Remove hairpin</source>
         <translation type="unfinished"/>
     </message>
@@ -36339,17 +36407,17 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="232"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="230"/>
         <source>Load string tunings preset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="285"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="283"/>
         <source>Set number of strings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="356"/>
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="354"/>
         <source>Edit strings</source>
         <translation type="unfinished"/>
     </message>

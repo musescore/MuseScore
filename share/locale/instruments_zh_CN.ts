@@ -139,7 +139,7 @@
         <source>Flute in G, sounding a fifth higher than the standard flute.</source>
         <comment>treble-flute description</comment>
         <extracomment>description for Treble Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>G调长笛，比标准长笛高五度</translation>
+        <translation>G调长笛，比标准长笛高五度。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="250"/>
@@ -167,7 +167,7 @@
         <source>Notched, end-blown vertical bamboo flute used in Korean folk music.</source>
         <comment>danso description</comment>
         <extracomment>description for Danso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>朝鲜民间音乐使用的有孔、管端吹奏的竖竹笛</translation>
+        <translation>朝鲜民间音乐使用的有孔、管端吹奏的竖竹笛。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="259"/>
@@ -195,7 +195,7 @@
         <source>Flute in E♭, sounding a minor third above the standard flute.</source>
         <comment>soprano-flute description</comment>
         <extracomment>description for Soprano Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>E♭长笛，比标准长笛高小三度。</translation>
+        <translation>E♭调长笛，比标准长笛高小三度。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="268"/>
@@ -223,7 +223,7 @@
         <source>6-hole simple-system wooden transverse flute.</source>
         <comment>irish-flute description</comment>
         <extracomment>description for Irish Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>6孔简单木横笛</translation>
+        <translation>6孔简单木横笛。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="277"/>
@@ -251,7 +251,7 @@
         <source>Baroque wooden transverse flute.</source>
         <comment>traverso description</comment>
         <extracomment>description for Traverso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>巴洛克木横笛</translation>
+        <translation>巴洛克木横笛。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="286"/>
@@ -279,7 +279,7 @@
         <source>Standard concert flute in C.</source>
         <comment>flute description</comment>
         <extracomment>description for Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C调标准音乐会长笛</translation>
+        <translation>C调标准音乐会长笛。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="295"/>
@@ -307,7 +307,7 @@
         <source>Flute in G, sounding a fourth lower than the standard flute.</source>
         <comment>alto-flute description</comment>
         <extracomment>description for Alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>G调长笛，比标准长笛低四度</translation>
+        <translation>G调长笛，比标准长笛低四度。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="304"/>
@@ -335,7 +335,7 @@
         <source>Flute in C, sounding an octave lower than the standard flute.</source>
         <comment>bass-flute description</comment>
         <extracomment>description for Bass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C调长笛，比标准长笛低八度</translation>
+        <translation>C调长笛，比标准长笛低八度。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="313"/>
@@ -363,7 +363,7 @@
         <source>Flute in G, sounding an octave below the alto flute.</source>
         <comment>contra-alto-flute description</comment>
         <extracomment>description for Contra-alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>G调长笛，比中音长笛低八度</translation>
+        <translation>G调长笛，比中音长笛低八度。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="322"/>
@@ -391,7 +391,7 @@
         <source>Flute in C, sounding two octaves lower than the standard flute.</source>
         <comment>contrabass-flute description</comment>
         <extracomment>description for Contrabass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C调长笛，比标准长笛低两个八度</translation>
+        <translation>C调长笛，比标准长笛低两个八度。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="331"/>
@@ -419,7 +419,7 @@
         <source>Flute in G, sounding two octaves below the alto flute.</source>
         <comment>subcontra-alto-flute description</comment>
         <extracomment>description for Sub Contra-alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>G调长笛，比中音长笛低两个八度</translation>
+        <translation>G调长笛，比中音长笛低两个八度。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="340"/>
@@ -447,7 +447,7 @@
         <source>Flute in C, sounding three octaves below the standard flute.</source>
         <comment>double-contrabass-flute description</comment>
         <extracomment>description for Double Contrabass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C调长笛，比标准长笛低三个八度</translation>
+        <translation>C调长笛，比标准长笛低三个八度。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="349"/>
@@ -475,7 +475,7 @@
         <source>Flute in C, sounding four octaves below the standard flute.</source>
         <comment>hyperbass-flute description</comment>
         <extracomment>description for Hyperbass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C调长笛，比标准长笛低四个八度</translation>
+        <translation>C调长笛，比标准长笛低四个八度。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="358"/>
@@ -503,7 +503,7 @@
         <source>Chinese bamboo transverse flute, pitched in A.</source>
         <comment>a-dizi description</comment>
         <extracomment>description for Dizi; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A调中国竹横笛</translation>
+        <translation>A调中国竹横笛。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="367"/>
@@ -538,7 +538,7 @@
         <source>Chinese bamboo transverse flute, pitched in G. The most common variant.</source>
         <comment>g-dizi description</comment>
         <extracomment>description for Dizi; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>G调中国竹横笛，笛子最常见的变种</translation>
+        <translation>G调中国竹横笛，最常见的变种。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="378"/>
@@ -573,7 +573,7 @@
         <source>Chinese bamboo transverse flute, pitched in F.</source>
         <comment>f-dizi description</comment>
         <extracomment>description for Dizi; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>F调中国竹横笛</translation>
+        <translation>F调中国竹横笛。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="389"/>
@@ -608,7 +608,7 @@
         <source>Chinese bamboo transverse flute, pitched in E.</source>
         <comment>e-dizi description</comment>
         <extracomment>description for Dizi; tuning: E; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>E调中国竹横笛</translation>
+        <translation>E调中国竹横笛。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="400"/>
@@ -643,7 +643,7 @@
         <source>Chinese bamboo transverse flute, pitched in D.</source>
         <comment>d-dizi description</comment>
         <extracomment>description for Dizi; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D调中国竹横笛</translation>
+        <translation>D调中国竹横笛。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="411"/>
@@ -678,7 +678,7 @@
         <source>Chinese bamboo transverse flute, pitched in C.</source>
         <comment>c-dizi description</comment>
         <extracomment>description for Dizi; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C调中国竹横笛</translation>
+        <translation>C调中国竹横笛。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="422"/>
@@ -713,7 +713,7 @@
         <source>Japanese bamboo end-blown flute.</source>
         <comment>shakuhachi description</comment>
         <extracomment>description for Shakuhachi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>日本竹笛</translation>
+        <translation>日本管端吹奏的竹笛。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="433"/>
@@ -1728,7 +1728,7 @@
         <source>End-blown flute made of a row of closed tubes.</source>
         <comment>pan-flute description</comment>
         <extracomment>description for Pan Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>由一排封闭的管子制成的末端吹笛。</translation>
+        <translation>由一排封闭的管子制成的管端吹奏的笛子。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="756"/>
@@ -1756,7 +1756,7 @@
         <source>South American traditional flute pitched in C.</source>
         <comment>quena description</comment>
         <extracomment>description for Quena; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C调南美传统长笛</translation>
+        <translation>C调南美传统长笛。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="765"/>
@@ -1784,7 +1784,7 @@
         <source>South American traditional flute pitched in C.</source>
         <comment>c-quena description</comment>
         <extracomment>description for Quena; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C调南美传统长笛</translation>
+        <translation>C调南美传统长笛。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="774"/>
@@ -1819,7 +1819,7 @@
         <source>South American traditional flute pitched in G. The most common variant.</source>
         <comment>g-quena description</comment>
         <extracomment>description for Quena; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>南美洲传统G调长笛。是最常见的变种。</translation>
+        <translation>G调南美传统长笛，最常见的变种。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="785"/>
@@ -1854,7 +1854,7 @@
         <source>South American traditional flute pitched in F.</source>
         <comment>f-quena description</comment>
         <extracomment>description for Quena; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>F调南美传统长笛</translation>
+        <translation>F调南美传统长笛，</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="796"/>
@@ -1889,7 +1889,7 @@
         <source>South American traditional flute pitched in D.</source>
         <comment>d-quena description</comment>
         <extracomment>description for Quena; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D调南美传统长笛</translation>
+        <translation>D调南美传统长笛。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="807"/>
