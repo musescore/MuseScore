@@ -57,6 +57,9 @@ public:
 
     /// @brief Maps a codepoint in the font's encoding to String containing Smufl-encoded character. If the input font is Smufl, it may be an optional codepoint.
     static std::optional<engraving::String> smuflStringFromFinaleChar(char32_t c, const musx::dom::MusxInstance<musx::dom::FontInfo>& font);
+
+    /// @brief returns the glyph name (SMuFL and non-SMuFL) for the given character in the given font.
+    static std::string charNameFinale(char32_t c, const musx::dom::MusxInstance<musx::dom::FontInfo>& font);
 };
 
 }

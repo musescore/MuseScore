@@ -43,6 +43,7 @@
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/navigate.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/parenthesis.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/rest.h"
@@ -51,6 +52,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stem.h"
+#include "engraving/dom/symbol.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/tremolotwochord.h"
@@ -335,6 +337,37 @@ static void setNoteHeadSymbol(engraving::Note* note, SymId noteHeadSym)
     }
 }
 
+static std::pair<bool, bool> getAccidentalProperties(std::string symbolName, SymId actualSym)
+{
+    bool hasParentheses = false;
+    bool isSmall = false;
+    switch (actualSym) {
+    case SymId::accidentalFlat:
+        hasParentheses = symbolName == "accidentalFlatParens" || symbolName == "accidentalFlatParenthesesSmall";
+        isSmall = symbolName == "accidentalFlatSmall" || symbolName == "accidentalFlatParenthesesSmall";
+        break;
+    case SymId::accidentalDoubleFlat:
+        hasParentheses = symbolName == "accidentalDoubleFlatParens" || symbolName == "accidentalDoubleFlatParenthesesSmall";
+        isSmall = symbolName == "accidentalDoubleFlatSmall" || symbolName == "accidentalDoubleFlatParenthesesSmall";
+        break;
+    case SymId::accidentalNatural:
+        hasParentheses = symbolName == "accidentalNaturalParens" || symbolName == "accidentalNaturalParenthesesSmall";
+        isSmall = symbolName == "accidentalNaturalSmall" || symbolName == "accidentalNaturalParenthesesSmall";
+        break;
+    case SymId::accidentalSharp:
+        hasParentheses = symbolName == "accidentalSharpParens" || symbolName == "accidentalSharpParenthesesSmall";
+        isSmall = symbolName == "accidentalSharpSmall" || symbolName == "accidentalSharpParenthesesSmall";
+        break;
+    case SymId::accidentalDoubleSharp:
+        hasParentheses = symbolName == "accidentalDoubleSharpParens" || symbolName == "accidentalDoubleSharpParenthesesSmall";
+        isSmall = symbolName == "accidentalDoubleSharpSmall" || symbolName == "accidentalDoubleSharpParenthesesSmall";
+        break;
+    default:
+        break;
+    }
+    return std::make_pair(hasParentheses, isSmall);
+}
+
 bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrackIdx, Measure* measure, bool graceNotes,
                                          std::vector<engraving::Note*>& notesWithUnmanagedTies,
                                          std::vector<ReadableTuplet>& tupletMap)
@@ -488,6 +521,33 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                                 /// @todo this calculation needs to take into account the default accidental separation amounts in accidentalOptions. The options
                                 /// should allow us to calculate the default position of the accidental relative to the note. (But it may not be easy.)
                                 a->setOffset(evpuToPointF(accidentalInfo->hOffset, accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0) * a->defaultSpatium());
+
+                                if (accidentalInfo->altChar) {
+                                    /// @todo verify if we can always use custom font (like for articulations) or not
+                                    auto [canParenthesise, isSmall] = getAccidentalProperties(FinaleTextConv::charNameFinale(accidentalInfo->altChar, accidentalInfo->customFont), a->symId());
+                                    if (!canParenthesise && !isSmall) {
+                                        SymId customSym = FinaleTextConv::symIdFromFinaleChar(accidentalInfo->altChar, accidentalInfo->customFont);
+                                        if (customSym != SymId::noSym) {
+                                            Symbol* sym = new Symbol(note);
+                                            sym->setTrack(curTrackIdx);
+                                            if (fontIsEngravingFont(accidentalInfo->customFont)) {
+                                                sym->setSym(customSym, note->score()->engravingFonts()->fontByName(accidentalInfo->customFont->getName()));
+                                            } else {
+                                                sym->setSym(customSym);
+                                            }
+                                            sym->setOffset(a->offset()); /// @todo exact positioning
+                                            a->setVisible(false);
+                                            note->add(sym);
+                                        }
+                                    } else {
+                                        if (canParenthesise) {
+                                            setAndStyleProperty(a, Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS));
+                                        }
+                                        if (isSmall) {
+                                            a->setSmall(true);
+                                        }
+                                    }
+                                }
                             }
                         }
                         note->add(a);
@@ -506,15 +566,26 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                         note->setSmall(true);
                     }
                     note->setOffset(evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0) * note->defaultSpatium());
-                    const MusxInstance<FontInfo> noteFont = noteInfo->useOwnFont ? noteInfo->customFont : options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Noteheads);
                     if (targetStaff->isTabStaff(segment->tick())
                         && (noteInfo->altNhead == U'X' || noteInfo->altNhead == U'x')) {
                         // Shortcut for dead notes
                         note->setProperty(Pid::HEAD_GROUP, NoteHeadGroup::HEAD_CROSS);
                     } else {
-                        /// @todo set parentheses based on 0xF5D1u to 0xF5D4u (optional glyphs in q-whole order)
-                        /// more noteheads may have parentheses baked in, but not in SymId yet.
-                        setNoteHeadSymbol(note, FinaleTextConv::symIdFromFinaleChar(noteInfo->altNhead, noteFont));
+                        SymId customSym = FinaleTextConv::symIdFromFinaleChar(noteInfo->altNhead, noteInfo->customFont);
+                        if (customSym == SymId::noSym) {
+                            customSym = unparenthesisedNoteHead(FinaleTextConv::charNameFinale(noteInfo->altNhead, noteInfo->customFont));
+                            if (customSym != SymId::noSym) {
+                                for (int i = 0; i < 2; ++i) {
+                                    Parenthesis* p = Factory::createParenthesis(note);
+                                    p->setParent(note);
+                                    p->setTrack(curTrackIdx);
+                                    p->setVisible(note->visible());
+                                    p->setDirection(i == 0 ? DirectionH::LEFT : DirectionH::RIGHT);
+                                    note->add(p);
+                                }
+                            }
+                        }
+                        setNoteHeadSymbol(note, customSym);
                     }
                 }
             }

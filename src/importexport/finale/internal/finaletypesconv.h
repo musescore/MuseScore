@@ -80,6 +80,7 @@ extern engraving::TremoloType tremoloTypeFromSymId(engraving::SymId sym);
 extern engraving::BarLineType toMuseScoreBarLineType(musx::dom::others::Measure::BarlineType blt);
 extern engraving::FretDotType toFretDotType(musx::dom::details::FretboardDiagram::Shape shape);
 extern engraving::FretMarkerType toFretMarkerType(musx::dom::details::FretboardDiagram::Shape shape);
+extern engraving::SymId unparenthesisedNoteHead(const std::string& symName);
 
 // unit conversion
 extern double doubleFromEvpu(double evpu);
