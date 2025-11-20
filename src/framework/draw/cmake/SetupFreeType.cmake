@@ -31,4 +31,5 @@ endif()
 if (NOT FREETYPE_FOUND)
     # sets FREETYPE_LIBRARIES and FREETYPE_INCLUDE_DIRS
     add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../thirdparty/freetype freetype)
+    target_no_warning(freetype -Wno-conversion)
 endif()
