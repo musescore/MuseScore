@@ -26,7 +26,7 @@ import Muse.UiComponents 1.0
 import Muse.Dock 1.0
 
 import Muse.Cloud 1.0
-import Muse.Learn 1.0
+import Muse.Learn
 import MuseScore.Project 1.0
 import MuseScore.MuseSounds 1.0
 

@@ -115,6 +115,7 @@ set(LINK_LIB
     muse::mpe
     muse::midi
     muse::learn
+    muse::learn_qml
     muse::tours
     muse::multiinstances
     muse::cloud

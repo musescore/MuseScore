@@ -25,7 +25,7 @@ import QtQuick.Controls 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-import Muse.Learn 1.0
+import Muse.Learn
 
 FocusScope {
     id: root

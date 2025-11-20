@@ -93,7 +93,7 @@ QVariantMap LearnPageModel::classesAuthor() const
                                                 "and other related courses and services to help you create your best music. "
                                                 "Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!\n\n"
                                                 "(Note: Mastering MuseScore is available in English only)");
-    author["avatarUrl"] = "qrc:/qml/Muse/Learn/resources/marc_sabatella.JPG";
+    author["avatarUrl"] = "qrc:/qt/qml/Muse/Learn/resources/marc_sabatella.jpg";
     author["organizationName"] = muse::qtrc("learn", "Mastering MuseScore");
     author["organizationUrl"] = "https://www.masteringmusescore.com/musescore4";
 

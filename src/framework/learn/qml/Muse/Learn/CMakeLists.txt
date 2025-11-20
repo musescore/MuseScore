@@ -4,7 +4,7 @@
 # MuseScore
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited and others
+# Copyright (C) 2025 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,24 +16,21 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(muse_learn ALIAS muse::learn)
+muse_create_qml_module(muse_learn_qml ALIAS muse::learn_qml FOR muse_learn)
 
-target_sources(muse_learn PRIVATE 
-    learnmodule.cpp
-    learnmodule.h
-    learnerrors.h
-    ilearnconfiguration.h
-    ilearnservice.h
-    internal/learnconfiguration.cpp
-    internal/learnconfiguration.h
-    internal/learnservice.cpp
-    internal/learnservice.h
+qt_add_qml_module(muse_learn_qml
+    URI Muse.Learn
+    VERSION 1.0
+    SOURCES
+        learnpagemodel.cpp
+        learnpagemodel.h
+    QML_FILES
+        LearnPage.qml
+        internal/ClassesPage.qml
+        internal/Playlist.qml
+        internal/PlaylistItem.qml
+    RESOURCES
+        resources/marc_sabatella.jpg
 )
-
-if (QT_SUPPORT)
-    target_link_libraries(muse_learn PRIVATE Qt::Concurrent Qt::Network Qt::Qml)
-endif()
-
-add_subdirectory(qml/Muse/Learn)

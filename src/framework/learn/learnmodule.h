@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_LEARN_LEARNMODULE_H
-#define MUSE_LEARN_LEARNMODULE_H
+
+#pragma once
 
 #include <memory>
 
@@ -34,8 +34,6 @@ class LearnModule : public modularity::IModuleSetup
 public:
     std::string moduleName() const override;
     void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
     void onInit(const IApplication::RunMode& mode) override;
     void onDelayedInit() override;
 
@@ -44,5 +42,3 @@ private:
     std::shared_ptr<LearnService> m_learnService;
 };
 }
-
-#endif // MUSE_LEARN_LEARNMODULE_H

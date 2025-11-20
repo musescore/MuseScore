@@ -28,15 +28,8 @@
 #include "internal/learnconfiguration.h"
 #include "internal/learnservice.h"
 
-#include "view/learnpagemodel.h"
-
 using namespace muse::learn;
 using namespace muse::modularity;
-
-static void learn_init_qrc()
-{
-    Q_INIT_RESOURCE(learn);
-}
 
 std::string LearnModule::moduleName() const
 {
@@ -50,16 +43,6 @@ void LearnModule::registerExports()
 
     ioc()->registerExport<ILearnConfiguration>(moduleName(), m_learnConfiguration);
     ioc()->registerExport<ILearnService>(moduleName(), m_learnService);
-}
-
-void LearnModule::registerResources()
-{
-    learn_init_qrc();
-}
-
-void LearnModule::registerUiTypes()
-{
-    qmlRegisterType<LearnPageModel>("Muse.Learn", 1, 0, "LearnPageModel");
 }
 
 void LearnModule::onInit(const IApplication::RunMode&)
