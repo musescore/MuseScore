@@ -153,12 +153,11 @@ MusxInstance<others::LayerAttributes> FinaleParser::layerAttributes(const Fracti
     if (m_track2Layer.empty() || m_track2Layer.at(track).empty()) {
         return nullptr;
     }
-    auto i = m_track2Layer.at(track).upper_bound(tick.ticks());
-    if (i == m_track2Layer.at(track).begin()) {
-        return nullptr;
+    const auto it = muse::findLessOrEqual(m_track2Layer.at(track), tick.ticks());
+    if (it != m_track2Layer.at(track).cend()) {
+        return m_doc->getOthers()->get<others::LayerAttributes>(m_currentMusxPartId, it->second);
     }
-    const LayerIndex& layer = (--i)->second;
-    return m_doc->getOthers()->get<others::LayerAttributes>(m_currentMusxPartId, layer);
+    return nullptr;
 }
 
 DirectionV FinaleParser::getDirectionVForLayer(const ChordRest* cr)
@@ -968,6 +967,7 @@ void FinaleParser::importEntries()
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     std::vector<engraving::Note*> notesWithUnmanagedTies;
+    std::fill_n(m_track2Layer.begin(), m_score->ntracks().size(), std::vector<std::map<int, musx::dom::LayerIndex>>{});
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
         StaffCmper musxStaffId = musxScrollViewItem->staffId;
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, musxStaffId, muse::nidx);
@@ -988,7 +988,6 @@ void FinaleParser::importEntries()
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measureId);
                 break;
             }
-            std::vector<LayerIndex> trackLayers(m_score->ntracks(), 0);
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxStaffId, measureId);
             bool processContext = bool(gfHold);
             if (processContext && gfHold.calcIsCuesOnly()) {
