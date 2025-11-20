@@ -99,7 +99,7 @@ PlaybackController::PlaybackController()
 void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, [this]() { PlaybackController::togglePlay(); });
-    dispatcher()->reg(this, PLAY_FROM_SELECTION, this, &PlaybackController::playFromSelection);
+    dispatcher()->reg(this, PLAY_FROM_SELECTION, [this]() { PlaybackController::playFromSelection(); });
     dispatcher()->reg(this, STOP_CODE, [this]() { PlaybackController::pause(/*select*/ false); });
     dispatcher()->reg(this, PAUSE_AND_SELECT_CODE, [this]() { PlaybackController::pause(/*select*/ true); });
     dispatcher()->reg(this, REWIND_CODE, this, &PlaybackController::rewind);
@@ -656,28 +656,14 @@ void PlaybackController::togglePlay(bool showErrors)
     }
 }
 
-void PlaybackController::play()
+void PlaybackController::playFromSelection(bool showErrors)
 {
-    IF_ASSERT_FAILED(currentPlayer()) {
+    if (selection()->isNone()) {
         return;
     }
 
-    if (isLoopEnabled()) {
-        secs_t startSecs = playbackStartSecs();
-        seek(startSecs);
-    }
-
-    secs_t delay = 0.;
-    if (notationConfiguration()->isCountInEnabled()) {
-        notationPlayback()->triggerCountIn(m_currentTick, delay);
-    }
-
-    currentPlayer()->play(delay);
-}
-
-void PlaybackController::playFromSelection()
-{
-    if (selection()->isNone()) {
+    if (showErrors && m_onlineSoundsController->shouldShowOnlineSoundsProcessingError(isPlaying())) {
+        m_onlineSoundsController->showOnlineSoundsProcessingError([this]() { playFromSelection(false /*showErrors*/); });
         return;
     }
 
@@ -705,6 +691,25 @@ void PlaybackController::playFromSelection()
     } else if (!isPlaying()) {
         play();
     }
+}
+
+void PlaybackController::play()
+{
+    IF_ASSERT_FAILED(currentPlayer()) {
+        return;
+    }
+
+    if (isLoopEnabled()) {
+        secs_t startSecs = playbackStartSecs();
+        seek(startSecs);
+    }
+
+    secs_t delay = 0.;
+    if (notationConfiguration()->isCountInEnabled()) {
+        notationPlayback()->triggerCountIn(m_currentTick, delay);
+    }
+
+    currentPlayer()->play(delay);
 }
 
 void PlaybackController::rewind(const ActionData& args)

@@ -168,9 +168,9 @@ private:
     void addSoundFlagsIfNeed(const std::vector<engraving::EngravingItem*>& selection);
 
     void togglePlay(bool showErrors = true);
+    void playFromSelection(bool showErrors = true);
     void rewind(const muse::actions::ActionData& args);
     void play();
-    void playFromSelection();
     void pause(bool select = false);
     void stop();
     void resume();
