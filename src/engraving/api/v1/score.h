@@ -533,6 +533,17 @@ public:
     Q_INVOKABLE void doLayout(apiv1::Fraction* startTick, apiv1::Fraction* endTick);
 
     /** APIDOC
+     * Replaces the instrument for a given part with a new instrument.
+     * This changes the instrument definition including its name, clef, and sound.
+     * @method
+     * @param {Engraving.Part} part The Part object whose instrument should be replaced.
+     * @param {String} instrumentId ID of the new instrument, as listed in
+     * {@link https://github.com/musescore/MuseScore/blob/master/share/instruments/instruments.xml|instruments.xml}
+     * @since 4.7
+    */
+    Q_INVOKABLE void replaceInstrument(apiv1::Part* part, const QString& instrumentId);
+
+    /** APIDOC
      * Creates and returns a cursor to be used to navigate in the score
      * @method
      * @returns {Cursor} cursor

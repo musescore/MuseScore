@@ -21,7 +21,9 @@
 set(MODULE_TEST engraving_api_tests)
 
 set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/util_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/score_tests.cpp
 )
 
 set(MODULE_TEST_LINK

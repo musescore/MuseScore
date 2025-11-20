@@ -26,12 +26,18 @@
 #include "dom/factory.h"
 #include "dom/instrtemplate.h"
 #include "dom/measure.h"
+#include "dom/part.h"
 #include "dom/score.h"
 #include "dom/masterscore.h"
 #include "dom/segment.h"
 #include "dom/text.h"
 #include "editing/editsystemlocks.h"
 #include "types/typesconv.h"
+
+// notation
+#include "notation/inotation.h"
+#include "notation/inotationparts.h"
+#include "notation/notationtypes.h"
 
 // api
 #include "apistructs.h"
@@ -148,6 +154,40 @@ void Score::appendPartByMusicXmlId(const QString& instrumentMusicXmlId)
     }
 
     score()->appendPart(t);
+}
+
+/** APIDOC
+* Replaces the instrument for a given part with a new instrument.
+* This changes the instrument definition including its name, clef, and sound.
+* @method
+* @param {Part} part - The Part object whose instrument should be replaced.
+* @param {string} instrumentId - ID of the new instrument from instruments.xml.
+*/
+void Score::replaceInstrument(apiv1::Part* part, const QString& instrumentId)
+{
+    if (!part) {
+        LOGW("replaceInstrument: part is null");
+        return;
+    }
+
+    const InstrumentTemplate* t = searchTemplate(instrumentId);
+    if (!t) {
+        LOGW("replaceInstrument: <%s> not found", qPrintable(instrumentId));
+        return;
+    }
+
+    mu::notation::INotationPartsPtr parts = notation() ? notation()->parts() : nullptr;
+    if (!parts) {
+        LOGW("replaceInstrument: notation parts is null");
+        return;
+    }
+
+    mu::notation::InstrumentKey instrumentKey;
+    instrumentKey.partId = muse::ID(part->part()->id());
+    instrumentKey.instrumentId = muse::String::fromQString(part->part()->instrumentId());
+    instrumentKey.tick = mu::engraving::Part::MAIN_INSTRUMENT_TICK;
+
+    parts->replaceInstrument(instrumentKey, mu::engraving::Instrument::fromTemplate(t));
 }
 
 //---------------------------------------------------------
