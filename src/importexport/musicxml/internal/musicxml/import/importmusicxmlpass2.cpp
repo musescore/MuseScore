@@ -941,8 +941,7 @@ static void addLyrics(MusicXmlLogger* logger, const XmlStreamReader* const xmlre
                       const std::set<Lyrics*>& extLyrics,
                       MusicXmlLyricsExtend& extendedLyrics)
 {
-    for (const int lyricNo : muse::keys(numbrdLyrics)) {
-        Lyrics* const lyric = numbrdLyrics.at(lyricNo);
+    for (const auto& [lyricNo, lyric] : numbrdLyrics) {
         addLyric(logger, xmlreader, cr, lyric, lyricNo, extendedLyrics);
         if (muse::contains(extLyrics, lyric)) {
             extendedLyrics.addLyric(lyric);
@@ -953,8 +952,7 @@ static void addLyrics(MusicXmlLogger* logger, const XmlStreamReader* const xmlre
 static void addGraceNoteLyrics(const std::map<int, Lyrics*>& numberedLyrics, std::set<Lyrics*> extendedLyrics,
                                std::vector<GraceNoteLyrics>& gnLyrics)
 {
-    for (const int lyricNo : muse::keys(numberedLyrics)) {
-        Lyrics* const lyric = numberedLyrics.at(lyricNo);
+    for (const auto& [lyricNo, lyric] : numberedLyrics) {
         if (lyric) {
             bool extend = muse::contains(extendedLyrics, lyric);
             const GraceNoteLyrics gnl = GraceNoteLyrics(lyric, extend, lyricNo);

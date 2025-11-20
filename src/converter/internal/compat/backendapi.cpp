@@ -592,8 +592,8 @@ Ret BackendApi::doExportScoreParts(const IMasterNotationPtr masterNotation, QIOD
         partsTitles << partTitle;
 
         QVariantMap meta;
-        for (const String& key: muse::keys(partMetaTags)) {
-            meta[key] = partMetaTags[key].toQString();
+        for (const auto& [key, val] : partMetaTags) {
+            meta[key] = val.toQString();
         }
 
         meta["open"] = partScore->isOpen();

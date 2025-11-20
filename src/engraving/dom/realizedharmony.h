@@ -81,9 +81,6 @@ public:
 
     bool valid() const { return !m_dirty && m_harmony; }
 
-    const std::vector<int> pitches() const { return muse::keys(notes()); }
-    const std::vector<int> tpcs() const { return muse::values(notes()); }
-
     const PitchMap& notes() const;
     const PitchMap generateNotes(int rootTpc, int bassTpc, bool literal, Voicing voicing, int transposeOffset) const;
 
