@@ -30,6 +30,8 @@
 #include "internal/platform/win/winpopupviewclosecontroller.h"
 #endif
 
+#include "log.h"
+
 static Qt::WindowFlags resolveWindowFlags()
 {
     static const Qt::WindowFlags frameFlags = Qt::FramelessWindowHint       // Without border
@@ -38,6 +40,7 @@ static Qt::WindowFlags resolveWindowFlags()
 
 #if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
     static const Qt::WindowFlags result = Qt::Tool | frameFlags;
+    LOGI() << "resolveWindowFlags: macOS/Windows - returning Qt::Tool | frameFlags, flags:" << result;
     return result;
 #else
     static int sIsLinuxKde = -1;
@@ -53,6 +56,8 @@ static Qt::WindowFlags resolveWindowFlags()
 
         sIsLinuxKde = (desktop.contains("kde") || session.contains("kde"))
                       && QSysInfo::productType() == "ubuntu";
+
+        LOGI() << "resolveWindowFlags: sIsLinuxKde:" << sIsLinuxKde << ", sIsXcb:" << sIsXcb;
     }
 
     // needed for accessibility in spinboxes
@@ -60,14 +65,17 @@ static Qt::WindowFlags resolveWindowFlags()
     static const Qt::WindowFlags bypassFlags = Qt::BypassWindowManagerHint;
 
     if (sIsLinuxKde && sIsXcb) {
-        static const Qt::WindowFlags result = Qt::Popup | bypassFlags | frameFlags;
+        static const Qt::WindowFlags result = Qt::Tool | frameFlags;
+        LOGI() << "resolveWindowFlags: Linux KDE + XCB - returning Qt::Tool | frameFlags, flags:" << result;
         return result;
     } else if (sIsLinuxKde) {
         static const Qt::WindowFlags result = Qt::Popup | frameFlags;
+        LOGI() << "resolveWindowFlags: Linux KDE - returning Qt::Popup | frameFlags, flags:" << result;
         return result;
     }
 
     static const Qt::WindowFlags result = Qt::Tool | bypassFlags | frameFlags;
+    LOGI() << "resolveWindowFlags: Linux default - returning Qt::Tool | bypassFlags | frameFlags, flags:" << result;
     return result;
  #endif
 }
