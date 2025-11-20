@@ -150,14 +150,14 @@ std::unordered_map<int, voice_idx_t> FinaleParser::mapFinaleVoices(const std::ma
 
 MusxInstance<others::LayerAttributes> FinaleParser::layerAttributes(const Fraction& tick, track_idx_t track)
 {
-    if (m_track2Layer.empty()) {
+    if (m_track2Layer.empty() || m_track2Layer.at(track).empty()) {
         return nullptr;
     }
-    auto i = m_track2Layer.upper_bound(tick.ticks());
-    if (i == m_track2Layer.begin()) {
+    auto i = m_track2Layer.at(track).upper_bound(tick.ticks());
+    if (i == m_track2Layer.at(track).begin()) {
         return nullptr;
     }
-    const LayerIndex& layer = (--i)->second.at(track);
+    const LayerIndex& layer = (--i)->second;
     return m_doc->getOthers()->get<others::LayerAttributes>(m_currentMusxPartId, layer);
 }
 
@@ -1018,7 +1018,7 @@ void FinaleParser::importEntries()
                         }
 
                         track_idx_t curTrackIdx = staffTrackIdx + voiceOff;
-                        trackLayers.at(curTrackIdx) = layer;
+                        m_track2Layer.at(curTrackIdx).emplace(currTick.ticks(), layer);
                         if (curTrackIdx != staffTrackIdx) {
                             measureHasVoices = true;
                         }
@@ -1067,7 +1067,6 @@ void FinaleParser::importEntries()
                 rest->setVisible(!currMusxStaff->hideRests && !currMusxStaff->blankMeasure && !measureHasVoices);
                 segment->add(rest);
             }
-            m_track2Layer.emplace(currTick.ticks(), trackLayers);
         }
 
         // Ties can only be attached to notes within a single part (instrument).
