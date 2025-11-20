@@ -338,94 +338,92 @@ void FinaleParser::importArticulations()
             }
 
             // Arpeggios
-            if (articSym.value() == SymId::noSym && !c->arpeggio() && articChar.has_value()) {
-                // The Finale symbol is an optional character and not in SMuFL
-                const std::string_view* glyphName = smufl_mapping::getGlyphName(articChar.value(), smufl_mapping::SmuflGlyphSource::Finale);
-                if (glyphName && *glyphName == "arpeggioVerticalSegment") {
-                    if (c->isGrace()) {
-                        continue;
-                    }
-                    Segment* s = c->segment();
-                    track_idx_t topChordTrack = c->track();
-                    track_idx_t bottomChordTrack = c->track();
-                    if (const System* sys = c->measure()->system()) {
-                        int line = c->staffType()->isTabStaff() ? c->upNote()->string() * 2 : c->upNote()->line();
-                        // x in chord coords, y in system coords
-                        PointF baseStartPos(c->upNote()->ldata()->pos().x(),
-                                            sys->staff(c->vStaffIdx())->y() + c->staffOffsetY()
-                                            + (line * c->spatium() * c->staffType()->lineDistance().val() * 0.5));
-                        if (articDef->autoVert) {
-                            // determine up/down and add corresponding offset (flipped/main)
-                            // and also other factors (centering, stacking, etc.)
-                        } else {
-                            // observed: always use above pos
-                            baseStartPos += evpuToPointF(articDef->xOffsetMain, -articDef->yOffsetMain) * c->defaultSpatium();
-                        }
-                        baseStartPos += evpuToPointF(articAssign->horzOffset, -articAssign->vertOffset) * c->defaultSpatium();
-
-                        muse::draw::FontMetrics fm = FontTracker(articDef->fontMain).toFontMetrics(c->spatium() / c->defaultSpatium());
-                        baseStartPos.ry() -= fm.boundingRect(articChar.value()).height();
-
-                        line = c->staffType()->isTabStaff() ? c->downNote()->string() * 2 : c->downNote()->line();
-                        PointF baseEndPos(c->downNote()->ldata()->pos().x(),
-                                          sys->staff(c->vStaffIdx())->y() + c->staffOffsetY()
-                                          + (++line * c->spatium() * c->staffType()->lineDistance().val() * 0.5));
-                        baseEndPos += evpuToPointF(articAssign->horzAdd, -articAssign->vertAdd) * c->defaultSpatium();
-                        /// @todo (How) is this point affected by baseStartPos
-
-                        double upDiff = DBL_MAX;
-                        double downDiff = DBL_MAX;
-                        for (track_idx_t track = 0; track < m_score->ntracks(); ++track) {
-                            if (!sys->staff(track2staff(track))->show()) {
-                                continue;
-                            }
-                            if (s->element(track) && s->element(track)->isChord()) {
-                                Chord* potentialMatch = toChord(s->element(track));
-                                // Check for up match
-                                // Iterate through and find best top/bottom matches
-                                // Then add to top chord (not c) and set spanArpeggio (only for lower chord?) as appropriate
-                                line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->upNote()->string() * 2 : potentialMatch->upNote()->line();
-                                double upPos = sys->staff(potentialMatch->vStaffIdx())->y() + potentialMatch->staffOffsetY()
-                                               + (line * potentialMatch->spatium() * potentialMatch->staffType()->lineDistance().val() * 0.5);
-                                double diff = std::abs(upPos - baseStartPos.y());
-                                if (diff < upDiff) {
-                                    upDiff = diff;
-                                    topChordTrack = potentialMatch->track();
-                                }
-                                line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->downNote()->string() * 2 : potentialMatch->downNote()->line();
-                                double downPos = sys->staff(potentialMatch->vStaffIdx())->y() + potentialMatch->staffOffsetY()
-                                                + (line * potentialMatch->spatium() * potentialMatch->staffType()->lineDistance().val() * 0.5);
-                                diff = std::abs(downPos - baseEndPos.y());
-                                if (diff < downDiff) {
-                                    downDiff = diff;
-                                    bottomChordTrack = potentialMatch->track();
-                                }
-                            }
-                        }
-                    }
-                    Chord* arpChord = toChord(s->element(topChordTrack));
-                    Arpeggio* arpeggio = Factory::createArpeggio(arpChord);
-                    arpeggio->setTrack(topChordTrack);
-                    arpeggio->setArpeggioType(ArpeggioType::NORMAL);
-                    arpeggio->setSpan(int(bottomChordTrack + 1 - topChordTrack));
-                    for (track_idx_t track = topChordTrack; track <= bottomChordTrack; ++track) {
-                        if (s->element(track) && s->element(track)->isChord()) {
-                            toChord(s->element(track))->setSpanArpeggio(arpeggio);
-                        }
-                    }
-                    // Unused, probably don't map nicely
-                    // arpeggio->setUserLen1(absoluteDouble);
-                    // arpeggio->setUserLen2(absoluteDouble);
-                    arpeggio->setPlayArpeggio(articDef->playArtic);
-                    // Playback values in finale are EDUs by default, or in % by non-default (exact workings needs to be investigated)
-                    // MuseScore is relative to BPM 120 (8 notes take the spread time beats).
-                    Fraction totalArpDuration = eduToFraction(articDef->startTopNoteDelta - articDef->startBotNoteDelta);
-                    double beatsPerSecondRatio = m_score->tempo(s->tick()).val / 2.0; // We are this much faster/slower than 120 bpm
-                    double timeIn120BPM = totalArpDuration.toDouble() / beatsPerSecondRatio;
-                    arpeggio->setStretch(timeIn120BPM * 8.0 / c->notes().size());
-                    arpeggio->setParent(arpChord);
-                    arpChord->setArpeggio(arpeggio);
+			// The Finale symbol is an optional character and not in SMuFL
+            if (articSym.value() == SymId::noSym && !c->arpeggio() && articChar.has_value()
+				&& FinaleTextConv::charNameFinale(articChar.value(), articDef->fontMain) == "arpeggioVerticalSegment") {
+                if (c->isGrace()) {
+                    continue;
                 }
+                Segment* s = c->segment();
+                track_idx_t topChordTrack = c->track();
+                track_idx_t bottomChordTrack = c->track();
+                if (const System* sys = c->measure()->system()) {
+                    int line = c->staffType()->isTabStaff() ? c->upNote()->string() * 2 : c->upNote()->line();
+                    // x in chord coords, y in system coords
+                    PointF baseStartPos(c->upNote()->ldata()->pos().x(),
+                                        sys->staff(c->vStaffIdx())->y() + c->staffOffsetY()
+                                        + (line * c->spatium() * c->staffType()->lineDistance().val() * 0.5));
+                    if (articDef->autoVert) {
+                        // determine up/down and add corresponding offset (flipped/main)
+                        // and also other factors (centering, stacking, etc.)
+                    } else {
+                        // observed: always use above pos
+                        baseStartPos += evpuToPointF(articDef->xOffsetMain, -articDef->yOffsetMain) * c->defaultSpatium();
+                    }
+                    baseStartPos += evpuToPointF(articAssign->horzOffset, -articAssign->vertOffset) * c->defaultSpatium();
+
+                    muse::draw::FontMetrics fm = FontTracker(articDef->fontMain).toFontMetrics(c->spatium() / c->defaultSpatium());
+                    baseStartPos.ry() -= fm.boundingRect(articChar.value()).height();
+
+                    line = c->staffType()->isTabStaff() ? c->downNote()->string() * 2 : c->downNote()->line();
+                    PointF baseEndPos(c->downNote()->ldata()->pos().x(),
+                                      sys->staff(c->vStaffIdx())->y() + c->staffOffsetY()
+                                      + (++line * c->spatium() * c->staffType()->lineDistance().val() * 0.5));
+                    baseEndPos += evpuToPointF(articAssign->horzAdd, -articAssign->vertAdd) * c->defaultSpatium();
+                    /// @todo (How) is this point affected by baseStartPos
+
+                    double upDiff = DBL_MAX;
+                    double downDiff = DBL_MAX;
+                    for (track_idx_t track = 0; track < m_score->ntracks(); ++track) {
+                        if (!sys->staff(track2staff(track))->show()) {
+                            continue;
+                        }
+                        if (s->element(track) && s->element(track)->isChord()) {
+                            Chord* potentialMatch = toChord(s->element(track));
+                            // Check for up match
+                            // Iterate through and find best top/bottom matches
+                            // Then add to top chord (not c) and set spanArpeggio (only for lower chord?) as appropriate
+                            line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->upNote()->string() * 2 : potentialMatch->upNote()->line();
+                            double upPos = sys->staff(potentialMatch->vStaffIdx())->y() + potentialMatch->staffOffsetY()
+                                           + (line * potentialMatch->spatium() * potentialMatch->staffType()->lineDistance().val() * 0.5);
+                            double diff = std::abs(upPos - baseStartPos.y());
+                            if (diff < upDiff) {
+                                upDiff = diff;
+                                topChordTrack = potentialMatch->track();
+                            }
+                            line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->downNote()->string() * 2 : potentialMatch->downNote()->line();
+                            double downPos = sys->staff(potentialMatch->vStaffIdx())->y() + potentialMatch->staffOffsetY()
+                                            + (line * potentialMatch->spatium() * potentialMatch->staffType()->lineDistance().val() * 0.5);
+                            diff = std::abs(downPos - baseEndPos.y());
+                            if (diff < downDiff) {
+                                downDiff = diff;
+                                bottomChordTrack = potentialMatch->track();
+                            }
+                        }
+                    }
+                }
+                Chord* arpChord = toChord(s->element(topChordTrack));
+                Arpeggio* arpeggio = Factory::createArpeggio(arpChord);
+                arpeggio->setTrack(topChordTrack);
+                arpeggio->setArpeggioType(ArpeggioType::NORMAL);
+                arpeggio->setSpan(int(bottomChordTrack + 1 - topChordTrack));
+                for (track_idx_t track = topChordTrack; track <= bottomChordTrack; ++track) {
+                    if (s->element(track) && s->element(track)->isChord()) {
+                        toChord(s->element(track))->setSpanArpeggio(arpeggio);
+                    }
+                }
+                // Unused, probably don't map nicely
+                // arpeggio->setUserLen1(absoluteDouble);
+                // arpeggio->setUserLen2(absoluteDouble);
+                arpeggio->setPlayArpeggio(articDef->playArtic);
+                // Playback values in finale are EDUs by default, or in % by non-default (exact workings needs to be investigated)
+                // MuseScore is relative to BPM 120 (8 notes take the spread time beats).
+                Fraction totalArpDuration = eduToFraction(articDef->startTopNoteDelta - articDef->startBotNoteDelta);
+                double beatsPerSecondRatio = m_score->tempo(s->tick()).val / 2.0; // We are this much faster/slower than 120 bpm
+                double timeIn120BPM = totalArpDuration.toDouble() / beatsPerSecondRatio;
+                arpeggio->setStretch(timeIn120BPM * 8.0 / c->notes().size());
+                arpeggio->setParent(arpChord);
+                arpChord->setArpeggio(arpeggio);
             }
 
             /// @todo Ornament properties, chordlines, fingerings, trills, figured bass?, pedal lines?

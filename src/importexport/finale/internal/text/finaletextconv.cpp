@@ -122,6 +122,21 @@ std::optional<char32_t> FinaleTextConv::mappedChar(char32_t c, const MusxInstanc
     return c;
 }
 
+std::string FinaleTextConv::charNameFinale(char32_t c, const MusxInstance<FontInfo>& font)
+{
+    if (!c) {
+        return {};
+    }
+    std::optional<char32_t> mappedChar = FinaleTextConv::mappedChar(c, font);
+    if (!mappedChar.has_value()) {
+        return {};
+    }
+    if (const std::string_view* glyphName = smufl_mapping::getGlyphName(mappedChar.value(), smufl_mapping::SmuflGlyphSource::Finale)) {
+        return std::string{*glyphName};
+    }
+    return {};
+}
+
 std::optional<String> FinaleTextConv::smuflStringFromFinaleChar(char32_t c, const MusxInstance<FontInfo>& font)
 {
     if (!font->calcIsSMuFL()) { /// @todo See note above about `calcIsSMuFL`
