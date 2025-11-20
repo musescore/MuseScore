@@ -1324,11 +1324,9 @@ void FinaleParser::importPageTexts()
             return { startP };
         }
         page_idx_t endP = page_idx_t(pageTextAssign->calcEndPageNumber(m_currentMusxPartId).value_or(PageCmper(m_score->npages())) - 1);
+        endP = std::min(endP, m_score->npages() - 1);
         std::vector<page_idx_t> pagesWithText;
         for (page_idx_t i = startP; i <= endP; ++i) {
-            if (i >= m_score->npages()) {
-                break;
-            }
             pagesWithText.emplace_back(i);
         }
         return pagesWithText;
