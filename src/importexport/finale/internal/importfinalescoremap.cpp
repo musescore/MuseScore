@@ -1261,12 +1261,12 @@ void FinaleParser::importPageLayout()
         const MusxInstance<others::StaffSystem>& leftStaffSystem = staffSystems[i];
         MusxInstance<others::StaffSystem>& rightStaffSystem = staffSystems[i];
 
-        //retrieve leftmost measure of system
+        // Retrieve leftmost measure of system
         Fraction startTick = muse::value(m_meas2Tick, leftStaffSystem->startMeas, Fraction(-1, 1));
         Measure* startMeasure = !startTick.negative() ? m_score->tick2measure(startTick) : nullptr;
 
-        // determine if system is first on the page
-        // determine the current page the staffsystem is on
+        // Determine if system is first on the page
+        // Determine the current page the staffsystem is on
         bool isFirstSystemOnPage = false;
         for (size_t j = currentPageIndex; j < pages.size(); ++j) {
             const MusxInstance<others::Page>& page = pages[j];
@@ -1321,7 +1321,7 @@ void FinaleParser::importPageLayout()
             break;
         }
 
-        // now we have moved Coda Systems, compute end of System
+        // Now we have moved Coda Systems, compute end of System
         Fraction endTick = muse::value(m_meas2Tick, rightStaffSystem->getLastMeasure(), Fraction(-1, 1));
         Measure* endMeasure = !endTick.negative() ? m_score->tick2measure(endTick) : nullptr;
         IF_ASSERT_FAILED(startMeasure && endMeasure) {
@@ -1329,7 +1329,8 @@ void FinaleParser::importPageLayout()
             continue;
         }
 
-        // create system left and right margins
+        // Create system left and right margins
+        /// @todo account for instrument name visibility shenanigans
         MeasureBase* sysStart = startMeasure;
         if (!muse::RealIsNull(double(leftStaffSystem->left))) {
             // for the very first system, create a non-frame indent instead
@@ -1364,8 +1365,8 @@ void FinaleParser::importPageLayout()
         } else {
             logger()->logInfo(String(u"No need to add right margin for system %1").arg(i));
         }
-        // lock measures in place
-        // we lock all systems to guarantee we end up with the correct measure distribution
+
+        // Lock measures in place, to guarantee we end up with the correct measure distribution
         m_score->addSystemLock(new SystemLock(sysStart, sysEnd));
 
         // Calculate if this is the last system on the page
