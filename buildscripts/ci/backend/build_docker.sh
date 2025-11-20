@@ -25,14 +25,27 @@ ORIGIN_DIR=${PWD}
 ARTIFACTS_DIR=build.artifacts
 DOCKER_WORK_DIR=$ARTIFACTS_DIR/docker
 MU_VERSION=""
+PACKARCH="" # architecture (x86_64, aarch64, armv7l)
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -v|--version) MU_VERSION="$2"; shift ;;
+        --arch) PACKARCH="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
+
+if [ -z "$PACKARCH" ]; then 
+    PACKARCH="x86_64"
+fi
+
+case "$PACKARCH" in
+    aarch64|arm64) DOCKER_PLATFORM="linux/arm64" ;;
+    x86_64|amd64) DOCKER_PLATFORM="linux/amd64" ;;
+    armv7l|armhf) DOCKER_PLATFORM="linux/arm/v7" ;;
+    *) echo "Unknown architecture: $PACKARCH"; exit 1 ;;
+esac
 
 if [ -z "$MU_VERSION" ]; then MU_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env); fi
 
@@ -51,7 +64,15 @@ sed -i 's|x.x.x.xxxxxx|'${MU_VERSION}'|' $DOCKER_WORK_DIR/install_mu.sh
 
 cd $DOCKER_WORK_DIR
 echo "Build Docker"
-docker build -t ghcr.io/musescore/converter_4:${MU_VERSION} .
+
+# Enable buildx
+docker buildx create --use >/dev/null 2>&1 || true
+
+docker buildx build \
+    --platform ${DOCKER_PLATFORM} \
+    -t ghcr.io/musescore/converter_4:${MU_VERSION} \
+    --load .
+
 cd $ORIGIN_DIR
 
 echo "Done!!"

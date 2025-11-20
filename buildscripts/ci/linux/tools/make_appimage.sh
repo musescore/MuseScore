@@ -20,6 +20,16 @@ BUILD_TOOLS=$HOME/build_tools
 
 mkdir -p $BUILD_TOOLS
 
+echo "============== logs"
+
+cd "$(dirname "${INSTALL_DIR}")"
+appdir="$(basename "${INSTALL_DIR}")"
+echo "appdir: $(readlink -f "$appdir")"
+find "$appdir" -type l -exec ls -l {} \; | sed -n '1,200p'
+cd "$ORIGIN_DIR"
+
+echo "============== logs"
+
 ##########################################################################
 # INSTALL APPIMAGETOOL AND LINUXDEPLOY
 ##########################################################################
@@ -341,6 +351,25 @@ To enable automatic updates, please set the env. variable UPDATE_INFORMATION
 according to <https://github.com/AppImage/AppImageSpec/blob/master/draft.md>.
 EOF
 fi
+
+echo "============== logs"
+
+cd "$(dirname "${INSTALL_DIR}")"
+appdir="$(basename "${INSTALL_DIR}")"
+echo "appdir: $(readlink -f "$appdir")"
+find "$appdir" -type l -exec ls -l {} \; | sed -n '1,200p'
+cd "$ORIGIN_DIR"
+
+echo "============== logs"
+
+# Remove symlinks before creating AppImage
+cd "$(dirname "${INSTALL_DIR}")"
+appdir="$(basename "${INSTALL_DIR}")"
+[ -L "${appdir}/usr" ] && echo "Removing ${appdir}/usr (symlink)" && rm -f "${appdir}/usr"
+#[ -L "${appdir}/share/man/man1/musescore4portable.1.gz" ] && echo "Removing ${appdir}/share/man/man1/musescore4portable.1.gz (symlink)" && rm -f "${appdir}/share/man/man1/musescore4portable.1.gz"
+#[ -L "${appdir}/mscore4portable.png" ] && echo "Removing ${appdir}/mscore4portable.png (symlink)" && rm -f "${appdir}/mscore4portable.png"
+#[ -L "${appdir}/org.musescore.MuseScore4portable.desktop" ] && echo "Removing ${appdir}/org.musescore.MuseScore4portable.desktop (symlink)" && rm -f "${appdir}/org.musescore.MuseScore4portable.desktop"
+cd "$ORIGIN_DIR"
 
 # create AppImage
 appimagetool "${appimagetool_args[@]}" "${appdir}" "${appimage}"
