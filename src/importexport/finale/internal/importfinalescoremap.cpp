@@ -1355,8 +1355,7 @@ void FinaleParser::importPageLayout()
             HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
             rightBox->setBoxWidth(absoluteSpatiumFromEvpu(-rightStaffSystem->right, rightBox));
             setAndStyleProperty(rightBox, Pid::SIZE_SPATIUM_DEPENDENT, false); /// @todo still doesn't seem to be scaled correctly
-            Fraction rightTick = endMeasure->nextMeasure() ? endMeasure->nextMeasure()->tick() : m_score->last()->endTick();
-            rightBox->setTick(rightTick);
+            rightBox->setTick(endMeasure->endTick());
             rightBox->setNext(endMeasure->next());
             rightBox->setPrev(endMeasure);
             m_score->measures()->insert(rightBox, rightBox);
@@ -1369,24 +1368,22 @@ void FinaleParser::importPageLayout()
         // we lock all systems to guarantee we end up with the correct measure distribution
         m_score->addSystemLock(new SystemLock(sysStart, sysEnd));
 
-        // add page break if needed
-        bool isLastSystemOnPage = false;
-        for (const MusxInstance<others::Page>& page : pages) {
-            if (page->isBlank()) {
-                continue;
-            }
-            const MusxInstance<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystemId);
-            Fraction pageStartTick = muse::value(m_meas2Tick, firstPageSystem->startMeas, Fraction(-1, 1));
-            // the last staff system in the score can't be compared to the startTick of the preceding page -
-            // account for that here too, but don't add a page break
-            if (pageStartTick == endTick + endMeasure->ticks() || i + 1 == staffSystems.size()) {
-                isLastSystemOnPage = true;
-                if (i + 1 < staffSystems.size()) {
+        // Calculate if this is the last system on the page
+        // and add a page break if needed
+        bool isLastSystemOnPage = i + 1 == staffSystems.size(); // last total system is always last on page and doesn't need a page break
+        if (!isLastSystemOnPage) {
+            for (const MusxInstance<others::Page>& page : pages) {
+                if (page->isBlank()) {
+                    continue;
+                }
+                const MusxInstance<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystemId);
+                if (muse::value(m_meas2Tick, firstPageSystem->startMeas, Fraction(-1, 1)) == endMeasure->endTick()) {
+                    isLastSystemOnPage = true;
                     LayoutBreak* lb = Factory::createLayoutBreak(sysEnd);
                     lb->setLayoutBreakType(LayoutBreakType::PAGE);
                     sysEnd->add(lb);
+                    break;
                 }
-                break;
             }
         }
 
