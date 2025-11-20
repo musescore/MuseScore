@@ -18,13 +18,134 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+# - Creates a target and sets up common properties for Muse modules
+function(muse_create_module target_name)
+    set(options NO_QT NO_PCH NO_UNITY STUB)
+    set(oneValueArgs ALIAS)
+    cmake_parse_arguments(PARSE_ARGV 1 arg "${options}" "${oneValueArgs}" "")
+
+    # Status message
+    set(message "Configuring ${target_name}")
+    if (arg_ALIAS)
+        set(message "${message} <${arg_ALIAS}>")
+    endif()
+    if (arg_STUB)
+        set(message "${message} [stub]")
+    endif()
+    message(STATUS "${message}")
+
+    # Create target
+    if (NOT arg_NO_QT AND QT_SUPPORT)
+        # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
+        qt_add_library(${target_name})
+    else()
+        # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
+        add_library(${target_name})
+
+        set_target_properties(${target_name} PROPERTIES
+            AUTOMOC OFF
+            AUTOUIC OFF
+            AUTORCC OFF
+        )
+    endif()
+
+    # Alias target
+    if (arg_ALIAS)
+        add_library(${arg_ALIAS} ALIAS ${target_name})
+    endif()
+    
+    # Include directories
+    if (NOT MUSE_FRAMEWORK_PATH)
+        set(MUSE_FRAMEWORK_PATH ${PROJECT_SOURCE_DIR})
+    endif()
+
+    target_include_directories(${target_name} PRIVATE
+        ${PROJECT_BINARY_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}
+
+        ${PROJECT_SOURCE_DIR}/src
+
+        ${MUSE_FRAMEWORK_PATH}
+        ${MUSE_FRAMEWORK_PATH}/framework
+        ${MUSE_FRAMEWORK_PATH}/framework/global
+        ${MUSE_FRAMEWORK_PATH}/framework/testing/thirdparty/googletest/googletest/include
+
+        # compat
+        ${MUSE_FRAMEWORK_PATH}/src
+        ${MUSE_FRAMEWORK_PATH}/src/framework
+        ${MUSE_FRAMEWORK_PATH}/src/framework/global
+        ${MUSE_FRAMEWORK_PATH}/src/framework/testing/thirdparty/googletest/googletest/include
+        # end compat
+    )
+
+    # Precompiled header
+    if (NOT arg_NO_PCH AND MUSE_COMPILE_USE_PCH)
+        if (${target_name} STREQUAL muse_global)
+            target_precompile_headers_clang_ccache(${target_name} PRIVATE ${MUSE_FRAMEWORK_PATH}/buildscripts/pch/pch.h)
+        else()
+            target_precompile_headers_clang_ccache(${target_name} REUSE_FROM muse_global)
+            target_compile_definitions(${target_name} PRIVATE muse_global_EXPORTS=1)
+            set(MODULE_LINK_GLOBAL ON)
+        endif()
+    endif()
+
+    # Unity build
+    if (arg_NO_UNITY)
+        set_target_properties(${target_name} PROPERTIES UNITY_BUILD OFF)
+    elseif(MUSE_COMPILE_USE_UNITY)
+        set_target_properties(${target_name} PROPERTIES UNITY_BUILD ON)
+    endif()
+
+    # Code coverage
+    if (MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE AND MODULE_USE_COVERAGE)
+        set(COVERAGE_FLAGS -fprofile-arcs -ftest-coverage --coverage)
+        target_compile_options(${target_name} PRIVATE ${COVERAGE_FLAGS})
+        target_link_options(${target_name} PRIVATE -lgcov --coverage -fprofile-arcs -ftest-coverage)
+    endif()
+
+    # Link with global module
+    if (NOT ${target_name} STREQUAL muse_global AND MODULE_LINK_GLOBAL)
+        target_link_libraries(${target_name} PRIVATE muse_global)
+    endif()
+endfunction()
+
+# - Creates a target and sets up common properties for Muse thirdparty modules
+function(muse_create_thirdparty_module target_name)
+    set(oneValueArgs ALIAS)
+    cmake_parse_arguments(PARSE_ARGV 1 arg "" "${oneValueArgs}" "")
+
+    # Status message
+    set(message "Configuring ${target_name}")
+    if (arg_ALIAS)
+        set(message "${message} <${arg_ALIAS}>")
+    endif()
+    message(STATUS "${message}")
+
+    # Create target
+    # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
+    add_library(${target_name})
+
+    set_target_properties(${target_name} PROPERTIES
+        AUTOMOC OFF
+        AUTOUIC OFF
+        AUTORCC OFF
+    )
+
+    # Alias target
+    if (arg_ALIAS)
+        add_library(${arg_ALIAS} ALIAS ${target_name})
+    endif()
+endfunction()
+
+### LEGACY MACROS
+
 ## Declare
 # declare_module(somename) - set module (target) name
 
 ## Setup
 # set(MODULE somename)                        - set module (target) name
 # set(MODULE_ALIAS somename)                  - set module (target) alias name
-# set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})  - set module root
 # set(MODULE_INCLUDE ...)                     - set include (by default see below include_directories)
 # set(MODULE_INCLUDE_PRIVATE ...)             - set private include
 # set(MODULE_DEF ...)                         - set definitions
@@ -49,7 +170,6 @@ macro(declare_module name)
     set(MODULE ${name})
     # just reset all settings
     unset(MODULE_ALIAS)
-    unset(MODULE_ROOT)
     unset(MODULE_INCLUDE)
     unset(MODULE_DEF)
     unset(MODULE_SRC)
@@ -66,15 +186,6 @@ macro(declare_module name)
     unset(MODULE_IS_STUB)
     set(MODULE_USE_COVERAGE ON)
 endmacro()
-
-macro(declare_thirdparty_module name)
-    declare_module(${name})
-    set(MODULE_USE_QT OFF)
-    set(MODULE_LINK_GLOBAL OFF)
-    set(MODULE_USE_PCH OFF)
-    set(MODULE_USE_COVERAGE OFF)
-endmacro()
-
 
 macro(add_qml_import_path input_var)
     if (NOT ${${input_var}} STREQUAL "")
@@ -98,23 +209,31 @@ function(target_precompile_headers_clang_ccache target)
 endfunction()
 
 macro(setup_module)
-    if (MODULE_IS_STUB)
-        message(STATUS "Configuring ${MODULE} <${MODULE_ALIAS}> [stub]")
-    else()
-        message(STATUS "Configuring ${MODULE} <${MODULE_ALIAS}>")
+    set(ARGS)
+
+    if (NOT MODULE_USE_QT)
+        list(APPEND ARGS NO_QT)
     endif()
 
-    if (MODULE_USE_QT AND QT_SUPPORT)
-        # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
-        qt_add_library(${MODULE} ${MODULE_SRC})
-    else()
-        # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
-        add_library(${MODULE} ${MODULE_SRC})
+    if (MODULE_IS_STUB)
+        list(APPEND ARGS STUB)
     endif()
 
     if (MODULE_ALIAS)
-        add_library(${MODULE_ALIAS} ALIAS ${MODULE})
+        list(APPEND ARGS ALIAS ${MODULE_ALIAS})
     endif()
+
+    if (NOT MODULE_USE_PCH)
+        list(APPEND ARGS NO_PCH)
+    endif()
+
+    if (NOT MODULE_USE_UNITY)
+        list(APPEND ARGS NO_UNITY)
+    endif()
+
+    muse_create_module(${MODULE} ${ARGS})
+
+    target_sources(${MODULE} PRIVATE ${MODULE_SRC})
 
     if (MODULE_USE_QT AND QT_SUPPORT)
         if (MODULE_QRC)
@@ -126,12 +245,6 @@ macro(setup_module)
             qt_add_big_resources(RCC_BIG_SOURCES ${MODULE_BIG_QRC})
             target_sources(${MODULE} PRIVATE ${RCC_BIG_SOURCES})
         endif()
-    else()
-        set_target_properties(${MODULE} PROPERTIES
-            AUTOMOC OFF
-            AUTOUIC OFF
-            AUTORCC OFF
-        )
     endif()
 
     add_qml_import_path(MODULE_QML_IMPORT)
@@ -145,49 +258,9 @@ macro(setup_module)
         set(MUSE_FRAMEWORK_PATH ${PROJECT_SOURCE_DIR})
     endif()
 
-    if (MUSE_COMPILE_USE_PCH AND MODULE_USE_PCH)
-        if (${MODULE} STREQUAL muse_global)
-            target_precompile_headers_clang_ccache(${MODULE} PRIVATE ${MUSE_FRAMEWORK_PATH}/buildscripts/pch/pch.h)
-        else()
-            target_precompile_headers_clang_ccache(${MODULE} REUSE_FROM muse_global)
-            target_compile_definitions(${MODULE} PRIVATE muse_global_EXPORTS=1)
-
-            set(MODULE_LINK_GLOBAL ON)
-        endif()
-    endif()
-
-    if (MUSE_COMPILE_USE_UNITY)
-        if (MODULE_USE_UNITY)
-            set_target_properties(${MODULE} PROPERTIES UNITY_BUILD ON)
-        else()
-            set_target_properties(${MODULE} PROPERTIES UNITY_BUILD OFF)
-        endif()
-    endif()
-
-    target_include_directories(${MODULE} PUBLIC
-        ${MODULE_INCLUDE}
-    )
-
-    target_include_directories(${MODULE} PRIVATE
-        ${PROJECT_BINARY_DIR}
-        ${CMAKE_CURRENT_BINARY_DIR}
-        ${MODULE_ROOT}
-
-        ${PROJECT_SOURCE_DIR}/src
-
-        ${MUSE_FRAMEWORK_PATH}
-        ${MUSE_FRAMEWORK_PATH}/framework
-        ${MUSE_FRAMEWORK_PATH}/framework/global
-        ${MUSE_FRAMEWORK_PATH}/framework/testing/thirdparty/googletest/googletest/include
-
-        # compat
-        ${MUSE_FRAMEWORK_PATH}/src
-        ${MUSE_FRAMEWORK_PATH}/src/framework
-        ${MUSE_FRAMEWORK_PATH}/src/framework/global
-        ${MUSE_FRAMEWORK_PATH}/src/framework/testing/thirdparty/googletest/googletest/include
-        # end compat
-
-        ${MODULE_INCLUDE_PRIVATE}
+    target_include_directories(${MODULE} 
+        PRIVATE ${MODULE_INCLUDE_PRIVATE}
+        PUBLIC ${MODULE_INCLUDE}
     )
 
     target_compile_definitions(${MODULE} PUBLIC
@@ -199,18 +272,8 @@ macro(setup_module)
         ${MODULE_DEF_PRIVATE}
     )
 
-    if (MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE AND MODULE_USE_COVERAGE)
-        set(COVERAGE_FLAGS -fprofile-arcs -ftest-coverage --coverage)
-        target_compile_options(${MODULE} PRIVATE ${COVERAGE_FLAGS})
-        target_link_options(${MODULE} PRIVATE -lgcov --coverage)
-    endif()
-
-    if (NOT ${MODULE} MATCHES muse_global AND MODULE_LINK_GLOBAL)
-        target_link_libraries(${MODULE} PRIVATE muse_global)
-    endif()
-
     target_link_libraries(${MODULE}
-        PRIVATE ${MODULE_LINK} ${COVERAGE_FLAGS}
+        PRIVATE ${MODULE_LINK}
         PUBLIC ${MODULE_LINK_PUBLIC}
     )
 endmacro()

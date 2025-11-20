@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_thirdparty_module(vst_sdk_3)
+muse_create_thirdparty_module(vst3sdk)
 
 if(MUSE_MODULE_VST_VST3_SDK_PATH)
     set(VST3_SDK_PATH ${MUSE_MODULE_VST_VST3_SDK_PATH})
@@ -51,12 +51,10 @@ include(GetCompilerInfo)
 include(GetBuildType)
 
 if (BUILD_IS_DEBUG)
-    set(MODULE_DEF -DDEVELOPMENT)
+    target_compile_definitions(vst3sdk PRIVATE DEVELOPMENT)
 else()
-    set(MODULE_DEF -DRELEASE)
+    target_compile_definitions(vst3sdk PRIVATE RELEASE)
 endif()
-
-set(MODULE_USE_UNITY OFF)
 
 if (OS_IS_WIN)
     set(PLATFORM_SRC
@@ -173,7 +171,7 @@ set(VST_SDK_HOSTING_SRC
     ${VST3_SDK_PATH}/public.sdk/source/vst/hosting/plugprovider.h
     )
 
-set(MODULE_SRC
+target_sources(vst3sdk PRIVATE
     ${VST_BASE_SRC}
     ${VST_PLUGIN_INTERFACES_SRC}
     ${VST_SDK_COMMON_SRC}
@@ -181,14 +179,12 @@ set(MODULE_SRC
     ${PLATFORM_SRC}
     )
 
-set(MODULE_INCLUDE
+target_include_directories(vst3sdk PUBLIC
     ${VST3_SDK_PATH}
     )
 
-setup_module()
-
-target_no_warning(${MODULE} -w)
+target_no_warning(vst3sdk -w)
 
 if (CC_IS_CLANG)
-    set_property(TARGET ${MODULE} APPEND_STRING PROPERTY COMPILE_FLAGS "-fobjc-arc")
+    target_compile_options(vst3sdk PRIVATE -fobjc-arc)
 endif()

@@ -1,4 +1,4 @@
-declare_thirdparty_module(flac)
+muse_create_thirdparty_module(flac)
 
 include(GetPlatformInfo)
 include(GetCompilerInfo)
@@ -9,9 +9,10 @@ set(FLAC_SRC ${FLAC_DIR}/src)
 
 include(GetFlacCompileInfo.cmake)
 
-list(APPEND FLAC_DEFS
-    -DHAVE_CONFIG_H
-    -DFLAC__NO_DLL)
+target_compile_definitions(flac
+    PRIVATE HAVE_CONFIG_H
+    PUBLIC FLAC__NO_DLL
+)
 
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "i686" AND HAVE_STACKREALIGN_FLAG)
     add_compile_options(-mstackrealign)
@@ -19,18 +20,17 @@ endif()
 
 configure_file(${FLAC_DIR}/config.cmake.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-set(MODULE_DEF ${FLAC_DEFS})
+target_include_directories(flac 
+    PUBLIC
+        ${FLAC_DIR}/include
+        ${FLAC_DIR}/src/libFLAC/include
+        ${FLAC_DIR}/src/libFLAC++/include
+    PRIVATE
+        ${CMAKE_CURRENT_BINARY_DIR}
+)
 
-set (MODULE_INCLUDE
-    ${FLAC_DIR}
-    ${FLAC_DIR}/include
-    ${FLAC_DIR}/src
-    ${FLAC_DIR}/src/libFLAC/include
-    ${FLAC_DIR}/src/libFLAC++/include
-    ${CMAKE_CURRENT_BINARY_DIR}
-    )
-
-set (MODULE_SRC
+target_sources(flac PRIVATE
+    ${CMAKE_CURRENT_BINARY_DIR}/config.h
     ${FLAC_SRC}/libFLAC/bitmath.c
     ${FLAC_SRC}/libFLAC/bitreader.c
     ${FLAC_SRC}/libFLAC/bitwriter.c
@@ -65,29 +65,24 @@ set (MODULE_SRC
     ${FLAC_SRC}/libFLAC++/stream_encoder.cpp
     $<$<BOOL:${OS_IS_WIN}>:${FLAC_DIR}/include/share/win_utf8_io.h>
     $<$<BOOL:${OS_IS_WIN}>:${FLAC_SRC}/share/win_utf8_io/win_utf8_io.c>
-    )
+)
 
-set(MODULE_USE_UNITY OFF)
-set(MODULE_USE_COVERAGE OFF)
-
-setup_module()
-
-target_no_warning(${MODULE} -Wno-deprecated)
-target_no_warning(${MODULE} -Wno-conversion)
-target_no_warning(${MODULE} -Wno-unused-parameter)
-target_no_warning(${MODULE} -Wno-unused-variable)
-target_no_warning(${MODULE} -Wno-type-limits)
-target_no_warning(${MODULE} -Wno-unknown-pragmas)
-target_no_warning(${MODULE} -Wno-conversion)
-target_no_warning(${MODULE} -Wno-uninitialized)
-target_no_warning(${MODULE} -Wno-shift-negative-value)
-target_no_warning(${MODULE} -Wno-implicit-fallthrough)
-target_no_warning(${MODULE} -Wno-empty-body)
-target_no_warning(${MODULE} -Wno-attributes)
-target_no_warning(${MODULE} -WMSVC-no-translation-unit-is-empty)
-target_no_warning(${MODULE} -WMSVC-no-nonstandard-extension-used)
-target_no_warning(${MODULE} -WMSVC-no-assignment-within-conditional-expression)
-target_no_warning(${MODULE} -WMSVC-no-hides-previous)
-target_no_warning(${MODULE} -WMSVC-no-undefined-assuming-extern)
-target_no_warning(${MODULE} -WMSVC-named-type-definition-in-parentheses)
-target_no_warning(${MODULE} -WMSVC-no-unreachable)
+target_no_warning(flac -Wno-deprecated)
+target_no_warning(flac -Wno-conversion)
+target_no_warning(flac -Wno-unused-parameter)
+target_no_warning(flac -Wno-unused-variable)
+target_no_warning(flac -Wno-type-limits)
+target_no_warning(flac -Wno-unknown-pragmas)
+target_no_warning(flac -Wno-conversion)
+target_no_warning(flac -Wno-uninitialized)
+target_no_warning(flac -Wno-shift-negative-value)
+target_no_warning(flac -Wno-implicit-fallthrough)
+target_no_warning(flac -Wno-empty-body)
+target_no_warning(flac -Wno-attributes)
+target_no_warning(flac -WMSVC-no-translation-unit-is-empty)
+target_no_warning(flac -WMSVC-no-nonstandard-extension-used)
+target_no_warning(flac -WMSVC-no-assignment-within-conditional-expression)
+target_no_warning(flac -WMSVC-no-hides-previous)
+target_no_warning(flac -WMSVC-no-undefined-assuming-extern)
+target_no_warning(flac -WMSVC-named-type-definition-in-parentheses)
+target_no_warning(flac -WMSVC-no-unreachable)
