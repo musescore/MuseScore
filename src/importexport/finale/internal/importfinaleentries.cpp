@@ -833,6 +833,7 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
             }
         }
     }
+    beam->resetExplicitParent();
     return true;
 }
 
