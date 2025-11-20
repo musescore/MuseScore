@@ -237,7 +237,7 @@ QList<QVariantMap> StartupScenario::welcomeDialogData() const
                                            "Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world."));
     item1.insert("buttonText", muse::qtrc("appshell/welcome", "View my scores online"));
     item1.insert("destinationUrl",
-                 "https://musescore.com/my-scores?utm_source=mss-app-welcome-musescore-com&utm_medium[…]lcome-musescore-com&utm_campaign=mss-app-welcome-musescore-com");
+                 "https://musescore.com/my-scores?utm_source=mss-app-welcome-musescore-com&utm_medium=mss-app-welcome-musescore-com&utm_campaign=mss-app-welcome-musescore-com");
 
     QVariantMap item2;
     item2.insert("title", muse::qtrc("appshell/welcome", "What’s new in MuseScore Studio"));
