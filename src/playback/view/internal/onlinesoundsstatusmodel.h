@@ -86,6 +86,7 @@ private:
     bool m_manualProcessingAllowed = false;
     bool m_shouldNotifyToursThatManualProcessingAllowed = true;
     Status m_status = Status::Success;
+    muse::Ret m_ret;
     muse::async::Channel<notation::InstrumentTrackIdSet> m_tracksDataChanged;
 };
 }

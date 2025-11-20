@@ -58,6 +58,8 @@ Loader {
 
             model: regionsModel
 
+            property real progressBackgroundOpacity: 0.6
+
             delegate: AudioProcessingProgressBar {
                 id: progressBar
 
@@ -67,8 +69,27 @@ Loader {
                 height: model.rect.height * 0.7
 
                 progress: model.progress
-                backgroundColor: repeater.model.progressBackgroundColor
                 textColor: repeater.model.progressTextColor
+                backgroundColor: repeater.model.progressBackgroundColor
+                backgroundOpacity: repeater.progressBackgroundOpacity
+            }
+
+            SequentialAnimation on progressBackgroundOpacity {
+                loops: Animation.Infinite
+
+                NumberAnimation {
+                    from: 0.3
+                    to: 0.6
+                    duration: 1000
+                    easing.type: Easing.InOutQuad
+                }
+
+                NumberAnimation {
+                    from: 0.6
+                    to: 0.3
+                    duration: 1000
+                    easing.type: Easing.InOutQuad
+                }
             }
         }
     }

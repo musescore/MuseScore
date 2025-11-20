@@ -29,8 +29,9 @@ Item {
     id: root
 
     property int progress: 0 // 0-100%
-    property color backgroundColor
     property color textColor
+    property alias backgroundColor: background.color
+    property alias backgroundOpacity: background.opacity
 
     readonly property real minWidth: iconLabel.width * 2 + prv.sideMargin
 
@@ -48,25 +49,6 @@ Item {
         anchors.fill: parent
 
         radius: background.height * 0.7
-        color: root.backgroundColor
-
-        SequentialAnimation on opacity {
-            loops: Animation.Infinite
-
-            NumberAnimation {
-                from: 0.3
-                to: 0.6
-                duration: 1000
-                easing.type: Easing.InOutQuad
-            }
-
-            NumberAnimation {
-                from: 0.6
-                to: 0.3
-                duration: 1000
-                easing.type: Easing.InOutQuad
-            }
-        }
     }
 
     StyledIconLabel {
