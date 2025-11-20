@@ -30,6 +30,8 @@ set(SKIP_INSTALL_ALL TRUE)
 
 add_subdirectory(${FREETYPE_DIR})
 
+target_no_warning(freetype -Wno-conversion)
+
 # Export variables
 set(FREETYPE_LIBRARIES freetype PARENT_SCOPE)
 set(FREETYPE_INCLUDE_DIRS ${FREETYPE_DIR}/include PARENT_SCOPE)
