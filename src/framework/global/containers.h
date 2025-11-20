@@ -276,7 +276,8 @@ template<typename Map>
 inline auto values(const Map& m) -> std::vector<typename Map::mapped_type>
 {
     std::vector<typename Map::mapped_type> result;
-    for (auto&& p : m) {
+    result.reserve(m.size());
+    for (const auto& p : m) {
         result.push_back(p.second);
     }
     return result;

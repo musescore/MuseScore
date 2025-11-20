@@ -2095,7 +2095,7 @@ void MusicXmlParserPass2::scorePartwise()
     }
     addError(checkAtEndElement(m_e, u"score-partwise"));
 
-    for (EngravingItem* sysEl : muse::values(m_sysElements)) {
+    for (const auto& [_, sysEl] : m_sysElements) {
         m_score->undoAddElement(sysEl);
 
         // Remove potential duplicated text for text and text lines
@@ -2908,7 +2908,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
     fillGapsInFirstVoices(measure, part);
 
     // Prevent any beams from extending into the next measure
-    for (Beam* beam : muse::values(beams)) {
+    for (auto& [_, beam] : beams) {
         if (beam) {
             removeBeam(beam);
         }

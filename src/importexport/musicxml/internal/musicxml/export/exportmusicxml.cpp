@@ -2537,7 +2537,7 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bo
             map.insert({ ksym.xPos, ksym });
         }
         // then write them (automatically sorted on key)
-        for (const KeySym& ksym : muse::values(map)) {
+        for (const auto& [_, ksym] : map) {
             int step = (po - ksym.line) % 7;
             //LOGD(" keysym sym %d -> line %d step %d", ksym.sym, ksym.line, step);
             m_xml.tag("key-step", String(Char(table2[step])));
