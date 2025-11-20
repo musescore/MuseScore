@@ -5155,7 +5155,7 @@ void NotationInteraction::repeatSelection()
         endSegment = endSegment->next1(SegmentType::ChordRest);
     }
     if (endSegment) {
-        for (track_idx_t track = dStaff * VOICES; track < (dStaff + 1) * VOICES; ++track) {
+        for (track_idx_t track = staff2track(dStaff); track < staff2track(dStaff + 1); ++track) {
             EngravingItem* e = endSegment->element(track);
             if (e) {
                 startEdit(TranslatableString("undoableAction", "Repeat selection"));
@@ -5168,8 +5168,6 @@ void NotationInteraction::repeatSelection()
             }
         }
     }
-
-    return;
 }
 
 void NotationInteraction::repeatListSelection(const Selection& selection)
@@ -5223,7 +5221,6 @@ void NotationInteraction::repeatListSelection(const Selection& selection)
     score()->select(toSelect, SelectType::ADD);
 
     apply();
-    return;
 }
 
 void NotationInteraction::copyLyrics()

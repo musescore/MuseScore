@@ -439,7 +439,7 @@ private:
     bool dropCanvas(EngravingItem* e);
     void resetDropData();
 
-    void repeatListSelection(const Selection& selection);
+    void repeatListSelection(const engraving::Selection& selection);
 
     void doFinishAddFretboardDiagram();
 
