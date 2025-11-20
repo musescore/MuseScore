@@ -1960,6 +1960,17 @@ FretMarkerType toFretMarkerType(details::FretboardDiagram::Shape shape)
     return muse::value(dotTable, shape, FretMarkerType::NONE);
 }
 
+SymId unparenthesisedNoteHead(const std::string& symName)
+{
+    static const std::unordered_map<std::string, SymId> noteHeadTable = {
+        { "noteheadDoubleWholeParens", SymId::noteheadDoubleWhole },
+        { "noteheadWholeParens",       SymId::noteheadWhole },
+        { "noteheadHalfParens",        SymId::noteheadHalf },
+        { "noteheadBlackParens",       SymId::noteheadBlack },
+    };
+    return muse::value(noteHeadTable, symName, SymId::noSym);
+}
+
 double doubleFromEvpu(double evpuDouble)
 {
     return evpuDouble / EVPU_PER_SPACE;
