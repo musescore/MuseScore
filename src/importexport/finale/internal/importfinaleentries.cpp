@@ -929,7 +929,8 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
         tupletMap[i].scoreTuplet->setParent(measure);
         // musxTuplet::calcRatio is the reciprocal of what MuseScore needs
         /// @todo skip case where finale numerator is 0: often used for changing beams
-        Fraction tupletRatio = musxFractionToFraction(tupletMap[i].musxTuplet->calcRatio().reciprocal());
+        Fraction tupletRatio = Fraction(tupletMap[i].musxTuplet->displayNumber,
+                                        tupletMap[i].musxTuplet->referenceNumber * tupletMap[i].musxTuplet->referenceDuration / tupletMap[i].musxTuplet->displayDuration);
         tupletMap[i].scoreTuplet->setRatio(tupletRatio);
         tupletMap[i].scoreTuplet->setBaseLen(baseLen);
         Fraction f = baseLen.fraction() * tupletRatio.denominator();
