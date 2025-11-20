@@ -1331,7 +1331,7 @@ void FinaleParser::importPageLayout()
 
         // create system left and right margins
         MeasureBase* sysStart = startMeasure;
-        if (!muse::RealIsEqual(double(leftStaffSystem->left), 0.0)) {
+        if (!muse::RealIsNull(double(leftStaffSystem->left))) {
             // for the very first system, create a non-frame indent instead
             if (startMeasure->tick().isZero()) {
                 m_score->style().set(Sid::enableIndentationOnFirstSystem, true);
@@ -1351,7 +1351,7 @@ void FinaleParser::importPageLayout()
             logger()->logInfo(String(u"No need to add left margin for system %1").arg(i));
         }
         MeasureBase* sysEnd = endMeasure;
-        if (!muse::RealIsEqual(double(-rightStaffSystem->right), 0.0)) {
+        if (!muse::RealIsNull(double(-rightStaffSystem->right))) {
             HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
             rightBox->setBoxWidth(absoluteSpatiumFromEvpu(-rightStaffSystem->right, rightBox));
             setAndStyleProperty(rightBox, Pid::SIZE_SPATIUM_DEPENDENT, false); /// @todo still doesn't seem to be scaled correctly

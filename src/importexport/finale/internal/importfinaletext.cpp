@@ -1186,12 +1186,10 @@ void FinaleParser::importPageTexts()
             || pageTextAssign->hidden
             || startPage.value() >= 3 /// @todo must be changed to be first non-blank page + 2
             || endPage.value() < PageCmper(m_score->npages()) /// @todo allow copyright on just page 1?
-            || !muse::RealIsEqual(pageTextAssign->yDisp, 0.0)
-            || !muse::RealIsEqual(pageTextAssign->xDisp, 0.0)
-            || (pageTextAssign->indRpPos && (!muse::RealIsEqual(pageTextAssign->rightPgXDisp, 0.0)
-                                             || !muse::RealIsEqual(pageTextAssign->rightPgYDisp, 0.0)))
-            || pageTextAssign->hPosPageEdge
-            || pageTextAssign->vPosPageEdge) {
+            || !muse::RealIsNull(double(pageTextAssign->yDisp)) || !muse::RealIsNull(double(pageTextAssign->xDisp))
+            || (pageTextAssign->indRpPos && (!muse::RealIsNull(double(pageTextAssign->rightPgXDisp))
+                                             || !muse::RealIsNull(double(pageTextAssign->rightPgYDisp))))
+            || pageTextAssign->hPosPageEdge || pageTextAssign->vPosPageEdge) {
             notHF.emplace_back(pageTextAssign);
             continue;
         }
