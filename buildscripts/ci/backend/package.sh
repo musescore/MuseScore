@@ -33,6 +33,7 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         --build_mode) BUILD_MODE="$2"; shift ;;
         -v|--version) BUILD_VERSION="$2"; shift ;;
+        --arch) PACKARCH="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -46,12 +47,14 @@ if [ -z "$BUILD_VERSION" ]; then BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_ve
 if [ -z "$BUILD_MODE" ]; then echo "error: not set BUILD_MODE"; exit 1; fi
 if [ -z "$BUILD_VERSION" ]; then echo "error: not set BUILD_VERSION"; exit 1; fi
 
+if [ -z "$PACKARCH" ]; then PACKARCH="x86_64"; fi
 
 MAJOR_VERSION="${BUILD_VERSION%%.*}"
 
 echo "BUILD_MODE: $BUILD_MODE"
 echo "BUILD_VERSION: $BUILD_VERSION"
 echo "MAJOR_VERSION: $MAJOR_VERSION"
+echo "PACKARCH: $PACKARCH"
 echo "INSTALL_DIR: $INSTALL_DIR"
 
 # Constants
@@ -63,7 +66,7 @@ APP_IMAGE_NAME=MuseScoreTemporary
 ARTIFACT_NAME=MuseScore-${BUILD_VERSION}
 
 # Make AppImage
-bash ./buildscripts/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${APP_IMAGE_NAME}.AppImage"
+bash ./buildscripts/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${APP_IMAGE_NAME}.AppImage" "${PACKARCH}"
 mv "${INSTALL_DIR}/../${APP_IMAGE_NAME}.AppImage" "${ARTIFACTS_DIR}/"
 
 cd $ARTIFACTS_DIR
