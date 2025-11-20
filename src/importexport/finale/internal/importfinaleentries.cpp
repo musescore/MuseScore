@@ -1067,7 +1067,7 @@ void FinaleParser::importEntries()
                 rest->setVisible(!currMusxStaff->hideRests && !currMusxStaff->blankMeasure && !measureHasVoices);
                 segment->add(rest);
             }
-            m_track2Layer.insert(std::make_pair(currTick.ticks(), trackLayers));
+            m_track2Layer.emplace(currTick.ticks(), trackLayers);
         }
 
         // Ties can only be attached to notes within a single part (instrument).
