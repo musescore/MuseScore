@@ -26,6 +26,7 @@
 #include "playbackcontroller.h"
 #include "modularity/ioc.h"
 #include "context/iuicontextresolver.h"
+#include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 #include "ui/uitypes.h"
 
@@ -33,6 +34,7 @@ namespace mu::playback {
 class PlaybackUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable
 {
     INJECT(context::IUiContextResolver, uicontextResolver)
+    INJECT(context::IGlobalContext, globalContext)
 
 public:
     PlaybackUiActions(std::shared_ptr<PlaybackController> controller);

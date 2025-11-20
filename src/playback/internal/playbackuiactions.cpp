@@ -27,9 +27,13 @@
 #include "types/translatablestring.h"
 
 using namespace mu::playback;
+using namespace mu::notation;
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
+
+static const ActionCode PLAY_FROM_SELECTION_CODE("play-from-selection");
+static const ActionCode CLEAR_ONLINE_SOUNDS_CACHE_CODE("clear-online-sounds-cache");
 
 const UiActionList PlaybackUiActions::s_mainActions = {
     UiAction("play",
@@ -37,6 +41,13 @@ const UiActionList PlaybackUiActions::s_mainActions = {
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Play"),
              TranslatableString("action", "Play"),
+             IconCode::Code::PLAY
+             ),
+    UiAction(PLAY_FROM_SELECTION_CODE,
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Play from selection"),
+             TranslatableString("action", "Play from selection"),
              IconCode::Code::PLAY
              ),
     UiAction("stop",
@@ -183,8 +194,6 @@ const UiActionList PlaybackUiActions::s_diagnosticActions = {
              )
 };
 
-static const ActionCode CLEAR_ONLINE_SOUNDS_CACHE_CODE("clear-online-sounds-cache");
-
 const UiActionList PlaybackUiActions::s_onlineSoundsActions = {
     UiAction(CLEAR_ONLINE_SOUNDS_CACHE_CODE,
              mu::context::UiCtxAny,
@@ -215,6 +224,22 @@ void PlaybackUiActions::init()
         }
 
         m_actionEnabledChanged.send(codes);
+    });
+
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        INotationPtr currNotation = globalContext()->currentNotation();
+        if (!currNotation) {
+            return;
+        }
+
+        INotationInteractionPtr interaction = currNotation->interaction();
+        interaction->selectionChanged().onNotify(this, [this]() {
+            m_actionEnabledChanged.send({ PLAY_FROM_SELECTION_CODE });
+        });
+
+        interaction->isEditingElementChanged().onNotify(this, [this]() {
+            m_actionEnabledChanged.send({ PLAY_FROM_SELECTION_CODE });
+        });
     });
 
     m_controller->onlineSoundsChanged().onNotify(this, [this]() {
@@ -249,6 +274,12 @@ bool PlaybackUiActions::actionEnabled(const UiAction& act) const
 
     if (act.code == CLEAR_ONLINE_SOUNDS_CACHE_CODE) {
         return !m_controller->onlineSounds().empty();
+    }
+
+    if (act.code == PLAY_FROM_SELECTION) {
+        const INotationPtr currNotation = globalContext()->currentNotation();
+        const INotationInteractionPtr interaction = currNotation ? currNotation->interaction() : nullptr;
+        return interaction && !interaction->selection()->isNone() && !interaction->isEditingElement();
     }
 
     return true;

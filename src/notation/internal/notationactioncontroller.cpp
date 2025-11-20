@@ -712,7 +712,7 @@ void NotationActionController::resetState()
     if (interaction->isTextEditingStarted()) {
         interaction->endEditElement();
         return;
-    } else if (interaction->isElementEditStarted()) {
+    } else if (interaction->isEditingElement()) {
         interaction->endEditElement();
     }
 
@@ -2349,7 +2349,7 @@ bool NotationActionController::isEditingElement() const
 {
     auto interaction = currentNotationInteraction();
     if (interaction) {
-        return interaction->isElementEditStarted() || interaction->isDragStarted();
+        return interaction->isEditingElement() || interaction->isDragStarted();
     }
     return false;
 }
