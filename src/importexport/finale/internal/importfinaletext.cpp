@@ -1323,9 +1323,14 @@ void FinaleParser::importPageTexts()
         if (muse::contains(textsForFirstPage, pageTextAssign)) {
             return { startP };
         }
-        page_idx_t endP = page_idx_t(pageTextAssign->calcEndPageNumber(m_currentMusxPartId).value_or(PageCmper(m_score->npages())));
-        endP = std::min(endP, m_score->npages());
+        page_idx_t endP = m_score-npages();
+        std::optional<PageCmper> lastPage = pageTextAssign->calcEndPageNumber(m_currentMusxPartId);
+        if (lastPage.has_value()) {
+            endP = std::min(page_idx_t(lastPage.value()), endP);
+        }
+
         std::vector<page_idx_t> pagesWithText;
+        pagesWithText.reserve(endP - startP);
         for (page_idx_t i = startP; i < endP; ++i) {
             pagesWithText.emplace_back(i);
         }
