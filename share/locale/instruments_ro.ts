@@ -5921,7 +5921,7 @@
         <source>C alto</source>
         <comment>c-horn-alto traitName</comment>
         <extracomment>traitName for Horn; transposition: C alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>do alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2099"/>
@@ -15819,7 +15819,7 @@
         <source>General MIDI synth pad (generic).</source>
         <comment>pad-synth description</comment>
         <extracomment>description for Pad Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pan sintetizator MIDI general (generic).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5256"/>
@@ -20648,7 +20648,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
         <source>Common</source>
-        <translation>Comun</translation>
+        <translation>Comune</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="76"/>

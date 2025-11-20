@@ -5060,14 +5060,14 @@
         <source>Accordion</source>
         <comment>accordion trackName</comment>
         <extracomment>trackName for Accordion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Akordion</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1823"/>
         <source>Accordion</source>
         <comment>accordion longName</comment>
         <extracomment>longName for Accordion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Akordion</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1825"/>
@@ -16232,14 +16232,14 @@
         <source>Harp</source>
         <comment>harp trackName</comment>
         <extracomment>trackName for Harp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Harpa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5389"/>
         <source>Harp</source>
         <comment>harp longName</comment>
         <extracomment>longName for Harp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Harpa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5391"/>
@@ -16561,7 +16561,7 @@
         <source>Guitar</source>
         <comment>guitar-steel-treble-clef longName</comment>
         <extracomment>longName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5491"/>
@@ -16631,7 +16631,7 @@
         <source>Guitar</source>
         <comment>guitar-nylon-treble-clef longName</comment>
         <extracomment>longName for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5513"/>
@@ -16715,7 +16715,7 @@
         <source>Guitar</source>
         <comment>guitar-steel-tablature longName</comment>
         <extracomment>longName for Acoustic Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5541"/>
@@ -20927,7 +20927,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="48"/>
         <source>Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Gitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="49"/>
