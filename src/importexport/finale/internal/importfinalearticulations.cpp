@@ -338,9 +338,9 @@ void FinaleParser::importArticulations()
             }
 
             // Arpeggios
-			// The Finale symbol is an optional character and not in SMuFL
+            // The Finale symbol is an optional character and not in SMuFL
             if (articSym.value() == SymId::noSym && !c->arpeggio() && articChar.has_value()
-				&& FinaleTextConv::charNameFinale(articChar.value(), articDef->fontMain) == "arpeggioVerticalSegment") {
+                && FinaleTextConv::charNameFinale(articDef->charMain, articDef->fontMain) == "arpeggioVerticalSegment") {
                 if (c->isGrace()) {
                     continue;
                 }
