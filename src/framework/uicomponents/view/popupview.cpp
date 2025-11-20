@@ -30,15 +30,23 @@
 #include "internal/platform/win/winpopupviewclosecontroller.h"
 #endif
 
-static bool isLinuxKde()
+static Qt::WindowFlags resolveWindowFlags()
 {
+    static const Qt::WindowFlags frameFlags = Qt::FramelessWindowHint       // Without border
+                                              | Qt::NoDropShadowWindowHint  // Without system shadow
+    ;
+
 #if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
-    return false;
+    static const Qt::WindowFlags result = Qt::Tool | frameFlags;
+    return result;
 #else
     static int sIsLinuxKde = -1;
+    static bool sIsXcb = false;
     if (sIsLinuxKde == -1) {
         QString desktop = qEnvironmentVariable("XDG_CURRENT_DESKTOP").toLower();
         QString session = qEnvironmentVariable("XDG_SESSION_DESKTOP").toLower();
+
+        sIsXcb = qGuiApp->platformName().toLower().contains("xcb");
 
         LOGI() << "XDG_CURRENT_DESKTOP:" << desktop;
         LOGI() << "XDG_SESSION_DESKTOP:" << session;
@@ -47,8 +55,21 @@ static bool isLinuxKde()
                       && QSysInfo::productType() == "ubuntu";
     }
 
-    return sIsLinuxKde;
-#endif
+    // needed for accessibility in spinboxes
+    // see https://github.com/musescore/MuseScore/pull/29888#issuecomment-3302731855
+    static const Qt::WindowFlags bypassFlags = Qt::BypassWindowManagerHint;
+
+    if (sIsLinuxKde && sIsXcb) {
+        static const Qt::WindowFlags result = Qt::Popup | bypassFlags | frameFlags;
+        return result;
+    } else if (sIsLinuxKde) {
+        static const Qt::WindowFlags result = Qt::Popup | frameFlags;
+        return result;
+    }
+
+    static const Qt::WindowFlags result = Qt::Tool | bypassFlags | frameFlags;
+    return result;
+ #endif
 }
 
 using namespace muse::uicomponents;
@@ -75,21 +96,9 @@ void PopupView::initView()
 
     WindowView::initView();
 
-    Qt::WindowFlags flags;
-    if (isLinuxKde()) {
-        flags = Qt::Popup;
-    } else {
-        flags = Qt::Tool
-                // needed for accessibility in spinboxes
-                // see https://github.com/musescore/MuseScore/pull/29888#issuecomment-3302731855
-                | Qt::BypassWindowManagerHint;
-    }
-
-    flags |= Qt::FramelessWindowHint        // Without border
-             | Qt::NoDropShadowWindowHint   // Without system shadow
-    ;
-
+    Qt::WindowFlags flags = resolveWindowFlags();
     m_view->setFlags(flags);
+
     m_view->setColor(Qt::transparent);
 }
 
