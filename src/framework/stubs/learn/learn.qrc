@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qml/Muse/Learn/LearnPage.qml</file>
-        <file>qml/Muse/Learn/qmldir</file>
-    </qresource>
-</RCC>
