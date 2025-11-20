@@ -1148,6 +1148,9 @@ void FinaleParser::importEntries()
 
 static double systemPosByLine(ChordRest* cr, bool up)
 {
+    IF_ASSERT_FAILED(cr->measure()->system()) {
+        return 0.0;
+    }
     int line = 0;
     if (cr->isChord()) {
         engraving::Note* n = up ? toChord(cr)->upNote() : toChord(cr)->downNote();
@@ -1334,7 +1337,7 @@ void FinaleParser::importEntryAdjustments()
 
     // Rebase rest offsets (must happen after layout but before beaming)
     for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
-        if (chordRest->isRest() && !toRest(chordRest)->alignWithOtherRests()) {
+        if (chordRest->isRest() && !toRest(chordRest)->alignWithOtherRests() && chordRest->ldata()->isSetPos()) {
             toRest(chordRest)->ryoffset() -= chordRest->ldata()->pos().y();
         }
     }
@@ -1346,6 +1349,10 @@ void FinaleParser::importEntryAdjustments()
         }
 
         Beam* beam = chordRest->beam();
+        // Invisible staves
+        if (!beam->system()) {
+            continue;
+        }
         const double beamStaffY = beam->system()->staff(beam->staffIdx())->y() + beam->staffOffsetY();
         const double middleLinePos = beamStaffY + (beam->staffType()->lines() - 1) * beam->spatium() * beam->staffType()->lineDistance().val() * 0.5;
 
@@ -1598,7 +1605,7 @@ void FinaleParser::importEntryAdjustments()
     for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
         // Rebase dot offset
         /// @todo dot direction
-        if (chordRest->dots() > 0) {
+        if (chordRest->dots() > 0 && chordRest->ldata()->isSetPos()) {
             const double dotDistance = m_score->style().styleMM(Sid::dotNoteDistance) * chordRest->staff()->staffMag(chordRest);
             if (chordRest->isChord()) {
                 double rightmostNoteX = -DBL_MAX;
