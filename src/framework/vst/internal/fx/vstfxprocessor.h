@@ -45,7 +45,7 @@ public:
     void setOutputSpec(const audio::OutputSpec& spec) override;
     bool active() const override;
     void setActive(bool active) override;
-    void process(float* buffer, unsigned int sampleCount) override;
+    void process(float* buffer, unsigned int sampleCount, muse::audio::msecs_t playbackPosition = 0) override;
 
 private:
     bool m_inited = false;

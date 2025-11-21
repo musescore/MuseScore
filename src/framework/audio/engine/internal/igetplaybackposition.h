@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,31 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_IAUDIOPROCESSOR_H
-#define MUSE_AUDIO_IAUDIOPROCESSOR_H
 
-#include <memory>
+#pragma once
 
 #include "audio/common/audiotypes.h"
 
-namespace muse::audio {
-class IFxProcessor
+namespace muse::audio::engine {
+class IGetPlaybackPosition
 {
 public:
-    virtual ~IFxProcessor() = default;
+    virtual ~IGetPlaybackPosition() = default;
 
-    virtual AudioFxType type() const = 0;
-    virtual const AudioFxParams& params() const = 0;
-    virtual async::Channel<audio::AudioFxParams> paramsChanged() const = 0;
-    virtual void setOutputSpec(const OutputSpec& spec) = 0;
-
-    virtual bool active() const = 0;
-    virtual void setActive(bool active) = 0;
-
-    virtual void process(float* buffer, unsigned int sampleCount, muse::audio::msecs_t playbackPosition = 0) = 0;
+    virtual msecs_t playbackPosition() const = 0;
 };
-
-using IFxProcessorPtr = std::shared_ptr<IFxProcessor>;
 }
-
-#endif // MUSE_AUDIO_IAUDIOPROCESSOR_H

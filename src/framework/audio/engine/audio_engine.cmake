@@ -69,6 +69,7 @@ set(AUDIO_ENGINE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/tracksequence.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/tracksequence.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/igettracks.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/igetplaybackposition.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequenceplayer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequenceplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/samplerateconvertor.cpp

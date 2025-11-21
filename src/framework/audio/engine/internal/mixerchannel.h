@@ -32,14 +32,16 @@
 #include "track.h"
 
 namespace muse::audio::engine {
+class IGetPlaybackPosition;
 class MixerChannel : public ITrackAudioOutput, public Injectable, public async::Asyncable
 {
     Inject<fx::IFxResolver> fxResolver = { this };
 
 public:
-    explicit MixerChannel(const TrackId trackId, IAudioSourcePtr source, const OutputSpec& outputSpec,
+    explicit MixerChannel(const TrackId trackId, const OutputSpec& outputSpec, IAudioSourcePtr source,
+                          const IGetPlaybackPosition* getPlaybackPosition, const modularity::ContextPtr& iocCtx);
+    explicit MixerChannel(const TrackId trackId, const OutputSpec& outputSpec, const IGetPlaybackPosition* getPlaybackPosition,
                           const modularity::ContextPtr& iocCtx);
-    explicit MixerChannel(const TrackId trackId, const OutputSpec& outputSpec, const modularity::ContextPtr& iocCtx);
 
     TrackId trackId() const;
     IAudioSourcePtr source() const;
@@ -74,6 +76,7 @@ private:
     AudioOutputParams m_params;
 
     IAudioSourcePtr m_audioSource = nullptr;
+    const IGetPlaybackPosition* m_getPlaybackPosition = nullptr;
     std::vector<IFxProcessorPtr> m_fxProcessors = {};
 
     dsp::CompressorPtr m_compressor = nullptr;
