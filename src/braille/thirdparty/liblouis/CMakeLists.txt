@@ -1,9 +1,9 @@
-declare_thirdparty_module(liblouis)
+muse_create_thirdparty_module(liblouis)
 
 add_subdirectory(tables)
 
-set(MODULE_DEF
-    -DTABLESDIR=dataPathPtr         # compileTranslationTable.c
+target_compile_definitions(liblouis PRIVATE
+    TABLESDIR=dataPathPtr           # compileTranslationTable.c
 )
 
 set(WIDECHARS_ARE_UCS4 TRUE)        # configMS.h
@@ -21,7 +21,7 @@ configure_file(
     @ONLY
 )
 
-set(MODULE_SRC
+target_sources(liblouis PRIVATE
     # Alphabetical order please!
     ${CMAKE_CURRENT_LIST_DIR}/liblouis/commonTranslationFunctions.c
     ${CMAKE_CURRENT_LIST_DIR}/liblouis/compileTranslationTable.c
@@ -36,10 +36,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/liblouis/utils.c
 )
 
-set(MODULE_USE_UNITY OFF)
-set(MODULE_USE_COVERAGE OFF)
+set_target_properties(liblouis PROPERTIES UNITY_BUILD OFF)
 
-setup_module()
-
-target_no_warning(${MODULE} -Wno-conversion)
-target_no_warning(${MODULE} -w)
+target_no_warning(liblouis -Wno-conversion)
+target_no_warning(liblouis -w)

@@ -18,10 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(preferences_qml)
-setup_module()
+muse_create_qml_module(preferences_qml FOR preferences)
 
-target_link_libraries(preferences_qml PRIVATE preferences Qt::Core5Compat)
+target_link_libraries(preferences_qml PRIVATE Qt::Core5Compat)
 
 qt_add_qml_module(preferences_qml
     URI MuseScore.Preferences

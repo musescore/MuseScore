@@ -1,4 +1,4 @@
-declare_thirdparty_module(opusenc)
+muse_create_thirdparty_module(opusenc)
 
 include(GetPlatformInfo)
 include(GetCompilerInfo)
@@ -14,43 +14,42 @@ aux_source_directory(${OPUSENC_DIR}/src SOURCE_LIB)
 
 configure_file(${OPUSENC_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-set(MODULE_DEF
-    -DOUTSIDE_SPEEX
-    -DRANDOM_PREFIX=opusenc_prefix)
-
-set(MODULE_INCLUDE
-    ${OPUSENC_DIR}/include
-    ${OPUSENC_DIR}/src
-    ${OPUSENC_DIR}
-    ${OPUS_INCLUDE_DIRS}
-    )
-
-set(MODULE_SRC
+target_sources(opusenc PRIVATE
     ${SOURCE_LIB}
-    )
+    ${CMAKE_CURRENT_BINARY_DIR}/config.h
+)
 
-set(MODULE_LINK ${OPUS_LIBRARIES})
+target_compile_definitions(opusenc PRIVATE
+    OUTSIDE_SPEEX
+    RANDOM_PREFIX=opusenc_prefix
+)
 
-set(MODULE_USE_UNITY OFF)
-set(MODULE_USE_COVERAGE OFF)
+target_include_directories(opusenc 
+    PUBLIC
+        ${OPUSENC_DIR}/include
+        ${OPUS_INCLUDE_DIRS}
+    PRIVATE
+        ${OPUSENC_DIR}/src
+        ${OPUSENC_DIR}
+)
 
-setup_module()
+target_link_libraries(opusenc PRIVATE ${OPUS_LIBRARIES})
 
-target_no_warning(${MODULE} -Wno-unused-parameter)
-target_no_warning(${MODULE} -Wno-unused-variable)
-target_no_warning(${MODULE} -Wno-type-limits)
-target_no_warning(${MODULE} -Wno-unknown-pragmas)
-target_no_warning(${MODULE} -Wno-conversion)
-target_no_warning(${MODULE} -Wno-uninitialized)
-target_no_warning(${MODULE} -Wno-shift-negative-value)
-target_no_warning(${MODULE} -Wno-implicit-fallthrough)
-target_no_warning(${MODULE} -Wno-empty-body)
-target_no_warning(${MODULE} -Wno-attributes)
-target_no_warning(${MODULE} -Wno-sign-compare)
-target_no_warning(${MODULE} -Wno-restrict)
-target_no_warning(${MODULE} -WMSVC-no-translation-unit-is-empty)
-target_no_warning(${MODULE} -WMSVC-no-nonstandard-extension-used)
-target_no_warning(${MODULE} -WMSVC-no-assignment-within-conditional-expression)
-target_no_warning(${MODULE} -WMSVC-no-hides-previous)
-target_no_warning(${MODULE} -WMSVC-no-undefined-assuming-extern)
-target_no_warning(${MODULE} -WMSVC-named-type-definition-in-parentheses)
+target_no_warning(opusenc -Wno-unused-parameter)
+target_no_warning(opusenc -Wno-unused-variable)
+target_no_warning(opusenc -Wno-type-limits)
+target_no_warning(opusenc -Wno-unknown-pragmas)
+target_no_warning(opusenc -Wno-conversion)
+target_no_warning(opusenc -Wno-uninitialized)
+target_no_warning(opusenc -Wno-shift-negative-value)
+target_no_warning(opusenc -Wno-implicit-fallthrough)
+target_no_warning(opusenc -Wno-empty-body)
+target_no_warning(opusenc -Wno-attributes)
+target_no_warning(opusenc -Wno-sign-compare)
+target_no_warning(opusenc -Wno-restrict)
+target_no_warning(opusenc -WMSVC-no-translation-unit-is-empty)
+target_no_warning(opusenc -WMSVC-no-nonstandard-extension-used)
+target_no_warning(opusenc -WMSVC-no-assignment-within-conditional-expression)
+target_no_warning(opusenc -WMSVC-no-hides-previous)
+target_no_warning(opusenc -WMSVC-no-undefined-assuming-extern)
+target_no_warning(opusenc -WMSVC-named-type-definition-in-parentheses)

@@ -18,29 +18,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_learn)
-set(MODULE_ALIAS muse::learn)
+muse_create_module(muse_learn ALIAS muse::learn)
 
-set(MODULE_QRC learn.qrc)
-
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
-
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/learnmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/learnmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/learnerrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/ilearnconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/ilearnservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/learnconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/learnconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/learnservice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/learnservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/learnpagemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/learnpagemodel.h
-    )
+target_sources(muse_learn PRIVATE 
+    learnmodule.cpp
+    learnmodule.h
+    learnerrors.h
+    ilearnconfiguration.h
+    ilearnservice.h
+    internal/learnconfiguration.cpp
+    internal/learnconfiguration.h
+    internal/learnservice.cpp
+    internal/learnservice.h
+)
 
 if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Concurrent Qt::Network Qt::Qml)
+    target_link_libraries(muse_learn PRIVATE Qt::Concurrent Qt::Network Qt::Qml)
 endif()
 
-setup_module()
+add_subdirectory(qml/Muse/Learn)

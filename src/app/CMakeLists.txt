@@ -115,6 +115,7 @@ set(LINK_LIB
     muse::mpe
     muse::midi
     muse::learn
+    muse::learn_qml
     muse::tours
     muse::multiinstances
     muse::cloud
@@ -133,7 +134,6 @@ set(LINK_LIB
     playback
     preferences
     preferences_qml
-    preferences_qmlplugin
     instrumentsscene
     musesounds
     )

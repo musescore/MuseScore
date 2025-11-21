@@ -18,17 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_learn)
-set(MODULE_ALIAS muse::learn)
+muse_create_module(muse_learn ALIAS muse::learn STUB)
 
-set(MODULE_QRC learn.qrc)
+target_sources(muse_learn PRIVATE 
+    learnmodule.cpp
+    learnmodule.h
+)
 
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
-
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/learnmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/learnmodule.h
-    )
-
-set(MODULE_IS_STUB ON)
-setup_module()
+add_subdirectory(qml/Muse/Learn)

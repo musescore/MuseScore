@@ -21,21 +21,9 @@
  */
 #include "learnmodule.h"
 
-#include <QQmlEngine>
-
 using namespace muse::learn;
-
-static void learn_init_qrc()
-{
-    Q_INIT_RESOURCE(learn);
-}
 
 std::string LearnModule::moduleName() const
 {
     return "learn_stub";
-}
-
-void LearnModule::registerResources()
-{
-    learn_init_qrc();
 }
