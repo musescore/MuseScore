@@ -967,7 +967,7 @@ void FinaleParser::importEntries()
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     std::vector<engraving::Note*> notesWithUnmanagedTies;
-    std::fill_n(m_track2Layer.begin(), m_score->ntracks(), std::map<int, musx::dom::LayerIndex>{});
+    m_track2Layer.assign(m_score->ntracks(), std::map<int, musx::dom::LayerIndex>{});
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
         StaffCmper musxStaffId = musxScrollViewItem->staffId;
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, musxStaffId, muse::nidx);
@@ -1263,7 +1263,6 @@ DirectionV FinaleParser::calculateTieDirection(Tie* tie)
             if (endNote) {
                 const Chord* endChord = endNote->chord();
                 DirectionV endDir = endChord->beam() ? endChord->beam()->direction() : endChord->stemDirection();
-                assert(endDir != DirectionV::AUTO); // perhaps not necessary
                 adjacentStemDir = endDir;
             } else {
                 const ChordRest* nextCR = nextChordRest(c);
