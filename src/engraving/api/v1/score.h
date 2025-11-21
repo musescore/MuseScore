@@ -273,11 +273,10 @@ public:
     Q_INVOKABLE apiv1::Segment* findSegmentAtTick(int types, apiv1::FractionWrapper* tick);
 
     // === Lyrics ===
-    bool hasLyrics() { return score()->hasLyrics(); }
-    int lyricCount() { return score()->lyricCount(); }
-    QQmlListProperty<apiv1::Lyric> lyrics();
-    /// Extracts all lyrics in the score and returns them in a single string.
-    Q_INVOKABLE QString extractLyrics() { return score()->extractLyrics(); }
+    bool hasLyrics() const;
+    int lyricCount() const;
+    QQmlListProperty<apiv1::Lyric> lyrics() const;
+    Q_INVOKABLE QString extractLyrics() const;
 
     /// \cond MS_INTERNAL
     int nmeasures() const { return static_cast<int>(score()->nmeasures()); }

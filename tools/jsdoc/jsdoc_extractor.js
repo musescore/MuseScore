@@ -32,6 +32,33 @@ function scan(files, rootPath, filter)
     }
 }
 
+function nameFromSig(line)
+{
+    let name = "";
+    // Result Class::method(...)
+    let colonIdx = line.lastIndexOf("::")
+    if (colonIdx !== -1) {
+        colonIdx += 2 // skip `::`
+        let braceIdx = line.indexOf("(", colonIdx)
+        name = line.substr(colonIdx, (braceIdx - colonIdx))
+    }
+
+    if (name === "") {
+        // Result method(...)
+        line = line.trim()
+        let spaceIdx = line.indexOf(" ")
+        if (spaceIdx !== -1) {
+            spaceIdx += 1 // skip ` `
+            let braceIdx = line.indexOf("(", spaceIdx)
+            if (braceIdx !== -1) {
+                name = line.substr(spaceIdx, (braceIdx - spaceIdx))
+            }
+        }
+    }
+
+    return name;
+}
+
 async function extractDoc(file)
 {
     const fileStream = fs.createReadStream(file)
@@ -41,103 +68,111 @@ async function extractDoc(file)
                                         })
 
     const APIDOC_BEGIN = "/** APIDOC"
-    const APIDOC_END = "*/"
-    const APIDOC_NSPACE = "namespace:"
-    const APIDOC_METHOD = "method"
+    const APIDOC_END = "*/" 
+    
+    let state = {
+        apidocStarted: false,
 
-    var state = {
-        namespaceStared: false,
-        namespaceName: "",
+        currentDoc: "",
 
-        methodDocContent: false,
-        methodParams: [],
+        parentDoc: "", // namespace or class
+        parentName: "",
+
         methodLookName: false,
-    };
+        methods: [],
 
-    var doc = ""
+        propLookName: false,
+        props: [],
+    }                                   
 
-    for await (var line of rl) {
+    for await (let line of rl) {
         line = line.trim()
 
         if (line.startsWith(APIDOC_BEGIN)) {
-
-            // remove /** APIDOC
-            line = line.substring(APIDOC_BEGIN.length);
-            line = line.trim()
-
-            // check namespace
-            // `namespace: interactive`
-            if (line.startsWith(APIDOC_NSPACE)) {
-                state.namespaceName = line.substring(APIDOC_NSPACE.length).trim()
-                state.namespaceStared = true;
-                doc += "/**\n"
-            }
-            // check method
-            // `method`
-            else if (line.startsWith(APIDOC_METHOD)) {
-                doc += "\t/**\n"
-                state.methodDocContent = true
-            }
-
-            continue;
+            // remove APIDOC
+            line = line.replace("APIDOC", "");
+            state.apidocStarted = true;
+            state.currentDoc = "";
         }
 
-        if (line.startsWith(APIDOC_END)) {
-            // write ns
-            if (state.namespaceName !== "") {
-                doc += "*/\n"
-                doc += "const " + state.namespaceName + " = {\n\n"
-                state.namespaceName = ""
-            }
-            // end method
-            else if (state.methodDocContent) {
-                state.methodDocContent = false
-                state.methodLookName = true
-            }
+        if (state.apidocStarted && line.endsWith(APIDOC_END)) {
+            state.currentDoc += line + "\n";
+            state.apidocStarted = false;
 
-            continue;
-        }
+            // check of kind 
 
-        if (state.namespaceName !== "") {
-            doc += line + "\n"
-            continue;
-        }
-
-        if (state.methodDocContent) {
-            doc += "\t" + line + "\n"
-
-            if (line.includes("@param")) {
-                var words = line.split(' ');
-                state.methodParams.push(words[3])
+            // get parent - namespace or class
+            const namespaceMatch = state.currentDoc.match(/@namespace\s+(\S+)/);
+            if (namespaceMatch) {
+                state.parentName = namespaceMatch[1];
+                state.parentDoc = state.currentDoc;
+                continue;
             }
 
-            continue;
+            const classMatch = state.currentDoc.match(/@class\s+(\S+)/);
+            if (classMatch) {
+                state.parentName = classMatch[1];
+                state.parentDoc = state.currentDoc;
+                continue;
+            }
+
+            // try add memberof to method
+            if (state.parentName !== "") {
+                if (state.currentDoc.includes('@method')) {
+                    state.currentDoc = state.currentDoc.replace('@method', `@memberof ${state.parentName}\n* @method`);
+                    state.methodLookName = true;
+                    continue;
+                }
+            }
+
+            // try get property 
+            if (state.currentDoc.includes('@property')) {
+                state.currentDoc = state.currentDoc.replace('/** ', `*`);
+                state.currentDoc = state.currentDoc.replace('/**', `*`);
+                state.currentDoc = state.currentDoc.replace('*/', ``);
+                state.propLookName = true;
+                continue;
+            }
         }
 
-        if (state.methodLookName) {
-            // Result Class::method(...)
-            var colonIdx = line.lastIndexOf("::")
-            if (colonIdx !== -1) {
-                colonIdx += 2 // skip ::
-                var braceIdx = line.indexOf("(", colonIdx)
-                var name = line.substr(colonIdx, (braceIdx - colonIdx))
+        if (state.apidocStarted) {
+            state.currentDoc += line + "\n";
+        }
 
-                // write method
-                doc += "\t*/\n"
-                doc += "\t" + name + "(" + state.methodParams.join(', ') + ") {},\n\n"
+         if (state.methodLookName) {
+            let name = nameFromSig(line);
+            if (name !== "") {
+                state.methodLookName = false;
+                state.currentDoc = state.currentDoc.replace('@method', `@method ${name}`);
+                state.methods.push(state.currentDoc);
+            }
+        }
 
-                // cleanup state
-                state.methodLookName = ""
-                state.methodParams = []
+        if (state.propLookName) {
+            let name = nameFromSig(line);
+            if (name !== "") {
+                state.propLookName = false;
+                // add name 
+                const regex = /@property\s+\{([^}]+)\}\s+/;
+                state.currentDoc = state.currentDoc.replace(regex, `@property {$1} ${name} `);
+                state.props.push(state.currentDoc);
             }
         }
     }
 
-    if (state.namespaceStared) {
-        doc += "};";
+    let doc = "";
+
+    let propsDoc = "";
+    for (const p of state.props) {
+        propsDoc += p; 
     }
 
-    return doc
+    doc = state.parentDoc.replace('*/', `${propsDoc}*/`);
+
+    for (const m of state.methods) {
+        doc += m;
+    }
+    return doc;
 }
 
 function saveDoc(doc, dir, name)

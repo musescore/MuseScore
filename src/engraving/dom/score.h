@@ -990,12 +990,15 @@ public:
     EngravingItem* lastElement(bool frame = true);
 
     size_t nmeasures() const;
-    bool hasLyrics();
-    bool hasHarmonies();
+
+    bool hasHarmonies() const;
+    int harmonyCount() const;
+
+    bool hasLyrics() const;
     int  lyricCount() const;
     std::vector<Lyrics*> lyrics() const;
-    int  harmonyCount();
-    String extractLyrics();
+    String extractLyrics() const;
+
     int keysig();
     int duration();
     int durationWithoutRepeats();
