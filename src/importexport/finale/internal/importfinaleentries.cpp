@@ -628,11 +628,12 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             toRest(cr)->setVisible(false);
         } else {
             // Stem and stem direction
-            if (currentEntry->freezeStem || currentEntry->voice2 || currentEntry->v2Launch) {
+            const auto [freezeStem, upStem] = entryInfo.calcEntryStemSettings();
+            if (freezeStem || currentEntry->voice2 || currentEntry->v2Launch) {
                 // LayerAttributes are read later on, once all voices have been added to the score.
                 // Additionally, beams have their own vertical direction, which is set in processBeams.
-                chord->setStemDirection(currentEntry->upStem ? DirectionV::UP : DirectionV::DOWN);
-                if (currentEntry->freezeStem) {
+                chord->setStemDirection(upStem ? DirectionV::UP : DirectionV::DOWN);
+                if (freezeStem) {
                     m_fixedChords.insert(chord);
                 }
             }
