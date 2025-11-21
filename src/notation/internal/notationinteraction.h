@@ -202,7 +202,7 @@ public:
 
     void copySelection() override;
     void copyLyrics() override;
-    muse::Ret repeatSelection() override;
+    void repeatSelection() override;
     void pasteSelection(const Fraction& scale = Fraction(1, 1)) override;
     void swapSelection() override;
     void deleteSelection() override;
@@ -443,6 +443,8 @@ private:
     bool prepareDropTimeAnchorElement(const muse::PointF& pos);
     bool dropCanvas(EngravingItem* e);
     void resetDropData();
+
+    void repeatListSelection(const engraving::Selection& selection);
 
     void doFinishAddFretboardDiagram();
 

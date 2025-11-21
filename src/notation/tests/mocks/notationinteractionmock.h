@@ -151,7 +151,7 @@ public:
     MOCK_METHOD(void, addBoxes, (BoxType, int, int, bool), (override));
 
     MOCK_METHOD(void, copySelection, (), (override));
-    MOCK_METHOD(muse::Ret, repeatSelection, (), (override));
+    MOCK_METHOD(void, repeatSelection, (), (override));
     MOCK_METHOD(void, copyLyrics, (), (override));
     MOCK_METHOD(void, pasteSelection, (const Fraction&), (override));
     MOCK_METHOD(void, swapSelection, (), (override));

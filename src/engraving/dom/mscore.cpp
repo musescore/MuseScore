@@ -117,6 +117,7 @@ std::string MScore::errorToString(MsError err)
     case MsError::CORRUPTED_MEASURE: return "CORRUPTED_MEASURE";
     case MsError::CANNOT_REMOVE_KEY_SIG: return "CANNOT_REMOVE_KEY_SIG";
     case MsError::CANNOT_JOIN_MEASURE_STAFFTYPE_CHANGE: return "CANNOT_JOIN_MEASURE_STAFFTYPE_CHANGE";
+    case MsError::CANNOT_REPEAT_SELECTION: return "CANNOT_REPEAT_SELECTION";
     }
 
     return {};

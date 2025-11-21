@@ -164,6 +164,7 @@ enum class MsError : unsigned char {
     CORRUPTED_MEASURE,
     CANNOT_REMOVE_KEY_SIG,
     CANNOT_JOIN_MEASURE_STAFFTYPE_CHANGE,
+    CANNOT_REPEAT_SELECTION,
 };
 
 /// \cond PLUGIN_API \private \endcond
