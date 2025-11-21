@@ -160,6 +160,7 @@ void WindowView::doOpen()
         return;
     }
 
+    resolveParentWindow();
     updateGeometry();
 
     beforeOpen();
@@ -413,10 +414,6 @@ void WindowView::setParentWindow(QWindow* window)
 
 void WindowView::resolveParentWindow()
 {
-    if (m_parentWindow) {
-        return;
-    }
-
     if (QQuickItem* parent = parentItem()) {
         if (QWindow* window = parent->window()) {
             setParentWindow(window);
