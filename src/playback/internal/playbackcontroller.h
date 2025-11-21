@@ -60,6 +60,7 @@ class PlaybackController : public IPlaybackController, public muse::actions::Act
 
 public:
     PlaybackController();
+    ~PlaybackController();
 
     void init();
 

@@ -96,6 +96,8 @@ PlaybackController::PlaybackController()
 {
 }
 
+PlaybackController::~PlaybackController() = default;
+
 void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, [this]() { PlaybackController::togglePlay(); });
