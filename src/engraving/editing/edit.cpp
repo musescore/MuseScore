@@ -2053,6 +2053,7 @@ void Score::cmdAddTie(bool addToChord)
 {
     const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
     std::vector<EngravingItem*> toSelect;
+
     if (noteList.empty()) {
         LOGD("no notes selected");
         return;
@@ -2081,6 +2082,7 @@ void Score::cmdAddTie(bool addToChord)
             cr = toChord(c->explicitParent());
             addToChord = true;
         } else {
+            m_is.setTrack(note->chord()->track());
             m_is.setSegment(note->chord()->segment());
             m_is.moveToNextInputPos();
             m_is.setLastSegment(m_is.segment());
@@ -2106,6 +2108,8 @@ void Score::cmdAddTie(bool addToChord)
             } else {
                 addFlag = true;             // re-use chord
             }
+        } else if (!noteEntryMode()) {
+            addFlag = false;
         }
 
         // if no note to re-use, create one
@@ -2170,13 +2174,13 @@ Tie* Score::cmdToggleTie()
     }
 
     std::vector<Note*> tieNoteList(noteList.size());
-    Chord* chord = noteList.front()->chord();
+    bool singleTick = true;
     bool someHaveExistingNextNoteToTieTo = false;
-
+    bool allHaveExistingNextNoteToTieTo = true;
     for (size_t i = 0; i < noteList.size(); ++i) {
         Note* n = noteList[i];
-        if (chord && n->chord() != chord) {
-            chord = nullptr;
+        if (n->chord()->tick() != noteList.front()->tick()) {
+            singleTick = false;
         }
         if (n->tieFor()) {
             tieNoteList[i] = nullptr;
@@ -2185,13 +2189,15 @@ Tie* Score::cmdToggleTie()
             tieNoteList[i] = tieNote;
             if (tieNote) {
                 someHaveExistingNextNoteToTieTo = true;
+            } else {
+                allHaveExistingNextNoteToTieTo = false;
             }
         }
     }
 
-    const bool shouldTieListSelection = noteList.size() >= 2 && !chord;
+    const bool shouldTieListSelection = noteList.size() >= 2 && !singleTick;
 
-    if (chord) { /* i.e. all notes are in the same chord */
+    if (singleTick /* i.e. all notes are in the same tick */ && !allHaveExistingNextNoteToTieTo) {
         cmdAddTie(true);
         return nullptr;
     }
