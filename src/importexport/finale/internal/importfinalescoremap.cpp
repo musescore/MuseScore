@@ -300,6 +300,18 @@ void FinaleParser::importMeasures()
         }
         measure->setTimesig(scoreTimeSig);
         measure->setTicks(scoreTimeSig);
+        if (const MusxInstance<others::MeasureNumberRegion> measNumRegion = musxMeasure->findMeasureNumberRegion()) {
+            if (musxMeasure->getCmper() == measNumRegion->startMeas) {
+                measure->setNoOffset(measNumRegion->numberOffset);
+            }
+            if (std::optional<int> dispNum = measNumRegion->calcDisplayNumberFor(musxMeasure->getCmper())) {
+                measure->setNo(dispNum.value() - 1);
+            } else {
+                measure->setIrregular(true);
+            }
+        } else {
+            measure->setIrregular(true);
+        }
         m_score->measures()->append(measure);
 
         // Needed for later calculations, saves a global layout call
