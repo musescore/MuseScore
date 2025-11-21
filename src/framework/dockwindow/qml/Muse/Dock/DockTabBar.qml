@@ -90,19 +90,40 @@ Rectangle {
         spacing: 0
 
         readonly property real availableWidth: root.width + 1  // + 1, because we don't need to see the rightmost separator
-        readonly property real implicitWidthOfActiveTab: currentItem ? currentItem.implicitWidth : 0
-        readonly property real implicitWidthOfAllTabsTogether: {
-            let result = 0
-            let items = tabs.contentItem.children
 
-            for (let i in items) {
-                let item = items[i]
-                if (item && item.implicitWidth) {
-                    result += item.implicitWidth
-                }
+        onAvailableWidthChanged: { layoutTabs() }
+
+        property bool layoutTabsScheduled: false
+
+        function layoutTabs() {
+            if (!layoutTabsScheduled) {
+                Qt.callLater(doLayoutTabs)
+                layoutTabsScheduled = true
+            }
+        }
+
+        function doLayoutTabs() {
+            layoutTabsScheduled = false
+
+            let implicitWidthOfActiveTab = currentItem?.implicitWidth ?? 0
+            let implicitWidthOfAllTabsTogether = 0
+
+            for (let tab of contentItem.children) {
+                implicitWidthOfAllTabsTogether += tab?.implicitWidth ?? 0
             }
 
-            return result
+            const enoughSpace = implicitWidthOfAllTabsTogether <= availableWidth;
+            for (let tab of contentItem.children) {
+                if (tab.isCurrent || enoughSpace) {
+                    tab.width = tab.implicitWidth
+                    tab.isCutOff = false
+                } else {
+                    tab.width = (availableWidth - implicitWidthOfActiveTab)
+                            / (implicitWidthOfAllTabsTogether - implicitWidthOfActiveTab)
+                            * tab.implicitWidth
+                    tab.isCutOff = true
+                }
+            }
         }
 
         delegate: DockPanelTab {
@@ -110,21 +131,13 @@ Rectangle {
             isCurrent: root.currentIndex === model.index
             contextMenuModel: model.contextMenu
 
-            width: {
-                var w
-                if (isCurrent || tabs.implicitWidthOfAllTabsTogether <= tabs.availableWidth) {
-                    w = implicitWidth
-                } else {
-                    w = (tabs.availableWidth - tabs.implicitWidthOfActiveTab)
-                    / (tabs.implicitWidthOfAllTabsTogether - tabs.implicitWidthOfActiveTab)
-                    * implicitWidth
-                }
-                return w
-            }
-
             navigation.name: text
             navigation.panel: root.navigationPanel
             navigation.order: model.index * 2 // NOTE '...' button will have +1 order
+
+            Component.onCompleted: { tabs.layoutTabs() }
+
+            onImplicitWidthChanged: { tabs.layoutTabs() }
 
             onNavigationTriggered: {
                 root.tabClicked(model.index)
