@@ -314,13 +314,9 @@ void FinaleParser::importMeasures()
                 measure->setNoOffset(measNumRegion->numberOffset - lastDisplayNum);
             }
             if (musxMeasure->getCmper() == measNumRegion->endMeas - 1) {
-                /// @todo create measNumRegion->calcLastDisplayNumber() and use that instead of this.
-                Cmper check = musxMeasure->getCmper();
-                auto currLast = measNumRegion->calcDisplayNumberFor(check);
-                while (!currLast && check >= measNumRegion->startMeas) {
-                    currLast = measNumRegion->calcDisplayNumberFor(--check);
+                if (std::optional<int> currLast = measNumRegion->calcLastDisplayNumber()) {
+                    lastDisplayNum = currLast.value();
                 }
-                lastDisplayNum = currLast.value_or(0); /// @todo fix this with musx utility func
             }
             if (musxMeasure->noMeasNum) {
                 measure->setIrregular(true);
