@@ -2052,7 +2052,7 @@ static Tie* createAndAddTie(Note* startNote, Note* endNote)
 void Score::cmdAddTie(bool addToChord)
 {
     const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
-
+    std::vector<EngravingItem*> toSelect;
     if (noteList.empty()) {
         LOGD("no notes selected");
         return;
@@ -2147,10 +2147,12 @@ void Score::cmdAddTie(bool addToChord)
                 }
             }
         }
+        toSelect.push_back(n);
     }
     if (lastAddedChord) {
         nextInputPos(lastAddedChord, false);
     }
+    score()->select(toSelect, SelectType::ADD);
     endCmd();
 }
 
@@ -2170,7 +2172,6 @@ Tie* Score::cmdToggleTie()
     std::vector<Note*> tieNoteList(noteList.size());
     Chord* chord = noteList.front()->chord();
     bool someHaveExistingNextNoteToTieTo = false;
-    bool allHaveExistingNextNoteToTieTo = true;
 
     for (size_t i = 0; i < noteList.size(); ++i) {
         Note* n = noteList[i];
@@ -2184,22 +2185,14 @@ Tie* Score::cmdToggleTie()
             tieNoteList[i] = tieNote;
             if (tieNote) {
                 someHaveExistingNextNoteToTieTo = true;
-            } else {
-                allHaveExistingNextNoteToTieTo = false;
             }
         }
     }
 
     const bool shouldTieListSelection = noteList.size() >= 2 && !chord;
 
-    if (chord /* i.e. all notes are in the same chord */ && !allHaveExistingNextNoteToTieTo) {
-        cmdAddTie();
-        if (noteList.size() >= 2) {
-            Chord* c = chord->next();
-            for (Note* cn : c->notes()) {
-                score()->select(cn, SelectType::ADD);
-            }
-        }
+    if (chord) { /* i.e. all notes are in the same chord */
+        cmdAddTie(true);
         return nullptr;
     }
 
