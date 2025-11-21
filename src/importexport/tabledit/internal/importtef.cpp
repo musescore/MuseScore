@@ -609,7 +609,8 @@ static void fillGap(Measure* measure, track_idx_t track, const Fraction& tstart,
     auto durList = toDurationList(restLen, true);
     LOGN("durList.size %zu", durList.size());
     for (const auto& dur : durList) {
-        LOGN("type %d dots %d fraction %d/%d", dur.type(), dur.dots(), dur.fraction().numerator(), dur.fraction().denominator());
+        LOGN("type %d dots %d fraction %d/%d", static_cast<int>(dur.type()), dur.dots(), dur.fraction().numerator(),
+             dur.fraction().denominator());
         Segment* s = measure->getSegment(SegmentType::ChordRest, ctick);
         addRest(s, track, dur, dur.fraction(), muse::draw::Color::BLACK, false);
         ctick += dur.fraction();

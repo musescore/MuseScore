@@ -388,14 +388,14 @@ void Transpose::transpositionChanged(Score* score, Part* part, Interval oldV, Fr
     for (Staff* ls : part->staff(0)->staffList()) {
         // TODO: special handling for linked staves within a score
         // could be useful for capo
-        Score* score = ls->score();
-        if (muse::contains(scores, score)) {
+        Score* lsScore = ls->score();
+        if (muse::contains(scores, lsScore)) {
             continue;
         }
-        scores.insert(score);
+        scores.insert(lsScore);
         Part* lp = ls->part();
-        if (!score->style().styleB(Sid::concertPitch)) {
-            transposeKeys(score, lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, true);
+        if (!lsScore->style().styleB(Sid::concertPitch)) {
+            transposeKeys(lsScore, lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, true);
         }
     }
 
