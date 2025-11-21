@@ -6,12 +6,12 @@
     <Style>
       <pageWidth>8.5</pageWidth>
       <pageHeight>11</pageHeight>
-      <pagePrintableWidth>7</pagePrintableWidth>
-      <pageEvenLeftMargin>1</pageEvenLeftMargin>
-      <pageOddLeftMargin>1</pageOddLeftMargin>
-      <pageEvenTopMargin>0.5</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.5</pageEvenBottomMargin>
-      <pageOddTopMargin>0.5</pageOddTopMargin>
+      <pagePrintableWidth>7.5</pagePrintableWidth>
+      <pageEvenLeftMargin>0.5</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.5</pageOddLeftMargin>
+      <pageEvenTopMargin>0.625</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.625</pageEvenBottomMargin>
+      <pageOddTopMargin>0.625</pageOddTopMargin>
       <pageTwosided>0</pageTwosided>
       <lyricsOddFontFace>Finale Lyrics</lyricsOddFontFace>
       <lyricsEvenFontFace>Finale Lyrics</lyricsEvenFontFace>
@@ -65,6 +65,7 @@
       <pedalDashGapLen>8.17021</pedalDashGapLen>
       <pedalHookHeight>0.5</pedalHookHeight>
       <pedalFontFace>Times New Roman</pedalFontFace>
+      <romanNumeralPosBelow x="0.483964" y="-3.87171"/>
       <chordSymbolAFontFace>Times New Roman</chordSymbolAFontFace>
       <chordSymbolBFontFace>Times New Roman</chordSymbolBFontFace>
       <chordSymbolBFontStyle>0</chordSymbolBFontStyle>
@@ -88,7 +89,7 @@
       <mmRestNumberPos>-0.333333</mmRestNumberPos>
       <mmRestOldStyleMaxMeasures>8</mmRestOldStyleMaxMeasures>
       <mmRestOldStyleSpacing>2</mmRestOldStyleSpacing>
-      <firstSystemIndentationValue>6</firstSystemIndentationValue>
+      <firstSystemIndentationValue>6.19881</firstSystemIndentationValue>
       <slurMidWidth>0.125</slurMidWidth>
       <slurDottedWidth>0.0917969</slurDottedWidth>
       <tieMidWidth>0.125</tieMidWidth>
@@ -96,12 +97,7 @@
       <minTieLength>1.83333</minTieLength>
       <musicalSymbolFont>Finale Maestro</musicalSymbolFont>
       <musicalTextFont>Finale Maestro Text</musicalTextFont>
-      <headerFirstPage>1</headerFirstPage>
-      <headerOddEven>0</headerOddEven>
-      <evenHeaderL></evenHeaderL>
-      <evenHeaderC>&lt;font face=&quot;Times New Roman&quot;/&gt;&lt;font size=&quot;24&quot;/&gt;$:workTitle:</evenHeaderC>
-      <oddHeaderC>&lt;font face=&quot;Times New Roman&quot;/&gt;&lt;font size=&quot;24&quot;/&gt;$:workTitle:</oddHeaderC>
-      <oddHeaderR></oddHeaderR>
+      <showHeader>0</showHeader>
       <showFooter>0</showFooter>
       <voltaPosAbove x="0" y="-4"/>
       <voltaHook>3</voltaHook>
@@ -204,7 +200,7 @@
       <repeatRightFontSize>11.6667</repeatRightFontSize>
       <repeatRightFontStyle>1</repeatRightFontStyle>
       <frameFontFace>Times New Roman</frameFontFace>
-      <frameOffset x="14.0488" y="6.78241"/>
+      <frameFontSpatiumDependent>1</frameFontSpatiumDependent>
       <textLineFontFace>Times New Roman</textLineFontFace>
       <systemTextLineFontFace>Times New Roman</systemTextLineFontFace>
       <noteLineFontFace>Times New Roman</noteLineFontFace>
@@ -275,18 +271,241 @@
     <showMargins>0</showMargins>
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
-    <metaTag name="copyright">©2025</metaTag>
-    <metaTag name="description">Finale's specially-curated engraved style
-
-* Features the SMuFL-compliant Finale Maestro font family
-
-* Includes inserts for Title, Subtitle, Composer, Arranger, Score/Part, and Copyright </metaTag>
+    <metaTag name="copyright"></metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Two Parts, no Measures, with Bracket</metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName></trackName>
+      <hideWhenEmpty>off</hideWhenEmpty>
+      <Instrument>
+        <trackName></trackName>
+        <StringData>
+          <frets>21</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
+        <Channel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>D_D</eid>
+        <vspacerUp>17.4227</vspacerUp>
+        <voice>
+          <KeySig>
+            <eid>E_E</eid>
+            <concertKey>0</concertKey>
+            <mode>major</mode>
+            </KeySig>
+          <TimeSig>
+            <eid>F_F</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <Groups>
+              <Node pos="8" action="272"/>
+              <Node pos="16" action="273"/>
+              <Node pos="24" action="272"/>
+              </Groups>
+            </TimeSig>
+          <Harmony>
+            <harmonyType>1</harmonyType>
+            <rootCase>2</rootCase>
+            <bassCase>2</bassCase>
+            <harmonyInfo>
+              <name>I</name>
+              </harmonyInfo>
+            <eid>G_G</eid>
+            <autoplace>0</autoplace>
+            </Harmony>
+          <Rest>
+            <eid>H_H</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <location>
+            <fractions>-3/4</fractions>
+            </location>
+          <Harmony>
+            <harmonyType>1</harmonyType>
+            <rootCase>2</rootCase>
+            <bassCase>2</bassCase>
+            <harmonyInfo>
+              <name>IIm7</name>
+              </harmonyInfo>
+            <eid>I_I</eid>
+            <autoplace>0</autoplace>
+            </Harmony>
+          <location>
+            <fractions>1/2</fractions>
+            </location>
+          <Harmony>
+            <harmonyType>1</harmonyType>
+            <rootCase>1</rootCase>
+            <bassCase>2</bassCase>
+            <harmonyInfo>
+              <name>##IV7(addmaj7)/IV</name>
+              </harmonyInfo>
+            <eid>J_J</eid>
+            <autoplace>0</autoplace>
+            </Harmony>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>K_K</eid>
+        <voice>
+          <KeySig>
+            <eid>L_L</eid>
+            <concertKey>2</concertKey>
+            <mode>major</mode>
+            </KeySig>
+          <Harmony>
+            <harmonyType>1</harmonyType>
+            <rootCase>2</rootCase>
+            <bassCase>2</bassCase>
+            <harmonyInfo>
+              <name>III</name>
+              <root>19</root>
+              </harmonyInfo>
+            <eid>M_M</eid>
+            <autoplace>0</autoplace>
+            </Harmony>
+          <Rest>
+            <eid>N_N</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <location>
+            <fractions>-3/4</fractions>
+            </location>
+          <Harmony>
+            <harmonyType>1</harmonyType>
+            <rootCase>2</rootCase>
+            <bassCase>2</bassCase>
+            <harmonyInfo>
+              <name>VI</name>
+              </harmonyInfo>
+            <eid>O_O</eid>
+            <autoplace>0</autoplace>
+            </Harmony>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <Harmony>
+            <harmonyType>1</harmonyType>
+            <rootCase>2</rootCase>
+            <bassCase>2</bassCase>
+            <harmonyInfo>
+              <name>VII(add♯9add♭9)/#VI</name>
+              <root>12</root>
+              </harmonyInfo>
+            <eid>P_P</eid>
+            <autoplace>0</autoplace>
+            <offset x="0.524294" y="-6.04955"/>
+            </Harmony>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <Harmony>
+            <harmonyType>1</harmonyType>
+            <rootCase>2</rootCase>
+            <bassCase>2</bassCase>
+            <harmonyInfo>
+              <name>II</name>
+              </harmonyInfo>
+            <eid>Q_Q</eid>
+            <autoplace>0</autoplace>
+            </Harmony>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>R_R</eid>
+        <voice>
+          <KeySig>
+            <eid>S_S</eid>
+            <concertKey>2</concertKey>
+            <mode>minor</mode>
+            </KeySig>
+          <Harmony>
+            <harmonyType>1</harmonyType>
+            <rootCase>2</rootCase>
+            <bassCase>2</bassCase>
+            <harmonyInfo>
+              <name>III</name>
+              <root>19</root>
+              </harmonyInfo>
+            <eid>T_T</eid>
+            <autoplace>0</autoplace>
+            </Harmony>
+          <Rest>
+            <eid>U_U</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <location>
+            <fractions>-3/4</fractions>
+            </location>
+          <Harmony>
+            <harmonyType>1</harmonyType>
+            <rootCase>2</rootCase>
+            <bassCase>2</bassCase>
+            <harmonyInfo>
+              <name>VI</name>
+              </harmonyInfo>
+            <eid>V_V</eid>
+            <autoplace>0</autoplace>
+            </Harmony>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <Harmony>
+            <harmonyType>1</harmonyType>
+            <rootCase>2</rootCase>
+            <bassCase>2</bassCase>
+            <harmonyInfo>
+              <name>VII(add♯9add♭9)/#VI</name>
+              <root>12</root>
+              </harmonyInfo>
+            <eid>W_W</eid>
+            <autoplace>0</autoplace>
+            <offset x="0.483964" y="-6.04955"/>
+            </Harmony>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <Harmony>
+            <harmonyType>1</harmonyType>
+            <rootCase>2</rootCase>
+            <bassCase>2</bassCase>
+            <harmonyInfo>
+              <name>II</name>
+              </harmonyInfo>
+            <eid>X_X</eid>
+            <autoplace>0</autoplace>
+            </Harmony>
+          </voice>
+        </Measure>
+      </Staff>
+    <SystemLocks>
+      <systemLock>
+        <startMeasure>D_D</startMeasure>
+        <endMeasure>R_R</endMeasure>
+        </systemLock>
+      </SystemLocks>
     </Score>
   </museScore>
