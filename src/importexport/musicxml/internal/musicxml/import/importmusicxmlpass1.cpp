@@ -456,7 +456,7 @@ bool MusicXmlParserPass1::determineMeasureLength(std::vector<Fraction>& ml) cons
 
     // determine number of measures: max number of measures in any part
     size_t nMeasures = 0;
-    for (const MusicXmlPart& part : muse::values(m_parts)) {
+    for (const auto& [_, part] : m_parts) {
         if (part.nMeasures() > nMeasures) {
             nMeasures = part.nMeasures();
         }
@@ -465,7 +465,7 @@ bool MusicXmlParserPass1::determineMeasureLength(std::vector<Fraction>& ml) cons
     // determine max length of a specific measure in all parts
     for (size_t i = 0; i < nMeasures; ++i) {
         Fraction maxMeasDur;
-        for (const MusicXmlPart& part : muse::values(m_parts)) {
+        for (const auto& [_, part] : m_parts) {
             if (i < part.nMeasures()) {
                 Fraction measDurPartJ = part.measureDuration(i);
                 if (measDurPartJ > maxMeasDur) {

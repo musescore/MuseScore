@@ -6082,7 +6082,7 @@ void Score::removeSystemLock(const SystemLock* lock)
 void Score::updateSwing()
 {
     for (Staff* s : m_staves) {
-        s->clearSwingList();
+        s->clearSwingMap();
     }
     Measure* fm = firstMeasure();
     if (!fm) {
@@ -6106,10 +6106,10 @@ void Score::updateSwing()
             sp.swingUnit = st->swingParameters().swingUnit;
             if (st->systemFlag()) {
                 for (Staff* sta : m_staves) {
-                    sta->insertIntoSwingList(s->tick(), sp);
+                    sta->insertIntoSwingMap(s->tick(), sp);
                 }
             } else {
-                staff->insertIntoSwingList(s->tick(), sp);
+                staff->insertIntoSwingMap(s->tick(), sp);
             }
         }
     }

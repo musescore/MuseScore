@@ -942,8 +942,7 @@ static void addLyrics(MusicXmlLogger* logger, const XmlStreamReader* const xmlre
                       const std::set<Lyrics*>& extLyrics,
                       MusicXmlLyricsExtend& extendedLyrics)
 {
-    for (const int lyricNo : muse::keys(numbrdLyrics)) {
-        Lyrics* const lyric = numbrdLyrics.at(lyricNo);
+    for (const auto& [lyricNo, lyric] : numbrdLyrics) {
         addLyric(logger, xmlreader, cr, lyric, lyricNo, extendedLyrics);
         if (muse::contains(extLyrics, lyric)) {
             extendedLyrics.addLyric(lyric);
@@ -954,8 +953,7 @@ static void addLyrics(MusicXmlLogger* logger, const XmlStreamReader* const xmlre
 static void addGraceNoteLyrics(const std::map<int, Lyrics*>& numberedLyrics, std::set<Lyrics*> extendedLyrics,
                                std::vector<GraceNoteLyrics>& gnLyrics)
 {
-    for (const int lyricNo : muse::keys(numberedLyrics)) {
-        Lyrics* const lyric = numberedLyrics.at(lyricNo);
+    for (const auto& [lyricNo, lyric] : numberedLyrics) {
         if (lyric) {
             bool extend = muse::contains(extendedLyrics, lyric);
             const GraceNoteLyrics gnl = GraceNoteLyrics(lyric, extend, lyricNo);
@@ -2098,7 +2096,7 @@ void MusicXmlParserPass2::scorePartwise()
     }
     addError(checkAtEndElement(m_e, u"score-partwise"));
 
-    for (EngravingItem* sysEl : muse::values(m_sysElements)) {
+    for (const auto& [_, sysEl] : m_sysElements) {
         m_score->undoAddElement(sysEl);
 
         // Remove potential duplicated text for text and text lines
@@ -2911,7 +2909,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
     fillGapsInFirstVoices(measure, part);
 
     // Prevent any beams from extending into the next measure
-    for (Beam* beam : muse::values(beams)) {
+    for (auto& [_, beam] : beams) {
         if (beam) {
             removeBeam(beam);
         }

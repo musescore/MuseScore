@@ -156,10 +156,10 @@ TEST_F(Engraving_TempoMapTests, TEMPO_MULTIPLIER)
     EXPECT_EQ(tempoMap->size(), expectedTempoMap.size());
 
     // [THEN] Applied tempo matches with our expectations
-    for (int tick : muse::keys(*tempoMap)) {
+    for (const auto& [tick, event] : *tempoMap) {
         double expectedBps = expectedTempoMap[tick].val;
 
-        EXPECT_NEAR(tempoMap->at(tick).tempo.val,        expectedBps,              TEMPO_ERROR);
+        EXPECT_NEAR(event.tempo.val,                     expectedBps,              TEMPO_ERROR);
         EXPECT_NEAR(tempoMap->tempo(tick).val,           expectedBps,              TEMPO_ERROR);
         EXPECT_NEAR(tempoMap->multipliedTempo(tick).val, expectedBps * multiplier, TEMPO_ERROR);
     }

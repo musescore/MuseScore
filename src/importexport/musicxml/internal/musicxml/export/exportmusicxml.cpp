@@ -2537,7 +2537,7 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bo
             map.insert({ ksym.xPos, ksym });
         }
         // then write them (automatically sorted on key)
-        for (const KeySym& ksym : muse::values(map)) {
+        for (const auto& [_, ksym] : map) {
             int step = (po - ksym.line) % 7;
             //LOGD(" keysym sym %d -> line %d step %d", ksym.sym, ksym.line, step);
             m_xml.tag("key-step", String(Char(table2[step])));
@@ -7057,8 +7057,8 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
             keysig(keysigs.at(0), p->staff(0)->clef(m->tick()), 0, keysigs.at(0)->visible());
         } else {
             // staff-specific keysigs
-            for (staff_idx_t st : muse::keys(keysigs)) {
-                keysig(keysigs.at(st), p->staff(st)->clef(m->tick()), st + 1, keysigs.at(st)->visible());
+            for (const auto& [st, ks] : keysigs) {
+                keysig(ks, p->staff(st)->clef(m->tick()), st + 1, ks->visible());
             }
         }
     } else {
@@ -7102,8 +7102,8 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
             timesig(timesigs.at(0), 0);
         } else {
             // staff-specific timesig
-            for (staff_idx_t st : muse::keys(timesigs)) {
-                timesig(timesigs.at(st), st + 1);
+            for (const auto& [st, ts] : timesigs) {
+                timesig(ts, st + 1);
             }
         }
     }
@@ -7275,9 +7275,9 @@ typedef std::map<int, const Instrument*> MusicXmlReverseInstrumentMap;
 static void initReverseInstrMap(MusicXmlReverseInstrumentMap& rim, const MusicXmlInstrumentMap& im)
 {
     rim.clear();
-    for (const Instrument* i : muse::keys(im)) {
-        int instNr = im.at(i);
-        rim.insert({ instNr, i });
+
+    for (const auto& [instr, instNr] : im) {
+        rim.insert({ instNr, instr });
     }
 }
 
@@ -7794,12 +7794,13 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
         } else {
             MusicXmlReverseInstrumentMap rim;
             initReverseInstrMap(rim, instrMap);
-            for (int instNr : muse::keys(rim)) {
-                const Instrument* instr = rim.at(instNr);
-                scoreInstrument(xml, idx + 1, instNr + 1,
+
+            for (const auto& [instrNr, instr] : rim) {
+                scoreInstrument(xml, idx + 1, instrNr + 1,
                                 MScoreTextToMusicXml::toPlainText(instr->trackName()),
                                 instr);
             }
+
             for (auto ii = rim.cbegin(); ii != rim.cend(); ii++) {
                 int instNr = ii->first;
                 int midiPort = part->midiPort() + 1;

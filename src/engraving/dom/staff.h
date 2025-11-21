@@ -32,7 +32,6 @@
 #include "cleflist.h"
 #include "groups.h"
 #include "keylist.h"
-#include "pitch.h"
 #include "stafftypelist.h"
 
 #include "../types/types.h"
@@ -163,8 +162,8 @@ public:
     }
 
     SwingParameters swing(const Fraction&)  const;
-    void clearSwingList() { m_swingList.clear(); }
-    void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { m_swingList.insert({ tick.ticks(), sp }); }
+    void clearSwingMap() { m_swingMap.clear(); }
+    void insertIntoSwingMap(const Fraction& tick, SwingParameters sp) { m_swingMap.insert({ tick.ticks(), sp }); }
 
     const CapoParams& capo(const Fraction&) const;
     void insertCapoParams(const Fraction& tick, const CapoParams& params);
@@ -204,9 +203,7 @@ public:
     double spatium(const EngravingItem*) const;
     //===========
 
-    PitchList& pitchOffsets() { return m_pitchOffsets; }
-
-    int pitchOffset(const Fraction& tick) const { return m_pitchOffsets.pitchOffset(tick.ticks()); }
+    int pitchOffset(const Fraction& tick) const;
     void updateOttava();
 
     std::vector<Staff*> staffList() const;
@@ -309,12 +306,11 @@ private:
     StaffTypeList m_staffTypeList;
 
     std::map<int, int> m_channelList[VOICES];
-    std::map<int, SwingParameters> m_swingList;
+    std::map<int, SwingParameters> m_swingMap;
     std::map<int, CapoParams> m_capoMap;
+    std::map<int, int> m_pitchOffsetMap;
     bool m_playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> m_visibilityVoices { true, true, true, true };
-
-    PitchList m_pitchOffsets;               // cached value
 
     bool m_reflectTranspositionInLinkedTab = true;
 

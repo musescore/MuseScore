@@ -352,7 +352,12 @@ QVariantMap InputResourceItem::buildSoundFontsMenuItem(const ResourceByVendorMap
     }
 
     // Sort SoundFonts by name and add them to the menu
-    std::vector<muse::String> soundFonts = muse::keys(resourcesBySoundFont);
+    std::vector<muse::String> soundFonts;
+    soundFonts.reserve(resourcesBySoundFont.size());
+    for (const auto& pair : resourcesBySoundFont) {
+        soundFonts.push_back(pair.first);
+    }
+
     std::sort(soundFonts.begin(), soundFonts.end(), [](const muse::String& s1, const muse::String& s2) {
         return muse::strings::lessThanCaseInsensitive(s1, s2);
     });

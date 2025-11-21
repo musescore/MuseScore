@@ -1513,9 +1513,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         }
 
         TremoloTwoChord* prevTremolo = nullptr;
-        for (track_idx_t srcTrack : muse::keys(map)) {
+        for (const auto& [srcTrack, dstTrack] : map) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
-            track_idx_t dstTrack = map.at(srcTrack);
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                 Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
                 EngravingItem* oef = oseg->element(trackZeroVoice(srcTrack));

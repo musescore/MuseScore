@@ -1020,34 +1020,23 @@ SwingParameters Staff::swing(const Fraction& tick) const
     }
     sp.swingRatio = swingRatio;
     sp.swingUnit = swingUnit;
-    if (m_swingList.empty()) {
+    if (m_swingMap.empty()) {
         return sp;
     }
 
-    std::vector<int> ticks = muse::keys(m_swingList);
-    auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick.ticks());
-    if (it == ticks.cbegin()) {
-        return sp;
-    }
-    --it;
-    return m_swingList.at(*it);
+    auto it = muse::findLessOrEqual(m_swingMap, tick.ticks());
+    return it == m_swingMap.cend() ? sp : it->second;
 }
 
 const CapoParams& Staff::capo(const Fraction& tick) const
 {
     static const CapoParams dummy;
-
     if (m_capoMap.empty()) {
         return dummy;
     }
 
-    std::vector<int> ticks = muse::keys(m_capoMap);
-    auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick.ticks());
-    if (it == ticks.cbegin()) {
-        return dummy;
-    }
-    --it;
-    return m_capoMap.at(*it);
+    auto it = muse::findLessOrEqual(m_capoMap, tick.ticks());
+    return it == m_capoMap.cend() ? dummy : it->second;
 }
 
 void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
@@ -1072,17 +1061,13 @@ bool Staff::shouldMergeMatchingRests() const
 
 int Staff::channel(const Fraction& tick, voice_idx_t voice) const
 {
-    if (m_channelList[voice].empty()) {
+    const std::map<int, int>& map = m_channelList[voice];
+    if (map.empty()) {
         return 0;
     }
 
-    std::vector<int> ticks = muse::keys(m_channelList[voice]);
-    auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick.ticks());
-    if (it == ticks.cbegin()) {
-        return 0;
-    }
-    --it;
-    return m_channelList[voice].at(*it);
+    auto it = muse::findLessOrEqual(map, tick.ticks());
+    return it == map.cend() ? 0 : it->second;
 }
 
 //---------------------------------------------------------
@@ -1402,15 +1387,25 @@ void Staff::setColor(const Fraction& tick, const Color& val)
 void Staff::updateOttava()
 {
     staff_idx_t staffIdx = idx();
-    m_pitchOffsets.clear();
+    m_pitchOffsetMap.clear();
     for (auto i : score()->spanner()) {
         const Spanner* s = i.second;
         if (s->isOttava() && s->staffIdx() == staffIdx && s->playSpanner()) {
             const Ottava* o = toOttava(s);
-            m_pitchOffsets.setPitchOffset(o->tick().ticks(), o->pitchShift());
-            m_pitchOffsets.setPitchOffset(o->tick2().ticks(), 0);
+            m_pitchOffsetMap.insert_or_assign(o->tick().ticks(), o->pitchShift());
+            m_pitchOffsetMap.insert_or_assign(o->tick2().ticks(), 0);
         }
     }
+}
+
+int Staff::pitchOffset(const Fraction& tick) const
+{
+    if (m_pitchOffsetMap.empty()) {
+        return 0;
+    }
+
+    const auto it = muse::findLessOrEqual(m_pitchOffsetMap, tick.ticks());
+    return it == m_pitchOffsetMap.cend() ? 0 : it->second;
 }
 
 //---------------------------------------------------------

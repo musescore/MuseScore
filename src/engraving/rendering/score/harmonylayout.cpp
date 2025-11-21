@@ -458,7 +458,8 @@ void HarmonyLayout::render(Harmony* item, Harmony::LayoutData* ldata, const Layo
     }
 
     double longestLine = 0.0;
-    for (double width : muse::keys(chordTextSegments)) {
+
+    for (const auto& [width, _] : chordTextSegments) {
         if (width > longestLine) {
             longestLine = width;
         }
