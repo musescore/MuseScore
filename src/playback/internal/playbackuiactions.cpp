@@ -276,7 +276,7 @@ bool PlaybackUiActions::actionEnabled(const UiAction& act) const
         return !m_controller->onlineSounds().empty();
     }
 
-    if (act.code == PLAY_FROM_SELECTION) {
+    if (act.code == PLAY_FROM_SELECTION_CODE) {
         const INotationPtr currNotation = globalContext()->currentNotation();
         const INotationInteractionPtr interaction = currNotation ? currNotation->interaction() : nullptr;
         return interaction && !interaction->selection()->isNone() && !interaction->isEditingElement();
