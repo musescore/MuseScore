@@ -188,7 +188,7 @@ void LayoutPanelTreeModel::setupPartsConnections()
 
     notationParts.onChanged(m_partsNotifyReceiver.get(), [this]() {
         load();
-    });
+    }, Mode::SetReplace);
 
     auto updateMasterPartItem = [this](const muse::ID& partId) {
         auto partItem = dynamic_cast<PartTreeItem*>(m_rootItem->childAtId(partId, LayoutPanelItemType::PART));
@@ -202,18 +202,18 @@ void LayoutPanelTreeModel::setupPartsConnections()
 
     notationParts.onItemAdded(m_partsNotifyReceiver.get(), [updateMasterPartItem](const Part* part) {
         updateMasterPartItem(part->id());
-    });
+    }, Mode::SetReplace);
 
     notationParts.onItemChanged(m_partsNotifyReceiver.get(), [updateMasterPartItem](const Part* part) {
         updateMasterPartItem(part->id());
-    });
+    }, Mode::SetReplace);
 
     m_notation->parts()->systemObjectStavesChanged().onNotify(this, [this]() {
         m_shouldUpdateSystemObjectLayers = true;
         if (!m_isLoadingBlocked) {
             load();
         }
-    });
+    }, Mode::SetReplace);
 }
 
 void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& partId)
@@ -283,7 +283,7 @@ void LayoutPanelTreeModel::setupNotationConnections()
 {
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
         updateSelectedRows();
-    });
+    }, Mode::SetReplace);
 
     m_notation->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChanges& changes) {
         if (changes.isTextEditing) {

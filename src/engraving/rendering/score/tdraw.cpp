@@ -642,9 +642,11 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
         y2l = 2.5 * spatium;
     } else {
         const StaffType* st = item->staffType();
+        const int lines = st->lines();
+        const double lineDistance = st->lineDistance().toMM(spatium);
 
-        y1l = st->doty1() * spatium;
-        y2l = st->doty2() * spatium;
+        y1l = (static_cast<double>((lines - 1) / 2) - 0.5) * lineDistance;
+        y2l = (static_cast<double>(lines / 2) + 0.5) * lineDistance;
 
         //adjust for staffType offset
         double stYOffset = item->staffOffsetY();

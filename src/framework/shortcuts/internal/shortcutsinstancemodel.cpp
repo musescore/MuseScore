@@ -21,8 +21,6 @@
  */
 #include "shortcutsinstancemodel.h"
 
-#include "log.h"
-
 using namespace muse::shortcuts;
 
 ShortcutsInstanceModel::ShortcutsInstanceModel(QObject* parent)

@@ -32,8 +32,6 @@
 #include "../docktypes.h"
 #include "../view/dockpanelview.h"
 
-#include "log.h"
-
 using namespace muse::dock;
 using namespace muse::actions;
 using namespace muse::uicomponents;

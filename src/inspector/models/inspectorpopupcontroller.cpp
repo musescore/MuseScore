@@ -27,8 +27,6 @@
 
 #include "uicomponents/view/popupview.h"
 
-#include "log.h"
-
 using namespace mu::inspector;
 using namespace muse::uicomponents;
 

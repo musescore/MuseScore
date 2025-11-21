@@ -30,7 +30,7 @@
 using namespace mu::engraving;
 
 RootItem::RootItem(Score* score)
-    : EngravingItem(ElementType::ROOT_ITEM, score), m_score(score)
+    : EngravingItem(ElementType::ROOT_ITEM, score)
 {
     m_dummy = new compat::DummyElement(this);
 }
