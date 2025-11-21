@@ -65,6 +65,7 @@
       <pedalDashGapLen>8.17021</pedalDashGapLen>
       <pedalHookHeight>0.5</pedalHookHeight>
       <pedalFontFace>Times New Roman</pedalFontFace>
+      <trillPosAbove x="0" y="-1.875"/>
       <chordSymbolAFontFace>Times New Roman</chordSymbolAFontFace>
       <chordSymbolBFontFace>Times New Roman</chordSymbolBFontFace>
       <chordSymbolBFontStyle>0</chordSymbolBFontStyle>
@@ -88,7 +89,7 @@
       <mmRestNumberPos>-0.333333</mmRestNumberPos>
       <mmRestOldStyleMaxMeasures>8</mmRestOldStyleMaxMeasures>
       <mmRestOldStyleSpacing>2</mmRestOldStyleSpacing>
-      <firstSystemIndentationValue>6</firstSystemIndentationValue>
+      <firstSystemIndentationValue>6.19881</firstSystemIndentationValue>
       <slurMidWidth>0.125</slurMidWidth>
       <slurDottedWidth>0.0917969</slurDottedWidth>
       <tieMidWidth>0.125</tieMidWidth>
@@ -110,6 +111,8 @@
       <voltaFontSize>8.33333</voltaFontSize>
       <voltaFontStyle>0</voltaFontStyle>
       <voltaOffset x="1.5" y="1.5"/>
+      <ottavaPosAbove x="0" y="0.899054"/>
+      <ottavaPosBelow x="0" y="0.315721"/>
       <ottavaHookAbove>0.5</ottavaHookAbove>
       <ottavaHookBelow>0.5</ottavaHookBelow>
       <ottavaLineWidth>0.0917969</ottavaLineWidth>
@@ -220,7 +223,7 @@
       <bendFontSize>10</bendFontSize>
       <bendLineWidth>0.0917969</bendLineWidth>
       <guitarBendLineWidth>0.0917969</guitarBendLineWidth>
-      <guitarBendLineWidthTab>0.0917969</guitarBendLineWidthTab>
+      <guitarBendLineWidthTab>0.10026</guitarBendLineWidthTab>
       <guitarBendUseFull>1</guitarBendUseFull>
       <showFretOnFullBendRelease>0</showFretOnFullBendRelease>
       <headerFontFace>Times New Roman</headerFontFace>
@@ -275,7 +278,7 @@
     <showMargins>0</showMargins>
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
-    <metaTag name="copyright">©2025</metaTag>
+    <metaTag name="copyright">©</metaTag>
     <metaTag name="description">Finale's specially-curated engraved style
 
 * Features the SMuFL-compliant Finale Maestro font family
@@ -287,6 +290,404 @@
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Two Parts, no Measures, with Bracket</metaTag>
+    <metaTag name="workTitle">j</metaTag>
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="1" span="2" col="0" visible="1"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff>
+        <eid>D_D</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName></trackName>
+      <hideWhenEmpty>off</hideWhenEmpty>
+      <Instrument>
+        <trackName></trackName>
+        <Channel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10.9466</height>
+        <bottomGap>4.13675</bottomGap>
+        <boxAutoSize>0</boxAutoSize>
+        <paddingToNotationBelow>0.516567</paddingToNotationBelow>
+        <eid>E_E</eid>
+        <offset x="0" y="-9.47032"/>
+        <Text>
+          <eid>F_F</eid>
+          <style>frame</style>
+          <size>12.1</size>
+          <offset x="0" y="-0.4375"/>
+          <text><font size="12.1"/>Score</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <eid>G_G</eid>
+        <vspacerFixed>8</vspacerFixed>
+        <voice>
+          <BarLine>
+            <eid>H_H</eid>
+            </BarLine>
+          <KeySig>
+            <eid>I_I</eid>
+            <concertKey>-1</concertKey>
+            <mode>major</mode>
+            </KeySig>
+          <TimeSig>
+            <eid>J_J</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <Groups>
+              <Node pos="8" action="272"/>
+              <Node pos="16" action="273"/>
+              <Node pos="24" action="272"/>
+              </Groups>
+            </TimeSig>
+          <Spanner type="Ottava">
+            <Ottava>
+              <subtype>8va</subtype>
+              <beginTextOffset x="0" y="-1.11722"/>
+              <continueTextOffset x="0" y="-1.11722"/>
+              <endTextOffset x="0" y="-1.11722"/>
+              <eid>K_K</eid>
+              <Segment>
+                <subtype>0</subtype>
+                <offset x="0" y="0.899054"/>
+                <off2 x="7.50866" y="0"/>
+                <eid>L_L</eid>
+                <autoplace>0</autoplace>
+                </Segment>
+              </Ottava>
+            <next>
+              <location>
+                <measures>1</measures>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <eid>M_M</eid>
+            <durationType>quarter</durationType>
+            <Spanner type="Slur">
+              <Slur>
+                <eid>N_N</eid>
+                <up>up</up>
+                </Slur>
+              <next>
+                <location>
+                  <fractions>1/4</fractions>
+                  </location>
+                </next>
+              </Spanner>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>O_O</eid>
+              <pitch>70</pitch>
+              <tpc>12</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>P_P</eid>
+            <durationType>quarter</durationType>
+            <Spanner type="Slur">
+              <prev>
+                <location>
+                  <fractions>-1/4</fractions>
+                  </location>
+                </prev>
+              </Spanner>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>Q_Q</eid>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>R_R</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>S_S</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <Spanner type="Glissando">
+                <Glissando>
+                  <glissandoShowText>0</glissandoShowText>
+                  <dashLineLength>-1.83255e-06</dashLineLength>
+                  <dashGapLength>-1.83255e-06</dashGapLength>
+                  <eid>T_T</eid>
+                  <diagonal>1</diagonal>
+                  <dashLineLength>-1.83255e-06</dashLineLength>
+                  <dashGapLength>-1.83255e-06</dashGapLength>
+                  </Glissando>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>0</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>U_U</eid>
+                  <diagonal>1</diagonal>
+                  <lineWidth>0.10026</lineWidth>
+                  <anchor>3</anchor>
+                  <dashLineLength>-1.83255e-06</dashLineLength>
+                  <dashGapLength>-1.83255e-06</dashGapLength>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>V_V</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>W_W</eid>
+              <pitch>88</pitch>
+              <tpc>18</tpc>
+              <Spanner type="Glissando">
+                <Glissando>
+                  <lineWidth>0</lineWidth>
+                  <glissandoShowText>0</glissandoShowText>
+                  <dashLineLength>-1.83255e-06</dashLineLength>
+                  <dashGapLength>-1.83255e-06</dashGapLength>
+                  <subtype>1</subtype>
+                  <eid>X_X</eid>
+                  <diagonal>1</diagonal>
+                  <lineWidth>0</lineWidth>
+                  <dashLineLength>-1.83255e-06</dashLineLength>
+                  <dashGapLength>-1.83255e-06</dashGapLength>
+                  </Glissando>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    <fractions>-1/2</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Glissando">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>Y_Y</eid>
+        <voice>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
+          <Spanner type="Ottava">
+            <Ottava>
+              <subtype>15mb</subtype>
+              <beginTextOffset x="0" y="0.725946"/>
+              <continueTextOffset x="0" y="0.725946"/>
+              <endTextOffset x="0" y="0.725946"/>
+              <eid>Z_Z</eid>
+              <Segment>
+                <subtype>0</subtype>
+                <offset x="0" y="0.315721"/>
+                <off2 x="-2.22627" y="0"/>
+                <eid>a_a</eid>
+                <autoplace>0</autoplace>
+                </Segment>
+              </Ottava>
+            <next>
+              <location>
+                <fractions>1/1</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Spanner type="Trill">
+            <Trill>
+              <subtype>trill</subtype>
+              <eid>b_b</eid>
+              <Segment>
+                <subtype>0</subtype>
+                <offset x="0.166667" y="-1.875"/>
+                <off2 x="1.08333" y="0"/>
+                <eid>c_c</eid>
+                <autoplace>0</autoplace>
+                </Segment>
+              <Ornament>
+                <subtype>ornamentTrill</subtype>
+                <eid>d_d</eid>
+                </Ornament>
+              </Trill>
+            <next>
+              <location>
+                <fractions>1/4</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <eid>e_e</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>f_f</eid>
+              <pitch>58</pitch>
+              <tpc>12</tpc>
+              </Note>
+            </Chord>
+          <Spanner type="Trill">
+            <prev>
+              <location>
+                <fractions>-1/4</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Chord>
+            <eid>g_g</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>h_h</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              <Spanner type="Glissando">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    <fractions>1/2</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>i_i</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>j_j</eid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>k_k</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>l_l</eid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          </voice>
+        </Measure>
+      <VBox>
+        <height>-0.56365</height>
+        <topGap>0.56365</topGap>
+        <boxAutoSize>0</boxAutoSize>
+        <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+        <paddingToNotationAbove>0.516567</paddingToNotationAbove>
+        <eid>m_m</eid>
+        <Text>
+          <eid>n_n</eid>
+          <style>frame</style>
+          <size>10.08</size>
+          <align>center,bottom</align>
+          <offset x="0" y="186.242"/>
+          <position>center</position>
+          <text><font size="10.08"/>©</text>
+          </Text>
+        </VBox>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <BarLine>
+            <span>1</span>
+            <eid>o_o</eid>
+            </BarLine>
+          <KeySig>
+            <eid>p_p</eid>
+            <concertKey>-1</concertKey>
+            <mode>major</mode>
+            </KeySig>
+          <TimeSig>
+            <eid>q_q</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <Groups>
+              <Node pos="8" action="272"/>
+              <Node pos="16" action="273"/>
+              <Node pos="24" action="272"/>
+              </Groups>
+            </TimeSig>
+          <Rest>
+            <eid>r_r</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>s_s</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <SystemLocks>
+      <systemLock>
+        <startMeasure>G_G</startMeasure>
+        <endMeasure>Y_Y</endMeasure>
+        </systemLock>
+      </SystemLocks>
     </Score>
   </museScore>
