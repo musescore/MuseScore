@@ -135,7 +135,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: 6.10.0
+          version: ${{ env.USE_QT69 == 'on' && '6.9.2' || '6.2.4' }}
           host: ${{ matrix.qt-host }}
           target: 'desktop'
           arch: ${{ matrix.qt-arch }}
