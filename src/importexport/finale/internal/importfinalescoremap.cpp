@@ -286,6 +286,7 @@ void FinaleParser::importMeasures()
 
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
+    int lastDisplayNum = 0;
     for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
         Measure* measure = Factory::createMeasure(m_score->dummy()->system());
         Fraction tick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
@@ -300,18 +301,6 @@ void FinaleParser::importMeasures()
         }
         measure->setTimesig(scoreTimeSig);
         measure->setTicks(scoreTimeSig);
-        if (const MusxInstance<others::MeasureNumberRegion> measNumRegion = musxMeasure->findMeasureNumberRegion()) {
-            if (musxMeasure->getCmper() == measNumRegion->startMeas) {
-                measure->setNoOffset(measNumRegion->numberOffset);
-            }
-            if (std::optional<int> dispNum = measNumRegion->calcDisplayNumberFor(musxMeasure->getCmper())) {
-                measure->setNo(dispNum.value() - 1);
-            } else {
-                measure->setIrregular(true);
-            }
-        } else {
-            measure->setIrregular(true);
-        }
         m_score->measures()->append(measure);
 
         // Needed for later calculations, saves a global layout call
@@ -320,7 +309,25 @@ void FinaleParser::importMeasures()
         }
 
         measure->setBreakMultiMeasureRest(musxMeasure->breakMmRest);
-        measure->setIrregular(musxMeasure->noMeasNum);
+        if (const MusxInstance<others::MeasureNumberRegion> measNumRegion = musxMeasure->findMeasureNumberRegion()) {
+            if (musxMeasure->getCmper() == measNumRegion->startMeas) {
+                measure->setNoOffset(measNumRegion->numberOffset - lastDisplayNum);
+            }
+            if (musxMeasure->getCmper() == measNumRegion->endMeas - 1) {
+                /// @todo create measNumRegion->calcLastDisplayNumber() and use that instead of this.
+                Cmper check = musxMeasure->getCmper();
+                auto currLast = measNumRegion->calcDisplayNumberFor(check);
+                while (!currLast && check >= measNumRegion->startMeas) {
+                    currLast = measNumRegion->calcDisplayNumberFor(--check);
+                }
+                lastDisplayNum = currLast.value_or(0); /// @todo fix this with musx utility func
+            }
+            if (musxMeasure->noMeasNum) {
+                measure->setIrregular(true);
+            }
+        } else {
+            measure->setIrregular(true);
+        }
     }
 }
 
