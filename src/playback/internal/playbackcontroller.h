@@ -45,6 +45,7 @@
 #include "../isoundprofilesrepository.h"
 
 namespace mu::playback {
+class OnlineSoundsController;
 class PlaybackController : public IPlaybackController, public muse::actions::Actionable, public muse::async::Asyncable
 {
     INJECT_STATIC(muse::actions::IActionsDispatcher, dispatcher)
@@ -58,6 +59,8 @@ class PlaybackController : public IPlaybackController, public muse::actions::Act
     INJECT_STATIC(muse::tours::IToursService, tours)
 
 public:
+    PlaybackController();
+
     void init();
 
     bool isPlayAllowed() const override;
@@ -164,10 +167,10 @@ private:
 
     void addSoundFlagsIfNeed(const std::vector<engraving::EngravingItem*>& selection);
 
-    void togglePlay();
+    void togglePlay(bool showErrors = true);
+    void playFromSelection(bool showErrors = true);
     void rewind(const muse::actions::ActionData& args);
     void play();
-    void playFromSelection();
     void pause(bool select = false);
     void stop();
     void resume();
@@ -225,14 +228,6 @@ private:
 
     void onTrackNewlyAdded(const engraving::InstrumentTrackId& instrumentTrackId);
 
-    void addToOnlineSounds(const muse::audio::TrackId trackId, const muse::audio::AudioResourceMeta& meta);
-    void removeFromOnlineSounds(const muse::audio::TrackId trackId);
-    void listenOnlineSoundsProcessingProgress(const muse::audio::TrackId trackId);
-    bool shouldShowOnlineSoundsProcessingError() const;
-    void showOnlineSoundsProcessingError();
-    void processOnlineSounds();
-    void clearOnlineSoundsCache();
-
     muse::audio::secs_t playedTickToSecs(int tick) const;
 
     notation::INotationPtr m_notation;
@@ -267,13 +262,8 @@ private:
     bool m_isRangeSelection = false;
 
     DrumsetLoader m_drumsetLoader;
+    std::unique_ptr<OnlineSoundsController> m_onlineSoundsController;
 
     bool m_measureInputLag = false;
-
-    std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta> m_onlineSounds;
-    std::set<muse::audio::TrackId> m_onlineSoundsBeingProcessed;
-    muse::async::Notification m_onlineSoundsChanged;
-    muse::Progress m_onlineSoundsProcessingProgress;
-    bool m_onlineSoundsErrorDetected = false;
 };
 }

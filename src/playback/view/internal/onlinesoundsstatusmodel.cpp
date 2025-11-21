@@ -22,6 +22,8 @@
 
 #include "onlinesoundsstatusmodel.h"
 
+#include "audio/common/audioerrors.h"
+
 #include "async/async.h"
 #include "translation.h"
 
@@ -29,8 +31,28 @@ using namespace mu::notation;
 using namespace mu::playback;
 using namespace muse::audio;
 
+static QString formatLimitReachedError(const muse::Ret& ret)
+{
+    if (ret.code() != (int)Err::OnlineSoundsLimitReached) {
+        return QString();
+    }
+
+    const QString libName = String::fromStdString(ret.data<std::string>("libraryName", std::string()));
+    const QString date = String::fromStdString(ret.data<std::string>("date", std::string()));
+
+    if (libName.isEmpty() || date.isEmpty()) {
+        return QString();
+    }
+
+    const QString text = muse::qtrc("playback", "You’ve reached your current render limit for %1. "
+                                                "You will be able to process online sounds again after your quota resets on %2.")
+                         .arg(libName)
+                         .arg(date);
+    return text;
+}
+
 OnlineSoundsStatusModel::OnlineSoundsStatusModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)), m_ret(muse::make_ok())
 {
 }
 
@@ -57,9 +79,10 @@ void OnlineSoundsStatusModel::load()
     });
 
     progress.finished().onReceive(this, [this](const muse::ProgressResult& result) {
-        setStatus(result.ret.success() ? Status::Success : Status::Error);
+        m_ret = result.ret;
+        setStatus(result.ret ? Status::Success : Status::Error);
 
-        if (result.ret.success() && m_manualProcessingAllowed) {
+        if (result.ret && m_manualProcessingAllowed) {
             setManualProcessingAllowed(false);
         }
     });
@@ -89,20 +112,28 @@ int OnlineSoundsStatusModel::status() const
 
 QString OnlineSoundsStatusModel::errorTitle() const
 {
-    if (m_status != Status::Error) {
-        return QString();
+    if (!m_ret) {
+        if (m_ret.code() == (int)Err::OnlineSoundsProcessingError) {
+            return muse::qtrc("playback", "Some online sounds aren’t ready yet");
+        } else if (m_ret.code() != (int)muse::Ret::Code::Cancel) {
+            return muse::qtrc("playback", "Unable to process online sounds");
+        }
     }
 
-    return muse::qtrc("playback", "Some online sounds aren’t ready yet");
+    return QString();
 }
 
 QString OnlineSoundsStatusModel::errorDescription() const
 {
-    if (m_status != Status::Error) {
-        return QString();
+    if (!m_ret) {
+        if (m_ret.code() == (int)Err::OnlineSoundsLimitReached) {
+            return formatLimitReachedError(m_ret);
+        } else if (m_ret.code() != (int)muse::Ret::Code::Cancel) {
+            return muse::qtrc("playback", "Please check your connection, and make sure MuseHub is running and you are logged in.");
+        }
     }
 
-    return muse::qtrc("playback", "Please check your connection, and make sure MuseHub is running and you are logged in.");
+    return QString();
 }
 
 void OnlineSoundsStatusModel::onOnlineSoundsChanged()

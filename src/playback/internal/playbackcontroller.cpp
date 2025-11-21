@@ -21,6 +21,8 @@
  */
 #include "playbackcontroller.h"
 
+#include "onlinesoundscontroller.h"
+
 #include "playbacktypes.h"
 
 #include "engraving/dom/stafftext.h"
@@ -89,10 +91,15 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
     return muse::mtrc("playback", "Aux %1").arg(index + 1).toStdString();
 }
 
+PlaybackController::PlaybackController()
+    : m_onlineSoundsController(std::make_unique<OnlineSoundsController>())
+{
+}
+
 void PlaybackController::init()
 {
-    dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
-    dispatcher()->reg(this, PLAY_FROM_SELECTION, this, &PlaybackController::playFromSelection);
+    dispatcher()->reg(this, PLAY_CODE, [this]() { PlaybackController::togglePlay(); });
+    dispatcher()->reg(this, PLAY_FROM_SELECTION, [this]() { PlaybackController::playFromSelection(); });
     dispatcher()->reg(this, STOP_CODE, [this]() { PlaybackController::pause(/*select*/ false); });
     dispatcher()->reg(this, PAUSE_AND_SELECT_CODE, [this]() { PlaybackController::pause(/*select*/ true); });
     dispatcher()->reg(this, REWIND_CODE, this, &PlaybackController::rewind);
@@ -111,8 +118,7 @@ void PlaybackController::init()
     dispatcher()->reg(this, TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE, this, &PlaybackController::toggleHearPlaybackWhenEditing);
     dispatcher()->reg(this, "playback-reload-cache", this, &PlaybackController::reloadPlaybackCache);
 
-    dispatcher()->reg(this, "process-online-sounds", this, &PlaybackController::processOnlineSounds);
-    dispatcher()->reg(this, "clear-online-sounds-cache", this, &PlaybackController::clearOnlineSoundsCache);
+    m_onlineSoundsController->regActions();
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
@@ -452,11 +458,11 @@ void PlaybackController::onAudioResourceChanged(const TrackId trackId, const Ins
     notationPlayback->removeSoundFlags({ instrumentTrackId });
 
     if (audio::isOnlineAudioResource(newMeta)) {
-        addToOnlineSounds(trackId, newMeta);
+        m_onlineSoundsController->addOnlineTrack(trackId, newMeta);
         tours()->onEvent(u"online_sounds_added");
         notationPlayback->setSendEventsOnScoreChange(instrumentTrackId, true);
     } else if (audio::isOnlineAudioResource(oldMeta)) {
-        removeFromOnlineSounds(trackId);
+        m_onlineSoundsController->removeOnlineTrack(trackId);
         notationPlayback->setSendEventsOnScoreChange(instrumentTrackId, false);
     }
 }
@@ -614,15 +620,15 @@ void PlaybackController::onSelectionChanged()
     updateSoloMuteStates();
 }
 
-void PlaybackController::togglePlay()
+void PlaybackController::togglePlay(bool showErrors)
 {
     if (!isPlayAllowed()) {
         LOGW() << "playback not allowed";
         return;
     }
 
-    if (shouldShowOnlineSoundsProcessingError()) {
-        showOnlineSoundsProcessingError();
+    if (showErrors && m_onlineSoundsController->shouldShowOnlineSoundsProcessingError(isPlaying())) {
+        m_onlineSoundsController->showOnlineSoundsProcessingError([this]() { togglePlay(false /*showErrors*/); });
         return;
     }
 
@@ -650,28 +656,14 @@ void PlaybackController::togglePlay()
     }
 }
 
-void PlaybackController::play()
+void PlaybackController::playFromSelection(bool showErrors)
 {
-    IF_ASSERT_FAILED(currentPlayer()) {
+    if (selection()->isNone()) {
         return;
     }
 
-    if (isLoopEnabled()) {
-        secs_t startSecs = playbackStartSecs();
-        seek(startSecs);
-    }
-
-    secs_t delay = 0.;
-    if (notationConfiguration()->isCountInEnabled()) {
-        notationPlayback()->triggerCountIn(m_currentTick, delay);
-    }
-
-    currentPlayer()->play(delay);
-}
-
-void PlaybackController::playFromSelection()
-{
-    if (selection()->isNone()) {
+    if (showErrors && m_onlineSoundsController->shouldShowOnlineSoundsProcessingError(isPlaying())) {
+        m_onlineSoundsController->showOnlineSoundsProcessingError([this]() { playFromSelection(false /*showErrors*/); });
         return;
     }
 
@@ -699,6 +691,25 @@ void PlaybackController::playFromSelection()
     } else if (!isPlaying()) {
         play();
     }
+}
+
+void PlaybackController::play()
+{
+    IF_ASSERT_FAILED(currentPlayer()) {
+        return;
+    }
+
+    if (isLoopEnabled()) {
+        secs_t startSecs = playbackStartSecs();
+        seek(startSecs);
+    }
+
+    secs_t delay = 0.;
+    if (notationConfiguration()->isCountInEnabled()) {
+        notationPlayback()->triggerCountIn(m_currentTick, delay);
+    }
+
+    currentPlayer()->play(delay);
 }
 
 void PlaybackController::rewind(const ActionData& args)
@@ -759,9 +770,10 @@ void PlaybackController::onPlaybackStatusChanged()
     }
 
     bool playing = isPlaying();
+    const auto& onlineSounds = m_onlineSoundsController->onlineSounds();
 
     for (const auto& pair : m_instrumentTrackIdMap) {
-        bool shouldSendOnScoreChange = playing || muse::contains(m_onlineSounds, pair.second);
+        bool shouldSendOnScoreChange = playing || muse::contains(onlineSounds, pair.second);
         notationPlayback()->setSendEventsOnScoreChange(pair.first, shouldSendOnScoreChange);
     }
 }
@@ -1039,14 +1051,7 @@ void PlaybackController::resetCurrentSequence()
     m_player = nullptr;
     globalContext()->setCurrentPlayer(nullptr);
 
-    const bool hadOnlineSounds = !m_onlineSounds.empty();
-    m_onlineSounds.clear();
-    m_onlineSoundsBeingProcessed.clear();
-    m_onlineSoundsErrorDetected = false;
-
-    if (hadOnlineSounds) {
-        m_onlineSoundsChanged.notify();
-    }
+    m_onlineSoundsController->resetCurrentSequence();
 }
 
 void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished)
@@ -1155,7 +1160,7 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
         }
 
         if (muse::audio::isOnlineAudioResource(appliedParams.in.resourceMeta)) {
-            addToOnlineSounds(trackId, appliedParams.in.resourceMeta);
+            m_onlineSoundsController->addOnlineTrack(trackId, appliedParams.in.resourceMeta);
 
             if (notationPlayback()) {
                 notationPlayback()->setSendEventsOnScoreChange(instrumentTrackId, true);
@@ -1304,7 +1309,7 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
         }
     }
 
-    removeFromOnlineSounds(search->second);
+    m_onlineSoundsController->removeOnlineTrack(search->second);
 
     m_trackRemoved.send(search->second);
     m_instrumentTrackIdMap.erase(instrumentTrackId);
@@ -1327,135 +1332,12 @@ void PlaybackController::onTrackNewlyAdded(const InstrumentTrackId& instrumentTr
     }
 }
 
-void PlaybackController::addToOnlineSounds(const TrackId trackId, const AudioResourceMeta& meta)
-{
-    auto it = m_onlineSounds.find(trackId);
-    if (it != m_onlineSounds.end() && it->second == meta) {
-        return;
-    }
-
-    m_onlineSounds.insert_or_assign(trackId, meta);
-    listenOnlineSoundsProcessingProgress(trackId);
-    m_onlineSoundsChanged.notify();
-}
-
-void PlaybackController::removeFromOnlineSounds(const TrackId trackId)
-{
-    if (!muse::contains(m_onlineSounds, trackId)) {
-        return;
-    }
-
-    muse::remove(m_onlineSounds, trackId);
-    muse::remove(m_onlineSoundsBeingProcessed, trackId);
-
-    if (m_onlineSoundsProcessingProgress.isStarted() && m_onlineSoundsBeingProcessed.empty()) {
-        m_onlineSoundsProcessingProgress.finish(make_ret(Ret::Code::Cancel));
-    }
-
-    m_onlineSoundsChanged.notify();
-}
-
-void PlaybackController::listenOnlineSoundsProcessingProgress(const TrackId trackId)
-{
-    playback()->inputProcessingProgress(m_currentSequenceId, trackId)
-    .onResolve(this, [this, trackId](muse::audio::InputProcessingProgress inputProgress) {
-        inputProgress.processedChannel.onReceive(this, [this, trackId]
-                                                 (const InputProcessingProgress::StatusInfo& status,
-                                                  const InputProcessingProgress::ChunkInfoList& /*chunks*/,
-                                                  const InputProcessingProgress::ProgressInfo& progress)
-        {
-            switch (status.status) {
-                case InputProcessingProgress::Undefined:
-                    break;
-                case InputProcessingProgress::Started: {
-                    m_onlineSoundsBeingProcessed.insert(trackId);
-
-                    if (!m_onlineSoundsProcessingProgress.isStarted()) {
-                        m_onlineSoundsErrorDetected = false;
-                        m_onlineSoundsProcessingProgress.start();
-                    }
-                } break;
-                case InputProcessingProgress::Processing: {
-                    if (m_onlineSoundsBeingProcessed.size() == 1) {
-                        m_onlineSoundsProcessingProgress.progress(progress.current, progress.total);
-                    }
-                } break;
-                case InputProcessingProgress::Finished: {
-                    muse::remove(m_onlineSoundsBeingProcessed, trackId);
-
-                    if (status.errorCode != 0 && status.errorCode != (int)Ret::Code::Cancel) {
-                        m_onlineSoundsErrorDetected = true;
-                        LOGE() << "Error during online sounds processing: " << status.errorText << ", track: " << trackId;
-                    }
-
-                    if (m_onlineSoundsBeingProcessed.empty()) {
-                        m_onlineSoundsProcessingProgress.finish(Ret(!m_onlineSoundsErrorDetected));
-                    }
-                } break;
-            }
-        });
-    });
-}
-
-bool PlaybackController::shouldShowOnlineSoundsProcessingError() const
-{
-    if (m_onlineSoundsErrorDetected) {
-        return configuration()->shouldShowOnlineSoundsProcessingError() && !isPlaying();
-    }
-
-    return false;
-}
-
-void PlaybackController::showOnlineSoundsProcessingError()
-{
-    const std::string text = muse::mtrc("playback", "This may be due to a poor internet connection or server issue. "
-                                                    "Your score will still play, but some sounds may be missing. "
-                                                    "Please check your connection, and make sure MuseHub is running and you are logged in. "
-                                                    "<a href=\"%1\">Learn more here</a>.")
-                             .arg(configuration()->onlineSoundsHandbookUrl()).toStdString();
-
-    auto promise = interactive()->warning(muse::trc("playback", "Some online sounds aren’t ready yet"), text,
-                                          { IInteractive::Button::Ok }, IInteractive::Button::Ok,
-                                          IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
-
-    m_onlineSoundsErrorDetected = false;
-
-    promise.onResolve(this, [this](const IInteractive::Result& res) {
-        if (!res.showAgain()) {
-            configuration()->setShouldShowOnlineSoundsProcessingError(false);
-        }
-
-        togglePlay();
-    });
-}
-
-void PlaybackController::processOnlineSounds()
-{
-    IF_ASSERT_FAILED(playback()) {
-        return;
-    }
-
-    for (const auto& pair : m_onlineSounds) {
-        playback()->processInput(m_currentSequenceId, pair.first);
-    }
-}
-
-void PlaybackController::clearOnlineSoundsCache()
-{
-    IF_ASSERT_FAILED(playback()) {
-        return;
-    }
-
-    for (const auto& pair : m_onlineSounds) {
-        playback()->clearCache(m_currentSequenceId, pair.first);
-    }
-}
-
 void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceId)
 {
     playback()->removeAllTracks(m_currentSequenceId);
 
     m_currentSequenceId = sequenceId;
+    m_onlineSoundsController->setCurrentSequence(sequenceId);
     m_player = playback()->player(sequenceId);
     globalContext()->setCurrentPlayer(m_player);
 
@@ -1901,7 +1783,7 @@ void PlaybackController::setIsExportingAudio(bool exporting)
     m_isExportingAudio = exporting;
     updateSoloMuteStates();
 
-    if (!m_onlineSounds.empty() && !audioConfiguration()->autoProcessOnlineSoundsInBackground()) {
+    if (!onlineSounds().empty() && !audioConfiguration()->autoProcessOnlineSoundsInBackground()) {
         dispatcher()->dispatch("process-online-sounds");
     }
 }
@@ -1911,19 +1793,19 @@ bool PlaybackController::canReceiveAction(const ActionCode&) const
     return m_masterNotation != nullptr && m_masterNotation->hasParts();
 }
 
-const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& PlaybackController::onlineSounds() const
+const std::map<TrackId, AudioResourceMeta>& PlaybackController::onlineSounds() const
 {
-    return m_onlineSounds;
+    return m_onlineSoundsController->onlineSounds();
 }
 
 muse::async::Notification PlaybackController::onlineSoundsChanged() const
 {
-    return m_onlineSoundsChanged;
+    return m_onlineSoundsController->onlineSoundsChanged();
 }
 
 muse::Progress PlaybackController::onlineSoundsProcessingProgress() const
 {
-    return m_onlineSoundsProcessingProgress;
+    return m_onlineSoundsController->onlineSoundsProcessingProgress();
 }
 
 muse::audio::secs_t PlaybackController::playedTickToSecs(int tick) const
