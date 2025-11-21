@@ -60,7 +60,7 @@ static std::array<int, 3> parseVersion(const muse::String& versionString, bool& 
     if (componentIdx < result.size()) {
         result.at(componentIdx) = curNum;
     } else {
-        LOGW() << "Ignoring everything after third point";
+        LOGW() << "Ignoring everything after third point: " << versionString;
     }
 
     ok = true;
