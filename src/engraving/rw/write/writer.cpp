@@ -67,6 +67,7 @@ bool Writer::writeScore(Score* score, io::IODevice* device, rw::WriteInOutData* 
     write(score, xml, ctx, hook);
 
     xml.endElement();
+    xml.flush();
 
     if (!inout || !inout->ctx.shouldWriteRange()) {
         //update version values for i.e. plugin access

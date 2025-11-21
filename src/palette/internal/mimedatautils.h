@@ -35,6 +35,7 @@ QByteArray toMimeData(T* t)
     buffer.open(muse::io::IODevice::WriteOnly);
     engraving::XmlWriter xml(&buffer);
     t->write(xml, true);
+    xml.flush();
     buffer.close();
     return buffer.data().toQByteArray();
 }

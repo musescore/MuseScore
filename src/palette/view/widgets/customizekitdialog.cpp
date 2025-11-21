@@ -668,6 +668,7 @@ void CustomizeKitDialog::save()
     xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
     m_editedDrumset.save(xml);
     xml.endElement();
+    xml.flush();
     if (f.hasError()) {
         QString s = muse::qtrc("palette", "Writing file failed: %1").arg(QString::fromStdString(f.errorString()));
         interactive()->error(muse::trc("palette", "Write drumset"), s.toStdString());

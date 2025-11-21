@@ -509,6 +509,7 @@ bool Palette::writeToFile(const QString& p) const
     }
     xml.endElement();
     xml.endElement();
+    xml.flush();
     cbuf.seek(0);
     //f.addDirectory("META-INF");
     //f.addDirectory("Pictures");
@@ -527,6 +528,7 @@ bool Palette::writeToFile(const QString& p) const
         xml1.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
         write(xml1, false);
         xml1.endElement();
+        xml1.flush();
         cbuf1.close();
         f.addFile("palette.xml", cbuf1.data());
     }
