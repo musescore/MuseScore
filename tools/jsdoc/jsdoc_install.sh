@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-npm install jsdoc 
+HERE="$(dirname ${BASH_SOURCE[0]})"
+cd $HERE
+npm install

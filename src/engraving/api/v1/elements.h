@@ -2356,10 +2356,14 @@ public:
     /// \endcond
 };
 
+/** APIDOC
+ * Class representing a lyric.
+ * @class Lyric
+ * @hideconstructor
+*/
 class Lyric : public EngravingItem
 {
     Q_OBJECT
-
     Q_PROPERTY(QString plainText READ plainText)
 
 public:
@@ -2367,6 +2371,7 @@ public:
     Lyric(mu::engraving::Lyrics* l = nullptr, Ownership own = Ownership::PLUGIN)
         : EngravingItem(l, own) {}
 
+    /** APIDOC @property {string} - plain text of lyric */
     QString plainText() const { return toLyrics(e)->plainText(); }
 };
 

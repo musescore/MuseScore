@@ -39,6 +39,18 @@
 
 using namespace mu::engraving::apiv1;
 
+/** APIDOC
+ * Class representing a score.
+ * We can get the current score by calling the `api.engraving.curScore`
+ * @class Score
+ * @hideconstructor
+*/
+
+/** APIDOC
+ * Create a new Cursor
+ * @method
+ * @returns {Cursor} cursor
+*/
 Cursor* Score::newCursor()
 {
     return new Cursor(score());
@@ -262,10 +274,33 @@ QQmlListProperty<System> Score::systems()
     return wrapContainerProperty<System>(this, score()->systems());
 }
 
-QQmlListProperty<Lyric> Score::lyrics()
+/** APIDOC @property {boolean} - has lyrics */
+bool Score::hasLyrics() const
+{
+    return score()->hasLyrics();
+}
+
+/** APIDOC @property {number} - count of lyrics */
+int Score::lyricCount() const
+{
+    return score()->lyricCount();
+}
+
+/** APIDOC @property {Lyric[]} - list of lyrics */
+QQmlListProperty<Lyric> Score::lyrics() const
 {
     static std::vector<Lyrics*> list = score()->lyrics();
     return wrapContainerProperty<Lyric>(this, list);
+}
+
+/** APIDOC
+* Extracts all lyrics in the score and returns them in a single string.
+* @method
+* @return {string} - lyrics string
+*/
+QString Score::extractLyrics() const
+{
+    return score()->extractLyrics();
 }
 
 //---------------------------------------------------------

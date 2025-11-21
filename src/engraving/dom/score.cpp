@@ -4994,7 +4994,7 @@ ChordRest* Score::cmdTopStaff(ChordRest* cr)
 //   hasLyrics
 //---------------------------------------------------------
 
-bool Score::hasLyrics()
+bool Score::hasLyrics() const
 {
     if (!firstMeasure()) {
         return false;
@@ -5016,7 +5016,7 @@ bool Score::hasLyrics()
 //   hasHarmonies
 //---------------------------------------------------------
 
-bool Score::hasHarmonies()
+bool Score::hasHarmonies() const
 {
     if (!firstMeasure()) {
         return false;
@@ -5116,7 +5116,7 @@ std::vector<Lyrics*> Score::lyrics() const
 //   extractLyrics
 //---------------------------------------------------------
 
-String Score::extractLyrics()
+String Score::extractLyrics() const
 {
     String result;
     std::vector<Lyrics*> list = lyrics();
@@ -5132,12 +5132,11 @@ String Score::extractLyrics()
     return result.trimmed();
 }
 
-
 //---------------------------------------------------------
 //   harmonyCount
 //---------------------------------------------------------
 
-int Score::harmonyCount()
+int Score::harmonyCount() const
 {
     int count = 0;
     SegmentType st = SegmentType::ChordRest;
@@ -5150,7 +5149,6 @@ int Score::harmonyCount()
     }
     return count;
 }
-
 
 //---------------------------------------------------------
 //   keysig

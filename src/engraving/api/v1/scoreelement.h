@@ -183,8 +183,8 @@ public:
 
 /// \cond PLUGIN_API \private \endcond
 template<typename T, class Container>
-QmlListAccess<T, Container> wrapContainerProperty(QObject* obj, Container& c)
+QmlListAccess<T, Container> wrapContainerProperty(const QObject* obj, Container& c)
 {
-    return QmlListAccess<T, Container>(obj, c);
+    return QmlListAccess<T, Container>(const_cast<QObject*>(obj), c);
 }
 }
