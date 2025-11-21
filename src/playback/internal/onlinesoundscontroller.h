@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "actions/actionable.h"
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
@@ -34,10 +35,10 @@
 namespace mu::playback {
 class OnlineSoundsController : public muse::actions::Actionable, public muse::async::Asyncable
 {
-    INJECT_STATIC(IPlaybackConfiguration, configuration)
-    INJECT_STATIC(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT_STATIC(muse::IInteractive, interactive)
-    INJECT_STATIC(muse::audio::IPlayback, playback)
+    muse::Inject<IPlaybackConfiguration> configuration;
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher;
+    muse::Inject<muse::IInteractive> interactive;
+    muse::Inject<muse::audio::IPlayback> playback;
 
 public:
     OnlineSoundsController();

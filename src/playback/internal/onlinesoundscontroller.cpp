@@ -25,6 +25,7 @@
 #include "audio/audioerrors.h"
 
 #include "log.h"
+#include "translation.h"
 
 using namespace muse;
 using namespace mu::playback;
@@ -175,7 +176,7 @@ bool OnlineSoundsController::shouldShowOnlineSoundsProcessingError(bool isPlayin
 
 void OnlineSoundsController::showOnlineSoundsProcessingError(const std::function<void()>& onShown)
 {
-    const std::string text = muse::mtrc("playback", "This may be due to a poor internet connection or server issue. "
+    const std::string text = muse::qtrc("playback", "This may be due to a poor internet connection or server issue. "
                                                     "Your score will still play, but some sounds may be missing. "
                                                     "Please check your connection, and make sure MuseHub is running and you are logged in. "
                                                     "<a href=\"%1\">Learn more here</a>.")
@@ -215,7 +216,7 @@ void OnlineSoundsController::showLimitReachedErrorIfNeed(const InputProcessingPr
     }
     m_onlineLibrariesWithExceededLimit.insert(libName);
 
-    const std::string text = muse::mtrc("playback", "You’ve reached your current render limit for %1. "
+    const std::string text = muse::qtrc("playback", "You’ve reached your current render limit for %1. "
                                                     "You will be able to process online sounds again after your quota resets on %2. "
                                                     "More info: <a href=\"%3\">%3</a>.")
                              .arg(libName)
