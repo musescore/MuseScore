@@ -2174,32 +2174,35 @@ Tie* Score::cmdToggleTie()
         return nullptr;
     }
 
-    bool canAddTies = false;
-    const size_t notes = noteList.size();
-    std::vector<Note*> tieNoteList(notes);
-    Note* tieNote = nullptr;
-    Note* n = nullptr;
+    std::vector<Note*> tieNoteList(noteList.size());
+    Chord* chord = noteList.front()->chord();
+    bool someHaveExistingNextNoteToTieTo = false;
+    bool allHaveExistingNextNoteToTieTo = true;
 
-    bool sameChord = std::all_of(noteList.begin(), noteList.end(), [&](const Note* n) { return n->chord() == noteList[0]->chord(); });
-    const bool shouldTieListSelection = !sameChord;
-
-    for (size_t i = 0; i < notes; ++i) {
-        n = noteList[i];
+    for (size_t i = 0; i < noteList.size(); ++i) {
+        Note* n = noteList[i];
+        if (chord && n->chord() != chord) {
+            chord = nullptr;
+        }
         if (n->tieFor()) {
             tieNoteList[i] = nullptr;
         } else {
-            tieNote = searchTieNote(n);
+            Note* tieNote = searchTieNote(n);
             tieNoteList[i] = tieNote;
             if (tieNote) {
-                canAddTies = true;
+                someHaveExistingNextNoteToTieTo = true;
+            } else {
+                allHaveExistingNextNoteToTieTo = false;
             }
         }
     }
 
-    if (!tieNote && selection().isList() && sameChord) {
+    const bool shouldTieListSelection = noteList.size() >= 2 && !chord;
+
+    if (chord /* i.e. all notes are in the same chord */ && !allHaveExistingNextNoteToTieTo) {
         cmdAddTie();
-        if (notes >= 2) {
-            Chord* c = n->chord()->next();
+        if (noteList.size() >= 2) {
+            Chord* c = chord->next();
             for (Note* cn : c->notes()) {
                 score()->select(cn, SelectType::ADD);
             }
@@ -2207,7 +2210,7 @@ Tie* Score::cmdToggleTie()
         return nullptr;
     }
 
-    const TranslatableString actionName = canAddTies
+    const TranslatableString actionName = someHaveExistingNextNoteToTieTo
                                           ? TranslatableString("undoableAction", "Add tie")
                                           : TranslatableString("undoableAction", "Remove tie");
 
@@ -2215,7 +2218,7 @@ Tie* Score::cmdToggleTie()
 
     Tie* tie = nullptr;
 
-    for (size_t i = 0; i < notes; ++i) {
+    for (size_t i = 0; i < noteList.size(); ++i) {
         Note* note = noteList[i];
         Note* tieToNote = tieNoteList[i];
 
@@ -2224,7 +2227,7 @@ Tie* Score::cmdToggleTie()
         }
 
         // Tie to adjacent unselected note
-        if (canAddTies && tieToNote) {
+        if (someHaveExistingNextNoteToTieTo && tieToNote) {
             Note* startNote = note->tick() <= tieToNote->tick() ? note : tieToNote;
             Note* endNote = startNote == tieToNote ? note : tieToNote;
             tie = createAndAddTie(startNote, endNote);
@@ -2248,14 +2251,14 @@ Tie* Score::cmdToggleTie()
             continue;
         }
 
-        if (!shouldTieListSelection || i > notes - 2) {
+        if (!shouldTieListSelection || i > noteList.size() - 2) {
             continue;
         }
 
         // Tie to next appropriate note in selection
         Note* note2 = nullptr;
 
-        for (size_t j = i + 1; j < notes; ++j) {
+        for (size_t j = i + 1; j < noteList.size(); ++j) {
             Note* candidateNote = noteList[j];
             if (!candidateNote) {
                 continue;
