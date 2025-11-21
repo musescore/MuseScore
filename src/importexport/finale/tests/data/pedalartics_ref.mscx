@@ -6,12 +6,12 @@
     <Style>
       <pageWidth>8.5</pageWidth>
       <pageHeight>11</pageHeight>
-      <pagePrintableWidth>7</pagePrintableWidth>
-      <pageEvenLeftMargin>1</pageEvenLeftMargin>
-      <pageOddLeftMargin>1</pageOddLeftMargin>
-      <pageEvenTopMargin>0.5</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.5</pageEvenBottomMargin>
-      <pageOddTopMargin>0.5</pageOddTopMargin>
+      <pagePrintableWidth>7.5</pagePrintableWidth>
+      <pageEvenLeftMargin>0.5</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.5</pageOddLeftMargin>
+      <pageEvenTopMargin>0.625</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.625</pageEvenBottomMargin>
+      <pageOddTopMargin>0.625</pageOddTopMargin>
       <pageTwosided>0</pageTwosided>
       <lyricsOddFontFace>Finale Lyrics</lyricsOddFontFace>
       <lyricsEvenFontFace>Finale Lyrics</lyricsEvenFontFace>
@@ -65,6 +65,7 @@
       <pedalDashGapLen>8.17021</pedalDashGapLen>
       <pedalHookHeight>0.5</pedalHookHeight>
       <pedalFontFace>Times New Roman</pedalFontFace>
+      <pedalContinueText></pedalContinueText>
       <chordSymbolAFontFace>Times New Roman</chordSymbolAFontFace>
       <chordSymbolBFontFace>Times New Roman</chordSymbolBFontFace>
       <chordSymbolBFontStyle>0</chordSymbolBFontStyle>
@@ -88,7 +89,7 @@
       <mmRestNumberPos>-0.333333</mmRestNumberPos>
       <mmRestOldStyleMaxMeasures>8</mmRestOldStyleMaxMeasures>
       <mmRestOldStyleSpacing>2</mmRestOldStyleSpacing>
-      <firstSystemIndentationValue>6</firstSystemIndentationValue>
+      <firstSystemIndentationValue>6.19881</firstSystemIndentationValue>
       <slurMidWidth>0.125</slurMidWidth>
       <slurDottedWidth>0.0917969</slurDottedWidth>
       <tieMidWidth>0.125</tieMidWidth>
@@ -96,12 +97,7 @@
       <minTieLength>1.83333</minTieLength>
       <musicalSymbolFont>Finale Maestro</musicalSymbolFont>
       <musicalTextFont>Finale Maestro Text</musicalTextFont>
-      <headerFirstPage>1</headerFirstPage>
-      <headerOddEven>0</headerOddEven>
-      <evenHeaderL></evenHeaderL>
-      <evenHeaderC>&lt;font face=&quot;Times New Roman&quot;/&gt;&lt;font size=&quot;24&quot;/&gt;$:workTitle:</evenHeaderC>
-      <oddHeaderC>&lt;font face=&quot;Times New Roman&quot;/&gt;&lt;font size=&quot;24&quot;/&gt;$:workTitle:</oddHeaderC>
-      <oddHeaderR></oddHeaderR>
+      <showHeader>0</showHeader>
       <showFooter>0</showFooter>
       <voltaPosAbove x="0" y="-4"/>
       <voltaHook>3</voltaHook>
@@ -184,7 +180,7 @@
       <mmRestRangeFontSize>8.33333</mmRestRangeFontSize>
       <mmRestRangeFontSpatiumDependent>1</mmRestRangeFontSpatiumDependent>
       <mmRestRangePosAbove x="0" y="0"/>
-      <mmRestRangePosBelow x="0" y="1.48133"/>
+      <mmRestRangePosBelow x="0" y="1.54276"/>
       <translatorFontFace>Times New Roman</translatorFontFace>
       <systemTextFontFace>Times New Roman</systemTextFontFace>
       <systemTextFontStyle>2</systemTextFontStyle>
@@ -204,7 +200,8 @@
       <repeatRightFontSize>11.6667</repeatRightFontSize>
       <repeatRightFontStyle>1</repeatRightFontStyle>
       <frameFontFace>Times New Roman</frameFontFace>
-      <frameOffset x="14.0488" y="6.78241"/>
+      <frameFontSize>12.1</frameFontSize>
+      <frameOffset x="7.02439" y="9.18379"/>
       <textLineFontFace>Times New Roman</textLineFontFace>
       <systemTextLineFontFace>Times New Roman</systemTextLineFontFace>
       <noteLineFontFace>Times New Roman</noteLineFontFace>
@@ -275,18 +272,503 @@
     <showMargins>0</showMargins>
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
-    <metaTag name="copyright">©2025</metaTag>
-    <metaTag name="description">Finale's specially-curated engraved style
-
-* Features the SMuFL-compliant Finale Maestro font family
-
-* Includes inserts for Title, Subtitle, Composer, Arranger, Score/Part, and Copyright </metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="description">SMuFL compliant default file featuring the Finale Maestro Font</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Two Parts, no Measures, with Bracket</metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName></trackName>
+      <hideWhenEmpty>off</hideWhenEmpty>
+      <Instrument>
+        <trackName></trackName>
+        <StringData>
+          <frets>21</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
+        <Channel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>15</height>
+        <bottomGap>3</bottomGap>
+        <boxAutoSize>0</boxAutoSize>
+        <paddingToNotationBelow>1.26374</paddingToNotationBelow>
+        <eid>D_D</eid>
+        <Text>
+          <eid>E_E</eid>
+          <style>frame</style>
+          <offset x="0" y="0.729167"/>
+          <text><font size="12.1"/>Score</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <eid>F_F</eid>
+        <vspacerFixed>9.67198</vspacerFixed>
+        <voice>
+          <KeySig>
+            <eid>G_G</eid>
+            <concertKey>0</concertKey>
+            <mode>major</mode>
+            </KeySig>
+          <TimeSig>
+            <eid>H_H</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <Groups>
+              <Node pos="8" action="272"/>
+              <Node pos="16" action="273"/>
+              <Node pos="24" action="272"/>
+              </Groups>
+            </TimeSig>
+          <Spanner type="Pedal">
+            <Pedal>
+              <lineVisible>0</lineVisible>
+              <eid>I_I</eid>
+              </Pedal>
+            <next>
+              <location>
+                <measures>1</measures>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <eid>J_J</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>K_K</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>L_L</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>M_M</eid>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>N_N</eid>
+        <voice>
+          <Spanner type="Pedal">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
+          <Chord>
+            <eid>O_O</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>P_P</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>Q_Q</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>R_R</eid>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>S_S</eid>
+        <voice>
+          <Spanner type="Pedal">
+            <Pedal>
+              <lineVisible>0</lineVisible>
+              <endText></endText>
+              <eid>T_T</eid>
+              </Pedal>
+            <next>
+              <location>
+                <measures>1</measures>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <eid>U_U</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>V_V</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>W_W</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>X_X</eid>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>Y_Y</eid>
+        <voice>
+          <Spanner type="Pedal">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <eid>Z_Z</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>a_a</eid>
+        <vspacerFixed>9.67198</vspacerFixed>
+        <voice>
+          <Rest>
+            <eid>b_b</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>c_c</eid>
+        <voice>
+          <Rest>
+            <eid>d_d</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>e_e</eid>
+        <voice>
+          <Rest>
+            <eid>f_f</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>g_g</eid>
+        <voice>
+          <Rest>
+            <eid>h_h</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>i_i</eid>
+        <vspacerFixed>9.67198</vspacerFixed>
+        <voice>
+          <Rest>
+            <eid>j_j</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>k_k</eid>
+        <voice>
+          <Rest>
+            <eid>l_l</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>m_m</eid>
+        <voice>
+          <Rest>
+            <eid>n_n</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>o_o</eid>
+        <voice>
+          <Rest>
+            <eid>p_p</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>q_q</eid>
+        <vspacerFixed>9.67198</vspacerFixed>
+        <voice>
+          <Rest>
+            <eid>r_r</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>s_s</eid>
+        <voice>
+          <Rest>
+            <eid>t_t</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>u_u</eid>
+        <voice>
+          <Rest>
+            <eid>v_v</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>w_w</eid>
+        <voice>
+          <Rest>
+            <eid>x_x</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>y_y</eid>
+        <vspacerFixed>9.67198</vspacerFixed>
+        <voice>
+          <Rest>
+            <eid>z_z</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>0_0</eid>
+        <voice>
+          <Rest>
+            <eid>1_1</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>2_2</eid>
+        <voice>
+          <Rest>
+            <eid>3_3</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>4_4</eid>
+        <voice>
+          <Rest>
+            <eid>5_5</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>6_6</eid>
+        <vspacerFixed>9.67198</vspacerFixed>
+        <voice>
+          <Rest>
+            <eid>7_7</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>8_8</eid>
+        <voice>
+          <Rest>
+            <eid>9_9</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>+_+</eid>
+        <voice>
+          <Rest>
+            <eid>/_/</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>AB_AB</eid>
+        <voice>
+          <Rest>
+            <eid>BB_BB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>CB_CB</eid>
+        <vspacerFixed>9.67198</vspacerFixed>
+        <voice>
+          <Rest>
+            <eid>DB_DB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>EB_EB</eid>
+        <voice>
+          <Rest>
+            <eid>FB_FB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>GB_GB</eid>
+        <voice>
+          <Rest>
+            <eid>HB_HB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>IB_IB</eid>
+        <voice>
+          <Rest>
+            <eid>JB_JB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>KB_KB</eid>
+        <voice>
+          <Rest>
+            <eid>LB_LB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>MB_MB</eid>
+        <voice>
+          <Rest>
+            <eid>NB_NB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>OB_OB</eid>
+        <voice>
+          <Rest>
+            <eid>PB_PB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <VBox>
+        <height>-2.33526</height>
+        <topGap>2.33526</topGap>
+        <boxAutoSize>0</boxAutoSize>
+        <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+        <paddingToNotationAbove>0.516567</paddingToNotationAbove>
+        <eid>QB_QB</eid>
+        </VBox>
+      </Staff>
+    <SystemLocks>
+      <systemLock>
+        <startMeasure>F_F</startMeasure>
+        <endMeasure>Y_Y</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>a_a</startMeasure>
+        <endMeasure>g_g</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>i_i</startMeasure>
+        <endMeasure>o_o</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>q_q</startMeasure>
+        <endMeasure>w_w</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>y_y</startMeasure>
+        <endMeasure>4_4</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>6_6</startMeasure>
+        <endMeasure>AB_AB</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>CB_CB</startMeasure>
+        <endMeasure>IB_IB</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>KB_KB</startMeasure>
+        <endMeasure>OB_OB</endMeasure>
+        </systemLock>
+      </SystemLocks>
     </Score>
   </museScore>
