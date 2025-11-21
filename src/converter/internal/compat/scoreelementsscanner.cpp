@@ -22,11 +22,13 @@
 
 #include "scoreelementsscanner.h"
 
+#include "engraving/types/typesconv.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/tempotext.h"
+#include "engraving/dom/dynamic.h"
 
 using namespace mu::converter;
 using namespace mu::engraving;
@@ -164,8 +166,10 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
         info.name = toHarmony(item)->harmonyName();
     } else if (item->isTempoText()) {
         info.text = toTempoText(item)->tempoInfo();
-    } else if (item->isPlayTechAnnotation() || item->isDynamic()) {
+    } else if (item->isPlayTechAnnotation()) {
         info.name = item->translatedSubtypeUserName();
+    } else if (item->isDynamic()) {
+        info.name = TConv::toXml(toDynamic(item)->dynamicType()).ascii();
     } else if (item->isTextBase()) {
         info.text = toTextBase(item)->plainText();
     } else {
