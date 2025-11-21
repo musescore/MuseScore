@@ -1125,6 +1125,7 @@ muse::ByteArray Selection::staffMimeData() const
     }
 
     xml.endElement();
+    xml.flush();
     return buffer.data();
 }
 
@@ -1312,6 +1313,7 @@ muse::ByteArray Selection::symbolListMimeData() const
     }
 
     xml.endElement();
+    xml.flush();
     buffer.close();
     return buffer.data();
 }

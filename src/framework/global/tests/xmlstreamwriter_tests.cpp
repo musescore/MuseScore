@@ -56,6 +56,7 @@ TEST_F(Global_Ser_XML, WriteRead)
         xml.endElement();
 
         xml.endElement();
+        xml.flush();
 
         EXPECT_NE(data.size(), 0);
         buf.close();

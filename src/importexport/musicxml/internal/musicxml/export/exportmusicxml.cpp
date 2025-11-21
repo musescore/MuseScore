@@ -8775,6 +8775,7 @@ void ExportMusicXml::write(muse::io::IODevice* dev)
     writeParts();
 
     m_xml.endElement();
+    m_xml.flush();
 }
 
 //---------------------------------------------------------
@@ -8834,8 +8835,7 @@ static void writeMxlArchive(Score* score, muse::ZipWriter& zip, const String& fi
     muse::io::Buffer cbuf;
     cbuf.open(muse::io::IODevice::ReadWrite);
 
-    XmlWriter xml;
-    xml.setDevice(&cbuf);
+    XmlWriter xml(&cbuf);
     xml.startDocument();
     xml.startElement("container");
     xml.startElement("rootfiles");
@@ -8843,6 +8843,7 @@ static void writeMxlArchive(Score* score, muse::ZipWriter& zip, const String& fi
     xml.endElement();
     xml.endElement();
     xml.endElement();
+    xml.flush();
     cbuf.seek(0);
 
     zip.addFile("META-INF/container.xml", cbuf.data());

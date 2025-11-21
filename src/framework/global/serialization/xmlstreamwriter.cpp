@@ -182,7 +182,6 @@ void XmlStreamWriter::endElement()
 {
     m_impl->putLevel();
     m_impl->stream << "</" << muse::takeLast(m_impl->stack) << '>' << '\n';
-    flush();
 }
 
 // <element attr="value" />
