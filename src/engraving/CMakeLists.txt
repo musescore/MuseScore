@@ -163,7 +163,6 @@ target_sources(engraving PRIVATE
     editing/undo.cpp
     editing/undo.h
 
-    rw/README.h
     rw/ireader.h
     rw/iwriter.h
     rw/rwregister.cpp
