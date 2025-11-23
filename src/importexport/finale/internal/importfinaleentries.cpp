@@ -966,7 +966,7 @@ void FinaleParser::importEntries()
         return;
     }
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
-    MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
     std::vector<engraving::Note*> notesWithUnmanagedTies;
     m_track2Layer.assign(m_score->ntracks(), std::map<int, musx::dom::LayerIndex>{});
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
@@ -982,6 +982,7 @@ void FinaleParser::importEntries()
 
         for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
             MeasCmper measureId = musxMeasure->getCmper();
+            musx::util::Fraction legacyPickupSpacer = musxMeasure->calcMinLegacyPickupSpacer(musxStaffId);
             Fraction currTick = muse::value(m_meas2Tick, measureId, Fraction(-1, 1));
             Measure* measure = !currTick.negative()  ? m_score->tick2measure(currTick) : nullptr;
             bool measureHasVoices = false;
@@ -1004,7 +1005,7 @@ void FinaleParser::importEntries()
                 for (const auto& finaleLayer : finaleLayers) {
                     const LayerIndex layer = finaleLayer.first;
                     /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
-                    MusxInstance<EntryFrame> entryFrame = gfHold.createEntryFrame(layer);
+                    MusxInstance<EntryFrame> entryFrame = gfHold.createEntryFrame(layer, legacyPickupSpacer);
                     if (!entryFrame) {
                         logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxStaffId, measureId);
                         continue;
