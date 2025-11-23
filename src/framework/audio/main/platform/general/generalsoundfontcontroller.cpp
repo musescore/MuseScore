@@ -44,7 +44,7 @@ void GeneralSoundFontController::loadSoundFonts()
 void GeneralSoundFontController::addSoundFont(const SoundFontUri& uri)
 {
     io::path_t path = uri.toLocalFile();
-    std::string title = muse::qtrc("audio", "Do you want to add the SoundFont: %1?")
+    std::string title = muse::qtrc("audio", "Do you want to add SoundFont %1?")
                         .arg(io::filename(path).toQString()).toStdString();
 
     interactive()->question(title, "", {

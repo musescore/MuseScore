@@ -77,7 +77,7 @@
               <bool>true</bool>
              </property>
              <property name="text">
-              <string>Eighth note</string>
+              <string>Eighth</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -90,7 +90,7 @@
               <bool>true</bool>
              </property>
              <property name="text">
-              <string>Sixteenth note</string>
+              <string>Sixteenth</string>
              </property>
             </widget>
            </item>
@@ -109,7 +109,7 @@
            <item>
             <widget class="QLabel" name="label_12">
              <property name="text">
-              <string>Select swing ratio:</string>
+              <string>Swing ratio:</string>
              </property>
              <property name="buddy">
               <cstring>swingBox</cstring>
