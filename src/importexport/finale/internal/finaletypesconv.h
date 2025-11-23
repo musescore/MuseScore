@@ -59,7 +59,7 @@ extern engraving::CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBa
 extern engraving::NoteVal notePropertiesToNoteVal(const musx::dom::Note::NoteProperties& noteProperties, engraving::Key key = engraving::Key::C);
 extern engraving::Fraction musxFractionToFraction(const musx::util::Fraction& fraction);
 extern engraving::Fraction eduToFraction(musx::dom::Edu edu);
-extern engraving::Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger);
+extern engraving::Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, musx::util::Fraction pickupSpacer, FinaleLoggerPtr& logger);
 extern engraving::Key keyFromAlteration(int musxAlteration);
 extern engraving::KeyMode keyModeFromDiatonicMode(music_theory::DiatonicMode diatonicMode);
 extern engraving::SymId acciSymbolFromAcciAmount(int acciAmount);
