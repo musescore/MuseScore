@@ -61,7 +61,7 @@ enum class MscIoMode : unsigned char {
 
 inline MscIoMode mscIoModeBySuffix(const std::string& suffix)
 {
-    if (suffix == MSCZ) {
+    if (suffix == MSCZ || suffix == MSCZ_BACKUP) {
         return MscIoMode::Zip;
     } else if (suffix == MSCX) {
         return MscIoMode::Dir;
