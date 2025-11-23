@@ -122,7 +122,7 @@ FocusScope {
         z: label.z - 1 // enable clicking on links in label text
 
         onClicked: {
-            navigation.requestActiveByInteraction()
+            navCtrl.requestActiveByInteraction()
 
             root.clicked()
         }

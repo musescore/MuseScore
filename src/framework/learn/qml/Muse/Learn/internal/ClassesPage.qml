@@ -79,7 +79,7 @@ Item {
         anchors.fill: parent
 
         contentWidth: parent.width
-        contentHeight: authorInfo.height + sideMargin
+        contentHeight: authorInfo.height + root.sideMargin
 
         topMargin: topGradient.height
 

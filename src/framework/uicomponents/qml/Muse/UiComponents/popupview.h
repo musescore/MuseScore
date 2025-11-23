@@ -53,7 +53,7 @@ class PopupView : public WindowView
 
     Q_PROPERTY(QQuickItem * anchorItem READ anchorItem WRITE setAnchorItem NOTIFY anchorItemChanged)
     Q_PROPERTY(PlacementPolicies placementPolicies READ placementPolicies WRITE setPlacementPolicies NOTIFY placementPoliciesChanged)
-    Q_PROPERTY(PopupPosition::Type popupPosition READ popupPosition WRITE setPopupPosition NOTIFY popupPositionChanged)
+    Q_PROPERTY(muse::uicomponents::PopupPosition::Type popupPosition READ popupPosition WRITE setPopupPosition NOTIFY popupPositionChanged)
 
     // Relative to parentItem
     Q_PROPERTY(qreal x READ localX WRITE setLocalX NOTIFY xChanged)

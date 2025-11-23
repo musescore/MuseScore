@@ -78,7 +78,7 @@ Rectangle {
     StyledIconLabel {
         anchors.fill: parent
         iconCode: IconCode.QUESTION_MARK
-        visible: isIndeterminate
+        visible: root.isIndeterminate
     }
 
     MouseArea {
@@ -89,7 +89,7 @@ Rectangle {
         hoverEnabled: true
 
         onClicked: {
-            navigation.requestActiveByInteraction()
+            navCtrl.requestActiveByInteraction()
 
             prv.selectColor()
         }
