@@ -19,11 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
-import QtQuick.Controls 2.0
-import MuseScore.Inspector 1.0
+import QtQuick
+import QtQuick.Controls
+import MuseScore.Inspector
 import Muse.UiComponents
-import Muse.Ui 1.0
+import Muse.Ui
 import "../../common"
 import "internal"
 
