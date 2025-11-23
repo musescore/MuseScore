@@ -42,6 +42,8 @@ qt_add_qml_module(muse_uicomponents_qml
         filtervalue.h
         iconview.cpp
         iconview.h
+        internal/focuslistener.cpp
+        internal/focuslistener.h
         internal/popupviewclosecontroller.cpp
         internal/popupviewclosecontroller.h
         itemmultiselectionmodel.cpp
@@ -72,7 +74,6 @@ qt_add_qml_module(muse_uicomponents_qml
         validators/intinputvalidator.h
         windowview.cpp
         windowview.h
-
 
     QML_FILES
         Border.qml
@@ -213,7 +214,7 @@ if (MUSE_MODULE_UI_DISABLE_MODALITY)
 endif()
 
 # Necessary for the auto-generated sources
-target_include_directories(muse_uicomponents_qml PRIVATE validators)
+target_include_directories(muse_uicomponents_qml PRIVATE internal validators)
 
 if (MUSE_MODULE_UI_TESTS)
     add_subdirectory(tests)

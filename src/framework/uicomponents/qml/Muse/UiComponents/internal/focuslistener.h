@@ -26,7 +26,7 @@
 
 #include <qqmlintegration.h>
 
-namespace muse::ui {
+namespace muse::uicomponents {
 class FocusListener : public QObject
 {
     Q_OBJECT
