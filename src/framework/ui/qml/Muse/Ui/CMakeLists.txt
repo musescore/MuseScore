@@ -48,22 +48,10 @@ qt_add_qml_module(muse_ui_qml
         windowsmodel.h
         dev/interactivetestsmodel.cpp
         dev/interactivetestsmodel.h
-        internal/errordetailsmodel.cpp
-        internal/errordetailsmodel.h
-        internal/focuslistener.cpp
-        internal/focuslistener.h
-        internal/progressdialogmodel.cpp
-        internal/progressdialogmodel.h
 
     QML_FILES
         InteractiveProvider.qml
         ToolTipProvider.qml
-        StandardDialogPanel.qml
-        internal/ErrorDetailsView.qml
-        internal/FileDialog.qml
-        internal/FolderDialog.qml
-        internal/ProgressDialog.qml
-        internal/StandardDialog.qml
 
     IMPORTS
         QtQuick

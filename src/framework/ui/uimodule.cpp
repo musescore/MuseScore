@@ -108,10 +108,10 @@ void UiModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse.Ui", "StandardDialog");
-        ir->registerQmlUri(Uri("muse://interactive/progress"), "Muse.Ui", "ProgressDialog");
-        ir->registerQmlUri(Uri("muse://interactive/selectfile"), "Muse.Ui", "FileDialog");
-        ir->registerQmlUri(Uri("muse://interactive/selectdir"), "Muse.Ui", "FolderDialog");
+        ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse.Ui.Dialogs", "StandardDialog");
+        ir->registerQmlUri(Uri("muse://interactive/progress"), "Muse.Ui.Dialogs", "ProgressDialog");
+        ir->registerQmlUri(Uri("muse://interactive/selectfile"), "Muse.Ui.Dialogs", "FileDialog");
+        ir->registerQmlUri(Uri("muse://interactive/selectdir"), "Muse.Ui.Dialogs", "FolderDialog");
 
         ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
         ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "DevTools/Interactive/SampleDialog.qml");
