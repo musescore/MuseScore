@@ -329,7 +329,7 @@ void FinaleParser::importMeasures()
 
 void FinaleParser::importParts()
 {
-    MusxInstanceList<others::StaffUsed> scrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    MusxInstanceList<others::StaffUsed> scrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
 
     const bool hideEmptyStaves = m_score->style().styleB(Sid::hideEmptyStaves);
     const AutoOnOff doNotHideVal = hideEmptyStaves ? AutoOnOff::OFF : AutoOnOff::AUTO;
@@ -358,7 +358,7 @@ void FinaleParser::importParts()
 
         const auto& [topStaffId, instInfo] = *instIt;
         if (instInfo.staffGroupId != 0) {
-            if (MusxInstance<details::StaffGroup> group = m_doc->getDetails()->get<details::StaffGroup>(m_currentMusxPartId, BASE_SYSTEM_ID, instInfo.staffGroupId)) {
+            if (MusxInstance<details::StaffGroup> group = m_doc->getDetails()->get<details::StaffGroup>(m_currentMusxPartId, m_doc->calcScrollViewCmper(m_currentMusxPartId), instInfo.staffGroupId)) {
                 if (group->hideStaves == details::StaffGroup::HideStaves::None) {
                     part->setHideWhenEmpty(doNotHideVal);
                 } else if (group->hideStaves != details::StaffGroup::HideStaves::AsGroup) {
@@ -454,7 +454,7 @@ void FinaleParser::importBrackets()
         throw std::logic_error("Unable to read PartDefinition for score");
         return;
     }
-    const MusxInstanceList<others::StaffUsed> scrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    const MusxInstanceList<others::StaffUsed> scrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
 
     auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, m_currentMusxPartId, scrollView);
     auto groupsByLayer = computeStaffGroupLayers(staffGroups);
@@ -798,7 +798,7 @@ void FinaleParser::importStaffItems()
         return;
     }
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
-    MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
     MusxInstanceList<others::StaffSystem> musxSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
         // Retrieve staff
