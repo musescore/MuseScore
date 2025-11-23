@@ -82,6 +82,7 @@ public:
 signals:
     void isNavigatorVisibleChanged();
     void isBraillePanelVisibleChanged();
+    void createPaletteIfDestroyed();
 
 private:
     void onNotationChanged();

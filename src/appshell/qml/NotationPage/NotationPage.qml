@@ -42,7 +42,15 @@ DockPage {
 
     required property NavigationSection topToolbarKeyNavSec
 
-    property NotationPageModel pageModel: NotationPageModel {}
+    property bool isPalettesCreated: false
+
+    property NotationPageModel pageModel: NotationPageModel {
+       onCreatePaletteIfDestroyed: {
+         if (!isPalettesCreated) {
+            palettesPanel.open()
+         }
+       }
+    }
 
     property NavigationSection noteInputKeyNavSec: NavigationSection {
         name: "NoteInputSection"
@@ -270,6 +278,12 @@ DockPage {
 
                 Component.onCompleted: {
                     palettesPanel.contextMenuModel = contextMenuModel
+                    isPalettesCreated = true
+                }
+
+                Component.onDestruction: {
+                    palettesPanel.contextMenuModel = null
+                    isPalettesCreated = false
                 }
             }
         },
