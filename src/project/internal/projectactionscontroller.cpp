@@ -1901,7 +1901,7 @@ async::Promise<io::path_t> ProjectActionsController::selectScoreOpeningFile() co
                          "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mei *.tef *.mscx *.mscs *.mscz~";
 
     std::vector<std::string> filter { muse::trc("project", "All supported files") + " (" + allExt + ")",
-                                      muse::trc("project", "MuseScore files") + " (*.mscz)",
+                                      muse::trc("project", "MuseScore files") + " (*.mscz *.mscz~)",
                                       muse::trc("project", "MusicXML files") + " (*.mxl *.musicxml *.xml)",
                                       muse::trc("project", "MIDI files") + " (*.mid *.midi *.kar)",
                                       muse::trc("project", "MuseData files") + " (*.md)",
