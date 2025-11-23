@@ -303,7 +303,7 @@ void FinaleParser::importSmartShapes()
     /// @note Getting the entire array of smart shapes works for SCORE_PARTID, but if we ever need to do it for excerpts it could fail.
     /// This is because `getArray` currently cannot pull a mix of score and partially shared part instances. Adding the ability to do so
     /// would require significant refactoring of musx. -- RGP
-    MusxInstanceList<others::SmartShape> smartShapes = m_doc->getOthers()->getArray<others::SmartShape>(m_currentMusxPartId); //, BASE_SYSTEM_ID
+    MusxInstanceList<others::SmartShape> smartShapes = m_doc->getOthers()->getArray<others::SmartShape>(m_currentMusxPartId);
     logger()->logInfo(String(u"Import smart shapes: Found %1 smart shapes").arg(smartShapes.size()));
     for (const MusxInstance<others::SmartShape>& smartShape : smartShapes) {
         if (smartShape->shapeType == others::SmartShape::ShapeType::WordExtension
