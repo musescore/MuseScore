@@ -33,6 +33,10 @@ ListItemBlank {
     property var menuAnchorItem: null
 
     property var parentWindow: null
+    property var parentMenu: null
+
+    // Amazon triangle state - passed from parent menu
+    property bool amazonTriangleActive: false
 
     enum IconAndCheckMarkMode {
         None,
@@ -110,6 +114,56 @@ ListItemBlank {
     // As a workaround, we ensure that the MouseArea is on top of the StyledTextLabel,
     // so that it takes precedence.
     mouseArea.z: 1000
+
+    // Shared function to check if we should open submenu
+    function shouldOpenSubmenu() {
+        if (!mouseArea.containsMouse) {
+            return false
+        }
+
+        // If triangle is active, check if mouse is inside it
+        if (root.amazonTriangleActive && root.parentMenu) {
+            // Map mouse position from item to menu content coordinates
+            var mousePosInMenu = root.mapToItem(root.parentMenu.contentItem, mouseArea.mouseX, mouseArea.mouseY)
+            if (root.parentMenu.isMouseInsideTriangle(mousePosInMenu)) {
+                // Mouse is inside triangle - don't open submenu
+                return false
+            }
+        }
+
+        return true
+    }
+
+    // Handle hover events - check Amazon triangle before opening
+    Connections {
+        target: mouseArea
+
+        // Handle hover state changes
+        function onContainsMouseChanged() {
+            if (root.shouldOpenSubmenu()) {
+                root.openSubMenuRequested(true)
+            }
+        }
+
+        // Handle mouse movement (needed for smooth hover detection)
+        function onPositionChanged(mouse) {
+            if (root.shouldOpenSubmenu()) {
+                root.openSubMenuRequested(true)
+            }
+        }
+    }
+
+    // When triangle disappears, open submenu if hovering this item
+    onAmazonTriangleActiveChanged: {
+        if (!amazonTriangleActive) {
+            // Triangle disappeared - check if we should open submenu
+            Qt.callLater(function() {
+                if (root.shouldOpenSubmenu()) {
+                    root.openSubMenuRequested(true)
+                }
+            })
+        }
+    }
 
     QtObject {
         id: itemPrv
@@ -231,12 +285,6 @@ ListItemBlank {
             width: 16
             iconCode: root.hasSubMenu ? IconCode.SMALL_ARROW_RIGHT : IconCode.NONE
             visible: !isEmpty || (root.reserveSpaceForShortcutsOrSubmenuIndicator && !shortcutsLabel.visible)
-        }
-    }
-
-    onHovered: function(isHovered, mouseX, mouseY) {
-        if (isHovered) {
-            root.openSubMenuRequested(true)
         }
     }
 

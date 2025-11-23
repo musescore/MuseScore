@@ -270,10 +270,31 @@ MenuView {
 
             root.subMenuLoader.opened.connect(function(itemId) {
                 root.closePolicies = PopupView.NoAutoClose
+
+                // Notify C++ about submenu geometry
+                if (root.subMenuLoader.menu && root.subMenuLoader.menu.contentItem) {
+                    Qt.callLater(function() {
+                        var subMenuContent = root.subMenuLoader.menu.contentItem
+                        var intermediateItem = view
+                        var subMenuTopLeftInWindow = subMenuContent.mapToItem(intermediateItem, 0, 0)
+                        var subMenuTopLeftInContent = content.mapFromItem(intermediateItem, subMenuTopLeftInWindow.x, subMenuTopLeftInWindow.y)
+
+                        var subMenuGeometry = Qt.rect(
+                            subMenuTopLeftInContent.x,
+                            subMenuTopLeftInContent.y,
+                            subMenuContent.width,
+                            subMenuContent.height
+                        )
+                        root.setSubMenuGeometry(subMenuGeometry)
+                    })
+                }
             })
 
             root.subMenuLoader.closed.connect(function(force) {
                 root.closePolicies = PopupView.CloseOnPressOutsideParent
+
+                // Notify C++ that submenu closed
+                root.clearSubMenuGeometry()
 
                 if (force) {
                     root.close(true)
@@ -281,6 +302,8 @@ MenuView {
                 }
             })
         }
+
+
 
         StyledListView {
             id: view
@@ -359,6 +382,7 @@ MenuView {
 
                         menuAnchorItem: root.anchorItem
                         parentWindow: root.window
+                        parentMenu: root
 
                         navigation.panel: content.navigationPanel
                         navigation.row: model.index
@@ -371,6 +395,9 @@ MenuView {
                         padding: root.padding
 
                         subMenuShowed: root.subMenuLoader.isMenuOpened && root.subMenuLoader.parent === item
+
+                        // Pass Amazon triangle state to menu item
+                        amazonTriangleActive: root.amazonTriangleActive
 
                         onOpenSubMenuRequested: function(byHover) {
                             if (!hasSubMenu) {
@@ -386,6 +413,12 @@ MenuView {
                                     root.subMenuLoader.close()
                                     return
                                 }
+                            }
+
+                            // Clear the Amazon triangle when opening a different submenu
+                            // This allows the new submenu to open even if triangle was active
+                            if (root.subMenuLoader.parent !== item) {
+                                root.clearSubMenuGeometry()
                             }
 
                             root.subMenuLoader.parent = item
@@ -415,6 +448,40 @@ MenuView {
                         property var modelData
                     }
                 }
+            }
+        }
+
+        // Amazon-triangle visualization (debug)
+        Canvas {
+            id: amazonTriangleCanvas
+            anchors.fill: parent
+            z: 500  // Below mouseArea (1000) but above view
+            visible: root.amazonTriangleActive
+
+            onPaint: {
+                const ctx = getContext("2d")
+                ctx.clearRect(0, 0, width, height)
+
+                if (!root.amazonTriangleActive) {
+                    return
+                }
+
+                // Draw semi-transparent triangle
+                ctx.fillStyle = "rgba(255, 0, 0, 0.5)" // Red for debugging
+                ctx.beginPath()
+                ctx.moveTo(root.triangleP1.x, root.triangleP1.y)
+                ctx.lineTo(root.triangleP2.x, root.triangleP2.y)
+                ctx.lineTo(root.triangleP3.x, root.triangleP3.y)
+                ctx.closePath()
+                ctx.fill()
+            }
+
+            Connections {
+                target: root
+                function onTriangleP1Changed() { amazonTriangleCanvas.requestPaint() }
+                function onTriangleP2Changed() { amazonTriangleCanvas.requestPaint() }
+                function onTriangleP3Changed() { amazonTriangleCanvas.requestPaint() }
+                function onAmazonTriangleActiveChanged() { amazonTriangleCanvas.requestPaint() }
             }
         }
     }

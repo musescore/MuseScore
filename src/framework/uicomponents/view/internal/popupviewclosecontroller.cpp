@@ -114,6 +114,22 @@ bool PopupViewCloseController::eventFilter(QObject* watched, QEvent* event)
         if (!m_canClosed) {
             event->ignore();
         }
+    } else if (QEvent::HoverMove == event->type() || QEvent::HoverEnter == event->type()) {
+        // Track mouse position for amazon triangle
+        QWindow* window = popupWindow();
+        if (window) {
+            QPointF globalPos = static_cast<QMouseEvent*>(event)->globalPosition();
+            QPointF localPos = window->mapFromGlobal(globalPos);
+
+            // Notify about mouse movement (this updates MenuView's internal state)
+            if (m_mouseMoveCallback) {
+                m_mouseMoveCallback(localPos);
+            }
+
+            // NOTE: We no longer filter hover events when in Amazon triangle.
+            // Instead, we let the events through and block submenu opening logic at QML level.
+            // This allows proper hover state tracking while still preventing accidental submenu changes.
+        }
     }
 
     return QObject::eventFilter(watched, event);
@@ -190,6 +206,16 @@ bool PopupViewCloseController::isMouseWithinBoundaries(const QPointF& mousePos) 
         }
     }
 
+    //! NOTE Check amazon triangle - if mouse is in the triangle, it's considered within boundaries
+    //! This prevents the menu from closing when the mouse is moving toward a submenu
+    // if (m_amazonTriangleActive) {
+    //     // Convert global mousePos to local coordinates relative to the parent item
+    //         QPointF localPos = window->mapFromGlobal(mousePos);
+    //         if (isPointInTriangle(localPos)) {
+    //             return true;
+    //         }
+    // }
+
     // Hack for https://github.com/musescore/MuseScore/issues/29656
     if (interactiveProvider()->isSelectColorOpened()) {
         return true;
@@ -215,4 +241,51 @@ QWindow* PopupViewCloseController::parentWindow() const
 QWindow* PopupViewCloseController::popupWindow() const
 {
     return m_popupWindow;
+}
+
+void PopupViewCloseController::setAmazonTriangle(const QPointF& p1, const QPointF& p2, const QPointF& p3, bool active)
+{
+    m_triangleP1 = p1;
+    m_triangleP2 = p2;
+    m_triangleP3 = p3;
+    if (p1.x() > p2.x()) {
+        m_amazonTriangleActive = false;
+    } else {
+        m_amazonTriangleActive = active;
+    }
+}
+
+void PopupViewCloseController::setMouseMoveCallback(std::function<void(const QPointF&)> callback)
+{
+    m_mouseMoveCallback = callback;
+}
+
+bool PopupViewCloseController::isPointInTriangle(const QPointF& point) const
+{
+    if (!m_amazonTriangleActive) {
+        return false;
+    }
+
+    // Helper lambda to calculate cross product sign
+    auto sign = [](const QPointF& p1, const QPointF& p2, const QPointF& p3) -> qreal {
+        return (p1.x() - p3.x()) * (p2.y() - p3.y()) - (p2.x() - p3.x()) * (p1.y() - p3.y());
+    };
+
+    qreal d1 = sign(point, m_triangleP1, m_triangleP2);
+    qreal d2 = sign(point, m_triangleP2, m_triangleP3);
+    qreal d3 = sign(point, m_triangleP3, m_triangleP1);
+
+    bool hasNeg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+    bool hasPos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+
+    // LOGD("Checking (%f, %f). Triangle [(%f, %f) - (%f, %f) - (%f, %f)] -> %s",
+    //         point.x(), point.y(),
+    //         m_triangleP1.x(), m_triangleP1.y(),
+    //         m_triangleP2.x(), m_triangleP2.y(),
+    //         m_triangleP3.x(), m_triangleP3.y(),
+    //         !(hasNeg && hasPos)  ? "true" : "false"
+    //     );
+
+    // Point is inside if all cross products have the same sign
+    return !(hasNeg && hasPos);
 }

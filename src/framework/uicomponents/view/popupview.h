@@ -139,13 +139,15 @@ protected:
 
     bool eventFilter(QObject* watched, QEvent* event) override;
 
-    void initCloseController();
+    virtual void initCloseController();
 
     void repositionWindowIfNeed() override;
     void updateGeometry() override;
     virtual void updateContentPosition();
 
     QPointF m_localPos;
+
+    PopupViewCloseController* m_closeController = nullptr;
 
 private:
     ClosePolicies m_closePolicies = { ClosePolicy::CloseOnPressOutsideParent };
@@ -158,7 +160,5 @@ private:
     int m_arrowX = 0;
     int m_arrowY = 0;
     int m_padding = 0;
-
-    PopupViewCloseController* m_closeController = nullptr;
 };
 }

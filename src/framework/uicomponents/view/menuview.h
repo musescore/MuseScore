@@ -23,6 +23,8 @@
 
 #include "popupview.h"
 
+#include <QTimer>
+
 namespace muse::uicomponents {
 class MenuView : public PopupView
 {
@@ -33,6 +35,12 @@ class MenuView : public PopupView
     Q_PROPERTY(int contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentHeightChanged)
 
     Q_PROPERTY(Qt::AlignmentFlag cascadeAlign READ cascadeAlign WRITE setCascadeAlign NOTIFY cascadeAlignChanged)
+
+    // Amazon triangle properties for event filtering
+    Q_PROPERTY(QPointF triangleP1 READ triangleP1 WRITE setTriangleP1 NOTIFY triangleP1Changed)
+    Q_PROPERTY(QPointF triangleP2 READ triangleP2 WRITE setTriangleP2 NOTIFY triangleP2Changed)
+    Q_PROPERTY(QPointF triangleP3 READ triangleP3 WRITE setTriangleP3 NOTIFY triangleP3Changed)
+    Q_PROPERTY(bool amazonTriangleActive READ amazonTriangleActive WRITE setAmazonTriangleActive NOTIFY amazonTriangleActiveChanged)
 
 public:
     explicit MenuView(QQuickItem* parent = nullptr);
@@ -48,6 +56,25 @@ public:
     int contentHeight() const;
     void setContentHeight(int newContentHeight);
 
+    // Amazon triangle accessors
+    QPointF triangleP1() const;
+    void setTriangleP1(const QPointF& point);
+
+    QPointF triangleP2() const;
+    void setTriangleP2(const QPointF& point);
+
+    QPointF triangleP3() const;
+    void setTriangleP3(const QPointF& point);
+
+    bool amazonTriangleActive() const;
+    void setAmazonTriangleActive(bool active);
+
+    // Amazon triangle management
+    Q_INVOKABLE void setSubMenuGeometry(const QRectF& geometry);
+    Q_INVOKABLE void clearSubMenuGeometry();
+    Q_INVOKABLE void onMouseMove(const QPointF& position);
+    Q_INVOKABLE bool isMouseInsideTriangle(const QPointF& mousePos) const;
+
 public slots:
     void setCascadeAlign(Qt::AlignmentFlag cascadeAlign);
 
@@ -56,6 +83,11 @@ signals:
 
     void contentWidthChanged();
     void contentHeightChanged();
+
+    void triangleP1Changed();
+    void triangleP2Changed();
+    void triangleP3Changed();
+    void amazonTriangleActiveChanged();
 
 private:
     void componentComplete() override;
@@ -69,10 +101,36 @@ private:
 
     QQuickItem* parentMenuContentItem() const;
 
+private slots:
+    void onMouseStoppedTimer();
+
+protected:
+    void initCloseController() override;
+
 private:
+    void updateCloseControllerTriangle();
+    void updateTriangle(const QPointF& mousePos);
+    void calculateTriangleVertices(const QPointF& p1);
+
     Qt::AlignmentFlag m_cascadeAlign = Qt::AlignmentFlag::AlignRight;
 
     int m_contentWidth = -1;
     int m_contentHeight = -1;
+
+    // Amazon triangle coordinates
+    QPointF m_triangleP1;
+    QPointF m_triangleP2;
+    QPointF m_triangleP3;
+    bool m_amazonTriangleActive = false;
+
+    // Mouse tracking for amazon triangle
+    QPointF m_lastMousePos;
+    qint64 m_lastMouseMoveTime = 0;
+    QTimer* m_mouseStoppedTimer = nullptr;
+    bool m_mouseStopped = false;
+
+    // Submenu geometry for triangle calculation
+    QRectF m_subMenuGeometry;
+    bool m_hasSubMenuOpen = false;
 };
 }
