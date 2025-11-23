@@ -294,7 +294,7 @@ void FinaleParser::importMeasures()
         m_meas2Tick.emplace(musxMeasure->getCmper(), tick);
         m_tick2Meas.emplace(tick, musxMeasure->getCmper());
         MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature();
-        Fraction scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
+        Fraction scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), musxMeasure->calcMinLegacyPickupSpacer(), logger());
         if (scoreTimeSig != currTimeSig) {
             m_score->sigmap()->add(tick.ticks(), scoreTimeSig);
             currTimeSig = scoreTimeSig;
@@ -927,7 +927,7 @@ void FinaleParser::importStaffItems()
                 const MusxInstance<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
                 Segment* seg = measure->getSegmentR(SegmentType::TimeSig, Fraction(0, 1));
                 TimeSig* ts = Factory::createTimeSig(seg);
-                Fraction timeSig = simpleMusxTimeSigToFraction(localTimeSig->calcSimplified(), logger());
+                Fraction timeSig = simpleMusxTimeSigToFraction(localTimeSig->calcSimplified(), 0, logger());
 
                 // Display text: Attempt to inherit it, where possible
                 if (visualTimeSig->getAbbreviatedSymbol().has_value()) {
