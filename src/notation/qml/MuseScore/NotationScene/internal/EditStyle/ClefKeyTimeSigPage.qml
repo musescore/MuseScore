@@ -98,7 +98,7 @@ StyledFlickable {
                 }
 
                 CheckBox {
-                    text: qsTrc("notation/editstyle/timesignatures", "Hide tab clefs after the first system where they appear")
+                    text: qsTrc("notation/editstyle/timesignatures", "Hide TAB clefs after the first system where they appear")
                     enabled: pageModel.genClef.value === true
                     checked: pageModel.hideTabClefAfterFirst.value === true
                     onClicked: pageModel.hideTabClefAfterFirst.value = !pageModel.hideTabClefAfterFirst.value
