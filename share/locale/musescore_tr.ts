@@ -10223,7 +10223,7 @@ asla sola hizalama</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MainToolBar.qml" line="64"/>
-        <location filename="../../src/appshell/qml/WindowContent.qml" line="64"/>
+        <location filename="../../src/appshell/qml/WindowContent.qml" line="65"/>
         <source>Main toolbar</source>
         <translation>Ana araç çubuğu</translation>
     </message>
@@ -10375,12 +10375,12 @@ Bu işlem partisyonlarınızın hiçbirini silmez.</translation>
         <translation>Yeniden başlat</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="372"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="381"/>
         <source>The previous session quit unexpectedly.</source>
         <translation>Önceki oturum beklenmedik şekilde sonlandırıldı.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="373"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="382"/>
         <source>Do you want to restore the session?</source>
         <translation>Oturumu geri yüklemek istiyor musunuz?</translation>
     </message>
@@ -11775,46 +11775,61 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="234"/>
+        <source>Enjoy free cloud storage</source>
+        <translation>Ücretsiz bulut depolamadan faydalanın</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="236"/>
+        <source>Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world.</source>
+        <translation>Partisyonlarınızı özel olarak MuseScore.com&apos;a kaydedin; böylece geçmiş sürümlere geri dönebilir, başkalarını görüntülemeye ve yorum yapmaya davet edebilir ve hazır olduğunuzda müziğinizi tüm dünyayla paylaşabilirsiniz.</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="238"/>
+        <source>View my scores online</source>
+        <translation>Partisyonlarımı çevrimiçi görüntüle</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="243"/>
         <source>What’s new in MuseScore Studio</source>
         <translation>MuseScore Studio&apos;daki yenilikler</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="236"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="245"/>
         <source>Includes a new system for hiding empty staves, a new text editing widget, guitar notation improvements, engraving improvements and more.</source>
         <translation>Boş dizekleri gizlemek için yeni bir sistem, yeni bir metin düzenleme aracı, gitar notasyonu iyileştirmeleri, gravür iyileştirmeleri ve daha fazlasını içerir.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="238"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="247"/>
         <source>Watch video</source>
         <translation>Videoyu izle</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="243"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="252"/>
         <source>Install our free MuseSounds libraries</source>
         <translation>Ücretsiz MuseSounds kütüphanelerimizi yükleyin</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="245"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="254"/>
         <source>Explore our collection of realistic sample libraries, including solo instruments, marching percussion, and full orchestra - available for free on MuseHub.</source>
         <translation>Solo çalgılar, bando vurmalı çalgılar ve tam orkestra gibi gerçekçi örneklenmiş kütüphanelerimizden oluşan koleksiyonumuzu keşfedin - MuseHub&apos;da ücretsiz olarak mevcuttur.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="247"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="256"/>
         <source>Get it on MuseHub</source>
         <translation>MuseHub&apos;dan alın</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="252"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="261"/>
         <source>Explore our tutorials</source>
         <translation>Öğreticilerimizi keşfedin</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="254"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="263"/>
         <source>We’ve put together a playlist of tutorials to help both beginners and experienced users get the most out of MuseScore Studio.</source>
         <translation>Hem yeni başlayanların hem de deneyimli kullanıcıların MuseScore Studio&apos;dan en iyi şekilde yararlanmasına yardımcı olmak için bir dizi öğretici video hazırladık.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="256"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="265"/>
         <source>View tutorials</source>
         <translation>Öğreticileri görüntüle</translation>
     </message>
@@ -12032,7 +12047,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1103"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3344"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3356"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2561"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2562"/>
         <source>Start of %1</source>
         <translation>%1 başlangıcı</translation>
     </message>
@@ -12042,7 +12057,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1105"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3348"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3364"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2576"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2577"/>
         <source>End of %1</source>
         <translation>%1 sonu</translation>
     </message>
@@ -12183,18 +12198,18 @@ Perde %1 teller %2</translation>
         <translation>%2 süresi için %1 oranına sahip düzensiz gurup oluşturulamıyor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8031"/>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8179"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8014"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8162"/>
         <source>Remove stale partial tie</source>
         <translation>Bozuk kısmi uzatma bağını kaldırın</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8089"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8072"/>
         <source>Reset incoming partial slur</source>
         <translation>Giren kısmı hece bağını sıfırla</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8099"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8082"/>
         <source>Reset outgoing partial slur</source>
         <translation>Çıkan kısmı hece bağını sıfırla</translation>
     </message>
@@ -12293,18 +12308,18 @@ Perde %1 teller %2</translation>
         <translation><numerusform>%n tel(ler) toplam</numerusform><numerusform>%n tel(ler) toplam</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/harmony.cpp" line="1275"/>
+        <location filename="../../src/engraving/dom/harmony.cpp" line="1269"/>
         <source>Roman numeral</source>
         <translation>Roma rakamı</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/harmony.cpp" line="1277"/>
+        <location filename="../../src/engraving/dom/harmony.cpp" line="1271"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1717"/>
         <source>Nashville number</source>
         <translation>Nashville numarası</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/harmony.cpp" line="1327"/>
+        <location filename="../../src/engraving/dom/harmony.cpp" line="1321"/>
         <source>lower case</source>
         <translation>küçük harf</translation>
     </message>
@@ -12460,42 +12475,42 @@ Perde %1 teller %2</translation>
         <translation>%1; Süresi: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2535"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2536"/>
         <source>Annotations:</source>
         <translation>Ek açıklamalar:</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1642"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1645"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="159"/>
         <source>Start measure: %1</source>
         <translation>Başlama ölçüsü: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1645"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1648"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="161"/>
         <source>Start displayed measure: %1</source>
         <translation>Görüntülenen başlangıç ölçüsü: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1648"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1651"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="163"/>
         <source>Start beat: %1</source>
         <translation>Başlama vuruşu: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1655"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1658"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="166"/>
         <source>End measure: %1</source>
         <translation>Bitiş ölçüsü: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1658"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1661"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="168"/>
         <source>End displayed measure: %1</source>
         <translation>Görüntülenen bitiş ölçüsü: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1661"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1664"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="170"/>
         <source>End beat: %1</source>
         <translation>Bitiş vuruşu: %1</translation>
@@ -15123,7 +15138,7 @@ Perde %1 teller %2</translation>
         <translation>Açık / Atonal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/partialtiepopupmodel.cpp" line="192"/>
+        <location filename="../../src/notation/view/internal/partialtiepopupmodel.cpp" line="190"/>
         <source>Remove partial tie</source>
         <translation>Kısmi bağı kaldır</translation>
     </message>
@@ -22251,18 +22266,18 @@ Perde %1 teller %2</translation>
         <translation>Sonuç bulunamadı</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml" line="107"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml" line="89"/>
         <source>Processing %1%…</source>
         <extracomment>%1 will be replaced with percentage (i.e. if it is replaced with 50, the string will read &quot;Processing 50%…&quot;)</extracomment>
         <translation>İşleniyor %1%…</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml" line="108"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml" line="90"/>
         <source>Processing…</source>
         <translation>İşleniyor…</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml" line="110"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml" line="92"/>
         <source>%1%</source>
         <extracomment>%1 will be replaced with percentage (i.e. if it is replaced with 50, the string will read &quot;50%&quot;)</extracomment>
         <translation>%1%</translation>
@@ -23733,7 +23748,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="187"/>
         <source>Align horizontal center of text to notehead</source>
-        <translation>Metnin yatay merkezini  nota başına hizalayın</translation>
+        <translation>Metnin yatay merkezini nota başına hizalayın</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="192"/>
@@ -23801,7 +23816,7 @@ pickup measure</source>
         <translation>Metin ortalamayı kullan</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/expressions/ExpressionsSettings.qml" line="82"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/expressions/ExpressionsSettings.qml" line="53"/>
         <source>Align with preceding dynamic</source>
         <translation>Önceki gürlükle hizalayın</translation>
     </message>
@@ -25849,17 +25864,17 @@ pickup measure</source>
 <context>
     <name>languages</name>
     <message>
-        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="363"/>
+        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="358"/>
         <source>Checking for updates…</source>
         <translation>Güncelleştirmeler kontrol ediliyor...</translation>
     </message>
     <message>
-        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="417"/>
+        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="412"/>
         <source>Downloading…</source>
         <translation>İndiriliyor...</translation>
     </message>
     <message>
-        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="434"/>
+        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="429"/>
         <source>Unpacking…</source>
         <translation>Açılıyor...</translation>
     </message>
@@ -26290,50 +26305,50 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
         <translation>Üzgünüz, şu anda bu sesleri yükleyemiyoruz</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="63"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="91"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="64"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="92"/>
         <source>Not now</source>
         <translation>Şimdi değil</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="67"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="95"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="68"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="96"/>
         <source>Quit &amp; launch MuseSounds Manager</source>
         <translation>Çık ve MuseSounds Yöneticisi’ni başlat</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="69"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="70"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. Your MuseSounds libraries won’t work until the update is complete.</source>
         <translation>Bu güncellemeyi uygulamak için MuseScore Studio kısa bir süreliğine kapanacak ve MuseSounds Yöneticisi açılacak. Güncelleme tamamlanana kadar MuseSounds kitaplıklarınız çalışmayacak.</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="73"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="102"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="74"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="103"/>
         <source>Quit &amp; launch MuseHub</source>
         <translation>Çık ve MuseHub’ı başlat</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="75"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="76"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseHub will open. Your MuseSounds libraries won’t work until the update is complete.</source>
         <translation>Bu güncellemeyi uygulamak için MuseScore Studio kısa bir süreliğine kapanacak ve MuseHub açılacak. Güncelleme tamamlanana kadar MuseSounds kitaplıklarınız çalışmayacak.</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="79"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="80"/>
         <source>MuseSounds needs an update</source>
         <translation>MuseSounds’un güncellenmesi gerekiyor</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="97"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="98"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseSounds Manager can apply the update. You’ll need to restart MuseScore Studio when the update is complete.</source>
         <translation>MuseSounds’un sorunsuz çalışmaya devam etmesi için, MuseScore Studio’nun kısa süreliğine kapanması gerekiyor. Böylece MuseSounds Yöneticisi güncellemeyi uygulayabilecek. Güncelleme tamamlandığında MuseScore Studio’yu yeniden başlatmanız gerekecek.</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="104"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="105"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseHub can apply the update. You’ll be prompted to relaunch MuseScore Studio when it’s ready.</source>
         <translation>MuseSounds’un sorunsuz çalışmaya devam etmesi için MuseScore Studio’nun kısa süreliğine kapanması gerekiyor. MuseHub güncellemeyi uyguladıktan sonra MuseScore Studio’yu yeniden başlatmanız istenecek.</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="109"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="110"/>
         <source>An update for MuseSounds is available</source>
         <translation>MuseSounds için bir güncelleme mevcut</translation>
     </message>
@@ -29476,36 +29491,36 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
         <translation>Eski vurmalı panelini kullan</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="75"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="76"/>
         <source>MIDI %1</source>
         <extracomment>%1 will be the MIDI note for a drum (displayed in the percussion panel)</extracomment>
         <translation>MIDI %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="84"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="85"/>
         <source>Shortcut %1</source>
         <extracomment>%1 will be the shortcut for a drum (displayed in the percussion panel)</extracomment>
         <translation>Kısayol %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="91"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="92"/>
         <source>Row %1</source>
         <extracomment>%1 will be the row number of a percussion panel pad</extracomment>
         <translation>Satır %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="94"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="95"/>
         <source>Column %1</source>
         <extracomment>%1 will be the column number of a percussion panel pad</extracomment>
         <translation>Sütun %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="114"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="115"/>
         <source>Empty pad</source>
         <translation>Boş ped</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="141"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="142"/>
         <source>options</source>
         <translation>seçenekler</translation>
     </message>
@@ -29521,7 +29536,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="200"/>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="152"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="158"/>
         <source>Finish editing</source>
         <translation>Düzenlemeyi bitir</translation>
     </message>
@@ -29536,12 +29551,12 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
         <translation>Seti kişiselleştir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="414"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="415"/>
         <source>Add row</source>
         <translation>Satır ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="436"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="437"/>
         <source>Select an unpitched percussion staff to see available sounds</source>
         <translation>Mevcut sesleri görmek için perdesiz vurmalı bir dizeği seçin</translation>
     </message>
@@ -29579,27 +29594,27 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
         <translation>Asla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="153"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="159"/>
         <source>Edit layout</source>
         <translation>Yerleşimi düzenle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="169"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="175"/>
         <source>Pad names</source>
         <translation>Ped adı</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="172"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="178"/>
         <source>Notation preview</source>
         <translation>Notasyon önizlemesi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="177"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="183"/>
         <source>%1 columns</source>
         <translation>%1 sütun</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="184"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="190"/>
         <source>Reset layout</source>
         <translation>Yerleşimi sıfırla</translation>
     </message>
@@ -30105,39 +30120,39 @@ failed.</source>
 yazılamadı.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="261"/>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="263"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="266"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="268"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1805"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1806"/>
         <source>Capo</source>
         <translation>Kapo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="271"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="276"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1811"/>
         <source>String tunings</source>
         <translation>Tellerin akortu</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="287"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="292"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1843"/>
         <source>Left-hand tapping</source>
         <translation>Sol el tapping</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="291"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="296"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1847"/>
         <source>Right-hand tapping</source>
         <translation>Sağ el tapping</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="297"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="302"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1850"/>
         <source>Hammer-on / pull-off</source>
         <translation>Hammer-on / pull-off</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="344"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="349"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1711"/>
         <source>Blank</source>
         <translation>Boş</translation>
@@ -32583,9 +32598,13 @@ başarısız: %2</translation>
         <translation>Bu ses çevrim içi olarak işlenir.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="625"/>
         <source>An animated bar will let you know when sounds are processing online. You’ll also see a notification in the status bar. You can change when these notifications appear in Preferences &gt; Audio &amp; MIDI…</source>
         <translation>Sesler çevrim içi olarak işlenirken sizi bilgilendirmek için hareketli bir çubuk görünecektir. Ayrıca durum çubuğunda da bir bildirim göreceksiniz. Bu bildirimlerin ne zaman görüneceğini Tercihler &gt; Ses &amp; MIDI… bölümünden değiştirebilirsiniz.</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="625"/>
+        <source>Audio is processed in the background while you work. To trigger processing yourself, turn off automatic processing in Preferences &gt; Audio &amp; MIDI &gt; Online sounds.</source>
+        <translation>Siz çalışırken ses arka planda işlenir. İşlemeyi kendiniz tetiklemek için, Tercihler &gt; Ses ve MIDI &gt; Çevrimiçi sesler bölümünden otomatik işlemeyi kapatın.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="639"/>
@@ -32763,39 +32782,60 @@ başarısız: %2</translation>
         <translation>Bu profili etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="83"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="85"/>
         <source>Reverb</source>
         <translation>Yankı</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="89"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="91"/>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="617"/>
         <source>Aux %1</source>
         <translation>Yard. %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="996"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1016"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1006"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1026"/>
         <source>Chords</source>
         <translation>Akorlar</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1348"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="178"/>
         <source>This may be due to a poor internet connection or server issue. Your score will still play, but some sounds may be missing. Please check your connection, and make sure MuseHub is running and you are logged in. &lt;a href=&quot;%1&quot;&gt;Learn more here&lt;/a&gt;.</source>
         <translation>Bu, zayıf bir internet bağlantısından veya sunucu sorunundan kaynaklanıyor olabilir. Partisyonunuz yine de çalınacaktır, ancak bazı sesler eksik olabilir. Lütfen bağlantınızı kontrol edin, MuseHub’ın çalıştığından ve oturum açtığınızdan emin olun. &lt;a href=&quot;%1&quot;&gt;Daha fazla bilgi için buraya bakın&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1354"/>
-        <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="96"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="184"/>
+        <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="117"/>
         <source>Some online sounds aren’t ready yet</source>
         <translation>Bazı çevrimiçi sesler henüz hazır değil.</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1486"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="218"/>
+        <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2. More info: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</source>
+        <translation>%1 için mevcut oluşturma sınırınıza ulaştınız. %2 tarihinde kotanız sıfırlandıktan sonra çevrimiçi sesleri tekrar işleyebileceksiniz. Daha fazla biligi:&lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="225"/>
+        <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="119"/>
+        <source>Unable to process online sounds</source>
+        <translation>Çevrimiçi sesler işlenemiyor</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="242"/>
+        <source>Are you sure you want to clear online sounds cache?</source>
+        <translation>Çevrimiçi ses önbelleğini temizlemek istediğinizden emin misiniz?</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="243"/>
+        <source>This will delete online sounds data stored on your computer for this score. Online sounds processing will try to restart immediately.</source>
+        <translation>Bu işlem, bu partisyona ait bilgisayarınızda depolanan çevrimiçi ses verilerini silecek. Çevrimiçi ses işleme hemen yeniden başlatılmaya çalışılacaktır.</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1387"/>
         <source>Loading audio samples</source>
         <translation>Ses örneklemeleri yükleniyor</translation>
     </message>
@@ -32805,28 +32845,28 @@ başarısız: %2</translation>
         <translation>Daha fazla ses alın</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="379"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="376"/>
         <source>SoundFonts</source>
         <translation>SoundFontlar</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="421"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="418"/>
         <source>Bank %1, preset %2</source>
         <translation>Sıra %1, ön ayar %2</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="475"/>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="535"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="472"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="532"/>
         <source>Choose automatically</source>
         <translation>Otomatik seçim</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="517"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="514"/>
         <source>Preset %1</source>
         <translation>Ön ayar %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="527"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="524"/>
         <source>Bank %1</source>
         <translation>Sıra %1</translation>
     </message>
@@ -32926,7 +32966,12 @@ başarısız: %2</translation>
         <translation>Ses işaretleri sıfırlanabilir ancak dizek metni kalacaktır. Bu işlem geri alınamaz.</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="105"/>
+        <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="47"/>
+        <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2.</source>
+        <translation>%1 için mevcut işleme sınırınıza ulaştınız. %2 tarihinde kotanız sıfırlandıktan sonra çevrimiçi sesleri tekrar işleyebileceksiniz.</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="132"/>
         <source>Please check your connection, and make sure MuseHub is running and you are logged in.</source>
         <translation>Lütfen bağlantınızı kontrol edin ve MuseHub’ın çalıştığından ve oturum açtığınızdan emin olun.</translation>
     </message>
@@ -35121,7 +35166,7 @@ başarısız: %2</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="75"/>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListItem.qml" line="247"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListItem.qml" line="248"/>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="113"/>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="210"/>
         <source>checked</source>
@@ -35131,7 +35176,7 @@ başarısız: %2</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="77"/>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListItem.qml" line="247"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListItem.qml" line="248"/>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="113"/>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="210"/>
         <source>unchecked</source>
@@ -35401,14 +35446,14 @@ başarısız: %2</translation>
     <name>undoableAction</name>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="712"/>
-        <location filename="../../src/engraving/dom/edit.cpp" line="2007"/>
-        <location filename="../../src/engraving/dom/edit.cpp" line="2142"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="2011"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="2146"/>
         <source>Add tie</source>
         <translation>Uzatma bağı ekle</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="738"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2903"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2902"/>
         <source>Add slur</source>
         <translation>Hece bağı ekle</translation>
     </message>
@@ -35439,17 +35484,17 @@ başarısız: %2</translation>
         <translation>Tüm konumları sıfırla</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="2143"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="2147"/>
         <source>Remove tie</source>
         <translation>Uzatma bağını kaldır</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="2229"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="2233"/>
         <source>Toggle laissez vibrer</source>
         <translation>Laissez vibrer&apos;i aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="4440"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="4444"/>
         <source>Enter rest</source>
         <translation>Sus gir</translation>
     </message>
@@ -35527,8 +35572,9 @@ başarısız: %2</translation>
         <translation>Ögeyi görünmez yap</translation>
     </message>
     <message>
+        <location filename="../../src/engraving/tests/voiceswitching_tests.cpp" line="119"/>
         <location filename="../../src/inspector/models/inspectormodelwithvoiceandpositionoptions.cpp" line="163"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5915"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5919"/>
         <source>Change voice</source>
         <translation>Sesi değiştir</translation>
     </message>
@@ -35729,12 +35775,12 @@ başarısız: %2</translation>
         <translation>Aktarılmışları göster</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="561"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="562"/>
         <source>Toggle visible</source>
         <translation>Görünürlüğü aç/kapat</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1177"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1178"/>
         <source>Drag element(s)</source>
         <translation><numerusform>Ögeyi sürükle</numerusform><numerusform>Ögeyi(leri) sürükle</numerusform></translation>
     </message>
@@ -35759,511 +35805,511 @@ başarısız: %2</translation>
         <translation>Palet ögesini uygula: %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3411"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3410"/>
         <source>Add chord symbol to fretboard diagram</source>
         <translation>Akor şemasına akor sembolü ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3949"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3948"/>
         <source>Move chord/rest to staff</source>
         <translation>Akoru/susu dizeğe taşı</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3979"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3978"/>
         <source>Move chord/rest</source>
         <translation>Akoru/susu taşı</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4029"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4028"/>
         <source>Toggle snap to previous</source>
         <translation>Öncekine yapıştırı aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4070"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4069"/>
         <source>Toggle snap to next</source>
         <translation>Sonrakine yapıştırı aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4210"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4209"/>
         <source>Change vertical position</source>
         <translation>Dikey konumu değiştir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4213"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4212"/>
         <source>Change pitch</source>
         <translation>Perde değiştir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4226"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4225"/>
         <source>Move lyrics</source>
         <translation>Şarkı sözünü taşı</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4238"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4237"/>
         <source>Nudge element</source>
         <translation>Ögeyi hafifçe hareket ettir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4274"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4273"/>
         <source>Nudge</source>
         <translation>Hafifçe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4383"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4382"/>
         <source>Edit text</source>
         <translation>Metni düzenle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4785"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4784"/>
         <source>Keystroke edit</source>
         <extracomment>Means: an editing operation triggered by a keystroke</extracomment>
         <translation>Tuşa basmayla düzenle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4859"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4862"/>
         <source>Move element anchors</source>
         <translation>Öge bağlantı noktalarını taşı</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4905"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4908"/>
         <source>Split measure</source>
         <translation>Ölçüyü böl</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4920"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4923"/>
         <source>Join measures</source>
         <translation>Ölçüleri birleştir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5073"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5076"/>
         <source>Add horizontal frame</source>
         <translation>Yatay çerçeve ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5074"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5077"/>
         <source>Add vertical frame</source>
         <translation>Dikey çerçeve ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5075"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5078"/>
         <source>Add text frame</source>
         <translation>Metin çerçevesi ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5076"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5079"/>
         <source>Add fretboard diagram legend</source>
         <translation>Akor şeması listesi ekle</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5077"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5080"/>
         <source>Add %n measure(s)</source>
         <translation><numerusform>%n ölçü ekle</numerusform><numerusform>%n ölçü ekle</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5143"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5178"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5147"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5182"/>
         <source>Repeat selection</source>
         <translation>Seçimi tekrarla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5200"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5204"/>
         <source>Paste</source>
         <translation>Yapıştır</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5269"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5273"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5295"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5299"/>
         <source>Flip direction</source>
         <translation>Yönünü çevir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5308"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5312"/>
         <source>Flip horizontally</source>
         <translation>Yatay olarak çevir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5368"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5372"/>
         <source>Add ottava</source>
         <translation>Oktav ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5375"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5415"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5379"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5419"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="207"/>
         <source>Add hairpin</source>
         <translation>Takı ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5476"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5480"/>
         <source>Add brackets</source>
         <translation>Köşeli parantez ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5481"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5485"/>
         <source>Add braces</source>
         <translation>Süslü parantez ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5486"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5490"/>
         <source>Add parentheses</source>
         <translation>Parantez ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5513"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5517"/>
         <source>Toggle accidental</source>
         <translation>Değiştirici işareti aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5556"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8036"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5560"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8040"/>
         <source>Toggle articulation</source>
         <translation>Seslendirmeyi aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5573"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5577"/>
         <source>Toggle augmentation dots</source>
         <translation>Uzatma noktasını aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5607"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5611"/>
         <source>Add grace note</source>
         <translation>Çarpma notası ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5634"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5638"/>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="711"/>
         <source>Add tuplet</source>
         <translation>Düzensiz gurup ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5655"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5659"/>
         <source>Set beam type</source>
         <translation>Nota kirişi tipini ayarla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5667"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5671"/>
         <source>Decrease duration</source>
         <translation>Süresini azalt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5668"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5672"/>
         <source>Increase duration</source>
         <translation>Süresini artır</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5685"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5689"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="199"/>
         <source>Change hairpin type</source>
         <translation>Takı tipini değiştir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5728"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5732"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="159"/>
         <source>Add dynamic</source>
         <translation>Gürlük ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5779"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5783"/>
         <source>Toggle layout break</source>
         <translation>Yerleşim kesmesini aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5786"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5790"/>
         <source>Move measure to previous system</source>
         <translation>Ölçüyü önceki satıra taşı</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5793"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5797"/>
         <source>Move measure to next system</source>
         <translation>Ölçüyü sonraki satıra taşı</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5800"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5804"/>
         <source>Lock/unlock selected system(s)</source>
         <translation>Seçili satırları kilitle/kilidi aç</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5807"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5811"/>
         <source>Lock/unlock all systems</source>
         <translation>Tüm satırları kilitle/kilidi aç</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5814"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5818"/>
         <source>Create system from selection</source>
         <translation>Seçili bölgeden satır oluştur</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5821"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5825"/>
         <source>Apply system lock to selection</source>
         <translation>Seçime satır kilidi uygula</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5831"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5835"/>
         <source>Measures per system</source>
         <translation>Her satır başına ölçü sayısı</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5838"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5842"/>
         <source>Transposition</source>
         <translation>Aktarma</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5862"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5866"/>
         <source>Swap voices</source>
         <translation>Sesleri değiştir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5893"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5897"/>
         <source>Add interval</source>
         <translation>Aralık ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5900"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5904"/>
         <source>Enter note at fret %1</source>
         <translation>%1 perdesine nota girin</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5926"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5930"/>
         <source>Change voice assignment</source>
         <translation>Ses atamasını değiştir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5937"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5941"/>
         <source>Add note-anchored line</source>
         <translation>Notaya-bağlı çizgi ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6020"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6024"/>
         <source>Add text</source>
         <translation>Metin ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6088"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6092"/>
         <source>Add image</source>
         <translation>Resim ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6107"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6111"/>
         <source>Add figured bass</source>
         <translation>Şifreli bas ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6122"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6126"/>
         <source>Increase layout stretch</source>
         <translation>Yerleştirme esnetmesini artır</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6123"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6127"/>
         <source>Decrease layout stretch</source>
         <translation>Yerleştirme esnemesini azalt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6146"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6150"/>
         <source>Add time signature</source>
         <translation>Ölçü göstergesi ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6157"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6161"/>
         <source>Explode</source>
         <translation>Akoru bölümlere dağıt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6168"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6172"/>
         <source>Implode</source>
         <translation>Bölümleri akora topla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6179"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6183"/>
         <source>Realize chord symbols</source>
         <translation>Akor sembollerini notalara dönüştürün</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6225"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6229"/>
         <source>Delete %n measure(s)</source>
         <translation><numerusform>%n ölçüyü sil</numerusform><numerusform>%n ölçüyü sil</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6236"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6240"/>
         <source>Delete range</source>
         <translation>Aralığı sil</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6243"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6247"/>
         <source>Remove empty trailing measures</source>
         <translation>Sondaki boş ölçüleri kaldır</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6254"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6258"/>
         <source>Fill with slashes</source>
         <translation>Eğik çizgilerle doldur</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6265"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6269"/>
         <source>Toggle rhythmic slash notation</source>
         <translation>Eğik çizgili tartım notasyonunu aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6272"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6276"/>
         <source>Change enharmonic spelling</source>
         <translation>Sesdeş yazılışıyla değiştir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6279"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6283"/>
         <source>Optimize enharmonic spelling</source>
         <translation>Sesdeş yazımı optimize et</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6286"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6290"/>
         <source>Regroup rhythms</source>
         <translation>Tartımı yeniden gurupla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6293"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6297"/>
         <source>Resequence rehearsal marks</source>
         <translation>Prova işaretlerini yeniden sırala</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6300"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6304"/>
         <source>Reset layout stretch</source>
         <translation>Yerleştirme esnemesini sıfırla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6307"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6311"/>
         <source>Reset text style overrides</source>
         <translation>Metin biçimini geçersiz kılmayı sıfırla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6314"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6318"/>
         <source>Reset beams</source>
         <translation>Kirişleri sıfırla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6331"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6335"/>
         <source>Reset shapes and positions</source>
         <translation>Şekilleri ve konumları sıfırla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6351"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6355"/>
         <source>Reset to default layout</source>
         <translation>Varsayılan yerleşime sıfırla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6377"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6381"/>
         <source>Set score view settings</source>
         <translation>Partisyon görünüm ayarlarını belirle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6547"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6551"/>
         <source>Navigate to lyrics</source>
         <translation>Şarkı sözüne git</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6676"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6735"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6680"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6739"/>
         <source>Navigate to next syllable</source>
         <translation>Sonraki heceye git</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6914"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6918"/>
         <source>Navigate to verse</source>
         <translation>Söze git</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6971"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7061"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6975"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7065"/>
         <source>Navigate to next chord symbol</source>
         <translation>Sonraki akor sembolüne  git</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7104"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7108"/>
         <source>Navigate to chord symbol</source>
         <translation>Akor sembolüne git</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7161"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7207"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7165"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7211"/>
         <source>Navigate to next figured bass</source>
         <translation>Sonraki şifreli bas&apos;a git</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7255"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7259"/>
         <source>Navigate to figured bass</source>
         <translation>Şifreli bas&apos;a git</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7554"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7561"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7621"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7681"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7558"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7565"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7625"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7685"/>
         <source>Enter lyrics extension line</source>
         <translation>Söz uzatma çizgisi ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7706"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7710"/>
         <source>Add lyrics verse</source>
         <translation>Şarkı sözü ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7754"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7758"/>
         <source>Enter guitar bend</source>
         <translation>Gitar bendi gir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7827"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7831"/>
         <source>Add fretboard diagram</source>
         <translation>Akor şeması ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7960"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7964"/>
         <source>Format text</source>
         <translation>Metni biçimlendir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7980"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7984"/>
         <source>Toggle subscript</source>
         <translation>Alt-simge&apos;yi aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7982"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7986"/>
         <source>Toggle superscript</source>
         <translation>Üst-simge&apos;yi aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7984"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7988"/>
         <source>Toggle subscript/superscript</source>
         <translation>Alt-simge/üst-simgeyi&apos;i aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8041"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8045"/>
         <source>Toggle ornament</source>
         <translation>Süsleme&apos;yi aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8046"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8050"/>
         <source>Toggle automatic placement</source>
         <translation>Otomatik yerleştirme&apos;yi aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8057"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8061"/>
         <source>Add clef</source>
         <translation>Açkı ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8062"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8066"/>
         <source>Add accidental</source>
         <translation>Değiştirici işaret ekle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8067"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8071"/>
         <source>Transpose semitone</source>
         <translation>Yarım aralık aktar</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8073"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8077"/>
         <source>Transpose diatonically</source>
         <translation>Diyatonik aktar</translation>
     </message>
@@ -36275,7 +36321,7 @@ başarısız: %2</translation>
         <translation>Nota gir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationmidiinput.cpp" line="500"/>
+        <location filename="../../src/notation/internal/notationmidiinput.cpp" line="505"/>
         <source>Realtime advance</source>
         <translation>Gerçek-zamanlı ilerleme</translation>
     </message>
@@ -36561,12 +36607,12 @@ başarısız: %2</translation>
         <translation>Üzgünüz, lütfen daha sonra tekrar deneyin</translation>
     </message>
     <message>
-        <location filename="../../src/framework/update/internal/updatescenario.cpp" line="225"/>
+        <location filename="../../src/framework/update/internal/updatescenario.cpp" line="224"/>
         <source>MuseScore Studio needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.</source>
         <translation>Kurulumun tamamlanması için MuseScore Studio&apos;nun kapatılması gerekiyor. Kaydedilmemiş değişiklikleriniz varsa MuseScore Studio kapanmadan önce bunları kaydetmenizi isteyecektir.</translation>
     </message>
     <message>
-        <location filename="../../src/framework/update/internal/updatescenario.cpp" line="230"/>
+        <location filename="../../src/framework/update/internal/updatescenario.cpp" line="229"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
