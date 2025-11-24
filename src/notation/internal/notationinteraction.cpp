@@ -2961,7 +2961,7 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
             partialSlur->undoSetOutgoing(true);
             firstChordRest = toChordRest(cr);
             const Measure* endMeas = otherElement->findMeasure();
-            ChordRest* endCr = endMeas->lastChordRest(0);
+            ChordRest* endCr = endMeas->lastChordRest(otherElement->track());
             secondChordRest = endCr;
         } else {
             partialSlur->undoSetIncoming(true);
@@ -2972,7 +2972,7 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
                     startMeas = startMeas->nextMeasure();
                 }
             }
-            ChordRest* startCr = startMeas->firstChordRest(0);
+            ChordRest* startCr = startMeas->firstChordRest(otherElement->track());
             firstChordRest = startCr;
         }
         slurTemplate = partialSlur;
