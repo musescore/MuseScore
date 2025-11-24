@@ -101,6 +101,7 @@ private:
 
     void openOnlineHandbookPage();
     void openAskForHelpPage();
+    void openAccessibilityStatementPage();
     void openPreferencesDialog();
     void doOpenPreferencesDialog();
 
