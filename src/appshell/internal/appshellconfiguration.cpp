@@ -49,6 +49,7 @@ static const Settings::Key STARTUP_SCORE_PATH(module_name, "application/startup/
 static const std::string MUSESCORE_ONLINE_HANDBOOK_URL("https://handbook.musescore.org");
 
 static const std::string MUSESCORE_ASK_FOR_HELP_URL_PATH("/redirect/post/question");
+static const std::string MUSESCORE_ACCESSIBILITY_STATEMENT_URL_PATH("/about/musescore-studio-accessibility-statement");
 static const std::string MUSESCORE_FORUM_URL_PATH("/forum");
 static const std::string MUSESCORE_CONTRIBUTE_URL_PATH("/contribute");
 static const std::string MUSEHUB_FREE_MUSE_SOUNDS_URL("https://www.musehub.com/free-musesounds"
@@ -200,6 +201,11 @@ std::string AppShellConfiguration::askForHelpUrl() const
     };
 
     return museScoreUrl() + MUSESCORE_ASK_FOR_HELP_URL_PATH + "?" + params.join("&").toStdString();
+}
+
+std::string AppShellConfiguration::accessibilityStatementUrl() const
+{
+    return museScoreUrl() + MUSESCORE_ACCESSIBILITY_STATEMENT_URL_PATH;
 }
 
 std::string AppShellConfiguration::museScoreUrl() const

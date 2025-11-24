@@ -461,6 +461,7 @@ MenuItem* AppMenuModel::makeHelpMenu(bool addDiagnosticsSubMenu)
     helpItems << makeMenuItem("about-musescore", MenuItemRole::AboutRole);
     helpItems << makeMenuItem("about-qt", MenuItemRole::AboutQtRole);
     helpItems << makeMenuItem("about-musicxml");
+    helpItems << makeMenuItem("accessibility-statement");
     helpItems << makeSeparator();
 
 #if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
