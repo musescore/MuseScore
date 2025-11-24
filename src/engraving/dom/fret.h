@@ -143,8 +143,8 @@ public:
 
     Segment* segment() const;
 
-    static String patternFromDiagram(const FretDiagram* diagram);
-    static std::vector<String> harmoniesFromPattern(const String& pattern);
+    String patternFromDiagram() const;
+    std::vector<String> harmoniesFromPattern(const String& pattern) const;
     std::vector<DiagramInfo> patternsFromHarmony(const String& harmonyName);
 
     void updateDiagram(const String& harmonyName);

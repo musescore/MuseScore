@@ -586,8 +586,8 @@ void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interva
     }
 
     // No chord symbol attached. Create harmony from diagram, transpose it, then use the new harmony to update the fret diagram
-    String pattern = FretDiagram::patternFromDiagram(diagram);
-    std::vector<String> names = FretDiagram::harmoniesFromPattern(pattern);
+    String pattern = diagram->patternFromDiagram();
+    std::vector<String> names = diagram->harmoniesFromPattern(pattern);
     if (names.empty()) {
         diagram->undoFretClear();
         MScore::setError(MsError::TRANSPOSE_NO_FRET_DIAGRAM, true);
