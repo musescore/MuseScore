@@ -23,6 +23,7 @@
 
 #include <QAbstractListModel>
 #include <QHash>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 
@@ -33,6 +34,7 @@ namespace mu::engraving {
 class EngravingStyleModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
+    QML_ELEMENT;
 
     muse::Inject<context::IGlobalContext> context = { this };
 

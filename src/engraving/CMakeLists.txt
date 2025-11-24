@@ -421,3 +421,7 @@ if (MUE_BUILD_ENGRAVING_TESTS)
     add_subdirectory(tests)
     add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/api/tests)
 endif()
+
+if (QT_SUPPORT)
+    add_subdirectory(qml/MuseScore/Engraving)
+endif()

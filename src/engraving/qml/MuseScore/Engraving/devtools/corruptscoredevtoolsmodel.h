@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_CORRUPTSCORENDEVTOOLSMODEL_H
-#define MU_ENGRAVING_CORRUPTSCORENDEVTOOLSMODEL_H
+#pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
@@ -32,6 +32,7 @@ namespace mu::engraving {
 class CorruptScoreDevToolsModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
+    QML_ELEMENT;
 
     muse::Inject<context::IGlobalContext> globalContext = { this };
 
@@ -41,5 +42,3 @@ public:
     Q_INVOKABLE void corruptOpenScore();
 };
 }
-
-#endif // MU_ENGRAVING_CORRUPTSCORENDEVTOOLSMODEL_H
