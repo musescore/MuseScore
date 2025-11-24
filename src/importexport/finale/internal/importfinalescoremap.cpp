@@ -896,6 +896,7 @@ void FinaleParser::importStaffItems()
 
         // Clefs, key signatures, and time signatures
         MusxInstance<TimeSignature> currMusxTimeSig;
+        std::optional<musx::util::Fraction> currLegacyPickupSpacer;
         MusxInstance<TimeSignature> currVisualTimeSig;
         MusxInstance<KeySignature> currMusxKeySig;
         std::optional<KeySigEvent> currKeySigEvent;
@@ -918,16 +919,17 @@ void FinaleParser::importStaffItems()
 
             // Time signatures
             const MusxInstance<TimeSignature> localTimeSig = musxMeasure->createTimeSignature(musxStaffId);
+            const musx::util::Fraction legacyPickupSpacer = musxMeasure->calcMinLegacyPickupSpacer(musxStaffId);
             const MusxInstance<TimeSignature> visualTimeSig = musxMeasure->createDisplayTimeSignature(musxStaffId);
             const bool visualTimeSigChanged = !currVisualTimeSig || !currVisualTimeSig->isSame(*visualTimeSig);
-            const bool actualTimeSigChanged = !currMusxTimeSig || !currMusxTimeSig->isSame(*localTimeSig);
+            const bool actualTimeSigChanged = !currMusxTimeSig || !currMusxTimeSig->isSame(*localTimeSig) || currLegacyPickupSpacer != legacyPickupSpacer;
             const bool forceDisplayTimeSig = musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always;
             const bool forceHideTimeSig = musxMeasure->showTime == others::Measure::ShowTimeSigMode::Never;
             if (actualTimeSigChanged || visualTimeSigChanged || forceDisplayTimeSig) {
                 const MusxInstance<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
                 Segment* seg = measure->getSegmentR(SegmentType::TimeSig, Fraction(0, 1));
                 TimeSig* ts = Factory::createTimeSig(seg);
-                Fraction timeSig = simpleMusxTimeSigToFraction(localTimeSig->calcSimplified(), 0, logger());
+                Fraction timeSig = simpleMusxTimeSigToFraction(localTimeSig->calcSimplified(), legacyPickupSpacer, logger());
 
                 // Display text: Attempt to inherit it, where possible
                 if (visualTimeSig->getAbbreviatedSymbol().has_value()) {
@@ -952,6 +954,7 @@ void FinaleParser::importStaffItems()
                 seg->add(ts);
             }
             currMusxTimeSig = localTimeSig;
+            currLegacyPickupSpacer = legacyPickupSpacer;
             currVisualTimeSig = visualTimeSig;
 
             // clefs
