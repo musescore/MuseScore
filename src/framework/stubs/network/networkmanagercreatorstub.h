@@ -28,6 +28,7 @@ namespace muse::network {
 class NetworkManagerCreatorStub : public INetworkManagerCreator
 {
 public:
+    INetworkManagerPtr makeNetworkManager() const override;
     deprecated::INetworkManagerPtr makeDeprecatedNetworkManager() const override;
 };
 }
