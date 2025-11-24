@@ -1,6 +1,8 @@
 #include "ScoreEngine.h"
+#include "SketchManager.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <QQuickImageProvider>
 
 class ScoreImageProvider : public QQuickImageProvider {
@@ -21,6 +23,10 @@ int main(int argc, char *argv[]) {
 
   QQmlApplicationEngine engine;
   engine.addImageProvider("score", new ScoreImageProvider);
+
+  // Create and register SketchManager
+  SketchManager sketchManager;
+  engine.rootContext()->setContextProperty("sketchManager", &sketchManager);
 
   const QUrl url(u"qrc:/MuseSketch/Main.qml"_qs);
   QObject::connect(

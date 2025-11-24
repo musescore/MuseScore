@@ -3,7 +3,18 @@
 # a better understanding of the minimal dependencies needed.
 
 add_library(musesketch_core STATIC
+    include/ScoreEngine.h
+    include/Sketch.h
+    include/Motif.h
+    include/Section.h
+    include/SketchRepository.h
+    include/SketchManager.h
     src/ScoreEngine.cpp
+    src/Sketch.cpp
+    src/Motif.cpp
+    src/Section.cpp
+    src/SketchRepository.cpp
+    src/SketchManager.cpp
 )
 
 target_include_directories(musesketch_core PUBLIC
