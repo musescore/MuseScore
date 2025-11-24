@@ -132,8 +132,6 @@ set(LINK_LIB
     palette
     inspector
     playback
-    preferences
-    preferences_qml
     instrumentsscene
     musesounds
     )
@@ -153,6 +151,8 @@ add_to_link_if_enabled(${MUSE_MODULE_DOCKWINDOW} muse::dockwindow)
 
 add_to_link_if_enabled(${MUE_BUILD_APPSHELL_MODULE} appshell)
 add_to_link_if_enabled(${MUE_BUILD_CONVERTER_MODULE} converter)
+add_to_link_if_enabled(${MUE_BUILD_PREFERENCES_MODULE} preferences)
+add_to_link_if_enabled(${MUE_BUILD_PREFERENCES_MODULE} preferences_qml)
 add_to_link_if_enabled(${MUE_BUILD_PRINT_MODULE} print)
 
 if (MUE_BUILD_IMPEXP_BB_MODULE)
