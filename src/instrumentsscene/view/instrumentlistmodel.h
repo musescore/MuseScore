@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_INSTRUMENTLISTMODEL_H
-#define MU_INSTRUMENTSSCENE_INSTRUMENTLISTMODEL_H
+
+#pragma once
 
 #include <QAbstractListModel>
 
@@ -29,7 +29,7 @@
 #include "modularity/ioc.h"
 #include "notation/iinstrumentsrepository.h"
 
-#include "uicomponents/view/itemmultiselectionmodel.h"
+#include "uicomponents/qml/Muse/UiComponents/itemmultiselectionmodel.h"
 
 namespace mu::instrumentsscene {
 class InstrumentListModel : public QAbstractListModel, public muse::async::Asyncable
@@ -144,5 +144,3 @@ private:
     bool m_saveCurrentGroup = false;
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_INSTRUMENTLISTMODEL_H

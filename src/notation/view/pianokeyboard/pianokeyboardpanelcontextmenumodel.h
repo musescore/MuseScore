@@ -19,11 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_PIANOKEYBOARDPANELCONTEXTMENUMODEL_H
-#define MU_NOTATION_PIANOKEYBOARDPANELCONTEXTMENUMODEL_H
 
-#include "uicomponents/view/abstractmenumodel.h"
+#pragma once
+
 #include "actions/actionable.h"
+#include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
 #include "inotationconfiguration.h"
@@ -72,5 +72,3 @@ private:
     qreal m_currentKeyWidthScaling = 0.0;
 };
 }
-
-#endif // MU_NOTATION_PIANOKEYBOARDPANELCONTEXTMENUMODEL_H

@@ -25,7 +25,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
-#include "uicomponents/view/abstracttoolbarmodel.h"
+#include "uicomponents/qml/Muse/UiComponents/abstracttoolbarmodel.h"
 
 namespace mu::notation {
 class NotationToolBarModel : public muse::uicomponents::AbstractToolBarModel

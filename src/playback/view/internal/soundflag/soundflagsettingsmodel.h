@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_SOUNDFLAGSETTINGSMODEL_H
-#define MU_PLAYBACK_SOUNDFLAGSETTINGSMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -29,7 +28,7 @@
 #include "playback/iplaybackcontroller.h"
 #include "playback/iplaybackconfiguration.h"
 
-#include "uicomponents/view/menuitem.h"
+#include "uicomponents/qml/Muse/UiComponents/menuitem.h"
 
 #include "notation/view/abstractelementpopupmodel.h"
 
@@ -123,5 +122,3 @@ private:
     bool m_availablePresetsInited = false;
 };
 }
-
-#endif // MU_PLAYBACK_SOUNDFLAGSETTINGSMODEL_H

@@ -23,7 +23,7 @@
 #pragma once
 
 #include "view/abstractelementpopupmodel.h"
-#include "uicomponents/view/menuitem.h"
+#include "uicomponents/qml/Muse/UiComponents/menuitem.h"
 
 namespace mu::engraving {
 class Tie;

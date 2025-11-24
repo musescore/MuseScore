@@ -25,7 +25,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
-#include "uicomponents/view/selectableitemlistmodel.h"
+#include "uicomponents/qml/Muse/UiComponents/selectableitemlistmodel.h"
 
 #include "models/abstractinspectormodel.h"
 #include "fretframechordlistmodel.h"

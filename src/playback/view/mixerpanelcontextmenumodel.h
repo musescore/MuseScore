@@ -20,11 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_MIXERPANELCONTEXTMENUMODEL_H
-#define MU_PLAYBACK_MIXERPANELCONTEXTMENUMODEL_H
+#pragma once
 
-#include "uicomponents/view/abstractmenumodel.h"
 #include "actions/actionable.h"
+#include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "actions/iactionsdispatcher.h"
 #include "playback/iplaybackconfiguration.h"
@@ -91,5 +90,3 @@ private:
     void setViewMenuItemChecked(const QString& itemId, bool checked);
 };
 }
-
-#endif // MU_PLAYBACK_MIXERPANELCONTEXTMENUMODEL_H

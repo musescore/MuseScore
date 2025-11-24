@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "uicomponents/view/abstractmenumodel.h"
+#include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "muse_framework_config.h"
 

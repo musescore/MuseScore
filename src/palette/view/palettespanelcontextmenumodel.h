@@ -19,11 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_PALETTESPANELCONTEXTMENUMODEL_H
-#define MU_PALETTE_PALETTESPANELCONTEXTMENUMODEL_H
 
-#include "uicomponents/view/abstractmenumodel.h"
+#pragma once
+
 #include "actions/actionable.h"
+#include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
@@ -52,5 +52,3 @@ private:
     muse::uicomponents::MenuItem* createExpandCollapseAllItem(bool expand);
 };
 }
-
-#endif // MU_PALETTE_PALETTESPANELCONTEXTMENUMODEL_H

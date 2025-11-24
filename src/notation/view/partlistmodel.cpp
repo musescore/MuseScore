@@ -25,7 +25,7 @@
 #include "log.h"
 #include "translation.h"
 
-#include "uicomponents/view/itemmultiselectionmodel.h"
+#include "uicomponents/qml/Muse/UiComponents/itemmultiselectionmodel.h"
 
 #include "engraving/dom/utils.h"
 

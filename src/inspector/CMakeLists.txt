@@ -245,6 +245,7 @@ set(MODULE_SRC
 
 set(MODULE_LINK
     muse::uicomponents
+    muse::uicomponents_qml
     engraving
     Qt::Quick
     )

@@ -29,7 +29,7 @@
 #include "global/iinteractive.h"
 
 Q_MOC_INCLUDE(< QQuickItem >)
-Q_MOC_INCLUDE("uicomponents/view/popupview.h")
+Q_MOC_INCLUDE("uicomponents/qml/Muse/UiComponents/popupview.h")
 
 class QQuickItem;
 
