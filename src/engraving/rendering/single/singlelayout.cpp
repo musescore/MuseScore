@@ -24,6 +24,7 @@
 
 #include "draw/fontmetrics.h"
 
+#include "types/types.h"
 #include "types/typesconv.h"
 #include "types/symnames.h"
 
@@ -1055,6 +1056,7 @@ void SingleLayout::layout(HammerOnPullOffSegment* item, const Context& ctx)
     align.vertical = AlignV::BASELINE;
     align.horizontal = AlignH::HCENTER;
     hopoText->setAlign(align);
+    hopoText->setPosition(AlignH::HCENTER);
     layoutTextBase(hopoText, ctx, hopoText->mutldata());
 
     RectF bbox = item->ldata()->bbox();
