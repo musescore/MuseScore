@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,18 +25,15 @@
 #include "ilearnservice.h"
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "ilearnconfiguration.h"
 #include "network/inetworkmanagercreator.h"
-#include "iinteractive.h"
-
-class QJsonDocument;
 
 namespace muse::learn {
-class LearnService : public ILearnService, public Injectable
+class LearnService : public ILearnService, public Injectable, public async::Asyncable
 {
-    ThreadSafeInject<ILearnConfiguration> configuration = { this };
-    ThreadSafeInject<network::INetworkManagerCreator> networkManagerCreator = { this };
-    Inject<IInteractive> interactive = { this };
+    Inject<ILearnConfiguration> configuration = { this };
+    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
 
 public:
     LearnService(const modularity::ContextPtr& iocCtx)
@@ -51,16 +48,14 @@ public:
     async::Channel<Playlist> advancedPlaylistChanged() const override;
 
 private:
-    void th_requestPlaylist(const QUrl& playlistUrl, std::function<void(RetVal<Playlist>)> callBack) const;
+    void downloadPlaylist(const QUrl& playlistUrl, std::function<void(RetVal<Playlist>)> callBack);
 
-    Playlist parsePlaylist(const QJsonDocument& playlistDoc) const;
-
-    mutable std::mutex m_startedPlaylistMutex;
     Playlist m_startedPlaylist;
     async::Channel<Playlist> m_startedPlaylistChannel;
 
-    mutable std::mutex m_advancedPlaylistMutex;
     Playlist m_advancedPlaylist;
     async::Channel<Playlist> m_advancedPlaylistChannel;
+
+    muse::network::INetworkManagerPtr m_networkManager;
 };
 }
