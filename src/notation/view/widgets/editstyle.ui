@@ -245,7 +245,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>38</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -280,8 +280,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>408</width>
-                <height>517</height>
+                <width>652</width>
+                <height>710</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -924,8 +924,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>409</width>
-             <height>1110</height>
+             <width>641</width>
+             <height>1560</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_72">
@@ -3227,8 +3227,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>664</width>
-             <height>592</height>
+             <width>716</width>
+             <height>731</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -4534,8 +4534,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>268</width>
-             <height>527</height>
+             <width>656</width>
+             <height>720</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_38">
@@ -5337,8 +5337,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>401</width>
-             <height>583</height>
+             <width>641</width>
+             <height>787</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_67">
@@ -6060,8 +6060,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>365</width>
-                <height>408</height>
+                <width>595</width>
+                <height>560</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54" rowstretch="0,0,0,2">
@@ -6948,8 +6948,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>459</width>
-             <height>494</height>
+             <width>656</width>
+             <height>720</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_68">
@@ -10453,8 +10453,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>482</width>
-             <height>543</height>
+             <width>725</width>
+             <height>785</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64" stretch="0,0,2">
@@ -12042,8 +12042,8 @@ followed by dashes</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>362</width>
-                <height>543</height>
+                <width>650</width>
+                <height>708</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
@@ -12704,16 +12704,6 @@ followed by dashes</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="1">
-                  <widget class="QDoubleSpinBox" name="textStyleFrameBorderRadius">
-                   <property name="keyboardTracking">
-                    <bool>false</bool>
-                   </property>
-                   <property name="decimals">
-                    <number>0</number>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="1" column="2">
                   <widget class="QToolButton" name="resetTextStyleFrameBackground">
                    <property name="toolTip">
@@ -12833,6 +12823,13 @@ followed by dashes</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QSpinBox" name="textStyleFrameBorderRadius">
+                   <property name="keyboardTracking">
+                    <bool>false</bool>
                    </property>
                   </widget>
                  </item>
@@ -13203,6 +13200,12 @@ followed by dashes</string>
  </widget>
  <customwidgets>
   <customwidget>
+   <class>muse::uicomponents::RadioButtonGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>uicomponents/view/widgets/radiobuttongroupbox.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>Awl::ColorLabel</class>
    <extends>QPushButton</extends>
    <header>notation/view/widgets/colorlabel.h</header>
@@ -13224,12 +13227,6 @@ followed by dashes</string>
    <class>mu::notation::AlignSelect</class>
    <extends>QWidget</extends>
    <header>notation/view/widgets/alignSelect.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>muse::uicomponents::RadioButtonGroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>uicomponents/view/widgets/radiobuttongroupbox.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
