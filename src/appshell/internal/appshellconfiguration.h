@@ -81,6 +81,7 @@ public:
 
     std::string handbookUrl() const override;
     std::string askForHelpUrl() const override;
+    std::string accessibilityStatementUrl() const override;
     std::string museScoreUrl() const override;
     std::string museScoreForumUrl() const override;
     std::string museScoreContributionUrl() const override;
