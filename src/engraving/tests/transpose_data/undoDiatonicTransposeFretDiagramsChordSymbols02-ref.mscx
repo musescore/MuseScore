@@ -138,24 +138,6 @@
                 <marker>circle</marker>
                 </string>
               </fretDiagram>
-            <string no="0">
-              <marker>88</marker>
-              </string>
-            <string no="1">
-              <dot>3</dot>
-              </string>
-            <string no="2">
-              <dot>2</dot>
-              </string>
-            <string no="3">
-              <marker>79</marker>
-              </string>
-            <string no="4">
-              <dot>1</dot>
-              </string>
-            <string no="5">
-              <marker>79</marker>
-              </string>
             </FretDiagram>
           <Chord>
             <eid>HzvSPszx2NI_lxchTRPN6iO</eid>
@@ -197,24 +179,6 @@
                 <dot fret="2">normal</dot>
                 </string>
               </fretDiagram>
-            <string no="0">
-              <marker>88</marker>
-              </string>
-            <string no="1">
-              <marker>88</marker>
-              </string>
-            <string no="2">
-              <marker>79</marker>
-              </string>
-            <string no="3">
-              <dot>2</dot>
-              </string>
-            <string no="4">
-              <dot>3</dot>
-              </string>
-            <string no="5">
-              <dot>2</dot>
-              </string>
             </FretDiagram>
           <location>
             <fractions>1/4</fractions>
@@ -247,24 +211,6 @@
                 <marker>circle</marker>
                 </string>
               </fretDiagram>
-            <string no="0">
-              <marker>79</marker>
-              </string>
-            <string no="1">
-              <dot>2</dot>
-              </string>
-            <string no="2">
-              <dot>2</dot>
-              </string>
-            <string no="3">
-              <dot>1</dot>
-              </string>
-            <string no="4">
-              <marker>79</marker>
-              </string>
-            <string no="5">
-              <marker>79</marker>
-              </string>
             </FretDiagram>
           <Chord>
             <eid>lNT7H0p9/lF_SLiwqKlD1UD</eid>
@@ -298,15 +244,6 @@
                 </string>
               <barre start="0" end="5">1</barre>
               </fretDiagram>
-            <string no="1">
-              <dot>3</dot>
-              </string>
-            <string no="2">
-              <dot>3</dot>
-              </string>
-            <string no="3">
-              <dot>2</dot>
-              </string>
             </FretDiagram>
           </voice>
         </Measure>
@@ -341,24 +278,6 @@
                 <marker>circle</marker>
                 </string>
               </fretDiagram>
-            <string no="0">
-              <marker>88</marker>
-              </string>
-            <string no="1">
-              <dot>3</dot>
-              </string>
-            <string no="2">
-              <dot>2</dot>
-              </string>
-            <string no="3">
-              <marker>79</marker>
-              </string>
-            <string no="4">
-              <dot>1</dot>
-              </string>
-            <string no="5">
-              <marker>79</marker>
-              </string>
             </FretDiagram>
           <Chord>
             <eid>/Sa4VlGGHaH_eEnHBeShepD</eid>
@@ -400,24 +319,6 @@
                 <dot fret="2">normal</dot>
                 </string>
               </fretDiagram>
-            <string no="0">
-              <marker>88</marker>
-              </string>
-            <string no="1">
-              <marker>88</marker>
-              </string>
-            <string no="2">
-              <marker>79</marker>
-              </string>
-            <string no="3">
-              <dot>2</dot>
-              </string>
-            <string no="4">
-              <dot>3</dot>
-              </string>
-            <string no="5">
-              <dot>2</dot>
-              </string>
             </FretDiagram>
           <location>
             <fractions>1/4</fractions>
@@ -443,19 +344,6 @@
                 </string>
               <barre start="0" end="-1">1</barre>
               </fretDiagram>
-            <string no="0">
-              <dot>1</dot>
-              </string>
-            <string no="1">
-              <dot>3</dot>
-              </string>
-            <string no="2">
-              <dot>3</dot>
-              </string>
-            <string no="3">
-              <dot>2</dot>
-              </string>
-            <barre>1</barre>
             </FretDiagram>
           <Chord>
             <eid>weLPdp/TOPE_HveOwApPWWC</eid>
@@ -489,15 +377,6 @@
                 </string>
               <barre start="0" end="5">2</barre>
               </fretDiagram>
-            <string no="1">
-              <dot>4</dot>
-              </string>
-            <string no="2">
-              <dot>4</dot>
-              </string>
-            <string no="3">
-              <dot>3</dot>
-              </string>
             </FretDiagram>
           </voice>
         </Measure>
