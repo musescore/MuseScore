@@ -339,6 +339,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::Quena,  {} }, { midi::Program(0, 67) } },
 
+        { { mpe::SoundId::Dulzaina, { mpe::SoundSubCategory::Castilian } }, { midi::Program(0, 68) } },
+
         { { mpe::SoundId::Heckelphone,  {} }, { midi::Program(0, 68) } },
         { { mpe::SoundId::Oboe,  { mpe::SoundSubCategory::Baroque } }, { midi::Program(0, 69) } },
         { { mpe::SoundId::Oboe,  {} }, { midi::Program(0, 68) } },

@@ -92,6 +92,7 @@ enum class SoundId
 
     WindsGroup,
     Piccolo,
+    Dulzaina,
     Heckelphone,
     HeckelphoneClarinet,
     Oboe,
@@ -288,6 +289,7 @@ enum class SoundSubCategory
     African,
     Indian,
     Spanish,
+    Castilian,
     Swedish,
     Hungarian,
     Romanian,
@@ -503,6 +505,7 @@ inline const std::unordered_map<SoundId, String> ID_STRINGS
 
     { SoundId::WindsGroup, String(u"winds_group") },
     { SoundId::Piccolo, String(u"piccolo") },
+    { SoundId::Dulzaina, String(u"dulzaina") },
     { SoundId::Heckelphone, String(u"heckelphone") },
     { SoundId::HeckelphoneClarinet, String(u"heckelphone_clarinet") },
     { SoundId::Oboe, String(u"oboe") },
@@ -746,6 +749,7 @@ inline const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
     { SoundSubCategory::African, String(u"african") },
     { SoundSubCategory::Indian, String(u"indian") },
     { SoundSubCategory::Spanish, String(u"spanish") },
+    { SoundSubCategory::Castilian, String(u"castilian") },
     { SoundSubCategory::Swedish, String(u"swedish") },
     { SoundSubCategory::Hungarian, String(u"hungarian") },
     { SoundSubCategory::Romanian, String(u"romanian") },
