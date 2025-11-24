@@ -85,7 +85,7 @@ private:
     RetVal<ReleaseInfo> m_lastCheckResult;
     io::path_t m_installatorPath;
 
-    network::INetworkManagerPtr m_networkManager;
+    network::deprecated::INetworkManagerPtr m_networkManager;
     Progress m_updateProgress;
 };
 }

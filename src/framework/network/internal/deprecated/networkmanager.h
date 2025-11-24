@@ -25,15 +25,15 @@
 #include <QIODevice>
 
 #include "modularity/ioc.h"
-#include "../inetworkconfiguration.h"
 
-#include "inetworkmanager.h"
+#include "network/inetworkconfiguration.h"
+#include "network/deprecated/inetworkmanager.h"
 
 class QNetworkAccessManager;
 class QNetworkRequest;
 class QNetworkReply;
 
-namespace muse::network {
+namespace muse::network::deprecated {
 class NetworkManager : public QObject, public INetworkManager, public Injectable
 {
     Q_OBJECT

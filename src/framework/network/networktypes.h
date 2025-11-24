@@ -42,7 +42,7 @@ struct RequestHeaders
 
 using IncomingDevice = QIODevice;
 
-struct OutgoingDevice
+struct OutgoingDevice // deprecated
 {
     OutgoingDevice(QIODevice* device)
         : m_device(device), m_multiPart(nullptr) {}

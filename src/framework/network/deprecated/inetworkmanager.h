@@ -24,11 +24,11 @@
 
 #include "types/ret.h"
 #include "global/progress.h"
-#include "networktypes.h"
+#include "../networktypes.h"
 
 class QUrl;
 
-namespace muse::network {
+namespace muse::network::deprecated {
 class INetworkManager
 {
 public:

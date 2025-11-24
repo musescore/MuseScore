@@ -24,7 +24,7 @@
 
 #include "network/inetworkmanager.h"
 
-namespace muse::network {
+namespace muse::network::deprecated {
 class NetworkManagerStub : public INetworkManager
 {
 public:

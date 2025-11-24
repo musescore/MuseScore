@@ -21,11 +21,11 @@
  */
 #include "networkmanagercreator.h"
 
-#include "networkmanager.h"
+#include "deprecated/networkmanager.h"
 
 using namespace muse::network;
 
-INetworkManagerPtr NetworkManagerCreator::makeNetworkManager() const
+deprecated::INetworkManagerPtr NetworkManagerCreator::makeDeprecatedNetworkManager() const
 {
-    return std::make_shared<NetworkManager>();
+    return std::make_shared<deprecated::NetworkManager>();
 }

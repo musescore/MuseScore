@@ -69,7 +69,7 @@ muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateService::checkFo
             OutgoingDevice outgoingDevice(&queryBuffer);
             QBuffer receivedData;
 
-            INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+            deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
             muse::Ret ret = manager->post(configuration()->checkForMuseSamplerUpdateUrl(), &outgoingDevice, &receivedData,
                                           configuration()->headers());
 

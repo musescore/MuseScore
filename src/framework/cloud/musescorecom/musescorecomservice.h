@@ -71,13 +71,14 @@ private:
 
     network::RequestHeaders headers() const;
 
-    Ret doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
+    Ret doDownloadScore(network::deprecated::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
                         const QString& hash = QString(), const QString& secret = QString());
 
-    RetVal<ValMap> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
+    RetVal<ValMap> doUploadScore(network::deprecated::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
                                  Visibility visibility, const QUrl& sourceUrl = QUrl(), int revisionId = 0);
 
-    Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl);
+    Ret doUploadAudio(network::deprecated::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat,
+                      const QUrl& sourceUrl);
 };
 }
 

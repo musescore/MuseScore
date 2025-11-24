@@ -24,6 +24,7 @@
 using namespace muse;
 using namespace muse::network;
 
+namespace muse::network::deprecated {
 Ret NetworkManagerStub::get(const QUrl&, IncomingDevice*, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
@@ -61,4 +62,5 @@ Progress NetworkManagerStub::progress() const
 
 void NetworkManagerStub::abort()
 {
+}
 }

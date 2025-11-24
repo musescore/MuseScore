@@ -110,7 +110,7 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, std::function<voi
 {
     TRACEFUNC;
 
-    network::INetworkManagerPtr networkManager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr networkManager = networkManagerCreator()->makeDeprecatedNetworkManager();
     RequestHeaders headers = configuration()->headers();
 
     QBuffer playlistInfoData;

@@ -29,8 +29,8 @@
 #include "networkerrors.h"
 
 using namespace muse;
-using namespace muse::network;
 
+namespace muse::network::deprecated {
 NetworkManager::NetworkManager(QObject* parent)
     : QObject(parent)
 {
@@ -282,4 +282,5 @@ Ret NetworkManager::errorFromReply(const QNetworkReply* reply) const
     }
 
     return ret;
+}
 }

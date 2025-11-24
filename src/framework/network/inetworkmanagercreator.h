@@ -23,7 +23,7 @@
 #define MUSE_NETWORK_INETWORKMANAGERCREATOR_H
 
 #include "modularity/imoduleinterface.h"
-#include "inetworkmanager.h"
+#include "deprecated/inetworkmanager.h"
 
 namespace muse::network {
 class INetworkManagerCreator : MODULE_EXPORT_INTERFACE
@@ -33,7 +33,7 @@ class INetworkManagerCreator : MODULE_EXPORT_INTERFACE
 public:
     virtual ~INetworkManagerCreator() = default;
 
-    virtual INetworkManagerPtr makeNetworkManager() const = 0;
+    virtual deprecated::INetworkManagerPtr makeDeprecatedNetworkManager() const = 0;
 };
 }
 
