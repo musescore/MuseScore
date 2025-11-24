@@ -27,5 +27,23 @@ Window {
             color: "#AAAAAA"
             font.pixelSize: 16
         }
+
+        Image {
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: 400
+            height: 300
+            source: "image://score/demo"
+            fillMode: Image.PreserveAspectFit
+            
+            Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+                border.color: "white"
+                border.width: 1
+                opacity: 0.5
+            }
+        }
     }
 }
