@@ -39,7 +39,7 @@ jobs:
       url: ${{ github.server_url }}/${{ github.repository }}/releases/${{ inputs.tag && format('tag/{0}', inputs.tag) || 'latest' }} # show on run page
     steps:
       - name: Clone repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Update info about the release in musescore-updates
         run: |

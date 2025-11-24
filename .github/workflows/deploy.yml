@@ -30,7 +30,7 @@ jobs:
       release_name: ${{ steps.make_tag_info.outputs.RELEASE_NAME }}
     steps:
     - name: Clone repo with history
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0 # entire history for all branches and tags
     - id: make_tag_info
@@ -85,7 +85,7 @@ jobs:
       url: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ needs.plan.outputs.tag_name }}
     steps:
     - name: Clone repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
     - name: Download and extract artifacts
       uses: actions/download-artifact@v6
       with:

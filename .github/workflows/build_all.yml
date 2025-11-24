@@ -67,7 +67,7 @@ jobs:
       build_number: ${{ steps.make_build_number.outputs.build_number }}
     steps:
       - name: Clone repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Generate build number
         id: make_build_number
         run: |
@@ -151,7 +151,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Clone repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
     - name: Prepare dummy artifact
       run: |
         ARTIFACTS_DIR="build.artifacts"
