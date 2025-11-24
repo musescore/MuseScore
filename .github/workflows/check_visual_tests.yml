@@ -18,7 +18,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0
     - name: "Configure workflow"
@@ -65,7 +65,7 @@ jobs:
     if: needs.setup.outputs.do_run == 'true'
     steps:
     - name: Clone repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Get ccache timestamp
       run: echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
@@ -110,7 +110,7 @@ jobs:
     if: needs.setup.outputs.do_run == 'true'
     steps:
     - name: Clone repository and checkout reference commit
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         ref: ${{ needs.setup.outputs.reference_sha }}
 
@@ -157,7 +157,7 @@ jobs:
     if: needs.setup.outputs.do_run == 'true'
     steps:
     - name: Clone repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
     - name: Download current
       uses: actions/download-artifact@v6
       with:

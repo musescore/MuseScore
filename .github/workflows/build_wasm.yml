@@ -25,7 +25,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
     - name: Configure workflow
       env:
         pull_request_title: ${{ github.event.pull_request.title }}

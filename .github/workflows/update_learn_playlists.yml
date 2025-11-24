@@ -40,7 +40,7 @@ jobs:
       url: https://www.youtube.com/playlist?list=${{ matrix.playlist.id }} # show on run page
     steps:
       - name: Clone repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Update playlist info on s3
         run: |
