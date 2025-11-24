@@ -73,6 +73,9 @@
       <Family id="oboes">
             <name>Oboes</name>
       </Family>
+      <Family id="dulzainas">
+            <name>Dulzainas</name>
+      </Family>
       <Family id="shawms">
             <name>Shawms</name>
       </Family>
@@ -1531,6 +1534,26 @@
                   <Channel>
                         <!--MIDI: Bank 0, Prog 67; MS General: Baritone Sax-->
                         <program value="67"/> <!--Baritone Sax-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="fs-castilian-dulzaina">
+                  <family>dulzainas</family>
+                  <trackName>Castilian Dulzaina</trackName>
+                  <longName>Castilian Dulzaina</longName>
+                  <shortName>Cast. Dulz.</shortName>
+                  <traitName type="transposition">F♯</traitName>
+                  <description>Spanish double-reed folk instrument from the Castile region. In F♯.</description>
+                  <musicXMLid>wind.reed.dulzaina</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>63-91</aPitchRange>
+                  <pPitchRange>63-96</pPitchRange>
+                  <transposeDiatonic>3</transposeDiatonic>
+                  <transposeChromatic>6</transposeChromatic>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 68; MS General: Oboe-->
+                        <program value="68"/> <!--Oboe-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>

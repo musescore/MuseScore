@@ -102,6 +102,8 @@ PlaybackSetupData WindsSetupDataResolver::doResolve(const Instrument* instrument
         { "f-quena", { SoundId::Quena, SoundCategory::Winds } },
         { "d-quena", { SoundId::Quena, SoundCategory::Winds } },
 
+        { "fs-castilian-dulzaina", { SoundId::Dulzaina, SoundCategory::Winds, { SoundSubCategory::Castilian } } },
+
         { "piccolo-heckelphone", { SoundId::Heckelphone, SoundCategory::Winds } },
         { "heckelphone", { SoundId::Heckelphone, SoundCategory::Winds } },
         { "piccolo-oboe", { SoundId::Oboe, SoundCategory::Winds } },
