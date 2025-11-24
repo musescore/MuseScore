@@ -79,6 +79,7 @@ private:
     void checkOutputDevice();
     void updateOutputSpec();
 
+    IAudioDriver::Callback m_callback;
     IAudioDriverPtr m_audioDriver;
     async::Notification m_currentAudioApiChanged;
     async::Notification m_availableOutputDevicesChanged;

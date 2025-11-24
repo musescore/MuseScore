@@ -26,6 +26,7 @@
 #undef UNICODE
 #include "ASIOSDK/common/asiosys.h"
 #include "ASIOSDK/common/asio.h"
+#include "ASIOSDK/common/iasiodrv.h"
 #include "ASIOSDK/host/asiodrivers.h"
 
 #include "log.h"
@@ -36,6 +37,7 @@ using namespace muse::audio;
 struct AsioData {
     // Drivers list
     AsioDrivers drivers;
+    std::set<std::string> baddrivers;
 
     // ASIOInit()
     ASIODriverInfo driverInfo;
@@ -612,6 +614,40 @@ std::vector<sample_rate_t> AsioAudioDriver::availableOutputDeviceSampleRates() c
     };
 }
 
+static bool isDriverAvailable(long index, const char* name)
+{
+    //! NOTE We remember drivers that are not loaded or initialized
+    //! until the end of the application's operation.
+    //! Because there are drivers that cannot be reloaded after closing
+    //! (to implement checking every time)
+    //! For example: Audient USB Audio ASIO Driver
+    //! When we reopen it, it crashes.
+    if (s_adata.baddrivers.find(std::string(name)) != s_adata.baddrivers.end()) {
+        return false;
+    }
+
+    IASIO* driver = 0;
+    LONG ret = s_adata.drivers.asioOpenDriver(index, (void**)&driver);
+    if (ret == DRVERR_DEVICE_ALREADY_OPEN) {
+        return true;
+    }
+
+    if (ret != 0) {
+        s_adata.baddrivers.insert(std::string(name));
+        return false;
+    }
+
+    void* sysRef = nullptr;
+    bool ok = driver->init(sysRef) == ASIOTrue;
+    if (!ok) {
+        s_adata.baddrivers.insert(std::string(name));
+    }
+
+    s_adata.drivers.asioCloseDriver(index);
+
+    return ok;
+}
+
 AudioDeviceList AsioAudioDriver::availableOutputDevices() const
 {
     char names[16][32];
@@ -626,10 +662,12 @@ AudioDeviceList AsioAudioDriver::availableOutputDevices() const
     AudioDeviceList devices;
     devices.reserve(count);
     for (long i = 0; i < count; i++) {
-        AudioDevice d;
-        d.id = names[i];
-        d.name = d.id;
-        devices.push_back(std::move(d));
+        if (isDriverAvailable(i, names[i])) {
+            AudioDevice d;
+            d.id = names[i];
+            d.name = d.id;
+            devices.push_back(std::move(d));
+        }
     }
 
     return devices;
