@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <QAbstractListModel>
 #include <qqmlintegration.h>
 
@@ -43,6 +45,7 @@ class InspectorListModel : public QAbstractListModel, public muse::async::Asynca
 
 public:
     explicit InspectorListModel(QObject* parent = nullptr);
+    ~InspectorListModel();
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
@@ -87,7 +90,7 @@ private:
 
     QList<AbstractInspectorModel*> m_modelList;
 
-    IElementRepositoryService* m_repository = nullptr;
+    std::unique_ptr<IElementRepositoryService> m_repository;
 
     bool m_inspectorVisible = true;
     mu::engraving::PropertyIdSet m_changedPropertyIdSet;

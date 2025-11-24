@@ -19,9 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_IELEMENTREPOSITORYSERVICE_H
-#define MU_INSPECTOR_IELEMENTREPOSITORYSERVICE_H
 
+#pragma once
+
+#include "async/channel.h"
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/select.h"
 
@@ -35,8 +36,6 @@ class IElementRepositoryService
 public:
     virtual ~IElementRepositoryService() = default;
 
-    virtual QObject* getQObject() = 0;
-
     virtual bool needUpdateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList,
                                        engraving::SelState selectionState) const = 0;
     virtual void updateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList, engraving::SelState selectionState) = 0;
@@ -47,9 +46,6 @@ public:
     const = 0;
     virtual QList<mu::engraving::EngravingItem*> takeAllElements() const = 0;
 
-signals:
-    virtual void elementsUpdated(const QList<mu::engraving::EngravingItem*>& newRawElementList) = 0;
+    virtual muse::async::Channel<QList<mu::engraving::EngravingItem*> > elementsUpdated() const = 0;
 };
 }
-
-#endif // MU_INSPECTOR_IELEMENTREPOSITORYSERVICE_H

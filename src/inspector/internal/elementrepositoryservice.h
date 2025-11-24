@@ -19,21 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_ELEMENTREPOSITORYSERVICE_H
-#define MU_INSPECTOR_ELEMENTREPOSITORYSERVICE_H
 
-#include "internal/interfaces/ielementrepositoryservice.h"
+#pragma once
 
-#include <QObject>
+#include "ielementrepositoryservice.h"
 
 namespace mu::inspector {
-class ElementRepositoryService : public QObject, public IElementRepositoryService
+class ElementRepositoryService : public IElementRepositoryService
 {
-    Q_OBJECT
 public:
-    explicit ElementRepositoryService(QObject* parent);
-
-    QObject* getQObject() override;
+    ElementRepositoryService() = default;
 
     bool needUpdateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList,
                                engraving::SelState selectionState) const override;
@@ -45,8 +40,7 @@ public:
     override;
     QList<mu::engraving::EngravingItem*> takeAllElements() const override;
 
-signals:
-    void elementsUpdated(const QList<mu::engraving::EngravingItem*>& newRawElementList) override;
+    muse::async::Channel<QList<mu::engraving::EngravingItem*> > elementsUpdated() const override;
 
 private:
     QList<mu::engraving::EngravingItem*> exposeRawElements(const QList<mu::engraving::EngravingItem*>& rawElementList) const;
@@ -71,7 +65,7 @@ private:
     QList<mu::engraving::EngravingItem*> m_exposedElementList;
     QList<mu::engraving::EngravingItem*> m_rawElementList;
     mu::engraving::SelState m_selectionState = mu::engraving::SelState::NONE;
+
+    muse::async::Channel<QList<mu::engraving::EngravingItem*> > m_elementsUpdated;
 };
 }
-
-#endif // MU_INSPECTOR_ELEMENTREPOSITORYSERVICE_H

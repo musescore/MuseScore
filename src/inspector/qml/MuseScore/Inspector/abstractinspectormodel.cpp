@@ -153,16 +153,16 @@ QString AbstractInspectorModel::shortcutsForActionCode(std::string code) const
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository,
                                                mu::engraving::ElementType elementType)
-    : QObject(parent), m_elementType(elementType)
+    : QObject(parent), m_repository(repository), m_elementType(elementType)
 {
-    m_repository = repository;
-
     if (!m_repository) {
         return;
     }
 
-    connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<mu::engraving::EngravingItem*>&)), this,
-            SLOT(updateProperties()));
+    m_repository->elementsUpdated().onReceive(this, [this](const QList<mu::engraving::EngravingItem*>&) {
+        updateProperties();
+    });
+
     connect(this, &AbstractInspectorModel::requestReloadPropertyItems, this, &AbstractInspectorModel::updateProperties);
 }
 

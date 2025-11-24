@@ -30,7 +30,7 @@
 #include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
 
-#include "internal/services/elementrepositoryservice.h"
+#include "internal/elementrepositoryservice.h"
 
 #include "log.h"
 
@@ -39,9 +39,8 @@ using namespace mu::notation;
 
 InspectorListModel::InspectorListModel(QObject* parent)
     : QAbstractListModel(parent)
+    , m_repository{std::make_unique<ElementRepositoryService>()}
 {
-    m_repository = new ElementRepositoryService(this);
-
     listenSelectionChanged();
     listenScoreChanges();
 
@@ -52,6 +51,8 @@ InspectorListModel::InspectorListModel(QObject* parent)
         notifyModelsAboutNotationChanged();
     });
 }
+
+InspectorListModel::~InspectorListModel() = default;
 
 void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection,
                                                         const QList<mu::engraving::EngravingItem*>& selectedElementList)
@@ -129,7 +130,7 @@ void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem
     m_repository->updateElementList(selectedElementList, selectionState);
 
     if (forceUpdate) {
-        m_repository->elementsUpdated(selectedElementList);
+        m_repository->elementsUpdated().send(selectedElementList);
     }
 }
 
@@ -208,31 +209,31 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
 
         switch (sectionType) {
         case InspectorSectionType::SECTION_GENERAL:
-            newModel = new GeneralSettingsModel(this, m_repository);
+            newModel = new GeneralSettingsModel(this, m_repository.get());
             break;
         case InspectorSectionType::SECTION_MEASURES:
-            newModel = new MeasuresSettingsModel(this, m_repository);
+            newModel = new MeasuresSettingsModel(this, m_repository.get());
             break;
         case InspectorSectionType::SECTION_EMPTY_STAVES:
-            newModel = new EmptyStavesVisibilitySettingsModel(this, m_repository);
+            newModel = new EmptyStavesVisibilitySettingsModel(this, m_repository.get());
             break;
         case InspectorSectionType::SECTION_NOTATION:
-            newModel = new NotationSettingsProxyModel(this, m_repository, selectedElementKeySet);
+            newModel = new NotationSettingsProxyModel(this, m_repository.get(), selectedElementKeySet);
             break;
         case InspectorSectionType::SECTION_TEXT:
-            newModel = new TextSettingsModel(this, m_repository, /*isTextLineText*/ false);
+            newModel = new TextSettingsModel(this, m_repository.get(), /*isTextLineText*/ false);
             break;
         case InspectorSectionType::SECTION_TEXT_LINES:
-            newModel = new TextSettingsModel(this, m_repository, /*isTextLineText*/ true);
+            newModel = new TextSettingsModel(this, m_repository.get(), /*isTextLineText*/ true);
             break;
         case InspectorSectionType::SECTION_SCORE_DISPLAY:
-            newModel = new ScoreSettingsModel(this, m_repository);
+            newModel = new ScoreSettingsModel(this, m_repository.get());
             break;
         case InspectorSectionType::SECTION_SCORE_APPEARANCE:
-            newModel = new ScoreAppearanceSettingsModel(this, m_repository);
+            newModel = new ScoreAppearanceSettingsModel(this, m_repository.get());
             break;
         case InspectorSectionType::SECTION_PARTS:
-            newModel = new PartsSettingsModel(this, m_repository);
+            newModel = new PartsSettingsModel(this, m_repository.get());
             break;
         case AbstractInspectorModel::InspectorSectionType::SECTION_UNDEFINED:
             break;

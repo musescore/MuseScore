@@ -52,16 +52,6 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-ElementRepositoryService::ElementRepositoryService(QObject* parent)
-    : QObject(parent)
-{
-}
-
-QObject* ElementRepositoryService::getQObject()
-{
-    return this;
-}
-
 bool ElementRepositoryService::needUpdateElementList(const QList<EngravingItem*>& newRawElementList,
                                                      SelState selectionState) const
 {
@@ -79,7 +69,7 @@ void ElementRepositoryService::updateElementList(const QList<EngravingItem*>& ne
     m_rawElementList = newRawElementList;
     m_selectionState = selectionState;
 
-    emit elementsUpdated(m_rawElementList);
+    m_elementsUpdated.send(m_rawElementList);
 }
 
 QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByType(const mu::engraving::ElementType elementType) const
@@ -505,4 +495,9 @@ QList<EngravingItem*> ElementRepositoryService::findLyrics() const
     }
 
     return resultList;
+}
+
+muse::async::Channel<QList<EngravingItem*> > ElementRepositoryService::elementsUpdated() const
+{
+    return m_elementsUpdated;
 }

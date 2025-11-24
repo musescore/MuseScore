@@ -22,19 +22,21 @@
 
 #include "textstylepopupmodel.h"
 
-#include "internal/services/elementrepositoryservice.h"
+#include "internal/elementrepositoryservice.h"
 
 using namespace mu::notation;
 using namespace mu::inspector;
 
 TextStylePopupModel::TextStylePopupModel(QObject* parent)
     : AbstractElementPopupModel(PopupModelType::TYPE_TEXT, parent)
-{
-    m_elementRepositoryService = new ElementRepositoryService(this);
 
-    m_textSettingsModel = new TextSettingsModel(this, m_elementRepositoryService, /*isTextLineText*/ false);
+    , m_elementRepositoryService{std::make_unique<ElementRepositoryService>()}
+{
+    m_textSettingsModel = new TextSettingsModel(this, m_elementRepositoryService.get(), /*isTextLineText*/ false);
     m_textSettingsModel->init();
 }
+
+TextStylePopupModel::~TextStylePopupModel() = default;
 
 void TextStylePopupModel::init()
 {

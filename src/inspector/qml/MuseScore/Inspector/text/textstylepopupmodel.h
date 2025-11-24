@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <qqmlintegration.h>
 
 #include "notation/view/abstractelementpopupmodel.h"
@@ -41,6 +43,7 @@ class TextStylePopupModel : public notation::AbstractElementPopupModel
 
 public:
     explicit TextStylePopupModel(QObject* parent = nullptr);
+    ~TextStylePopupModel();
 
     TextSettingsModel* textSettingsModel() const;
 
@@ -57,7 +60,7 @@ private:
 
     TextSettingsModel* m_textSettingsModel = nullptr;
 
-    ElementRepositoryService* m_elementRepositoryService = nullptr;
+    std::unique_ptr<ElementRepositoryService> m_elementRepositoryService;
 
     bool m_placeAbove = true;
 };

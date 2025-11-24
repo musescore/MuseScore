@@ -32,7 +32,7 @@
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/property.h"
 
-#include "internal/interfaces/ielementrepositoryservice.h"
+#include "internal/ielementrepositoryservice.h"
 #include "notation/inotation.h"
 #include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"

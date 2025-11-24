@@ -24,9 +24,9 @@ target_sources(inspector PRIVATE
     inspectormodule.cpp
     inspectormodule.h
 
-    internal/services/elementrepositoryservice.cpp
-    internal/services/elementrepositoryservice.h
-    internal/interfaces/ielementrepositoryservice.h
+    internal/ielementrepositoryservice.h
+    internal/elementrepositoryservice.cpp
+    internal/elementrepositoryservice.h
 )
 
 add_subdirectory(qml/MuseScore/Inspector)

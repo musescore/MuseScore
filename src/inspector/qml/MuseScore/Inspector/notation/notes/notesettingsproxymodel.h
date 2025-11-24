@@ -35,10 +35,9 @@ class NoteSettingsProxyModel : public AbstractInspectorProxyModel
 public:
     explicit NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository);
 
-private slots:
+private:
     void onElementsUpdated(const QList<mu::engraving::EngravingItem*>& newElements);
 
-private:
     InspectorModelType resolveDefaultSubModelType(const QList<mu::engraving::EngravingItem*>& newElements) const;
 };
 }

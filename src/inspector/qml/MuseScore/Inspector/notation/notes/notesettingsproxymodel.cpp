@@ -52,8 +52,10 @@ NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementReposito
 
     setModels(models);
 
-    connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<mu::engraving::EngravingItem*>&)), this,
-            SLOT(onElementsUpdated(const QList<mu::engraving::EngravingItem*>&)));
+    m_repository->elementsUpdated().onReceive(this, [this](const QList<mu::engraving::EngravingItem*>& newElements) {
+        updateProperties();
+        onElementsUpdated(newElements);
+    }, Mode::SetReplace /* override AbstractInspectorModel's callback */);
 }
 
 void NoteSettingsProxyModel::onElementsUpdated(const QList<mu::engraving::EngravingItem*>& newElements)
