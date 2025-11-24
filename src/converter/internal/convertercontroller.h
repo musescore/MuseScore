@@ -75,13 +75,18 @@ public:
 
 private:
 
+    struct CopyrightInfo {
+        muse::String text   = {};
+        bool showOnAllPages = false;
+    };
+
     struct Job {
         muse::io::path_t in;
         muse::io::path_t out;
         std::optional<notation::TransposeOptions> transposeOptions;
         std::optional<size_t> pageNum;
         std::vector<size_t> visibleParts;
-        muse::String copyright;
+        CopyrightInfo copyright;
     };
 
     using BatchJob = std::vector<Job>;
@@ -91,8 +96,7 @@ private:
 
     muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
                           const muse::String& soundProfile = muse::String(),
-                          const muse::UriQuery& extensionUri = muse::UriQuery(), const TransposeOpts& transposeOptions = std::nullopt, const std::optional<size_t>& pageNum = std::nullopt, const std::vector<size_t>& visibleParts = std::vector<size_t>(),
-                          const muse::String& copyright = muse::String());
+                          const muse::UriQuery& extensionUri = muse::UriQuery(), const TransposeOpts& transposeOptions = std::nullopt, const std::optional<size_t>& pageNum = std::nullopt, const std::vector<size_t>& visibleParts = std::vector<size_t>(), const CopyrightInfo& copyright = { {}, false });
 
     muse::Ret convertScoreParts(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
                                 const muse::io::path_t& out);
