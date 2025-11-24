@@ -11,174 +11,217 @@ ApplicationWindow {
     
     color: "#1E1E1E"
     
-    ColumnLayout {
+    StackView {
+        id: stackView
         anchors.fill: parent
-        anchors.margins: 0
-        spacing: 0
         
-        // Header
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 80
-            color: "#2D2D2D"
-            
-            ColumnLayout {
-                anchors.centerIn: parent
-                spacing: 4
-                
-                Text {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: "MuseSketch"
-                    color: "white"
-                    font.pixelSize: 28
-                    font.bold: true
-                }
-                
-                Text {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: "Your Sketches"
-                    color: "#AAAAAA"
-                    font.pixelSize: 14
-                }
-            }
-        }
+        initialItem: sketchListPage
         
-        // Sketch List
-        ListView {
-            id: sketchListView
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+        // Sketch List Page
+        Component {
+            id: sketchListPage
             
-            model: sketchManager.sketches
-            spacing: 1
-            
-            delegate: Rectangle {
-                width: sketchListView.width
-                height: 80
-                color: mouseArea.pressed ? "#3D3D3D" : "#2D2D2D"
-                
-                MouseArea {
-                    id: mouseArea
-                    anchors.fill: parent
-                    onClicked: {
-                        sketchManager.openSketch(modelData.id)
-                    }
+            Page {
+                background: Rectangle {
+                    color: "#1E1E1E"
                 }
                 
-                RowLayout {
+                ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 16
-                    spacing: 12
+                    anchors.margins: 0
+                    spacing: 0
                     
+                    // Header
                     Rectangle {
-                        Layout.preferredWidth: 48
-                        Layout.preferredHeight: 48
-                        radius: 8
-                        color: "#4A90E2"
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 80
+                        color: "#2D2D2D"
                         
+                        ColumnLayout {
+                            anchors.centerIn: parent
+                            spacing: 4
+                            
+                            Text {
+                                Layout.alignment: Qt.AlignHCenter
+                                text: "MuseSketch"
+                                color: "white"
+                                font.pixelSize: 28
+                                font.bold: true
+                            }
+                            
+                            Text {
+                                Layout.alignment: Qt.AlignHCenter
+                                text: "Your Sketches"
+                                color: "#AAAAAA"
+                                font.pixelSize: 14
+                            }
+                        }
+                    }
+                    
+                    // Sketch List
+                    ListView {
+                        id: sketchListView
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        
+                        model: sketchManager.sketches
+                        spacing: 1
+                        
+                        delegate: Rectangle {
+                            width: sketchListView.width
+                            height: 80
+                            color: mouseArea.pressed ? "#3D3D3D" : "#2D2D2D"
+                            
+                            MouseArea {
+                                id: mouseArea
+                                anchors.fill: parent
+                                onClicked: {
+                                    stackView.push(sketchViewComponent, { sketchId: modelData.id })
+                                }
+                            }
+                            
+                            RowLayout {
+                                anchors.fill: parent
+                                anchors.margins: 16
+                                spacing: 12
+                                
+                                Rectangle {
+                                    Layout.preferredWidth: 48
+                                    Layout.preferredHeight: 48
+                                    radius: 8
+                                    color: "#4A90E2"
+                                    
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: modelData.name.substring(0, 1).toUpperCase()
+                                        color: "white"
+                                        font.pixelSize: 24
+                                        font.bold: true
+                                    }
+                                }
+                                
+                                ColumnLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 4
+                                    
+                                    Text {
+                                        text: modelData.name
+                                        color: "white"
+                                        font.pixelSize: 18
+                                        font.bold: true
+                                    }
+                                    
+                                    Text {
+                                        text: "Modified: " + modelData.modifiedAt
+                                        color: "#AAAAAA"
+                                        font.pixelSize: 12
+                                    }
+                                }
+                                
+                                Button {
+                                    text: "×"
+                                    font.pixelSize: 24
+                                    flat: true
+                                    
+                                    onClicked: {
+                                        sketchManager.deleteSketch(modelData.id)
+                                    }
+                                    
+                                    background: Rectangle {
+                                        color: parent.pressed ? "#FF4444" : "transparent"
+                                        radius: 4
+                                    }
+                                    
+                                    contentItem: Text {
+                                        text: parent.text
+                                        color: parent.hovered ? "#FF6666" : "#888888"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
+                                }
+                            }
+                            
+                            Rectangle {
+                                anchors.bottom: parent.bottom
+                                width: parent.width
+                                height: 1
+                                color: "#3D3D3D"
+                            }
+                        }
+                        
+                        // Empty state
                         Text {
                             anchors.centerIn: parent
-                            text: modelData.name.substring(0, 1).toUpperCase()
-                            color: "white"
-                            font.pixelSize: 24
-                            font.bold: true
+                            visible: sketchListView.count === 0
+                            text: "No sketches yet\nTap + to create one"
+                            color: "#666666"
+                            font.pixelSize: 16
+                            horizontalAlignment: Text.AlignHCenter
                         }
                     }
                     
-                    ColumnLayout {
-                        Layout.fillWidth: true
-                        spacing: 4
+                    // FAB Button
+                    RoundButton {
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                        Layout.bottomMargin: 20
                         
-                        Text {
-                            text: modelData.name
-                            color: "white"
-                            font.pixelSize: 18
-                            font.bold: true
-                        }
-                        
-                        Text {
-                            text: "Modified: " + modelData.modifiedAt
-                            color: "#AAAAAA"
-                            font.pixelSize: 12
-                        }
-                    }
-                    
-                    Button {
-                        text: "×"
-                        font.pixelSize: 24
-                        flat: true
-                        
-                        onClicked: {
-                            sketchManager.deleteSketch(modelData.id)
-                        }
+                        width: 64
+                        height: 64
+                        text: "+"
+                        font.pixelSize: 32
                         
                         background: Rectangle {
-                            color: parent.pressed ? "#FF4444" : "transparent"
-                            radius: 4
+                            radius: 32
+                            color: parent.pressed ? "#3A7BC8" : "#4A90E2"
+                            
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                horizontalOffset: 0
+                                verticalOffset: 4
+                                radius: 8
+                                samples: 17
+                                color: "#80000000"
+                            }
                         }
                         
                         contentItem: Text {
                             text: parent.text
-                            color: parent.hovered ? "#FF6666" : "#888888"
+                            color: "white"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
+                            font: parent.font
+                        }
+                        
+                        onClicked: {
+                            newSketchDialog.open()
                         }
                     }
                 }
-                
-                Rectangle {
-                    anchors.bottom: parent.bottom
-                    width: parent.width
-                    height: 1
-                    color: "#3D3D3D"
-                }
-            }
-            
-            // Empty state
-            Text {
-                anchors.centerIn: parent
-                visible: sketchListView.count === 0
-                text: "No sketches yet\nTap + to create one"
-                color: "#666666"
-                font.pixelSize: 16
-                horizontalAlignment: Text.AlignHCenter
             }
         }
         
-        // FAB Button
-        RoundButton {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-            Layout.bottomMargin: 20
+        // Sketch View Component
+        Component {
+            id: sketchViewComponent
             
-            width: 64
-            height: 64
-            text: "+"
-            font.pixelSize: 32
-            
-            background: Rectangle {
-                radius: 32
-                color: parent.pressed ? "#3A7BC8" : "#4A90E2"
-                
-                layer.enabled: true
-                layer.effect: DropShadow {
-                    horizontalOffset: 0
-                    verticalOffset: 4
-                    radius: 8
-                    samples: 17
-                    color: "#80000000"
+            SketchView {
+                onBackRequested: stackView.pop()
+                onCreateMotifRequested: {
+                    stackView.push(motifShapeViewComponent, { sketchId: sketchId })
                 }
             }
+        }
+        
+        // Motif Shape View Component
+        Component {
+            id: motifShapeViewComponent
             
-            contentItem: Text {
-                text: parent.text
-                color: "white"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                font: parent.font
-            }
-            
-            onClicked: {
-                newSketchDialog.open()
+            MotifShapeView {
+                onBackRequested: stackView.pop()
+                onMotifSaved: {
+                    // Refresh sketch list when returning
+                    sketchManager.refreshSketches()
+                }
             }
         }
     }

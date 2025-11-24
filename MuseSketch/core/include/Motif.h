@@ -1,5 +1,6 @@
 #pragma once
 
+#include "RhythmGrid.h"
 #include <QJsonObject>
 #include <QList>
 #include <QString>
@@ -13,15 +14,22 @@ public:
   QString name() const { return m_name; }
   int lengthBars() const { return m_lengthBars; }
   QList<int> pitchContour() const { return m_pitchContour; }
-  QList<QString> rhythmPattern() const { return m_rhythmPattern; }
   QString keyRef() const { return m_keyRef; }
+
+  // New RhythmGrid API
+  const RhythmGrid &rhythmGrid() const { return m_rhythmGrid; }
+  RhythmGrid &rhythmGrid() { return m_rhythmGrid; }
+  void setRhythmGrid(const RhythmGrid &grid) { m_rhythmGrid = grid; }
+
+  // Legacy compatibility - returns durations as string list
+  QList<QString> rhythmPattern() const { return m_rhythmGrid.toDurationList(); }
+  void setRhythmPattern(const QList<QString> &pattern) {
+    m_rhythmGrid = RhythmGrid::fromDurationList(pattern);
+  }
 
   void setName(const QString &name) { m_name = name; }
   void setLengthBars(int length) { m_lengthBars = length; }
   void setPitchContour(const QList<int> &contour) { m_pitchContour = contour; }
-  void setRhythmPattern(const QList<QString> &pattern) {
-    m_rhythmPattern = pattern;
-  }
   void setKeyRef(const QString &key) { m_keyRef = key; }
 
   QJsonObject toJson() const;
@@ -31,7 +39,7 @@ private:
   QString m_id;
   QString m_name;
   int m_lengthBars = 1;
-  QList<int> m_pitchContour;      // Scale degrees (1-7)
-  QList<QString> m_rhythmPattern; // e.g., ["quarter", "eighth", "eighth"]
-  QString m_keyRef;               // Reference to parent sketch key
+  QList<int> m_pitchContour; // Scale degrees (1-7)
+  RhythmGrid m_rhythmGrid;   // Rich rhythm representation
+  QString m_keyRef;          // Reference to parent sketch key
 };

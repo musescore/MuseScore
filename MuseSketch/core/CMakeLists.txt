@@ -7,14 +7,20 @@ add_library(musesketch_core STATIC
     include/Sketch.h
     include/Motif.h
     include/Section.h
+    include/RhythmGrid.h
+    include/MotifQuantizer.h
     include/SketchRepository.h
     include/SketchManager.h
+    include/MotifEditorController.h
     src/ScoreEngine.cpp
     src/Sketch.cpp
     src/Motif.cpp
     src/Section.cpp
+    src/RhythmGrid.cpp
+    src/MotifQuantizer.cpp
     src/SketchRepository.cpp
     src/SketchManager.cpp
+    src/MotifEditorController.cpp
 )
 
 target_include_directories(musesketch_core PUBLIC

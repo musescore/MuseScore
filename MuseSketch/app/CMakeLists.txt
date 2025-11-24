@@ -5,7 +5,14 @@ qt_add_executable(musesketch MACOSX_BUNDLE
 qt_add_qml_module(musesketch
     URI "MuseSketch"
     VERSION 1.0
-    QML_FILES Main.qml
+    QML_FILES 
+        Main.qml
+        SketchView.qml
+        MotifShapeView.qml
+        components/ScaleDegreePad.qml
+        components/RhythmButton.qml
+        components/MotifDisplay.qml
+        components/ContourCanvas.qml
 )
 
 target_link_libraries(musesketch PRIVATE

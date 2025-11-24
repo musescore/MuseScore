@@ -15,6 +15,7 @@ public:
   Q_INVOKABLE void openSketch(const QString &id);
   Q_INVOKABLE void deleteSketch(const QString &id);
   Q_INVOKABLE void refreshSketches();
+  Q_INVOKABLE QVariantMap getSketch(const QString &id);
 
   QVariantList sketches() const;
 

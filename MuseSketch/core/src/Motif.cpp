@@ -20,11 +20,8 @@ QJsonObject Motif::toJson() const {
   }
   json["pitchContour"] = contourArray;
 
-  QJsonArray rhythmArray;
-  for (const QString &rhythm : m_rhythmPattern) {
-    rhythmArray.append(rhythm);
-  }
-  json["rhythmPattern"] = rhythmArray;
+  // Use new RhythmGrid format
+  json["rhythmGrid"] = m_rhythmGrid.toJson();
 
   return json;
 }
@@ -42,12 +39,18 @@ Motif Motif::fromJson(const QJsonObject &json) {
   }
   motif.setPitchContour(contour);
 
-  QJsonArray rhythmArray = json["rhythmPattern"].toArray();
-  QList<QString> rhythm;
-  for (const auto &value : rhythmArray) {
-    rhythm.append(value.toString());
+  // Support both new rhythmGrid format and legacy rhythmPattern format
+  if (json.contains("rhythmGrid")) {
+    motif.setRhythmGrid(RhythmGrid::fromJson(json["rhythmGrid"].toArray()));
+  } else if (json.contains("rhythmPattern")) {
+    // Legacy format - convert from string array
+    QJsonArray rhythmArray = json["rhythmPattern"].toArray();
+    QList<QString> rhythm;
+    for (const auto &value : rhythmArray) {
+      rhythm.append(value.toString());
+    }
+    motif.setRhythmPattern(rhythm);
   }
-  motif.setRhythmPattern(rhythm);
 
   return motif;
 }
