@@ -145,7 +145,8 @@ ListItemBlank {
                 }
 
                 Connections {
-                    target: keyLoader.item
+                    target: (root.keysEditable && !root.keyReadOnly) ? keyLoader.item : null
+                    ignoreUnknownSignals: true
                     function onChanged(newVal) {
                         root.item[keyRoleName] = newVal
                         listItem.keyEdited(newVal)
@@ -204,10 +205,6 @@ ListItemBlank {
                         valueLoader.item.maxValue = root.item[maxValueRoleName]
                     }
                 }
-
-                valueLoader.item.navPanel = valueLoader.navPanel
-                valueLoader.item.navRow = valueLoader.navRow
-                valueLoader.item.navColumn = valueLoader.navColumn
             }
 
             onValChanged: {
@@ -251,10 +248,6 @@ ListItemBlank {
 
             onLoaded: {
                 textLoader.item.val = textLoader.val ?? ""
-
-                textLoader.item.navPanel = textLoader.navPanel
-                textLoader.item.navRow = textLoader.navRow
-                textLoader.item.navColumn = textLoader.navColumn
             }
 
             onValChanged: {
@@ -275,168 +268,168 @@ ListItemBlank {
                 target: textLoader.item
                 function onChanged(newVal) { textLoader.changed(newVal) }
             }
-        }
-    }
 
-    Component {
-        id: singleClickTextComp
+            Component {
+                id: singleClickTextComp
 
-        TextInputField {
-            id: textControl
+                TextInputField {
+                    id: textControl
 
-            property string val
-            signal changed(string newVal)
+                    property string val
+                    signal changed(string newVal)
 
-            property string accessibleName: navigation.accessible.name
-            property NavigationPanel navPanel: null
-            property int navRow: 0
-            property int navColumn: 0
+                    property string accessibleName: navigation.accessible.name
+                    property NavigationPanel navPanel: textLoader.navPanel
+                    property int navRow: textLoader.navRow
+                    property int navColumn: 0
 
-            navigation.panel: navPanel
-            navigation.row: navRow
-            navigation.column: navColumn
+                    navigation.panel: navPanel
+                    navigation.row: navRow
+                    navigation.column: navColumn
 
-            currentText: val
+                    currentText: val
 
-            textSidePadding: root.textInputSidePadding
+                    textSidePadding: root.textInputSidePadding
 
-            onTextEdited: function(newTextValue) {
-                changed(newTextValue)
-            }
-        }
-    }
-
-    Component {
-        id: doubleClickTextComp
-
-        Item {
-            id: doubleClickItem
-
-            height: root.height
-            width: 10
-
-            property string val
-            property string accessibleName: navigation.accessible.name
-            property NavigationPanel navPanel
-            property int navRow
-            property int navColumn
-
-            signal changed(string newVal)
-            signal startEdit(var val)
-            signal escaped()
-
-            onStartEdit: function(val) {
-                valueEditLoader.edit(val)
-            }
-
-            onEscaped: {
-                valueEditLoader.escaped()
-            }
-
-            NavigationFocusBorder {
-                navigationCtrl: NavigationControl {
-                    id: valueNavCtrl
-                    enabled: doubleClickItem.enabled && doubleClickItem.visible
-                    panel: doubleClickItem.navPanel
-                    row: doubleClickItem.navRow
-                    column: doubleClickItem.navColumn
-
-                    onTriggered: {
-                        valueEditLoader.edit(doubleClickItem.val)
-                        root.clicked(mouseArea)
+                    onTextEdited: function(newTextValue) {
+                        changed(newTextValue)
                     }
-
-                    onActiveChanged: {
-                        if (!active) {
-                            valueEditLoader.escaped()
-                        }
-                    }
-                }
-
-                anchors.topMargin: 1
-                anchors.bottomMargin: 1
-            }
-
-            StyledTextLabel {
-                id: valueLabel
-
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignLeft
-
-                visible: !valueEditLoader.isEditState
-
-                text: doubleClickItem.val
-            }
-
-            MouseArea {
-                anchors.fill: valueLabel
-
-                acceptedButtons: Qt.LeftButton
-                hoverEnabled: true
-                propagateComposedEvents: true
-
-                onDoubleClicked: (mouse) => {
-                    mouse.accepted = true
-                    valueEditLoader.edit(doubleClickItem.val)
-                }
-            }
-
-            Loader {
-                id: valueEditLoader
-
-                anchors.fill: valueLabel
-
-                property bool isEditState: false
-                sourceComponent: valueEditLoader.isEditState ? valueEditComp : null
-
-                function edit(text) {
-                    valueEditLoader.isEditState = true
-                    valueEditLoader.item.currentText = text
-                    valueEditLoader.item.newValue = text
-                    valueEditLoader.item.visible = true
-                    valueEditLoader.item.ensureActiveFocus()
-                }
-
-                function escaped() {
-                    valueEditLoader.item.escaped()
                 }
             }
 
             Component {
-                id: valueEditComp
+                id: doubleClickTextComp
 
-                TextInputField {
-                    id: valueEdit
+                Item {
+                    id: doubleClickItem
 
-                    anchors.fill: parent
+                    height: root.height
+                    width: 10
 
-                    property string newValue: ""
+                    property string val
+                    property string accessibleName: navigation.accessible.name
+                    property NavigationPanel navPanel: textLoader.navPanel
+                    property int navRow: textLoader.navRow
+                    property int navColumn
 
-                    background.color: "transparent"
-                    background.border.width: 0
-                    inputField.color: valueLabel.color
-                    textSidePadding: 0
-                    visible: false
+                    signal changed(string newVal)
+                    signal startEdit(var val)
+                    signal escaped()
 
-                    onTextChanged: function (text) {
-                        valueEdit.newValue = text
-                    }
-
-                    onAccepted: {
-                        doubleClickItem.changed(valueEdit.newValue)
-                        valueEditLoader.isEditState = false
+                    onStartEdit: function(val) {
+                        valueEditLoader.edit(val)
                     }
 
                     onEscaped: {
-                        valueEditLoader.isEditState = false
+                        valueEditLoader.escaped()
                     }
 
-                    onFocusChanged: {
-                        if (!valueEdit.focus) {
-                            valueEdit.visible = false
-                            valueEditLoader.isEditState = false
-                            valueEdit.accepted()
-                            doubleClickItem.changed(valueEdit.newValue)
+                    NavigationFocusBorder {
+                        navigationCtrl: NavigationControl {
+                            id: valueNavCtrl
+                            enabled: doubleClickItem.enabled && doubleClickItem.visible
+                            panel: doubleClickItem.navPanel
+                            row: doubleClickItem.navRow
+                            column: doubleClickItem.navColumn
+
+                            onTriggered: {
+                                valueEditLoader.edit(doubleClickItem.val)
+                                root.clicked(mouseArea)
+                            }
+
+                            onActiveChanged: {
+                                if (!active) {
+                                    valueEditLoader.escaped()
+                                }
+                            }
+                        }
+
+                        anchors.topMargin: 1
+                        anchors.bottomMargin: 1
+                    }
+
+                    StyledTextLabel {
+                        id: valueLabel
+
+                        anchors.fill: parent
+                        horizontalAlignment: Text.AlignLeft
+
+                        visible: !valueEditLoader.isEditState
+
+                        text: doubleClickItem.val
+                    }
+
+                    MouseArea {
+                        anchors.fill: valueLabel
+
+                        acceptedButtons: Qt.LeftButton
+                        hoverEnabled: true
+                        propagateComposedEvents: true
+
+                        onDoubleClicked: (mouse) => {
+                            mouse.accepted = true
+                            valueEditLoader.edit(doubleClickItem.val)
+                        }
+                    }
+
+                    Loader {
+                        id: valueEditLoader
+
+                        anchors.fill: valueLabel
+
+                        property bool isEditState: false
+                        sourceComponent: valueEditLoader.isEditState ? valueEditComp : null
+
+                        function edit(text) {
+                            valueEditLoader.isEditState = true
+                            valueEditLoader.item.currentText = text
+                            valueEditLoader.item.newValue = text
+                            valueEditLoader.item.visible = true
+                            valueEditLoader.item.ensureActiveFocus()
+                        }
+
+                        function escaped() {
+                            valueEditLoader.item.escaped()
+                        }
+                    }
+
+                    Component {
+                        id: valueEditComp
+
+                        TextInputField {
+                            id: valueEdit
+
+                            anchors.fill: parent
+
+                            property string newValue: ""
+
+                            background.color: "transparent"
+                            background.border.width: 0
+                            inputField.color: valueLabel.color
+                            textSidePadding: 0
+                            visible: false
+
+                            onTextChanged: function (text) {
+                                valueEdit.newValue = text
+                            }
+
+                            onAccepted: {
+                                doubleClickItem.changed(valueEdit.newValue)
+                                valueEditLoader.isEditState = false
+                            }
+
+                            onEscaped: {
+                                valueEditLoader.isEditState = false
+                            }
+
+                            onFocusChanged: {
+                                if (!valueEdit.focus) {
+                                    valueEdit.visible = false
+                                    valueEditLoader.isEditState = false
+                                    valueEdit.accepted()
+                                    doubleClickItem.changed(valueEdit.newValue)
+                                }
+                            }
                         }
                     }
                 }
