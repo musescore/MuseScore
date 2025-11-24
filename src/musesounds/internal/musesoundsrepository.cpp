@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,8 +23,6 @@
 #include "musesoundsrepository.h"
 
 #include "serialization/json.h"
-
-#include "global/concurrency/concurrent.h"
 
 using namespace mu::musesounds;
 using namespace muse;
@@ -46,37 +44,7 @@ static muse::UriQuery correctThumbnailSize(const UriQuery& uri)
     return UriQuery(uriStr.toStdString());
 }
 
-void MuseSoundsRepository::init()
-{
-    auto soundsCallBack = [this](const RetVal<SoundCatalogueInfoList>& result) {
-        if (!result.ret) {
-            LOGE() << result.ret.toString();
-            return;
-        }
-
-        {
-            std::lock_guard lock(m_mutex);
-            m_soundsСatalogs = result.val;
-        }
-
-        m_soundsСatalogsChanged.notify();
-    };
-
-    Concurrent::run(this, &MuseSoundsRepository::th_requestSounds, configuration()->soundsUri(), soundsCallBack);
-}
-
-const SoundCatalogueInfoList& MuseSoundsRepository::soundsCatalogueList() const
-{
-    std::lock_guard lock(m_mutex);
-    return m_soundsСatalogs;
-}
-
-async::Notification MuseSoundsRepository::soundsCatalogueListChanged() const
-{
-    return m_soundsСatalogsChanged;
-}
-
-QByteArray MuseSoundsRepository::soundsRequestJson() const
+static QByteArray soundsRequestJson()
 {
     QLocale locale = QLocale();
     String localeStr = locale.bcp47Name() + "-" + QLocale::territoryToCode(locale.territory());
@@ -114,35 +82,58 @@ QByteArray MuseSoundsRepository::soundsRequestJson() const
     return JsonDocument(json).toJson(JsonDocument::Format::Compact).toQByteArray();
 }
 
-void MuseSoundsRepository::th_requestSounds(const UriQuery& soundsUri, std::function<void(RetVal<SoundCatalogueInfoList>)> callBack) const
+void MuseSoundsRepository::init()
 {
     TRACEFUNC;
 
-    network::deprecated::INetworkManagerPtr networkManager = networkManagerCreator()->makeDeprecatedNetworkManager();
+    QUrl url = QUrl(QString::fromStdString(configuration()->soundsUri().toString()));
+    QByteArray jsonData = soundsRequestJson();
     RequestHeaders headers = configuration()->headers();
 
-    QByteArray jsonData = soundsRequestJson();
-    QBuffer receivedData(&jsonData);
-    OutgoingDevice device(&receivedData);
+    auto device = std::make_shared<QBuffer>();
+    device->setData(jsonData);
+    auto receivedData = std::make_shared<QBuffer>();
 
-    Ret soundsItemsRet = networkManager->post(QUrl(QString::fromStdString(soundsUri.toString())), &device, &receivedData, headers);
-    if (!soundsItemsRet) {
-        callBack(soundsItemsRet);
+    m_networkManager = networkManagerCreator()->makeNetworkManager();
+    RetVal<Progress> progress = m_networkManager->post(url, device, receivedData, headers);
+    if (!progress.ret) {
+        LOGE() << progress.ret.toString();
+        m_networkManager = nullptr;
         return;
     }
 
-    RetVal<SoundCatalogueInfoList> result;
+    progress.val.finished().onReceive(this, [this, receivedData](const muse::ProgressResult& res) {
+        if (!res.ret) {
+            LOGE() << res.ret.toString();
+            m_networkManager = nullptr;
+            return;
+        }
 
-    std::string err;
-    JsonDocument soundsInfoDoc = JsonDocument::fromJson(ByteArray::fromQByteArray(receivedData.data()), &err);
-    if (!err.empty()) {
-        result.ret = make_ret(Ret::Code::InternalError, err);
-    } else {
-        result.ret = make_ok();
-        result.val = parseSounds(soundsInfoDoc);
-    }
+        RetVal<SoundCatalogueInfoList> result;
 
-    callBack(result);
+        std::string err;
+        JsonDocument soundsInfoDoc = JsonDocument::fromJson(ByteArray::fromQByteArray(receivedData->data()), &err);
+        if (!err.empty()) {
+            result.ret = make_ret(Ret::Code::InternalError, err);
+        } else {
+            result.ret = make_ok();
+            result.val = parseSounds(soundsInfoDoc);
+        }
+
+        m_soundsСatalogs = result.val;
+        m_soundsСatalogsChanged.notify();
+        m_networkManager = nullptr;
+    });
+}
+
+const SoundCatalogueInfoList& MuseSoundsRepository::soundsCatalogueList() const
+{
+    return m_soundsСatalogs;
+}
+
+async::Notification MuseSoundsRepository::soundsCatalogueListChanged() const
+{
+    return m_soundsСatalogsChanged;
 }
 
 SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& soundsDoc) const
