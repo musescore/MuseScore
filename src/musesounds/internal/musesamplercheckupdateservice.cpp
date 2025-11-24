@@ -23,21 +23,43 @@
 #include "musesamplercheckupdateservice.h"
 
 #include <QBuffer>
-#include <QJsonDocument>
 
+#include "global/serialization/json.h"
 #include "global/types/version.h"
-#include "defer.h"
 
+using namespace muse;
 using namespace mu::musesounds;
 using namespace muse::network;
+using namespace muse::async;
+
+static RetVal<Version> parseVersion(const QByteArray& json)
+{
+    std::string err;
+    const ByteArray ba = ByteArray::fromQByteArrayNoCopy(json);
+    const JsonDocument doc = JsonDocument::fromJson(ba, &err);
+    if (!err.empty() || !doc.isObject()) {
+        return RetVal<Version>::make_ret(int(Ret::Code::UnknownError), err);
+    }
+
+    const JsonObject rootObj = doc.rootObject();
+    const JsonObject dataObj = rootObj.value("data").toObject();
+    const JsonObject productObj = dataObj.value("product").toObject();
+    const JsonArray assetsArray = productObj.value("assets").toArray();
+
+    if (assetsArray.empty()) {
+        return RetVal<Version>::make_ret(int(Ret::Code::UnknownError), "Invalid JSON format");
+    }
+
+    const JsonObject firstAsset = assetsArray.at(0).toObject();
+    const String versionStr = firstAsset.value("version").toString();
+    const Version version(versionStr);
+
+    return RetVal<Version>::make_ok(version);
+}
 
 bool MuseSamplerCheckUpdateService::canCheckForUpdate() const
 {
-#ifdef QT_CONCURRENT_SUPPORTED
     return museSampler() && !museSampler()->version().isNull();
-#else
-    return false;
-#endif
 }
 
 bool MuseSamplerCheckUpdateService::incompatibleLocalVersion() const
@@ -49,74 +71,46 @@ bool MuseSamplerCheckUpdateService::incompatibleLocalVersion() const
     return museSampler()->version() < museSamplerConfiguration()->minSupportedVersion();
 }
 
-muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateService::checkForUpdate()
+Promise<RetVal<bool> > MuseSamplerCheckUpdateService::checkForUpdate()
 {
-    const muse::Version localVersion = museSampler() ? museSampler()->version() : muse::Version();
+    const Version localVersion = museSampler() ? museSampler()->version() : Version();
 
-    return muse::async::Promise<muse::RetVal<bool> >([this, localVersion](auto resolve, auto) {
+    return Promise<RetVal<bool> >([this, localVersion](auto resolve, auto) {
         if (localVersion.isNull()) {
-            muse::RetVal<bool> result;
-            result.ret = muse::Ret(int(muse::Ret::Code::UnknownError), "Unable to obtain the local MuseSampler version");
+            RetVal<bool> result;
+            result.ret = Ret(int(Ret::Code::UnknownError), "Unable to obtain the local MuseSampler version");
             result.val = false;
             return resolve(result);
         }
 
-#ifdef QT_CONCURRENT_SUPPORTED
-        Concurrent::run([this, localVersion, resolve]() {
-            QByteArray query = configuration()->getMuseSamplerVersionQuery().toUtf8();
-            QBuffer queryBuffer(&query);
+        auto queryBuffer = std::make_shared<QBuffer>();
+        queryBuffer->setData(configuration()->getMuseSamplerVersionQuery().toUtf8());
+        auto receivedData = std::make_shared<QBuffer>();
 
-            OutgoingDevice outgoingDevice(&queryBuffer);
-            QBuffer receivedData;
+        m_networkManager = networkManagerCreator()->makeNetworkManager();
+        RetVal<Progress> progress = m_networkManager->post(configuration()->checkForMuseSamplerUpdateUrl(),
+                                                           queryBuffer, receivedData,
+                                                           configuration()->headers());
+        if (!progress.ret) {
+            m_networkManager = nullptr;
+            return resolve(RetVal<bool>::make_ret(progress.ret));
+        }
 
-            deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-            muse::Ret ret = manager->post(configuration()->checkForMuseSamplerUpdateUrl(), &outgoingDevice, &receivedData,
-                                          configuration()->headers());
+        progress.val.finished().onReceive(this, [this, receivedData, localVersion, resolve](const ProgressResult& res) {
+            RetVal<bool> result = RetVal<bool>::make_ok(false);
 
-            muse::RetVal<bool> result = muse::RetVal<bool>::make_ok(false);
-            DEFER {
-                (void)resolve(result);
-            };
-
-            if (!ret) {
-                result.ret = ret;
-                return;
+            if (res.ret) {
+                const RetVal<Version> version = parseVersion(receivedData->data());
+                result.ret = version.ret;
+                result.val = localVersion < version.val;
+            } else {
+                result.ret = res.ret;
             }
 
-            QJsonParseError err;
-            const QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
-            if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-                result.ret = muse::Ret(int(muse::Ret::Code::UnknownError), err.errorString().toStdString());
-                return;
-            }
-
-            const QJsonObject rootObj = doc.object();
-            const QJsonObject dataObj = rootObj.value("data").toObject();
-            const QJsonObject productObj = dataObj.value("product").toObject();
-            const QJsonArray assetsArray = productObj.value("assets").toArray();
-
-            if (assetsArray.empty()) {
-                result.ret = muse::Ret(int(muse::Ret::Code::UnknownError), "Invalid JSON format");
-                return;
-            }
-
-            const QJsonObject firstAsset = assetsArray.first().toObject();
-            const QString versionStr = firstAsset.value("version").toString();
-            const muse::Version version(versionStr);
-
-            result.val = localVersion < version;
+            (void)resolve(result);
+            m_networkManager = nullptr;
         });
 
-        return muse::async::Promise<muse::RetVal<bool> >::dummy_result();
-#else
-        UNUSED(resolve);
-        UNUSED(this);
-
-        muse::RetVal<bool> result;
-        result.ret = muse::Ret(int(muse::Ret::Code::NotSupported), "NotSupported");
-        result.val = false;
-
-        return resolve(result);
-#endif
-    }, muse::async::PromiseType::AsyncByBody);
+        return Promise<RetVal<bool> >::dummy_result();
+    });
 }
