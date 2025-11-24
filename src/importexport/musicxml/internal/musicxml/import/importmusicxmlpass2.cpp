@@ -2627,6 +2627,14 @@ static void addGraceChordsAfter(Chord* c, GraceChordList& gcl, size_t& gac)
     while (gac > 0) {
         if (gcl.size() > 0) {
             Chord* graceChord = muse::takeFirst(gcl);
+            std::vector<EngravingItem*> el = graceChord->el(); // copy, because modified during loop
+            for (EngravingItem* e : el) {
+                if (e->isFermata()) {
+                    e->setParent(c->segment());
+                    c->segment()->add(e);
+                    graceChord->removeFermata(toFermata(e));
+                }
+            }
             graceChord->toGraceAfter();
             c->add(graceChord);              // TODO check if same voice ?
             coerceGraceCue(c, graceChord);
@@ -2652,6 +2660,7 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
         std::vector<EngravingItem*> el = gc->el(); // copy, because modified during loop
         for (EngravingItem* e : el) {
             if (e->isFermata()) {
+                e->setParent(c->segment());
                 c->segment()->add(e);
                 gc->removeFermata(toFermata(e));
             }
