@@ -91,6 +91,7 @@
 #include "engraving/editing/editchord.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editsystemlocks.h"
+#include "engraving/editing/editpagebreaks.h"
 #include "engraving/editing/splitjoinmeasure.h"
 #include "engraving/editing/transpose.h"
 #include "engraving/editing/textedit.h"
@@ -5891,6 +5892,16 @@ void NotationInteraction::addRemoveSystemLocks(AddRemoveSystemLockType intervalT
 
     startEdit(TranslatableString("undoableAction", "Measures per system"));
     EditSystemLocks::addRemoveSystemLocks(score(), interval, afterEachSystem);
+    apply();
+}
+
+void NotationInteraction::addRemovePageBreaks(AddRemovePageBreaksType intervalType, int interval)
+{
+    interval = intervalType == AddRemovePageBreaksType::SystemsInterval ? interval : 0;
+    bool afterEachPage = intervalType == AddRemovePageBreaksType::AfterEachPage;
+
+    startEdit(TranslatableString("undoableAction", "Add / remove page breaks"));
+    EditPageBreaks::addRemovePageBreaks(score(), interval, afterEachPage);
     apply();
 }
 
