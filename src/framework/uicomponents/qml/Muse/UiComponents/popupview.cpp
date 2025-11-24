@@ -59,9 +59,18 @@ void PopupView::initView()
         flags = Qt::Tool;
     }
 
+    static int sIsKde = -1;
+    if (sIsKde == -1) {
+        QString desktop = qEnvironmentVariable("XDG_CURRENT_DESKTOP").toLower();
+        QString session = qEnvironmentVariable("XDG_SESSION_DESKTOP").toLower();
+        sIsKde = desktop.contains("kde") || session.contains("kde");
+    }
+    if (!sIsKde) {
+        flags |= Qt::BypassWindowManagerHint;        // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
+    }
+
     flags |= Qt::FramelessWindowHint        // Without border
-             | Qt::NoDropShadowWindowHint   // Without system shadow
-             | Qt::BypassWindowManagerHint; // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
+             | Qt::NoDropShadowWindowHint;   // Without system shadow
 
     m_view->setFlags(flags);
     m_view->setColor(Qt::transparent);
