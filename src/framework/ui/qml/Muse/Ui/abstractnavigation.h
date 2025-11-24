@@ -52,7 +52,7 @@ class AbstractNavigation : public QObject, public QQmlParserStatus, public Injec
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)
     Q_PROPERTY(bool highlight READ highlight NOTIFY highlightChanged)
 
-    Q_PROPERTY(AccessibleItem * accessible READ accessible WRITE setAccessible NOTIFY accessibleChanged)
+    Q_PROPERTY(muse::ui::AccessibleItem * accessible READ accessible WRITE setAccessible NOTIFY accessibleChanged)
 
     Q_INTERFACES(QQmlParserStatus)
 
@@ -113,7 +113,7 @@ signals:
     void highlightChanged();
     void accessibleChanged();
 
-    void navigationEvent(QVariant event);
+    void navigationEvent(muse::ui::NavigationEvent* event);
 
 protected:
 

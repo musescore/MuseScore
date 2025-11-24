@@ -28,9 +28,9 @@
 #include "ui/inavigation.h"
 
 namespace muse::ui {
-class NavigationEvent
+class NavigationEvent : public QObject
 {
-    Q_GADGET
+    Q_OBJECT
     QML_ELEMENT;
     QML_UNCREATABLE("Must be created in C++ only")
     Q_PROPERTY(Type type READ type CONSTANT)

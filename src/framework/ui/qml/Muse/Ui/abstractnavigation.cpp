@@ -229,7 +229,7 @@ async::Channel<bool> AbstractNavigation::activeChanged() const
 void AbstractNavigation::onEvent(INavigation::EventPtr e)
 {
     NavigationEvent ev(e);
-    emit navigationEvent(QVariant::fromValue(ev));
+    emit navigationEvent(&ev);
 }
 
 QWindow* AbstractNavigation::window() const
