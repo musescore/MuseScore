@@ -1664,8 +1664,11 @@ Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx:
     }
     Fraction result = Fraction(count.quotient(),  musx::util::Fraction::fromEdu(Edu(noteType)).denominator());
     Fraction spacer = musxFractionToFraction(pickupSpacer);
+    if (spacer == Fraction(0, 1)) {
+        return result;
+    }
     if (spacer >= result) {
-        logger->logWarning(String("Skipping pickup spacer that is larger than the time signagure."));
+        logger->logWarning(String("Skipping pickup spacer that is larger than the time signature."));
         return result;
     }
     return result - spacer;
