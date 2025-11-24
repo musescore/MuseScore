@@ -211,7 +211,6 @@ void AudioDriverController::changeCurrentAudioApi(const std::string& name)
         return;
     }
 
-    IAudioDriver::Spec oldSpec = m_audioDriver->activeSpec();
     if (m_audioDriver->isOpened()) {
         m_audioDriver->close();
     }
@@ -223,8 +222,13 @@ void AudioDriverController::changeCurrentAudioApi(const std::string& name)
 
     // reset to default
     IAudioDriver::Spec spec = defaultSpec();
-    spec.callback = oldSpec.callback;
-    m_audioDriver->open(spec, nullptr);
+    spec.callback = m_callback;
+
+    if (!spec.deviceId.empty()) {
+        m_audioDriver->open(spec, nullptr);
+    } else {
+        LOGW() << "no devices for " << name;
+    }
 
     configuration()->setCurrentAudioApi(name);
     m_currentAudioApiChanged.notify();
@@ -251,6 +255,8 @@ async::Notification AudioDriverController::availableOutputDevicesChanged() const
 
 bool AudioDriverController::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec)
 {
+    m_callback = spec.callback;
+
     const std::string currentAudioApi = configuration()->currentAudioApi();
     IAudioDriverPtr driver = createDriver(currentAudioApi);
     driver->init();

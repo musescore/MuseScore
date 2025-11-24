@@ -59,6 +59,7 @@ private:
     std::thread m_thread;
     std::atomic<bool> m_running = false;
 
+    AudioDeviceID m_audioDeviceId;
     async::Channel<Spec> m_activeSpecChanged;
     async::Notification m_availableOutputDevicesChanged;
 };
