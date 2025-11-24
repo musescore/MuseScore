@@ -23,13 +23,13 @@ muse_create_module(engraving)
 # TODO: convert to target-based variant of qt_add_resources
 # (Not easy because of heavy use of aliases, which is much more cumbersome 
 # in CMake than in .qrc files)
-qt_add_resources(RESOURCE_SOURCES 
+muse_module_add_qrc(engraving 
     engraving.qrc
     data/fonts/fonts_Smufl.qrc
 )
 
 # TODO: convert to target-based variant of qt_add_resources
-qt_add_resources(BIG_RESOURCE_SOURCES
+muse_module_add_qrc(engraving BIG_RESOURCES
     data/fonts/fonts_Bravura.qrc
     data/fonts/fonts_Campania.qrc
     data/fonts/fonts_Edwin.qrc
