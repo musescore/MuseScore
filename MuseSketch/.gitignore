@@ -1,0 +1,41 @@
+# CMake
+build/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+*.cmake
+!SetupConfigure.cmake
+!build.cmake
+!version.cmake
+
+# Qt
+*.user
+*.qmlc
+*.jsc
+*.moc
+*.ui
+*.qrc
+.qmake.stash
+.qmake.cache
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.DS_Store
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+bin/
+lib/
+*.a
+*.o
+*.so
+*.dylib
+*.dll
+*.exe
+*.app/
