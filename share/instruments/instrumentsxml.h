@@ -98,6 +98,7 @@ QT_TRANSLATE_NOOP("engraving/instruments/family", "Gemshorns"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Pan Flutes"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Quenas"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Oboes"),
+QT_TRANSLATE_NOOP("engraving/instruments/family", "Dulzainas"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Shawms"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Cromornes"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Crumhorns"),
@@ -813,6 +814,17 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "D Quena", "d-quena longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "D Qn.", "d-quena shortName"),
 //: traitName for Quena; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "D", "d-quena traitName"),
+
+//: description for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Spanish double-reed folk instrument from the Castile region. In F♯.", "fs-castilian-dulzaina description"),
+//: trackName for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Castilian Dulzaina", "fs-castilian-dulzaina trackName"),
+//: longName for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Castilian Dulzaina", "fs-castilian-dulzaina longName"),
+//: shortName for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Cast. Dulz.", "fs-castilian-dulzaina shortName"),
+//: traitName for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "F♯", "fs-castilian-dulzaina traitName"),
 
 //: description for Piccolo Heckelphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Very rare variant of the heckelphone in F, sounding a fourth higher than the oboe.", "piccolo-heckelphone description"),
