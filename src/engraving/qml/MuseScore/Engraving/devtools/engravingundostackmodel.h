@@ -23,6 +23,7 @@
 
 #include <QAbstractItemModel>
 #include <QHash>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 
@@ -35,6 +36,7 @@ class UndoCommand;
 class EngravingUndoStackModel : public QAbstractItemModel, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
+    QML_ELEMENT;
 
     muse::Inject<context::IGlobalContext> context = { this };
 

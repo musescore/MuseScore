@@ -19,20 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ENGRAVINGELEMENTSMODEL_H
-#define MU_ENGRAVING_ENGRAVINGELEMENTSMODEL_H
+
+#pragma once
 
 #include <QAbstractItemModel>
 #include <QHash>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "iengravingelementsprovider.h"
 #include "actions/iactionsdispatcher.h"
+
+#include "devtools/iengravingelementsprovider.h"
 
 namespace mu::engraving {
 class EngravingElementsModel : public QAbstractItemModel, public muse::Injectable
 {
     Q_OBJECT
+    QML_ELEMENT;
+
     Q_PROPERTY(QString info READ info NOTIFY infoChanged)
     Q_PROPERTY(QString summary READ summary NOTIFY summaryChanged)
 
@@ -111,5 +115,3 @@ private:
     QString m_summary;
 };
 }
-
-#endif // MU_ENGRAVING_ENGRAVINGELEMENTSMODEL_H

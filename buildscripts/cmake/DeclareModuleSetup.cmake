@@ -153,6 +153,24 @@ function(muse_create_thirdparty_module target_name)
     endif()
 endfunction()
 
+function(muse_module_add_qrc target_name)
+    if (NOT QT_SUPPORT)
+        message(WARNING "Building without Qt support, cannot add QRC to target ${target_name}")
+        return()
+    endif()
+
+    set(options BIG_RESOURCES)
+    cmake_parse_arguments(PARSE_ARGV 1 arg "${options}" "" "")
+
+    if (arg_BIG_RESOURCES)
+        qt_add_big_resources(QRC_SOURCES ${arg_UNPARSED_ARGUMENTS})
+    else()
+        qt_add_resources(QRC_SOURCES ${arg_UNPARSED_ARGUMENTS})
+    endif()
+
+    target_sources(${target_name} PRIVATE ${QRC_SOURCES})
+endfunction()
+
 ### LEGACY MACROS
 
 ## Declare

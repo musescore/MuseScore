@@ -125,6 +125,7 @@ set(LINK_LIB
     braille
     muse::diagnostics
     engraving
+    engraving_qml
     context
     notation
     project
