@@ -233,6 +233,7 @@ PlaybackSetupData WindsSetupDataResolver::doResolve(const Instrument* instrument
         { "baritone-sarrusophone", { SoundId::Sarrusophone, SoundCategory::Winds, { SoundSubCategory::Baritone } } },
         { "bass-sarrusophone", { SoundId::Sarrusophone, SoundCategory::Winds, { SoundSubCategory::Bass } } },
         { "contrabass-sarrusophone", { SoundId::Sarrusophone, SoundCategory::Winds, { SoundSubCategory::Contra_Bass } } },
+        { "fsharp-castilian-dulzaina", { SoundId::Dulzaina, SoundCategory::Winds, { SoundSubCategory::Castilian } } },
 
         { "bagpipe", { SoundId::Bagpipe, SoundCategory::Winds } },
         { "accordion", { SoundId::Accordion, SoundCategory::Winds } },

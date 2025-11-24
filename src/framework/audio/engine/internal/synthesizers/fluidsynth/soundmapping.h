@@ -576,7 +576,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Shofar,  {} }, { midi::Program(0, 60) } },
         { { mpe::SoundId::Vuvuzela,  {} }, { midi::Program(0, 56) } },
         { { mpe::SoundId::KlaxonHorns,  {} }, { midi::Program(0, 84) } },
-        { { mpe::SoundId::Kazoo,  {} }, { midi::Program(0, 85) } }
+        { { mpe::SoundId::Kazoo,  {} }, { midi::Program(0, 85) } },
+        { { mpe::SoundId::Dulzaina, { mpe::SoundSubCategory::Castilian } }, { midi::Program(0, 68) } }
     };
 
     static const std::map<SoundMappingKey, midi::Programs> PERCUSSION_MAPPINGS = {

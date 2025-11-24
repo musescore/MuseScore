@@ -370,7 +370,10 @@
       <Family id="nyckelharpas">
             <name>Nyckelharpas</name>
       </Family>
-      <Articulation>
+	<Family id="dulzainas">
+		<name>Dulzainas</name>
+	</Family>
+	<Articulation>
             <velocity>100</velocity>
             <gateTime>100</gateTime>
       </Articulation>
@@ -3451,6 +3454,28 @@
                         <program value="109"/> <!--Bagpipe-->
                   </Channel>
                   <genre>world</genre>
+            </Instrument>
+            <Instrument id="fsharp-castilian-dulzaina">
+                  <family>dulzainas</family>
+                  <trackName>Castilian Dulzaina</trackName>
+                  <longName>Castilian Dulzaina</longName>
+                  <shortName>CastDulz.</shortName>
+                  <traitName type="transposition">F#</traitName>
+                  <description>Castilian Spanish folk instrument in F# (an augmented fourth above).</description>
+                  <musicXMLid>wind.reed.castiliandulzaina</musicXMLid>
+                  <staves>1</staves>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>63-91</aPitchRange>
+                  <pPitchRange>63-96</pPitchRange>
+                  <transposeDiatonic>3</transposeDiatonic>
+                  <transposeChromatic>6</transposeChromatic>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 68; MS General: Oboe-->
+                        <program value="68"/> <!--Oboe-->
+                  </Channel>
+                  <genre>world</genre>
+                  <genre>popular</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="free-reed">
