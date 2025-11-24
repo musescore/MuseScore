@@ -131,7 +131,7 @@ MuseScore {
                     }
                 }
                 // list selections / selection filter could be individual notes
-                if (!note.selected) {
+                if (!note.selected || note.tieBack) {
                     continue
                 }
                 // Then apply new names
