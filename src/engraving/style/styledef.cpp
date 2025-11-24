@@ -2033,7 +2033,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(systemTextMusicalSymbolSize,                         10.0),
     styleDef(tabFretNumberMusicalSymbolSize,                      9.0),
     styleDef(tempoChangeMusicalSymbolSize,                        12.0),
-    styleDef(tempoMusicalSymbolSize,                              12.0),
+    styleDef(tempoMusicalSymbolSize,                              20.0),
     styleDef(textLineMusicalSymbolSize,                           10.0),
     styleDef(titleMusicalSymbolSize,                              22.0),
     styleDef(translatorMusicalSymbolSize,                         10.0),

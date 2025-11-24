@@ -47,6 +47,7 @@
 #include "dom/textline.h"
 #include "editing/transpose.h"
 #include "style/styledef.h"
+#include "dom/tempotext.h"
 
 #include "engraving/style/textstyle.h"
 
@@ -1005,6 +1006,11 @@ void mu::engraving::compat::CompatUtils::setMusicSymbolSize470(MStyle& style)
             continue;
         }
 
-        style.set(musicSymbolSizeSid, style.value(fontSizeSid));
+        double size = style.value(fontSizeSid).toDouble();
+        if (textStyleType == TextStyleType::TEMPO) {
+            size *= TempoText::DEFAULT_SYM_SIZE_RATIO;
+        }
+
+        style.set(musicSymbolSizeSid, size);
     }
 }
