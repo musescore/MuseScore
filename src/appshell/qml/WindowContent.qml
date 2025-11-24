@@ -25,7 +25,7 @@ import QtQuick.Controls 2.15
 import Muse.Dock 1.0
 import MuseScore.AppShell 1.0
 import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import Muse.UiComponents
 
 import "./HomePage"
 import "./NotationPage"

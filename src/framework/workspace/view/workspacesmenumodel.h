@@ -26,7 +26,7 @@
 #include "ui/iuiactionsregister.h"
 #include "workspace/iworkspacemanager.h"
 
-#include "uicomponents/view/abstractmenumodel.h"
+#include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 namespace muse::workspace {
 class WorkspacesMenuModel : public uicomponents::AbstractMenuModel

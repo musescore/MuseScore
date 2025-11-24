@@ -24,7 +24,7 @@
 #include "modularity/ioc.h"
 #include "../iextensionsprovider.h"
 
-#include "uicomponents/view/abstracttoolbarmodel.h"
+#include "uicomponents/qml/Muse/UiComponents/abstracttoolbarmodel.h"
 
 namespace muse::extensions {
 class ExtensionsToolBarModel : public uicomponents::AbstractToolBarModel

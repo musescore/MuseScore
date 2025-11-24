@@ -23,7 +23,7 @@ import QtQuick 2.9
 import QtQuick.Layouts 1.12
 
 import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import Muse.UiComponents
 
 Item {
     id: root

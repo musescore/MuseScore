@@ -31,7 +31,7 @@
 #include "staffcontroltreeitem.h"
 #include "systemobjectslayertreeitem.h"
 
-#include "uicomponents/view/itemmultiselectionmodel.h"
+#include "uicomponents/qml/Muse/UiComponents/itemmultiselectionmodel.h"
 
 #include "defer.h"
 #include "log.h"

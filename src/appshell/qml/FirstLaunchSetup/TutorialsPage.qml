@@ -24,8 +24,8 @@ import QtQuick.Window 2.15
 import QtQuick.Layouts 1.15
 
 import Muse.Ui 1.0
-import Muse.UiComponents 1.0
-import Muse.GraphicalEffects 1.0
+import Muse.UiComponents
+import Muse.GraphicalEffects
 import MuseScore.AppShell 1.0
 
 Page {

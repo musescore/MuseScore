@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTEINPUTBARCUSTOMISEITEM_H
-#define MU_NOTATION_NOTEINPUTBARCUSTOMISEITEM_H
+
+#pragma once
 
 #include <QString>
 
 #include "ui/view/iconcodes.h"
-#include "uicomponents/view/selectableitemlistmodel.h"
+#include "uicomponents/qml/Muse/UiComponents/selectableitemlistmodel.h"
 
 namespace mu::notation {
 class NoteInputBarCustomiseItem : public muse::uicomponents::SelectableItemListModel::Item
@@ -74,5 +74,3 @@ private:
     bool m_checked = false;
 };
 }
-
-#endif // MU_NOTATION_NOTEINPUTBARCUSTOMISEITEM_H

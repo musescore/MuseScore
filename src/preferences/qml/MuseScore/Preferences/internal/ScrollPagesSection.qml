@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-import Muse.UiComponents 1.0
+import Muse.UiComponents
 
 BaseSection {
     id: root
@@ -50,12 +52,14 @@ BaseSection {
         ]
 
         delegate: RoundedRadioButton {
+            id: radioButton
             leftPadding: 0
             spacing: 6
 
-            property string title: modelData["title"]
+            required property string title
+            required property int value
 
-            checked: root.orientation === modelData["value"]
+            checked: root.orientation === value
 
             navigation.name: "ScrollPagesOrientationButton"
             navigation.panel: root.navigation
@@ -63,12 +67,12 @@ BaseSection {
             navigation.accessible.name: title
 
             StyledTextLabel {
-                text: title
+                text: radioButton.title
                 horizontalAlignment: Text.AlignLeft
             }
 
             onToggled: {
-                root.orientationChangeRequested(modelData["value"])
+                root.orientationChangeRequested(value)
             }
         }
     }

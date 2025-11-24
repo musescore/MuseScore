@@ -24,7 +24,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import Muse.UiComponents
 
 ListItemBlank {
     id: root
@@ -117,18 +117,17 @@ ListItemBlank {
         property string id: root.modelData?.id ?? ""
 
         property string title: root.modelData?.title ?? ""
-        property string titleWithMnemonicUnderline: modelData?.titleWithMnemonicUnderline ?? title
+        property string titleWithMnemonicUnderline: root.modelData?.titleWithMnemonicUnderline ?? title
 
-        property bool hasShortcuts: Boolean(modelData) && Boolean(modelData.shortcuts)
-        property string shortcuts: hasShortcuts ? modelData.shortcuts : ""
+        property bool hasShortcuts: Boolean(root.modelData?.shortcuts)
+        property string shortcuts: hasShortcuts ? root.modelData.shortcuts : ""
 
-        property bool isCheckable: Boolean(modelData) && Boolean(modelData.checkable)
-        property bool isChecked: isCheckable && Boolean(modelData.checked)
-
+        property bool isCheckable: Boolean(root.modelData?.checkable)
+        property bool isChecked: isCheckable && Boolean(root.modelData.checked)
         property bool isSelectable: Boolean(root.modelData?.selectable)
-        property bool isSelected: isSelectable && Boolean(root.modelData?.selected)
+        property bool isSelected: isSelectable && Boolean(root.modelData.selected)
 
-        property bool hasIcon: Boolean(modelData) && Boolean(modelData.icon) && modelData.icon !== IconCode.NONE
+        property bool hasIcon: Boolean(root.modelData?.icon) && root.modelData.icon !== IconCode.NONE
     }
 
     function calculatedLeftPartWidth() {

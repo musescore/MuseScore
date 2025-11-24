@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "uicomponents/view/selectableitemlistmodel.h"
+#include "uicomponents/qml/Muse/UiComponents/selectableitemlistmodel.h"
 
 namespace mu::inspector {
 class FretFrameChordItem : public muse::uicomponents::SelectableItemListModel::Item

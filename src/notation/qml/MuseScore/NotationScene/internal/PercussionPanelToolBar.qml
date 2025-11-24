@@ -22,8 +22,8 @@
 import QtQuick 2.15
 
 import Muse.Ui 1.0
-import Muse.UiComponents 1.0
-import Muse.GraphicalEffects 1.0
+import Muse.UiComponents
+import Muse.GraphicalEffects
 import MuseScore.NotationScene 1.0
 
 Item {

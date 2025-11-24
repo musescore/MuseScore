@@ -24,8 +24,8 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 
 import Muse.Ui 1.0
-import Muse.UiComponents 1.0
-import Muse.GraphicalEffects 1.0
+import Muse.UiComponents
+import Muse.GraphicalEffects
 
 Item {
     id: root
@@ -79,7 +79,7 @@ Item {
         anchors.fill: parent
 
         contentWidth: parent.width
-        contentHeight: authorInfo.height + sideMargin
+        contentHeight: authorInfo.height + root.sideMargin
 
         topMargin: topGradient.height
 

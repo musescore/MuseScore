@@ -237,8 +237,9 @@ set(MODULE_LINK
     muse::draw
     engraving
     commonscene
-    muse::uicomponents
     muse::ui
+    muse::uicomponents
+    muse::uicomponents_qml
     Qt::Quick
     Qt::StateMachine
     Qt::Widgets

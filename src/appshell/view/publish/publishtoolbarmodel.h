@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "uicomponents/view/abstracttoolbarmodel.h"
+#include "uicomponents/qml/Muse/UiComponents/abstracttoolbarmodel.h"
 
 namespace mu::appshell {
 class PublishToolBarModel : public muse::uicomponents::AbstractToolBarModel

@@ -20,14 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_DOCK_DOCKWINDOW_H
-#define MUSE_DOCK_DOCKWINDOW_H
+#pragma once
 
 #include <QQuickItem>
 
-#include "framework/uicomponents/view/qmllistproperty.h"
-
 #include "async/asyncable.h"
+#include "uicomponents/qml/Muse/UiComponents/qmllistproperty.h"
 
 #include "modularity/ioc.h"
 #include "workspace/iworkspacemanager.h"
@@ -157,5 +155,3 @@ private:
     bool m_reloadCurrentPageAllowed = false;
 };
 }
-
-#endif // MUSE_DOCK_DOCKWINDOW_H

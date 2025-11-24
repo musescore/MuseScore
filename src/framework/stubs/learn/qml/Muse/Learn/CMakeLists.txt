@@ -25,4 +25,6 @@ qt_add_qml_module(muse_learn_qml
     VERSION 1.0
     QML_FILES
         LearnPage.qml
+    DEPENDENCIES
+        TARGET muse_uicomponents_qml
 )

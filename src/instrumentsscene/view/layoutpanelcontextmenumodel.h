@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include "uicomponents/view/abstractmenumodel.h"
 #include "actions/actionable.h"
+#include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"

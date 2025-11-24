@@ -28,8 +28,8 @@
 #include "async/asyncable.h"
 #include "actions/actionable.h"
 
-#include "uicomponents/view/menuitem.h"
-#include "uicomponents/view/abstractmenumodel.h"
+#include "uicomponents/qml/Muse/UiComponents/menuitem.h"
+#include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"

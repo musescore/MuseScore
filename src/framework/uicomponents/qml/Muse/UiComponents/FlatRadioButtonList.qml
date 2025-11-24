@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+pragma ComponentBehavior: Bound
 
-import Muse.UiComponents 1.0
-import Muse.Ui 1.0
+import QtQuick
+
+import Muse.UiComponents
+import Muse.Ui
 
 RadioButtonGroup {
     id: root
@@ -44,12 +46,15 @@ RadioButtonGroup {
             return
         }
 
-        root.itemAtIndex(0).navigation.requestActive()
+        (root.itemAtIndex(0) as FlatRadioButton).navigation.requestActive()
     }
 
     implicitHeight: ui.theme.defaultButtonSize
 
     delegate: FlatRadioButton {
+        required property var modelData
+        required property int index
+
         checked: root.currentValue  === modelData.value
 
         text: modelData.text ?? ""
@@ -63,7 +68,7 @@ RadioButtonGroup {
 
         navigation.name: "FlatRadioButtonList_" + (Boolean(text) ? text : modelData.title)
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowStart + 1 + model.index
+        navigation.row: root.navigationRowStart + 1 + index
         navigation.accessible.name: root.accessibleName + " " + (Boolean(text) ? text : modelData.title)
         navigation.accessible.description:  modelData.description ?? ""
 

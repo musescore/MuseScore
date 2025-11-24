@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_NOTATIONSTATUSBARMODEL_H
-#define MU_NOTATION_NOTATIONSTATUSBARMODEL_H
+#pragma once
 
 #include <QObject>
 #include <QQmlParserStatus>
@@ -29,8 +28,8 @@
 #include "async/asyncable.h"
 #include "actions/actionable.h"
 
-#include "uicomponents/view/menuitem.h"
-#include "uicomponents/view/abstractmenumodel.h"
+#include "uicomponents/qml/Muse/UiComponents/menuitem.h"
+#include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
@@ -139,5 +138,3 @@ private:
     std::shared_ptr<muse::uicomponents::AbstractMenuModel> m_workspacesMenuModel;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONSTATUSBARMODEL_H

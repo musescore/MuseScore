@@ -23,7 +23,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import Muse.UiComponents
 
 FocusScope {
     id: root

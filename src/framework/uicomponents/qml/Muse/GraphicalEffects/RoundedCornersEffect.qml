@@ -28,5 +28,5 @@ ShaderEffect {
     required property real radius
     property size sourceSize: Qt.size(root.width, root.height)
 
-    fragmentShader: "qrc:/qml/Muse/GraphicalEffects/shaders/roundcorners.frag.qsb"
+    fragmentShader: "qrc:/qt/qml/Muse/GraphicalEffects/shaders/roundcorners.frag.qsb"
 }

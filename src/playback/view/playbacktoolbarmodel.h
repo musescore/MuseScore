@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLAYBACK_PLAYBACKTOOLBARMODEL_H
-#define MU_PLAYBACK_PLAYBACKTOOLBARMODEL_H
 
-#include "uicomponents/view/abstractmenumodel.h"
+#pragma once
+
+#include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
 #include "iplaybackcontroller.h"
@@ -112,5 +112,3 @@ private:
     QTime m_playTime;
 };
 }
-
-#endif // MU_PLAYBACK_PLAYBACKTOOLBARMODEL_H
