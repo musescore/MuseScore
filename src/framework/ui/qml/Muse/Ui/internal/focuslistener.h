@@ -1,8 +1,8 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -19,35 +19,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_NAVIGATIONPOPUPPANEL_H
-#define MUSE_UI_NAVIGATIONPOPUPPANEL_H
 
-#include <QObject>
+#pragma once
 
-#include "navigationpanel.h"
+#include <QQuickItem>
+
+#include <qqmlintegration.h>
 
 namespace muse::ui {
-class NavigationPopupPanel : public NavigationPanel
+class FocusListener : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT;
 
-    Q_PROPERTY(NavigationControl * parentControl READ parentControl_property WRITE setParentControl NOTIFY parentControlChanged)
+    Q_PROPERTY(QQuickItem * item READ item WRITE setItem NOTIFY itemChanged)
 
 public:
-    explicit NavigationPopupPanel(QObject* parent = nullptr);
+    explicit FocusListener(QObject* parent = nullptr);
 
-    INavigationControl* parentControl() const;
-    NavigationControl* parentControl_property() const;
-
-public slots:
-    void setParentControl(NavigationControl* parentControl);
-    void setParentControl(INavigationControl* parentControl);
+    QQuickItem* item() const;
 
 signals:
-    void parentControlChanged();
+    void itemChanged();
+
+public slots:
+    void setItem(QQuickItem* item);
 
 private:
-    INavigationControl* m_parentControl = nullptr;
+    void listenFocusChanged();
+
+    bool eventFilter(QObject* watched, QEvent* event);
+
+    QQuickItem* m_item = nullptr;
 };
 }
-#endif // MUSE_UI_NAVIGATIONPOPUPPANEL_H

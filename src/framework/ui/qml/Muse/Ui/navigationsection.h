@@ -19,25 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_NAVIGATIONSECTION_H
-#define MUSE_UI_NAVIGATIONSECTION_H
+
+#pragma once
 
 #include <QObject>
 #include <QList>
+
+#include <qqmlintegration.h>
 
 #include "abstractnavigation.h"
 #include "navigationpanel.h"
 
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
-
-#include "../inavigationcontroller.h"
+#include "ui/inavigationcontroller.h"
 
 namespace muse::ui {
 class NavigationSection : public AbstractNavigation, public INavigationSection
 {
     Q_OBJECT
     Q_PROPERTY(QmlType type READ type_property WRITE setType NOTIFY typeChanged)
+    QML_ELEMENT
 
 public:
     Inject<IApplication> application = { this };
@@ -102,5 +104,3 @@ private:
     OnActiveRequested m_onActiveRequested;
 };
 }
-
-#endif // MUSE_UI_NAVIGATIONSECTION_H

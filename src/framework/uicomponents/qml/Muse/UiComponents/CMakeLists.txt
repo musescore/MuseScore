@@ -169,6 +169,7 @@ qt_add_qml_module(muse_uicomponents_qml
 
     IMPORTS
         QtQuick
+        TARGET muse_ui_qml
 )
 
 if (OS_IS_MAC)

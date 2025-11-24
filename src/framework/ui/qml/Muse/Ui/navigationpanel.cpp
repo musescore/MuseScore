@@ -21,8 +21,6 @@
  */
 #include "navigationpanel.h"
 
-#include <algorithm>
-
 #include "accessibility/iaccessible.h"
 #include "navigationsection.h"
 #include "translation.h"

@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_MIXERCHANNELITEM_H
-#define MU_PLAYBACK_MIXERCHANNELITEM_H
+#pragma once
 
 #include <QObject>
 
@@ -33,7 +32,7 @@
 #include "context/iglobalcontext.h"
 #include "iplaybackconfiguration.h"
 
-#include "ui/view/navigationpanel.h"
+#include "ui/qml/Muse/Ui/navigationpanel.h"
 
 #include "audio/common/audiotypes.h"
 #include "inputresourceitem.h"
@@ -210,5 +209,3 @@ protected:
     bool m_outputResourceItemsLoading = false;
 };
 }
-
-#endif // MU_PLAYBACK_MIXERCHANNELITEM_H

@@ -21,8 +21,6 @@
  */
 #include "qmldrag.h"
 
-#include "log.h"
-
 using namespace muse::ui;
 
 QmlDrag::QmlDrag(QObject* parent)

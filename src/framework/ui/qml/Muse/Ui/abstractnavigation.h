@@ -19,24 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_ABSTRACTNAVIGATION_H
-#define MUSE_UI_ABSTRACTNAVIGATION_H
+
+#pragma once
 
 #include <QObject>
 #include <QQmlParserStatus>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
-#include "../inavigation.h"
+#include "modularity/ioc.h"
+#include "ui/inavigation.h"
+#include "ui/inavigationcontroller.h"
+
 #include "qmlaccessible.h"
 #include "navigationevent.h"
-
-#include "modularity/ioc.h"
-#include "../inavigationcontroller.h"
 
 namespace muse::ui {
 class AbstractNavigation : public QObject, public QQmlParserStatus, public Injectable, public async::Asyncable
 {
     Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("AbstractNavigation is an abstract base class")
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 
@@ -131,5 +134,3 @@ protected:
     bool m_isComponentCompleted = false;
 };
 }
-
-#endif // MUSE_UI_ABSTRACTNAVIGATION_H

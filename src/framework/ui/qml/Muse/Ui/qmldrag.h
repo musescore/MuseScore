@@ -26,7 +26,7 @@
 #include <QQuickItem>
 
 #include "global/modularity/ioc.h"
-#include "../idragcontroller.h"
+#include "idragcontroller.h"
 
 namespace muse::ui {
 class QmlDrag : public QObject
@@ -36,13 +36,13 @@ class QmlDrag : public QObject
     Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged FINAL)
     Q_PROPERTY(QVariantMap mimeData READ mimeData WRITE setMimeData NOTIFY mimeDataChanged FINAL)
 
-    QML_ELEMENT
+    QML_NAMED_ELEMENT(CppDrag)
     QML_ATTACHED(QmlDrag)
 
     Inject<IDragController> controller;
 
 public:
-    QmlDrag(QObject* parent);
+    QmlDrag(QObject* parent = nullptr);
 
     bool active() const;
     void setActive(bool newActive);

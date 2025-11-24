@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_MIXERPANELMODEL_H
-#define MU_PLAYBACK_MIXERPANELMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QList>
@@ -30,8 +29,8 @@
 #include "async/asyncable.h"
 #include "audio/main/iplayback.h"
 #include "context/iglobalcontext.h"
-#include "ui/view/navigationsection.h"
 #include "playback/iplaybackconfiguration.h"
+#include "ui/qml/Muse/Ui/navigationsection.h"
 
 #include "iplaybackcontroller.h"
 #include "internal/mixerchannelitem.h"
@@ -114,5 +113,3 @@ private:
     int m_navigationOrderStart = 1;
 };
 }
-
-#endif // MU_PLAYBACK_MIXERPANELMODEL_H

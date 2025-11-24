@@ -19,34 +19,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_ERRORDETAILSMODEL_H
-#define MUSE_UI_ERRORDETAILSMODEL_H
 
-#include <QAbstractListModel>
+#pragma once
+
+#include <QObject>
+
+#include <qqmlintegration.h>
+
+#include "navigationpanel.h"
 
 namespace muse::ui {
-class ErrorDetailsModel : public QAbstractListModel
+class NavigationPopupPanel : public NavigationPanel
 {
     Q_OBJECT
+    QML_ELEMENT
+
+    Q_PROPERTY(NavigationControl* parentControl READ parentControl_property WRITE setParentControl NOTIFY parentControlChanged)
 
 public:
-    explicit ErrorDetailsModel(QObject* parent = nullptr);
+    explicit NavigationPopupPanel(QObject* parent = nullptr);
 
-    QVariant data(const QModelIndex& index, int role) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    QHash<int, QByteArray> roleNames() const override;
+    INavigationControl* parentControl() const;
+    NavigationControl* parentControl_property() const;
 
-    Q_INVOKABLE void load(const QString& detailedText);
-    Q_INVOKABLE bool copyDetailsToClipboard();
+public slots:
+    void setParentControl(NavigationControl* parentControl);
+    void setParentControl(INavigationControl* parentControl);
+
+signals:
+    void parentControlChanged();
 
 private:
-    enum Roles {
-        ErrorText = Qt::UserRole + 1,
-        ErrorPlainText
-    };
-
-    QList<QVariantMap> m_items;
+    INavigationControl* m_parentControl = nullptr;
 };
 }
-
-#endif //MUSE_UI_ERRORDETAILSMODEL_H

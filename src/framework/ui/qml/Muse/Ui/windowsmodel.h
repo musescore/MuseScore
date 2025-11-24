@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2021 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,31 +22,33 @@
 
 #pragma once
 
-#include "async/asyncable.h"
-#include "modularity/ioc.h"
-#include "ui/iuiconfiguration.h"
+#include <QObject>
 
 #include <qqmlintegration.h>
 
-#include "ui/view/mainwindowbridge.h"
+#include "modularity/ioc.h"
+#include "ui/iwindowscontroller.h"
 
 namespace muse::ui {
-class MacOSMainWindowBridge : public MainWindowBridge, public async::Asyncable
+class WindowsModel : public QObject, public Injectable
 {
     Q_OBJECT
-    QML_NAMED_ELEMENT(MainWindowBridge)
+    QML_ELEMENT;
 
-    INJECT(IUiConfiguration, uiConfiguration)
+    Inject<ui::IWindowsController> windowsController = { this };
+
+    Q_PROPERTY(
+        QRect mainWindowTitleBarMoveArea READ mainWindowTitleBarMoveArea WRITE setMainWindowTitleBarMoveArea NOTIFY mainWindowTitleBarMoveAreaChanged)
 
 public:
-    explicit MacOSMainWindowBridge(QObject* parent = nullptr);
+    explicit WindowsModel(QObject* parent = nullptr);
 
-    bool fileModified() const override;
+    QRect mainWindowTitleBarMoveArea() const;
 
 public slots:
-    void setFileModified(bool modified) override;
+    void setMainWindowTitleBarMoveArea(const QRect& area);
 
-private:
-    void init() override;
+signals:
+    void mainWindowTitleBarMoveAreaChanged(QRect titleBarMoveArea);
 };
 }
