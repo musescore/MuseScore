@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2025 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,13 +16,16 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(inspector STUB)
+muse_create_qml_module(inspector_qml FOR inspector STUB)
 
-target_sources(inspector PRIVATE
-    inspectorstubmodule.cpp
-    inspectorstubmodule.h
+qt_add_qml_module(inspector_qml
+    URI MuseScore.Inspector
+    VERSION 1.0
+    QML_FILES
+        InspectorForm.qml
+        TextStylePopup.qml
+    IMPORTS
+        TARGET muse_uicomponents_qml
 )
-
-add_subdirectory(qml/MuseScore/Inspector)

@@ -24,7 +24,10 @@ import QtQuick 2.15
 import Muse.UiComponents
 
 Rectangle {
-    property var model: null
+    property var model
+    property var navigationSection
+    property int navigationOrderStart
+    property var notationView
 
     color: ui.theme.backgroundPrimaryColor
 

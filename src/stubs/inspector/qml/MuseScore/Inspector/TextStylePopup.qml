@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -13,17 +13,28 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-#include "inspectorstubmodule.h"
+import QtQuick
 
-using namespace mu::inspector;
+import Muse.UiComponents
+import MuseScore.NotationScene
 
-std::string InspectorModule::moduleName() const
-{
-    return "inspector";
+AbstractElementPopup {
+    id: root
+
+    model: null
+    
+    property var notationViewNavigationSection
+    property int navigationOrderStart
+    readonly property int navigationOrderEnd: 0
+
+    StyledTextLabel {
+        anchors.centerIn: parent
+        text: "Text Style Popup Stub"
+    }
 }
