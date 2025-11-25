@@ -1893,7 +1893,10 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                                                                         /*nominal=*/ score()->sigmap()->timesig(tick().ticks()).nominal(),
                                                                         /*measure=*/ this,
                                                                         /*maxDots=*/ 0);
-
+                if (durList.empty()) {
+                    LOGD("Could not make durations for: %d/%d", (nf * stretch).numerator(), (nf * stretch).denominator());
+                    continue;
+                }
                 // set the existing rest to the first value of the duration list
                 TDuration firstDur = durList[0];
                 rest->undoChangeProperty(Pid::DURATION, firstDur.isMeasure() ? ticks() : firstDur.fraction());
