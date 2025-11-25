@@ -676,6 +676,20 @@ exports.publish = async function (taffyData, opts, tutorials) {
 
     data = taffyData;
 
+    // MUFIX 
+    data().each(function(doclet) {
+
+        // Removed (static) from view
+        if (doclet.scope === 'static') {
+            doclet.scope = undefined;
+        }
+
+        // Added `api.` prefix
+        if (doclet.kind === "namespace") {
+            doclet.name = "api."+doclet.name
+        }
+    });
+
     conf = env.conf.templates || {};
     conf.default = conf.default || {};
 

@@ -304,7 +304,7 @@ h4.name {
 table {
 	border-collapse: separate;
 	border-radius: 0.5rem;
-	border-spacing: 0 0.5rem;
+	border-spacing: 0;
 	font-size: 0.875rem;
 	margin: 0;
 	width: 100%;
@@ -316,8 +316,8 @@ table td:first-child,
 table thead th:first-child,
 .params thead th:first-child,
 .props thead th:first-child {
-	border-bottom-left-radius: 1rem;
-	border-top-left-radius: 1rem;
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
 
 }
 
@@ -326,8 +326,8 @@ table td:last-child,
 table thead th:last-child,
 .params thead th:last-child,
 .props thead th:last-child {
-	border-bottom-right-radius: 1rem;
-	border-top-right-radius: 1rem;
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
 
 }
 
@@ -354,7 +354,7 @@ th,
 td {
 	display: table-cell;
 	margin: 0;
-	padding: 1rem 2rem;
+	padding: 0.5rem 2rem;
 	text-align: left;
 	vertical-align: top;
 
