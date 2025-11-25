@@ -31,8 +31,7 @@
       <trackName>Backing
 Vocals</trackName>
       <Instrument id="voice">
-        <longName>Backing
-Vocals</longName>
+        <longName>Backing<br/>Vocals</longName>
         <shortName>B. Vx.</shortName>
         <trackName>Voice</trackName>
         <minPitchP>38</minPitchP>
@@ -126,10 +125,8 @@ Vocals</longName>
       <trackName>Electric
 Guitar 1</trackName>
       <Instrument id="electric-guitar">
-        <longName>Electric
-Guitar 1</longName>
-        <shortName>Elec.
-Gtr. 1</shortName>
+        <longName>Electric<br/>Guitar 1</longName>
+        <shortName>Elec.<br/>Gtr. 1</shortName>
         <trackName>Electric Guitar</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>88</maxPitchP>
@@ -256,10 +253,8 @@ Gtr. 1</shortName>
       <trackName>Electric
 Guitar 2</trackName>
       <Instrument id="electric-guitar">
-        <longName>Electric
-Guitar 2</longName>
-        <shortName>Elec.
-Gtr. 2</shortName>
+        <longName>Electric<br/>Guitar 2</longName>
+        <shortName>Elec.<br/>Gtr. 2</shortName>
         <trackName>Electric Guitar</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>88</maxPitchP>
@@ -385,10 +380,8 @@ Gtr. 2</shortName>
       <trackName>Acoustic
 Guitar</trackName>
       <Instrument id="guitar-steel">
-        <longName>Acoustic
-Guitar</longName>
-        <shortName>Ac.
-Gtr.</shortName>
+        <longName>Acoustic<br/>Guitar</longName>
+        <shortName>Ac.<br/>Gtr.</shortName>
         <trackName>Acoustic Guitar</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>84</maxPitchP>
@@ -483,8 +476,7 @@ Gtr.</shortName>
       <trackName>Piano 2</trackName>
       <Instrument id="piano">
         <longName>Piano 2</longName>
-        <shortName>Pno.
-2</shortName>
+        <shortName>Pno.<br/>2</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
