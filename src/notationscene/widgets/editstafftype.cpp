@@ -136,6 +136,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     connect(stemBelowRadio,      &QRadioButton::toggled, this, &EditStaffType::updatePreview);
     connect(minimShortRadio,     &QRadioButton::toggled, this, &EditStaffType::tabMinimShortToggled);
     connect(minimSlashedRadio,   &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(minimCircledRadio,   &QRadioButton::toggled, this, &EditStaffType::updatePreview);
     connect(showRests,           &QRadioButton::toggled, this, &EditStaffType::updatePreview);
 
     connect(textStyleRadioButton, &QRadioButton::toggled, this, &EditStaffType::textStylesToggled);
@@ -365,6 +366,7 @@ void EditStaffType::setValues()
         minimNoneRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::NONE);
         minimShortRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::SHORTER);
         minimSlashedRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::SLASHED);
+        minimCircledRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::CIRCLED);
         mu::engraving::TablatureSymbolRepeat symRepeat = staffType.symRepeat();
         valuesRepeatNever->setChecked(symRepeat == mu::engraving::TablatureSymbolRepeat::NEVER);
         valuesRepeatSystem->setChecked(symRepeat == mu::engraving::TablatureSymbolRepeat::SYSTEM);
@@ -541,9 +543,9 @@ void EditStaffType::setFromDlg()
         }
         staffType.setLinesThrough(linesThroughRadio->isChecked());
         staffType.setMinimStyle(minimNoneRadio->isChecked() ? mu::engraving::TablatureMinimStyle::NONE
-                                : (minimShortRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SHORTER : mu::engraving::
-                                   TablatureMinimStyle::
-                                   SLASHED));
+                                : minimShortRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SHORTER
+                                : minimSlashedRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SLASHED
+                                : mu::engraving::TablatureMinimStyle::CIRCLED);
         staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? mu::engraving::TablatureSymbolRepeat::NEVER
                                   : (valuesRepeatSystem->isChecked() ? mu::engraving::TablatureSymbolRepeat::SYSTEM
                                      : valuesRepeatMeasure->isChecked() ? mu::engraving::TablatureSymbolRepeat::MEASURE

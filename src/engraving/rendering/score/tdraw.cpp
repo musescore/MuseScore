@@ -2339,6 +2339,22 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         const double startPosX = ldata->bbox().x();
         const double yOffset = tab->fretFontYOffset();
         painter->drawText(PointF(startPosX, yOffset * item->magS()), item->fretString());
+
+        // Draw ellipse around fret number for half notes when CIRCLED style is selected
+        if (tab->minimStyle() == TablatureMinimStyle::CIRCLED
+            && item->chord()->durationType().type() == DurationType::V_HALF) {
+            double sp = item->spatium();
+            double lineWidth = sp * 0.1;
+            double expandBottom = sp * 0.15 + lineWidth;
+            double expandTop = sp * 0.3 + lineWidth;
+            double expandH = sp * 0.3 + lineWidth;
+            RectF bbox = ldata->bbox();
+            RectF ellipseRect(bbox.x() - expandH, bbox.y() - expandTop,
+                              bbox.width() + expandH * 2, bbox.height() + expandTop + expandBottom);
+            painter->setBrush(BrushStyle::NoBrush);
+            painter->setPen(Pen(item->curColor(opt), lineWidth));
+            painter->drawEllipse(ellipseRect);
+        }
     }
     // NOT tablature
     else {
