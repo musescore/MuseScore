@@ -209,6 +209,21 @@ ApplicationWindow {
                 onCreateMotifRequested: {
                     stackView.push(motifShapeViewComponent, { sketchId: sketchId })
                 }
+                onEditMotifRequested: function(motifId) {
+                    stackView.push(motifEditViewComponent, { sketchId: sketchId, motifId: motifId })
+                }
+            }
+        }
+        
+        // Motif Edit View Component
+        Component {
+            id: motifEditViewComponent
+            
+            MotifEditView {
+                onBackRequested: stackView.pop()
+                onMotifUpdated: {
+                    sketchManager.refreshSketches()
+                }
             }
         }
         

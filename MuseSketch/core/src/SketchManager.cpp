@@ -73,6 +73,74 @@ QVariantMap SketchManager::getSketch(const QString &id) {
   return sketchMap;
 }
 
+QVariantMap SketchManager::getMotif(const QString &sketchId, const QString &motifId) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  for (const Motif &motif : sketch.motifs()) {
+    if (motif.id() == motifId) {
+      QVariantMap motifMap;
+      motifMap["id"] = motif.id();
+      motifMap["name"] = motif.name();
+      motifMap["lengthBars"] = motif.lengthBars();
+      
+      // Convert pitch contour
+      QVariantList pitchArray;
+      for (int degree : motif.pitchContour()) {
+        pitchArray.append(degree);
+      }
+      motifMap["pitchContour"] = pitchArray;
+      
+      // Convert rhythm pattern
+      QVariantList rhythmArray;
+      for (const QString &rhythm : motif.rhythmPattern()) {
+        rhythmArray.append(rhythm);
+      }
+      motifMap["rhythmPattern"] = rhythmArray;
+      
+      // Convert rhythm cells
+      QVariantList rhythmCells;
+      for (const RhythmCell &cell : motif.rhythmGrid().cells()) {
+        QVariantMap cellMap;
+        cellMap["duration"] = cell.duration;
+        cellMap["tie"] = cell.tie;
+        cellMap["isRest"] = cell.isRest;
+        rhythmCells.append(cellMap);
+      }
+      motifMap["rhythmCells"] = rhythmCells;
+      
+      return motifMap;
+    }
+  }
+  
+  return QVariantMap(); // Not found
+}
+
+void SketchManager::updateMotifPitches(const QString &sketchId, const QString &motifId, const QVariantList &pitches) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  QList<int> newPitches;
+  for (const QVariant &p : pitches) {
+    newPitches.append(p.toInt());
+  }
+  
+  // Find and update the motif
+  QList<Motif> motifs = sketch.motifs();
+  for (int i = 0; i < motifs.size(); ++i) {
+    if (motifs[i].id() == motifId) {
+      Motif updatedMotif = motifs[i];
+      updatedMotif.setPitchContour(newPitches);
+      motifs[i] = updatedMotif;
+      break;
+    }
+  }
+  
+  // Update sketch with modified motifs
+  sketch.setMotifs(motifs);
+  m_repository.saveSketch(sketch);
+  
+  loadSketches();
+}
+
 QVariantList SketchManager::sketches() const { return m_sketches; }
 
 void SketchManager::loadSketches() {

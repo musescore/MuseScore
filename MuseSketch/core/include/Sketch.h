@@ -30,6 +30,7 @@ public:
   void addMotif(const Motif &motif);
   void removeMotif(const QString &motifId);
   Motif *findMotif(const QString &motifId);
+  void setMotifs(const QList<Motif> &motifs) { m_motifs = motifs; }
 
   void addSection(const Section &section);
   void removeSection(const QString &sectionId);

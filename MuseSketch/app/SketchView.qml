@@ -10,6 +10,7 @@ Page {
     
     signal backRequested()
     signal createMotifRequested()
+    signal editMotifRequested(string motifId)
     
     Component.onCompleted: {
         loadSketch()
@@ -132,8 +133,16 @@ Page {
                 delegate: Rectangle {
                     width: motifsListView.width
                     height: 80
-                    color: "#2D2D2D"
+                    color: motifMouseArea.pressed ? "#3D3D3D" : "#2D2D2D"
                     radius: 8
+                    
+                    MouseArea {
+                        id: motifMouseArea
+                        anchors.fill: parent
+                        onClicked: {
+                            root.editMotifRequested(modelData.id)
+                        }
+                    }
                     
                     RowLayout {
                         anchors.fill: parent
@@ -170,6 +179,12 @@ Page {
                                 color: "#AAAAAA"
                                 font.pixelSize: 14
                             }
+                        }
+                        
+                        Text {
+                            text: "›"
+                            color: "#666666"
+                            font.pixelSize: 24
                         }
                     }
                 }

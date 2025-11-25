@@ -16,6 +16,8 @@ public:
   Q_INVOKABLE void deleteSketch(const QString &id);
   Q_INVOKABLE void refreshSketches();
   Q_INVOKABLE QVariantMap getSketch(const QString &id);
+  Q_INVOKABLE QVariantMap getMotif(const QString &sketchId, const QString &motifId);
+  Q_INVOKABLE void updateMotifPitches(const QString &sketchId, const QString &motifId, const QVariantList &pitches);
 
   QVariantList sketches() const;
 
