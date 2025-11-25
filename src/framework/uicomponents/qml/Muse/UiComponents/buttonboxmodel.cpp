@@ -55,6 +55,10 @@ QList<int> ButtonBoxModel::load()
             button = m_layoutButtons[static_cast<ButtonType>(type)];
         }
 
+        IF_ASSERT_FAILED(button) {
+            continue;
+        }
+
         ButtonRole role = button->buttonRole;
         if (role >= ButtonRole::CustomRole) {
             maxCustomRole = std::max(maxCustomRole, static_cast<int>(role));

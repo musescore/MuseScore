@@ -141,6 +141,8 @@ void GlobalModule::registerApi()
         api->regApiCreator(moduleName(), "api.interactive", new api::ApiCreator<InteractiveApi>());
         api->regApiCreator(moduleName(), "api.process", new ApiCreator<ProcessApi>());
         api->regApiCreator(moduleName(), "api.filesystem", new ApiCreator<FileSystemApi>());
+
+        api->regGlobalEnum(moduleName(), QMetaEnum::fromType<InteractiveApi::Button>());
     }
 }
 

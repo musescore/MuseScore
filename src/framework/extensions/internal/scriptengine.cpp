@@ -54,13 +54,29 @@ ScriptEngine::ScriptEngine(const modularity::ContextPtr& iocCtx, int apiverion)
 
     globalObj.setProperty("api", m_engine->newQObject(m_api));
 
+    QJSValue freezeFn = m_engine->evaluate("Object.freeze");
+
+    const std::vector<muse::api::IApiRegister::GlobalEnum>& globalEnums = apiRegister()->globalEnums();
+    for (const muse::api::IApiRegister::GlobalEnum& e : globalEnums) {
+        QJSValue enumObj = m_engine->newObject();
+        QString name = QString::fromLatin1(e.meta.enumName());
+
+        for (int i = 0; i < e.meta.keyCount(); ++i) {
+            QString key = QString::fromLatin1(e.meta.key(i));
+            enumObj.setProperty(key, key);
+        }
+
+        QJSValue frozenObj = freezeFn.call({ enumObj });
+        globalObj.setProperty(name, frozenObj);
+    }
+
     m_moduleLoader = new JsModuleLoader(m_iocContext, m_engine);
     m_moduleLoader->pushEngine(this);
     QJSValue loaderObj = m_engine->newQObject(m_moduleLoader);
     QJSValue requireFn = loaderObj.property("require");
-    m_engine->globalObject().setProperty("require", requireFn);
-    m_engine->globalObject().setProperty("exports", m_engine->newObject());
-    m_engine->globalObject().setProperty("module", loaderObj);
+    globalObj.setProperty("require", requireFn);
+    globalObj.setProperty("exports", m_engine->newObject());
+    globalObj.setProperty("module", loaderObj);
 }
 
 ScriptEngine::ScriptEngine(ScriptEngine* engine)
