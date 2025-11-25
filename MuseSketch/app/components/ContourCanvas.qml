@@ -12,6 +12,8 @@ Rectangle {
     property var strokes: []         // Array of strokes, each stroke is an array of points
     property var currentStroke: []   // Current stroke being drawn
     property bool hasStrokes: strokes.length > 0
+    property int motifBars: 1        // Number of bars for beat grid
+    property int beatsPerBar: 4      // Time signature (beats per bar)
     
     signal contourDrawn(var points)
     
@@ -63,6 +65,34 @@ Rectangle {
         }
     }
     
+    // Beat grid lines (vertical)
+    Row {
+        anchors.fill: parent
+        anchors.margins: 4
+        z: -1  // Behind the canvas
+        
+        Repeater {
+            model: root.motifBars * root.beatsPerBar + 1  // +1 for end line
+            
+            Rectangle {
+                width: index === 0 || index === root.motifBars * root.beatsPerBar ? 0 : 1
+                height: parent.height
+                x: (parent.width / (root.motifBars * root.beatsPerBar)) * index
+                color: index % root.beatsPerBar === 0 ? "#5A5A5A" : "#3D3D3D"  // Brighter for bar lines
+                
+                // Beat number label at bottom
+                Text {
+                    anchors.bottom: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottomMargin: 2
+                    text: index > 0 && index < root.motifBars * root.beatsPerBar ? (index % root.beatsPerBar === 0 ? "│" : "") : ""
+                    color: "#555555"
+                    font.pixelSize: 10
+                }
+            }
+        }
+    }
+    
     // Drawing canvas
     Canvas {
         id: canvas
@@ -72,6 +102,27 @@ Rectangle {
         onPaint: {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
+            
+            // Draw beat grid lines on canvas (vertical)
+            var totalBeats = root.motifBars * root.beatsPerBar;
+            var beatWidth = width / totalBeats;
+            
+            ctx.lineWidth = 1;
+            for (var b = 1; b < totalBeats; b++) {
+                var beatX = b * beatWidth;
+                // Bar lines are brighter
+                if (b % root.beatsPerBar === 0) {
+                    ctx.strokeStyle = "#5A5A5A";
+                    ctx.lineWidth = 2;
+                } else {
+                    ctx.strokeStyle = "#3D3D3D";
+                    ctx.lineWidth = 1;
+                }
+                ctx.beginPath();
+                ctx.moveTo(beatX, 0);
+                ctx.lineTo(beatX, height);
+                ctx.stroke();
+            }
             
             // Helper function to draw a single stroke
             function drawStroke(points, color, drawDots) {

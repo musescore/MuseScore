@@ -114,6 +114,7 @@ Page {
                 pitchContour: motifEditor.pitchContour
                 rhythmPattern: motifEditor.rhythmPattern
                 rhythmCells: motifEditor.rhythmCells
+                motifBars: motifEditor.motifBars
             }
             
             // Contour Canvas (Draw Mode)
@@ -132,6 +133,7 @@ Page {
                 ContourCanvas {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 150
+                    motifBars: motifEditor.motifBars
                     
                     onContourDrawn: function(points) {
                         motifEditor.applyContourPath(points)

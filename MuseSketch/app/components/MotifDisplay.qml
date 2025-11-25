@@ -8,6 +8,8 @@ Rectangle {
     property var pitchContour: []
     property var rhythmPattern: []
     property var rhythmCells: []  // New format: [{duration, tie, isRest}, ...]
+    property int motifBars: 1     // Number of bars for beat grid
+    property int beatsPerBar: 4   // Time signature (beats per bar)
     
     color: "#1E1E1E"
     radius: 8
@@ -82,6 +84,26 @@ Rectangle {
                     var drawWidth = width - (padding * 2);
                     var pixelsPerBeat = totalBeats > 0 ? drawWidth / totalBeats : 0;
                     var stepY = height / 8; // 7 scale degrees + padding
+                    
+                    // Draw beat grid lines (vertical) based on motifBars setting
+                    var gridTotalBeats = root.motifBars * root.beatsPerBar;
+                    var gridPixelsPerBeat = drawWidth / gridTotalBeats;
+                    
+                    for (var b = 1; b < gridTotalBeats; b++) {
+                        var beatX = padding + (b * gridPixelsPerBeat);
+                        // Bar lines are brighter
+                        if (b % root.beatsPerBar === 0) {
+                            ctx.strokeStyle = "#5A5A5A";
+                            ctx.lineWidth = 2;
+                        } else {
+                            ctx.strokeStyle = "#3A3A3A";
+                            ctx.lineWidth = 1;
+                        }
+                        ctx.beginPath();
+                        ctx.moveTo(beatX, 0);
+                        ctx.lineTo(beatX, height);
+                        ctx.stroke();
+                    }
                     
                     ctx.strokeStyle = "#4A90E2";
                     ctx.fillStyle = "#4A90E2";
