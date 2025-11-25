@@ -673,6 +673,7 @@ EngravingItem* mu::engraving::apiv1::wrap(mu::engraving::EngravingItem* e, Owner
     API_WRAP(Tuplet)
     API_WRAP(DurationElement)
     API_WRAP(Beam)
+    API_WRAP(Lyrics)
     API_WRAP(Segment)
     API_WRAP(Measure)
     API_WRAP(MeasureBase)
