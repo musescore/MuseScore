@@ -10,8 +10,12 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 # Find Qt6
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Widgets Network Svg Xml Concurrent PrintSupport Multimedia)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Widgets Network Svg Xml Concurrent PrintSupport Multimedia Test)
+
+# Enable testing
+enable_testing()
 
 # Add subdirectories
 add_subdirectory(app)
 add_subdirectory(core)
+add_subdirectory(tests)
