@@ -771,32 +771,49 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     return true;
 }
 
-bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx)
+bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx, std::unordered_set<EntryNumber>& beamedEntries)
 {
     if (!entryInfoPtr.calcIsBeamStart()) {
+        const bool isBeamContinuation = !entryInfoPtr.getPreviousSameV() && entryInfoPtr.getPreviousInBeamGroupAcrossBars();
+        if (!isBeamContinuation) {
+            return true;
+        }
+    }
+    if (beamedEntries.find(entryInfoPtr->getEntry()->getEntryNumber()) != beamedEntries.end()) {
         return true;
     }
     /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
     const MusxInstance<Entry>& firstEntry = entryInfoPtr->getEntry();
     ChordRest* firstCr = chordRestFromEntryInfoPtr(entryInfoPtr);
-    IF_ASSERT_FAILED(firstCr) {
+    IF_ASSERT_FAILED(firstCr || entryInfoPtr.calcCreatesSingletonBeamLeft()) {
         logger()->logWarning(String(u"Entry %1 was not mapped").arg(firstEntry->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
         return false;
     }
 
     Beam* beam = Factory::createBeam(m_score->dummy()->system());
     beam->setTrack(curTrackIdx);
-    beam->add(firstCr);
-    firstCr->setBeamMode(BeamMode::BEGIN);
-
-    if (firstEntry->isNote && firstCr->isChord()) {
-        DirectionV stemDir = toChord(firstCr)->stemDirection();
-        if (stemDir != DirectionV::AUTO) {
-            beam->doSetDirection(stemDir);
+    if (firstCr) {
+        beam->add(firstCr);
+        beamedEntries.emplace(firstEntry->getEntryNumber());
+        if (!entryInfoPtr.calcBeamContinuesLeftOverBarline()) {
+            firstCr->setBeamMode(BeamMode::BEGIN);
+        } else {
+            firstCr->setBeamMode(BeamMode::MID); /// @todo figure out sec beam here
+        }
+        if (firstEntry->isNote && firstCr->isChord()) {
+            DirectionV stemDir = toChord(firstCr)->stemDirection();
+            if (stemDir != DirectionV::AUTO) {
+                beam->doSetDirection(stemDir);
+            }
         }
     }
 
-    for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroup(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroup()) {
+    const MeasCmper startMeasureId = entryInfoPtr.getMeasure();
+
+    for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroupAcrossBars(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroupAcrossBars()) {
+        if (nextInBeam.getMeasure() != startMeasureId) {
+            break;
+        }
         const MusxInstance<Entry>& currentEntry = nextInBeam->getEntry();
         EntryNumber currentEntryNumber = currentEntry->getEntryNumber();
         if (entryInfoPtr->getEntry()->graceNote && !currentEntry->isNote) {
@@ -809,6 +826,7 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
             continue;
         }
         beam->add(currentCr);
+        beamedEntries.emplace(currentEntry->getEntryNumber());
 
         // Secondary beam breaks
         unsigned secBeamStart = 0;
@@ -968,6 +986,7 @@ void FinaleParser::importEntries()
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
     std::vector<engraving::Note*> notesWithUnmanagedTies;
+    std::unordered_set<EntryNumber> beamedEntries;
     m_track2Layer.assign(m_score->ntracks(), std::map<int, musx::dom::LayerIndex>{});
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
         StaffCmper musxStaffId = musxScrollViewItem->staffId;
@@ -1037,8 +1056,16 @@ void FinaleParser::importEntries()
                         createTupletsFromMap(measure, curTrackIdx, tupletMap);
 
                         // add chords and rests
+                        bool skipNext = false;
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
+                            if (skipNext || entryInfoPtr.calcCreatesSingletonBeamLeft()) {
+                                skipNext = false;
+                                continue;
+                            }
                             processEntryInfo(entryInfoPtr, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap);
+                            if (entryInfoPtr.calcCreatesSingletonBeamRight()) {
+                                skipNext = true;
+                            }
                         }
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
                             processEntryInfo(entryInfoPtr, curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap);
@@ -1049,7 +1076,7 @@ void FinaleParser::importEntries()
 
                         // create beams
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            processBeams(entryInfoPtr, curTrackIdx);
+                            processBeams(entryInfoPtr, curTrackIdx, beamedEntries);
                         }
                         // m_entryNumber2CR.clear(); /// @todo use 2 maps, one of which clears itself, to make beaming more efficient
                     }
