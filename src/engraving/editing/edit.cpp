@@ -6991,6 +6991,12 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             }
             doUndoAddElement(ne);
         } else if (element->isHarmony() && element->explicitParent()->isFretDiagram()) {
+            EngravingItem* parentFd = element->parentItem();
+            if (parentFd->score() != score) {
+                // Find linked fret diagram
+                EngravingItem* linkedFd = parentFd->findLinkedInScore(score);
+                ne->setParent(linkedFd);
+            }
             doUndoAddElement(ne);
         }
         //
