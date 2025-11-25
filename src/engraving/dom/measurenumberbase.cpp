@@ -37,9 +37,8 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 MeasureNumberBase::MeasureNumberBase(const ElementType& type, Measure* parent, TextStyleType tid)
-    : TextBase(type, parent, tid)
+    : TextBase(type, parent, tid, ElementFlag::ON_STAFF)
 {
-    setFlag(ElementFlag::ON_STAFF, true);
 }
 
 //---------------------------------------------------------

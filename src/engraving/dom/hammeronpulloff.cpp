@@ -269,7 +269,7 @@ static ElementStyle hopoStyle;
 
 HammerOnPullOffText::HammerOnPullOffText(HammerOnPullOffSegment* parent)
     : TextBase(ElementType::HAMMER_ON_PULL_OFF_TEXT, parent, TextStyleType::HAMMER_ON_PULL_OFF,
-               ElementFlag::MOVABLE | ElementFlag::GENERATED)
+               ElementFlag::MOVABLE | ElementFlag::GENERATED | ElementFlag::ON_STAFF)
 {
     resetProperty(Pid::PLACEMENT);
     initElementStyle(&hopoStyle);

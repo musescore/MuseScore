@@ -731,7 +731,7 @@ double GuitarBendHold::lineWidth() const
  * **************************************/
 
 GuitarBendHoldSegment::GuitarBendHoldSegment(GuitarBendHold* sp, System* parent)
-    : LineSegment(ElementType::GUITAR_BEND_HOLD_SEGMENT, sp, parent, ElementFlag::MOVABLE)
+    : LineSegment(ElementType::GUITAR_BEND_HOLD_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setFlag(ElementFlag::ON_STAFF, true);
 }
