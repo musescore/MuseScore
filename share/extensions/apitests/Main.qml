@@ -32,7 +32,7 @@ ExtensionBlank {
                 text: "api.interactive.question"
                 onClicked: {
                     let btn = api.interactive.question("Api tests", "Yes or No?", [Button.Yes, Button.No])
-                    if (btn === "Yes") {
+                    if (btn === Button.Yes) {
                         api.interactive.info("Api tests", "Your answer is Yes.")
                     } else {
                         api.interactive.warning("Api tests", "Your answer is " + btn)
