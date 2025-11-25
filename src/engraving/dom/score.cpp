@@ -54,8 +54,8 @@
 #include "capo.h"
 #include "chord.h"
 #include "clef.h"
-#include "excerpt.h"
 #include "dynamic.h"
+#include "excerpt.h"
 #include "factory.h"
 #include "fermata.h"
 #include "glissando.h"
@@ -84,12 +84,12 @@
 #include "rest.h"
 #include "scoreorder.h"
 #include "segment.h"
-#include "stafftextbase.h"
 #include "select.h"
 #include "shadownote.h"
 #include "sig.h"
 #include "slur.h"
 #include "staff.h"
+#include "stafftextbase.h"
 #include "stafftype.h"
 #include "synthesizerstate.h"
 #include "system.h"
@@ -857,14 +857,20 @@ void Score::spell()
 {
     for (staff_idx_t i = 0; i < nstaves(); ++i) {
         std::vector<Note*> notes;
-        for (Segment* s = firstSegment(SegmentType::All); s; s = s->next1()) {
+        for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             track_idx_t strack = i * VOICES;
             track_idx_t etrack = strack + VOICES;
             for (track_idx_t track = strack; track < etrack; ++track) {
                 EngravingItem* e = s->element(track);
-                if (e && e->type() == ElementType::CHORD) {
-                    std::copy_if(toChord(e)->notes().begin(), toChord(e)->notes().end(),
+                if (e && e->isChord()) {
+                    Chord* c = toChord(e);
+                    std::copy_if(c->notes().begin(), c->notes().end(),
                                  std::back_inserter(notes), [this](EngravingItem* ce) { return selection().isNone() || ce->selected(); });
+                    for (Chord* g : c->graceNotes()) {
+                        std::copy_if(g->notes().begin(), g->notes().end(),
+                                     std::back_inserter(notes),
+                                     [this](EngravingItem* ce) { return selection().isNone() || ce->selected(); });
+                    }
                 }
             }
         }
@@ -872,23 +878,30 @@ void Score::spell()
     }
 }
 
-void Score::spell(staff_idx_t startStaff, staff_idx_t endStaff, Segment* startSegment, Segment* endSegment)
+void Score::spellWithSharpsOrFlats(Prefer prefer)
 {
-    for (staff_idx_t i = startStaff; i < endStaff; ++i) {
-        std::vector<Note*> notes;
-        for (Segment* s = startSegment; s && s != endSegment; s = s->next()) {
-            track_idx_t strack = i * VOICES;
-            track_idx_t etrack = strack + VOICES;
-            for (track_idx_t track = strack; track < etrack; ++track) {
-                EngravingItem* e = s->element(track);
-                if (e && e->type() == ElementType::CHORD) {
-                    notes.insert(notes.end(),
-                                 toChord(e)->notes().begin(),
-                                 toChord(e)->notes().end());
-                }
-            }
+    std::vector<Note*> notes = selection().noteList();
+    for (Note* n : notes) {
+        Interval v = n->part()->instrument(n->chord()->tick())->transpose();
+        int tpc1, tpc2;
+        if (n->staff()->concertPitch() || v.isZero()) {
+            // Note: using Key::C always and ignoring actual key signature. Otherwise, "respell with flats" would still use sharps
+            // sometimes if they're in the key, and vice versa, which seems contrary to the intent of the command.
+            tpc1 = pitch2tpc(n->pitch(), Key::C, prefer);
+            v.flip();
+            tpc2 = Transpose::transposeTpc(tpc1, v, true);
+        } else {
+            // Spell the transposed pitch first, then convert to concert pitch
+            int writtenPitch = n->pitch() - v.chromatic;
+            tpc2 = pitch2tpc(writtenPitch, Key::C, prefer);
+            tpc1 = Transpose::transposeTpc(tpc2, v, true);
         }
-        spellNotelist(notes);
+        n->undoChangeProperty(Pid::TPC1, tpc1);
+        n->undoChangeProperty(Pid::TPC2, tpc2);
+        for (Note* tied : n->tiedNotes()) {
+            tied->undoChangeProperty(Pid::TPC1, tpc1);
+            tied->undoChangeProperty(Pid::TPC2, tpc2);
+        }
     }
 }
 
@@ -949,98 +962,6 @@ void Score::changeEnharmonicSpelling(bool both)
             }
         }
     }
-}
-
-//---------------------------------------------------------
-//   prevNote
-//---------------------------------------------------------
-
-Note* prevNote(Note* n)
-{
-    Chord* chord = n->chord();
-    Segment* seg = chord->segment();
-    const std::vector<Note*> nl = chord->notes();
-    auto i = std::find(nl.begin(), nl.end(), n);
-    if (i != nl.begin()) {
-        return *(i - 1);
-    }
-    staff_idx_t staff      = n->staffIdx();
-    track_idx_t startTrack = staff * VOICES + n->voice() - 1;
-    track_idx_t endTrack   = 0;
-    while (seg) {
-        if (seg->segmentType() == SegmentType::ChordRest) {
-            for (track_idx_t track = startTrack; track >= endTrack; --track) {
-                EngravingItem* e = seg->element(track);
-                if (e && e->type() == ElementType::CHORD) {
-                    return toChord(e)->upNote();
-                }
-            }
-        }
-        seg = seg->prev1();
-        startTrack = staff * VOICES + VOICES - 1;
-    }
-    return n;
-}
-
-//---------------------------------------------------------
-//   nextNote
-//---------------------------------------------------------
-
-static Note* nextNote(Note* n)
-{
-    Chord* chord = n->chord();
-    const std::vector<Note*> nl = chord->notes();
-    auto i = std::find(nl.begin(), nl.end(), n);
-    if (i != nl.end()) {
-        ++i;
-        if (i != nl.end()) {
-            return *i;
-        }
-    }
-    Segment* seg   = chord->segment();
-    staff_idx_t staff      = n->staffIdx();
-    track_idx_t startTrack = staff * VOICES + n->voice() + 1;
-    track_idx_t endTrack   = staff * VOICES + VOICES;
-    while (seg) {
-        if (seg->segmentType() == SegmentType::ChordRest) {
-            for (track_idx_t track = startTrack; track < endTrack; ++track) {
-                EngravingItem* e = seg->element(track);
-                if (e && e->type() == ElementType::CHORD) {
-                    return ((Chord*)e)->downNote();
-                }
-            }
-        }
-        seg = seg->next1();
-        startTrack = staff * VOICES;
-    }
-    return n;
-}
-
-//---------------------------------------------------------
-//   spell
-//---------------------------------------------------------
-
-void Score::spell(Note* note)
-{
-    std::vector<Note*> notes;
-
-    notes.push_back(note);
-    Note* nn = nextNote(note);
-    notes.push_back(nn);
-    nn = nextNote(nn);
-    notes.push_back(nn);
-    nn = nextNote(nn);
-    notes.push_back(nn);
-
-    nn = prevNote(note);
-    notes.insert(notes.begin(), nn);
-    nn = prevNote(nn);
-    notes.insert(notes.begin(), nn);
-    nn = prevNote(nn);
-    notes.insert(notes.begin(), nn);
-
-    int opt = computeWindow(notes, 0, 7);
-    note->setTpc(tpc(3, note->pitch(), opt));
 }
 
 //---------------------------------------------------------
