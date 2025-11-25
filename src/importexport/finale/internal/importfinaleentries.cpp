@@ -490,7 +490,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     /// @todo Do we really need to explicitly add the accidental object if it's not frozen?
                     /// RGP: if it has been manually moved, it looks like it.Otherwise perhaps not.
                     AccidentalVal accVal = tpc2alter(nval.tpc1);
-                    bool hasAccidental = noteInfoPtr->freezeAcci;
+                    bool hasAccidental = noteInfoPtr->freezeAcci && noteInfoPtr->showAcci;
                     if (!hasAccidental) {
                         if (Segment* startSegment = note->firstTiedNote()->chord()->segment()) {
                             int line = noteValToLine(nval, targetStaff, segment->tick());
@@ -505,7 +505,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                         Accidental* a = Factory::createAccidental(note);
                         a->setAccidentalType(at);
                         a->setRole(noteInfoPtr->freezeAcci ? AccidentalRole::USER : AccidentalRole::AUTO);
-                        a->setVisible(note->visible());
+                        a->setVisible(note->visible() && noteInfoPtr->showAcci);
                         a->setBracket(noteInfoPtr->parenAcci ? AccidentalBracket::PARENTHESIS : AccidentalBracket::NONE);
                         a->setParent(note);
                         if (currentEntry->noteDetail) {
