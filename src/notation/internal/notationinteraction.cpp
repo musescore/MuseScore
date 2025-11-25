@@ -2191,7 +2191,7 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
         return false;
     }
 
-    if (segment->isTupletSubdivision() || segment->isInsideTupletOnStaff(staffIdx)) {
+    if (segment->isTupletSubdivisionOnStaff(staffIdx) || segment->isInsideTupletOnStaff(staffIdx)) {
         endDrop();
         notifyAboutDropChanged();
         //MScore::setError(MsError::DEST_TUPLET);

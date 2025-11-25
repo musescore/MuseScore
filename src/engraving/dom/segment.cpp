@@ -1098,9 +1098,10 @@ void Segment::setXPosInSystemCoords(double x)
     mutldata()->setPosX(x - measure()->x());
 }
 
-bool Segment::isTupletSubdivision() const
+bool Segment::isTupletSubdivisionOnStaff(staff_idx_t staffIdx) const
 {
-    int denom = tick().reduced().denominator();
+    Fraction timeStretch = score()->staff(staffIdx)->timeStretch(tick());
+    int denom = (m_tick * timeStretch).reduced().denominator();
     bool denomIsPowOfTwo = (denom & (denom - 1)) == 0;
     // A non-power-of-two denominator is possible only with tuplets
     return !denomIsPowOfTwo;
