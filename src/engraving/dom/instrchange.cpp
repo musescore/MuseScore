@@ -152,8 +152,18 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
     }
 
     //: The text of an "instrument change" marking. It is an instruction to the player to switch to another instrument.
-    const String newInstrChangeText = muse::mtrc("engraving", "To %1").arg(instrument->trackName());
-    undoChangeProperty(Pid::TEXT, TextBase::plainToXmlText(newInstrChangeText));
+    if (!m_manualText && !hasCustomText()) {
+        const String newInstrChangeText = muse::mtrc("engraving", "To %1").arg(instrument->trackName());
+        undoChangeProperty(Pid::TEXT, TextBase::plainToXmlText(newInstrChangeText));
+    }
+}
+
+bool InstrumentChange::setProperty(Pid id, const PropertyValue& v)
+{
+    if (id == Pid::TEXT) {
+        m_manualText = true;
+    }
+    return TextBase::setProperty(id, v);
 }
 
 //---------------------------------------------------------

@@ -65,10 +65,25 @@ public:
 
     bool placeMultiple() const override { return false; }
 
+    bool setProperty(Pid id, const PropertyValue& v) override;
+
+    void setCustomText(const String& s) {
+        _customText = s;
+        _useCustomText = true;
+        m_manualText = true;
+    }
+
+    String customText() const { return _customText; }
+
+    bool hasCustomText() const { return _useCustomText; }
+
 private:
 
     Instrument* m_instrument = nullptr;     // Staff holds ownership if part of score
     bool m_init = false;                    // Set if the instrument has been set by the user, as there is no other way to tell.
+    String _customText;                     // Custom text entered by user for instrument name
+    bool _useCustomText = false;            // True if using stored custom text instead of default
+    bool m_manualText = false;              // Set when user edits text directly in UI
 };
 } // namespace mu::engraving
 #endif
