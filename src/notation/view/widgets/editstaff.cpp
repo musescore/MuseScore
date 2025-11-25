@@ -653,6 +653,7 @@ QString EditStaff::midiCodeToStr(int midiCode)
 
 void EditStaff::showStaffTypeDialog()
 {
+    editStaffTypeDialog->setStaff(m_staff);
     editStaffTypeDialog->setStaffType(m_staff->staffType(mu::engraving::Fraction(0, 1)));
     editStaffTypeDialog->setInstrument(m_instrument);
 

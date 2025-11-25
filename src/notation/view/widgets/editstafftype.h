@@ -37,13 +37,14 @@ namespace mu::notation {
 //   EditStaffType
 //---------------------------------------------------------
 
-class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::Injectable
+class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
     INJECT(muse::IInteractive, interactive)
 
-    mu::engraving::StaffType staffType;
+    mu::engraving::StaffType m_staffType;
+    const mu::engraving::Staff* m_staff = nullptr;
 
     virtual void showEvent(QShowEvent*);
     virtual void hideEvent(QHideEvent*);
@@ -77,7 +78,8 @@ public:
     EditStaffType(QWidget* parent = nullptr);
     ~EditStaffType() {}
     void setStaffType(const mu::engraving::StaffType* staffType);
-    mu::engraving::StaffType getStaffType() const { return staffType; }
+    void setStaff(const mu::engraving::Staff* staff) { m_staff = staff; }
+    mu::engraving::StaffType getStaffType() const { return m_staffType; }
 
     void setInstrument(const Instrument& instrument);
 
