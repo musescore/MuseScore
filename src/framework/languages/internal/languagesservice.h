@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -36,10 +36,10 @@ class QTranslator;
 namespace muse::languages {
 class LanguagesService : public ILanguagesService, public Injectable, public async::Asyncable
 {
-    ThreadSafeInject<ILanguagesConfiguration> configuration = { this };
-    ThreadSafeInject<network::INetworkManagerCreator> networkManagerCreator = { this };
-    ThreadSafeInject<io::IFileSystem> fileSystem = { this };
-    ThreadSafeInject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    Inject<ILanguagesConfiguration> configuration = { this };
+    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
 
 public:
     LanguagesService(const modularity::ContextPtr& iocCtx)
@@ -65,12 +65,15 @@ private:
 
     void setCurrentLanguage(const QString& languageCode);
     QString effectiveLanguageCode(QString languageCode) const;
+
     Ret loadLanguage(Language& lang);
 
-    void th_update(const QString& languageCode, Progress progress);
-    bool canUpdate(const QString& languageCode);
-    Ret downloadLanguage(const QString& languageCode, Progress progress) const;
-    RetVal<QString> fileHash(const io::path_t& path);
+    void checkUpdateAvailable(const QString& languageCode, std::function<void(const RetVal<bool>&)> finished);
+    void updateLanguage(const QString& languageCode, std::function<void(const Ret&)> finished);
+
+    Ret unpackAndWriteLanguage(const QByteArray& zipData);
+
+    RetVal<QString> fileHash(const io::path_t& path) const;
 
 private:
     LanguagesHash m_languagesHash;
@@ -78,11 +81,13 @@ private:
     async::Notification m_currentLanguageChanged;
     Language m_placeholderLanguage;
 
-    QSet<QTranslator*> m_translators;
-    mutable QHash<QString, Progress> m_updateOperationsHash;
+    std::vector<QTranslator*> m_translators;
+    QHash<QString, Progress> m_updateOperationsHash;
 
     bool m_inited = false;
     bool m_restartRequiredToApplyLanguage = false;
     async::Channel<bool> m_restartRequiredToApplyLanguageChanged;
+
+    network::INetworkManagerPtr m_networkManager;
 };
 }
