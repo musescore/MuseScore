@@ -59,8 +59,44 @@ function nameFromSig(line)
     return name;
 }
 
-async function extractDoc(file)
+function enumName(line)
 {
+    let name = "";
+    line = line.trim()
+    let enumIdx = line.indexOf("enum");
+    if (enumIdx === -1) {
+        return name;
+    }
+
+    enumIdx += 4
+    let braceIdx = line.indexOf("{", enumIdx) 
+    if (braceIdx !== -1) {
+        name = line.substr(enumIdx, (braceIdx - enumIdx))
+        name = name.trim();
+    }
+
+    return name;
+}
+
+function enumKey(line) 
+{
+    let key = "";
+    line = line.trim()
+    let idx = line.indexOf('=')
+    if (idx === -1) {
+        idx = line.indexOf(',')
+    } 
+
+    if (idx !== -1) {
+        let key = line.substr(0, idx)
+        return key.trim();
+    }
+
+    return ""
+}
+
+async function extractDoc(file)
+{   
     const fileStream = fs.createReadStream(file)
     const rl = readline.createInterface({
                                             input: fileStream,
@@ -71,6 +107,7 @@ async function extractDoc(file)
     const APIDOC_END = "*/" 
     
     let state = {
+        hasApidoc: false,
         apidocStarted: false,
 
         currentDoc: "",
@@ -83,6 +120,10 @@ async function extractDoc(file)
 
         propLookName: false,
         props: [],
+
+        enumLookName: false,
+        enumStarted: false,
+        enums: [],
     }                                   
 
     for await (let line of rl) {
@@ -91,6 +132,7 @@ async function extractDoc(file)
         if (line.startsWith(APIDOC_BEGIN)) {
             // remove APIDOC
             line = line.replace("APIDOC", "");
+            state.hasApidoc = true;
             state.apidocStarted = true;
             state.currentDoc = "";
         }
@@ -133,6 +175,12 @@ async function extractDoc(file)
                 state.propLookName = true;
                 continue;
             }
+
+            // try get enum 
+            if (state.currentDoc.includes('@enum')) {
+                state.enumLookName = true;
+                continue;
+            }
         }
 
         if (state.apidocStarted) {
@@ -158,9 +206,34 @@ async function extractDoc(file)
                 state.props.push(state.currentDoc);
             }
         }
+
+        if (state.enumLookName) {
+            let name = enumName(line);
+            if (name !== "") {
+                state.enumLookName = false;
+                state.enumStarted = true;
+                state.currentDoc += 'const ' + name + ' = {\n';
+            }
+        }
+
+        if (state.enumStarted) {
+            let key = enumKey(line);
+            if (key !== "") {
+                state.currentDoc += '\t' + key + ': "' + key + '",\n'
+            }
+        }
+
+        if (state.enumStarted && line.startsWith('}')) {
+            state.enumStarted = false;
+            state.currentDoc += '};';
+            state.enums.push(state.currentDoc);
+        }
     }
 
     let doc = "";
+    if (!state.hasApidoc) {
+        return doc;
+    }
 
     let propsDoc = "";
     for (const p of state.props) {
@@ -169,9 +242,14 @@ async function extractDoc(file)
 
     doc = state.parentDoc.replace('*/', `${propsDoc}*/`);
 
+    for (const en of state.enums) {
+        doc += en
+    }
+
     for (const m of state.methods) {
         doc += m;
     }
+
     return doc;
 }
 
@@ -277,7 +355,7 @@ async function main()
     // extrac
     for (var i in files) {
         const file = files[i]
-        const name = path.parse(file).name
+        const name = path.parse(file).base
 
         const doc = await extractDoc(file);
         if (doc !== "") {

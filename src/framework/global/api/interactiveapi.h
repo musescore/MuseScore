@@ -37,6 +37,10 @@ class InteractiveApi : public ApiObject
 public:
     explicit InteractiveApi(IApiEngine* e);
 
+    /** APIDOC
+     * Question buttons
+     * @enum
+     */
     enum Button {
         Ok = int(IInteractive::Button::Ok),
         Continue = int(IInteractive::Button::Continue),

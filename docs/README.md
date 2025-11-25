@@ -76,6 +76,20 @@ There must be the `@method` tag
 int Score::lyricCount() const
 ```
 There must be the `@property` tag, the description should be in one line
+
+#### Enums
+
+```
+    /** APIDOC
+     * Question buttons
+     * @enum
+     */
+    enum Button {
+        ...
+    };    
+```
+There must be the `@enum` tag
+
    
 When generating documentation, we first extract this documentation from the `cpp` files.   
    
