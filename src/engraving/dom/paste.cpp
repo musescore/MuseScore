@@ -169,6 +169,10 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                 Fraction len = mlen > rest ? rest : mlen;
                 std::vector<TDuration> dl = toRhythmicDurationList(len, false, tick - measure->tick(), sigmap()->timesig(
                                                                        tick).nominal(), measure, MAX_DOTS);
+                if (dl.empty()) {
+                    LOGD("Could not make durations for: %d/%d", len.numerator(), len.denominator());
+                    return;
+                }
                 TDuration d = dl[0];
                 Fraction c2Tick(tick + c->tick());
                 c2->setDurationType(d);
@@ -213,6 +217,10 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                 Fraction len  = rest > mlen ? mlen : rest;
                 std::vector<TDuration> dl = toRhythmicDurationList(len, true, tick - measure->tick(), sigmap()->timesig(
                                                                        tick).nominal(), measure, MAX_DOTS);
+                if (dl.empty()) {
+                    LOGD("Could not make durations for: %d/%d", len.numerator(), len.denominator());
+                    return;
+                }
                 TDuration d = dl[0];
                 r2->setDurationType(d);
                 r2->setTicks(d.isMeasure() ? measure->ticks() : d.fraction());
@@ -234,6 +242,10 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                     Fraction mlen = measure->endTick() - tick;
                     Fraction len  = rest > mlen ? mlen : rest;
                     std::vector<TDuration> dl = toDurationList(len, false);
+                    if (dl.empty()) {
+                        LOGD("Could not make durations for: %d/%d", len.numerator(), len.denominator());
+                        return;
+                    }
                     TDuration d = dl[0];
                     r2->setTicks(d.fraction());
                     r2->setDurationType(d);

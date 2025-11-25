@@ -507,6 +507,10 @@ std::vector<TDuration> toDurationList(Fraction l, bool useDots, int maxDots, boo
 std::vector<TDuration> toRhythmicDurationList(const Fraction& l, bool isRest, Fraction rtickStart,
                                               const TimeSigFrac& nominal, Measure* msr, int maxDots)
 {
+    IF_ASSERT_FAILED(l > Fraction(0, 1)) {
+        return {};
+    }
+
     std::vector<TDuration> dList;
     dList.reserve(8);
 

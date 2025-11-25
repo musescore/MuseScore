@@ -1518,6 +1518,10 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
         Fraction srcF = cr1->ticks();
         Fraction dstF = tick - cr1->tick();
         std::vector<TDuration> dList = toDurationList(dstF, true);
+        if (dList.empty()) {
+            LOGD("Could not make durations for: %d/%d", dstF.numerator(), dstF.denominator());
+            return false;
+        }
         size_t n = dList.size();
         undoChangeChordRestLen(cr1, TDuration(dList[0]));
         if (n > 1) {
@@ -1712,6 +1716,10 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
         }
         Fraction timeStretch = cr->staff()->timeStretch(cr->tick());
         std::vector<TDuration> dList = toDurationList(dstF, true);
+        if (dList.empty()) {
+            LOGD("Could not make durations for: %d/%d", dstF.numerator(), dstF.denominator());
+            return;
+        }
         undoChangeChordRestLen(cr, dList[0]);
         Fraction tick2 = cr->tick();
         for (unsigned i = 1; i < dList.size(); ++i) {
