@@ -117,12 +117,17 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
                     result = false;
                 }
             } else if (e->isHarmony() && transposeChordNames) {
-                const EngravingObject* parent = e->parent();
-                if (parent && parent->isFretDiagram()
-                    && std::find(selectionList.begin(), selectionList.end(), parent) != selectionList.end()) {
-                    continue;
+                EngravingObject* parent = e->parent();
+                if (parent && parent->isFretDiagram()) {
+                    if (std::find(selectionList.begin(), selectionList.end(), parent) != selectionList.end()) {
+                        continue;
+                    }
+
+                    FretDiagram* fd = toFretDiagram(parent);
+                    transposeFretDiagram(toFretDiagram(fd), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
+                } else {
+                    transposeHarmony(toHarmony(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
                 }
-                transposeHarmony(toHarmony(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
             } else if (e->isFretDiagram() && transposeChordNames) {
                 transposeFretDiagram(toFretDiagram(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
             } else if (e->isKeySig() && mode != TransposeMode::DIATONICALLY && trKeys) {
