@@ -613,7 +613,7 @@ TEST_F(Engraving_SpannersTests, spanners17_pluginAPI_scoreSpanners)
     apiv1::Score apiScore(score);
 
     // Get spanners using Plugin API
-    QQmlListProperty<apiv1::EngravingItem> scoreSpanners = apiScore.spanners();
+    QQmlListProperty<apiv1::Spanner> scoreSpanners = apiScore.spanners();
 
     // Basic sanity checks: the property should return a valid list
     EXPECT_NE(scoreSpanners.count, nullptr);
@@ -632,16 +632,12 @@ TEST_F(Engraving_SpannersTests, spanners17_pluginAPI_scoreSpanners)
     // Verify each spanner can be accessed and has valid properties
     for (int i = 0; i < spannerCount; i++) {
         auto* item = scoreSpanners.at(&scoreSpanners, i);
-        apiv1::EngravingItem* apiItem = qobject_cast<apiv1::EngravingItem*>(item);
-        EXPECT_TRUE(apiItem != nullptr) << "Spanner " << i << " should be a valid EngravingItem";
+        apiv1::Spanner* apiItem = qobject_cast<apiv1::Spanner*>(item);
+        EXPECT_TRUE(apiItem != nullptr) << "Spanner " << i << " should be a valid Spanner";
 
-        if (apiItem && apiItem->element()) {
-            // Verify it's actually a spanner
-            mu::engraving::EngravingItem* elem = apiItem->element();
-            EXPECT_TRUE(elem->isSpanner()) << "Item " << i << " should be a Spanner";
-
+        if (apiItem && apiItem->spanner()) {
             // Verify we can access the track property (spanners have tracks)
-            track_idx_t track = elem->track();
+            track_idx_t track = apiItem->spanner()->track();
             EXPECT_GE(track, 0) << "Spanner " << i << " should have a valid track";
         }
     }
