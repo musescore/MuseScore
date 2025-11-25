@@ -2754,11 +2754,7 @@ void NotationUiActions::init()
                 updateActionsEnabled(s_actions);
             }, Asyncable::Mode::SetReplace);
 
-            interaction->textEditingStarted().onNotify(this, [this]() {
-                updateActionsEnabled(s_actions);
-            }, Asyncable::Mode::SetReplace);
-
-            interaction->textEditingEnded().onReceive(this, [this](TextBase*) {
+            interaction->isEditingElementChanged().onNotify(this, [this]() {
                 updateActionsEnabled(s_actions);
             }, Asyncable::Mode::SetReplace);
 
