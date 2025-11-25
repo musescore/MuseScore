@@ -1,0 +1,9 @@
+{
+    "uri": "musescore://extensions/dev/apitests",
+    "type": "form",
+    "title": "Api tests",
+    "description": "This is a development extension for API tests.",
+    "ui_context": "Any",
+
+    "path": "Main.qml"
+}
