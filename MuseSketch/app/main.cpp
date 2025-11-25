@@ -1,4 +1,5 @@
 #include "MotifEditorController.h"
+#include "MotifPlayer.h"
 #include "ScoreEngine.h"
 #include "SketchManager.h"
 #include <QGuiApplication>
@@ -32,6 +33,10 @@ int main(int argc, char *argv[]) {
   // Create and register MotifEditorController
   MotifEditorController motifEditor;
   engine.rootContext()->setContextProperty("motifEditor", &motifEditor);
+
+  // Create and register MotifPlayer
+  MotifPlayer motifPlayer;
+  engine.rootContext()->setContextProperty("motifPlayer", &motifPlayer);
 
   const QUrl url(u"qrc:/MuseSketch/Main.qml"_qs);
   QObject::connect(

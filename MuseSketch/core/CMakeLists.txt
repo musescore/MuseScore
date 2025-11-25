@@ -12,6 +12,8 @@ add_library(musesketch_core STATIC
     include/SketchRepository.h
     include/SketchManager.h
     include/MotifEditorController.h
+    include/AudioEngine.h
+    include/MotifPlayer.h
     src/ScoreEngine.cpp
     src/Sketch.cpp
     src/Motif.cpp
@@ -21,13 +23,16 @@ add_library(musesketch_core STATIC
     src/SketchRepository.cpp
     src/SketchManager.cpp
     src/MotifEditorController.cpp
+    src/AudioEngine.cpp
+    src/MotifPlayer.cpp
 )
 
 target_include_directories(musesketch_core PUBLIC
     include
 )
 
-target_link_libraries(musesketch_core PRIVATE
+target_link_libraries(musesketch_core PUBLIC
     Qt6::Core
     Qt6::Gui
+    Qt6::Multimedia
 )

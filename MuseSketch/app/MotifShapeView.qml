@@ -163,7 +163,10 @@ Page {
                         
                         ScaleDegreePad {
                             degree: index + 1
-                            onClicked: motifEditor.addNote(degree)
+                            onClicked: {
+                                motifEditor.addNote(degree)
+                                motifPlayer.playPreviewNote(degree, motifEditor.key)
+                            }
                         }
                     }
                 }
@@ -287,6 +290,167 @@ Page {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             font.pixelSize: 14
+                        }
+                    }
+                }
+            }
+            
+            // Playback Controls
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.leftMargin: 16
+                Layout.rightMargin: 16
+                Layout.topMargin: 12
+                spacing: 12
+                
+                Text {
+                    text: "Playback"
+                    color: "#AAAAAA"
+                    font.pixelSize: 14
+                }
+                
+                // Play/Stop and Tempo
+                Row {
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 12
+                    
+                    // Play/Stop button
+                    Button {
+                        width: 60
+                        height: 44
+                        enabled: motifEditor.noteCount > 0
+                        
+                        onClicked: {
+                            if (motifPlayer.isPlaying) {
+                                motifPlayer.stop()
+                            } else {
+                                motifPlayer.setMotif(
+                                    motifEditor.pitchContour,
+                                    motifEditor.rhythmCells,
+                                    motifEditor.key
+                                )
+                                motifPlayer.play()
+                            }
+                        }
+                        
+                        background: Rectangle {
+                            radius: 8
+                            color: parent.pressed ? "#2E7D32" : (motifPlayer.isPlaying ? "#4CAF50" : "#2D2D2D")
+                            border.color: motifPlayer.isPlaying ? "#4CAF50" : "#3D3D3D"
+                            border.width: 2
+                        }
+                        
+                        contentItem: Text {
+                            text: motifPlayer.isPlaying ? "■" : "▶"
+                            color: parent.enabled ? "white" : "#666666"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            font.pixelSize: 20
+                        }
+                    }
+                    
+                    // Loop toggle
+                    Button {
+                        width: 50
+                        height: 44
+                        
+                        onClicked: motifPlayer.isLooping = !motifPlayer.isLooping
+                        
+                        background: Rectangle {
+                            radius: 8
+                            color: parent.pressed ? "#3D3D3D" : (motifPlayer.isLooping ? "#FF9800" : "#2D2D2D")
+                            border.color: motifPlayer.isLooping ? "#FF9800" : "#3D3D3D"
+                            border.width: 2
+                        }
+                        
+                        contentItem: Text {
+                            text: "⟲"
+                            color: "white"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            font.pixelSize: 20
+                        }
+                    }
+                    
+                    // Metronome toggle
+                    Button {
+                        width: 50
+                        height: 44
+                        
+                        onClicked: motifPlayer.metronomeEnabled = !motifPlayer.metronomeEnabled
+                        
+                        background: Rectangle {
+                            radius: 8
+                            color: parent.pressed ? "#3D3D3D" : (motifPlayer.metronomeEnabled ? "#9C27B0" : "#2D2D2D")
+                            border.color: motifPlayer.metronomeEnabled ? "#9C27B0" : "#3D3D3D"
+                            border.width: 2
+                        }
+                        
+                        contentItem: Text {
+                            text: "♩"
+                            color: "white"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            font.pixelSize: 18
+                        }
+                    }
+                    
+                    // Tempo display/control
+                    Row {
+                        spacing: 4
+                        
+                        Button {
+                            width: 30
+                            height: 44
+                            text: "-"
+                            onClicked: motifPlayer.tempo = Math.max(40, motifPlayer.tempo - 10)
+                            
+                            background: Rectangle {
+                                radius: 4
+                                color: parent.pressed ? "#3D3D3D" : "#2D2D2D"
+                            }
+                            contentItem: Text {
+                                text: parent.text
+                                color: "white"
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                font.pixelSize: 18
+                            }
+                        }
+                        
+                        Rectangle {
+                            width: 60
+                            height: 44
+                            color: "#2D2D2D"
+                            radius: 4
+                            
+                            Text {
+                                anchors.centerIn: parent
+                                text: motifPlayer.tempo + "\nbpm"
+                                color: "white"
+                                horizontalAlignment: Text.AlignHCenter
+                                font.pixelSize: 12
+                                lineHeight: 0.9
+                            }
+                        }
+                        
+                        Button {
+                            width: 30
+                            height: 44
+                            text: "+"
+                            onClicked: motifPlayer.tempo = Math.min(240, motifPlayer.tempo + 10)
+                            
+                            background: Rectangle {
+                                radius: 4
+                                color: parent.pressed ? "#3D3D3D" : "#2D2D2D"
+                            }
+                            contentItem: Text {
+                                text: parent.text
+                                color: "white"
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                font.pixelSize: 18
+                            }
                         }
                     }
                 }
