@@ -739,6 +739,12 @@ PointF EngravingItem::pagePos() const
             measure = toSegment(explicitParent())->measure();
         } else if (explicitParent()->isMeasure()) {           // used in measure number
             measure = toMeasure(explicitParent());
+        } else if (explicitParent()->isChordRest()) {
+            return p + parentItem()->pagePos();
+        } else if (explicitParent()->isNote()) {
+            return p + parentItem()->pagePos();
+        } else if (explicitParent()->isSpannerSegment()) {
+            system = toSpannerSegment(explicitParent())->system();
         } else if (explicitParent()->isSystem()) {
             system = toSystem(explicitParent());
         } else if (explicitParent()->isFretDiagram()) {
@@ -791,12 +797,14 @@ PointF EngravingItem::canvasPos() const
             measure = toSegment(explicitParent())->measure();
         } else if (explicitParent()->isMeasure()) {     // used in measure number
             measure = toMeasure(explicitParent());
-        }
-        // system = toMeasure(parent())->system();
-        else if (explicitParent()->isSystem()) {
+        } else if (explicitParent()->isSystem()) {
             system = toSystem(explicitParent());
-        } else if (explicitParent()->isChord()) {       // grace chord
-            measure = toSegment(explicitParent()->explicitParent())->measure();
+        } else if (explicitParent()->isChordRest()) {
+            return p + parentItem()->canvasPos();
+        } else if (explicitParent()->isNote()) {
+            return p + parentItem()->canvasPos();
+        } else if (explicitParent()->isSpannerSegment()) {
+            system = toSpannerSegment(explicitParent())->system();
         } else if (explicitParent()->isFretDiagram()) {
             return p + parentItem()->canvasPos();
         } else {
