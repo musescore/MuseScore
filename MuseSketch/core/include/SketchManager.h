@@ -18,6 +18,11 @@ public:
   Q_INVOKABLE QVariantMap getSketch(const QString &id);
   Q_INVOKABLE QVariantMap getMotif(const QString &sketchId, const QString &motifId);
   Q_INVOKABLE void updateMotifPitches(const QString &sketchId, const QString &motifId, const QVariantList &pitches);
+  
+  // Motif CRUD operations (PR-06)
+  Q_INVOKABLE void renameMotif(const QString &sketchId, const QString &motifId, const QString &newName);
+  Q_INVOKABLE QString duplicateMotif(const QString &sketchId, const QString &motifId);
+  Q_INVOKABLE void deleteMotif(const QString &sketchId, const QString &motifId);
 
   QVariantList sketches() const;
 

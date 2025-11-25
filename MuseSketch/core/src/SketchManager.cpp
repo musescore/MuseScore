@@ -2,6 +2,7 @@
 #include "Motif.h"
 #include "RhythmGrid.h"
 #include "Sketch.h"
+#include <QUuid>
 #include <QVariantMap>
 
 SketchManager::SketchManager(QObject *parent) : QObject(parent) {
@@ -138,6 +139,59 @@ void SketchManager::updateMotifPitches(const QString &sketchId, const QString &m
   sketch.setMotifs(motifs);
   m_repository.saveSketch(sketch);
   
+  loadSketches();
+}
+
+void SketchManager::renameMotif(const QString &sketchId, const QString &motifId, const QString &newName) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  QList<Motif> motifs = sketch.motifs();
+  for (int i = 0; i < motifs.size(); ++i) {
+    if (motifs[i].id() == motifId) {
+      motifs[i].setName(newName);
+      break;
+    }
+  }
+  
+  sketch.setMotifs(motifs);
+  m_repository.saveSketch(sketch);
+  loadSketches();
+}
+
+QString SketchManager::duplicateMotif(const QString &sketchId, const QString &motifId) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  // Find the original motif
+  const Motif *original = nullptr;
+  for (const Motif &m : sketch.motifs()) {
+    if (m.id() == motifId) {
+      original = &m;
+      break;
+    }
+  }
+  
+  if (!original) {
+    return QString();
+  }
+  
+  // Create a duplicate with a new ID
+  QString newId = QUuid::createUuid().toString(QUuid::WithoutBraces);
+  Motif duplicate(newId, original->name() + " (copy)", original->lengthBars());
+  duplicate.setPitchContour(original->pitchContour());
+  duplicate.setRhythmGrid(original->rhythmGrid());
+  duplicate.setKeyRef(original->keyRef());
+  
+  sketch.addMotif(duplicate);
+  m_repository.saveSketch(sketch);
+  loadSketches();
+  
+  return newId;
+}
+
+void SketchManager::deleteMotif(const QString &sketchId, const QString &motifId) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  sketch.removeMotif(motifId);
+  m_repository.saveSketch(sketch);
   loadSketches();
 }
 
