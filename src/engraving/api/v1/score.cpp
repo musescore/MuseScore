@@ -287,11 +287,11 @@ int Score::lyricCount() const
 }
 
 /** APIDOC @property {Lyric[]} - list of lyrics */
-QQmlListProperty<Lyric> Score::lyrics() const
+QQmlListProperty<Lyrics> Score::lyrics() const
 {
-    static std::vector<Lyrics*> list;
+    static std::vector<engraving::Lyrics*> list;
     list = score()->lyrics();
-    return wrapContainerProperty<Lyric>(this, list);
+    return wrapContainerProperty<Lyrics>(this, list);
 }
 
 /** APIDOC

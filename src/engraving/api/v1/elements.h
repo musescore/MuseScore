@@ -62,6 +62,7 @@ namespace mu::engraving::apiv1 {
 class FractionWrapper;
 class IntervalWrapper;
 class EngravingItem;
+class Lyrics;
 class Part;
 class Spanner;
 class Staff;
@@ -553,13 +554,9 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY(measureRepeatNumberPos,  MEASURE_REPEAT_NUMBER_POS)
 
+    /// For lyrics and lyrics lines: The verse they are assigned to.
     API_PROPERTY_T(int, verse,            VERSE)
 
-    /// For lyrics: The syllabic, one of
-    /// PluginAPI::PluginAPI::Syllabic values.
-    API_PROPERTY_T(int, syllabic,         SYLLABIC)
-    /// The tick length of a lyrics object.
-    API_PROPERTY(lyricTicks,              LYRIC_TICKS)
     /// For voltas: The list of passes on which to play the underlying measures.
     API_PROPERTY(volta_ending,            VOLTA_ENDING)
     /// For line elements: Controls the visibility of the line.
@@ -1397,7 +1394,7 @@ class ChordRest : public DurationElement
     Q_OBJECT
     /// Lyrics corresponding to this chord or rest, if any.
     /// Before 3.6 version this property was only available for \ref Chord objects.
-    Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> lyrics READ lyrics)
+    Q_PROPERTY(QQmlListProperty<apiv1::Lyrics> lyrics READ lyrics)
     /// Beam which covers this chord/rest, if such exists.
     /// \since MuseScore 3.6
     Q_PROPERTY(apiv1::Beam * beam READ beam)
@@ -1426,7 +1423,7 @@ public:
     mu::engraving::ChordRest* chordRest() { return toChordRest(e); }
     const mu::engraving::ChordRest* chordRest() const { return toChordRest(e); }
 
-    QQmlListProperty<EngravingItem> lyrics() { return wrapContainerProperty<EngravingItem>(this, chordRest()->lyrics()); }   // TODO: special type for Lyrics?
+    QQmlListProperty<Lyrics> lyrics() { return wrapContainerProperty<Lyrics>(this, chordRest()->lyrics()); }
     Beam* beam() { return wrap<Beam>(chordRest()->beam()); }
 
     bool isFullMeasureRest() { return chordRest()->isFullMeasureRest(); }
@@ -2358,21 +2355,36 @@ public:
 
 /** APIDOC
  * Class representing a lyric.
- * @class Lyric
+ * @class Lyrics
  * @hideconstructor
 */
-class Lyric : public EngravingItem
+class Lyrics : public EngravingItem
 {
     Q_OBJECT
     Q_PROPERTY(QString plainText READ plainText)
+    Q_PROPERTY(bool isMelisma READ isMelisma)
+    Q_PROPERTY(apiv1::EngravingItem * separator READ separator)
+
+    /// The syllabic property determines hyphenation for lyrics.
+    /// One of PluginAPI::PluginAPI::Syllabic values.
+    API_PROPERTY_T(int, syllabic,         SYLLABIC)
+    /// The tick length of a lyrics object.
+    API_PROPERTY(lyricTicks,              LYRIC_TICKS)
 
 public:
 
-    Lyric(mu::engraving::Lyrics* l = nullptr, Ownership own = Ownership::PLUGIN)
+    Lyrics(mu::engraving::Lyrics* l = nullptr, Ownership own = Ownership::PLUGIN)
         : EngravingItem(l, own) {}
 
-    /** APIDOC @property {string} - plain text of lyric */
-    QString plainText() const { return toLyrics(e)->plainText(); }
+    mu::engraving::Lyrics* lyrics() { return toLyrics(e); }
+    const mu::engraving::Lyrics* lyrics() const { return toLyrics(e); }
+
+    /** APIDOC @property {string} - plain text of lyric, i.e. text with formatting removed */
+    QString plainText() const { return lyrics()->plainText(); }
+    /** APIDOC @property {bool} - whether this lyric is a melisma */
+    bool isMelisma() const { return lyrics()->isMelisma(); }
+    /** APIDOC @property {EngravingItem} - the lyrics line for this lyric, if it exists */
+    apiv1::EngravingItem* separator() const { return wrap(lyrics()->separator()); }
 };
 
 #undef API_PROPERTY

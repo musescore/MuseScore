@@ -53,7 +53,7 @@ class System;
 class Selection;
 class Score;
 class Staff;
-class Lyric;
+class Lyrics;
 class Spanner;
 
 extern Selection* selectionWrap(mu::engraving::Selection* select);
@@ -169,7 +169,7 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     Q_PROPERTY(int lyricCount READ lyricCount)
     /// List of lyrics in this score.
     /// \since MuseScore 4.7
-    Q_PROPERTY(QQmlListProperty<apiv1::Lyric> lyrics READ lyrics)
+    Q_PROPERTY(QQmlListProperty<apiv1::Lyrics> lyrics READ lyrics)
     /// List of spanners (hairpins, slurs, etc.) in this score.
     /// \since MuseScore 4.7
     Q_PROPERTY(QQmlListProperty<apiv1::Spanner> spanners READ spanners)
@@ -279,7 +279,7 @@ public:
     // === Lyrics ===
     bool hasLyrics() const;
     int lyricCount() const;
-    QQmlListProperty<apiv1::Lyric> lyrics() const;
+    QQmlListProperty<apiv1::Lyrics> lyrics() const;
     Q_INVOKABLE QString extractLyrics() const;
 
     /// \cond MS_INTERNAL
