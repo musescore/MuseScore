@@ -46,7 +46,7 @@ static const ElementStyle sectionBreakStyle {
 //---------------------------------------------------------
 
 LayoutBreak::LayoutBreak(MeasureBase* parent)
-    : EngravingItem(ElementType::LAYOUT_BREAK, parent, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
+    : EngravingItem(ElementType::LAYOUT_BREAK, parent, ElementFlag::SYSTEM)
 {
     m_pause = 0.;
     m_startWithLongNames = false;
