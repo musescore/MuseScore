@@ -35,6 +35,7 @@
 #include "dom/segment.h"
 #include "dom/staff.h"
 #include "dom/stafflines.h"
+#include "dom/stafftype.h"
 #include "dom/system.h"
 #include "dom/page.h"
 #include "dom/textlinebase.h"
@@ -284,7 +285,9 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
 void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const LayoutContext& ctx)
 {
     staff_idx_t staffIdx = staffLines->staffIdx();
-    bool linesThrough = ctx.dom().staff(staffIdx)->staffType(Fraction())->linesThrough();
+    const StaffType* staffType = ctx.dom().staff(staffIdx)->staffType(Fraction());
+    bool linesThrough = staffType->linesThrough();
+    TablatureMinimStyle minimStyle = staffType->minimStyle();
 
     PointF staffLinesPos = staffLines->pagePos();
 
