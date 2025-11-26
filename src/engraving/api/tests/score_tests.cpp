@@ -33,38 +33,11 @@
 #include "engraving/api/v1/score.h"
 #include "engraving/api/v1/part.h"
 
-#include "mocks/globalcontextmock.h"
-#include "mocks/notationmock.h"
-#include "mocks/notationpartsmock.h"
-
 using namespace mu::engraving;
-using namespace mu::notation;
-using namespace mu::context;
-using ::testing::Return;
-using ::testing::_;
-using ::testing::NiceMock;
 
 class Engraving_ApiScoreTests : public ::testing::Test
 {
 public:
-    void SetUp() override
-    {
-        m_globalContext = std::make_shared<NiceMock<GlobalContextMock> >();
-        m_notation = std::make_shared<NiceMock<NotationMock> >();
-        m_notationParts = std::make_shared<NiceMock<NotationPartsMock> >();
-    }
-
-    void TearDown() override
-    {
-        m_notationParts.reset();
-        m_notation.reset();
-        m_globalContext.reset();
-    }
-
-protected:
-    std::shared_ptr<NiceMock<GlobalContextMock> > m_globalContext;
-    std::shared_ptr<NiceMock<NotationMock> > m_notation;
-    std::shared_ptr<NiceMock<NotationPartsMock> > m_notationParts;
 };
 
 //---------------------------------------------------------
@@ -197,14 +170,13 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentRedo)
 }
 
 //---------------------------------------------------------
-//   testReplaceInstrumentApiWithMocks
+//   testReplaceInstrumentApi
 //   Test the Plugin API Score::replaceInstrument() method
-//   using mocks to verify the correct call chain
 //---------------------------------------------------------
 
-TEST_F(Engraving_ApiScoreTests, replaceInstrumentApiWithMocks)
+TEST_F(Engraving_ApiScoreTests, replaceInstrumentApi)
 {
-    // [GIVEN] A score with a part and mocked notation layer
+    // [GIVEN] A score with a part
     MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
     Part* domPart = new Part(domScore);
@@ -213,34 +185,22 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentApiWithMocks)
 
     // Set initial instrument
     Instrument initialInstrument;
-    initialInstrument.setId(u"wind.flutes.flute");
+    initialInstrument.setId(u"test.flute");
     initialInstrument.setTrackName(u"Flute");
     domPart->setInstrument(initialInstrument);
 
-    // Setup mock chain: GlobalContext -> Notation -> NotationParts
-    ON_CALL(*m_globalContext, currentNotation())
-    .WillByDefault(Return(m_notation));
-    ON_CALL(*m_notation, parts())
-    .WillByDefault(Return(m_notationParts));
+    EXPECT_EQ(domPart->instrumentId(), QString("test.flute"));
 
-    // [EXPECT] replaceInstrument to be called on NotationParts with correct parameters
-    EXPECT_CALL(*m_notationParts, replaceInstrument(_, _, _))
-    .Times(1);
-
-    // Register the mock in IOC
-    muse::modularity::globalIoc()->registerExport<IGlobalContext>("test", m_globalContext);
-
-    // Create API wrapper for the score
+    // Create API wrappers
     apiv1::Score apiScore(domScore);
-
-    // Create API wrapper for the part
     apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
 
-    // [WHEN] We call replaceInstrument through the API
+    // [WHEN] We call replaceInstrument through the API with a valid instrument
     apiScore.replaceInstrument(apiPart, "violin");
 
-    // Cleanup
-    muse::modularity::globalIoc()->unregister<IGlobalContext>("test");
+    // [THEN] The instrument should be changed to violin
+    EXPECT_EQ(domPart->instrumentId(), QString("violin"));
+
     delete apiPart;
     delete domScore;
 }
@@ -257,7 +217,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentApiNullPart)
     apiv1::Score apiScore(domScore);
 
     // [WHEN/THEN] Calling with null part should not crash
-    apiScore.replaceInstrument(nullptr, "strings.violin");
+    apiScore.replaceInstrument(nullptr, "violin");
 
     delete domScore;
 }
@@ -276,12 +236,19 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentApiInvalidInstrument)
     domScore->appendPart(domPart);
     domScore->appendStaff(Factory::createStaff(domPart));
 
+    // Set initial instrument
+    Instrument initialInstrument;
+    initialInstrument.setId(u"test.initial");
+    domPart->setInstrument(initialInstrument);
+
     apiv1::Score apiScore(domScore);
     apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
 
-    // [WHEN/THEN] Calling with invalid instrument ID should not crash
-    // (instrument templates are not loaded in test environment, so any ID is "invalid")
+    // [WHEN] Calling with invalid instrument ID
     apiScore.replaceInstrument(apiPart, "nonexistent.instrument.xyz");
+
+    // [THEN] Instrument should remain unchanged
+    EXPECT_EQ(domPart->instrumentId(), QString("test.initial"));
 
     delete apiPart;
     delete domScore;
