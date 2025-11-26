@@ -85,7 +85,14 @@ StyledFlickable {
 
     property var capoStyles: [
         chordSymbolsModel.displayCapoChords,
-        chordSymbolsModel.capoPosition
+        chordSymbolsModel.capoPosition,
+        chordSymbolsModel.capoChordDisplayMode,
+        chordSymbolsModel.capoChordParenthesized,
+        chordSymbolsModel.capoChordTextStyle,
+        chordSymbolsModel.capoChordStackedSpacing,
+        chordSymbolsModel.capoLabelVisible,
+        chordSymbolsModel.capoLabelFormat,
+        chordSymbolsModel.capoLabelTextStyle
     ]
 
     function resetStyles(styles) {
@@ -904,6 +911,140 @@ StyledFlickable {
                         onValueEdited: function(newValue) {
                             chordSymbolsModel.capoPosition.value = newValue
                         }
+                    }
+                }
+
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+                    // Only enabled when "Show chord symbols & transposed symbols" is selected (value 1 = BOTH)
+                    enabled: chordSymbolsModel.displayCapoChords.value === 1
+
+                    StyledTextLabel {
+                        Layout.preferredWidth: 120
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        text: qsTrc("notation", "Display mode:")
+                    }
+
+                    ComboBoxDropdown {
+                        Layout.preferredWidth: 200
+                        model: chordSymbolsModel.possibleCapoChordDisplayModeOptions()
+                        styleItem: chordSymbolsModel.capoChordDisplayMode
+                    }
+                }
+
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+                    // Only enabled when displayCapoChords == BOTH (1) AND capoChordDisplayMode == STACKED (1)
+                    enabled: chordSymbolsModel.displayCapoChords.value === 1 &&
+                             chordSymbolsModel.capoChordDisplayMode.value === 1
+
+                    StyledTextLabel {
+                        Layout.preferredWidth: 120
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        text: qsTrc("notation/editstyle/chordsymbols", "Capo chord style:")
+                    }
+
+                    ComboBoxDropdown {
+                        Layout.preferredWidth: 200
+                        model: chordSymbolsModel.possibleCapoChordTextStyleOptions()
+                        styleItem: chordSymbolsModel.capoChordTextStyle
+                    }
+                }
+
+                CheckBox {
+                    Layout.fillWidth: true
+                    // Only enabled when displayCapoChords == BOTH (1) AND capoChordDisplayMode == STACKED (1)
+                    enabled: chordSymbolsModel.displayCapoChords.value === 1 &&
+                             chordSymbolsModel.capoChordDisplayMode.value === 1
+                    text: qsTrc("notation/editstyle/chordsymbols", "Show capo chord in parentheses")
+                    checked: chordSymbolsModel.capoChordParenthesized.value === true
+                    onClicked: chordSymbolsModel.capoChordParenthesized.value = !chordSymbolsModel.capoChordParenthesized.value
+                }
+
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+                    // Only enabled when displayCapoChords == BOTH (1) AND capoChordDisplayMode == STACKED (1)
+                    enabled: chordSymbolsModel.displayCapoChords.value === 1 &&
+                             chordSymbolsModel.capoChordDisplayMode.value === 1
+
+                    StyledTextLabel {
+                        Layout.preferredWidth: 120
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        text: qsTrc("notation/editstyle/chordsymbols", "Stacked spacing:")
+                    }
+
+                    IncrementalPropertyControl {
+                        Layout.preferredWidth: 80
+
+                        currentValue: chordSymbolsModel.capoChordStackedSpacing.value
+                        minValue: 0.0
+                        maxValue: 2.0
+                        step: 0.1
+                        decimals: 1
+                        measureUnitsSymbol: qsTrc("global", "sp")
+
+                        onValueEdited: function(newValue) {
+                            chordSymbolsModel.capoChordStackedSpacing.value = newValue
+                        }
+                    }
+                }
+
+                CheckBox {
+                    Layout.fillWidth: true
+                    enabled: chordSymbolsModel.capoPosition.value > 0 &&
+                             chordSymbolsModel.displayCapoChords.value !== 0
+                    text: qsTrc("notation/editstyle/chordsymbols", "Show capo position label")
+                    checked: chordSymbolsModel.capoLabelVisible.value === true
+                    onClicked: chordSymbolsModel.capoLabelVisible.value = !chordSymbolsModel.capoLabelVisible.value
+                }
+
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+                    enabled: chordSymbolsModel.capoLabelVisible.value === true &&
+                             chordSymbolsModel.capoPosition.value > 0 &&
+                             chordSymbolsModel.displayCapoChords.value !== 0
+
+                    StyledTextLabel {
+                        Layout.preferredWidth: 120
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        text: qsTrc("notation/editstyle/chordsymbols", "Label format:")
+                    }
+
+                    TextInputField {
+                        Layout.preferredWidth: 150
+                        currentText: chordSymbolsModel.capoLabelFormat.value
+                        onTextEdited: function(newText) {
+                            chordSymbolsModel.capoLabelFormat.value = newText
+                        }
+                    }
+                }
+
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+                    enabled: chordSymbolsModel.capoLabelVisible.value === true &&
+                             chordSymbolsModel.capoPosition.value > 0 &&
+                             chordSymbolsModel.displayCapoChords.value !== 0
+
+                    StyledTextLabel {
+                        Layout.preferredWidth: 120
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        text: qsTrc("notation/editstyle/chordsymbols", "Label style:")
+                    }
+
+                    ComboBoxDropdown {
+                        Layout.preferredWidth: 200
+                        model: chordSymbolsModel.possibleCapoLabelTextStyleOptions()
+                        styleItem: chordSymbolsModel.capoLabelTextStyle
                     }
                 }
             }
