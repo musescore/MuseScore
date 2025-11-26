@@ -325,7 +325,7 @@ private:
     bool calculateUp(const musx::dom::MusxInstance<musx::dom::details::ArticulationAssign>& articAssign,
                      musx::dom::others::ArticulationDef::AutoVerticalMode vm, engraving::ChordRest* cr);
     engraving::DirectionV getDirectionVForLayer(const engraving::ChordRest* e);
-    engraving::DirectionV calculateTieDirection(engraving::Tie* tie);
+    engraving::DirectionV calculateTieDirection(engraving::Tie* tie, musx::dom::EntryNumber entryNumber);
     engraving::Note* noteFromEntryInfoAndNumber(const musx::dom::EntryInfoPtr& entryInfoPtr, musx::dom::NoteNumber nn);
     engraving::Note* noteFromNoteInfoPtr(const musx::dom::NoteInfoPtr& noteInfoPtr);
     engraving::ChordRest* chordRestFromEntryInfoPtr(const musx::dom::EntryInfoPtr& entryInfoPtr);
