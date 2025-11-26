@@ -312,10 +312,16 @@ RetVal<muse::midi::tick_t> NotationPlayback::playPositionTickByElement(const Eng
 
 void NotationPlayback::addLoopBoundary(LoopBoundaryType boundaryType, tick_t tick)
 {
+    const Measure* first = score()->firstMeasure();
+    const Measure* last = score()->lastMeasure();
+    IF_ASSERT_FAILED(first && last) {
+        return;
+    }
+
     if (tick == BoundaryTick::FirstScoreTick) {
-        tick = score()->firstMeasure()->tick().ticks();
+        tick = first->tick().ticks();
     } else if (tick == BoundaryTick::LastScoreTick) {
-        tick = score()->lastMeasure()->endTick().ticks();
+        tick = last->endTick().ticks();
     }
 
     switch (boundaryType) {

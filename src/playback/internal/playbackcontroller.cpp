@@ -25,6 +25,7 @@
 
 #include "playbacktypes.h"
 
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/utils.h"
 #include "engraving/dom/factory.h"
@@ -851,6 +852,12 @@ void PlaybackController::toggleLoopPlayback()
 {
     if (isLoopEnabled()) {
         disableLoop();
+        return;
+    }
+
+    const MasterScore* score = m_masterNotation ? m_masterNotation->masterScore() : nullptr;
+    const Measure* first = score ? score->firstMeasure() : nullptr;
+    if (!first) {
         return;
     }
 
