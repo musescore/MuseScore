@@ -143,6 +143,16 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>L_L</eid>
+              <Image>
+                <Image>
+                  <eid>M_M</eid>
+                  <z>9299</z>
+                  <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
+                  </Image>
+                <eid>N_N</eid>
+                <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
+                <size w="38.52" h="38.64"/>
+                </Image>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -819,8 +829,6 @@
       <name>Alto</name>
       <Division>480</Division>
       <Style>
-        <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
-        <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -913,6 +921,17 @@
               <Note>
                 <eid>EC_EC</eid>
                 <linkedTo>L_L</linkedTo>
+                <Image>
+                  <Image>
+                    <eid>FC_FC</eid>
+                    <z>9299</z>
+                    <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
+                    </Image>
+                  <eid>GC_GC</eid>
+                  <linkedTo>N_N</linkedTo>
+                  <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
+                  <size w="38.52" h="38.64"/>
+                  </Image>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
                 </Note>
@@ -1294,8 +1313,6 @@
       <name>Tenor</name>
       <Division>480</Division>
       <Style>
-        <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
-        <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>

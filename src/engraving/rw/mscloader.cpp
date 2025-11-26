@@ -127,7 +127,7 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, Se
             if (!MScore::noImages) {
                 std::vector<String> images = mscReader.imageFileNames();
                 for (const String& name : images) {
-                    imageStore.add(name, mscReader.readImageFile(name));
+                    imageStore.add(name.toStdString(), mscReader.readImageFile(name));
                 }
             }
         }

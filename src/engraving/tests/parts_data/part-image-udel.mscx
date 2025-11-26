@@ -121,7 +121,6 @@
         <Image>
           <eid>G_G</eid>
           <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-          <linkPath>schnee.png</linkPath>
           <size w="38.52" h="38.64"/>
           </Image>
         </VBox>
@@ -149,11 +148,9 @@
                   <eid>M_M</eid>
                   <z>9299</z>
                   <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-                  <linkPath>schnee.png</linkPath>
                   </Image>
                 <eid>N_N</eid>
                 <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-                <linkPath>schnee.png</linkPath>
                 <size w="38.52" h="38.64"/>
                 </Image>
               <pitch>72</pitch>
@@ -895,7 +892,6 @@
           <Image>
             <eid>+B_+B</eid>
             <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-            <linkPath>schnee.png</linkPath>
             <size w="38.52" h="38.64"/>
             </Image>
           <Text>
@@ -932,12 +928,10 @@
                     <eid>FC_FC</eid>
                     <z>9299</z>
                     <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-                    <linkPath>schnee.png</linkPath>
                     </Image>
                   <eid>GC_GC</eid>
                   <linkedTo>N_N</linkedTo>
                   <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-                  <linkPath>schnee.png</linkPath>
                   <size w="38.52" h="38.64"/>
                   </Image>
                 <pitch>72</pitch>

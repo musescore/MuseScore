@@ -155,7 +155,6 @@
               <Image>
                 <eid>VE_VE</eid>
                 <path></path>
-                <linkPath></linkPath>
                 </Image>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -934,7 +933,6 @@
                   <eid>WE_WE</eid>
                   <linkedTo>VE_VE</linkedTo>
                   <path></path>
-                  <linkPath></linkPath>
                   </Image>
                 <pitch>74</pitch>
                 <tpc>16</tpc>
