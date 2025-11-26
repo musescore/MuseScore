@@ -779,9 +779,9 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
             return true;
         }
     }
-    if (beamedEntries.find(entryInfoPtr->getEntry()->getEntryNumber()) != beamedEntries.end()) {
-        return true;
-    }
+    //if (beamedEntries.find(entryInfoPtr->getEntry()->getEntryNumber()) != beamedEntries.end()) {
+    //    return true;
+    //}
     /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
     const MusxInstance<Entry>& firstEntry = entryInfoPtr->getEntry();
     ChordRest* firstCr = chordRestFromEntryInfoPtr(entryInfoPtr);
@@ -789,6 +789,16 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
         logger()->logWarning(String(u"Entry %1 was not mapped").arg(firstEntry->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
         return false;
     }
+
+    auto calcBeamMode = [](unsigned count) -> BeamMode {
+        if (count <= 1) {
+            return BeamMode::MID;
+        } else if (count == 2) {
+            return BeamMode::BEGIN16;
+        } else {
+            return BeamMode::BEGIN32;
+        }
+    };
 
     Beam* beam = Factory::createBeam(m_score->dummy()->system());
     beam->setTrack(curTrackIdx);
@@ -798,7 +808,8 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
         if (!entryInfoPtr.calcBeamContinuesLeftOverBarline()) {
             firstCr->setBeamMode(BeamMode::BEGIN);
         } else {
-            firstCr->setBeamMode(BeamMode::MID); /// @todo figure out sec beam here
+            const unsigned beamBreaks = entryInfoPtr.calcLowestBeamStart(/*considerBeamOverBarlines*/true);
+            firstCr->setBeamMode(calcBeamMode(beamBreaks));
         }
         if (firstEntry->isNote && firstCr->isChord()) {
             DirectionV stemDir = toChord(firstCr)->stemDirection();
@@ -829,19 +840,8 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
         beamedEntries.emplace(currentEntry->getEntryNumber());
 
         // Secondary beam breaks
-        unsigned secBeamStart = 0;
-        if (currentEntry->secBeam) {
-            if (const auto& secBeamBreak = m_doc->getDetails()->get<details::SecondaryBeamBreak>(nextInBeam.getFrame()->getRequestedPartId(), currentEntryNumber)) {
-                secBeamStart = secBeamBreak->calcLowestBreak();
-            }
-        }
-        if (secBeamStart <= 1) {
-            currentCr->setBeamMode(BeamMode::MID);
-        } else if (secBeamStart == 2) {
-            currentCr->setBeamMode(BeamMode::BEGIN16);
-        } else {
-            currentCr->setBeamMode(BeamMode::BEGIN32);
-        }
+        const unsigned secBeamStart = nextInBeam.calcLowestBeamStart(/*considerBeamOverBarlines*/true);
+        currentCr->setBeamMode(calcBeamMode(secBeamStart));
 
         // Stem direction
         if (currentEntry->isNote && currentCr->isChord()) {
