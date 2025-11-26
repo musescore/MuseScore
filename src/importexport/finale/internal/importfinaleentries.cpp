@@ -1212,7 +1212,7 @@ static double systemPosByLine(ChordRest* cr, bool up)
            + (line * cr->spatium() * cr->staffType()->lineDistance().val() * 0.5);
 }
 
-DirectionV FinaleParser::calculateTieDirection(Tie* tie)
+DirectionV FinaleParser::calculateTieDirection(Tie* tie, EntryNumber entryNumber)
 {
     // MuseScore requires all tie segments to have the same direction.
     // As such, if the direction has already been set, don't recalculate.
@@ -1226,7 +1226,17 @@ DirectionV FinaleParser::calculateTieDirection(Tie* tie)
 
     Chord* c = note->chord();
     DirectionV stemDir = c->beam() ? c->beam()->direction() : c->stemDirection();
-    assert(stemDir != DirectionV::AUTO);
+    if (stemDir == DirectionV::AUTO) {
+        logger()->logWarning(String(u"The stem direction for ChordRest corresponding to EntryNumber %1 could not be determined. Getting it from EntryInfoPtr instead.").arg(entryNumber));
+        StaffCmper musxStaffId = muse::value(m_staff2Inst, c->staffIdx(), 0);
+        MeasCmper musxMeasureId = c->measure()->measureIndex() + 1;
+        EntryInfoPtr entryInfoPtr = EntryInfoPtr::fromPositionOrNull(m_doc, m_currentMusxPartId, musxStaffId, musxMeasureId, entryNumber);
+        IF_ASSERT_FAILED (entryInfoPtr) {
+            logger()->logWarning(String(u"The stem direction for ChordRest corresponding to EntryNumber %1 could not be deterimed at all. Returning AUTO.").arg(entryNumber));
+            return DirectionV::AUTO;
+        }
+        stemDir = entryInfoPtr.calcUpStem() ? DirectionV::UP : DirectionV::DOWN;
+    }
 
     // Inherit the stem direction only when the chord has a fixed direction, and the layer says to do so.
     const auto& layerInfo = layerAttributes(c->tick(), c->track());
@@ -1674,9 +1684,13 @@ void FinaleParser::importEntryAdjustments()
                 }
             } else if (chordRest->isRest()) {
                 Rest* r = toRest(chordRest);
-                double difference = r->dotList().front()->pos().x() - (r->ldata()->bbox().right() + dotDistance); // offset to cr means no subtracting rest offset
-                for (NoteDot* nd : r->dotList()) {
-                    nd->rxoffset() -= difference;
+                if (!r->dotList().empty()) {
+                    double difference = r->dotList().front()->pos().x() - (r->ldata()->bbox().right() + dotDistance); // offset to cr means no subtracting rest offset
+                    for (NoteDot* nd : r->dotList()) {
+                        nd->rxoffset() -= difference;
+                    }
+                } else {
+                    logger()->logWarning(String(u"ChordRest for EntryNumber %1 has dots but Rest::dotList is empty").arg(entryNumber));
                 }
             }
         }
@@ -1717,7 +1731,7 @@ void FinaleParser::importEntryAdjustments()
         NoteNumber noteNumber = numbers.second;
 
         /// @todo offsets and contour
-        auto positionTie = [this](Tie* tie, const MusxInstance<details::TieAlterBase>& tieAlt) {
+        auto positionTie = [this, entryNumber](Tie* tie, const MusxInstance<details::TieAlterBase>& tieAlt) {
             // Collect alterations
             logger()->logDebugTrace(String(u"Importing tie at tick %1...").arg(tie->tick().toString()));
             bool outside = musxOptions().tieOptions->useOuterPlacement;
@@ -1737,7 +1751,7 @@ void FinaleParser::importEntryAdjustments()
 
             // Tie direction (over/under)
             if (direction == DirectionV::AUTO) {
-                direction = calculateTieDirection(tie);
+                direction = calculateTieDirection(tie, entryNumber);
             }
             setAndStyleProperty(tie, Pid::SLUR_DIRECTION, direction);
 

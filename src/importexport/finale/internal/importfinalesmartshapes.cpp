@@ -22,6 +22,7 @@
 #include "internal/importfinaleparser.h"
 #include "internal/importfinalelogger.h"
 #include "internal/finaletypesconv.h"
+#include "internal/text/finaletextconv.h"
 
 #include <vector>
 #include <exception>
@@ -49,6 +50,7 @@
 #include "engraving/dom/slurtie.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/spanner.h"
+#include "engraving/dom/system.h"
 #include "engraving/dom/textlinebase.h"
 #include "engraving/dom/trill.h"
 #include "engraving/dom/utils.h"
@@ -667,8 +669,9 @@ void FinaleParser::importSmartShapes()
                         if (assign->shapeNum != smartShape->getCmper()) {
                             continue;
                         }
-                        const auto& centerShape = m_doc->getDetails()->get<details::CenterShape>(m_currentMusxPartId, assign->shapeNum, assign->centerShapeNum);
-                        positionSegmentFromEndPoints(centerShape->startBreakAdj, centerShape->endBreakAdj);
+                        if (const auto centerShape = m_doc->getDetails()->get<details::CenterShape>(m_currentMusxPartId, assign->shapeNum, assign->centerShapeNum)) {
+                            positionSegmentFromEndPoints(centerShape->startBreakAdj, centerShape->endBreakAdj);
+                        }
                         break;
                     }
                 }
