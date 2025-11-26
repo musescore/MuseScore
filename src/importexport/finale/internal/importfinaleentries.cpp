@@ -832,7 +832,8 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
             continue;
         }
         ChordRest* currentCr = chordRestFromEntryInfoPtr(nextInBeam);
-        IF_ASSERT_FAILED(currentCr) {
+        if (!currentCr) {
+            // this can happen if the entry was the first (invisible) entry of a singleton beam left. Such entries should be skipped.
             logger()->logWarning(String(u"Entry %1 was not mapped").arg(currentEntryNumber), m_doc, nextInBeam.getStaff(), nextInBeam.getMeasure());
             continue;
         }
@@ -855,11 +856,11 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
     return true;
 }
 
-static void processTremolos(std::vector<ReadableTuplet>& tremoloMap, track_idx_t curTrackIdx, Measure* measure)
+static void processTremolos(const std::vector<ReadableTuplet>& tremoloMap, track_idx_t curTrackIdx, Measure* measure)
 {
     /// @todo account for invalid durations
     Fraction timeStretch = measure->score()->staff(track2staff(curTrackIdx))->timeStretch(measure->tick());
-    for (ReadableTuplet tuplet : tremoloMap) {
+    for (const ReadableTuplet& tuplet : tremoloMap) {
         engraving::Chord* c1 = measure->findChord(measure->tick() + tuplet.startTick, curTrackIdx); // timestretch?
         engraving::Chord* c2 = measure->findChord(measure->tick() + ((tuplet.startTick + tuplet.endTick) / 2), curTrackIdx);
         IF_ASSERT_FAILED(c1 && c2 && c1->ticks() == c2->ticks()) {
@@ -895,7 +896,7 @@ static void processTremolos(std::vector<ReadableTuplet>& tremoloMap, track_idx_t
     }
 }
 
-static void createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo,
+static void createTupletMap(const std::vector<EntryFrame::TupletInfo>& tupletInfo,
                             std::vector<ReadableTuplet>& tupletMap, std::vector<ReadableTuplet>& tremoloMap, int voice)
 {
     const bool forVoice2 = bool(voice);
