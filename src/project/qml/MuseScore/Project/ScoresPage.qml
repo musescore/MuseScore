@@ -127,6 +127,7 @@ FocusScope {
             navigation.order: 2
 
             onActivated: function(index, value) {
+                currentIndex = index
                 scoresPageModel.selectedFamilyId = value
             }
         }
@@ -150,6 +151,7 @@ FocusScope {
             navigation.order: 3
 
             onActivated: function(index, value) {
+                currentIndex = index
                 scoresPageModel.selectedInstrumentId = value
             }
 

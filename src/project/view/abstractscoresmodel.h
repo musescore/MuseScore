@@ -50,7 +50,9 @@ protected:
     enum Roles {
         NameRole = Qt::UserRole + 1,
         IsNoResultsFoundRole,
-        ScoreRole
+        ScoreRole,
+        InstrumentIdsRole,
+        InstrumentFamiliesRole
     };
 
     static const QString NAME_KEY;
