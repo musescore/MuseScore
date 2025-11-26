@@ -31,13 +31,9 @@
 #include "dom/masterscore.h"
 #include "dom/segment.h"
 #include "dom/text.h"
+#include "editing/editpart.h"
 #include "editing/editsystemlocks.h"
 #include "types/typesconv.h"
-
-// notation
-#include "notation/inotation.h"
-#include "notation/inotationparts.h"
-#include "notation/notationtypes.h"
 
 // api
 #include "apistructs.h"
@@ -176,18 +172,11 @@ void Score::replaceInstrument(apiv1::Part* part, const QString& instrumentId)
         return;
     }
 
-    mu::notation::INotationPartsPtr parts = notation() ? notation()->parts() : nullptr;
-    if (!parts) {
-        LOGW("replaceInstrument: notation parts is null");
-        return;
-    }
+    mu::engraving::Part* domPart = part->part();
+    mu::engraving::Instrument newInstrument = mu::engraving::Instrument::fromTemplate(t);
+    String newPartName = t->trackName;
 
-    mu::notation::InstrumentKey instrumentKey;
-    instrumentKey.partId = muse::ID(part->part()->id());
-    instrumentKey.instrumentId = muse::String::fromQString(part->part()->instrumentId());
-    instrumentKey.tick = mu::engraving::Part::MAIN_INSTRUMENT_TICK;
-
-    parts->replaceInstrument(instrumentKey, mu::engraving::Instrument::fromTemplate(t));
+    score()->undo(new ChangePart(domPart, new mu::engraving::Instrument(newInstrument), newPartName));
 }
 
 //---------------------------------------------------------
