@@ -25,6 +25,7 @@
 
 #include "playbacktypes.h"
 
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/utils.h"
 #include "engraving/dom/factory.h"
@@ -1790,9 +1791,28 @@ void PlaybackController::setIsExportingAudio(bool exporting)
     }
 }
 
-bool PlaybackController::canReceiveAction(const ActionCode&) const
+bool PlaybackController::canReceiveAction(const ActionCode& code) const
 {
-    return m_masterNotation != nullptr && m_masterNotation->hasParts();
+    if (!m_masterNotation || !m_masterNotation->hasParts()) {
+        return false;
+    }
+
+    static const std::unordered_set<ActionCode> REQUIRES_MEASURES {
+        PLAY_CODE,
+        STOP_CODE,
+        PAUSE_AND_SELECT_CODE,
+        REWIND_CODE,
+        LOOP_CODE,
+        LOOP_IN_CODE,
+        LOOP_OUT_CODE,
+    };
+
+    if (muse::contains(REQUIRES_MEASURES, code)) {
+        const MasterScore* score = m_masterNotation->masterScore();
+        return score && score->firstMeasure();
+    }
+
+    return true;
 }
 
 const std::map<TrackId, AudioResourceMeta>& PlaybackController::onlineSounds() const
