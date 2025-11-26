@@ -1468,6 +1468,7 @@ bool Selection::canCopy() const
     }
 
     Fraction endTick = m_endSegment ? m_endSegment->tick() : m_score->lastSegment()->tick();
+    Fraction timeStretch(1, 0);
 
     for (staff_idx_t staffIdx = m_staffStart; staffIdx != m_staffEnd; ++staffIdx) {
         for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
@@ -1506,9 +1507,13 @@ bool Selection::canCopy() const
             }
         }
 
-        // loop through measures on this staff checking for local time signatures
+        // Check that all selected measures have the same time stretch - allows copy/paste within a local time signature,
+        // but don't yet support it between differing local time signatures.
         for (Measure* m = m_startSegment->measure(); m && m->tick() < endTick; m = m->nextMeasure()) {
-            if (m_score->staff(staffIdx)->isLocalTimeSignature(m->tick())) {
+            Fraction mTimeStretch = m_score->staff(staffIdx)->timeStretch(m->tick());
+            if (!timeStretch.isValid()) {
+                timeStretch = mTimeStretch;
+            } else if (timeStretch != mTimeStretch) {
                 return false;
             }
         }

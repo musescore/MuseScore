@@ -437,14 +437,6 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 } else if (tag == "Tuplet") {
                     Tuplet* oldTuplet = tuplet;
                     Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
-                    // no paste into local time signature
-                    if (score->staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
-                        MScore::setError(MsError::DEST_LOCAL_TIME_SIGNATURE);
-                        if (oldTuplet && oldTuplet->elements().empty()) {
-                            delete oldTuplet;
-                        }
-                        return false;
-                    }
                     Measure* measure = score->tick2measure(tick);
                     tuplet = Factory::createTuplet(measure);
                     tuplet->setTrack(ctx.track());
@@ -491,11 +483,6 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     TRead::readItem(cr, e, ctx);
                     cr->setSelected(false);
                     Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
-                    // no paste into local time signature
-                    if (score->staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
-                        MScore::setError(MsError::DEST_LOCAL_TIME_SIGNATURE);
-                        return false;
-                    }
                     if (score->tick2measure(tick)->isMeasureRepeatGroup(dstStaffIdx)) {
                         MeasureRepeat* mr = score->tick2measure(tick)->measureRepeatElement(dstStaffIdx);
                         score->deleteItem(mr);    // resets any measures related to mr

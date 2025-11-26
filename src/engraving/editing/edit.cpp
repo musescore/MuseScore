@@ -544,7 +544,7 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
             // compute list of durations which will fit l
             //
             std::vector<TDuration> dList;
-            if (tuplet || staff->isLocalTimeSignature(tick) || f == Fraction(0, 1)) {
+            if (tuplet || f == Fraction(0, 1)) {
                 dList = toDurationList(l, useDots);
                 std::reverse(dList.begin(), dList.end());
             } else {
