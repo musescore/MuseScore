@@ -1009,10 +1009,26 @@ static void autoplaceHarmony(EngravingItem* harmony)
 
 void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, LayoutContext& ctx)
 {
+    if (harmonies.empty()) {
+        return;
+    }
+
+    // Find the first harmony by tick position for capo label
+    Harmony* firstHarmony = nullptr;
+    Fraction earliestTick = Fraction::max();
+    for (Harmony* h : harmonies) {
+        if (h->tick() < earliestTick) {
+            earliestTick = h->tick();
+            firstHarmony = h;
+        }
+    }
+
     if (!ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
         for (Harmony* harmony : harmonies) {
             autoplaceHarmony(harmony);
         }
+        // Add capo label to first harmony after layout
+        HarmonyLayout::layoutCapoLabel(firstHarmony, ctx);
         return;
     }
 
@@ -1038,6 +1054,9 @@ void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System
     for (EngravingItem* harmony : harmonyItemsNoAlign) {
         autoplaceHarmony(harmony);
     }
+
+    // Add capo label to first harmony after all layout is complete
+    HarmonyLayout::layoutCapoLabel(firstHarmony, ctx);
 }
 
 void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* system, LayoutContext& ctx)
@@ -1058,6 +1077,19 @@ void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* 
                 Shape harmShape = harmony->ldata()->shape().translated(harmony->pos() + fretDiag->pos() + s->pos() + s->measure()->pos());
                 skl.add(harmShape);
             }
+        }
+
+        // Add capo label to first harmony
+        if (!elements.harmonies.empty()) {
+            Harmony* firstHarmony = nullptr;
+            Fraction earliestTick = Fraction::max();
+            for (Harmony* h : elements.harmonies) {
+                if (h->tick() < earliestTick) {
+                    earliestTick = h->tick();
+                    firstHarmony = h;
+                }
+            }
+            HarmonyLayout::layoutCapoLabel(firstHarmony, ctx);
         }
 
         return;
