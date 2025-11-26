@@ -419,6 +419,7 @@ MenuItem* AppMenuModel::makeToolsMenu()
          */
         makeSeparator(),
         makeMenuItem("copy-lyrics-to-clipboard"),
+        makeMenuItem("check-lyrics-spelling"),
         makeMenuItem("del-empty-measures"),
     };
 

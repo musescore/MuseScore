@@ -30,6 +30,7 @@
         <file>qml/MuseScore/NotationScene/Timeline.qml</file>
         <file>qml/MuseScore/NotationScene/SelectionFilterPanel.qml</file>
         <file>qml/MuseScore/NotationScene/EditGridSizeDialog.qml</file>
+        <file>qml/MuseScore/NotationScene/LyricsSpellingIssuesDialog.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartsTopPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CustomiseView.qml</file>

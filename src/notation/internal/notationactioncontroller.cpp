@@ -24,6 +24,7 @@
 #include "io/file.h"
 
 #include "notationtypes.h"
+#include "notation/ilyricsspellcheckservice.h"
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
@@ -399,6 +400,7 @@ void NotationActionController::init()
     registerAction("unroll-repeats", &Controller::unrollRepeats);
 
     registerAction("copy-lyrics-to-clipboard", &Interaction::copyLyrics);
+    registerAction("check-lyrics-spelling", [this]() { checkLyricsSpelling(); });
     registerAction("acciaccatura", &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::ACCIACCATURA);
     registerAction("appoggiatura", &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::APPOGGIATURA);
     registerAction("grace4", &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE4);
@@ -2398,6 +2400,27 @@ void NotationActionController::checkForScoreCorruptions()
 
         interactive()->warning(title, text);
     }
+}
+
+void NotationActionController::checkLyricsSpelling()
+{
+    auto spellCheckService = modularity::_ioc()->resolve<ILyricsSpellCheckService>("notation");
+    if (!spellCheckService) {
+        LOGE() << "LyricsSpellCheckService not available";
+        return;
+    }
+
+    if (!spellCheckService->isAvailable()) {
+        std::string title = muse::trc("notation", "Spell Check Unavailable");
+        std::string body = muse::trc("notation", "No spelling dictionaries found.\n\n"
+                                                 "Please install hunspell dictionaries for your language.\n"
+                                                 "On Linux: sudo apt install hunspell-en-us\n"
+                                                 "On macOS: brew install hunspell");
+        interactive()->warning(title, body, {}, muse::IInteractive::Button::Ok);
+        return;
+    }
+
+    interactive()->open("musescore://notation/lyricsspellingissues");
 }
 
 void NotationActionController::registerAction(const ActionCode& code,
