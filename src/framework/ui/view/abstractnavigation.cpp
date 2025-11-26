@@ -47,7 +47,7 @@ bool AbstractNavigation::isComponentCompleted() const
 
 void AbstractNavigation::componentComplete()
 {
-    if (isComponentCompleted()) {
+    IF_ASSERT_FAILED(!isComponentCompleted()) {
         return;
     }
 

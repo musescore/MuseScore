@@ -44,14 +44,6 @@ NavigationControl::~NavigationControl()
 
 void NavigationControl::componentComplete()
 {
-    if (isComponentCompleted()) {
-        return;
-    }
-
-    if (m_panel) {
-        m_panel->componentComplete();
-    }
-
     AbstractNavigation::componentComplete();
 }
 
