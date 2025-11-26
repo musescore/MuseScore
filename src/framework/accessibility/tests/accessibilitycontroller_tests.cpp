@@ -80,7 +80,7 @@ public:
 
         const IAccessible* accessibleParent() const override { return m_parent; }
         size_t accessibleChildCount() const override { return 0; }
-        const IAccessible* accessibleChild(size_t) const override { return nullptr; }
+        IAccessible* accessibleChild(size_t) const override { return nullptr; }
         QWindow* accessibleWindow() const override { return nullptr; }
         muse::modularity::ContextPtr iocContext() const override { return muse::modularity::globalCtx(); }
         IAccessible::Role accessibleRole() const override { return IAccessible::NoRole; }

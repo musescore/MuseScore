@@ -25,6 +25,8 @@
 
 #include "qmlaccessible.h"
 
+#include "log.h"
+
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::accessibility;
@@ -45,7 +47,7 @@ bool AbstractNavigation::isComponentCompleted() const
 
 void AbstractNavigation::componentComplete()
 {
-    if (isComponentCompleted()) {
+    IF_ASSERT_FAILED(!isComponentCompleted()) {
         return;
     }
 
