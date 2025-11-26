@@ -31,7 +31,10 @@
 #include "musx/musx.h"
 
 #include "types/string.h"
+#include "engraving/types/types.h"
+#include "engraving/types/typesconv.h"
 
+#include "engraving/dom/barline.h"
 #include "engraving/dom/box.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/dynamic.h"
@@ -48,9 +51,11 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/pitchspelling.h"
+#include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/sig.h"
+#include "engraving/dom/spacer.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stafftextbase.h"
