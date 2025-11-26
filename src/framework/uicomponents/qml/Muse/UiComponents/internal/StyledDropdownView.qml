@@ -218,6 +218,8 @@ DropdownView {
             delegate: ListItemBlank {
                 id: item
 
+                required property int index
+
                 objectName: "dropitem"
 
                 height: root.itemHeight
@@ -225,16 +227,16 @@ DropdownView {
 
                 normalColor: root.itemColor
 
-                isSelected: model.index === root.currentIndex
+                isSelected: index === root.currentIndex
 
                 navigation.name: label.text
                 navigation.panel: view.navigationPanel
-                navigation.row: model.index
+                navigation.row: index
                 navigation.accessible.name: label.text
                 navigation.accessible.window: root.accessibleWindow
                 navigation.onActiveChanged: {
                     if (navigation.highlight) {
-                        view.positionViewAtIndex(model.index, ListView.Contain)
+                        view.positionViewAtIndex(index, ListView.Contain)
                     }
                 }
 
@@ -267,12 +269,12 @@ DropdownView {
                     anchors.leftMargin: 12
                     horizontalAlignment: Text.AlignLeft
 
-                    text: Utils.getItemValue(root.model, model.index, root.textRole, "")
+                    text: Utils.getItemValue(root.model, item.index, root.textRole, "")
                 }
 
                 onClicked: {
-                    var value = Utils.getItemValue(root.model, model.index, root.valueRole, undefined)
-                    root.handleItem(model.index, value)
+                    var value = Utils.getItemValue(root.model, item.index, root.valueRole, undefined)
+                    root.handleItem(item.index, value)
                 }
 
                 mouseArea.onContainsMouseChanged: {
