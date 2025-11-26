@@ -373,7 +373,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
 {
     // Retrieve entry from entryInfo
     MusxInstance<Entry> currentEntry = entryInfo->getEntry();
-    if (!currentEntry) {
+    IF_ASSERT_FAILED (currentEntry) {
         logger()->logWarning(String(u"Failed to get entry"));
         return false;
     }
@@ -400,6 +400,26 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     if (entryStartTick.negative()) {
         // Return true for non-anchorable grace notes, else false
         return isGrace;
+    }
+    if (entryStartTick > measure->ticks() || (!isGrace && entryStartTick == measure->ticks())) {
+        // If entries spill past the end of the measure, put them in the next measure.
+        // A common situation for this is beams over barlines created by the Beam Over Barline plugin.
+        // There are other situations (tuplets over barlines come to mind) where users have made adhoc
+        // use of extra entries in a measure. Since MuseScore hates these, we put them in the next measure,
+        // then possibly overwrite them when we import the entries for the next measure.
+        /// @todo We may need to adjust `curTrackIdx` to match the layers/voices in the next measure, but let's
+        /// hope that is such a rare edge case that we don't.
+        entryStartTick -= measure->ticks();
+        measure = measure->nextMeasure();
+    }
+    if (Segment* existingSeg = measure->findSegmentR(SegmentType::ChordRest, entryStartTick)) {
+        if (toChordRest(existingSeg->element(curTrackIdx))) {
+            if (entryInfo.calcCanBeBeamed() && currentEntry->isHidden) {
+                // This entry is probably a placeholder for a beam over barline that was created
+                // in the pass for the previous measure, so skip it.
+                return true;
+            }
+        }
     }
     Segment* segment = measure->getSegmentR(SegmentType::ChordRest, entryStartTick);
 
