@@ -30,6 +30,11 @@
 
 using namespace mu::engraving::apiv1;
 
+/** APIDOC
+ * Information and actions related to Score
+ * @namespace engraving
+ */
+
 EngravingApiV1::EngravingApiV1(muse::api::IApiEngine* e)
     : muse::api::ApiObject(e)
 {
