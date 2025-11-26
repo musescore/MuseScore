@@ -1,5 +1,6 @@
 #include "SketchManager.h"
 #include "Motif.h"
+#include "PartwritingEngine.h"
 #include "RhythmGrid.h"
 #include "Section.h"
 #include "Sketch.h"
@@ -7,7 +8,12 @@
 #include <QVariantMap>
 
 SketchManager::SketchManager(QObject *parent) : QObject(parent) {
+  m_partwritingEngine = new PartwritingEngine();
   loadSketches();
+}
+
+SketchManager::~SketchManager() {
+  delete m_partwritingEngine;
 }
 
 QString SketchManager::createNewSketch(const QString &name) {
@@ -26,7 +32,8 @@ void SketchManager::deleteSketch(const QString &id) {
 void SketchManager::refreshSketches() { loadSketches(); }
 
 QVariantMap SketchManager::getSketch(const QString &id) {
-  Sketch sketch = m_repository.loadSketch(id);
+  // Force reload from disk to get the latest data (other components may have modified it)
+  Sketch sketch = m_repository.loadSketch(id, true);
 
   QVariantMap sketchMap;
   sketchMap["id"] = sketch.id();
@@ -76,7 +83,7 @@ QVariantMap SketchManager::getSketch(const QString &id) {
 }
 
 QVariantMap SketchManager::getMotif(const QString &sketchId, const QString &motifId) {
-  Sketch sketch = m_repository.loadSketch(sketchId);
+  Sketch sketch = m_repository.loadSketch(sketchId, true);
   
   for (const Motif &motif : sketch.motifs()) {
     if (motif.id() == motifId) {
@@ -250,7 +257,7 @@ QVariantMap SketchManager::getSection(const QString &sketchId, const QString &se
 }
 
 QVariantList SketchManager::getSections(const QString &sketchId) {
-  Sketch sketch = m_repository.loadSketch(sketchId);
+  Sketch sketch = m_repository.loadSketch(sketchId, true);
   
   QVariantList sectionsArray;
   for (const Section &section : sketch.sections()) {
@@ -362,6 +369,179 @@ QVariantList SketchManager::getSectionTimeline(const QString &sketchId, const QS
   }
   
   return QVariantList();
+}
+
+// Texture/SATB operations (PR-08)
+
+void SketchManager::setSectionTexture(const QString &sketchId, const QString &sectionId,
+                                       const QString &textureType) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  Section *section = sketch.findSection(sectionId);
+  if (section) {
+    if (textureType == "SATBChorale") {
+      section->setTextureType(TextureType::SATBChorale);
+    } else {
+      section->setTextureType(TextureType::MelodyOnly);
+    }
+    m_repository.saveSketch(sketch);
+  }
+}
+
+QString SketchManager::getSectionTexture(const QString &sketchId, const QString &sectionId) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  for (const Section &section : sketch.sections()) {
+    if (section.id() == sectionId) {
+      return section.textureTypeString();
+    }
+  }
+  return "MelodyOnly";
+}
+
+void SketchManager::generateSATBChorale(const QString &sketchId, const QString &sectionId,
+                                         const QString &sopranoMotifId) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  // Find the soprano motif
+  const Motif *sopranoMotif = nullptr;
+  for (const Motif &m : sketch.motifs()) {
+    if (m.id() == sopranoMotifId) {
+      sopranoMotif = &m;
+      break;
+    }
+  }
+  
+  if (!sopranoMotif) return;
+  
+  Section *section = sketch.findSection(sectionId);
+  if (!section) return;
+  
+  // Generate SATB voices using the partwriting engine
+  ChoraleVoices voices = m_partwritingEngine->generateChoraleTexture(*sopranoMotif, sketch);
+  
+  // Store the voices in the section
+  VoiceData soprano, alto, tenor, bass;
+  
+  soprano.pitches = voices.soprano.pitches;
+  soprano.rhythm = voices.soprano.rhythm;
+  
+  alto.pitches = voices.alto.pitches;
+  alto.rhythm = voices.alto.rhythm;
+  
+  tenor.pitches = voices.tenor.pitches;
+  tenor.rhythm = voices.tenor.rhythm;
+  
+  bass.pitches = voices.bass.pitches;
+  bass.rhythm = voices.bass.rhythm;
+  
+  section->setSopranoVoice(soprano);
+  section->setAltoVoice(alto);
+  section->setTenorVoice(tenor);
+  section->setBassVoice(bass);
+  section->setTextureType(TextureType::SATBChorale);
+  
+  m_repository.saveSketch(sketch);
+}
+
+void SketchManager::generateSATBFromTimeline(const QString &sketchId, const QString &sectionId) {
+  Sketch sketch = m_repository.loadSketch(sketchId, true);
+  
+  Section *section = sketch.findSection(sectionId);
+  if (!section) return;
+  
+  // Get the melody timeline from the section's placements
+  QList<NoteEvent> timeline = section->flattenToTimeline(sketch);
+  
+  if (timeline.isEmpty()) {
+    qWarning() << "Cannot generate SATB from empty timeline";
+    return;
+  }
+  
+  // Extract pitches and rhythm from the timeline
+  QList<int> pitches;
+  RhythmGrid rhythm;
+  
+  for (const NoteEvent &event : timeline) {
+    if (!event.isRest && event.scaleDegree > 0) {
+      pitches.append(event.scaleDegree);
+    }
+    
+    RhythmCell cell;
+    cell.duration = event.duration;
+    cell.isRest = event.isRest;
+    cell.tie = event.tie;
+    rhythm.addCell(cell);
+  }
+  
+  if (pitches.isEmpty()) {
+    qWarning() << "No notes in timeline to generate SATB from";
+    return;
+  }
+  
+  // Generate SATB voices using the partwriting engine
+  ChoraleVoices voices = m_partwritingEngine->generateChoraleFromPitches(pitches, rhythm, sketch.key());
+  
+  // Store the voices in the section
+  VoiceData soprano, alto, tenor, bass;
+  
+  soprano.pitches = voices.soprano.pitches;
+  soprano.rhythm = voices.soprano.rhythm;
+  
+  alto.pitches = voices.alto.pitches;
+  alto.rhythm = voices.alto.rhythm;
+  
+  tenor.pitches = voices.tenor.pitches;
+  tenor.rhythm = voices.tenor.rhythm;
+  
+  bass.pitches = voices.bass.pitches;
+  bass.rhythm = voices.bass.rhythm;
+  
+  section->setSopranoVoice(soprano);
+  section->setAltoVoice(alto);
+  section->setTenorVoice(tenor);
+  section->setBassVoice(bass);
+  section->setTextureType(TextureType::SATBChorale);
+  
+  m_repository.saveSketch(sketch);
+  
+  qDebug() << "Generated SATB from timeline with" << pitches.size() << "notes";
+}
+
+QVariantList SketchManager::getSATBVoiceTimeline(const QString &sketchId, const QString &sectionId,
+                                                  int voiceIndex) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  for (const Section &section : sketch.sections()) {
+    if (section.id() == sectionId) {
+      QList<NoteEvent> timeline = section.flattenVoiceToTimeline(voiceIndex);
+      
+      QVariantList result;
+      for (const NoteEvent &event : timeline) {
+        QVariantMap eventMap;
+        eventMap["scaleDegree"] = event.scaleDegree;
+        eventMap["duration"] = event.duration;
+        eventMap["startBeat"] = event.startBeat;
+        eventMap["isRest"] = event.isRest;
+        eventMap["tie"] = event.tie;
+        result.append(eventMap);
+      }
+      return result;
+    }
+  }
+  
+  return QVariantList();
+}
+
+bool SketchManager::hasSATBVoices(const QString &sketchId, const QString &sectionId) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  for (const Section &section : sketch.sections()) {
+    if (section.id() == sectionId) {
+      return section.hasSATBVoices();
+    }
+  }
+  return false;
 }
 
 QVariantList SketchManager::sketches() const { return m_sketches; }

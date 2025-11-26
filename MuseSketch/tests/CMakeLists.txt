@@ -52,3 +52,16 @@ target_link_libraries(test_section PRIVATE
 
 add_test(NAME SectionTest COMMAND test_section)
 
+# Partwriting engine tests (PR-08)
+add_executable(test_partwriting
+    tst_partwriting.cpp
+)
+
+target_link_libraries(test_partwriting PRIVATE
+    Qt6::Core
+    Qt6::Test
+    musesketch_core
+)
+
+add_test(NAME PartwritingTest COMMAND test_partwriting)
+

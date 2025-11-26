@@ -7,6 +7,29 @@ MotifPlayer::MotifPlayer(QObject *parent) : QObject(parent) {
 
   connect(&m_metronomeTimer, &QTimer::timeout, this,
           &MotifPlayer::onMetronomeTick);
+  
+  // Timer for prerendered playback end
+  m_prerenderedEndTimer.setSingleShot(true);
+  connect(&m_prerenderedEndTimer, &QTimer::timeout, this, [this]() {
+    qDebug() << "MotifPlayer: Prerendered playback ended, isPlaying=" << m_isPlaying << "isLooping=" << m_isLooping;
+    if (m_isPlaying) {
+      if (m_isLooping) {
+        // Restart for looping
+        playPrerendered();
+      } else {
+        // Properly stop playback
+        m_audioEngine.stop();
+        m_isPlaying = false;
+        m_currentNoteIndex = 0;
+        m_currentPitchIndex = 0;
+        m_currentBeat = 0;
+        emit isPlayingChanged();
+        emit currentNoteIndexChanged();
+        emit playbackFinished();
+        qDebug() << "MotifPlayer: Emitted isPlayingChanged and playbackFinished";
+      }
+    }
+  });
 }
 
 void MotifPlayer::setMotif(const QVariantList &pitchContour,
@@ -63,8 +86,104 @@ void MotifPlayer::play() {
   playNextNote();
 }
 
+void MotifPlayer::playPrerendered() {
+  if (m_rhythmCells.isEmpty()) {
+    qWarning() << "MotifPlayer: No motif to play (empty rhythm cells)";
+    return;
+  }
+  
+  if (m_pitchContour.isEmpty()) {
+    qWarning() << "MotifPlayer: No motif to play (empty pitch contour)";
+    return;
+  }
+
+  qDebug() << "MotifPlayer::playPrerendered() - rhythmCells:" << m_rhythmCells.size() 
+           << "pitches:" << m_pitchContour.size() << "tempo:" << m_tempo;
+
+  // Build event list for pre-rendering
+  QVariantList events;
+  int msPerBeat = 60000 / m_tempo;
+  int currentTimeMs = 0;
+  int pitchIndex = 0;
+  int totalDurationMs = 0;
+  
+  for (int i = 0; i < m_rhythmCells.size(); i++) {
+    const RhythmCell &cell = m_rhythmCells[i];
+    int durationMs = durationToMs(cell.duration);
+    
+    qDebug() << "  Cell" << i << ": duration=" << cell.duration 
+             << "isRest=" << cell.isRest << "durationMs=" << durationMs;
+    
+    if (!cell.isRest && pitchIndex < m_pitchContour.size()) {
+      int scaleDegree = m_pitchContour[pitchIndex];
+      int midiPitch = AudioEngine::scaleDegreeToMidi(scaleDegree, m_key);
+      
+      qDebug() << "    -> Note: scaleDegree=" << scaleDegree 
+               << "midiPitch=" << midiPitch << "startMs=" << currentTimeMs;
+      
+      QVariantList notes;
+      QVariantMap note;
+      note["midiPitch"] = midiPitch;
+      note["voiceType"] = m_voiceType;
+      notes.append(note);
+      
+      QVariantMap event;
+      event["startMs"] = currentTimeMs;
+      event["durationMs"] = qMax(50, durationMs - 30); // Slight gap, but at least 50ms
+      event["notes"] = notes;
+      events.append(event);
+      
+      pitchIndex++;
+    }
+    
+    // Advance time for ALL cells (notes and rests)
+    currentTimeMs += durationMs;
+  }
+  
+  totalDurationMs = currentTimeMs;
+  
+  // Add metronome clicks to the event list if enabled
+  if (m_metronomeEnabled) {
+    int numBeats = (totalDurationMs + msPerBeat - 1) / msPerBeat;
+    qDebug() << "Adding" << numBeats << "metronome clicks";
+    for (int beat = 0; beat < numBeats; beat++) {
+      QVariantList notes;
+      QVariantMap note;
+      note["midiPitch"] = -1;  // Special value for metronome click
+      note["voiceType"] = 5;   // VoiceType::Metronome
+      notes.append(note);
+      
+      QVariantMap event;
+      event["startMs"] = beat * msPerBeat;
+      event["durationMs"] = 50;  // Short click
+      event["notes"] = notes;
+      events.append(event);
+    }
+  }
+  
+  qDebug() << "MotifPlayer: Built" << events.size() << "events, totalDuration=" << totalDurationMs << "ms";
+  
+  if (events.isEmpty()) {
+    qWarning() << "MotifPlayer: No notes to play";
+    return;
+  }
+  
+  m_isPlaying = true;
+  m_currentNoteIndex = 0;
+  m_currentPitchIndex = 0;
+  m_currentBeat = 0;
+  emit isPlayingChanged();
+  
+  // Play the pre-rendered timeline (includes metronome if enabled)
+  m_audioEngine.playRenderedTimeline(events, totalDurationMs);
+  
+  // Schedule playback finished using the member timer (can be cancelled by stop())
+  m_prerenderedEndTimer.start(totalDurationMs + 100);
+}
+
 void MotifPlayer::stop() {
   m_playbackTimer.stop();
+  m_prerenderedEndTimer.stop();  // Cancel any pending prerendered end callback
   stopMetronome();
   m_audioEngine.stop();
 
@@ -91,7 +210,99 @@ void MotifPlayer::pause() {
 
 void MotifPlayer::playPreviewNote(int scaleDegree, const QString &key) {
   int midiPitch = AudioEngine::scaleDegreeToMidi(scaleDegree, key);
-  m_audioEngine.playNote(midiPitch, 300); // 300ms preview
+  m_audioEngine.playNote(midiPitch, 300, m_voiceType); // 300ms preview with current voice
+}
+
+void MotifPlayer::playPreviewNoteWithVoice(int scaleDegree, const QString &key, int voiceType) {
+  int midiPitch = AudioEngine::scaleDegreeToMidi(scaleDegree, key);
+  m_audioEngine.playNote(midiPitch, 300, voiceType);
+}
+
+void MotifPlayer::playSATBChord(const QVariantList &notes, const QString &key, int durationMs) {
+  // Convert scale degrees to MIDI pitches and create chord data
+  QVariantList chordNotes;
+  
+  for (int idx = 0; idx < notes.size(); idx++) {
+    QVariantMap noteMap = notes[idx].toMap();
+    int scaleDegree = noteMap["scaleDegree"].toInt();
+    int voiceType = noteMap["voiceType"].toInt();
+    int octaveOffset = noteMap["octaveOffset"].toInt();
+    
+    if (scaleDegree > 0) {
+      int midiPitch = AudioEngine::scaleDegreeToMidi(scaleDegree, key, octaveOffset);
+      
+      QVariantMap chordNote;
+      chordNote["midiPitch"] = midiPitch;
+      chordNote["voiceType"] = voiceType;
+      chordNotes.append(chordNote);
+    }
+  }
+  
+  if (!chordNotes.isEmpty()) {
+    m_audioEngine.playChord(chordNotes, durationMs);
+  }
+}
+
+void MotifPlayer::playSATBTimeline(const QVariantList &events, const QString &key) {
+  // Convert events from beat-based to millisecond-based and scale degrees to MIDI
+  QVariantList renderedEvents;
+  int msPerBeat = 60000 / m_tempo;
+  int totalDurationMs = 0;
+  
+  for (int eventIdx = 0; eventIdx < events.size(); eventIdx++) {
+    QVariantMap event = events[eventIdx].toMap();
+    double startBeat = event["startBeat"].toDouble();
+    QString duration = event["duration"].toString();
+    QVariantList notes = event["notes"].toList();
+    
+    // Convert beat to milliseconds
+    int startMs = int(startBeat * msPerBeat);
+    int durationMs = durationToMs(duration);
+    
+    // Track total duration
+    if (startMs + durationMs > totalDurationMs) {
+      totalDurationMs = startMs + durationMs;
+    }
+    
+    // Convert notes from scale degrees to MIDI
+    QVariantList midiNotes;
+    for (int noteIdx = 0; noteIdx < notes.size(); noteIdx++) {
+      QVariantMap noteMap = notes[noteIdx].toMap();
+      int scaleDegree = noteMap["scaleDegree"].toInt();
+      int voiceType = noteMap["voiceType"].toInt();
+      int octaveOffset = noteMap["octaveOffset"].toInt();
+      
+      if (scaleDegree > 0) {
+        int midiPitch = AudioEngine::scaleDegreeToMidi(scaleDegree, key, octaveOffset);
+        
+        QVariantMap midiNote;
+        midiNote["midiPitch"] = midiPitch;
+        midiNote["voiceType"] = voiceType;
+        midiNotes.append(midiNote);
+      }
+    }
+    
+    if (!midiNotes.isEmpty()) {
+      QVariantMap renderedEvent;
+      renderedEvent["startMs"] = startMs;
+      renderedEvent["durationMs"] = durationMs;
+      renderedEvent["notes"] = midiNotes;
+      renderedEvents.append(renderedEvent);
+    }
+  }
+  
+  if (!renderedEvents.isEmpty()) {
+    m_isPlaying = true;
+    m_currentNoteIndex = 0;
+    m_currentPitchIndex = 0;
+    m_currentBeat = 0;
+    emit isPlayingChanged();
+    
+    m_audioEngine.playRenderedTimeline(renderedEvents, totalDurationMs);
+    
+    // Schedule playback finished using the member timer (can be cancelled by stop())
+    m_prerenderedEndTimer.start(totalDurationMs + 100);
+  }
 }
 
 void MotifPlayer::playNextNote() {
@@ -115,13 +326,13 @@ void MotifPlayer::playNextNote() {
   int durationMs = durationToMs(cell.duration);
 
   if (!cell.isRest && m_currentPitchIndex < m_pitchContour.size()) {
-    // Play the note
+    // Play the note with current voice type
     int scaleDegree = m_pitchContour[m_currentPitchIndex];
     int midiPitch = AudioEngine::scaleDegreeToMidi(scaleDegree, m_key);
 
     // Slightly shorter than full duration for articulation
     int noteDurationMs = qMax(50, durationMs - 50);
-    m_audioEngine.playNote(midiPitch, noteDurationMs);
+    m_audioEngine.playNote(midiPitch, noteDurationMs, m_voiceType);
 
     m_currentPitchIndex++;
   }
@@ -214,6 +425,13 @@ void MotifPlayer::setMetronomeEnabled(bool enabled) {
     }
 
     emit metronomeEnabledChanged();
+  }
+}
+
+void MotifPlayer::setVoiceType(int type) {
+  if (type >= 0 && type <= 5 && type != m_voiceType) {
+    m_voiceType = type;
+    emit voiceTypeChanged();
   }
 }
 

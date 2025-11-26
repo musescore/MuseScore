@@ -4,12 +4,15 @@
 #include <QObject>
 #include <QVariantList>
 
+class PartwritingEngine;
+
 class SketchManager : public QObject {
   Q_OBJECT
   Q_PROPERTY(QVariantList sketches READ sketches NOTIFY sketchesChanged)
 
 public:
   explicit SketchManager(QObject *parent = nullptr);
+  ~SketchManager();
 
   Q_INVOKABLE QString createNewSketch(const QString &name);
   Q_INVOKABLE void openSketch(const QString &id);
@@ -43,6 +46,17 @@ public:
   
   // Get flattened timeline for playback
   Q_INVOKABLE QVariantList getSectionTimeline(const QString &sketchId, const QString &sectionId);
+  
+  // Texture/SATB operations (PR-08)
+  Q_INVOKABLE void setSectionTexture(const QString &sketchId, const QString &sectionId, 
+                                      const QString &textureType);
+  Q_INVOKABLE QString getSectionTexture(const QString &sketchId, const QString &sectionId);
+  Q_INVOKABLE void generateSATBChorale(const QString &sketchId, const QString &sectionId,
+                                        const QString &sopranoMotifId);
+  Q_INVOKABLE void generateSATBFromTimeline(const QString &sketchId, const QString &sectionId);
+  Q_INVOKABLE QVariantList getSATBVoiceTimeline(const QString &sketchId, const QString &sectionId,
+                                                 int voiceIndex);
+  Q_INVOKABLE bool hasSATBVoices(const QString &sketchId, const QString &sectionId);
 
   QVariantList sketches() const;
 
@@ -55,4 +69,5 @@ private:
 
   SketchRepository m_repository;
   QVariantList m_sketches;
+  PartwritingEngine *m_partwritingEngine;
 };

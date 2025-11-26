@@ -14,7 +14,17 @@ Page {
     Component.onCompleted: {
         if (sketchId) {
             motifEditor.startNewMotif(sketchId)
+            // Sync tempo with sketch tempo
+            var sketchData = sketchManager.getSketch(sketchId)
+            if (sketchData && sketchData.tempo) {
+                motifPlayer.tempo = sketchData.tempo
+            }
         }
+    }
+    
+    Component.onDestruction: {
+        // Stop playback when leaving the screen
+        motifPlayer.stop()
     }
     
     header: ToolBar {
@@ -326,12 +336,13 @@ Page {
                             if (motifPlayer.isPlaying) {
                                 motifPlayer.stop()
                             } else {
+                                motifPlayer.voiceType = 0  // SketchPiano
                                 motifPlayer.setMotif(
                                     motifEditor.pitchContour,
                                     motifEditor.rhythmCells,
                                     motifEditor.key
                                 )
-                                motifPlayer.play()
+                                motifPlayer.playPrerendered()  // Use pre-rendered for smooth playback
                             }
                         }
                         

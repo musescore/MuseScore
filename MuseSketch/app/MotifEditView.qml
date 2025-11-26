@@ -21,6 +21,11 @@ Page {
         loadMotif()
     }
     
+    Component.onDestruction: {
+        // Stop playback when leaving the screen
+        motifPlayer.stop()
+    }
+    
     function loadMotif() {
         motifData = sketchManager.getMotif(sketchId, motifId)
         if (motifData) {
@@ -521,12 +526,17 @@ Page {
                         motifPlayer.stop()
                     } else {
                         var sketchData = sketchManager.getSketch(sketchId)
+                        // Set tempo from sketch before playing
+                        if (sketchData && sketchData.tempo) {
+                            motifPlayer.tempo = sketchData.tempo
+                        }
+                        motifPlayer.voiceType = 0  // SketchPiano
                         motifPlayer.setMotif(
                             root.editablePitchContour,
                             root.editableRhythmCells,
                             sketchData ? sketchData.key : "C major"
                         )
-                        motifPlayer.play()
+                        motifPlayer.playPrerendered()  // Use pre-rendered for smooth playback
                     }
                 }
                 

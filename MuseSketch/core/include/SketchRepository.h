@@ -16,7 +16,7 @@ public:
   SketchRepository();
 
   QString createSketch(const QString &name);
-  Sketch loadSketch(const QString &id);
+  Sketch loadSketch(const QString &id, bool forceReload = false);
   void saveSketch(const Sketch &sketch);
   QList<SketchInfo> listSketches();
   void deleteSketch(const QString &id);

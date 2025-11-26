@@ -1,15 +1,50 @@
 #include "Section.h"
 #include "Motif.h"
-#include "RhythmGrid.h"
 #include "Sketch.h"
 #include <QJsonArray>
 #include <QUuid>
 #include <algorithm>
 
+// VoiceData serialization
+QJsonObject VoiceData::toJson() const {
+  QJsonObject json;
+  QJsonArray pitchArray;
+  for (int p : pitches) {
+    pitchArray.append(p);
+  }
+  json["pitches"] = pitchArray;
+  json["rhythm"] = rhythm.toJson(); // toJson returns QJsonArray
+  return json;
+}
+
+VoiceData VoiceData::fromJson(const QJsonObject &json) {
+  VoiceData voice;
+  QJsonArray pitchArray = json["pitches"].toArray();
+  for (const auto &p : pitchArray) {
+    voice.pitches.append(p.toInt());
+  }
+  // RhythmGrid::fromJson expects QJsonArray
+  voice.rhythm = RhythmGrid::fromJson(json["rhythm"].toArray());
+  return voice;
+}
+
 Section::Section(const QString &id, const QString &name, int lengthBars)
     : m_id(id.isEmpty() ? QUuid::createUuid().toString(QUuid::WithoutBraces)
                         : id),
       m_name(name), m_lengthBars(lengthBars) {}
+
+QString Section::textureTypeString() const {
+  switch (m_textureType) {
+    case TextureType::MelodyOnly: return "MelodyOnly";
+    case TextureType::SATBChorale: return "SATBChorale";
+    default: return "MelodyOnly";
+  }
+}
+
+bool Section::hasSATBVoices() const {
+  return !m_soprano.isEmpty() && !m_alto.isEmpty() && 
+         !m_tenor.isEmpty() && !m_bass.isEmpty();
+}
 
 void Section::addPlacement(const MotifPlacement &placement) {
   m_placements.append(placement);
@@ -172,6 +207,62 @@ QList<NoteEvent> Section::flattenToTimeline(const Sketch &sketch) const {
   return timeline;
 }
 
+QList<NoteEvent> Section::flattenVoiceToTimeline(int voiceIndex) const {
+  QList<NoteEvent> timeline;
+  
+  const VoiceData *voice = nullptr;
+  switch (voiceIndex) {
+    case 0: voice = &m_soprano; break;
+    case 1: voice = &m_alto; break;
+    case 2: voice = &m_tenor; break;
+    case 3: voice = &m_bass; break;
+    default: return timeline;
+  }
+  
+  if (voice->isEmpty()) return timeline;
+  
+  double currentBeat = 0.0;
+  int pitchIndex = 0;
+  
+  if (voice->rhythm.isEmpty()) {
+    // Default to quarter notes
+    for (int pitch : voice->pitches) {
+      NoteEvent event;
+      event.scaleDegree = pitch;
+      event.duration = "quarter";
+      event.startBeat = currentBeat;
+      event.isRest = false;
+      event.tie = false;
+      timeline.append(event);
+      currentBeat += 1.0;
+    }
+  } else {
+    for (int i = 0; i < voice->rhythm.cellCount(); i++) {
+      const RhythmCell &cell = voice->rhythm.cell(i);
+      
+      NoteEvent event;
+      event.duration = cell.duration;
+      event.startBeat = currentBeat;
+      event.isRest = cell.isRest;
+      event.tie = cell.tie;
+      
+      if (cell.isRest) {
+        event.scaleDegree = 0;
+      } else if (pitchIndex < voice->pitches.size()) {
+        event.scaleDegree = voice->pitches[pitchIndex];
+        pitchIndex++;
+      } else {
+        event.scaleDegree = 1;
+      }
+      
+      timeline.append(event);
+      currentBeat += durationToBeats(cell.duration);
+    }
+  }
+  
+  return timeline;
+}
+
 QJsonObject MotifPlacement::toJson() const {
   QJsonObject json;
   json["motifId"] = motifId;
@@ -195,12 +286,21 @@ QJsonObject Section::toJson() const {
   json["id"] = m_id;
   json["name"] = m_name;
   json["lengthBars"] = m_lengthBars;
+  json["textureType"] = static_cast<int>(m_textureType);
 
   QJsonArray placementsArray;
   for (const auto &placement : m_placements) {
     placementsArray.append(placement.toJson());
   }
   json["placements"] = placementsArray;
+  
+  // Save SATB voice data if present
+  if (m_textureType == TextureType::SATBChorale) {
+    json["soprano"] = m_soprano.toJson();
+    json["alto"] = m_alto.toJson();
+    json["tenor"] = m_tenor.toJson();
+    json["bass"] = m_bass.toJson();
+  }
 
   return json;
 }
@@ -209,9 +309,25 @@ Section Section::fromJson(const QJsonObject &json) {
   Section section(json["id"].toString(), json["name"].toString(),
                   json["lengthBars"].toInt(8));
 
+  section.m_textureType = static_cast<TextureType>(json["textureType"].toInt(0));
+  
   QJsonArray placementsArray = json["placements"].toArray();
   for (const auto &placementValue : placementsArray) {
     section.addPlacement(MotifPlacement::fromJson(placementValue.toObject()));
+  }
+  
+  // Load SATB voice data if present
+  if (json.contains("soprano")) {
+    section.m_soprano = VoiceData::fromJson(json["soprano"].toObject());
+  }
+  if (json.contains("alto")) {
+    section.m_alto = VoiceData::fromJson(json["alto"].toObject());
+  }
+  if (json.contains("tenor")) {
+    section.m_tenor = VoiceData::fromJson(json["tenor"].toObject());
+  }
+  if (json.contains("bass")) {
+    section.m_bass = VoiceData::fromJson(json["bass"].toObject());
   }
 
   return section;

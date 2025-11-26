@@ -14,6 +14,7 @@ add_library(musesketch_core STATIC
     include/MotifEditorController.h
     include/AudioEngine.h
     include/MotifPlayer.h
+    include/PartwritingEngine.h
     src/ScoreEngine.cpp
     src/Sketch.cpp
     src/Motif.cpp
@@ -25,6 +26,7 @@ add_library(musesketch_core STATIC
     src/MotifEditorController.cpp
     src/AudioEngine.cpp
     src/MotifPlayer.cpp
+    src/PartwritingEngine.cpp
 )
 
 target_include_directories(musesketch_core PUBLIC

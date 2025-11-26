@@ -13,9 +13,9 @@ QString SketchRepository::createSketch(const QString &name) {
   return sketch.id();
 }
 
-Sketch SketchRepository::loadSketch(const QString &id) {
-  // Check cache first
-  if (m_cache.contains(id)) {
+Sketch SketchRepository::loadSketch(const QString &id, bool forceReload) {
+  // Check cache first (unless forceReload is true)
+  if (!forceReload && m_cache.contains(id)) {
     return m_cache[id];
   }
 
