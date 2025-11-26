@@ -2046,8 +2046,10 @@ static Tie* createAndAddTie(Note* startNote, Note* endNote)
 
 void Score::cmdAddTie(bool addToChord)
 {
-    const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
+    std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
     std::vector<EngravingItem*> toSelect;
+    std::sort(noteList.begin(), noteList.end(), [](const Note* a, const Note* b) { return a->track() < b->track(); });
+    track_idx_t track = noteList[0]->chord()->track();
 
     if (noteList.empty()) {
         LOGD("no notes selected");
@@ -2092,7 +2094,10 @@ void Score::cmdAddTie(bool addToChord)
         }
 
         bool addFlag = lastAddedChord != nullptr;
-
+        if (c->track() != track) {
+            addFlag = false;
+            track = c->track();
+        }
         // try to re-use existing note or chord
         Note* n = nullptr;
         if (addToChord && cr->isChord()) {
@@ -2103,8 +2108,6 @@ void Score::cmdAddTie(bool addToChord)
             } else {
                 addFlag = true;             // re-use chord
             }
-        } else if (!noteEntryMode()) {
-            addFlag = false;
         }
 
         // if no note to re-use, create one
@@ -2193,7 +2196,7 @@ Tie* Score::cmdToggleTie()
     const bool shouldTieListSelection = noteList.size() >= 2 && !singleTick;
 
     if (singleTick /* i.e. all notes are in the same tick */ && !allHaveExistingNextNoteToTieTo) {
-        cmdAddTie(true);
+        cmdAddTie();
         return nullptr;
     }
 
