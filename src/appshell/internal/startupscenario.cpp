@@ -23,10 +23,8 @@
 #include "startupscenario.h"
 
 #include <QCoreApplication>
-#include <QTimer>
 
 #include "async/async.h"
-#include "network/networkerrors.h"
 #include "translation.h"
 #include "log.h"
 
@@ -38,8 +36,6 @@ static const muse::UriQuery FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup
 static const muse::UriQuery WELCOME_DIALOG_URI("musescore://welcomedialog");
 static const muse::Uri HOME_URI("musescore://home");
 static const muse::Uri NOTATION_URI("musescore://notation");
-
-static constexpr int CHECK_FOR_UPDATES_TIMEOUT(7500);
 
 static StartupModeType modeTypeTromString(const std::string& str)
 {
@@ -148,19 +144,6 @@ muse::async::Promise<muse::Ret> StartupScenario::runOnSplashScreen()
                     onUpdateCheckCompleted();
                 });
             }
-        });
-
-        // Timeout if the checks take too long...
-        QTimer::singleShot(CHECK_FOR_UPDATES_TIMEOUT, [this, resolve]() {
-            if (!m_updateChecksInProgress) {
-                return;
-            }
-
-            m_updateChecksInProgress = false;
-
-            LOGE() << "Update checks timed out...";
-            const Ret ret = network::make_ret(network::Err::Timeout);
-            (void)resolve(ret);
         });
 
         return muse::async::Promise<Ret>::dummy_result();
