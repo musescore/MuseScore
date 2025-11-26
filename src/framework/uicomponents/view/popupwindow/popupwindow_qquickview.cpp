@@ -30,6 +30,33 @@ static const QString POPUP_WINDOW_VIEW_NAME(POPUP_WINDOW_NAME + "_QQuickView");
 
 using namespace muse::uicomponents;
 
+static Qt::WindowFlags resolveWindowFlags()
+{
+    Qt::WindowFlags flags;
+
+    static bool isWayland = qGuiApp->platformName().contains("wayland");
+    if (isWayland) {
+        flags = Qt::Popup;
+    } else {
+        flags = Qt::Tool;
+    }
+
+    static int sIsKde = -1;
+    if (sIsKde == -1) {
+        QString desktop = qEnvironmentVariable("XDG_CURRENT_DESKTOP").toLower();
+        QString session = qEnvironmentVariable("XDG_SESSION_DESKTOP").toLower();
+        sIsKde = desktop.contains("kde") || session.contains("kde");
+    }
+    if (!sIsKde) {
+        flags |= Qt::BypassWindowManagerHint;        // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
+    }
+
+    flags |= Qt::FramelessWindowHint               // Without border
+             | Qt::NoDropShadowWindowHint;          // Without system shadow
+
+    return flags;
+}
+
 PopupWindow_QQuickView::PopupWindow_QQuickView(const modularity::ContextPtr& iocCtx, QObject* parent)
     : IPopupWindow(parent), muse::Injectable(iocCtx)
 {
@@ -87,18 +114,7 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
     }
     // popup
     else {
-        Qt::WindowFlags flags;
-        if (qGuiApp->platformName().contains("wayland")) {
-            flags = Qt::Popup;
-        } else {
-            flags = Qt::Tool;
-        }
-
-        flags |= Qt::FramelessWindowHint           // Without border
-                 | Qt::NoDropShadowWindowHint      // Without system shadow
-                 | Qt::BypassWindowManagerHint;    // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
-
-        m_view->setFlags(flags);
+        m_view->setFlags(resolveWindowFlags());
         m_view->setColor(QColor(Qt::transparent));
     }
 
