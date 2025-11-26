@@ -10,6 +10,7 @@ qt_add_qml_module(musesketch
         SketchView.qml
         MotifShapeView.qml
         MotifEditView.qml
+        SectionEditorView.qml
         components/ScaleDegreePad.qml
         components/RhythmButton.qml
         components/MotifDisplay.qml

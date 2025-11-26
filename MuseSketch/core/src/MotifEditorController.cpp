@@ -91,12 +91,12 @@ QString MotifEditorController::saveMotif(const QString &name) {
     return QString();
   }
 
-  // Create motif
+  // Create motif with the selected bar length
   Motif motif("",
               name.isEmpty()
                   ? "Motif " + QString::number(sketch.motifs().size() + 1)
                   : name,
-              1);
+              m_motifBars);
   motif.setPitchContour(m_pitchContour);
   motif.setRhythmGrid(m_rhythmGrid);
   motif.setKeyRef(m_key);

@@ -1,6 +1,7 @@
 #include "SketchManager.h"
 #include "Motif.h"
 #include "RhythmGrid.h"
+#include "Section.h"
 #include "Sketch.h"
 #include <QUuid>
 #include <QVariantMap>
@@ -193,6 +194,174 @@ void SketchManager::deleteMotif(const QString &sketchId, const QString &motifId)
   sketch.removeMotif(motifId);
   m_repository.saveSketch(sketch);
   loadSketches();
+}
+
+// Section CRUD operations (PR-07)
+
+QString SketchManager::createSection(const QString &sketchId, const QString &name, int lengthBars) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  QString sectionId = QUuid::createUuid().toString(QUuid::WithoutBraces);
+  Section section(sectionId, name, lengthBars);
+  sketch.addSection(section);
+  
+  m_repository.saveSketch(sketch);
+  return sectionId;
+}
+
+QVariantMap SketchManager::getSection(const QString &sketchId, const QString &sectionId) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  for (const Section &section : sketch.sections()) {
+    if (section.id() == sectionId) {
+      QVariantMap sectionMap;
+      sectionMap["id"] = section.id();
+      sectionMap["name"] = section.name();
+      sectionMap["lengthBars"] = section.lengthBars();
+      
+      // Convert placements
+      QVariantList placementsArray;
+      for (const MotifPlacement &p : section.placements()) {
+        QVariantMap pMap;
+        pMap["motifId"] = p.motifId;
+        pMap["startBar"] = p.startBar;
+        pMap["repetitions"] = p.repetitions;
+        pMap["voice"] = p.voice;
+        
+        // Include motif info for display
+        for (const Motif &m : sketch.motifs()) {
+          if (m.id() == p.motifId) {
+            pMap["motifName"] = m.name();
+            pMap["motifLengthBars"] = m.lengthBars();
+            pMap["endBar"] = p.endBar(m.lengthBars());
+            break;
+          }
+        }
+        
+        placementsArray.append(pMap);
+      }
+      sectionMap["placements"] = placementsArray;
+      
+      return sectionMap;
+    }
+  }
+  
+  return QVariantMap();
+}
+
+QVariantList SketchManager::getSections(const QString &sketchId) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  QVariantList sectionsArray;
+  for (const Section &section : sketch.sections()) {
+    QVariantMap sectionMap;
+    sectionMap["id"] = section.id();
+    sectionMap["name"] = section.name();
+    sectionMap["lengthBars"] = section.lengthBars();
+    sectionMap["placementCount"] = section.placements().size();
+    sectionsArray.append(sectionMap);
+  }
+  
+  return sectionsArray;
+}
+
+void SketchManager::renameSection(const QString &sketchId, const QString &sectionId, const QString &newName) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  Section *section = sketch.findSection(sectionId);
+  if (section) {
+    section->setName(newName);
+    m_repository.saveSketch(sketch);
+  }
+}
+
+void SketchManager::setSectionLength(const QString &sketchId, const QString &sectionId, int lengthBars) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  Section *section = sketch.findSection(sectionId);
+  if (section) {
+    section->setLengthBars(lengthBars);
+    m_repository.saveSketch(sketch);
+  }
+}
+
+void SketchManager::deleteSection(const QString &sketchId, const QString &sectionId) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  sketch.removeSection(sectionId);
+  m_repository.saveSketch(sketch);
+}
+
+void SketchManager::addPlacement(const QString &sketchId, const QString &sectionId,
+                                  const QString &motifId, int startBar, int repetitions) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  Section *section = sketch.findSection(sectionId);
+  if (section) {
+    MotifPlacement placement;
+    placement.motifId = motifId;
+    placement.startBar = startBar;
+    placement.repetitions = repetitions;
+    placement.voice = 0; // Default to melody voice
+    
+    section->addPlacement(placement);
+    m_repository.saveSketch(sketch);
+  }
+}
+
+void SketchManager::removePlacement(const QString &sketchId, const QString &sectionId, int placementIndex) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  Section *section = sketch.findSection(sectionId);
+  if (section) {
+    section->removePlacement(placementIndex);
+    m_repository.saveSketch(sketch);
+  }
+}
+
+void SketchManager::movePlacement(const QString &sketchId, const QString &sectionId,
+                                   int placementIndex, int newStartBar) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  Section *section = sketch.findSection(sectionId);
+  if (section) {
+    section->movePlacement(placementIndex, newStartBar);
+    m_repository.saveSketch(sketch);
+  }
+}
+
+void SketchManager::setPlacementRepetitions(const QString &sketchId, const QString &sectionId,
+                                             int placementIndex, int repetitions) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  Section *section = sketch.findSection(sectionId);
+  if (section) {
+    section->setPlacementRepetitions(placementIndex, repetitions);
+    m_repository.saveSketch(sketch);
+  }
+}
+
+QVariantList SketchManager::getSectionTimeline(const QString &sketchId, const QString &sectionId) {
+  Sketch sketch = m_repository.loadSketch(sketchId);
+  
+  for (const Section &section : sketch.sections()) {
+    if (section.id() == sectionId) {
+      QList<NoteEvent> timeline = section.flattenToTimeline(sketch);
+      
+      QVariantList result;
+      for (const NoteEvent &event : timeline) {
+        QVariantMap eventMap;
+        eventMap["scaleDegree"] = event.scaleDegree;
+        eventMap["duration"] = event.duration;
+        eventMap["startBeat"] = event.startBeat;
+        eventMap["isRest"] = event.isRest;
+        eventMap["tie"] = event.tie;
+        result.append(eventMap);
+      }
+      return result;
+    }
+  }
+  
+  return QVariantList();
 }
 
 QVariantList SketchManager::sketches() const { return m_sketches; }

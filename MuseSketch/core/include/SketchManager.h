@@ -23,6 +23,26 @@ public:
   Q_INVOKABLE void renameMotif(const QString &sketchId, const QString &motifId, const QString &newName);
   Q_INVOKABLE QString duplicateMotif(const QString &sketchId, const QString &motifId);
   Q_INVOKABLE void deleteMotif(const QString &sketchId, const QString &motifId);
+  
+  // Section CRUD operations (PR-07)
+  Q_INVOKABLE QString createSection(const QString &sketchId, const QString &name, int lengthBars = 8);
+  Q_INVOKABLE QVariantMap getSection(const QString &sketchId, const QString &sectionId);
+  Q_INVOKABLE QVariantList getSections(const QString &sketchId);
+  Q_INVOKABLE void renameSection(const QString &sketchId, const QString &sectionId, const QString &newName);
+  Q_INVOKABLE void setSectionLength(const QString &sketchId, const QString &sectionId, int lengthBars);
+  Q_INVOKABLE void deleteSection(const QString &sketchId, const QString &sectionId);
+  
+  // Section placement operations
+  Q_INVOKABLE void addPlacement(const QString &sketchId, const QString &sectionId, 
+                                 const QString &motifId, int startBar, int repetitions = 1);
+  Q_INVOKABLE void removePlacement(const QString &sketchId, const QString &sectionId, int placementIndex);
+  Q_INVOKABLE void movePlacement(const QString &sketchId, const QString &sectionId, 
+                                  int placementIndex, int newStartBar);
+  Q_INVOKABLE void setPlacementRepetitions(const QString &sketchId, const QString &sectionId,
+                                            int placementIndex, int repetitions);
+  
+  // Get flattened timeline for playback
+  Q_INVOKABLE QVariantList getSectionTimeline(const QString &sketchId, const QString &sectionId);
 
   QVariantList sketches() const;
 

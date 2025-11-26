@@ -39,3 +39,16 @@ target_link_libraries(test_motif_crud PRIVATE
 
 add_test(NAME MotifCrudTest COMMAND test_motif_crud)
 
+# Section tests (PR-07)
+add_executable(test_section
+    tst_section.cpp
+)
+
+target_link_libraries(test_section PRIVATE
+    Qt6::Core
+    Qt6::Test
+    musesketch_core
+)
+
+add_test(NAME SectionTest COMMAND test_section)
+

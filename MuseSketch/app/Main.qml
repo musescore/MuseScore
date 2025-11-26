@@ -212,6 +212,21 @@ ApplicationWindow {
                 onEditMotifRequested: function(motifId) {
                     stackView.push(motifEditViewComponent, { sketchId: sketchId, motifId: motifId })
                 }
+                onEditSectionRequested: function(sectionId) {
+                    stackView.push(sectionEditorViewComponent, { sketchId: sketchId, sectionId: sectionId })
+                }
+            }
+        }
+        
+        // Section Editor View Component
+        Component {
+            id: sectionEditorViewComponent
+            
+            SectionEditorView {
+                onBackRequested: stackView.pop()
+                onSectionUpdated: {
+                    sketchManager.refreshSketches()
+                }
             }
         }
         

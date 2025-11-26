@@ -9,9 +9,12 @@ Page {
     property string sketchId: ""
     property var sketchData: null
     
+    property var sectionsData: []
+    
     signal backRequested()
     signal createMotifRequested()
     signal editMotifRequested(string motifId)
+    signal editSectionRequested(string sectionId)
     
     Component.onCompleted: {
         loadSketch()
@@ -19,6 +22,7 @@ Page {
     
     function loadSketch() {
         sketchData = sketchManager.getSketch(sketchId)
+        sectionsData = sketchManager.getSections(sketchId)
     }
     
     header: ToolBar {
@@ -451,6 +455,139 @@ Page {
                 font: parent.font
             }
         }
+        
+        // Sections Header
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.topMargin: 12
+            spacing: 12
+            
+            Text {
+                text: "Sections"
+                color: "white"
+                font.pixelSize: 18
+                font.bold: true
+            }
+            
+            Text {
+                text: "(" + sectionsData.length + ")"
+                color: "#AAAAAA"
+                font.pixelSize: 18
+            }
+            
+            Item { Layout.fillWidth: true }
+            
+            Button {
+                text: "+ New"
+                font.pixelSize: 12
+                
+                onClicked: newSectionDialog.open()
+                
+                background: Rectangle {
+                    radius: 4
+                    color: parent.pressed ? "#3A7BC8" : "#4A90E2"
+                }
+                
+                contentItem: Text {
+                    text: parent.text
+                    color: "white"
+                    font: parent.font
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
+        }
+        
+        // Sections List
+        ListView {
+            id: sectionsListView
+            Layout.fillWidth: true
+            Layout.preferredHeight: Math.min(sectionsData.length * 68, 200)
+            
+            model: sectionsData
+            spacing: 8
+            clip: true
+            
+            delegate: Rectangle {
+                width: sectionsListView.width
+                height: 60
+                color: sectionMouseArea.pressed ? "#3D3D3D" : "#2D2D2D"
+                radius: 8
+                
+                MouseArea {
+                    id: sectionMouseArea
+                    anchors.fill: parent
+                    onClicked: root.editSectionRequested(modelData.id)
+                    
+                    onPressAndHold: {
+                        sectionDeleteDialog.sectionId = modelData.id
+                        sectionDeleteDialog.sectionName = modelData.name
+                        sectionDeleteDialog.open()
+                    }
+                }
+                
+                RowLayout {
+                    anchors.fill: parent
+                    anchors.margins: 12
+                    spacing: 12
+                    
+                    Rectangle {
+                        Layout.preferredWidth: 36
+                        Layout.preferredHeight: 36
+                        radius: 4
+                        color: "#9B59B6"
+                        
+                        Text {
+                            anchors.centerIn: parent
+                            text: "§"
+                            color: "white"
+                            font.pixelSize: 20
+                            font.bold: true
+                        }
+                    }
+                    
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: 2
+                        
+                        Text {
+                            text: modelData.name
+                            color: "white"
+                            font.pixelSize: 16
+                            font.bold: true
+                        }
+                        
+                        Text {
+                            text: modelData.lengthBars + " bars • " + modelData.placementCount + " motifs"
+                            color: "#AAAAAA"
+                            font.pixelSize: 12
+                        }
+                    }
+                    
+                    Text {
+                        text: "›"
+                        color: "#666666"
+                        font.pixelSize: 24
+                    }
+                }
+            }
+            
+            // Empty state
+            Rectangle {
+                anchors.fill: parent
+                visible: sectionsListView.count === 0
+                color: "#2D2D2D"
+                radius: 8
+                
+                Text {
+                    anchors.centerIn: parent
+                    text: "No sections yet\nCreate one to arrange motifs"
+                    color: "#666666"
+                    font.pixelSize: 14
+                    horizontalAlignment: Text.AlignHCenter
+                }
+            }
+        }
     }
     
     // Rename Dialog
@@ -510,6 +647,91 @@ Page {
         
         onAccepted: {
             sketchManager.deleteMotif(root.sketchId, motifId)
+            loadSketch()
+        }
+    }
+    
+    // New Section Dialog
+    Dialog {
+        id: newSectionDialog
+        anchors.centerIn: parent
+        width: 280
+        title: "New Section"
+        modal: true
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        
+        ColumnLayout {
+            width: parent.width
+            spacing: 12
+            
+            TextField {
+                id: sectionNameField
+                Layout.fillWidth: true
+                placeholderText: "Section name"
+                text: "Section " + (sectionsData.length + 1)
+                selectByMouse: true
+                onAccepted: newSectionDialog.accept()
+            }
+            
+            RowLayout {
+                Layout.fillWidth: true
+                
+                Text {
+                    text: "Length:"
+                    color: "#CCCCCC"
+                }
+                
+                SpinBox {
+                    id: sectionLengthSpinBox
+                    from: 1
+                    to: 64
+                    value: 8
+                }
+                
+                Text {
+                    text: "bars"
+                    color: "#CCCCCC"
+                }
+            }
+        }
+        
+        onAccepted: {
+            if (sectionNameField.text.trim() !== "") {
+                var sectionId = sketchManager.createSection(root.sketchId, sectionNameField.text.trim(), sectionLengthSpinBox.value)
+                loadSketch()
+                // Navigate to section editor
+                root.editSectionRequested(sectionId)
+            }
+        }
+        
+        onOpened: {
+            sectionNameField.text = "Section " + (sectionsData.length + 1)
+            sectionNameField.forceActiveFocus()
+            sectionNameField.selectAll()
+        }
+    }
+    
+    // Section Delete Dialog
+    Dialog {
+        id: sectionDeleteDialog
+        anchors.centerIn: parent
+        width: 280
+        title: "Delete Section"
+        modal: true
+        standardButtons: Dialog.Yes | Dialog.No
+        
+        property string sectionId: ""
+        property string sectionName: ""
+        
+        Text {
+            width: parent.width
+            text: "Are you sure you want to delete \"" + sectionDeleteDialog.sectionName + "\"?"
+            color: "#CCCCCC"
+            wrapMode: Text.WordWrap
+        }
+        
+        onAccepted: {
+            sketchManager.deleteSection(root.sketchId, sectionId)
             loadSketch()
         }
     }
