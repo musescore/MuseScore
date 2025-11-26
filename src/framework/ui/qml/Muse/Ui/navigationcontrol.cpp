@@ -43,14 +43,7 @@ NavigationControl::~NavigationControl()
 
 void NavigationControl::componentComplete()
 {
-    if (isComponentCompleted()) {
-        return;
-    }
-
-    if (m_panel) {
-        m_panel->componentComplete();
-        AbstractNavigation::componentComplete();
-    }
+    AbstractNavigation::componentComplete();
 }
 
 QString NavigationControl::name() const
@@ -164,10 +157,6 @@ void NavigationControl::setPanel(NavigationPanel* panel)
     if (m_panel) {
         m_panel->addControl(this);
         connect(m_panel, &NavigationPanel::destroyed, this, &NavigationControl::onPanelDestroyed);
-
-        if (!isComponentCompleted()) {
-            AbstractNavigation::componentComplete();
-        }
     }
 
     emit panelChanged(m_panel);

@@ -87,9 +87,9 @@ size_t AccessibleItem::accessibleChildCount() const
     return static_cast<size_t>(m_children.size());
 }
 
-const IAccessible* AccessibleItem::accessibleChild(size_t i) const
+IAccessible* AccessibleItem::accessibleChild(size_t i) const
 {
-    return static_cast<const IAccessible*>(m_children.value(static_cast<int>(i), nullptr));
+    return m_children.value(static_cast<int>(i), nullptr);
 }
 
 QWindow* AccessibleItem::accessibleWindow() const
