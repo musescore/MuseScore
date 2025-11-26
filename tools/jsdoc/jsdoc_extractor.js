@@ -2,7 +2,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const readline = require('node:readline');
 
-const VERSION = "0.1"
+const VERSION = "0.2"
+const QML_NS = "Qml"
 
 var filter = {
     ignoreFile: "",
@@ -59,6 +60,21 @@ function nameFromSig(line)
     return name;
 }
 
+function qmlPropName(line) 
+{
+    const words = line.split(" ");
+    if (words.length < 4) {
+        return ""
+    }
+
+    let name = words[2];
+    const colonIdx = name.indexOf(":")
+    if (colonIdx !== -1) {
+        name = name.substr(0, colonIdx)
+    }
+    return name;
+}
+
 function enumName(line)
 {
     let name = "";
@@ -97,6 +113,8 @@ function enumKey(line)
 
 async function extractDoc(file)
 {   
+    const isQml = path.parse(file).ext === ".qml";
+
     const fileStream = fs.createReadStream(file)
     const rl = readline.createInterface({
                                             input: fileStream,
@@ -111,6 +129,7 @@ async function extractDoc(file)
         apidocStarted: false,
 
         currentDoc: "",
+        doclets: [],
 
         parentDoc: "", // namespace or class
         parentName: "",
@@ -121,9 +140,55 @@ async function extractDoc(file)
         propLookName: false,
         props: [],
 
+        memberLookName: false,
+        members: [],
+        
         enumLookName: false,
         enumStarted: false,
         enums: [],
+
+        makeDoclet: function() {
+            let doc = "";
+
+            let propsDoc = "";
+            for (const p of state.props) {
+                propsDoc += p; 
+            }
+
+            doc = state.parentDoc.replace('*/', `${propsDoc}*/`);
+
+            for (const m of state.members) {
+                doc += m
+            }
+
+            for (const en of state.enums) {
+                doc += en
+            }
+
+            for (const m of state.methods) {
+                doc += m;
+            }
+
+            return doc;
+        },
+
+        resetDoclet: function() {
+            this.parentDoc = "";
+            this.parentName = "";
+
+            this.methodLookName = false;
+            this.methods = [];
+
+            this.propLookName = false;
+            this.props = [];
+
+            this.memberLookName = false;
+            this.members = [];
+            
+            this.enumLookName = false;
+            this.enumStarted = false;
+            this.enums = [];
+        }
     }                                   
 
     for await (let line of rl) {
@@ -146,6 +211,12 @@ async function extractDoc(file)
             // get parent - namespace or class
             const namespaceMatch = state.currentDoc.match(/@namespace\s+(\S+)/);
             if (namespaceMatch) {
+                if (state.parentDoc !== "") {
+                    let doc = state.makeDoclet();
+                    state.doclets.push(doc);
+                    state.resetDoclet()
+                }    
+
                 state.parentName = namespaceMatch[1];
                 state.parentDoc = state.currentDoc;
                 continue;
@@ -153,8 +224,28 @@ async function extractDoc(file)
 
             const classMatch = state.currentDoc.match(/@class\s+(\S+)/);
             if (classMatch) {
-                state.parentName = classMatch[1];
+                if (state.parentDoc !== "") {
+                    let doc = state.makeDoclet();
+                    state.doclets.push(doc);
+                    state.resetDoclet()
+                }  
+                
+                // Start a new class
                 state.parentDoc = state.currentDoc;
+
+                // For Qml we can explicitly specify memberof, 
+                // for C++ memberof can be specified (preferably), but it may not.
+                if (isQml) {
+                    state.parentName = QML_NS+"."+classMatch[1];
+                    state.parentDoc = state.parentDoc.replace('@class', `@memberof ${QML_NS}\n* @class`);
+                } else {
+                    const memberofMatch = state.currentDoc.match(/@memberof\s+(\S+)/);
+                    if (memberofMatch) {
+                        state.parentName = memberofMatch[1]+"."+classMatch[1];
+                    } else {
+                        state.parentName = classMatch[1];
+                    }
+                }
                 continue;
             }
 
@@ -174,6 +265,15 @@ async function extractDoc(file)
                 state.currentDoc = state.currentDoc.replace('*/', ``);
                 state.propLookName = true;
                 continue;
+            }
+
+            // try get member 
+            if (state.currentDoc.includes('@member')) {
+                if (state.currentDoc.includes('@member')) {
+                    state.currentDoc = state.currentDoc.replace('@member', `@memberof ${state.parentName}\n* @member`);
+                    state.memberLookName = true;
+                    continue;
+                }
             }
 
             // try get enum 
@@ -197,13 +297,36 @@ async function extractDoc(file)
         }
 
         if (state.propLookName) {
-            let name = nameFromSig(line);
+            let name = "";
+            if (isQml) {
+                name = qmlPropName(line);
+            } else {
+                name = nameFromSig(line);
+            }
+
             if (name !== "") {
                 state.propLookName = false;
                 // add name 
                 const regex = /@property\s+\{([^}]+)\}\s+/;
                 state.currentDoc = state.currentDoc.replace(regex, `@property {$1} ${name} `);
                 state.props.push(state.currentDoc);
+            }
+        }
+
+        if (state.memberLookName) {
+            let name = "";
+            if (isQml) {
+                name = qmlPropName(line);
+            } else {
+                name = nameFromSig(line);
+            }
+
+            if (name !== "") {
+                state.memberLookName = false;
+                // add name 
+                const regex = /@member\s+\{([^}]+)\}\s+/;
+                state.currentDoc = state.currentDoc.replace(regex, `@member {$1} ${name}\n`);
+                state.members.push(state.currentDoc);
             }
         }
 
@@ -230,26 +353,18 @@ async function extractDoc(file)
         }
     }
 
-    let doc = "";
     if (!state.hasApidoc) {
-        return doc;
+        return "";
     }
 
-    let propsDoc = "";
-    for (const p of state.props) {
-        propsDoc += p; 
+    // last 
+    state.doclets.push(state.makeDoclet());
+
+    let doc = "";
+    for (let d of state.doclets) {
+        doc += d;
+        doc += '\n\n\n'
     }
-
-    doc = state.parentDoc.replace('*/', `${propsDoc}*/`);
-
-    for (const en of state.enums) {
-        doc += en
-    }
-
-    for (const m of state.methods) {
-        doc += m;
-    }
-
     return doc;
 }
 

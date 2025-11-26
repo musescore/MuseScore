@@ -2274,12 +2274,13 @@ public:
     /// \endcond
 };
 
-//---------------------------------------------------------
-//   Spanner
-///  Provides access to internal mu::engraving::Spanner objects.
-///  \since MuseScore 4.6
-//---------------------------------------------------------
-
+/** APIDOC
+ * Provides access to internal mu::engraving::Spanner objects.
+ * @class Spanner
+ * @memberof engraving
+ * @hideconstructor
+ * @since 4.6
+*/
 class Spanner : public EngravingItem
 {
     Q_OBJECT
@@ -2357,7 +2358,9 @@ public:
 /** APIDOC
  * Class representing a lyric.
  * @class Lyrics
+ * @memberof engraving
  * @hideconstructor
+ * @since 4.7
 */
 class Lyrics : public EngravingItem
 {

@@ -24,8 +24,6 @@
 
 #include <QUrl>
 
-#include "global/containers.h"
-
 using namespace muse::api;
 
 /** APIDOC
