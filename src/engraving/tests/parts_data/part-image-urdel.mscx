@@ -121,7 +121,6 @@
         <Image>
           <eid>G_G</eid>
           <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-          <linkPath>schnee.png</linkPath>
           <size w="38.52" h="38.64"/>
           </Image>
         </VBox>
@@ -883,7 +882,6 @@
           <Image>
             <eid>+B_+B</eid>
             <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-            <linkPath>schnee.png</linkPath>
             <size w="38.52" h="38.64"/>
             </Image>
           <Text>
