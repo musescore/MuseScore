@@ -1228,9 +1228,7 @@ DirectionV FinaleParser::calculateTieDirection(Tie* tie, EntryNumber entryNumber
     DirectionV stemDir = c->beam() ? c->beam()->direction() : c->stemDirection();
     if (stemDir == DirectionV::AUTO) {
         logger()->logWarning(String(u"The stem direction for ChordRest corresponding to EntryNumber %1 could not be determined. Getting it from EntryInfoPtr instead.").arg(entryNumber));
-        StaffCmper musxStaffId = muse::value(m_staff2Inst, c->staffIdx(), 0);
-        MeasCmper musxMeasureId = c->measure()->measureIndex() + 1;
-        EntryInfoPtr entryInfoPtr = EntryInfoPtr::fromPositionOrNull(m_doc, m_currentMusxPartId, musxStaffId, musxMeasureId, entryNumber);
+        EntryInfoPtr entryInfoPtr = EntryInfoPtr::fromEntryNumber(m_doc, m_currentMusxPartId, entryNumber);
         IF_ASSERT_FAILED (entryInfoPtr) {
             logger()->logWarning(String(u"The stem direction for ChordRest corresponding to EntryNumber %1 could not be deterimed at all. Returning AUTO.").arg(entryNumber));
             return DirectionV::AUTO;
