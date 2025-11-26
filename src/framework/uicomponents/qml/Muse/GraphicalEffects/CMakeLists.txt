@@ -18,9 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_qml_module(muse_uicomponents_graphicaleffects_qml ALIAS muse::uicomponents_graphicaleffects_qml FOR muse_uicomponents)
+muse_create_qml_module(muse_graphicaleffects_qml ALIAS muse::graphicaleffects_qml FOR muse_uicomponents)
 
-qt_add_qml_module(muse_uicomponents_graphicaleffects_qml
+qt_add_qml_module(muse_graphicaleffects_qml
     URI Muse.GraphicalEffects
     VERSION 1.0
     QML_FILES
@@ -31,7 +31,7 @@ qt_add_qml_module(muse_uicomponents_graphicaleffects_qml
         RoundedCornersEffect.qml
 )
 
-qt_add_shaders(muse_uicomponents_graphicaleffects_qml muse_uicomponents_graphicaleffects_qml_shaders
+qt_add_shaders(muse_graphicaleffects_qml muse_graphicaleffects_qml_shaders
     PREFIX
         "/qt/qml/Muse/GraphicalEffects"
     FILES
