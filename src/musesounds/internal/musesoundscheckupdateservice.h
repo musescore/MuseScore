@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,49 +21,38 @@
  */
 #pragma once
 
+#include "musesounds/imusesoundscheckupdateservice.h"
+#include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "modularity/ioc.h"
+#include "musesounds/imusesoundsconfiguration.h"
 #include "network/inetworkmanagercreator.h"
-#include "io/ifilesystem.h"
-#include "global/isysteminfo.h"
+#include "global/iglobalconfiguration.h"
 #include "languages/ilanguagesconfiguration.h"
-#include "iinteractive.h"
-
-#include "../global/iglobalconfiguration.h"
-#include "../imusesoundsconfiguration.h"
-#include "../imusesoundscheckupdateservice.h"
+#include "global/iinteractive.h"
 
 namespace mu::musesounds {
 class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, public muse::Injectable, public muse::async::Asyncable
 {
+    muse::Inject<IMuseSoundsConfiguration> configuration = { this };
     muse::Inject<muse::network::INetworkManagerCreator> networkManagerCreator = { this };
     muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
-    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
-    muse::Inject<muse::ISystemInfo> systemInfo = { this };
     muse::Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<IMuseSoundsConfiguration> configuration = { this };
 
 public:
-
     MuseSoundsCheckUpdateService(const muse::modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
     muse::Ret needCheckForUpdate() const override;
 
-    muse::RetVal<muse::update::ReleaseInfo> checkForUpdate() override;
-    muse::RetVal<muse::update::ReleaseInfo> lastCheckResult() override;
-
-    muse::Progress updateProgress() override;
+    muse::async::Promise<muse::RetVal<muse::update::ReleaseInfo> > checkForUpdate() override;
+    const muse::RetVal<muse::update::ReleaseInfo>& lastCheckResult() const override;
 
 private:
     muse::RetVal<muse::update::ReleaseInfo> parseRelease(const QByteArray& json) const;
 
-    void clear();
-
     muse::RetVal<muse::update::ReleaseInfo> m_lastCheckResult;
-    muse::io::path_t m_installatorPath;
-    muse::Progress m_updateProgress;
+    muse::network::INetworkManagerPtr m_networkManager;
 };
 }
