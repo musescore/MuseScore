@@ -37,8 +37,8 @@ static QString formatLimitReachedError(const muse::Ret& ret)
         return QString();
     }
 
-    const QString libName = String::fromStdString(ret.data<std::string>("libraryName", std::string()));
-    const QString date = String::fromStdString(ret.data<std::string>("date", std::string()));
+    const QString libName = QString::fromStdString(ret.data<std::string>("libraryName", std::string()));
+    const QString date = QString::fromStdString(ret.data<std::string>("date", std::string()));
 
     if (libName.isEmpty() || date.isEmpty()) {
         return QString();
