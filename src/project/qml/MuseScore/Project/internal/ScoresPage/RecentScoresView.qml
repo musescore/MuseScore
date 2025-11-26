@@ -47,6 +47,8 @@ ScoresView {
 
             model: recentScoresModel
             searchText: root.searchText
+            familyFilter: root.familyFilter
+            instrumentFilter: root.instrumentFilter
 
             isNoResultsMessageAllowed: false // provided by the model instead
 
@@ -78,6 +80,8 @@ ScoresView {
 
             model: recentScoresModel
             searchText: root.searchText
+            familyFilter: root.familyFilter
+            instrumentFilter: root.instrumentFilter
 
             backgroundColor: root.backgroundColor
             sideMargin: root.sideMargin

@@ -37,6 +37,8 @@ const QString AbstractScoresModel::IS_CLOUD_KEY("isCloud");
 const QString AbstractScoresModel::CLOUD_SCORE_ID_KEY("scoreId");
 const QString AbstractScoresModel::CLOUD_VISIBILITY_KEY("cloudVisibility");
 const QString AbstractScoresModel::CLOUD_VIEW_COUNT_KEY("cloudViewCount");
+const QString AbstractScoresModel::INSTRUMENT_IDS_KEY("instrumentIds");
+const QString AbstractScoresModel::INSTRUMENT_FAMILIES_KEY("instrumentFamilies");
 
 AbstractScoresModel::AbstractScoresModel(QObject* parent)
     : QAbstractListModel(parent)

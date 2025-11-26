@@ -45,6 +45,7 @@ struct ProjectMeta
 
     size_t partsCount = 0;
     QPixmap thumbnail;
+    QStringList instrumentIds;  // canonical instrument IDs extracted from score
 
     QString source;
     QString audioComUrl;

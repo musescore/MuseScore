@@ -27,6 +27,9 @@
 
 #include "multiinstances/resourcelockguard.h"
 
+#include "notation/notationtypes.h"
+#include "types/projecttypes.h"
+
 #include "app_config.h"
 
 #ifdef QT_CONCURRENT_SUPPORTED
@@ -82,19 +85,36 @@ void RecentFilesController::prependRecentFile(const RecentFile& newFile)
 
     TRACEFUNC;
 
+    // Read instrument metadata and enrich the file
+    RecentFile enrichedFile = newFile;
+
+    RetVal<ProjectMeta> meta = mscMetaReader()->readMeta(enrichedFile.path);
+    if (meta.ret) {
+        enrichedFile.instrumentIds = meta.val.instrumentIds;
+
+        // Look up families for each instrument
+        QSet<QString> families;
+        for (const QString& instrId : enrichedFile.instrumentIds) {
+            QString familyId = lookupFamilyForInstrument(instrId);
+            families.insert(familyId);
+        }
+        enrichedFile.instrumentFamilies = families.values();
+    }
+    // If read fails, skip silently - instrumentIds/Families remain empty
+
     RecentFilesList newList;
     newList.reserve(m_recentFilesList.size() + 1);
-    newList.push_back(newFile);
+    newList.push_back(enrichedFile);
 
     for (const RecentFile& file : m_recentFilesList) {
-        if (file.path != newFile.path && fileSystem()->exists(file.path)) {
+        if (file.path != enrichedFile.path && fileSystem()->exists(file.path)) {
             newList.push_back(file);
         }
     }
 
     setRecentFilesList(newList, true);
 
-    prependPlatformRecentFile(newFile.path);
+    prependPlatformRecentFile(enrichedFile.path);
 }
 
 void RecentFilesController::moveRecentFile(const muse::io::path_t& before, const RecentFile& after)
@@ -170,6 +190,21 @@ void RecentFilesController::loadRecentFilesList()
             RecentFile file;
             file.path = obj["path"].toStdString();
             file.displayNameOverride = QString::fromStdString(obj["displayName"].toStdString());
+
+            // Load instrument data
+            if (obj.contains("instrumentIds")) {
+                JsonArray arr = obj["instrumentIds"].toArray();
+                for (size_t j = 0; j < arr.size(); ++j) {
+                    file.instrumentIds << QString::fromStdString(arr.at(j).toStdString());
+                }
+            }
+            if (obj.contains("instrumentFamilies")) {
+                JsonArray arr = obj["instrumentFamilies"].toArray();
+                for (size_t j = 0; j < arr.size(); ++j) {
+                    file.instrumentFamilies << QString::fromStdString(arr.at(j).toStdString());
+                }
+            }
+
             newList.emplace_back(std::move(file));
         } else {
             continue;
@@ -232,14 +267,30 @@ void RecentFilesController::saveRecentFilesList()
 
     JsonArray jsonArray;
     for (const RecentFile& file : m_recentFilesList) {
+        // Always write as object to include instrument data
+        JsonObject obj;
+        obj["path"] = file.path.toStdString();
         if (!file.displayNameOverride.isEmpty()) {
-            JsonObject obj;
-            obj["path"] = file.path.toStdString();
             obj["displayName"] = file.displayNameOverride.toStdString();
-            jsonArray << obj;
-        } else {
-            jsonArray << file.path.toStdString();
         }
+
+        // Save instrument data
+        if (!file.instrumentIds.isEmpty()) {
+            JsonArray ids;
+            for (const QString& id : file.instrumentIds) {
+                ids << id.toStdString();
+            }
+            obj["instrumentIds"] = ids;
+        }
+        if (!file.instrumentFamilies.isEmpty()) {
+            JsonArray families;
+            for (const QString& fam : file.instrumentFamilies) {
+                families << fam.toStdString();
+            }
+            obj["instrumentFamilies"] = families;
+        }
+
+        jsonArray << obj;
     }
 
     JsonDocument json(jsonArray);
@@ -288,6 +339,20 @@ Promise<QPixmap> RecentFilesController::thumbnail(const muse::io::path_t& filePa
 
         return Promise<QPixmap>::Result::unchecked();
     }, PromiseType::AsyncByBody);
+}
+
+QString RecentFilesController::lookupFamilyForInstrument(const QString& instrumentId) const
+{
+    muse::String id = muse::String::fromQString(instrumentId);
+    const notation::InstrumentTemplate& templ = instrumentsRepository()->instrumentTemplate(id);
+
+    if (templ.isValid() && templ.family) {
+        muse::String famId = templ.family->id;
+        if (!famId.isEmpty()) {
+            return famId.toQString();
+        }
+    }
+    return OTHER_FAMILY_ID;
 }
 
 void RecentFilesController::cleanUpThumbnailCache(const RecentFilesList& files)

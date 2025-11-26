@@ -107,6 +107,60 @@ FocusScope {
             navigation.order: 1
             accessible.name: qsTrc("project", "Search recent scores")
         }
+
+        // Instrument family filter - only show for local/recent tab
+        StyledDropdown {
+            id: familyFilter
+
+            visible: tabBar.currentIndex === 0
+
+            Layout.preferredWidth: 150
+
+            model: scoresPageModel.familyFilterOptions
+            textRole: "name"
+            valueRole: "id"
+
+            currentIndex: 0
+
+            navigation.name: "FamilyFilter"
+            navigation.panel: navSearchPanel
+            navigation.order: 2
+
+            onActivated: function(index, value) {
+                scoresPageModel.selectedFamilyId = value
+            }
+        }
+
+        // Instrument filter - only show for local/recent tab
+        StyledDropdown {
+            id: instrumentFilter
+
+            visible: tabBar.currentIndex === 0
+
+            Layout.preferredWidth: 150
+
+            model: scoresPageModel.instrumentFilterOptions
+            textRole: "name"
+            valueRole: "id"
+
+            currentIndex: 0
+
+            navigation.name: "InstrumentFilter"
+            navigation.panel: navSearchPanel
+            navigation.order: 3
+
+            onActivated: function(index, value) {
+                scoresPageModel.selectedInstrumentId = value
+            }
+
+            Connections {
+                target: scoresPageModel
+                function onSelectedFamilyIdChanged() {
+                    // Reset to "All" when family changes
+                    instrumentFilter.currentIndex = 0
+                }
+            }
+        }
     }
 
     RowLayout {
@@ -250,6 +304,9 @@ FocusScope {
 
             viewType: scoresPageModel.viewType
             searchText: searchField.searchText
+
+            familyFilter: scoresPageModel.selectedFamilyId
+            instrumentFilter: scoresPageModel.selectedInstrumentId
 
             backgroundColor: background.color
             sideMargin: prv.sideMargin

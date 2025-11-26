@@ -36,6 +36,8 @@ Item {
     property list<ColumnItem> columns
     property alias showNewScoreItem: newScoreItem.visible
     property string searchText
+    property string familyFilter: ""
+    property string instrumentFilter: ""
 
     property color backgroundColor: ui.theme.backgroundSecondaryColor
     property real sideMargin: 46
@@ -68,6 +70,26 @@ Item {
                 roleName: "name"
                 roleValue: root.searchText
                 compareType: CompareType.Contains
+            }
+        ]
+    }
+
+    SortFilterProxyModel {
+        id: instrumentFilterModel
+        sourceModel: searchFilterModel
+
+        filters: [
+            FilterValue {
+                roleName: "instrumentFamilies"
+                roleValue: root.familyFilter
+                compareType: CompareType.ListContains
+                enabled: Boolean(root.familyFilter)
+            },
+            FilterValue {
+                roleName: "instrumentIds"
+                roleValue: root.instrumentFilter
+                compareType: CompareType.ListContains
+                enabled: Boolean(root.instrumentFilter)
             }
         ]
     }
@@ -202,7 +224,7 @@ Item {
                         z: 2
                     }
 
-                    model: searchFilterModel
+                    model: instrumentFilterModel
 
                     delegate: ScoreListItem {
                         required property int index
@@ -255,7 +277,7 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            visible: Boolean(root.searchText) && !listViewContainer.visible
+            visible: (Boolean(root.searchText) || Boolean(root.familyFilter) || Boolean(root.instrumentFilter)) && !listViewContainer.visible
 
             Message {
                 anchors.top: parent.top

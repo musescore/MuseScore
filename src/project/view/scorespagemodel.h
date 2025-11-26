@@ -29,6 +29,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "iinteractive.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
+#include "notation/iinstrumentsrepository.h"
 
 class QString;
 
@@ -41,9 +42,15 @@ class ScoresPageModel : public QObject
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(muse::IInteractive, interactive)
     INJECT(muse::cloud::IMuseScoreComService, museScoreComService)
+    INJECT(notation::IInstrumentsRepository, instrumentsRepository)
 
     Q_PROPERTY(int tabIndex READ tabIndex WRITE setTabIndex NOTIFY tabIndexChanged)
     Q_PROPERTY(ViewType viewType READ viewType WRITE setViewType NOTIFY viewTypeChanged)
+
+    Q_PROPERTY(QVariantList familyFilterOptions READ familyFilterOptions CONSTANT)
+    Q_PROPERTY(QVariantList instrumentFilterOptions READ instrumentFilterOptions NOTIFY instrumentFilterOptionsChanged)
+    Q_PROPERTY(QString selectedFamilyId READ selectedFamilyId WRITE setSelectedFamilyId NOTIFY selectedFamilyIdChanged)
+    Q_PROPERTY(QString selectedInstrumentId READ selectedInstrumentId WRITE setSelectedInstrumentId NOTIFY selectedInstrumentIdChanged)
 
 public:
     explicit ScoresPageModel(QObject* parent = nullptr);
@@ -60,6 +67,15 @@ public:
     ViewType viewType() const;
     void setViewType(ViewType type);
 
+    QVariantList familyFilterOptions() const;
+    QVariantList instrumentFilterOptions() const;
+
+    QString selectedFamilyId() const;
+    void setSelectedFamilyId(const QString& familyId);
+
+    QString selectedInstrumentId() const;
+    void setSelectedInstrumentId(const QString& instrumentId);
+
     Q_INVOKABLE void createNewScore();
     Q_INVOKABLE void openOther();
     Q_INVOKABLE void openScore(const QString& scorePath, const QString& displayNameOverride);
@@ -68,6 +84,13 @@ public:
 signals:
     void tabIndexChanged();
     void viewTypeChanged();
+    void instrumentFilterOptionsChanged();
+    void selectedFamilyIdChanged();
+    void selectedInstrumentIdChanged();
+
+private:
+    QString m_selectedFamilyId;
+    QString m_selectedInstrumentId;
 };
 }
 

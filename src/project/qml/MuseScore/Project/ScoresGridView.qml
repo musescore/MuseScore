@@ -33,6 +33,8 @@ Item {
 
     property AbstractScoresModel model
     property string searchText
+    property string familyFilter: ""
+    property string instrumentFilter: ""
 
     property bool isNoResultsMessageAllowed: true
 
@@ -64,15 +66,38 @@ Item {
     }
 
     SortFilterProxyModel {
-        id: itemTypeFilterModel
+        id: instrumentFilterModel
         sourceModel: searchFilterModel
+
+        alwaysIncludeIndices: root.model.nonScoreItemIndices
+
+        filters: [
+            FilterValue {
+                roleName: "instrumentFamilies"
+                roleValue: root.familyFilter
+                compareType: CompareType.ListContains
+                enabled: Boolean(root.familyFilter)
+            },
+            FilterValue {
+                roleName: "instrumentIds"
+                roleValue: root.instrumentFilter
+                compareType: CompareType.ListContains
+                enabled: Boolean(root.instrumentFilter)
+            }
+        ]
+    }
+
+    SortFilterProxyModel {
+        id: itemTypeFilterModel
+        sourceModel: instrumentFilterModel
 
         filters: [
             FilterValue {
                 roleName: "isNoResultsFound"
                 roleValue: true
                 compareType: CompareType.NotEqual
-                enabled: !Boolean(root.searchText) || searchFilterModel.rowCount > root.model.nonScoreItemIndices.length
+                enabled: (!Boolean(root.searchText) && !Boolean(root.familyFilter) && !Boolean(root.instrumentFilter))
+                         || instrumentFilterModel.rowCount > root.model.nonScoreItemIndices.length
                 async: true
             }
         ]
@@ -189,7 +214,7 @@ Item {
         id: noResultsMessage
         anchors.fill: parent
 
-        visible: Boolean(root.searchText) && view.count === 0 && root.isNoResultsMessageAllowed
+        visible: (Boolean(root.searchText) || Boolean(root.familyFilter) || Boolean(root.instrumentFilter)) && view.count === 0 && root.isNoResultsMessageAllowed
 
         Message {
             anchors.top: parent.top

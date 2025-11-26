@@ -29,6 +29,7 @@
 #include "iprojectconfiguration.h"
 #include "irecentfilescontroller.h"
 #include "io/ifilesystem.h"
+#include "notation/iinstrumentsrepository.h"
 
 namespace mu::project {
 class RecentScoresModel : public AbstractScoresModel, public muse::async::Asyncable
@@ -38,6 +39,7 @@ class RecentScoresModel : public AbstractScoresModel, public muse::async::Asynca
     INJECT(IProjectConfiguration, configuration)
     INJECT(IRecentFilesController, recentFilesController)
     INJECT(muse::io::IFileSystem, fileSystem)
+    INJECT(notation::IInstrumentsRepository, instrumentsRepository)
 
 public:
     RecentScoresModel(QObject* parent = nullptr);
@@ -49,6 +51,8 @@ public:
 private:
     void updateRecentScores();
     void setRecentScores(const std::vector<QVariantMap>& items);
+    QString localizedInstrumentName(const QString& id) const;
+    QString localizedFamilyName(const QString& id) const;
 };
 }
 

@@ -34,6 +34,7 @@
 #include "imscmetareader.h"
 #include "io/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
+#include "notation/iinstrumentsrepository.h"
 
 namespace mu::project {
 class RecentFilesController : public IRecentFilesController, public muse::async::Asyncable, public muse::Injectable
@@ -42,6 +43,7 @@ class RecentFilesController : public IRecentFilesController, public muse::async:
     muse::ThreadSafeInject<IMscMetaReader> mscMetaReader = { this };
     muse::ThreadSafeInject<muse::io::IFileSystem> fileSystem = { this };
     muse::ThreadSafeInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    muse::ThreadSafeInject<notation::IInstrumentsRepository> instrumentsRepository = { this };
 
 public:
     void init();
@@ -66,6 +68,7 @@ private:
     void saveRecentFilesList();
 
     void cleanUpThumbnailCache(const RecentFilesList& files);
+    QString lookupFamilyForInstrument(const QString& instrumentId) const;
 
     mutable bool m_dirty = true;
     mutable RecentFilesList m_recentFilesList;
