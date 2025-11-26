@@ -161,39 +161,36 @@ ApplicationWindow {
                     }
                     
                     // FAB Button
-                    RoundButton {
+                    Rectangle {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
                         Layout.bottomMargin: 20
-                        
                         width: 64
                         height: 64
-                        text: "+"
-                        font.pixelSize: 32
+                        radius: 32
+                        color: fabMouseArea.pressed ? "#3A7BC8" : "#4A90E2"
                         
-                        background: Rectangle {
-                            radius: 32
-                            color: parent.pressed ? "#3A7BC8" : "#4A90E2"
-                            
-                            layer.enabled: true
-                            layer.effect: DropShadow {
-                                horizontalOffset: 0
-                                verticalOffset: 4
-                                radius: 8
-                                samples: 17
-                                color: "#80000000"
-                            }
+                        layer.enabled: true
+                        layer.effect: DropShadow {
+                            horizontalOffset: 0
+                            verticalOffset: 4
+                            radius: 8
+                            samples: 17
+                            color: "#80000000"
                         }
                         
-                        contentItem: Text {
-                            text: parent.text
+                        Text {
+                            anchors.centerIn: parent
+                            anchors.verticalCenterOffset: -2  // Adjust for font baseline
+                            text: "+"
                             color: "white"
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font: parent.font
+                            font.pixelSize: 32
+                            font.weight: Font.Light
                         }
                         
-                        onClicked: {
-                            newSketchDialog.open()
+                        MouseArea {
+                            id: fabMouseArea
+                            anchors.fill: parent
+                            onClicked: newSketchDialog.open()
                         }
                     }
                 }
@@ -256,34 +253,131 @@ ApplicationWindow {
         }
     }
     
+    // New Sketch Dialog Overlay
+    Rectangle {
+        id: newSketchDialogOverlay
+        anchors.fill: parent
+        color: "#80000000"
+        visible: newSketchDialog.visible
+        z: 100
+        
+        MouseArea {
+            anchors.fill: parent
+            onClicked: newSketchDialog.close()
+        }
+    }
+    
     // New Sketch Dialog
-    Dialog {
+    Rectangle {
         id: newSketchDialog
         anchors.centerIn: parent
         width: 300
-        title: "New Sketch"
-        modal: true
+        height: 180
+        radius: 12
+        color: "#2D2D2D"
+        border.color: "#4A4A4A"
+        border.width: 1
+        visible: false
+        z: 101
         
-        standardButtons: Dialog.Ok | Dialog.Cancel
-        
-        TextField {
-            id: sketchNameField
-            width: parent.width
-            placeholderText: "Sketch name"
-            selectByMouse: true
-            
-            onAccepted: newSketchDialog.accept()
+        function open() { 
+            sketchNameField.text = ""
+            visible = true
+            sketchNameField.forceActiveFocus()
         }
-        
-        onAccepted: {
+        function close() { visible = false }
+        function accept() { 
             if (sketchNameField.text.trim() !== "") {
                 sketchManager.createNewSketch(sketchNameField.text.trim())
                 sketchNameField.text = ""
+                close()
             }
         }
         
-        onOpened: {
-            sketchNameField.forceActiveFocus()
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 20
+            spacing: 16
+            
+            Text {
+                text: "New Sketch"
+                color: "white"
+                font.pixelSize: 18
+                font.bold: true
+            }
+            
+            TextField {
+                id: sketchNameField
+                Layout.fillWidth: true
+                Layout.preferredHeight: 44
+                leftPadding: 12
+                topPadding: 12
+                bottomPadding: 12
+                placeholderText: "Sketch name"
+                placeholderTextColor: "#888888"
+                color: "white"
+                font.pixelSize: 16
+                selectByMouse: true
+                
+                background: Rectangle {
+                    color: "#1E1E1E"
+                    radius: 8
+                    border.color: sketchNameField.activeFocus ? "#4A90E2" : "#4A4A4A"
+                    border.width: 1
+                }
+                
+                onAccepted: newSketchDialog.accept()
+            }
+            
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 12
+                
+                Button {
+                    Layout.fillWidth: true
+                    implicitHeight: 40
+                    text: "Cancel"
+                    
+                    onClicked: newSketchDialog.close()
+                    
+                    background: Rectangle {
+                        radius: 8
+                        color: parent.pressed ? "#3D3D3D" : "#2D2D2D"
+                        border.color: "#4A4A4A"
+                        border.width: 1
+                    }
+                    
+                    contentItem: Text {
+                        text: parent.text
+                        color: "white"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: 14
+                    }
+                }
+                
+                Button {
+                    Layout.fillWidth: true
+                    implicitHeight: 40
+                    text: "Create"
+                    
+                    onClicked: newSketchDialog.accept()
+                    
+                    background: Rectangle {
+                        radius: 8
+                        color: parent.pressed ? "#3A7BC8" : "#4A90E2"
+                    }
+                    
+                    contentItem: Text {
+                        text: parent.text
+                        color: "white"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: 14
+                        font.bold: true
+                    }
+                }
+            }
         }
     }
 }

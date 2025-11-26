@@ -164,16 +164,17 @@ Page {
                     font.pixelSize: 14
                 }
                 
-                GridLayout {
+                Row {
                     Layout.alignment: Qt.AlignHCenter
-                    columns: 4
-                    rowSpacing: 12
-                    columnSpacing: 12
+                    spacing: 8
                     
                     Repeater {
                         model: 7
                         
                         ScaleDegreePad {
+                            width: 44
+                            height: 44
+                            font.pixelSize: 18
                             degree: index + 1
                             onClicked: {
                                 motifEditor.addNote(degree)
@@ -197,55 +198,66 @@ Page {
                     font.pixelSize: 14
                 }
                 
-                Row {
-                    Layout.alignment: Qt.AlignHCenter
-                    spacing: 12
+                Item {
+                    Layout.fillWidth: true
+                    implicitHeight: rhythmButtonsRow.height
                     
-                    RhythmButton {
-                        rhythmType: "quarter"
-                        displayText: "♩"
-                        isSelected: selectedRhythm === "quarter"
-                        onClicked: {
-                            selectedRhythm = "quarter"
-                            motifEditor.addRhythm("quarter")
+                    Row {
+                        id: rhythmButtonsRow
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 12
+                        
+                        RhythmButton {
+                            rhythmType: "whole"
+                            displayText: "1"
+                            isSelected: selectedRhythm === "whole"
+                            onClicked: {
+                                selectedRhythm = "whole"
+                                motifEditor.addRhythm("whole")
+                            }
                         }
-                    }
-                    
-                    RhythmButton {
-                        rhythmType: "eighth"
-                        displayText: "♪"
-                        isSelected: selectedRhythm === "eighth"
-                        onClicked: {
-                            selectedRhythm = "eighth"
-                            motifEditor.addRhythm("eighth")
+                        
+                        RhythmButton {
+                            rhythmType: "half"
+                            displayText: "½"
+                            isSelected: selectedRhythm === "half"
+                            onClicked: {
+                                selectedRhythm = "half"
+                                motifEditor.addRhythm("half")
+                            }
                         }
-                    }
-                    
-                    RhythmButton {
-                        rhythmType: "dotted-quarter"
-                        displayText: "♩."
-                        isSelected: selectedRhythm === "dotted-quarter"
-                        onClicked: {
-                            selectedRhythm = "dotted-quarter"
-                            motifEditor.addRhythm("dotted-quarter")
+                        
+                        RhythmButton {
+                            rhythmType: "quarter"
+                            displayText: "¼"
+                            isSelected: selectedRhythm === "quarter"
+                            onClicked: {
+                                selectedRhythm = "quarter"
+                                motifEditor.addRhythm("quarter")
+                            }
                         }
-                    }
-                    
-                    RhythmButton {
-                        rhythmType: "half"
-                        displayText: "𝅗𝅥"
-                        isSelected: selectedRhythm === "half"
-                        onClicked: {
-                            selectedRhythm = "half"
-                            motifEditor.addRhythm("half")
+                        
+                        RhythmButton {
+                            rhythmType: "eighth"
+                            displayText: "⅛"
+                            isSelected: selectedRhythm === "eighth"
+                            onClicked: {
+                                selectedRhythm = "eighth"
+                                motifEditor.addRhythm("eighth")
+                            }
                         }
                     }
                 }
                 
                 // Rest and Tie toggles
-                Row {
-                    Layout.alignment: Qt.AlignHCenter
-                    spacing: 16
+                Item {
+                    Layout.fillWidth: true
+                    implicitHeight: restTieRow.height
+                    
+                    Row {
+                        id: restTieRow
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 16
                     
                     Button {
                         width: 100
@@ -304,6 +316,7 @@ Page {
                             font.pixelSize: 14
                         }
                     }
+                    }
                 }
             }
             
@@ -322,14 +335,20 @@ Page {
                 }
                 
                 // Play/Stop and Tempo
-                Row {
-                    Layout.alignment: Qt.AlignHCenter
-                    spacing: 12
+                Item {
+                    Layout.fillWidth: true
+                    implicitHeight: playbackRow.height
                     
-                    // Play/Stop button
-                    Button {
-                        width: 60
-                        height: 44
+                    Row {
+                        id: playbackRow
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 12
+                        
+                        // Play/Stop button (circular)
+                        Button {
+                        implicitWidth: 50
+                        implicitHeight: 50
+                        padding: 0
                         enabled: motifEditor.noteCount > 0
                         
                         onClicked: {
@@ -347,10 +366,10 @@ Page {
                         }
                         
                         background: Rectangle {
-                            radius: 8
-                            color: parent.pressed ? "#2E7D32" : (motifPlayer.isPlaying ? "#4CAF50" : "#2D2D2D")
-                            border.color: motifPlayer.isPlaying ? "#4CAF50" : "#3D3D3D"
-                            border.width: 2
+                            implicitWidth: 50
+                            implicitHeight: 50
+                            radius: width / 2
+                            color: parent.pressed ? "#2E7D32" : (motifPlayer.isPlaying ? "#4CAF50" : "#4A90E2")
                         }
                         
                         contentItem: Text {
@@ -362,15 +381,18 @@ Page {
                         }
                     }
                     
-                    // Loop toggle
+                    // Loop toggle (circular)
                     Button {
-                        width: 50
-                        height: 44
+                        implicitWidth: 44
+                        implicitHeight: 44
+                        padding: 0
                         
                         onClicked: motifPlayer.isLooping = !motifPlayer.isLooping
                         
                         background: Rectangle {
-                            radius: 8
+                            implicitWidth: 44
+                            implicitHeight: 44
+                            radius: width / 2
                             color: parent.pressed ? "#3D3D3D" : (motifPlayer.isLooping ? "#FF9800" : "#2D2D2D")
                             border.color: motifPlayer.isLooping ? "#FF9800" : "#3D3D3D"
                             border.width: 2
@@ -381,19 +403,22 @@ Page {
                             color: "white"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            font.pixelSize: 20
+                            font.pixelSize: 18
                         }
                     }
                     
-                    // Metronome toggle
+                    // Metronome toggle (circular)
                     Button {
-                        width: 50
-                        height: 44
+                        implicitWidth: 44
+                        implicitHeight: 44
+                        padding: 0
                         
                         onClicked: motifPlayer.metronomeEnabled = !motifPlayer.metronomeEnabled
                         
                         background: Rectangle {
-                            radius: 8
+                            implicitWidth: 44
+                            implicitHeight: 44
+                            radius: width / 2
                             color: parent.pressed ? "#3D3D3D" : (motifPlayer.metronomeEnabled ? "#9C27B0" : "#2D2D2D")
                             border.color: motifPlayer.metronomeEnabled ? "#9C27B0" : "#3D3D3D"
                             border.width: 2
@@ -404,7 +429,7 @@ Page {
                             color: "white"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            font.pixelSize: 18
+                            font.pixelSize: 16
                         }
                     }
                     
@@ -465,6 +490,7 @@ Page {
                                 font.pixelSize: 18
                             }
                         }
+                    }
                     }
                 }
             }
@@ -527,33 +553,125 @@ Page {
     }
     
     // Save Dialog
-    Dialog {
+    Rectangle {
+        id: saveDialogOverlay
+        anchors.fill: parent
+        color: "#80000000"
+        visible: saveDialog.visible
+        
+        MouseArea {
+            anchors.fill: parent
+            onClicked: saveDialog.close()
+        }
+    }
+    
+    Rectangle {
         id: saveDialog
         anchors.centerIn: parent
         width: 300
-        title: "Save Motif"
-        modal: true
+        height: 180
+        radius: 12
+        color: "#2D2D2D"
+        border.color: "#4A4A4A"
+        border.width: 1
+        visible: false
         
-        standardButtons: Dialog.Save | Dialog.Cancel
+        property bool isOpen: visible
         
-        TextField {
-            id: motifNameField
-            width: parent.width
-            placeholderText: "Motif name (optional)"
-            selectByMouse: true
-            
-            onAccepted: saveDialog.accept()
-        }
-        
-        onAccepted: {
+        function open() { visible = true; motifNameField.forceActiveFocus() }
+        function close() { visible = false }
+        function accept() { 
             motifEditor.saveMotif(motifNameField.text.trim())
             motifNameField.text = ""
             root.motifSaved()
             root.backRequested()
+            close()
         }
         
-        onOpened: {
-            motifNameField.forceActiveFocus()
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 20
+            spacing: 16
+            
+            Text {
+                text: "Save Motif"
+                color: "white"
+                font.pixelSize: 18
+                font.bold: true
+            }
+            
+            TextField {
+                id: motifNameField
+                Layout.fillWidth: true
+                Layout.preferredHeight: 44
+                leftPadding: 12
+                topPadding: 12
+                bottomPadding: 12
+                placeholderText: "Motif name (optional)"
+                placeholderTextColor: "#888888"
+                color: "white"
+                font.pixelSize: 16
+                selectByMouse: true
+                
+                background: Rectangle {
+                    color: "#1E1E1E"
+                    radius: 8
+                    border.color: motifNameField.activeFocus ? "#4A90E2" : "#4A4A4A"
+                    border.width: 1
+                }
+                
+                onAccepted: saveDialog.accept()
+            }
+            
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 12
+                
+                Button {
+                    Layout.fillWidth: true
+                    implicitHeight: 40
+                    text: "Cancel"
+                    
+                    onClicked: saveDialog.close()
+                    
+                    background: Rectangle {
+                        radius: 8
+                        color: parent.pressed ? "#3D3D3D" : "#2D2D2D"
+                        border.color: "#4A4A4A"
+                        border.width: 1
+                    }
+                    
+                    contentItem: Text {
+                        text: parent.text
+                        color: "white"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: 14
+                    }
+                }
+                
+                Button {
+                    Layout.fillWidth: true
+                    implicitHeight: 40
+                    text: "Save"
+                    
+                    onClicked: saveDialog.accept()
+                    
+                    background: Rectangle {
+                        radius: 8
+                        color: parent.pressed ? "#3A7BC8" : "#4A90E2"
+                    }
+                    
+                    contentItem: Text {
+                        text: parent.text
+                        color: "white"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: 14
+                        font.bold: true
+                    }
+                }
+            }
         }
     }
     

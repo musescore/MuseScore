@@ -94,17 +94,6 @@ Page {
                 }
             }
 
-            Text {
-                text: sectionData ? sectionData.lengthBars + " bars" : ""
-                color: "#AAAAAA"
-                font.pixelSize: 14
-                
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: lengthDialog.open()
-                }
-            }
-
             // Texture selector
             ComboBox {
                 id: textureSelector
@@ -185,6 +174,7 @@ Page {
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: "#252525"
+            clip: true
 
             ColumnLayout {
                 anchors.fill: parent
@@ -394,10 +384,13 @@ Page {
 
                 // Instructions
                 Text {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: "Tap timeline to add motif • Drag blocks to move • Tap block for options"
+                    Layout.fillWidth: true
+                    Layout.maximumWidth: parent.width
+                    text: "Tap timeline to add • Drag to move • Tap for options"
                     color: "#666666"
-                    font.pixelSize: 12
+                    font.pixelSize: 11
+                    horizontalAlignment: Text.AlignHCenter
+                    elide: Text.ElideRight
                 }
 
                 // Detailed Section Visualization (aligned with timeline above)
@@ -906,8 +899,9 @@ Page {
                 spacing: 20
 
                 Button {
-                    width: 50
-                    height: 50
+                    implicitWidth: 50
+                    implicitHeight: 50
+                    padding: 0
                     
                     property bool isAnyPlaying: motifPlayer.isPlaying || satbIsPlaying
                     
@@ -924,7 +918,9 @@ Page {
                     }
 
                     background: Rectangle {
-                        radius: 25
+                        implicitWidth: 50
+                        implicitHeight: 50
+                        radius: width / 2
                         color: parent.pressed ? "#3A7BC8" : (parent.isAnyPlaying ? "#4CAF50" : "#4A90E2")
                     }
 

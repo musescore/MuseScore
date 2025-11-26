@@ -446,63 +446,73 @@ Page {
                     font.pixelSize: 12
                 }
                 
-                ScrollView {
+                // Rhythm pattern with proportional spacing
+                Item {
+                    id: editRhythmContainer
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    clip: true
-                    ScrollBar.horizontal.policy: ScrollBar.AsNeeded
-                    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
                     
-                    Row {
-                        spacing: 12
+                    // Helper function to convert duration to beats
+                    function durationToBeats(dur) {
+                        switch(dur) {
+                            case "whole": return 4.0;
+                            case "dotted-half": return 3.0;
+                            case "half": return 2.0;
+                            case "dotted-quarter": return 1.5;
+                            case "quarter": return 1.0;
+                            case "dotted-eighth": return 0.75;
+                            case "eighth": return 0.5;
+                            case "sixteenth": return 0.25;
+                            default: return 1.0;
+                        }
+                    }
+                    
+                    // Calculate total beats
+                    property real totalBeats: {
+                        var total = 0;
+                        for (var i = 0; i < root.editableRhythmCells.length; i++) {
+                            total += durationToBeats(root.editableRhythmCells[i].duration);
+                        }
+                        return Math.max(total, 1);
+                    }
+                    property real beatWidth: (width - 20) / totalBeats
+                    
+                    Repeater {
+                        model: root.editableRhythmCells
                         
-                        Repeater {
-                            model: root.editableRhythmCells
+                        Item {
+                            // Calculate position and width based on beats
+                            property real cellBeats: editRhythmContainer.durationToBeats(modelData.duration)
+                            property real startBeat: {
+                                var start = 0;
+                                for (var i = 0; i < index; i++) {
+                                    start += editRhythmContainer.durationToBeats(root.editableRhythmCells[i].duration);
+                                }
+                                return start;
+                            }
                             
-                            Column {
-                                spacing: 2
-                                
-                                Text {
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    text: {
-                                        var isRest = modelData.isRest || false;
-                                        if (isRest) return "—";
-                                        switch(modelData.duration) {
-                                            case "whole": return "○";
-                                            case "half": return "◐";
-                                            case "dotted-half": return "◐.";
-                                            case "quarter": return "●";
-                                            case "dotted-quarter": return "●.";
-                                            case "eighth": return "♪";
-                                            case "dotted-eighth": return "♪.";
-                                            case "sixteenth": return "♬";
-                                            default: return "●";
-                                        }
+                            x: 10 + startBeat * editRhythmContainer.beatWidth
+                            width: cellBeats * editRhythmContainer.beatWidth
+                            height: editRhythmContainer.height
+                            
+                            Text {
+                                anchors.left: parent.left
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: {
+                                    switch(modelData.duration) {
+                                        case "whole": return "1";
+                                        case "half": return "½";
+                                        case "dotted-half": return "½.";
+                                        case "quarter": return "¼";
+                                        case "dotted-quarter": return "¼.";
+                                        case "eighth": return "⅛";
+                                        case "dotted-eighth": return "⅛.";
+                                        case "sixteenth": return "¹⁄₁₆";
+                                        default: return "¼";
                                     }
-                                    color: (modelData.isRest || false) ? "#888888" : "white"
-                                    font.pixelSize: 18
                                 }
-                                
-                                Text {
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    text: {
-                                        var isRest = modelData.isRest || false;
-                                        var prefix = isRest ? "R:" : "";
-                                        switch(modelData.duration) {
-                                            case "whole": return prefix + "1";
-                                            case "dotted-half": return prefix + "2.";
-                                            case "half": return prefix + "2";
-                                            case "dotted-quarter": return prefix + "4.";
-                                            case "quarter": return prefix + "4";
-                                            case "dotted-eighth": return prefix + "8.";
-                                            case "eighth": return prefix + "8";
-                                            case "sixteenth": return prefix + "16";
-                                            default: return prefix + "4";
-                                        }
-                                    }
-                                    color: "#AAAAAA"
-                                    font.pixelSize: 10
-                                }
+                                color: (modelData.isRest || false) ? "#888888" : "white"
+                                font.pixelSize: 18
                             }
                         }
                     }
