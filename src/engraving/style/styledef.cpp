@@ -439,6 +439,13 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(displayCapoChords,                          int(DisplayCapoChordType::CONCERT)),
     styleDef(capoPosition,                               PropertyValue(0)),
+    styleDef(capoChordDisplayMode,                       int(CapoChordDisplayMode::INLINE)),
+    styleDef(capoChordParenthesized,                     true),
+    styleDef(capoChordTextStyle,                         TextStyleType::HARMONY_B),
+    styleDef(capoChordStackedSpacing,                    0.8_sp),
+    styleDef(capoLabelVisible,                           true),
+    styleDef(capoLabelFormat,                            String(u"Capo %1:")),
+    styleDef(capoLabelTextStyle,                         TextStyleType::HARMONY_B),
     styleDef(fretNumMag,                                 PropertyValue(2.0)), // DEPRECATED
     styleDef(fretNumPos,                                 PropertyValue(0)),
     styleDef(fretY,                                      1.0_sp),

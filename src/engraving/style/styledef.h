@@ -452,6 +452,13 @@ enum class Sid : short {
 
     displayCapoChords,
     capoPosition,
+    capoChordDisplayMode,      // CapoChordDisplayMode enum
+    capoChordParenthesized,    // bool - show parens in STACKED mode
+    capoChordTextStyle,        // TextStyleType for capo chord (default HARMONY_B)
+    capoChordStackedSpacing,   // Spatium gap between chords in STACKED mode
+    capoLabelVisible,          // bool - show "Capo N:" label
+    capoLabelFormat,           // String format (default "Capo %1:")
+    capoLabelTextStyle,        // TextStyleType for label (default HARMONY_B)
     fretNumMag,
     fretNumPos,
     fretY,
