@@ -39,3 +39,42 @@ lib/
 *.dll
 *.exe
 *.app/
+
+# Mobile build directories
+build-ios-*/
+build-android-*/
+
+# iOS
+*.xcworkspace/
+xcuserdata/
+*.xcuserstate
+*.ipa
+*.dSYM.zip
+*.dSYM/
+
+# Android
+*.apk
+*.aab
+*.ap_
+*.dex
+local.properties
+app/android/libs/
+app/android/.gradle/
+app/android/build/
+app/android/.cxx/
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+
+# Android Studio
+*.iml
+.externalNativeBuild/
+.cxx/
+
+# Qt for mobile
+*_autogen/
+*_qmltyperegistrations.cpp
+android-build/
+.qt/

@@ -11,6 +11,7 @@ Page {
     property var sketchData: null
     property string currentTexture: "MelodyOnly"
     property bool hasSATB: false
+    property int satbVersion: 0  // Increment to force SATB visualization refresh
     
     // Playhead state
     property real playheadBeat: 0
@@ -61,9 +62,8 @@ Page {
         if (sectionVisualization) {
             sectionVisualization.updateTimeline()
         }
-        if (satbVisualization) {
-            satbVisualization.requestPaint()
-        }
+        // Increment version to trigger repaint of all SATB canvases
+        satbVersion++
     }
 
     header: ToolBar {
@@ -626,12 +626,16 @@ Page {
 
                                         // Voice visualization
                                         Canvas {
-                                            id: satbVisualization
+                                            id: satbVoiceCanvas
                                             width: parent.width - 80
                                             height: parent.height
 
                                             property int voiceIndex: modelData.voiceIndex
                                             property string voiceColor: modelData.color
+                                            
+                                            // Repaint when satbVersion changes
+                                            property int version: root.satbVersion
+                                            onVersionChanged: requestPaint()
 
                                             onPaint: {
                                                 var ctx = getContext("2d");

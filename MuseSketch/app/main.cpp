@@ -8,6 +8,7 @@
 #include <QQmlContext>
 #include <QQuickImageProvider>
 #include <QStandardPaths>
+#include <QDir>
 
 class ScoreImageProvider : public QQuickImageProvider {
 public:
@@ -44,8 +45,22 @@ int main(int argc, char *argv[]) {
   ExportEngine exportEngine;
   engine.rootContext()->setContextProperty("exportEngine", &exportEngine);
   
-  // Expose download path to QML
-  QString downloadPath = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+  // Expose export path to QML
+  // On iOS, use Documents directory (accessible via Files app)
+  // On desktop, use Downloads directory
+  QString downloadPath;
+#if defined(Q_OS_IOS)
+  downloadPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+#else
+  downloadPath = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+#endif
+  
+  // Ensure the directory exists
+  QDir dir(downloadPath);
+  if (!dir.exists()) {
+      dir.mkpath(".");
+  }
+  
   engine.rootContext()->setContextProperty("downloadPath", downloadPath);
 
   const QUrl url(u"qrc:/MuseSketch/Main.qml"_qs);
