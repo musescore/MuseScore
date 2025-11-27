@@ -3434,9 +3434,9 @@ void Score::cmdMoveRest(Rest* rest, DirectionV dir)
 {
     PointF pos(rest->offset());
     if (dir == DirectionV::UP) {
-        pos.ry() -= style().spatium();
+        pos.ry() -= rest->spatium() * rest->staffType()->lineDistance().val();
     } else if (dir == DirectionV::DOWN) {
-        pos.ry() += style().spatium();
+        pos.ry() += rest->spatium() * rest->staffType()->lineDistance().val();
     }
     rest->undoChangeProperty(Pid::OFFSET, pos);
 }
