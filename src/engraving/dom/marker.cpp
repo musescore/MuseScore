@@ -148,16 +148,6 @@ String Marker::markerTypeUserName() const
 }
 
 //---------------------------------------------------------
-//   styleChanged
-//---------------------------------------------------------
-
-void Marker::styleChanged()
-{
-    setMarkerType(m_markerType);
-    TextBase::styleChanged();
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
