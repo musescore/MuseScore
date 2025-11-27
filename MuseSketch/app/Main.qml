@@ -212,6 +212,21 @@ ApplicationWindow {
                 onEditSectionRequested: function(sectionId) {
                     stackView.push(sectionEditorViewComponent, { sketchId: sketchId, sectionId: sectionId })
                 }
+                onExportRequested: {
+                    stackView.push(exportViewComponent, { 
+                        sketchId: sketchId, 
+                        sketchName: sketchData ? sketchData.name : "Sketch" 
+                    })
+                }
+            }
+        }
+        
+        // Export View Component
+        Component {
+            id: exportViewComponent
+            
+            ExportView {
+                onBack: stackView.pop()
             }
         }
         

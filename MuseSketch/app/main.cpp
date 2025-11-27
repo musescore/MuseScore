@@ -1,3 +1,4 @@
+#include "ExportEngine.h"
 #include "MotifEditorController.h"
 #include "MotifPlayer.h"
 #include "ScoreEngine.h"
@@ -6,6 +7,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickImageProvider>
+#include <QStandardPaths>
 
 class ScoreImageProvider : public QQuickImageProvider {
 public:
@@ -37,6 +39,14 @@ int main(int argc, char *argv[]) {
   // Create and register MotifPlayer
   MotifPlayer motifPlayer;
   engine.rootContext()->setContextProperty("motifPlayer", &motifPlayer);
+
+  // Create and register ExportEngine
+  ExportEngine exportEngine;
+  engine.rootContext()->setContextProperty("exportEngine", &exportEngine);
+  
+  // Expose download path to QML
+  QString downloadPath = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+  engine.rootContext()->setContextProperty("downloadPath", downloadPath);
 
   const QUrl url(u"qrc:/MuseSketch/Main.qml"_qs);
   QObject::connect(

@@ -15,6 +15,7 @@ Page {
     signal createMotifRequested()
     signal editMotifRequested(string motifId)
     signal editSectionRequested(string sectionId)
+    signal exportRequested()
     
     Component.onCompleted: {
         loadSketch()
@@ -32,12 +33,25 @@ Page {
         
         RowLayout {
             anchors.fill: parent
+            anchors.leftMargin: 8
+            anchors.rightMargin: 8
             spacing: 8
             
             ToolButton {
                 text: "←"
                 font.pixelSize: 24
                 onClicked: root.backRequested()
+                
+                contentItem: Text {
+                    text: parent.text
+                    color: "#4A90E2"
+                    font: parent.font
+                    verticalAlignment: Text.AlignVCenter
+                }
+                
+                background: Rectangle {
+                    color: "transparent"
+                }
             }
             
             Text {
@@ -46,6 +60,26 @@ Page {
                 color: "white"
                 font.pixelSize: 20
                 font.bold: true
+            }
+            
+            Button {
+                text: "Export"
+                font.pixelSize: 14
+                
+                onClicked: root.exportRequested()
+                
+                background: Rectangle {
+                    radius: 6
+                    color: parent.pressed ? "#3A7BC8" : "#4A90E2"
+                }
+                
+                contentItem: Text {
+                    text: parent.text
+                    color: "white"
+                    font: parent.font
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
             }
         }
     }
@@ -103,21 +137,21 @@ Page {
         
         // Motif Library Header
         RowLayout {
-            Layout.fillWidth: true
-            spacing: 12
-            
-            Text {
+                Layout.fillWidth: true
+                spacing: 12
+                
+                Text {
                 text: "Motif Library"
-                color: "white"
-                font.pixelSize: 18
-                font.bold: true
-            }
-            
-            Text {
-                text: "(" + (sketchData && sketchData.motifs ? sketchData.motifs.length : 0) + ")"
-                color: "#AAAAAA"
-                font.pixelSize: 18
-            }
+                    color: "white"
+                    font.pixelSize: 18
+                    font.bold: true
+                }
+                
+                Text {
+                    text: "(" + (sketchData && sketchData.motifs ? sketchData.motifs.length : 0) + ")"
+                    color: "#AAAAAA"
+                    font.pixelSize: 18
+                }
             
             Item { Layout.fillWidth: true }
             
@@ -139,25 +173,25 @@ Page {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
+                }
             }
-        }
-        
-        // Motifs List
-        ListView {
-            id: motifsListView
-            Layout.fillWidth: true
-            Layout.fillHeight: true
             
-            model: sketchData && sketchData.motifs ? sketchData.motifs : []
-            spacing: 8
-            clip: true
-            
-            delegate: Rectangle {
+            // Motifs List
+            ListView {
+                id: motifsListView
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                
+                model: sketchData && sketchData.motifs ? sketchData.motifs : []
+                spacing: 8
+                clip: true
+                
+                delegate: Rectangle {
                 id: motifDelegate
-                width: motifsListView.width
+                    width: motifsListView.width
                 height: 100
                 color: motifMouseArea.pressed ? "#3D3D3D" : "#2D2D2D"
-                radius: 8
+                    radius: 8
                 
                 property var motif: modelData
                 property bool showActions: false
@@ -176,17 +210,17 @@ Page {
                         motifDelegate.showActions = !motifDelegate.showActions
                     }
                 }
-                
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 12
                     
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.margins: 12
+                        spacing: 12
+                        
                     // Mini motif preview
-                    Rectangle {
+                        Rectangle {
                         Layout.preferredWidth: 76
                         Layout.preferredHeight: 76
-                        radius: 8
+                            radius: 8
                         color: "#1E1E1E"
                         
                         Canvas {
@@ -264,16 +298,16 @@ Page {
                     }
                     
                     // Motif info
-                    ColumnLayout {
-                        Layout.fillWidth: true
-                        spacing: 4
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 4
                         visible: !motifDelegate.showActions
-                        
-                        Text {
-                            text: modelData.name
-                            color: "white"
-                            font.pixelSize: 16
-                            font.bold: true
+                            
+                            Text {
+                                text: modelData.name
+                                color: "white"
+                                font.pixelSize: 16
+                                font.bold: true
                             elide: Text.ElideRight
                             Layout.fillWidth: true
                         }
@@ -378,7 +412,7 @@ Page {
                     }
                     
                     // Close actions button
-                    Text {
+                            Text {
                         visible: motifDelegate.showActions
                         text: "✕"
                         color: "#888888"
@@ -388,24 +422,24 @@ Page {
                             anchors.fill: parent
                             anchors.margins: -8
                             onClicked: motifDelegate.showActions = false
+                            }
                         }
                     }
                 }
-            }
-            
-            // Empty state
-            Rectangle {
-                anchors.fill: parent
-                visible: motifsListView.count === 0
-                color: "#2D2D2D"
-                radius: 8
                 
-                Text {
-                    anchors.centerIn: parent
-                    text: "No motifs yet\nTap + to create one"
-                    color: "#666666"
-                    font.pixelSize: 16
-                    horizontalAlignment: Text.AlignHCenter
+                // Empty state
+                Rectangle {
+                    anchors.fill: parent
+                    visible: motifsListView.count === 0
+                    color: "#2D2D2D"
+                    radius: 8
+                    
+                    Text {
+                        anchors.centerIn: parent
+                        text: "No motifs yet\nTap + to create one"
+                        color: "#666666"
+                        font.pixelSize: 16
+                        horizontalAlignment: Text.AlignHCenter
                 }
             }
         }
@@ -420,7 +454,7 @@ Page {
                 text: "Sections"
                 color: "white"
                 font.pixelSize: 18
-                font.bold: true
+            font.bold: true
             }
             
             Text {
@@ -436,18 +470,18 @@ Page {
                 font.pixelSize: 12
                 
                 onClicked: newSectionDialog.open()
-                
-                background: Rectangle {
+            
+            background: Rectangle {
                     radius: 4
-                    color: parent.pressed ? "#3A7BC8" : "#4A90E2"
-                }
-                
-                contentItem: Text {
-                    text: parent.text
-                    color: "white"
+                color: parent.pressed ? "#3A7BC8" : "#4A90E2"
+            }
+            
+            contentItem: Text {
+                text: parent.text
+                color: "white"
                     font: parent.font
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
                 }
             }
         }
