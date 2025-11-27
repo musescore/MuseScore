@@ -1303,7 +1303,7 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         return;
     }
 
-    if (ctx.element->isMeasure() && event->modifiers() == Qt::NoModifier) {
+    if (ctx.element->findMeasure() && event->modifiers() == Qt::NoModifier) {
         dispatcher()->dispatch("note-input", ActionData::make_arg1<PointF>(m_mouseDownInfo.logicalBeginPoint));
         return;
     }
