@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UPDATE_UPDATEERRORS_H
-#define MUSE_UPDATE_UPDATEERRORS_H
+
+#pragma once
 
 #include "types/ret.h"
 
@@ -31,13 +31,12 @@ enum class Err {
     UnknownError    = int(muse::Ret::Code::UpdateFirst),
 
     NoUpdate,
-    NetworkError
+    NetworkError,
+    ReleaseInfoParseError,
 };
 
-inline muse::Ret make_ret(Err e)
+inline muse::Ret make_ret(Err e, const std::string& text = {})
 {
-    return muse::Ret(static_cast<int>(e));
+    return muse::Ret(static_cast<int>(e), text);
 }
 }
-
-#endif // MUSE_UPDATE_UPDATEERRORS_H

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,20 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UPDATE_UPDATESCENARIO_H
-#define MUSE_UPDATE_UPDATESCENARIO_H
 
+#pragma once
+
+#include "update/iupdatescenario.h"
 #include "async/asyncable.h"
-#include "progress.h"
-
 #include "modularity/ioc.h"
+
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
-#include "../iupdateconfiguration.h"
-#include "../iappupdateservice.h"
+#include "update/iupdateconfiguration.h"
+#include "update/iappupdateservice.h"
 
-#include "../iupdatescenario.h"
+#include "progress.h"
 
 namespace muse::update {
 class UpdateScenario : public IUpdateScenario, public Injectable, public async::Asyncable
@@ -41,7 +41,6 @@ class UpdateScenario : public IUpdateScenario, public Injectable, public async::
     Inject<actions::IActionsDispatcher> dispatcher = { this };
     Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
     Inject<IUpdateConfiguration> configuration = { this };
-
     Inject<IAppUpdateService> service = { this };
 
 public:
@@ -55,15 +54,10 @@ public:
     muse::async::Promise<Ret> showUpdate() override;  // NOTE: Resolves to "OK" if the user wants to close and complete install of update...
 
 private:
-    bool isCheckInProgress() const;
-
-    void th_checkForUpdate();
-
     muse::async::Promise<Ret> processUpdateError(int errorCode);
 
     async::Promise<IInteractive::Result> showNoUpdateMsg();
     muse::async::Promise<Ret> showReleaseInfo(const ReleaseInfo& info);
-
     async::Promise<IInteractive::Result> showServerErrorMsg();
 
     muse::async::Promise<Ret> downloadRelease();
@@ -72,8 +66,5 @@ private:
     bool shouldIgnoreUpdate(const ReleaseInfo& info) const;
 
     bool m_checkInProgress = false;
-    ProgressPtr m_checkProgressChannel = nullptr;
 };
 }
-
-#endif // MUSE_UPDATE_UPDATESCENARIO_H

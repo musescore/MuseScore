@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,27 +23,22 @@
 
 using namespace muse;
 using namespace muse::update;
+using namespace muse::async;
 
-RetVal<ReleaseInfo> UpdateServiceStub::checkForUpdate()
+Promise<RetVal<ReleaseInfo> > UpdateServiceStub::checkForUpdate()
 {
-    return make_ret(Ret::Code::NotSupported);
+    return Promise<RetVal<ReleaseInfo> >([this](auto resolve, auto) {
+        return resolve(make_ret(Ret::Code::NotSupported));
+    });
 }
 
-RetVal<ReleaseInfo> UpdateServiceStub::lastCheckResult() const
+const RetVal<ReleaseInfo>& UpdateServiceStub::lastCheckResult() const
 {
-    return make_ret(Ret::Code::NotSupported);
+    static const auto dummyInfo = RetVal<ReleaseInfo>::make_ret(Ret::Code::NotSupported);
+    return dummyInfo;
 }
 
-RetVal<io::path_t> UpdateServiceStub::downloadRelease()
+RetVal<Progress> UpdateServiceStub::downloadRelease()
 {
-    return make_ret(Ret::Code::NotSupported);
-}
-
-void UpdateServiceStub::cancelUpdate()
-{
-}
-
-Progress UpdateServiceStub::updateProgress()
-{
-    return Progress();
+    return RetVal<Progress>::make_ret(Ret::Code::NotSupported);
 }

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,14 +22,9 @@
 
 #include "updatescenario.h"
 
-#include <QTimer>
-
-#include "global/concurrency/concurrent.h"
-
 #include "updateerrors.h"
 
 #include "types/val.h"
-
 #include "translation.h"
 #include "defer.h"
 #include "log.h"
@@ -37,89 +32,68 @@
 using namespace muse;
 using namespace muse::update;
 using namespace muse::actions;
+using namespace muse::async;
 
 bool UpdateScenario::needCheckForUpdate() const
 {
     return configuration()->needCheckForUpdate();
 }
 
-muse::async::Promise<Ret> UpdateScenario::checkForUpdate(bool manual)
+Promise<Ret> UpdateScenario::checkForUpdate(bool manual)
 {
-    return async::make_promise<Ret>([this, manual](auto resolve, auto) {
-        m_checkProgressChannel = std::make_shared<Progress>();
-        m_checkProgressChannel->started().onNotify(this, [this]() {
-            m_checkInProgress = true;
+    if (m_checkInProgress) {
+        return async::make_promise<Ret>([](auto resolve, auto) {
+            const int code = (int)Ret::Code::UnknownError;
+            return resolve(muse::make_ret(code, "Check already in progress"));
         });
+    }
 
-        if (isCheckInProgress()) {
-            LOGE() << "Check already in progress";
-            const Ret ret = muse::make_ret(Ret::Code::UnknownError);
-            return resolve(ret);
+    m_checkInProgress = true;
+
+    return service()->checkForUpdate().then<Ret>(this, [this, manual](const RetVal<ReleaseInfo>& res, auto resolve) {
+        Ret ret = res.ret;
+
+        const bool noUpdate = ret.code() == static_cast<int>(Err::NoUpdate);
+        if (noUpdate) {
+            ret = make_ok();
         }
 
-        m_checkProgressChannel = std::make_shared<Progress>();
-        m_checkProgressChannel->started().onNotify(this, [this]() {
-            m_checkInProgress = true;
-        });
-
-        m_checkProgressChannel->finished().onReceive(this, [this, manual, resolve](const ProgressResult& res) {
-            Ret ret = muse::make_ok();
-            DEFER {
-                m_checkInProgress = false;
-                (void)resolve(ret);
-            };
-
-            const bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
-            if (!noUpdate && !res.ret) {
-                LOGE() << "Unable to check for app update, error: " << res.ret.toString();
-                ret = muse::make_ret(Ret::Code::UnknownError);
-
-                if (manual) {
-                    showServerErrorMsg();
-                }
-
-                return;
-            }
-
-            if (!manual) {
-                return;
-            }
-
-            const ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
+        if (manual) {
             if (noUpdate) {
                 showNoUpdateMsg();
+            } else if (!res.ret) {
+                showServerErrorMsg();
             } else {
-                showReleaseInfo(info);
+                showReleaseInfo(res.val);
             }
-        });
+        }
 
-        Concurrent::run(this, &UpdateScenario::th_checkForUpdate);
-        return muse::async::Promise<Ret>::dummy_result();
+        m_checkInProgress = false;
+        return resolve(ret);
     });
 }
 
 bool UpdateScenario::hasUpdate() const
 {
-    if (isCheckInProgress()) {
+    if (m_checkInProgress) {
         return false;
     }
 
-    const RetVal<ReleaseInfo> lastCheckResult = service()->lastCheckResult();
+    const RetVal<ReleaseInfo>& lastCheckResult = service()->lastCheckResult();
     if (!lastCheckResult.ret) {
         return false;
     }
 
-    bool noUpdate = lastCheckResult.ret.code() == static_cast<int>(Err::NoUpdate);
-    if (noUpdate) {
+    if (lastCheckResult.ret.code() == static_cast<int>(Err::NoUpdate)) {
         return false;
     }
 
     return !shouldIgnoreUpdate(lastCheckResult.val);
 }
 
-muse::async::Promise<Ret> UpdateScenario::showUpdate()
+Promise<Ret> UpdateScenario::showUpdate()
 {
-    const RetVal<ReleaseInfo> lastCheckResult = service()->lastCheckResult();
+    const RetVal<ReleaseInfo>& lastCheckResult = service()->lastCheckResult();
     if (lastCheckResult.ret) {
         return showReleaseInfo(lastCheckResult.val);
     }
@@ -128,25 +102,7 @@ muse::async::Promise<Ret> UpdateScenario::showUpdate()
     });
 }
 
-bool UpdateScenario::isCheckInProgress() const
-{
-    return m_checkInProgress;
-}
-
-void UpdateScenario::th_checkForUpdate()
-{
-    m_checkProgressChannel->start();
-
-    RetVal<ReleaseInfo> retVal = service()->checkForUpdate();
-
-    RetVal<Val> result;
-    result.ret = retVal.ret;
-    result.val = Val(releaseInfoToValMap(retVal.val));
-
-    m_checkProgressChannel->finish(result);
-}
-
-muse::async::Promise<Ret> UpdateScenario::processUpdateError(int errorCode)
+Promise<Ret> UpdateScenario::processUpdateError(int errorCode)
 {
     const auto unknownError = async::make_promise<Ret>([](auto resolve, auto) {
         return resolve(muse::make_ret(Ret::Code::UnknownError));
@@ -169,7 +125,7 @@ muse::async::Promise<Ret> UpdateScenario::processUpdateError(int errorCode)
     });
 }
 
-async::Promise<IInteractive::Result> UpdateScenario::showNoUpdateMsg()
+Promise<IInteractive::Result> UpdateScenario::showNoUpdateMsg()
 {
     const QString str = muse::qtrc("update", "You already have the latest version of MuseScore Studio. "
                                              "Please visit <a href=\"%1\">MuseScore.org</a> for news on what’s coming next.")
@@ -182,7 +138,7 @@ async::Promise<IInteractive::Result> UpdateScenario::showNoUpdateMsg()
                                IInteractive::Option::WithIcon);
 }
 
-muse::async::Promise<Ret> UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
+Promise<Ret> UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
 {
     UriQuery query("muse://update/appreleaseinfo");
     query.addParam("notes", Val(info.notes));
@@ -206,17 +162,17 @@ muse::async::Promise<Ret> UpdateScenario::showReleaseInfo(const ReleaseInfo& inf
             (void)resolve(ret);
         });
 
-        return muse::async::Promise<Ret>::dummy_result();
+        return Promise<Ret>::dummy_result();
     });
 }
 
-async::Promise<IInteractive::Result> UpdateScenario::showServerErrorMsg()
+Promise<IInteractive::Result> UpdateScenario::showServerErrorMsg()
 {
     return interactive()->error(muse::trc("update", "Cannot connect to server"),
                                 muse::trc("update", "Sorry - please try again later"));
 }
 
-muse::async::Promise<Ret> UpdateScenario::downloadRelease()
+Promise<Ret> UpdateScenario::downloadRelease()
 {
     RetVal<Val> rv = interactive()->openSync("muse://update?mode=download");
     if (!rv.ret) {
@@ -225,7 +181,7 @@ muse::async::Promise<Ret> UpdateScenario::downloadRelease()
     return askToCloseAppAndCompleteInstall(rv.val.toString());
 }
 
-muse::async::Promise<Ret> UpdateScenario::askToCloseAppAndCompleteInstall(const muse::io::path_t& installerPath)
+Promise<Ret> UpdateScenario::askToCloseAppAndCompleteInstall(const io::path_t& installerPath)
 {
     const std::string info = muse::trc("update", "MuseScore Studio needs to close to complete the installation. "
                                                  "If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.");

@@ -39,13 +39,19 @@ using ::testing::Return;
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
 
+#include "async/processevents.h"
+#include "async/async.h"
+
 using namespace muse;
 using namespace muse::update;
+using namespace muse::async;
+using namespace muse::network;
 
 namespace muse::update {
-class AppUpdateServiceTests : public ::testing::Test
+class AppUpdateServiceTests : public ::testing::Test, public ::async::Asyncable
 {
     muse::GlobalInject<muse::IApplication> application;
+
 public:
     void SetUp() override
     {
@@ -57,8 +63,8 @@ public:
         m_networkManagerCreator = std::make_shared<NiceMock<muse::network::NetworkManagerCreatorMock> >();
         m_service->networkManagerCreator.set(m_networkManagerCreator);
 
-        m_networkManager = std::make_shared<muse::network::deprecated::NetworkManagerMock>();
-        ON_CALL(*m_networkManagerCreator, makeDeprecatedNetworkManager())
+        m_networkManager = std::make_shared<muse::network::NetworkManagerMock>();
+        ON_CALL(*m_networkManagerCreator, makeNetworkManager())
         .WillByDefault(Return(m_networkManager));
 
         m_systemInfoMock = std::make_shared<NiceMock<SystemInfoMock> >();
@@ -73,7 +79,7 @@ public:
         delete m_service;
     }
 
-    void makeReleaseInfo() const
+    void makeReleaseInfo()
     {
         std::string checkForAppUpdateUrl = "checkForAppUpdateUrl";
         EXPECT_CALL(*m_configuration, checkForAppUpdateUrl())
@@ -94,16 +100,16 @@ public:
 
         EXPECT_CALL(*m_networkManager, get(QUrl(QString::fromStdString(checkForAppUpdateUrl)), _, _))
         .WillOnce(testing::Invoke(
-                      [releasesNotes](const QUrl&, muse::network::IncomingDevice* buf, const muse::network::RequestHeaders&) {
+                      [this, releasesNotes](const QUrl&, IncomingDevicePtr buf, const RequestHeaders&) {
             buf->open(muse::network::IncomingDevice::WriteOnly);
             buf->write(releasesNotes.toUtf8());
             buf->close();
 
-            return muse::make_ok();
+            return muse::RetVal<Progress>::make_ok(m_getReleaseInfoProgress);
         }));
     }
 
-    void makePreviousReleasesNotes() const
+    void makePreviousReleasesNotes()
     {
         std::string previousAppReleasesNotesUrl = "previousAppReleasesNotesUrl";
         EXPECT_CALL(*m_configuration, previousAppReleasesNotesUrl())
@@ -121,22 +127,24 @@ public:
 
         EXPECT_CALL(*m_networkManager, get(QUrl(QString::fromStdString(previousAppReleasesNotesUrl)), _, _))
         .WillOnce(testing::Invoke(
-                      [releasesNotes](const QUrl&, muse::network::IncomingDevice* buf, const muse::network::RequestHeaders&) {
+                      [this, releasesNotes](const QUrl&, IncomingDevicePtr buf, const RequestHeaders&) {
             buf->open(muse::network::IncomingDevice::WriteOnly);
             buf->write(releasesNotes.toUtf8());
             buf->close();
 
-            return muse::make_ok();
+            return muse::RetVal<Progress>::make_ok(m_getPrevReleasesInfoProgress);
         }));
     }
 
     AppUpdateService* m_service = nullptr;
     std::shared_ptr<UpdateConfigurationMock> m_configuration;
-
     std::shared_ptr<muse::network::NetworkManagerCreatorMock> m_networkManagerCreator;
-    std::shared_ptr<muse::network::deprecated::NetworkManagerMock> m_networkManager;
+    std::shared_ptr<muse::network::NetworkManagerMock> m_networkManager;
     std::shared_ptr<SystemInfoMock> m_systemInfoMock;
+    Progress m_getReleaseInfoProgress;
+    Progress m_getPrevReleasesInfoProgress;
 };
+}
 
 TEST_F(AppUpdateServiceTests, ParseRelease_Linux_x86_64)
 {
@@ -152,7 +160,19 @@ TEST_F(AppUpdateServiceTests, ParseRelease_Linux_x86_64)
     .WillByDefault(Return(ISystemInfo::CpuArchitecture::x86_64));
 
     //! [WHEN] Check for update
-    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal;
+    m_service->checkForUpdate().onResolve(this, [&retVal](const RetVal<ReleaseInfo>& res) {
+        retVal = res;
+    });
+
+    //! [WHEN] Process messages
+    async::processMessages();
+
+    //! [WHEN] Successfully downloaded release info
+    m_getReleaseInfoProgress.finish(ProgressResult::make_ok({}));
+
+    //! [WHEN] Successfully downloaded previous releases info
+    m_getPrevReleasesInfoProgress.finish(ProgressResult::make_ok({}));
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
@@ -173,7 +193,19 @@ TEST_F(AppUpdateServiceTests, ParseRelease_Linux_arm)
     .WillByDefault(Return(ISystemInfo::CpuArchitecture::Arm));
 
     //! [WHEN] Check for update
-    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal;
+    m_service->checkForUpdate().onResolve(this, [&retVal](const RetVal<ReleaseInfo>& res) {
+        retVal = res;
+    });
+
+    //! [WHEN] Process messages
+    async::processMessages();
+
+    //! [WHEN] Successfully downloaded release info
+    m_getReleaseInfoProgress.finish(ProgressResult::make_ok({}));
+
+    //! [WHEN] Successfully downloaded previous releases info
+    m_getPrevReleasesInfoProgress.finish(ProgressResult::make_ok({}));
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
@@ -194,7 +226,19 @@ TEST_F(AppUpdateServiceTests, ParseRelease_Linux_aarch64)
     .WillByDefault(Return(ISystemInfo::CpuArchitecture::Arm64));
 
     //! [WHEN] Check for update
-    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal;
+    m_service->checkForUpdate().onResolve(this, [&retVal](const RetVal<ReleaseInfo>& res) {
+        retVal = res;
+    });
+
+    //! [WHEN] Process messages
+    async::processMessages();
+
+    //! [WHEN] Successfully downloaded release info
+    m_getReleaseInfoProgress.finish(ProgressResult::make_ok({}));
+
+    //! [WHEN] Successfully downloaded previous releases info
+    m_getPrevReleasesInfoProgress.finish(ProgressResult::make_ok({}));
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
@@ -215,7 +259,19 @@ TEST_F(AppUpdateServiceTests, ParseRelease_Linux_Unknown)
     .WillByDefault(Return(ISystemInfo::CpuArchitecture::Unknown));
 
     //! [WHEN] Check for update
-    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal;
+    m_service->checkForUpdate().onResolve(this, [&retVal](const RetVal<ReleaseInfo>& res) {
+        retVal = res;
+    });
+
+    //! [WHEN] Process messages
+    async::processMessages();
+
+    //! [WHEN] Successfully downloaded release info
+    m_getReleaseInfoProgress.finish(ProgressResult::make_ok({}));
+
+    //! [WHEN] Successfully downloaded previous releases info
+    m_getPrevReleasesInfoProgress.finish(ProgressResult::make_ok({}));
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
@@ -236,7 +292,19 @@ TEST_F(AppUpdateServiceTests, ParseRelease_Windows)
     .Times(1);
 
     //! [WHEN] Check for update
-    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal;
+    m_service->checkForUpdate().onResolve(this, [&retVal](const RetVal<ReleaseInfo>& res) {
+        retVal = res;
+    });
+
+    //! [WHEN] Process messages
+    async::processMessages();
+
+    //! [WHEN] Successfully downloaded release info
+    m_getReleaseInfoProgress.finish(ProgressResult::make_ok({}));
+
+    //! [WHEN] Successfully downloaded previous releases info
+    m_getPrevReleasesInfoProgress.finish(ProgressResult::make_ok({}));
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
@@ -257,7 +325,19 @@ TEST_F(AppUpdateServiceTests, ParseRelease_MacOS)
     .Times(1);
 
     //! [WHEN] Check for update
-    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal;
+    m_service->checkForUpdate().onResolve(this, [&retVal](const RetVal<ReleaseInfo>& res) {
+        retVal = res;
+    });
+
+    //! [WHEN] Process messages
+    async::processMessages();
+
+    //! [WHEN] Successfully downloaded release info
+    m_getReleaseInfoProgress.finish(ProgressResult::make_ok({}));
+
+    //! [WHEN] Successfully downloaded previous releases info
+    m_getPrevReleasesInfoProgress.finish(ProgressResult::make_ok({}));
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
@@ -271,16 +351,27 @@ TEST_F(AppUpdateServiceTests, CheckForUpdate_ReleasesNotes)
     makePreviousReleasesNotes();
 
     //! [THEN] Versions should be in correct order and don't contain current version
-    PrevReleasesNotesList expectedReleasesNotes = {
+    PrevReleasesNotesList expectedReleasesNotes {
         { "40000.3", "blabla3" },
         { "40000.4", "blabla4" },
     };
 
     //! [WHEN] Check for update
-    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal;
+    m_service->checkForUpdate().onResolve(this, [&retVal](const RetVal<ReleaseInfo>& res) {
+        retVal = res;
+    });
+
+    //! [WHEN] Process messages
+    async::processMessages();
+
+    //! [WHEN] Successfully downloaded release info
+    m_getReleaseInfoProgress.finish(ProgressResult::make_ok({}));
+
+    //! [WHEN] Successfully downloaded previous releases info
+    m_getPrevReleasesInfoProgress.finish(ProgressResult::make_ok({}));
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
     EXPECT_EQ(retVal.val.previousReleasesNotes, expectedReleasesNotes);
-}
 }

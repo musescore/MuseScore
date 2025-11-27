@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,9 +22,6 @@
 
 #include "updatemodel.h"
 
-#include "async/async.h"
-#include "io/path.h"
-
 #include "translation.h"
 #include "log.h"
 
@@ -38,36 +35,45 @@ UpdateModel::UpdateModel(QObject* parent)
 
 UpdateModel::~UpdateModel()
 {
-    service()->cancelUpdate();
+    if (m_progress.isStarted()) {
+        m_progress.cancel();
+    }
 }
 
 void UpdateModel::load(const QString& mode)
 {
-    Progress progress = service()->updateProgress();
+    if (mode != "download") {
+        return;
+    }
 
-    progress.started().onNotify(this, [this]() {
-        emit started();
-    });
+    RetVal<Progress> progress = service()->downloadRelease();
+    if (!progress.ret) {
+        LOGE() << progress.ret.toString();
+        emit finished(progress.ret.code(), QString());
+        return;
+    }
 
-    progress.progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string& title) {
+    m_progress = progress.val;
+    emit started();
+
+    const RetVal<ReleaseInfo>& info = service()->lastCheckResult();
+
+    //: Means that the download is currently in progress.
+    //: %1 will be replaced by the version number of the version that is being downloaded.
+    setProgressTitle(muse::qtrc("update", "Downloading MuseScore Studio %1")
+                     .arg(QString::fromStdString(info.val.version)));
+
+    m_progress.progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string&) {
         setCurrentProgress(current);
         setTotalProgress(total);
-        setProgressTitle(QString::fromStdString(title));
     });
 
-    progress.finished().onReceive(this, [](const ProgressResult& res) {
-        const Ret& ret = res.ret;
-
-        if (!ret && !ret.text().empty()) {
-            LOGE() << ret.toString();
+    m_progress.finished().onReceive(this, [this](const ProgressResult& res) {
+        if (!res.ret) {
+            LOGE() << res.ret.toString();
         }
-    });
 
-    async::Async::call(this, [this, mode]() {
-        if (mode == "download") {
-            RetVal<muse::io::path_t> downloadRetVal = service()->downloadRelease();
-            emit finished(downloadRetVal.ret.code(), downloadRetVal.val.toQString());
-        }
+        emit finished(res.ret.code(), res.val.toQString());
     });
 }
 
