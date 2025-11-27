@@ -548,8 +548,9 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
                 dList = toDurationList(l, useDots);
                 std::reverse(dList.begin(), dList.end());
             } else {
-                dList
-                    = toRhythmicDurationList(f, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, useDots ? 1 : 0);
+                Fraction timeStretch = staff->timeStretch(tick);
+                dList = toRhythmicDurationList(f, true, (tick - measure->tick()) * timeStretch, sigmap()->timesig(
+                                                   tick).nominal(), measure, useDots ? 1 : 0, timeStretch);
             }
             if (dList.empty()) {
                 return rests;
@@ -1885,7 +1886,8 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                         }
                         measure = segment->measure();
                         std::vector<TDuration> dl;
-                        dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(tick.ticks()).nominal(), measure, 1);
+                        dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(
+                                                        tick.ticks()).nominal(), measure, 1, staff(track2staff(track))->timeStretch(tick));
                         size_t n = dl.size();
                         for (size_t i = 0; i < n; ++i) {
                             const TDuration& d = dl[i];
