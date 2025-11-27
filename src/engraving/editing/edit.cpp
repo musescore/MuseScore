@@ -5523,7 +5523,7 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
                     linkedParent = newMeas->getSegment(SegmentType::TimeTick, oldSeg->tick());
                 }
             } else {
-                linkedParent = parent->findLinkedInScore(linkedScore);
+                linkedParent = parent->findLinkedInStaff(linkedDest);
             }
             IF_ASSERT_FAILED(linkedParent) {
                 continue;
