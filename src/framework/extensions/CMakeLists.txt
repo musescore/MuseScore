@@ -22,6 +22,8 @@ declare_module(muse_extensions)
 set(MODULE_ALIAS muse::extensions)
 
 set(MODULE_QRC extensions.qrc)
+set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
+set(MODULE_QMLAPI_IMPORT ${CMAKE_CURRENT_LIST_DIR}/api)
 
 include(${CMAKE_CURRENT_LIST_DIR}/api/v1/apiv1.cmake)
 
@@ -80,9 +82,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/devtools/apidumpmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/apidumpmodel.h
     )
-
-
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
 if (QT_SUPPORT)
     list(APPEND MODULE_LINK Qt::Quick)

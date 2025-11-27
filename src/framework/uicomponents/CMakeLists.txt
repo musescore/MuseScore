@@ -36,16 +36,11 @@ target_sources(muse_uicomponents PRIVATE
 
 add_subdirectory(view/treeview)
 
-if(QT_SUPPORT)
-    target_link_libraries(muse_uicomponents PRIVATE Qt::Widgets Qt::Quick Qt::QmlIntegration)
-endif()
-
-qt_add_resources(muse_uicomponents "muse_uicomponents_api"
-    PREFIX 
-        "/"
-    FILES
-        "api/MuseApi/Controls/qmldir"
-)
+target_link_libraries(muse_uicomponents PRIVATE Qt::Widgets Qt::Quick Qt::QmlIntegration)
 
 add_subdirectory(qml/Muse/UiComponents)
 add_subdirectory(qml/Muse/GraphicalEffects)
+
+if (MUSE_MODULE_UI_API)
+    add_subdirectory(api/MuseApi/Controls)
+endif()

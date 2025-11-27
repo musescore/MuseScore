@@ -61,6 +61,8 @@ private:
 
     void setTitle(QString title);
 
+    QString validateImports(const io::path_t& qmlFilePath) const;
+
     QString m_title;
     QQuickItem* m_contentItem = nullptr;
 };

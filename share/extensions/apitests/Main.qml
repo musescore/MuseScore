@@ -1,9 +1,6 @@
 import QtQuick
 
-import MuseApi.Extensions
 import MuseApi.Controls
-// import Muse.Ui
-// import Muse.UiComponents
 
 ExtensionBlank {
 

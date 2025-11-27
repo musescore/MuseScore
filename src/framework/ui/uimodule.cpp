@@ -153,6 +153,8 @@ void UiModule::registerApi()
         api->regApiCreator(moduleName(), "api.navigation", new ApiCreator<muse::api::NavigationApi>());
         api->regApiCreator(moduleName(), "api.keyboard", new ApiCreator<muse::api::KeyboardApi>());
         api->regApiSingltone(moduleName(), "api.theme", m_uiengine->theme());
+
+        qmlRegisterUncreatableType<IconCode>("MuseApi.Controls", 1, 0, "IconCode", "Cannot create an IconCode");
     }
 }
 
