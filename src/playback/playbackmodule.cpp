@@ -38,6 +38,7 @@
 #include "view/playbackloadingmodel.h"
 #include "view/mixerpanelmodel.h"
 #include "view/mixerpanelcontextmenumodel.h"
+#include "view/mixerchannelcontextmenumodel.h"
 #include "view/soundprofilesmodel.h"
 #include "view/internal/soundflag/soundflagsettingsmodel.h"
 #include "view/internal/onlinesoundsstatusmodel.h"
@@ -96,6 +97,7 @@ void PlaybackModule::registerUiTypes()
     qmlRegisterType<PlaybackLoadingModel>("MuseScore.Playback", 1, 0, "PlaybackLoadingModel");
     qmlRegisterType<MixerPanelModel>("MuseScore.Playback", 1, 0, "MixerPanelModel");
     qmlRegisterType<MixerPanelContextMenuModel>("MuseScore.Playback", 1, 0, "MixerPanelContextMenuModel");
+    qmlRegisterType<MixerChannelContextMenuModel>("MuseScore.Playback", 1, 0, "MixerChannelContextMenuModel");
     qmlRegisterType<SoundProfilesModel>("MuseScore.Playback", 1, 0, "SoundProfilesModel");
 
     qmlRegisterType<SoundFlagSettingsModel>("MuseScore.Playback", 1, 0, "SoundFlagSettingsModel");

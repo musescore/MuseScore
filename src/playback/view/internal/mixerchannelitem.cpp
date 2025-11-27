@@ -751,3 +751,33 @@ const QMap<aux_channel_idx_t, AuxSendItem*>& MixerChannelItem::auxSendItems() co
 {
     return m_auxSendItems;
 }
+
+void MixerChannelItem::setAuxSends(const AuxSendsParams& auxSends)
+{
+    size_t count = std::min(auxSends.size(), m_outParams.auxSends.size());
+
+    bool changed = false;
+    for (size_t i = 0; i < count; ++i) {
+        const auto& src = auxSends[i];
+        auto& dst = m_outParams.auxSends[i];
+        if (!muse::RealIsEqual(dst.signalAmount, src.signalAmount) || dst.active != src.active) {
+            dst = src;
+            changed = true;
+        }
+    }
+
+    if (!changed) {
+        return;
+    }
+
+    // Update UI items
+    for (aux_channel_idx_t i = 0; i < count; ++i) {
+        auto it = m_auxSendItems.find(i);
+        if (it != m_auxSendItems.end()) {
+            it.value()->setAudioSignalPercentage(static_cast<int>(auxSends[i].signalAmount * 100.f));
+            it.value()->setIsActive(auxSends[i].active);
+        }
+    }
+
+    emit outputParamsChanged(m_outParams);
+}

@@ -127,6 +127,59 @@ ColumnLayout {
         }
     }
 
+    MixerChannelContextMenuModel {
+        id: channelContextMenuModel
+    }
+
+    ContextMenuLoader {
+        id: channelContextMenu
+
+        property int channelIndex: -1
+
+        onHandleMenuItem: function(itemId) {
+            switch (itemId) {
+            case "copy":
+                mixerPanelModel.copyChannelSettings(channelContextMenu.channelIndex)
+                break
+            case "paste":
+                mixerPanelModel.pasteChannelSettings(channelContextMenu.channelIndex)
+                break
+            case "apply-to-all":
+                mixerPanelModel.applySettingsToAllChannels(channelContextMenu.channelIndex)
+                break
+            case "undo":
+                mixerPanelModel.undo()
+                break
+            case "redo":
+                mixerPanelModel.redo()
+                break
+            }
+        }
+    }
+
+    function showChannelContextMenu(channelIndex, anchorItem) {
+        var data = mixerPanelModel.get(channelIndex)
+        if (!data || !data.channelItem) {
+            return
+        }
+
+        var item = data.channelItem
+
+        // Only show menu for instrument channels
+        if (item.type === MixerChannelItem.Master ||
+            item.type === MixerChannelItem.Aux ||
+            item.type === MixerChannelItem.Metronome) {
+            return
+        }
+
+        channelContextMenu.channelIndex = channelIndex
+        channelContextMenuModel.loadForChannel(channelIndex, mixerPanelModel)
+        
+        // Map button position to root coordinate space
+        var pos = anchorItem.mapToItem(root, 0, 0)
+        channelContextMenu.show(Qt.point(pos.x, pos.y), channelContextMenuModel.items)
+    }
+
     StyledFlickable {
         id: flickable
 
@@ -341,6 +394,10 @@ ColumnLayout {
 
                 onNavigateControlIndexChanged: function(index) {
                     prv.setNavigateControlIndex(index)
+                }
+
+                onMenuButtonClicked: function(channelIndex, anchorItem) {
+                    showChannelContextMenu(channelIndex, anchorItem)
                 }
             }
         }

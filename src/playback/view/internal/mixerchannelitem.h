@@ -121,6 +121,8 @@ public:
     const muse::audio::AudioInputParams& inputParams() const;
     const muse::audio::AudioOutputParams& outputParams() const;
 
+    Q_INVOKABLE void setAuxSends(const muse::audio::AuxSendsParams& auxSends);
+
     InputResourceItem* inputResourceItem() const;
     QList<OutputResourceItem*> outputResourceItemList() const;
     QList<AuxSendItem*> auxSendItemList() const;

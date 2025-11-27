@@ -25,6 +25,8 @@
 
 #include <QAbstractListModel>
 #include <QList>
+#include <optional>
+#include <vector>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -32,11 +34,21 @@
 #include "context/iglobalcontext.h"
 #include "ui/view/navigationsection.h"
 #include "playback/iplaybackconfiguration.h"
+#include "types/translatablestring.h"
 
 #include "iplaybackcontroller.h"
 #include "internal/mixerchannelitem.h"
 
 namespace mu::playback {
+struct MixerChannelUndoState {
+    int channelIndex = -1;
+    muse::audio::AudioOutputParams params;
+};
+
+struct MixerUndoState {
+    std::vector<MixerChannelUndoState> previousStates;
+    muse::TranslatableString actionName;
+};
 class MixerPanelModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
@@ -51,12 +63,25 @@ class MixerPanelModel : public QAbstractListModel, public muse::async::Asyncable
     Q_PROPERTY(int navigationOrderStart READ navigationOrderStart WRITE setNavigationOrderStart NOTIFY navigationOrderStartChanged)
 
     Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
+    Q_PROPERTY(bool hasClipboardData READ hasClipboardData NOTIFY clipboardChanged)
+    Q_PROPERTY(bool canUndo READ canUndo NOTIFY undoStateChanged)
+    Q_PROPERTY(bool canRedo READ canRedo NOTIFY undoStateChanged)
 
 public:
     explicit MixerPanelModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load();
     Q_INVOKABLE QVariantMap get(int index);
+
+    Q_INVOKABLE void copyChannelSettings(int channelIndex);
+    Q_INVOKABLE void pasteChannelSettings(int channelIndex);
+    Q_INVOKABLE void applySettingsToAllChannels(int sourceChannelIndex);
+    Q_INVOKABLE void undo();
+    Q_INVOKABLE void redo();
+
+    bool hasClipboardData() const;
+    bool canUndo() const;
+    bool canRedo() const;
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -72,6 +97,8 @@ signals:
     void navigationSectionChanged();
     void navigationOrderStartChanged();
     void rowCountChanged();
+    void clipboardChanged();
+    void undoStateChanged();
 
 private:
     enum Roles {
@@ -106,7 +133,14 @@ private:
     notation::INotationPlaybackPtr notationPlayback() const;
     notation::INotationPartsPtr masterNotationParts() const;
 
+    muse::audio::AudioOutputParams captureChannelParams(MixerChannelItem* item) const;
+    void applyParamsToChannel(MixerChannelItem* item, const muse::audio::AudioOutputParams& params);
+    void saveUndoState(const std::vector<int>& channelIndices, const muse::TranslatableString& actionName);
+
     QList<MixerChannelItem*> m_mixerChannelList;
+    std::optional<muse::audio::AudioOutputParams> m_clipboardParams;
+    std::optional<MixerUndoState> m_undoState;
+    std::optional<MixerUndoState> m_redoState;
     MixerChannelItem* m_masterChannelItem = nullptr;
     muse::audio::TrackSequenceId m_currentTrackSequenceId = -1;
 
