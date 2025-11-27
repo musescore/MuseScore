@@ -2616,6 +2616,14 @@ static void addGraceChordsAfter(Chord* c, GraceChordList& gcl, size_t& gac)
     while (gac > 0) {
         if (gcl.size() > 0) {
             Chord* graceChord = muse::takeFirst(gcl);
+            std::vector<EngravingItem*> el = graceChord->el(); // copy, because modified during loop
+            for (EngravingItem* e : el) {
+                if (e->isFermata()) {
+                    e->setParent(c->segment());
+                    c->segment()->add(e);
+                    graceChord->removeFermata(toFermata(e));
+                }
+            }
             graceChord->toGraceAfter();
             c->add(graceChord);              // TODO check if same voice ?
             coerceGraceCue(c, graceChord);
@@ -2641,6 +2649,7 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
         std::vector<EngravingItem*> el = gc->el(); // copy, because modified during loop
         for (EngravingItem* e : el) {
             if (e->isFermata()) {
+                e->setParent(c->segment());
                 c->segment()->add(e);
                 gc->removeFermata(toFermata(e));
             }
@@ -5166,7 +5175,7 @@ void MusicXmlParserDirection::dashes(const String& type, const int number,
 {
     const MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::HAIRPIN, number });
     if (type == u"start") {
-        TextLineBase* b = spdesc.isStopped ? toTextLine(spdesc.sp) : Factory::createTextLine(m_score->dummy());
+        TextLineBase* b = spdesc.isStopped ? toTextLineBase(spdesc.sp) : Factory::createTextLine(m_score->dummy());
         // if (placement.empty()) placement = "above";  // TODO ? set default
 
         // hack: combine with a previous words element
@@ -5190,7 +5199,7 @@ void MusicXmlParserDirection::dashes(const String& type, const int number,
         // use MusicXML specific type instead
         starts.push_back(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
     } else if (type == u"stop") {
-        TextLine* b = spdesc.isStarted ? toTextLine(spdesc.sp) : Factory::createTextLine(m_score->dummy());
+        TextLineBase* b = spdesc.isStarted ? toTextLineBase(spdesc.sp) : Factory::createTextLine(m_score->dummy());
         stops.push_back(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
     }
     m_e.skipCurrentElement();
