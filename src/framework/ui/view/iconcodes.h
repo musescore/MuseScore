@@ -57,6 +57,12 @@ class IconCode
     Q_GADGET
 
 public:
+
+    /** APIDOC
+     * Icon code
+     * @enum
+     * @name IconCode
+     */
     enum class Code : char16_t {
         SMALL_ARROW_LEFT = 0xEF0F,
         SMALL_ARROW_UP = 0xEF10,

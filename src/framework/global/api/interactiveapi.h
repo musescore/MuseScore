@@ -41,7 +41,7 @@ public:
      * Question buttons
      * @enum
      */
-    enum Button {
+    enum ButtonCode {
         Ok = int(IInteractive::Button::Ok),
         Continue = int(IInteractive::Button::Continue),
         RestoreDefaults = int(IInteractive::Button::RestoreDefaults),
@@ -68,7 +68,7 @@ public:
         Clear = int(IInteractive::Button::Clear),
         Done = int(IInteractive::Button::Done),
     };
-    Q_ENUM(Button);
+    Q_ENUM(ButtonCode);
 
     Q_INVOKABLE void info(const QString& contentTitle, const QString& text);
     Q_INVOKABLE void warning(const QString& contentTitle, const QString& text);
