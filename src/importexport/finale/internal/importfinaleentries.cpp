@@ -401,7 +401,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         // Return true for non-anchorable grace notes, else false
         return isGrace;
     }
-    if (entryStartTick > measure->ticks() || (!isGrace && entryStartTick == measure->ticks())) {
+    while (entryStartTick > measure->ticks() || (!isGrace && entryStartTick == measure->ticks())) {
         // If entries spill past the end of the measure, put them in the next measure.
         // A common situation for this is beams over barlines created by the Beam Over Barline plugin.
         // There are other situations (tuplets over barlines come to mind) where users have made adhoc
