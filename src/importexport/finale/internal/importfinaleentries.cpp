@@ -401,7 +401,9 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         // Return true for non-anchorable grace notes, else false
         return isGrace;
     }
-    while (entryStartTick > measure->ticks() || (!isGrace && entryStartTick == measure->ticks())) {
+    Measure* originalMeasure = measure;
+    Fraction originalTick = entryStartTick;
+    while (entryStartTick >= measure->ticks()) {
         // If entries spill past the end of the measure, put them in the next measure.
         // A common situation for this is beams over barlines created by the Beam Over Barline plugin.
         // There are other situations (tuplets over barlines come to mind) where users have made adhoc
@@ -411,6 +413,12 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         /// hope that is such a rare edge case that we don't.
         entryStartTick -= measure->ticks();
         measure = measure->nextMeasure();
+        if(!measure) {
+            logger()->logWarning(String(u"Encountered entry number %1 beyond the end of the document.").arg(currentEntry->getEntryNumber()));
+            measure = originalMeasure;
+            entryStartTick = originalTick;
+            break;
+        }
     }
     if (Segment* existingSeg = measure->findSegmentR(SegmentType::ChordRest, entryStartTick)) {
         if (toChordRest(existingSeg->element(curTrackIdx))) {
