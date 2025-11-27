@@ -338,15 +338,18 @@ void TransposeDialog::setDirection(TransposeDirection direction)
             closestKey->setChecked(true);
         } else {
             upKey->setChecked(direction == TransposeDirection::UP);
+            downKey->setChecked(direction == TransposeDirection::DOWN);
         }
         break;
     }
     case TransposeMode::BY_INTERVAL: {
         upInterval->setChecked(direction == TransposeDirection::UP);
+        downInterval->setChecked(direction == TransposeDirection::DOWN);
         break;
     }
     case TransposeMode::DIATONICALLY: {
         upDiatonic->setChecked(direction == TransposeDirection::UP);
+        downDiatonic->setChecked(direction == TransposeDirection::DOWN);
         break;
     }
     default: {
