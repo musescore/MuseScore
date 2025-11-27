@@ -64,6 +64,11 @@ void MixerPanelModel::load()
 
     m_currentTrackSequenceId = sequenceId;
 
+    // Clear undo state on project change
+    m_undoState.reset();
+    m_redoState.reset();
+    emit undoStateChanged();
+
     loadItems();
 }
 
@@ -659,4 +664,203 @@ void MixerPanelModel::setNavigationOrderStart(int navigationOrderStart)
     emit navigationOrderStartChanged();
 
     updateItemsPanelsOrder();
+}
+
+AudioOutputParams MixerPanelModel::captureChannelParams(MixerChannelItem* item) const
+{
+    AudioOutputParams params;
+    params.volume = item->volumeLevel();
+    params.balance = static_cast<float>(item->balance()) / 100.f;
+    params.auxSends = item->outputParams().auxSends;
+    // Note: fxChain, solo, muted, forceMute intentionally NOT copied
+    return params;
+}
+
+void MixerPanelModel::applyParamsToChannel(MixerChannelItem* item, const AudioOutputParams& params)
+{
+    item->setVolumeLevel(params.volume);
+    item->setBalance(static_cast<int>(params.balance * 100.f));
+    item->setAuxSends(params.auxSends);
+}
+
+void MixerPanelModel::copyChannelSettings(int channelIndex)
+{
+    if (channelIndex < 0 || channelIndex >= m_mixerChannelList.size()) {
+        return;
+    }
+
+    MixerChannelItem* item = m_mixerChannelList.at(channelIndex);
+
+    if (item->type() == MixerChannelItem::Type::Master
+        || item->type() == MixerChannelItem::Type::Aux
+        || item->type() == MixerChannelItem::Type::Metronome) {
+        return;
+    }
+
+    m_clipboardParams = captureChannelParams(item);
+    emit clipboardChanged();
+}
+
+void MixerPanelModel::pasteChannelSettings(int channelIndex)
+{
+    if (!m_clipboardParams.has_value()) {
+        return;
+    }
+
+    if (channelIndex < 0 || channelIndex >= m_mixerChannelList.size()) {
+        return;
+    }
+
+    MixerChannelItem* item = m_mixerChannelList.at(channelIndex);
+
+    if (item->type() == MixerChannelItem::Type::Master
+        || item->type() == MixerChannelItem::Type::Aux
+        || item->type() == MixerChannelItem::Type::Metronome) {
+        return;
+    }
+
+    // Save undo state before applying
+    saveUndoState({ channelIndex }, TranslatableString("playback", "Paste channel settings"));
+
+    applyParamsToChannel(item, m_clipboardParams.value());
+}
+
+bool MixerPanelModel::hasClipboardData() const
+{
+    return m_clipboardParams.has_value();
+}
+
+bool MixerPanelModel::canUndo() const
+{
+    return m_undoState.has_value();
+}
+
+bool MixerPanelModel::canRedo() const
+{
+    return m_redoState.has_value();
+}
+
+void MixerPanelModel::saveUndoState(const std::vector<int>& channelIndices, const TranslatableString& actionName)
+{
+    MixerUndoState state;
+    state.actionName = actionName;
+
+    for (int idx : channelIndices) {
+        if (idx >= 0 && idx < m_mixerChannelList.size()) {
+            MixerChannelItem* item = m_mixerChannelList.at(idx);
+            MixerChannelUndoState channelState;
+            channelState.channelIndex = idx;
+            channelState.params = captureChannelParams(item);
+            state.previousStates.push_back(channelState);
+        }
+    }
+
+    m_undoState = state;
+    m_redoState.reset();
+    emit undoStateChanged();
+}
+
+void MixerPanelModel::undo()
+{
+    if (!m_undoState.has_value()) {
+        return;
+    }
+
+    // Capture current state for redo
+    MixerUndoState redoState;
+    redoState.actionName = m_undoState->actionName;
+
+    for (const auto& prev : m_undoState->previousStates) {
+        if (prev.channelIndex >= 0 && prev.channelIndex < m_mixerChannelList.size()) {
+            MixerChannelItem* item = m_mixerChannelList.at(prev.channelIndex);
+
+            // Save current for redo
+            MixerChannelUndoState channelState;
+            channelState.channelIndex = prev.channelIndex;
+            channelState.params = captureChannelParams(item);
+            redoState.previousStates.push_back(channelState);
+
+            // Restore previous
+            applyParamsToChannel(item, prev.params);
+        }
+    }
+
+    m_redoState = redoState;
+    m_undoState.reset();
+    emit undoStateChanged();
+}
+
+void MixerPanelModel::redo()
+{
+    if (!m_redoState.has_value()) {
+        return;
+    }
+
+    // Capture current state for undo
+    MixerUndoState undoState;
+    undoState.actionName = m_redoState->actionName;
+
+    for (const auto& prev : m_redoState->previousStates) {
+        if (prev.channelIndex >= 0 && prev.channelIndex < m_mixerChannelList.size()) {
+            MixerChannelItem* item = m_mixerChannelList.at(prev.channelIndex);
+
+            // Save current for undo
+            MixerChannelUndoState channelState;
+            channelState.channelIndex = prev.channelIndex;
+            channelState.params = captureChannelParams(item);
+            undoState.previousStates.push_back(channelState);
+
+            // Re-apply
+            applyParamsToChannel(item, prev.params);
+        }
+    }
+
+    m_undoState = undoState;
+    m_redoState.reset();
+    emit undoStateChanged();
+}
+
+void MixerPanelModel::applySettingsToAllChannels(int sourceChannelIndex)
+{
+    if (sourceChannelIndex < 0 || sourceChannelIndex >= m_mixerChannelList.size()) {
+        return;
+    }
+
+    MixerChannelItem* sourceItem = m_mixerChannelList.at(sourceChannelIndex);
+
+    // Only allow from instrument channels
+    if (sourceItem->type() == MixerChannelItem::Type::Master
+        || sourceItem->type() == MixerChannelItem::Type::Aux
+        || sourceItem->type() == MixerChannelItem::Type::Metronome) {
+        return;
+    }
+
+    AudioOutputParams sourceParams = captureChannelParams(sourceItem);
+
+    // Collect target indices
+    std::vector<int> targetIndices;
+    for (int i = 0; i < m_mixerChannelList.size(); ++i) {
+        if (i == sourceChannelIndex) {
+            continue;
+        }
+
+        MixerChannelItem* targetItem = m_mixerChannelList.at(i);
+
+        // Skip non-instrument channels
+        if (targetItem->type() == MixerChannelItem::Type::Master
+            || targetItem->type() == MixerChannelItem::Type::Aux
+            || targetItem->type() == MixerChannelItem::Type::Metronome) {
+            continue;
+        }
+
+        targetIndices.push_back(i);
+    }
+
+    // Save undo state before applying
+    saveUndoState(targetIndices, TranslatableString("playback", "Apply settings to all channels"));
+
+    // Apply to all targets
+    for (int idx : targetIndices) {
+        applyParamsToChannel(m_mixerChannelList.at(idx), sourceParams);
+    }
 }

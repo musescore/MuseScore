@@ -31,9 +31,15 @@ MixerPanelSection {
 
     headerTitle: qsTrc("playback", "Name")
 
+    signal menuButtonClicked(int channelIndex, var anchorItem)
+
     Rectangle {
+        id: titleRect
         width: root.channelItemWidth
         height: 22
+
+        property bool isInstrumentChannel: channelItem.type === MixerChannelItem.PrimaryInstrument ||
+                                           channelItem.type === MixerChannelItem.SecondaryInstrument
 
         function resolveLabelColor() {
             switch(channelItem.type) {
@@ -65,19 +71,41 @@ MixerPanelSection {
 
         StyledTextLabel {
             id: textLabel
-            anchors.centerIn: parent
+            anchors.left: parent.left
+            anchors.right: menuButton.visible ? menuButton.left : parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 4
+            anchors.rightMargin: 2
 
             font: ui.theme.bodyBoldFont
-
-            readonly property int margin: -8
-            width: margin + parent.width + margin
+            horizontalAlignment: Text.AlignHCenter
 
             text: channelItem.title
+        }
+
+        FlatButton {
+            id: menuButton
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.rightMargin: 2
+
+            visible: titleRect.isInstrumentChannel
+            width: 18
+            height: 18
+
+            icon: IconCode.MENU_THREE_DOTS
+            iconFont: ui.theme.toolbarIconsFont
+            transparent: true
+
+            onClicked: {
+                root.menuButtonClicked(model.index, menuButton)
+            }
         }
 
         MouseArea {
             id: mouseArea
             anchors.fill: parent
+            z: -1
 
             enabled: parent.enabled
             hoverEnabled: true
