@@ -102,7 +102,11 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
         ExportType::makeWithSuffixes({ "mei" },
                                      muse::qtrc("project/export", "MEI"),
                                      muse::qtrc("project/export", "MEI files"),
-                                     "MeiSettingsPage.qml")
+                                     "MeiSettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "lrc" },
+                                     muse::qtrc("project/export", "LRC file"),
+                                     muse::qtrc("project/export", "LRC files"),
+                                     "") // No settings page needed
     };
 
     const ExportInfo& info = exportProjectScenario()->exportInfo();
@@ -269,6 +273,10 @@ void ExportDialogModel::setExportType(const ExportType& type)
     emit selectedExportTypeChanged(type.toMap());
 
     std::vector<UnitType> unitTypes = exportProjectScenario()->supportedUnitTypes(type);
+
+    if (type.id == "lrc") {
+        unitTypes = { UnitType::MULTI_PART }; // only supports single file export
+    }
 
     IF_ASSERT_FAILED(!unitTypes.empty()) {
         return;
