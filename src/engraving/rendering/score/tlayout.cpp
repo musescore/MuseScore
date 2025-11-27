@@ -4103,10 +4103,6 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         }
 
         SymId nh = item->noteHead();
-        if (item->configuration()->crossNoteHeadAlwaysBlack() && ((nh == SymId::noteheadXHalf) || (nh == SymId::noteheadXWhole))) {
-            nh = SymId::noteheadXBlack;
-        }
-
         ldata->cachedNoteheadSym.set_value(nh);
 
         if (item->isNoteName()) {

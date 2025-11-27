@@ -102,7 +102,6 @@ public:
     MOCK_METHOD(bool, guitarProImportExperimental, (), (const, override));
     MOCK_METHOD(bool, shouldAddParenthesisOnStandardStaff, (), (const, override));
     MOCK_METHOD(bool, negativeFretsAllowed, (), (const, override));
-    MOCK_METHOD(bool, crossNoteHeadAlwaysBlack, (), (const, override));
     MOCK_METHOD(void, setGuitarProMultivoiceEnabled, (bool), (override));
     MOCK_METHOD(bool, guitarProMultivoiceEnabled, (), (const, override));
     MOCK_METHOD(bool, minDistanceForPartialSkylineCalculated, (), (const, override));
