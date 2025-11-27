@@ -599,7 +599,14 @@ void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interva
         return;
     }
 
-    String name = names.front();
+    Fraction tick = Fraction(0, 1);
+    Segment* seg = diagram->segment();
+    if (seg) {
+        tick = seg->tick();
+    }
+    Key key = !diagram->staff() ? Key::C : diagram->staff()->key(tick);
+
+    String name = findBestEnharmonicFit(names, key, score->style());
 
     diagram->setHarmony(name);
     harmony = diagram->harmony();
@@ -608,17 +615,10 @@ void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interva
     }
 
     // Transpose harmony without undo
-    Fraction tick = Fraction(0, 1);
-    Segment* seg = harmony->getParentSeg();
-    if (seg) {
-        tick = seg->tick();
-    }
-
     Interval kv = harmony->staff()->transpose(harmony->tick());
     Interval iv = harmony->part()->instrument(harmony->tick())->transpose();
     Interval hInterval((interval.diatonic - kv.diatonic + iv.diatonic), (interval.chromatic - kv.chromatic + iv.chromatic));
 
-    Key key = !harmony->staff() ? Key::C : harmony->staff()->key(tick);
     for (HarmonyInfo* info : harmony->chords()) {
         if (mode == TransposeMode::DIATONICALLY) {
             info->setRootTpc(Transpose::transposeTpcDiatonicByKey(info->rootTpc(), transposeInterval, key, trKeys, useDoubleSharpsFlats));
@@ -644,6 +644,28 @@ void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interva
     score->rebuildFretBox();
 
     return;
+}
+
+String Transpose::findBestEnharmonicFit(const std::vector<String>& notes, Key key, const MStyle& style)
+{
+    std::vector<int> tpcs;
+    NoteSpellingType harmonySpelling = style.styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
+    NoteCaseType harmonyCase = NoteCaseType::AUTO;
+    size_t idx = 0;
+    for (const String& note : notes) {
+        int tpc = convertNote(note, harmonySpelling, harmonyCase, idx);
+        tpcs.push_back(tpc);
+    }
+
+    int tpc = bestEnharmonicFit(tpcs, key);
+
+    if (tpc == Tpc::TPC_INVALID) {
+        return notes.front();
+    }
+
+    String note = tpc2name(tpc, harmonySpelling, harmonyCase);
+
+    return note;
 }
 
 //---------------------------------------------------------
