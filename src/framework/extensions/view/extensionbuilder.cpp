@@ -61,7 +61,8 @@ QString ExtensionBuilder::validateImports(const io::path_t& qmlFilePath) const
 
 void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 {
-    Action a = provider()->action(UriQuery(uri.toStdString()));
+    const UriQuery q = UriQuery(uri.toStdString());
+    const Action a = provider()->action(q);
     if (!a.isValid()) {
         LOGE() << "Not found action, uri: " << uri;
         return;
@@ -76,8 +77,14 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
         engin = engine()->qmlEngine();
     }
 
+    const Manifest& manifest = provider()->manifest(q.uri());
     QObject* qmlObj = nullptr;
-    QString errorString = validateImports(a.path);
+
+    QString errorString;
+    if (manifest.apiversion != 1) {
+        errorString = validateImports(a.path);
+    }
+
     if (errorString.isEmpty()) {
         //! NOTE We create extension UI using a separate engine to control what we provide,
         //! making it easier to maintain backward compatibility and stability.

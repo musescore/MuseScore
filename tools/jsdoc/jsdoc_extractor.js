@@ -278,7 +278,15 @@ async function extractDoc(file)
 
             // try get enum 
             if (state.currentDoc.includes('@enum')) {
-                state.enumLookName = true;
+                const nameMatch = state.currentDoc.match(/@name\s+(\S+)/);
+                if (nameMatch) {
+                    // remove @name
+                    state.currentDoc = state.currentDoc.replace(/^\s*\*\s*.*@name.*$\n?/gm, '');
+                    state.enumStarted = true;
+                    state.currentDoc += 'const ' + nameMatch[1] + ' = {\n';
+                } else {
+                    state.enumLookName = true;
+                }
                 continue;
             }
         }

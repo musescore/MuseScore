@@ -32,16 +32,23 @@ import Muse.UiComponents
  * @class FlatButton
  * @hideconstructor
  * @example
- * FlatButton {
- *     text: "Click me"
- *     onClicked: {
- *         api.interactive.info("Test", "Clicked on button")
- *     }
+ * import MuseApi.Controls
+ *
+ * ExtensionBlank {
+ *      FlatButton {
+ *          text: "Click me"
+ *          onClicked: {
+ *              api.interactive.info("Test", "Clicked on button")
+ *          }
+ *      }
  * }
 */
 FocusScope {
     id: root
 
+    /** APIDOC
+     * @member {IconCode}
+     */
     property int icon: IconCode.NONE
     /** APIDOC
      * @member {String}

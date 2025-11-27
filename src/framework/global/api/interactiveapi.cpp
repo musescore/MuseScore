@@ -71,7 +71,7 @@ void InteractiveApi::error(const QString& contentTitle, const QString& text)
 
 static muse::IInteractive::Button buttonFromString(const QString& str)
 {
-    QMetaEnum meta = QMetaEnum::fromType<InteractiveApi::Button>();
+    static QMetaEnum meta = QMetaEnum::fromType<InteractiveApi::ButtonCode>();
     int val = meta.keyToValue(str.toLatin1().constData());
     if (val == -1) {
         return muse::IInteractive::Button::NoButton;
@@ -81,7 +81,7 @@ static muse::IInteractive::Button buttonFromString(const QString& str)
 
 static QString buttonToString(const muse::IInteractive::Button& btn)
 {
-    QMetaEnum meta = QMetaEnum::fromType<InteractiveApi::Button>();
+    static QMetaEnum meta = QMetaEnum::fromType<InteractiveApi::ButtonCode>();
     const char* key = meta.valueToKey(static_cast<int>(btn));
     return QString::fromLatin1(key);
 }

@@ -10,6 +10,12 @@ import QtQuick
  * Base class for extension form
  * @class ExtensionBlank
  * @hideconstructor
+ * @example
+ * import MuseApi.Controls
+ *
+ * ExtensionBlank {
+ *     // content of extension form
+ * }
 */
 Rectangle {
 
