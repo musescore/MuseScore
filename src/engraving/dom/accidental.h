@@ -264,8 +264,6 @@ public:
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override { setGenerated(false); }
 
-    void undoSetSmall(bool val);
-
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;

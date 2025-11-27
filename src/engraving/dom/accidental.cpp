@@ -424,15 +424,6 @@ EngravingItem* Accidental::drop(EditData& data)
 }
 
 //---------------------------------------------------------
-//   undoSetSmall
-//---------------------------------------------------------
-
-void Accidental::undoSetSmall(bool val)
-{
-    undoChangeProperty(Pid::SMALL, val);
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
