@@ -475,11 +475,6 @@ bool EngravingConfiguration::negativeFretsAllowed() const
     return guitarProImportExperimental();
 }
 
-bool EngravingConfiguration::crossNoteHeadAlwaysBlack() const
-{
-    return guitarProImportExperimental();
-}
-
 void EngravingConfiguration::setGuitarProMultivoiceEnabled(bool multiVoice)
 {
     m_multiVoice = multiVoice;
