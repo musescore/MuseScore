@@ -240,6 +240,7 @@ void PopupView::doOpen()
 
     beforeOpen();
 
+    resolveParentWindow();
     updateGeometry();
 
     if (!isDialog()) {
