@@ -1,90 +1,55 @@
-# ![MuseScore Studio](share/icons/musescore_logo_full.png)
+# Musescore NC Version
 
-Music notation and composition software
+**Musescore NC Version** is a customized version of the open-source music notation software, specifically tailored for development using **Gemini CLI** within the **Antigravity** IDE.
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
-[![Coverage](https://s3.us-east-1.amazonaws.com/extensions.musescore.org/test/code_coverage/coverage_badge.svg?)](https://github.com/musescore/MuseScore/actions/workflows/check_unit_tests.yml)
+## What We Updated
 
-MuseScore Studio is an open source and free music notation software. For support, contribution, and bug reports visit MuseScore.org. Fork and make pull requests!
+We have made specific improvements to the codebase to enhance robustness and developer experience:
 
-## Features
+1.  **Fixed Soundfont Download Script**: Updated `buildscripts/cmake/DownloadSoundFont.cmake` to correctly check the status of auxiliary file downloads (License, Changelog, Readme). It now logs warnings instead of silently failing if these files cannot be retrieved.
+2.  **Integrated Gemini CLI Guide**: Added comprehensive documentation on how to leverage the Gemini CLI for finding bugs, understanding code, and generating fixes.
 
-- WYSIWYG design, notes are entered on a "virtual notepaper"
-- TrueType font(s) for printing & display allows for high quality scaling to all sizes
-- Easy & fast note entry
-- Many editing functions
-- MusicXML import/export
-- MIDI (SMF) import/export
-- MEI import/export
-- MuseData import
-- MIDI input for note entry
-- Integrated sequencer and software synthesizer to play the score
-- Print or create PDF files
+## Development Guide: Gemini CLI in Antigravity
 
-## More info
+This version is designed to be developed using the **Gemini CLI** integrated into the **Antigravity** IDE. This setup allows for AI-assisted coding, debugging, and documentation.
 
-- [MuseScore Homepage](https://musescore.org)
-- [MuseScore Git workflow instructions](https://musescore.org/en/developers-handbook/git-workflow)
-- [How to compile MuseScore?](https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment)
+### 1. Setup
+
+The Gemini CLI comes pre-integrated in Antigravity.
+
+*   **Activation**: When you first open the terminal, accept the prompt to connect Gemini CLI if it appears.
+*   **Verification**: Run `gemini --version` to ensure the tool is active.
+
+### 2. Basic Commands
+
+Use these commands to interact with the codebase:
+
+*   **`gemini chat "<question>"`**: Ask general questions about the project or logic.
+*   **`gemini explain <file_path>`**: Get a detailed explanation of what a specific file does.
+*   **`gemini code "<instruction>"`**: Generate code snippets or entire functions based on your requirements.
+*   **`gemini debug`**: Analyze errors and get suggestions for fixes.
+
+### 3. Workflow Example
+
+To see this workflow in action, you can look at how we fixed the bug in `buildscripts/cmake/DownloadSoundFont.cmake`.
+
+1.  **Identify**: We used `grep "TODO"` to find a task: `## TODO check STATUS of downloads`.
+2.  **Understand**: We used `gemini explain` to understand the script's purpose.
+3.  **Fix**: We used `gemini code` to generate the CMake logic for checking download statuses.
+4.  **Verify**: We reviewed and applied the code to ensure robustness.
+
+For a more detailed walkthrough, please refer to the [DEVELOPMENT_WITH_GEMINI.md](DEVELOPMENT_WITH_GEMINI.md) file included in this repository.
+
+## Original Features
+
+Musescore NC Version retains all the powerful features of the original MuseScore Studio:
+
+- WYSIWYG design
+- TrueType font support for high-quality scaling
+- Fast note entry
+- MusicXML, MIDI, and MEI import/export
+- Integrated sequencer and software synthesizer
 
 ## License
 
-MuseScore Studio is licensed under GPL version 3.0. See [license file](https://github.com/musescore/MuseScore/blob/master/LICENSE.txt) in the same directory.
-
-## Packages
-
-See [Code Structure on Wiki](https://github.com/musescore/MuseScore/wiki/CodeStructure)
-
-## Building
-
-**Read the [Compilation section](https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment) of the [MuseScore Wiki](https://github.com/musescore/MuseScore/wiki) for a complete build walkthrough and a list of dependencies.**
-
-### Getting sources
-
-If using git to download repo of entire code history, type:
-
-    git clone https://github.com/musescore/MuseScore.git
-    cd MuseScore
-
-Otherwise, you can just download the latest source release tarball from the [Releases page](https://github.com/musescore/MuseScore/releases), and then from your download directory type:
-
-    tar xzf MuseScore-x.x.x.tar.gz
-    cd MuseScore-x.x.x
-
-### Release Build
-
-To compile MuseScore Studio for release, type:
-
-    cmake -P build.cmake -DCMAKE_BUILD_TYPE=Release
-
-If something goes wrong, append the word "clean" to the above command to delete the build subdirectory:
-
-    cmake -P build.cmake -DCMAKE_BUILD_TYPE=Release clean
-
-Then try running the first command again.
-
-### Running
-
-To start MuseScore Studio, type:
-
-    cmake -P build.cmake -DCMAKE_BUILD_TYPE=Release run
-
-Or run the compiled executable directly.
-
-### Debug Build
-
-A debug version can be built and run by replacing `-DCMAKE_BUILD_TYPE=Release`
-with `-DCMAKE_BUILD_TYPE=Debug` in the above commands.
-
-If you omit the `-DCMAKE_BUILD_TYPE` option entirely then `RelWithDebInfo` is
-used by default, as it provides a useful compromise between Release and Debug.
-
-### Testing
-
-See the [Unit tests section](https://github.com/musescore/MuseScore/wiki/Unit-tests) of the [MuseScore Wiki](https://github.com/musescore/MuseScore/wiki) for instructions on how to run the test suite.
-
-### Code Formatting
-
-Run `./hooks/install.sh` to install a pre-commit hook that will format your staged files. Requires that you install `uncrustify`.
-
-If you have problems, please report them. To uninstall, run `./hooks/uninstall.sh`.
+Musescore NC Version is licensed under GPL version 3.0. See [license file](LICENSE.txt) in the same directory.
