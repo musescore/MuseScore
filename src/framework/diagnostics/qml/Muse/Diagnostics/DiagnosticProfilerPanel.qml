@@ -98,32 +98,55 @@ Rectangle {
         anchors.right: parent.right
         clip: true
         model: profModel
-        section.property: "groupRole"
-        section.delegate: Rectangle {
-            width: parent.width
-            height: 24
-            color: ui.theme.backgroundSecondaryColor
-            StyledTextLabel {
-                anchors.fill: parent
-                anchors.margins: 2
-                horizontalAlignment: Qt.AlignLeft
-                text: section
-            }
-        }
+
         delegate: ListItemBlank {
 
             anchors.left: parent ? parent.left : undefined
             anchors.right: parent ? parent.right : undefined
             height: 24
 
-            StyledTextLabel {
-                anchors.fill: parent
-                anchors.leftMargin: 16
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-                font.family: "Consolas"
-                text: dataRole
-            }
+	    property bool isHeader: dataRole.startsWith("Main thread") || dataRole.startsWith("Other thread")
+	    property var cols: isHeader ? [] : dataRole.split(/\t|  +/)
+
+	    Column {
+		anchors.fill: parent
+
+		Rectangle {
+		    visible: isHeader
+		    width: parent.width
+		    height: 24
+		    color: ui.theme.backgroundSecondaryColor
+
+		    StyledTextLabel {
+			anchors.fill: parent
+			anchors.margins: 4
+			font.family: "Consolas"
+			font.bold: true
+			text: dataRole
+			verticalAlignment: Text.AlignVCenter
+			horizontalAlignment: Text.AlignLeft
+		    }
+		}
+
+		Row {
+		    visible: !isHeader
+		    anchors.fill: parent
+		    anchors.leftMargin: 16
+		    spacing: 32
+
+		    Repeater {
+			model: cols.length
+			StyledTextLabel {
+			    font.family: "Consolas"
+			    text: cols[index]
+			    verticalAlignment: Text.AlignVCenter
+			    horizontalAlignment: Text.AlignLeft
+			    width: index == 0 ? 300 : 120
+			    elide: Text.ElideRight
+			}
+		    }
+		}
+	    }
         }
     }
 }
