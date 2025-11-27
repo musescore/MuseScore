@@ -177,7 +177,6 @@ void TransposeDialog::setEnableTransposeToKey(bool val)
 void TransposeDialog::setEnableTransposeChordNames(bool val)
 {
     transposeChordNames->setEnabled(val);
-    transposeChordNames->setChecked(val);
 }
 
 //---------------------------------------------------------
@@ -373,6 +372,11 @@ void TransposeDialog::setUseDoubleSharpsFlats(bool val)
     accidentalOptions->setCurrentIndex(val);
 }
 
+void TransposeDialog::setTransposeChordNames(bool val)
+{
+    transposeChordNames->setChecked(val);
+}
+
 void TransposeDialog::restorePreviousSettings()
 {
     TransposeOptions& options = lastUsedOptions();
@@ -381,6 +385,7 @@ void TransposeDialog::restorePreviousSettings()
     setDirection(options.direction);
     setInterval(options.interval);
     setUseDoubleSharpsFlats(options.needTransposeDoubleSharpsFlats);
+    setTransposeChordNames(options.needTransposeChordNames);
 }
 
 TransposeOptions& TransposeDialog::lastUsedOptions()

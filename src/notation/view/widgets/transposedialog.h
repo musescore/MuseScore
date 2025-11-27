@@ -75,6 +75,7 @@ private:
     void setInterval(int interval);
     void restorePreviousSettings();
     void setUseDoubleSharpsFlats(bool val);
+    void setTransposeChordNames(bool val);
 
     static TransposeOptions& lastUsedOptions();
 
