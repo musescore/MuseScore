@@ -55,7 +55,6 @@ private:
     INotationSelectionPtr selection() const;
     INotationInteractionPtr interaction() const;
 
-    Key firstPitchedStaffKey() const;
     void setEnableTransposeKeys(bool val);
     void setEnableTransposeToKey(bool val);
     void setEnableTransposeChordNames(bool val);
@@ -71,9 +70,9 @@ private:
     void setKey(Key k);
     bool useDoubleSharpsFlats() const;
 
+    void restorePreviousSettings();
     void setDirection(TransposeDirection direction);
     void setInterval(int interval);
-    void restorePreviousSettings();
     void setUseDoubleSharpsFlats(bool val);
     void setTransposeChordNames(bool val);
 

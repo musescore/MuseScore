@@ -62,7 +62,6 @@ TransposeDialog::TransposeDialog(QWidget* parent)
     });
     setEnableTransposeChordNames(hasChordNames);
 
-    setKey(firstPitchedStaffKey());
     restorePreviousSettings();
 
     connect(this, &TransposeDialog::accepted, this, &TransposeDialog::apply);
@@ -257,39 +256,6 @@ void TransposeDialog::apply()
     }
 }
 
-Key TransposeDialog::firstPitchedStaffKey() const
-{
-    mu::engraving::staff_idx_t startStaffIdx = 0;
-    mu::engraving::staff_idx_t endStaffIdx   = 0;
-    Fraction startTick = Fraction(0, 1);
-    INotationSelectionRangePtr range = selection()->range();
-
-    if (selection()->isRange()) {
-        startStaffIdx = range->startStaffIndex();
-        endStaffIdx = range->endStaffIndex();
-        startTick = range->startTick();
-    }
-
-    Key key = Key::C;
-
-    muse::async::NotifyList<const Part*> partList = notation()->parts()->partList();
-    for (const Part* part : partList) {
-        for (const Staff* staff : part->staves()) {
-            if (staff->idx() < startStaffIdx || staff->idx() > endStaffIdx) {
-                continue;
-            }
-
-            if (staff->isPitchedStaff(startTick)) {
-                key = staff->concertKey(startTick);
-
-                break;
-            }
-        }
-    }
-
-    return key;
-}
-
 void TransposeDialog::setEnableTransposeKeys(bool val)
 {
     transposeKeys->setEnabled(val);
@@ -386,6 +352,7 @@ void TransposeDialog::restorePreviousSettings()
     setInterval(options.interval);
     setUseDoubleSharpsFlats(options.needTransposeDoubleSharpsFlats);
     setTransposeChordNames(options.needTransposeChordNames);
+    setKey(options.key);
 }
 
 TransposeOptions& TransposeDialog::lastUsedOptions()
