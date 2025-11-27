@@ -36,7 +36,7 @@ public:
     void regApiSingltone(const std::string& module, const std::string& api, ApiObject* o) override;
     std::pair<ApiObject*, bool /*is need delete*/> createApi(const std::string& api, IApiEngine* e) const override;
 
-    void regGlobalEnum(const std::string& module, const QMetaEnum& meta) override;
+    void regGlobalEnum(const std::string& module, const QMetaEnum& meta, const std::string& name = "") override;
     const std::vector<GlobalEnum>& globalEnums() const override;
 
     // dev
