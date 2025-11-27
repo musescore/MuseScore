@@ -1355,6 +1355,12 @@ std::unordered_set<EngravingItem*> collectElementsAnchoredToChordRest(const Chor
     }
     for (Chord* grace : chord->graceNotes()) {
         elems.emplace(grace);
+        for (Articulation* gArt : grace->articulations()) {
+            elems.emplace(gArt);
+        }
+        if (TremoloSingleChord* gTremSing = grace->tremoloSingleChord()) {
+            elems.emplace(gTremSing);
+        }
     }
     return elems;
 }
