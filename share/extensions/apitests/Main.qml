@@ -1,8 +1,9 @@
 import QtQuick
 
 import MuseApi.Extensions
-//import MuseApi.Controls
-import Muse.UiComponents
+import MuseApi.Controls
+// import Muse.Ui
+// import Muse.UiComponents
 
 ExtensionBlank {
 
@@ -30,6 +31,7 @@ ExtensionBlank {
 
             FlatButton {
                 text: "api.interactive.question"
+                icon: IconCode.STAR
                 onClicked: {
                     let btn = api.interactive.question("Api tests", "Yes or No?", [Button.Yes, Button.No])
                     if (btn === Button.Yes) {
