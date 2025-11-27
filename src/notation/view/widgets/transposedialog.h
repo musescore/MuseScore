@@ -72,10 +72,9 @@ private:
     bool useDoubleSharpsFlats() const;
 
     void setDirection(TransposeDirection direction);
-
     void setInterval(int interval);
-
     void restorePreviousSettings();
+    void setUseDoubleSharpsFlats(bool val);
 
     static TransposeOptions& lastUsedOptions();
 

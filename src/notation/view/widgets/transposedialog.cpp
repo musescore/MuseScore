@@ -366,6 +366,13 @@ void TransposeDialog::setInterval(int interval)
     }
 }
 
+void TransposeDialog::setUseDoubleSharpsFlats(bool val)
+{
+    // index 0 - don't use
+    // index 1 - use
+    accidentalOptions->setCurrentIndex(val);
+}
+
 void TransposeDialog::restorePreviousSettings()
 {
     TransposeOptions& options = lastUsedOptions();
@@ -373,6 +380,7 @@ void TransposeDialog::restorePreviousSettings()
     setMode(options.mode);
     setDirection(options.direction);
     setInterval(options.interval);
+    setUseDoubleSharpsFlats(options.needTransposeDoubleSharpsFlats);
 }
 
 TransposeOptions& TransposeDialog::lastUsedOptions()
