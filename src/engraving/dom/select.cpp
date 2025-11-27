@@ -1085,14 +1085,24 @@ muse::ByteArray Selection::staffMimeData() const
     SelectionFilter filter = selectionFilter();
     Fraction curTick;
 
-    Fraction ticks  = tickEnd() - tickStart();
+    Fraction ticks = tickEnd() - tickStart();
     int staves = static_cast<int>(staffEnd() - staffStart());
 
-    xml.startElement("StaffList", { { "version", (MScore::testMode ? "2.00" : Constants::MSC_VERSION_STR) },
-                         { "tick", tickStart().toString() },
-                         { "len", ticks.toString() },
-                         { "staff", staffStart() },
-                         { "staves", staves } });
+    XmlWriter::Attributes staffListAttributes = {
+        { "version", (MScore::testMode ? "2.00" : Constants::MSC_VERSION_STR) },
+        { "tick", tickStart().toString() },
+        { "len", ticks.toString() },
+        { "staff", staffStart() },
+        { "staves", staves },
+    };
+
+    // Note: canCopy() ensures that the whole selection has a single time stretch ratio.
+    Fraction timeStretch = score()->staff(staffStart())->timeStretch(tickStart());
+    if (timeStretch != Fraction(1, 1)) {
+        staffListAttributes.push_back({ "timeStretch", timeStretch.toString() });
+    }
+
+    xml.startElement("StaffList", staffListAttributes);
 
     Segment* seg1 = m_startSegment;
     Segment* seg2 = m_endSegment;

@@ -401,6 +401,16 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 done = true;
                 break;
             }
+            // Check the time stretch for all measures overlapping the destination range.
+            for (Measure* m = dst->measure(); m && m->tick() < oEndTick; m = m->nextMeasure()) {
+                Fraction mTimeStretch = dst->score()->staff(dstStaffIdx)->timeStretch(m->tick());
+                if (mTimeStretch != Fraction(1, 1)) {
+                    LOGD("Can't paste due to different time stretch ratios (src time stretch: 1/1, dst time stretch: %d/%d)",
+                         mTimeStretch.numerator(), mTimeStretch.denominator());
+                    MScore::setError(MsError::DEST_LOCAL_TIME_SIGNATURE);
+                    return false;
+                }
+            }
 
             while (e.readNextStartElement()) {
                 pasted = true;
