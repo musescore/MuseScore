@@ -42,7 +42,8 @@ static InputProcessingProgress::StatusInfo::StatusData parseStatusData(const std
     }
 
     std::string err;
-    JsonDocument doc = JsonDocument::fromJson(ByteArray(json.c_str()), &err);
+    ByteArray ba(json.c_str());
+    JsonDocument doc = JsonDocument::fromJson(ba, &err);
 
     if (!err.empty() || !doc.isObject()) {
         LOGE() << "JSON parse error: " << err << ", json: " << json;
@@ -388,8 +389,12 @@ void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int
     long long chunksDurationUs = 0;
     bool isRendering = false;
 
-    for (int i = 0; i < size; ++i) {
+    // Call it N + 1 times so that the sampler can delete the list to avoid memory leak
+    for (int i = 0; i <= size; ++i) {
         const RenderRangeInfo info = m_samplerLib->getNextRenderProgressInfo(list);
+        if (i == size) {
+            break;
+        }
 
         switch (info._state) {
         case ms_RenderingState_Rendering:
