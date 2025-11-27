@@ -343,16 +343,22 @@ void TransposeDialog::setTransposeChordNames(bool val)
     transposeChordNames->setChecked(val);
 }
 
+void TransposeDialog::setTransposeKeys(bool val)
+{
+    transposeKeys->setChecked(val);
+}
+
 void TransposeDialog::restorePreviousSettings()
 {
     TransposeOptions& options = lastUsedOptions();
 
     setMode(options.mode);
     setDirection(options.direction);
+    setKey(options.key);
     setInterval(options.interval);
     setUseDoubleSharpsFlats(options.needTransposeDoubleSharpsFlats);
     setTransposeChordNames(options.needTransposeChordNames);
-    setKey(options.key);
+    setTransposeKeys(options.needTransposeKeys);
 }
 
 TransposeOptions& TransposeDialog::lastUsedOptions()
