@@ -354,6 +354,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
         }
         Fraction tickStart = Fraction::fromString(e.attribute("tick"));
         Fraction oTickLen = Fraction::fromString(e.attribute("len"));
+        Fraction timeStretch = Fraction::fromString(e.attribute("timeStretch"));
         tickLen = oTickLen * scale;
         int staffStart = e.intAttribute("staff", 0);
         staves = e.intAttribute("staves", 0);
@@ -387,6 +388,25 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
             if (dstStaffIdx >= dst->score()->nstaves()) {
                 LOGD("paste beyond staves");
                 done = true;
+                break;
+            }
+            if (dst->isInsideTupletOnStaff(dstStaffIdx)) {
+                done = true;
+                break;
+            }
+            // Check the time stretch for all measures overlapping the destination range.
+            for (Measure* m = dst->measure(); m && m->tick() < oEndTick; m = m->nextMeasure()) {
+                Fraction mTimeStretch = dst->score()->staff(dstStaffIdx)->timeStretch(m->tick());
+                if (mTimeStretch != timeStretch) {
+                    LOGD(
+                        "Can't paste due to different time stretch ratios (src staff idx: %d, time stretch: %d/%d, dst staff idx: %d, time stretch: %d/%d)", srcStaffIdx,
+                        timeStretch.numerator(), timeStretch.denominator(), dstStaffIdx, mTimeStretch.numerator(),
+                        mTimeStretch.denominator());
+                    done = true;
+                    break;
+                }
+            }
+            if (done) {
                 break;
             }
 
