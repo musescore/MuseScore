@@ -650,6 +650,18 @@ bool Staff::isVoiceVisible(int voice)
 }
 
 //---------------------------------------------------------
+//   Spanner::ornament
+//---------------------------------------------------------
+
+Ornament* Spanner::ornament() const
+{
+    if (spanner()->type() == mu::engraving::ElementType::TRILL) {
+        return wrap<Ornament>(trill()->ornament());
+    }
+    return nullptr;
+}
+
+//---------------------------------------------------------
 //   wrap
 ///   \cond PLUGIN_API \private \endcond
 ///   Wraps mu::engraving::EngravingItem choosing the correct wrapper type
@@ -663,7 +675,7 @@ EngravingItem* mu::engraving::apiv1::wrap(mu::engraving::EngravingItem* e, Owner
     }
 
 #define API_WRAP(type) \
-    if (e->is##type()) { return wrap<type>(to##type(e), own); }
+        if (e->is##type()) { return wrap<type>(to##type(e), own); }
 
     API_WRAP(Tie)
     API_WRAP(Ornament)
