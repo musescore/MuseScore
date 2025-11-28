@@ -17,23 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
 
-#include <QObject>
-#include <qqmlintegration.h>
-
-namespace muse::ui {
-class QmlDataFormatter : public QObject
-{
-    Q_OBJECT
-    QML_NAMED_ELEMENT(DataFormatter);
-    QML_UNCREATABLE("Must be created in C++ only")
-
-public:
-    explicit QmlDataFormatter(QObject* parent = nullptr);
-
-    Q_INVOKABLE QString formatReal(double value, int decimals = 2) const;
-};
-}
+#include "foreign.h"

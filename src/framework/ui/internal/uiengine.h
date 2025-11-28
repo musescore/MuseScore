@@ -20,11 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UI_UIENGINE_H
-#define MUSE_UI_UIENGINE_H
+#pragma once
 
 #include <QObject>
 #include <memory>
+
+#include <qqmlintegration.h>
 
 #include "../iuiengine.h"
 #include "../api/themeapi.h"
@@ -43,6 +44,9 @@ class QmlApiEngine;
 class UiEngine : public QObject, public IUiEngine, public Injectable
 {
     Q_OBJECT
+
+    QML_ELEMENT;
+    QML_UNCREATABLE("Must be created in C++ only");
 
     Q_PROPERTY(api::ThemeApi * theme READ theme NOTIFY themeChanged)
     Q_PROPERTY(QmlToolTip * tooltip READ tooltip CONSTANT)
@@ -123,5 +127,3 @@ private:
     mutable int m_isEffectsAllowed = -1;
 };
 }
-
-#endif // MUSE_UI_UIENGINE_H

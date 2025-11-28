@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2021 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,34 +22,33 @@
 
 #pragma once
 
+#include <QObject>
+
 #include <qqmlintegration.h>
 
-#include <QString>
-#include <QValidator>
+#include "modularity/ioc.h"
+#include "ui/iwindowscontroller.h"
 
-namespace muse::uicomponents {
-class IntInputValidator : public QValidator
+namespace muse::ui {
+class WindowsModel : public QObject, public Injectable
 {
     Q_OBJECT
-    QML_ELEMENT
-    Q_PROPERTY(int top READ top WRITE setTop)
-    Q_PROPERTY(int bottom READ bottom WRITE setBottom)
+    QML_ELEMENT;
+
+    Inject<ui::IWindowsController> windowsController = { this };
+
+    Q_PROPERTY(
+        QRect mainWindowTitleBarMoveArea READ mainWindowTitleBarMoveArea WRITE setMainWindowTitleBarMoveArea NOTIFY mainWindowTitleBarMoveAreaChanged)
 
 public:
-    explicit IntInputValidator(QObject* parent = nullptr);
+    explicit WindowsModel(QObject* parent = nullptr);
 
-    void fixup(QString& string) const override;
-    State validate(QString& inputStr, int& cursorPos) const override;
-
-    int top() const;
-    int bottom() const;
+    QRect mainWindowTitleBarMoveArea() const;
 
 public slots:
-    void setTop(int);
-    void setBottom(int);
+    void setMainWindowTitleBarMoveArea(const QRect& area);
 
-private:
-    int m_top = 999;
-    int m_bottom = -999;
+signals:
+    void mainWindowTitleBarMoveAreaChanged(QRect titleBarMoveArea);
 };
 }

@@ -19,17 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_NAVIGATIONEVENT_H
-#define MUSE_UI_NAVIGATIONEVENT_H
+
+#pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "ui/inavigation.h"
 
 namespace muse::ui {
-class NavigationEvent
+class NavigationEvent : public QObject
 {
-    Q_GADGET
+    Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Must be created in C++ only")
     Q_PROPERTY(Type type READ type CONSTANT)
     Q_PROPERTY(bool accepted READ accepted WRITE setAccepted)
 
@@ -62,6 +65,3 @@ private:
     INavigation::EventPtr m_event;
 };
 }
-Q_DECLARE_METATYPE(muse::ui::NavigationEvent)
-
-#endif // MUSE_UI_NAVIGATIONEVENT_H

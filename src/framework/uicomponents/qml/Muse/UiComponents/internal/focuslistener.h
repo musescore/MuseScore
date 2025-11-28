@@ -1,8 +1,8 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -19,34 +19,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_ERRORDETAILSMODEL_H
-#define MUSE_UI_ERRORDETAILSMODEL_H
 
-#include <QAbstractListModel>
+#pragma once
 
-namespace muse::ui {
-class ErrorDetailsModel : public QAbstractListModel
+#include <QQuickItem>
+
+#include <qqmlintegration.h>
+
+namespace muse::uicomponents {
+class FocusListener : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT;
+
+    Q_PROPERTY(QQuickItem * item READ item WRITE setItem NOTIFY itemChanged)
 
 public:
-    explicit ErrorDetailsModel(QObject* parent = nullptr);
+    explicit FocusListener(QObject* parent = nullptr);
 
-    QVariant data(const QModelIndex& index, int role) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    QHash<int, QByteArray> roleNames() const override;
+    QQuickItem* item() const;
 
-    Q_INVOKABLE void load(const QString& detailedText);
-    Q_INVOKABLE bool copyDetailsToClipboard();
+signals:
+    void itemChanged();
+
+public slots:
+    void setItem(QQuickItem* item);
 
 private:
-    enum Roles {
-        ErrorText = Qt::UserRole + 1,
-        ErrorPlainText
-    };
+    void listenFocusChanged();
 
-    QList<QVariantMap> m_items;
+    bool eventFilter(QObject* watched, QEvent* event);
+
+    QQuickItem* m_item = nullptr;
 };
 }
-
-#endif //MUSE_UI_ERRORDETAILSMODEL_H

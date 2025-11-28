@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-Studio-CLA-applies
+ * MuseScore-CLA-applies
  *
- * MuseScore Studio
+ * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,30 +22,32 @@
 
 #pragma once
 
-#include <QObject>
+#include <QAbstractListModel>
 
-#include "modularity/ioc.h"
-#include "ui/iwindowscontroller.h"
+#include <qqmlintegration.h>
 
 namespace muse::ui {
-class WindowsModel : public QObject, public Injectable
+class ErrorDetailsModel : public QAbstractListModel
 {
     Q_OBJECT
-
-    Inject<ui::IWindowsController> windowsController = { this };
-
-    Q_PROPERTY(
-        QRect mainWindowTitleBarMoveArea READ mainWindowTitleBarMoveArea WRITE setMainWindowTitleBarMoveArea NOTIFY mainWindowTitleBarMoveAreaChanged)
+    QML_ELEMENT
 
 public:
-    explicit WindowsModel(QObject* parent = nullptr);
+    explicit ErrorDetailsModel(QObject* parent = nullptr);
 
-    QRect mainWindowTitleBarMoveArea() const;
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
-public slots:
-    void setMainWindowTitleBarMoveArea(const QRect& area);
+    Q_INVOKABLE void load(const QString& detailedText);
+    Q_INVOKABLE bool copyDetailsToClipboard();
 
-signals:
-    void mainWindowTitleBarMoveAreaChanged(QRect titleBarMoveArea);
+private:
+    enum Roles {
+        ErrorText = Qt::UserRole + 1,
+        ErrorPlainText
+    };
+
+    QList<QVariantMap> m_items;
 };
 }

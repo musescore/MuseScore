@@ -19,12 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_MACOS_MAINWINDOWBRIDGE_H
-#define MUSE_UI_MACOS_MAINWINDOWBRIDGE_H
+
+#pragma once
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
+
+#include <qqmlintegration.h>
 
 #include "ui/view/mainwindowbridge.h"
 
@@ -32,6 +34,7 @@ namespace muse::ui {
 class MacOSMainWindowBridge : public MainWindowBridge, public async::Asyncable
 {
     Q_OBJECT
+    QML_NAMED_ELEMENT(MainWindowBridge)
 
     INJECT(IUiConfiguration, uiConfiguration)
 
@@ -47,5 +50,3 @@ private:
     void init() override;
 };
 }
-
-#endif // MUSE_UI_MACOS_MAINWINDOWBRIDGE_H

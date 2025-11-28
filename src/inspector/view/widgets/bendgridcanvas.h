@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_INSPECTOR_BENDGRIDCANVAS_H
-#define MU_INSPECTOR_BENDGRIDCANVAS_H
+#pragma once
 
 #include <optional>
 
@@ -35,7 +34,7 @@
 #include "types/bendtypes.h"
 
 #include "uicomponents/view/quickpaintedview.h"
-#include "ui/view/qmlaccessible.h"
+#include "ui/qml/Muse/Ui/qmlaccessible.h"
 
 namespace mu::inspector {
 class BendGridCanvas : public muse::uicomponents::QuickPaintedView, public muse::async::Asyncable
@@ -164,5 +163,3 @@ private:
     bool m_canvasWasChanged = false;
 };
 }
-
-#endif // MU_INSPECTOR_BENDGRIDCANVAS_H

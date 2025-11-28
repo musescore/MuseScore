@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -17,38 +17,24 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_FOCUSLISTENER_H
-#define MUSE_UI_FOCUSLISTENER_H
 
-#include <QQuickItem>
+#pragma once
+
+#include <QQuickPaintedItem>
+#include <qqmlintegration.h>
 
 namespace muse::ui {
-class FocusListener : public QObject
+class GraphicsTestObject : public QQuickPaintedItem
 {
     Q_OBJECT
-
-    Q_PROPERTY(QQuickItem * item READ item WRITE setItem NOTIFY itemChanged)
+    QML_ELEMENT
 
 public:
-    explicit FocusListener(QObject* parent = nullptr);
+    GraphicsTestObject();
+    ~GraphicsTestObject();
 
-    QQuickItem* item() const;
-
-signals:
-    void itemChanged();
-
-public slots:
-    void setItem(QQuickItem* item);
-
-private:
-    void listenFocusChanged();
-
-    bool eventFilter(QObject* watched, QEvent* event);
-
-    QQuickItem* m_item = nullptr;
+    void paint(QPainter*) override;
 };
 }
-
-#endif // MUSE_UI_FOCUSLISTENER_H

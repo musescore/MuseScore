@@ -20,13 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UI_QMLACCESSIBLE_H
-#define MUSE_UI_QMLACCESSIBLE_H
+#pragma once
 
 #include <QObject>
 #include <QQmlParserStatus>
 #include <QQuickItem>
 #include <QMap>
+
+#include <qqmlintegration.h>
 
 #include "accessibility/iaccessible.h"
 #include "modularity/ioc.h"
@@ -38,40 +39,39 @@
     void set_##P(bool arg) { setState(S, arg); } \
 
 namespace muse::ui {
-class MUAccessible
-{
-    Q_GADGET
-public:
-    MUAccessible() = default;
+namespace MUAccessible {
+Q_NAMESPACE;
+QML_ELEMENT;
 
-    //! NOTE Please sync with accessibility::IAccessible::Role (src/framework/accessibility/iaccessible.h)
-    enum Role {
-        NoRole = 0,
-        Application,
-        Dialog,
-        Panel,
-        StaticText,
-        EditableText,
-        SilentRole,
-        Button,
-        CheckBox,
-        RadioButton,
-        ComboBox,
-        List,
-        ListItem,
-        MenuItem,
-        SpinBox,
-        Range,
-        Group,
-        Information,
-        ElementOnScore
-    };
-    Q_ENUM(Role)
+//! NOTE Please sync with accessibility::IAccessible::Role (src/framework/accessibility/iaccessible.h)
+enum Role {
+    NoRole = 0,
+    Application,
+    Dialog,
+    Panel,
+    StaticText,
+    EditableText,
+    SilentRole,
+    Button,
+    CheckBox,
+    RadioButton,
+    ComboBox,
+    List,
+    ListItem,
+    MenuItem,
+    SpinBox,
+    Range,
+    Group,
+    Information,
+    ElementOnScore
 };
+Q_ENUM_NS(Role)
+}
 
 class AccessibleItem : public QObject, public QQmlParserStatus, public accessibility::IAccessible, public Injectable
 {
     Q_OBJECT
+    QML_ELEMENT;
 
     Q_PROPERTY(AccessibleItem * accessibleParent READ accessibleParent_property WRITE setAccessibleParent NOTIFY accessiblePrnChanged)
     Q_PROPERTY(muse::ui::MUAccessible::Role role READ role WRITE setRole NOTIFY roleChanged)
@@ -248,5 +248,3 @@ private:
     async::Channel<State, bool> m_accessibleStateChanged;
 };
 }
-
-#endif // MUSE_UI_QMLACCESSIBLE_H

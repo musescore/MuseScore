@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_PROGRESSDIALOGMODEL_H
-#define MUSE_UI_PROGRESSDIALOGMODEL_H
+
+#pragma once
 
 #include <QObject>
+
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 #include "progress.h"
@@ -31,6 +33,7 @@ namespace muse::ui {
 class ProgressDialogModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
+    QML_ELEMENT
 
     Q_PROPERTY(int from READ from NOTIFY fromChanged)
     Q_PROPERTY(int value READ value NOTIFY valueChanged)
@@ -68,5 +71,3 @@ private:
     Progress m_progress;
 };
 }
-
-#endif //MUSE_UI_PROGRESSDIALOGMODEL_H

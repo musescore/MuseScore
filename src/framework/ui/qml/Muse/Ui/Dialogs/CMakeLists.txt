@@ -4,7 +4,7 @@
 # MuseScore
 # Music Composition & Notation
 #
-# Copyright (C) 2025 MuseScore Limited and others
+# Copyright (C) 2025 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -18,22 +18,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_qml_module(muse_learn_qml ALIAS muse::learn_qml FOR muse_learn)
+muse_create_qml_module(muse_ui_dialogs_qml ALIAS muse::ui_dialogs_qml FOR muse_ui)
 
-qt_add_qml_module(muse_learn_qml
-    URI Muse.Learn
+qt_add_qml_module(muse_ui_dialogs_qml
+    URI Muse.Ui.Dialogs
     VERSION 1.0
     SOURCES
-        learnpagemodel.cpp
-        learnpagemodel.h
+        errordetailsmodel.cpp
+        errordetailsmodel.h
+        progressdialogmodel.cpp
+        progressdialogmodel.h
     QML_FILES
-        LearnPage.qml
-        internal/ClassesPage.qml
-        internal/Playlist.qml
-        internal/PlaylistItem.qml
-    RESOURCES
-        resources/marc_sabatella.jpg
+        ErrorDetailsView.qml
+        FileDialog.qml
+        FolderDialog.qml
+        ProgressDialog.qml
+        StandardDialog.qml
+        StandardDialogPanel.qml
     IMPORTS
+        QtQuick
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
 )

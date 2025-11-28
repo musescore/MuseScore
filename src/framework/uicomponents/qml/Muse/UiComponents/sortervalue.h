@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "qqmlintegration.h"
+#include <qqmlintegration.h>
 
 #include <QObject>
 

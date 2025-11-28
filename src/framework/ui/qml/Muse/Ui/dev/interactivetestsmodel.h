@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_INTERACTIVETESTSMODEL_H
-#define MUSE_UI_INTERACTIVETESTSMODEL_H
+
+#pragma once
 
 #include <QObject>
+
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
@@ -32,6 +34,7 @@ namespace muse::ui {
 class InteractiveTestsModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
+    QML_ELEMENT;
 
     Q_PROPERTY(QString currentUri READ currentUri NOTIFY currentUriChanged)
 
@@ -79,5 +82,3 @@ private:
     QString m_currentUri;
 };
 }
-
-#endif // MUSE_UI_INTERACTIVETESTSMODEL_H

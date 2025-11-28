@@ -45,6 +45,7 @@ qt_add_qml_module(engraving_qml
         devtools/EngravingUndoStackDialog.qml
         devtools/EngravingUndoStackPanel.qml
     IMPORTS
+        TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
 )
 

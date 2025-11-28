@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_NAVIGATIONPOPUPPANEL_H
-#define MUSE_UI_NAVIGATIONPOPUPPANEL_H
+
+#pragma once
 
 #include <QObject>
+
+#include <qqmlintegration.h>
 
 #include "navigationpanel.h"
 
@@ -30,8 +32,9 @@ namespace muse::ui {
 class NavigationPopupPanel : public NavigationPanel
 {
     Q_OBJECT
+    QML_ELEMENT
 
-    Q_PROPERTY(NavigationControl * parentControl READ parentControl_property WRITE setParentControl NOTIFY parentControlChanged)
+    Q_PROPERTY(NavigationControl* parentControl READ parentControl_property WRITE setParentControl NOTIFY parentControlChanged)
 
 public:
     explicit NavigationPopupPanel(QObject* parent = nullptr);
@@ -50,4 +53,3 @@ private:
     INavigationControl* m_parentControl = nullptr;
 };
 }
-#endif // MUSE_UI_NAVIGATIONPOPUPPANEL_H

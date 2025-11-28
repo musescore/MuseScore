@@ -62,7 +62,8 @@ public:
     void listen(const OnResult& f);
     void destroy();
 
-    static GraphicsTestObject* graphicsTestObject;
+    inline static bool testObjectIsAlive = false;
+    inline static bool testObjectHasPainted = false;
 
 private:
 
@@ -83,16 +84,5 @@ private:
     GraphicsProblemsDetectorLogDest* m_logDest = nullptr;
     OnResult m_onResult;
     QTimer m_timer;
-};
-
-class GraphicsTestObject : public QQuickPaintedItem
-{
-public:
-    GraphicsTestObject();
-    ~GraphicsTestObject();
-
-    bool painted = false;
-
-    void paint(QPainter*) override;
 };
 }
