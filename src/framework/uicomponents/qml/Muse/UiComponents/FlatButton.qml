@@ -36,6 +36,7 @@ import Muse.UiComponents
  *
  * ExtensionBlank {
  *      FlatButton {
+ *          icon: IconCode.STAR
  *          text: "Click me"
  *          onClicked: {
  *              api.interactive.info("Test", "Clicked on button")
@@ -47,7 +48,7 @@ FocusScope {
     id: root
 
     /** APIDOC
-     * @member {IconCode}
+     * @member {Qml.IconCode}
      */
     property int icon: IconCode.NONE
     /** APIDOC

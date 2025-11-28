@@ -101,11 +101,11 @@ std::vector<muse::IInteractive::Button> InteractiveApi::buttons(const QJSValueLi
  * @method
  * @param {String} title Title
  * @param {String} text Message
- * @param {Button[]} buttons Buttons
- * @return {Button} - selected button
+ * @param {ButtonCode[]} buttons Code of buttons
+ * @return {ButtonCode} - selected button
  * @example
- * let btn = api.interactive.question("My question", "Yes or No?", [Button.Yes, Button.No]);
- * if (btn === Button.Yes) {
+ * let btn = api.interactive.question("My question", "Yes or No?", [ButtonCode.Yes, ButtonCode.No]);
+ * if (btn === ButtonCode.Yes) {
  *      ...
  * }
  */
