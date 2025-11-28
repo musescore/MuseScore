@@ -74,9 +74,10 @@ std::pair<ApiObject*, bool /*is need delete*/> ApiRegister::createApi(const std:
     return { it->second.c->create(e), it->second.c->isNeedDelete() };
 }
 
-void ApiRegister::regGlobalEnum(const std::string& module, const QMetaEnum& meta)
+void ApiRegister::regGlobalEnum(const std::string& module, const QMetaEnum& meta, const std::string& name)
 {
-    m_globalEnums.push_back({ module, meta });
+    std::string ename = name.empty() ? std::string(meta.enumName()) : name;
+    m_globalEnums.push_back({ module, ename, meta });
 }
 
 const std::vector<ApiRegister::GlobalEnum>& ApiRegister::globalEnums() const

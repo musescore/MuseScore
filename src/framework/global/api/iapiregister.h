@@ -48,10 +48,11 @@ public:
 
     struct GlobalEnum {
         std::string module;
+        std::string name;
         QMetaEnum meta;
     };
 
-    virtual void regGlobalEnum(const std::string& module, const QMetaEnum& meta) = 0;
+    virtual void regGlobalEnum(const std::string& module, const QMetaEnum& meta, const std::string& name = "") = 0;
     virtual const std::vector<GlobalEnum>& globalEnums() const = 0;
 
     // dev

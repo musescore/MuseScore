@@ -27,12 +27,14 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/mainwindowmock.h
 
     ${CMAKE_CURRENT_LIST_DIR}/navigationcontroller_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/qmltooltip_tests.cpp
     )
 
 set(MODULE_TEST_LINK
     muse_actions
     muse_ui
+    # Linking a non-qml module (or its tests) to its qml counterpart should 
+    # generally be avoided, but for the ui module we have to make an exception.
+    muse_ui_qml 
     Qt::Quick
     )
 

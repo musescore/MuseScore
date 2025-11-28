@@ -49,8 +49,10 @@ namespace muse::uicomponents {
 class WindowView : public QObject, public QQmlParserStatus, public Injectable, public async::Asyncable
 {
     Q_OBJECT
-    QML_ELEMENT;
     Q_INTERFACES(QQmlParserStatus)
+
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable as it is abstract base class")
 
     Q_PROPERTY(QQuickItem * parent READ parentItem WRITE setParentItem NOTIFY parentItemChanged)
 

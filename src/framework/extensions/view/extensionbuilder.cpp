@@ -25,6 +25,7 @@
 
 #include "global/types/number.h"
 #include "global/async/async.h"
+#include "global/io/file.h"
 
 #include "../api/v1/ipluginapiv1.h"
 
@@ -32,13 +33,36 @@
 
 using namespace muse::extensions;
 
+const QString ERROR_MSG_PATH = ":/qml/Muse/Extensions/ExtensionErrorMessage.qml";
+
 ExtensionBuilder::ExtensionBuilder(QObject* parent)
     : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {}
 
+QString ExtensionBuilder::validateImports(const io::path_t& qmlFilePath) const
+{
+    ByteArray data;
+    Ret ret = io::File::readFile(qmlFilePath, data);
+    if (!ret) {
+        return "failed read file: " + qmlFilePath.toQString() + ", err: " + QString::fromStdString(ret.toString());
+    }
+
+    QByteArray qdata = data.toQByteArrayNoCopy();
+    QString content = QString::fromUtf8(qdata);
+    QStringList lines = content.split('\n');
+    for (const QString& line_ : std::as_const(lines)) {
+        QString line = line_.trimmed();
+        if (line.startsWith("import") && line.contains("Muse.")) {
+            return "Importing 'Muse.' modules is prohibited.";
+        }
+    }
+    return QString();
+}
+
 void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 {
-    Action a = provider()->action(UriQuery(uri.toStdString()));
+    const UriQuery q = UriQuery(uri.toStdString());
+    const Action a = provider()->action(q);
     if (!a.isValid()) {
         LOGE() << "Not found action, uri: " << uri;
         return;
@@ -53,18 +77,43 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
         engin = engine()->qmlEngine();
     }
 
-    //! NOTE We create extension UI using a separate engine to control what we provide,
-    //! making it easier to maintain backward compatibility and stability.
-    QQmlComponent component = QQmlComponent(engin, a.path.toQString());
-    if (!component.isReady()) {
-        LOGE() << "Failed to load QML file: " << a.path << ", from extension: " << uri;
-        LOGE() << component.errorString();
-        return;
+    const Manifest& manifest = provider()->manifest(q.uri());
+    QObject* qmlObj = nullptr;
+
+    QString errorString;
+    if (manifest.apiversion != 1) {
+        errorString = validateImports(a.path);
     }
 
-    QObject* obj = component.createWithInitialProperties({ { "parent", QVariant::fromValue(itemParent) } });
+    if (errorString.isEmpty()) {
+        //! NOTE We create extension UI using a separate engine to control what we provide,
+        //! making it easier to maintain backward compatibility and stability.
+        QQmlComponent component = QQmlComponent(engin, a.path.toQString());
+        if (component.isReady()) {
+            qmlObj = component.createWithInitialProperties({ { "parent", QVariant::fromValue(itemParent) } });
+        } else {
+            errorString = component.errorString();
+            LOGE() << "Failed to load QML file: " << a.path << ", from extension: " << uri;
+        }
+    }
 
-    m_contentItem = qobject_cast<QQuickItem*>(obj);
+    if (!errorString.isEmpty()) {
+        LOGE() << errorString;
+
+        QQmlComponent component = QQmlComponent(engin, ERROR_MSG_PATH);
+        if (component.isReady()) {
+            qmlObj = component.createWithInitialProperties({
+                { "parent", QVariant::fromValue(itemParent) },
+                { "text", errorString }
+            });
+        } else {
+            LOGE() << "Failed to load QML file: " << a.path << ", from extension: " << uri;
+            LOGE() << component.errorString();
+            return;
+        }
+    }
+
+    m_contentItem = qobject_cast<QQuickItem*>(qmlObj);
     if (!m_contentItem) {
         LOGE() << "Component not QuickItem, file: " << a.path << ", from extension: " << uri;
     }

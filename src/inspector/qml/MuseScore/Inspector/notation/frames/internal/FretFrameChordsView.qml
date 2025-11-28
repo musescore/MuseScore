@@ -1,0 +1,123 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2025 MuseScore Limited
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.Ui
+import Muse.UiComponents
+
+import MuseScore.Inspector
+
+StyledListView {
+    id: root
+
+    required property FretFrameChordListModel model
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
+    property int navigationRowEnd: navigationRowStart + (count * 2) - 1
+
+    spacing: 0
+
+    signal changeChordVisibilityRequested(int index, bool visible)
+    signal selectRowRequested(int index)
+    signal clearSelectionRequested()
+
+    function positionViewAtSelectedItems() {
+        var selectedIndexes = root.model.selectionModel.selectedIndexes
+        for (var _index in selectedIndexes) {
+            positionViewAtIndex(selectedIndexes[_index].row, ListView.Contain)
+        }
+    }
+
+    function focusOnFirst() {
+        var firstItem = root.itemAtIndex(0) as ListItemBlank
+        if (Boolean(firstItem)) {
+            firstItem.navigation.requestActive()
+        }
+    }
+
+    function clearFocus() {
+        root.clearSelectionRequested()
+    }
+
+    delegate: ListItemBlank {
+        id: itemDelegate
+
+        required property FretFrameChordItem item
+        required isSelected
+        required property int index
+
+        height: 34
+        width: root.width
+
+        onClicked: {
+            root.selectRowRequested(index)
+        }
+
+        navigation.name: item.title
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart + (index * 2)
+        navigation.accessible.name: item.title
+        navigation.onActiveChanged: {
+            if (navigation.active) {
+                root.positionViewAtIndex(index, ListView.Contain)
+            }
+        }
+
+        RowLayout {
+            anchors.fill: parent
+            anchors.leftMargin: 12
+            anchors.rightMargin: 12
+
+            spacing: 4
+
+            VisibilityBox {
+                id: visibilityButton
+
+                Layout.alignment: Qt.AlignLeft
+
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationRowStart + (itemDelegate.index * 2) + 1
+                accessibleText: titleLabel.text
+
+                isVisible: itemDelegate.item.isVisible
+
+                onVisibleToggled: {
+                    root.changeChordVisibilityRequested(itemDelegate.index, !itemDelegate.item.isVisible)
+                }
+            }
+
+            StyledTextLabel {
+                id: titleLabel
+
+                Layout.fillWidth: true
+
+                horizontalAlignment: Text.AlignLeft
+                text: itemDelegate.item.title
+                font.family: ui.theme.musicalTextFont.family
+            }
+        }
+    }
+}

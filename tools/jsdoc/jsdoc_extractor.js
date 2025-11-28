@@ -75,6 +75,22 @@ function qmlPropName(line)
     return name;
 }
 
+function qpropName(line)
+{
+    if (!line.includes("Q_PROPERTY")) {
+        return "";
+    }
+
+    const words = line.split(" ");
+    for (let i = 0; i < words.length; ++i) {
+        if (words[i] === "READ") {
+            let name = words[i - 1];
+            return name.trim()
+        }
+    }
+    return "";
+}
+
 function enumName(line)
 {
     let name = "";
@@ -140,6 +156,9 @@ async function extractDoc(file)
         propLookName: false,
         props: [],
 
+        qpropLookName: false,
+        qprops: [],
+
         memberLookName: false,
         members: [],
         
@@ -156,6 +175,10 @@ async function extractDoc(file)
             }
 
             doc = state.parentDoc.replace('*/', `${propsDoc}*/`);
+
+            for (const p of state.qprops) {
+                doc += p
+            }
 
             for (const m of state.members) {
                 doc += m
@@ -181,6 +204,9 @@ async function extractDoc(file)
 
             this.propLookName = false;
             this.props = [];
+
+            this.qpropLookName = false;
+            this.qprops = [];
 
             this.memberLookName = false;
             this.members = [];
@@ -250,12 +276,10 @@ async function extractDoc(file)
             }
 
             // try add memberof to method
-            if (state.parentName !== "") {
-                if (state.currentDoc.includes('@method')) {
-                    state.currentDoc = state.currentDoc.replace('@method', `@memberof ${state.parentName}\n* @method`);
-                    state.methodLookName = true;
-                    continue;
-                }
+            if (state.currentDoc.includes('@method')) {
+                state.currentDoc = state.currentDoc.replace('@method', `@memberof ${state.parentName}\n* @method`);
+                state.methodLookName = true;
+                continue;
             }
 
             // try get property 
@@ -267,18 +291,32 @@ async function extractDoc(file)
                 continue;
             }
 
+            // try get q_property 
+            if (state.currentDoc.includes('@q_property')) {
+                // add memberof and make as member
+                state.currentDoc = state.currentDoc.replace('@q_property', `@memberof ${state.parentName}\n* @member`);
+                state.qpropLookName = true;
+                continue;
+            }
+
             // try get member 
-            if (state.currentDoc.includes('@member')) {
-                if (state.currentDoc.includes('@member')) {
-                    state.currentDoc = state.currentDoc.replace('@member', `@memberof ${state.parentName}\n* @member`);
-                    state.memberLookName = true;
-                    continue;
-                }
+            if (state.currentDoc.includes('@member ')) {
+                state.currentDoc = state.currentDoc.replace('@member', `@memberof ${state.parentName}\n* @member`);
+                state.memberLookName = true;
+                continue;
             }
 
             // try get enum 
             if (state.currentDoc.includes('@enum')) {
-                state.enumLookName = true;
+                const nameMatch = state.currentDoc.match(/@name\s+(\S+)/);
+                if (nameMatch) {
+                    // remove @name
+                    state.currentDoc = state.currentDoc.replace(/^\s*\*\s*.*@name.*$\n?/gm, '');
+                    state.enumStarted = true;
+                    state.currentDoc += 'const ' + nameMatch[1] + ' = {\n';
+                } else {
+                    state.enumLookName = true;
+                }
                 continue;
             }
         }
@@ -310,6 +348,17 @@ async function extractDoc(file)
                 const regex = /@property\s+\{([^}]+)\}\s+/;
                 state.currentDoc = state.currentDoc.replace(regex, `@property {$1} ${name} `);
                 state.props.push(state.currentDoc);
+            }
+        }
+
+        if (state.qpropLookName) {
+            let name = qpropName(line);
+            if (name !== "") {
+                state.qpropLookName = false;
+                // add name 
+                const regex = /@member\s+\{([^}]+)\}\s+/;
+                state.currentDoc = state.currentDoc.replace(regex, `@member {$1} ${name}\n`);
+                state.qprops.push(state.currentDoc);
             }
         }
 
@@ -406,6 +455,10 @@ async function main()
     // parse args
     var args = process.argv.slice(2);
     console.log("args: ", args)
+    if (args.length === 0) {
+        return;
+    }
+
     {
         var i = -1;
         while (true) {
@@ -482,3 +535,7 @@ async function main()
 }
 
 main()
+
+module.exports = {
+    extractDoc,
+};

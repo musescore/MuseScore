@@ -104,9 +104,29 @@ TEST_F(Engraving_TransposeTests, undoTransposeChordSymbols)
     undoTransposeTest(u"undoTransposeChordSymbols");
 }
 
+TEST_F(Engraving_TransposeTests, undoTransposeFretDiagramsChordSymbols)
+{
+    undoTransposeTest(u"undoTransposeFretDiagramsChordSymbols");
+}
+
+TEST_F(Engraving_TransposeTests, undoTransposeFretDiagrams)
+{
+    undoTransposeTest(u"undoTransposeFretDiagrams");
+}
+
 TEST_F(Engraving_TransposeTests, undoDiatonicTransposeChordSymbols)
 {
     undoDiatonicTransposeTest(u"undoDiatonicTransposeChordSymbols");
+}
+
+TEST_F(Engraving_TransposeTests, undoDiatonicTransposeFretDiagramsChordSymbols)
+{
+    undoTransposeTest(u"undoDiatonicTransposeFretDiagramsChordSymbols");
+}
+
+TEST_F(Engraving_TransposeTests, undoDiatonicTransposeFretDiagrams)
+{
+    undoTransposeTest(u"undoDiatonicTransposeFretDiagrams");
 }
 
 TEST_F(Engraving_TransposeTests, undoDiatonicTranspose)

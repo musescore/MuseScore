@@ -38,6 +38,7 @@
 
 #include "log.h"
 
+// #define MUSE_MODULE_ACCESSIBILITY_TRACE
 #ifdef MUSE_MODULE_ACCESSIBILITY_TRACE
 #define MYLOG() LOGI()
 #else
@@ -157,6 +158,18 @@ void AccessibilityController::reg(IAccessible* item)
         init();
     }
 
+    if (item != this) {
+        if (!item->accessibleParent()) {
+            MYLOG() << "Skipping item with no parent: " << item->accessibleName();
+            return;
+        }
+
+        if (!m_allItems.contains(item->accessibleParent())) {
+            MYLOG() << "Skipping item with unregistered parent: " << item->accessibleName();
+            return;
+        }
+    }
+
     if (findItem(item).isValid()) {
         LOGW() << "Already registered";
         return;
@@ -187,6 +200,16 @@ void AccessibilityController::reg(IAccessible* item)
     // VoiceOver: Use QObject not QAccessibleInterface in QAccessible…Event() constructors.
     QAccessibleEvent ev(it.object, QAccessible::ObjectCreated);
     sendEvent(&ev);
+
+    // Register children
+    size_t childCount = item->accessibleChildCount();
+    for (size_t i = 0; i < childCount; ++i) {
+        IAccessible* child = item->accessibleChild(i);
+        if (m_allItems.contains(child)) {
+            continue;
+        }
+        reg(child);
+    }
 }
 
 void AccessibilityController::unreg(IAccessible* aitem)

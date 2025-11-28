@@ -1,0 +1,130 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore Limited
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+
+import MuseScore.Inspector
+import Muse.UiComponents
+import Muse.Ui
+
+import "../common"
+
+InspectorSectionView {
+    id: root
+
+    required property ScoreAppearanceSettingsModel model
+
+    implicitHeight: contentColumn.implicitHeight
+
+    Column {
+        id: contentColumn
+
+        width: parent.width
+        spacing: 8
+
+        RowLayout {
+            width: parent.width
+            spacing: 4
+
+            CheckBox {
+                Layout.fillWidth: true
+
+                text: qsTrc("inspector", "Automatically hide all empty staves")
+
+                navigation.name: "EmptyStaves"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationRow(1)
+
+                checked: root.model?.hideEmptyStaves ?? false
+                onClicked: {
+                    if (root.model) {
+                        root.model.hideEmptyStaves = !checked
+                    }
+                }
+            }
+
+            PopupViewButton {
+                id: hideEmptyStavesSettingsPopupButton
+                Layout.fillWidth: false
+                Layout.minimumWidth: implicitWidth
+
+                icon: IconCode.SETTINGS_COG
+                transparent: !isOpened
+
+                anchorItem: root.anchorItem
+
+                navigation.name: "HideEmptyStavesSettings"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationRow(2)
+                accessible.name: qsTrc("inspector", "Show options for hiding empty staves")
+
+                popupContent: HideEmptyStavesSettings {
+                    model: root.model
+                    navigationPanel: hideEmptyStavesSettingsPopupButton.popupNavigationPanel
+                }
+
+                onEnsureContentVisibleRequested: function(invisibleContentHeight) {
+                    root.ensureContentVisibleRequested(invisibleContentHeight)
+                }
+
+                onPopupOpened: function(popup, control) {
+                    root.popupOpened(popup, control)
+                }
+            }
+        }
+
+        FlatButton {
+            width: parent.width
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "Page settings"
+            navigation.row: root.navigationRow(3)
+
+            text: qsTrc("inspector", "Page settings")
+
+            onClicked: {
+                if (root.model) {
+                    root.model.showPageSettings()
+                }
+            }
+        }
+
+        FlatButton {
+            width: parent.width
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "Style settings"
+            navigation.row: root.navigationRow(4)
+
+            text: qsTrc("inspector", "Style settings")
+
+            onClicked: {
+                if (root.model) {
+                    root.model.showStyleSettings()
+                }
+            }
+        }
+    }
+}

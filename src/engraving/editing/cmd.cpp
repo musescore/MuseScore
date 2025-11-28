@@ -414,7 +414,7 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
         return;
     }
 
-    if (readOnly() || MScore::_error != MsError::MS_NO_ERROR) {
+    if (readOnly() || (MScore::_error != MsError::MS_NO_ERROR && !MScore::_errorIsWarning)) {
         rollback = true;
     }
 

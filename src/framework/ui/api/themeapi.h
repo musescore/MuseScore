@@ -20,12 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_API_THEMEAPI_H
-#define MUSE_API_THEMEAPI_H
+#pragma once
 
 #include <QFont>
 #include <QPainter>
 #include <QProxyStyle>
+
+#include <qqmlintegration.h>
 
 #include "global/api/apiobject.h"
 #include "modularity/ioc.h"
@@ -34,60 +35,229 @@
 
 namespace muse::api {
 class ProxyStyle;
+/** APIDOC
+ * Access to the theme
+ * @namespace theme
+ */
 class ThemeApi : public api::ApiObject, public async::Asyncable
 {
     Q_OBJECT
 
+    QML_NAMED_ELEMENT(QmlTheme)
+    QML_UNCREATABLE("Must be created in C++ only")
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Boolean}
+     */
     Q_PROPERTY(bool isDark READ isDark NOTIFY themeChanged)
 
+    /** APIDOC
+     * @readonly
+     * @q_property {Color}
+     */
     Q_PROPERTY(QColor backgroundPrimaryColor READ backgroundPrimaryColor NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Color}
+     */
     Q_PROPERTY(QColor backgroundSecondaryColor READ backgroundSecondaryColor NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Color}
+     */
     Q_PROPERTY(QColor backgroundTertiaryColor READ backgroundTertiaryColor NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Color}
+     */
     Q_PROPERTY(QColor backgroundQuarternaryColor READ backgroundQuarternaryColor NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Color}
+     */
     Q_PROPERTY(QColor popupBackgroundColor READ popupBackgroundColor NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Color}
+     */
     Q_PROPERTY(QColor textFieldColor READ textFieldColor NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Color}
+     */
     Q_PROPERTY(QColor strokeColor READ strokeColor NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Color}
+     */
     Q_PROPERTY(QColor accentColor READ accentColor NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Color}
+     */
     Q_PROPERTY(QColor buttonColor READ buttonColor NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Color}
+     */
     Q_PROPERTY(QColor fontPrimaryColor READ fontPrimaryColor NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Color}
+     */
     Q_PROPERTY(QColor fontSecondaryColor READ fontSecondaryColor NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Color}
+     */
     Q_PROPERTY(QColor linkColor READ linkColor NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Color}
+     */
     Q_PROPERTY(QColor focusColor READ focusColor NOTIFY themeChanged)
+
+    // internal
     Q_PROPERTY(QVariantMap extra READ extra NOTIFY themeChanged FINAL)
 
+    /** APIDOC
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(qreal borderWidth READ borderWidth NOTIFY themeChanged)
+
+    // internal
     Q_PROPERTY(qreal navCtrlBorderWidth READ navCtrlBorderWidth NOTIFY themeChanged)
 
+    /** APIDOC
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(qreal accentOpacityNormal READ accentOpacityNormal NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(qreal accentOpacityHit READ accentOpacityHit NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(qreal accentOpacityHover READ accentOpacityHover NOTIFY themeChanged)
 
+    /** APIDOC
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(qreal buttonOpacityNormal READ buttonOpacityNormal NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(qreal buttonOpacityHover READ buttonOpacityHover NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(qreal buttonOpacityHit READ buttonOpacityHit NOTIFY themeChanged)
 
+    /** APIDOC
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(qreal itemOpacityDisabled READ itemOpacityDisabled NOTIFY themeChanged)
 
+    /** APIDOC
+     * @readonly
+     * @q_property {Font}
+     */
     Q_PROPERTY(QFont bodyFont READ bodyFont NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Font}
+     */
     Q_PROPERTY(QFont bodyBoldFont READ bodyBoldFont NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Font}
+     */
     Q_PROPERTY(QFont largeBodyFont READ largeBodyFont NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Font}
+     */
     Q_PROPERTY(QFont largeBodyBoldFont READ largeBodyBoldFont NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Font}
+     */
     Q_PROPERTY(QFont tabFont READ tabFont NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Font}
+     */
     Q_PROPERTY(QFont tabBoldFont READ tabBoldFont NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Font}
+     */
     Q_PROPERTY(QFont headerFont READ headerFont NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Font}
+     */
     Q_PROPERTY(QFont headerBoldFont READ headerBoldFont NOTIFY themeChanged)
+
+    /** APIDOC
+     * @readonly
+     * @q_property {Font}
+     */
     Q_PROPERTY(QFont titleBoldFont READ titleBoldFont NOTIFY themeChanged)
 
+    // internal
     Q_PROPERTY(QFont iconsFont READ iconsFont NOTIFY themeChanged)
     Q_PROPERTY(QFont toolbarIconsFont READ toolbarIconsFont NOTIFY themeChanged)
 
     Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY themeChanged)
     Q_PROPERTY(QFont musicalTextFont READ musicalTextFont NOTIFY themeChanged)
 
+    /** APIDOC
+     * @readonly
+     * @q_property {Font}
+     */
     Q_PROPERTY(QFont defaultFont READ defaultFont CONSTANT)
 
+    /** APIDOC
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(qreal defaultButtonSize READ defaultButtonSize NOTIFY themeChanged)
 
+    // internal
     Q_PROPERTY(int flickableMaxVelocity READ flickableMaxVelocity CONSTANT)
 
     Q_PROPERTY(int tooltipDelay READ tooltipDelay CONSTANT)
@@ -264,5 +434,3 @@ private:
     ThemeApi* m_theme = nullptr;
 };
 }
-
-#endif // MUSE_API_THEMEAPI_H
