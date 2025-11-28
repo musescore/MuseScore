@@ -2304,7 +2304,6 @@ class Spanner : public EngravingItem
     Q_PROPERTY(QQmlListProperty<apiv1::SpannerSegment> spannerSegments READ spannerSegments)
     /// The ornament object of this spanner
     Q_PROPERTY(apiv1::Ornament * ornament READ ornament)
-    
     /// \cond MS_INTERNAL
 
 public:
@@ -2323,8 +2322,9 @@ public:
     {
         return wrapContainerProperty<SpannerSegment>(this, spanner()->spannerSegments());
     }
-    
-    Ornament* ornament() const { 
+
+    Ornament* ornament() const
+    { 
         if (spanner()->type() == mu::engraving::ElementType::TRILL) {
             return wrap<Ornament>(trill()->ornament());
         } else {
