@@ -48,6 +48,7 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tremolotwochord.h"
+#include "engraving/dom/trill.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/accidental.h"
@@ -68,6 +69,7 @@ class Spanner;
 class Staff;
 class System;
 class Tie;
+class Trill;
 class Tuplet;
 class Measure;
 class Beam;
@@ -2301,7 +2303,8 @@ class Spanner : public EngravingItem
     Q_PROPERTY(apiv1::EngravingItem * endElement READ endElement)
     /// List of spanner segments belonging to this spanner.
     Q_PROPERTY(QQmlListProperty<apiv1::SpannerSegment> spannerSegments READ spannerSegments)
-
+    /// The ornament object of this spanner
+    Q_PROPERTY(apiv1::Ornament * ornament READ ornament)
     /// \cond MS_INTERNAL
 
 public:
@@ -2310,6 +2313,8 @@ public:
 
     mu::engraving::Spanner* spanner() { return toSpanner(e); }
     const mu::engraving::Spanner* spanner() const { return toSpanner(e); }
+    mu::engraving::Trill* trill() { return toTrill(e); }
+    const mu::engraving::Trill* trill() const { return toTrill(e); }
 
     EngravingItem* startElement() const { return wrap(spanner()->startElement()); }
     EngravingItem* endElement() const { return wrap(spanner()->endElement()); }
@@ -2318,6 +2323,8 @@ public:
     {
         return wrapContainerProperty<SpannerSegment>(this, spanner()->spannerSegments());
     }
+
+    Ornament* ornament() const;
 
     /// \endcond
 };
