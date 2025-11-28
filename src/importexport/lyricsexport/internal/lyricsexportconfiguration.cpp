@@ -29,7 +29,26 @@ using namespace muse;
 using namespace mu;
 using namespace mu::iex::lrcexport;
 
+static const std::string module_name("iex_lyricsexport");
+
+static const Settings::Key LRC_USE_ENHANCED_FORMAT_KEY(module_name, "export/lrc/useEnhancedFormat");
+
 void LyricsExportConfiguration::init()
 {
-    // Nothing to do
+    settings()->setDefaultValue(LRC_USE_ENHANCED_FORMAT_KEY, Val(false));
+}
+
+async::Channel<bool> LyricsExportConfiguration::lrcUseEnhancedFormatChanged() const
+{
+    return m_lrcUseEnhancedFormatChanged;
+}
+
+bool LyricsExportConfiguration::lrcUseEnhancedFormat() const
+{
+    return settings()->value(LRC_USE_ENHANCED_FORMAT_KEY).toBool();
+}
+
+void LyricsExportConfiguration::setLrcUseEnhancedFormat(bool value)
+{
+    settings()->setSharedValue(LRC_USE_ENHANCED_FORMAT_KEY, Val(value));
 }

@@ -44,6 +44,7 @@ muse::Ret LRCWriter::write(notation::INotationPtr notation, muse::io::IODevice& 
     Score* score = notation->elements()->msScore();
     QByteArray data;
     QBuffer buffer(&data);
+    bool enhancedFormat = configuration()->lrcUseEnhancedFormat();
 
     /***********
     *
@@ -99,32 +100,59 @@ QMap<qreal, QString> LRCWriter::collectLyrics(const Score* score) const
     QMap<qreal, QString> lyrics;
     const RepeatList& repeats = score->repeatList();
 
+    LOGI() << "tpacebes ";
+
+    int paabRepeatSegment = 0;
+
     for (const RepeatSegment* rs : repeats) {
         const int tickOffset = rs->utick - rs->tick;
 
+        ++paabRepeatSegment;
+
+        LOGI() << "tpacebes repeat segment " << paabRepeatSegment;
+
+        int paabMeasureBase = 0;
+
         for (const MeasureBase* mb = rs->firstMeasure(); mb; mb = mb->next()) {
+
+            ++paabMeasureBase;
+
             if (!mb->isMeasure()) {
                 continue;
             }
 
+            LOGI() << "tpacebes measure base " << paabMeasureBase;
+
+            int paabSegment = 0;
             for (Segment* seg = toMeasure(mb)->first(); seg; seg = seg->next()) {
+                ++paabSegment;
                 if (!seg->isChordRestType()) {
                     continue;
                 }
 
+                LOGI() << "tpacebes paabSegment " << paabSegment;
+
+                int paabEngravingItem = 0;
                 for (EngravingItem* e : seg->elist()) {
+                    ++paabEngravingItem;
                     if (!e || !e->isChordRest()) {
                         continue;
                     }
 
+                    LOGI() << "tpacebes paabEngravingItem " << paabEngravingItem;
+
+                    int paabLyrics = 0;
                     for (Lyrics* l : toChordRest(e)->lyrics()) {
+                        ++paabLyrics;
                         // if (l->text().empty())
                         if (l->plainText().isEmpty()) {
                             continue;
                         }
+                        LOGI() << "tpacebes paabLyrics " << paabLyrics;
 
                         const qreal time = score->utick2utime(l->tick().ticks() + tickOffset) * 1000;
                         lyrics.insert(time, l->plainText());
+                        LOGI() << "tpacebes insertamos Time " << time << "==>" << l->plainText() << "<==";
                     }
                 }
             }

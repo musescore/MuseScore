@@ -28,5 +28,12 @@ class LyricsExportConfiguration : public ILyricsExportConfiguration
 {
 public:
     void init();
+
+    bool lrcUseEnhancedFormat() const override;
+    void setLrcUseEnhancedFormat(bool value) override;
+    muse::async::Channel<bool> lrcUseEnhancedFormatChanged() const override;
+
+private:
+    muse::async::Channel<bool> m_lrcUseEnhancedFormatChanged;
 };
 }

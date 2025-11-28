@@ -19,23 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
+import QtQuick 2.15
 
-#include <string>
-#include <optional>
+import Muse.UiComponents
 
-#include "modularity/imoduleinterface.h"
+ExportSettingsPage {
+    id: root
 
-namespace mu::iex::lrcexport {
-class ILyricsExportConfiguration : MODULE_EXPORT_INTERFACE
-{
-    INTERFACE_ID(ILyricsExportConfiguration)
+    CheckBox {
+        width: parent.width
+        text: qsTrc("project/export", "LRC enhanced format")
 
-public:
-    virtual ~ILyricsExportConfiguration() = default;
+        navigation.name: "LrcUseEnhancedFormat"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 1
 
-    virtual bool lrcUseEnhancedFormat() const = 0;
-    virtual void setLrcUseEnhancedFormat(bool value) = 0;
-    virtual muse::async::Channel<bool> lrcUseEnhancedFormatChanged() const = 0;
-};
+        checked: root.model.lrcUseEnhancedFormat
+        onClicked: {
+            root.model.lrcUseEnhancedFormat = !checked
+        }
+    }
 }

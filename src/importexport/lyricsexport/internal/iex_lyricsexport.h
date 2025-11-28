@@ -25,6 +25,7 @@
 #include <QIODevice>
 
 #include "project/inotationwriter.h"
+#include "../ilyricsexportconfiguration.h"
 
 namespace mu::engraving {
 class Score;
@@ -33,6 +34,9 @@ class Score;
 namespace mu::iex::lrcexport {
 class LRCWriter : public project::INotationWriter
 {
+public:
+    INJECT_STATIC(mu::iex::lrcexport::LyricsExportConfiguration, configuration)
+
 public:
     // Interface implementation
     std::vector<UnitType> supportedUnitTypes() const override;

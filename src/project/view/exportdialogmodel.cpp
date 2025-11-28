@@ -106,7 +106,7 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
         ExportType::makeWithSuffixes({ "lrc" },
                                      muse::qtrc("project/export", "LRC file"),
                                      muse::qtrc("project/export", "LRC files"),
-                                     "") // No settings page needed
+                                     "LrcSettingsPage.qml")
     };
 
     const ExportInfo& info = exportProjectScenario()->exportInfo();
@@ -639,6 +639,21 @@ void ExportDialogModel::setMeiUseMuseScoreIds(bool useMuseScoreIds)
 
     meiConfiguration()->setMeiUseMuseScoreIds(useMuseScoreIds);
     emit meiUseMuseScoreIdsChanged(useMuseScoreIds);
+}
+
+bool ExportDialogModel::lrcUseEnhancedFormat() const
+{
+    return lrcConfiguration()->lrcUseEnhancedFormat();
+}
+
+void ExportDialogModel::setLrcUseEnhancedFormat(bool useEnhancedFormat)
+{
+    if (useEnhancedFormat == lrcUseEnhancedFormat()) {
+        return;
+    }
+
+    lrcConfiguration()->setLrcUseEnhancedFormat(useEnhancedFormat);
+    emit lrcUseEnhancedFormatChanged(useEnhancedFormat);
 }
 
 QVariantList ExportDialogModel::musicXmlLayoutTypes() const

@@ -24,6 +24,7 @@
         <file>qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/MusicXmlSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/LrcSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml</file>
         <file>qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml</file>
         <file>qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml</file>
