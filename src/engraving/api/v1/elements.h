@@ -1797,15 +1797,15 @@ class Measure : public MeasureBase
      * Next measure, accounting for multimeasure rests.
      * @readonly
      * @q_property {engraving.Measure}
+     * @name nextMeasureMM
      */
-    // Q_PROPERTY(apiv1::Measure * nextMeasureMM READ nextMeasureMM)
 
     /** APIDOC
      * Previous measure
      * @readonly
      * @q_property {engraving.Measure}
+     * @name prevMeasure
      */
-    // Q_PROPERTY(apiv1::Measure * prevMeasure READ prevMeasure)
 
     /// The first segment of this measure
     Q_PROPERTY(apiv1::Segment * firstSegment READ firstSegment)
