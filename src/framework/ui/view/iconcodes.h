@@ -60,6 +60,7 @@ public:
 
     /** APIDOC
      * Icon code
+     * @memberof Qml
      * @enum
      * @name IconCode
      */

@@ -268,12 +268,10 @@ async function extractDoc(file)
             }
 
             // try get member 
-            if (state.currentDoc.includes('@member')) {
-                if (state.currentDoc.includes('@member')) {
-                    state.currentDoc = state.currentDoc.replace('@member', `@memberof ${state.parentName}\n* @member`);
-                    state.memberLookName = true;
-                    continue;
-                }
+            if (state.currentDoc.includes('@member ')) {
+                state.currentDoc = state.currentDoc.replace('@member', `@memberof ${state.parentName}\n* @member`);
+                state.memberLookName = true;
+                continue;
             }
 
             // try get enum 
@@ -414,6 +412,10 @@ async function main()
     // parse args
     var args = process.argv.slice(2);
     console.log("args: ", args)
+    if (args.length === 0) {
+        return;
+    }
+
     {
         var i = -1;
         while (true) {
@@ -490,3 +492,7 @@ async function main()
 }
 
 main()
+
+module.exports = {
+    extractDoc,
+};
