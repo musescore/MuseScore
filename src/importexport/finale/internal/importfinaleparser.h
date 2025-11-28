@@ -321,7 +321,7 @@ private:
     bool processEntryInfo(musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx, engraving::Measure* measure, bool graceNotes,
                           std::vector<engraving::Note*>& notesWithUnmanagedTies,
                           std::vector<ReadableTuplet>& tupletMap);
-    bool processBeams(musx::dom::EntryInfoPtr entryInfoPtr, engraving::track_idx_t curTrackIdx, std::unordered_set<musx::dom::EntryNumber>& beamedEntries);
+    bool processBeams(musx::dom::EntryInfoPtr entryInfoPtr, engraving::track_idx_t curTrackIdx);
     bool calculateUp(const musx::dom::MusxInstance<musx::dom::details::ArticulationAssign>& articAssign,
                      musx::dom::others::ArticulationDef::AutoVerticalMode vm, engraving::ChordRest* cr);
     engraving::DirectionV getDirectionVForLayer(const engraving::ChordRest* e);
