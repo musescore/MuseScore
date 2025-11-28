@@ -288,19 +288,14 @@ static Tuplet* bottomTupletFromTick(std::vector<ReadableTuplet> tupletMap, Fract
 
 static Fraction findParentTickForGraceNote(EntryInfoPtr entryInfo, bool& insertAfter, FinaleLoggerPtr& logger)
 {
-    for (EntryInfoPtr entryInfoPtr = entryInfo; entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextSameV()) {
-        if (!entryInfoPtr->getEntry()->graceNote) {
-            if (!entryInfoPtr.calcDisplaysAsRest()) {
-                return musxFractionToFraction(entryInfoPtr.calcGlobalElapsedDuration()).reduced();
-            }
-        }
+    if (const EntryInfoPtr mainNote = entryInfo.findMainEntryForGraceNote(/*ignoreRests*/true)) {
+        insertAfter = false;
+        return musxFractionToFraction(mainNote.calcGlobalElapsedDuration()).reduced();
     }
-    for (EntryInfoPtr entryInfoPtr = entryInfo; entryInfoPtr; entryInfoPtr = entryInfoPtr.getPreviousSameV()) {
-        if (!entryInfoPtr->getEntry()->graceNote) {
-            if (!entryInfoPtr.calcDisplaysAsRest()) {
-                insertAfter = true;
-                return musxFractionToFraction(entryInfoPtr.calcGlobalElapsedDuration()).reduced();
-            }
+    if (const EntryInfoPtr prevNonGrace = entryInfo.getPreviousSameVNoGrace()) {
+        if (!prevNonGrace.calcDisplaysAsRest()) {
+            insertAfter = true;
+            return musxFractionToFraction(prevNonGrace.calcGlobalElapsedDuration()).reduced();
         }
     }
     // MuseScore requires grace notes be attached to a chord. The above code
