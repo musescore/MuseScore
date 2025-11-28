@@ -30,7 +30,7 @@
 #include "iappupdateservice.h"
 
 namespace muse::update {
-class UpdateModel : public QObject, public Injectable, public async::Asyncable
+class AppUpdateModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -41,8 +41,8 @@ class UpdateModel : public QObject, public Injectable, public async::Asyncable
     Inject<IAppUpdateService> service = { this };
 
 public:
-    explicit UpdateModel(QObject* parent = nullptr);
-    ~UpdateModel();
+    explicit AppUpdateModel(QObject* parent = nullptr);
+    ~AppUpdateModel() override;
 
     Q_INVOKABLE void load(const QString& mode);
 

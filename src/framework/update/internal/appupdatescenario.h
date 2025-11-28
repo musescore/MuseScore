@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "update/iupdatescenario.h"
+#include "update/iappupdatescenario.h"
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 
@@ -35,7 +35,7 @@
 #include "progress.h"
 
 namespace muse::update {
-class UpdateScenario : public IUpdateScenario, public Injectable, public async::Asyncable
+class AppUpdateScenario : public IAppUpdateScenario, public Injectable, public async::Asyncable
 {
     Inject<IInteractive> interactive = { this };
     Inject<actions::IActionsDispatcher> dispatcher = { this };
@@ -44,7 +44,7 @@ class UpdateScenario : public IUpdateScenario, public Injectable, public async::
     Inject<IAppUpdateService> service = { this };
 
 public:
-    UpdateScenario(const modularity::ContextPtr& iocCtx)
+    AppUpdateScenario(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
     bool needCheckForUpdate() const override;

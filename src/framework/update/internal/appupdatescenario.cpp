@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "updatescenario.h"
+#include "appupdatescenario.h"
 
 #include "updateerrors.h"
 
@@ -34,12 +34,12 @@ using namespace muse::update;
 using namespace muse::actions;
 using namespace muse::async;
 
-bool UpdateScenario::needCheckForUpdate() const
+bool AppUpdateScenario::needCheckForUpdate() const
 {
     return configuration()->needCheckForUpdate();
 }
 
-Promise<Ret> UpdateScenario::checkForUpdate(bool manual)
+Promise<Ret> AppUpdateScenario::checkForUpdate(bool manual)
 {
     if (m_checkInProgress) {
         return async::make_promise<Ret>([](auto resolve, auto) {
@@ -73,7 +73,7 @@ Promise<Ret> UpdateScenario::checkForUpdate(bool manual)
     });
 }
 
-bool UpdateScenario::hasUpdate() const
+bool AppUpdateScenario::hasUpdate() const
 {
     if (m_checkInProgress) {
         return false;
@@ -91,7 +91,7 @@ bool UpdateScenario::hasUpdate() const
     return !shouldIgnoreUpdate(lastCheckResult.val);
 }
 
-Promise<Ret> UpdateScenario::showUpdate()
+Promise<Ret> AppUpdateScenario::showUpdate()
 {
     const RetVal<ReleaseInfo>& lastCheckResult = service()->lastCheckResult();
     if (lastCheckResult.ret) {
@@ -102,7 +102,7 @@ Promise<Ret> UpdateScenario::showUpdate()
     });
 }
 
-Promise<Ret> UpdateScenario::processUpdateError(int errorCode)
+Promise<Ret> AppUpdateScenario::processUpdateError(int errorCode)
 {
     const auto unknownError = async::make_promise<Ret>([](auto resolve, auto) {
         return resolve(muse::make_ret(Ret::Code::UnknownError));
@@ -125,7 +125,7 @@ Promise<Ret> UpdateScenario::processUpdateError(int errorCode)
     });
 }
 
-Promise<IInteractive::Result> UpdateScenario::showNoUpdateMsg()
+Promise<IInteractive::Result> AppUpdateScenario::showNoUpdateMsg()
 {
     const QString str = muse::qtrc("update", "You already have the latest version of MuseScore Studio. "
                                              "Please visit <a href=\"%1\">MuseScore.org</a> for news on what’s coming next.")
@@ -138,7 +138,7 @@ Promise<IInteractive::Result> UpdateScenario::showNoUpdateMsg()
                                IInteractive::Option::WithIcon);
 }
 
-Promise<Ret> UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
+Promise<Ret> AppUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
 {
     UriQuery query("muse://update/appreleaseinfo");
     query.addParam("notes", Val(info.notes));
@@ -166,22 +166,22 @@ Promise<Ret> UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
     });
 }
 
-Promise<IInteractive::Result> UpdateScenario::showServerErrorMsg()
+Promise<IInteractive::Result> AppUpdateScenario::showServerErrorMsg()
 {
     return interactive()->error(muse::trc("update", "Cannot connect to server"),
                                 muse::trc("update", "Sorry - please try again later"));
 }
 
-Promise<Ret> UpdateScenario::downloadRelease()
+Promise<Ret> AppUpdateScenario::downloadRelease()
 {
-    RetVal<Val> rv = interactive()->openSync("muse://update?mode=download");
+    RetVal<Val> rv = interactive()->openSync("muse://update/app?mode=download");
     if (!rv.ret) {
         return processUpdateError(rv.ret.code());
     }
     return askToCloseAppAndCompleteInstall(rv.val.toString());
 }
 
-Promise<Ret> UpdateScenario::askToCloseAppAndCompleteInstall(const io::path_t& installerPath)
+Promise<Ret> AppUpdateScenario::askToCloseAppAndCompleteInstall(const io::path_t& installerPath)
 {
     const std::string info = muse::trc("update", "MuseScore Studio needs to close to complete the installation. "
                                                  "If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.");
@@ -206,7 +206,7 @@ Promise<Ret> UpdateScenario::askToCloseAppAndCompleteInstall(const io::path_t& i
     });
 }
 
-bool UpdateScenario::shouldIgnoreUpdate(const ReleaseInfo& info) const
+bool AppUpdateScenario::shouldIgnoreUpdate(const ReleaseInfo& info) const
 {
     return info.version == configuration()->skippedReleaseVersion() && !configuration()->checkForUpdateTestMode();
 }

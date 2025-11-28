@@ -20,27 +20,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "updatemodel.h"
+#include "appupdatemodel.h"
 
 #include "translation.h"
 #include "log.h"
 
 using namespace muse::update;
 
-UpdateModel::UpdateModel(QObject* parent)
+AppUpdateModel::AppUpdateModel(QObject* parent)
     : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
     setProgressTitle(muse::qtrc("update", "Updating MuseScore Studio"));
 }
 
-UpdateModel::~UpdateModel()
+AppUpdateModel::~AppUpdateModel()
 {
     if (m_progress.isStarted()) {
         m_progress.cancel();
     }
 }
 
-void UpdateModel::load(const QString& mode)
+void AppUpdateModel::load(const QString& mode)
 {
     if (mode != "download") {
         return;
@@ -77,22 +77,22 @@ void UpdateModel::load(const QString& mode)
     });
 }
 
-int UpdateModel::currentProgress() const
+int AppUpdateModel::currentProgress() const
 {
     return m_currentProgress;
 }
 
-int UpdateModel::totalProgress() const
+int AppUpdateModel::totalProgress() const
 {
     return m_totalProgress;
 }
 
-QString UpdateModel::progressTitle() const
+QString AppUpdateModel::progressTitle() const
 {
     return m_progressTitle;
 }
 
-void UpdateModel::setCurrentProgress(int progress)
+void AppUpdateModel::setCurrentProgress(int progress)
 {
     if (m_currentProgress == progress) {
         return;
@@ -102,7 +102,7 @@ void UpdateModel::setCurrentProgress(int progress)
     emit currentProgressChanged();
 }
 
-void UpdateModel::setTotalProgress(int progress)
+void AppUpdateModel::setTotalProgress(int progress)
 {
     if (m_totalProgress == progress) {
         return;
@@ -112,7 +112,7 @@ void UpdateModel::setTotalProgress(int progress)
     emit totalProgressChanged();
 }
 
-void UpdateModel::setProgressTitle(const QString& title)
+void AppUpdateModel::setProgressTitle(const QString& title)
 {
     if (m_progressTitle == title) {
         return;

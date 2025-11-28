@@ -26,10 +26,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/updatestubmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/updateconfigurationstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/updateconfigurationstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/updatescenariostub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/updatescenariostub.h
-    ${CMAKE_CURRENT_LIST_DIR}/updateservicestub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/updateservicestub.h
+    ${CMAKE_CURRENT_LIST_DIR}/appupdatescenariostub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/appupdatescenariostub.h
+    ${CMAKE_CURRENT_LIST_DIR}/appupdateservicestub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/appupdateservicestub.h
     )
 
 set(MODULE_IS_STUB ON)

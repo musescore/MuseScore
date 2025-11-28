@@ -35,7 +35,7 @@
 #include "project/iprojectautosaver.h"
 #include "audioplugins/iregisteraudiopluginsscenario.h"
 
-#include "update/iupdatescenario.h"
+#include "update/iappupdatescenario.h"
 #include "musesounds/imusesoundscheckupdatescenario.h"
 #include "musesounds/imusesamplercheckupdatescenario.h"
 
@@ -50,7 +50,7 @@ class StartupScenario : public IStartupScenario, public muse::Injectable, public
     muse::Inject<project::IProjectAutoSaver> projectAutoSaver = { this };
     muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
 
-    muse::Inject<muse::update::IUpdateScenario> appUpdateScenario = { this };
+    muse::Inject<muse::update::IAppUpdateScenario> appUpdateScenario = { this };
     muse::Inject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario = { this };
     muse::Inject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckForUpdateScenario = { this };
 

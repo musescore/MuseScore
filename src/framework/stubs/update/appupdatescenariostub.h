@@ -19,26 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "updateservicestub.h"
 
-using namespace muse;
-using namespace muse::update;
-using namespace muse::async;
+#pragma once
 
-Promise<RetVal<ReleaseInfo> > UpdateServiceStub::checkForUpdate()
+#include "update/iappupdatescenario.h"
+
+namespace muse::update {
+class AppUpdateScenarioStub : public IAppUpdateScenario
 {
-    return Promise<RetVal<ReleaseInfo> >([this](auto resolve, auto) {
-        return resolve(make_ret(Ret::Code::NotSupported));
-    });
-}
+public:
+    bool needCheckForUpdate() const override;
+    muse::async::Promise<Ret> checkForUpdate(bool manual) override;
 
-const RetVal<ReleaseInfo>& UpdateServiceStub::lastCheckResult() const
-{
-    static const auto dummyInfo = RetVal<ReleaseInfo>::make_ret(Ret::Code::NotSupported);
-    return dummyInfo;
-}
-
-RetVal<Progress> UpdateServiceStub::downloadRelease()
-{
-    return RetVal<Progress>::make_ret(Ret::Code::NotSupported);
+    bool hasUpdate() const override;
+    muse::async::Promise<Ret> showUpdate() override;
+};
 }

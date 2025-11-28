@@ -25,7 +25,7 @@
 #include "update/iappupdateservice.h"
 
 namespace muse::update {
-class UpdateServiceStub : public IAppUpdateService
+class AppUpdateServiceStub : public IAppUpdateService
 {
 public:
     async::Promise<muse::RetVal<ReleaseInfo> > checkForUpdate() override;
