@@ -1168,4 +1168,36 @@ Key clampKey(Key key, PreferSharpFlat prefer)
 
     return key;
 }
+
+int bestEnharmonicFit(const std::vector<int> tpcs, Key key)
+{
+    int keyIndex = int(key) - int(Key::MIN);
+    if (keyIndex < 0 || keyIndex >= int(Key::NUM_OF)) {
+        return tpcs.front();
+    }
+
+    // Highest penalty in enharmonicSpelling available (100) + 1
+    int bestPenalty = 101;
+    int closestTpc = Tpc::TPC_INVALID;
+
+    for (int tpc : tpcs) {
+        if (tpc == Tpc::TPC_INVALID) {
+            continue;
+        }
+
+        int lof = tpc - Tpc::TPC_MIN;
+        if (lof < 0 || lof >= 34) {
+            continue;
+        }
+
+        int penalty = enharmonicSpelling[keyIndex][lof];
+
+        if (penalty < bestPenalty) {
+            bestPenalty = penalty;
+            closestTpc = tpc;
+        }
+    }
+
+    return closestTpc;
+}
 }

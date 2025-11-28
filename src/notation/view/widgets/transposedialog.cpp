@@ -22,6 +22,7 @@
 
 #include "transposedialog.h"
 
+#include "internal/mscoreerrorscontroller.h"
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
@@ -55,7 +56,7 @@ TransposeDialog::TransposeDialog(QWidget* parent)
 
     const std::vector<EngravingItem*>& elements = selection()->elements();
     bool hasChordNames = std::any_of(elements.cbegin(), elements.cend(), [](const EngravingItem* item) {
-        return item->isHarmony();
+        return item->isHarmony() || item->isFretDiagram();
     });
     setEnableTransposeChordNames(hasChordNames);
 
@@ -217,6 +218,8 @@ void TransposeDialog::apply()
     options.needTransposeDoubleSharpsFlats = useDoubleSharpsFlats();
 
     interaction()->transpose(options);
+
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 
     if (m_allSelected) {
         interaction()->clearSelection();
