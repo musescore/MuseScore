@@ -238,15 +238,6 @@ PropertyValue Vibrato::propertyDefault(Pid propertyId) const
 }
 
 //---------------------------------------------------------
-//   undoSetVibratoType
-//---------------------------------------------------------
-
-void Vibrato::undoSetVibratoType(VibratoType val)
-{
-    undoChangeProperty(Pid::VIBRATO_TYPE, int(val));
-}
-
-//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 

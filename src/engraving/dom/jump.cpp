@@ -111,33 +111,6 @@ String Jump::jumpTypeUserName() const
 }
 
 //---------------------------------------------------------
-//   undoSetJumpTo
-//---------------------------------------------------------
-
-void Jump::undoSetJumpTo(const String& s)
-{
-    undoChangeProperty(Pid::JUMP_TO, s);
-}
-
-//---------------------------------------------------------
-//   undoSetPlayUntil
-//---------------------------------------------------------
-
-void Jump::undoSetPlayUntil(const String& s)
-{
-    undoChangeProperty(Pid::PLAY_UNTIL, s);
-}
-
-//---------------------------------------------------------
-//   undoSetContinueAt
-//---------------------------------------------------------
-
-void Jump::undoSetContinueAt(const String& s)
-{
-    undoChangeProperty(Pid::CONTINUE_AT, s);
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

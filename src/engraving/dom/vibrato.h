@@ -76,7 +76,6 @@ public:
     LineSegment* createLineSegment(System* parent) override;
     PointF linePos(Grip grip, System** system) const override;
 
-    void undoSetVibratoType(VibratoType val);
     void setVibratoType(VibratoType tt) { m_vibratoType = tt; }
     VibratoType vibratoType() const { return m_vibratoType; }
     String vibratoTypeUserName() const;

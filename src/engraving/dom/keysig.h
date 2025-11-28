@@ -77,11 +77,9 @@ public:
 
     bool showCourtesy() const { return m_showCourtesy; }
     void setShowCourtesy(bool v) { m_showCourtesy = v; }
-    void undoSetShowCourtesy(bool v);
 
     KeyMode mode() const { return m_sig.mode(); }
     void setMode(KeyMode v) { m_sig.setMode(v); }
-    void undoSetMode(KeyMode v);
 
     PointF staffOffset() const override;
 

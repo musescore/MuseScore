@@ -89,7 +89,6 @@ public:
 
     bool isSmall() const { return m_isSmall; }
     void setSmall(bool val) { m_isSmall = val; }
-    void undoSetSmall(bool val);
 
     int staffMove() const { return m_staffMove; }
     void setStaffMove(int val) { m_staffMove = val; }
