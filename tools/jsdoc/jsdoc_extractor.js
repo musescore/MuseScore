@@ -127,6 +127,66 @@ function enumKey(line)
     return ""
 }
 
+const QPROP_TYPE = "qprop"
+
+class Doc {
+    type = "";
+    comment = "";
+    lookupName = false;
+
+    constructor(type, comm) {
+        this.type = type
+        this.comment = comm;
+    }
+
+    tagName() {
+        const match = this.comment.match(/@name\s+(\S+)/);
+        if (match) {
+            return match[1];
+        }
+        return "";
+    }
+
+    removeTagName() {
+        this.comment = this.comment.replace(/^\s*\*\s*.*@name.*$\n?/gm, '');
+    }
+
+    takeTagName() {
+        const name = this.tagName();
+        if (name !== "") {
+            this.removeTagName();
+        }
+        return name;
+    }
+
+    addNameToMemberTag(name) {
+        const regex = /@member\s+\{([^}]+)\}\s+/;
+        this.comment = this.comment.replace(regex, `@member {$1} ${name}\n`);
+    }
+}
+
+class QPropDoc extends Doc {
+
+    constructor(comm) {
+        super(QPROP_TYPE, comm);
+    }
+
+    processComment(parentName) {
+        // add memberof and make as member
+        this.comment = this.comment.replace('@q_property', `@memberof ${parentName}\n* @member`);
+        const name = this.takeTagName();
+        if (name !== "") {
+            this.completeComment(name);
+        } else {
+            this.lookupName = true;
+        }
+    }
+
+    completeComment(name) {
+        this.addNameToMemberTag(name)
+    }
+}
+
 async function extractDoc(file)
 {   
     const isQml = path.parse(file).ext === ".qml";
@@ -145,6 +205,8 @@ async function extractDoc(file)
         apidocStarted: false,
 
         currentDoc: "",
+        doc: null,
+        
         doclets: [],
 
         parentDoc: "", // namespace or class
@@ -309,9 +371,11 @@ async function extractDoc(file)
 
             // try get q_property 
             if (state.currentDoc.includes('@q_property')) {
-                // add memberof and make as member
-                state.currentDoc = state.currentDoc.replace('@q_property', `@memberof ${state.parentName}\n* @member`);
-                state.qpropLookName = true;
+                state.doc = new QPropDoc(state.currentDoc)
+                state.doc.processComment(state.parentName)
+                if (!state.doc.lookupName) {
+                    state.qprops.push(state.doc.comment);
+                }
                 continue;
             }
 
@@ -367,14 +431,15 @@ async function extractDoc(file)
             }
         }
 
-        if (state.qpropLookName) {
-            let name = qpropName(line);
+        if (state.doc && state.doc.lookupName) {
+            let name = ""
+            switch(state.doc.type) {
+                case QPROP_TYPE: name = qpropName(line); break;
+            }
+
             if (name !== "") {
-                state.qpropLookName = false;
-                // add name 
-                const regex = /@member\s+\{([^}]+)\}\s+/;
-                state.currentDoc = state.currentDoc.replace(regex, `@member {$1} ${name}\n`);
-                state.qprops.push(state.currentDoc);
+                state.doc.completeComment(name)
+                state.qprops.push(state.doc.comment);
             }
         }
 
