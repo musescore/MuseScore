@@ -39,6 +39,7 @@ public:
 
     /** APIDOC
      * Question buttons
+     * @memberof Qml
      * @enum
      */
     enum ButtonCode {
