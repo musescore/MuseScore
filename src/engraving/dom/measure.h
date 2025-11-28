@@ -173,7 +173,7 @@ public:
     bool hasVoices(staff_idx_t staffIdx) const;
     void setHasVoices(staff_idx_t staffIdx, bool v);
 
-    StaffLines* staffLines(staff_idx_t staffIdx);
+    StaffLines* staffLines(staff_idx_t staffIdx) const;
     Spacer* vspacerDown(staff_idx_t staffIdx) const;
     Spacer* vspacerUp(staff_idx_t staffIdx) const;
     void setStaffVisible(staff_idx_t staffIdx, bool visible);
