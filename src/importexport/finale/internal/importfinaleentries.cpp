@@ -750,7 +750,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         gc->setNoteType((!graceAfterType /* && gc->beams() > 0 */ && unbeamed && (currentEntry->slashGrace || musxOptions().graceOptions->slashFlaggedGraceNotes))
                          ? engraving::NoteType::ACCIACCATURA : durationTypeToNoteType(d.type(), graceAfterType));
         engraving::Chord* graceParentChord = toChord(segment->element(curTrackIdx));
-        gc->setGraceIndex(static_cast<int>(graceAfterType ? graceParentChord->graceNotesAfter().size() : graceParentChord->graceNotesBefore().size()));
+        gc->setGraceIndex(static_cast<int>(graceAfterType ? 0 : graceParentChord->graceNotesBefore().size()));
         graceParentChord->add(gc);
     } else {
         segment->add(cr);
