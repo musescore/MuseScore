@@ -32,10 +32,10 @@ class PartsSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * positionLinkedToMaster READ positionLinkedToMaster CONSTANT)
-    Q_PROPERTY(PropertyItem * appearanceLinkedToMaster READ appearanceLinkedToMaster CONSTANT)
-    Q_PROPERTY(PropertyItem * textLinkedToMaster READ textLinkedToMaster CONSTANT)
-    Q_PROPERTY(PropertyItem * excludeFromOtherParts READ excludeFromOtherParts CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * positionLinkedToMaster READ positionLinkedToMaster CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * appearanceLinkedToMaster READ appearanceLinkedToMaster CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * textLinkedToMaster READ textLinkedToMaster CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * excludeFromOtherParts READ excludeFromOtherParts CONSTANT)
 
     Q_PROPERTY(bool showPartLinkingOption READ showPartLinkingOption NOTIFY showPartLinkingOptionChanged)
     Q_PROPERTY(bool showExcludeOption READ showExcludeOption NOTIFY showExcludeOptionChanged)

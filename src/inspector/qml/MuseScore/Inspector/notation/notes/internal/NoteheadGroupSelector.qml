@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 
@@ -67,7 +69,12 @@ InspectorPropertyView {
                 implicitHeight: gridView.cellHeight
                 implicitWidth: gridView.cellWidth
 
-                hint: model.headHint
+                required property int headGroup
+                required property string headHint
+                required property int iconCode
+                required property int index
+
+                hint: headHint
                 background.radius: gridView.cellRadius
 
                 navigation.name: hint
@@ -87,12 +94,12 @@ InspectorPropertyView {
                     font.family: "Bravura"
                     font.pixelSize: 30
 
-                    iconCode: model.iconCode
+                    iconCode: delegateItem.iconCode
                 }
 
                 onClicked: {
                     if (root.propertyItem) {
-                        root.propertyItem.value = model.headGroup
+                        root.propertyItem.value = delegateItem.headGroup
                     }
                 }
             }

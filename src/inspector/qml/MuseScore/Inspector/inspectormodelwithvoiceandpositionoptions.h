@@ -35,10 +35,10 @@ class InspectorModelWithVoiceAndPositionOptions : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * voiceBasedPosition READ voiceBasedPosition CONSTANT)
-    Q_PROPERTY(PropertyItem * voiceAssignment READ voiceAssignment CONSTANT)
-    Q_PROPERTY(PropertyItem * voice READ voice CONSTANT)
-    Q_PROPERTY(PropertyItem * centerBetweenStaves READ centerBetweenStaves CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * voiceBasedPosition READ voiceBasedPosition CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * voiceAssignment READ voiceAssignment CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * voice READ voice CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * centerBetweenStaves READ centerBetweenStaves CONSTANT)
     Q_PROPERTY(bool isMultiStaffInstrument READ isMultiStaffInstrument WRITE setIsMultiStaffInstrument NOTIFY isMultiStaffInstrumentChanged)
     Q_PROPERTY(
         bool isStaveCenteringAvailable READ isStaveCenteringAvailable WRITE setIsStaveCenteringAvailable NOTIFY isStaveCenteringAvailableChanged)

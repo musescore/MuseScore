@@ -33,10 +33,11 @@ Column {
 
     width: parent.width
 
-    required property QtObject model
+    required property InspectorModelWithVoiceAndPositionOptions model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
+    readonly property int navigationRowEnd: centerStavesSection.navigationRowEnd
 
     spacing: 12
 
@@ -48,9 +49,7 @@ Column {
         propertyItem: root.model ? root.model.voiceAssignment : null
 
         onRequestResetToDefault: {
-            if (root.model) {
-                propertyItem.resetToDefault()
-            }
+            propertyItem?.resetToDefault?.()
         }
 
         navigationPanel: root.navigationPanel
@@ -153,9 +152,7 @@ Column {
                 ]
 
                 onToggled: function(newValue) {
-                    if (root.model) {
-                        root.model.changeVoice(newValue)
-                    }
+                    root.model?.changeVoice?.(newValue)
                 }
             }
         }
@@ -181,8 +178,8 @@ Column {
     FlatRadioButtonGroupPropertyView {
         id: centerStavesSection
 
-        visible: root.model ? root.model.isMultiStaffInstrument : false
-        enabled: root.model ? root.model.isStaveCenteringAvailable : false
+        visible: root.model && root.model.isMultiStaffInstrument
+        enabled: root.model && root.model.isStaveCenteringAvailable
 
         titleText: qsTrc("inspector", "Center between staves")
 

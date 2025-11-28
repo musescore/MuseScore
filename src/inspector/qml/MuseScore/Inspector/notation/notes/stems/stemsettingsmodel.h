@@ -32,10 +32,10 @@ class StemSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * thickness READ thickness CONSTANT)
-    Q_PROPERTY(PropertyItem * length READ length CONSTANT)
-    Q_PROPERTY(PropertyItem * offset READ offset CONSTANT)
-    Q_PROPERTY(PropertyItem * stemDirection READ stemDirection CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * thickness READ thickness CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * length READ length CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * offset READ offset CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * stemDirection READ stemDirection CONSTANT)
 
     Q_PROPERTY(bool useStraightNoteFlags READ useStraightNoteFlags WRITE setUseStraightNoteFlags NOTIFY useStraightNoteFlagsChanged)
 

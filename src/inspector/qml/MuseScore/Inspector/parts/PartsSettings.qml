@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
-import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
@@ -30,6 +29,8 @@ import "../common"
 
 InspectorSectionView {
     id: root
+
+    required property PartsSettingsModel model
 
     implicitHeight: contentColumn.height
 
@@ -77,7 +78,7 @@ InspectorSectionView {
                 navigation.panel: root.navigationPanel
                 navigation.row: positionLinkedToMasterToggle.navigation.row + 1
 
-                propertyItem: root.model ? root.model.appearanceLinkedToMaster : null
+                propertyItem: root.model?.appearanceLinkedToMaster
                 text: qsTrc("inspector", "Style/appearance")
             }
 

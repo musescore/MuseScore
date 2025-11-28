@@ -32,8 +32,8 @@ class ClefSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * shouldShowCourtesy READ shouldShowCourtesy CONSTANT)
-    Q_PROPERTY(PropertyItem * clefToBarlinePosition READ clefToBarlinePosition CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * shouldShowCourtesy READ shouldShowCourtesy CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * clefToBarlinePosition READ clefToBarlinePosition CONSTANT)
     Q_PROPERTY(bool isClefToBarPosAvailable READ isClefToBarPosAvailable NOTIFY isClefToBarPosAvailableChanged)
     Q_PROPERTY(bool isCourtesyClefAvailable READ isCourtesyClefAvailable NOTIFY isCourtesyClefAvailableChanged)
 

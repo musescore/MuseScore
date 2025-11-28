@@ -21,22 +21,24 @@
  */
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
 import MuseScore.Inspector
+
 import "../../common"
 
 Column {
     id: root
 
-    objectName: "PlayCountSettings"
+    // Can be used with either BarlineSettingsModel or PlayCountTextSettingsModel
+    required property AbstractInspectorModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
-    property QtObject model: null
+    readonly property int navigationRowEnd: playCountText.navigationRowEnd
+
+    objectName: "PlayCountSettings"
 
     spacing: 12
 
@@ -73,11 +75,11 @@ Column {
     TextSection {
         id: playCountText
         propertyItem: root.model ? root.model.playCountText : null
-        visible: root.model && root.model.playCountTextSetting.value && root.model.playCountTextSetting.value === BarlineTypes.COUNT_CUSTOM
+        visible: root.model?.playCountTextSetting.value === BarlineTypes.COUNT_CUSTOM
 
         showButton: false
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: playCountTextSection.navigationRowStart + 1
+        navigationRowStart: playCountTextSection.navigationRowEnd + 1
     }
 }

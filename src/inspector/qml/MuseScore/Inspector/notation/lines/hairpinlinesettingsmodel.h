@@ -32,11 +32,12 @@ class HairpinLineSettingsModel : public TextLineSettingsModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * snapBefore READ snapBefore CONSTANT)
-    Q_PROPERTY(PropertyItem * snapAfter READ snapAfter CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * snapBefore READ snapBefore CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * snapAfter READ snapAfter CONSTANT)
 
 public:
     enum HairpinLineType {
+        Unknown,
         Crescendo,
         Diminuendo
     };
@@ -46,13 +47,14 @@ public:
     PropertyItem* snapBefore() const;
     PropertyItem* snapAfter() const;
 
-private:
-    engraving::HairpinType m_hairpinType = engraving::HairpinType::CRESC_LINE;
-
+protected:
     void createProperties() override;
     void loadProperties() override;
     void resetProperties() override;
     void requestElements() override;
+
+private:
+    engraving::HairpinType m_hairpinType = engraving::HairpinType::CRESC_LINE;
 
     PropertyItem* m_snapBefore = nullptr;
     PropertyItem* m_snapAfter = nullptr;

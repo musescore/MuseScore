@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
-import QtQuick.Layouts
 
 import Muse.UiComponents
 import MuseScore.Inspector
@@ -30,7 +31,7 @@ import "../../../common"
 ExpandableBlank {
     id: root
 
-    property QtObject model: null
+    required property GradualTempoChangePlaybackModel model
 
     enabled: model ? !model.isEmpty : false
     title: model ? model.title : ""

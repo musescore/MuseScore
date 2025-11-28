@@ -32,8 +32,8 @@ class TremoloSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * style READ style CONSTANT)
-    Q_PROPERTY(PropertyItem * direction READ direction CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * style READ style CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * direction READ direction CONSTANT)
 
 public:
     explicit TremoloSettingsModel(QObject* parent, IElementRepositoryService* repository);

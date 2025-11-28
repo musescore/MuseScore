@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -31,6 +33,8 @@ import "../common"
 
 InspectorSectionView {
     id: root
+
+    required property ScoreAppearanceSettingsModel model
 
     implicitHeight: contentColumn.implicitHeight
 

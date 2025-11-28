@@ -22,10 +22,10 @@
 
 #pragma once
 
-#include <qqmlintegration.h>
-#include "abstractinspectormodel.h"
-
 #include <QHash>
+#include <qqmlintegration.h>
+
+#include "abstractinspectormodel.h"
 
 namespace mu::inspector {
 class AbstractInspectorProxyModel : public AbstractInspectorModel
@@ -36,20 +36,21 @@ class AbstractInspectorProxyModel : public AbstractInspectorModel
 
     Q_PROPERTY(bool isMultiModel READ isMultiModel NOTIFY modelsChanged)
     Q_PROPERTY(QVariantList models READ models NOTIFY modelsChanged)
-    Q_PROPERTY(QObject * firstModel READ firstModel NOTIFY modelsChanged)
+    Q_PROPERTY(mu::inspector::AbstractInspectorModel * firstModel READ firstModel NOTIFY modelsChanged)
 
-    Q_PROPERTY(InspectorModelType defaultSubModelType READ defaultSubModelType NOTIFY defaultSubModelTypeChanged)
+    Q_PROPERTY(
+        mu::inspector::AbstractInspectorModel::InspectorModelType defaultSubModelType READ defaultSubModelType NOTIFY defaultSubModelTypeChanged)
 
 public:
     explicit AbstractInspectorProxyModel(QObject* parent, IElementRepositoryService* repository);
 
     bool isMultiModel() const;
     QVariantList models() const;
-    QObject* firstModel() const;
+    AbstractInspectorModel* firstModel() const;
 
     InspectorModelType defaultSubModelType() const;
 
-    Q_INVOKABLE QObject* modelByType(InspectorModelType type) const;
+    Q_INVOKABLE mu::inspector::AbstractInspectorModel* modelByType(InspectorModelType type) const;
 
     QList<AbstractInspectorModel*> modelList() const;
 

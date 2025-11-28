@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
-import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
@@ -30,13 +29,12 @@ import "../../common"
 Column {
     id: root
 
-    property QtObject proxyModel: null
+    property PlaybackProxyModel proxyModel: null
 
     property NavigationPanel navigationPanel: null
 
     width: parent.width
     spacing: 12
-
 
     function forceFocusIn() {
         generalSettings.focusOnCurrentTab()

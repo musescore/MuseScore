@@ -32,7 +32,7 @@ class ExpressionSettingsModel : public InspectorModelWithVoiceAndPositionOptions
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * snapExpression READ snapExpression CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * snapExpression READ snapExpression CONSTANT)
 
 public:
     explicit ExpressionSettingsModel(QObject* parent, IElementRepositoryService* repository);

@@ -34,26 +34,26 @@ class BeamSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(QObject * beamModesModel READ beamModesModel CONSTANT)
+    Q_PROPERTY(mu::inspector::BeamModesModel * beamModesModel READ beamModesModel CONSTANT)
 
-    Q_PROPERTY(PropertyItem * featheringHeightLeft READ featheringHeightLeft CONSTANT)
-    Q_PROPERTY(PropertyItem * featheringHeightRight READ featheringHeightRight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * featheringHeightLeft READ featheringHeightLeft CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * featheringHeightRight READ featheringHeightRight CONSTANT)
     Q_PROPERTY(
         mu::inspector::BeamTypes::FeatheringMode featheringMode READ featheringMode WRITE setFeatheringMode NOTIFY featheringModeChanged)
     Q_PROPERTY(bool isFeatheringHeightChangingAllowed READ isFeatheringHeightChangingAllowed NOTIFY featheringModeChanged)
 
-    Q_PROPERTY(PropertyItem * beamHeightLeft READ beamHeightLeft CONSTANT)
-    Q_PROPERTY(PropertyItem * beamHeightRight READ beamHeightRight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * beamHeightLeft READ beamHeightLeft CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * beamHeightRight READ beamHeightRight CONSTANT)
     Q_PROPERTY(bool isBeamHeightLocked READ isBeamHeightLocked WRITE setIsBeamHeightLocked NOTIFY isBeamHeightLockedChanged)
 
-    Q_PROPERTY(PropertyItem * isBeamHidden READ isBeamHidden CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isBeamHidden READ isBeamHidden CONSTANT)
 
-    Q_PROPERTY(PropertyItem * forceHorizontal READ forceHorizontal CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * forceHorizontal READ forceHorizontal CONSTANT)
 
-    Q_PROPERTY(PropertyItem * customPositioned READ customPositioned CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * customPositioned READ customPositioned CONSTANT)
 
-    Q_PROPERTY(PropertyItem * stemDirection READ stemDirection CONSTANT)
-    Q_PROPERTY(PropertyItem * crossStaffMove READ crossStaffMove CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * stemDirection READ stemDirection CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * crossStaffMove READ crossStaffMove CONSTANT)
     Q_PROPERTY(
         bool isCrossStaffMoveAvailable READ isCrossStaffMoveAvailable WRITE setIsCrossStaffMoveAvailable NOTIFY isCrossStaffMoveAvailableChanged)
 
@@ -64,7 +64,7 @@ public:
 
     PropertyItem* customPositioned();
 
-    QObject* beamModesModel() const;
+    BeamModesModel* beamModesModel() const;
 
     PropertyItem* featheringHeightLeft() const;
     PropertyItem* featheringHeightRight() const;

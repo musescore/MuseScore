@@ -33,8 +33,8 @@ class BeamModesModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * mode READ mode CONSTANT)
-    Q_PROPERTY(PropertyItem * isFeatheringAvailable READ isFeatheringAvailable CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * mode READ mode CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isFeatheringAvailable READ isFeatheringAvailable CONSTANT)
 
 public:
     explicit BeamModesModel(QObject* parent, IElementRepositoryService* repository);

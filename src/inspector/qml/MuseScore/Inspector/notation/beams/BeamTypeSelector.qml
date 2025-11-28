@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
-import QtQuick.Controls
 
 import Muse.UiComponents
 import Muse.Ui
@@ -66,10 +67,16 @@ InspectorPropertyView {
             ]
 
             delegate: ListItemBlank {
+                id: delegateItem
+
+                required property int value
+                required property int iconCode
+                required hint
+                required property int index
+
                 implicitHeight: gridView.cellHeight
                 implicitWidth: gridView.cellWidth
 
-                hint: modelData["hint"] ?? ""
                 background.radius: gridView.cellRadius
 
                 navigation.name: "BeamType" + hint
@@ -84,13 +91,13 @@ InspectorPropertyView {
 
                 StyledIconLabel {
                     anchors.centerIn: parent
-                    iconCode: modelData["iconCode"] ?? IconCode.NONE
+                    iconCode: delegateItem.iconCode ?? IconCode.NONE
                     font.pixelSize: 32
                 }
 
                 onClicked: {
                     if (root.propertyItem) {
-                        root.propertyItem.value = modelData["value"]
+                        root.propertyItem.value = value
                     }
                 }
             }

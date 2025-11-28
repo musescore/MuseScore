@@ -32,9 +32,9 @@ class TimeSignatureSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * horizontalScale READ horizontalScale CONSTANT)
-    Q_PROPERTY(PropertyItem * verticalScale READ verticalScale CONSTANT)
-    Q_PROPERTY(PropertyItem * shouldShowCourtesy READ shouldShowCourtesy CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * horizontalScale READ horizontalScale CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * verticalScale READ verticalScale CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * shouldShowCourtesy READ shouldShowCourtesy CONSTANT)
     Q_PROPERTY(bool isGenerated READ isGenerated CONSTANT)
 
 public:

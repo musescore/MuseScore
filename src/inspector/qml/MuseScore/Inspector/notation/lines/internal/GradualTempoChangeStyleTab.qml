@@ -31,7 +31,7 @@ import "../../../common"
 Column {
     id: root
 
-    property QtObject model: null
+    required property GradualTempoChangeSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1

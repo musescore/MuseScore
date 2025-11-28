@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 
 import QtQuick.Layouts
@@ -32,7 +34,7 @@ import "internal"
 Item {
     id: root
 
-    property alias model: fretDiagramTabPanel.model
+    required property FretDiagramSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -54,6 +56,8 @@ Item {
 
         FretDiagramTabPanel {
             id: fretDiagramTabPanel
+
+            model: root.model
 
             width: parent.width
 
@@ -116,6 +120,8 @@ Item {
                     Column {
                         id: repeaterItem
 
+                        required property int index
+
                         property int string: repeater.count - index - 1
                         property string finger: root.model ? root.model.fingerings[string] : 0
 
@@ -158,7 +164,7 @@ Item {
 
                             navigation.name: `Finger ${repeaterItem.string + 1} text input`
                             navigation.panel: root.navigationPanel
-                            navigation.row: repeater.navigationRowStart + index
+                            navigation.row: repeater.navigationRowStart + repeaterItem.index
                             navigation.accessible.name: qsTrc("inspector", "Finger for string %1").arg(repeaterItem.string + 1)
 
                             onTextEditingFinished: function (newTextValue) {

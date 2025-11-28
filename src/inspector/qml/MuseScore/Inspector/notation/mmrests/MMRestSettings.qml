@@ -30,7 +30,7 @@ import "../../common"
 Column {
     id: root
 
-    property QtObject model: null
+    required property MMRestSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -40,7 +40,7 @@ Column {
     spacing: 12
 
     function focusOnFirst() {
-        numberVisibilityCheckBox.focusOnFirst()
+        numberVisibilityCheckBox.navigation.requestActive()
     }
 
     PropertyCheckBox {

@@ -41,9 +41,9 @@ class FretFrameChordsSettingsModel : public AbstractInspectorModel, public muse:
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(FretFrameChordListModel * chordListModel READ chordListModel CONSTANT)
+    Q_PROPERTY(mu::inspector::FretFrameChordListModel * chordListModel READ chordListModel CONSTANT)
 
-    Q_PROPERTY(PropertyItem * listOrder READ listOrder CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * listOrder READ listOrder CONSTANT)
 
     Q_PROPERTY(bool hasInvisibleChords READ hasInvisibleChords NOTIFY hasInvisibleChordsChanged)
 

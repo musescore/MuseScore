@@ -32,15 +32,15 @@ class NoteheadSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * isHeadHidden READ isHeadHidden CONSTANT)
-    Q_PROPERTY(PropertyItem * isHeadSmall READ isHeadSmall CONSTANT)
-    Q_PROPERTY(PropertyItem * hasHeadParentheses READ hasHeadParentheses CONSTANT)
-    Q_PROPERTY(PropertyItem * headDirection READ headDirection CONSTANT)
-    Q_PROPERTY(PropertyItem * headGroup READ headGroup CONSTANT)
-    Q_PROPERTY(PropertyItem * headType READ headType CONSTANT)
-    Q_PROPERTY(PropertyItem * headSystem READ headSystem CONSTANT)
-    Q_PROPERTY(PropertyItem * dotPosition READ dotPosition CONSTANT)
-    Q_PROPERTY(PropertyItem * offset READ offset CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isHeadHidden READ isHeadHidden CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isHeadSmall READ isHeadSmall CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * hasHeadParentheses READ hasHeadParentheses CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * headDirection READ headDirection CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * headGroup READ headGroup CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * headType READ headType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * headSystem READ headSystem CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * dotPosition READ dotPosition CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * offset READ offset CONSTANT)
     Q_PROPERTY(bool isTrillCueNote READ isTrillCueNote NOTIFY isTrillCueNoteChanged)
 
 public:

@@ -34,16 +34,16 @@ class VerticalFrameSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * frameHeight READ frameHeight CONSTANT)
-    Q_PROPERTY(PropertyItem * gapAbove READ gapAbove CONSTANT)
-    Q_PROPERTY(PropertyItem * gapBelow READ gapBelow CONSTANT)
-    Q_PROPERTY(PropertyItem * frameLeftMargin READ frameLeftMargin CONSTANT)
-    Q_PROPERTY(PropertyItem * frameRightMargin READ frameRightMargin CONSTANT)
-    Q_PROPERTY(PropertyItem * frameTopMargin READ frameTopMargin CONSTANT)
-    Q_PROPERTY(PropertyItem * frameBottomMargin READ frameBottomMargin CONSTANT)
-    Q_PROPERTY(PropertyItem * isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
-    Q_PROPERTY(PropertyItem * paddingToNotationAbove READ paddingToNotationAbove CONSTANT)
-    Q_PROPERTY(PropertyItem * paddingToNotationBelow READ paddingToNotationBelow CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * frameHeight READ frameHeight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * gapAbove READ gapAbove CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * gapBelow READ gapBelow CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * frameLeftMargin READ frameLeftMargin CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * frameRightMargin READ frameRightMargin CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * frameTopMargin READ frameTopMargin CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * frameBottomMargin READ frameBottomMargin CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * paddingToNotationAbove READ paddingToNotationAbove CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * paddingToNotationBelow READ paddingToNotationBelow CONSTANT)
 
 public:
     explicit VerticalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository);

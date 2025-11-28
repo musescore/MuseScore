@@ -32,23 +32,23 @@ class OrnamentSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * placement READ placement CONSTANT)
 
-    Q_PROPERTY(PropertyItem * intervalAbove READ intervalAbove CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * intervalAbove READ intervalAbove CONSTANT)
     Q_PROPERTY(bool isIntervalAboveAvailable READ isIntervalAboveAvailable NOTIFY isIntervalAboveAvailableChanged)
 
-    Q_PROPERTY(PropertyItem * intervalBelow READ intervalBelow CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * intervalBelow READ intervalBelow CONSTANT)
     Q_PROPERTY(bool isIntervalBelowAvailable READ isIntervalBelowAvailable NOTIFY isIntervalBelowAvailableChanged)
 
-    Q_PROPERTY(PropertyItem * intervalStep READ intervalStep CONSTANT)
-    Q_PROPERTY(PropertyItem * intervalType READ intervalType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * intervalStep READ intervalStep CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * intervalType READ intervalType CONSTANT)
     Q_PROPERTY(bool isFullIntervalChoiceAvailable READ isFullIntervalChoiceAvailable NOTIFY isFullIntervalChoiceAvailableChanged)
     Q_PROPERTY(bool isPerfectStep READ isPerfectStep NOTIFY isPerfectStepChanged)
 
-    Q_PROPERTY(PropertyItem * showAccidental READ showAccidental CONSTANT)
-    Q_PROPERTY(PropertyItem * startOnUpperNote READ startOnUpperNote CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * showAccidental READ showAccidental CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * startOnUpperNote READ startOnUpperNote CONSTANT)
 
-    Q_PROPERTY(PropertyItem * showCueNote READ showCueNote CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * showCueNote READ showCueNote CONSTANT)
 
 public:
     explicit OrnamentSettingsModel(QObject* parent, IElementRepositoryService* repository);

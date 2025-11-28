@@ -34,31 +34,31 @@ class TextLineSettingsModel : public InspectorModelWithVoiceAndPositionOptions
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * isLineVisible READ isLineVisible CONSTANT)
-    Q_PROPERTY(PropertyItem * allowDiagonal READ allowDiagonal CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isLineVisible READ isLineVisible CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * allowDiagonal READ allowDiagonal CONSTANT)
 
-    Q_PROPERTY(PropertyItem * lineStyle READ lineStyle CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * lineStyle READ lineStyle CONSTANT)
 
-    Q_PROPERTY(PropertyItem * thickness READ thickness CONSTANT)
-    Q_PROPERTY(PropertyItem * dashLineLength READ dashLineLength CONSTANT)
-    Q_PROPERTY(PropertyItem * dashGapLength READ dashGapLength CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * thickness READ thickness CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * dashLineLength READ dashLineLength CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * dashGapLength READ dashGapLength CONSTANT)
 
-    Q_PROPERTY(PropertyItem * startHookType READ startHookType CONSTANT)
-    Q_PROPERTY(PropertyItem * endHookType READ endHookType CONSTANT)
-    Q_PROPERTY(PropertyItem * startHookHeight READ startHookHeight CONSTANT)
-    Q_PROPERTY(PropertyItem * endHookHeight READ endHookHeight CONSTANT)
-    Q_PROPERTY(PropertyItem * gapBetweenTextAndLine READ gapBetweenTextAndLine CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * startHookType READ startHookType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * endHookType READ endHookType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * startHookHeight READ startHookHeight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * endHookHeight READ endHookHeight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * gapBetweenTextAndLine READ gapBetweenTextAndLine CONSTANT)
 
-    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * placement READ placement CONSTANT)
 
-    Q_PROPERTY(PropertyItem * beginningText READ beginningText CONSTANT)
-    Q_PROPERTY(PropertyItem * beginningTextOffset READ beginningTextOffset CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * beginningText READ beginningText CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * beginningTextOffset READ beginningTextOffset CONSTANT)
 
-    Q_PROPERTY(PropertyItem * continuousText READ continuousText CONSTANT)
-    Q_PROPERTY(PropertyItem * continuousTextOffset READ continuousTextOffset CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * continuousText READ continuousText CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * continuousTextOffset READ continuousTextOffset CONSTANT)
 
-    Q_PROPERTY(PropertyItem * endText READ endText CONSTANT)
-    Q_PROPERTY(PropertyItem * endTextOffset READ endTextOffset CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * endText READ endText CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * endTextOffset READ endTextOffset CONSTANT)
 
 public:
     explicit TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository,

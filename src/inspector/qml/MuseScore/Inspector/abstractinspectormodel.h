@@ -60,7 +60,7 @@ class AbstractInspectorModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 
     Q_PROPERTY(bool isSystemObjectBelowBottomStaff READ isSystemObjectBelowBottomStaff NOTIFY isSystemObjectBelowBottomStaffChanged)
-    Q_PROPERTY(MeasurementUnits measurementUnits READ measurementUnits NOTIFY measurementUnitsChanged)
+    Q_PROPERTY(mu::inspector::CommonTypes::MeasurementUnits measurementUnits READ measurementUnits NOTIFY measurementUnitsChanged)
 
 public:
     muse::Inject<context::IGlobalContext> context;

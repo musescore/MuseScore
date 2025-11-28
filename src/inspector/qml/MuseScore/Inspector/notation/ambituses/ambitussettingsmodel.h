@@ -32,18 +32,18 @@ class AmbitusSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * noteheadGroup READ noteheadGroup CONSTANT)
-    Q_PROPERTY(PropertyItem * noteheadType READ noteheadType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * noteheadGroup READ noteheadGroup CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * noteheadType READ noteheadType CONSTANT)
 
-    Q_PROPERTY(PropertyItem * topTpc READ topTpc CONSTANT)
-    Q_PROPERTY(PropertyItem * bottomTpc READ bottomTpc CONSTANT)
-    Q_PROPERTY(PropertyItem * topOctave READ topOctave CONSTANT)
-    Q_PROPERTY(PropertyItem * bottomOctave READ bottomOctave CONSTANT)
-    Q_PROPERTY(PropertyItem * topPitch READ topPitch CONSTANT)
-    Q_PROPERTY(PropertyItem * bottomPitch READ bottomPitch CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * topTpc READ topTpc CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * bottomTpc READ bottomTpc CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * topOctave READ topOctave CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * bottomOctave READ bottomOctave CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * topPitch READ topPitch CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * bottomPitch READ bottomPitch CONSTANT)
 
-    Q_PROPERTY(PropertyItem * direction READ direction CONSTANT)
-    Q_PROPERTY(PropertyItem * lineThickness READ lineThickness CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * direction READ direction CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * lineThickness READ lineThickness CONSTANT)
 
 public:
     explicit AmbitusSettingsModel(QObject* parent, IElementRepositoryService* repository);

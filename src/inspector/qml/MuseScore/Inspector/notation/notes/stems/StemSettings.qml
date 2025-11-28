@@ -19,23 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
-import QtQuick.Controls
 
 import Muse.Ui
 import Muse.UiComponents
-import MuseScore.Inspector
 
-import "../../common"
+import MuseScore.Inspector
 
 FocusableItem {
     id: root
 
     //@note Current design assumes that stems and hooks should be represented at the same tab,
     //      but semantically it's different things, so they should have different models
-    property QtObject chordModel: null
-    property QtObject stemModel: null
-    property QtObject hookModel: null
+    required property ChordSettingsModel chordModel
+    required property StemSettingsModel stemModel
+    required property HookSettingsModel hookModel
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -105,6 +105,13 @@ FocusableItem {
                 ]
 
                 delegate: FlatRadioButton {
+                    id: delegateItem
+
+                    required property var modelData
+                    required property int iconCode
+                    required property int value
+                    required property int index
+
                     height: 70
 
                     navigation.name: "FlagStyle" + modelData.text
@@ -118,20 +125,20 @@ FocusableItem {
 
                         StyledIconLabel {
                             anchors.horizontalCenter: parent.horizontalCenter
-                            iconCode: modelData.iconCode
+                            iconCode: delegateItem.iconCode
                             font.pixelSize: 32
                         }
 
                         StyledTextLabel {
                             anchors.horizontalCenter: parent.horizontalCenter
-                            text: modelData.text
+                            text: delegateItem.modelData.text
                         }
                     }
 
-                    checked: root.stemModel && root.stemModel.useStraightNoteFlags === modelData.value
+                    checked: root.stemModel && root.stemModel.useStraightNoteFlags === delegateItem.value
                     onToggled: {
                         if (root.stemModel) {
-                            root.stemModel.useStraightNoteFlags = modelData.value
+                            root.stemModel.useStraightNoteFlags = delegateItem.value
                         }
                     }
                 }

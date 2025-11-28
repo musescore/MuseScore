@@ -27,7 +27,7 @@ import Muse.UiComponents
 Column {
     id: root
 
-    property QtObject model: null
+    required property ScoreAppearanceSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0

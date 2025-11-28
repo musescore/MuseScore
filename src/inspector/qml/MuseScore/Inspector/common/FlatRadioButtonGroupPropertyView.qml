@@ -46,7 +46,7 @@ InspectorPropertyView {
         id: radioButtonGroupItem
 
         height: root.requestHeight
-        width: requestWidth ? requestWidth : parent.width
+        width: root.requestWidth || parent.width
 
         transparent: root.transparent
 

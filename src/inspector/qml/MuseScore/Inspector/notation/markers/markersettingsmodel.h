@@ -32,10 +32,10 @@ class MarkerSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * type READ type CONSTANT)
-    Q_PROPERTY(PropertyItem * label READ label CONSTANT)
-    Q_PROPERTY(PropertyItem * position READ position CONSTANT)
-    Q_PROPERTY(PropertyItem * centerOnSymbol READ centerOnSymbol CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * type READ type CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * label READ label CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * position READ position CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * centerOnSymbol READ centerOnSymbol CONSTANT)
 
 public:
     explicit MarkerSettingsModel(QObject* parent, IElementRepositoryService* repository);

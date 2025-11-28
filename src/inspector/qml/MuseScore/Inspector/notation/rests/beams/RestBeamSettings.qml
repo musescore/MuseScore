@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,45 +21,36 @@
  */
 import QtQuick
 
-import Muse.Ui
-import Muse.UiComponents
 import MuseScore.Inspector
+import Muse.UiComponents
+import Muse.Ui
 
-import "../../common"
+import "../beams"
 
-Column {
+FocusableItem {
     id: root
 
-    property QtObject model: null
+    property RestBeamSettingsModel model: null
+    readonly property BeamModesModel beamModesModel: model?.beamModesModel ?? null
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
+    readonly property int navigationRowEnd: beamTypeSection.navigationRowEnd
 
-    objectName: "ExpressionsSettings"
-
-    spacing: 12
+    implicitWidth: beamTypeSection.implicitWidth
+    implicitHeight: beamTypeSection.implicitHeight
 
     function focusOnFirst() {
-        snapExpression.navigation.requestActive()
+        beamTypeSection.focusOnFirst()
     }
 
-    CheckBoxPropertyView {
-        id: snapExpression
+    BeamTypeSelector {
+        id: beamTypeSection
+        titleText: qsTrc("inspector", "Beam type")
+        propertyItem: root.beamModesModel ? root.beamModesModel.mode : null
+        enabled: root.beamModesModel && !root.beamModesModel.isEmpty
 
-        navigationName: "Snap expression"
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
-
-        titleText: qsTrc("inspector", "Align with preceding dynamic")
-        propertyItem: root.model?.snapExpression ?? null
-    }
-
-    VoicesAndPositionSection {
-        id: voicesAndPositionSection
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: snapExpression.navigationRowEnd + 1
-
-        model: root.model
     }
 }

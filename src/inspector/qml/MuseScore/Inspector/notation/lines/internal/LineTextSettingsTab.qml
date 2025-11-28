@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
-import QtQuick.Controls
 
 import MuseScore.Inspector
 import Muse.UiComponents
@@ -32,7 +31,7 @@ import "../../../"
 FocusableItem {
     id: root
 
-    property QtObject model: null
+    required property TextLineSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1

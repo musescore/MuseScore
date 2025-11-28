@@ -34,8 +34,8 @@ class BendSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * bendDirection READ bendDirection CONSTANT)
-    Q_PROPERTY(PropertyItem * showHoldLine READ showHoldLine CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * bendDirection READ bendDirection CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * showHoldLine READ showHoldLine CONSTANT)
     Q_PROPERTY(bool isShowHoldLineAvailable READ isShowHoldLineAvailable NOTIFY isShowHoldLineAvailableChanged)
 
     Q_PROPERTY(bool isBendCurveEnabled READ isBendCurveEnabled NOTIFY isBendCurveEnabledChanged)

@@ -32,7 +32,7 @@ class GlissandoPlaybackModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * styleType READ styleType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * styleType READ styleType CONSTANT)
     Q_PROPERTY(bool isHarpGliss READ isHarpGliss NOTIFY isHarpGlissChanged)
 
 public:

@@ -32,7 +32,7 @@ class HookSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * offset READ offset CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * offset READ offset CONSTANT)
 
 public:
     explicit HookSettingsModel(QObject* parent, IElementRepositoryService* repository);

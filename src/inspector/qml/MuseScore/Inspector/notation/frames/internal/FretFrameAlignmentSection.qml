@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 
 import Muse.Ui
@@ -53,42 +55,47 @@ InspectorPropertyView {
 
         model: [
             {
-                iconRole: IconCode.ALIGN_LEFT,
-                typeRole: CommonTypes.LEFT,
+                iconCode: IconCode.ALIGN_LEFT,
+                value: CommonTypes.LEFT,
                 title: qsTrc("inspector", "Align left"),
                 description: qsTrc("inspector", "Align left edge of legend to reference point")
             },
             {
-                iconRole: IconCode.ALIGN_HORIZONTAL_CENTER,
-                typeRole: CommonTypes.HCENTER,
+                iconCode: IconCode.ALIGN_HORIZONTAL_CENTER,
+                value: CommonTypes.HCENTER,
                 title: qsTrc("inspector", "Align center"),
                 description: qsTrc("inspector", "Align horizontal center of legend to reference point")
             },
             {
-                iconRole: IconCode.ALIGN_RIGHT,
-                typeRole: CommonTypes.RIGHT,
+                iconCode: IconCode.ALIGN_RIGHT,
+                value: CommonTypes.RIGHT,
                 title: qsTrc("inspector", "Align right"),
                 description: qsTrc("inspector", "Align right edge of legend to reference point")
             }
         ]
 
         delegate: FlatRadioButton {
-            navigation.panel: root.navigationPanel
-            navigation.name: "HAlign" + model.index
-            navigation.row: horizontalAlignmentButtonList.navigationRowStart + model.index
-            navigation.accessible.name: modelData.title
-            navigation.accessible.description: modelData.description
+            required iconCode
+            required property int value
+            required property string title
+            required property string description
+            required property int index
 
-            toolTipTitle: modelData.title
-            toolTipDescription: modelData.description
+            navigation.panel: root.navigationPanel
+            navigation.name: "HAlign" + index
+            navigation.row: horizontalAlignmentButtonList.navigationRowStart + index
+            navigation.accessible.name: title
+            navigation.accessible.description: description
+
+            toolTipTitle: title
+            toolTipDescription: description
 
             width: 30
             transparent: true
 
-            iconCode: modelData.iconRole
-            checked: root.propertyItem && !root.propertyItem.isUndefined && (root.propertyItem.value === modelData.typeRole)
+            checked: root.propertyItem && !root.propertyItem.isUndefined && (root.propertyItem.value === value)
             onToggled: {
-                root.propertyItem.value = modelData.typeRole
+                root.propertyItem.value = value
             }
         }
     }

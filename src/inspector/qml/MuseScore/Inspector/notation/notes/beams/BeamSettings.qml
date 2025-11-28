@@ -19,21 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
-import QtQuick.Controls
 
 import MuseScore.Inspector
 import Muse.UiComponents
 import Muse.Ui
 
 import "../beams"
-import "../../common"
 
 FocusableItem {
     id: root
 
-    property QtObject model: null
-    readonly property QtObject beamModesModel: model ? model.beamModesModel : null
+    required property BeamSettingsModel model
+    readonly property BeamModesModel beamModesModel: model?.beamModesModel
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -99,6 +99,10 @@ FocusableItem {
                     ]
 
                     delegate: FlatRadioButton {
+                        required property var modelData
+                        required property int value
+                        required property int index
+
                         iconCode: modelData["iconCode"] ?? IconCode.NONE
                         text: modelData["text"] ?? ""
 
@@ -108,10 +112,10 @@ FocusableItem {
                         navigation.accessible.name: featheredBeamsLabel.text + " " + text
 
                         checked: root.beamModesModel && !(root.model.featheringHeightLeft.isUndefined || root.model.featheringHeightRight.isUndefined)
-                                 ? root.model.featheringMode === modelData["value"]
+                                 ? root.model.featheringMode === value
                                  : false
                         onToggled: {
-                            root.model.featheringMode = modelData["value"]
+                            root.model.featheringMode = value
                         }
                     }
                 }

@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
-import QtQuick.Controls
 
 import Muse.Ui
 import Muse.UiComponents
@@ -32,7 +31,7 @@ import "internal"
 Column {
     id: root
 
-    property QtObject model: null
+    required property GlissandoSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -68,7 +67,7 @@ Column {
         navigationRowStart: lineSection.navigationRowEnd + 1
     }
 
-    SeparatorLine { anchors.margins: -12; visible: hooksSection.visible }
+    SeparatorLine { anchors.margins: -12 }
 
     PropertyCheckBox {
         id: showTextCheckBox

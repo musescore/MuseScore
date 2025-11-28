@@ -25,7 +25,8 @@
 #include <QPainter>
 #include <qqmlintegration.h>
 
-#include "uicomponents/view/quickpaintedview.h"
+#include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
+
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "engraving/types/pitchvalue.h"
@@ -34,8 +35,7 @@ namespace mu::inspector {
 class GridCanvas : public muse::uicomponents::QuickPaintedView
 {
     Q_OBJECT
-
-    INJECT(muse::ui::IUiConfiguration, uiConfig)
+    QML_ELEMENT;
 
     Q_PROPERTY(QVariant pointList READ pointList WRITE setPointList NOTIFY pointListChanged)
 
@@ -45,7 +45,7 @@ class GridCanvas : public muse::uicomponents::QuickPaintedView
     Q_PROPERTY(int columnSpacing READ columnSpacing WRITE setColumnSpacing NOTIFY columnSpacingChanged)
     Q_PROPERTY(bool shouldShowNegativeRows READ shouldShowNegativeRows WRITE setShouldShowNegativeRows NOTIFY shouldShowNegativeRowsChanged)
 
-    QML_ELEMENT
+    muse::Inject<muse::ui::IUiConfiguration> uiConfig;
 
 public:
     explicit GridCanvas(QQuickItem* parent = nullptr);

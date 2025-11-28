@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
-import QtQuick.Controls
 
 import Muse.Ui
 import Muse.UiComponents
@@ -31,14 +30,13 @@ import "../../../common"
 FocusableItem {
     id: root
 
-    property QtObject model: null
+    required property PedalSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
-
 
     Column {
         id: contentColumn

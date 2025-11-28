@@ -32,10 +32,10 @@ class SlurAndTieSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * lineStyle READ lineStyle CONSTANT)
-    Q_PROPERTY(PropertyItem * direction READ direction CONSTANT)
-    Q_PROPERTY(PropertyItem * tiePlacement READ tiePlacement CONSTANT)
-    Q_PROPERTY(PropertyItem * minLength READ minLength CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * lineStyle READ lineStyle CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * direction READ direction CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * tiePlacement READ tiePlacement CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * minLength READ minLength CONSTANT)
     Q_PROPERTY(bool isTiePlacementAvailable READ isTiePlacementAvailable NOTIFY isTiePlacementAvailableChanged)
     Q_PROPERTY(bool isMinLengthAvailable READ isMinLengthAvailable NOTIFY isMinLengthAvailableChanged)
     Q_PROPERTY(bool isLineStyleAvailable READ isLineStyleAvailable NOTIFY isLineStyleAvailableChanged)

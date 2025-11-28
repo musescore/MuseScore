@@ -32,8 +32,8 @@ class MMRestSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * isNumberVisible READ isNumberVisible CONSTANT)
-    Q_PROPERTY(PropertyItem * numberPosition READ numberPosition CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isNumberVisible READ isNumberVisible CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * numberPosition READ numberPosition CONSTANT)
     Q_PROPERTY(bool areNumberOptionsEnabled READ areNumberOptionsEnabled NOTIFY areNumberOptionsEnabledChanged)
 
 public:

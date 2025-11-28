@@ -32,7 +32,7 @@ class VoltaSettingsModel : public TextLineSettingsModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * repeatCount READ repeatCount CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * repeatCount READ repeatCount CONSTANT)
 
 public:
     explicit VoltaSettingsModel(QObject* parent, IElementRepositoryService* repository);

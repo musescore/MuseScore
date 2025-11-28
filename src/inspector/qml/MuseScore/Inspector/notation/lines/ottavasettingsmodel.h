@@ -32,8 +32,8 @@ class OttavaSettingsModel : public TextLineSettingsModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * ottavaType READ ottavaType CONSTANT)
-    Q_PROPERTY(PropertyItem * showNumbersOnly READ showNumbersOnly CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * ottavaType READ ottavaType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * showNumbersOnly READ showNumbersOnly CONSTANT)
 
 public:
     explicit OttavaSettingsModel(QObject* parent, IElementRepositoryService* repository);

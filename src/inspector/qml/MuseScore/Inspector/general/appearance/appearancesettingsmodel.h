@@ -37,12 +37,12 @@ class AppearanceSettingsModel : public AbstractInspectorModel
 
     INJECT(notation::INotationConfiguration, notationConfiguration)
 
-    Q_PROPERTY(PropertyItem * leadingSpace READ leadingSpace CONSTANT)
-    Q_PROPERTY(PropertyItem * measureWidth READ measureWidth CONSTANT)
-    Q_PROPERTY(PropertyItem * minimumDistance READ minimumDistance CONSTANT)
-    Q_PROPERTY(PropertyItem * color READ color CONSTANT)
-    Q_PROPERTY(PropertyItem * arrangeOrder READ arrangeOrder CONSTANT)
-    Q_PROPERTY(PropertyItem * offset READ offset CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * leadingSpace READ leadingSpace CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * measureWidth READ measureWidth CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * minimumDistance READ minimumDistance CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * color READ color CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * arrangeOrder READ arrangeOrder CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * offset READ offset CONSTANT)
     Q_PROPERTY(bool isSnappedToGrid READ isSnappedToGrid WRITE setIsSnappedToGrid NOTIFY isSnappedToGridChanged)
     Q_PROPERTY(bool isVerticalOffsetAvailable READ isVerticalOffsetAvailable NOTIFY isVerticalOffsetAvailableChanged)
 

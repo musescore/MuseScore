@@ -32,23 +32,23 @@ class StaffTypeSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * isSmall READ isSmall CONSTANT)
-    Q_PROPERTY(PropertyItem * verticalOffset READ verticalOffset CONSTANT)
-    Q_PROPERTY(PropertyItem * scale READ scale CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isSmall READ isSmall CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * verticalOffset READ verticalOffset CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * scale READ scale CONSTANT)
 
-    Q_PROPERTY(PropertyItem * lineCount READ lineCount CONSTANT)
-    Q_PROPERTY(PropertyItem * lineDistance READ lineDistance CONSTANT)
-    Q_PROPERTY(PropertyItem * stepOffset READ stepOffset CONSTANT)
-    Q_PROPERTY(PropertyItem * isInvisible READ isInvisible CONSTANT)
-    Q_PROPERTY(PropertyItem * color READ color CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * lineCount READ lineCount CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * lineDistance READ lineDistance CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * stepOffset READ stepOffset CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isInvisible READ isInvisible CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * color READ color CONSTANT)
 
-    Q_PROPERTY(PropertyItem * noteheadSchemeType READ noteheadSchemeType CONSTANT)
-    Q_PROPERTY(PropertyItem * isStemless READ isStemless CONSTANT)
-    Q_PROPERTY(PropertyItem * shouldShowBarlines READ shouldShowBarlines CONSTANT)
-    Q_PROPERTY(PropertyItem * shouldShowLedgerLines READ shouldShowLedgerLines CONSTANT)
-    Q_PROPERTY(PropertyItem * shouldGenerateClefs READ shouldGenerateClefs CONSTANT)
-    Q_PROPERTY(PropertyItem * shouldGenerateTimeSignatures READ shouldGenerateTimeSignatures CONSTANT)
-    Q_PROPERTY(PropertyItem * shouldGenerateKeySignatures READ shouldGenerateKeySignatures CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * noteheadSchemeType READ noteheadSchemeType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isStemless READ isStemless CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * shouldShowBarlines READ shouldShowBarlines CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * shouldShowLedgerLines READ shouldShowLedgerLines CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * shouldGenerateClefs READ shouldGenerateClefs CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * shouldGenerateTimeSignatures READ shouldGenerateTimeSignatures CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * shouldGenerateKeySignatures READ shouldGenerateKeySignatures CONSTANT)
 public:
     explicit StaffTypeSettingsModel(QObject* parent, IElementRepositoryService* repository);
 

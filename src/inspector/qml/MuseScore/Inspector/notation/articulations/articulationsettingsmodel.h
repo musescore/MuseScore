@@ -32,7 +32,7 @@ class ArticulationSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * placement READ placement CONSTANT)
     Q_PROPERTY(bool isPlacementAvailable READ isPlacementAvailable NOTIFY isPlacementAvailableChanged FINAL)
 
 public:

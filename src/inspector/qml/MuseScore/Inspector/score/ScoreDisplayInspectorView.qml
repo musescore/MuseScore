@@ -21,13 +21,16 @@
  */
 import QtQuick
 import QtQuick.Layouts
-import MuseScore.Inspector
+
 import Muse.UiComponents
+import MuseScore.Inspector
 
 import "../common"
 
 InspectorSectionView {
     id: root
+
+    required property ScoreDisplaySettingsModel model
 
     implicitHeight: grid.implicitHeight
 
@@ -52,8 +55,8 @@ InspectorSectionView {
             //: Invisible elements
             text: qsTrc("inspector", "Invisible")
             accessibleText: qsTrc("inspector", "Invisible elements")
-            isVisible: model ? model.shouldShowInvisible : false
-            onVisibleToggled: { model.shouldShowInvisible = !model.shouldShowInvisible }
+            isVisible: root.model ? root.model.shouldShowInvisible : false
+            onVisibleToggled: { root.model.shouldShowInvisible = !root.model.shouldShowInvisible }
         }
 
         VisibilityBox {
@@ -65,8 +68,8 @@ InspectorSectionView {
             navigation.row: root.navigationRow(3)
 
             text: qsTrc("inspector", "Formatting")
-            isVisible: model ? model.shouldShowFormatting : false
-            onVisibleToggled: { model.shouldShowFormatting = !model.shouldShowFormatting }
+            isVisible: root.model ? root.model.shouldShowFormatting : false
+            onVisibleToggled: { root.model.shouldShowFormatting = !root.model.shouldShowFormatting }
         }
 
         VisibilityBox {
@@ -78,8 +81,8 @@ InspectorSectionView {
             navigation.row: root.navigationRow(4)
 
             text: qsTrc("inspector", "Frames")
-            isVisible: model ? model.shouldShowFrames : false
-            onVisibleToggled: { model.shouldShowFrames = !model.shouldShowFrames }
+            isVisible: root.model ? root.model.shouldShowFrames : false
+            onVisibleToggled: { root.model.shouldShowFrames = !root.model.shouldShowFrames }
         }
 
         VisibilityBox {
@@ -91,8 +94,8 @@ InspectorSectionView {
             navigation.row: root.navigationRow(5)
 
             text: qsTrc("inspector", "Page margins")
-            isVisible: model ? model.shouldShowPageMargins : false
-            onVisibleToggled: { model.shouldShowPageMargins = !model.shouldShowPageMargins }
+            isVisible: root.model ? root.model.shouldShowPageMargins : false
+            onVisibleToggled: { root.model.shouldShowPageMargins = !root.model.shouldShowPageMargins }
         }
 
         VisibilityBox {
@@ -104,8 +107,8 @@ InspectorSectionView {
             navigation.row: root.navigationRow(6)
 
             text: qsTrc("inspector", "Sound flags")
-            isVisible: model ? model.shouldShowSoundFlags : false
-            onVisibleToggled: { model.shouldShowSoundFlags = !model.shouldShowSoundFlags }
+            isVisible: root.model ? root.model.shouldShowSoundFlags : false
+            onVisibleToggled: { root.model.shouldShowSoundFlags = !root.model.shouldShowSoundFlags }
         }
     }
 }

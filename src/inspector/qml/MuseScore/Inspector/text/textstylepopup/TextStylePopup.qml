@@ -20,7 +20,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 import Muse.Ui

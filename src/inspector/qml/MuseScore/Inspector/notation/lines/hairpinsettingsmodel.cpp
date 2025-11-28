@@ -24,7 +24,6 @@
 #include "engraving/dom/hairpin.h"
 
 #include "types/commontypes.h"
-#include "types/hairpintypes.h"
 
 #include "translation.h"
 
@@ -32,7 +31,7 @@ using namespace mu::inspector;
 using namespace mu::engraving;
 
 HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : TextLineSettingsModel(parent, repository)
+    : HairpinLineSettingsModel(parent, repository, HairpinLineSettingsModel::Unknown)
 {
     setModelType(InspectorModelType::TYPE_HAIRPIN);
     setTitle(muse::qtrc("inspector", "Hairpin"));
@@ -56,26 +55,13 @@ PropertyItem* HairpinSettingsModel::continuousHeight() const
     return m_continuousHeight;
 }
 
-PropertyItem* HairpinSettingsModel::snapBefore() const
-{
-    return m_snapBefore;
-}
-
-PropertyItem* HairpinSettingsModel::snapAfter() const
-{
-    return m_snapAfter;
-}
-
 void HairpinSettingsModel::createProperties()
 {
-    TextLineSettingsModel::createProperties();
+    HairpinLineSettingsModel::createProperties();
 
     m_isNienteCircleVisible = buildPropertyItem(mu::engraving::Pid::HAIRPIN_CIRCLEDTIP);
     m_height = buildPropertyItem(mu::engraving::Pid::HAIRPIN_HEIGHT);
     m_continuousHeight = buildPropertyItem(mu::engraving::Pid::HAIRPIN_CONT_HEIGHT);
-
-    m_snapBefore = buildPropertyItem(mu::engraving::Pid::SNAP_BEFORE);
-    m_snapAfter = buildPropertyItem(mu::engraving::Pid::SNAP_AFTER);
 
     isLineVisible()->setIsVisible(false);
     allowDiagonal()->setIsVisible(true);
@@ -84,7 +70,7 @@ void HairpinSettingsModel::createProperties()
 
 void HairpinSettingsModel::loadProperties()
 {
-    TextLineSettingsModel::loadProperties();
+    HairpinLineSettingsModel::loadProperties();
 
     const static PropertyIdSet propertyIdSet {
         Pid::HAIRPIN_CIRCLEDTIP,
@@ -99,13 +85,11 @@ void HairpinSettingsModel::loadProperties()
 
 void HairpinSettingsModel::resetProperties()
 {
-    TextLineSettingsModel::resetProperties();
+    HairpinLineSettingsModel::resetProperties();
 
     m_isNienteCircleVisible->resetToDefault();
     m_height->resetToDefault();
     m_continuousHeight->resetToDefault();
-    m_snapBefore->resetToDefault();
-    m_snapAfter->resetToDefault();
 }
 
 void HairpinSettingsModel::requestElements()
@@ -124,7 +108,7 @@ void HairpinSettingsModel::requestElements()
 
 void HairpinSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet& changedStyleIdSet)
 {
-    TextLineSettingsModel::onNotationChanged(changedPropertyIdSet, changedStyleIdSet);
+    HairpinLineSettingsModel::onNotationChanged(changedPropertyIdSet, changedStyleIdSet);
     loadProperties(changedPropertyIdSet);
 }
 
@@ -140,13 +124,5 @@ void HairpinSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 
     if (muse::contains(propertyIdSet, Pid::HAIRPIN_CONT_HEIGHT)) {
         loadPropertyItem(m_continuousHeight, formatDoubleFunc);
-    }
-
-    if (muse::contains(propertyIdSet, Pid::SNAP_BEFORE)) {
-        loadPropertyItem(m_snapBefore);
-    }
-
-    if (muse::contains(propertyIdSet, Pid::SNAP_AFTER)) {
-        loadPropertyItem(m_snapAfter);
     }
 }

@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound 
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -32,7 +34,7 @@ import "internal"
 Column {
     id: root
 
-    property QtObject model: null
+    required property HairpinLineSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -119,7 +121,7 @@ Column {
         id: hairpinStyleSettings
 
         HairpinStyleSettings {
-            model: root.model
+            model: root.model as HairpinSettingsModel
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1000

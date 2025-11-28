@@ -32,17 +32,17 @@ class DynamicsSettingsModel : public InspectorModelWithVoiceAndPositionOptions
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * avoidBarLines READ avoidBarLines CONSTANT)
-    Q_PROPERTY(PropertyItem * dynamicSize READ dynamicSize CONSTANT)
-    Q_PROPERTY(PropertyItem * centerOnNotehead READ centerOnNotehead CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * avoidBarLines READ avoidBarLines CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * dynamicSize READ dynamicSize CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * centerOnNotehead READ centerOnNotehead CONSTANT)
 
     // Frame-related settings
-    Q_PROPERTY(PropertyItem * frameType READ frameType CONSTANT)
-    Q_PROPERTY(PropertyItem * frameBorderColor READ frameBorderColor CONSTANT)
-    Q_PROPERTY(PropertyItem * frameFillColor READ frameFillColor CONSTANT)
-    Q_PROPERTY(PropertyItem * frameThickness READ frameThickness CONSTANT)
-    Q_PROPERTY(PropertyItem * frameMargin READ frameMargin CONSTANT)
-    Q_PROPERTY(PropertyItem * frameCornerRadius READ frameCornerRadius CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * frameType READ frameType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * frameBorderColor READ frameBorderColor CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * frameFillColor READ frameFillColor CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * frameThickness READ frameThickness CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * frameMargin READ frameMargin CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * frameCornerRadius READ frameCornerRadius CONSTANT)
 
 public:
     explicit DynamicsSettingsModel(QObject* parent, IElementRepositoryService* repository);

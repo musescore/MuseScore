@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
-import QtQuick.Controls
 
 import Muse.Ui
 import MuseScore.Inspector
@@ -31,7 +30,7 @@ import "../../common"
 Column {
     id: root
 
-    property QtObject model: null
+    required property JumpSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1

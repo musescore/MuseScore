@@ -110,7 +110,7 @@ Column {
         icon: IconCode.PLUS
 
         onClicked: {
-            model.insertMeasures(numberOfMeasures.currentValue, targetDropdown.currentValue)
+            root.model.insertMeasures(numberOfMeasures.currentValue, targetDropdown.currentValue)
         }
     }
 }

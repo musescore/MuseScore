@@ -32,8 +32,8 @@ class VibratoSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * lineType READ lineType CONSTANT)
-    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * lineType READ lineType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * placement READ placement CONSTANT)
 
 public:
     explicit VibratoSettingsModel(QObject* parent, IElementRepositoryService* repository);

@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 
 import Muse.Ui
@@ -37,7 +39,7 @@ import "parts"
 ExpandableBlank {
     id: root
 
-    property var sectionModel // Comes from inspectorListModel
+    required property AbstractInspectorModel sectionModel // Comes from inspectorListModel
     property var anchorItem: null
 
     signal ensureContentVisibleRequested(int invisibleContentHeight)
@@ -45,7 +47,6 @@ ExpandableBlank {
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: root.title
-        section: root.navigationSection
         direction: NavigationPanel.Vertical
         accessible.name: root.title
         enabled: root.enabled && root.visible
@@ -70,7 +71,7 @@ ExpandableBlank {
         case AbstractInspectorModel.SECTION_TEXT_LINES:
         case AbstractInspectorModel.SECTION_TEXT: return textSection
         case AbstractInspectorModel.SECTION_NOTATION:
-            if (sectionModel.isMultiModel) {
+            if ((sectionModel as AbstractInspectorProxyModel).isMultiModel) {
                 return notationMultiElementsSection
             } else {
                 return notationSingleElementSection
@@ -87,7 +88,7 @@ ExpandableBlank {
         id: generalSection
 
         GeneralInspectorView {
-            model: root.sectionModel
+            model: root.sectionModel as GeneralSettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
@@ -106,7 +107,7 @@ ExpandableBlank {
         id: measuresSection
 
         MeasuresInspectorView {
-            model: root.sectionModel
+            model: root.sectionModel as MeasuresSettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
@@ -125,7 +126,7 @@ ExpandableBlank {
         id: emptyStavesSection
 
         EmptyStavesVisibilityInspectorView {
-            model: root.sectionModel
+            model: root.sectionModel as EmptyStavesVisibilitySettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
@@ -144,7 +145,7 @@ ExpandableBlank {
         id: textSection
 
         TextInspectorView {
-            model: root.sectionModel
+            model: root.sectionModel as TextSettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
@@ -163,7 +164,7 @@ ExpandableBlank {
         id: notationMultiElementsSection
 
         NotationMultiElementView {
-            model: root.sectionModel
+            model: root.sectionModel as NotationSettingsProxyModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
@@ -182,7 +183,7 @@ ExpandableBlank {
         id: notationSingleElementSection
 
         NotationSingleElementView {
-            model: root.sectionModel
+            model: root.sectionModel as NotationSettingsProxyModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
 
@@ -196,7 +197,7 @@ ExpandableBlank {
         id: scoreSection
 
         ScoreDisplayInspectorView {
-            model: root.sectionModel
+            model: root.sectionModel as ScoreDisplaySettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
 
@@ -210,7 +211,7 @@ ExpandableBlank {
         id: scoreAppearanceSection
 
         ScoreAppearanceInspectorView {
-            model: root.sectionModel
+            model: root.sectionModel as ScoreAppearanceSettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
@@ -229,7 +230,7 @@ ExpandableBlank {
         id: partsSection
 
         PartsSettings {
-            model: root.sectionModel
+            model: root.sectionModel as PartsSettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem

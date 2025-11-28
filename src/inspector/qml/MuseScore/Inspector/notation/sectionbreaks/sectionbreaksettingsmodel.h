@@ -32,11 +32,11 @@ class SectionBreakSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * shouldStartWithLongInstrNames READ shouldStartWithLongInstrNames CONSTANT)
-    Q_PROPERTY(PropertyItem * shouldResetBarNums READ shouldResetBarNums CONSTANT)
-    Q_PROPERTY(PropertyItem * pauseDuration READ pauseDuration CONSTANT)
-    Q_PROPERTY(PropertyItem * firstSystemIndent READ firstSystemIndent CONSTANT)
-    Q_PROPERTY(PropertyItem * showCourtesySignatures READ showCourtesySignatures CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * shouldStartWithLongInstrNames READ shouldStartWithLongInstrNames CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * shouldResetBarNums READ shouldResetBarNums CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * pauseDuration READ pauseDuration CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * firstSystemIndent READ firstSystemIndent CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * showCourtesySignatures READ showCourtesySignatures CONSTANT)
 
 public:
     explicit SectionBreakSettingsModel(QObject* parent, IElementRepositoryService* repository);

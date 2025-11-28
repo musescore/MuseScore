@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
-import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
@@ -30,7 +29,7 @@ import MuseScore.Inspector
 FocusableItem {
     id: root
 
-    property QtObject model: null
+    required property FretFrameChordsSettingsModel model
 
     property int sideMargin: 0
 

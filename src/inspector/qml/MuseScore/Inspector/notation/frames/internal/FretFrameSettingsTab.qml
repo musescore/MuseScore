@@ -30,7 +30,7 @@ import "../../../common"
 FocusableItem {
     id: root
 
-    property QtObject model: null
+    required property FretFrameSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1

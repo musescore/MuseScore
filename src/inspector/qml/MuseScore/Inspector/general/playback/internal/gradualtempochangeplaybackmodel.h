@@ -32,8 +32,8 @@ class GradualTempoChangePlaybackModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * tempoChangeFactor READ tempoChangeFactor CONSTANT)
-    Q_PROPERTY(PropertyItem * tempoEasingMethod READ tempoEasingMethod CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * tempoChangeFactor READ tempoChangeFactor CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * tempoEasingMethod READ tempoEasingMethod CONSTANT)
 
 public:
     explicit GradualTempoChangePlaybackModel(QObject* parent, IElementRepositoryService* repository);

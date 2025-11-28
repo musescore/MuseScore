@@ -32,7 +32,7 @@ class MeasureRepeatSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * numberPosition READ numberPosition CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * numberPosition READ numberPosition CONSTANT)
 
 public:
     explicit MeasureRepeatSettingsModel(QObject* parent, IElementRepositoryService* repository);

@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound   
+
 import QtQuick
 
 import Muse.Ui
@@ -71,7 +73,7 @@ Loader {
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
 
-    property string viewObjectName: root.item ? root.item.objectName : ""
+    readonly property string viewObjectName: root.item ? root.item.objectName : ""
 
     function forceFocusIn() {
         root.item.focusOnFirst()
@@ -154,239 +156,417 @@ Loader {
 
     sourceComponent: root.model ? prv.componentByType(root.model.modelType) : null
 
-    onLoaded: {
-        root.item.model = root.model
-        root.item.navigationPanel = root.navigationPanel
-        root.item.navigationRowStart = root.navigationRowStart
-    }
-
     Component {
         id: noteComp
-        NoteSettings { }
+        NoteSettings { 
+            model: root.model as NoteSettingsProxyModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: fermataComp
-        FermataSettings { }
+        FermataSettings { 
+            model: root.model as FermataSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: glissandoComp
-        GlissandoSettings { }
+        GlissandoSettings { 
+            model: root.model as GlissandoSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: vibratoComp
-        VibratoSettings { }
+        VibratoSettings { 
+            model: root.model as VibratoSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: slurAndTieComp
-        SlurAndTieSettings { }
+        SlurAndTieSettings { 
+            model: root.model as SlurAndTieSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: tempoComp
-        TempoSettings { }
+        TempoSettings { 
+            model: root.model as TempoSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: aTempoComp
-        TempoRestorePreviousSettings { }
+        TempoRestorePreviousSettings {  
+            model: root.model as TempoSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: tempoPrimoComp
-        TempoRestorePreviousSettings { }
+        TempoRestorePreviousSettings {  
+            model: root.model as TempoSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: barlineComp
-        BarlineSettings { }
+        BarlineSettings { 
+            model: root.model as BarlineSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: sectionBreakComp
-        SectionBreakSettings { }
+        SectionBreakSettings { 
+            model: root.model as SectionBreakSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: markerComp
-        MarkerSettings { }
+        MarkerSettings { 
+            model: root.model as MarkerSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: jumpComp
-        JumpSettings { }
+        JumpSettings { 
+            model: root.model as JumpSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: keySignatureComp
-        KeySignatureSettings { }
+        KeySignatureSettings { 
+            model: root.model as KeySignatureSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: accidentalComp
-        AccidentalSettings { }
+        AccidentalSettings { 
+            model: root.model as AccidentalSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: fretDiagramComp
-        FretDiagramSettings { }
+        FretDiagramSettings { 
+            model: root.model as FretDiagramSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: spacerComp
-        SpacerSettings { }
+        SpacerSettings { 
+            model: root.model as SpacerSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: clefComp
-        ClefSettings { }
+        ClefSettings { 
+            model: root.model as ClefSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: lineComp
-        LineSettings { }
+        LineSettings { 
+            model: root.model as TextLineSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: hairpinLineComp
-        HairpinLineSettings { }
+        HairpinLineSettings { 
+            model: root.model as HairpinLineSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: gradualTempoChangeComp
-        GradualTempoChangeSettings { }
+        GradualTempoChangeSettings {    
+            model: root.model as GradualTempoChangeSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: staffTypeComp
-        StaffTypeSettings { }
+        StaffTypeSettings { 
+            model: root.model as StaffTypeSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: textFrameComp
-        TextFrameSettings { }
+        TextFrameSettings { 
+            model: root.model as TextFrameSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: verticalFrameComp
-        VerticalFrameSettings { }
+        VerticalFrameSettings { 
+            model: root.model as VerticalFrameSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: horizontalFrameComp
-        HorizontalFrameSettings { }
+        HorizontalFrameSettings { 
+            model: root.model as HorizontalFrameSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: fretFrameComp
-        FretFrameSettings { }
+        FretFrameSettings { 
+            model: root.model as FretFrameSettingsProxyModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: articulationComp
-        ArticulationSettings { }
+        ArticulationSettings {  
+            model: root.model as ArticulationSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: ornamentComp
-        OrnamentSettings { }
+        OrnamentSettings {  
+            model: root.model as OrnamentSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: ambitusComp
-        AmbitusSettings { }
+        AmbitusSettings { 
+            model: root.model as AmbitusSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: imageComp
-        ImageSettings { }
+        ImageSettings { 
+            model: root.model as ImageSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: chordSymbolComp
-        ChordSymbolSettings { }
+        ChordSymbolSettings { 
+            model: root.model as ChordSymbolSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: bracketComp
-        BracketSettings { }
+        BracketSettings {   
+            model: root.model as BracketSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: timeSignatureComp
-        TimeSignatureSettings { }
+        TimeSignatureSettings { 
+            model: root.model as TimeSignatureSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: mmRestComp
-        MMRestSettings { }
+        MMRestSettings { 
+            model: root.model as MMRestSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: bendComp
-        BendSettings { }
+        BendSettings { 
+            model: root.model as BendSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: tremoloBarComp
-        TremoloBarSettings { }
+        TremoloBarSettings { 
+            model: root.model as TremoloBarSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: tremoloComp
-        TremoloSettings { }
+        TremoloSettings { 
+            model: root.model as TremoloSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: measureRepeatComp
-        MeasureRepeatSettings { }
+        MeasureRepeatSettings { 
+            model: root.model as MeasureRepeatSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: tupletComp
-        TupletSettings {}
+        TupletSettings { 
+            model: root.model as TupletSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: instrumentNameComp
-        InstrumentNameSettings {}
+        InstrumentNameSettings { 
+            model: root.model as InstrumentNameSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: lyricsComp
-        LyricsSettings {}
+        LyricsSettings { 
+            model: root.model as LyricsSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: restComp
-        RestSettings {}
+        RestSettings { 
+            model: root.model as RestSettingsProxyModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: dynamicComp
-        DynamicsSettings {}
+        DynamicsSettings { 
+            model: root.model as DynamicsSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: expressionComp
-        ExpressionsSettings {}
+        ExpressionSettings { 
+            model: root.model as ExpressionSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: stringTuningsComp
-        StringTuningsSettings {}
+        StringTuningsSettings { 
+            model: root.model as StringTuningsSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: symbolComp
-        SymbolSettings {}
+        SymbolSettings {    
+            model: root.model as SymbolSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 
     Component {
         id: playCountTextComp
-        PlayCountSettings {}
+        PlayCountSettings { 
+            model: root.model as PlayCountTextSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
     }
 }

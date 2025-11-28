@@ -32,10 +32,10 @@ class TupletSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * directionType READ directionType CONSTANT)
-    Q_PROPERTY(PropertyItem * numberType READ numberType CONSTANT)
-    Q_PROPERTY(PropertyItem * bracketType READ bracketType CONSTANT)
-    Q_PROPERTY(PropertyItem * lineThickness READ lineThickness CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * directionType READ directionType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * numberType READ numberType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * bracketType READ bracketType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * lineThickness READ lineThickness CONSTANT)
 
 public:
     explicit TupletSettingsModel(QObject* parent, IElementRepositoryService* repository);

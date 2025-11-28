@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -32,6 +34,8 @@ import "appearance"
 
 InspectorSectionView {
     id: root
+
+    required property GeneralSettingsModel model
 
     implicitHeight: contentColumn.height
 
@@ -124,10 +128,10 @@ InspectorSectionView {
                 icon: IconCode.AUDIO
                 text: qsTrc("inspector", "Playback")
 
-                enabled: model && !model.playbackProxyModel.isEmpty
+                enabled: root.model && !root.model.playbackProxyModel.isEmpty
 
                 popupContent: PlaybackSettings {
-                    proxyModel: model ? model.playbackProxyModel : null
+                    proxyModel: root.model ? root.model.playbackProxyModel : null
 
                     navigationPanel: playbackButton.popupNavigationPanel
                 }
@@ -154,7 +158,7 @@ InspectorSectionView {
                 icon: IconCode.POSITION_ARROWS
                 text: qsTrc("inspector", "Appearance")
 
-                enabled: model && !model.appearanceSettingsModel.isEmpty
+                enabled: root.model && !root.model.appearanceSettingsModel.isEmpty
 
                 popupContent: AppearanceSettings {
                     model: root.model ? root.model.appearanceSettingsModel : null

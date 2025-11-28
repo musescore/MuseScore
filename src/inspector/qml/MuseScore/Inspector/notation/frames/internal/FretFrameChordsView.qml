@@ -19,15 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
 
+import MuseScore.Inspector
+
 StyledListView {
     id: root
+
+    required property FretFrameChordListModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -47,7 +52,7 @@ StyledListView {
     }
 
     function focusOnFirst() {
-        var firstItem = root.itemAtIndex(0)
+        var firstItem = root.itemAtIndex(0) as ListItemBlank
         if (Boolean(firstItem)) {
             firstItem.navigation.requestActive()
         }
@@ -60,12 +65,12 @@ StyledListView {
     delegate: ListItemBlank {
         id: itemDelegate
 
-        property var item: model.item
+        required property FretFrameChordItem item
+        required isSelected
+        required property int index
 
         height: 34
         width: root.width
-
-        isSelected: model.isSelected
 
         onClicked: {
             root.selectRowRequested(index)
@@ -73,7 +78,7 @@ StyledListView {
 
         navigation.name: item.title
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowStart + (model.index * 2)
+        navigation.row: root.navigationRowStart + (index * 2)
         navigation.accessible.name: item.title
         navigation.onActiveChanged: {
             if (navigation.active) {
@@ -94,13 +99,13 @@ StyledListView {
                 Layout.alignment: Qt.AlignLeft
 
                 navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowStart + (model.index * 2) + 1
+                navigation.row: root.navigationRowStart + (itemDelegate.index * 2) + 1
                 accessibleText: titleLabel.text
 
                 isVisible: itemDelegate.item.isVisible
 
                 onVisibleToggled: {
-                    root.changeChordVisibilityRequested(index, !itemDelegate.item.isVisible)
+                    root.changeChordVisibilityRequested(itemDelegate.index, !itemDelegate.item.isVisible)
                 }
             }
 
@@ -109,8 +114,8 @@ StyledListView {
 
                 Layout.fillWidth: true
 
-                horizontalAlignment: Qt.AlignLeft
-                text: Boolean(itemDelegate.item) ? itemDelegate.item.title : ""
+                horizontalAlignment: Text.AlignLeft
+                text: itemDelegate.item.title
                 font.family: ui.theme.musicalTextFont.family
             }
         }

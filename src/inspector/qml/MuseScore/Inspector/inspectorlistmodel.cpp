@@ -148,6 +148,7 @@ QVariant InspectorListModel::data(const QModelIndex& index, int role) const
     AbstractInspectorModel* model = m_modelList.at(index.row());
 
     QObject* result = qobject_cast<QObject*>(model);
+    assert(result != nullptr);
 
     return QVariant::fromValue(result);
 }
@@ -227,7 +228,7 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
             newModel = new TextSettingsModel(this, m_repository.get(), /*isTextLineText*/ true);
             break;
         case InspectorSectionType::SECTION_SCORE_DISPLAY:
-            newModel = new ScoreSettingsModel(this, m_repository.get());
+            newModel = new ScoreDisplaySettingsModel(this, m_repository.get());
             break;
         case InspectorSectionType::SECTION_SCORE_APPEARANCE:
             newModel = new ScoreAppearanceSettingsModel(this, m_repository.get());

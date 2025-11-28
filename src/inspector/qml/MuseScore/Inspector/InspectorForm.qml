@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 
 import Muse.Ui
 import Muse.UiComponents
 import MuseScore.Inspector
-
-import "."
 
 Rectangle {
     id: root
@@ -45,7 +45,7 @@ Rectangle {
     function focusFirstItem() {
         var item = sectionList.itemAtIndex(0)
         if (item) {
-            item.navigation.requestActive()
+            item.navigationPanel.requestActive()
         }
     }
 
@@ -111,13 +111,18 @@ Rectangle {
         }
 
         delegate: Column {
+            id: delegateItem
+
+            required property AbstractInspectorModel inspectorSectionModel
+            required property int index
+
             width: ListView.view.width
             spacing: sectionList.spacing
 
             property var navigationPanel: _item.navigationPanel
 
             SeparatorLine {
-                visible: model.index !== 0
+                visible: delegateItem.index !== 0
             }
 
             InspectorSectionDelegate {
@@ -128,10 +133,10 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.rightMargin: 12
 
-                sectionModel: model.inspectorSectionModel
+                sectionModel: delegateItem.inspectorSectionModel
                 anchorItem: root
                 navigationPanel.section: root.navigationSection
-                navigationPanel.order: root.navigationOrderStart + model.index
+                navigationPanel.order: root.navigationOrderStart + delegateItem.index
 
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                     sectionList.ensureContentVisible(invisibleContentHeight)

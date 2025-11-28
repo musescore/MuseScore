@@ -23,21 +23,19 @@
 
 #include <qqmlintegration.h>
 
-#include "textlinesettingsmodel.h"
+#include "hairpinlinesettingsmodel.h"
 
 namespace mu::inspector {
-class HairpinSettingsModel : public TextLineSettingsModel
+class HairpinSettingsModel : public HairpinLineSettingsModel
 {
     Q_OBJECT
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * isNienteCircleVisible READ isNienteCircleVisible CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isNienteCircleVisible READ isNienteCircleVisible CONSTANT)
 
-    Q_PROPERTY(PropertyItem * height READ height CONSTANT)
-    Q_PROPERTY(PropertyItem * continuousHeight READ continuousHeight CONSTANT)
-    Q_PROPERTY(PropertyItem * snapBefore READ snapBefore CONSTANT)
-    Q_PROPERTY(PropertyItem * snapAfter READ snapAfter CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * height READ height CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * continuousHeight READ continuousHeight CONSTANT)
 
 public:
     explicit HairpinSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -46,9 +44,6 @@ public:
 
     PropertyItem* height() const;
     PropertyItem* continuousHeight() const;
-
-    PropertyItem* snapBefore() const;
-    PropertyItem* snapAfter() const;
 
 private:
     void createProperties() override;
@@ -64,8 +59,5 @@ private:
 
     PropertyItem* m_height = nullptr;
     PropertyItem* m_continuousHeight = nullptr;
-
-    PropertyItem* m_snapBefore = nullptr;
-    PropertyItem* m_snapAfter = nullptr;
 };
 }

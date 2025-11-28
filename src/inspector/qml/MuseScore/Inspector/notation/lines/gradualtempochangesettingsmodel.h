@@ -32,8 +32,8 @@ class GradualTempoChangeSettingsModel : public TextLineSettingsModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * snapBefore READ snapBefore CONSTANT)
-    Q_PROPERTY(PropertyItem * snapAfter READ snapAfter CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * snapBefore READ snapBefore CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * snapAfter READ snapAfter CONSTANT)
 
 public:
     explicit GradualTempoChangeSettingsModel(QObject* parent, IElementRepositoryService* repository);

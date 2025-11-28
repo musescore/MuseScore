@@ -116,9 +116,7 @@ FlatButton {
         }
 
         function forceFocusIn() {
-            if (Boolean(contentLoader.item) && Boolean(contentLoader.item.forceFocusIn)) {
-                contentLoader.item.forceFocusIn()
-            }
+            contentLoader.item?.forceFocusIn?.()
         }
 
         function checkForInsufficientSpace() {

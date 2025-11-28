@@ -193,12 +193,12 @@ PropertyItem* GeneralSettingsModel::isSmall() const
     return m_isSmall;
 }
 
-QObject* GeneralSettingsModel::playbackProxyModel() const
+PlaybackProxyModel* GeneralSettingsModel::playbackProxyModel() const
 {
     return m_playbackProxyModel;
 }
 
-QObject* GeneralSettingsModel::appearanceSettingsModel() const
+AppearanceSettingsModel* GeneralSettingsModel::appearanceSettingsModel() const
 {
     return m_appearanceSettingsModel;
 }

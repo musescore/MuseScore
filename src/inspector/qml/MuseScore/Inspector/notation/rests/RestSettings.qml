@@ -21,7 +21,6 @@
  */
 
 import QtQuick
-import QtQuick.Layouts
 
 import Muse.UiComponents
 import Muse.Ui
@@ -32,7 +31,7 @@ import "../../common"
 Column {
     id: root
 
-    property QtObject model: null
+    required property RestSettingsProxyModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -42,11 +41,11 @@ Column {
     width: parent.width
     spacing: 12
 
-    readonly property QtObject beamModel: model ? model.modelByType(AbstractInspectorModel.TYPE_BEAM) : null
-    readonly property QtObject restModel: model ? model.modelByType(AbstractInspectorModel.TYPE_REST_REST) : null
+    readonly property RestBeamSettingsModel beamModel: model ? model.modelByType(AbstractInspectorModel.TYPE_BEAM) : null
+    readonly property RestSettingsModel restModel: model ? model.modelByType(AbstractInspectorModel.TYPE_REST_REST) : null
 
     function focusOnFirst() {
-        restBeamSettings.navigation.requestActive()
+        restBeamSettings.focusOnFirst()
     }
 
     RestBeamSettings {
@@ -65,7 +64,7 @@ Column {
 
         navigation.name: "Align with other rests"
         navigation.panel: root.navigationPanel
-        navigation.row: navigationRowStart
+        navigation.row: restBeamSettings.navigationRowEnd + 1
 
         propertyItem: root.restModel ? root.restModel.alignWithOtherRests : null
         text: qsTrc("inspector", "Align with other rests in the same voice")

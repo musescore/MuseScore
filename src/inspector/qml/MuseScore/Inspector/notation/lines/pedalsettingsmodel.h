@@ -32,7 +32,7 @@ class PedalSettingsModel : public TextLineSettingsModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * lineType READ lineType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * lineType READ lineType CONSTANT)
     Q_PROPERTY(bool isChangingLineVisibilityAllowed READ isChangingLineVisibilityAllowed NOTIFY isChangingLineVisibilityAllowedChanged)
 
 public:

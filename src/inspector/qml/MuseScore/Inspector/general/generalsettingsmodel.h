@@ -35,13 +35,13 @@ class GeneralSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * isVisible READ isVisible CONSTANT)
-    Q_PROPERTY(PropertyItem * isAutoPlaceAllowed READ isAutoPlaceAllowed CONSTANT)
-    Q_PROPERTY(PropertyItem * isPlayable READ isPlayable CONSTANT)
-    Q_PROPERTY(PropertyItem * isSmall READ isSmall CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isVisible READ isVisible CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isAutoPlaceAllowed READ isAutoPlaceAllowed CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isPlayable READ isPlayable CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isSmall READ isSmall CONSTANT)
 
-    Q_PROPERTY(QObject * playbackProxyModel READ playbackProxyModel CONSTANT)
-    Q_PROPERTY(QObject * appearanceSettingsModel READ appearanceSettingsModel CONSTANT)
+    Q_PROPERTY(mu::inspector::PlaybackProxyModel * playbackProxyModel READ playbackProxyModel CONSTANT)
+    Q_PROPERTY(mu::inspector::AppearanceSettingsModel * appearanceSettingsModel READ appearanceSettingsModel CONSTANT)
     Q_PROPERTY(bool areGeneralPropertiesAvailable READ areGeneralPropertiesAvailable NOTIFY areGeneralPropertiesAvailableChanged)
 
 public:
@@ -52,8 +52,8 @@ public:
     PropertyItem* isPlayable() const;
     PropertyItem* isSmall() const;
 
-    QObject* playbackProxyModel() const;
-    QObject* appearanceSettingsModel() const;
+    PlaybackProxyModel* playbackProxyModel() const;
+    AppearanceSettingsModel* appearanceSettingsModel() const;
 
     bool areGeneralPropertiesAvailable();
 

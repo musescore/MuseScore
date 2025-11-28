@@ -32,7 +32,7 @@ import "internal"
 Column {
     id: root
 
-    property QtObject model: null
+    required property FretFrameSettingsProxyModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -46,8 +46,8 @@ Column {
         tabBar.focusOnCurrentTab()
     }
 
-    readonly property QtObject frameChordsModel: model ? model.modelByType(AbstractInspectorModel.TYPE_FRET_FRAME_CHORDS) : null
-    readonly property QtObject frameSettingsModel: model ? model.modelByType(AbstractInspectorModel.TYPE_FRET_FRAME_SETTINGS) : null
+    readonly property FretFrameChordsSettingsModel frameChordsModel: model ? model.modelByType(AbstractInspectorModel.TYPE_FRET_FRAME_CHORDS) : null
+    readonly property FretFrameSettingsModel frameSettingsModel: model ? model.modelByType(AbstractInspectorModel.TYPE_FRET_FRAME_SETTINGS) : null
 
     InspectorTabBar {
         id: tabBar

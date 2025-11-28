@@ -20,8 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UI_WIDGETVIEW_H
-#define MUSE_UI_WIDGETVIEW_H
+#pragma once
+
+#include <qqmlintegration.h>
 
 #include "quickpaintedview.h"
 
@@ -43,6 +44,7 @@ private:
 class WidgetView : public QuickPaintedView
 {
     Q_OBJECT
+    QML_ELEMENT;
 
 public:
     explicit WidgetView(QQuickItem* parent = nullptr);
@@ -60,9 +62,6 @@ protected:
     void updateSizeConstraints();
 
 private:
-
     std::shared_ptr<IDisplayableWidget> m_widget = nullptr;
 };
 }
-
-#endif // MUSE_UI_WIDGETVIEW_H

@@ -32,8 +32,8 @@ class LyricsSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * verse READ verse CONSTANT)
-    Q_PROPERTY(PropertyItem * avoidBarlines READ avoidBarlines CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * verse READ verse CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * avoidBarlines READ avoidBarlines CONSTANT)
 public:
     explicit LyricsSettingsModel(QObject* parent, IElementRepositoryService* repository);
 

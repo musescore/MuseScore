@@ -26,16 +26,16 @@
 #include <QVariant>
 #include <qqmlintegration.h>
 
-#include "uicomponents/view/quickpaintedview.h"
+#include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
+
 #include "context/iglobalcontext.h"
 #include "engraving/dom/fret.h"
 
 namespace mu::inspector {
 class FretCanvas : public muse::uicomponents::QuickPaintedView
 {
-    INJECT(context::IGlobalContext, globalContext)
-
     Q_OBJECT
+    QML_ELEMENT;
 
     Q_PROPERTY(QVariant diagram READ diagram WRITE setFretDiagram NOTIFY diagramChanged)
     Q_PROPERTY(bool isBarreModeOn READ isBarreModeOn WRITE setIsBarreModeOn NOTIFY isBarreModeOnChanged)
@@ -43,7 +43,7 @@ class FretCanvas : public muse::uicomponents::QuickPaintedView
     Q_PROPERTY(int currentFretDotType READ currentFretDotType WRITE setCurrentFretDotType NOTIFY currentFretDotTypeChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
-    QML_ELEMENT
+    muse::Inject<context::IGlobalContext> globalContext;
 
 public:
     explicit FretCanvas(QQuickItem* parent = nullptr);
@@ -82,16 +82,16 @@ private:
     void mousePressEvent(QMouseEvent*) override;
     void hoverMoveEvent(QHoverEvent*) override;
 
-    void paintDotSymbol(QPainter* p, QPen& pen, qreal y, qreal x, qreal dotd, mu::engraving::FretDotType dtype);
+    void paintDotSymbol(QPainter* p, QPen& pen, qreal y, qreal x, qreal dotd, engraving::FretDotType dtype);
     void getPosition(const QPointF& pos, int* string, int* fret);
 
-    mu::engraving::FretDiagram* m_diagram = nullptr;
+    engraving::FretDiagram* m_diagram = nullptr;
 
     int m_cstring = 0;
     int m_cfret = 0;
 
     bool m_automaticDotType = false;
-    mu::engraving::FretDotType m_currentDtype = mu::engraving::FretDotType::NORMAL;
+    engraving::FretDotType m_currentDtype = engraving::FretDotType::NORMAL;
     bool m_barreMode = false;
     bool m_multidotMode = false;
 

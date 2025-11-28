@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 
 import Muse.Ui
@@ -30,7 +32,7 @@ import "../common"
 Column {
     id: root
 
-    property QtObject model: null
+    required property TextSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
@@ -94,27 +96,31 @@ Column {
             visible: root.model ? root.model.isScriptSizeAvailable : false
 
             model: [
-                { iconRole: IconCode.TEXT_SUBSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_BOTTOM, titleRole: qsTrc("inspector", "Subscript") },
-                { iconRole: IconCode.TEXT_SUPERSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_TOP, titleRole: qsTrc("inspector", "Superscript") }
+                { iconCode: IconCode.TEXT_SUBSCRIPT, value: TextTypes.TEXT_SUBSCRIPT_BOTTOM, title: qsTrc("inspector", "Subscript") },
+                { iconCode: IconCode.TEXT_SUPERSCRIPT, value: TextTypes.TEXT_SUBSCRIPT_TOP, title: qsTrc("inspector", "Superscript") }
             ]
 
             delegate: FlatRadioButton {
-                navigation.name: "ScriptOptions" + model.index
+                required iconCode
+                required property int value
+                required property string title
+                required property int index
+
+                navigation.name: "ScriptOptions" + index
                 navigation.panel: root.navigationPanel
-                navigation.row: subscriptOptionsButtonList.navigationRowStart + model.index
-                navigation.accessible.name: modelData["titleRole"]
+                navigation.row: subscriptOptionsButtonList.navigationRowStart + index
+                navigation.accessible.name: title
 
                 width: 30
                 transparent: true
 
-                iconCode: modelData["iconRole"]
-                checked: root.model && !root.model.textScriptAlignment.isUndefined ? root.model.textScriptAlignment.value === modelData["typeRole"]
+                checked: root.model && !root.model.textScriptAlignment.isUndefined ? root.model.textScriptAlignment.value === value
                                                                                    : false
                 onClicked: {
-                    if (root.model.textScriptAlignment.value === modelData["typeRole"]) {
+                    if (root.model.textScriptAlignment.value === value) {
                         root.model.textScriptAlignment.value = TextTypes.TEXT_SUBSCRIPT_NORMAL
                     } else {
-                        root.model.textScriptAlignment.value = modelData["typeRole"]
+                        root.model.textScriptAlignment.value = value
                     }
                 }
             }

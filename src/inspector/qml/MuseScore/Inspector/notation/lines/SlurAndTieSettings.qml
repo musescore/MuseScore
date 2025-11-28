@@ -31,7 +31,7 @@ import "internal"
 Column {
     id: root
 
-    property QtObject model: null
+    required property SlurAndTieSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -114,6 +114,6 @@ Column {
 
         navigationName: "Minimum length"
         navigationPanel: root.navigationPanel
-        navigationRowStart: root.tiePlacementSection + 1
+        navigationRowStart: tiePlacementSection.navigationRowEnd + 1
     }
 }

@@ -26,6 +26,8 @@ import "../common"
 InspectorSectionView {
     id: root
 
+    required property NotationSettingsProxyModel model
+
     implicitHeight: loader.implicitHeight
 
     NotationInspectorSectionLoader {

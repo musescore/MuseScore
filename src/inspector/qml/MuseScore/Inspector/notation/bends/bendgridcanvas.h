@@ -34,15 +34,14 @@
 
 #include "types/bendtypes.h"
 
-#include "uicomponents/view/quickpaintedview.h"
 #include "ui/qml/Muse/Ui/qmlaccessible.h"
+#include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
 
 namespace mu::inspector {
 class BendGridCanvas : public muse::uicomponents::QuickPaintedView, public muse::async::Asyncable
 {
     Q_OBJECT
-
-    INJECT(muse::ui::IUiConfiguration, uiConfig)
+    QML_ELEMENT;
 
     Q_PROPERTY(QVariant pointList READ pointList WRITE setPointList NOTIFY pointListChanged)
 
@@ -55,7 +54,7 @@ class BendGridCanvas : public muse::uicomponents::QuickPaintedView, public muse:
     Q_PROPERTY(muse::ui::AccessibleItem
                * accessibleParent READ accessibleParent WRITE setAccessibleParent NOTIFY accessibleParentChanged)
 
-    QML_ELEMENT
+    muse::Inject<muse::ui::IUiConfiguration> uiConfig;
 
 public:
     explicit BendGridCanvas(QQuickItem* parent = nullptr);

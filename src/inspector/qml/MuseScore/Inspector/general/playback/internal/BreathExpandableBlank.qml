@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 
 import Muse.UiComponents
@@ -28,9 +30,9 @@ import "../../../common"
 ExpandableBlank {
     id: root
 
-    property QtObject model: null
+    required property BreathPlaybackModel model
 
-    property int navigationRowEnd: contentItem.navigationRowEnd
+    property int navigationRowEnd: (contentItem as SpinBoxPropertyView).navigationRowEnd
 
     enabled: model ? !model.isEmpty : false
 

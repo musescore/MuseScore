@@ -32,11 +32,11 @@ class AccidentalSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * bracketType READ bracketType CONSTANT)
-    Q_PROPERTY(PropertyItem * isSmall READ isSmall CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * bracketType READ bracketType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isSmall READ isSmall CONSTANT)
     Q_PROPERTY(bool isSmallAvailable READ isSmallAvailable NOTIFY isSmallAvailableChanged)
 
-    Q_PROPERTY(PropertyItem * stackingOrderOffset READ stackingOrderOffset CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * stackingOrderOffset READ stackingOrderOffset CONSTANT)
     Q_PROPERTY(bool isStackingOrderAvailable READ isStackingOrderAvailable NOTIFY isStackingOrderAvailableChanged)
     Q_PROPERTY(bool isStackingOrderEnabled READ isStackingOrderEnabled NOTIFY isStackingOrderEnabledChanged)
 

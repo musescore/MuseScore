@@ -270,7 +270,7 @@ bool BeamSettingsModel::isBeamHeightLocked() const
     return m_isBeamHeightLocked;
 }
 
-QObject* BeamSettingsModel::beamModesModel() const
+BeamModesModel* BeamSettingsModel::beamModesModel() const
 {
     return m_beamModesModel;
 }

@@ -32,9 +32,9 @@ class ChordSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * isStemless READ isStemless CONSTANT)
-    Q_PROPERTY(PropertyItem * showStemSlash READ showStemSlash CONSTANT)
-    Q_PROPERTY(PropertyItem * combineVoice READ combineVoice CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isStemless READ isStemless CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * showStemSlash READ showStemSlash CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * combineVoice READ combineVoice CONSTANT)
 
     Q_PROPERTY(bool showStemSlashVisible READ showStemSlashVisible NOTIFY showStemSlashVisibleChanged)
     Q_PROPERTY(bool showStemSlashEnabled READ showStemSlashEnabled NOTIFY showStemSlashEnabledChanged)

@@ -32,11 +32,11 @@ class HorizontalFrameSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * frameWidth READ frameWidth CONSTANT)
-    Q_PROPERTY(PropertyItem * leftGap READ leftGap CONSTANT)
-    Q_PROPERTY(PropertyItem * rightGap READ rightGap CONSTANT)
-    Q_PROPERTY(PropertyItem * shouldDisplayKeysAndBrackets READ shouldDisplayKeysAndBrackets CONSTANT)
-    Q_PROPERTY(PropertyItem * isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * frameWidth READ frameWidth CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * leftGap READ leftGap CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * rightGap READ rightGap CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * shouldDisplayKeysAndBrackets READ shouldDisplayKeysAndBrackets CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
 
 public:
     explicit HorizontalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository);

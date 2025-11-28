@@ -38,14 +38,14 @@ class FretDiagramSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * scale READ scale CONSTANT)
-    Q_PROPERTY(PropertyItem * stringsCount READ stringsCount CONSTANT)
-    Q_PROPERTY(PropertyItem * fretsCount READ fretsCount CONSTANT)
-    Q_PROPERTY(PropertyItem * fretNumber READ fretNumber CONSTANT)
-    Q_PROPERTY(PropertyItem * isNutVisible READ isNutVisible CONSTANT)
-    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
-    Q_PROPERTY(PropertyItem * orientation READ orientation CONSTANT)
-    Q_PROPERTY(PropertyItem * verticalAlign READ verticalAlign CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * scale READ scale CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * stringsCount READ stringsCount CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * fretsCount READ fretsCount CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * fretNumber READ fretNumber CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * isNutVisible READ isNutVisible CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * placement READ placement CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * orientation READ orientation CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * verticalAlign READ verticalAlign CONSTANT)
 
     Q_PROPERTY(bool isBarreModeOn READ isBarreModeOn WRITE setIsBarreModeOn NOTIFY isBarreModeOnChanged)
     Q_PROPERTY(bool isMultipleDotsModeOn READ isMultipleDotsModeOn WRITE setIsMultipleDotsModeOn NOTIFY isMultipleDotsModeOnChanged)
@@ -55,7 +55,7 @@ class FretDiagramSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool isInFretBox READ isInFretBox NOTIFY isInFretBoxChanged)
 
     Q_PROPERTY(QVariant fretDiagram READ fretDiagram NOTIFY fretDiagramChanged)
-    Q_PROPERTY(PropertyItem * showFingerings READ showFingerings CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * showFingerings READ showFingerings CONSTANT)
     Q_PROPERTY(QStringList fingerings READ fingerings NOTIFY fingeringsChanged)
 
 public:

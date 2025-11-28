@@ -21,6 +21,7 @@
  */
 #include "abstractinspectorproxymodel.h"
 
+#include "abstractinspectormodel.h"
 #include "inspectormodelcreator.h"
 
 using namespace mu::inspector;
@@ -41,12 +42,12 @@ QVariantList AbstractInspectorProxyModel::models() const
     return objects;
 }
 
-QObject* AbstractInspectorProxyModel::modelByType(InspectorModelType type) const
+AbstractInspectorModel* AbstractInspectorProxyModel::modelByType(InspectorModelType type) const
 {
     return m_models.value(type);
 }
 
-QObject* AbstractInspectorProxyModel::firstModel() const
+AbstractInspectorModel* AbstractInspectorProxyModel::firstModel() const
 {
     if (m_models.empty()) {
         return nullptr;

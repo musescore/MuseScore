@@ -169,9 +169,9 @@ bool MeasuresSettingsModel::isMakeIntoSystemAvailable() const
     return m_isMakeIntoSystemAvailable;
 }
 
-size_t MeasuresSettingsModel::systemCount() const
+int MeasuresSettingsModel::systemCount() const
 {
-    return m_systemCount;
+    return static_cast<int>(m_systemCount);
 }
 
 void MeasuresSettingsModel::updateScoreIsInPageView()

@@ -19,20 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
 import MuseScore.Inspector
+
 import "../../common"
 import "../playcounttext"
 
 Column {
     id: root
 
-    property QtObject model: null
+    required property BarlineSettingsModel model
 
     objectName: "BarlineSettings"
 
@@ -137,7 +139,7 @@ Column {
 
                 navigation.name: "SpanToStaffCheckBox"
                 navigation.panel: root.navigationPanel
-                navigation.row: showItem.navigationRowEnd + 1
+                navigation.row: showItem.navigation.row + 1
 
                 text: qsTrc("inspector", "Span to next staff")
                 propertyItem: root.model ? root.model.isSpanToNextStaff : null

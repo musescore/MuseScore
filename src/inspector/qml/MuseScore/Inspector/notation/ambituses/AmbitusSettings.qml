@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
-import QtQuick.Controls
 
 import Muse.Ui
 import Muse.UiComponents
@@ -32,7 +33,7 @@ import "../notes/internal"
 Column {
     id: root
 
-    property QtObject model: null
+    required property AmbitusSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1

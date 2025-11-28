@@ -31,7 +31,7 @@ import "../../common"
 Column {
     id: root
 
-    property QtObject model: null
+    required property ChordSymbolSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -171,9 +171,7 @@ Column {
         visible: root.model ? !root.model.hasLinkedFretboardDiagram : false
 
         onClicked: {
-            if (root.model) {
-                root.model.addFretboardDiagram()
-            }
+            root.model?.addFretboardDiagram?.()
         }
     }
 }

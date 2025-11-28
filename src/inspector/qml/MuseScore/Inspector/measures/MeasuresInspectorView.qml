@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -30,6 +32,8 @@ import "../common"
 
 InspectorSectionView {
     id: root
+
+    required property MeasuresSettingsModel model
 
     implicitHeight: contentColumn.implicitHeight
 
@@ -81,9 +85,7 @@ InspectorSectionView {
                 icon: IconCode.DELETE_TANK
 
                 onClicked: {
-                    if (root.model) {
-                        root.model.deleteSelectedMeasures()
-                    }
+                    root.model?.deleteSelectedMeasures?.()
                 }
             }
         }
@@ -121,12 +123,10 @@ InspectorSectionView {
                     text: qsTrc("inspector", "Previous")
 
                     toolTipTitle: qsTrc("inspector", "Move measure(s) to previous system")
-                    toolTipShortcut: root.model ? model.shortcutMoveMeasureUp : ""
+                    toolTipShortcut: root.model?.shortcutMoveMeasureUp ?? ""
 
                     onClicked: {
-                        if (root.model) {
-                            root.model.moveMeasureUp()
-                        }
+                        root.model?.moveMeasureUp?.()
                     }
                 }
 
@@ -147,9 +147,7 @@ InspectorSectionView {
                     toolTipShortcut: root.model ? root.model.shortcutMoveMeasureDown : ""
 
                     onClicked: {
-                        if (root.model) {
-                            model.moveMeasureDown()
-                        }
+                        root.model?.moveMeasureDown?.()
                     }
                 }
             }
@@ -180,9 +178,7 @@ InspectorSectionView {
             accentButton: root.model ? root.model.allSystemsAreLocked : false
 
             onClicked: {
-                if (root.model) {
-                    root.model.toggleSystemLock()
-                }
+                root.model?.toggleSystemLock?.()
             }
         }
 
@@ -206,9 +202,7 @@ InspectorSectionView {
             toolTipShortcut: root.model ? root.model.shortcutMakeIntoSystem : ""
 
             onClicked: {
-                if (root.model) {
-                    root.model.makeIntoSystem()
-                }
+                root.model?.makeIntoSystem?.()
             }
         }
     }

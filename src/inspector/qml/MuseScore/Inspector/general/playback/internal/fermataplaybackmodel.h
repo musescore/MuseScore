@@ -32,7 +32,7 @@ class FermataPlaybackModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * timeStretch READ timeStretch CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * timeStretch READ timeStretch CONSTANT)
 
 public:
     explicit FermataPlaybackModel(QObject* parent, IElementRepositoryService* repository);

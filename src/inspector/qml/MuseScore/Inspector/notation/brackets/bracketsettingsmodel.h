@@ -32,8 +32,8 @@ class BracketSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * bracketColumnPosition READ bracketColumnPosition CONSTANT)
-    Q_PROPERTY(PropertyItem * bracketSpanStaves READ bracketSpanStaves CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * bracketColumnPosition READ bracketColumnPosition CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * bracketSpanStaves READ bracketSpanStaves CONSTANT)
 
     Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY selectionChanged)
     Q_PROPERTY(int maxBracketColumnPosition READ maxBracketColumnPosition NOTIFY maxBracketColumnPositionChanged)

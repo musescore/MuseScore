@@ -29,6 +29,8 @@ CheckBox {
 
     required property PropertyItem propertyItem
 
+    readonly property int navigationRowEnd: navigation.row
+
     width: parent.width
 
     visible: propertyItem && propertyItem.isVisible

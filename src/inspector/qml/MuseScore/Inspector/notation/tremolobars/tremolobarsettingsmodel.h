@@ -32,10 +32,10 @@ class TremoloBarSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * type READ type CONSTANT)
-    Q_PROPERTY(PropertyItem * curve READ curve CONSTANT)
-    Q_PROPERTY(PropertyItem * lineThickness READ lineThickness CONSTANT)
-    Q_PROPERTY(PropertyItem * scale READ scale CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * type READ type CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * curve READ curve CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * lineThickness READ lineThickness CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * scale READ scale CONSTANT)
 
     Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY areSettingsAvailableChanged)
 

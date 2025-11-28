@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
-import QtQuick.Controls
 
 import Muse.Ui
 import Muse.UiComponents
@@ -31,7 +30,7 @@ import "../../common"
 Column {
     id: root
 
-    property QtObject model: null
+    required property AccidentalSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -68,7 +67,7 @@ Column {
 
         navigation.name: "SmallAccidentalBox"
         navigation.panel: root.navigationPanel
-        navigation.row: bracketType.navigation.row + 1
+        navigation.row: bracketType.navigationRowEnd + 1
     }
 
     InspectorPropertyView {

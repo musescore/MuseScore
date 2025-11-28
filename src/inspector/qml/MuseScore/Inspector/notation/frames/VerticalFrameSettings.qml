@@ -31,7 +31,7 @@ import "internal"
 Column {
     id: root
 
-    property QtObject model: null
+    required property VerticalFrameSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1

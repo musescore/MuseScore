@@ -27,7 +27,6 @@ import Muse.UiComponents
 FocusScope {
     id: root
 
-    property QtObject model: null
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
 

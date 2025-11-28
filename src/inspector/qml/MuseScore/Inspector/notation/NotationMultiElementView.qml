@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -29,6 +31,8 @@ import "../common"
 
 InspectorSectionView {
     id: root
+
+    required property NotationSettingsProxyModel model
 
     implicitHeight: grid.implicitHeight
 
@@ -46,13 +50,16 @@ InspectorSectionView {
             delegate: PopupViewButton {
                 id: button
 
+                required property AbstractInspectorModel modelData
+                required property int index
+
                 popupAvailableWidth: parent ? parent.width : 0
                 anchorItem: root.anchorItem
 
-                icon: modelData["icon"]
-                text: modelData["title"]
+                text: modelData?.title
+                icon: modelData?.icon
 
-                visible: !modelData["isEmpty"]
+                visible: modelData && !modelData.isEmpty
 
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRow(index)
@@ -62,7 +69,7 @@ InspectorSectionView {
 
                     width: parent.width
 
-                    model: modelData
+                    model: button.modelData
 
                     navigationPanel: button.popupNavigationPanel
 

@@ -33,7 +33,7 @@ class RestSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * alignWithOtherRests READ alignWithOtherRests CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * alignWithOtherRests READ alignWithOtherRests CONSTANT)
 
 public:
     explicit RestSettingsModel(QObject* parent, IElementRepositoryService* repository);

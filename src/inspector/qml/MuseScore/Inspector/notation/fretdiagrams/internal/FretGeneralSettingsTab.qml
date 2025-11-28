@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 
@@ -31,7 +33,7 @@ import "../../../common"
 FocusableItem {
     id: root
 
-    property QtObject model: null
+    required property FretDiagramSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -111,23 +113,27 @@ FocusableItem {
                 enabled: root.model ? !root.model.isBarreModeOn : false
 
                 model: [
-                    { iconRole: IconCode.FRETBOARD_MARKER_CIRCLE_FILLED, typeRole: FretDiagramTypes.DOT_NORMAL, titleRole: qsTrc("inspector", "Normal") },
-                    { iconRole: IconCode.CLOSE_X_ROUNDED, typeRole: FretDiagramTypes.DOT_CROSS, titleRole: qsTrc("inspector", "Cross") },
-                    { iconRole: IconCode.STOP, typeRole: FretDiagramTypes.DOT_SQUARE, titleRole: qsTrc("inspector", "Square") },
-                    { iconRole: IconCode.FRETBOARD_MARKER_TRIANGLE, typeRole: FretDiagramTypes.DOT_TRIANGLE, titleRole: qsTrc("inspector", "Triangle") }
+                    { iconCode: IconCode.FRETBOARD_MARKER_CIRCLE_FILLED, value: FretDiagramTypes.DOT_NORMAL, title: qsTrc("inspector", "Normal") },
+                    { iconCode: IconCode.CLOSE_X_ROUNDED, value: FretDiagramTypes.DOT_CROSS, title: qsTrc("inspector", "Cross") },
+                    { iconCode: IconCode.STOP, value: FretDiagramTypes.DOT_SQUARE, title: qsTrc("inspector", "Square") },
+                    { iconCode: IconCode.FRETBOARD_MARKER_TRIANGLE, value: FretDiagramTypes.DOT_TRIANGLE, title: qsTrc("inspector", "Triangle") }
                 ]
 
                 delegate: FlatRadioButton {
-                    iconCode: modelData["iconRole"]
-                    checked: root.model ? root.model.currentFretDotType === modelData["typeRole"] : false
+                    required property string title
+                    required iconCode
+                    required property int value
+                    required property int index
+
+                    checked: root.model ? root.model.currentFretDotType === value : false
 
                     navigation.name: "LineStyleGroup"
                     navigation.panel: root.navigationPanel
                     navigation.row: root.navigationRowStart + 3 + index
-                    navigation.accessible.name: markerTypeLabel.text + " " + modelData["titleRole"]
+                    navigation.accessible.name: markerTypeLabel.text + " " + title
 
                     onToggled: {
-                        root.model.currentFretDotType = modelData["typeRole"]
+                        root.model.currentFretDotType = value
                     }
                 }
             }

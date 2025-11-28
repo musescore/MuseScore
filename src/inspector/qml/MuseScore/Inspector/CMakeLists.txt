@@ -208,8 +208,8 @@ qt_add_qml_module(inspector_qml
         score/scoredisplaysettingsmodel.h
         text/textsettingsmodel.cpp
         text/textsettingsmodel.h
-        text/textstylepopupmodel.cpp
-        text/textstylepopupmodel.h
+        text/textstylepopup/textstylepopupmodel.cpp
+        text/textstylepopup/textstylepopupmodel.h
         types/accidentaltypes.h
         types/ambitustypes.h
         types/articulationtypes.h
@@ -262,11 +262,11 @@ qt_add_qml_module(inspector_qml
         general/appearance/internal/VerticalSpacingSection.qml
         general/GeneralInspectorView.qml
         general/playback/internal/ArpeggioExpandableBlank.qml
+        general/playback/internal/BreathExpandableBlank.qml
         general/playback/internal/FermataExpandableBlank.qml
         general/playback/internal/GlissandoExpandableBlank.qml
         general/playback/internal/GradualTempoChangeBlank.qml
         general/playback/internal/NoteExpandableBlank.qml
-        general/playback/internal/PausesExpandableBlank.qml
         general/playback/PlaybackGeneralSettings.qml
         general/playback/PlaybackSettings.qml
         InspectorForm.qml
@@ -283,7 +283,7 @@ qt_add_qml_module(inspector_qml
         notation/chordsymbols/ChordSymbolSettings.qml
         notation/clefs/ClefSettings.qml
         notation/dynamics/DynamicsSettings.qml
-        notation/expressions/ExpressionsSettings.qml
+        notation/expressions/ExpressionSettings.qml
         notation/fermatas/FermataSettings.qml
         notation/frames/FretFrameSettings.qml
         notation/frames/HorizontalFrameSettings.qml
@@ -341,7 +341,7 @@ qt_add_qml_module(inspector_qml
         notation/notes/stems/StemSettings.qml
         notation/ornaments/OrnamentSettings.qml
         notation/playcounttext/PlayCountSettings.qml
-        notation/rests/RestBeamSettings.qml
+        notation/rests/beams/RestBeamSettings.qml
         notation/rests/RestSettings.qml
         notation/sectionbreaks/SectionBreakSettings.qml
         notation/spacers/SpacerSettings.qml
@@ -373,11 +373,12 @@ qt_add_qml_module(inspector_qml
 # Necessary for the auto-generated sources
 target_include_directories(inspector_qml PRIVATE 
     emptystaves
-    general/appearance
     general
-    general/playback/internal
+    general/appearance
     general/playback
+    general/playback/internal
     measures
+    notation
     notation/accidentals
     notation/ambituses
     notation/articulations
@@ -390,8 +391,8 @@ target_include_directories(inspector_qml PRIVATE
     notation/dynamics
     notation/expressions
     notation/fermatas
-    notation/frames/fretframe
     notation/frames
+    notation/frames/fretframe
     notation/fretdiagrams
     notation/fretdiagrams/internal
     notation/images
@@ -403,17 +404,16 @@ target_include_directories(inspector_qml PRIVATE
     notation/markers
     notation/measurerepeats
     notation/mmrests
-    notation
+    notation/notes
     notation/notes/beams
     notation/notes/chords
     notation/notes/hooks
     notation/notes/noteheads
-    notation/notes
     notation/notes/stems
     notation/ornaments
     notation/playcounttext
-    notation/rests/beams
     notation/rests
+    notation/rests/beams
     notation/sectionbreaks
     notation/spacers
     notation/stafftype
@@ -425,8 +425,9 @@ target_include_directories(inspector_qml PRIVATE
     notation/tremolos
     notation/tuplets
     parts
-    score/internal
     score
+    score/internal
     text
+    text/textstylepopup
     types
 )

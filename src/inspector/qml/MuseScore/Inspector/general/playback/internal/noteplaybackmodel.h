@@ -32,8 +32,8 @@ class NotePlaybackModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * tuning READ tuning CONSTANT)
-    Q_PROPERTY(PropertyItem * velocity READ velocity CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * tuning READ tuning CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * velocity READ velocity CONSTANT)
 
 public:
     explicit NotePlaybackModel(QObject* parent, IElementRepositoryService* repository);

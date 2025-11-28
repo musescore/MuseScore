@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UICOMPONENTS_QUICKPAINTEDVIEW_H
-#define MUSE_UICOMPONENTS_QUICKPAINTEDVIEW_H
+#pragma once
 
 #include <QQuickPaintedItem>
 
@@ -28,6 +27,9 @@ namespace muse::uicomponents {
 class QuickPaintedView : public QQuickPaintedItem
 {
     Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable as it is abstract base class");
+
 public:
     QuickPaintedView(QQuickItem* parent = nullptr);
 
@@ -35,5 +37,3 @@ protected:
     QSGNode* updatePaintNode(QSGNode* old, UpdatePaintNodeData* d) override;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_QUICKPAINTEDVIEW_H

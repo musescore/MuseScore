@@ -19,19 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
-import QtQuick.Controls
+
 import MuseScore.Inspector
 import Muse.UiComponents
 import Muse.Ui
-import "../../common"
-import "internal"
 
 FocusableItem {
     id: root
 
-    property QtObject headModel: null
-    property QtObject chordModel: null
+    required property NoteheadSettingsModel headModel
+    required property ChordSettingsModel chordModel
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1

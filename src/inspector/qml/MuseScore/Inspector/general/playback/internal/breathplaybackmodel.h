@@ -32,7 +32,7 @@ class BreathPlaybackModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * pauseTime READ pauseTime CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * pauseTime READ pauseTime CONSTANT)
 
 public:
     explicit BreathPlaybackModel(QObject* parent, IElementRepositoryService* repository);

@@ -32,7 +32,7 @@ class SpacerSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * spacerHeight READ spacerHeight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * spacerHeight READ spacerHeight CONSTANT)
 
 public:
     explicit SpacerSettingsModel(QObject* parent, IElementRepositoryService* repository);

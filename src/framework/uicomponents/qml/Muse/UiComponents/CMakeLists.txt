@@ -56,6 +56,8 @@ qt_add_qml_module(muse_uicomponents_qml
         popupview.h
         qmllistproperty.cpp
         qmllistproperty.h
+        quickpaintedview.cpp
+        quickpaintedview.h
         selectableitemlistmodel.cpp
         selectableitemlistmodel.h
         selectmultipledirectoriesmodel.cpp
@@ -72,6 +74,8 @@ qt_add_qml_module(muse_uicomponents_qml
         validators/doubleinputvalidator.h
         validators/intinputvalidator.cpp
         validators/intinputvalidator.h
+        widgetview.cpp
+        widgetview.h
         windowview.cpp
         windowview.h
 

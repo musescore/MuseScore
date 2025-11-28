@@ -32,8 +32,8 @@ class TempoSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * followText READ isFollowText CONSTANT)
-    Q_PROPERTY(PropertyItem * tempo READ tempo CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * followText READ isFollowText CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * tempo READ tempo CONSTANT)
 
 public:
     explicit TempoSettingsModel(QObject* parent, IElementRepositoryService* repository, InspectorModelType modelType);

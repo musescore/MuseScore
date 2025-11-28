@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -54,9 +56,7 @@ Column {
     signal requestApplyToStyle()
 
     function requestActiveFocus() {
-        if (buttonLoader.item && buttonLoader.item.navigation) {
-            buttonLoader.item.navigation.requestActive()
-        }
+        focusOnFirst()
     }
 
     enabled: propertyItem && propertyItem.isEnabled
@@ -68,8 +68,9 @@ Column {
 
     //! NOTE Overridden in instances and specializations of InspectorPropertyView
     function focusOnFirst() {
-        if (buttonLoader.item && buttonLoader.item.navigation) {
-            buttonLoader.item.navigation.requestActive()
+        const button = buttonLoader.item as FlatButton
+        if (button && button.navigation) {
+            button.navigation.requestActive()
         }
     }
 

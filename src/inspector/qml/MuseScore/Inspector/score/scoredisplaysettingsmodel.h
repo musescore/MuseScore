@@ -28,7 +28,7 @@
 #include "notation/notationtypes.h"
 
 namespace mu::inspector {
-class ScoreSettingsModel : public AbstractInspectorModel
+class ScoreDisplaySettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -41,7 +41,7 @@ class ScoreSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool shouldShowSoundFlags READ shouldShowSoundFlags WRITE setShouldShowSoundFlags NOTIFY shouldShowSoundFlagsChanged)
 
 public:
-    explicit ScoreSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit ScoreDisplaySettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

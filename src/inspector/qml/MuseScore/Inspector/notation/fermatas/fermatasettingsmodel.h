@@ -32,7 +32,7 @@ class FermataSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * placementType READ placementType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * placementType READ placementType CONSTANT)
 public:
     explicit FermataSettingsModel(QObject* parent, IElementRepositoryService* repository);
 

@@ -27,7 +27,7 @@
 using namespace mu::inspector;
 using namespace mu::notation;
 
-ScoreSettingsModel::ScoreSettingsModel(QObject* parent, IElementRepositoryService* repository)
+ScoreDisplaySettingsModel::ScoreDisplaySettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setSectionType(InspectorSectionType::SECTION_SCORE_DISPLAY);
@@ -35,7 +35,7 @@ ScoreSettingsModel::ScoreSettingsModel(QObject* parent, IElementRepositoryServic
     createProperties();
 }
 
-void ScoreSettingsModel::onCurrentNotationChanged()
+void ScoreDisplaySettingsModel::onCurrentNotationChanged()
 {
     updateAll();
 
@@ -46,27 +46,27 @@ void ScoreSettingsModel::onCurrentNotationChanged()
     }
 }
 
-void ScoreSettingsModel::createProperties()
+void ScoreDisplaySettingsModel::createProperties()
 {
     updateAll();
 }
 
-void ScoreSettingsModel::requestElements()
+void ScoreDisplaySettingsModel::requestElements()
 {
     //!Note the model work only with the parent score, no need to request other child elements
 }
 
-bool ScoreSettingsModel::isEmpty() const
+bool ScoreDisplaySettingsModel::isEmpty() const
 {
     return !isNotationExisting();
 }
 
-void ScoreSettingsModel::loadProperties()
+void ScoreDisplaySettingsModel::loadProperties()
 {
     updateAll();
 }
 
-void ScoreSettingsModel::resetProperties()
+void ScoreDisplaySettingsModel::resetProperties()
 {
     setShouldShowInvisible(false);
     setShouldShowFormatting(false);
@@ -74,7 +74,7 @@ void ScoreSettingsModel::resetProperties()
     setShouldShowPageMargins(false);
 }
 
-ScoreConfig ScoreSettingsModel::scoreConfig() const
+ScoreConfig ScoreDisplaySettingsModel::scoreConfig() const
 {
     if (!currentNotation()) {
         return ScoreConfig();
@@ -83,32 +83,32 @@ ScoreConfig ScoreSettingsModel::scoreConfig() const
     return currentNotation()->interaction()->scoreConfig();
 }
 
-bool ScoreSettingsModel::shouldShowInvisible() const
+bool ScoreDisplaySettingsModel::shouldShowInvisible() const
 {
     return m_shouldShowInvisible;
 }
 
-bool ScoreSettingsModel::shouldShowFormatting() const
+bool ScoreDisplaySettingsModel::shouldShowFormatting() const
 {
     return m_shouldShowFormatting;
 }
 
-bool ScoreSettingsModel::shouldShowFrames() const
+bool ScoreDisplaySettingsModel::shouldShowFrames() const
 {
     return m_shouldShowFrames;
 }
 
-bool ScoreSettingsModel::shouldShowPageMargins() const
+bool ScoreDisplaySettingsModel::shouldShowPageMargins() const
 {
     return m_shouldShowPageMargins;
 }
 
-bool ScoreSettingsModel::shouldShowSoundFlags() const
+bool ScoreDisplaySettingsModel::shouldShowSoundFlags() const
 {
     return m_shouldShowSoundFlags;
 }
 
-void ScoreSettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
+void ScoreDisplaySettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
 {
     if (m_shouldShowInvisible == shouldShowInvisible) {
         return;
@@ -118,7 +118,7 @@ void ScoreSettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
     updateShouldShowInvisible(shouldShowInvisible);
 }
 
-void ScoreSettingsModel::setShouldShowFormatting(bool shouldShowFormatting)
+void ScoreDisplaySettingsModel::setShouldShowFormatting(bool shouldShowFormatting)
 {
     if (m_shouldShowFormatting == shouldShowFormatting) {
         return;
@@ -128,7 +128,7 @@ void ScoreSettingsModel::setShouldShowFormatting(bool shouldShowFormatting)
     updateShouldShowFormatting(shouldShowFormatting);
 }
 
-void ScoreSettingsModel::setShouldShowFrames(bool shouldShowFrames)
+void ScoreDisplaySettingsModel::setShouldShowFrames(bool shouldShowFrames)
 {
     if (m_shouldShowFrames == shouldShowFrames) {
         return;
@@ -138,7 +138,7 @@ void ScoreSettingsModel::setShouldShowFrames(bool shouldShowFrames)
     updateShouldShowFrames(shouldShowFrames);
 }
 
-void ScoreSettingsModel::setShouldShowPageMargins(bool shouldShowPageMargins)
+void ScoreDisplaySettingsModel::setShouldShowPageMargins(bool shouldShowPageMargins)
 {
     if (m_shouldShowPageMargins == shouldShowPageMargins) {
         return;
@@ -148,7 +148,7 @@ void ScoreSettingsModel::setShouldShowPageMargins(bool shouldShowPageMargins)
     updateShouldShowPageMargins(shouldShowPageMargins);
 }
 
-void ScoreSettingsModel::setShouldShowSoundFlags(bool shouldShowSoundFlags)
+void ScoreDisplaySettingsModel::setShouldShowSoundFlags(bool shouldShowSoundFlags)
 {
     if (m_shouldShowSoundFlags == shouldShowSoundFlags) {
         return;
@@ -158,7 +158,7 @@ void ScoreSettingsModel::setShouldShowSoundFlags(bool shouldShowSoundFlags)
     updateShouldShowSoundFlags(shouldShowSoundFlags);
 }
 
-void ScoreSettingsModel::updateShouldShowInvisible(bool isVisible)
+void ScoreDisplaySettingsModel::updateShouldShowInvisible(bool isVisible)
 {
     if (isVisible == m_shouldShowInvisible) {
         return;
@@ -168,7 +168,7 @@ void ScoreSettingsModel::updateShouldShowInvisible(bool isVisible)
     emit shouldShowInvisibleChanged(isVisible);
 }
 
-void ScoreSettingsModel::updateShouldShowFormatting(bool isVisible)
+void ScoreDisplaySettingsModel::updateShouldShowFormatting(bool isVisible)
 {
     if (isVisible == m_shouldShowFormatting) {
         return;
@@ -178,7 +178,7 @@ void ScoreSettingsModel::updateShouldShowFormatting(bool isVisible)
     emit shouldShowFormattingChanged(isVisible);
 }
 
-void ScoreSettingsModel::updateShouldShowFrames(bool isVisible)
+void ScoreDisplaySettingsModel::updateShouldShowFrames(bool isVisible)
 {
     if (isVisible == m_shouldShowFrames) {
         return;
@@ -188,7 +188,7 @@ void ScoreSettingsModel::updateShouldShowFrames(bool isVisible)
     emit shouldShowFramesChanged(isVisible);
 }
 
-void ScoreSettingsModel::updateShouldShowPageMargins(bool isVisible)
+void ScoreDisplaySettingsModel::updateShouldShowPageMargins(bool isVisible)
 {
     if (isVisible == m_shouldShowPageMargins) {
         return;
@@ -198,7 +198,7 @@ void ScoreSettingsModel::updateShouldShowPageMargins(bool isVisible)
     emit shouldShowPageMarginsChanged(isVisible);
 }
 
-void ScoreSettingsModel::updateShouldShowSoundFlags(bool isVisible)
+void ScoreDisplaySettingsModel::updateShouldShowSoundFlags(bool isVisible)
 {
     if (isVisible == m_shouldShowSoundFlags) {
         return;
@@ -208,7 +208,7 @@ void ScoreSettingsModel::updateShouldShowSoundFlags(bool isVisible)
     emit shouldShowSoundFlagsChanged(isVisible);
 }
 
-void ScoreSettingsModel::updateFromConfig(ScoreConfigType configType)
+void ScoreDisplaySettingsModel::updateFromConfig(ScoreConfigType configType)
 {
     switch (configType) {
     case notation::ScoreConfigType::ShowInvisibleElements:
@@ -231,7 +231,7 @@ void ScoreSettingsModel::updateFromConfig(ScoreConfigType configType)
     }
 }
 
-void ScoreSettingsModel::updateAll()
+void ScoreDisplaySettingsModel::updateAll()
 {
     auto config = scoreConfig();
 

@@ -32,15 +32,15 @@ class GlissandoSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * lineType READ lineType CONSTANT)
-    Q_PROPERTY(PropertyItem * showText READ showText CONSTANT)
-    Q_PROPERTY(PropertyItem * text READ text CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * lineType READ lineType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * showText READ showText CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * text READ text CONSTANT)
 
-    Q_PROPERTY(PropertyItem * thickness READ thickness CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * thickness READ thickness CONSTANT)
 
-    Q_PROPERTY(PropertyItem * lineStyle READ lineStyle CONSTANT)
-    Q_PROPERTY(PropertyItem * dashLineLength READ dashLineLength CONSTANT)
-    Q_PROPERTY(PropertyItem * dashGapLength READ dashGapLength CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * lineStyle READ lineStyle CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * dashLineLength READ dashLineLength CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * dashGapLength READ dashGapLength CONSTANT)
 
 public:
     explicit GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository);

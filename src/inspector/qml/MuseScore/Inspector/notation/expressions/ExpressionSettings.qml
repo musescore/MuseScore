@@ -26,32 +26,40 @@ import Muse.UiComponents
 import MuseScore.Inspector
 
 import "../../common"
-import "internal"
 
-Item {
+Column {
     id: root
 
-    property QtObject proxyModel: null
+    required property ExpressionSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
 
-    implicitHeight: contentColumn.height
-    width: parent.width
+    objectName: "ExpressionSettings"
 
-    Column {
-        id: contentColumn
+    spacing: 12
 
-        width: parent.width
+    function focusOnFirst() {
+        snapExpression.requestActiveFocus()
+    }
 
-        spacing: 12
+    CheckBoxPropertyView {
+        id: snapExpression
 
-        DynamicsExpandableBlank {
-            id: dynamicSection
-            navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart
+        navigationName: "Snap expression"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
 
-            model: proxyModel ? proxyModel.modelByType(AbstractInspectorModel.TYPE_DYNAMIC) : null
-        }
+        titleText: qsTrc("inspector", "Align with preceding dynamic")
+        propertyItem: root.model?.snapExpression ?? null
+    }
+
+    VoicesAndPositionSection {
+        id: voicesAndPositionSection
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: snapExpression.navigationRowEnd + 1
+
+        model: root.model
     }
 }

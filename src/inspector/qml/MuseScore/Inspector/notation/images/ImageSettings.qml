@@ -30,7 +30,7 @@ import "../../common"
 Column {
     id: root
 
-    property QtObject model: null
+    required property ImageSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1

@@ -32,10 +32,10 @@ class JumpSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * jumpTo READ jumpTo CONSTANT)
-    Q_PROPERTY(PropertyItem * playUntil READ playUntil CONSTANT)
-    Q_PROPERTY(PropertyItem * continueAt READ continueAt CONSTANT)
-    Q_PROPERTY(PropertyItem * hasToPlayRepeats READ hasToPlayRepeats CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * jumpTo READ jumpTo CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * playUntil READ playUntil CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * continueAt READ continueAt CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * hasToPlayRepeats READ hasToPlayRepeats CONSTANT)
 public:
     explicit JumpSettingsModel(QObject* parent, IElementRepositoryService* repository);
 

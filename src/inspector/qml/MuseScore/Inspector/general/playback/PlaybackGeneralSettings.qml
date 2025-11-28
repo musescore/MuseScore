@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 
 import Muse.Ui
@@ -31,7 +33,7 @@ import "internal"
 Item {
     id: root
 
-    property QtObject proxyModel: null
+    property PlaybackProxyModel proxyModel: null
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -51,7 +53,7 @@ Item {
             { typeRole: AbstractInspectorModel.TYPE_NOTE, componentRole: noteSection },
             { typeRole: AbstractInspectorModel.TYPE_ARPEGGIO, componentRole: arpeggioSection },
             { typeRole: AbstractInspectorModel.TYPE_FERMATA, componentRole: fermataSection },
-            { typeRole: AbstractInspectorModel.TYPE_BREATH, componentRole: pausesSection },
+            { typeRole: AbstractInspectorModel.TYPE_BREATH, componentRole: breathSection },
             { typeRole: AbstractInspectorModel.TYPE_GLISSANDO, componentRole: glissandoSection },
             { typeRole: AbstractInspectorModel.TYPE_GRADUAL_TEMPO_CHANGE, componentRole: tempoChangeSection }
         ]
@@ -75,8 +77,10 @@ Item {
             delegate: Column {
                 id: itemColumn
 
-                width: parent.width
+                required property var modelData
+                required property int index
 
+                width: parent.width
                 spacing: contentColumn.spacing
 
                 Loader {
@@ -84,18 +88,19 @@ Item {
 
                     width: parent.width
 
-                    sourceComponent: modelData.componentRole
+                    property var model: itemColumn.modelData.itemModel
+
+                    sourceComponent: itemColumn.modelData.componentRole
 
                     onLoaded: {
-                        expandableLoader.item.model = modelData.itemModel
-                        expandableLoader.item.navigation.panel = root.navigationPanel
-                        expandableLoader.item.navigation.row = root.navigationRowStart + model.index * 1000
+                        item.navigation.panel = Qt.binding(() => root.navigationPanel)
+                        item.navigation.row = Qt.binding(() => root.navigationRowStart + itemColumn.index * 1000)
                     }
                 }
 
                 SeparatorLine {
                     anchors.margins: -12
-                    visible: model.index < (repeater.count - 1)
+                    visible: itemColumn.index < (repeater.count - 1)
                 }
             }
         }
@@ -120,9 +125,9 @@ Item {
     }
 
     Component {
-        id: pausesSection
+        id: breathSection
 
-        PausesExpandableBlank {}
+        BreathExpandableBlank {}
     }
 
     Component {

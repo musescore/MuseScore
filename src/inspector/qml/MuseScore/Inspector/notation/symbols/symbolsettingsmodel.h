@@ -33,10 +33,10 @@ class SymbolSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * sym READ sym CONSTANT)
-    Q_PROPERTY(PropertyItem * scoreFont READ scoreFont CONSTANT)
-    Q_PROPERTY(PropertyItem * symbolSize READ symbolSize CONSTANT)
-    Q_PROPERTY(PropertyItem * symAngle READ symAngle CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * sym READ sym CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * scoreFont READ scoreFont CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * symbolSize READ symbolSize CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * symAngle READ symAngle CONSTANT)
 
     Q_PROPERTY(QVariantList symFonts READ symFonts NOTIFY symFontsChanged)
 

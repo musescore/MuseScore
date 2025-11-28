@@ -32,7 +32,7 @@ class ArpeggioPlaybackModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(PropertyItem * stretch READ stretch CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * stretch READ stretch CONSTANT)
 public:
     explicit ArpeggioPlaybackModel(QObject* parent, IElementRepositoryService* repository);
 

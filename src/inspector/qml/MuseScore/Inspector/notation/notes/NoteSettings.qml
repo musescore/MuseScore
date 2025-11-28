@@ -31,7 +31,7 @@ import "../../common"
 Column {
     id: root
 
-    property QtObject model: null
+    required property NoteSettingsProxyModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -45,11 +45,12 @@ Column {
         tabBar.focusOnCurrentTab()
     }
 
-    readonly property QtObject headModel: model ? model.modelByType(AbstractInspectorModel.TYPE_NOTEHEAD) : null
-    readonly property QtObject chordModel: model ? model.modelByType(AbstractInspectorModel.TYPE_CHORD) : null
-    readonly property QtObject stemModel: model ? model.modelByType(AbstractInspectorModel.TYPE_STEM) : null
-    readonly property QtObject hookModel: model ? model.modelByType(AbstractInspectorModel.TYPE_HOOK) : null
-    readonly property QtObject beamModel: model ? model.modelByType(AbstractInspectorModel.TYPE_BEAM) : null
+    readonly property NoteheadSettingsModel headModel: model ? model.modelByType(AbstractInspectorModel.TYPE_NOTEHEAD) : null
+    readonly property ChordSettingsModel chordModel: model ? model.modelByType(AbstractInspectorModel.TYPE_CHORD) : null
+    readonly property StemSettingsModel stemModel: model ? model.modelByType(AbstractInspectorModel.TYPE_STEM) : null
+    readonly property HookSettingsModel hookModel: model ? model.modelByType(AbstractInspectorModel.TYPE_HOOK) : null
+    readonly property BeamSettingsModel beamModel: model ? model.modelByType(AbstractInspectorModel.TYPE_BEAM) : null
+    
     InspectorTabBar {
         id: tabBar
 

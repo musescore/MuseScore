@@ -30,7 +30,7 @@ import "internal"
 Column {
     id: root
 
-    property QtObject model: null
+    required property AppearanceSettingsModel model
 
     property NavigationPanel navigationPanel: null
 

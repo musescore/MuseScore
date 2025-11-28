@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+pragma ComponentBehavior: Bound
+
 import QtQuick
 
 import Muse.UiComponents
@@ -29,6 +31,8 @@ import "../common"
 
 InspectorSectionView {
     id: root
+
+    required property TextSettingsModel model
 
     implicitHeight: contentColumn.height
 
@@ -117,20 +121,24 @@ InspectorSectionView {
                     ]
 
                     delegate: FlatToggleButton {
+                        required property int iconCode
+                        required property int value
+                        required property string title
+                        required property int index
+
                         navigation.panel: root.navigationPanel
-                        navigation.name: "FontStyle" + model.index
-                        navigation.row: styleGroup.navigationRowStart + model.index
-                        navigation.accessible.name: modelData.title
+                        navigation.name: "FontStyle" + index
+                        navigation.row: styleGroup.navigationRowStart + index
+                        navigation.accessible.name: title
 
-                        toolTipTitle: modelData.title
+                        toolTipTitle: title
+                        icon: iconCode
 
-                        icon: modelData.iconCode
-
-                        checked: root.model && !root.model.fontStyle.isUndefined && (root.model.fontStyle.value & modelData.value)
+                        checked: root.model && !root.model.fontStyle.isUndefined && (root.model.fontStyle.value & value)
 
                         onToggled: {
-                            root.model.fontStyle.value = checked ? root.model.fontStyle.value & ~modelData.value
-                                                                 : root.model.fontStyle.value | modelData.value
+                            root.model.fontStyle.value = checked ? root.model.fontStyle.value & ~value
+                                                                 : root.model.fontStyle.value | value
                         }
                     }
                 }
@@ -203,48 +211,53 @@ InspectorSectionView {
 
                     model: [
                         {
-                            iconRole: IconCode.TEXT_ALIGN_LEFT,
-                            typeRole: TextTypes.FONT_ALIGN_H_LEFT,
+                            iconCode: IconCode.TEXT_ALIGN_LEFT,
+                            value: TextTypes.FONT_ALIGN_H_LEFT,
                             title: qsTrc("inspector", "Align left"),
                             description: qsTrc("inspector", "Align left edge of text to reference point")
                         },
                         {
-                            iconRole: IconCode.TEXT_ALIGN_CENTER,
-                            typeRole: TextTypes.FONT_ALIGN_H_CENTER,
+                            iconCode: IconCode.TEXT_ALIGN_CENTER,
+                            value: TextTypes.FONT_ALIGN_H_CENTER,
                             title: qsTrc("inspector", "Align center"),
                             description: qsTrc("inspector", "Align horizontal center of text to reference point")
                         },
                         {
-                            iconRole: IconCode.TEXT_ALIGN_RIGHT,
-                            typeRole: TextTypes.FONT_ALIGN_H_RIGHT,
+                            iconCode: IconCode.TEXT_ALIGN_RIGHT,
+                            value: TextTypes.FONT_ALIGN_H_RIGHT,
                             title: qsTrc("inspector", "Align right"),
                             description: qsTrc("inspector", "Align right edge of text to reference point")
                         },
                         {
-                            iconRole: IconCode.TEXT_ALIGN_JUSTIFY, 
-                            typeRole: TextTypes.FONT_ALIGN_H_JUSTIFY,
+                            iconCode: IconCode.TEXT_ALIGN_JUSTIFY, 
+                            value: TextTypes.FONT_ALIGN_H_JUSTIFY,
                             title: qsTrc("inspector", "Justify"),
                             description: qsTrc("inspector", "Justify text to fill the available width")
                         }
                     ]
 
                     delegate: FlatRadioButton {
-                        navigation.panel: root.navigationPanel
-                        navigation.name: "HAlign" + model.index
-                        navigation.row: horizontalAlignmentButtonList.navigationRowStart + model.index
-                        navigation.accessible.name: modelData.title
-                        navigation.accessible.description: modelData.description
+                        required iconCode
+                        required property int value
+                        required property string title
+                        required property string description
+                        required property int index
 
-                        toolTipTitle: modelData.title
-                        toolTipDescription: modelData.description
+                        navigation.panel: root.navigationPanel
+                        navigation.name: "HAlign" + index
+                        navigation.row: horizontalAlignmentButtonList.navigationRowStart + index
+                        navigation.accessible.name: title
+                        navigation.accessible.description: description
+
+                        toolTipTitle: title
+                        toolTipDescription: description
 
                         width: 30
                         transparent: true
 
-                        iconCode: modelData.iconRole
-                        checked: root.model && !root.model.horizontalAlignment.isUndefined && (root.model.horizontalAlignment.value === modelData.typeRole)
+                        checked: root.model && !root.model.horizontalAlignment.isUndefined && (root.model.horizontalAlignment.value === value)
                         onToggled: {
-                            root.model.horizontalAlignment.value = modelData.typeRole
+                            root.model.horizontalAlignment.value = value
                         }
                     }
                 }
@@ -263,48 +276,53 @@ InspectorSectionView {
 
                     model: [
                         {
-                            iconRole: IconCode.TEXT_ALIGN_TOP,
-                            typeRole: TextTypes.FONT_ALIGN_V_TOP,
+                            iconCode: IconCode.TEXT_ALIGN_TOP,
+                            value: TextTypes.FONT_ALIGN_V_TOP,
                             title: qsTrc("inspector", "Align top"),
                             description: qsTrc("inspector", "Align top edge of text to reference point")
                         },
                         {
-                            iconRole: IconCode.TEXT_ALIGN_MIDDLE,
-                            typeRole: TextTypes.FONT_ALIGN_V_CENTER,
+                            iconCode: IconCode.TEXT_ALIGN_MIDDLE,
+                            value: TextTypes.FONT_ALIGN_V_CENTER,
                             title: qsTrc("inspector", "Align middle"),
                             description: qsTrc("inspector", "Align vertical center of text to reference point")
                         },
                         {
-                            iconRole: IconCode.TEXT_ALIGN_BOTTOM,
-                            typeRole: TextTypes.FONT_ALIGN_V_BOTTOM,
+                            iconCode: IconCode.TEXT_ALIGN_BOTTOM,
+                            value: TextTypes.FONT_ALIGN_V_BOTTOM,
                             title:qsTrc("inspector", "Align bottom"),
                             description: qsTrc("inspector", "Align bottom edge of text to reference point")
                         },
                         {
-                            iconRole: IconCode.TEXT_ALIGN_BASELINE,
-                            typeRole: TextTypes.FONT_ALIGN_V_BASELINE,
+                            iconCode: IconCode.TEXT_ALIGN_BASELINE,
+                            value: TextTypes.FONT_ALIGN_V_BASELINE,
                             title: qsTrc("inspector", "Align baseline"),
                             description: qsTrc("inspector", "Align baseline of text to reference point")
                         }
                     ]
 
                     delegate: FlatRadioButton {
-                        navigation.panel: root.navigationPanel
-                        navigation.name: "VAlign" + model.index
-                        navigation.row: verticalAlignmentButtonList.navigationRowStart + model.index
-                        navigation.accessible.name: modelData.title
-                        navigation.accessible.description: modelData.description
+                        required iconCode
+                        required property int value
+                        required property string title
+                        required property string description
+                        required property int index
 
-                        toolTipTitle: modelData.title
-                        toolTipDescription: modelData.description
+                        navigation.panel: root.navigationPanel
+                        navigation.name: "VAlign" + index
+                        navigation.row: verticalAlignmentButtonList.navigationRowStart + index
+                        navigation.accessible.name: title
+                        navigation.accessible.description: description
+
+                        toolTipTitle: title
+                        toolTipDescription: description
 
                         width: 30
                         transparent: true
 
-                        iconCode: modelData.iconRole
-                        checked: root.model && !root.model.verticalAlignment.isUndefined && (root.model.verticalAlignment.value === modelData.typeRole)
+                        checked: root.model && !root.model.verticalAlignment.isUndefined && (root.model.verticalAlignment.value === value)
                         onToggled: {
-                            root.model.verticalAlignment.value = modelData.typeRole
+                            root.model.verticalAlignment.value = value
                         }
                     }
                 }
@@ -326,43 +344,47 @@ InspectorSectionView {
 
             model: [
                 {
-                    iconRole: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_LEFT : IconCode.NOTE_ALIGN_LEFT,
-                    typeRole: CommonTypes.LEFT,
+                    iconCode: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_LEFT : IconCode.NOTE_ALIGN_LEFT,
+                    value: CommonTypes.LEFT,
                     title: qsTrc("inspector", "Align left"),
                     description: qsTrc("inspector", "Align left edge of text to reference point")
                 },
                 {
-                    iconRole: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_HORIZONTAL_CENTER : IconCode.NOTE_ALIGN_CENTER,
-                    typeRole:
-                    CommonTypes.HCENTER,
+                    iconCode: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_HORIZONTAL_CENTER : IconCode.NOTE_ALIGN_CENTER,
+                    value: CommonTypes.HCENTER,
                     title: qsTrc("inspector", "Align center"),
                     description: qsTrc("inspector", "Align horizontal center of text to reference point")
                 },
                 {
-                    iconRole: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_RIGHT : IconCode.NOTE_ALIGN_RIGHT,
-                    typeRole: CommonTypes.RIGHT,
+                    iconCode: root.model && root.model.usePositionRelativeToLine ? IconCode.ALIGN_RIGHT : IconCode.NOTE_ALIGN_RIGHT,
+                    value: CommonTypes.RIGHT,
                     title: qsTrc("inspector", "Align right"),
                     description: qsTrc("inspector", "Align right edge of text to reference point")
                 }
             ]
 
             delegate: FlatRadioButton {
-                navigation.panel: root.navigationPanel
-                navigation.name: "HAlign" + model.index
-                navigation.row: positionButtonList.navigationRowStart + model.index
-                navigation.accessible.name: modelData.title
-                navigation.accessible.description: modelData.description
+                required iconCode
+                required property int value
+                required property string title
+                required property string description
+                required property int index
 
-                toolTipTitle: modelData.title
-                toolTipDescription: modelData.description
+                navigation.panel: root.navigationPanel
+                navigation.name: "HAlign" + index
+                navigation.row: positionButtonList.navigationRowStart + index
+                navigation.accessible.name: title
+                navigation.accessible.description: description
+
+                toolTipTitle: title
+                toolTipDescription: description
 
                 width: 30
                 transparent: true
 
-                iconCode: modelData.iconRole
-                checked: root.model && !root.model.horizontalPosition.isUndefined && (root.model.horizontalPosition.value === modelData.typeRole)
+                checked: root.model && !root.model.horizontalPosition.isUndefined && (root.model.horizontalPosition.value === value)
                 onToggled: {
-                    root.model.horizontalPosition.value = modelData.typeRole
+                    root.model.horizontalPosition.value = value
                 }
             }
         }

@@ -19,17 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_PIXMAPSCORETHUMBNAILVIEW_H
-#define MU_PROJECT_PIXMAPSCORETHUMBNAILVIEW_H
+
+#pragma once
 
 #include <QPainter>
 
-#include "uicomponents/view/quickpaintedview.h"
+#include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
 
 namespace mu::project {
 class PixmapScoreThumbnailView : public muse::uicomponents::QuickPaintedView
 {
     Q_OBJECT
+    QML_ELEMENT;
 
     Q_PROPERTY(QPixmap thumbnail READ thumbnail WRITE setThumbnail NOTIFY thumbnailChanged)
 
@@ -49,5 +50,3 @@ private:
     QPixmap m_thumbnail;
 };
 }
-
-#endif // MU_PROJECT_PIXMAPSCORETHUMBNAILVIEW_H
