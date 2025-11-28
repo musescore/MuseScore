@@ -19,11 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_DRUMSETOOLSPANELVIEW_H
-#define MU_PALETTE_DRUMSETOOLSPANELVIEW_H
 
-#include "uicomponents/view/widgetview.h"
+#pragma once
+
 #include "async/asyncable.h"
+#include "uicomponents/qml/Muse/UiComponents/widgetview.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
@@ -67,5 +67,3 @@ private:
     std::shared_ptr<DrumsetPaletteAdapter> m_adapter;
 };
 }
-
-#endif // MU_PALETTE_DRUMSETOOLSPANELVIEW_H

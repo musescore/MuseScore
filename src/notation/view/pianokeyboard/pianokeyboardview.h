@@ -19,12 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_PIANOKEYBOARDVIEW_H
-#define MU_NOTATION_PIANOKEYBOARDVIEW_H
+
+#pragma once
 
 #include "async/asyncable.h"
 
-#include "uicomponents/view/quickpaintedview.h"
+#include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
+
 #include "modularity/ioc.h"
 #include "inotationconfiguration.h"
 #include "ui/iuiconfiguration.h"
@@ -36,6 +37,7 @@ class PianoKeyboardController;
 class PianoKeyboardView : public muse::uicomponents::QuickPaintedView, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
+    QML_ELEMENT;
 
     Q_PROPERTY(int numberOfKeys READ numberOfKeys WRITE setNumberOfKeys NOTIFY numberOfKeysChanged)
     Q_PROPERTY(qreal keyWidthScaling READ keyWidthScaling WRITE setScaling NOTIFY keyWidthScalingChanged)
@@ -126,5 +128,3 @@ private:
     qreal m_scrollBarSize = 0.0;
 };
 }
-
-#endif // MU_NOTATION_PIANOKEYBOARDVIEW_H

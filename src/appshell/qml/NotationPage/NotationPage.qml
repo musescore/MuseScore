@@ -30,7 +30,7 @@ import MuseScore.AppShell 1.0
 
 import MuseScore.NotationScene 1.0
 import MuseScore.Palette 1.0
-import MuseScore.Inspector 1.0
+import MuseScore.Inspector
 import MuseScore.InstrumentsScene 1.0
 import MuseScore.Playback 1.0
 

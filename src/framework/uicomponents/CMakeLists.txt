@@ -28,10 +28,6 @@ target_sources(muse_uicomponents PRIVATE
     view/topleveldialog.h
     view/widgets/radiobuttongroupbox.cpp
     view/widgets/radiobuttongroupbox.h
-    view/quickpaintedview.cpp
-    view/quickpaintedview.h
-    view/widgetview.cpp
-    view/widgetview.h
 )
 
 add_subdirectory(view/treeview)
