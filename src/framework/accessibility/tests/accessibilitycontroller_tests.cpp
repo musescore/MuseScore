@@ -76,11 +76,11 @@ public:
     class AccessibleItem : public IAccessible
     {
     public:
-        void setParent(AccessibleItem* parent) { m_parent = parent; }
+        void setParent(IAccessible* parent) { m_parent = parent; }
 
         const IAccessible* accessibleParent() const override { return m_parent; }
         size_t accessibleChildCount() const override { return 0; }
-        const IAccessible* accessibleChild(size_t) const override { return nullptr; }
+        IAccessible* accessibleChild(size_t) const override { return nullptr; }
         QWindow* accessibleWindow() const override { return nullptr; }
         muse::modularity::ContextPtr iocContext() const override { return muse::modularity::globalCtx(); }
         IAccessible::Role accessibleRole() const override { return IAccessible::NoRole; }
@@ -124,14 +124,16 @@ public:
         async::Channel<IAccessible::Property, Val> m_propertyChanged;
         async::Channel<IAccessible::State, bool> m_stateChanged;
 
-        AccessibleItem* m_parent = nullptr;
+        IAccessible* m_parent = nullptr;
     };
 
-    AccessibleItem* make_item()
+    AccessibleItem* makeItemWithRegisteredParent()
     {
-        AccessibleItem* item = new AccessibleItem();
-
         AccessibleItem* parent = new AccessibleItem();
+        parent->setParent(m_controller.get());
+        m_controller->reg(parent);
+
+        AccessibleItem* item = new AccessibleItem();
         item->setParent(parent);
 
         return item;
@@ -183,8 +185,8 @@ TEST_F(Accessibility_ControllerTests, SendEventOnFocusChanged)
     ON_CALL(*m_configuration, active()).WillByDefault(Return(true));
 
     //! [GIVEN] Two items
-    AccessibleItem* item1 = make_item();
-    AccessibleItem* item2 = make_item();
+    AccessibleItem* item1 = makeItemWithRegisteredParent();
+    AccessibleItem* item2 = makeItemWithRegisteredParent();
 
     //! [GIVEN] Register items
     m_controller->reg(item1);
@@ -220,8 +222,8 @@ TEST_F(Accessibility_ControllerTests, NotSendEventOnFocusChangedIfAccessibilityI
     ON_CALL(*m_configuration, active()).WillByDefault(Return(false));
 
     //! [GIVEN] Two items
-    AccessibleItem* item1 = make_item();
-    AccessibleItem* item2 = make_item();
+    AccessibleItem* item1 = makeItemWithRegisteredParent();
+    AccessibleItem* item2 = makeItemWithRegisteredParent();
 
     //! [GIVEN] Register items
     m_controller->reg(item1);
