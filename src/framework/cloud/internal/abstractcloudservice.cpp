@@ -283,7 +283,7 @@ void AbstractCloudService::signOut()
     }
 
     QBuffer receivedData;
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
     Ret ret = manager->get(signOutUrl.val, &receivedData, m_serverConfig.headers);
     if (!ret) {
         printServerReply(receivedData);
@@ -326,7 +326,7 @@ ValCh<AccountInfo> AbstractCloudService::accountInfo() const
 Ret AbstractCloudService::checkCloudIsAvailable() const
 {
     QBuffer receivedData;
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
     Ret ret = manager->get(m_serverConfig.serverAvailabilityUrl, &receivedData, m_serverConfig.headers);
 
     if (!ret) {

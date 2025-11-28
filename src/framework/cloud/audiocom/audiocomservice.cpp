@@ -133,7 +133,7 @@ Ret AudioComService::downloadAccountInfo()
     TRACEFUNC;
 
     QBuffer receivedData;
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
     Ret ret = manager->get(AUDIOCOM_USER_INFO_API_URL, &receivedData, headers());
 
     if (!ret) {
@@ -185,7 +185,7 @@ bool AudioComService::doUpdateTokens()
     QBuffer receivedData(&jsonData);
     OutgoingDevice device(&receivedData);
 
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
     Ret ret = manager->post(serverConfig.refreshApiUrl, &device, &receivedData, headers());
 
     if (!ret) {
@@ -208,7 +208,7 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
     manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
         progress->progress(current, total, message);
     });
@@ -251,7 +251,7 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
     return progress;
 }
 
-Ret AudioComService::doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat)
+Ret AudioComService::doUploadAudio(network::deprecated::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat)
 {
     TRACEFUNC;
 
@@ -300,7 +300,7 @@ Ret AudioComService::doUploadAudio(network::INetworkManagerPtr uploadManager, QI
     return ret;
 }
 
-Ret AudioComService::doUpdateVisibility(network::INetworkManagerPtr manager, const QUrl& url, Visibility visibility)
+Ret AudioComService::doUpdateVisibility(network::deprecated::INetworkManagerPtr manager, const QUrl& url, Visibility visibility)
 {
     QUrl patchUrl(AUDIOCOM_API_ROOT_URL + "/audio/" + idFromCloudUrl(url).toQString());
 
@@ -319,7 +319,8 @@ Ret AudioComService::doUpdateVisibility(network::INetworkManagerPtr manager, con
     return ret;
 }
 
-Ret AudioComService::doCreateAudio(network::INetworkManagerPtr manager, const QString& title, int size, const QString& audioFormat,
+Ret AudioComService::doCreateAudio(network::deprecated::INetworkManagerPtr manager, const QString& title, int size,
+                                   const QString& audioFormat,
                                    const QUrl& existingUrl, Visibility visibility, bool replaceExisting)
 {
     TRACEFUNC;
@@ -375,7 +376,7 @@ Ret AudioComService::doCreateAudio(network::INetworkManagerPtr manager, const QS
 
 void AudioComService::notifyServerAboutFailUpload(const QUrl& failUrl, const QString& token)
 {
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
 
     QBuffer receivedData;
 
@@ -387,7 +388,7 @@ void AudioComService::notifyServerAboutFailUpload(const QUrl& failUrl, const QSt
 
 void AudioComService::notifyServerAboutSuccessUpload(const QUrl& successUrl, const QString& token)
 {
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
 
     QBuffer receivedData;
     QBuffer outData;

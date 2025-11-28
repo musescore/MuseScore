@@ -26,10 +26,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/networkmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/networkerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/networktypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/deprecated/inetworkmanager.h
     ${CMAKE_CURRENT_LIST_DIR}/inetworkmanager.h
     ${CMAKE_CURRENT_LIST_DIR}/inetworkmanagercreator.h
     ${CMAKE_CURRENT_LIST_DIR}/inetworkconfiguration.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/internal/deprecated/networkmanager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/deprecated/networkmanager.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/networkmanager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/networkmanager.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/networkmanagercreator.cpp

@@ -23,170 +23,15 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QEventLoop>
 #include <QUrl>
 
 #include "networkerrors.h"
 
 using namespace muse;
 using namespace muse::network;
+using namespace muse::async;
 
-NetworkManager::NetworkManager(QObject* parent)
-    : QObject(parent)
-{
-    m_manager = new QNetworkAccessManager(this);
-    m_manager->setTransferTimeout(); // Use Qt's default timeout (30s)
-}
-
-NetworkManager::~NetworkManager()
-{
-    if (m_reply) {
-        m_reply->abort();
-    }
-}
-
-Ret NetworkManager::get(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers)
-{
-    return execRequest(GET_REQUEST, url, incomingData, nullptr, headers);
-}
-
-Ret NetworkManager::head(const QUrl& url, const RequestHeaders& headers)
-{
-    return execRequest(HEAD_REQUEST, url, nullptr, nullptr, headers);
-}
-
-Ret NetworkManager::post(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData, const RequestHeaders& headers)
-{
-    return execRequest(POST_REQUEST, url, incomingData, outgoingData, headers);
-}
-
-Ret NetworkManager::put(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData, const RequestHeaders& headers)
-{
-    return execRequest(PUT_REQUEST, url, incomingData, outgoingData, headers);
-}
-
-Ret NetworkManager::patch(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData, const RequestHeaders& headers)
-{
-    return execRequest(PATCH_REQUEST, url, incomingData, outgoingData, headers);
-}
-
-Ret NetworkManager::del(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers)
-{
-    return execRequest(DELETE_REQUEST, url, incomingData, nullptr, headers);
-}
-
-Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IncomingDevice* incomingData, OutgoingDevice* outgoingData,
-                                const RequestHeaders& headers)
-{
-    if (outgoingData && outgoingData->device()) {
-        if (!openDevice(outgoingData->device(), QIODevice::ReadOnly)) {
-            return make_ret(Err::FiledOpenIODeviceRead);
-        }
-    }
-
-    if (incomingData) {
-        if (!openDevice(incomingData, QIODevice::WriteOnly)) {
-            return make_ret(Err::FiledOpenIODeviceWrite);
-        }
-        m_incomingData = incomingData;
-    }
-
-    QNetworkRequest request(url);
-    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, true);
-
-    RequestHeaders _headers = headers;
-    if (_headers.isEmpty()) {
-        _headers = configuration()->defaultHeaders();
-    }
-
-    for (auto it = _headers.knownHeaders.cbegin(); it != _headers.knownHeaders.cend(); ++it) {
-        request.setHeader(it.key(), it.value());
-    }
-
-    for (auto it = _headers.rawHeaders.cbegin(); it != _headers.rawHeaders.cend(); ++it) {
-        request.setRawHeader(it.key(), it.value());
-    }
-
-    m_progress.start();
-
-    QNetworkReply* reply = receiveReply(requestType, request, outgoingData);
-
-    if (outgoingData) {
-        prepareReplyTransmit(reply);
-    }
-
-    if (incomingData) {
-        prepareReplyReceive(reply, m_incomingData);
-    }
-
-    Ret ret = waitForReplyFinished(reply);
-    m_progress.finish(ret);
-
-    if (reply) {
-        reply->disconnect();
-    }
-
-    if (outgoingData && outgoingData->device()) {
-        closeDevice(outgoingData->device());
-    }
-
-    closeDevice(m_incomingData);
-    m_incomingData = nullptr;
-
-    return ret;
-}
-
-QNetworkReply* NetworkManager::receiveReply(RequestType requestType, const QNetworkRequest& request, OutgoingDevice* outgoingData)
-{
-    switch (requestType) {
-    case GET_REQUEST: return m_manager->get(request);
-    case HEAD_REQUEST: return m_manager->head(request);
-    case DELETE_REQUEST: return m_manager->deleteResource(request);
-    case PUT_REQUEST: {
-        if (outgoingData->device()) {
-            return m_manager->put(request, outgoingData->device());
-        } else if (outgoingData->multiPart()) {
-            return m_manager->put(request, outgoingData->multiPart());
-        }
-        break;
-    }
-    case PATCH_REQUEST: {
-        if (outgoingData->device()) {
-            return m_manager->sendCustomRequest(request, "PATCH", outgoingData->device());
-        } else if (outgoingData->multiPart()) {
-            return m_manager->sendCustomRequest(request, "PATCH", outgoingData->multiPart());
-        }
-        break;
-    }
-    case POST_REQUEST: {
-        if (outgoingData->device()) {
-            return m_manager->post(request, outgoingData->device());
-        } else if (outgoingData->multiPart()) {
-            return m_manager->post(request, outgoingData->multiPart());
-        }
-        break;
-    }
-    }
-
-    UNREACHABLE;
-    return nullptr;
-}
-
-Progress NetworkManager::progress() const
-{
-    return m_progress;
-}
-
-void NetworkManager::abort()
-{
-    if (m_reply) {
-        m_reply->abort();
-    }
-
-    m_progress.finish(make_ret(Err::Abort));
-}
-
-bool NetworkManager::openDevice(QIODevice* device, QIODevice::OpenModeFlag flags)
+static bool openDevice(QIODevicePtr& device, QIODevice::OpenModeFlag flags)
 {
     IF_ASSERT_FAILED(device) {
         return false;
@@ -199,63 +44,14 @@ bool NetworkManager::openDevice(QIODevice* device, QIODevice::OpenModeFlag flags
     return device->open(flags);
 }
 
-void NetworkManager::closeDevice(QIODevice* device)
+static void closeDevice(QIODevicePtr& device)
 {
     if (device && device->isOpen()) {
         device->close();
     }
 }
 
-void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IncomingDevice* incomingData)
-{
-    if (incomingData) {
-        connect(reply, &QNetworkReply::downloadProgress, this, [this](const qint64 curr, const qint64 total) {
-            m_progress.progress(curr, total);
-        });
-
-        connect(reply, &QNetworkReply::readyRead, this, [this]() {
-            IF_ASSERT_FAILED(m_incomingData) {
-                return;
-            }
-
-            QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-            IF_ASSERT_FAILED(reply) {
-                return;
-            }
-
-            m_incomingData->write(reply->readAll());
-        });
-    }
-}
-
-void NetworkManager::prepareReplyTransmit(QNetworkReply* reply)
-{
-    connect(reply, &QNetworkReply::uploadProgress, this, [this](qint64 curr, qint64 total) {
-        m_progress.progress(curr, total);
-    });
-}
-
-Ret NetworkManager::waitForReplyFinished(QNetworkReply* reply)
-{
-    IF_ASSERT_FAILED(reply) {
-        return make_ret(Err::UnknownError);
-    }
-
-    if (reply->isFinished()) {
-        return errorFromReply(reply);
-    }
-
-    QEventLoop loop;
-    connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-
-    m_reply = reply;
-    loop.exec();
-    m_reply = nullptr;
-
-    return errorFromReply(reply);
-}
-
-Ret NetworkManager::errorFromReply(const QNetworkReply* reply) const
+static Ret retFromReply(const QNetworkReply* reply)
 {
     if (!reply) {
         return make_ret(Err::NetworkError);
@@ -282,4 +78,180 @@ Ret NetworkManager::errorFromReply(const QNetworkReply* reply) const
     }
 
     return ret;
+}
+
+NetworkManager::NetworkManager(QObject* parent)
+    : QObject(parent)
+{
+    m_manager = new QNetworkAccessManager(this);
+    m_manager->setTransferTimeout(); // Use Qt's default timeout (30s)
+}
+
+RetVal<Progress> NetworkManager::get(const QUrl& url, IncomingDevicePtr incomingData, const RequestHeaders& headers)
+{
+    return execRequest(GET_REQUEST, url, incomingData, NoOutgoingDevice(), headers);
+}
+
+RetVal<Progress> NetworkManager::head(const QUrl& url, const RequestHeaders& headers)
+{
+    return execRequest(HEAD_REQUEST, url, nullptr, NoOutgoingDevice(), headers);
+}
+
+RetVal<Progress> NetworkManager::post(const QUrl& url, OutgoingDeviceVar outgoingData, IncomingDevicePtr incomingData,
+                                      const RequestHeaders& headers)
+{
+    return execRequest(POST_REQUEST, url, incomingData, outgoingData, headers);
+}
+
+RetVal<Progress> NetworkManager::put(const QUrl& url, OutgoingDeviceVar outgoingData, IncomingDevicePtr incomingData,
+                                     const RequestHeaders& headers)
+{
+    return execRequest(PUT_REQUEST, url, incomingData, outgoingData, headers);
+}
+
+RetVal<Progress> NetworkManager::patch(const QUrl& url, OutgoingDeviceVar outgoingData, IncomingDevicePtr incomingData,
+                                       const RequestHeaders& headers)
+{
+    return execRequest(PATCH_REQUEST, url, incomingData, outgoingData, headers);
+}
+
+RetVal<Progress> NetworkManager::del(const QUrl& url, IncomingDevicePtr incomingData, const RequestHeaders& headers)
+{
+    return execRequest(DELETE_REQUEST, url, incomingData, NoOutgoingDevice(), headers);
+}
+
+RetVal<Progress> NetworkManager::execRequest(RequestType requestType, const QUrl& url,
+                                             IncomingDevicePtr incomingData,
+                                             OutgoingDeviceVar outgoingData,
+                                             const RequestHeaders& headers)
+{
+    if (std::holds_alternative<QIODevicePtr>(outgoingData)) {
+        if (!openDevice(std::get<QIODevicePtr>(outgoingData), QIODevice::ReadOnly)) {
+            return RetVal<Progress>::make_ret((int)Err::FiledOpenIODeviceRead);
+        }
+    }
+
+    if (incomingData) {
+        if (!openDevice(incomingData, QIODevice::WriteOnly)) {
+            return RetVal<Progress>::make_ret((int)Err::FiledOpenIODeviceWrite);
+        }
+    }
+
+    const QNetworkRequest request = prepareRequest(url, headers);
+    QNetworkReply* reply = sendRequest(requestType, request, outgoingData);
+    IF_ASSERT_FAILED(reply) {
+        return RetVal<Progress>::make_ret((int)Err::NetworkError);
+    }
+
+    size_t requestId = 0;
+    if (!m_requestDataMap.empty()) {
+        requestId = m_requestDataMap.rbegin()->first + 1;
+    }
+
+    RequestData& requestData = m_requestDataMap[requestId];
+    requestData.incomingData = incomingData;
+    requestData.outgoingData = outgoingData;
+    requestData.reply = reply;
+    requestData.progress.start();
+    requestData.progress.canceled().onNotify(this, [this, requestId]() {
+        m_requestDataMap[requestId].reply->abort();
+    });
+
+    if (!std::holds_alternative<NoOutgoingDevice>(outgoingData)) {
+        connect(reply, &QNetworkReply::uploadProgress, this, [this, requestId](qint64 curr, qint64 total) {
+            m_requestDataMap[requestId].progress.progress(curr, total);
+        });
+    }
+
+    if (incomingData) {
+        connect(reply, &QNetworkReply::downloadProgress, this, [this, requestId](qint64 curr, qint64 total) {
+            m_requestDataMap[requestId].progress.progress(curr, total);
+        });
+
+        connect(reply, &QNetworkReply::readyRead, this, [this, requestId]() {
+            RequestData& data = m_requestDataMap[requestId];
+            data.incomingData->write(data.reply->readAll());
+        });
+    }
+
+    connect(reply, &QNetworkReply::finished, this, [this, requestId]() {
+        auto it = m_requestDataMap.find(requestId);
+        IF_ASSERT_FAILED(it != m_requestDataMap.end()) {
+            return;
+        }
+
+        RequestData& data = it->second;
+        data.reply->disconnect();
+        data.progress.canceled().disconnect(this);
+
+        if (std::holds_alternative<QIODevicePtr>(data.outgoingData)) {
+            closeDevice(std::get<QIODevicePtr>(data.outgoingData));
+        }
+
+        closeDevice(data.incomingData);
+
+        const Ret ret = retFromReply(data.reply);
+        Progress progress = data.progress;
+        m_requestDataMap.erase(it);
+        progress.finish(ret);
+    });
+
+    return RetVal<Progress>::make_ok(requestData.progress);
+}
+
+QNetworkRequest NetworkManager::prepareRequest(const QUrl& url, const RequestHeaders& headers) const
+{
+    QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, true);
+
+    RequestHeaders _headers = headers;
+    if (_headers.isEmpty()) {
+        _headers = configuration()->defaultHeaders();
+    }
+
+    for (auto it = _headers.knownHeaders.cbegin(); it != _headers.knownHeaders.cend(); ++it) {
+        request.setHeader(it.key(), it.value());
+    }
+
+    for (auto it = _headers.rawHeaders.cbegin(); it != _headers.rawHeaders.cend(); ++it) {
+        request.setRawHeader(it.key(), it.value());
+    }
+
+    return request;
+}
+
+QNetworkReply* NetworkManager::sendRequest(RequestType type, const QNetworkRequest& request, const OutgoingDeviceVar& device)
+{
+    switch (type) {
+    case GET_REQUEST: return m_manager->get(request);
+    case HEAD_REQUEST: return m_manager->head(request);
+    case DELETE_REQUEST: return m_manager->deleteResource(request);
+    case PUT_REQUEST: {
+        if (std::holds_alternative<QIODevicePtr>(device)) {
+            return m_manager->put(request, std::get<QIODevicePtr>(device).get());
+        } else if (std::holds_alternative<QHttpMultiPartPtr>(device)) {
+            return m_manager->put(request, std::get<QHttpMultiPartPtr>(device).get());
+        }
+        break;
+    }
+    case PATCH_REQUEST: {
+        if (std::holds_alternative<QIODevicePtr>(device)) {
+            return m_manager->sendCustomRequest(request, "PATCH", std::get<QIODevicePtr>(device).get());
+        } else if (std::holds_alternative<QHttpMultiPartPtr>(device)) {
+            return m_manager->sendCustomRequest(request, "PATCH", std::get<QHttpMultiPartPtr>(device).get());
+        }
+        break;
+    }
+    case POST_REQUEST: {
+        if (std::holds_alternative<QIODevicePtr>(device)) {
+            return m_manager->post(request, std::get<QIODevicePtr>(device).get());
+        } else if (std::holds_alternative<QHttpMultiPartPtr>(device)) {
+            return m_manager->post(request, std::get<QHttpMultiPartPtr>(device).get());
+        }
+        break;
+    }
+    }
+
+    UNREACHABLE;
+    return nullptr;
 }

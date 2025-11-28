@@ -26,6 +26,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/networkstubmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/networkmanagercreatorstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/networkmanagercreatorstub.h
+    ${CMAKE_CURRENT_LIST_DIR}/deprecated/networkmanagerstub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deprecated/networkmanagerstub.h
     ${CMAKE_CURRENT_LIST_DIR}/networkmanagerstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/networkmanagerstub.h
     ${CMAKE_CURRENT_LIST_DIR}/networkconfigurationstub.cpp

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,10 +22,16 @@
 #include "networkmanagercreator.h"
 
 #include "networkmanager.h"
+#include "deprecated/networkmanager.h"
 
 using namespace muse::network;
 
 INetworkManagerPtr NetworkManagerCreator::makeNetworkManager() const
 {
     return std::make_shared<NetworkManager>();
+}
+
+deprecated::INetworkManagerPtr NetworkManagerCreator::makeDeprecatedNetworkManager() const
+{
+    return std::make_shared<deprecated::NetworkManager>();
 }

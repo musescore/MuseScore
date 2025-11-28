@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_NETWORK_NETWORKTYPES_H
-#define MUSE_NETWORK_NETWORKTYPES_H
+
+#pragma once
 
 #include <QVariantMap>
 #include <QNetworkRequest>
@@ -40,9 +40,11 @@ struct RequestHeaders
     }
 };
 
+using QIODevicePtr = std::shared_ptr<QIODevice>;
 using IncomingDevice = QIODevice;
+using IncomingDevicePtr = QIODevicePtr;
 
-struct OutgoingDevice
+struct OutgoingDevice // deprecated
 {
     OutgoingDevice(QIODevice* device)
         : m_device(device), m_multiPart(nullptr) {}
@@ -63,6 +65,8 @@ private:
     QIODevice* m_device = nullptr;
     QHttpMultiPart* m_multiPart = nullptr;
 };
-}
 
-#endif // MUSE_NETWORK_NETWORKTYPES_H
+struct NoOutgoingDevice {};
+using QHttpMultiPartPtr = std::shared_ptr<QHttpMultiPart>;
+using OutgoingDeviceVar = std::variant<QIODevicePtr, QHttpMultiPartPtr, NoOutgoingDevice>;
+}
