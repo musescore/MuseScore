@@ -1665,7 +1665,6 @@ public:
 //   MeasureBase
 //    MeasureBase wrapper (Measures, frames)
 //---------------------------------------------------------
-
 class MeasureBase : public EngravingItem
 {
     Q_OBJECT
@@ -1719,7 +1718,8 @@ class MeasureBase : public EngravingItem
     /// \see \ref Score.firstMeasureMM
     /// \since MuseScore 3.6
     Q_PROPERTY(apiv1::Measure * nextMeasureMM READ nextMeasureMM)
-    /// Previous measure.
+
+    /// Previous measure
     Q_PROPERTY(apiv1::Measure * prevMeasure READ prevMeasure)
     /// Previous measure, accounting for multimeasure rests.
     /// See \ref nextMeasureMM for a reference on multimeasure rests.
@@ -1780,9 +1780,33 @@ public:
 //    Measure wrapper
 //---------------------------------------------------------
 
+/** APIDOC
+ * Class representing a measure.
+ * @class Measure
+ * @extends engraving.MeasureBase
+ * @memberof engraving
+ * @hideconstructor
+*/
 class Measure : public MeasureBase
 {
     Q_OBJECT
+
+    //! NOTE These are properties from MeasureBase, but we'll document them as if they were from Measure.
+
+    /** APIDOC
+     * Next measure, accounting for multimeasure rests.
+     * @readonly
+     * @q_property {engraving.Measure}
+     */
+    // Q_PROPERTY(apiv1::Measure * nextMeasureMM READ nextMeasureMM)
+
+    /** APIDOC
+     * Previous measure
+     * @readonly
+     * @q_property {engraving.Measure}
+     */
+    // Q_PROPERTY(apiv1::Measure * prevMeasure READ prevMeasure)
+
     /// The first segment of this measure
     Q_PROPERTY(apiv1::Segment * firstSegment READ firstSegment)
     /// The last segment of this measure

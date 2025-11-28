@@ -275,6 +275,22 @@ async function extractDoc(file)
                 continue;
             }
 
+            const declareMatch = state.currentDoc.match(/@declare\s+(\S+)/);
+            if (declareMatch) {
+                if (state.parentDoc !== "") {
+                    let doc = state.makeDoclet();
+                    state.doclets.push(doc);
+                    state.resetDoclet()
+                }  
+
+                const memberofMatch = state.currentDoc.match(/@memberof\s+(\S+)/);
+                if (memberofMatch) {
+                    state.parentName = memberofMatch[1]+"."+declareMatch[1];
+                } else {
+                    state.parentName = declareMatch[1];
+                }
+            }
+
             // try add memberof to method
             if (state.currentDoc.includes('@method')) {
                 state.currentDoc = state.currentDoc.replace('@method', `@memberof ${state.parentName}\n* @method`);
