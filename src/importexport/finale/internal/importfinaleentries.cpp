@@ -111,13 +111,13 @@ void FinaleParser::mapLayers()
     }
 }
 
-std::unordered_map<int, voice_idx_t> FinaleParser::mapFinaleVoices(const std::map<LayerIndex, bool>& finaleVoiceMap,
+std::unordered_map<int, voice_idx_t> FinaleParser::mapFinaleVoices(const std::map<LayerIndex, int>& finaleVoiceMap,
                                                                         musx::dom::StaffCmper curStaff, musx::dom::MeasCmper curMeas) const
 {
     using FinaleVoiceID = int;
     std::unordered_map<FinaleVoiceID, voice_idx_t> result;
     std::unordered_map<voice_idx_t, FinaleVoiceID> reverseMap;
-    for (const auto& [layerIndex, usesV2] : finaleVoiceMap) {
+    for (const auto& [layerIndex, voice2Count] : finaleVoiceMap) {
         const auto& it = m_layer2Voice.find(layerIndex);
         if (it != m_layer2Voice.end()) {
             auto [revIt, emplaced] = reverseMap.emplace(it->second, createFinaleVoiceId(layerIndex, false));
@@ -128,8 +128,8 @@ std::unordered_map<int, voice_idx_t> FinaleParser::mapFinaleVoices(const std::ma
         }
         logger()->logWarning(String(u"Layer %1 was not mapped to a voice").arg(int(layerIndex) + 1), m_doc, curStaff, curMeas);
     }
-    for (const auto& [layerIndex, usesV2] : finaleVoiceMap) {
-        if (usesV2) {
+    for (const auto& [layerIndex, voice2Count] : finaleVoiceMap) {
+        if (voice2Count != 0) {
             bool foundVoice = false;
             for (voice_idx_t v : {0, 1, 2, 3}) {
                 auto [revIt, emplaced] = reverseMap.emplace(v, createFinaleVoiceId(layerIndex, true));
@@ -1027,7 +1027,7 @@ void FinaleParser::importEntries()
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measureId);
                 break;
             }
-            details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxStaffId, measureId);
+            details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxStaffId, measureId, legacyPickupSpacer);
             bool processContext = bool(gfHold);
             if (processContext && gfHold.calcIsCuesOnly()) {
                 logger()->logWarning(String(u"Cue notes not yet supported"), m_doc, musxStaffId, measureId);
@@ -1037,12 +1037,12 @@ void FinaleParser::importEntries()
             // The code after the if statement must still be executed.
             if (processContext) {
                 // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
-                std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
+                std::map<LayerIndex, int> finaleLayers = gfHold.calcVoices();
                 std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxStaffId, measureId);
                 for (const auto& finaleLayer : finaleLayers) {
                     const LayerIndex layer = finaleLayer.first;
                     /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
-                    MusxInstance<EntryFrame> entryFrame = gfHold.createEntryFrame(layer, legacyPickupSpacer);
+                    MusxInstance<EntryFrame> entryFrame = gfHold.createEntryFrame(layer);
                     if (!entryFrame) {
                         logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxStaffId, measureId);
                         continue;
