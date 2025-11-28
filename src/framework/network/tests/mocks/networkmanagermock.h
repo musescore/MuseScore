@@ -24,9 +24,9 @@
 
 #include <gmock/gmock.h>
 
-#include "network/inetworkmanager.h"
+#include "network/deprecated/inetworkmanager.h"
 
-namespace muse::network {
+namespace muse::network::deprecated {
 class NetworkManagerMock : public INetworkManager
 {
 public:

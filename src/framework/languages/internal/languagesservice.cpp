@@ -377,7 +377,7 @@ void LanguagesService::th_update(const QString& languageCode, Progress progress)
 bool LanguagesService::canUpdate(const QString& languageCode)
 {
     QBuffer buff;
-    INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeDeprecatedNetworkManager();
 
     Ret ret = networkManagerPtr->get(configuration()->languagesUpdateUrl().toString(), &buff);
     if (!ret) {
@@ -413,7 +413,7 @@ Ret LanguagesService::downloadLanguage(const QString& languageCode, Progress pro
     progress.progress(0, 0, downloadingStatusTitle);
 
     QBuffer qbuff;
-    INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeDeprecatedNetworkManager();
 
     networkManagerPtr->progress().progressChanged().onReceive(
         this, [&progress, &downloadingStatusTitle](int64_t current, int64_t total, const std::string&) {

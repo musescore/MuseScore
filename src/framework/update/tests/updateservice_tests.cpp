@@ -57,8 +57,8 @@ public:
         m_networkManagerCreator = std::make_shared<NiceMock<muse::network::NetworkManagerCreatorMock> >();
         m_service->networkManagerCreator.set(m_networkManagerCreator);
 
-        m_networkManager = std::make_shared<muse::network::NetworkManagerMock>();
-        ON_CALL(*m_networkManagerCreator, makeNetworkManager())
+        m_networkManager = std::make_shared<muse::network::deprecated::NetworkManagerMock>();
+        ON_CALL(*m_networkManagerCreator, makeDeprecatedNetworkManager())
         .WillByDefault(Return(m_networkManager));
 
         m_systemInfoMock = std::make_shared<NiceMock<SystemInfoMock> >();
@@ -134,7 +134,7 @@ public:
     std::shared_ptr<UpdateConfigurationMock> m_configuration;
 
     std::shared_ptr<muse::network::NetworkManagerCreatorMock> m_networkManagerCreator;
-    std::shared_ptr<muse::network::NetworkManagerMock> m_networkManager;
+    std::shared_ptr<muse::network::deprecated::NetworkManagerMock> m_networkManager;
     std::shared_ptr<SystemInfoMock> m_systemInfoMock;
 };
 

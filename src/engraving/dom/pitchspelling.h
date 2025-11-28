@@ -104,6 +104,7 @@ extern int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseT
 extern int clampEnharmonic(int tpc, bool useDoubleSharpsFlats = true);
 extern int clampPitch(int pitch, bool octaved = false);
 extern Key clampKey(Key key, PreferSharpFlat prefer = PreferSharpFlat::NONE);
+extern int bestEnharmonicFit(const std::vector<int> tpcs, Key key);
 
 //---------------------------------------------------------
 //   tpc2alter

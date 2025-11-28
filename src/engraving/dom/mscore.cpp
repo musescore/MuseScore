@@ -63,6 +63,7 @@ bool MScore::svgPrinting = false;
 extern void initDrumset();
 
 MsError MScore::_error { MsError::MS_NO_ERROR };
+bool MScore::_errorIsWarning = false;
 
 void MScore::registerUiTypes()
 {
@@ -118,6 +119,7 @@ std::string MScore::errorToString(MsError err)
     case MsError::CANNOT_REMOVE_KEY_SIG: return "CANNOT_REMOVE_KEY_SIG";
     case MsError::CANNOT_JOIN_MEASURE_STAFFTYPE_CHANGE: return "CANNOT_JOIN_MEASURE_STAFFTYPE_CHANGE";
     case MsError::CANNOT_REPEAT_SELECTION: return "CANNOT_REPEAT_SELECTION";
+    case MsError::TRANSPOSE_NO_FRET_DIAGRAM: return "TRANSPOSE_NO_FRET_DIAGRAM";
     }
 
     return {};

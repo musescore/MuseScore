@@ -33,4 +33,7 @@ qt_add_qml_module(muse_learn_qml
         internal/PlaylistItem.qml
     RESOURCES
         resources/marc_sabatella.jpg
+    IMPORTS
+        TARGET muse_ui_qml
+        TARGET muse_uicomponents_qml
 )

@@ -17,16 +17,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-declare_module(inspector)
 
-set(MODULE_QRC ${CMAKE_CURRENT_LIST_DIR}/view/inspector_resources.qrc)
+muse_create_module(inspector STUB)
 
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/view/qml)
+target_sources(inspector PRIVATE
+    inspectorstubmodule.cpp
+    inspectorstubmodule.h
+)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/inspectorstubmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/inspectorstubmodule.h
-    )
-
-set(MODULE_IS_STUB ON)
-setup_module()
+add_subdirectory(qml/MuseScore/Inspector)

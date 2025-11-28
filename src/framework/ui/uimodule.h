@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UI_UIMODULE_H
-#define MUSE_UI_UIMODULE_H
+#pragma once
 
 #include "modularity/imodulesetup.h"
 #include <QtGlobal>
@@ -52,8 +51,6 @@ public:
     void registerExports() override;
     void resolveImports() override;
     void registerApi() override;
-    void registerResources() override;
-    void registerUiTypes() override;
     void onPreInit(const IApplication::RunMode& mode) override;
     void onInit(const IApplication::RunMode& mode) override;
     void onAllInited(const IApplication::RunMode& mode) override;
@@ -78,5 +75,3 @@ private:
     #endif
 };
 }
-
-#endif // MUSE_UI_UIMODULE_H

@@ -32,6 +32,8 @@
 #include "thirdparty/KDDockWidgets/src/private/quick/FrameQuick_p.h"
 #include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
 
+#include "ui/qml/Muse/Ui/navigationsection.h"
+
 namespace muse::dock {
 static QSize adjustSizeByConstraints(const QSize& size, const QSize& min, const QSize& max)
 {
@@ -594,7 +596,12 @@ void DockBase::resize(int width, int height)
     applySizeConstraints();
 }
 
-muse::ui::NavigationSection* DockBase::navigationSection() const
+muse::ui::INavigationSection* DockBase::navigationSection() const
+{
+    return m_navigationSection;
+}
+
+muse::ui::NavigationSection* DockBase::navigationSection_property() const
 {
     return m_navigationSection;
 }

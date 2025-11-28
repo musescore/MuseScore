@@ -158,24 +158,6 @@ void Marker::styleChanged()
 }
 
 //---------------------------------------------------------
-//   undoSetLabel
-//---------------------------------------------------------
-
-void Marker::undoSetLabel(const String& s)
-{
-    undoChangeProperty(Pid::LABEL, s);
-}
-
-//---------------------------------------------------------
-//   undoSetMarkerType
-//---------------------------------------------------------
-
-void Marker::undoSetMarkerType(const MarkerType t)
-{
-    undoChangeProperty(Pid::MARKER_TYPE, t);
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

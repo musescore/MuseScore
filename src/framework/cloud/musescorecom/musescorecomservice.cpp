@@ -132,7 +132,7 @@ Ret MuseScoreComService::downloadAccountInfo()
     }
 
     QBuffer receivedData;
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
     Ret ret = manager->get(userInfoUrl.val, &receivedData, headers());
 
     if (!ret) {
@@ -179,7 +179,7 @@ bool MuseScoreComService::doUpdateTokens()
     QBuffer receivedData;
     OutgoingDevice device(&multiPart);
 
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
     Ret ret = manager->post(serverConfig().refreshApiUrl, &device, &receivedData, headers());
 
     if (!ret) {
@@ -224,7 +224,7 @@ RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
     }
 
     QBuffer receivedData;
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
     Ret ret = manager->get(scoreInfoUrl.val, &receivedData, headers());
 
     if (!ret) {
@@ -273,7 +273,7 @@ async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int scoresPer
         }
 
         QBuffer receivedData;
-        INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+        deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
         Ret ret = manager->get(scoresListUrl.val, &receivedData, headers());
 
         if (!ret) {
@@ -329,7 +329,7 @@ ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
     manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
         progress->progress(current, total, message);
     });
@@ -348,7 +348,7 @@ ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData
     return progress;
 }
 
-Ret MuseScoreComService::doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
+Ret MuseScoreComService::doDownloadScore(network::deprecated::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
                                          const QString& hash, const QString& secret)
 {
     TRACEFUNC;
@@ -383,7 +383,7 @@ ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
     manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
         progress->progress(current, total, message);
     });
@@ -414,7 +414,7 @@ ProgressPtr MuseScoreComService::uploadAudio(QIODevice& audioData, const QString
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
     manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
         progress->progress(current, total, message);
     });
@@ -432,7 +432,7 @@ ProgressPtr MuseScoreComService::uploadAudio(QIODevice& audioData, const QString
     return progress;
 }
 
-RetVal<ValMap> MuseScoreComService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
+RetVal<ValMap> MuseScoreComService::doUploadScore(deprecated::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
                                                   Visibility visibility, const QUrl& sourceUrl, int revisionId)
 {
     TRACEFUNC;
@@ -549,7 +549,8 @@ RetVal<ValMap> MuseScoreComService::doUploadScore(INetworkManagerPtr uploadManag
     return result;
 }
 
-Ret MuseScoreComService::doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat,
+Ret MuseScoreComService::doUploadAudio(network::deprecated::INetworkManagerPtr uploadManager, QIODevice& audioData,
+                                       const QString& audioFormat,
                                        const QUrl& sourceUrl)
 {
     TRACEFUNC;

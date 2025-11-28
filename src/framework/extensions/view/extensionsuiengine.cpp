@@ -90,7 +90,7 @@ void ExtensionsUiEngine::setup()
     const std::vector<muse::api::IApiRegister::GlobalEnum>& globalEnums = apiRegister()->globalEnums();
     for (const muse::api::IApiRegister::GlobalEnum& e : globalEnums) {
         QJSValue enumObj = m_engine->newObject();
-        QString name = QString::fromLatin1(e.meta.enumName());
+        QString name = QString::fromStdString(e.name);
 
         for (int i = 0; i < e.meta.keyCount(); ++i) {
             QString key = QString::fromLatin1(e.meta.key(i));
@@ -100,13 +100,6 @@ void ExtensionsUiEngine::setup()
         QJSValue frozenObj = freezeFn.call({ enumObj });
         globalObject.setProperty(name, frozenObj);
     }
-
-    //! NOTE We prohibit importing default modules;
-    //! only what is in the `api` folder will be imported.
-    m_engine->addImportPath(":/api");
-
-    //! NOTE Temporarily for development
-    m_engine->addImportPath(":/qml");
 }
 
 QQmlEngine* ExtensionsUiEngine::engine()

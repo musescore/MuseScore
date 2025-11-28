@@ -166,6 +166,11 @@ void MScoreErrorsController::checkAndShowMScoreError()
         title = muse::trc("notation", "Can’t repeat this selection");
         message = muse::trc("notation", "Make a list selection of notes or rests on the same beat or any range selection and retry.");
         break;
+    case MsError::TRANSPOSE_NO_FRET_DIAGRAM:
+        title = muse::trc("notation", "Some fretboard diagrams could not be transposed");
+        message = muse::trc("notation",
+                            "Fretboard diagrams that could not be transposed have been left blank. You can undo this action if required.");
+        break;
     }
 
     interactive()->info(title, message, {}, 0,

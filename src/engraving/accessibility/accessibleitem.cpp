@@ -148,7 +148,7 @@ size_t AccessibleItem::accessibleChildCount() const
     return count;
 }
 
-const IAccessible* AccessibleItem::accessibleChild(size_t i) const
+IAccessible* AccessibleItem::accessibleChild(size_t i) const
 {
     TRACEFUNC;
 

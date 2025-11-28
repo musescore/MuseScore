@@ -1,0 +1,67 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2025 MuseScore Limited
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#pragma once
+
+#include <memory>
+
+#include <qqmlintegration.h>
+
+#include "notation/view/abstractelementpopupmodel.h"
+
+#include "text/textsettingsmodel.h"
+
+namespace mu::inspector {
+class ElementRepositoryService;
+
+class TextStylePopupModel : public notation::AbstractElementPopupModel
+{
+    Q_OBJECT
+    QML_ELEMENT
+
+    Q_PROPERTY(TextSettingsModel* textSettingsModel READ textSettingsModel CONSTANT)
+    Q_PROPERTY(bool placeAbove READ placeAbove NOTIFY placeAboveChanged)
+
+public:
+    explicit TextStylePopupModel(QObject* parent = nullptr);
+    ~TextStylePopupModel();
+
+    TextSettingsModel* textSettingsModel() const;
+
+    Q_INVOKABLE void init() override;
+
+    bool placeAbove() const;
+
+signals:
+    void placeAboveChanged();
+
+private:
+    void updateItemRect() override;
+    bool ignoreTextEditingChanges() const override { return false; }
+
+    TextSettingsModel* m_textSettingsModel = nullptr;
+
+    std::unique_ptr<ElementRepositoryService> m_elementRepositoryService;
+
+    bool m_placeAbove = true;
+};
+}

@@ -55,7 +55,7 @@ void Engraving_FretDiagramTests::testChordSymToFretDiagram(MasterScore* score)
         FretDiagram* diagram = Factory::createFretDiagram(score->dummy()->segment());
         EXPECT_TRUE(diagram);
         diagram->updateDiagram(harmony->harmonyName());
-        String pattern = FretDiagram::patternFromDiagram(diagram);
+        String pattern = diagram->patternFromDiagram();
         EXPECT_EQ(pattern, FRET_PATTERN_REF);
         measure = measure->nextMeasure();
         delete diagram;

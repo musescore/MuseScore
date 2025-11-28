@@ -38,53 +38,27 @@
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosplatformtheme.h"
 #include "internal/windowscontroller.h"
-#include "view/platform/macos/macosmainwindowbridge.h"
 #elif defined(Q_OS_WIN)
 #include "internal/platform/windows/windowsplatformtheme.h"
 #include "internal/platform/windows/winwindowscontroller.h"
-#include "view/mainwindowbridge.h"
 #elif defined(Q_OS_LINUX)
 #include "internal/platform/linux/linuxplatformtheme.h"
 #include "internal/windowscontroller.h"
-#include "view/mainwindowbridge.h"
 #else
 #include "internal/platform/stub/stubplatformtheme.h"
 #include "internal/windowscontroller.h"
-#include "view/mainwindowbridge.h"
 #endif
-
-#include "view/qmltooltip.h"
-#include "view/iconcodes.h"
-#include "view/musicalsymbolcodes.h"
-#include "view/navigationsection.h"
-#include "view/navigationpanel.h"
-#include "view/navigationpopuppanel.h"
-#include "view/navigationcontrol.h"
-#include "view/navigationevent.h"
-#include "view/qmlaccessible.h"
-#include "view/focuslistener.h"
-#include "view/qmldrag.h"
-#include "view/windowsmodel.h"
-
-#include "view/internal/errordetailsmodel.h"
-#include "view/internal/progressdialogmodel.h"
 
 #include "global/api/iapiregister.h"
 #include "api/navigationapi.h"
 #include "api/keyboardapi.h"
 
-#include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
 
 #include "log.h"
 
 using namespace muse::ui;
 using namespace muse::modularity;
-
-static void ui_init_qrc()
-{
-    Q_INIT_RESOURCE(ui);
-}
 
 std::string UiModule::moduleName() const
 {
@@ -134,10 +108,10 @@ void UiModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse/Ui/internal/StandardDialog.qml");
-        ir->registerQmlUri(Uri("muse://interactive/progress"), "Muse/Ui/internal/ProgressDialog.qml");
-        ir->registerQmlUri(Uri("muse://interactive/selectfile"), "Muse/Ui/internal/FileDialog.qml");
-        ir->registerQmlUri(Uri("muse://interactive/selectdir"), "Muse/Ui/internal/FolderDialog.qml");
+        ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse.Ui.Dialogs", "StandardDialog");
+        ir->registerQmlUri(Uri("muse://interactive/progress"), "Muse.Ui.Dialogs", "ProgressDialog");
+        ir->registerQmlUri(Uri("muse://interactive/selectfile"), "Muse.Ui.Dialogs", "FileDialog");
+        ir->registerQmlUri(Uri("muse://interactive/selectdir"), "Muse.Ui.Dialogs", "FolderDialog");
 
         ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
         ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "DevTools/Interactive/SampleDialog.qml");
@@ -153,51 +127,9 @@ void UiModule::registerApi()
         api->regApiCreator(moduleName(), "api.navigation", new ApiCreator<muse::api::NavigationApi>());
         api->regApiCreator(moduleName(), "api.keyboard", new ApiCreator<muse::api::KeyboardApi>());
         api->regApiSingltone(moduleName(), "api.theme", m_uiengine->theme());
+
+        qmlRegisterUncreatableType<IconCode>("MuseApi.Controls", 1, 0, "IconCode", "Cannot create an IconCode");
     }
-}
-
-void UiModule::registerResources()
-{
-    ui_init_qrc();
-}
-
-void UiModule::registerUiTypes()
-{
-    qmlRegisterUncreatableType<UiEngine>("Muse.Ui", 1, 0, "UiEngine", "Cannot create an UiEngine");
-    qmlRegisterUncreatableType<api::ThemeApi>("Muse.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
-    qmlRegisterUncreatableType<QmlToolTip>("Muse.Ui", 1, 0, "QmlToolTip", "Cannot create a QmlToolTip");
-    qmlRegisterUncreatableType<IconCode>("Muse.Ui", 1, 0, "IconCode", "Cannot create an IconCode");
-    qmlRegisterUncreatableType<MusicalSymbolCodes>("Muse.Ui", 1, 0, "MusicalSymbolCodes",
-                                                   "Cannot create an MusicalSymbolCodes");
-    qmlRegisterUncreatableType<InteractiveProvider>("Muse.Ui", 1, 0, "QmlInteractiveProvider", "Cannot create");
-    qmlRegisterUncreatableType<ContainerType>("Muse.Ui", 1, 0, "ContainerType", "Cannot create a ContainerType");
-
-    qmlRegisterUncreatableType<NavigationEvent>("Muse.Ui", 1, 0, "NavigationEvent", "Cannot create a KeyNavigationEvent");
-    qmlRegisterType<QmlDataFormatter>("Muse.Ui", 1, 0, "DataFormatter");
-    qmlRegisterType<NavigationSection>("Muse.Ui", 1, 0, "NavigationSection");
-    qmlRegisterType<NavigationPanel>("Muse.Ui", 1, 0, "NavigationPanel");
-    qmlRegisterType<NavigationPopupPanel>("Muse.Ui", 1, 0, "NavigationPopupPanel");
-    qmlRegisterType<NavigationControl>("Muse.Ui", 1, 0, "NavigationControl");
-    qmlRegisterType<AccessibleItem>("Muse.Ui", 1, 0, "AccessibleItem");
-    qmlRegisterUncreatableType<MUAccessible>("Muse.Ui", 1, 0, "MUAccessible", "Cannot create a enum type");
-    qmlRegisterType<QmlDrag>("Muse.Ui", 1, 0, "CppDrag");
-
-    qmlRegisterType<FocusListener>("Muse.Ui", 1, 0, "FocusListener");
-
-    qmlRegisterType<WindowsModel>("Muse.Ui", 1, 0, "WindowsModel");
-
-#ifdef Q_OS_MAC
-    qmlRegisterType<MacOSMainWindowBridge>("Muse.Ui", 1, 0, "MainWindowBridge");
-#else
-    qmlRegisterType<MainWindowBridge>("Muse.Ui", 1, 0, "MainWindowBridge");
-#endif
-
-    qmlRegisterType<ErrorDetailsModel>("Muse.Ui", 1, 0, "ErrorDetailsModel");
-    qmlRegisterType<ProgressDialogModel>("Muse.Ui", 1, 0, "ProgressDialogModel");
-
-    qmlRegisterType<InteractiveTestsModel>("Muse.Ui", 1, 0, "InteractiveTestsModel");
-
-    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(muse_ui_QML_IMPORT);
 }
 
 void UiModule::onPreInit(const IApplication::RunMode& mode)

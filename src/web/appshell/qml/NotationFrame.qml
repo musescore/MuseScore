@@ -29,7 +29,7 @@ import Muse.UiComponents
 import MuseScore.NotationScene 1.0
 import MuseScore.Palette 1.0
 import MuseScore.InstrumentsScene 1.0
-import MuseScore.Inspector 1.0
+import MuseScore.Inspector
 
 Item {
 

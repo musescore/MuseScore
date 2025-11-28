@@ -222,7 +222,6 @@ public:
     using EngravingItem::setColor;
     Color color(const Fraction&) const;
     void setColor(const Fraction&, const Color& val);
-    void undoSetColor(const Color& val);
     void insertTime(const Fraction&, const Fraction& len);
 
     PropertyValue getProperty(Pid) const override;

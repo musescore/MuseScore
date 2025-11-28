@@ -165,6 +165,7 @@ enum class MsError : unsigned char {
     CANNOT_REMOVE_KEY_SIG,
     CANNOT_JOIN_MEASURE_STAFFTYPE_CHANGE,
     CANNOT_REPEAT_SELECTION,
+    TRANSPOSE_NO_FRET_DIAGRAM,
 };
 
 /// \cond PLUGIN_API \private \endcond
@@ -187,6 +188,7 @@ class MScore
 public:
 
     static MsError _error;
+    static bool _errorIsWarning;
 
     static void registerUiTypes();
 
@@ -230,7 +232,7 @@ public:
     static double horizontalPageGapEven;
     static double horizontalPageGapOdd;
 
-    static void setError(MsError e) { _error = e; }
+    static void setError(MsError e, bool warning = false) { _error = e; _errorIsWarning = warning; }
 
     static std::string errorToString(MsError err);
 };

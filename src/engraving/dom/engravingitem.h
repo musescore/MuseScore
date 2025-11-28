@@ -358,7 +358,6 @@ public:
     Color curColor(bool isVisible, const rendering::PaintOptions& opt) const;
     Color curColor(bool isVisible, Color normalColor, const rendering::PaintOptions& opt) const;
 
-    void undoSetColor(const Color& c);
     void undoSetVisible(bool v);
     void undoAddElement(EngravingItem* element, bool addToLinkedStaves = true);
 

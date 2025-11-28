@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <Score>
+    <eid>2kOmbTnFT2K_1Ffu11EvJBD</eid>
+    <Division>480</Division>
+    <Style>
+      <spatium>1.75</spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="subtitle">Subtitle</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestra">
+      <name>Orchestra</name>
+      <instrument id="flute">
+        <family id="flutes">Flutes</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        <unsorted group="brass"/>
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion"/>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        <unsorted group="unpitched-percussion"/>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <unsorted/>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      </Order>
+    <Part id="1">
+      <Staff>
+        <eid>xVSmWcXHRCO_x7nzdLq+W7E</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Flute</trackName>
+      <Instrument id="flute">
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Channel>
+          <program value="73"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>IbIByf9V45G_n1FatmQDVWL</eid>
+        <voice>
+          <KeySig>
+            <eid>EXMLx/3R3qJ_c7cWKj13N+H</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>J0Rmy10EtIN_1Pc/Cz+r81</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <FretDiagram>
+            <eid>R0u21zOyPpB_0EP+/0xPk1G</eid>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="3">
+                <marker>circle</marker>
+                </string>
+              <string no="4">
+                <dot fret="1">normal</dot>
+                </string>
+              <string no="5">
+                <marker>circle</marker>
+                </string>
+              </fretDiagram>
+            </FretDiagram>
+          <Chord>
+            <eid>HzvSPszx2NI_lxchTRPN6iO</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>9v0GXubQFuD_28VjANAW6QP</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <location>
+            <fractions>-1/4</fractions>
+            </location>
+          <FretDiagram>
+            <eid>OFE3RL+QFb_JM52a+emRcF</eid>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <marker>cross</marker>
+                </string>
+              <string no="2">
+                <marker>circle</marker>
+                </string>
+              <string no="3">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="4">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="5">
+                <dot fret="2">normal</dot>
+                </string>
+              </fretDiagram>
+            </FretDiagram>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <FretDiagram>
+            <eid>Dy2Y5gbCKWJ_WaQEnsLiXGC</eid>
+            <fretDiagram>
+              <string no="0">
+                <marker>circle</marker>
+                </string>
+              <string no="1">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="1">normal</dot>
+                </string>
+              <string no="4">
+                <marker>circle</marker>
+                </string>
+              <string no="5">
+                <marker>circle</marker>
+                </string>
+              </fretDiagram>
+            </FretDiagram>
+          <Chord>
+            <eid>lNT7H0p9/lF_SLiwqKlD1UD</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>9i1YoWhQ61M_QDmwLNAB6eJ</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <location>
+            <fractions>-1/4</fractions>
+            </location>
+          <FretDiagram>
+            <eid>RUhArZbVQ2I_EBobFVVqu7K</eid>
+            <fretDiagram>
+              <string no="1">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="2">normal</dot>
+                </string>
+              <barre start="0" end="5">1</barre>
+              </fretDiagram>
+            </FretDiagram>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>ZuKAVzo7TK_s158BJvRsNN</eid>
+        <voice>
+          <FretDiagram>
+            <eid>kzgHUWGvXwC_+rObEvI4GlP</eid>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="3">
+                <marker>circle</marker>
+                </string>
+              <string no="4">
+                <dot fret="1">normal</dot>
+                </string>
+              <string no="5">
+                <marker>circle</marker>
+                </string>
+              </fretDiagram>
+            </FretDiagram>
+          <Chord>
+            <eid>/Sa4VlGGHaH_eEnHBeShepD</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>3Hmm8a/YfmO_gfnHMV576XE</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <location>
+            <fractions>-1/4</fractions>
+            </location>
+          <FretDiagram>
+            <eid>TpkrtNUCNJG_Q9OsSNc1HbI</eid>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <marker>cross</marker>
+                </string>
+              <string no="2">
+                <marker>circle</marker>
+                </string>
+              <string no="3">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="4">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="5">
+                <dot fret="2">normal</dot>
+                </string>
+              </fretDiagram>
+            </FretDiagram>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <FretDiagram>
+            <fretOffset>3</fretOffset>
+            <eid>VHDCXjTjSiH_r25IkqW4hWO</eid>
+            <fretDiagram>
+              <string no="1">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="2">normal</dot>
+                </string>
+              <barre start="0" end="-1">1</barre>
+              </fretDiagram>
+            </FretDiagram>
+          <Chord>
+            <eid>weLPdp/TOPE_HveOwApPWWC</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>fHTzGDb6kWP_AT+2b8DnxsG</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <location>
+            <fractions>-1/4</fractions>
+            </location>
+          <FretDiagram>
+            <eid>CokpN1M4pqC_loY45KU7o8E</eid>
+            <fretDiagram>
+              <string no="1">
+                <dot fret="4">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="4">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="3">normal</dot>
+                </string>
+              <barre start="0" end="5">2</barre>
+              </fretDiagram>
+            </FretDiagram>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
