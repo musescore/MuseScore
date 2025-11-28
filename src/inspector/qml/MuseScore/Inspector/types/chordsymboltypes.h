@@ -22,14 +22,32 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+namespace ChordSymbolTypes {
+Q_NAMESPACE;
+QML_ELEMENT;
 
-    std::string moduleName() const override;
+enum class VoicingType {
+    VOICING_INVALID = -1,
+    VOICING_AUTO,
+    VOICING_ROOT_ONLY,
+    VOICING_CLOSE,
+    VOICING_DROP_TWO,
+    VOICING_SIX_NOTE,
+    VOICING_FOUR_NOTE,
+    VOICING_THREE_NOTE
 };
+Q_ENUM_NS(VoicingType)
+
+enum class DurationType {
+    DURATION_INVALID = -1,
+    DURATION_UNTIL_NEXT_CHORD_SYMBOL,
+    DURATION_STOP_AT_MEASURE_END,
+    DURATION_SEGMENT_DURATION
+};
+
+Q_ENUM_NS(DurationType)
+}
 }

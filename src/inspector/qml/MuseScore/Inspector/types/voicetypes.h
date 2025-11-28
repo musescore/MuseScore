@@ -22,14 +22,19 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+namespace VoiceTypes {
+Q_NAMESPACE;
+QML_ELEMENT;
 
-    std::string moduleName() const override;
+enum class VoiceAssignment {
+    VOICE_ALL_IN_INSTRUMENT,
+    VOICE_ALL_IN_STAFF,
+    VOICE_CURRENT_ONLY,
 };
+
+Q_ENUM_NS(VoiceAssignment)
+}
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,14 +22,18 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
+
+#include "abstractinspectorproxymodel.h"
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
+class FretFrameSettingsProxyModel : public AbstractInspectorProxyModel
 {
-public:
-    InspectorModule() = default;
+    Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable from QML")
 
-    std::string moduleName() const override;
+public:
+    explicit FretFrameSettingsProxyModel(QObject* parent, IElementRepositoryService* repository);
 };
 }

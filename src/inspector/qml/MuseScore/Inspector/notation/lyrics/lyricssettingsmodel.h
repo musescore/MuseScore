@@ -19,17 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
+
+#include "abstractinspectormodel.h"
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
+class LyricsSettingsModel : public AbstractInspectorModel
 {
-public:
-    InspectorModule() = default;
+    Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable from QML")
 
-    std::string moduleName() const override;
+    Q_PROPERTY(PropertyItem * verse READ verse CONSTANT)
+    Q_PROPERTY(PropertyItem * avoidBarlines READ avoidBarlines CONSTANT)
+public:
+    explicit LyricsSettingsModel(QObject* parent, IElementRepositoryService* repository);
+
+    void createProperties() override;
+    void requestElements() override;
+    void loadProperties() override;
+    void resetProperties() override;
+
+    PropertyItem* verse() const;
+    PropertyItem* avoidBarlines() const;
+
+private:
+    PropertyItem* m_verse = nullptr;
+    PropertyItem* m_avoidBarlines = nullptr;
 };
 }

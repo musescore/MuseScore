@@ -19,17 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
+
+#include "abstractinspectormodel.h"
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
+class TempoSettingsModel : public AbstractInspectorModel
 {
-public:
-    InspectorModule() = default;
+    Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable from QML")
 
-    std::string moduleName() const override;
+    Q_PROPERTY(PropertyItem * followText READ isFollowText CONSTANT)
+    Q_PROPERTY(PropertyItem * tempo READ tempo CONSTANT)
+
+public:
+    explicit TempoSettingsModel(QObject* parent, IElementRepositoryService* repository, InspectorModelType modelType);
+
+    void createProperties() override;
+    void requestElements() override;
+    void loadProperties() override;
+    void resetProperties() override;
+
+    PropertyItem* isFollowText() const;
+    PropertyItem* tempo() const;
+
+private:
+    PropertyItem* m_isFollowText = nullptr;
+    PropertyItem* m_tempo = nullptr;
 };
 }

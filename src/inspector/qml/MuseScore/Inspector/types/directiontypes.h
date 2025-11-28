@@ -22,14 +22,32 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+namespace DirectionTypes {
+Q_NAMESPACE;
+QML_ELEMENT;
 
-    std::string moduleName() const override;
+enum VerticalDirection {
+    VERTICAL_AUTO,
+    VERTICAL_UP,
+    VERTICAL_DOWN
 };
+Q_ENUM_NS(VerticalDirection)
+
+enum HorizontalDirection {
+    HORIZONTAL_AUTO,
+    HORIZONTAL_LEFT,
+    HORIZONTAL_RIGHT
+};
+Q_ENUM_NS(HorizontalDirection)
+
+enum CenterBetweenStaves {
+    CENTER_STAVES_AUTO,
+    CENTER_STAVES_ON,
+    CENTER_STAVES_OFF
+};
+Q_ENUM_NS(CenterBetweenStaves)
+}
 }

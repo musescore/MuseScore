@@ -19,17 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
+
+#include "abstractinspectormodel.h"
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
+class StringTuningsSettingsModel : public AbstractInspectorModel
 {
-public:
-    InspectorModule() = default;
+    Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable from QML")
 
-    std::string moduleName() const override;
+public:
+    explicit StringTuningsSettingsModel(QObject* parent, IElementRepositoryService* repository);
+
+    Q_INVOKABLE void editStrings();
+
+private:
+    void createProperties() override { }
+    void loadProperties() override { }
+    void resetProperties() override { }
+    void requestElements() override { }
+
+    bool isEmpty() const override;
 };
 }

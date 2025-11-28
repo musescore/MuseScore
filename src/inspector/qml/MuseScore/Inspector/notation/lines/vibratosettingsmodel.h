@@ -19,17 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
+
+#include "abstractinspectormodel.h"
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
+class VibratoSettingsModel : public AbstractInspectorModel
 {
-public:
-    InspectorModule() = default;
+    Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable from QML")
 
-    std::string moduleName() const override;
+    Q_PROPERTY(PropertyItem * lineType READ lineType CONSTANT)
+    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
+
+public:
+    explicit VibratoSettingsModel(QObject* parent, IElementRepositoryService* repository);
+
+    PropertyItem* lineType() const;
+    PropertyItem* placement() const;
+
+    Q_INVOKABLE QVariantList possibleLineTypes() const;
+
+private:
+    void createProperties() override;
+    void loadProperties() override;
+    void resetProperties() override;
+
+    PropertyItem* m_lineType = nullptr;
+    PropertyItem* m_placement = nullptr;
 };
 }

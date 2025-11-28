@@ -22,14 +22,27 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+namespace KeySignatureTypes {
+Q_NAMESPACE;
+QML_ELEMENT;
 
-    std::string moduleName() const override;
+enum class Mode {
+    MODE_UNKNOWN = -1,
+    MODE_NONE,
+    MODE_MAJOR,
+    MODE_MINOR,
+    MODE_DORIAN,
+    MODE_PHRYGIAN,
+    MODE_LYDIAN,
+    MODE_MIXOLYDIAN,
+    MODE_AEOLIAN,
+    MODE_IONIAN,
+    MODE_LOCRIAN
 };
+
+Q_ENUM_NS(Mode)
+}
 }

@@ -22,14 +22,25 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+namespace DynamicTypes {
+Q_NAMESPACE;
+QML_NAMED_ELEMENT(Dynamic);
 
-    std::string moduleName() const override;
+enum class Scope {
+    SCOPE_STAFF = 0,
+    SCOPE_SINGLE_INSTRUMENT,
+    SCOPE_ALL_INSTRUMENTS
 };
+Q_ENUM_NS(Scope)
+
+enum class VelocityChangeSpeed {
+    VELOCITY_CHANGE_SPEED_SLOW = 0,
+    VELOCITY_CHANGE_SPEED_NORMAL,
+    VELOCITY_CHANGE_SPEED_FAST
+};
+Q_ENUM_NS(VelocityChangeSpeed)
+}
 }

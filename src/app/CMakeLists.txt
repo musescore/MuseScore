@@ -132,6 +132,7 @@ set(LINK_LIB
     commonscene
     palette
     inspector
+    inspector_qml
     playback
     instrumentsscene
     musesounds

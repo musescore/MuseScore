@@ -22,14 +22,21 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+namespace HairpinTypes {
+Q_NAMESPACE;
+QML_NAMED_ELEMENT(Hairpin);
 
-    std::string moduleName() const override;
+enum class VelocityEasing {
+    VELOCITY_EASING_LINEAR = 0,
+    VELOCITY_EASING_EXPONENTIAL,
+    VELOCITY_EASING_IN,
+    VELOCITY_EASING_OUT,
+    VELOCITY_EASING_IN_OUT
 };
+
+Q_ENUM_NS(VelocityEasing)
+}
 }

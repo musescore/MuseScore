@@ -21,7 +21,7 @@
  */
 #include "elementrepositoryservice.h"
 
-#include "types/texttypes.h"
+#include "qml/MuseScore/Inspector/types/texttypes.h"
 
 #include "engraving/dom/barline.h"
 #include "engraving/dom/beam.h"

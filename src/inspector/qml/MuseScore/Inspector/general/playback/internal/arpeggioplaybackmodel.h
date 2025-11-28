@@ -19,17 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
+
+#include "abstractinspectormodel.h"
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
+class ArpeggioPlaybackModel : public AbstractInspectorModel
 {
-public:
-    InspectorModule() = default;
+    Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable from QML")
 
-    std::string moduleName() const override;
+    Q_PROPERTY(PropertyItem * stretch READ stretch CONSTANT)
+public:
+    explicit ArpeggioPlaybackModel(QObject* parent, IElementRepositoryService* repository);
+
+    PropertyItem* stretch() const;
+
+protected:
+    void createProperties() override;
+    void requestElements() override;
+    void loadProperties() override;
+    void resetProperties() override;
+
+private:
+    PropertyItem* m_stretch = nullptr;
 };
 }

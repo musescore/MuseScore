@@ -19,17 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
+
+#include "abstractinspectormodel.h"
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
+class KeySignatureSettingsModel : public AbstractInspectorModel
 {
-public:
-    InspectorModule() = default;
+    Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable from QML")
 
-    std::string moduleName() const override;
+    Q_PROPERTY(PropertyItem * hasToShowCourtesy READ hasToShowCourtesy CONSTANT)
+    Q_PROPERTY(PropertyItem * mode READ mode CONSTANT)
+public:
+    explicit KeySignatureSettingsModel(QObject* parent, IElementRepositoryService* repository);
+
+    void createProperties() override;
+    void requestElements() override;
+    void loadProperties() override;
+    void resetProperties() override;
+
+    PropertyItem* hasToShowCourtesy() const;
+    PropertyItem* mode() const;
+
+private:
+    PropertyItem* m_hasToShowCourtesy = nullptr;
+    PropertyItem* m_mode = nullptr;
 };
 }

@@ -22,14 +22,25 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+namespace ArticulationTypes {
+Q_NAMESPACE;
+QML_ELEMENT;
 
-    std::string moduleName() const override;
+enum class Placement {
+    TYPE_TOP,
+    TYPE_BOTTOM,
+    TYPE_AUTO
 };
+
+enum class Style {
+    STYLE_STANDART = 0,
+    STYLE_BAROQUE
+};
+
+Q_ENUM_NS(Placement)
+Q_ENUM_NS(Style)
+}
 }

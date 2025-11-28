@@ -22,14 +22,18 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+namespace TremoloTypes {
+Q_NAMESPACE;
+QML_ELEMENT;
 
-    std::string moduleName() const override;
+enum class TremoloStyle {
+    STYLE_DEFAULT,
+    STYLE_TRADITIONAL,
+    STYLE_TRADITIONAL_ALTERNATE
 };
+Q_ENUM_NS(TremoloStyle)
+}
 }

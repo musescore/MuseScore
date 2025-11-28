@@ -19,17 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick 2.15
 
-#pragma once
+import Muse.Ui 1.0
+import Muse.UiComponents
+import MuseScore.Inspector
 
-#include "modularity/imodulesetup.h"
+import "../../common"
+import "internal"
 
-namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+Item {
+    id: root
 
-    std::string moduleName() const override;
-};
+    property QtObject proxyModel: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
+
+    implicitHeight: contentColumn.height
+    width: parent.width
+
+    Column {
+        id: contentColumn
+
+        width: parent.width
+
+        spacing: 12
+
+        DynamicsExpandableBlank {
+            id: dynamicSection
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowStart
+
+            model: proxyModel ? proxyModel.modelByType(AbstractInspectorModel.TYPE_DYNAMIC) : null
+        }
+    }
 }

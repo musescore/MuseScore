@@ -19,17 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+namespace SlurTieTypes {
+Q_NAMESPACE;
+QML_ELEMENT;
 
-    std::string moduleName() const override;
+enum TiePlacement {
+    TIE_PLACEMENT_AUTO,
+    TIE_PLACEMENT_INSIDE,
+    TIE_PLACEMENT_OUTSIDE,
 };
+
+Q_ENUM_NS(TiePlacement)
+}
 }

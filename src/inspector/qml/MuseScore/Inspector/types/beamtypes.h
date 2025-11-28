@@ -22,14 +22,31 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+namespace BeamTypes {
+Q_NAMESPACE;
+QML_NAMED_ELEMENT(Beam);
 
-    std::string moduleName() const override;
+enum class Mode {
+    MODE_INVALID = -1,
+    MODE_AUTO,
+    MODE_NONE,
+    MODE_BEGIN,
+    MODE_BEGIN32,
+    MODE_BEGIN64,
+    MODE_MID,
+    MODE_END
 };
+Q_ENUM_NS(Mode)
+
+enum class FeatheringMode {
+    FEATHERING_NONE = 0,
+    FEATHERED_DECELERATE,
+    FEATHERED_ACCELERATE
+};
+
+Q_ENUM_NS(FeatheringMode)
+}
 }

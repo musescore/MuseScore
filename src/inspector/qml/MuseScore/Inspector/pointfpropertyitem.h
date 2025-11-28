@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2022 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,14 +22,29 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
+
+#include "propertyitem.h"
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
+class PointFPropertyItem : public PropertyItem
 {
-public:
-    InspectorModule() = default;
+    Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable from QML")
 
-    std::string moduleName() const override;
+    Q_PROPERTY(qreal x READ x_property WRITE setX NOTIFY valueChanged)
+    Q_PROPERTY(qreal y READ y_property WRITE setY NOTIFY valueChanged)
+
+public:
+    explicit PointFPropertyItem(const mu::engraving::Pid propertyId, QObject* parent = nullptr);
+
+    qreal x_property() const;
+    qreal x() const;
+    void setX(qreal newX);
+
+    qreal y_property() const;
+    qreal y() const;
+    void setY(qreal newY);
 };
 }

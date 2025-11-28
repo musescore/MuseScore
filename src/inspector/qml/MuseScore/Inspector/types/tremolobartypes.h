@@ -22,14 +22,24 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+namespace TremoloBarTypes {
+Q_NAMESPACE;
+QML_ELEMENT;
 
-    std::string moduleName() const override;
+//! NOTE: must be in synch with mu::engraving::TremoloBarType
+enum class TremoloBarType {
+    TYPE_DIP = 0,
+    TYPE_DIVE,
+    TYPE_RELEASE_UP,
+    TYPE_INVERTED_DIP,
+    TYPE_RETURN,
+    TYPE_RELEASE_DOWN,
+    TYPE_CUSTOM
 };
+
+Q_ENUM_NS(TremoloBarType)
+}
 }

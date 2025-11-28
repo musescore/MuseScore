@@ -22,14 +22,12 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include "abstractinspectormodel.h"
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
+class InspectorModelCreator
 {
 public:
-    InspectorModule() = default;
-
-    std::string moduleName() const override;
+    static AbstractInspectorModel* newInspectorModel(InspectorModelType modelType, QObject* parent, IElementRepositoryService* repository);
 };
 }

@@ -22,14 +22,22 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+namespace GlissandoTypes {
+Q_NAMESPACE;
+QML_NAMED_ELEMENT(Glissando);
 
-    std::string moduleName() const override;
+//! NOTE: must be in sync with mu::engraving::GlissandoStyle
+enum class Style {
+    STYLE_CHROMATIC = 0,
+    STYLE_WHITE_KEYS,
+    STYLE_BLACK_KEYS,
+    STYLE_DIATONIC,
+    STYLE_PORTAMENTO
 };
+
+Q_ENUM_NS(Style)
+}
 }

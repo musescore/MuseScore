@@ -22,14 +22,34 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
+
+#include "abstractinspectormodel.h"
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
+class BeamModesModel : public AbstractInspectorModel
 {
-public:
-    InspectorModule() = default;
+    Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable from QML")
 
-    std::string moduleName() const override;
+    Q_PROPERTY(PropertyItem * mode READ mode CONSTANT)
+    Q_PROPERTY(PropertyItem * isFeatheringAvailable READ isFeatheringAvailable CONSTANT)
+
+public:
+    explicit BeamModesModel(QObject* parent, IElementRepositoryService* repository);
+
+    PropertyItem* mode() const;
+    PropertyItem* isFeatheringAvailable() const;
+
+public slots:
+    void createProperties() override;
+    void requestElements() override;
+    void loadProperties() override;
+    void resetProperties() override;
+
+private:
+    PropertyItem* m_mode = nullptr;
+    PropertyItem* m_isFeatheringAvailable = nullptr;
 };
 }

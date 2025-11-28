@@ -22,14 +22,19 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
-{
-public:
-    InspectorModule() = default;
+namespace LineTypes {
+Q_NAMESPACE;
+QML_ELEMENT;
 
-    std::string moduleName() const override;
+enum class LineStyle {
+    LINE_STYLE_SOLID,
+    LINE_STYLE_DASHED,
+    LINE_STYLE_DOTTED
 };
+
+Q_ENUM_NS(LineStyle)
+}
 }

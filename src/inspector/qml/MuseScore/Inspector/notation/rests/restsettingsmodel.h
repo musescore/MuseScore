@@ -22,14 +22,31 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <qqmlintegration.h>
+
+#include "abstractinspectormodel.h"
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
+class RestSettingsModel : public AbstractInspectorModel
 {
-public:
-    InspectorModule() = default;
+    Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable from QML")
 
-    std::string moduleName() const override;
+    Q_PROPERTY(PropertyItem * alignWithOtherRests READ alignWithOtherRests CONSTANT)
+
+public:
+    explicit RestSettingsModel(QObject* parent, IElementRepositoryService* repository);
+
+    PropertyItem* alignWithOtherRests() const;
+
+private:
+    void createProperties() override;
+    void requestElements() override;
+    void loadProperties() override;
+    void resetProperties() override;
+
+private:
+    PropertyItem* m_alignWithOtherRests = nullptr;
 };
-}
+} // namespace mu::inspector

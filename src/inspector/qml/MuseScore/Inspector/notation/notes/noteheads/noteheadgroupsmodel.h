@@ -19,17 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include <QObject>
+#include <QAbstractListModel>
+#include <qqmlintegration.h>
+
+#include "modularity/ioc.h"
+#include "engraving/iengravingfontsprovider.h"
 
 namespace mu::inspector {
-class InspectorModule : public muse::modularity::IModuleSetup
+class NoteheadGroupsModel : public QAbstractListModel
 {
-public:
-    InspectorModule() = default;
+    Q_OBJECT
+    QML_ELEMENT
 
-    std::string moduleName() const override;
+    INJECT(engraving::IEngravingFontsProvider, engravingFonts)
+public:
+    explicit NoteheadGroupsModel(QObject* parent = nullptr);
+
+    QHash<int, QByteArray> roleNames() const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    QVariant data(const QModelIndex& index, int role) const;
+
+private:
+    enum RoleNames {
+        HeadGroupRole = Qt::UserRole + 1,
+        HintRole,
+        IconCodeRole
+    };
 };
 }
