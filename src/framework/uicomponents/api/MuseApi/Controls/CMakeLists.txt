@@ -28,8 +28,6 @@ set(UICOMPONENTS_QML_DIR ${CMAKE_CURRENT_LIST_DIR}/../../../qml/Muse/UiComponent
 # we need to consider adding the old version to this module for backward compatibility.
 
 set(UICOMPONENTS_FILES
-    ${UICOMPONENTS_QML_DIR}/FlatButton.qml
-
     ${UICOMPONENTS_QML_DIR}/Border.qml
     ${UICOMPONENTS_QML_DIR}/ButtonBox.qml
     ${UICOMPONENTS_QML_DIR}/CheckBox.qml
