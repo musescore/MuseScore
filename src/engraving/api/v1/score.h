@@ -61,55 +61,146 @@ extern Selection* selectionWrap(mu::engraving::Selection* select);
 //---------------------------------------------------------
 //   Score
 //---------------------------------------------------------
-
+/** APIDOC
+ * @declare engraving.Score
+*/
 class Score : public apiv1::ScoreElement, public muse::Injectable
 {
     Q_OBJECT
 
-    /// Composer of the score, as taken from the score properties (read only).\n \since MuseScore 3.2
+    /** APIDOC
+     * Composer of the score, as taken from the score properties
+     * @readonly
+     * @q_property {String}
+     */
     Q_PROPERTY(QString composer READ composer)
-    /// Duration of score in seconds (read only).\n \since MuseScore 3.2
+
+    /** APIDOC
+     * Duration of score in seconds
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(int duration READ duration)
-    /// List of the excerpts (linked parts) (read only)
+
+    /** APIDOC
+     * List of the excerpts (linked parts)
+     * @readonly
+     * @q_property {engraving.Excerpt[]}
+     */
     Q_PROPERTY(QQmlListProperty<apiv1::Excerpt> excerpts READ excerpts)
-    /// First measure of the score (read only)
+
+    /** APIDOC
+     * First measure of the score
+     * @readonly
+     * @q_property {engraving.Measure}
+     */
     Q_PROPERTY(apiv1::Measure * firstMeasure READ firstMeasure)
-    /// First multimeasure rest measure of the score (read only).
-    /// \see \ref Measure.nextMeasureMM
-    /// \since MuseScore 3.2
+
+    /** APIDOC
+     * First multimeasure rest measure of the score
+     * @readonly
+     * @q_property {engraving.Measure}
+     * @see engraving.MeasureBase.nextMeasureMM
+     */
     Q_PROPERTY(apiv1::Measure * firstMeasureMM READ firstMeasureMM)
-    /// Number of harmony items (chord symbols) in the score (read only).\n \since MuseScore 3.2
+
+    /** APIDOC
+     * Number of harmony items (chord symbols) in the score
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(int harmonyCount READ harmonyCount)
-    /// Whether score has harmonies (chord symbols) (read only).\n \since MuseScore 3.2
+
+    /** APIDOC
+     * Whether score has harmonies (chord symbols)
+     * @readonly
+     * @q_property {Boolean}
+     */
     Q_PROPERTY(bool hasHarmonies READ hasHarmonies)
-    /// Key signature at the start of the score, in number of accidentals,
-    /// negative for flats, positive for sharps (read only).\n \since MuseScore 3.2
+
+    /** APIDOC
+     * Key signature at the start of the score, in number of accidentals,
+     * negative for flats, positive for sharps
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(int keysig READ keysig)
-    /// Last measure of the score (read only)
+
+    /** APIDOC
+     * Last measure of the score
+     * @readonly
+     * @q_property {engraving.Measure}
+     */
     Q_PROPERTY(apiv1::Measure * lastMeasure READ lastMeasure)
-    /// Last multimeasure rest measure of the score (read only).
-    /// \see \ref Measure.prevMeasureMM
-    /// \since MuseScore 3.2
+
+    /** APIDOC
+     * Last multimeasure rest measure of the score
+     * @readonly
+     * @q_property {engraving.Measure}
+     * @see engraving.MeasureBase.prevMeasureMM
+     */
     Q_PROPERTY(apiv1::Measure * lastMeasureMM READ lastMeasureMM)
-    /// Last score segment (read only)
+
+    /** APIDOC
+     * Last score segment
+     * @readonly
+     * @q_property {engraving.Segment}
+     */
     Q_PROPERTY(apiv1::Segment * lastSegment READ lastSegment)                // TODO: make it function? Was property in 2.X, but firstSegment is a function...
-    /// Name of the score, without path leading to it and extension.\n \since MuseScore 3.2
+
+    /** APIDOC
+     * Name of the score, without path leading to it and extension.
+     * @q_property {String}
+     */
     Q_PROPERTY(QString scoreName READ name WRITE setName)
-    /// Number of measures (read only)
+
+    /** APIDOC
+     * Number of measures
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(int nmeasures READ nmeasures)
-    /// Number of pages (read only)
+
+    /** APIDOC
+     * Number of pages
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(int npages READ npages)
-    /// Number of staves (read only)
+
+    /** APIDOC
+     * Number of staves
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(int nstaves READ nstaves)
-    /// Number of tracks (#nstaves * 4) (read only)
+
+    /** APIDOC
+     * Number of tracks
+     * @readonly
+     * @q_property {Number}
+     */
     Q_PROPERTY(int ntracks READ ntracks)
-//      Q_PROPERTY(mu::engraving::PageFormat*                pageFormat        READ pageFormat     WRITE undoChangePageFormat)
-    /// The list of parts
+
+    /** APIDOC
+     * The list of parts
+     * @readonly
+     * @q_property {engraving.Part[]}
+     */
     Q_PROPERTY(QQmlListProperty<apiv1::Part> parts READ parts)
-    /// Lyricist of score, as taken from the score properties.\n \since MuseScore 3.2
+
+    /** APIDOC
+     * Lyricist of score, as taken from the score properties.
+     * @readonly
+     * @q_property {String}
+     */
     Q_PROPERTY(QString lyricist READ lyricist)
-//      Q_PROPERTY(QString                        subtitle          READ subtitle)
-    /// Title of score, as taken from the score properties' workTitle (read only).\n \since MuseScore 3.2
+
+    /** APIDOC
+     * Title of score, as taken from the score properties `workTitle`
+     * @readonly
+     * @q_property {String}
+     */
     Q_PROPERTY(QString title READ title)
     /// MuseScore version the score has been last saved with (includes autosave) (read only)
     Q_PROPERTY(QString mscoreVersion READ mscoreVersion)
