@@ -640,6 +640,8 @@ static constexpr char32_t commonTextSymbols[] = {
     0x2019,      // &lsquo;
     0x201C,      // &ldquo;
     0x201D,      // &rdquo;
+    0x2039,      // single left-pointing angle quotation mark (‹)
+    0x203A,      // single right-pointing angle quotation mark (›)
     0x2020,      // &dagger;
     0x2021,      // &Dagger;
     0x2022,      // &bull;
