@@ -364,7 +364,9 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
     interaction->textEditingEnded().disconnect(this);
     interaction->dropChanged().disconnect(this);
     interaction->shadowNoteChanged().disconnect(this);
-    notationPlayback()->loopBoundariesChanged().disconnect(this);
+    if (notationPlayback()) {
+        notationPlayback()->loopBoundariesChanged().disconnect(this);
+    }
     m_notation->viewModeChanged().disconnect(this);
 
     if (isMainView()) {

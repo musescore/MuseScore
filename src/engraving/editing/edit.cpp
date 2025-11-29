@@ -450,7 +450,7 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
     }
     newcr->mutldata()->setPosX(0.0);
     newcr->setDurationType(d);
-    newcr->setTicks(d.isMeasure() ? cr->measure()->ticks() : d.fraction());
+    newcr->setTicks(d.isMeasure() ? cr->measure()->stretchedLen(cr->staff()) : d.fraction());
     newcr->setTuplet(cr->tuplet());
     newcr->setSelected(false);
     if (newcr->isChord()) {
@@ -1824,19 +1824,19 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                     }
                     lastRest = cr;
                 }
-                Fraction restTicks = lastRest->tick() + lastRest->ticks() - curr->tick();
+                Fraction restTicks = (lastRest->endTick() - curr->tick()) * curr->staff()->timeStretch(curr->tick());
                 seg = setNoteRest(seg, curr->track(), NoteVal(), restTicks, DirectionV::AUTO, false, {}, true);
             } else if (curr->isChord()) {
                 // combine tied chords
                 Chord* chord = toChord(curr);
                 Chord* lastTiedChord = chord;
-                for (Chord* next = chord->nextTiedChord(); next && next->tick() + next->ticks() <= maxTick; next = next->nextTiedChord()) {
+                for (Chord* next = chord->nextTiedChord(); next && next->endTick() <= maxTick; next = next->nextTiedChord()) {
                     lastTiedChord = next;
                 }
                 if (!lastTiedChord) {
                     lastTiedChord = chord;
                 }
-                Fraction noteTicks = lastTiedChord->tick() + lastTiedChord->ticks() - chord->tick();
+                Fraction noteTicks = (lastTiedChord->endTick() - chord->tick()) * chord->staff()->timeStretch(chord->tick());
                 if (!(curr->tuplet())) {
                     // store start/end note for backward/forward ties ending/starting on the group of notes being rewritten
                     size_t numNotes = chord->notes().size();
