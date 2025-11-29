@@ -1451,7 +1451,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
 //    - do not stop at measure end
 //---------------------------------------------------------
 
-bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, int voiceOffset[VOICES])
+bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, const Fraction voiceOffset[VOICES])
 {
     Measure* m = tick2measure(baseTick);
     if (!m) {
@@ -1461,16 +1461,16 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
 
     track_idx_t strack = staffIdx * VOICES;
     for (track_idx_t track = strack; track < strack + VOICES; track++) {
-        if (voiceOffset[track - strack] == -1) {
+        if (!voiceOffset[track - strack].isValid()) {
             continue;
         }
-        Fraction tick = baseTick + Fraction::fromTicks(voiceOffset[track - strack]);
+        Fraction tick = baseTick + voiceOffset[track - strack];
         Measure* tm   = tick2measure(tick);
         if ((track % VOICES) && !tm->hasVoices(staffIdx)) {
             continue;
         }
 
-        Fraction newLen = len - Fraction::fromTicks(voiceOffset[track - strack]);
+        Fraction newLen = len - voiceOffset[track - strack];
         assert(newLen.numerator() != 0);
 
         if (newLen > Fraction(0, 1)) {

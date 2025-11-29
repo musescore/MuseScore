@@ -411,15 +411,15 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 } else if (tag == "transposeDiatonic") {
                     ctx.setTransposeDiatonic(static_cast<int8_t>(e.readInt()));
                 } else if (tag == "voiceOffset") {
-                    int voiceOffset[VOICES];
-                    std::fill(voiceOffset, voiceOffset + VOICES, -1);
+                    Fraction voiceOffset[VOICES];
+                    std::fill(voiceOffset, voiceOffset + VOICES, Fraction(1, 0));
                     while (e.readNextStartElement()) {
                         if (e.name() != "voice") {
                             e.unknown();
                         }
                         voice_idx_t voiceId = static_cast<voice_idx_t>(e.intAttribute("id", -1));
                         assert(voiceId < VOICES);
-                        voiceOffset[voiceId] = e.readInt();
+                        voiceOffset[voiceId] = Fraction::fromTicks(e.readInt());
                     }
                     if (!score->makeGap1(dstTick, dstStaffIdx, tickLen, voiceOffset)) {
                         LOGD() << "cannot make gap in staff " << dstStaffIdx << " at tick " << dstTick.ticks();
