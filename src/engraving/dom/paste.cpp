@@ -102,7 +102,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
         Transpose::transposeChord(chord, tick);
         if (chord->tremoloTwoChord()) {
             twoNoteTremoloFactor = 2;
-        } else if (cr->durationTypeTicks() == (cr->actualTicksAt(tick) * 2)) {
+        } else if (cr->durationTypeTicks() == (cr->ticks() * 2)) {
             // this could be the 2nd note of a two-note tremolo
             // check previous CR on same track, if it has a two-note tremolo, then set twoNoteTremoloFactor to 2
             Segment* seg = measure->undoGetSegment(SegmentType::ChordRest, tick);
@@ -122,7 +122,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
     // otherwise, we need to convert to duration rest(s)
     // and potentially split the rest up (eg, 5/4 => whole + quarter)
     bool convertMeasureRest = cr->isRest() && cr->durationType().type() == DurationType::V_MEASURE
-                              && (tick != measure->tick() || cr->ticks() != measure->ticks());
+                              && (tick != measure->tick() || cr->actualTicksAt(tick) != measure->ticks());
 
     Fraction measureEnd = measure->endTick();
     bool isGrace = cr->isChord() && toChord(cr)->noteType() != NoteType::NORMAL;
@@ -145,7 +145,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
     if (cr->isMeasureRepeat()) {
         partialCopy = toMeasureRepeat(cr)->actualTicks() != measure->ticks();
     } else if (!isGrace && !cr->tuplet()) {
-        partialCopy = cr->durationTypeTicks() != (cr->actualTicksAt(tick) * twoNoteTremoloFactor);
+        partialCopy = cr->durationTypeTicks() != (cr->ticks() * twoNoteTremoloFactor);
     }
 
     // if note is too long to fit in measure, split it up with a tie across the barline
@@ -153,11 +153,12 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
     // we have already disallowed a tuplet from crossing the barline, so there is no problem here
     // but due to rounding, it might appear from actualTicks() that the last note is too long by a couple of ticks
 
+    Staff* stf = cr->staff();
     if (!isGrace && !cr->tuplet() && (tick + cr->actualTicksAt(tick) > measureEnd || partialCopy || convertMeasureRest)) {
         if (cr->isChord()) {
             // split Chord
             Chord* c = toChord(cr);
-            Fraction rest = c->actualTicksAt(tick);
+            Fraction rest = c->ticks();
             bool firstpart = true;
             while (rest.isNotZero()) {
                 measure = tick2measure(tick);
@@ -165,20 +166,18 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                 if (!firstpart) {
                     c2->removeMarkings(true);
                 }
-                Fraction mlen = measure->endTick() - tick;
+                Fraction timeStretch = stf->timeStretch(tick);
+                Fraction mlen = (measure->endTick() - tick) * timeStretch;
                 Fraction len = mlen > rest ? rest : mlen;
-                Fraction timeStretch = c2->staff()->timeStretch(tick);
-                std::vector<TDuration> dl = toRhythmicDurationList(len * timeStretch, false, (tick - measure->tick()) * timeStretch,
+                std::vector<TDuration> dl = toRhythmicDurationList(len, false, (tick - measure->tick()) * timeStretch,
                                                                    sigmap()->timesig(tick).nominal(), measure, MAX_DOTS, timeStretch);
                 if (dl.empty()) {
                     LOGD("Could not make durations for: %d/%d", len.numerator(), len.denominator());
                     return;
                 }
                 TDuration d = dl[0];
-                Fraction c2Tick(tick + c->tick());
                 c2->setDurationType(d);
                 c2->setTicks(d.fraction());
-                rest -= c2->actualTicksAt(c2Tick);
                 undoAddCR(c2, measure, tick);
 
                 std::vector<Note*> nl1 = c->notes();
@@ -201,9 +200,10 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                         nl2[i]->setTieBack(tie);
                     }
                 }
-                c = c2;
+                rest -= c2->ticks();
+                tick += c2->actualTicksAt(tick);
                 firstpart = false;
-                tick += c->actualTicksAt(c2Tick);
+                c = c2;
             }
         } else if (cr->isRest()) {
             // split Rest
@@ -214,10 +214,10 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
             while (!rest.isZero()) {
                 Rest* r2      = firstpart ? r : toRest(r->clone());
                 measure       = tick2measure(tick);
-                Fraction mlen = measure->endTick() - tick;
+                Fraction timeStretch = stf->timeStretch(tick);
+                Fraction mlen = (measure->endTick() - tick) * timeStretch;
                 Fraction len  = rest > mlen ? mlen : rest;
-                Fraction timeStretch = r2->staff()->timeStretch(tick);
-                std::vector<TDuration> dl = toRhythmicDurationList(len * timeStretch, true, (tick - measure->tick()) * timeStretch,
+                std::vector<TDuration> dl = toRhythmicDurationList(len, true, (tick - measure->tick()) * timeStretch,
                                                                    sigmap()->timesig(tick).nominal(), measure, MAX_DOTS, timeStretch);
                 if (dl.empty()) {
                     LOGD("Could not make durations for: %d/%d", len.numerator(), len.denominator());
@@ -225,7 +225,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                 }
                 TDuration d = dl[0];
                 r2->setDurationType(d);
-                r2->setTicks(d.isMeasure() ? measure->ticks() : d.fraction());
+                r2->setTicks(d.isMeasure() ? measure->stretchedLen(stf) : d.fraction());
                 undoAddCR(r2, measure, tick);
                 rest -= r2->ticks();
                 tick += r2->actualTicksAt(tick);
@@ -233,7 +233,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
             }
         } else if (cr->isMeasureRepeat()) {
             MeasureRepeat* mr = toMeasureRepeat(cr);
-            std::vector<TDuration> list = toDurationList(mr->actualTicks(), true);
+            std::vector<TDuration> list = toDurationList(mr->ticks(), true);
             for (auto dur : list) {
                 Rest* r = Factory::createRest(this->dummy()->segment(), dur);
                 r->setTrack(cr->track());
@@ -241,7 +241,8 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                 while (!rest.isZero()) {
                     Rest* r2      = toRest(r->clone());
                     measure       = tick2measure(tick);
-                    Fraction mlen = measure->endTick() - tick;
+                    Fraction timeStretch = stf->timeStretch(tick);
+                    Fraction mlen = (measure->endTick() - tick) * timeStretch;
                     Fraction len  = rest > mlen ? mlen : rest;
                     std::vector<TDuration> dl = toDurationList(len, false);
                     if (dl.empty()) {
@@ -252,7 +253,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                     r2->setTicks(d.fraction());
                     r2->setDurationType(d);
                     undoAddCR(r2, measure, tick);
-                    rest -= d.fraction();
+                    rest -= r2->ticks();
                     tick += r2->actualTicksAt(tick);
                 }
                 delete r;

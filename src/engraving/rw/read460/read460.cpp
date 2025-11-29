@@ -421,9 +421,9 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                         }
                         voice_idx_t voiceId = static_cast<voice_idx_t>(e.intAttribute("id", -1));
                         assert(voiceId < VOICES);
-                        voiceOffset[voiceId] = Fraction::fromTicks(e.readInt());
+                        voiceOffset[voiceId] = Fraction::fromTicks(e.readInt()) * timeStretch;
                     }
-                    if (!score->makeGap1(dstTick, dstStaffIdx, tickLen, voiceOffset)) {
+                    if (!score->makeGap1(dstTick, dstStaffIdx, tickLen * timeStretch, voiceOffset)) {
                         LOGD() << "cannot make gap in staff " << dstStaffIdx << " at tick " << dstTick.ticks();
                         done = true;             // break main loop, cannot make gap
                         break;
@@ -530,7 +530,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                     Fraction d = tremolo->durationType().ticks();
                                     tremolo->setDurationType(d * scale);
                                 }
-                                Fraction tremoloEndTick = tick + chord->actualTicks();
+                                Fraction tremoloEndTick = tick + chord->actualTicksAt(tick);
                                 Fraction measureEndTick = score->tick2measure(tick)->endTick();
                                 if (tremoloEndTick > measureEndTick) {
                                     MScore::setError(MsError::DEST_TREMOLO);
@@ -551,7 +551,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             graceNotes.clear();
                         }
                         // delete pending ties, they are not selected when copy
-                        if ((tick - dstTick) + cr->actualTicks() >= tickLen) {
+                        if ((tick - dstTick) + cr->actualTicksAt(tick) >= tickLen) {
                             if (cr->isChord()) {
                                 Chord* c = toChord(cr);
                                 for (Note* note: c->notes()) {
@@ -564,7 +564,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             }
                         }
                         // shorten last cr to fit in the space made by makeGap
-                        if ((tick - dstTick) + cr->actualTicks() > tickLen) {
+                        if ((tick - dstTick) + cr->actualTicksAt(tick) > tickLen) {
                             Fraction newLength = tickLen - (tick - dstTick);
                             // check previous CR on same track, if it has tremolo, delete the tremolo
                             // we don't want a tremolo and two different chord durations
@@ -590,8 +590,8 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                 // shorten duration
                                 // exempt notes in tuplets, since we don't allow copy of partial tuplet anyhow
                                 // TODO: figure out a reasonable fudge factor to make sure shorten tuplets appropriately if we do ever copy a partial tuplet
-                                cr->setTicks(newLength);
-                                cr->setDurationType(newLength);
+                                cr->setTicks(newLength * timeStretch);
+                                cr->setDurationType(newLength * timeStretch);
                             }
                         }
                         score->pasteChordRest(cr, tick);

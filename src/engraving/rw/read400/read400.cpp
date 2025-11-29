@@ -495,7 +495,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                         if (tuplet) {
                             cr->readAddTuplet(tuplet);
                         }
-                        ctx.incTick(cr->actualTicks());
+                        ctx.incTick(cr->actualTicksAt(tick));
                         if (doScale) {
                             Fraction d = cr->durationTypeTicks();
                             cr->setTicks(cr->ticks() * scale);
@@ -515,7 +515,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                     Fraction d = t->durationType().ticks();
                                     t->setDurationType(d * scale);
                                 }
-                                Fraction tremoloEndTick = tick + chord->actualTicks();
+                                Fraction tremoloEndTick = tick + chord->actualTicksAt(tick);
                                 Fraction measureEndTick = score->tick2measure(tick)->endTick();
                                 if (tremoloEndTick > measureEndTick) {
                                     MScore::setError(MsError::DEST_TREMOLO);
@@ -536,7 +536,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             graceNotes.clear();
                         }
                         // delete pending ties, they are not selected when copy
-                        if ((tick - dstTick) + cr->actualTicks() >= tickLen) {
+                        if ((tick - dstTick) + cr->actualTicksAt(tick) >= tickLen) {
                             if (cr->isChord()) {
                                 Chord* c = toChord(cr);
                                 for (Note* note: c->notes()) {
@@ -549,7 +549,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             }
                         }
                         // shorten last cr to fit in the space made by makeGap
-                        if ((tick - dstTick) + cr->actualTicks() > tickLen) {
+                        if ((tick - dstTick) + cr->actualTicksAt(tick) > tickLen) {
                             Fraction newLength = tickLen - (tick - dstTick);
                             // check previous CR on same track, if it has tremolo, delete the tremolo
                             // we don't want a tremolo and two different chord durations
