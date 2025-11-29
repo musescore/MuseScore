@@ -1068,6 +1068,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
 //---------------------------------------------------------
 //   setNoteRest
 //    pitch == -1  -> set rest
+//    "sd" is in local (stretched) time
 //    return segment of last created note/rest
 //---------------------------------------------------------
 
@@ -1262,9 +1263,11 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
 //
 //    if keepChord, the chord at tick is not removed
 //
+//    "sd" is in local (stretched) time
+//
 //    gap does not exceed measure or scope of tuplet
 //
-//    return size of actual gap
+//    return size of actual gap in local time
 //---------------------------------------------------------
 
 Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
@@ -1451,6 +1454,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
 //    chord/rest
 //    - cr is top level (not part of a tuplet)
 //    - do not stop at measure end
+//    - len and voiceOffset are in local (stretched) time
 //---------------------------------------------------------
 
 bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, const Fraction voiceOffset[VOICES])
@@ -1609,7 +1613,7 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
 //---------------------------------------------------------
 //   splitGapToMeasureBoundaries
 //    cr  - start of gap
-//    gap - gap len
+//    gap - gap len in local (stretched) time
 //---------------------------------------------------------
 
 std::vector<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
@@ -1655,6 +1659,7 @@ std::vector<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction
 
 //---------------------------------------------------------
 //   changeCRlen
+//    - dstF is in local (stretched) time
 //---------------------------------------------------------
 
 void Score::changeCRlen(ChordRest* cr, const TDuration& d)
