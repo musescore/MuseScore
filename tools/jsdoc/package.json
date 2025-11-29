@@ -4,6 +4,8 @@
     "fs-extra": "^11.3.2",
     "html-minifier-terser": "^7.2.0",
     "klaw-sync": "^7.0.0",
-    "showdown": "^2.1.0"
+    "showdown": "^2.1.0",
+    "uglify-js": "^3.19.3",
+    "csso": "^5.0.5"
   }
 }

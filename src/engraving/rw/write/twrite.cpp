@@ -1420,14 +1420,8 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
         write(item->harmony(), xml, ctx);
     }
 
-    // Lowercase f indicates new writing format
-    // TODO: in the next score format version (4) use only write new + props and discard
-    // the compatibility writing.
     xml.startElement("fretDiagram");
-    // writeNew (if want to make changes, do it here rather than in writeOld)
     {
-        //    This is the important one for 3.1+
-        //---------------------------------------------------------
         for (int i = 0; i < item->strings(); ++i) {
             FretItem::Marker m = item->marker(i);
             std::vector<FretItem::Dot> allDots = item->dot(i);
@@ -1474,97 +1468,6 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
         }
     }
     xml.endElement();
-
-    // writeOld (for compatibility only)
-    {
-        int lowestDotFret = -1;
-        int furthestLeftLowestDot = -1;
-
-        // Do some checks for details needed for checking whether to add barres
-        for (int i = 0; i < item->strings(); ++i) {
-            std::vector<FretItem::Dot> allDots = item->dot(i);
-
-            bool dotExists = false;
-            for (auto const& d : allDots) {
-                if (d.exists()) {
-                    dotExists = true;
-                    break;
-                }
-            }
-
-            if (!dotExists) {
-                continue;
-            }
-
-            for (auto const& d : allDots) {
-                if (d.exists()) {
-                    if (d.fret < lowestDotFret || lowestDotFret == -1) {
-                        lowestDotFret = d.fret;
-                        furthestLeftLowestDot = i;
-                    } else if (d.fret == lowestDotFret && (i < furthestLeftLowestDot || furthestLeftLowestDot == -1)) {
-                        furthestLeftLowestDot = i;
-                    }
-                }
-            }
-        }
-
-        // The old system writes a barre as a bool, which causes no problems in any way, not at all.
-        // So, only write that if the barre is on the lowest fret with a dot,
-        // and there are no other dots on its fret, and it goes all the way to the right.
-        int barreStartString = -1;
-        int barreFret = -1;
-        for (auto const& i : item->barres()) {
-            FretItem::Barre b = i.second;
-            if (b.exists()) {
-                int fret = i.first;
-                if (fret <= lowestDotFret && b.endString == -1 && !(fret == lowestDotFret && b.startString > furthestLeftLowestDot)) {
-                    barreStartString = b.startString;
-                    barreFret = fret;
-                    break;
-                }
-            }
-        }
-
-        for (int i = 0; i < item->strings(); ++i) {
-            FretItem::Marker m = item->marker(i);
-            std::vector<FretItem::Dot> allDots = item->dot(i);
-
-            bool dotExists = false;
-            for (auto const& d : allDots) {
-                if (d.exists()) {
-                    dotExists = true;
-                    break;
-                }
-            }
-
-            if (!dotExists && !m.exists() && i != barreStartString) {
-                continue;
-            }
-
-            xml.startElement("string", { { "no", i } });
-
-            if (m.exists()) {
-                xml.tag("marker", FretItem::markerToChar(m.mtype).unicode());
-            }
-
-            for (auto const& d : allDots) {
-                if (d.exists() && !(i == barreStartString && d.fret == barreFret)) {
-                    xml.tag("dot", d.fret);
-                }
-            }
-
-            // Add dot so barre will display in pre-3.1
-            if (barreStartString == i) {
-                xml.tag("dot", barreFret);
-            }
-
-            xml.endElement();
-        }
-
-        if (barreFret > 0) {
-            xml.tag("barre", 1);
-        }
-    }
     xml.endElement();
 }
 
@@ -1915,57 +1818,10 @@ void TWrite::writeProperties(const BSymbol* item, XmlWriter& xml, WriteContext& 
 
 void TWrite::write(const Image* item, XmlWriter& xml, WriteContext& ctx)
 {
-    // attempt to convert the _linkPath to a path relative to the score
-    //
-    // TODO : on Save As, score()->fileInfo() still contains the old path and fname
-    //          if the Save As path is different, image relative path will be wrong!
-    //
-    String relativeFilePath;
-    if (!item->linkPath().isEmpty() && item->linkIsValid()) {
-        muse::io::FileInfo fi(item->linkPath());
-        // score()->fileInfo()->canonicalPath() would be better
-        // but we are saving under a temp file name and the 'final' file
-        // might not exist yet, so canonicalFilePath() may return only "/"
-        // OTOH, the score 'final' file name is practically always canonical, at this point
-        String scorePath = item->score()->masterScore()->fileInfo()->absoluteDirPath().toString();
-        String imgFPath  = fi.canonicalFilePath();
-        // if imgFPath is in (or below) the directory of scorePath
-        if (imgFPath.startsWith(scorePath, muse::CaseSensitive)) {
-            // relative img path is the part exceeding scorePath
-            imgFPath.remove(0, scorePath.size());
-            if (imgFPath.startsWith(u'/')) {
-                imgFPath.remove(0, 1);
-            }
-            relativeFilePath = imgFPath;
-        }
-        // try 1 level up
-        else {
-            // reduce scorePath by one path level
-            fi = muse::io::FileInfo(scorePath);
-            scorePath = fi.path();
-            // if imgFPath is in (or below) the directory up the score directory
-            if (imgFPath.startsWith(scorePath, muse::CaseSensitive)) {
-                // relative img path is the part exceeding new scorePath plus "../"
-                imgFPath.remove(0, scorePath.size());
-                if (!imgFPath.startsWith(u'/')) {
-                    imgFPath.prepend(u'/');
-                }
-                imgFPath.prepend(u"..");
-                relativeFilePath = imgFPath;
-            }
-        }
-    }
-    // if no match, use full _linkPath
-    if (relativeFilePath.isEmpty()) {
-        relativeFilePath = item->linkPath();
-    }
-
     xml.startElement(item);
     writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
-    // keep old "path" tag, for backward compatibility and because it is used elsewhere
-    // (for instance by Box:read(), Measure:read(), Note:read(), ...)
-    xml.tag("path", item->storeItem() ? item->storeItem()->hashName() : relativeFilePath);
-    xml.tag("linkPath", relativeFilePath);
+
+    xml.tag("path", item->storeItem() ? item->storeItem()->hashName() : std::string());
 
     writeProperty(item, xml, Pid::AUTOSCALE);
     writeProperty(item, xml, Pid::SIZE);
@@ -2168,10 +2024,12 @@ void TWrite::write(const MidiArticulation* item, XmlWriter& xml)
 void TWrite::write(const StaffName& item, XmlWriter& xml, const char* tag)
 {
     if (!item.name().isEmpty()) {
+        String name = item.name();
+        lineBreakToTag(name);
         if (item.pos() == 0) {
-            xml.writeXml(String::fromUtf8(tag), item.name());
+            xml.writeXml(String::fromUtf8(tag), name);
         } else {
-            xml.writeXml(String(u"%1 pos=\"%2\"").arg(String::fromUtf8(tag)).arg(item.pos()), item.name());
+            xml.writeXml(String(u"%1 pos=\"%2\"").arg(String::fromUtf8(tag)).arg(item.pos()), name);
         }
     }
 }

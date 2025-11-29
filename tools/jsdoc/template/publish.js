@@ -252,14 +252,29 @@ function addSignatureTypes(f) {
 
     f.signature =
         `${f.signature || ''}<span class="type-signature">` +
-        `${types.length ? ` :${types.join('|')}` : ''}</span>`;
+        `${types.length ? `: ${types.join('|')}` : ''}</span>`;
 }
 
 function addAttribs(f) {
-    const attribs = helper.getAttribs(f);
-    const attribsString = buildAttribsString(attribs);
 
-    f.attribs = `<span class="type-signature">${attribsString}</span>`;
+    // look signal 
+    let hasSignal = false;
+    if (f.tags) {
+        for (let t of f.tags) {
+            if (t.title === "signal") {
+                hasSignal = true;
+                break;
+            }
+        }
+    }
+
+    if (hasSignal) {
+        f.attribs = `<span class="type-signature">(signal) </span>`;
+    } else {
+        const attribs = helper.getAttribs(f);
+        const attribsString = buildAttribsString(attribs);
+        f.attribs = `<span class="type-signature">${attribsString}</span>`;
+    }
 }
 
 function shortenPaths(files, commonPrefix) {
@@ -675,6 +690,20 @@ exports.publish = async function (taffyData, opts, tutorials) {
     let templatePath;
 
     data = taffyData;
+
+    // MUFIX 
+    data().each(function(doclet) {
+
+        // Removed (static) from view
+        if (doclet.scope === 'static') {
+            doclet.scope = undefined;
+        }
+
+        // Added `api.` prefix
+        if (doclet.kind === "namespace" && doclet.name !== "Qml") {
+            doclet.name = "api."+doclet.name
+        }
+    });
 
     conf = env.conf.templates || {};
     conf.default = conf.default || {};

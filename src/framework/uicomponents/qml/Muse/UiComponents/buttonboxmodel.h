@@ -133,6 +133,7 @@ private:
     LayoutButton* layoutButton(const QQuickItem* item) const;
 
     QHash<ButtonType, LayoutButton*> m_layoutButtons {
+        { NoButton,        new LayoutButton(muse::qtrc("uicomponents", "No button"),        NoButton,        RejectRole,      true) },
         { Ok,              new LayoutButton(muse::qtrc("uicomponents", "OK"),               Ok,              AcceptRole,      true) },
         { Save,            new LayoutButton(muse::qtrc("uicomponents", "Save"),             Save,            ApplyRole,       true) },
         { SaveAll,         new LayoutButton(muse::qtrc("uicomponents", "Save all"),         SaveAll,         ApplyRole,       false) },

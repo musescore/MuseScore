@@ -31,6 +31,7 @@
 #include "modularity/ioc.h"
 #include "global/io/ifilesystem.h"
 #include "global/types/ret.h"
+#include "global/api/iapiregister.h"
 
 #include "global/api/iapiengine.h"
 
@@ -39,6 +40,7 @@ class JsModuleLoader;
 class ScriptEngine : public muse::api::IApiEngine
 {
     GlobalInject<io::IFileSystem> fileSystem;
+    GlobalInject<muse::api::IApiRegister> apiRegister;
 
 public:
     ScriptEngine(const modularity::ContextPtr& iocCtx, int apiverion);

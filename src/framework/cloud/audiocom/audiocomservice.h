@@ -61,11 +61,11 @@ private:
 
     network::RequestHeaders headers(const QString& token = QString()) const;
 
-    Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat);
-    Ret doCreateAudio(network::INetworkManagerPtr manager, const QString& title, int size, const QString& audioFormat,
+    Ret doUploadAudio(network::deprecated::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat);
+    Ret doCreateAudio(network::deprecated::INetworkManagerPtr manager, const QString& title, int size, const QString& audioFormat,
                       const QUrl& existingUrl, Visibility visibility, bool replaceExisting);
 
-    Ret doUpdateVisibility(network::INetworkManagerPtr manager, const QUrl& url, Visibility visibility);
+    Ret doUpdateVisibility(network::deprecated::INetworkManagerPtr manager, const QUrl& url, Visibility visibility);
 
     void notifyServerAboutFailUpload(const QUrl& failUrl, const QString& token);
     void notifyServerAboutSuccessUpload(const QUrl& successUrl, const QString& token);

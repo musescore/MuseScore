@@ -1696,15 +1696,6 @@ const MeasureBase* EngravingItem::findMeasureBase() const
 }
 
 //---------------------------------------------------------
-//   undoSetColor
-//---------------------------------------------------------
-
-void EngravingItem::undoSetColor(const Color& c)
-{
-    undoChangeProperty(Pid::COLOR, PropertyValue::fromValue(c));
-}
-
-//---------------------------------------------------------
 //   undoSetVisible
 //---------------------------------------------------------
 

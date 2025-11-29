@@ -111,6 +111,12 @@ typedef std::map<int, FretItem::Barre> BarreMap;
 typedef std::map<int, FretItem::Marker> MarkerMap;
 typedef std::map<int, std::vector<FretItem::Dot> > DotMap;
 
+struct DiagramInfo {
+    String harmonyName;
+    String diagramXml;
+    String diagramPattern;
+};
+
 //---------------------------------------------------------
 //   @@ FretDiagram
 ///    Fretboard diagram
@@ -137,8 +143,9 @@ public:
 
     Segment* segment() const;
 
-    static String patternFromDiagram(const FretDiagram* diagram);
-    static std::vector<String> patternHarmonies(const String& pattern);
+    String patternFromDiagram() const;
+    std::vector<String> harmoniesFromPattern(const String& pattern) const;
+    std::vector<DiagramInfo> patternsFromHarmony(const String& harmonyName);
 
     void updateDiagram(const String& harmonyName);
 

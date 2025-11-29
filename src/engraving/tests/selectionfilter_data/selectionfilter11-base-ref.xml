@@ -25,24 +25,6 @@
           <dot fret="1">normal</dot>
           </string>
         </fretDiagram>
-      <string no="0">
-        <marker>88</marker>
-        </string>
-      <string no="1">
-        <dot>3</dot>
-        </string>
-      <string no="2">
-        <dot>2</dot>
-        </string>
-      <string no="3">
-        <marker>79</marker>
-        </string>
-      <string no="4">
-        <marker>79</marker>
-        </string>
-      <string no="5">
-        <dot>1</dot>
-        </string>
       </FretDiagram>
     <Chord>
       <durationType>quarter</durationType>

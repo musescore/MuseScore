@@ -19,9 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include <QUrl>
 
 #include "interactiveapi.h"
+
+#include <QUrl>
 
 using namespace muse::api;
 
@@ -41,10 +42,79 @@ InteractiveApi::InteractiveApi(IApiEngine* e)
  * @param {String} title Title
  * @param {String} text Message
  */
-
 void InteractiveApi::info(const QString& contentTitle, const QString& text)
 {
     interactive()->infoSync(contentTitle.toStdString(), text.toStdString());
+}
+
+/** APIDOC
+ * Show warning message
+ * @method
+ * @param {String} title Title
+ * @param {String} text Message
+ */
+void InteractiveApi::warning(const QString& contentTitle, const QString& text)
+{
+    interactive()->warningSync(contentTitle.toStdString(), text.toStdString());
+}
+
+/** APIDOC
+ * Show error message
+ * @method
+ * @param {String} title Title
+ * @param {String} text Message
+ */
+void InteractiveApi::error(const QString& contentTitle, const QString& text)
+{
+    interactive()->errorSync(contentTitle.toStdString(), text.toStdString());
+}
+
+static muse::IInteractive::Button buttonFromString(const QString& str)
+{
+    static QMetaEnum meta = QMetaEnum::fromType<InteractiveApi::ButtonCode>();
+    int val = meta.keyToValue(str.toLatin1().constData());
+    if (val == -1) {
+        return muse::IInteractive::Button::NoButton;
+    }
+    return static_cast<muse::IInteractive::Button>(val);
+}
+
+static QString buttonToString(const muse::IInteractive::Button& btn)
+{
+    static QMetaEnum meta = QMetaEnum::fromType<InteractiveApi::ButtonCode>();
+    const char* key = meta.valueToKey(static_cast<int>(btn));
+    return QString::fromLatin1(key);
+}
+
+std::vector<muse::IInteractive::Button> InteractiveApi::buttons(const QJSValueList& btns) const
+{
+    std::vector<muse::IInteractive::Button> result;
+    for (const QJSValue& btn : btns) {
+        QString str = btn.toString();
+        result.push_back(buttonFromString(str));
+    }
+    return result;
+}
+
+/** APIDOC
+ * Ask a question
+ * @method
+ * @param {String} title Title
+ * @param {String} text Message
+ * @param {ButtonCode[]} buttons Code of buttons
+ * @return {ButtonCode} - selected button
+ * @example
+ * let btn = api.interactive.question("My question", "Yes or No?", [ButtonCode.Yes, ButtonCode.No]);
+ * if (btn === ButtonCode.Yes) {
+ *      ...
+ * }
+ */
+QString InteractiveApi::question(const QString& contentTitle, const QString& text, const QJSValueList& btns)
+{
+    IInteractive::Result res = interactive()->questionSync(contentTitle.toStdString(),
+                                                           text.toStdString(),
+                                                           buttons(btns));
+    return buttonToString(res.standardButton());
 }
 
 /** APIDOC

@@ -18,6 +18,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+# - Registers the given path as QML import path for QtCreator
+macro(add_qml_import_path import_path)
+    if (NOT ${import_path} STREQUAL "")
+        set(QML_IMPORT_PATH "$CACHE{QML_IMPORT_PATH}")
+        list(APPEND QML_IMPORT_PATH ${import_path})
+        list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+        set(QML_IMPORT_PATH "${QML_IMPORT_PATH}" CACHE STRING
+            "QtCreator extra import paths for QML modules" FORCE)
+    endif()
+endmacro()
+
 # - Creates a target and sets up common properties for Muse modules
 function(muse_create_module target_name)
     set(options NO_QT NO_PCH NO_UNITY STUB)
@@ -122,6 +133,11 @@ function(muse_create_qml_module target_name)
         target_include_directories(${target_name} PRIVATE ${_for_dir})
         
         target_link_libraries(${target_name} PRIVATE ${arg_FOR})
+
+        # This might not be the cleanest way to obtain this path, but it is a 
+        # good balance between simplicity and correctness
+        get_target_property(_for_binary_dir ${arg_FOR} BINARY_DIR)
+        add_qml_import_path(${_for_binary_dir}/qml)
     endif()
 endfunction()
 
@@ -190,6 +206,7 @@ endfunction()
 # set(MODULE_QRC somename.qrc)                - set resource (qrc) file
 # set(MODULE_BIG_QRC somename.qrc)            - set big resource (qrc) file
 # set(MODULE_QML_IMPORT ...)                  - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
+# set(MODULE_QMLAPI_IMPORT ...)               - set Qml api import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_QMLEXT_IMPORT ...)               - set Qml extensions import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_USE_PCH ON/OFF)                  - set whether to use precompiled headers for this module (default ON)
 # set(MODULE_USE_UNITY ON/OFF)                - set whether to use unity build for this module (default ON)
@@ -213,6 +230,7 @@ macro(declare_module name)
     unset(MODULE_QRC)
     unset(MODULE_BIG_QRC)
     unset(MODULE_QML_IMPORT)
+    unset(MODULE_QMLAPI_IMPORT)
     unset(MODULE_QMLEXT_IMPORT)
     set(MODULE_USE_PCH ON)
     set(MODULE_USE_UNITY ON)
@@ -220,13 +238,9 @@ macro(declare_module name)
     set(MODULE_USE_COVERAGE ON)
 endmacro()
 
-macro(add_qml_import_path input_var)
-    if (NOT ${${input_var}} STREQUAL "")
-        set(QML_IMPORT_PATH "$CACHE{QML_IMPORT_PATH}")
-        list(APPEND QML_IMPORT_PATH ${${input_var}})
-        list(REMOVE_DUPLICATES QML_IMPORT_PATH)
-        set(QML_IMPORT_PATH "${QML_IMPORT_PATH}" CACHE STRING
-            "QtCreator extra import paths for QML modules" FORCE)
+macro(add_qml_import_path_if_not_empty input_var)
+    if (${input_var})
+        add_qml_import_path(${${input_var}})
     endif()
 endmacro()
 
@@ -280,8 +294,9 @@ macro(setup_module)
         endif()
     endif()
 
-    add_qml_import_path(MODULE_QML_IMPORT)
-    add_qml_import_path(MODULE_QMLAPI_IMPORT)
+    add_qml_import_path_if_not_empty(MODULE_QML_IMPORT)
+    add_qml_import_path_if_not_empty(MODULE_QMLAPI_IMPORT)
+    add_qml_import_path_if_not_empty(MODULE_QMLEXT_IMPORT)
 
     if (BUILD_SHARED_LIBS)
         install(TARGETS ${MODULE} DESTINATION ${SHARED_LIBS_INSTALL_DESTINATION})

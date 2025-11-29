@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UI_ICONCODE_H
-#define MUSE_UI_ICONCODE_H
+#pragma once
 
 #include <QObject>
 #include <QMetaEnum>
@@ -57,6 +56,13 @@ class IconCode
     Q_GADGET
 
 public:
+
+    /** APIDOC
+     * Icon code
+     * @memberof Qml
+     * @enum
+     * @name IconCode
+     */
     enum class Code : char16_t {
         SMALL_ARROW_LEFT = 0xEF0F,
         SMALL_ARROW_UP = 0xEF10,
@@ -539,5 +545,3 @@ static inline QChar iconCodeToChar(IconCode::Code code)
     return QChar(static_cast<char16_t>(code));
 }
 }
-
-#endif // MUSE_UI_ICONCODE_H

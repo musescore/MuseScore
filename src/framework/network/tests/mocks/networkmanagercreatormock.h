@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_NETWORK_NETWORKMANAGERCREATORMOCK_H
-#define MUSE_NETWORK_NETWORKMANAGERCREATORMOCK_H
+
+#pragma once
 
 #include <gmock/gmock.h>
 
@@ -31,7 +31,6 @@ class NetworkManagerCreatorMock : public INetworkManagerCreator
 {
 public:
     MOCK_METHOD(INetworkManagerPtr, makeNetworkManager, (), (const, override));
+    MOCK_METHOD(deprecated::INetworkManagerPtr, makeDeprecatedNetworkManager, (), (const, override));
 };
 }
-
-#endif // MUSE_NETWORK_NETWORKMANAGERCREATORMOCK_H

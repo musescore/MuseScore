@@ -35,7 +35,7 @@
 
 Q_MOC_INCLUDE("dockwindow/view/dockstatusbarview.h")
 
-namespace mu::ui {
+namespace muse::ui {
 class NavigationControl;
 }
 

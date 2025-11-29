@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_NETWORK_NETWORKMANAGERSTUB_H
-#define MUSE_NETWORK_NETWORKMANAGERSTUB_H
+
+#pragma once
 
 #include "network/inetworkmanager.h"
 
@@ -28,20 +28,14 @@ namespace muse::network {
 class NetworkManagerStub : public INetworkManager
 {
 public:
-    Ret get(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers = RequestHeaders()) override;
-    Ret head(const QUrl& url, const RequestHeaders& headers = RequestHeaders()) override;
-    Ret post(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData,
-             const RequestHeaders& headers = RequestHeaders()) override;
-    Ret put(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData,
-            const RequestHeaders& headers = RequestHeaders()) override;
-    Ret patch(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData,
-              const RequestHeaders& headers = RequestHeaders()) override;
-    Ret del(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers = RequestHeaders()) override;
-
-    Progress progress() const override;
-
-    void abort() override;
+    RetVal<Progress> get(const QUrl& url, IncomingDevicePtr incomingData, const RequestHeaders& headers = RequestHeaders()) override;
+    RetVal<Progress> head(const QUrl& url, const RequestHeaders& headers = RequestHeaders()) override;
+    RetVal<Progress> post(const QUrl& url, OutgoingDeviceVar outgoingData, IncomingDevicePtr incomingData,
+                          const RequestHeaders& headers = RequestHeaders()) override;
+    RetVal<Progress> put(const QUrl& url, OutgoingDeviceVar outgoingData, IncomingDevicePtr incomingData,
+                         const RequestHeaders& headers = RequestHeaders()) override;
+    RetVal<Progress> patch(const QUrl& url, OutgoingDeviceVar outgoingData, IncomingDevicePtr incomingData,
+                           const RequestHeaders& headers = RequestHeaders()) override;
+    RetVal<Progress> del(const QUrl& url, IncomingDevicePtr incomingData, const RequestHeaders& headers = RequestHeaders()) override;
 };
 }
-
-#endif // MUSE_NETWORK_NETWORKMANAGERSTUB_H

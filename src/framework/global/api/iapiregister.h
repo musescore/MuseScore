@@ -22,6 +22,9 @@
 #ifndef MUSE_API_IAPIREGISTER_H
 #define MUSE_API_IAPIREGISTER_H
 
+#include <vector>
+#include <QMetaEnum>
+
 #include "modularity/imoduleinterface.h"
 #include "iapiengine.h"
 #include "api/apiobject.h"
@@ -42,6 +45,15 @@ public:
     virtual void regApiCreator(const std::string& module, const std::string& api, ICreator* c) = 0;
     virtual void regApiSingltone(const std::string& module, const std::string& api, ApiObject* o) = 0;
     virtual std::pair<ApiObject*, bool /*is need delete*/> createApi(const std::string& api, IApiEngine* e) const = 0;
+
+    struct GlobalEnum {
+        std::string module;
+        std::string name;
+        QMetaEnum meta;
+    };
+
+    virtual void regGlobalEnum(const std::string& module, const QMetaEnum& meta, const std::string& name = "") = 0;
+    virtual const std::vector<GlobalEnum>& globalEnums() const = 0;
 
     // dev
     struct Dump

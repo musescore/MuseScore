@@ -18,13 +18,12 @@
         "template": "./template",
         "encoding": "utf8",               
         "destination": "./out/",          
-        "recurse": false,                  
-        "version": false,
+        "recurse": true,                  
         "search": false,
         "theme_opts": {
             "default_theme": "light",
-            "homepageTitle": "Muse Extensions",
-            "sections": ["Tutorials", "Namespaces", "Modules", "Classes"]
+            "title": "Home",
+            "sections": ["Tutorials", "Namespaces", "Classes", "Global"]
         }                
 	},
     "markdown": {

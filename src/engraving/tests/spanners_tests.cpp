@@ -36,6 +36,9 @@
 #include "engraving/dom/system.h"
 #include "engraving/editing/editexcerpt.h"
 
+#include "engraving/api/v1/score.h"
+#include "engraving/api/v1/elements.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
@@ -591,5 +594,53 @@ TEST_F(Engraving_SpannersTests, spanners16)
     EXPECT_TRUE(score);
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"smallstaff01.mscx", SPANNERS_DATA_DIR + u"smallstaff01-ref.mscx"));
+    delete score;
+}
+
+//---------------------------------------------------------
+///  spanners17
+///   Test Plugin API score.spanners property
+///   Verify that score.spanners exposes all spanners in the score
+//---------------------------------------------------------
+
+TEST_F(Engraving_SpannersTests, spanners17_pluginAPI_scoreSpanners)
+{
+    // Load a score file
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"glissando01.mscx");
+    EXPECT_TRUE(score);
+
+    // Create Plugin API wrapper for the score
+    apiv1::Score apiScore(score);
+
+    // Get spanners using Plugin API
+    QQmlListProperty<apiv1::Spanner> scoreSpanners = apiScore.spanners();
+
+    // Basic sanity checks: the property should return a valid list
+    EXPECT_NE(scoreSpanners.count, nullptr);
+    EXPECT_NE(scoreSpanners.at, nullptr);
+
+    int spannerCount = scoreSpanners.count(&scoreSpanners);
+    EXPECT_GE(spannerCount, 0) << "Count should be non-negative";
+
+    // Get spanners directly from the score for comparison
+    auto domSpanners = score->spannerList();
+
+    // The Plugin API should expose the same number of spanners
+    EXPECT_EQ(spannerCount, (int)domSpanners.size())
+        << "Plugin API should expose all spanners from the score";
+
+    // Verify each spanner can be accessed and has valid properties
+    for (int i = 0; i < spannerCount; i++) {
+        auto* item = scoreSpanners.at(&scoreSpanners, i);
+        apiv1::Spanner* apiItem = qobject_cast<apiv1::Spanner*>(item);
+        EXPECT_TRUE(apiItem != nullptr) << "Spanner " << i << " should be a valid Spanner";
+
+        if (apiItem && apiItem->spanner()) {
+            // Verify we can access the track property (spanners have tracks)
+            track_idx_t track = apiItem->spanner()->track();
+            EXPECT_GE(track, 0) << "Spanner " << i << " should have a valid track";
+        }
+    }
+
     delete score;
 }

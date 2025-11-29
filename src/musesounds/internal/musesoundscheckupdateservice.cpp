@@ -83,7 +83,7 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
 
     QBuffer buff;
     QUrl url = configuration()->checkForMuseSoundsUpdateUrl();
-    INetworkManagerPtr networkManager = networkManagerCreator()->makeNetworkManager();
+    deprecated::INetworkManagerPtr networkManager = networkManagerCreator()->makeDeprecatedNetworkManager();
 
     Ret getUpdateInfo = networkManager->get(url, &buff);
 

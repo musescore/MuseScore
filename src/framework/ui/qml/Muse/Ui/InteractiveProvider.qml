@@ -28,7 +28,7 @@ Item {
     id: root
 
     property var topParent: null
-    property var provider: ui._interactiveProvider
+    property CppInteractiveProvider provider: ui._interactiveProvider
     property var objects: ({})
 
     signal requestedDockPage(var uri, var params)
@@ -67,7 +67,7 @@ Item {
             }
 
             if (page.type === ContainerType.QmlDialog) {
-                var dialogPath = page.module ? page.path : "../../" + page.path
+                var dialogPath = page.module ? page.path : "qrc:/qml/" + page.path
 
                 var dialogObj = root.createDialog(page.module, dialogPath, page.params)
                 data.setValue("ret", dialogObj.ret)

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_INSPECTORMODULE_H
-#define MU_INSPECTOR_INSPECTORMODULE_H
+
+#pragma once
 
 #include "modularity/imodulesetup.h"
 
@@ -31,10 +31,5 @@ public:
     InspectorModule() = default;
 
     std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
 };
 }
-
-#endif // MU_INSPECTOR_INSPECTORMODULE_H

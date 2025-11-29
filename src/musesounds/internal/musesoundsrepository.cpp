@@ -118,7 +118,7 @@ void MuseSoundsRepository::th_requestSounds(const UriQuery& soundsUri, std::func
 {
     TRACEFUNC;
 
-    network::INetworkManagerPtr networkManager = networkManagerCreator()->makeNetworkManager();
+    network::deprecated::INetworkManagerPtr networkManager = networkManagerCreator()->makeDeprecatedNetworkManager();
     RequestHeaders headers = configuration()->headers();
 
     QByteArray jsonData = soundsRequestJson();

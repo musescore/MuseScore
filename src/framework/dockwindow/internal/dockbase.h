@@ -24,14 +24,18 @@
 
 #include <QQuickItem>
 
-#include <optional>
-
 #include "../docktypes.h"
-#include "ui/view/navigationsection.h"
-#include "uicomponents/qml/Muse/UiComponents/qmllistproperty.h"
+
+#include "ui/inavigation.h"
+
+Q_MOC_INCLUDE("ui/qml/Muse/Ui/navigationsection.h")
 
 namespace KDDockWidgets {
 class DockWidgetQuick;
+}
+
+namespace muse::ui {
+class NavigationSection;
 }
 
 namespace muse::dock {
@@ -64,8 +68,8 @@ class DockBase : public QQuickItem
 
     Q_PROPERTY(bool inited READ inited NOTIFY initedChanged)
 
-    Q_PROPERTY(
-        muse::ui::NavigationSection * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
+    Q_PROPERTY(muse::ui::NavigationSection * navigationSection
+               READ navigationSection_property WRITE setNavigationSection NOTIFY navigationSectionChanged)
     Q_PROPERTY(int contentNavigationPanelOrderStart READ contentNavigationPanelOrderStart NOTIFY contentNavigationPanelOrderStartChanged)
 
 public:
@@ -121,7 +125,8 @@ public:
     Q_INVOKABLE void close();
     Q_INVOKABLE void resize(int width, int height);
 
-    ui::NavigationSection* navigationSection() const;
+    ui::INavigationSection* navigationSection() const;
+    ui::NavigationSection* navigationSection_property() const;
     int contentNavigationPanelOrderStart() const;
 
 public slots:

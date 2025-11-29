@@ -21,35 +21,9 @@
  */
 #include "inspectorstubmodule.h"
 
-#include "modularity/ioc.h"
-#include "ui/iuiengine.h"
-
 using namespace mu::inspector;
-using namespace muse::modularity;
-
-static void inspector_init_qrc()
-{
-    Q_INIT_RESOURCE(inspector_resources);
-}
 
 std::string InspectorModule::moduleName() const
 {
     return "inspector";
-}
-
-void InspectorModule::registerExports()
-{
-}
-
-void InspectorModule::registerResources()
-{
-    inspector_init_qrc();
-}
-
-void InspectorModule::registerUiTypes()
-{
-    std::shared_ptr<muse::ui::IUiEngine> ui = ioc()->resolve<muse::ui::IUiEngine>(moduleName());
-    if (ui) {
-        ui->addSourceImportPath(inspector_QML_IMPORT);
-    }
 }

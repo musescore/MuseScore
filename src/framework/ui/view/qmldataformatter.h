@@ -22,11 +22,15 @@
 #pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 namespace muse::ui {
 class QmlDataFormatter : public QObject
 {
     Q_OBJECT
+    QML_NAMED_ELEMENT(DataFormatter);
+    QML_UNCREATABLE("Must be created in C++ only")
+
 public:
     explicit QmlDataFormatter(QObject* parent = nullptr);
 

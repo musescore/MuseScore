@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,41 +24,32 @@
 using namespace muse;
 using namespace muse::network;
 
-Ret NetworkManagerStub::get(const QUrl&, IncomingDevice*, const RequestHeaders&)
+RetVal<Progress> NetworkManagerStub::get(const QUrl&, IncomingDevicePtr, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-Ret NetworkManagerStub::head(const QUrl&, const RequestHeaders&)
+RetVal<Progress> NetworkManagerStub::head(const QUrl&, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-Ret NetworkManagerStub::post(const QUrl&, OutgoingDevice*, IncomingDevice*, const RequestHeaders&)
+RetVal<Progress> NetworkManagerStub::post(const QUrl&, OutgoingDeviceVar, IncomingDevicePtr, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-Ret NetworkManagerStub::put(const QUrl&, OutgoingDevice*, IncomingDevice*, const RequestHeaders&)
+RetVal<Progress> NetworkManagerStub::put(const QUrl&, OutgoingDeviceVar, IncomingDevicePtr, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-Ret NetworkManagerStub::patch(const QUrl&, OutgoingDevice*, IncomingDevice*, const RequestHeaders&)
+RetVal<Progress> NetworkManagerStub::patch(const QUrl&, OutgoingDeviceVar, IncomingDevicePtr, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-Ret NetworkManagerStub::del(const QUrl&, IncomingDevice*, const RequestHeaders&)
+RetVal<Progress> NetworkManagerStub::del(const QUrl&, IncomingDevicePtr, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
-}
-
-Progress NetworkManagerStub::progress() const
-{
-    return Progress();
-}
-
-void NetworkManagerStub::abort()
-{
 }

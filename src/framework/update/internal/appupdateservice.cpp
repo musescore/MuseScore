@@ -85,7 +85,7 @@ muse::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
     }
 
     QBuffer buff;
-    m_networkManager = networkManagerCreator()->makeNetworkManager();
+    m_networkManager = networkManagerCreator()->makeDeprecatedNetworkManager();
 
     // Read request history file...
     io::path_t historyPath = configuration()->updateRequestHistoryJsonPath();
@@ -212,7 +212,7 @@ muse::RetVal<muse::io::path_t> AppUpdateService::downloadRelease()
 
     m_updateProgress.start();
 
-    m_networkManager = networkManagerCreator()->makeNetworkManager();
+    m_networkManager = networkManagerCreator()->makeDeprecatedNetworkManager();
     m_networkManager->progress().progressChanged().onReceive(this, [this, info](int64_t current, int64_t total, const std::string&) {
         m_updateProgress.progress(
             current, total,

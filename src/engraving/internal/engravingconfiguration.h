@@ -113,10 +113,11 @@ public:
     bool doNotSaveEIDsForBackCompat() const override;
     void setDoNotSaveEIDsForBackCompat(bool doNotSave) override;
 
+    bool allowReadingImagesFromOutsideMscz() const override;
+
     bool guitarProImportExperimental() const override;
     bool shouldAddParenthesisOnStandardStaff() const override;
     bool negativeFretsAllowed() const override;
-    bool crossNoteHeadAlwaysBlack() const override;
     void setGuitarProMultivoiceEnabled(bool multiVoice) override;
     bool guitarProMultivoiceEnabled() const override;
     bool minDistanceForPartialSkylineCalculated() const override;

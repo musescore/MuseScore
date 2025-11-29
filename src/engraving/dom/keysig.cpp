@@ -170,24 +170,6 @@ void KeySig::changeKeySigEvent(const KeySigEvent& t)
     setKeySigEvent(t);
 }
 
-//---------------------------------------------------------
-//   undoSetShowCourtesy
-//---------------------------------------------------------
-
-void KeySig::undoSetShowCourtesy(bool v)
-{
-    undoChangeProperty(Pid::SHOW_COURTESY, v);
-}
-
-//---------------------------------------------------------
-//   undoSetMode
-//---------------------------------------------------------
-
-void KeySig::undoSetMode(KeyMode v)
-{
-    undoChangeProperty(Pid::KEYSIG_MODE, v);
-}
-
 PointF KeySig::staffOffset() const
 {
     const Segment* seg = segment();

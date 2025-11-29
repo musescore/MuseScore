@@ -43,6 +43,7 @@ using namespace mu::engraving::apiv1;
  * Class representing a score.
  * We can get the current score by calling the `api.engraving.curScore`
  * @class Score
+ * @memberof engraving
  * @hideconstructor
 */
 
@@ -274,33 +275,56 @@ QQmlListProperty<System> Score::systems()
     return wrapContainerProperty<System>(this, score()->systems());
 }
 
-/** APIDOC @property {boolean} - has lyrics */
+/** APIDOC
+ * @readonly
+ * @member {Boolean}
+ */
 bool Score::hasLyrics() const
 {
     return score()->hasLyrics();
 }
 
-/** APIDOC @property {number} - count of lyrics */
+/** APIDOC
+ * @readonly
+ * @member {Number}
+ */
 int Score::lyricCount() const
 {
     return score()->lyricCount();
 }
 
-/** APIDOC @property {Lyric[]} - list of lyrics */
-QQmlListProperty<Lyric> Score::lyrics() const
+/** APIDOC
+ * @readonly
+ * @member {engraving.Lyric[]}
+ * @since 4.7
+ */
+QQmlListProperty<Lyrics> Score::lyrics() const
 {
-    static std::vector<Lyrics*> list = score()->lyrics();
-    return wrapContainerProperty<Lyric>(this, list);
+    static std::vector<engraving::Lyrics*> list;
+    list = score()->lyrics();
+    return wrapContainerProperty<Lyrics>(this, list);
 }
 
 /** APIDOC
 * Extracts all lyrics in the score and returns them in a single string.
 * @method
-* @return {string} - lyrics string
+* @return {String} - lyrics string
 */
 QString Score::extractLyrics() const
 {
     return score()->extractLyrics();
+}
+
+/** APIDOC
+ * @readonly
+ * @member {engraving.Spanner[]}
+ * @since 4.7
+ */
+QQmlListProperty<Spanner> Score::spanners()
+{
+    static std::vector<mu::engraving::Spanner*> spannerList;
+    spannerList = score()->spannerList();
+    return wrapContainerProperty<Spanner>(this, spannerList);
 }
 
 //---------------------------------------------------------

@@ -798,20 +798,10 @@ void TRead::read(Expression* expr, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
 {
-    // Read the old format first
-    bool hasBarre = false;
-    bool haveReadNew = false;
-
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
 
-        // Check for new format fret diagram
-        if (haveReadNew) {
-            e.skipCurrentElement();
-            continue;
-        }
         if (tag == "fretDiagram") {
-            // Read new
             while (e.readNextStartElement()) {
                 const AsciiStringView tag2(e.name());
 
@@ -843,38 +833,16 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
                     e.unknown();
                 }
             }
-            haveReadNew = true;
-        }
-        // Check for new properties
-        else if (tag == "showNut") {
+        } else if (tag == "showNut") {
             TRead::readProperty(d, e, ctx, Pid::FRET_NUT);
         } else if (tag == "orientation") {
             TRead::readProperty(d, e, ctx, Pid::ORIENTATION);
-        }
-        // Then read the rest if there is no new format diagram (compatibility read)
-        else if (tag == "strings") {
+        } else if (tag == "strings") {
             TRead::readProperty(d, e, ctx, Pid::FRET_STRINGS);
         } else if (tag == "frets") {
             TRead::readProperty(d, e, ctx, Pid::FRET_FRETS);
         } else if (tag == "fretOffset") {
             TRead::readProperty(d, e, ctx, Pid::FRET_OFFSET);
-        } else if (tag == "string") {
-            int no = e.intAttribute("no");
-            while (e.readNextStartElement()) {
-                const AsciiStringView t(e.name());
-                if (t == "dot") {
-                    d->setDot(no, e.readInt());
-                } else if (t == "marker") {
-                    d->setMarker(no, Char(e.readInt()) == u'X' ? FretMarkerType::CROSS : FretMarkerType::CIRCLE);
-                }
-                /*else if (t == "fingering")
-                      setFingering(no, e.readInt());*/
-                else {
-                    e.unknown();
-                }
-            }
-        } else if (tag == "barre") {
-            hasBarre = e.readBool();
         } else if (tag == "mag") {
             TRead::readProperty(d, e, ctx, Pid::MAG);
         } else if (tag == "Harmony") {
@@ -886,18 +854,6 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
         } else if (TRead::readProperty(d, tag, e, ctx, Pid::EXCLUDE_VERTICAL_ALIGN)) {
         } else if (!readItemProperties(d, e, ctx)) {
             e.unknown();
-        }
-    }
-
-    // Old handling of barres
-    if (hasBarre) {
-        for (int s = 0; s < d->strings(); ++s) {
-            for (auto& dot : d->dot(s)) {
-                if (dot.exists()) {
-                    d->setBarre(s, -1, dot.fret);
-                    return;
-                }
-            }
         }
     }
 }
@@ -1502,6 +1458,8 @@ bool TRead::readProperties(Fermata* f, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
 {
+    bool loaded = false;
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "autoScale") {
@@ -1518,15 +1476,17 @@ void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
             //    sp if size is spatium
             img->setSizeIsSpatium(e.readBool());
         } else if (tag == "path") {
-            img->setStorePath(e.readText());
+            loaded = img->loadFromStore(e.readText().toStdString());
         } else if (tag == "linkPath") {
-            img->setLinkPath(e.readText());
+            if (img->configuration()->allowReadingImagesFromOutsideMscz() && !loaded) {
+                loaded = img->loadFromFile(e.readText());
+            } else {
+                e.skipCurrentElement();
+            }
         } else if (!TRead::readProperties(img, e, ctx)) {
             e.unknown();
         }
     }
-
-    img->load();
 }
 
 void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
@@ -4029,6 +3989,7 @@ void TRead::read(StaffName* item, XmlReader& xml)
 {
     item->setPos(xml.intAttribute("pos", 0));
     String name = xml.readXml();
+    lineBreakFromTag(name);
     if (name.startsWith(u"<html>")) {
         // compatibility to old html implementation:
         name = HtmlParser::parse(name);

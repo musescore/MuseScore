@@ -54,7 +54,6 @@ public:
     StaffName(const String& xmlText, int pos = 0);
 
     String toPlainText() const;
-    static StaffName fromPlainText(const String& plainText, int pos = 0);
 
     bool operator==(const StaffName&) const;
     String toString() const;

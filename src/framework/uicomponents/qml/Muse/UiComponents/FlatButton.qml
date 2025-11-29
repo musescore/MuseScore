@@ -27,10 +27,33 @@ import QtQuick.Layouts
 import Muse.Ui 
 import Muse.UiComponents
 
+/** APIDOC
+ * General button
+ * @class FlatButton
+ * @hideconstructor
+ * @example
+ * import MuseApi.Controls
+ *
+ * ExtensionBlank {
+ *      FlatButton {
+ *          icon: IconCode.STAR
+ *          text: "Click me"
+ *          onClicked: {
+ *              api.interactive.info("Test", "Clicked on button")
+ *          }
+ *      }
+ * }
+*/
 FocusScope {
     id: root
 
+    /** APIDOC
+     * @member {Qml.IconCode}
+     */
     property int icon: IconCode.NONE
+    /** APIDOC
+     * @member {String}
+     */
     property string text: ""
     property int textFormat: Text.AutoText
     property int maximumLineCount: 1
@@ -105,6 +128,10 @@ FocusScope {
         return FlatButton.TextOnly
     }
 
+    /** APIDOC
+     * @method
+     * @signal
+     */
     signal clicked(var mouse)
     // The `pressAndHold` signal is intentionally not "forwarded" here from the MouseArea for performance reasons.
     // Most buttons don't use it and Qt has optimizations if no signal is attached. If a component needs it,

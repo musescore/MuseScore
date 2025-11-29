@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_TIMELINEVIEW_H
-#define MU_NOTATION_TIMELINEVIEW_H
+#pragma once
 
 #include <QImage>
 #include <QTimer>
+#include <qqmlintegration.h>
 
-#include "uicomponents/view/widgetview.h"
+#include "uicomponents/qml/Muse/UiComponents/widgetview.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
@@ -36,6 +36,7 @@ namespace mu::notation {
 class TimelineView : public muse::uicomponents::WidgetView, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
+    QML_ELEMENT;
 
     muse::Inject<context::IGlobalContext> globalContext = { this };
 
@@ -55,5 +56,3 @@ private:
     QTimer m_drawTimer;
 };
 }
-
-#endif // MU_NOTATION_TIMELINEVIEW_H

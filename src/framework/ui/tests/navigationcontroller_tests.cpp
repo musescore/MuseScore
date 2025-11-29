@@ -32,18 +32,13 @@
 #include "global/tests/mocks/applicationmock.h"
 #include "ui/tests/mocks/mainwindowmock.h"
 
-#include "ui/view/navigationcontrol.h"
-#include "ui/view/navigationpanel.h"
-#include "ui/view/navigationsection.h"
+#include "ui/qml/Muse/Ui/navigationcontrol.h"
+#include "ui/qml/Muse/Ui/navigationpanel.h"
+#include "ui/qml/Muse/Ui/navigationsection.h"
 
 #include "log.h"
 
 using ::testing::Return;
-using ::testing::ReturnRef;
-using ::testing::NiceMock;
-using ::testing::_;
-using ::testing::SaveArgPointee;
-using ::testing::DoAll;
 
 using namespace muse;
 using namespace muse::ui;

@@ -27,7 +27,7 @@
 #include <QIcon>
 #include <QColor>
 
-#include "view/quickpaintedview.h"
+#include "quickpaintedview.h"
 
 namespace muse::uicomponents {
 class IconView : public QuickPaintedView
