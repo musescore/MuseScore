@@ -465,6 +465,7 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
 //---------------------------------------------------------
 //   setRest
 //    sets rests and returns the first one
+//    "l" is in local (stretched) time
 //---------------------------------------------------------
 
 Rest* Score::setRest(const Fraction& _tick, track_idx_t track, const Fraction& _l, bool useDots, Tuplet* tuplet, bool useFullMeasureRest)
@@ -476,6 +477,7 @@ Rest* Score::setRest(const Fraction& _tick, track_idx_t track, const Fraction& _
 //---------------------------------------------------------
 //   setRests
 //    create one or more rests to fill "l"
+//    "l" is in local (stretched) time
 //---------------------------------------------------------
 
 std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, const Fraction& _l, bool useDots, Tuplet* tuplet,
