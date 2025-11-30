@@ -26,7 +26,7 @@ using namespace mu::palette;
 PaletteRootModel::PaletteRootModel(QObject* parent)
     : QObject(parent)
 {
-    dispatcher()->reg(this, "palette-search", [this]() {
+    dispatcher()->reg(this, "palette-search-after-creation-requested", [this]() {
         emit paletteSearchRequested();
     });
     dispatcher()->reg(this, "apply-current-palette-element", [this]() {
