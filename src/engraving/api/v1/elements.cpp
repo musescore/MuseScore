@@ -33,6 +33,7 @@
 #include "engraving/dom/spacer.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/tremolotwochord.h"
+#include "engraving/dom/trill.h"
 
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/editsystemlocks.h"
@@ -655,7 +656,7 @@ bool Staff::isVoiceVisible(int voice)
 
 Ornament* Spanner::ornament() const
 {
-    if (spanner()->type() == mu::engraving::ElementType::TRILL) {
+    if (spanner()->isTrill()) {
         return wrap<Ornament>(toTrill(spanner())->ornament());
     }
     return nullptr;

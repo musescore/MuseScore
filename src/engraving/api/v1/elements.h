@@ -48,7 +48,6 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tremolotwochord.h"
-#include "engraving/dom/trill.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/accidental.h"
@@ -69,7 +68,6 @@ class Spanner;
 class Staff;
 class System;
 class Tie;
-class Trill;
 class Tuplet;
 class Measure;
 class Beam;
