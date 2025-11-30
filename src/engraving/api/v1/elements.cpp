@@ -33,6 +33,7 @@
 #include "engraving/dom/spacer.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/tremolotwochord.h"
+#include "engraving/dom/trill.h"
 
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/editsystemlocks.h"
@@ -647,6 +648,18 @@ int Staff::pitchOffset(FractionWrapper* tick)
 bool Staff::isVoiceVisible(int voice)
 {
     return staff()->isVoiceVisible(voice);
+}
+
+//---------------------------------------------------------
+//   Spanner::ornament
+//---------------------------------------------------------
+
+Ornament* Spanner::ornament() const
+{
+    if (spanner()->isTrill()) {
+        return wrap<Ornament>(toTrill(spanner())->ornament());
+    }
+    return nullptr;
 }
 
 //---------------------------------------------------------

@@ -2301,7 +2301,8 @@ class Spanner : public EngravingItem
     Q_PROPERTY(apiv1::EngravingItem * endElement READ endElement)
     /// List of spanner segments belonging to this spanner.
     Q_PROPERTY(QQmlListProperty<apiv1::SpannerSegment> spannerSegments READ spannerSegments)
-
+    /// The ornament object of this spanner
+    Q_PROPERTY(apiv1::Ornament * ornament READ ornament)
     /// \cond MS_INTERNAL
 
 public:
@@ -2318,6 +2319,8 @@ public:
     {
         return wrapContainerProperty<SpannerSegment>(this, spanner()->spannerSegments());
     }
+
+    Ornament* ornament() const;
 
     /// \endcond
 };
