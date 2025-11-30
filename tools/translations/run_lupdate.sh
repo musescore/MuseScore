@@ -44,7 +44,7 @@ DEFAULT_LUPDATE_ARGS=(
     -tr-function-alias translate+=TranslatableString
     -tr-function-alias qsTranslate+=qsTrc
     -tr-function-alias QT_TRANSLATE_NOOP+=QT_TRANSLATE_NOOP_U16
-    -extensions cpp,h,mm,ui,qml,js
+    -extensions cpp,h,mm,ui,qml,js,mjs
 )
 
 run_indented() {
