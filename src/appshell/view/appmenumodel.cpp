@@ -138,7 +138,7 @@ void AppMenuModel::setupConnections()
         if (stack) {
             stack->stackChanged().onNotify(this, [this]() {
                 updateUndoRedoItems();
-            });
+            }, Asyncable::Mode::SetReplace /* FIXME */);
         }
 
         updateUndoRedoItems();

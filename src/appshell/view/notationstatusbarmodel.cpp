@@ -247,6 +247,14 @@ void NotationStatusBarModel::setNotation(const INotationPtr& notation)
         return;
     }
 
+    if (m_notation) {
+        m_notation->undoStack()->changesChannel().disconnect(this);
+        m_notation->viewModeChanged().disconnect(this);
+        m_notation->viewState()->zoomPercentage().ch.disconnect(this);
+        m_notation->viewState()->zoomType().ch.disconnect(this);
+        m_notation->accessibility()->accessibilityInfo().ch.disconnect(this);
+    }
+
     m_notation = notation;
 
     emit zoomEnabledChanged();
@@ -263,7 +271,7 @@ void NotationStatusBarModel::setNotation(const INotationPtr& notation)
         if (muse::contains(changes.changedStyleIdSet, mu::engraving::Sid::concertPitch)) {
             updateConcertPitchItem();
         }
-    }, async::Asyncable::Mode::SetReplace /* because this channel is from MasterScore*/);
+    });
 
     notation->viewModeChanged().onNotify(this, [this]() {
         initAvailableViewModeList();
@@ -277,18 +285,9 @@ void NotationStatusBarModel::setNotation(const INotationPtr& notation)
         initAvailableZoomList();
     });
 
-    listenChangesInAccessibility();
-}
-
-void NotationStatusBarModel::listenChangesInAccessibility()
-{
-    if (!accessibility()) {
-        return;
-    }
-
     emit accessibilityInfoChanged();
 
-    accessibility()->accessibilityInfo().ch.onReceive(this, [this](const std::string&) {
+    notation->accessibility()->accessibilityInfo().ch.onReceive(this, [this](const std::string&) {
         emit accessibilityInfoChanged();
     });
 }

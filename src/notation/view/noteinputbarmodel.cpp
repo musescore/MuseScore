@@ -142,6 +142,13 @@ void NoteInputBarModel::setNotation(const INotationPtr& notation)
         return;
     }
 
+    if (m_notation) {
+        noteInput()->stateChanged().disconnect(this);
+        interaction()->selectionChanged().disconnect(this);
+        undoStack()->stackChanged().disconnect(this);
+        notation->masterNotation()->hasPartsChanged().disconnect(this);
+    }
+
     m_notation = notation;
 
     if (notation) {
@@ -157,9 +164,10 @@ void NoteInputBarModel::setNotation(const INotationPtr& notation)
             updateState();
         });
 
+        // FIXME: only un-/resubscribe when master notation changes
         notation->masterNotation()->hasPartsChanged().onNotify(this, [this]() {
             emit isInputAllowedChanged();
-        }, Mode::SetReplace /*because it's from MasterNotation*/);
+        });
     }
 
     updateState();

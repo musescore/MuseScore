@@ -193,7 +193,7 @@ void AbstractSelectionFilterModel::onNotationChanged()
     }
     interaction->selectionChanged().onNotify(this, [this]() {
         onSelectionChanged();
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 }
 
 void AbstractSelectionFilterModel::notifyAboutDataChanged(const QModelIndex& index, const SelectionFilterTypesVariant& variant)

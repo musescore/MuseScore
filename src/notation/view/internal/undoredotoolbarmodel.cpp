@@ -110,5 +110,5 @@ void UndoRedoToolbarModel::subsribeOnUndoStackChanges()
 
     stack->stackChanged().onNotify(this, [this]() {
         updateItems();
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 }

@@ -257,7 +257,7 @@ void NotationRegionsBeingProcessedModel::listenViewModeChanges()
 
     notation->viewModeChanged().onNotify(this, [this]() {
         setRegions(calculateRegions(m_tracksBeingProcessed));
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 }
 
 void NotationRegionsBeingProcessedModel::startListeningToProgress(const TrackId trackId)

@@ -46,7 +46,7 @@ void UndoHistoryModel::onCurrentNotationChanged()
     if (stack) {
         stack->stackChanged().onNotify(this, [this] {
             onUndoRedo();
-        });
+        }, Asyncable::Mode::SetReplace /* FIXME */);
     }
 
     beginResetModel();

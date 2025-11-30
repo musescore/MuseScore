@@ -163,11 +163,11 @@ void TimelineView::componentComplete()
 
         notation->undoStack()->stackChanged().onNotify(this, [=] {
             updateView();
-        });
+        }, Asyncable::Mode::SetReplace /* FIXME */);
 
         notation->interaction()->selectionChanged().onNotify(this, [=] {
             updateView();
-        });
+        }, Asyncable::Mode::SetReplace /* FIXME */);
     };
 
     globalContext()->currentNotationChanged().onNotify(this, [initTimeline]() {
