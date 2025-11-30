@@ -656,7 +656,7 @@ bool Staff::isVoiceVisible(int voice)
 Ornament* Spanner::ornament() const
 {
     if (spanner()->type() == mu::engraving::ElementType::TRILL) {
-        return wrap<Ornament>(trill()->ornament());
+        return wrap<Ornament>(toTrill(spanner())->ornament());
     }
     return nullptr;
 }

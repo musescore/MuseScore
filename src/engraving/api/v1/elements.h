@@ -2313,8 +2313,6 @@ public:
 
     mu::engraving::Spanner* spanner() { return toSpanner(e); }
     const mu::engraving::Spanner* spanner() const { return toSpanner(e); }
-    mu::engraving::Trill* trill() { return toTrill(e); }
-    const mu::engraving::Trill* trill() const { return toTrill(e); }
 
     EngravingItem* startElement() const { return wrap(spanner()->startElement()); }
     EngravingItem* endElement() const { return wrap(spanner()->endElement()); }
