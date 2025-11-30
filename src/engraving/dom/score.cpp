@@ -4644,7 +4644,7 @@ ChordRest* Score::findChordRestEndingBeforeTickInTrack(const Fraction& tick, tra
     }
 
     for (const Segment* s = m->last(SegmentType::ChordRest); s; s = s->prev(SegmentType::ChordRest)) {
-        if (ChordRest* cr = toChordRest(s->elementAt(trackIdx))) {
+        if (ChordRest* cr = toChordRest(s->element(trackIdx))) {
             if (cr->endTick() <= tick) {
                 return cr;
             }

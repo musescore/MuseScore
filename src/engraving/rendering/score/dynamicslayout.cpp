@@ -206,7 +206,7 @@ void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::Layo
     }
 
     if (rightBarLineSegment) {
-        EngravingItem* e = rightBarLineSegment->elementAt(barLineStaff * VOICES);
+        EngravingItem* e = rightBarLineSegment->element(barLineStaff * VOICES);
         if (e) {
             double rightMargin = e->ldata()->bbox().translated(e->pagePos()).left()
                                  - referenceBBox.translated(item->pagePos() - item->offset()).right()
@@ -226,7 +226,7 @@ void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::Layo
         }
     }
     if (leftBarLineSegment) {
-        EngravingItem* e = leftBarLineSegment->elementAt(barLineStaff * VOICES);
+        EngravingItem* e = leftBarLineSegment->element(barLineStaff * VOICES);
         if (e) {
             double leftMargin = referenceBBox.translated(item->pagePos() - item->offset()).left()
                                 - e->ldata()->bbox().translated(e->pagePos()).right()

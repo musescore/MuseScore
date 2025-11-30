@@ -1166,7 +1166,7 @@ TEST_F(Engraving_PartsTests, partExclusion)
             continue;
         }
         for (Segment& segment : toMeasure(mb)->segments()) {
-            EngravingItem* item = segment.elementAt(0);
+            EngravingItem* item = segment.element(0);
             if (item && item->isClef() && !item->generated()) {
                 itemsToExclude.push_back(item);
             }
@@ -1326,7 +1326,7 @@ TEST_F(Engraving_PartsTests, inputFromParts) {
     flutePart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
     Segment* scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
     EXPECT_TRUE(scoreSegment);
-    Chord* chord = toChord(scoreSegment->elementAt(staff2track(fluteStaff) + voice));
+    Chord* chord = toChord(scoreSegment->element(staff2track(fluteStaff) + voice));
     EXPECT_TRUE(chord);
 
     voice = 2;
@@ -1335,7 +1335,7 @@ TEST_F(Engraving_PartsTests, inputFromParts) {
     oboePart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
     scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
     EXPECT_TRUE(scoreSegment);
-    chord = toChord(scoreSegment->elementAt(staff2track(oboeStaff) + voice));
+    chord = toChord(scoreSegment->element(staff2track(oboeStaff) + voice));
     EXPECT_TRUE(chord);
 
     voice = 1;
@@ -1344,7 +1344,7 @@ TEST_F(Engraving_PartsTests, inputFromParts) {
     clarinetPart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
     scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
     EXPECT_TRUE(scoreSegment);
-    chord = toChord(scoreSegment->elementAt(staff2track(clarinetStaff) + voice));
+    chord = toChord(scoreSegment->element(staff2track(clarinetStaff) + voice));
     EXPECT_TRUE(chord);
 
     voice = 0;
@@ -1354,7 +1354,7 @@ TEST_F(Engraving_PartsTests, inputFromParts) {
     bassoonPart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
     scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
     EXPECT_TRUE(scoreSegment);
-    chord = toChord(scoreSegment->elementAt(staff2track(bassoonStaff) + voice));
+    chord = toChord(scoreSegment->element(staff2track(bassoonStaff) + voice));
     EXPECT_TRUE(chord);
 }
 

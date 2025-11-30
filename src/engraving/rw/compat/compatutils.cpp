@@ -860,7 +860,7 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
                 continue;
             }
             for (track_idx_t track = 0; track <= masterScore->ntracks(); track++) {
-                EngravingItem* el = segment.elementAt(track);
+                EngravingItem* el = segment.element(track);
                 if (!el || !el->isChord()) {
                     continue;
                 }

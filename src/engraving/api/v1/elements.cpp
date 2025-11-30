@@ -149,7 +149,7 @@ int ChordRest::actualBeamMode(bool beamRests)
 
 EngravingItem* Segment::elementAt(int track)
 {
-    mu::engraving::EngravingItem* el = segment()->elementAt(track);
+    mu::engraving::EngravingItem* el = segment()->element(track);
     if (!el) {
         return nullptr;
     }

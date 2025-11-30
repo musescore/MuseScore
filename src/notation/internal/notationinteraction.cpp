@@ -2679,7 +2679,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
             const track_idx_t track2 = staff2track(sel.staffEnd());
             for (Segment* seg : segList) {
                 for (track_idx_t track = track1; track < track2; ++track) {
-                    EngravingItem* item = seg->elementAt(track);
+                    EngravingItem* item = seg->element(track);
                     if (!item || !item->isChord()) {
                         continue;
                     }
@@ -5127,8 +5127,8 @@ void NotationInteraction::repeatSelection()
             // Looking for the previous Chord
             while (prevSegment)
             {
-                if (prevSegment->elementAt(el->track())->isChord()) {
-                    c = toChord(prevSegment->elementAt(el->track()));
+                if (prevSegment->element(el->track())->isChord()) {
+                    c = toChord(prevSegment->element(el->track()));
                     break;
                 }
                 prevSegment = prevSegment->prev1WithElemsOnTrack(el->track());

@@ -351,7 +351,7 @@ void Clef::changeClefToBarlinePos(ClefToBarlinePosition newPos)
 
     staff_idx_t nStaves = score()->nstaves();
     for (staff_idx_t staffIndex = 0; staffIndex < nStaves; ++staffIndex) {
-        Clef* clef = static_cast<Clef*>(seg->elementAt(staffIndex * VOICES));
+        Clef* clef = toClef(seg->element(staffIndex * VOICES));
         if (clef) {
             clef->m_clefToBarlinePosition = newPos;
         }

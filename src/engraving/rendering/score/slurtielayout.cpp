@@ -1189,7 +1189,7 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
     }
 
     for (track_idx_t track = staff2track(startStaffIdx); track < staff2track(endStaffIdx, VOICES); ++track) {
-        EngravingItem* e = seg->elementAt(track);
+        EngravingItem* e = seg->element(track);
         if (!e || !e->isChordRest()) {
             continue;
         }

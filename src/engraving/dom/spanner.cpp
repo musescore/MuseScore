@@ -735,7 +735,7 @@ void Spanner::doComputeStartElement()
         if (systemFlag()) {
             m_startElement = startSegment();
         } else {
-            EngravingItem* startEl = startSeg->elementAt(track());
+            EngravingItem* startEl = startSeg->element(track());
             if (startEl) {
                 m_startElement = startEl;
             } else {
@@ -794,7 +794,7 @@ void Spanner::doComputeEndElement()
             m_endElement = endSeg;
         } else {
             track_idx_t trackIdx = effectiveTrack2();
-            EngravingItem* endEl = endSeg->elementAt(trackIdx);
+            EngravingItem* endEl = endSeg->element(trackIdx);
             if (endEl) {
                 m_endElement = endEl;
             } else {
@@ -1065,7 +1065,7 @@ Segment* Spanner::startSegment() const
 
     Segment* startSeg = score()->tick2segment(startTick, true, SegmentType::ChordRest, mmRest);
 
-    if (!startSeg || !startSeg->hasElements(staffIdx) || (isVoiceSpecific() && !startSeg->elementAt(trackIdx))) {
+    if (!startSeg || !startSeg->hasElements(staffIdx) || (isVoiceSpecific() && !startSeg->element(trackIdx))) {
         startSeg = score()->tick2segment(startTick, true, SegmentType::TimeTick, mmRest);
     }
 
@@ -1103,7 +1103,7 @@ Segment* Spanner::endSegment() const
 
     Segment* endSeg = score()->tick2segment(endTick, true, SegmentType::ChordRest, mmRest);
 
-    if (!endSeg || !endSeg->hasElements(staffIdx) || (isVoiceSpecific() && !endSeg->elementAt(trackIdx))) {
+    if (!endSeg || !endSeg->hasElements(staffIdx) || (isVoiceSpecific() && !endSeg->element(trackIdx))) {
         endSeg = score()->tick2segment(endTick, true, SegmentType::TimeTick, mmRest);
     }
 

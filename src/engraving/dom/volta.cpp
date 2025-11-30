@@ -394,7 +394,7 @@ PointF Volta::linePos(Grip grip, System** system) const
             x += segment->staffShape(si).right();
             x -= 0.5 * absoluteFromSpatium(lineWidth());
         } else if (segment->segmentType() & SegmentType::BarLineType) {
-            BarLine* barLine = toBarLine(segment->elementAt(track()));
+            BarLine* barLine = toBarLine(segment->element(track()));
             if (barLine->barLineType() == BarLineType::END_REPEAT || barLine->barLineType() == BarLineType::END_START_REPEAT) {
                 x += symWidth(SymId::repeatDot) + style().styleMM(Sid::repeatBarlineDotSeparation);
             }

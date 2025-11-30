@@ -36,7 +36,7 @@ static const Segment* findSegmentFrom(const Score* score, const System* system,
     }
 
     const track_idx_t trackIdx = staff2track(staffIdx);
-    const EngravingItem* item = segment->elementAt(trackIdx);
+    const EngravingItem* item = segment->element(trackIdx);
     if (!item) {
         return nullptr;
     }
@@ -47,7 +47,7 @@ static const Segment* findSegmentFrom(const Score* score, const System* system,
 
     while (segment && item && item->isRest()) {
         segment = segment->next1(SegmentType::ChordRest);
-        item = segment ? segment->elementAt(trackIdx) : nullptr;
+        item = segment ? segment->element(trackIdx) : nullptr;
     }
 
     return segment;
@@ -66,7 +66,7 @@ static const Segment* findSegmentTo(const Score* score, const System* system, co
     }
 
     const track_idx_t trackIdx = staff2track(staffIdx);
-    const EngravingItem* item = segment->elementAt(trackIdx);
+    const EngravingItem* item = segment->element(trackIdx);
     if (!item) {
         return nullptr;
     }
@@ -77,7 +77,7 @@ static const Segment* findSegmentTo(const Score* score, const System* system, co
 
     while (segment && item && item->isRest()) {
         segment = segment->prev1(SegmentType::ChordRest);
-        item = segment ? segment->elementAt(trackIdx) : nullptr;
+        item = segment ? segment->element(trackIdx) : nullptr;
     }
 
     return segment;
