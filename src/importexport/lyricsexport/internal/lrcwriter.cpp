@@ -130,7 +130,7 @@ std::map<double, QString> LRCWriter::collectLyrics(const mu::engraving::Score* s
     for (const RepeatSegment* rs : repeats) {
         const int tickOffset = rs->utick - rs->tick;
 
-        for (const MeasureBase* mb = rs->firstMeasure(); mb; mb = mb->next()) {
+        for (const MeasureBase* mb : rs->measureList()) {
             if (!mb->isMeasure()) {
                 continue;
             }
