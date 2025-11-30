@@ -25,7 +25,9 @@
 #include <QIODevice>
 
 #include "project/inotationwriter.h"
-#include "../ilyricsexportconfiguration.h"
+#include "engraving/engravingerrors.h"
+
+#include "importexport/lyricsexport/ilyricsexportconfiguration.h"
 
 namespace mu::engraving {
 class Score;
@@ -35,19 +37,23 @@ namespace mu::iex::lrcexport {
 class LRCWriter : public project::INotationWriter
 {
 public:
-    INJECT_STATIC(mu::iex::lrcexport::LyricsExportConfiguration, configuration)
+    INJECT_STATIC(mu::iex::lrcexport::ILyricsExportConfiguration, configuration)
 
 public:
     // Interface implementation
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType) const override;
     muse::Ret write(notation::INotationPtr, muse::io::IODevice&, const Options&) override;
-    void writeMetadata(QIODevice& device, const engraving::Score* score) const;
+    void writeMetadata(muse::io::IODevice* device, const engraving::Score* score) const;
     muse::Ret writeList(const notation::INotationPtrList&, muse::io::IODevice&, const Options&) override;
+    bool writeScore(mu::engraving::Score* score, const muse::io::path_t& path, bool enhancedLrc);
 
 private:
+    muse::Ret write(mu::engraving::Score* score, muse::io::IODevice*, bool);
     // Core lyric functionality
-    QMap<qreal, QString> collectLyrics(const engraving::Score*) const;
+    QMap<qreal, QString> collectLyrics(const mu::engraving::Score*);
     QString formatTimestamp(qreal ms) const;
+    bool exportLrc(mu::engraving::Score*, muse::io::IODevice*, bool);
+    void findStaffVoiceAndLyricToExport(const mu::engraving::Score*, mu::engraving::staff_idx_t&, mu::engraving::voice_idx_t&, int&);
 };
 } // namespace mu::iex::lrcexport

@@ -35,7 +35,7 @@ static const Settings::Key LRC_USE_ENHANCED_FORMAT_KEY(module_name, "export/lrc/
 
 void LyricsExportConfiguration::init()
 {
-    settings()->setDefaultValue(LRC_USE_ENHANCED_FORMAT_KEY, Val(false));
+    settings()->setDefaultValue(LRC_USE_ENHANCED_FORMAT_KEY, Val(true));
 }
 
 async::Channel<bool> LyricsExportConfiguration::lrcUseEnhancedFormatChanged() const

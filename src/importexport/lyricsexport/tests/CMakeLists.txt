@@ -18,29 +18,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(iex_lyricsexport)
+set(MODULE_TEST iex_lyricsexport_tests)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/lyricsexportmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/lyricsexportmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/ilyricsexportconfiguration.h
+set(MODULE_TEST_SRC
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.h
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/lyricsexportconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/lyricsexportconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/iex_lyricsexport.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/iex_lyricsexport.h
-    )
-
-set(MODULE_LINK
-    engraving
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/lrc_tests.cpp
 )
 
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Core5Compat)
-endif()
+set(MODULE_TEST_LINK
+    engraving
+    iex_lyricsexport
+    )
 
-setup_module()
+set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
-if (MUE_BUILD_IMPORTEXPORT_TESTS)
-    add_subdirectory(tests)
-endif()
+include(SetupGTest)
+

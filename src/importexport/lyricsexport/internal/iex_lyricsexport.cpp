@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "iex_lyricsexport.h"
+#include "io/file.h"
 
 #include <QBuffer>
 
@@ -28,7 +28,10 @@
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/lyrics.h"
 
+#include "iex_lyricsexport.h"
+
 using namespace mu::engraving;
+using namespace muse::io;
 
 namespace mu::iex::lrcexport {
 // Interface implementation
@@ -37,43 +40,65 @@ std::vector<project::INotationWriter::UnitType> LRCWriter::supportedUnitTypes() 
     return { UnitType::PER_PART };
 }
 
+//
+// LRCWriter::supportsUnitType
+//
+
 bool LRCWriter::supportsUnitType(UnitType ut) const { return ut == UnitType::PER_PART; }
+
+//
+// LRCWriter::write
+//
 
 muse::Ret LRCWriter::write(notation::INotationPtr notation, muse::io::IODevice& device, const Options&)
 {
     Score* score = notation->elements()->msScore();
-    QByteArray data;
-    QBuffer buffer(&data);
-    bool enhancedFormat = configuration()->lrcUseEnhancedFormat();
+    bool enhancedLrc = configuration()->lrcUseEnhancedFormat();
 
-    /***********
-    *
-    * PENDING....
-    Is there any advantage to writing to a buffer first, and then writing that buffer to the device? It would seem more efficient to me to write to the device directly.
+    return write(score, &device, enhancedLrc);
+}
 
-    ******/
+//
+// LRCWriter::exportLrc
+//
 
-    buffer.open(QIODevice::WriteOnly);
+bool LRCWriter::exportLrc(mu::engraving::Score* score, muse::io::IODevice* device, bool enhancedLrc)
+{
+    write(score, device, enhancedLrc);
+    return true;
+}
 
-    writeMetadata(buffer, score);
+//
+// LRCWriter::writeScore
+//
 
-    const auto lyrics = collectLyrics(score);
-
-    // Write lyrics
-    for (auto it = lyrics.constBegin(); it != lyrics.constEnd(); ++it) {
-        buffer.write(QString("[%1]%2\n").arg(formatTimestamp(it.key()), it.value()).toUtf8());
+bool LRCWriter::writeScore(mu::engraving::Score* score, const muse::io::path_t& path, bool enhancedLrc)
+{
+    File f(path);
+    if (!f.open(IODevice::WriteOnly)) {
+        return false;
     }
 
-    device.write(data);
-    return muse::Ret(muse::Ret::Code::Ok);
+    bool res = exportLrc(score, &f, enhancedLrc) && !f.hasError();
+    f.close();
+
+    return res;
 }
+
+//
+// LRCWriter::writeList
+//
 
 muse::Ret LRCWriter::writeList(const notation::INotationPtrList&, muse::io::IODevice&, const Options&)
 {
     return muse::Ret(muse::Ret::Code::NotSupported);
 }
 
-void LRCWriter::writeMetadata(QIODevice& device, const engraving::Score* score) const
+//
+// LRCWriter::writeMetadata
+//
+
+void LRCWriter::writeMetadata(muse::io::IODevice* device, const engraving::Score* score) const
 {
     QString metadata;
 
@@ -90,69 +115,80 @@ void LRCWriter::writeMetadata(QIODevice& device, const engraving::Score* score) 
     }
 
     if (!metadata.isEmpty()) {
-        device.write(metadata.toUtf8());
+        device->write(metadata.toUtf8());
     }
 }
 
-// Core lyric collection (simplified)
-QMap<qreal, QString> LRCWriter::collectLyrics(const Score* score) const
+//
+// LRCWriter::write
+//
+
+muse::Ret LRCWriter::write(mu::engraving::Score* score, muse::io::IODevice* device, bool enhancedLrc)
+{
+    writeMetadata(device, score);
+
+    const auto lyrics = collectLyrics(score);
+
+    // Write lyrics
+    for (auto it = lyrics.constBegin(); it != lyrics.constEnd(); ++it) {
+        if (enhancedLrc) {
+            // As there should only be words we replace spaces by "-"
+            QString lyricsText = it.value();
+            lyricsText.replace(QRegularExpression("\\s"), "-");
+            lyricsText.replace(QChar(0x00A0), QChar('-'));
+
+            device->write(QString("[%1] <%1> %2\n").arg(formatTimestamp(it.key()), lyricsText).toUtf8());
+        } else {
+            device->write(QString("[%1]%2\n").arg(formatTimestamp(it.key()), it.value()).toUtf8());
+        }
+    }
+
+    return muse::Ret(muse::Ret::Code::Ok);
+}
+
+//
+// LRCWriter::collectLyrics
+//
+
+QMap<qreal, QString> LRCWriter::collectLyrics(const mu::engraving::Score* score)
 {
     QMap<qreal, QString> lyrics;
     const RepeatList& repeats = score->repeatList();
 
-    LOGI() << "tpacebes ";
+    staff_idx_t lyricsStaff;
+    voice_idx_t lyricsVoice;
+    int lyricNumber;
 
-    int paabRepeatSegment = 0;
+    findStaffVoiceAndLyricToExport(score, lyricsStaff, lyricsVoice, lyricNumber);
 
     for (const RepeatSegment* rs : repeats) {
         const int tickOffset = rs->utick - rs->tick;
 
-        ++paabRepeatSegment;
-
-        LOGI() << "tpacebes repeat segment " << paabRepeatSegment;
-
-        int paabMeasureBase = 0;
-
         for (const MeasureBase* mb = rs->firstMeasure(); mb; mb = mb->next()) {
-
-            ++paabMeasureBase;
-
             if (!mb->isMeasure()) {
                 continue;
             }
 
-            LOGI() << "tpacebes measure base " << paabMeasureBase;
-
-            int paabSegment = 0;
             for (Segment* seg = toMeasure(mb)->first(); seg; seg = seg->next()) {
-                ++paabSegment;
                 if (!seg->isChordRestType()) {
                     continue;
                 }
 
-                LOGI() << "tpacebes paabSegment " << paabSegment;
-
-                int paabEngravingItem = 0;
                 for (EngravingItem* e : seg->elist()) {
-                    ++paabEngravingItem;
                     if (!e || !e->isChordRest()) {
                         continue;
                     }
 
-                    LOGI() << "tpacebes paabEngravingItem " << paabEngravingItem;
-
-                    int paabLyrics = 0;
                     for (Lyrics* l : toChordRest(e)->lyrics()) {
-                        ++paabLyrics;
                         // if (l->text().empty())
                         if (l->plainText().isEmpty()) {
                             continue;
                         }
-                        LOGI() << "tpacebes paabLyrics " << paabLyrics;
 
-                        const qreal time = score->utick2utime(l->tick().ticks() + tickOffset) * 1000;
-                        lyrics.insert(time, l->plainText());
-                        LOGI() << "tpacebes insertamos Time " << time << "==>" << l->plainText() << "<==";
+                        if ((lyricsStaff == e->staffIdx()) && (lyricsVoice == e->voice()) && (lyricNumber == l->subtype())) {
+                            const qreal time = score->utick2utime(l->tick().ticks() + tickOffset) * 1000;
+                            lyrics.insert(time, l->plainText());
+                        }
                     }
                 }
             }
@@ -161,6 +197,10 @@ QMap<qreal, QString> LRCWriter::collectLyrics(const Score* score) const
     return lyrics;
 }
 
+//
+// LRCWriter::formatTimestamp
+//
+
 QString LRCWriter::formatTimestamp(qreal ms) const
 {
     const int totalSec = static_cast<int>(ms / 1000);
@@ -168,5 +208,69 @@ QString LRCWriter::formatTimestamp(qreal ms) const
            .arg(totalSec / 60, 2, 10, QLatin1Char('0'))
            .arg(totalSec % 60, 2, 10, QLatin1Char('0'))
            .arg(static_cast<int>(ms) % 1000 / 10, 2, 10, QLatin1Char('0'));
+}
+
+//
+// LRCWriter::findStaffVoiceAndLyricToExport
+//
+
+void LRCWriter::findStaffVoiceAndLyricToExport(const mu::engraving::Score* score, mu::engraving::staff_idx_t& staff,
+                                               mu::engraving::voice_idx_t& voice, int& lyricNumber)
+{
+    bool lyricsFound = false;
+    staff = 0;
+    voice = 0;
+    lyricNumber = 0;
+
+    const RepeatList& repeats = score->repeatList();
+
+    for (const RepeatSegment* rs : repeats) {
+        const int tickOffset = rs->utick - rs->tick;
+
+        for (const MeasureBase* mb = rs->firstMeasure(); mb; mb = mb->next()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+
+            for (Segment* seg = toMeasure(mb)->first(); seg; seg = seg->next()) {
+                if (!seg->isChordRestType()) {
+                    continue;
+                }
+
+                for (EngravingItem* e : seg->elist()) {
+                    if (!e || !e->isChordRest()) {
+                        continue;
+                    }
+
+                    for (Lyrics* l : toChordRest(e)->lyrics()) {
+                        // if (l->text().empty())
+                        if (l->plainText().isEmpty()) {
+                            continue;
+                        } else {
+                            if (!lyricsFound) {
+                                lyricsFound = true;
+                                staff = e->staffIdx();
+                                voice = e->voice();
+                                lyricNumber = l->subtype();
+                            } else {
+                                if (staff > e->staffIdx()) {
+                                    staff = e->staffIdx();
+                                    voice = e->voice();
+                                    lyricNumber = l->subtype();
+                                } else if (staff == e->staffIdx()) {
+                                    if (voice > e->voice()) {
+                                        voice = e->voice();
+                                        lyricNumber = l->subtype();
+                                    } else if (voice == e->voice()) {
+                                        lyricNumber = min(lyricNumber, l->subtype());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 } // namespace mu::iex::lrcexport
