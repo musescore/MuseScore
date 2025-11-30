@@ -177,9 +177,6 @@ jobs:
         sudo apt-get update && sudo apt-get install -y ccache
         bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
-    - name: Register gcc problem matcher
-      run: echo "::add-matcher::.github/problem_matchers/gcc.json"
-
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
@@ -204,6 +201,10 @@ jobs:
       with:
         token: ${{ secrets.TRANSIFEX_API_TOKEN }}
         args: "pull -f"
+
+    - name: Register gcc problem matcher
+      run: echo "::add-matcher::.github/problem_matchers/gcc.json"
+
     - name: Build
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi

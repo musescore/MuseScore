@@ -161,7 +161,7 @@ public:
     virtual ~EngravingItem();
 
     EngravingItem& operator=(const EngravingItem&) = delete;
-    //@ create a copy of the element
+
     virtual EngravingItem* clone() const = 0;
     virtual EngravingItem* linkedClone();
 

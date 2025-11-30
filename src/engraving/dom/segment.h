@@ -173,8 +173,6 @@ public:
 
     EngravingItem* element(track_idx_t track) const;
 
-    // a variant of the above function, specifically designed to be called from QML
-    //@ returns the element at track 'track' (null if none)
     EngravingItem* elementAt(track_idx_t track) const;
 
     const std::vector<EngravingItem*>& elist() const { return m_elist; }

@@ -106,8 +106,4 @@ typedef uint64_t fluid_phase_t;
  */
 #define fluid_phase_sub_int(a, b)  ((a) -= (uint64_t)(b) << 32)
 
-/* Purpose:
- * Creates the expression a.index++. */
-#define fluid_phase_index_plusplus(a)  (((a) += 0x100000000LL)
-
 #endif  /* _FLUID_PHASE_H */
