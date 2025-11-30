@@ -111,6 +111,7 @@ void FinaleOptions::init(const FinaleParser& context)
     miscOptions = getDocOptions<options::MiscOptions>(context, "miscellaneous");
     mmRestOptions = getDocOptions<options::MultimeasureRestOptions>(context, "multimeasure rest");
     musicSpacing = getDocOptions<options::MusicSpacingOptions>(context, "music spacing");
+    musicSymbols = getDocOptions<options::MusicSymbolOptions>(context, "music symbols");
     auto pageFormatOptions = getDocOptions<options::PageFormatOptions>(context, "page format");
     pageFormat = pageFormatOptions->calcPageFormatForPart(context.currentMusxPartId());
     braceOptions = getDocOptions<options::PianoBraceBracketOptions>(context, "piano braces & brackets");
@@ -433,7 +434,18 @@ void writeStemPrefs(MStyle& style, const FinaleParser& context)
 {
     const auto& prefs = context.musxOptions();
 
-    setStyle(style, Sid::useStraightNoteFlags, prefs.flagOptions->straightFlags);
+    bool useStraightFlags = prefs.flagOptions->straightFlags;
+    if (!useStraightFlags) {
+        // some documents using certain music fonts (e.g., Pmusic) have straight flags as their regular flag characters.
+        // we check the flagUp and if that is straight, we consider that the others must be straight as well.
+        if (MusxInstance<FontInfo> flagFont = options::FontOptions::getFontInfo(context.musxDocument(), options::FontOptions::FontType::Flags)) {
+            SymId flagChar = FinaleTextConv::symIdFromFinaleChar(prefs.musicSymbols->flagUp, flagFont, SymId::noSym);
+            if (flagChar == SymId::flag8thUpStraight) {
+                useStraightFlags = true;
+            }
+        }
+    }
+    setStyle(style, Sid::useStraightNoteFlags, useStraightFlags);
     writeEfixSpace(style, Sid::stemWidth, prefs.stemOptions->stemWidth);
     setStyle(style, Sid::shortenStem, true);
     writeEvpuSpace(style, Sid::stemLength, prefs.stemOptions->stemLength);
