@@ -17023,7 +17023,7 @@
         <source>5-string electric bass guitar, high C tuning (staff notation).</source>
         <comment>5-string-electric-bass-high-c description</comment>
         <extracomment>description for 5-str. Electric Bass (high C/tenor); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>5-kielinen sähköbassokitara, korkea C-viritys (viivasto notaatio).</translation>
+        <translation>5-kielinen sähköbassokitara, korkea C-viritys (viivastonotaatio).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5637"/>
@@ -19054,7 +19054,7 @@
         <source>Strings</source>
         <comment>strings longName</comment>
         <extracomment>longName for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Jouset</translation>
+        <translation>Jousisoittimet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6290"/>
@@ -20616,7 +20616,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="193"/>
         <source>Strings</source>
-        <translation>Jouset</translation>
+        <translation>Kielisoittimet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="194"/>
