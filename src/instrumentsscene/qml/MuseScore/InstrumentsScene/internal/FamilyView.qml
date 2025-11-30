@@ -126,6 +126,22 @@ Item {
                 font: ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
                 text: groupName
+                elide: Text.ElideRight
+
+                MouseArea {
+                    id: hoverArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+
+                    onContainsMouseChanged: {
+                        if (hoverArea.containsMouse && itemTitleLabel.truncated) {
+                            ui.tooltip.show(hoverArea, groupName)
+                        } else {
+                            ui.tooltip.hide(hoverArea)
+                        }
+                    }
+                }
             }
 
             onClicked: {
