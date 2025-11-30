@@ -889,9 +889,7 @@ public:
     std::map<String, String>& metaTags() { return m_metaTags; }
     void setMetaTags(const std::map<String, String>& t) { m_metaTags = t; }
 
-    //@ returns as a string the metatag named 'tag'
     String metaTag(const String& tag) const;
-    //@ sets the metatag named 'tag' to 'val'
     void setMetaTag(const String& tag, const String& val);
 
     int pageNumberOffset() const { return m_pageNumberOffset; }
@@ -947,8 +945,7 @@ public:
 
     std::list<Score*> scoreList();
 
-    //@ appends to the score a number of measures
-    void appendMeasures(int);
+    void appendMeasures(int numMeasures);
 
     const std::multimap<int, Spanner*>& spanner() const { return m_spanner.map(); }
     SpannerMap& spannerMap() { return m_spanner; }

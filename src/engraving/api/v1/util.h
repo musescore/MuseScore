@@ -142,9 +142,9 @@ public slots:
     /// \param args An array of arguments passed to the program.
     /// \since MuseScore 4.3
     Q_INVOKABLE void startWithArgs(const QString& program, const QStringList& args);
-    //@ --
+    /// --
     Q_INVOKABLE bool waitForFinished(int msecs = 30000) { return QProcess::waitForFinished(msecs); }
-    //@ --
+    /// --
     Q_INVOKABLE QByteArray readAllStandardOutput() { return QProcess::readAllStandardOutput(); }
 };
 }

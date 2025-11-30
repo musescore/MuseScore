@@ -224,9 +224,7 @@ public:
     Hook* hook() const { return m_hook; }
     void setHook(Hook* h) { m_hook = h; }
 
-    //@ add an element to the Chord
     void add(EngravingItem*) override;
-    //@ remove the element from the Chord
     void remove(EngravingItem*) override;
 
     Note* selectedNote() const;

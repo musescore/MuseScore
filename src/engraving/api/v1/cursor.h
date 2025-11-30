@@ -214,10 +214,10 @@ public:
     Q_INVOKABLE void addRest();
     Q_INVOKABLE void addTuplet(apiv1::FractionWrapper* ratio, apiv1::FractionWrapper* duration);
 
-    //@ set duration
-    //@   z: numerator
-    //@   n: denominator
-    //@   Quarter, if n == 0
+    /// set duration
+    ///   z: numerator
+    ///   n: denominator
+    ///   Quarter, if n == 0
     Q_INVOKABLE void setDuration(int z, int n);
 };
 }
