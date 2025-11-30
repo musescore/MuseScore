@@ -710,7 +710,7 @@ void AbstractNotationPaintView::onNotationSetup()
         scheduleRedraw();
     }, async::Asyncable::Mode::SetReplace);
 
-    engravingConfiguration()->selectionColorChanged().onReceive(this, [this](int, const muse::draw::Color&) {
+    engravingConfiguration()->selectionColorChanged().onReceive(this, [this](voice_idx_t, const muse::draw::Color&) {
         scheduleRedraw();
     });
 
