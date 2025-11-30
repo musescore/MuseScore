@@ -67,7 +67,8 @@ public:
 
     bool setProperty(Pid id, const PropertyValue& v) override;
 
-    void setCustomText(const String& s) {
+    void setCustomText(const String& s)
+    {
         _customText = s;
         _useCustomText = true;
         m_manualText = true;
