@@ -101,7 +101,7 @@ Item {
                 view.positionViewAtIndex(index, ListView.Contain)
                 view.currentIndex = index
                 Qt.callLater(function() {
-                    if(view.currentItem) {
+                    if (view.currentItem) {
                         view.currentItem.startEditTitle()
                     }
                 })
