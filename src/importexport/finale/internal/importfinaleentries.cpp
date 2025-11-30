@@ -380,6 +380,16 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     }
     bool graceAfterType = false;
 
+    if (entryInfo.calcIsBeamedRestWorkaroundVisibleRest()) {
+        logger()->logInfo(String(u"Ignoring voice2 entry %1 that is part of a beaming workaround.").arg(currentEntryNumber));
+        return true;
+    }
+    const bool isRestWorkaroundHiddenEntry = entryInfo.calcIsBeamedRestWorkaroundHiddenRest();
+    if (isRestWorkaroundHiddenEntry) {
+        logger()->logInfo(String(u"Recognized entry %1 as a hidden rest used as a beaming workaround an converted it to visible").arg(currentEntryNumber));
+    }
+    const bool hiddenEntry = currentEntry->isHidden && !isRestWorkaroundHiddenEntry;
+
     Fraction entryStartTick = Fraction(-1, 1);
     // todo: save the fraction to avoid calling this function for every grace note
     // And the grace note code is sparse in safety checks by comparison with the rest of the code.
@@ -482,7 +492,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             engraving::Note* note = Factory::createNote(chord);
             note->setParent(chord);
             note->setTrack(curTrackIdx);
-            note->setVisible(!currentEntry->isHidden);
+            note->setVisible(!hiddenEntry);
             note->setPlay(!currentEntry->noPlayback && !neverPlayback); /// @todo account for spanners
             note->setAutoplace(!noteInfoPtr->noSpacing);
 
@@ -662,13 +672,13 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             }
             if (chord->shouldHaveStem() || d.hasStem()) {
                 Stem* stem = Factory::createStem(chord);
-                stem->setVisible(!currentEntry->isHidden);
+                stem->setVisible(!hiddenEntry);
                 chord->add(stem);
             }
             if (unbeamed && d.hooks() > 0) {
                 chord->setBeamMode(BeamMode::NONE);
                 Hook* hook = new Hook(chord);
-                hook->setVisible(!currentEntry->isHidden);
+                hook->setVisible(!hiddenEntry);
                 chord->setHook(hook);
                 chord->add(hook);
             }
@@ -720,7 +730,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             }
         }
         cr = toChordRest(rest);
-        cr->setVisible(!musxStaff->hideRests && !currentEntry->isHidden);
+        cr->setVisible(!musxStaff->hideRests && !hiddenEntry);
     }
 
     int entrySize = entryInfo.calcEntrySize();
@@ -840,11 +850,14 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
 
     const MeasCmper startMeasureId = entryInfoPtr.getMeasure();
 
-    for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroupAcrossBars(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroupAcrossBars()) {
+    for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroupAcrossBars(/*includeHidden*/true); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroupAcrossBars(/*includeHidden*/true)) {
         if (nextInBeam.getMeasure() != startMeasureId) {
             break;
         }
         const MusxInstance<Entry>& currentEntry = nextInBeam->getEntry();
+        if (currentEntry->isHidden && !nextInBeam.calcIsBeamedRestWorkaroundHiddenRest()) {
+            continue;
+        }
         EntryNumber currentEntryNumber = currentEntry->getEntryNumber();
         if (entryInfoPtr->getEntry()->graceNote && !currentEntry->isNote) {
             // Grace rests are unmapped and not supported
@@ -1075,7 +1088,9 @@ void FinaleParser::importEntries()
 
                         // add chords and rests
                         bool skipNext = false;
-                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
+                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1, /*skipBeamedRestWorkaround*/ true);
+                             entryInfoPtr;
+                             entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
                             if (skipNext || entryInfoPtr.calcCreatesSingletonBeamLeft()) {
                                 skipNext = false;
                                 continue;
