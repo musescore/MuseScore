@@ -106,47 +106,45 @@ Item {
         }
 
         delegate: ListItemBlank {
-            id: item
+                    id: item
 
-            property string groupName: modelData
+                    property string groupName: modelData
 
-            isSelected: groupsView.currentIndex === model.index
+                    isSelected: groupsView.currentIndex === model.index
 
-            navigation.name: modelData
-            navigation.panel: groupsView.navigation
-            navigation.row: 2 + model.index
-            navigation.accessible.name: itemTitleLabel.text
-            navigation.accessible.row: model.index
+                    navigation.name: modelData
+                    navigation.panel: groupsView.navigation
+                    navigation.row: 2 + model.index
+                    navigation.accessible.name: itemTitleLabel.text
+                    navigation.accessible.row: model.index
 
-            StyledTextLabel {
-                id: itemTitleLabel
-                anchors.fill: parent
-                anchors.leftMargin: 12
+                    StyledTextLabel {
+                        id: itemTitleLabel
+                        anchors.fill: parent
+                        anchors.leftMargin: 12
 
-                font: ui.theme.bodyBoldFont
-                horizontalAlignment: Text.AlignLeft
-                text: groupName
-                elide: Text.ElideRight
+                        font: ui.theme.bodyBoldFont
+                        horizontalAlignment: Text.AlignLeft
+                        text: groupName
 
-                MouseArea {
-                    id: hoverArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    acceptedButtons: Qt.NoButton
+                        MouseArea {
+                            id: tooltipArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            
+                            onClicked: {
+                                root.groupSelected(model.index)
+                            }
 
-                    onContainsMouseChanged: {
-                        if (hoverArea.containsMouse && itemTitleLabel.truncated) {
-                            ui.tooltip.show(hoverArea, groupName)
-                        } else {
-                            ui.tooltip.hide(hoverArea)
+                            onContainsMouseChanged: {
+                                if (containsMouse && itemTitleLabel.truncated) {
+                                    ui.tooltip.show(tooltipArea, groupName)
+                                } else {
+                                    ui.tooltip.hide(tooltipArea)
+                                }
+                            }
                         }
                     }
                 }
-            }
-
-            onClicked: {
-                root.groupSelected(model.index)
-            }
-        }
     }
 }
