@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -17,28 +17,19 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include <gtest/gtest.h>
 
-#include "io/file.h"
-
 #include "engraving/tests/utils/scorerw.h"
 #include "engraving/tests/utils/scorecomp.h"
 
-#include "modularity/ioc.h"
-#include "importexport/lyricsexport/ilyricsexportconfiguration.h"
-#include "importexport/lyricsexport/internal/iex_lyricsexport.h"
+#include "importexport/lyricsexport/internal/lrcwriter.h"
 
 using namespace mu::engraving;
 
 static const String LRC_DIR(u"data/");
-
-////////////////////////////////////////////////////////////////
-// Set to true to re-generate the MuseScore reference test files
-#define BUILD_MSCORE_REF_FILE false
-////////////////////////////////////////////////////////////////
 
 namespace mu::iex::lrcexport {
 class Lrc_Tests : public ::testing::Test
@@ -46,7 +37,8 @@ class Lrc_Tests : public ::testing::Test
 public:
     void lrcTest(const char* file, bool enhancedLrc);
 
-    inline static bool s_generateReferenceFile = BUILD_MSCORE_REF_FILE;
+    /// Set to true to re-generate the MuseScore reference test files
+    static constexpr bool s_generateReferenceFile = false;
 };
 
 void Lrc_Tests::lrcTest(const char* file, bool enhancedLrc)
@@ -63,7 +55,7 @@ void Lrc_Tests::lrcTest(const char* file, bool enhancedLrc)
     EXPECT_TRUE(score);
 
     // Flag to be turned on to generate the test reference lrc files
-    if (s_generateReferenceFile) {
+    if constexpr (s_generateReferenceFile) {
         bool res = exportFunc(score, ScoreRW::rootPath() + u"/" + LRC_DIR + fileName + u"_ref.lrc", enhancedLrc);
         EXPECT_TRUE(res);
         return;

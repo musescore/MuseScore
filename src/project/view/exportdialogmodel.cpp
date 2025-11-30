@@ -274,10 +274,6 @@ void ExportDialogModel::setExportType(const ExportType& type)
 
     std::vector<UnitType> unitTypes = exportProjectScenario()->supportedUnitTypes(type);
 
-    if (type.id == "lrc") {
-        unitTypes = { UnitType::MULTI_PART }; // only supports single file export
-    }
-
     IF_ASSERT_FAILED(!unitTypes.empty()) {
         return;
     }

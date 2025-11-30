@@ -18,28 +18,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(iex_lyricsexport)
+muse_create_module(iex_lyricsexport)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/lyricsexportmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/lyricsexportmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/ilyricsexportconfiguration.h
+target_sources(iex_lyricsexport PRIVATE
+    lyricsexportmodule.cpp
+    lyricsexportmodule.h
+    ilyricsexportconfiguration.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/lyricsexportconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/lyricsexportconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/iex_lyricsexport.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/iex_lyricsexport.h
-    )
-
-set(MODULE_LINK
-    engraving
+    internal/lyricsexportconfiguration.cpp
+    internal/lyricsexportconfiguration.h
+    internal/lrcwriter.cpp
+    internal/lrcwriter.h
 )
 
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Core5Compat)
-endif()
-
-setup_module()
+target_link_libraries(iex_lyricsexport PRIVATE engraving)
 
 if (MUE_BUILD_IMPORTEXPORT_TESTS)
     add_subdirectory(tests)

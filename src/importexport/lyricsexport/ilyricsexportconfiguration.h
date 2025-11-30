@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
-#include <string>
-#include <optional>
+#include "async/channel.h"
 
 #include "modularity/imoduleinterface.h"
 
