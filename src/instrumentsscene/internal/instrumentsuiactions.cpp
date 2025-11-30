@@ -36,13 +36,13 @@ const UiActionList InstrumentsUiActions::m_actions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Add/remove instruments…"),
-             TranslatableString("action", "Add/remove instruments…")
+             TranslatableString("action", "Add/remove instruments")
              ),
     UiAction("change-instrument",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Select instrument…"),
-             TranslatableString("action", "Select instrument…")
+             TranslatableString("action", "Select instrument")
              )
 };
 

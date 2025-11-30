@@ -39,8 +39,8 @@ const UiActionList WorkspaceUiActions::m_actions = {
     UiAction("configure-workspaces",
              muse::ui::UiCtxAny,
              muse::shortcuts::CTX_ANY,
-             TranslatableString("action", "Edit workspaces"),
              TranslatableString("action", "Edit workspaces…"),
+             TranslatableString("action", "Edit workspaces"),
              IconCode::Code::EDIT
              ),
     UiAction("create-workspace",
