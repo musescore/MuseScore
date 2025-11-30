@@ -154,9 +154,6 @@ jobs:
         choco install -y ccache
         bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
-    - name: Register msvc problem matcher
-      run: echo "::add-matcher::.github/problem_matchers/msvc.json"
-
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
@@ -183,6 +180,10 @@ jobs:
       with:
         token: ${{ secrets.TRANSIFEX_API_TOKEN }}
         args: "pull -f"
+
+    - name: Register msvc problem matcher
+      run: echo "::add-matcher::.github/problem_matchers/msvc.json"
+
     - name: Build
       shell: cmd
       run: |
