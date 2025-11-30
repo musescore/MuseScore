@@ -65,9 +65,7 @@ static std::string calcGlyphName(char32_t c, const MusxInstance<FontInfo>& font)
             return std::string(*glyphName);
         }
     } else if (const smufl_mapping::LegacyGlyphInfo* legacyGlyphInfo = smufl_mapping::getLegacyGlyphInfo(font->getName(), c)) {
-        if (legacyGlyphInfo->source == smufl_mapping::SmuflGlyphSource::Smufl) {
-            return std::string(legacyGlyphInfo->name);
-        }
+        return std::string(legacyGlyphInfo->name);
     }
     return {};
 }
