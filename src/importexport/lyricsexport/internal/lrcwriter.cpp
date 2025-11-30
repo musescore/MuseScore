@@ -225,6 +225,10 @@ void LRCWriter::findStaffVoiceAndLyricToExport(const mu::engraving::Score* score
                             }
                         }
                     }
+                    // If we have already chosen the lowest/prioritized option we can return (no better option available)
+                    if (lyricsFound && (staff == 0) && (voice == 0) && (lyricNumber == 0)) {
+                        return;
+                    }
                 }
             }
         }

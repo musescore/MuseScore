@@ -54,9 +54,5 @@ void LyricsExportModule::resolveImports()
 
 void LyricsExportModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     m_configuration->init();
 }
