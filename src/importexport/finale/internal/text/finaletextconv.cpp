@@ -65,6 +65,8 @@ static std::string calcGlyphName(char32_t c, const MusxInstance<FontInfo>& font)
             return std::string(*glyphName);
         }
     } else if (const smufl_mapping::LegacyGlyphInfo* legacyGlyphInfo = smufl_mapping::getLegacyGlyphInfo(font->getName(), c)) {
+        // The SMuFL specification lists many recommended optional glyphs, and at least some of these have SymId mappings in MuseScore. (An example is flag8UpStraight.)
+        // For this reason, we should not filter on source here.
         return std::string(legacyGlyphInfo->name);
     }
     return {};
