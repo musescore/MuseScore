@@ -216,7 +216,7 @@ void MeasuresSettingsModel::updateSystemCount()
     size_t count = selection()->selectedSystems().size();
     if (count != m_systemCount) {
         m_systemCount = count;
-        emit systemCountChanged(count);
+        emit systemCountChanged(static_cast<int>(count));
     }
 }
 
