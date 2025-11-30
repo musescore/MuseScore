@@ -67,6 +67,7 @@ struct FinaleOptions
     musx::dom::MusxInstance<musx::dom::options::MiscOptions> miscOptions;
     musx::dom::MusxInstance<musx::dom::options::MultimeasureRestOptions> mmRestOptions;
     musx::dom::MusxInstance<musx::dom::options::MusicSpacingOptions> musicSpacing;
+    musx::dom::MusxInstance<musx::dom::options::MusicSymbolOptions> musicSymbols;
     musx::dom::MusxInstance<musx::dom::options::PageFormatOptions::PageFormat> pageFormat;
     musx::dom::MusxInstance<musx::dom::options::PianoBraceBracketOptions> braceOptions;
     musx::dom::MusxInstance<musx::dom::options::RepeatOptions> repeatOptions;
