@@ -226,8 +226,8 @@ const UiActionList ApplicationUiActions::m_actions = {
     UiAction("preference-dialog",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             TranslatableString("action", "&Preferences"),
-             TranslatableString("action", "Preferences…")
+             TranslatableString("action", "&Preferences…"),
+             TranslatableString("action", "Preferences")
              ),
 
     UiAction("action://copy",

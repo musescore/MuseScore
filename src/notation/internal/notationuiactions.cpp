@@ -399,37 +399,37 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "More…"),
-             TranslatableString("action", "Select similar elements with more options…")
+             TranslatableString("action", "Select similar elements with more options")
              ),
     UiAction("edit-style",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Style…"),
-             TranslatableString("action", "Format style…")
+             TranslatableString("action", "Format style")
              ),
     UiAction("page-settings",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Page settings…"),
-             TranslatableString("action", "Page settings…")
+             TranslatableString("action", "Page settings")
              ),
     UiAction("load-style",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Load style…"),
-             TranslatableString("action", "Load style…")
+             TranslatableString("action", "Load style")
              ),
     UiAction("save-style",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "S&ave style…"),
-             TranslatableString("action", "Save style…")
+             TranslatableString("action", "Save style")
              ),
     UiAction("transpose",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Transpose…"),
-             TranslatableString("action", "Transpose…")
+             TranslatableString("action", "Transpose")
              ),
     UiAction("explode",
              mu::context::UiCtxProjectOpened,
@@ -568,31 +568,31 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Staff/Part properties…"),
-             TranslatableString("action", "Staff/Part properties…")
+             TranslatableString("action", "Staff/Part properties")
              ),
     UiAction("staff-text-properties",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Staff text properties…"),
-             TranslatableString("action", "Staff text properties…")
+             TranslatableString("action", "Staff text properties")
              ),
     UiAction("system-text-properties",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "System text properties…"),
-             TranslatableString("action", "System text properties…")
+             TranslatableString("action", "System text properties")
              ),
     UiAction("measure-properties",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Measure properties…"),
-             TranslatableString("action", "Measure properties…")
+             TranslatableString("action", "Measure properties")
              ),
     UiAction("measures-per-system",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Measures per s&ystem…"),
-             TranslatableString("action", "Measures per system…")
+             TranslatableString("action", "Measures per system")
              ),
     UiAction("voice-x12",
              mu::context::UiCtxProjectOpened,
@@ -697,19 +697,19 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Insert measures before selection…"),
-             TranslatableString("action", "Insert measures before selection…")
+             TranslatableString("action", "Insert measures before selection")
              ),
     UiAction("insert-measures-after-selection",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Insert measures after selection…"),
-             TranslatableString("action", "Insert measures after selection…")
+             TranslatableString("action", "Insert measures after selection")
              ),
     UiAction("insert-measures-at-start-of-score",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Insert measures at start of score…"),
-             TranslatableString("action", "Insert measures at start of score…")
+             TranslatableString("action", "Insert measures at start of score")
              ),
     UiAction("append-measure",
              mu::context::UiCtxProjectOpened,
@@ -721,7 +721,7 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Insert measures at end of score…"),
-             TranslatableString("action", "Insert measures at end of score…")
+             TranslatableString("action", "Insert measures at end of score")
              ),
     UiAction("insert-hbox",
              mu::context::UiCtxProjectOpened,
@@ -1461,7 +1461,7 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Othe&r…"),
-             TranslatableString("action", "Enter tuplet: other…")
+             TranslatableString("action", "Enter tuplet: other")
              ),
     UiAction("stretch-",
              mu::context::UiCtxProjectOpened,

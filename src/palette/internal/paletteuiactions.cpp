@@ -37,8 +37,8 @@ const UiActionList PaletteUiActions::m_actions = {
     UiAction(MASTERPALETTE_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
-             TranslatableString("action", "&Master palette"),
-             TranslatableString("action", "Open master palette…"),
+             TranslatableString("action", "&Master palette…"),
+             TranslatableString("action", "Open master palette"),
              Checkable::Yes
              ),
     UiAction("palette-search",
@@ -51,13 +51,13 @@ const UiActionList PaletteUiActions::m_actions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Time signature properties…"),
-             TranslatableString("action", "Time signature properties…")
+             TranslatableString("action", "Time signature properties")
              ),
     UiAction("customize-kit",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Customize kit…"),
-             TranslatableString("action", "Customize kit…")
+             TranslatableString("action", "Customize kit")
              ),
     UiAction("apply-current-palette-element",
              mu::context::UiCtxProjectOpened,
@@ -68,8 +68,8 @@ const UiActionList PaletteUiActions::m_actions = {
     UiAction("show-keys",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_TEXT_EDITING,
-             TranslatableString("action", "Insert special characters"),
-             TranslatableString("action", "Insert special characters…")
+             TranslatableString("action", "Insert special characters…"),
+             TranslatableString("action", "Insert special characters")
              )
 };
 
