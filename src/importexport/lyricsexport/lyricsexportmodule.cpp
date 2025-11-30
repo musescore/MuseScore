@@ -52,7 +52,7 @@ void LyricsExportModule::resolveImports()
     }
 }
 
-void LyricsExportModule::onInit(const IApplication::RunMode& mode)
+void LyricsExportModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
 }
