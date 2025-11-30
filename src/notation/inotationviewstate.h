@@ -26,9 +26,11 @@
 #include "async/channel.h"
 #include "types/retval.h"
 
-#include "draw/types/transform.h"
-
 #include "notationtypes.h"
+
+namespace muse::draw {
+class Transform;
+}
 
 namespace mu::engraving {
 class MscReader;

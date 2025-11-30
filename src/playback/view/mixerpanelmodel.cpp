@@ -22,6 +22,8 @@
 
 #include "mixerpanelmodel.h"
 
+#include "async/notifylist.h"
+
 #include "defer.h"
 
 #include "log.h"
@@ -134,7 +136,8 @@ void MixerPanelModel::loadItems()
         m_mixerChannelList.push_back(buildInstrumentChannelItem(search->second, instrumentTrackId, isPrimary));
     };
 
-    for (const Part* part : masterNotationParts()->partList()) {
+    async::NotifyList<const Part*> partList = masterNotationParts()->partList();
+    for (const Part* part : partList) {
         std::string primaryInstrId = part->instrument()->id().toStdString();
 
         for (const InstrumentTrackId& instrumentTrackId : part->instrumentTrackIdList()) {
@@ -347,7 +350,8 @@ int MixerPanelModel::resolveInsertIndex(const engraving::InstrumentTrackId& newI
 
     int mixerChannelListIdx = 0;
 
-    for (const Part* part : masterNotationParts()->partList()) {
+    async::NotifyList<const Part*> partList = masterNotationParts()->partList();
+    for (const Part* part : partList) {
         for (const InstrumentTrackId& instrumentTrackId : part->instrumentTrackIdList()) {
             if (instrumentTrackId == newInstrumentTrackId) {
                 return mixerChannelListIdx;

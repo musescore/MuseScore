@@ -21,6 +21,8 @@
  */
 #include "parttreeitem.h"
 
+#include "async/notifylist.h"
+
 #include "log.h"
 
 using namespace mu::instrumentsscene;

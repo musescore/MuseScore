@@ -24,6 +24,8 @@
 
 #include <algorithm>
 
+#include "async/notifylist.h"
+
 #include "translation.h"
 #include "roottreeitem.h"
 #include "parttreeitem.h"

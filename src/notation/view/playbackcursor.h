@@ -19,12 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_PLAYBACKCURSOR_H
-#define MU_NOTATION_PLAYBACKCURSOR_H
+
+#pragma once
 
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "draw/types/geometry.h"
+#include "midi/miditypes.h"
 
 #include "notation/inotation.h"
 
@@ -59,5 +60,3 @@ private:
     INotationPtr m_notation;
 };
 }
-
-#endif // MU_NOTATION_PLAYBACKCURSOR_H

@@ -24,6 +24,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "async/notifylist.h"
+
 #include "convertercodes.h"
 
 using namespace muse;

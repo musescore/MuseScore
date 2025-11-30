@@ -23,7 +23,6 @@
 
 #include <QPixmap>
 #include <QDate>
-#include <unordered_set>
 
 #include "translation.h"
 

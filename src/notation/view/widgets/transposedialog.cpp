@@ -22,6 +22,8 @@
 
 #include "transposedialog.h"
 
+#include "async/notifylist.h"
+
 #include "internal/mscoreerrorscontroller.h"
 #include "ui/view/widgetstatestore.h"
 
@@ -241,7 +243,8 @@ Key TransposeDialog::firstPitchedStaffKey() const
 
     Key key = Key::C;
 
-    for (const Part* part : notation()->parts()->partList()) {
+    muse::async::NotifyList<const Part*> partList = notation()->parts()->partList();
+    for (const Part* part : partList) {
         for (const Staff* staff : part->staves()) {
             if (staff->idx() < startStaffIdx || staff->idx() > endStaffIdx) {
                 continue;

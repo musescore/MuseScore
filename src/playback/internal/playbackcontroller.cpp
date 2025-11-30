@@ -21,6 +21,8 @@
  */
 #include "playbackcontroller.h"
 
+#include "async/notifylist.h"
+
 #include "onlinesoundscontroller.h"
 
 #include "playbacktypes.h"

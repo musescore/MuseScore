@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_AUDIOGENERATIONSETTINGSMODEL_H
-#define MU_PROJECT_AUDIOGENERATIONSETTINGSMODEL_H
+
+#pragma once
 
 #include <QObject>
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 
@@ -54,5 +55,3 @@ signals:
     void numberOfSavesChanged();
 };
 }
-
-#endif // MU_PROJECT_AUDIOGENERATIONSETTINGSMODEL_H

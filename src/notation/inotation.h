@@ -21,21 +21,21 @@
  */
 #pragma once
 
-#include <QString>
-
 #include "async/notification.h"
-#include "internal/inotationundostack.h"
-#include "notationtypes.h"
-#include "inotationpainting.h"
-#include "inotationviewstate.h"
-#include "inotationsolomutestate.h"
-#include "inotationstyle.h"
+
+#include "inotationaccessibility.h"
 #include "inotationelements.h"
 #include "inotationinteraction.h"
-#include "inotationaccessibility.h"
 #include "inotationmidiinput.h"
+#include "inotationpainting.h"
 #include "inotationparts.h"
+#include "inotationsolomutestate.h"
+#include "inotationstyle.h"
+#include "inotationviewstate.h"
+#include "internal/inotationundostack.h"
 #include "notationtypes.h"
+
+class QString;
 
 namespace mu::project {
 class INotationProject;
