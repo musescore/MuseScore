@@ -100,7 +100,11 @@ Item {
             function onPartAdded(index) {
                 view.positionViewAtIndex(index, ListView.Contain)
                 view.currentIndex = index
-                view.currentItem.startEditTitle()
+                Qt.callLater(function() {
+                    if (view.currentItem) {
+                        view.currentItem.startEditTitle()
+                    }
+                })
             }
         }
 
