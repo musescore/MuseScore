@@ -7902,6 +7902,7 @@ void NotationInteraction::addFretboardDiagram()
     startEdit(TranslatableString("undoableAction", "Add fretboard diagram"));
 
     engraving::FretDiagram* lastAddedDiagram = nullptr;
+    std::vector<engraving::FretDiagram*> created;
 
     for (EngravingItem* element : filteredElements) {
         engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(score->dummy()->segment());
@@ -7912,9 +7913,16 @@ void NotationInteraction::addFretboardDiagram()
 
         diagram->setParent(harmony->parent());
         score->undoAddElement(diagram);
-        score->undoChangeParent(harmony, diagram, track2staff(element->track()));
-
+        created.push_back(diagram);
         lastAddedDiagram = diagram;
+    }
+
+    for (int i = int(created.size()) - 1; i >= 0; --i) {
+        FretDiagram* diagram = created[i];
+        Harmony* harmony = toHarmony(filteredElements[i]);
+
+        score->undoChangeParent(harmony, diagram,
+                                track2staff(filteredElements[i]->track()));
     }
 
     apply();
