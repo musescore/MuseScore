@@ -121,11 +121,10 @@ std::map<double, QString> LRCWriter::collectLyrics(const mu::engraving::Score* s
     std::map<double, QString> lyrics;
     const RepeatList& repeats = score->repeatList();
 
-    staff_idx_t lyricsStaff;
-    voice_idx_t lyricsVoice;
+    track_idx_t trackNumber;
     int lyricNumber;
 
-    findStaffVoiceAndLyricToExport(score, lyricsStaff, lyricsVoice, lyricNumber);
+    findTrackAndLyricToExport(score, trackNumber, lyricNumber);
 
     for (const RepeatSegment* rs : repeats) {
         const int tickOffset = rs->utick - rs->tick;
@@ -151,7 +150,7 @@ std::map<double, QString> LRCWriter::collectLyrics(const mu::engraving::Score* s
                             continue;
                         }
 
-                        if ((lyricsStaff == e->staffIdx()) && (lyricsVoice == e->voice()) && (lyricNumber == l->subtype())) {
+                        if ((trackNumber == e->track()) && (lyricNumber == l->subtype())) {
                             const double time = score->utick2utime(l->tick().ticks() + tickOffset) * 1000;
                             lyrics.insert_or_assign(time, l->plainText());
                         }
@@ -172,18 +171,16 @@ QString LRCWriter::formatTimestamp(double ms) const
            .arg(static_cast<int>(ms) % 1000 / 10, 2, 10, QLatin1Char('0'));
 }
 
-void LRCWriter::findStaffVoiceAndLyricToExport(const mu::engraving::Score* score, mu::engraving::staff_idx_t& staff,
-                                               mu::engraving::voice_idx_t& voice, int& lyricNumber)
+void LRCWriter::findTrackAndLyricToExport(const engraving::Score* score, mu::engraving::track_idx_t& trackNumber, int& lyricNumber)
 {
     bool lyricsFound = false;
-    staff = 0;
-    voice = 0;
+    trackNumber = 0;
     lyricNumber = 0;
 
     const RepeatList& repeats = score->repeatList();
 
     for (const RepeatSegment* rs : repeats) {
-        for (const MeasureBase* mb = rs->firstMeasure(); mb; mb = mb->next()) {
+        for (const MeasureBase* mb : rs->measureList()) {
             if (!mb->isMeasure()) {
                 continue;
             }
@@ -206,27 +203,21 @@ void LRCWriter::findStaffVoiceAndLyricToExport(const mu::engraving::Score* score
 
                         if (!lyricsFound) {
                             lyricsFound = true;
-                            staff = e->staffIdx();
-                            voice = e->voice();
+                            trackNumber = e->track();
                             lyricNumber = l->subtype();
                             continue;
                         }
 
-                        if (staff > e->staffIdx()) {
-                            staff = e->staffIdx();
-                            voice = e->voice();
+                        // We check if we have a better option
+                        if (trackNumber > e->track()) {
+                            trackNumber = e->track();
                             lyricNumber = l->subtype();
-                        } else if (staff == e->staffIdx()) {
-                            if (voice > e->voice()) {
-                                voice = e->voice();
-                                lyricNumber = l->subtype();
-                            } else if (voice == e->voice()) {
-                                lyricNumber = std::min(lyricNumber, l->subtype());
-                            }
+                        } else if (trackNumber == e->track()) {
+                            lyricNumber = std::min(lyricNumber, l->subtype());
                         }
                     }
                     // If we have already chosen the lowest/prioritized option we can return (no better option available)
-                    if (lyricsFound && (staff == 0) && (voice == 0) && (lyricNumber == 0)) {
+                    if (lyricsFound && (trackNumber == 0) && (lyricNumber == 0)) {
                         return;
                     }
                 }

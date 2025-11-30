@@ -52,7 +52,6 @@ private:
     // Core lyric functionality
     std::map<double, QString> collectLyrics(const mu::engraving::Score*);
     QString formatTimestamp(double ms) const;
-    void findStaffVoiceAndLyricToExport(const engraving::Score* score, engraving::staff_idx_t& staff, engraving::voice_idx_t& voice,
-                                        int& lyricNumber);
+    void findTrackAndLyricToExport(const engraving::Score* score, mu::engraving::track_idx_t& trackNumber, int& lyricNumber);
 };
 } // namespace mu::iex::lrcexport
