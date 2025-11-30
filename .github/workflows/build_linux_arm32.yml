@@ -151,7 +151,7 @@ jobs:
           bash /MuseScore/buildscripts/ci/linux/setup.sh --arch armv7l && \
           bash /MuseScore/buildscripts/ci/linux/arm32/install_qt.sh && \
           git config --global --add safe.directory /MuseScore && \
-          bash /MuseScore/buildscripts/ci/translation/run_lupdate.sh && \
+          bash /MuseScore/buildscripts/ci/linux/arm32/run_lupdate.sh && \
           bash /MuseScore/buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --arch armv7l && \
           bash /MuseScore/buildscripts/ci/linux/package.sh --arch armv7l && \
           bash /MuseScore/buildscripts/ci/tools/checksum.sh \
