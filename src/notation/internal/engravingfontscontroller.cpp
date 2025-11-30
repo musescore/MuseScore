@@ -57,7 +57,7 @@ void EngravingFontsController::scanAllDirectories() const
 #elif defined(Q_OS_MACOS)
     // MacOS is correctly handled by Qt
     QStringList globalFontsPaths = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first(2);
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     // On Unix systems, we want $XDG_DATA_HOME (user-specific) and $XDG_DATA_DIRS (system-wide)
     QStringList globalFontsPaths { qgetenv("XDG_DATA_HOME") };
     globalFontsPaths.append(QString::fromLocal8Bit(qgetenv("XDG_DATA_DIRS")).split(':'));
