@@ -362,13 +362,13 @@ static std::pair<bool, bool> getAccidentalProperties(std::string symbolName, Sym
     return std::make_pair(hasParentheses, isSmall);
 }
 
-bool FinaleParser::processEntryInfo(EntryInfoPtr::WorkaroundAwareResult result, track_idx_t curTrackIdx, Measure* measure, bool graceNotes,
+bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, track_idx_t curTrackIdx, Measure* measure, bool graceNotes,
                                          std::vector<engraving::Note*>& notesWithUnmanagedTies,
                                     std::vector<ReadableTuplet>& tupletMap)
 {
     // Retrieve fields from WorkaroundAwareResult
-    EntryInfoPtr entryInfo = result.entry;
-    bool effectiveHidden = result.effectiveHidden;
+    EntryInfoPtr entryInfo = result.getEntryInfo();
+    bool effectiveHidden = result.getEffectiveHidden();
 
     // Retrieve entry from entryInfo
     MusxInstance<Entry> currentEntry = entryInfo->getEntry();
@@ -844,9 +844,9 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
 
     const MeasCmper startMeasureId = entryInfoPtr.getMeasure();
 
-    for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroupAcrossBars(EntryInfoPtr::BeamIterationMode::WorkaroundAware);
+    for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroupAcrossBars(EntryInfoPtr::BeamIterationMode::Interpreted);
          nextInBeam;
-         nextInBeam = nextInBeam.getNextInBeamGroupAcrossBars(EntryInfoPtr::BeamIterationMode::WorkaroundAware)) {
+         nextInBeam = nextInBeam.getNextInBeamGroupAcrossBars(EntryInfoPtr::BeamIterationMode::Interpreted)) {
         if (nextInBeam.getMeasure() != startMeasureId) {
             break;
         }
@@ -1080,21 +1080,11 @@ void FinaleParser::importEntries()
                         createTupletsFromMap(measure, curTrackIdx, tupletMap);
 
                         // add chords and rests
-                        bool skipNext = false;
-                        for (EntryInfoPtr::WorkaroundAwareResult result = entryFrame->getFirstInVoiceWorkaroundAware(voice + 1);
-                             result;
-                             result = result.entry.getNextInVoiceWorkaroundAware(voice + 1)) {
-                            if (skipNext || result.entry.calcCreatesSingletonBeamLeft()) {
-                                skipNext = false;
-                                continue;
-                            }
+                        for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1);  result; result = result.getNext()) {
                             processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap);
-                            if (result.entry.calcCreatesSingletonBeamRight()) {
-                                skipNext = true;
-                            }
                         }
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            processEntryInfo(entryInfoPtr.asWorkaroundAwareResult(), curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap);
+                            processEntryInfo(entryInfoPtr.asInterpretedIterator(), curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap);
                         }
 
                         // add tremolos
