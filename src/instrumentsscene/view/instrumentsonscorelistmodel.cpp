@@ -22,6 +22,8 @@
 
 #include "instrumentsonscorelistmodel.h"
 
+#include "async/notifylist.h"
+
 #include "log.h"
 
 using namespace muse;

@@ -152,7 +152,7 @@ void NotationViewInputController::onNotationChanged()
         if (AbstractElementPopupModel::hasElementEditPopup(selectedItem)) {
             m_view->showElementPopup(type);
         }
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 
     currNotation->interaction()->textEditingStarted().onNotify(this, [this] {
         const INotationPtr notation = currentNotation();
@@ -184,7 +184,7 @@ void NotationViewInputController::onNotationChanged()
         }
 
         m_view->hideElementPopup();
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 
     currNotation->interaction()->textEditingChanged().onNotify(this, [this] {
         const INotationPtr notation = currentNotation();
@@ -200,11 +200,11 @@ void NotationViewInputController::onNotationChanged()
         if (AbstractElementPopupModel::hasTextStylePopup(item) && item->cursor()->hasSelection()) {
             m_view->showElementPopup(item->type());
         }
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 
     currNotation->interaction()->textEditingEnded().onReceive(this, [this](const TextBase*) {
         m_view->hideElementPopup(PopupModelType::TYPE_TEXT);
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 }
 
 void NotationViewInputController::initZoom()

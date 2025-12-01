@@ -19,11 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_ASYNC_NOTIFYLIST_H
-#define MUSE_ASYNC_NOTIFYLIST_H
 
-#include <vector>
+#pragma once
+
 #include <cassert>
+#include <vector>
 
 #include "changednotify.h"
 
@@ -63,15 +63,6 @@ public:
         m_notify->onChanged(caller, f, mode);
     }
 
-    void resetOnChanged(Asyncable* caller)
-    {
-        assert(m_notify);
-        if (!m_notify) {
-            return;
-        }
-        m_notify->resetOnChanged(caller);
-    }
-
     template<typename Call>
     void onItemChanged(Asyncable* caller, Call f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
@@ -80,15 +71,6 @@ public:
             return;
         }
         m_notify->onItemChanged(caller, f, mode);
-    }
-
-    void resetOnItemChanged(Asyncable* caller)
-    {
-        assert(m_notify);
-        if (!m_notify) {
-            return;
-        }
-        m_notify->resetOnItemChanged(caller);
     }
 
     template<typename Call>
@@ -101,15 +83,6 @@ public:
         m_notify->onItemAdded(caller, f, mode);
     }
 
-    void resetOnItemAdded(Asyncable* caller)
-    {
-        assert(m_notify);
-        if (!m_notify) {
-            return;
-        }
-        m_notify->resetOnItemAdded(caller);
-    }
-
     template<typename Call>
     void onItemRemoved(Asyncable* caller, Call f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
@@ -118,11 +91,6 @@ public:
             return;
         }
         m_notify->onItemRemoved(caller, f, mode);
-    }
-
-    void resetOnItemRemoved(Asyncable* caller)
-    {
-        m_notify->resetOnItemRemoved(caller);
     }
 
     template<typename Call>
@@ -135,14 +103,16 @@ public:
         m_notify->onItemReplaced(caller, f, mode);
     }
 
-    void resetOnItemReplaced(Asyncable* caller)
+    void disconnect(Asyncable* caller)
     {
-        m_notify->resetOnItemReplaced(caller);
+        assert(m_notify);
+        if (!m_notify) {
+            return;
+        }
+        m_notify->disconnect(caller);
     }
 
 private:
     std::shared_ptr<ChangedNotify<T> > m_notify = nullptr;
 };
 }
-
-#endif // MUSE_ASYNC_NOTIFYLIST_H

@@ -20,11 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PALETTE_PALETTEWIDGET_H
-#define MU_PALETTE_PALETTEWIDGET_H
+#pragma once
 
 #include <QScrollArea>
 #include <QAccessibleWidget>
+
+#include "async/asyncable.h"
 
 #include "../../internal/palette.h"
 
@@ -250,5 +251,3 @@ private:
     bool m_restrictHeight = false;
 };
 }
-
-#endif // MU_PALETTE_PALETTEWIDGET_H

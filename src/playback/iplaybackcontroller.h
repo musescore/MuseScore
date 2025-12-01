@@ -31,6 +31,7 @@
 #include "notation/notationtypes.h"
 #include "audio/common/audiotypes.h"
 #include "actions/actiontypes.h"
+#include "midi/miditypes.h"
 
 #include "playbacktypes.h"
 

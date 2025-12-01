@@ -19,13 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONMIDIINPUT_H
-#define MU_NOTATION_INOTATIONMIDIINPUT_H
 
-#include "async/notification.h"
-#include "midi/miditypes.h"
+#pragma once
+
+#include "async/channel.h"
 
 #include "notationtypes.h"
+
+namespace muse::midi {
+struct Event;
+}
 
 namespace mu::notation {
 class INotationMidiInput
@@ -41,5 +44,3 @@ public:
 
 using INotationMidiInputPtr = std::shared_ptr<INotationMidiInput>;
 }
-
-#endif // MU_NOTATION_INOTATIONMIDIINPUT_H

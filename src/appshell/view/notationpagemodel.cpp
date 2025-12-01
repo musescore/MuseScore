@@ -185,13 +185,13 @@ void NotationPageModel::onNotationChanged()
     noteInput->stateChanged().onNotify(this, [this]() {
         scheduleUpdateDrumsetPanelVisibility();
         scheduleUpdatePercussionPanelVisibility();
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 
     INotationInteractionPtr notationInteraction = notation->interaction();
     notationInteraction->selectionChanged().onNotify(this, [this]() {
         scheduleUpdateDrumsetPanelVisibility();
         scheduleUpdatePercussionPanelVisibility();
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 }
 
 void NotationPageModel::toggleDock(const QString& name)

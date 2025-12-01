@@ -21,6 +21,8 @@
  */
 #include "playbackcontroller.h"
 
+#include "async/notifylist.h"
+
 #include "onlinesoundscontroller.h"
 
 #include "playbacktypes.h"
@@ -1717,6 +1719,17 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
         return;
     }
 
+    if (m_notation) {
+        INotationPartsPtr notationParts = m_notation->parts();
+        NotifyList<const Part*> partList = notationParts->partList();
+        partList.disconnect(this);
+
+        notationPlayback()->loopBoundariesChanged().disconnect(this);
+        m_notation->interaction()->selectionChanged().disconnect(this);
+        m_notation->interaction()->textEditingEnded().disconnect(this);
+        m_notation->soloMuteState()->trackSoloMuteStateChanged().disconnect(this);
+    }
+
     m_notation = notation;
 
     if (!m_notation) {
@@ -1756,9 +1769,10 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
         onPartChanged(part);
     });
 
+    // FIXME: only un-/re-subscribe if master notation changes
     notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
         updateLoop();
-    }, async::Asyncable::Mode::SetReplace);
+    });
 
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
         onSelectionChanged();

@@ -235,11 +235,11 @@ void PlaybackUiActions::init()
         INotationInteractionPtr interaction = currNotation->interaction();
         interaction->selectionChanged().onNotify(this, [this]() {
             m_actionEnabledChanged.send({ PLAY_FROM_SELECTION_CODE });
-        });
+        }, Asyncable::Mode::SetReplace /* FIXME */);
 
         interaction->isEditingElementChanged().onNotify(this, [this]() {
             m_actionEnabledChanged.send({ PLAY_FROM_SELECTION_CODE });
-        });
+        }, Asyncable::Mode::SetReplace /* FIXME */);
     });
 
     m_controller->onlineSoundsChanged().onNotify(this, [this]() {

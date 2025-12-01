@@ -360,7 +360,7 @@ void InspectorListModel::listenSelectionChanged()
 
     notation->interaction()->selectionChanged().onNotify(this, [this]() {
         updateElementList();
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 }
 
 void InspectorListModel::listenScoreChanges()
@@ -374,7 +374,7 @@ void InspectorListModel::listenScoreChanges()
         for (AbstractInspectorModel* model : m_modelList) {
             model->onNotationChanged({}, {});
         }
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 
     notation->undoStack()->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
         if (changes.isTextEditing) {
@@ -393,7 +393,7 @@ void InspectorListModel::listenScoreChanges()
         }
 
         onScoreChanged(changes.changedPropertyIdSet, changes.changedStyleIdSet);
-    }, Asyncable::Mode::SetReplace);
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 }
 
 void InspectorListModel::onScoreChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,

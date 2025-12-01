@@ -19,11 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONPARTS_H
-#define MU_NOTATION_NOTATIONPARTS_H
+
+#pragma once
+
+#include "async/asyncable.h"
+#include "async/notifylist.h"
 
 #include "inotationparts.h"
-#include "async/asyncable.h"
 #include "inotationundostack.h"
 #include "inotationinteraction.h"
 
@@ -159,5 +161,3 @@ private:
     mutable std::map<muse::ID, muse::async::ChangedNotifier<const Staff*> > m_staffChangedNotifierMap;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONPARTS_H

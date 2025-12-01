@@ -25,7 +25,7 @@
 #include "async/notification.h"
 #include "async/channel.h"
 
-#include "notation/notationtypes.h"
+#include "../notationtypes.h"
 
 namespace mu::engraving {
 class EditData;

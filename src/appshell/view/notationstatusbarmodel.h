@@ -121,8 +121,6 @@ private:
 
     notation::ZoomType currentZoomType() const;
 
-    void listenChangesInAccessibility();
-
     QList<int> possibleZoomPercentageList() const;
 
     QVariantList availableViewModeList_property();

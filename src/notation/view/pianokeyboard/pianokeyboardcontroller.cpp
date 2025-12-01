@@ -126,12 +126,12 @@ void PianoKeyboardController::onNotationChanged()
 
             m_isFromMidi = false;
             updateNotesKeys(notes);
-        });
+        }, Asyncable::Mode::SetReplace /* FIXME */);
 
         notation->midiInput()->notesReceived().onReceive(this, [this](const std::vector<const Note*>& notes) {
             m_isFromMidi = true;
             updateNotesKeys(notes);
-        });
+        }, Asyncable::Mode::SetReplace /* FIXME */);
     }
 }
 
