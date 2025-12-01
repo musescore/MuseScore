@@ -6078,204 +6078,209 @@ seguite da trattini</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
+        <source>Accessibility &amp;statement</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>
         <source>Revert to &amp;factory settings</source>
         <translation>Ripristina alle impostazioni di &amp;fabbrica</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="93"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="98"/>
         <source>Revert to factory settings</source>
         <translation>Ripristina alle impostazioni di fabbrica</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="100"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="105"/>
         <source>Restore the &amp;default layout</source>
         <translation>Ripristina impaginazione &amp;predefinita</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="101"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="106"/>
         <source>Restore the default layout</source>
         <translation>Ripristina impaginazione predefinita</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="108"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="113"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="48"/>
         <source>&amp;Playback controls</source>
         <translation>Controlli di &amp;riproduzione</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="109"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="114"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="49"/>
         <source>Show/hide playback controls</source>
         <translation>Mostra/nascondi controlli di riproduzione</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="115"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="120"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="55"/>
         <source>&amp;Note input</source>
         <translation>Inserimento &amp;note</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="116"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="121"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="56"/>
         <source>Show/hide note input toolbar</source>
         <translation>Mostra/nascondi barra inserimento note</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="124"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="129"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="64"/>
         <source>&amp;Palettes</source>
         <translation>&amp;Tavolozze</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="125"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="130"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="65"/>
         <source>Show/hide palettes</source>
         <translation>Mostra/nascondi tavolozze</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="136"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="71"/>
         <source>&amp;Layout</source>
         <translation>&amp;Layout</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="132"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="137"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="72"/>
         <source>Show/hide layout panel</source>
         <translation>Mostra/nascondi pannello impaginazione</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="138"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="143"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="78"/>
         <source>Propert&amp;ies</source>
         <translation>Propriet&amp;à</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="139"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="144"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="79"/>
         <source>Show/hide properties</source>
         <translation>Mostra/nascondi proprietà</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="145"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="150"/>
         <source>S&amp;election filter</source>
         <translation>Filtro di s&amp;elezione</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="146"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="151"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="86"/>
         <source>Show/hide selection filter</source>
         <translation>Mostra/nascondi filtro selezione</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="152"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="157"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="92"/>
         <source>&amp;History</source>
         <translation>&amp;Cronologia</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="153"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="158"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="93"/>
         <source>Show/hide undo history</source>
         <translation>Mostra/nascondi annulla cronologia</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="161"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="166"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="101"/>
         <source>&amp;Navigator</source>
         <translation>&amp;Navigatore</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="162"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="167"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="102"/>
         <source>Show/hide navigator</source>
         <translation>Mostra/nascondi navigatore</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="170"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="175"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="110"/>
         <source>&amp;Braille</source>
         <translation>&amp;Braille</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="171"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="176"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="111"/>
         <source>Show/hide braille panel</source>
         <translation>Mostra/nascondi pannello braille</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="179"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="184"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="119"/>
         <source>Tim&amp;eline</source>
         <translation>L&amp;inea temporale</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="180"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="185"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="120"/>
         <source>Show/hide timeline</source>
         <translation>Mostra/nascondi linea temporale</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="186"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="191"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="126"/>
         <source>Mixer</source>
         <translation>Mixer</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="187"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="192"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="127"/>
         <source>Show/hide mixer</source>
         <translation>Mostra/nascondi mixer</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="194"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="199"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="134"/>
         <source>Piano &amp;keyboard</source>
         <translation>&amp;Tastiera del pianoforte</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="195"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="200"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="135"/>
         <source>Show/hide piano keyboard</source>
         <translation>Mostra/nascondi tastiera pianoforte</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="201"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="206"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="141"/>
         <source>Percussion</source>
         <translation>Percussioni</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="202"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="207"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="142"/>
         <source>Show/hide percussion panel</source>
         <translation>Mostra/nascondi pannello percussioni</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="208"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="213"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="148"/>
         <source>Score comparison tool</source>
         <translation>Strumento di confronto partiture</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="216"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="221"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="156"/>
         <source>&amp;Status bar</source>
         <translation>Barra di &amp;stato</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="217"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="222"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="157"/>
         <source>Show/hide status bar</source>
         <translation>Mostra/nascondi barra di stato</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="224"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="229"/>
         <source>&amp;Preferences</source>
         <translation>&amp;Preferenze</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="225"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="230"/>
         <source>Preferences…</source>
         <translation>Preferenze…</translation>
     </message>
@@ -10335,12 +10340,12 @@ seguite da trattini</translation>
         <translation>Account</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="318"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="325"/>
         <source>Are you sure you want to revert to factory settings?</source>
         <translation>Sei sicuro di voler ripristinare le impostazioni di fabbrica?</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="319"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="326"/>
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
@@ -10349,27 +10354,27 @@ This action will not delete any of your scores.</source>
 Questa azione non eliminerà nessuna delle tue partiture.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="329"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="336"/>
         <source>Revert</source>
         <translation>Ripristina</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="331"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="338"/>
         <source>Revert to factory settings</source>
         <translation>Ripristina alle impostazioni di fabbrica</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="343"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="350"/>
         <source>Would you like to restart MuseScore Studio now?</source>
         <translation>Vuoi riavviare MuseScore Studio adesso?</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="344"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="351"/>
         <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
         <translation>Per rendere effettive queste modifiche MuseScore Studio deve essere riavviato.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="349"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="356"/>
         <source>Restart</source>
         <translation>Riavvia</translation>
     </message>
@@ -10689,47 +10694,47 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/diagnostics</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="489"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="490"/>
         <source>&amp;System</source>
         <translation>&amp;Sistema</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="501"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="502"/>
         <source>&amp;MuseSampler</source>
         <translation>&amp;MuseSampler</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="547"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="548"/>
         <source>A&amp;ctions</source>
         <translation>A&amp;zioni</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="548"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="549"/>
         <source>&amp;Accessibility</source>
         <translation>&amp;Accessibilità</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="549"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="550"/>
         <source>&amp;Engraving</source>
         <translation>&amp;Incisione</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="550"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="551"/>
         <source>E&amp;xtensions</source>
         <translation>E&amp;stensioni</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="551"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="552"/>
         <source>Auto&amp;bot</source>
         <translation>Auto&amp;bot</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="552"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="553"/>
         <source>&amp;VST</source>
         <translation>&amp;VST</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="556"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="557"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="291"/>
         <source>&amp;Diagnostics</source>
         <translation>&amp;Diagnostiche</translation>
@@ -10786,7 +10791,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/help</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="475"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="476"/>
         <source>&amp;Help</source>
         <translation>A&amp;iuto</translation>
     </message>
@@ -12196,18 +12201,18 @@ Tasto %1 sulle corde %2</translation>
         <translation>Impossibile creare il gruppo irregolare con rapporto %1 per durata %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8014"/>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8162"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8020"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8168"/>
         <source>Remove stale partial tie</source>
         <translation>Rimuovi la parziale legatura di valore vecchia</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8072"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8078"/>
         <source>Reset incoming partial slur</source>
         <translation>Ripristina la parziale legatura di portamento in entrata</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8082"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8088"/>
         <source>Reset outgoing partial slur</source>
         <translation>Ripristina la parziale legatura di portamento in uscita</translation>
     </message>
@@ -27348,31 +27353,31 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
         <translation>Menu zoom</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="676"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="677"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="367"/>
         <source>Insert &amp;after selection…</source>
         <translation>Inserisci &amp;dopo la selezione...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="677"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="678"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="368"/>
         <source>Insert &amp;before selection…</source>
         <translation>Inserisci &amp;prima della selezione...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="679"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="680"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="370"/>
         <source>Insert at &amp;start of score…</source>
         <translation>Inserisci a &amp;inizio partitura...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="680"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="681"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="371"/>
         <source>Insert at &amp;end of score…</source>
         <translation>Inserisci a &amp;fine partitura...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="694"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="695"/>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="652"/>
         <source>Insert at end of score</source>
         <translation>Inserisci a fine partitura</translation>
@@ -30106,12 +30111,12 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
         <translation>Inizia a digitare per cercare tra tutte le tavolozze</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palette.cpp" line="545"/>
+        <location filename="../../src/palette/internal/palette.cpp" line="544"/>
         <source>Writing palette file</source>
         <translation>Scrittura del file della tavolozza</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palette.cpp" line="546"/>
+        <location filename="../../src/palette/internal/palette.cpp" line="545"/>
         <source>Writing palette file
 %1
 failed.</source>
@@ -32782,60 +32787,60 @@ fallita: %2</translation>
         <translation>Attiva questo profilo</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="85"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="86"/>
         <source>Reverb</source>
         <translation>Riverbero</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="91"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="92"/>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="617"/>
         <source>Aux %1</source>
         <translation>Aux %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1016"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1025"/>
         <source>Metronome</source>
         <translation>Metronomo</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1026"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1035"/>
         <source>Chords</source>
         <translation>Accordi</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="178"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="179"/>
         <source>This may be due to a poor internet connection or server issue. Your score will still play, but some sounds may be missing. Please check your connection, and make sure MuseHub is running and you are logged in. &lt;a href=&quot;%1&quot;&gt;Learn more here&lt;/a&gt;.</source>
         <translation>Questo può essere dovuto ad una connessione internet lenta o un problema di server. Per favore controlla la connessione, e assicurati che MuseHub stia funzionando e di aver effettuato l&apos;accesso. &lt;a href=&quot;%1&quot;&gt;Maggiori istruzioni qui&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="184"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="185"/>
         <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="117"/>
         <source>Some online sounds aren’t ready yet</source>
         <translation>Alcuni suoni online non sono ancora pronti</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="218"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="219"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2. More info: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</source>
         <translation>Hai raggiunto il limite di resa attuale per %1. Potrai elaborare nuovamente i suoni online dopo il ripristino della quota su %2. Maggiori informazioni: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="225"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="226"/>
         <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="119"/>
         <source>Unable to process online sounds</source>
         <translation>Impossibile elaborare i suoni online</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="242"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="243"/>
         <source>Are you sure you want to clear online sounds cache?</source>
         <translation>Sei sicuro di voler cancellare la cache dei suoni online?</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="243"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="244"/>
         <source>This will delete online sounds data stored on your computer for this score. Online sounds processing will try to restart immediately.</source>
         <translation>Questo cancellerà i dati audio online memorizzati sul tuo computer per questo spartito. L&apos;elaborazione dei suoni online tenterà di riavviarsi immediatamente.</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1387"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1396"/>
         <source>Loading audio samples</source>
         <translation>Caricamento dei campioni audio</translation>
     </message>
@@ -34792,17 +34797,16 @@ fallita: %2</translation>
         <translation>Gratuito</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="47"/>
         <source>Save this score to your MuseScore.com account</source>
         <translation>Salva la partitura sul tuo account MuseScore.com</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="51"/>
+        <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="48"/>
         <source>Share this score and its audio on MuseScore.com</source>
         <translation>Salva la partitura e il suo audio su MuseScore.com</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="52"/>
+        <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="49"/>
         <source>Share the audio from this score on Audio.com</source>
         <translation>Salva l&apos;audio da questa partitura su Audio.com</translation>
     </message>
@@ -35299,17 +35303,17 @@ fallita: %2</translation>
         <translation>Nero</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="153"/>
+        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="145"/>
         <source>direction is horizontal</source>
         <translation>Direzione orizzontale</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="154"/>
+        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="146"/>
         <source>direction is vertical</source>
         <translation>Direzione verticale</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="155"/>
+        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="147"/>
         <source>direction is both</source>
         <translation>Ogni direzione</translation>
     </message>

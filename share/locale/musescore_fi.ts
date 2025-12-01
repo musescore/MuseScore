@@ -5046,7 +5046,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="75"/>
         <source>Apply to all parts</source>
-        <translation>Käytä kaikkiin stemmoihin</translation>
+        <translation>Koskee kaikkia stemmoja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="108"/>
@@ -6078,204 +6078,209 @@ jos niiden perässä on viivoja</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
+        <source>Accessibility &amp;statement</source>
+        <translation>Saavutettavuus&amp;seloste</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>
         <source>Revert to &amp;factory settings</source>
         <translation>Palauta te&amp;hdasasetukset</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="93"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="98"/>
         <source>Revert to factory settings</source>
         <translation>Palauta tehdasasetukset</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="100"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="105"/>
         <source>Restore the &amp;default layout</source>
         <translation>Palauta &amp;oletusasettelu</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="101"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="106"/>
         <source>Restore the default layout</source>
         <translation>Palauta oletusasettelu</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="108"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="113"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="48"/>
         <source>&amp;Playback controls</source>
         <translation>&amp;Toistosäätimet</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="109"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="114"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="49"/>
         <source>Show/hide playback controls</source>
         <translation>Näytä/piilota toistosäätimet</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="115"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="120"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="55"/>
         <source>&amp;Note input</source>
         <translation>&amp;Nuotinsyöttö</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="116"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="121"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="56"/>
         <source>Show/hide note input toolbar</source>
         <translation>Näytä/piilota nuotinsyöttöpalkki</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="124"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="129"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="64"/>
         <source>&amp;Palettes</source>
         <translation>&amp;Paletit</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="125"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="130"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="65"/>
         <source>Show/hide palettes</source>
         <translation>Näytä/piilota paletit</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="136"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="71"/>
         <source>&amp;Layout</source>
         <translation>&amp;Asettelu</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="132"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="137"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="72"/>
         <source>Show/hide layout panel</source>
         <translation>Näytä/piilota asettelupaneeli</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="138"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="143"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="78"/>
         <source>Propert&amp;ies</source>
         <translation>&amp;Ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="139"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="144"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="79"/>
         <source>Show/hide properties</source>
         <translation>Näytä/piilota ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="145"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="150"/>
         <source>S&amp;election filter</source>
         <translation>V&amp;alintasuodatin</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="146"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="151"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="86"/>
         <source>Show/hide selection filter</source>
         <translation>Näytä/piilota valintasuodatin</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="152"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="157"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="92"/>
         <source>&amp;History</source>
         <translation>&amp;Historia</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="153"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="158"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="93"/>
         <source>Show/hide undo history</source>
         <translation>Näytä/piilota kumoamishistoria</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="161"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="166"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="101"/>
         <source>&amp;Navigator</source>
         <translation>&amp;Navigaattori</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="162"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="167"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="102"/>
         <source>Show/hide navigator</source>
         <translation>Näytä/piilota navigaattori</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="170"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="175"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="110"/>
         <source>&amp;Braille</source>
         <translation>P&amp;istekirjoitus</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="171"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="176"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="111"/>
         <source>Show/hide braille panel</source>
         <translation>Näytä/piilota pistekirjoituspaneeli</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="179"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="184"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="119"/>
         <source>Tim&amp;eline</source>
         <translation>&amp;Aikajana</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="180"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="185"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="120"/>
         <source>Show/hide timeline</source>
         <translation>Näytä/piilota aikajana</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="186"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="191"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="126"/>
         <source>Mixer</source>
         <translation>Mikseri</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="187"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="192"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="127"/>
         <source>Show/hide mixer</source>
         <translation>Näytä/piilota mikseri</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="194"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="199"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="134"/>
         <source>Piano &amp;keyboard</source>
         <translation>Pianon &amp;koskettimet</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="195"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="200"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="135"/>
         <source>Show/hide piano keyboard</source>
         <translation>Näytä/piilota pianon koskettimet</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="201"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="206"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="141"/>
         <source>Percussion</source>
         <translation>Lyömäsoittimet</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="202"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="207"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="142"/>
         <source>Show/hide percussion panel</source>
         <translation>Näytä/piilota lyömäsoitinpaneeli</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="208"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="213"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="148"/>
         <source>Score comparison tool</source>
         <translation>Partituurien vertailutyökalu</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="216"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="221"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="156"/>
         <source>&amp;Status bar</source>
         <translation>&amp;Tilarivi</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="217"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="222"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="157"/>
         <source>Show/hide status bar</source>
         <translation>Näytä/piilota tilarivi</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="224"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="229"/>
         <source>&amp;Preferences</source>
         <translation>&amp;Asetukset</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="225"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="230"/>
         <source>Preferences…</source>
         <translation>Asetukset...</translation>
     </message>
@@ -10335,12 +10340,12 @@ jos niiden perässä on viivoja</translation>
         <translation>Tilit</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="318"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="325"/>
         <source>Are you sure you want to revert to factory settings?</source>
         <translation>Haluatko varmasti palata tehdasasetuksiin?</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="319"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="326"/>
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
@@ -10349,27 +10354,27 @@ This action will not delete any of your scores.</source>
 Tämä toiminto ei poista yhtään partituuriasi.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="329"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="336"/>
         <source>Revert</source>
         <translation>Palauta</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="331"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="338"/>
         <source>Revert to factory settings</source>
         <translation>Palauta tehdasasetukset</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="343"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="350"/>
         <source>Would you like to restart MuseScore Studio now?</source>
         <translation>Haluatko käynnistää nyt MuseScore Studion uudelleen?</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="344"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="351"/>
         <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
         <translation>MuseScore Studio on käynnistettävä uudelleen, jotta muutokset tulevat voimaan.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="349"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="356"/>
         <source>Restart</source>
         <translation>Käynnistä uudelleen</translation>
     </message>
@@ -10690,47 +10695,47 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/diagnostics</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="489"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="490"/>
         <source>&amp;System</source>
         <translation>&amp;Järjestelmä</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="501"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="502"/>
         <source>&amp;MuseSampler</source>
         <translation>&amp;MuseSampler</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="547"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="548"/>
         <source>A&amp;ctions</source>
         <translation>&amp;Toiminnot</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="548"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="549"/>
         <source>&amp;Accessibility</source>
         <translation>S&amp;aavutettavuus</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="549"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="550"/>
         <source>&amp;Engraving</source>
         <translation>&amp;Graafinen muotoilu</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="550"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="551"/>
         <source>E&amp;xtensions</source>
         <translation>&amp;Laajennukset</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="551"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="552"/>
         <source>Auto&amp;bot</source>
         <translation>Auto&amp;botti</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="552"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="553"/>
         <source>&amp;VST</source>
         <translation>&amp;VST</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="556"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="557"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="291"/>
         <source>&amp;Diagnostics</source>
         <translation>&amp;Diagnostiikka</translation>
@@ -10787,7 +10792,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/help</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="475"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="476"/>
         <source>&amp;Help</source>
         <translation>&amp;Apua</translation>
     </message>
@@ -12197,18 +12202,18 @@ Otenauha %1 kielissä %2</translation>
         <translation>Ei voi luoda poikkeusjakoa suhteella %1 kestolle %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8014"/>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8162"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8020"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8168"/>
         <source>Remove stale partial tie</source>
         <translation>Poista vanhentunut vajaa yhdyskaari</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8072"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8078"/>
         <source>Reset incoming partial slur</source>
         <translation>Palauta sisääntuleva vajaa sidoskaari</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="8082"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="8088"/>
         <source>Reset outgoing partial slur</source>
         <translation>Palauta ulosmenevä vajaa sidoskaari</translation>
     </message>
@@ -13420,13 +13425,13 @@ Otenauha %1 kielissä %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="356"/>
         <source>string tunings</source>
-        <translation><numerusform>kielen viritykset</numerusform><numerusform>kielen viritykset</numerusform></translation>
+        <translation><numerusform>kielen viritykset</numerusform><numerusform>kieliviritykset</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="357"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1728"/>
         <source>String tunings</source>
-        <translation><numerusform>Kielen viritykset</numerusform><numerusform>Kielen viritykset</numerusform></translation>
+        <translation><numerusform>Kielen viritykset</numerusform><numerusform>Kieliviritykset</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="359"/>
@@ -13491,12 +13496,12 @@ Otenauha %1 kielissä %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="377"/>
         <source>harp pedal diagram(s)</source>
-        <translation><numerusform>harppupedaalikaavio(t)</numerusform><numerusform>harppupedaalikaavio(t)</numerusform></translation>
+        <translation><numerusform>harppupedaalikaavio(t)</numerusform><numerusform>harpun pedaalikaaviot</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="378"/>
         <source>Harp pedal diagram(s)</source>
-        <translation><numerusform>Harppupedaalikaavio(t)</numerusform><numerusform>Harppupedaalikaavio(t)</numerusform></translation>
+        <translation><numerusform>Harppupedaalikaavio(t)</numerusform><numerusform>Harpun pedaalikaaviot</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="380"/>
@@ -13661,12 +13666,12 @@ Otenauha %1 kielissä %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="428"/>
         <source>pedal segment(s)</source>
-        <translation><numerusform>pedaalisegmentti(-tit)</numerusform><numerusform>pedaalisegmentti(-tit)</numerusform></translation>
+        <translation><numerusform>pedaalisegmentti(-tit)</numerusform><numerusform>pedaalisegmentit</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="429"/>
         <source>Pedal segment(s)</source>
-        <translation><numerusform>Pedaalisegmentti(-tit)</numerusform><numerusform>Pedaalisegmentti(-tit)</numerusform></translation>
+        <translation><numerusform>Pedaalisegmentti(-tit)</numerusform><numerusform>Pedaalisegmentit</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="431"/>
@@ -23631,7 +23636,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="81"/>
         <source>Customize bend</source>
-        <translation>Mukauta taivutus</translation>
+        <translation>Mukauta taivutusta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="104"/>
@@ -26437,7 +26442,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="64"/>
         <source>Capo settings</source>
-        <translation>Kapo asetukset</translation>
+        <translation>Kapon asetukset</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="76"/>
@@ -27242,7 +27247,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="65"/>
         <source>String tunings settings</source>
-        <translation>Kielten viritysasetukset</translation>
+        <translation>Kieliviritysten asetukset</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="77"/>
@@ -27349,31 +27354,31 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
         <translation>Zoom valikko</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="676"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="677"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="367"/>
         <source>Insert &amp;after selection…</source>
         <translation>Lisää valinnan &amp;jälkeen…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="677"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="678"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="368"/>
         <source>Insert &amp;before selection…</source>
         <translation>Lisää &amp;ennen valintaa…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="679"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="680"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="370"/>
         <source>Insert at &amp;start of score…</source>
         <translation>Lisää partituurin &amp;alkuun…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="680"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="681"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="371"/>
         <source>Insert at &amp;end of score…</source>
         <translation>Lisää partituurin &amp;loppuun…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="694"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="695"/>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="652"/>
         <source>Insert at end of score</source>
         <translation>Lisää partituurin loppuun</translation>
@@ -28315,7 +28320,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="242"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1283"/>
         <source>Apply to all parts</source>
-        <translation>Käytä kaikkiin stemmoihin</translation>
+        <translation>Koskee kaikkia stemmoja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="736"/>
@@ -30107,12 +30112,12 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
         <translation>Aloita kaikkien palettien etsintä kirjoittamalla</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palette.cpp" line="545"/>
+        <location filename="../../src/palette/internal/palette.cpp" line="544"/>
         <source>Writing palette file</source>
         <translation>Kirjoitetaan palettitiedostoa</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palette.cpp" line="546"/>
+        <location filename="../../src/palette/internal/palette.cpp" line="545"/>
         <source>Writing palette file
 %1
 failed.</source>
@@ -32783,60 +32788,60 @@ avaaminen epäonnistui: %2</translation>
         <translation>Aktivoi tämä profiili</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="85"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="86"/>
         <source>Reverb</source>
         <translation>Kaiku</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="91"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="92"/>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="617"/>
         <source>Aux %1</source>
         <translation>Aux %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1016"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1025"/>
         <source>Metronome</source>
         <translation>Metronomi</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1026"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1035"/>
         <source>Chords</source>
         <translation>Soinnut</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="178"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="179"/>
         <source>This may be due to a poor internet connection or server issue. Your score will still play, but some sounds may be missing. Please check your connection, and make sure MuseHub is running and you are logged in. &lt;a href=&quot;%1&quot;&gt;Learn more here&lt;/a&gt;.</source>
         <translation>Tämä voi johtua heikosta internetyhteydestä tai palvelinongelmasta. Partituurisi soi edelleen, mutta jotkin äänet saattavat puuttua. Tarkista yhteytesi ja varmista, että MuseHub on käynnissä ja olet kirjautunut sisään. &lt;a href=&quot;%1&quot;&gt;Lue lisää täältä&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="184"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="185"/>
         <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="117"/>
         <source>Some online sounds aren’t ready yet</source>
         <translation>Jotkin online-äänet eivät ole vielä valmiita</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="218"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="219"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2. More info: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</source>
         <translation>Olet saavuttanut nykyisen renderöintikiintiösi kohdassa %1. Voit käsitellä online-ääniä uudelleen, kun kiintiösi nollataan kohdassa %2. Lisätietoja: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="225"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="226"/>
         <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="119"/>
         <source>Unable to process online sounds</source>
         <translation>Online-äänien käsittely epäonnistui</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="242"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="243"/>
         <source>Are you sure you want to clear online sounds cache?</source>
         <translation>Haluatko varmasti tyhjentää online-äänien välimuistin?</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="243"/>
+        <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="244"/>
         <source>This will delete online sounds data stored on your computer for this score. Online sounds processing will try to restart immediately.</source>
         <translation>Tämä poistaa tietokoneellesi tallennetut tämän partituurin online-äänitiedot. Online-äänien käsittely yrittää käynnistyä uudelleen välittömästi.</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1387"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1396"/>
         <source>Loading audio samples</source>
         <translation>Ladataan ääninäytteitä</translation>
     </message>
@@ -34795,17 +34800,16 @@ Haluatko korvata sen?</translation>
         <translation>Ilmainen</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="47"/>
         <source>Save this score to your MuseScore.com account</source>
         <translation>Tallenna tämä partituuri MuseScore.com-tilillesi</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="51"/>
+        <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="48"/>
         <source>Share this score and its audio on MuseScore.com</source>
         <translation>Jaa tämä partituuri ja sen äänitiedosto MuseScore.com&apos;issa</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="52"/>
+        <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="49"/>
         <source>Share the audio from this score on Audio.com</source>
         <translation>Jaa tämän partituurin ääni Audio.com&apos;issa</translation>
     </message>
@@ -35302,17 +35306,17 @@ Haluatko korvata sen?</translation>
         <translation>Musta</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="153"/>
+        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="145"/>
         <source>direction is horizontal</source>
         <translation>suunta on horisonttaalinen</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="154"/>
+        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="146"/>
         <source>direction is vertical</source>
         <translation>suunta on vertikaalinen</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="155"/>
+        <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="147"/>
         <source>direction is both</source>
         <translation>suunta on molempia</translation>
     </message>
