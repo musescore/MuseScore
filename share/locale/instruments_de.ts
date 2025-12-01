@@ -5053,7 +5053,7 @@
         <source>Bellows-driven free-reed instrument with a keyboard or buttons on one end, and buttons on the other.</source>
         <comment>accordion description</comment>
         <extracomment>description for Accordion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balggetriebenes Harmonikainstrument mit einer Tastatur oder Knöpfen an einem Ende und Knöpfen am anderen Ende.</translation>
+        <translation>Balggetriebenes Durchschlagzungeninstrument mit einer Tastatur oder Knöpfen an einem Ende und Knöpfen am anderen Ende.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1821"/>
@@ -5109,7 +5109,7 @@
         <source>Bellows-driven free-reed instrument with buttons usually on both ends.</source>
         <comment>concertina description</comment>
         <extracomment>description for Concertina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balggetriebenes Harmonikainstrument mit Knöpfen üblicherweise an beiden Enden.</translation>
+        <translation>Balggetriebenes Durchschlagzungeninstrument mit Knöpfen üblicherweise an beiden Enden.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1839"/>
@@ -5697,7 +5697,7 @@
         <source>Mouth-blown free reed instrument with a keyboard.</source>
         <comment>melodica description</comment>
         <extracomment>description for Melodica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mundgeblasenes Harmonikainstrument mit Tastatur.</translation>
+        <translation>Mundgeblasenes Durchschlagzungeninstrument mit Tastatur.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2025"/>
@@ -5725,7 +5725,7 @@
         <source>Chinese mouth-blown free reed instrument.</source>
         <comment>sheng description</comment>
         <extracomment>description for Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chinesisches mundgeblasenes Harmonikainstrument.</translation>
+        <translation>Chinesisches mundgeblasenes Durchschlagzungeninstrument.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2034"/>
@@ -5753,7 +5753,7 @@
         <source>Chinese mouth-blown free reed instrument.</source>
         <comment>soprano-sheng description</comment>
         <extracomment>description for Soprano Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chinesisches mundgeblasenes Harmonikainstrument.</translation>
+        <translation>Chinesisches mundgeblasenes Durchschlagzungeninstrument.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2043"/>
@@ -5781,7 +5781,7 @@
         <source>Chinese mouth-blown free reed instrument.</source>
         <comment>alto-sheng description</comment>
         <extracomment>description for Alto Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chinesisches mundgeblasenes Harmonikainstrument.</translation>
+        <translation>Chinesisches mundgeblasenes Durchschlagzungeninstrument.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2052"/>
@@ -5809,7 +5809,7 @@
         <source>Chinese mouth-blown free reed instrument.</source>
         <comment>tenor-sheng description</comment>
         <extracomment>description for Tenor Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chinesisches mundgeblasenes Harmonikainstrument.</translation>
+        <translation>Chinesisches mundgeblasenes Durchschlagzungeninstrument.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2061"/>
@@ -5837,7 +5837,7 @@
         <source>Chinese mouth-blown free reed instrument.</source>
         <comment>bass-sheng description</comment>
         <extracomment>description for Bass Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chinesisches mundgeblasenes Harmonikainstrument.</translation>
+        <translation>Chinesisches mundgeblasenes Durchschlagzungeninstrument.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2070"/>
@@ -20711,7 +20711,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1816"/>
         <source>Free Reed</source>
-        <translation>Harmonikainstrumente</translation>
+        <translation>Durchschlagzungeninstrumente</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2077"/>
