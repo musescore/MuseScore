@@ -54,7 +54,7 @@ const std::vector<BreathType> Breath::BREATH_LIST {
 //---------------------------------------------------------
 
 Breath::Breath(Segment* parent)
-    : EngravingItem(ElementType::BREATH, parent, ElementFlag::MOVABLE)
+    : EngravingItem(ElementType::BREATH, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_symId = SymId::breathMarkComma;
     m_pause = 0.0;
@@ -81,23 +81,6 @@ bool Breath::isCaesura() const
 double Breath::mag() const
 {
     return staff() ? staff()->staffMag(tick()) : 1.0;
-}
-
-//---------------------------------------------------------
-//   pagePos
-//---------------------------------------------------------
-
-PointF Breath::pagePos() const
-{
-    if (explicitParent() == 0) {
-        return pos();
-    }
-    System* system = segment()->measure()->system();
-    double yp = y();
-    if (system) {
-        yp += system->staff(staffIdx())->y() + system->y();
-    }
-    return PointF(pageX(), yp);
 }
 
 //---------------------------------------------------------
