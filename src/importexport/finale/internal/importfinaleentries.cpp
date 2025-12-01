@@ -362,10 +362,14 @@ static std::pair<bool, bool> getAccidentalProperties(std::string symbolName, Sym
     return std::make_pair(hasParentheses, isSmall);
 }
 
-bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrackIdx, Measure* measure, bool graceNotes,
+bool FinaleParser::processEntryInfo(EntryInfoPtr::WorkaroundAwareResult result, track_idx_t curTrackIdx, Measure* measure, bool graceNotes,
                                          std::vector<engraving::Note*>& notesWithUnmanagedTies,
-                                         std::vector<ReadableTuplet>& tupletMap)
+                                    std::vector<ReadableTuplet>& tupletMap)
 {
+    // Retrieve fields from WorkaroundAwareResult
+    EntryInfoPtr entryInfo = result.entry;
+    bool effectiveHidden = result.effectiveHidden;
+
     // Retrieve entry from entryInfo
     MusxInstance<Entry> currentEntry = entryInfo->getEntry();
     IF_ASSERT_FAILED (currentEntry) {
@@ -379,16 +383,6 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         return true;
     }
     bool graceAfterType = false;
-
-    if (entryInfo.calcIsBeamedRestWorkaroundVisibleRest()) {
-        logger()->logInfo(String(u"Ignoring voice2 entry %1 that is part of a beaming workaround.").arg(currentEntryNumber));
-        return true;
-    }
-    const bool isRestWorkaroundHiddenEntry = entryInfo.calcIsBeamedRestWorkaroundHiddenRest();
-    if (isRestWorkaroundHiddenEntry) {
-        logger()->logInfo(String(u"Recognized entry %1 as a hidden rest used as a beaming workaround an converted it to visible").arg(currentEntryNumber));
-    }
-    const bool hiddenEntry = currentEntry->isHidden && !isRestWorkaroundHiddenEntry;
 
     Fraction entryStartTick = Fraction(-1, 1);
     // todo: save the fraction to avoid calling this function for every grace note
@@ -492,7 +486,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             engraving::Note* note = Factory::createNote(chord);
             note->setParent(chord);
             note->setTrack(curTrackIdx);
-            note->setVisible(!hiddenEntry);
+            note->setVisible(!effectiveHidden);
             note->setPlay(!currentEntry->noPlayback && !neverPlayback); /// @todo account for spanners
             note->setAutoplace(!noteInfoPtr->noSpacing);
 
@@ -672,13 +666,13 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             }
             if (chord->shouldHaveStem() || d.hasStem()) {
                 Stem* stem = Factory::createStem(chord);
-                stem->setVisible(!hiddenEntry);
+                stem->setVisible(!effectiveHidden);
                 chord->add(stem);
             }
             if (unbeamed && d.hooks() > 0) {
                 chord->setBeamMode(BeamMode::NONE);
                 Hook* hook = new Hook(chord);
-                hook->setVisible(!hiddenEntry);
+                hook->setVisible(!effectiveHidden);
                 chord->setHook(hook);
                 chord->add(hook);
             }
@@ -730,7 +724,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             }
         }
         cr = toChordRest(rest);
-        cr->setVisible(!musxStaff->hideRests && !hiddenEntry);
+        cr->setVisible(!musxStaff->hideRests && !effectiveHidden);
     }
 
     int entrySize = entryInfo.calcEntrySize();
@@ -850,14 +844,13 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
 
     const MeasCmper startMeasureId = entryInfoPtr.getMeasure();
 
-    for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroupAcrossBars(/*includeHidden*/true); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroupAcrossBars(/*includeHidden*/true)) {
+    for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroupAcrossBars(EntryInfoPtr::BeamIterationMode::WorkaroundAware);
+         nextInBeam;
+         nextInBeam = nextInBeam.getNextInBeamGroupAcrossBars(EntryInfoPtr::BeamIterationMode::WorkaroundAware)) {
         if (nextInBeam.getMeasure() != startMeasureId) {
             break;
         }
         const MusxInstance<Entry>& currentEntry = nextInBeam->getEntry();
-        if (currentEntry->isHidden && !nextInBeam.calcIsBeamedRestWorkaroundHiddenRest()) {
-            continue;
-        }
         EntryNumber currentEntryNumber = currentEntry->getEntryNumber();
         if (entryInfoPtr->getEntry()->graceNote && !currentEntry->isNote) {
             // Grace rests are unmapped and not supported
@@ -1088,20 +1081,20 @@ void FinaleParser::importEntries()
 
                         // add chords and rests
                         bool skipNext = false;
-                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1, /*skipBeamedRestWorkaround*/ true);
-                             entryInfoPtr;
-                             entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            if (skipNext || entryInfoPtr.calcCreatesSingletonBeamLeft()) {
+                        for (EntryInfoPtr::WorkaroundAwareResult result = entryFrame->getFirstInVoiceWorkaroundAware(voice + 1);
+                             result;
+                             result = result.entry.getNextInVoiceWorkaroundAware(voice + 1)) {
+                            if (skipNext || result.entry.calcCreatesSingletonBeamLeft()) {
                                 skipNext = false;
                                 continue;
                             }
-                            processEntryInfo(entryInfoPtr, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap);
-                            if (entryInfoPtr.calcCreatesSingletonBeamRight()) {
+                            processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap);
+                            if (result.entry.calcCreatesSingletonBeamRight()) {
                                 skipNext = true;
                             }
                         }
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            processEntryInfo(entryInfoPtr, curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap);
+                            processEntryInfo(entryInfoPtr.asWorkaroundAwareResult(), curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap);
                         }
 
                         // add tremolos
