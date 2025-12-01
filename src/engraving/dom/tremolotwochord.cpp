@@ -187,24 +187,6 @@ void TremoloTwoChord::reset()
 }
 
 //---------------------------------------------------------
-//   pagePos
-//---------------------------------------------------------
-
-PointF TremoloTwoChord::pagePos() const
-{
-    EngravingObject* e = explicitParent();
-    while (e && (!e->isSystem() && e->explicitParent())) {
-        e = e->explicitParent();
-    }
-    if (!e || !e->isSystem()) {
-        return pos();
-    }
-    System* s = toSystem(e);
-    double yp = y() + s->staff(staffIdx())->y() + s->y();
-    return PointF(pageX(), yp);
-}
-
-//---------------------------------------------------------
 //   setBeamDirection
 //---------------------------------------------------------
 

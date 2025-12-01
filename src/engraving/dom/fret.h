@@ -150,7 +150,6 @@ public:
     void updateDiagram(const String& harmonyName);
 
     std::vector<LineF> dragAnchorLines() const override;
-    PointF pagePos() const override;
     double mainWidth() const;
 
     int  strings() const { return m_strings; }

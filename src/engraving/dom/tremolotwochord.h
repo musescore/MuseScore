@@ -83,7 +83,6 @@ public:
 
     bool crossStaffBeamBetween() const;
 
-    PointF pagePos() const override;      ///< position in page coordinates
     String accessibleInfo() const override;
     void triggerLayout() const override;
 

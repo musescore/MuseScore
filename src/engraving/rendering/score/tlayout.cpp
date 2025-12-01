@@ -3708,9 +3708,6 @@ static void _layoutLedgerLine(const LedgerLine* item, const LayoutContext& ctx, 
     }
     double w2 = ldata->lineWidth * .5;
 
-    //Adjust Y position to staffType offset
-    ldata->moveY(item->staffOffsetY());
-
     if (item->vertical()) {
         ldata->setBbox(-w2, 0, w2, item->len());
     } else {

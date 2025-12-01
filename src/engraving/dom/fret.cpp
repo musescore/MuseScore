@@ -260,28 +260,6 @@ void FretDiagram::updateDiagram(const String& harmonyName)
     return;
 }
 
-//---------------------------------------------------------
-//   pagePos
-//---------------------------------------------------------
-
-PointF FretDiagram::pagePos() const
-{
-    if (explicitParent() == 0) {
-        return pos();
-    }
-    if (explicitParent()->isSegment()) {
-        Measure* m = toSegment(explicitParent())->measure();
-        System* system = m->system();
-        double yp = y();
-        if (system) {
-            yp += system->staffYpage(staffIdx());
-        }
-        return PointF(pageX(), yp);
-    } else {
-        return EngravingItem::pagePos();
-    }
-}
-
 double FretDiagram::mainWidth() const
 {
     double mainWidth = 0.0;

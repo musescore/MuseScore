@@ -474,7 +474,7 @@ Shape ParenthesisLayout::getParentShape(const EngravingItem* parent)
 
     if ((note->line() < -1 || note->line() > note->staff()->lines(note->tick())) && !chord->ledgerLines().empty()) {
         for (LedgerLine* ledger : chord->ledgerLines()) {
-            parentShape.add(ledger->shape().translate(ledger->pos() - note->pos() - ledger->staffOffset()));
+            parentShape.add(ledger->shape().translate(ledger->pos() - note->pos()));
         }
     }
 

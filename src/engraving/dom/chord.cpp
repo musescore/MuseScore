@@ -1191,22 +1191,23 @@ void Chord::cmdUpdateNotes(AccidentalState* as, staff_idx_t staffIdx)
 
 PointF Chord::pagePos() const
 {
-    if (isGrace()) {
-        PointF p(pos());
-        if (explicitParent() == 0) {
-            return p;
-        }
-        p.rx() = pageX();
+    if (!isGrace()) {
+        return EngravingItem::pagePos();
+    }
 
-        const Chord* pc = static_cast<const Chord*>(explicitParent());
-        System* system = pc->segment()->system();
-        if (!system) {
-            return p;
-        }
-        p.ry() += system->staffYpage(vStaffIdx()) + staffOffsetY();
+    PointF p(pos());
+    if (!explicitParent()) {
         return p;
     }
-    return EngravingItem::pagePos();
+    p.rx() = pageX();
+
+    const Chord* pc = static_cast<const Chord*>(explicitParent());
+    System* system = pc->segment()->system();
+    if (!system) {
+        return p;
+    }
+    p.ry() += system->staffYpage(vStaffIdx()) + staffOffsetY();
+    return p;
 }
 
 //---------------------------------------------------------

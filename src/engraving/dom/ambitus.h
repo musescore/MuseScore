@@ -89,7 +89,6 @@ public:
     double headWidth() const;
 
     // re-implemented virtual functions
-    PointF pagePos() const override;        // position in page coordinates
     void scanElements(std::function<void(EngravingItem*)> func) override;
     void setTrack(track_idx_t val) override;
 

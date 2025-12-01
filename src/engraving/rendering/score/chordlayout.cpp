@@ -3375,7 +3375,7 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
     shape.add(chordRestShape(item));      // add lyrics
 
     for (const LedgerLine* l : item->ledgerLines()) {
-        shape.add(l->shape().translate(l->pos() - l->staffOffset()));
+        shape.add(l->shape().translate(l->pos()));
     }
 
     if (beamlet && stem) {
