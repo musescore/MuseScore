@@ -800,7 +800,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
 
 bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx)
 {
-    if (!entryInfoPtr.calcIsBeamStart()) {
+    if (!entryInfoPtr.calcIsBeamStart(EntryInfoPtr::BeamIterationMode::Interpreted)) {
         const bool isBeamContinuation = !entryInfoPtr.getPreviousSameV() && entryInfoPtr.getPreviousInBeamGroupAcrossBars();
         if (!isBeamContinuation) {
             return true;
@@ -1083,8 +1083,8 @@ void FinaleParser::importEntries()
                         for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1);  result; result = result.getNext()) {
                             processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap);
                         }
-                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            processEntryInfo(entryInfoPtr.asInterpretedIterator(), curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap);
+                        for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1);  result; result = result.getNext()) {
+                            processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap);
                         }
 
                         // add tremolos
