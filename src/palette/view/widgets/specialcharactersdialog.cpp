@@ -640,6 +640,10 @@ static constexpr char32_t commonTextSymbols[] = {
     0x2019,      // &lsquo;
     0x201C,      // &ldquo;
     0x201D,      // &rdquo;
+    0x2039,      // &lsaquo;
+    0x203A,      // &rsaquo;
+    0x00AB,      // &laquo;
+    0x00BB,      // &raquo;
     0x2020,      // &dagger;
     0x2021,      // &Dagger;
     0x2022,      // &bull;
