@@ -732,31 +732,46 @@ PointF EngravingItem::pagePos() const
         idx = vStaffIdx();
     }
 
+    auto measureStaffY = [this](const Measure* measure, staff_idx_t idx) -> double {
+        if (!measure) {
+            return 0.0;
+        }
+        if (measure->mstaves().size() <= idx) {
+            LOGD("staffIdx out of bounds: %s", typeName());
+            return 0.0;
+        }
+        return measure->staffLines(idx)->y();
+    };
+
+    auto systemStaffY = [this](const System* system, staff_idx_t idx) -> double {
+        if (!system) {
+            return 0.0;
+        }
+        if (system->staves().size() <= idx) {
+            LOGD("staffIdx out of bounds: %s", typeName());
+            return 0.0;
+        }
+        return system->staffYpage(idx);
+    };
+
     if (m_flags & ElementFlag::ON_STAFF) {
-        System* system = nullptr;
-        Measure* measure = nullptr;
-        if (explicitParent()->isSegment()) {
-            measure = toSegment(explicitParent())->measure();
-        } else if (explicitParent()->isMeasure()) {           // used in measure number
-            measure = toMeasure(explicitParent());
-        } else if (explicitParent()->isSystem()) {
-            system = toSystem(explicitParent());
-        } else if (explicitParent()->isFretDiagram()) {
-            return p + parentItem()->pagePos();
-        } else if (explicitParent()->isFBox()) {
-            return p + parentItem()->pagePos();
+        // Segments, measures and systems all contain multiple staves
+        // Find the position of the stave that this item is on
+        EngravingItem* parent = parentItem();
+        if (parent->isSegment()) {
+            Segment* segment = toSegment(parent);
+            Measure* measure = segment ? segment->measure() : nullptr;
+            System* system = measure ? measure->system() : nullptr;
+            p.ry() += measureStaffY(measure, idx) + systemStaffY(system, idx);
+        } else if (parent->isMeasure()) {
+            Measure* measure = toMeasure(parent);
+            System* system = measure->system();
+            p.ry() += measureStaffY(measure, idx) + systemStaffY(system, idx);
+        } else if (parent->isSystem()) {
+            System* system = toSystem(parent);
+            p.ry() += systemStaffY(system, idx);
         } else {
-            ASSERT_X(String(u"this %1 parent %2\n").arg(String::fromAscii(typeName()), String::fromAscii(explicitParent()->typeName())));
-        }
-        if (measure) {
-            system = measure->system();
-            p.ry() += measure->staffLines(idx)->y();
-        }
-        if (system) {
-            if (system->staves().size() <= idx) {
-                LOGD("staffIdx out of bounds: %s", typeName());
-            }
-            p.ry() += system->staffYpage(idx);
+            return p + parent->pagePos();
         }
         p.rx() = pageX();
     } else {
@@ -784,39 +799,55 @@ PointF EngravingItem::canvasPos() const
         idx = vStaffIdx();
     }
 
+    auto measureStaffY = [this](const Measure* measure, staff_idx_t idx) -> double {
+        if (!measure) {
+            return 0.0;
+        }
+        if (measure->mstaves().size() <= idx) {
+            LOGD("staffIdx out of bounds: %s", typeName());
+            return 0.0;
+        }
+        return measure->staffLines(idx)->y();
+    };
+
+    auto systemStaffY = [this](const System* system, staff_idx_t idx) -> double {
+        if (!system) {
+            return 0.0;
+        }
+        if (system->staves().size() <= idx) {
+            LOGD("staffIdx out of bounds: %s", typeName());
+            return 0.0;
+        }
+        return system->staffYpage(idx);
+    };
+
+    auto pageY = [](const Page* page) -> double {
+        if (!page) {
+            return 0.0;
+        }
+        return page->y();
+    };
+
     if (m_flags & ElementFlag::ON_STAFF) {
-        System* system = nullptr;
-        Measure* measure = nullptr;
-        if (explicitParent()->isSegment()) {
-            measure = toSegment(explicitParent())->measure();
-        } else if (explicitParent()->isMeasure()) {     // used in measure number
-            measure = toMeasure(explicitParent());
-        }
-        // system = toMeasure(parent())->system();
-        else if (explicitParent()->isSystem()) {
-            system = toSystem(explicitParent());
-        } else if (explicitParent()->isChord()) {       // grace chord
-            measure = toSegment(explicitParent()->explicitParent())->measure();
-        } else if (explicitParent()->isFretDiagram()) {
-            return p + parentItem()->canvasPos();
+        // Segments, measures and systems all contain multiple staves
+        // Find the position of the stave that this item is on
+        EngravingItem* parent = parentItem();
+        if (parent->isSegment()) {
+            Segment* segment = toSegment(parent);
+            Measure* measure = segment ? segment->measure() : nullptr;
+            System* system = measure ? measure->system() : nullptr;
+            Page* page = system ? system->page() : nullptr;
+            p.ry() += measureStaffY(measure, idx) + systemStaffY(system, idx) + pageY(page);
+        } else if (parent->isMeasure()) {
+            Measure* measure = toMeasure(parent);
+            System* system = measure->system();
+            Page* page = system->page();
+            p.ry() += measureStaffY(measure, idx) + systemStaffY(system, idx) + pageY(page);
+        } else if (parent->isSystem()) {
+            System* system = toSystem(parent);
+            p.ry() += systemStaffY(system, idx);
         } else {
-            ASSERT_X(String(u"this %1 parent %2\n").arg(String::fromAscii(typeName()), String::fromAscii(explicitParent()->typeName())));
-        }
-        if (measure) {
-            const StaffLines* lines = measure->staffLines(idx);
-            p.ry() += lines ? lines->y() : 0;
-
-            system = measure->system();
-
-            if (system) {
-                Page* page = system->page();
-                if (page) {
-                    p.ry() += page->y();
-                }
-            }
-        }
-        if (system) {
-            p.ry() += system->staffYpage(idx);
+            return p + parent->pagePos();
         }
         p.rx() = canvasX();
     } else {

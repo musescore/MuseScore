@@ -276,7 +276,7 @@ void Measure::setHasVoices(staff_idx_t staffIdx, bool v)
     }
 }
 
-StaffLines* Measure::staffLines(staff_idx_t staffIdx)
+StaffLines* Measure::staffLines(staff_idx_t staffIdx) const
 {
     MStaff* staff = mstaff(staffIdx);
 

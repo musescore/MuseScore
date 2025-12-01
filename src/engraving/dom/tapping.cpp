@@ -120,7 +120,7 @@ static ElementStyle tapTextStyle;
 
 TappingText::TappingText(Tapping* parent)
     : TextBase(ElementType::TAPPING_TEXT, parent, TextStyleType::HAMMER_ON_PULL_OFF,
-               ElementFlag::MOVABLE | ElementFlag::GENERATED)
+               ElementFlag::MOVABLE | ElementFlag::GENERATED | ElementFlag::ON_STAFF)
 {
     initElementStyle(&tapTextStyle);
 }

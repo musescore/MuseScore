@@ -40,8 +40,8 @@ class Fingering final : public TextBase
     DECLARE_CLASSOF(ElementType::FINGERING)
 
 public:
-    Fingering(Note* parent, TextStyleType tid, ElementFlags ef = ElementFlag::HAS_TAG);
-    Fingering(Note* parent, ElementFlags ef = ElementFlag::HAS_TAG);
+    Fingering(Note* parent, TextStyleType tid, ElementFlags ef = ElementFlag::ON_STAFF);
+    Fingering(Note* parent, ElementFlags ef = ElementFlag::ON_STAFF);
 
     Fingering* clone() const override { return new Fingering(*this); }
 
