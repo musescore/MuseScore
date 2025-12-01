@@ -251,14 +251,14 @@ class MethodDoc extends Doc {
         this.addMemberof("@method", parentName);
         const name = this.takeTagName();
         if (name !== "") {
-            this.processName(name);
+            this.processName(undefined, name);
         } else {
             this.lookupName = true;
         }
     }
 
-    processName(line) {
-        let name = nameFromSig(line);
+    processName(line, name) {
+        name = name ? name : nameFromSig(line);
         if (name !== "") {
             // add name
             this.comment = this.comment.replace('@method', `@method ${name}`);
@@ -277,18 +277,19 @@ class MemberDoc extends Doc {
         this.addMemberof("@member", parentName);
         const name = this.takeTagName();
         if (name !== "") {
-            this.processName(name);
+            this.processName(undefined, name);
         } else {
             this.lookupName = true;
         }
     }
 
-    processName(line) {
-        let name = "";
-        if (this.isQml) {
-            name = qmlPropName(line);
-        } else {
-            name = nameFromSig(line);
+    processName(line, name) {
+        if (!name) {
+            if (this.isQml) {
+                name = qmlPropName(line);
+            } else {
+                name = nameFromSig(line);
+            }
         }
 
         if (name !== "") {
@@ -311,14 +312,14 @@ class QPropDoc extends Doc {
         this.comment = this.comment.replace('@q_property', `@memberof ${parentName}\n* @member`);
         const name = this.takeTagName();
         if (name !== "") {
-            this.processName(name);
+            this.processName(undefined, name);
         } else {
             this.lookupName = true;
         }
     }
 
-    processName(line) {
-        let name = qpropName(line);
+    processName(line, name) {
+        name = name ? name : qpropName(line);
         if (name !== "") {
             // add name 
             const regex = /@member\s+\{([^}]+)\}\s+/;
@@ -341,12 +342,13 @@ class PropDoc extends Doc {
         this.lookupName = true;
     }
 
-    processName(line) {
-        let name = "";
-        if (this.isQml) {
-            name = qmlPropName(line);
-        } else {
-            name = nameFromSig(line);
+    processName(line, name) {
+        if (!name) {
+            if (this.isQml) {
+                name = qmlPropName(line);
+            } else {
+                name = nameFromSig(line);
+            }
         }
 
         if (name !== "") {
@@ -367,14 +369,14 @@ class EnumDoc extends Doc {
     processComment(parentName) {
         const name = this.takeTagName();
         if (name !== "") {
-            this.processName(name);
+            this.processName(undefined, name);
         } else {
             this.lookupName = true;
         }
     }
 
-    processName(line) {
-        let name = enumName(line);
+    processName(line, name) {
+        name = name ? name : enumName(line);
         if (name !== "") {
             this.comment += `const ${name} = {\n`;
             this.lookupName = false;
@@ -412,7 +414,7 @@ async function extractDoc(file)
         hasApidoc: false,
         apidocStarted: false,
 
-        currentCommnet: "",
+        currentComment: "",
         parentDoc: null,
         doc: null,
         docs: [],
@@ -442,7 +444,7 @@ async function extractDoc(file)
             this.doclets.push(doclet);
 
             // reset
-            this.currentCommnet = "";
+            this.currentComment = "";
             this.parentDoc = null;
             this.doc = null;
             this.docs = [];
@@ -458,12 +460,12 @@ async function extractDoc(file)
             line = line.replace("APIDOC", "");
             state.hasApidoc = true;
             state.apidocStarted = true;
-            state.currentCommnet = "";
+            state.currentComment = "";
         }
 
         // collect APIDOC comment
         if (state.apidocStarted) {
-            state.currentCommnet += line + "\n";
+            state.currentComment += line + "\n";
         }
 
         // end APIDOC
@@ -471,22 +473,22 @@ async function extractDoc(file)
             state.apidocStarted = false;
 
             // check of kind 
-            if (state.currentCommnet.includes('@namespace')) {
-                state.doc = new NamespaceDoc(state.currentCommnet);
-            } else if (state.currentCommnet.includes('@class')) {
-                state.doc = new ClassDoc(state.currentCommnet);
-            } else if (state.currentCommnet.includes('@declare')) {
-                state.doc = new DeclareDoc(state.currentCommnet);
-            } else if (state.currentCommnet.includes('@method')) {
-                state.doc = new MethodDoc(state.currentCommnet)
-            } else if (state.currentCommnet.includes('@member ')) {
-                state.doc = new MemberDoc(state.currentCommnet)
-            } else if (state.currentCommnet.includes('@property')) {
-                state.doc = new PropDoc(state.currentCommnet)
-            } else if (state.currentCommnet.includes('@q_property')) {
-                state.doc = new QPropDoc(state.currentCommnet)
-            } else if (state.currentCommnet.includes('@enum')) {
-                state.doc = new EnumDoc(state.currentCommnet)
+            if (state.currentComment.includes('@namespace')) {
+                state.doc = new NamespaceDoc(state.currentComment);
+            } else if (state.currentComment.includes('@class')) {
+                state.doc = new ClassDoc(state.currentComment);
+            } else if (state.currentComment.includes('@declare')) {
+                state.doc = new DeclareDoc(state.currentComment);
+            } else if (state.currentComment.includes('@method')) {
+                state.doc = new MethodDoc(state.currentComment)
+            } else if (state.currentComment.includes('@member ')) {
+                state.doc = new MemberDoc(state.currentComment)
+            } else if (state.currentComment.includes('@property')) {
+                state.doc = new PropDoc(state.currentComment)
+            } else if (state.currentComment.includes('@q_property')) {
+                state.doc = new QPropDoc(state.currentComment)
+            } else if (state.currentComment.includes('@enum')) {
+                state.doc = new EnumDoc(state.currentComment)
             }
 
             state.doc.isQml = isQml;

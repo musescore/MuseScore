@@ -71,6 +71,13 @@ async function classTest() {
          * @since 4.7
          */
         QQmlListProperty<Lyrics> Score::lyrics() const {}
+
+        /** APIDOC
+         * Next measure, accounting for multimeasure rests.
+         * @readonly
+         * @q_property {engraving.Measure}
+         * @name nextMeasureMM
+         */
     `;
 
     saveFile(testCode, testFile);
@@ -81,8 +88,8 @@ async function classTest() {
 
 async function main() 
 {
-    await enumTest();
-   // await classTest();
+    //await enumTest();
+   await classTest();
 }
 
 main();
