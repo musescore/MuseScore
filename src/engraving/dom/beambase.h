@@ -187,7 +187,7 @@ public:
     DECLARE_LAYOUTDATA_METHODS(BeamBase)
 
 protected:
-    BeamBase(const ElementType& type, EngravingItem* parent, ElementFlags flags = ElementFlag::NOTHING);
+    BeamBase(const ElementType& type, EngravingItem* parent, ElementFlags flags = ElementFlag::ON_STAFF);
     BeamBase(const BeamBase&);
     std::vector<BeamSegment*> m_beamSegments;
     PointF m_startAnchor;

@@ -55,8 +55,6 @@ public:
     ~Beam();
 
     Beam* clone() const override { return new Beam(*this); }
-    PointF pagePos() const override;      ///< position in page coordinates
-    PointF canvasPos() const override;    ///< position in page coordinates
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;
