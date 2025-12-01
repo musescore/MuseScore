@@ -44,7 +44,7 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 TremoloSingleChord::TremoloSingleChord(Chord* parent)
-    : EngravingItem(ElementType::TREMOLO_SINGLECHORD, parent, ElementFlag::MOVABLE)
+    : EngravingItem(ElementType::TREMOLO_SINGLECHORD, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }
 
@@ -205,24 +205,6 @@ void TremoloSingleChord::reset()
     EngravingItem::reset();
     undoChangeProperty(Pid::STEM_DIRECTION, DirectionV::AUTO);
     resetProperty(Pid::BEAM_NO_SLOPE);
-}
-
-//---------------------------------------------------------
-//   pagePos
-//---------------------------------------------------------
-
-PointF TremoloSingleChord::pagePos() const
-{
-    EngravingObject* e = explicitParent();
-    while (e && (!e->isSystem() && e->explicitParent())) {
-        e = e->explicitParent();
-    }
-    if (!e || !e->isSystem()) {
-        return pos();
-    }
-    System* s = toSystem(e);
-    double yp = y() + s->staff(vStaffIdx())->y() + s->y();
-    return PointF(pageX(), yp);
 }
 
 TDuration TremoloSingleChord::durationType() const
