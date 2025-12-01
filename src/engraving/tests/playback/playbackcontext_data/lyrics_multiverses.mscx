@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
-  <programVersion>4.6.0</programVersion>
+  <programVersion>4.6.4</programVersion>
   <programRevision></programRevision>
   <Score>
     <eid>NZ0ENYbWJhL_D1D+L5U0hlN</eid>
@@ -292,12 +292,53 @@
         </Measure>
       <Measure>
         <eid>xCh9L0aAXtB_9XbHTxI8fSO</eid>
+        <startRepeat/>
+        <endRepeat>2</endRepeat>
         <voice>
-          <Rest>
-            <eid>mFBXXtUiUJO_79AKUwrvGoB</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <Chord>
+            <eid>JmHEThDyCzL_3Zr5iDsvUfB</eid>
+            <durationType>quarter</durationType>
+            <Lyrics>
+              <eid>KCe0/GpKY3F_oZsG/NmoNxO</eid>
+              <text>Hello</text>
+              </Lyrics>
+            <Note>
+              <eid>/8PZnwmqnxI_mFgXhracsYO</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>oeOTSUgFbqD_m+zfzkgo/iB</eid>
+            <durationType>quarter</durationType>
+            <Lyrics>
+              <eid>uQIidy09HuL_CnqdRbJKDdE</eid>
+              <text>world</text>
+              </Lyrics>
+            <Note>
+              <eid>ybAxS3fYObE_TxK0/A0/2kE</eid>
+              <pitch>70</pitch>
+              <tpc>12</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>X5ROjBy5J4F_unAR8NaodzP</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>beQzD/isdpF_PW/gSx5L1DD</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>YvrFXf97k3L_iMvHd1Dah3D</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>k4/6S1xKhw_bxDacXEvJR</eid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       </Staff>

@@ -36,6 +36,7 @@
 #include "dom/segment.h"
 #include "dom/tie.h"
 #include "dom/tremolotwochord.h"
+#include "editing/undo.h"
 
 #include "defer.h"
 #include "log.h"
@@ -992,22 +993,30 @@ bool PlaybackModel::shouldSkipChanges(const ScoreChanges& changes) const
         return false;
     }
 
-    const EngravingObject* obj = changes.changedObjects.begin()->first;
-    if (!obj->isTextBase()) {
+    const auto it = changes.changedObjects.begin();
+    if (!it->first->isTextBase()) {
         return false;
     }
 
-    const TextBase* text = toTextBase(obj);
-    const bool empty = toTextBase(obj)->empty();
+    const TextBase* text = toTextBase(it->first);
+    const bool empty = text->empty();
+    if (!empty) {
+        return false;
+    }
 
-    if (empty && text->isHarmony() && m_playChordSymbols) {
+    if (text->isHarmony() && m_playChordSymbols) {
         const InstrumentTrackId trackId = chordSymbolsTrackId(text->part()->id());
         if (!muse::contains(m_playbackDataMap, trackId)) {
             return false;
         }
     }
 
-    return empty;
+    const std::unordered_set<CommandType>& commands = it->second;
+    if (muse::contains(commands, CommandType::RemoveElement)) {
+        return false;
+    }
+
+    return true;
 }
 
 PlaybackModel::TrackBoundaries PlaybackModel::trackBoundaries(const ScoreChanges& changes) const

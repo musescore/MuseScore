@@ -39,6 +39,7 @@ class Score;
 class MeasureRepeat;
 class TextBase;
 class ChordRest;
+class RepeatSegment;
 
 class PlaybackContext
 {
@@ -97,13 +98,14 @@ private:
                         const int tickPositionOffset);
     void handleHairpin(const Hairpin* hairpin, const int tickPositionOffset);
     void handleSegmentAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick);
-    void handleSegmentElements(const Segment* segment, const int segmentPositionTick,
+    void handleSegmentElements(const RepeatSegment* repeat, const Segment* segment, const int segmentPositionTick,
                                std::vector<const MeasureRepeat*>& foundMeasureRepeats);
     void handleMeasureRepeats(const std::vector<const MeasureRepeat*>& measureRepeats, const int tickPositionOffset);
 
     void applyDynamic(const EngravingItem* dynamicItem, muse::mpe::dynamic_level_t dynamicLevel, const int positionTick);
 
     bool shouldSkipTrack(const track_idx_t trackIdx) const;
+    bool hasOnlyOneLyricsVerse(const RepeatSegment* repeat, const track_idx_t track) const;
 
     track_idx_t m_partStartTrack = 0;
     track_idx_t m_partEndTrack = 0;
@@ -116,6 +118,7 @@ private:
     PlayTechniquesMap m_playTechniquesMap;
 
     std::unordered_map<const ChordRest*, int> m_currentVerseNumByChordRest;
+    std::unordered_map<track_idx_t, std::set<int /*tick*/> > m_multiVerseLyricsPositionMap;
 };
 
 using PlaybackContextPtr = std::shared_ptr<PlaybackContext>;
