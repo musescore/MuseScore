@@ -26,6 +26,8 @@ qt_add_qml_module(muse_uicomponents_qml
     SOURCES
         abstractmenumodel.cpp
         abstractmenumodel.h
+        abstracttableviewmodel.cpp
+        abstracttableviewmodel.h
         abstracttoolbarmodel.cpp
         abstracttoolbarmodel.h
         buttonboxmodel.cpp
@@ -46,6 +48,12 @@ qt_add_qml_module(muse_uicomponents_qml
         internal/focuslistener.h
         internal/popupviewclosecontroller.cpp
         internal/popupviewclosecontroller.h
+        internal/tableviewheader.cpp
+        internal/tableviewheader.h
+        internal/tableviewcell.cpp
+        internal/tableviewcell.h
+        internal/tableviewlistcell.cpp
+        internal/tableviewlistcell.h
         itemmultiselectionmodel.cpp
         itemmultiselectionmodel.h
         menuitem.cpp
@@ -78,6 +86,9 @@ qt_add_qml_module(muse_uicomponents_qml
         widgetview.h
         windowview.cpp
         windowview.h
+
+        testtableviewmodel.cpp
+        testtableviewmodel.h
 
     QML_FILES
         Border.qml
@@ -144,7 +155,8 @@ qt_add_qml_module(muse_uicomponents_qml
         ValueList.qml
         VisibilityBox.qml
         VisibilityControls.qml
-        
+        StyledTableView.qml
+
         internal/ArrowScrollButton.qml
         internal/DirectoriesTopPanel.qml
         internal/DirectoriesView.qml
@@ -159,6 +171,8 @@ qt_add_qml_module(muse_uicomponents_qml
         internal/ValueListHeaderItem.qml
         internal/ValueListItem.qml
         internal/ViewScrollBar.qml
+        internal/StyledTableViewColumn.qml
+        internal/StyledTableViewCell.qml
 
         treeview/BasicTableView.qml
         treeview/BasicTableViewStyle.qml
@@ -168,7 +182,7 @@ qt_add_qml_module(muse_uicomponents_qml
         treeview/Style.qml
         treeview/TableViewColumn.qml
         treeview/TableViewItemDelegateLoader.qml
-    
+
     RESOURCES
         treeview/images/header.png
 

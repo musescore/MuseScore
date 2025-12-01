@@ -88,6 +88,7 @@ Rectangle {
                     { textRole: "NumberInputField", componentRole: numberInputFieldSample },
                     { textRole: "TimeInputField", componentRole: timeInputFieldSample },
                     { textRole: "ValueList", componentRole: valueListSample },
+                    { textRole: "StyledTableView", componentRole: tableViewSample },
                     { textRole: "StyledBusyIndicator", componentRole: styledBusyIndicatorSample },
                     { textRole: "DialogButtonBox", componentRole: dialogButtonBoxSample }
                 ]
@@ -1119,6 +1120,62 @@ Rectangle {
                     name: "Anna"
                     age: 11
                     valueType: "Int"
+                }
+            }
+        }
+    }
+
+    Component {
+        id: tableViewSample
+
+        StyledTableView  {
+            id: tableView
+
+            width: 560
+            height: 226
+
+            TestTableViewModel {
+                id: tableModel
+            }
+
+            model: tableModel
+
+            headerCapitalization: Font.Capitalize
+
+            sourceComponentCallback: function(type) {
+                switch(type) {
+                case TestTableViewCellType.Custom: return customComp
+                }
+
+                return null
+            }
+
+            Component {
+                id: customComp
+
+                Rectangle {
+                    id: item
+
+                    property var itemData
+                    property string val
+                    property int row
+                    property int column
+
+                    property string accessibleName: label.text
+
+                    signal changed(string stub)
+                    signal editingFinished()
+
+                    color: tableView.model.headerData(column, Qt.Horizontal).currentFormatId === "accent" ? ui.theme.accentColor : ui.theme.backgroundPrimaryColor
+
+                    StyledTextLabel {
+                        id: label
+
+                        anchors.fill: parent
+
+                        text: item.val
+                        horizontalAlignment: Text.AlignLeft
+                    }
                 }
             }
         }
