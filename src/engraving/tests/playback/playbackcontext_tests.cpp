@@ -871,6 +871,14 @@ TEST_F(Engraving_PlaybackContextTests, Lyrics_Multiverses)
         { 2500000, { makeSyllable(u"feel") } },
         { 3000000, { makeSyllable(u"like") } },
         { 3500000, { makeSyllable(u"work") } },
+
+        // 1st verse
+        { 4000000, { makeSyllable(u"Hello") } },
+        { 4500000, { makeSyllable(u"world") } },
+
+        // 1st verse (repeated)
+        { 6000000, { makeSyllable(u"Hello") } },
+        { 6500000, { makeSyllable(u"world") } },
     };
 
     const std::map<timestamp_t, SyllableEventList> actualEvents = ctx.syllables(score);
