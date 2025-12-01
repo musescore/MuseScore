@@ -269,23 +269,6 @@ double Ambitus::headWidth() const
 }
 
 //---------------------------------------------------------
-//   pagePos
-//---------------------------------------------------------
-
-PointF Ambitus::pagePos() const
-{
-    if (!explicitParent()) {
-        return pos();
-    }
-
-    double yp = y();
-    if (System* system = segment()->measure()->system()) {
-        yp += system->staff(staffIdx())->y() + system->y();
-    }
-    return PointF(pageX(), yp);
-}
-
-//---------------------------------------------------------
 //   normalize
 //
 //    makes sure topPitch is not < bottomPitch
