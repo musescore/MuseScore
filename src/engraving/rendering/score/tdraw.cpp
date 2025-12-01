@@ -1752,6 +1752,7 @@ void TDraw::draw(const TextFragment& textFragment, const TextBase* item, muse::d
 void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* painter, const PaintOptions& opt)
 {
     const TextLineBase* tl = item->textLineBase();
+    const TextLineBaseSegment::LayoutData* ldata = item->ldata();
 
     if (!item->text()->empty()) {
         painter->translate(item->text()->pos());
@@ -1767,7 +1768,7 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
         painter->translate(-item->endText()->pos());
     }
 
-    if (item->npoints() == 0
+    if (ldata->npoints == 0
         || ((opt.isPrinting || (item->score() && !item->score()->isShowInvisible()))
             && !tl->lineVisible())) {
         return;
@@ -1796,23 +1797,23 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
 
         pen.setJoinStyle(PenJoinStyle::BevelJoin);
         painter->setPen(pen);
-        if (!item->joinedHairpin().empty() && !isNonSolid) {
-            painter->drawPolyline(item->joinedHairpin());
+        if (!ldata->joinedHairpin.empty() && !isNonSolid) {
+            painter->drawPolyline(ldata->joinedHairpin);
         } else {
-            painter->drawLines(&item->points()[0], 2);
+            painter->drawLines(&ldata->points[0], 2);
         }
         return;
     }
 
-    int start = 0, end = item->npoints();
+    int start = 0, end = ldata->npoints;
 
     // Draw begin hook, if it needs to be drawn separately
     if (item->isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
         bool isTHook = tl->beginHookType() == HookType::HOOK_90T;
 
         if (isNonSolid || isTHook) {
-            const PointF& p1 = item->points()[start++];
-            const PointF& p2 = item->points()[start++];
+            const PointF& p1 = ldata->points[start++];
+            const PointF& p2 = ldata->points[start++];
 
             if (isTHook) {
                 painter->setPen(solidPen);
@@ -1831,8 +1832,8 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
         bool isTHook = tl->endHookType() == HookType::HOOK_90T;
 
         if (isNonSolid || isTHook) {
-            const PointF& p1 = item->points()[--end];
-            const PointF& p2 = item->points()[--end];
+            const PointF& p1 = ldata->points[--end];
+            const PointF& p2 = ldata->points[--end];
 
             if (isTHook) {
                 painter->setPen(solidPen);
@@ -1848,11 +1849,11 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
 
     // Draw the rest
     if (isNonSolid) {
-        pen.setDashPattern(distributedDashPattern(dash, gap, item->lineLength() / lineWidth));
+        pen.setDashPattern(distributedDashPattern(dash, gap, ldata->lineLength / lineWidth));
     }
 
     painter->setPen(pen);
-    painter->drawPolyline(&item->points()[start], end - start);
+    painter->drawPolyline(&ldata->points[start], end - start);
 }
 
 void TDraw::draw(const GradualTempoChangeSegment* item, Painter* painter, const PaintOptions& opt)

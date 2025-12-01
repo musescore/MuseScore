@@ -62,15 +62,13 @@ public:
     Text* text() const { return m_text; }
     Text* endText() const { return m_endText; }
 
-    const PointF* points() const { return &m_points[0]; }
-    PointF* pointsRef() { return &m_points[0]; }
-    const PolygonF& joinedHairpin() const { return m_joinedHairpin; }
-    PolygonF& joinedHairpinRef() { return m_joinedHairpin; }
-    int npoints() const { return m_npoints; }
-    int& npointsRef() { return m_npoints; }
-
-    double lineLength() const { return m_lineLength; }
-    void setLineLength(double l) { m_lineLength = l; }
+    struct LayoutData : public EngravingItem::LayoutData {
+        std::array<PointF, 6> points;
+        PolygonF joinedHairpin = PolygonF();
+        int npoints = 0;
+        double lineLength = 0;
+    };
+    DECLARE_LAYOUTDATA_METHODS(TextLineBaseSegment)
 
     static RectF boundingBoxOfLine(const PointF& p1, const PointF& p2, double lw2, bool isDottedLine);
 
@@ -78,10 +76,7 @@ protected:
 
     Text* m_text = nullptr;
     Text* m_endText = nullptr;
-    PointF m_points[6];
-    PolygonF m_joinedHairpin;
-    int m_npoints = 0;
-    double m_lineLength = 0;
+
     bool m_twoLines = false;
 };
 
