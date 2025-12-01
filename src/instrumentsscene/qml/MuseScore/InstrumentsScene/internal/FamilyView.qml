@@ -106,45 +106,32 @@ Item {
         }
 
         delegate: ListItemBlank {
-                    id: item
+            id: item
 
-                    property string groupName: modelData
+            property string groupName: modelData
 
-                    isSelected: groupsView.currentIndex === model.index
+            isSelected: groupsView.currentIndex === model.index
+            hint: itemTitleLabel.truncated ? groupName : ""
 
-                    navigation.name: modelData
-                    navigation.panel: groupsView.navigation
-                    navigation.row: 2 + model.index
-                    navigation.accessible.name: itemTitleLabel.text
-                    navigation.accessible.row: model.index
+            navigation.name: modelData
+            navigation.panel: groupsView.navigation
+            navigation.row: 2 + model.index
+            navigation.accessible.name: itemTitleLabel.text
+            navigation.accessible.row: model.index
 
-                    StyledTextLabel {
-                        id: itemTitleLabel
-                        anchors.fill: parent
-                        anchors.leftMargin: 12
+            StyledTextLabel {
+                id: itemTitleLabel
+                anchors.fill: parent
+                anchors.leftMargin: 12
 
-                        font: ui.theme.bodyBoldFont
-                        horizontalAlignment: Text.AlignLeft
-                        text: groupName
+                font: ui.theme.bodyBoldFont
+                horizontalAlignment: Text.AlignLeft
+                text: groupName
+            }
 
-                        MouseArea {
-                            id: tooltipArea
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            
-                            onClicked: {
-                                root.groupSelected(model.index)
-                            }
-
-                            onContainsMouseChanged: {
-                                if (containsMouse && itemTitleLabel.truncated) {
-                                    ui.tooltip.show(tooltipArea, groupName)
-                                } else {
-                                    ui.tooltip.hide(tooltipArea)
-                                }
-                            }
-                        }
-                    }
-                }
+            onClicked: {
+                root.groupSelected(model.index)
+            }
+        }
     }
 }
