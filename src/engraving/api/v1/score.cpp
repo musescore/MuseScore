@@ -295,7 +295,7 @@ int Score::lyricCount() const
 
 /** APIDOC
  * @readonly
- * @member {engraving.Lyric[]}
+ * @member {engraving.Lyrics[]}
  * @since 4.7
  */
 QQmlListProperty<Lyrics> Score::lyrics() const

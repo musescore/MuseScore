@@ -100,7 +100,7 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
      * First multimeasure rest measure of the score
      * @readonly
      * @q_property {engraving.Measure}
-     * @see engraving.MeasureBase.nextMeasureMM
+     * @see engraving.Measure.nextMeasureMM
      */
     Q_PROPERTY(apiv1::Measure * firstMeasureMM READ firstMeasureMM)
 
@@ -137,7 +137,7 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
      * Last multimeasure rest measure of the score
      * @readonly
      * @q_property {engraving.Measure}
-     * @see engraving.MeasureBase.prevMeasureMM
+     * @see engraving.Measure.prevMeasureMM
      */
     Q_PROPERTY(apiv1::Measure * lastMeasureMM READ lastMeasureMM)
 
