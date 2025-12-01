@@ -733,7 +733,9 @@ void Segment::add(EngravingItem* el)
 
     case ElementType::PLAY_COUNT_TEXT:
         assert(isType(SegmentType::BarLineType));
-        m_annotations.push_back(el);
+        if (!findAnnotation(ElementType::PLAY_COUNT_TEXT, el->track(), el->track())) {
+            m_annotations.push_back(el);
+        }
         break;
 
     case ElementType::STAFF_STATE:
