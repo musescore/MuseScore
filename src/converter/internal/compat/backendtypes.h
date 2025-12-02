@@ -32,8 +32,12 @@ struct ElementInfo
     mu::engraving::ElementType type = mu::engraving::ElementType::INVALID;
     muse::String name;
     muse::String notes;
-    muse::String duration;
     muse::String text;
+
+    struct Duration {
+        muse::String name;
+        uint8_t dots = 0;
+    } duration;
 
     struct Location {
         mu::engraving::staff_idx_t staffIdx = muse::nidx;
