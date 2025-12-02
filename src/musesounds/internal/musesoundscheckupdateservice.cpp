@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,6 +31,7 @@
 
 #include "musesoundserrors.h"
 
+#include "defer.h"
 #include "log.h"
 
 static const muse::UriQuery MUSEHUB_APP_URI("musehub://?from=musescore");
@@ -40,8 +41,9 @@ using namespace mu::musesounds;
 using namespace muse;
 using namespace muse::update;
 using namespace muse::network;
+using namespace muse::async;
 
-muse::Ret MuseSoundsCheckUpdateService::needCheckForUpdate() const
+Ret MuseSoundsCheckUpdateService::needCheckForUpdate() const
 {
     if (!configuration()->needCheckForMuseSoundsUpdate()) {
         return false;
@@ -64,66 +66,51 @@ muse::Ret MuseSoundsCheckUpdateService::needCheckForUpdate() const
 #endif
 }
 
-muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
+Promise<RetVal<ReleaseInfo> > MuseSoundsCheckUpdateService::checkForUpdate()
 {
-    RetVal<ReleaseInfo> result;
-    result.ret = make_ret(Err::NoUpdate);
+    return Promise<muse::RetVal<ReleaseInfo> >([this](auto resolve, auto) {
+        m_lastCheckResult.val = ReleaseInfo();
+        m_lastCheckResult.ret = muse::make_ok();
 
-    m_lastCheckResult = result;
+        if (configuration()->museSoundsCheckForUpdateTestMode()) {
+            return resolve(m_lastCheckResult);
+        }
 
-    clear();
+        auto buff = std::make_shared<QBuffer>();
+        QUrl url = configuration()->checkForMuseSoundsUpdateUrl();
+        m_networkManager = networkManagerCreator()->makeNetworkManager();
+        RetVal<Progress> progress = m_networkManager->get(url, buff);
 
-    if (configuration()->museSoundsCheckForUpdateTestMode()) {
-        // Return dummy info...
-        result.val = ReleaseInfo();
-        result.ret = muse::make_ok();
-        m_lastCheckResult = result;
-        return result;
-    }
+        if (!progress.ret) {
+            m_lastCheckResult.ret = progress.ret;
+            m_networkManager = nullptr;
+            return resolve(m_lastCheckResult);
+        }
 
-    QBuffer buff;
-    QUrl url = configuration()->checkForMuseSoundsUpdateUrl();
-    deprecated::INetworkManagerPtr networkManager = networkManagerCreator()->makeDeprecatedNetworkManager();
+        progress.val.finished().onReceive(this, [this, buff, resolve](const ProgressResult& res) {
+            DEFER {
+                (void)resolve(m_lastCheckResult);
+                m_networkManager = nullptr;
+            };
 
-    Ret getUpdateInfo = networkManager->get(url, &buff);
+            if (!res.ret) {
+                m_lastCheckResult.ret = res.ret;
+                return;
+            }
 
-    if (!getUpdateInfo) {
-        LOGE() << getUpdateInfo.toString();
-        return result;
-    }
+            m_lastCheckResult = parseRelease(buff->data());
+        });
 
-    QByteArray json = buff.data();
-
-    RetVal<ReleaseInfo> releaseInfoRetVal = parseRelease(json);
-    if (!releaseInfoRetVal.ret) {
-        return result;
-    }
-
-    if (!releaseInfoRetVal.val.isValid()) {
-        return result;
-    }
-
-    ReleaseInfo releaseInfo = releaseInfoRetVal.val;
-
-    result.ret = make_ok();
-    result.val = std::move(releaseInfo);
-
-    m_lastCheckResult = result;
-
-    return result;
+        return muse::async::Promise<muse::RetVal<ReleaseInfo> >::dummy_result();
+    });
 }
 
-muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::lastCheckResult()
+const RetVal<ReleaseInfo>& MuseSoundsCheckUpdateService::lastCheckResult() const
 {
     return m_lastCheckResult;
 }
 
-muse::Progress MuseSoundsCheckUpdateService::updateProgress()
-{
-    return m_updateProgress;
-}
-
-muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::parseRelease(const QByteArray& json) const
+RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::parseRelease(const QByteArray& json) const
 {
     RetVal<ReleaseInfo> result;
 
@@ -237,9 +224,4 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::parseRelease(const QByte
 #endif
 
     return result;
-}
-
-void MuseSoundsCheckUpdateService::clear()
-{
-    m_lastCheckResult = RetVal<ReleaseInfo>();
 }

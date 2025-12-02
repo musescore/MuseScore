@@ -29,9 +29,7 @@ class MuseSoundsCheckUpdateServiceStub : public IMuseSoundsCheckUpdateService
 public:
     muse::Ret needCheckForUpdate() const override;
 
-    muse::RetVal<muse::update::ReleaseInfo> checkForUpdate() override;
-    muse::RetVal<muse::update::ReleaseInfo> lastCheckResult() override;
-
-    muse::Progress updateProgress() override;
+    muse::async::Promise<muse::RetVal<muse::update::ReleaseInfo> > checkForUpdate() override;
+    const muse::RetVal<muse::update::ReleaseInfo>& lastCheckResult() const override;
 };
 }
