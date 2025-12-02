@@ -24,7 +24,6 @@
 #include "imusesamplercheckupdateservice.h"
 
 #include "async/asyncable.h"
-#include "async/promise.h"
 #include "modularity/ioc.h"
 #include "musesampler/imusesamplerinfo.h"
 #include "musesampler/imusesamplerconfiguration.h"
@@ -34,10 +33,10 @@
 namespace mu::musesounds {
 class MuseSamplerCheckUpdateService : public IMuseSamplerCheckUpdateService, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::ThreadSafeInject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
-    muse::ThreadSafeInject<muse::musesampler::IMuseSamplerConfiguration> museSamplerConfiguration = { this };
-    muse::ThreadSafeInject<muse::network::INetworkManagerCreator> networkManagerCreator = { this };
-    muse::ThreadSafeInject<IMuseSoundsConfiguration> configuration = { this };
+    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
+    muse::Inject<muse::musesampler::IMuseSamplerConfiguration> museSamplerConfiguration = { this };
+    muse::Inject<muse::network::INetworkManagerCreator> networkManagerCreator = { this };
+    muse::Inject<IMuseSoundsConfiguration> configuration = { this };
 
 public:
     MuseSamplerCheckUpdateService(const muse::modularity::ContextPtr& iocCtx)
@@ -47,5 +46,8 @@ public:
     bool incompatibleLocalVersion() const override;
 
     muse::async::Promise<muse::RetVal<bool> > checkForUpdate() override;
+
+private:
+    muse::network::INetworkManagerPtr m_networkManager;
 };
 }
