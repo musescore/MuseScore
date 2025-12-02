@@ -340,8 +340,10 @@ Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
 
 void ShortcutsRegister::resetShortcuts()
 {
-    mi::WriteResourceLockGuard guard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
-    fileSystem()->remove(configuration()->shortcutsUserAppDataPath());
+    {
+        mi::WriteResourceLockGuard guard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+        fileSystem()->remove(configuration()->shortcutsUserAppDataPath());
+    }
 
     reload();
 }
