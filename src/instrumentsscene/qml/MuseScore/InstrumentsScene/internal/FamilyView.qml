@@ -111,6 +111,7 @@ Item {
             property string groupName: modelData
 
             isSelected: groupsView.currentIndex === model.index
+            hint: itemTitleLabel.truncated ? groupName : ""
 
             navigation.name: modelData
             navigation.panel: groupsView.navigation
