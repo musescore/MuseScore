@@ -331,6 +331,15 @@ public:
     /// \since MuseScore 3.5
     Q_INVOKABLE void appendPartByMusicXmlId(const QString& instrumentMusicXmlId);
 
+    /// Replaces the instrument for a given part with a new instrument.
+    /// This changes the instrument definition including its name, clef, and sound.
+    /// \param part - The Part object whose instrument should be replaced.
+    /// \param instrumentId - ID of the new instrument, as listed in
+    /// [`instruments.xml`](https://github.com/musescore/MuseScore/blob/3.x/share/instruments/instruments.xml)
+    /// file.
+    /// \since MuseScore 4.7
+    Q_INVOKABLE void replaceInstrument(apiv1::Part* part, const QString& instrumentId);
+
     /// Appends a number of measures to this score.
     Q_INVOKABLE void appendMeasures(int n) { score()->appendMeasures(n); }
     Q_INVOKABLE void addText(const QString& type, const QString& text);
