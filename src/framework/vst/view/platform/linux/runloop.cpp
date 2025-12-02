@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -62,29 +62,39 @@ Steinberg::tresult RunLoop::registerEventHandler(Steinberg::Linux::IEventHandler
     Handler* h = new Handler();
     h->fd = fd;
     h->handler = handler;
-    h->readSN = new QSocketNotifier(fd, QSocketNotifier::Read);
-    h->writeSN = new QSocketNotifier(fd, QSocketNotifier::Write);
-
-    QObject::connect(h->readSN, &QSocketNotifier::activated, [h](QSocketDescriptor, QSocketNotifier::Type) {
+    
+    // Use polling timer instead of socket notifiers
+    h->pollTimer = new QTimer();
+    h->pollTimer->setInterval(33); // ~30 FPS
+    QObject::connect(h->pollTimer, &QTimer::timeout, [h]() {
         h->handler->onFDIsSet(h->fd);
     });
-
-    QObject::connect(h->writeSN, &QSocketNotifier::activated, [h](QSocketDescriptor, QSocketNotifier::Type) {
-        h->handler->onFDIsSet(h->fd);
-    });
-
+    
+    // Don't create socket notifiers
+    h->readSN = nullptr;
+    h->writeSN = nullptr;
+    
     m_handlers.push_back(h);
+    h->pollTimer->start();
 
     return Steinberg::kResultTrue;
 }
 
 RunLoop::Handler::~Handler()
 {
-    readSN->disconnect();
-    writeSN->disconnect();
-
-    delete readSN;
-    delete writeSN;
+    if (readSN) {
+        readSN->disconnect();
+        delete readSN;
+    }
+    if (writeSN) {
+        writeSN->disconnect();
+        delete writeSN;
+    }
+    if (pollTimer) {
+        pollTimer->stop();
+        pollTimer->disconnect();
+        delete pollTimer;
+    }
 }
 
 Steinberg::tresult RunLoop::unregisterEventHandler(Steinberg::Linux::IEventHandler* handler)
@@ -99,7 +109,6 @@ Steinberg::tresult RunLoop::unregisterEventHandler(Steinberg::Linux::IEventHandl
         }
 
         m_handlers.erase(it);
-
         delete h;
     }
 
