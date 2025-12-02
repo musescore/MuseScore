@@ -120,9 +120,9 @@ static mu::engraving::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km
     return mu::engraving::KeyboardModifier(int(km));
 }
 
-static qreal nudgeDistance(const mu::engraving::EditData& editData)
+static double nudgeDistance(const mu::engraving::EditData& editData)
 {
-    qreal spatium = editData.element->spatium();
+    double spatium = editData.element->spatium();
 
     if (editData.element->isBeam()) {
         if (editData.modifiers & Qt::ControlModifier) {
@@ -143,9 +143,9 @@ static qreal nudgeDistance(const mu::engraving::EditData& editData)
     return spatium * mu::engraving::MScore::nudgeStep;
 }
 
-static qreal nudgeDistance(const mu::engraving::EditData& editData, qreal raster)
+static double nudgeDistance(const mu::engraving::EditData& editData, double raster)
 {
-    qreal distance = nudgeDistance(editData);
+    double distance = nudgeDistance(editData);
     if (raster > 0) {
         raster = editData.element->spatium() / raster;
         if (distance < raster) {
@@ -4223,21 +4223,21 @@ void NotationInteraction::nudgeAnchors(MoveDirection d)
     }
 
     startEdit(TranslatableString("undoableAction", "Nudge"));
-    qreal vRaster = mu::engraving::MScore::vRaster();
-    qreal hRaster = mu::engraving::MScore::hRaster();
+    double vRaster = m_editData.element->isBarLine() ? 4 : mu::engraving::MScore::vRaster();
+    double hRaster = m_editData.element->isBarLine() ? 4 : mu::engraving::MScore::hRaster();
 
     switch (d) {
     case MoveDirection::Left:
-        m_editData.delta = QPointF(-nudgeDistance(m_editData, hRaster), 0);
+        m_editData.delta = PointF(-nudgeDistance(m_editData, hRaster), 0);
         break;
     case MoveDirection::Right:
-        m_editData.delta = QPointF(nudgeDistance(m_editData, hRaster), 0);
+        m_editData.delta = PointF(nudgeDistance(m_editData, hRaster), 0);
         break;
     case MoveDirection::Up:
-        m_editData.delta = QPointF(0, -nudgeDistance(m_editData, vRaster));
+        m_editData.delta = PointF(0, -nudgeDistance(m_editData, vRaster));
         break;
     case MoveDirection::Down:
-        m_editData.delta = QPointF(0, nudgeDistance(m_editData, vRaster));
+        m_editData.delta = PointF(0, nudgeDistance(m_editData, vRaster));
         break;
     default:
         rollback();
@@ -4386,8 +4386,8 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
         return false;
     }
 
-    qreal vRaster = mu::engraving::MScore::vRaster();
-    qreal hRaster = mu::engraving::MScore::hRaster();
+    double vRaster = m_editData.element->isBeam() ? 4 : mu::engraving::MScore::vRaster();
+    double hRaster = m_editData.element->isBeam() ? 4 : mu::engraving::MScore::hRaster();
 
     switch (event->key()) {
     case Qt::Key_Tab:
@@ -4407,16 +4407,16 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
 
         return true;
     case Qt::Key_Left:
-        m_editData.delta = QPointF(-nudgeDistance(m_editData, hRaster), 0);
+        m_editData.delta = PointF(-nudgeDistance(m_editData, hRaster), 0);
         break;
     case Qt::Key_Right:
-        m_editData.delta = QPointF(nudgeDistance(m_editData, hRaster), 0);
+        m_editData.delta = PointF(nudgeDistance(m_editData, hRaster), 0);
         break;
     case Qt::Key_Up:
-        m_editData.delta = QPointF(0, -nudgeDistance(m_editData, vRaster));
+        m_editData.delta = PointF(0, -nudgeDistance(m_editData, vRaster));
         break;
     case Qt::Key_Down:
-        m_editData.delta = QPointF(0, nudgeDistance(m_editData, vRaster));
+        m_editData.delta = PointF(0, nudgeDistance(m_editData, vRaster));
         break;
     default:
         return false;
