@@ -29,6 +29,8 @@ Loader {
     id: root
 
     property string searchText
+    property string familyFilter: ""
+    property string instrumentFilter: ""
 
     property int viewType: ScoresPageModel.Grid
 

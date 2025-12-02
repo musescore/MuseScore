@@ -39,6 +39,9 @@
 #include "../inotationwriter.h"
 
 namespace mu::project {
+
+inline const QString OTHER_FAMILY_ID = "other";
+
 struct ProjectCreateOptions
 {
     QString title;
@@ -234,6 +237,8 @@ using ProjectFilesList = std::vector<ProjectFile>;
 struct RecentFile {
     muse::io::path_t path;
     QString displayNameOverride = {};
+    QStringList instrumentIds;        // canonical instrument IDs (e.g., "piano", "violin")
+    QStringList instrumentFamilies;   // family IDs (e.g., "keyboards", "strings")
 
     RecentFile() = default;
 

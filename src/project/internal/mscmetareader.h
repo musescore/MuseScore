@@ -68,6 +68,7 @@ private:
         QVariantMap additionalTags;
 
         size_t partsCount = 0;
+        QStringList instrumentIds;
     };
 
     muse::Ret prepareReader(const muse::io::path_t& filePath, mu::engraving::MscReader& reader) const;

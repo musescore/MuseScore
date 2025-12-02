@@ -50,7 +50,9 @@ protected:
     enum Roles {
         NameRole = Qt::UserRole + 1,
         IsNoResultsFoundRole,
-        ScoreRole
+        ScoreRole,
+        InstrumentIdsRole,
+        InstrumentFamiliesRole
     };
 
     static const QString NAME_KEY;
@@ -65,6 +67,8 @@ protected:
     static const QString CLOUD_SCORE_ID_KEY;
     static const QString CLOUD_VISIBILITY_KEY;
     static const QString CLOUD_VIEW_COUNT_KEY;
+    static const QString INSTRUMENT_IDS_KEY;
+    static const QString INSTRUMENT_FAMILIES_KEY;
 
     std::vector<QVariantMap> m_items;
 };

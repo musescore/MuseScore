@@ -265,7 +265,18 @@ MscMetaReader::RawMeta MscMetaReader::doReadRawMeta(XmlStreamReader& xmlReader) 
             }
         } else if (tag == "Part") {
             meta.partsCount++;
-            xmlReader.skipCurrentElement();
+            while (xmlReader.readNextStartElement()) {
+                const std::string partTag(xmlReader.name());
+                if (partTag == "Instrument") {
+                    const std::string_view instrId = xmlReader.asciiAttribute("id");
+                    if (!instrId.empty()) {
+                        meta.instrumentIds << QString::fromUtf8(instrId.data(), static_cast<int>(instrId.size()));
+                    }
+                    xmlReader.skipCurrentElement();
+                } else {
+                    xmlReader.skipCurrentElement();
+                }
+            }
         } else {
             xmlReader.skipCurrentElement();
         }
@@ -337,6 +348,7 @@ void MscMetaReader::doReadMeta(XmlStreamReader& xmlReader, ProjectMeta& meta) co
     meta.partsCount = rawMeta.partsCount;
     meta.creationDate = QDate::fromString(rawMeta.creationDate, "yyyy-MM-dd");
     meta.additionalTags = std::move(rawMeta.additionalTags);
+    meta.instrumentIds = rawMeta.instrumentIds;
 }
 
 QString MscMetaReader::formatFromXml(const std::string& xml) const

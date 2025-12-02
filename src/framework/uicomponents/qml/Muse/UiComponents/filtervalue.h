@@ -36,7 +36,8 @@ enum Type
 {
     Equal,
     NotEqual,
-    Contains
+    Contains,
+    ListContains  // Check if a QStringList role contains the roleValue
 };
 Q_ENUM_NS(Type)
 }

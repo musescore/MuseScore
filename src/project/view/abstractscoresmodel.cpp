@@ -37,6 +37,8 @@ const QString AbstractScoresModel::IS_CLOUD_KEY("isCloud");
 const QString AbstractScoresModel::CLOUD_SCORE_ID_KEY("scoreId");
 const QString AbstractScoresModel::CLOUD_VISIBILITY_KEY("cloudVisibility");
 const QString AbstractScoresModel::CLOUD_VIEW_COUNT_KEY("cloudViewCount");
+const QString AbstractScoresModel::INSTRUMENT_IDS_KEY("instrumentIds");
+const QString AbstractScoresModel::INSTRUMENT_FAMILIES_KEY("instrumentFamilies");
 
 AbstractScoresModel::AbstractScoresModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -56,6 +58,8 @@ QVariant AbstractScoresModel::data(const QModelIndex& index, int role) const
     case NameRole: return item[NAME_KEY];
     case IsNoResultsFoundRole: return item[IS_NO_RESULTS_FOUND_KEY];
     case ScoreRole: return item;
+    case InstrumentIdsRole: return item[INSTRUMENT_IDS_KEY];
+    case InstrumentFamiliesRole: return item[INSTRUMENT_FAMILIES_KEY];
     }
 
     return QVariant();
@@ -71,7 +75,9 @@ QHash<int, QByteArray> AbstractScoresModel::roleNames() const
     static const QHash<int, QByteArray> ROLE_NAMES {
         { NameRole, NAME_KEY.toUtf8() },
         { IsNoResultsFoundRole, IS_NO_RESULTS_FOUND_KEY.toUtf8() },
-        { ScoreRole, "score" }
+        { ScoreRole, "score" },
+        { InstrumentIdsRole, INSTRUMENT_IDS_KEY.toUtf8() },
+        { InstrumentFamiliesRole, INSTRUMENT_FAMILIES_KEY.toUtf8() }
     };
 
     return ROLE_NAMES;

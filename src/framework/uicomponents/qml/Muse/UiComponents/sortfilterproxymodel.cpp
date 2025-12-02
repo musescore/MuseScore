@@ -206,6 +206,11 @@ bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& so
                 return false;
             }
             break;
+        case CompareType::ListContains:
+            if (!data.toStringList().contains(value->roleValue().toString())) {
+                return false;
+            }
+            break;
         }
     }
 

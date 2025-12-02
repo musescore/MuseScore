@@ -26,6 +26,8 @@
 #include "io/fileinfo.h"
 
 #include "engraving/infrastructure/mscio.h"
+#include "notation/notationtypes.h"
+#include "types/projecttypes.h"
 
 #include "log.h"
 
@@ -90,6 +92,23 @@ void RecentScoresModel::updateRecentScores()
         obj[IS_CREATE_NEW_KEY] = false;
         obj[IS_NO_RESULTS_FOUND_KEY] = false;
 
+        // Add instrument data
+        obj[INSTRUMENT_IDS_KEY] = file.instrumentIds;
+        obj[INSTRUMENT_FAMILIES_KEY] = file.instrumentFamilies;
+
+        // Add localized display names for UI
+        QStringList instrumentDisplayNames;
+        for (const QString& id : file.instrumentIds) {
+            instrumentDisplayNames << localizedInstrumentName(id);
+        }
+        obj["instrumentDisplayNames"] = instrumentDisplayNames;
+
+        QStringList familyDisplayNames;
+        for (const QString& id : file.instrumentFamilies) {
+            familyDisplayNames << localizedFamilyName(id);
+        }
+        obj["familyDisplayNames"] = familyDisplayNames;
+
         items.push_back(obj);
     }
 
@@ -106,4 +125,30 @@ void RecentScoresModel::updateRecentScores()
 QList<int> RecentScoresModel::nonScoreItemIndices() const
 {
     return { 0, rowCount() - 1 };
+}
+
+QString RecentScoresModel::localizedInstrumentName(const QString& id) const
+{
+    muse::String museId = muse::String::fromQString(id);
+    const notation::InstrumentTemplate& templ = instrumentsRepository()->instrumentTemplate(museId);
+    if (templ.isValid()) {
+        return templ.trackName.toQString();
+    }
+    return id;  // Fallback to ID if not found
+}
+
+QString RecentScoresModel::localizedFamilyName(const QString& id) const
+{
+    if (id == OTHER_FAMILY_ID) {
+        return muse::qtrc("project", "Other");
+    }
+
+    // Families are accessed via templates - find any template with this family
+    muse::String museId = muse::String::fromQString(id);
+    for (const notation::InstrumentTemplate* templ : instrumentsRepository()->instrumentTemplates()) {
+        if (templ->family && templ->family->id == museId) {
+            return templ->family->name.toQString();
+        }
+    }
+    return id;  // Fallback to ID if not found
 }
