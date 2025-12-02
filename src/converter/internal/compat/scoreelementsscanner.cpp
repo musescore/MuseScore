@@ -26,6 +26,7 @@
 #include "engraving/dom/score.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/rest.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/dynamic.h"
@@ -99,6 +100,15 @@ static muse::String chordToNotes(const Chord* chord)
     return notes.join(u" ");
 }
 
+static ElementInfo::Duration durationInfo(const TDuration& dur)
+{
+    ElementInfo::Duration result;
+    result.name = TConv::translatedUserName(dur.type());
+    result.dots = dur.dots();
+
+    return result;
+}
+
 static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
 {
     if (!itemAccepted(item)) {
@@ -123,15 +133,15 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
         } else {
             info.name = noteName(note);
         }
-        info.duration = chord->durationUserName();
+        info.duration = durationInfo(chord->durationType());
     } else if (isChordArticulation(item)) {
         Chord* chord = toChord(item->parentItem());
         scannerData->chords.insert(chord);
         info.name = item->translatedSubtypeUserName();
         info.notes = chordToNotes(chord);
-        info.duration = chord->durationUserName();
+        info.duration = durationInfo(chord->durationType());
     } else if (item->isRest()) {
-        info.duration = toRest(item)->durationUserName();
+        info.duration = durationInfo(toRest(item)->durationType());
     } else if (item->isSpannerSegment()) {
         Spanner* spanner = toSpannerSegment(item)->spanner();
         if (muse::contains(scannerData->spanners, spanner)) {
