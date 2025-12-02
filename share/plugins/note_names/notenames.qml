@@ -35,6 +35,8 @@ MuseScore {
       for (var i = 0; i < notes.length; i++) {
          if (!notes[i].visible)
             continue // skip invisible notes
+         if (notes[i].tieBack)
+            continue // skip tied to notes
          if (text.text) // only if text isn't empty
             text.text = sep + text.text;
          if (small)
