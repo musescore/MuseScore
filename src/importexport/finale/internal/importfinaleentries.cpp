@@ -378,7 +378,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
     }
     EntryNumber currentEntryNumber = currentEntry->getEntryNumber();
 
-    const bool isGrace = entryInfo->getEntry()->graceNote;
+    const bool isGrace = currentEntry->graceNote;
     if (isGrace != graceNotes) {
         return true;
     }
@@ -691,7 +691,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
             EntryInfoPtr entryInfo = noteInfoPtr.getEntryInfo();
             StaffCmper targetMusxStaffId = muse::value(m_staff2Inst, idx, 0);
             IF_ASSERT_FAILED (targetMusxStaffId) {
-                logger()->logWarning(String(u"Entry %1 (a rest) was not mapped to a known musx staff.").arg(entryInfo->getEntry()->getEntryNumber()), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
+                logger()->logWarning(String(u"Entry %1 (a rest) was not mapped to a known musx staff.").arg(currentEntry->getEntryNumber()), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
                 return false;
             }
             if (noteInfoPtr->getNoteId() == musx::dom::Note::RESTID) {
