@@ -22,7 +22,7 @@
 
 #include "midiremote.h"
 
-#include "global/io/file.h"
+#include "global/io/buffer.h"
 #include "global/serialization/xmlstreamreader.h"
 #include "global/serialization/xmlstreamwriter.h"
 
@@ -78,8 +78,10 @@ Ret MidiRemote::setMidiMappings(const MidiMappingList& midiMappings)
 
 void MidiRemote::resetMidiMappings()
 {
-    muse::mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
-    fileSystem()->remove(configuration()->midiMappingUserAppDataPath());
+    {
+        muse::mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
+        fileSystem()->remove(configuration()->midiMappingUserAppDataPath());
+    }
 
     m_midiMappings = {};
     m_midiMappingsChanged.notify();
@@ -126,16 +128,18 @@ Ret MidiRemote::process(const Event& ev)
 
 void MidiRemote::readMidiMappings()
 {
-    muse::mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
+    RetVal<ByteArray> mappingsData;
+    {
+        muse::mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
+        mappingsData = fileSystem()->readFile(configuration()->midiMappingUserAppDataPath());
+    }
 
-    const io::path_t midiMappingsPath = configuration()->midiMappingUserAppDataPath();
-    io::File mappingsFile(midiMappingsPath);
-    if (!mappingsFile.open(io::IODevice::ReadOnly)) {
-        LOGD() << "failed to open midi mappings file: " << mappingsFile.error();
+    if (!mappingsData.ret) {
+        LOGD() << "failed to open midi mappings file: " << mappingsData.ret.toString();
         return;
     }
 
-    XmlStreamReader reader(&mappingsFile);
+    XmlStreamReader reader(mappingsData.val);
 
     reader.readNextStartElement();
     if (reader.name() != MIDIMAPPING_TAG) {
@@ -184,16 +188,14 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
 {
     TRACEFUNC;
 
-    muse::mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
-
-    const io::path_t midiMappingsPath = configuration()->midiMappingUserAppDataPath();
-    io::File mappingsFile(midiMappingsPath);
-    if (!mappingsFile.open(io::IODevice::WriteOnly)) {
+    ByteArray data;
+    io::Buffer buf(&data);
+    if (!buf.open(io::IODevice::WriteOnly)) {
+        LOGE() << buf.errorString();
         return false;
     }
 
-    XmlStreamWriter writer(&mappingsFile);
-
+    XmlStreamWriter writer(&buf);
     writer.startDocument();
     writer.startElement(MIDIMAPPING_TAG);
 
@@ -204,7 +206,17 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
     writer.endElement();
     writer.flush();
 
-    return !mappingsFile.hasError();
+    Ret ret;
+    {
+        muse::mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
+        ret = fileSystem()->writeFile(configuration()->midiMappingUserAppDataPath(), data);
+    }
+
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+
+    return ret;
 }
 
 void MidiRemote::writeMidiMapping(XmlStreamWriter& writer, const MidiControlsMapping& midiMapping) const

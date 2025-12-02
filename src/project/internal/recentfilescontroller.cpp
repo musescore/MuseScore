@@ -244,10 +244,12 @@ void RecentFilesController::saveRecentFilesList()
 
     JsonDocument json(jsonArray);
 
-    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), RECENT_FILES_RESOURCE_NAME);
-    Ret ret = fileSystem()->writeFile(configuration()->recentFilesJsonPath(), json.toJson());
-    if (!ret) {
-        LOGE() << "Failed to save recent files list: " << ret.toString();
+    {
+        mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), RECENT_FILES_RESOURCE_NAME);
+        Ret ret = fileSystem()->writeFile(configuration()->recentFilesJsonPath(), json.toJson());
+        if (!ret) {
+            LOGE() << "Failed to save recent files list: " << ret.toString();
+        }
     }
 }
 

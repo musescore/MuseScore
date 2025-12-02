@@ -23,6 +23,7 @@
 
 #include <QKeySequence>
 
+#include "global/io/buffer.h"
 #include "global/io/file.h"
 #include "global/serialization/xmlstreamreader.h"
 #include "global/serialization/xmlstreamwriter.h"
@@ -340,8 +341,10 @@ Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
 
 void ShortcutsRegister::resetShortcuts()
 {
-    mi::WriteResourceLockGuard guard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
-    fileSystem()->remove(configuration()->shortcutsUserAppDataPath());
+    {
+        mi::WriteResourceLockGuard guard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+        fileSystem()->remove(configuration()->shortcutsUserAppDataPath());
+    }
 
     reload();
 }
@@ -350,16 +353,14 @@ bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::pat
 {
     TRACEFUNC;
 
-    mi::WriteResourceLockGuard guard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
-
-    io::File file(path);
-    if (!file.open(io::IODevice::WriteOnly)) {
-        LOGD() << "failed to open shortcuts file: " << file.error();
+    ByteArray data;
+    io::Buffer buf(&data);
+    if (!buf.open(io::IODevice::WriteOnly)) {
+        LOGE() << buf.errorString();
         return false;
     }
 
-    XmlStreamWriter writer(&file);
-
+    XmlStreamWriter writer(&buf);
     writer.startDocument();
     writer.startElement(SHORTCUTS_TAG);
 
@@ -370,7 +371,17 @@ bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::pat
     writer.endElement();
     writer.flush();
 
-    return !file.hasError();
+    Ret ret;
+    {
+        mi::WriteResourceLockGuard guard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+        ret = fileSystem()->writeFile(path, data);
+    }
+
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+
+    return ret;
 }
 
 void ShortcutsRegister::writeShortcut(XmlStreamWriter& writer, const Shortcut& shortcut) const
@@ -451,12 +462,13 @@ ShortcutList ShortcutsRegister::shortcutsForSequence(const std::string& sequence
 
 Ret ShortcutsRegister::importFromFile(const io::path_t& filePath)
 {
-    mi::ReadResourceLockGuard guard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
-
-    Ret ret = fileSystem()->copy(filePath, configuration()->shortcutsUserAppDataPath(), true);
-    if (!ret) {
-        LOGE() << "failed import file: " << ret.toString();
-        return ret;
+    {
+        mi::ReadResourceLockGuard guard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+        Ret ret = fileSystem()->copy(filePath, configuration()->shortcutsUserAppDataPath(), true);
+        if (!ret) {
+            LOGE() << "failed import file: " << ret.toString();
+            return ret;
+        }
     }
 
     reload();

@@ -123,11 +123,13 @@ std::map<muse::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs()
     //! NOTE Load current config
     if (io::File::exists(configPath)) {
         ByteArray data;
-        mi::ReadResourceLockGuard lock_guard(multiInstancesProvider.get(), EXTENSIONS_RESOURCE_NAME);
-        Ret ret = io::File::readFile(configPath, data);
-        if (!ret) {
-            LOGE() << "failed read config data, err: " << ret.toString() << ", file: " << configPath;
-            return {};
+        {
+            mi::ReadResourceLockGuard lock_guard(multiInstancesProvider.get(), EXTENSIONS_RESOURCE_NAME);
+            Ret ret = io::File::readFile(configPath, data);
+            if (!ret) {
+                LOGE() << "failed read config data, err: " << ret.toString() << ", file: " << configPath;
+                return {};
+            }
         }
 
         std::string err;
@@ -174,11 +176,14 @@ std::map<muse::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs()
     //! NOTE Load old plugins config
     else {
         ByteArray data;
-        mi::ReadResourceLockGuard lock_guard(multiInstancesProvider.get(), EXTENSIONS_RESOURCE_NAME);
-        Ret ret = io::File::readFile(oldPluginsConfigPath, data);
-        if (!ret) {
-            LOGE() << "failed read config data, err: " << ret.toString() << ", file: " << oldPluginsConfigPath;
-            return {};
+
+        {
+            mi::ReadResourceLockGuard lock_guard(multiInstancesProvider.get(), EXTENSIONS_RESOURCE_NAME);
+            Ret ret = io::File::readFile(oldPluginsConfigPath, data);
+            if (!ret) {
+                LOGE() << "failed read config data, err: " << ret.toString() << ", file: " << oldPluginsConfigPath;
+                return {};
+            }
         }
 
         std::string err;
