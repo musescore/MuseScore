@@ -37,6 +37,16 @@
 #include "internal/instrumentsrepository.h"
 #include "internal/engravingfontscontroller.h"
 
+#include "ispellchecker.h"
+#ifdef MUE_BUILD_NOTATION_HUNSPELL
+#include "internal/hunspellspellchecker.h"
+#else
+#include "internal/stubspellchecker.h"
+#endif
+
+#include "ilyricsspellcheckservice.h"
+#include "internal/lyricsspellcheckservice.h"
+
 #include "view/notationpaintview.h"
 #include "view/notationswitchlistmodel.h"
 #include "view/partlistmodel.h"
@@ -55,6 +65,7 @@
 
 #include "view/editgridsizedialogmodel.h"
 #include "view/editpercussionshortcutmodel.h"
+#include "view/lyricsspellingissuesmodel.h"
 #include "view/paintedengravingitem.h"
 
 #include "view/pianokeyboard/pianokeyboardview.h"
@@ -141,6 +152,14 @@ void NotationModule::registerExports()
 
     ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IInstrumentsRepository>(moduleName(), m_instrumentsRepository);
+
+#ifdef MUE_BUILD_NOTATION_HUNSPELL
+    ioc()->registerExport<ISpellChecker>(moduleName(), new HunspellSpellChecker());
+#else
+    ioc()->registerExport<ISpellChecker>(moduleName(), new StubSpellChecker());
+#endif
+
+    ioc()->registerExport<ILyricsSpellCheckService>(moduleName(), new LyricsSpellCheckService());
 }
 
 void NotationModule::resolveImports()
@@ -177,6 +196,7 @@ void NotationModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://notation/selectmeasurescount"), "MuseScore/NotationScene/SelectMeasuresCountDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/editgridsize"), "MuseScore/NotationScene/EditGridSizeDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/percussionpanelpadswap"), "MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml");
+        ir->registerQmlUri(Uri("musescore://notation/lyricsspellingissues"), "MuseScore/NotationScene/LyricsSpellingIssuesDialog.qml");
 
         ir->registerQmlUri(Uri("musescore://notation/editpercussionshortcut"), "MuseScore/NotationScene/EditPercussionShortcutDialog.qml");
     }
@@ -208,6 +228,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NotesInChordSelectionFilterModel>("MuseScore.NotationScene", 1, 0, "NotesInChordSelectionFilterModel");
     qmlRegisterType<EditGridSizeDialogModel>("MuseScore.NotationScene", 1, 0, "EditGridSizeDialogModel");
     qmlRegisterType<EditPercussionShortcutModel>("MuseScore.NotationScene", 1, 0, "EditPercussionShortcutModel");
+    qmlRegisterType<LyricsSpellingIssuesModel>("MuseScore.NotationScene", 1, 0, "LyricsSpellingIssuesModel");
     qmlRegisterType<PianoKeyboardView>("MuseScore.NotationScene", 1, 0, "PianoKeyboardView");
     qmlRegisterType<PianoKeyboardPanelContextMenuModel>("MuseScore.NotationScene", 1, 0, "PianoKeyboardPanelContextMenuModel");
 
