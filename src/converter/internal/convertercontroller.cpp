@@ -170,13 +170,13 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
     }
 
     if (!copyright.text.isEmpty()) {
-        if (copyright.showOnAllPages) {
-            notationProject->masterNotation()->masterScore()->style().set(mu::engraving::Sid::oddFooterC, "$c");
-            notationProject->masterNotation()->masterScore()->style().set(mu::engraving::Sid::evenFooterC, "$c");
-        }
-        ProjectMeta meta = notationProject->metaInfo();
-        meta.copyright += copyright.text;
-        notationProject->setMetaInfo(meta);
+        engraving::MStyle& style = notationProject->masterNotation()->masterScore()->style();
+        String footerOdd = style.value(engraving::Sid::oddFooterC).value<String>();
+        String footerEven = style.value(engraving::Sid::evenFooterC).value<String>();
+        footerOdd += copyright.text;
+        footerEven += copyright.text;
+        style.set(engraving::Sid::oddFooterC, footerOdd);
+        style.set(engraving::Sid::evenFooterC, footerEven);
     }
 
     globalContext()->setCurrentProject(notationProject);
