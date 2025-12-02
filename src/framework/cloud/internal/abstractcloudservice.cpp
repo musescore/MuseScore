@@ -33,6 +33,7 @@
 #include "multiinstances/resourcelockguard.h"
 #include "network/networkerrors.h"
 #include "global/iapplication.h"
+#include "global/io/ioretcodes.h"
 #include "draw/types/color.h"
 
 #include "oauthhttpserverreplyhandler.h"
@@ -126,17 +127,20 @@ bool AbstractCloudService::readTokens()
 {
     TRACEFUNC;
 
-    mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
-
     io::path_t tokensPath = tokensFilePath();
-    if (!fileSystem()->exists(tokensPath)) {
-        LOGI() << "Could not find the tokens file: " << tokensPath;
-        return false;
+    RetVal<ByteArray> tokensData;
+    {
+        mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
+        tokensData = fileSystem()->readFile(tokensPath);
     }
 
-    RetVal<ByteArray> tokensData = fileSystem()->readFile(tokensPath);
     if (!tokensData.ret) {
-        LOGE() << tokensData.ret.toString();
+        if (tokensData.ret.code() == (int)io::Err::FSNotExist) {
+            LOGI() << "Could not find the tokens file: " << tokensPath;
+        } else {
+            LOGE() << tokensData.ret.toString();
+        }
+
         return false;
     }
 
@@ -159,15 +163,18 @@ bool AbstractCloudService::saveTokens()
 {
     TRACEFUNC;
 
-    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
-
     QJsonObject tokensObject;
     tokensObject[ACCESS_TOKEN_KEY] = m_accessToken;
     tokensObject[REFRESH_TOKEN_KEY] = m_refreshToken;
     QJsonDocument tokensDoc(tokensObject);
-
     QByteArray json = tokensDoc.toJson();
-    Ret ret = fileSystem()->writeFile(tokensFilePath(), ByteArray::fromQByteArrayNoCopy(json));
+
+    Ret ret;
+    {
+        mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
+        ret = fileSystem()->writeFile(tokensFilePath(), ByteArray::fromQByteArrayNoCopy(json));
+    }
+
     if (!ret) {
         LOGE() << ret.toString();
     }
@@ -290,9 +297,11 @@ void AbstractCloudService::signOut()
         LOGE() << ret.toString();
     }
 
-    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
+    {
+        mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
+        ret = fileSystem()->remove(tokensFilePath());
+    }
 
-    ret = fileSystem()->remove(tokensFilePath());
     if (!ret) {
         LOGE() << ret.toString();
     }
