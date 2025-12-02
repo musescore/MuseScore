@@ -205,7 +205,7 @@ void PreferencesModel::load(const QString& currentPageId)
     endResetModel();
 }
 
-bool PreferencesModel::askForConfirmationOfPreferencesReset()
+void PreferencesModel::askForConfirmationOfPreferencesReset()
 {
     std::string title = muse::trc("appshell", "Are you sure you want to reset preferences?");
     std::string question = muse::trc("appshell", "This action will reset all your app preferences and delete all custom shortcuts. "
@@ -216,10 +216,14 @@ bool PreferencesModel::askForConfirmationOfPreferencesReset()
     muse::IInteractive::ButtonData resetBtn = interactive()->buttonData(muse::IInteractive::Button::Reset);
     cancelBtn.accent = true;
 
-    muse::IInteractive::Result result = interactive()->warningSync(title, question, { cancelBtn, resetBtn }, cancelBtn.btn,
-                                                                   { muse::IInteractive::Option::WithIcon },
-                                                                   muse::trc("appshell", "Reset preferences"));
-    return result.standardButton() == muse::IInteractive::Button::Reset;
+    interactive()->warning(title, question, { cancelBtn, resetBtn }, cancelBtn.btn,
+                           { muse::IInteractive::Option::WithIcon },
+                           muse::trc("appshell", "Reset preferences"))
+    .onResolve(this, [this](const muse::IInteractive::Result& res) {
+        if (res.isButton(muse::IInteractive::Button::Reset)) {
+            emit userAgreesToResetPreferences();
+        }
+    });
 }
 
 void PreferencesModel::resetFactorySettings()

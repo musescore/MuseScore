@@ -26,6 +26,7 @@
 #include <QAbstractItemModel>
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
 #include "ui/iuiactionsregister.h"
 #include "ui/view/iconcodes.h"
@@ -36,7 +37,7 @@
 #include "iinteractive.h"
 
 namespace mu::preferences {
-class PreferencesModel : public QAbstractItemModel, public muse::Injectable
+class PreferencesModel : public QAbstractItemModel, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -62,7 +63,7 @@ public:
     QString currentPageId() const;
 
     Q_INVOKABLE void load(const QString& currentPageId);
-    Q_INVOKABLE bool askForConfirmationOfPreferencesReset();
+    Q_INVOKABLE void askForConfirmationOfPreferencesReset();
     Q_INVOKABLE void resetFactorySettings();
     Q_INVOKABLE void apply();
     Q_INVOKABLE void cancel();
@@ -74,6 +75,7 @@ public slots:
     void setCurrentPageId(QString currentPageId);
 
 signals:
+    void userAgreesToResetPreferences();
     void currentPageIdChanged(QString currentPageId);
 
 private:

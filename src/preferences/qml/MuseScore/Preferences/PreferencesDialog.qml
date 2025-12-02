@@ -109,6 +109,18 @@ StyledDialogView {
         onCurrentPageIdChanged: function(currentPageId) {
             prv.updateStackCurrentIndex()
         }
+
+        onUserAgreesToResetPreferences: {
+            var pages = preferencesModel.availablePages()
+
+            for (var i in pages) {
+                var page = pages[i]
+                var obj = root.prv.pagesObjects[page.id]
+                obj.reset()
+            }
+
+            preferencesModel.resetFactorySettings()
+        }
     }
 
     ColumnLayout {
@@ -153,19 +165,7 @@ StyledDialogView {
             navigation.order: 100000
 
             onRevertFactorySettingsRequested: {
-                if (!preferencesModel.askForConfirmationOfPreferencesReset()) {
-                    return;
-                }
-
-                var pages = preferencesModel.availablePages()
-
-                for (var i in pages) {
-                    var page = pages[i]
-                    var obj = root.prv.pagesObjects[page.id]
-                    obj.reset()
-                }
-
-                preferencesModel.resetFactorySettings()
+                preferencesModel.askForConfirmationOfPreferencesReset()
             }
 
             onRejectRequested: {
