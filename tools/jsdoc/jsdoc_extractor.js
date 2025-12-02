@@ -45,6 +45,7 @@ function nameFromSig(line)
     }
 
     if (name === "") {
+        line = line.replace("Q_INVOKABLE", "");
         // Result method(...)
         line = line.trim()
         let spaceIdx = line.indexOf(" ")

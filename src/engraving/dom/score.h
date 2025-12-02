@@ -997,9 +997,9 @@ public:
     std::vector<Lyrics*> lyrics() const;
     String extractLyrics() const;
 
-    int keysig();
-    int duration();
-    int durationWithoutRepeats();
+    int keysig() const;
+    int duration() const;
+    int durationWithoutRepeats() const;
 
     void cmdInsertClef(Clef* clef, ChordRest* cr);
 

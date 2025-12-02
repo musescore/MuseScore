@@ -25,6 +25,7 @@
 #include <QQmlEngine>
 #include <QMetaEnum>
 
+#include "engraving/style/defaultstyle.h"
 #include "engraving/dom/score.h"
 
 #include "log.h"
@@ -55,14 +56,6 @@ mu::engraving::Sid MStyle::keyToSid(const QString& key)
     }
 }
 
-//---------------------------------------------------------
-//   MStyle::value
-///   Returns a value of style setting named \p key.
-///   Key should be one of \ref Sid values. Type of the
-///   returned value depends on type of the corresponding
-///   style setting.
-//---------------------------------------------------------
-
 QVariant MStyle::value(const QString& key) const
 {
     const Sid sid = keyToSid(key);
@@ -74,12 +67,6 @@ QVariant MStyle::value(const QString& key) const
     const PropertyValue val = m_style->value(sid);
     return val.toQVariant();
 }
-
-//---------------------------------------------------------
-//   MStyle::setValue
-///   Sets the value of style setting named \p key to \p value.
-///   Key should be one of \ref Sid values.
-//---------------------------------------------------------
 
 void MStyle::setValue(const QString& key, QVariant value)
 {
@@ -97,13 +84,6 @@ void MStyle::setValue(const QString& key, QVariant value)
         m_style->set(sid, PropertyValue::fromQVariant(value, mu::engraving::MStyle::valueType(sid)));
     }
 }
-
-//---------------------------------------------------------
-//   MStyle::resetValue
-///   Resets the value of style setting named \p key to its default.
-///   Key should be one of \ref Sid values.
-///   \since MuseScore 4.7
-//---------------------------------------------------------
 
 void MStyle::resetValue(const QString& key)
 {

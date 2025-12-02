@@ -116,11 +116,10 @@ public:
     }
 };
 
-/// \cond PLUGIN_API \private \endcond
 template<typename T, class Container>
-QmlExcerptsListAccess<T, Container> wrapExcerptsContainerProperty(QObject* obj, Container& c)
+QmlExcerptsListAccess<T, Container> wrapExcerptsContainerProperty(const QObject* obj, Container& c)
 {
-    return QmlExcerptsListAccess<T, Container>(obj, c);
+    return QmlExcerptsListAccess<T, Container>(const_cast<QObject*>(obj), c);
 }
 }
 

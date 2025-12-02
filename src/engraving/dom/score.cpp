@@ -5090,7 +5090,7 @@ int Score::harmonyCount() const
 //   keysig
 //---------------------------------------------------------
 
-int Score::keysig()
+int Score::keysig() const
 {
     Key result = Key::C;
     for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
@@ -5111,7 +5111,7 @@ int Score::keysig()
 //   duration
 //---------------------------------------------------------
 
-int Score::duration()
+int Score::duration() const
 {
     const RepeatList& rl = masterScore()->repeatList(true);
     if (rl.empty()) {
@@ -5125,7 +5125,7 @@ int Score::duration()
 //   durationWithoutRepeats
 //---------------------------------------------------------
 
-int Score::durationWithoutRepeats()
+int Score::durationWithoutRepeats() const
 {
     const RepeatList& rl = masterScore()->repeatList(false);
     if (rl.empty()) {
