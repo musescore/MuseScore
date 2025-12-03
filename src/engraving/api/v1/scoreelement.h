@@ -34,6 +34,7 @@ class EngravingObject;
 }
 
 namespace mu::engraving::apiv1 {
+class ScoreElement;
 //---------------------------------------------------------
 //   Ownership
 ///   \cond PLUGIN_API \private \endcond
@@ -106,6 +107,10 @@ public:
     Q_INVOKABLE QString userName() const;
     /// Checks whether two variables represent the same object. \since MuseScore 3.3
     Q_INVOKABLE bool is(apiv1::ScoreElement* other) { return other && element() == other->element(); }
+    /// Gets the children of this element. Includes children of children.
+    /// \param includeInvisible Whether invisible elements are included in the list.
+    /// \since MuseScore 4.7
+    Q_INVOKABLE QQmlListProperty<apiv1::ScoreElement> children(bool includeInvisible = true);
 };
 
 //---------------------------------------------------------
