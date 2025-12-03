@@ -53,6 +53,7 @@ private:
         Steinberg::Linux::IEventHandler* handler = nullptr;
         QSocketNotifier* readSN = nullptr;
         QSocketNotifier* writeSN = nullptr;
+        QTimer* pollTimer = nullptr;  // Add polling timer
 
         ~Handler();
     };
