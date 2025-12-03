@@ -437,7 +437,12 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             if (el->systemFlag() && el->isTopSystemObject()) {
                 el->setTrack(0); // original system object always goes on top
             }
-            segment->add(el);
+            if (el->chords().empty()) {
+                // Invalid harmony
+                delete el;
+            } else {
+                segment->add(el);
+            }
         } else if (tag == "FretDiagram") {
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
             FretDiagram* el = Factory::createFretDiagram(segment);
