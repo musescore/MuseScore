@@ -363,8 +363,8 @@ static std::pair<bool, bool> getAccidentalProperties(std::string symbolName, Sym
 }
 
 bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, track_idx_t curTrackIdx, Measure* measure, bool graceNotes,
-                                         std::vector<engraving::Note*>& notesWithUnmanagedTies,
-                                    std::vector<ReadableTuplet>& tupletMap)
+                                    std::vector<engraving::Note*>& notesWithUnmanagedTies,
+                                    std::vector<ReadableTuplet>& tupletMap, bool hasVoice1Voice2)
 {
     // Retrieve fields from WorkaroundAwareResult
     EntryInfoPtr entryInfo = result.getEntryInfo();
@@ -656,13 +656,15 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
         } else {
             // Stem and stem direction
             const auto [freezeStem, upStem] = entryInfo.calcEntryStemSettings();
-            if (freezeStem || currentEntry->voice2 || currentEntry->v2Launch) {
-                // LayerAttributes are read later on, once all voices have been added to the score.
-                // Additionally, beams have their own vertical direction, which is set in processBeams.
+            // LayerAttributes are read later on, once all voices have been added to the score.
+            // Additionally, beams have their own vertical direction, which is set in processBeams.
+            if (freezeStem) {
                 chord->setStemDirection(upStem ? DirectionV::UP : DirectionV::DOWN);
-                if (freezeStem) {
-                    m_fixedChords.insert(chord);
-                }
+                m_fixedChords.insert(chord);
+            } else if (hasVoice1Voice2) {
+                // Freeze all stems in a v1v2 context, because otherwise MuseScore treats it
+                // like layers, flipping all stems in track 0 up, track 1 down, etc.
+                chord->setStemDirection(entryInfo.calcUpStem() ? DirectionV::UP : DirectionV::DOWN);
             }
             if (chord->shouldHaveStem() || d.hasStem()) {
                 Stem* stem = Factory::createStem(chord);
@@ -1099,10 +1101,10 @@ void FinaleParser::importEntries()
                         constexpr static bool remapBeamovers = false;
                         // add chords and rests
                         for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1, remapBeamovers); result; result = result.getNext()) {
-                            processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap);
+                            processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap, bool(maxV1V2));
                         }
                         for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1, remapBeamovers); result; result = result.getNext()) {
-                            processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap);
+                            processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap, bool(maxV1V2));
                         }
 
                         // add tremolos
