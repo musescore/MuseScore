@@ -465,7 +465,12 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             if (el->systemFlag() && el->isTopSystemObject()) {
                 el->setTrack(0); // original system object always goes on top
             }
-            segment->add(el);
+            if (el->chords().empty()) {
+                // Invalid harmony
+                delete el;
+            } else {
+                segment->add(el);
+            }
         } else if (tag == "FretDiagram") {
             // hack - getSegment needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
