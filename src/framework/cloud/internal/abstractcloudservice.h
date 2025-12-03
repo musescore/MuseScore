@@ -140,6 +140,7 @@ private:
 
     bool readTokens();
     bool saveTokens();
+    void removeTokens();
     void clearTokens();
 
     io::path_t tokensFilePath() const;

@@ -179,6 +179,19 @@ bool AbstractCloudService::saveTokens()
     return ret;
 }
 
+void AbstractCloudService::removeTokens()
+{
+    {
+        mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
+        Ret ret = fileSystem()->remove(tokensFilePath());
+        if (!ret) {
+            LOGE() << ret.toString();
+        }
+    }
+
+    clearTokens();
+}
+
 void AbstractCloudService::clearTokens()
 {
     m_accessToken.clear();
@@ -275,24 +288,27 @@ void AbstractCloudService::signOut()
         return;
     }
 
-    QBuffer receivedData;
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    Ret ret = manager->get(signOutUrl.val, &receivedData, m_serverConfig.headers);
-    if (!ret) {
-        printServerReply(receivedData);
-        LOGE() << ret.toString();
+    if (signOutUrl.val.isEmpty()) {
+        removeTokens();
+        return;
     }
 
-    {
-        mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
-        ret = fileSystem()->remove(tokensFilePath());
+    auto receivedData = std::make_shared<QBuffer>();
+    RetVal<Progress> progress = m_networkManager->get(signOutUrl.val, receivedData, m_serverConfig.headers);
+    if (!progress.ret) {
+        LOGE() << progress.ret.toString();
+        removeTokens();
+        return;
     }
 
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
+    progress.val.finished().onReceive(this, [this, receivedData](const ProgressResult& res) {
+        if (!res.ret) {
+            LOGE() << res.ret;
+            printServerReply(*receivedData);
+        }
 
-    clearTokens();
+        removeTokens();
+    });
 }
 
 RetVal<Val> AbstractCloudService::ensureAuthorization(bool publishingScore, const std::string& text)
