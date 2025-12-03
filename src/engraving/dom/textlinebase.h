@@ -65,6 +65,8 @@ public:
     struct LayoutData : public EngravingItem::LayoutData {
         std::array<PointF, 6> points;
         PolygonF joinedHairpin = PolygonF();
+        PolygonF beginArrow = PolygonF();
+        PolygonF endArrow = PolygonF();
         int npoints = 0;
         double lineLength = 0;
     };
