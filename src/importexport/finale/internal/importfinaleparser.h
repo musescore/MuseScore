@@ -321,7 +321,7 @@ private:
     void createTupletsFromMap(engraving::Measure* measure, engraving::track_idx_t curTrackIdx, std::vector<ReadableTuplet>& tupletMap);
     bool processEntryInfo(musx::dom::EntryInfoPtr::InterpretedIterator result, engraving::track_idx_t curTrackIdx, engraving::Measure* measure, bool graceNotes,
                           std::vector<engraving::Note*>& notesWithUnmanagedTies,
-                          std::vector<ReadableTuplet>& tupletMap);
+                          std::vector<ReadableTuplet>& tupletMap, bool hasVoice1Voice2);
     bool processBeams(musx::dom::EntryInfoPtr entryInfoPtr, engraving::track_idx_t curTrackIdx);
     bool calculateUp(const musx::dom::MusxInstance<musx::dom::details::ArticulationAssign>& articAssign,
                      musx::dom::others::ArticulationDef::AutoVerticalMode vm, engraving::ChordRest* cr);
