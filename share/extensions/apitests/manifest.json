@@ -1,9 +1,22 @@
 {
     "uri": "musescore://extensions/dev/apitests",
-    "type": "form",
+    "type": "composite",
     "title": "Api tests",
     "description": "This is a development extension for API tests.",
     "ui_context": "Any",
 
-    "path": "Main.qml"
+    "actions": [
+        {
+            "code": "myform",
+            "type": "form",
+            "title": "Form",
+            "path": "Form.qml"
+        },
+        {
+            "code": "mymacros",
+            "type": "macros",
+            "title": "Macros",
+            "path": "macros.js"
+        }
+    ]
 }

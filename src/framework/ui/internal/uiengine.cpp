@@ -67,6 +67,12 @@ public:
         return m_engine->newArray(uint(length));
     }
 
+    QJSValue freeze(const QJSValue& val) override
+    {
+        static QJSValue freezeFn = m_engine->evaluate("Object.freeze");
+        return freezeFn.call({ val });
+    }
+
 private:
     QQmlEngine* m_engine = nullptr;
     const modularity::ContextPtr& m_iocContext;

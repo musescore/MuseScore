@@ -22,7 +22,10 @@
 
 #include "engravingapiv1.h"
 
+#include <QQmlEngine>
 #include <QJSValueIterator>
+
+#include "apitypes.h"
 
 #include "qmlpluginapi.h"
 
@@ -94,4 +97,10 @@ PluginAPI* EngravingApiV1::api() const
     }
 
     return m_api;
+}
+
+QJSValue EngravingApiV1::elementTypeEnum() const
+{
+    static const QJSValue enval = makeEnum<enums::ElementType>(muse::api::EnumType::Int);
+    return enval;
 }

@@ -24,6 +24,8 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 
+#include "global/api/apiutils.h"
+
 #include "log.h"
 
 using namespace muse::extensions;
@@ -57,6 +59,12 @@ public:
         return m_engine->newArray(uint(length));
     }
 
+    QJSValue freeze(const QJSValue& val) override
+    {
+        static QJSValue freezeFn = m_engine->evaluate("Object.freeze");
+        return freezeFn.call({ val });
+    }
+
 private:
     QQmlEngine* m_engine = nullptr;
     const modularity::ContextPtr& m_iocContext;
@@ -85,20 +93,11 @@ void ExtensionsUiEngine::setup()
     m_api = new api::ExtApi(m_apiEngine, m_engine);
     globalObject.setProperty("api", m_engine->newQObject(m_api));
 
-    QJSValue freezeFn = m_engine->evaluate("Object.freeze");
-
     const std::vector<muse::api::IApiRegister::GlobalEnum>& globalEnums = apiRegister()->globalEnums();
     for (const muse::api::IApiRegister::GlobalEnum& e : globalEnums) {
-        QJSValue enumObj = m_engine->newObject();
         QString name = QString::fromStdString(e.name);
-
-        for (int i = 0; i < e.meta.keyCount(); ++i) {
-            QString key = QString::fromLatin1(e.meta.key(i));
-            enumObj.setProperty(key, key);
-        }
-
-        QJSValue frozenObj = freezeFn.call({ enumObj });
-        globalObject.setProperty(name, frozenObj);
+        QJSValue enumObj = muse::api::enumToJsValue(m_apiEngine, e.meta, e.type);
+        globalObject.setProperty(name, enumObj);
     }
 }
 

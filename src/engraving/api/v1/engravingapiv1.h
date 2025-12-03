@@ -21,7 +21,10 @@
  */
 #pragma once
 
+#include <QJSValue>
+
 #include "global/api/apiobject.h"
+#include "global/api/apiutils.h"
 
 #include "extensions/api/v1/iapiv1object.h"
 
@@ -44,7 +47,7 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
 
     Q_PROPERTY(apiv1::Score * curScore READ curScore CONSTANT)
 
-    Q_PROPERTY(apiv1::Enum * Element READ elementTypeEnum CONSTANT)
+    Q_PROPERTY(QJSValue Element READ elementTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * Accidental READ accidentalTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * AccidentalBracket READ accidentalBracketEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * OrnamentStyle READ ornamentStyleEnum CONSTANT)
@@ -167,7 +170,7 @@ public:
 
     apiv1::Score* curScore() const { return api()->curScore(); }
 
-    apiv1::Enum* elementTypeEnum() const { return api()->get_elementTypeEnum(); }
+    QJSValue elementTypeEnum() const;
     apiv1::Enum* accidentalTypeEnum() const { return api()->get_accidentalTypeEnum(); }
     apiv1::Enum* accidentalBracketEnum() const { return api()->get_accidentalBracketEnum(); }
     apiv1::Enum* ornamentStyleEnum() const { return api()->get_ornamentStyleEnum(); }
@@ -330,6 +333,15 @@ public:
     Q_INVOKABLE void quit() { api()->quit(); }
 
 private:
+
+    template<typename T>
+    QJSValue makeEnum(muse::api::EnumType type) const
+    {
+        return muse::api::enumToJsValue(engine(),
+                                        QMetaEnum::fromType<T>(),
+                                        type);
+    }
+
     mutable PluginAPI* m_api = nullptr;
     mutable bool m_selfApi = false;
 };

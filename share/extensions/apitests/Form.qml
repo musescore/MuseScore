@@ -1,6 +1,7 @@
 import QtQuick
 
 import MuseApi.Controls
+import MuseApi.Engraving
 
 ExtensionBlank {
 
@@ -10,6 +11,24 @@ ExtensionBlank {
     implicitWidth: 400
 
     color: api.theme.backgroundPrimaryColor
+
+    Component.onCompleted: {
+        const score = api.engraving.curScore;
+        const measure = score.firstMeasure;
+        console.log("measure.type:", measure.type
+                    , ", api.engraving.Element.MEASURE:", api.engraving.Element.MEASURE
+                    , ", Element:", Element
+                    , ", Element.MEASURE:", Element.MEASURE
+                    , ", IconCode:", IconCode
+                    , ", IconCode.STAR:", IconCode.STAR
+                    )
+
+        if (measure.type === api.engraving.Element.MEASURE) {
+            console.log("this is measure")
+        } else {
+            console.log("this is not measure")
+        }
+    }
 
     StyledFlickable {
         anchors.fill: parent
