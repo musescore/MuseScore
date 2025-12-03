@@ -280,7 +280,7 @@ bool Lyrics::isEditAllowed(EditData& ed) const
         }
     }
 
-    if (ed.key == Key_Left) {
+    if (ed.key == Key_Left || ed.key == Key_Backspace) {
         return cursor()->column() != 0 || cursor()->hasSelection();
     }
 

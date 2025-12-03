@@ -947,11 +947,9 @@
   <SC>
     <key>prev-text-element</key>
     <seq>Shift+Space</seq>
-    </SC>
-  <SC>
-    <key>prev-text-element</key>
     <seq>Left</seq>
-  </SC>
+    <seq>Backspace</seq>
+    </SC>
   <SC>
     <key>next-syllable</key>
     <seq>-</seq>

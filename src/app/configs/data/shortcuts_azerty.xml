@@ -983,6 +983,8 @@
   <SC>
     <key>prev-text-element</key>
     <seq>Shift+Space</seq>
+    <seq>Left</seq>
+    <seq>Backspace</seq>
     </SC>
   <SC>
     <key>toggle-visible</key>
