@@ -488,6 +488,8 @@ public:
     //! At the moment it's: Text, Jump, Marker
     bool layoutToParentWidth() const { return m_layoutToParentWidth; }
 
+    virtual bool positionRelativeToNoteheadRest() const = 0;
+
     void setVoiceAssignment(VoiceAssignment v) { m_voiceAssignment = v; }
     VoiceAssignment voiceAssignment() const { return m_voiceAssignment; }
     void setDirection(DirectionV v) { m_direction = v; }

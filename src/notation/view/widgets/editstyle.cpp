@@ -1051,6 +1051,7 @@ EditStyle::EditStyle(QWidget* parent)
             connect(buttonGroup, &QButtonGroup::buttonClicked, setSignalMapper, mapFunction);
         } else if (auto alignSelect = qobject_cast<AlignSelect*>(sw.widget)) {
             connect(alignSelect, &AlignSelect::alignChanged, setSignalMapper, mapFunction);
+            connect(alignSelect, &AlignSelect::positionChanged, setSignalMapper, mapFunction);
         } else if (auto offsetSelect = qobject_cast<OffsetSelect*>(sw.widget)) {
             connect(offsetSelect, &OffsetSelect::offsetChanged, setSignalMapper, mapFunction);
         } else if (auto fontStyle = qobject_cast<FontStyleSelect*>(sw.widget)) {
@@ -1145,8 +1146,8 @@ EditStyle::EditStyle(QWidget* parent)
         textStyleValueChanged(TextStylePropertyType::TextAlign, textStyleAlign->align());
     });
 
-    connect(textPositionSelect, &TextPositionSelect::positionChanged, this, [=]() {
-        textStyleValueChanged(TextStylePropertyType::Position, textPositionSelect->position());
+    connect(textStyleAlign, &AlignSelect::positionChanged, this, [=]() {
+        textStyleValueChanged(TextStylePropertyType::Position, textStyleAlign->position());
     });
 
     // offset
@@ -1195,7 +1196,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetTextStyleFrameBorderRadius, &QToolButton::clicked, this, [=]() {
         resetTextStyle(TextStylePropertyType::FrameRound);
     });
-    connect(textStyleFrameBorderRadius, &QDoubleSpinBox::valueChanged, this, [=]() {
+    connect(textStyleFrameBorderRadius, &QSpinBox::valueChanged, this, [=]() {
         textStyleValueChanged(TextStylePropertyType::FrameRound, textStyleFrameBorderRadius->value());
     });
 
@@ -2762,7 +2763,7 @@ void EditStyle::textStyleChanged(int row)
             break;
 
         case TextStylePropertyType::Position:
-            textPositionSelect->setPosition(styleValue(a.sid).value<AlignH>());
+            textStyleAlign->setPosition(styleValue(a.sid).value<AlignH>());
             resetTextStyleAlign->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 

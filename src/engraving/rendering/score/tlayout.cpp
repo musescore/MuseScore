@@ -5316,27 +5316,6 @@ void TLayout::layoutSticking(const Sticking* item, Sticking::LayoutData* ldata)
     LAYOUT_CALL_ITEM(item);
     TextLayout::layoutBaseTextBase(item, ldata);
 
-    AlignH itemPosition =  item->position();
-    if (itemPosition != AlignH::LEFT) {
-        const Segment* seg = item->segment();
-        const Chord* chord = nullptr;
-        track_idx_t sTrack = trackZeroVoice(item->track());
-        track_idx_t eTrack = sTrack + VOICES;
-        for (track_idx_t track = sTrack; track < eTrack; ++track) {
-            EngravingItem* el = seg->element(track);
-            if (el && el->isChord()) {
-                chord = toChord(el);
-                break;
-            }
-        }
-
-        if (chord) {
-            const Note* refNote = item->placeAbove() ? chord->upNote() : chord->downNote();
-            double noteWidth = refNote->ldata()->bbox().width();
-            ldata->moveX(itemPosition == AlignH::HCENTER ? 0.5 * noteWidth : noteWidth);
-        }
-    }
-
     if (item->autoplace() && item->explicitParent()) {
         const Segment* s = toSegment(item->explicitParent());
         const Measure* m = s->measure();

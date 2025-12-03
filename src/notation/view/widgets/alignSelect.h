@@ -34,19 +34,26 @@ class AlignSelect : public QWidget, public Ui::AlignSelect, public muse::Injecta
 public:
     AlignSelect(QWidget* parent);
     mu::engraving::Align align() const;
+    mu::engraving::AlignH position() const;
+
     void setAlign(mu::engraving::Align);
+    void setPosition(mu::engraving::AlignH);
 
 signals:
     void alignChanged(mu::engraving::Align);
+    void positionChanged(mu::engraving::AlignH);
 
 private:
-    QButtonGroup* g1;
-    QButtonGroup* g2;
+    QButtonGroup* horizontalAlignButtons;
+    QButtonGroup* verticalAlignButtons;
+    QButtonGroup* positionButtons;
 
     void blockAlign(bool val);
+    void blockPosition(bool val);
 
 private slots:
     void _alignChanged();
+    void _positionChanged();
 };
 }
 

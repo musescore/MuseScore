@@ -79,6 +79,8 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
 
+    bool positionRelativeToNoteheadRest() const override { return false; }
+
     bool centerOnSymbol() const { return m_centerOnSymbol; }
     void setCenterOnSymbol(bool val) { m_centerOnSymbol = val; }
 

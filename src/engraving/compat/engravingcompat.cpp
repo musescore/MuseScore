@@ -41,6 +41,10 @@ void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
 {
     int mscVersion = score->mscVersion();
 
+    if (mscVersion < 470) {
+        adjustTextOffset(score);
+    }
+
     if (mscVersion < 460) {
         resetMarkerLeftFontSize(score);
         resetRestVerticalOffsets(score);
@@ -230,6 +234,39 @@ void EngravingCompat::adjustVBoxDistances(MasterScore* masterScore)
                 }
             }
         }
+    }
+}
+
+void EngravingCompat::adjustTextOffset(MasterScore* masterScore)
+{
+    auto doAdjustTextOffset = [](EngravingItem* item) {
+        if (!item->isTextBase()) {
+            return;
+        }
+
+        TextBase* text = toTextBase(item);
+
+        // Staff text, system text, and harp pedal diagrams are the only types which are attached to notes and weren't already
+        // placed with their left edges / centres / right edges aligned to the left / centre / right of the notehead
+        if (text->positionRelativeToNoteheadRest() && (text->isStaffText() || text->isSystemText() || text->isHarpPedalDiagram())) {
+            double mag = item->staff() ? item->staff()->staffMag(item) : 1.0;
+            double xAdj = item->symWidth(SymId::noteheadBlack) * mag;
+
+            switch (text->position()) {
+            case AlignH::HCENTER:
+                text->setProperty(Pid::OFFSET, PointF(text->offset().x() - xAdj / 2, text->offset().y()));
+                break;
+            case AlignH::RIGHT:
+                text->setProperty(Pid::OFFSET, PointF(text->offset().x() - xAdj, text->offset().y()));
+                break;
+            default:
+                break;
+            }
+        }
+    };
+
+    for (Score* score : masterScore->scoreList()) {
+        score->scanElements(doAdjustTextOffset);
     }
 }
 

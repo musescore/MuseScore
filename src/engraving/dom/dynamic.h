@@ -120,6 +120,8 @@ public:
 
     bool isEditAllowed(EditData&) const override;
 
+    bool positionRelativeToNoteheadRest() const override { return true; }
+
     Hairpin* leftHairpin() const { return m_leftHairpin; }
     Hairpin* rightHairpin() const { return m_rightHairpin; }
 
