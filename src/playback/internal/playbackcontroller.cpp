@@ -553,24 +553,6 @@ uint64_t PlaybackController::notationPlaybackKey() const
 
 void PlaybackController::onNotationChanged()
 {
-    DEFER {
-        m_isPlayAllowedChanged.notify();
-        m_totalPlayTimeChanged.notify();
-    };
-
-    if (globalContext()->currentMasterNotation() != m_masterNotation) {
-        m_masterNotation = globalContext()->currentMasterNotation();
-        notifyActionCheckedChanged(LOOP_CODE);
-
-        if (!m_masterNotation) {
-            return;
-        }
-
-        m_masterNotation->hasPartsChanged().onNotify(this, [this]() {
-            m_isPlayAllowedChanged.notify();
-        });
-    }
-
     setNotation(globalContext()->currentNotation());
 }
 
@@ -1725,7 +1707,6 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
         NotifyList<const Part*> partList = notationParts->partList();
         partList.disconnect(this);
 
-        notationPlayback()->loopBoundariesChanged().disconnect(this);
         m_notation->interaction()->selectionChanged().disconnect(this);
         m_notation->interaction()->textEditingEnded().disconnect(this);
         m_notation->soloMuteState()->trackSoloMuteStateChanged().disconnect(this);
@@ -1733,14 +1714,18 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
 
     m_notation = notation;
 
+    m_isPlayAllowedChanged.notify();
+
     if (!m_notation) {
+        setMasterNotation(nullptr);
         return;
     }
+
+    setMasterNotation(m_notation->masterNotation());
 
     if (!m_notation->hasVisibleParts()) {
         pause();
     }
-    m_isPlayAllowedChanged.notify();
 
     // All invisible tracks should be muted in newly opened notations (initNotationSoloMuteState)
     // Once the mute state has been edited, this "custom state" will be recalled from then onwards
@@ -1759,8 +1744,7 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
 
     updateSoloMuteStates();
 
-    INotationPartsPtr notationParts = m_notation->parts();
-    NotifyList<const Part*> partList = notationParts->partList();
+    NotifyList<const Part*> partList = m_notation->parts()->partList();
 
     partList.onItemAdded(this, [this](const Part* part) {
         onPartChanged(part);
@@ -1768,11 +1752,6 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
 
     partList.onItemChanged(this, [this](const Part* part) {
         onPartChanged(part);
-    });
-
-    // FIXME: only un-/re-subscribe if master notation changes
-    notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
-        updateLoop();
     });
 
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
@@ -1788,6 +1767,35 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
     m_notation->soloMuteState()->trackSoloMuteStateChanged().onReceive(
         this, [this](const InstrumentTrackId&, const notation::INotationSoloMuteState::SoloMuteState&) {
         updateSoloMuteStates();
+    });
+}
+
+void PlaybackController::setMasterNotation(notation::IMasterNotationPtr masterNotation)
+{
+    if (m_masterNotation == masterNotation) {
+        return;
+    }
+
+    if (m_masterNotation) {
+        m_masterNotation->hasPartsChanged().disconnect(this);
+        m_masterNotation->playback()->loopBoundariesChanged().disconnect(this);
+    }
+
+    m_masterNotation = masterNotation;
+
+    notifyActionCheckedChanged(LOOP_CODE);
+    m_totalPlayTimeChanged.notify();
+
+    if (!m_masterNotation) {
+        return;
+    }
+
+    m_masterNotation->hasPartsChanged().onNotify(this, [this]() {
+        m_isPlayAllowedChanged.notify();
+    });
+
+    m_masterNotation->playback()->loopBoundariesChanged().onNotify(this, [this]() {
+        updateLoop();
     });
 }
 
