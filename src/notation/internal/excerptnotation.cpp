@@ -27,7 +27,7 @@
 
 using namespace mu::notation;
 
-ExcerptNotation::ExcerptNotation(IMasterNotation* master, engraving::Excerpt* excerpt, const muse::modularity::ContextPtr& iocCtx)
+ExcerptNotation::ExcerptNotation(MasterNotation* master, engraving::Excerpt* excerpt, const muse::modularity::ContextPtr& iocCtx)
     : Notation(master, iocCtx), m_excerpt(excerpt)
 {
 }
@@ -140,5 +140,5 @@ IExcerptNotationPtr ExcerptNotation::clone() const
     mu::engraving::Excerpt* copy = new mu::engraving::Excerpt(*m_excerpt);
     copy->markAsCustom();
 
-    return std::make_shared<ExcerptNotation>(masterNotation(), copy, iocContext());
+    return std::make_shared<ExcerptNotation>(m_masterNotation, copy, iocContext());
 }

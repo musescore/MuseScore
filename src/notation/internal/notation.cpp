@@ -28,6 +28,7 @@
 
 #include "imasternotation.h"
 
+#include "masternotation.h"
 #include "notationpainting.h"
 #include "notationviewstate.h"
 #include "notationsolomutestate.h"
@@ -45,7 +46,7 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 
-Notation::Notation(IMasterNotation* master, const muse::modularity::ContextPtr& iocCtx, mu::engraving::Score* score)
+Notation::Notation(MasterNotation* master, const muse::modularity::ContextPtr& iocCtx, mu::engraving::Score* score)
     : muse::Injectable(iocCtx)
     , m_masterNotation(master)
 {
@@ -120,9 +121,9 @@ mu::project::INotationProject* Notation::project() const
     return m_masterNotation ? m_masterNotation->project() : nullptr;
 }
 
-IMasterNotation* Notation::masterNotation() const
+IMasterNotationPtr Notation::masterNotation() const
 {
-    return m_masterNotation;
+    return m_masterNotation->shared_from_this();
 }
 
 void Notation::setScore(Score* score)
