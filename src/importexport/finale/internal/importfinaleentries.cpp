@@ -1079,8 +1079,24 @@ void FinaleParser::importEntries()
                         createTupletMap(entryFrame->tupletInfo, tupletMap, tremoloMap, voice);
                         createTupletsFromMap(measure, curTrackIdx, tupletMap);
 
+                        // MuseScore cannot use the default mode of EntryInfoPtr::InterpretedIterator
+                        // for two reasons:
+                        //
+                        // 1. Beam processing: MuseScore must create all CRs (ChordRests) involved in a
+                        //    beam *before* running processBeams. The default mode remaps continuation
+                        //    notes into later measures, preventing us from constructing all CRs in
+                        //    the first measure prior to beam processing. (This could eventually be
+                        //    addressed by restructuring processBeams to run in a separate pass.)
+                        //
+                        // 2. Grace notes: MuseScore’s current grace-note model requires access to the
+                        //    hidden source entries in their raw measure positions so grace notes can be
+                        //    attached to the correct CR. The default mode substitutes those hidden
+                        //    entries with their displayed counterparts, obscuring the true attachment
+                        //    point. This limitation may disappear if MuseScore ever supports grace notes
+                        //    as independent notes rather than CR-attached items.
+                        //
+                        constexpr static bool remapBeamovers = false;
                         // add chords and rests
-                        constexpr static bool remapBeamovers = false; // we need to search all entries as they come, so that their CRs will already exist when we create the beams.
                         for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1, remapBeamovers); result; result = result.getNext()) {
                             processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap);
                         }
