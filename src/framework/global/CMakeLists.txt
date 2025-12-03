@@ -177,6 +177,7 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/settings.cpp
         ${CMAKE_CURRENT_LIST_DIR}/settings.h
 
+        ${CMAKE_CURRENT_LIST_DIR}/api/apitypes.h
         ${CMAKE_CURRENT_LIST_DIR}/api/iapiregister.h
         ${CMAKE_CURRENT_LIST_DIR}/api/iapiengine.h
         ${CMAKE_CURRENT_LIST_DIR}/api/internal/apiregister.cpp

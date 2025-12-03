@@ -25,6 +25,8 @@
 
 #include "extensions/api/v1/ipluginapiv1.h"
 
+#include "global/api/apiutils.h"
+
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
@@ -35,6 +37,8 @@
 #include "apitypes.h"
 #include "cursor.h"
 #include "enums.h"
+
+#include "log.h"
 
 namespace mu::engraving {
 class EngravingItem;
@@ -63,6 +67,14 @@ class Score;
             cppName->freeze(); \
         } \
         return cppName; \
+    }
+
+#define DECLARE_API_ENUM_JSVAL(qmlName, getterName, enumType) \
+/** Accessed using qmlName.VALUE*/ \
+    Q_PROPERTY(QJSValue qmlName READ getterName CONSTANT) \
+    QJSValue getterName() const { \
+        static const QJSValue enval = makeEnum(qmlName); \
+        return enval; \
     }
 
 #define DECLARE_API_ENUM2(qmlName, cppName, enumName1, enumName2) \
@@ -139,7 +151,8 @@ private:
 public:
     // Should be initialized in qmlpluginapi.cpp
     /// Contains mu::engraving::ElementType enumeration values
-    DECLARE_API_ENUM(Element,          elementTypeEnum,        mu::engraving::apiv1::enums::ElementType)
+    DECLARE_API_ENUM(Element, elementTypeEnum, mu::engraving::apiv1::enums::ElementType)
+    //DECLARE_API_ENUM_JSVAL(Element, elementTypeEnum, mu::engraving::apiv1::enums::ElementType)
     /// Contains mu::engraving::AccidentalType enumeration values
     DECLARE_API_ENUM(Accidental,       accidentalTypeEnum,     mu::engraving::apiv1::enums::AccidentalType)
     /// Contains mu::engraving::AccidentalBracket enumeration values
@@ -591,6 +604,19 @@ public:
 private:
     mu::engraving::Score* currentScore() const;
 
+    template<typename T>
+    QJSValue makeEnum(const QString& name) const
+    {
+        IF_ASSERT_FAILED(m_engine) {
+            return QJSValue();
+        }
+        return muse::api::enumToJsValue(m_engine,
+                                        QMetaEnum::fromType<T>(),
+                                        muse::api::EnumType::Int,
+                                        name);
+    }
+
+    muse::api::IApiEngine* m_engine = nullptr;
     QString m_pluginType;
     QString m_title;
     QString m_version;

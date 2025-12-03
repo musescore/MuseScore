@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited and others
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,22 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
-#include <QJSValue>
-#include <QObject>
-#include "modularity/ioc.h"
-
 namespace muse::api {
-class IApiEngine
-{
-public:
-    virtual ~IApiEngine() = default;
-
-    virtual const modularity::ContextPtr& iocContext() const = 0;
-    virtual QJSValue newQObject(QObject* o) = 0;
-    virtual QJSValue newObject() = 0;
-    virtual QJSValue newArray(size_t length = 0) = 0;
-    virtual QJSValue freeze(const QJSValue& val) = 0;
+enum class EnumType {
+    String = 0,
+    Int
 };
 }

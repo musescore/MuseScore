@@ -231,6 +231,7 @@ void PluginAPI::setup(QQmlEngine* e)
     }
 
     engravingApi->setApi(this);
+    m_engine = engravingApi->engine();
 }
 
 PluginAPI::PluginAPI(QQuickItem* parent)

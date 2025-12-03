@@ -74,10 +74,32 @@ std::pair<ApiObject*, bool /*is need delete*/> ApiRegister::createApi(const std:
     return { it->second.c->create(e), it->second.c->isNeedDelete() };
 }
 
-void ApiRegister::regGlobalEnum(const std::string& module, const QMetaEnum& meta, const std::string& name)
+void ApiRegister::regEnum(const char* uri, const char* name, const QMetaEnum& meta, EnumType type)
+{
+    qmlRegisterSingletonType(uri, 1, 0, name, [meta, type](QQmlEngine*, QJSEngine* jsengine) -> QJSValue {
+        QJSValue enumObj = jsengine->newObject();
+
+        for (int i = 0; i < meta.keyCount(); ++i) {
+            QString key = QString::fromLatin1(meta.key(i));
+            if (type == EnumType::String) {
+                enumObj.setProperty(key, key);
+            } else {
+                int val = meta.value(i);
+                enumObj.setProperty(key, val);
+            }
+        }
+
+        QJSValue freezeFn = jsengine->evaluate("Object.freeze");
+        return freezeFn.call({ enumObj });
+    });
+}
+
+void ApiRegister::regGlobalEnum(const std::string& module, const QMetaEnum& meta,
+                                EnumType type,
+                                const std::string& name)
 {
     std::string ename = name.empty() ? std::string(meta.enumName()) : name;
-    m_globalEnums.push_back({ module, ename, meta });
+    m_globalEnums.push_back({ module, ename, meta, type });
 }
 
 const std::vector<ApiRegister::GlobalEnum>& ApiRegister::globalEnums() const
@@ -110,6 +132,12 @@ public:
     QJSValue newArray(size_t length) override
     {
         return engine.newArray(static_cast<uint>(length));
+    }
+
+    QJSValue freeze(const QJSValue& val) override
+    {
+        static QJSValue freezeFn = engine.evaluate("Object.freeze");
+        return freezeFn.call({ val });
     }
 };
 

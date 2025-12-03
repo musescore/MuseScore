@@ -210,7 +210,7 @@ void ScriptEngine::dump(const QString& name, const QJSValue& val)
     }
 
     QString str = name + "\n";
-    for (const QString& prop : props) {
+    for (const QString& prop : std::as_const(props)) {
         str += "  " + prop + ": " + val.property(prop).toString() + "\n";
     }
 
@@ -258,4 +258,10 @@ QJSValue ScriptEngine::newObject()
 QJSValue ScriptEngine::newArray(size_t length)
 {
     return m_engine->newArray(uint(length));
+}
+
+QJSValue ScriptEngine::freeze(const QJSValue& val)
+{
+    static QJSValue freezeFn = m_engine->evaluate("Object.freeze");
+    return freezeFn.call({ val });
 }

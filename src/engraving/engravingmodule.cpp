@@ -144,6 +144,8 @@ void EngravingModule::registerApi()
     auto api = ioc()->resolve<muse::api::IApiRegister>(moduleName());
     if (api) {
         api->regApiCreator(moduleName(), "api.engraving.v1", new muse::api::ApiCreator<apiv1::EngravingApiV1>());
+
+        api->regEnum<apiv1::enums::ElementType>("MuseApi.Engraving", muse::api::EnumType::Int, "Element");
     }
 #endif
 }

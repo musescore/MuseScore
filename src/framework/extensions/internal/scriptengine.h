@@ -43,7 +43,7 @@ class ScriptEngine : public muse::api::IApiEngine
     GlobalInject<muse::api::IApiRegister> apiRegister;
 
 public:
-    ScriptEngine(const modularity::ContextPtr& iocCtx, int apiverion);
+    ScriptEngine(const modularity::ContextPtr& iocCtx, int apiversion);
     ~ScriptEngine();
 
     struct CallData {
@@ -74,6 +74,7 @@ public:
     QJSValue newQObject(QObject* o) override;
     QJSValue newObject() override;
     QJSValue newArray(size_t length = 0) override;
+    QJSValue freeze(const QJSValue& val) override;
 
     static void dump(const QString& name, const QJSValue& val);
     static Ret jsValueToRet(const QJSValue& val);
